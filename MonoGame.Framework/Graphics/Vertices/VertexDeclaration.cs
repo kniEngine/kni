@@ -35,14 +35,23 @@ namespace Microsoft.Xna.Framework.Graphics
                 Elements = elements;
 
                 // Pre-calculate hash code for fast comparisons and lookup in dictionaries.
+                _hashCode = VertexDeclarationData.CalculateHashCode(this.VertexStride, this.Elements);
+            }
+
+            private static int CalculateHashCode(int vertexStride, VertexElement[] elements)
+            {
+                int hashCode;
+
                 unchecked
                 {
-                    _hashCode = elements[0].GetHashCode();
+                    hashCode = elements[0].GetHashCode();
                     for (int i = 1; i < elements.Length; i++)
-                        _hashCode = (_hashCode * 397) ^ elements[i].GetHashCode();
+                        hashCode = (hashCode * 397) ^ elements[i].GetHashCode();
 
-                    _hashCode = (_hashCode * 397) ^ elements.Length;
-                    _hashCode = (_hashCode * 397) ^ vertexStride;
+                    hashCode = (hashCode * 397) ^ elements.Length;
+                    hashCode = (hashCode * 397) ^ vertexStride;
+
+                    return hashCode;
                 }
             }
 
