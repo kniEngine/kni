@@ -10,6 +10,11 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Platform.Media
 {
+    public interface IPlatformSong
+    {
+        SongStrategy Strategy { get; }
+    }
+
     abstract public class SongStrategy : IDisposable
     {
         private string _name;
@@ -89,6 +94,12 @@ namespace Microsoft.Xna.Platform.Media
         internal SongStrategy()
         {
         }
+
+        public T ToConcrete<T>() where T : SongStrategy
+        {
+            return (T)this;
+        }
+
 
         #region IDisposable
         ~SongStrategy()
