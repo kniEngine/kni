@@ -9,6 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformGraphicsDebug
+    {
+        GraphicsDebugStrategy Strategy { get; }
+    }
+
     public abstract class GraphicsDebugStrategy
     {
         internal readonly GraphicsContextStrategy _contextStrategy;
