@@ -11,10 +11,11 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Platform.Graphics
 {
     public class ConstantBuffer : GraphicsResource
+        , IPlatformConstantBuffer
     {
         private ConstantBufferStrategy _strategy;
         
-        internal ConstantBufferStrategy Strategy { get { return _strategy; } }
+        ConstantBufferStrategy IPlatformConstantBuffer.Strategy { get { return _strategy; } }
 
         public ConstantBuffer(GraphicsDevice device,
                               string name,

@@ -67,23 +67,23 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 uint mask = ((uint)1) << slot;
 
-                ConstantBuffer buffer = _buffers[slot];
-                if (buffer != null && !buffer.IsDisposed)
+                ConstantBuffer constantBuffer = _buffers[slot];
+                if (constantBuffer != null && !constantBuffer.IsDisposed)
                 {
-                    ConcreteConstantBuffer constantBuffer = buffer.Strategy.ToConcrete<ConcreteConstantBuffer>();
+                    ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
 
                     // Update the hardware buffer.
-                    if (constantBuffer.Dirty)
+                    if (constantBufferStrategy.Dirty)
                     {
-                        contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(constantBuffer.BufferData, constantBuffer.DXcbuffer);
+                        contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(constantBufferStrategy.BufferData, constantBufferStrategy.DXcbuffer);
 
-                        constantBuffer.Dirty = false;
+                        constantBufferStrategy.Dirty = false;
                     }
 
                     // Set the buffer to the shader stage.
                     if ((_dirty & mask) != 0)
                     {
-                        shaderStage.SetConstantBuffer(slot, constantBuffer.DXcbuffer);
+                        shaderStage.SetConstantBuffer(slot, constantBufferStrategy.DXcbuffer);
                         _dirty &= ~mask;
                     }
                 }

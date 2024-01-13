@@ -6,6 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformConstantBuffer
+    {
+        ConstantBufferStrategy Strategy { get; }
+    }
+
     public abstract class ConstantBufferStrategy : GraphicsResourceStrategy, ICloneable, IDisposable
     {
         private string _name;
