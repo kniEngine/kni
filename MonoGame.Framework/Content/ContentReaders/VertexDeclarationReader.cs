@@ -9,19 +9,22 @@ namespace Microsoft.Xna.Framework.Content
 	{
 		protected internal override VertexDeclaration Read(ContentReader input, VertexDeclaration existingInstance)
         {
-			var vertexStride = input.ReadInt32();
-			var elementCount = input.ReadInt32();
+			int vertexStride = input.ReadInt32();
+			int elementCount = input.ReadInt32();
+
 			VertexElement[] elements = new VertexElement[elementCount];
-			for (int i = 0; i < elementCount; ++i)
+			for (int i = 0; i < elementCount; i++)
 			{
-				var offset = input.ReadInt32();
-				var elementFormat = (VertexElementFormat)input.ReadInt32();
-				var elementUsage = (VertexElementUsage)input.ReadInt32();
-				var usageIndex = input.ReadInt32();
+                int offset = input.ReadInt32();
+                VertexElementFormat elementFormat = (VertexElementFormat)input.ReadInt32();
+                VertexElementUsage elementUsage = (VertexElementUsage)input.ReadInt32();
+                int usageIndex = input.ReadInt32();
 				elements[i] = new VertexElement(offset, elementFormat, elementUsage, usageIndex);
 			}
 
-            return VertexDeclaration.GetOrCreate(vertexStride, elements);
+			VertexDeclaration vertexDeclaration = VertexDeclaration.GetOrCreate(vertexStride, elements);
+
+            return vertexDeclaration;
 		}
 	}
 }
