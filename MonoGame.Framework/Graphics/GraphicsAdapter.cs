@@ -13,7 +13,9 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed class GraphicsAdapter
     {
-        internal GraphicsAdapterStrategy Strategy { get; private set; }
+        private GraphicsAdapterStrategy _strategy;
+
+        internal GraphicsAdapterStrategy Strategy { get { return _strategy; } }
 
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
@@ -42,51 +44,51 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public string DeviceName
         {
-            get { return Strategy.Platform_DeviceName; }
+            get { return _strategy.Platform_DeviceName; }
         }
 
         public string Description
         {
-            get { return Strategy.Platform_Description; }
+            get { return _strategy.Platform_Description; }
         }
 
         public int DeviceId
         {
-            get { return Strategy.Platform_DeviceId; }
+            get { return _strategy.Platform_DeviceId; }
         }
         
         public int Revision
         {
-            get { return Strategy.Platform_Revision; }
+            get { return _strategy.Platform_Revision; }
         }
 
         public int VendorId
         {
-            get { return Strategy.Platform_VendorId; }
+            get { return _strategy.Platform_VendorId; }
         }
         
         public int SubSystemId
         {
-            get { return Strategy.Platform_SubSystemId; }
+            get { return _strategy.Platform_SubSystemId; }
         }
         public IntPtr MonitorHandle
         {
-            get { return Strategy.Platform_MonitorHandle; }
+            get { return _strategy.Platform_MonitorHandle; }
         }
 
         public bool IsDefaultAdapter
         {
-            get { return Strategy.Platform_IsDefaultAdapter; }
+            get { return _strategy.Platform_IsDefaultAdapter; }
         }
 
         public DisplayModeCollection SupportedDisplayModes
         {
-            get { return Strategy.Platform_SupportedDisplayModes; }
+            get { return _strategy.Platform_SupportedDisplayModes; }
         }
 
         public DisplayMode CurrentDisplayMode
         {
-            get { return Strategy.Platform_CurrentDisplayMode; }
+            get { return _strategy.Platform_CurrentDisplayMode; }
         }
 
         /// <summary>
@@ -97,12 +99,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public bool IsWideScreen
         {
-            get { return Strategy.Platform_IsWideScreen; }
+            get { return _strategy.Platform_IsWideScreen; }
         }
 
         internal GraphicsAdapter(GraphicsAdapterStrategy strategy)
         {
-            Strategy = strategy;
+            _strategy = strategy;
         }
 
         public bool QueryBackBufferFormat(
@@ -110,7 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
              SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
              out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
         {
-            return Strategy.Platform_QueryBackBufferFormat(
+            return _strategy.Platform_QueryBackBufferFormat(
                 graphicsProfile,
                 format, depthFormat, multiSampleCount,
                 out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount
@@ -133,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,
             out SurfaceFormat selectedFormat, out DepthFormat selectedDepthFormat, out int selectedMultiSampleCount)
         {
-            return Strategy.Platform_QueryRenderTargetFormat(
+            return _strategy.Platform_QueryRenderTargetFormat(
                 graphicsProfile,
                 format, depthFormat, multiSampleCount,
                 out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount
@@ -142,7 +144,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public bool IsProfileSupported(GraphicsProfile graphicsProfile)
         {
-            return Strategy.Platform_IsProfileSupported(graphicsProfile);
+            return _strategy.Platform_IsProfileSupported(graphicsProfile);
         }
 
     }
