@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal event EventHandler<PresentationEventArgs> PresentationChanged;
 
 
-        internal GraphicsDevice Device { get { return _device; } }
+        public GraphicsDevice Device { get { return _device; } }
 
         public bool IsDisposed
         {
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public PresentationParameters PresentationParameters
         {
             get { return _presentationParameters; }
-            internal set { _presentationParameters = value; }
+            protected set { _presentationParameters = value; }
         }
 
         public GraphicsCapabilities Capabilities
@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Platform.Graphics
         protected abstract void PlatformSetup(PresentationParameters presentationParameters);
         protected abstract void PlatformInitialize();
 
-        internal int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount, int maxMultiSampleCount)
+        protected internal int GetClampedMultiSampleCount(SurfaceFormat surfaceFormat, int multiSampleCount, int maxMultiSampleCount)
         {
             if (multiSampleCount > 1)
             {

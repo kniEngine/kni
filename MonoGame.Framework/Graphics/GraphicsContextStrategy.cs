@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public readonly object SyncHandle = new object();
 
         public int RenderTargetCount { get { return _currentRenderTargetCount; } }
-        internal bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
+        public bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
 
         /// <summary>
         /// Get or set the color a <see cref="RenderTarget2D"/> is cleared to when it is set.
@@ -380,7 +380,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
+        public void ApplyRenderTargets(RenderTargetBinding[] renderTargets)
         {
             bool clearTarget = false;
 
