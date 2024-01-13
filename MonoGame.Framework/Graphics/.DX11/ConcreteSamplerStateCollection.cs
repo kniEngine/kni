@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     state = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>().GetDxState();
 
-                    Debug.Assert(sampler.GraphicsDevice == _contextStrategy.Context.DeviceStrategy.Device, "The state was created for a different device!");
+                    Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)_contextStrategy.Context).DeviceStrategy.Device, "The state was created for a different device!");
                 }
 
                 shaderStage.SetSampler(i, state);

@@ -57,16 +57,16 @@ namespace Microsoft.Xna.Platform.Graphics
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
 
-            bool supportsSRgb = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsSRgb;
-            bool supportsS3tc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsS3tc;
-            bool supportsPvrtc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsPvrtc;
-            bool supportsEtc1 = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsEtc1;
-            bool supportsEtc2 = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsEtc2;
-            bool supportsAtitc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsAtitc;
-            bool supportsFloat = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsFloatTextures;
-            bool supportsHalfFloat = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsHalfFloatTextures;
-            bool supportsNormalized = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == OGL.RenderApi.ES && contextStrategy.Context.DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
+            bool supportsSRgb = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsSRgb;
+            bool supportsS3tc = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsS3tc;
+            bool supportsPvrtc = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsPvrtc;
+            bool supportsEtc1 = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsEtc1;
+            bool supportsEtc2 = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsEtc2;
+            bool supportsAtitc = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsAtitc;
+            bool supportsFloat = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsFloatTextures;
+            bool supportsHalfFloat = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsHalfFloatTextures;
+            bool supportsNormalized = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsNormalized;
+            bool isGLES2 = GL.BoundApi == OGL.RenderApi.ES && ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
 
             switch (format)
             {
@@ -319,7 +319,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            GraphicsDeviceStrategy deviceStrategy = contextStrategy.Context.DeviceStrategy;
+            GraphicsDeviceStrategy deviceStrategy = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy;
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 

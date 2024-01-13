@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
       internal void PlatformApplyState(GraphicsContext context, WebGLTextureTarget target, bool useMipmaps = false)
         {
-            Debug.Assert(GraphicsDevice == context.DeviceStrategy.Device, "The state was created for a different device!");
+            Debug.Assert(GraphicsDevice == ((IPlatformGraphicsContext)context).DeviceStrategy.Device, "The state was created for a different device!");
 
             var GL = ((IPlatformGraphicsContext)context).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 

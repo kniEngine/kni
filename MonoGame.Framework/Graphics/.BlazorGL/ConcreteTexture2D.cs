@@ -286,7 +286,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Set mipMap levels
             //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
             //GL.CheckGLError();
-            if (contextStrategy.Context.DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
+            if (((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
             {
                 if (this.LevelCount > 0)
                 {

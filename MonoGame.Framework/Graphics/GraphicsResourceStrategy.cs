@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public GraphicsResourceStrategy(GraphicsContextStrategy contextStrategy)
         {
-            BindGraphicsDevice(contextStrategy.Context.DeviceStrategy);
+            BindGraphicsDevice(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy);
         }
 
         public GraphicsResourceStrategy(GraphicsResourceStrategy source)

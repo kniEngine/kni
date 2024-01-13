@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
 
-            iOSGameWindow gameWindow = iOSGameWindow.FromHandle(context.DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+            iOSGameWindow gameWindow = iOSGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             // TODO: Remove Game.Instance. iOSGameViewController/iOSGameView should be part of iOSGameWindow.
             ConcreteGame concreteGame = ConcreteGame.ConcreteGameInstance;
             iOSGameViewController viewController = concreteGame.ViewController;

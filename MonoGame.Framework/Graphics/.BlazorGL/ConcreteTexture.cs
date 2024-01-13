@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 out WebGLTexelType glType,
                 out bool glIsCompressedTexture)
         {
-            bool supportsS3tc = contextStrategy.Context.DeviceStrategy.Capabilities.SupportsS3tc;
+            bool supportsS3tc = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsS3tc;
             //bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
 
             switch (format)
