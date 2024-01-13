@@ -322,6 +322,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
         }
+
         private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
         {
             System.Diagnostics.Debug.Assert(_glTexture < 0);
@@ -339,6 +340,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
+            GL.CheckGLError();
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
             GL.CheckGLError();
 
@@ -361,23 +363,22 @@ namespace Microsoft.Xna.Platform.Graphics
             // Set mipMap levels
 #if !GLES
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-#endif
             GL.CheckGLError();
+#endif
             if (contextStrategy.Context.DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
             {
                 if (this.LevelCount > 0)
                 {
                     GL.TexParameter(TextureTarget.Texture2D, ConcreteSamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
+                    GL.CheckGLError();
                 }
                 else
                 {
                     GL.TexParameter(TextureTarget.Texture2D, ConcreteSamplerState.TextureParameterNameTextureMaxLevel, 1000);
+                    GL.CheckGLError();
                 }
-                GL.CheckGLError();
             }
         }
-
-
 
     }
 }
