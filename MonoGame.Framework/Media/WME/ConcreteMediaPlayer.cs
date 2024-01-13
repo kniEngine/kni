@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Platform.Media
 
         internal override void PlatformPlaySong(Song song)
         {
-            _mediaEngineEx.Source = ((ConcreteSongStrategy)song.Strategy).StreamSource.OriginalString;
+            _mediaEngineEx.Source = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().StreamSource.OriginalString;
             _mediaEngineEx.Load();
             _sessionState = SessionState.Started;
 

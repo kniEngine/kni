@@ -12,11 +12,12 @@ using Microsoft.Xna.Platform.Media;
 namespace Microsoft.Xna.Framework.Media
 {
     public sealed class Song : IEquatable<Song>, IDisposable
+        , IPlatformSong
     {
         private SongStrategy _strategy;
         bool _isDisposed;
 
-        public SongStrategy Strategy { get { return _strategy; } }
+        SongStrategy IPlatformSong.Strategy { get { return _strategy; } }
 
         public bool IsDisposed { get { return _isDisposed; } }
 

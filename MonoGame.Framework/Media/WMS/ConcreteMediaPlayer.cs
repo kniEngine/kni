@@ -373,7 +373,7 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             _currentSong = song;
-            MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
+            MediaPlatformStream mediaPlatformStream = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
            _session.SetTopology(SessionSetTopologyFlags.Immediate, mediaPlatformStream.Topology);
 
             // The volume service won't be available until the session topology

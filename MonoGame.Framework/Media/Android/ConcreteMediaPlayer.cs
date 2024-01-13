@@ -44,9 +44,9 @@ namespace Microsoft.Xna.Platform.Media
                     return TimeSpan.Zero;
 
                 if (_playingSong == activeSong && _androidPlayer.IsPlaying)
-                    ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
+                    ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
 
-                return ((ConcreteSongStrategy)activeSong.Strategy)._position;
+                return ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>()._position;
             }
         }
 
@@ -94,15 +94,15 @@ namespace Microsoft.Xna.Platform.Media
                 // Prepare the player
                 _androidPlayer.Reset();
 
-                if (((ConcreteSongStrategy)song.Strategy).AssetUri != null)
+                if (((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().AssetUri != null)
                 {
                     _androidPlayer.SetDataSource(Android.App.Application.Context,
-                                                 ((ConcreteSongStrategy)song.Strategy).AssetUri);
+                                                 ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().AssetUri);
                 }
                 else
                 {
                     var afd = Android.App.Application.Context.Assets.OpenFd(
-                        ((ConcreteSongStrategy)song.Strategy).StreamSource.OriginalString);
+                        ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().StreamSource.OriginalString);
                     if (afd == null)
                         return;
 
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Media
                 _playingSong = song;
 
                 _androidPlayer.Start();
-                song.Strategy.PlayCount++;
+                ((IPlatformSong)song).Strategy.PlayCount++;
             }
         }
 
@@ -144,8 +144,8 @@ namespace Microsoft.Xna.Platform.Media
                 Song activeSong = Queue.ActiveSong;
                 _androidPlayer.Stop();
                 _playingSong = null;
-                activeSong.Strategy.PlayCount = 0;
-                ((ConcreteSongStrategy)activeSong.Strategy)._position = TimeSpan.Zero;
+                ((IPlatformSong)activeSong).Strategy.PlayCount = 0;
+                ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.Zero;
 
 
             }
@@ -159,8 +159,8 @@ namespace Microsoft.Xna.Platform.Media
 
                 _androidPlayer.Stop();
                 _playingSong = null;
-                song.Strategy.PlayCount = 0;
-                ((ConcreteSongStrategy)song.Strategy)._position = TimeSpan.Zero;
+                ((IPlatformSong)song).Strategy.PlayCount = 0;
+                ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.Zero;
                 
                 Queue.Remove(song);
             }

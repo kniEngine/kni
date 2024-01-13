@@ -81,9 +81,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (Queue.ActiveSong != null)
             {
-                ConcreteSongStrategy songStrategy = (ConcreteSongStrategy)song.Strategy;
-
-                _webPlayer.Src = songStrategy.StreamSource.OriginalString;
+                _webPlayer.Src = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().StreamSource.OriginalString;
                 _webPlayer.Load();
 
                 _webPlayer.Volume = this.PlatformVolume;
@@ -92,7 +90,7 @@ namespace Microsoft.Xna.Platform.Media
                 _playingSong = song;
 
                 _webPlayer.Play();
-                song.Strategy.PlayCount++;
+                ((IPlatformSong)song).Strategy.PlayCount++;
             }
         }
 
@@ -122,7 +120,7 @@ namespace Microsoft.Xna.Platform.Media
                 _webPlayer.Pause();
                 _webPlayer.Src = "";
                 _playingSong = null;
-                activeSong.Strategy.PlayCount = 0;
+                ((IPlatformSong)activeSong).Strategy.PlayCount = 0;
             }
         }
 

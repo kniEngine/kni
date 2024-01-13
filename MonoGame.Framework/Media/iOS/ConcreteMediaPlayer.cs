@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Media
                 Song activeSong = Queue.ActiveSong;
                 if (activeSong != null)
                 {
-                    MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                    MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                     AVPlayer player = mediaPlatformStream.Player;
                     return TimeSpan.FromSeconds(player.CurrentTime.Seconds);
                 }
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 AVPlayer player = mediaPlatformStream.Player;
                 player.Seek(CMTime.FromSeconds(value.TotalSeconds, 1000));
             }
@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Platform.Media
             
             foreach (Song queuedSong in Queue.Songs)
             {
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)queuedSong.Strategy).GetMediaPlatformStream();
+                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)queuedSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)
                 {
                     AVPlayer player = mediaPlatformStream.Player;
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (Queue.ActiveSong != null)
             {
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
+                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
 
                 float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
@@ -120,8 +120,8 @@ namespace Microsoft.Xna.Platform.Media
                 if (mediaPlatformStream.Player == null)
                 {
                     // MediaLibrary items are lazy loaded
-                    if (((ConcreteSongStrategy)song.Strategy).AssetUrl != null)
-                        mediaPlatformStream.CreatePlayer(((ConcreteSongStrategy)song.Strategy).AssetUrl);
+                    if (((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().AssetUrl != null)
+                        mediaPlatformStream.CreatePlayer(((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().AssetUrl);
                     else
                         return;
                 }
@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Platform.Media
                 player2.Seek(CMTime.Zero); // Seek to start to ensure playback at the start.
                 player2.Play();
 
-                song.Strategy.PlayCount++;
+                ((IPlatformSong)song).Strategy.PlayCount++;
             }
         }
 
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)
                 {
                     AVPlayer player = mediaPlatformStream.Player;
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
             {
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)
                 {
                     AVPlayer player = mediaPlatformStream.Player;
@@ -166,14 +166,14 @@ namespace Microsoft.Xna.Platform.Media
         {
             foreach (Song queuedSong in Queue.Songs)
             {
-                var activeSong = Queue.ActiveSong;
+                Song activeSong = Queue.ActiveSong;
 
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)activeSong.Strategy).GetMediaPlatformStream();
+                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)
                 {
                     AVPlayer player = mediaPlatformStream.Player;
                     player.Pause();
-                    activeSong.Strategy.PlayCount = 0;
+                    ((IPlatformSong)activeSong).Strategy.PlayCount = 0;
                 }
             }
         }
@@ -184,12 +184,12 @@ namespace Microsoft.Xna.Platform.Media
             {
                 Song song = Queue[0];
 
-                MediaPlatformStream mediaPlatformStream = ((ConcreteSongStrategy)song.Strategy).GetMediaPlatformStream();
+                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)
                 {
                     AVPlayer player = mediaPlatformStream.Player;
                     player.Pause();
-                    song.Strategy.PlayCount = 0;
+                    ((IPlatformSong)song).Strategy.PlayCount = 0;
                 }
 
                 Queue.Remove(song);
