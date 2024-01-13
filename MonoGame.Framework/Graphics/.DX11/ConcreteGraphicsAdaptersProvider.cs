@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
 
                 // The first adapter is considered the default.
-                adapterList[0].Strategy.Platform_IsDefaultAdapter = true;
+                ((IPlatformGraphicsAdapter)adapterList[0]).Strategy.Platform_IsDefaultAdapter = true;
 
                 _adapters = new ReadOnlyCollection<GraphicsAdapter>(adapterList);
             }
@@ -109,18 +109,18 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     modes.Add(mode);
 
-                    if (adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode == null)
+                    if (((IPlatformGraphicsAdapter)adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode == null)
                     {
                         if (mode.Width == desktopWidth && mode.Height == desktopHeight && mode.Format == SurfaceFormat.Color)
-                            adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode = mode;
+                            ((IPlatformGraphicsAdapter)adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode = mode;
                     }
                 }
             }
 
-            adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._supportedDisplayModes = new DisplayModeCollection(modes);
+            ((IPlatformGraphicsAdapter)adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>()._supportedDisplayModes = new DisplayModeCollection(modes);
 
-            if (adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
-                adapter.Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
+            if (((IPlatformGraphicsAdapter)adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
+                ((IPlatformGraphicsAdapter)adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>()._currentDisplayMode = new DisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
 
             return adapter;
         }

@@ -12,10 +12,11 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed class GraphicsAdapter
+        : IPlatformGraphicsAdapter
     {
         private GraphicsAdapterStrategy _strategy;
 
-        internal GraphicsAdapterStrategy Strategy { get { return _strategy; } }
+        GraphicsAdapterStrategy IPlatformGraphicsAdapter.Strategy { get { return _strategy; } }
 
         public static ReadOnlyCollection<GraphicsAdapter> Adapters
         {
