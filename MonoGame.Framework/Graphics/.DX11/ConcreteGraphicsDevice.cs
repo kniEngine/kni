@@ -535,7 +535,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Clamp MultiSampleCount
             int maxMultiSampleCount = GetMaxMultiSampleCount(this.PresentationParameters.BackBufferFormat);
             PresentationParameters.MultiSampleCount =
-                GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount, maxMultiSampleCount);
+                base.GetClampedMultiSampleCount(PresentationParameters.BackBufferFormat, PresentationParameters.MultiSampleCount, maxMultiSampleCount);
 
             ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.OutputMerger.SetTargets((D3D11.DepthStencilView)null,
                                                                                                 (D3D11.RenderTargetView)null);
