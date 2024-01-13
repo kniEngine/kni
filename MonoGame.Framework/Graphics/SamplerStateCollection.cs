@@ -13,11 +13,12 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class SamplerStateCollection
-	{
+        : IPlatformSamplerStateCollection
+    {
         private SamplerStateCollectionStrategy _strategy;
 
 
-        internal SamplerStateCollectionStrategy Strategy { get { return _strategy; } }
+        SamplerStateCollectionStrategy IPlatformSamplerStateCollection.Strategy { get { return _strategy; } }
 
 
         internal SamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
