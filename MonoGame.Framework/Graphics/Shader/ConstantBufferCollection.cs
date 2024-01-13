@@ -6,10 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Platform.Graphics
 {
     public sealed class ConstantBufferCollection
+        : IPlatformConstantBufferCollection
     {
         private ConstantBufferCollectionStrategy _strategy;
 
-        internal ConstantBufferCollectionStrategy Strategy { get { return _strategy; } }
+        ConstantBufferCollectionStrategy IPlatformConstantBufferCollection.Strategy { get { return _strategy; } }
 
 
         internal ConstantBufferCollection(GraphicsContextStrategy contextStrategy, int capacity)

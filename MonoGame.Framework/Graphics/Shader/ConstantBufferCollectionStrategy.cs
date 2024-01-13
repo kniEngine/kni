@@ -4,6 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformConstantBufferCollection
+    {
+        ConstantBufferCollectionStrategy Strategy { get; }
+    }
+
     public abstract class ConstantBufferCollectionStrategy
     {
         protected ConstantBufferCollectionStrategy(int capacity)
