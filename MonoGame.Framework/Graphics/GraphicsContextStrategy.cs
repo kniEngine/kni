@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private GraphicsContext _context;
 
-        internal GraphicsContext Context { get { return _context; } }
+        public GraphicsContext Context { get { return _context; } }
 
         private bool _isDisposed = false;
 
