@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                 wrap = WebGLTexParam.CLAMP_TO_EDGE;
 
-            ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+            ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
             GL.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);

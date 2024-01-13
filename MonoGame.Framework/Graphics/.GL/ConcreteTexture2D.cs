@@ -337,7 +337,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
                 wrap = TextureWrapMode.ClampToEdge;
 
-            contextStrategy.Textures.Strategy.Dirty(0);
+            ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
             GL.CheckGLError();
