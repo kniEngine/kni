@@ -26,13 +26,15 @@ namespace Microsoft.Xna.Framework.Graphics
         private sealed class VertexDeclarationData : IEquatable<VertexDeclarationData>
         {
             private readonly int _hashCode;
+
             public readonly int VertexStride;
             public VertexElement[] Elements;
 
+
             public VertexDeclarationData(int vertexStride, VertexElement[] elements)
             {
-                VertexStride = vertexStride;
-                Elements = elements;
+                this.VertexStride = vertexStride;
+                this.Elements = elements;
 
                 // Pre-calculate hash code for fast comparisons and lookup in dictionaries.
                 _hashCode = VertexDeclarationData.CalculateHashCode(this.VertexStride, this.Elements);
@@ -64,19 +66,22 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (ReferenceEquals(null, other))
                     return false;
+
                 if (ReferenceEquals(this, other))
                     return true;
 
                 if (_hashCode != other._hashCode
-                    || VertexStride != other.VertexStride
-                    || Elements.Length != other.Elements.Length)
+                || VertexStride != other.VertexStride
+                || Elements.Length != other.Elements.Length)
                 {
                     return false;
                 }
 
                 for (int i = 0; i < Elements.Length; i++)
+                {
                     if (!Elements[i].Equals(other.Elements[i]))
                         return false;
+                }
 
                 return true;
             }
@@ -102,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             lock (_vertexDeclarationCache)
             {
-                var data = new VertexDeclarationData(vertexStride, elements);
+                VertexDeclarationData data = new VertexDeclarationData(vertexStride, elements);
                 VertexDeclaration vertexDeclaration;
                 if (!_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
                 {
@@ -164,7 +169,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             lock (_vertexDeclarationCache)
             {
-                var data = new VertexDeclarationData(vertexStride, elements);
+                VertexDeclarationData data = new VertexDeclarationData(vertexStride, elements);
+
                 VertexDeclaration vertexDeclaration;
                 if (_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
                 {
