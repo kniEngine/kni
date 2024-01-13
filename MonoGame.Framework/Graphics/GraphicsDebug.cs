@@ -11,10 +11,11 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
     public class GraphicsDebug
+        : IPlatformGraphicsDebug
     {
         private GraphicsDebugStrategy _strategy;
 
-        internal GraphicsDebugStrategy Strategy { get { return _strategy; } }
+        GraphicsDebugStrategy IPlatformGraphicsDebug.Strategy { get { return _strategy; } }
 
         public GraphicsDebug(GraphicsDevice device) : this(device.MainContext)
         {
