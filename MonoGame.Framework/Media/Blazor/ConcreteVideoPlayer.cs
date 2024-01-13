@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Media
             {
                 var GL = ((IPlatformGraphicsContext) ((IPlatformGraphicsDevice)base.Video.GraphicsDevice).Strategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                ConcreteTexture2D texture2D = _lastFrame.GetTextureStrategy<ConcreteTexture2D>();
+                ConcreteTexture2D texture2D = ((IPlatformTexture)_lastFrame).GetTextureStrategy<ConcreteTexture2D>();
 
                 System.Diagnostics.Debug.Assert(texture2D._glTexture != null);
                 ((IPlatformTextureCollection)texture2D.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);

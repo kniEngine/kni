@@ -647,7 +647,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     lock (this.SyncHandle)
                     {
-                        this.D3dContext.GenerateMips(renderTargetBinding.RenderTarget.GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
+                        this.D3dContext.GenerateMips(((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
                     }
                 }
             }
@@ -682,13 +682,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             for (int i = 0; i < base.RenderTargetCount; i++)
             {
-                RenderTargetBinding binding = _currentRenderTargetBindings[i];
-                IRenderTargetStrategyDX11 targetDX = (IRenderTargetStrategyDX11)binding.RenderTarget.GetTextureStrategy<ITextureStrategy>();
-                _currentRenderTargets[i] = targetDX.GetRenderTargetView(binding.ArraySlice);
+                RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[i];
+                IRenderTargetStrategyDX11 targetDX = (IRenderTargetStrategyDX11)((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>();
+                _currentRenderTargets[i] = targetDX.GetRenderTargetView(renderTargetBinding.ArraySlice);
             }
 
             // Use the depth from the first target.
-            IRenderTargetStrategyDX11 renderTargetDX = (IRenderTargetStrategyDX11)_currentRenderTargetBindings[0].RenderTarget.GetTextureStrategy<ITextureStrategy>();
+            IRenderTargetStrategyDX11 renderTargetDX = (IRenderTargetStrategyDX11)((IPlatformTexture)_currentRenderTargetBindings[0].RenderTarget).GetTextureStrategy<ITextureStrategy>();
             _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.

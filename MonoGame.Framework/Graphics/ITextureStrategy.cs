@@ -8,6 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
+    public interface IPlatformTexture
+    {
+        T GetTextureStrategy<T>() where T : ITextureStrategy;
+    }
+
     public interface ITextureStrategy
     {
         SurfaceFormat Format { get; }

@@ -42,11 +42,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 if ((_dirty & mask) == 0)
                     continue;
 
-                Texture tex = _textures[i];
+                Texture texture = _textures[i];
 
                 // Clear the previous binding if the 
                 // target is different from the new one.
-                if (_targets[i] != 0 && (tex == null || _targets[i] != tex.GetTextureStrategy<ConcreteTexture>()._glTarget))
+                if (_targets[i] != 0 && (texture == null || _targets[i] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
                 {
                     GL.ActiveTexture(TextureUnit.Texture0 + i);
                     GL.CheckGLError();
@@ -55,12 +55,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                 }
 
-                if (tex != null)
+                if (texture != null)
                 {
                     GL.ActiveTexture(TextureUnit.Texture0 + i);
                     GL.CheckGLError();
-                    _targets[i] = tex.GetTextureStrategy<ConcreteTexture>()._glTarget;
-                    GL.BindTexture(tex.GetTextureStrategy<ConcreteTexture>()._glTarget, tex.GetTextureStrategy<ConcreteTexture>()._glTexture);
+                    _targets[i] = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget;
+                    GL.BindTexture(((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GL.CheckGLError();
 
                     unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }

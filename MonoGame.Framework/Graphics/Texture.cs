@@ -10,6 +10,7 @@ using Microsoft.Xna.Platform.Graphics;
 namespace Microsoft.Xna.Framework.Graphics
 {
 	public abstract class Texture : GraphicsResource
+        , IPlatformTexture
 	{
         protected ITextureStrategy _strategyTexture;
         
@@ -36,7 +37,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         
-        internal T GetTextureStrategy<T>() where T : ITextureStrategy
+        T IPlatformTexture.GetTextureStrategy<T>()
         {
             return (T)_strategyTexture;
         }

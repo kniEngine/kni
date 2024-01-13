@@ -63,11 +63,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
 
-                Texture tex = _textures[i];
+                Texture texture = _textures[i];
 
-                if (tex != null && !tex.IsDisposed)
+                if (texture != null && !texture.IsDisposed)
                 {
-                    shaderStage.SetShaderResource(i, tex.GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
+                    shaderStage.SetShaderResource(i, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
 
                     unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }
                 }
