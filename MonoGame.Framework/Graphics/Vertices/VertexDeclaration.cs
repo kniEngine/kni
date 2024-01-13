@@ -96,12 +96,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region ----- VertexDeclaration Cache -----
 
-        private static readonly Dictionary<VertexDeclarationData, VertexDeclaration> _vertexDeclarationCache;
-
-        static VertexDeclaration()
-        {
-            _vertexDeclarationCache = new Dictionary<VertexDeclarationData, VertexDeclaration>();
-        }
+        private static readonly Dictionary<VertexDeclarationData, VertexDeclaration> _vertexDeclarationCache = new Dictionary<VertexDeclarationData, VertexDeclaration>();
 
         internal static VertexDeclaration GetOrCreate(int vertexStride, VertexElement[] elements)
         {
