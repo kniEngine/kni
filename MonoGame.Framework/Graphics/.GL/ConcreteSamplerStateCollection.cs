@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 SamplerState sampler = _actualSamplers[i];
                 Texture texture = _contextStrategy.Textures[i];
 
-                if (sampler != null && texture != null && sampler != texture.GetTextureStrategy<ConcreteTexture>()._glLastSamplerState)
+                if (sampler != null && texture != null && sampler != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glLastSamplerState)
                 {
                     // TODO: Avoid doing this redundantly (see TextureCollection.Apply())
                     // However, I suspect that rendering from the same texture with different sampling modes
@@ -63,8 +63,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     // GL.BindTexture(texture._glTarget, texture._glTexture);
                     // GL.CheckGLError();
 
-                    ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>().PlatformApplyState(_contextStrategy.Context, texture.GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
-                    texture.GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = sampler;
+                    ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>().PlatformApplyState(_contextStrategy.Context, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
+                    ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = sampler;
                 }
             }
         }
