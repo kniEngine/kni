@@ -23,51 +23,65 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region ----- Data shared between structurally identical vertex declarations -----
 
-        private sealed class Data : IEquatable<Data>
+        private sealed class VertexDeclarationData : IEquatable<VertexDeclarationData>
         {
             private readonly int _hashCode;
+
             public readonly int VertexStride;
             public VertexElement[] Elements;
 
-            public Data(int vertexStride, VertexElement[] elements)
+
+            public VertexDeclarationData(int vertexStride, VertexElement[] elements)
             {
-                VertexStride = vertexStride;
-                Elements = elements;
+                this.VertexStride = vertexStride;
+                this.Elements = elements;
 
                 // Pre-calculate hash code for fast comparisons and lookup in dictionaries.
+                _hashCode = VertexDeclarationData.CalculateHashCode(this.VertexStride, this.Elements);
+            }
+
+            private static int CalculateHashCode(int vertexStride, VertexElement[] elements)
+            {
+                int hashCode;
+
                 unchecked
                 {
-                    _hashCode = elements[0].GetHashCode();
+                    hashCode = elements[0].GetHashCode();
                     for (int i = 1; i < elements.Length; i++)
-                        _hashCode = (_hashCode * 397) ^ elements[i].GetHashCode();
+                        hashCode = (hashCode * 397) ^ elements[i].GetHashCode();
 
-                    _hashCode = (_hashCode * 397) ^ elements.Length;
-                    _hashCode = (_hashCode * 397) ^ vertexStride;
+                    hashCode = (hashCode * 397) ^ elements.Length;
+                    hashCode = (hashCode * 397) ^ vertexStride;
+
+                    return hashCode;
                 }
             }
 
             public override bool Equals(object obj)
             {
-                return Equals(obj as Data);
+                return Equals(obj as VertexDeclarationData);
             }
 
-            public bool Equals(Data other)
+            public bool Equals(VertexDeclarationData other)
             {
                 if (ReferenceEquals(null, other))
                     return false;
+
                 if (ReferenceEquals(this, other))
                     return true;
 
                 if (_hashCode != other._hashCode
-                    || VertexStride != other.VertexStride
-                    || Elements.Length != other.Elements.Length)
+                || VertexStride != other.VertexStride
+                || Elements.Length != other.Elements.Length)
                 {
                     return false;
                 }
 
                 for (int i = 0; i < Elements.Length; i++)
+                {
                     if (!Elements[i].Equals(other.Elements[i]))
                         return false;
+                }
 
                 return true;
             }
@@ -82,42 +96,37 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region ----- VertexDeclaration Cache -----
 
-        private static readonly Dictionary<Data, VertexDeclaration> _vertexDeclarationCache;
-
-        static VertexDeclaration()
-        {
-            _vertexDeclarationCache = new Dictionary<Data, VertexDeclaration>();
-        }
+        private static readonly Dictionary<VertexDeclarationData, VertexDeclaration> _vertexDeclarationDataCache = new Dictionary<VertexDeclarationData, VertexDeclaration>();
 
         internal static VertexDeclaration GetOrCreate(int vertexStride, VertexElement[] elements)
         {
-            lock (_vertexDeclarationCache)
+            lock (_vertexDeclarationDataCache)
             {
-                var data = new Data(vertexStride, elements);
+                VertexDeclarationData data = new VertexDeclarationData(vertexStride, elements);
                 VertexDeclaration vertexDeclaration;
-                if (!_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
-                {
-                    // Data.Elements have already been set in the Data ctor. However, entries
-                    // in the vertex declaration cache must be immutable. Therefore, we create a 
-                    // copy of the array, which the user cannot access.
-                    data.Elements = (VertexElement[])elements.Clone();
+                if (_vertexDeclarationDataCache.TryGetValue(data, out vertexDeclaration))
+                    return vertexDeclaration;
 
-                    vertexDeclaration = new VertexDeclaration(data);
-                    _vertexDeclarationCache[data] = vertexDeclaration;
-                }
+                // Data.Elements have already been set in the Data ctor. However, entries
+                // in the vertex declaration cache must be immutable. Therefore, we create a 
+                // copy of the array, which the user cannot access.
+                data.Elements = (VertexElement[])elements.Clone();
+
+                vertexDeclaration = new VertexDeclaration(data);
+                _vertexDeclarationDataCache[data] = vertexDeclaration;
 
                 return vertexDeclaration;
             }
         }
 
-        private VertexDeclaration(Data data)
+        private VertexDeclaration(VertexDeclarationData data)
         {
             _data = data;
         }
         #endregion
 
 
-        private readonly Data _data;
+        private readonly VertexDeclarationData _data;
 
         /// <summary>
         /// Gets the internal vertex elements array.
@@ -136,9 +145,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <paramref name="elements"/> is <see langword="null"/> or empty.
         /// </exception>
         public VertexDeclaration(params VertexElement[] elements)
-            : this(GetVertexStride(elements), elements)
-		{
-		}
+            : this(CalculateVertexStride(elements), elements)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VertexDeclaration"/> class.
@@ -153,11 +162,12 @@ namespace Microsoft.Xna.Framework.Graphics
             if ((elements == null) || (elements.Length == 0))
                 throw new ArgumentNullException("elements", "Elements cannot be empty");
 
-            lock (_vertexDeclarationCache)
+            lock (_vertexDeclarationDataCache)
             {
-                var data = new Data(vertexStride, elements);
+                VertexDeclarationData data = new VertexDeclarationData(vertexStride, elements);
+
                 VertexDeclaration vertexDeclaration;
-                if (_vertexDeclarationCache.TryGetValue(data, out vertexDeclaration))
+                if (_vertexDeclarationDataCache.TryGetValue(data, out vertexDeclaration))
                 {
                     // Reuse existing data.
                     _data = vertexDeclaration._data;
@@ -167,23 +177,23 @@ namespace Microsoft.Xna.Framework.Graphics
                     // Cache new vertex declaration.
                     data.Elements = (VertexElement[])elements.Clone();
                     _data = data;
-                    _vertexDeclarationCache[data] = this;
+                    _vertexDeclarationDataCache[data] = this;
                 }
             }
         }
 
-        private static int GetVertexStride(VertexElement[] elements)
-		{
-			int max = 0;
-			for (int i = 0; i < elements.Length; i++)
-			{
+        private static int CalculateVertexStride(VertexElement[] elements)
+        {
+            int max = 0;
+            for (int i = 0; i < elements.Length; i++)
+            {
                 int start = elements[i].Offset + elements[i].VertexElementFormat.GetSize();
-				if (max < start)
-					max = start;
-			}
+                if (max < start)
+                    max = start;
+            }
 
-			return max;
-		}
+            return max;
+        }
 
         /// <summary>
         /// Returns the VertexDeclaration for Type.
@@ -194,48 +204,48 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Prefer to use VertexDeclarationCache when the declaration lookup
         /// can be performed with a templated type.
         /// </remarks>
-		internal static VertexDeclaration FromType(Type vertexType)
-		{
-			if (vertexType == null)
-				throw new ArgumentNullException("vertexType", "Cannot be null");
+        internal static VertexDeclaration FromType(Type vertexType)
+        {
+            if (vertexType == null)
+                throw new ArgumentNullException("vertexType", "Cannot be null");
 
             if (!ReflectionHelpers.IsValueType(vertexType))
             {
-				throw new ArgumentException("Must be value type", "vertexType");
-			}
+                throw new ArgumentException("Must be value type", "vertexType");
+            }
 
             IVertexType type = Activator.CreateInstance(vertexType) as IVertexType;
-			if (type == null)
-			{
-				throw new ArgumentException("vertexData does not inherit IVertexType");
-			}
+            if (type == null)
+            {
+                throw new ArgumentException("vertexData does not inherit IVertexType");
+            }
 
             VertexDeclaration vertexDeclaration = type.VertexDeclaration;
-			if (vertexDeclaration == null)
-			{
-				throw new Exception("VertexDeclaration cannot be null");
-			}
+            if (vertexDeclaration == null)
+            {
+                throw new Exception("VertexDeclaration cannot be null");
+            }
 
-			return vertexDeclaration;
-		}
+            return vertexDeclaration;
+        }
 
         /// <summary>
         /// Gets a copy of the vertex elements.
         /// </summary>
         /// <returns>A copy of the vertex elements.</returns>
         public VertexElement[] GetVertexElements()
-		{
-			return (VertexElement[])_data.Elements.Clone();
-		}
+        {
+            return (VertexElement[])_data.Elements.Clone();
+        }
 
         /// <summary>
         /// Gets the size of a vertex (including padding) in bytes.
         /// </summary>
         /// <value>The size of a vertex (including padding) in bytes.</value>
         public int VertexStride
-		{
-			get { return _data.VertexStride; }
-		}
+        {
+            get { return _data.VertexStride; }
+        }
 
         /// <summary>
         /// Determines whether the specified <see cref="object"/> is equal to this instance.
