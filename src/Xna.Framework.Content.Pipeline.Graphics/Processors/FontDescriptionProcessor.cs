@@ -142,6 +142,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private FontFaceInfo FindLocalFontFile(FontDescription input, ContentProcessorContext context)
         {
+
             string fontsDirectory = Path.GetDirectoryName(input.Identity.SourceFilename);
 
             string fontFile = Path.Combine(fontsDirectory, input.FontName);
@@ -153,8 +154,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!File.Exists(fontFile))
                 return null;
 
-            FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-            return fontFaceInfo;
+            Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
+
+            using (Library sharpFontLib = new Library())
+                AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
+
+            foreach(FontFamilyInfo familyInfo in fontFamilyInfoCache.Values)
+            {
+                foreach (FontFaceInfo faceInfo in familyInfo.Faces)
+                {
+                    if (faceInfo.Style == input.Style)
+                        return faceInfo;
+                }
+            }
 
             return null;
         }
