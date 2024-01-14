@@ -205,14 +205,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                             FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(face.StyleFlags);
 
                                             FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, fontStyle, styleName, face.FaceFlags);
-              
-                                            FontFamilyInfo fontFamilyInfo;
-                                            if (!fontFamilyInfoCache.TryGetValue(fontName.ToUpperInvariant(), out fontFamilyInfo))
-                                            {
-                                                fontFamilyInfo = new FontFamilyInfo(fontName);
-                                                fontFamilyInfoCache.Add(fontName.ToUpperInvariant(), fontFamilyInfo);
-                                            }
-                                            fontFamilyInfo.Faces.Add(fontFaceInfo);
+
+                                            CachefontFaceInfo(fontFamilyInfoCache, fontName, fontFaceInfo);
                                         }
                                     }
                                 }
@@ -269,14 +263,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                             FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(face.StyleFlags);
 
                                             FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, fontStyle, styleName, face.FaceFlags);
-                                    
-                                            FontFamilyInfo fontFamilyInfo;
-                                            if (!fontFamilyInfoCache.TryGetValue(fontName.ToUpperInvariant(), out fontFamilyInfo))
-                                            {
-                                                fontFamilyInfo = new FontFamilyInfo(fontName);
-                                                fontFamilyInfoCache.Add(fontName.ToUpperInvariant(), fontFamilyInfo);
-                                            }
-                                            fontFamilyInfo.Faces.Add(fontFaceInfo);
+
+                                            CachefontFaceInfo(fontFamilyInfoCache, fontName, fontFaceInfo);
                                         }
                                     }
                                 }
@@ -325,6 +313,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             return null;
+        }
+
+        private static void CachefontFaceInfo(Dictionary<string, FontFamilyInfo> fontFamilyInfoCache, string fontName, FontFaceInfo fontFaceInfo)
+        {
+            FontFamilyInfo fontFamilyInfo;
+            if (!fontFamilyInfoCache.TryGetValue(fontName.ToUpperInvariant(), out fontFamilyInfo))
+            {
+                fontFamilyInfo = new FontFamilyInfo(fontName);
+                fontFamilyInfoCache.Add(fontName.ToUpperInvariant(), fontFamilyInfo);
+            }
+            fontFamilyInfo.Faces.Add(fontFaceInfo);
         }
 
         // Uses FreeType to rasterize TrueType fonts into a series of glyph bitmaps.
