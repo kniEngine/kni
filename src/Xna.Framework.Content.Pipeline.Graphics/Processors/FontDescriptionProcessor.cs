@@ -148,11 +148,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             foreach (string ext in extensions)
             {
                 string fontFile = Path.Combine(fontsDirectory, input.FontName + ext);
-                if (File.Exists(fontFile))
-                {
-                    FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
-                    return fontFaceInfo;
-                }
+                if (!File.Exists(fontFile))
+                    continue;
+
+                FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, 0, input.Style);
+                return fontFaceInfo;
             }
 
             return null;
