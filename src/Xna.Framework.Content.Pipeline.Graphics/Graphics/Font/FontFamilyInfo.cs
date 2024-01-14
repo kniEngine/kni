@@ -1,7 +1,6 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System.Collections.Generic;
-using SharpFont;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -29,7 +28,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         // optional properties
         public readonly string StyleName;
-        private readonly FaceFlags FaceFlags;
+        private readonly SharpFont.FaceFlags FaceFlags;
 
         public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style)
         {
@@ -38,7 +37,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             this.Style = style;
         }
 
-        public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName, FaceFlags faceFlags)
+        public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName, SharpFont.FaceFlags faceFlags)
         {
             this.FontFile = fontPath;
             this.FaceIndex = faceIndex;
@@ -52,13 +51,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             FontDescriptionStyle style = FontDescriptionStyle.Regular;
 
-            if (styleFlags == StyleFlags.None)
+            if (styleFlags == SharpFont.StyleFlags.None)
                 style = FontDescriptionStyle.Regular;
-            if (styleFlags == StyleFlags.Italic)
+            if (styleFlags == SharpFont.StyleFlags.Italic)
                 style = FontDescriptionStyle.Italic;
-            if (styleFlags == StyleFlags.Bold)
+            if (styleFlags == SharpFont.StyleFlags.Bold)
                 style = FontDescriptionStyle.Bold;
-            if (styleFlags == (StyleFlags.Italic | StyleFlags.Bold))
+            if (styleFlags == (SharpFont.StyleFlags.Italic | SharpFont.StyleFlags.Bold))
                 style = (FontDescriptionStyle)(-1);
 
             return style;
