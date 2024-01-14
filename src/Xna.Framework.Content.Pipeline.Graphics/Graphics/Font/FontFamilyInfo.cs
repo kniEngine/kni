@@ -49,16 +49,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         internal static FontDescriptionStyle ToFontStyle(SharpFont.StyleFlags styleFlags)
         {
-            FontDescriptionStyle style = FontDescriptionStyle.Regular;
+            FontDescriptionStyle style = default(FontDescriptionStyle);
 
-            if (styleFlags == SharpFont.StyleFlags.None)
-                style = FontDescriptionStyle.Regular;
-            if (styleFlags == SharpFont.StyleFlags.Italic)
-                style = FontDescriptionStyle.Italic;
-            if (styleFlags == SharpFont.StyleFlags.Bold)
-                style = FontDescriptionStyle.Bold;
-            if (styleFlags == (SharpFont.StyleFlags.Italic | SharpFont.StyleFlags.Bold))
-                style = (FontDescriptionStyle)(-1);
+            if ((styleFlags & SharpFont.StyleFlags.Bold) == SharpFont.StyleFlags.Bold)
+                style |= FontDescriptionStyle.Bold;
+            if ((styleFlags & SharpFont.StyleFlags.Italic) == SharpFont.StyleFlags.Italic)
+                style |= FontDescriptionStyle.Italic;
 
             return style;
         }
