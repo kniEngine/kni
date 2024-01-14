@@ -1,7 +1,6 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System.Collections.Generic;
-using SharpFont;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -29,9 +28,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         // optional properties
         public readonly string StyleName;
-        private readonly FaceFlags FaceFlags;
-
-        public bool IsMono { get { return FaceFlags.HasFlag(FaceFlags.FixedWidth); } }
+        private readonly SharpFont.FaceFlags FaceFlags;
 
         public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style)
         {
@@ -40,45 +37,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             this.Style = style;
         }
 
-        public FontFaceInfo(string fontPath, int faceIndex, StyleFlags styleFlags)
+        public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName, SharpFont.FaceFlags faceFlags)
         {
             this.FontFile = fontPath;
             this.FaceIndex = faceIndex;
-
-            if (styleFlags == StyleFlags.None)
-                this.Style = FontDescriptionStyle.Regular;
-            if (styleFlags == StyleFlags.Italic)
-                this.Style = FontDescriptionStyle.Italic;
-            if (styleFlags == StyleFlags.Bold)
-                this.Style = FontDescriptionStyle.Bold;
-            if (styleFlags == (StyleFlags.Italic | StyleFlags.Bold))
-                this.Style = (FontDescriptionStyle)(-1);
-        }
-
-        public FontFaceInfo(string fontPath, int faceIndex, StyleFlags styleFlags, string styleName, FaceFlags faceFlags)
-        {
-            this.FontFile = fontPath;
-            this.FaceIndex = faceIndex;
-
-            if (styleFlags == StyleFlags.None)
-                this.Style = FontDescriptionStyle.Regular;
-            if (styleFlags == StyleFlags.Italic)
-                this.Style = FontDescriptionStyle.Italic;
-            if (styleFlags == StyleFlags.Bold)
-                this.Style = FontDescriptionStyle.Bold;
-            if (styleFlags == (StyleFlags.Italic | StyleFlags.Bold))
-                this.Style = (FontDescriptionStyle)(-1);
+            this.Style = style;
 
             this.StyleName = styleName;
             this.FaceFlags = faceFlags;
         }
 
+        internal static FontDescriptionStyle ToFontStyle(SharpFont.StyleFlags styleFlags)
+        {
+            FontDescriptionStyle style = FontDescriptionStyle.Regular;
+
+            if (styleFlags == SharpFont.StyleFlags.None)
+                style = FontDescriptionStyle.Regular;
+            if (styleFlags == SharpFont.StyleFlags.Italic)
+                style = FontDescriptionStyle.Italic;
+            if (styleFlags == SharpFont.StyleFlags.Bold)
+                style = FontDescriptionStyle.Bold;
+            if (styleFlags == (SharpFont.StyleFlags.Italic | SharpFont.StyleFlags.Bold))
+                style = (FontDescriptionStyle)(-1);
+
+            return style;
+        }
+
         public override string ToString()
         {
-            return string.Format("{{FontFile: {0}, FaceIndex: {1}, Style: {2}, StyleName: {3}, FaceFlags: [{4}], IsMono:{5} }}",
+            return string.Format("{{FontFile: {0}, FaceIndex: {1}, Style: {2}, StyleName: {3}, FaceFlags: [{4}] }}",
                 FontFile, FaceIndex, Style,
-                StyleName, FaceFlags,
-                IsMono);
+                StyleName, FaceFlags);
         }
     }
 }
