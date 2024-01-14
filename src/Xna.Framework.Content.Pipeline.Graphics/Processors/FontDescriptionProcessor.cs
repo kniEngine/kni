@@ -200,17 +200,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                         {
                                             faceCount = face.FaceCount;
 
-                                            FontFamilyInfo fontFamilyInfo;
-                                            if (!fontFamilyInfoCache.TryGetValue(face.FamilyName.ToUpperInvariant(), out fontFamilyInfo))
-                                            {
-                                                fontFamilyInfo = new FontFamilyInfo(face.FamilyName);
-                                                fontFamilyInfoCache.Add(face.FamilyName.ToUpperInvariant(), fontFamilyInfo);
-                                            }
-
+                                            string fontName = face.FamilyName;
                                             string styleName = face.StyleName;
                                             FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(face.StyleFlags);
 
                                             FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, fontStyle, styleName, face.FaceFlags);
+              
+                                            FontFamilyInfo fontFamilyInfo;
+                                            if (!fontFamilyInfoCache.TryGetValue(fontName.ToUpperInvariant(), out fontFamilyInfo))
+                                            {
+                                                fontFamilyInfo = new FontFamilyInfo(fontName);
+                                                fontFamilyInfoCache.Add(fontName.ToUpperInvariant(), fontFamilyInfo);
+                                            }
                                             fontFamilyInfo.Faces.Add(fontFaceInfo);
                                         }
                                     }
@@ -263,17 +264,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                         {
                                             faceCount = face.FaceCount;
 
-                                            FontFamilyInfo fontFamilyInfo;
-                                            if (!fontFamilyInfoCache.TryGetValue(face.FamilyName.ToUpperInvariant(), out fontFamilyInfo))
-                                            {
-                                                fontFamilyInfo = new FontFamilyInfo(face.FamilyName);
-                                                fontFamilyInfoCache.Add(face.FamilyName.ToUpperInvariant(), fontFamilyInfo);
-                                            }
-
+                                            string fontName = face.FamilyName;
                                             string styleName = face.StyleName;
                                             FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(face.StyleFlags);
 
                                             FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, face.FaceIndex, fontStyle, styleName, face.FaceFlags);
+                                    
+                                            FontFamilyInfo fontFamilyInfo;
+                                            if (!fontFamilyInfoCache.TryGetValue(fontName.ToUpperInvariant(), out fontFamilyInfo))
+                                            {
+                                                fontFamilyInfo = new FontFamilyInfo(fontName);
+                                                fontFamilyInfoCache.Add(fontName.ToUpperInvariant(), fontFamilyInfo);
+                                            }
                                             fontFamilyInfo.Faces.Add(fontFaceInfo);
                                         }
                                     }
