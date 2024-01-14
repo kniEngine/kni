@@ -23,6 +23,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private static object _fontFamilyInfoCacheLocker = new object();
         private static Dictionary<string, FontFamilyInfo> _fontFamilyInfoCache;
 
+        List<string> _allowedFontFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
+
         SmoothingMode _smoothing = SmoothingMode.Normal;
 
         [DefaultValue(true)]
@@ -58,11 +60,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             if (!File.Exists(faceInfo.FontFile))
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ faceInfo.FontFile +"\".");
-
-            string fileExtension = Path.GetExtension(faceInfo.FontFile).ToLowerInvariant();
-            List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            if (!extensions.Contains(fileExtension))
-                throw new PipelineException("Unknown file extension " + fileExtension);
 
             context.Logger.LogMessage("Building Font {0}", faceInfo.FontFile);
 
@@ -147,12 +144,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             string fontFile = Path.Combine(fontsDirectory, input.FontName);
 
-            string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-            List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            if (!extensions.Contains(fontExtension))
-                return null;
             if (!File.Exists(fontFile))
                 return null;
+            string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+            if (!_allowedFontFileExtensions.Contains(fontFileExtension))
+               throw new PipelineException("Unknown file extension " + fontFileExtension);
 
             Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
 
@@ -196,9 +192,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                     // The registry value might have trailing NUL characters
                                     fontFile.TrimEnd(new char[] { '\0' });
 
-                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-                                    if (!extensions.Contains(fontExtension))
+                                    string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    if (!_allowedFontFileExtensions.Contains(fontFileExtension))
                                         continue;
 
                                     if (!Path.IsPathRooted(fontFile))
@@ -244,9 +239,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             {
                                 foreach (string fontFile in Directory.GetFiles(fontsDirectory))
                                 {
-                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-                                    if (!extensions.Contains(fontExtension))
+                                    string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    if (!_allowedFontFileExtensions.Contains(fontFileExtension))
                                         continue;
 
                                     AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
@@ -279,6 +273,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     string fontFile = split[0];
                     string fontName = split[1];
+
+                    string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                    if (!_allowedFontFileExtensions.Contains(fontFileExtension))
+                        return null;
 
                     // check font family, fontconfig might return a fallback
                     string[] families = new string[] { fontName };
