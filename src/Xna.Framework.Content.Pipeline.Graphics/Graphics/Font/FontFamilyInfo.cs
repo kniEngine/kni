@@ -31,8 +31,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public readonly string StyleName;
         private readonly FaceFlags FaceFlags;
 
-        public bool IsMono { get { return FaceFlags.HasFlag(FaceFlags.FixedWidth); } }
-
         public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style)
         {
             this.FontFile = fontPath;
@@ -68,10 +66,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         public override string ToString()
         {
-            return string.Format("{{FontFile: {0}, FaceIndex: {1}, Style: {2}, StyleName: {3}, FaceFlags: [{4}], IsMono:{5} }}",
+            return string.Format("{{FontFile: {0}, FaceIndex: {1}, Style: {2}, StyleName: {3}, FaceFlags: [{4}] }}",
                 FontFile, FaceIndex, Style,
-                StyleName, FaceFlags,
-                IsMono);
+                StyleName, FaceFlags);
         }
     }
 }
