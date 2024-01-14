@@ -61,9 +61,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!File.Exists(faceInfo.FontFile))
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ faceInfo.FontFile +"\".");
 
-            string fileExtension = Path.GetExtension(faceInfo.FontFile).ToLowerInvariant();
-            if (!_allowedFontFileExtensions.Contains(fileExtension))
-                throw new PipelineException("Unknown file extension " + fileExtension);
+            string fontFileExtension = Path.GetExtension(faceInfo.FontFile).ToLowerInvariant();
+            if (!_allowedFontFileExtensions.Contains(fontFileExtension))
+                throw new PipelineException("Unknown file extension " + fontFileExtension);
 
             context.Logger.LogMessage("Building Font {0}", faceInfo.FontFile);
 
@@ -148,8 +148,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             string fontFile = Path.Combine(fontsDirectory, input.FontName);
 
-            string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-            if (!_allowedFontFileExtensions.Contains(fontExtension))
+            string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+            if (!_allowedFontFileExtensions.Contains(fontFileExtension))
                 return null;
             if (!File.Exists(fontFile))
                 return null;
@@ -196,8 +196,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                     // The registry value might have trailing NUL characters
                                     fontFile.TrimEnd(new char[] { '\0' });
 
-                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-                                    if (!_allowedFontFileExtensions.Contains(fontExtension))
+                                    string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    if (!_allowedFontFileExtensions.Contains(fontFileExtension))
                                         continue;
 
                                     if (!Path.IsPathRooted(fontFile))
@@ -243,8 +243,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             {
                                 foreach (string fontFile in Directory.GetFiles(fontsDirectory))
                                 {
-                                    string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-                                    if (!_allowedFontFileExtensions.Contains(fontExtension))
+                                    string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                                    if (!_allowedFontFileExtensions.Contains(fontFileExtension))
                                         continue;
 
                                     AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
