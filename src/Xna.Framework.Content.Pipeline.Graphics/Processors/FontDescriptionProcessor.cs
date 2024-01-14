@@ -61,10 +61,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (!File.Exists(faceInfo.FontFile))
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ faceInfo.FontFile +"\".");
 
-            string fontFileExtension = Path.GetExtension(faceInfo.FontFile).ToLowerInvariant();
-            if (!_allowedFontFileExtensions.Contains(fontFileExtension))
-                throw new PipelineException("Unknown file extension " + fontFileExtension);
-
             context.Logger.LogMessage("Building Font {0}", faceInfo.FontFile);
 
             // Get the platform specific texture profile.
@@ -148,11 +144,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             string fontFile = Path.Combine(fontsDirectory, input.FontName);
 
-            string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-            if (!_allowedFontFileExtensions.Contains(fontFileExtension))
-                return null;
             if (!File.Exists(fontFile))
                 return null;
+            string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+            if (!_allowedFontFileExtensions.Contains(fontFileExtension))
+               throw new PipelineException("Unknown file extension " + fontFileExtension);
 
             Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
 
@@ -277,6 +273,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     string fontFile = split[0];
                     string fontName = split[1];
+
+                    string fontFileExtension = Path.GetExtension(fontFile).ToLowerInvariant();
+                    if (!_allowedFontFileExtensions.Contains(fontFileExtension))
+                        return null;
 
                     // check font family, fontconfig might return a fallback
                     string[] families = new string[] { fontName };
