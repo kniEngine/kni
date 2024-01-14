@@ -40,37 +40,30 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             this.Style = style;
         }
 
-        public FontFaceInfo(string fontPath, int faceIndex, StyleFlags styleFlags)
+        public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName, FaceFlags faceFlags)
         {
             this.FontFile = fontPath;
             this.FaceIndex = faceIndex;
-
-            if (styleFlags == StyleFlags.None)
-                this.Style = FontDescriptionStyle.Regular;
-            if (styleFlags == StyleFlags.Italic)
-                this.Style = FontDescriptionStyle.Italic;
-            if (styleFlags == StyleFlags.Bold)
-                this.Style = FontDescriptionStyle.Bold;
-            if (styleFlags == (StyleFlags.Italic | StyleFlags.Bold))
-                this.Style = (FontDescriptionStyle)(-1);
-        }
-
-        public FontFaceInfo(string fontPath, int faceIndex, StyleFlags styleFlags, string styleName, FaceFlags faceFlags)
-        {
-            this.FontFile = fontPath;
-            this.FaceIndex = faceIndex;
-
-            if (styleFlags == StyleFlags.None)
-                this.Style = FontDescriptionStyle.Regular;
-            if (styleFlags == StyleFlags.Italic)
-                this.Style = FontDescriptionStyle.Italic;
-            if (styleFlags == StyleFlags.Bold)
-                this.Style = FontDescriptionStyle.Bold;
-            if (styleFlags == (StyleFlags.Italic | StyleFlags.Bold))
-                this.Style = (FontDescriptionStyle)(-1);
+            this.Style = style;
 
             this.StyleName = styleName;
             this.FaceFlags = faceFlags;
+        }
+
+        internal static FontDescriptionStyle ToFontStyle(SharpFont.StyleFlags styleFlags)
+        {
+            FontDescriptionStyle style = FontDescriptionStyle.Regular;
+
+            if (styleFlags == StyleFlags.None)
+                style = FontDescriptionStyle.Regular;
+            if (styleFlags == StyleFlags.Italic)
+                style = FontDescriptionStyle.Italic;
+            if (styleFlags == StyleFlags.Bold)
+                style = FontDescriptionStyle.Bold;
+            if (styleFlags == (StyleFlags.Italic | StyleFlags.Bold))
+                style = (FontDescriptionStyle)(-1);
+
+            return style;
         }
 
         public override string ToString()
