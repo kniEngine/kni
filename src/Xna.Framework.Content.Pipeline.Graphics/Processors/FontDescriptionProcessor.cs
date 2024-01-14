@@ -23,6 +23,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private static object _fontFamilyInfoCacheLocker = new object();
         private static Dictionary<string, FontFamilyInfo> _fontFamilyInfoCache;
 
+        List<string> _allowedFontFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
+
         SmoothingMode _smoothing = SmoothingMode.Normal;
 
         [DefaultValue(true)]
@@ -60,8 +62,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ faceInfo.FontFile +"\".");
 
             string fileExtension = Path.GetExtension(faceInfo.FontFile).ToLowerInvariant();
-            List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            if (!extensions.Contains(fileExtension))
+            if (!_allowedFontFileExtensions.Contains(fileExtension))
                 throw new PipelineException("Unknown file extension " + fileExtension);
 
             context.Logger.LogMessage("Building Font {0}", faceInfo.FontFile);
@@ -148,8 +149,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string fontFile = Path.Combine(fontsDirectory, input.FontName);
 
             string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-            List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-            if (!extensions.Contains(fontExtension))
+            if (!_allowedFontFileExtensions.Contains(fontExtension))
                 return null;
             if (!File.Exists(fontFile))
                 return null;
@@ -197,8 +197,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                     fontFile.TrimEnd(new char[] { '\0' });
 
                                     string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-                                    if (!extensions.Contains(fontExtension))
+                                    if (!_allowedFontFileExtensions.Contains(fontExtension))
                                         continue;
 
                                     if (!Path.IsPathRooted(fontFile))
@@ -245,8 +244,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                 foreach (string fontFile in Directory.GetFiles(fontsDirectory))
                                 {
                                     string fontExtension = Path.GetExtension(fontFile).ToLowerInvariant();
-                                    List<string> extensions = new List<string> { ".ttf", ".ttc", ".otf" };
-                                    if (!extensions.Contains(fontExtension))
+                                    if (!_allowedFontFileExtensions.Contains(fontExtension))
                                         continue;
 
                                     AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
