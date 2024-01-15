@@ -152,8 +152,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
 
-            using (Library sharpFontLib = new Library())
-                AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
+            //using (Library sharpFontLib = new Library())
+            //    AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
+            AddOpenFontFaces(fontFamilyInfoCache, fontFile);
 
             foreach(FontFamilyInfo familyInfo in fontFamilyInfoCache.Values)
             {
@@ -177,7 +178,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
 
-                        using (Library sharpFontLib = new Library())
+                        //using (Library sharpFontLib = new Library())
                         {
                             string fontsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
                             foreach (RegistryKey key in new RegistryKey[] { Registry.LocalMachine, Registry.CurrentUser })
@@ -201,7 +202,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                     if (!File.Exists(fontFile))
                                         continue;
 
-                                    AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
+                                    //AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
+                                    AddOpenFontFaces(fontFamilyInfoCache, fontFile);
                                 }
                             }
                         }
@@ -228,7 +230,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         Dictionary<string, FontFamilyInfo> fontFamilyInfoCache = new Dictionary<string, FontFamilyInfo>();
 
-                        using (Library sharpFontLib = new Library())
+                        //using (Library sharpFontLib = new Library())
                         {
                             List<string> directories = new List<string>();
                             directories.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Fonts"));
@@ -243,7 +245,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                     if (!_allowedFontFileExtensions.Contains(fontFileExtension))
                                         continue;
 
-                                    AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
+                                    //AddSharpFontFaces(fontFamilyInfoCache, fontFile, sharpFontLib);
+                                    AddOpenFontFaces(fontFamilyInfoCache, fontFile);
                                 }
                             }
                         }
@@ -294,6 +297,46 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             return null;
+        }
+
+        private static void AddOpenFontFaces(Dictionary<string, FontFamilyInfo> fontFamilyInfoCache, string fontFile)
+        {
+            using (Stream fontFileStream = new FileStream(fontFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                Typography.OpenFont.OpenFontReader reader = new Typography.OpenFont.OpenFontReader();
+                Typography.OpenFont.PreviewFontInfo previewFontInfo = reader.ReadPreview(fontFileStream);
+
+                bool isFontCollection = previewFontInfo.IsFontCollection;
+                if (!isFontCollection)
+                {
+                    int faceIndex = 0;
+                    Typography.OpenFont.PreviewFontInfo fontInfo = previewFontInfo;
+
+                    string fontName = fontInfo.Name;
+                    string styleName = fontInfo.NameEntry.TypographyicSubfamilyName;
+                    FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(fontInfo.OS2TranslatedStyle);
+
+                    FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, faceIndex, fontStyle, styleName);
+
+                    CachefontFaceInfo(fontFamilyInfoCache, fontName, fontFaceInfo);
+                }
+                else
+                {
+                    for (int faceIndex = 0; faceIndex < previewFontInfo.MemberCount; faceIndex++)
+                    {
+                        Typography.OpenFont.PreviewFontInfo fontInfo = previewFontInfo.GetMember(faceIndex);
+
+                        string fontName = fontInfo.Name;
+                        string styleName = fontInfo.NameEntry.TypographyicSubfamilyName;
+                        FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(fontInfo.OS2TranslatedStyle);
+
+                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, faceIndex, fontStyle, styleName);
+
+                        CachefontFaceInfo(fontFamilyInfoCache, fontName, fontFaceInfo);
+                    }
+                }
+            }
+
         }
 
         private static void AddSharpFontFaces(Dictionary<string, FontFamilyInfo> fontFamilyInfoCache, string fontFile, Library sharpFontLib)
