@@ -1,6 +1,7 @@
 ﻿// Copyright (C)2023 Nick Kastellanos
 
 using System.Collections.Generic;
+using OpenFontStyleFlags = Typography.OpenFont.Extensions.TranslatedOS2FontStyle;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -37,6 +38,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             this.Style = style;
         }
 
+        public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName)
+        {
+            this.FontFile = fontPath;
+            this.FaceIndex = faceIndex;
+            this.Style = style;
+
+            this.StyleName = styleName;
+        }
+
         public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName, SharpFont.FaceFlags faceFlags)
         {
             this.FontFile = fontPath;
@@ -55,6 +65,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 style |= FontDescriptionStyle.Bold;
             if ((styleFlags & SharpFont.StyleFlags.Italic) == SharpFont.StyleFlags.Italic)
                 style |= FontDescriptionStyle.Italic;
+
+            return style;
+        }
+
+        internal static FontDescriptionStyle ToFontStyle(OpenFontStyleFlags styleFlags)
+        {
+            FontDescriptionStyle style = default(FontDescriptionStyle);
+
+            if ((styleFlags & OpenFontStyleFlags.BOLD) == OpenFontStyleFlags.BOLD)
+                style |= FontDescriptionStyle.Bold;
+            if ((styleFlags & OpenFontStyleFlags.ITALIC) == OpenFontStyleFlags.ITALIC)
+                style |= FontDescriptionStyle.Italic;
+
+            // not supported styles
+            if ((styleFlags & OpenFontStyleFlags.OBLIQUE) == OpenFontStyleFlags.OBLIQUE)
+                style = (FontDescriptionStyle)(-1);
 
             return style;
         }

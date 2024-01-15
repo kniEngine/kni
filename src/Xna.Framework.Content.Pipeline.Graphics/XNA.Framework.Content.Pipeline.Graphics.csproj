@@ -27,10 +27,16 @@
     <Reference Include="AssimpNet">
       <HintPath>..\..\ThirdParty\AssimpNet\4.1.0\lib\net40\AssimpNet.dll</HintPath>
     </Reference>
+    <Reference Include="Typography.OpenFont">
+      <HintPath>..\..\ThirdParty\Typography\net40\Typography.OpenFont.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' ">
     <Reference Include="AssimpNet">
       <HintPath>..\..\ThirdParty\AssimpNet\4.1.0\lib\netstandard1.3\AssimpNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Typography.OpenFont">
+      <HintPath>..\..\ThirdParty\Typography\netstandard2.0\Typography.OpenFont.dll</HintPath>
     </Reference>
   </ItemGroup>
   
