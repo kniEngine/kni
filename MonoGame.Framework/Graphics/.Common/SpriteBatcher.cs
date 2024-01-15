@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int batchIndex = 0;
             int batchCount = _batchItemCount;
 
-            unchecked { _device.CurrentContext._graphicsMetrics._spriteCount += batchCount; }
+            unchecked { ((IPlatformGraphicsDevice)_device).Strategy.CurrentContext._graphicsMetrics._spriteCount += batchCount; }
 
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while (batchCount > 0)
@@ -283,7 +283,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 _device.Textures[0] = texture;
 
-                _device.CurrentContext.SB_DrawIndexedPrimitives(
+                ((IPlatformGraphicsDevice)_device).Strategy.CurrentContext.SB_DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
                     baseVertex, //0, numVertices,
                     0, primitiveCount);
@@ -299,7 +299,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // because pass.Apply() might have set a texture from the effect.
                     _device.Textures[0] = texture;
 
-                    _device.CurrentContext.SB_DrawIndexedPrimitives(
+                    ((IPlatformGraphicsDevice)_device).Strategy.CurrentContext.SB_DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
                         baseVertex, //0, numVertices,
                         0, primitiveCount);
