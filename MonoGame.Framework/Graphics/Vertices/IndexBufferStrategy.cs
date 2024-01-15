@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return (T)this;
         }
 
-        internal IndexBufferStrategy(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
+        protected IndexBufferStrategy(GraphicsContextStrategy contextStrategy, IndexElementSize indexElementSize, int indexCount, BufferUsage usage)
             : base(contextStrategy)
         {
             _contextStrategy = contextStrategy;

@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
         protected internal readonly SamplerState[] _actualSamplers;
 
 
-        internal SamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
+        protected SamplerStateCollectionStrategy(GraphicsContextStrategy contextStrategy, int capacity)
         {
             // hard limit of 32 because of _d3dDirty flags being 32bits.
             if (capacity > 32)

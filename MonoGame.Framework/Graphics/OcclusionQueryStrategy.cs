@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract int PixelCount { get; }
         public abstract bool IsComplete { get; }
 
-        internal OcclusionQueryStrategy(GraphicsContextStrategy contextStrategy)
+        protected OcclusionQueryStrategy(GraphicsContextStrategy contextStrategy)
             : base(contextStrategy)
         {
             _contextStrategy = contextStrategy;
