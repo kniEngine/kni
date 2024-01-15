@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         internal readonly GraphicsContextStrategy _contextStrategy;
 
-        internal GraphicsDebugStrategy(GraphicsContextStrategy contextStrategy)
+        protected GraphicsDebugStrategy(GraphicsContextStrategy contextStrategy)
         {
             _contextStrategy = contextStrategy;
 
