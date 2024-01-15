@@ -15,13 +15,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 	/// </summary>
 	public class FontDescription : ContentItem
 	{
-        private string fontName;
-        private float size;
-        private float spacing;
-        private FontDescriptionStyle style;
-        private bool useKerning;
-	    private ICollection<char> characters = new HashSet<char>();
-        private char? defaultCharacter;
+        private string _fontName;
+        private float _size;
+        private float _spacing;
+        private FontDescriptionStyle _style;
+        private bool _useKerning;
+	    private ICollection<char> _characters = new HashSet<char>();
+        private char? _defaultCharacter;
 
 		/// <summary>
 		/// Gets or sets the name of the font, such as "Times New Roman" or "Arial". This value cannot be null or empty.
@@ -29,12 +29,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(AllowNull = false)]
 		public string FontName
 		{
-			get { return fontName; }
+			get { return _fontName; }
 			set
 			{
 				if (string.IsNullOrEmpty(value))
 					throw new ArgumentNullException("FontName is null or an empty string.");
-				fontName = value;
+				_fontName = value;
 			}
 		}
 
@@ -43,12 +43,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 		/// </summary>
 		public float Size
 		{
-			get { return size; }
+			get { return _size; }
 			set
 			{
 				if (value <= 0.0f)
 					throw new ArgumentOutOfRangeException("Size must be greater than zero.");
-				size = value;
+				_size = value;
 			}
 		}
 
@@ -58,8 +58,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(Optional = true)]
 		public float Spacing
 		{
-			get { return spacing; }
-			set { spacing = value; }
+			get { return _spacing; }
+			set { _spacing = value; }
 		}
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(Optional = true)]
         public bool UseKerning
         {
-            get { return useKerning; }
-            set { useKerning = value; }
+            get { return _useKerning; }
+            set { _useKerning = value; }
         }
 
 		/// <summary>
@@ -77,8 +77,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 		/// </summary>
 		public FontDescriptionStyle Style
 		{
-			get { return style; }
-			set { style = value; }
+			get { return _style; }
+			set { _style = value; }
 		}
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         [ContentSerializer(Optional = true)]
         public Nullable<char> DefaultCharacter
         {
-            get { return defaultCharacter; }
-            set { defaultCharacter = value; }
+            get { return _defaultCharacter; }
+            set { _defaultCharacter = value; }
         }
 
         [ContentSerializer(CollectionItemName = "CharacterRegion")]
@@ -135,8 +135,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 	    [ContentSerializerIgnore]
 	    public ICollection<char> Characters
 	    {
-	        get { return characters; } 
-            internal set { characters = new HashSet<char>(value); }
+	        get { return _characters; } 
+            internal set { _characters = new HashSet<char>(value); }
 	    }
 
         internal FontDescription()
@@ -177,11 +177,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 		public FontDescription(string fontName, float size, float spacing, FontDescriptionStyle fontStyle, bool useKerning)            
 		{
 			// Write to the properties so the validation is run
-			FontName = fontName;
-			Size = size;
-			Spacing = spacing;
-			Style = fontStyle;
-			UseKerning = useKerning;			
+			this.FontName = fontName;
+            this.Size = size;
+            this.Spacing = spacing;
+            this.Style = fontStyle;
+            this.UseKerning = useKerning;			
 		}
 	}
 }
