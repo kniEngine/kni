@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimFalseFlag)
+            if (_trimmingFalseFlag)
             {
                 // Dummy variables required for it to work with trimming ** DO NOT DELETE **
                 // This forces the classes not to be optimized out when deploying with trimming
@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimFalseFlag)
+            if (_trimmingFalseFlag)
             {
                 // Dummy variables required for it to work with trimming ** DO NOT DELETE **
                 // This forces the classes not to be optimized out when deploying with trimming
@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimFalseFlag)
+            if (_trimmingFalseFlag)
             {
                 // Dummy variables required for it to work with trimming ** DO NOT DELETE **
                 // This forces the classes not to be optimized out when deploying with trimming
