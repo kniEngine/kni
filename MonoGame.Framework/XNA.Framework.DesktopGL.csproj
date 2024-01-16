@@ -210,7 +210,6 @@
     <Compile Include="Content\ContentReaders\VertexBufferReader.cs" />
     <Compile Include="Content\ContentReaders\VertexDeclarationReader.cs" />
 
-    <Compile Include="Content\ContentReaderExtensions.cs" />
     <Compile Include="Content\DxtDecoder.cs" />
 
     <Compile Include="Content\ContentReaders\SoundEffectReader.cs" />
@@ -462,6 +461,7 @@
     <Compile Include="IGraphicsDeviceManager.cs" />
     <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
 
+    <Compile Include="Graphics\Utilities\ContentReaderExtensions.cs" />
     <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
 
     <Compile Include="GraphicsDeviceManager.cs" />

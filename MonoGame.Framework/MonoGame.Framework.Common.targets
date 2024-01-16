@@ -25,7 +25,6 @@
     <Compile Include="Content\ContentReaders\VertexDeclarationReader.cs" />
     <Compile Include="Content\ContentReaders\VideoReader.cs" />
 
-    <Compile Include="Content\ContentReaderExtensions.cs" />
     <Compile Include="Content\DxtDecoder.cs" />
   </ItemGroup>
 
