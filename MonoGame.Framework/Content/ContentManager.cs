@@ -10,10 +10,6 @@ using System.Reflection;
 using System.IO;
 using MonoGame.Framework.Utilities;
 
-#if !(UAP || WINUI)
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
-#endif
 
 namespace Microsoft.Xna.Framework.Content
 {
