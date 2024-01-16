@@ -9,12 +9,13 @@ namespace Microsoft.Xna.Framework
 {
     partial class TitleContainer
     {
-        static partial void PlatformInit()
+
+        private void PlatformInit()
         {
-            Location = NSBundle.MainBundle.ResourcePath;
+            _location = NSBundle.MainBundle.ResourcePath;
         }
 
-        private static Stream PlatformOpenStream(string safeName)
+        private Stream PlatformOpenStream(string safeName)
         {
             string absolutePath = Path.Combine(Location, safeName);
             return File.OpenRead(absolutePath);

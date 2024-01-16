@@ -9,7 +9,12 @@ namespace Microsoft.Xna.Framework
     partial class TitleContainer
     {
 
-        private static Stream PlatformOpenStream(string safeName)
+        private void PlatformInit()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        private Stream PlatformOpenStream(string safeName)
         {
             throw new PlatformNotSupportedException();
         }

@@ -18,18 +18,23 @@ namespace Microsoft.Xna.Framework
 {
     partial class TitleContainer
     {
-        static internal ResourceContext ResourceContext;
-        static internal ResourceMap FileResourceMap;
+        private ResourceContext _resourceContext;
+        private ResourceMap _fileResourceMap;
 
-        static partial void PlatformInit()
+        private void PlatformInit()
         {
-            Location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
+            _location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
 
-            ResourceContext = new ResourceContext();
-            FileResourceMap = ResourceManager.Current.MainResourceMap.GetSubtree("Files");
+            _resourceContext = new ResourceContext();
+            _fileResourceMap = ResourceManager.Current.MainResourceMap.GetSubtree("Files");
         }
 
-        private static async Task<Stream> OpenStreamAsync(string name)
+        private Stream PlatformOpenStream(string safeName)
+        {
+            return Task.Run(() => PlatformOpenStreamAsync(safeName).Result).Result;
+        }
+
+        private async Task<Stream> PlatformOpenStreamAsync(string name)
         {
             try
             {
@@ -42,11 +47,6 @@ namespace Microsoft.Xna.Framework
                 // The file must not exist... return a null stream.
                 return null;
             }
-        }
-
-        private static Stream PlatformOpenStream(string safeName)
-        {
-            return Task.Run(() => OpenStreamAsync(safeName).Result).Result;
         }
     }
 }

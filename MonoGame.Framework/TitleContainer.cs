@@ -4,27 +4,51 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Platform;
 using MonoGame.Framework.Utilities;
+
+namespace Microsoft.Xna.Platform
+{
+    public interface ITitleContainer
+    {
+        string Location { get; }
+
+        Stream OpenStream(string name);
+    }
+}
 
 namespace Microsoft.Xna.Framework
 {
     /// <summary>
     /// Provides functionality for opening a stream in the title storage area.
     /// </summary>
-    public static partial class TitleContainer
+    public sealed partial class TitleContainer : ITitleContainer
     {
-        static partial void PlatformInit();
+        private static TitleContainer _current;
 
-        static TitleContainer()
+        /// <summary>
+        /// Returns the current FrameworkDispatcher instance.
+        /// </summary> 
+        public static TitleContainer Current
         {
-            Location = string.Empty;
-            PlatformInit();
+            get
+            {
+                if (_current != null)
+                    return _current;
+
+                lock (typeof(TitleContainer))
+                {
+                    if (_current == null)
+                        _current = new TitleContainer();
+
+                    return _current;
+                }
+            }
         }
 
-        static internal string Location 
+        static internal string Location
         {
-            get;
-            private set;
+            get { return ((ITitleContainer)TitleContainer.Current).Location; }
         }
 
         /// <summary>
@@ -33,6 +57,26 @@ namespace Microsoft.Xna.Framework
         /// <param name="name">The filepath relative to the title storage area.</param>
         /// <returns>A open stream or null if the file is not found.</returns>
         public static Stream OpenStream(string name)
+        {
+            return ((ITitleContainer)TitleContainer.Current).OpenStream(name);
+        }
+
+
+        private TitleContainer()
+        {
+            PlatformInit();
+        }
+
+        #region ITitleContainer
+
+        private string _location = string.Empty;
+
+        string ITitleContainer.Location
+        {
+            get { return _location; }
+        }
+
+        Stream ITitleContainer.OpenStream(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
@@ -63,6 +107,8 @@ namespace Microsoft.Xna.Framework
                 throw new FileNotFoundException(name, ex);
             }
         }
+
+        #endregion ITitleContainer
 
         private static string NormalizeRelativePath(string name)
         {
