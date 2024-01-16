@@ -12,18 +12,18 @@ namespace Microsoft.Xna.Framework.Content
     internal class DictionaryReader<TKey, TValue> : ContentTypeReader<Dictionary<TKey, TValue>>
     {
         ContentTypeReader keyReader;
-		ContentTypeReader valueReader;
-		
-		Type keyType;
-		Type valueType;
-		
+        ContentTypeReader valueReader;
+        
+        Type keyType;
+        Type valueType;
+        
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
-			keyType = typeof(TKey);
-			valueType = typeof(TValue);
-			
-			keyReader = manager.GetTypeReader(keyType);
-			valueReader = manager.GetTypeReader(valueType);
+            keyType = typeof(TKey);
+            valueType = typeof(TValue);
+            
+            keyReader = manager.GetTypeReader(keyType);
+            valueReader = manager.GetTypeReader(valueType);
         }
 
         public override bool CanDeserializeIntoExistingObject

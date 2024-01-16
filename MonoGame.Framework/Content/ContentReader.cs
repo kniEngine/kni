@@ -18,9 +18,9 @@ namespace Microsoft.Xna.Framework.Content
         private string assetName;
         private List<KeyValuePair<int, Action<object>>> sharedResourceFixups;
         private ContentTypeReader[] typeReaders;
-		internal int version;
+        internal int version;
         internal int xnbLength;
-		internal int sharedResourceCount;
+        internal int sharedResourceCount;
 
         internal ContentTypeReader[] TypeReaders
         {
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content
             this.recordDisposableObject = recordDisposableObject;
             this.contentManager = manager;
             this.assetName = assetName;
-			this.version = version;
+            this.version = version;
             this.xnbLength = xnbLength;
         }
 
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Framework.Content
             if (sharedResourceCount <= 0)
                 return;
 
-            var sharedResources = new object[sharedResourceCount];
+            object[] sharedResources = new object[sharedResourceCount];
             for (int i = 0; i < sharedResourceCount; ++i)
             {
                 object existingInstance;
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Fixup shared resources by calling each registered action
-            foreach (var fixup in sharedResourceFixups)
+            foreach (KeyValuePair<int,Action<object>> fixup in sharedResourceFixups)
                 fixup.Value(sharedResources[fixup.Key]);
         }
 
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadObject<T>(ContentTypeReader typeReader)
         {
-            var result = (T)typeReader.Read(this, default(T));
+            T result = (T)typeReader.Read(this, default(T));
             RecordDisposable(result);
             return result;
         }
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadRawObject<T>()
         {
-			return (T)ReadRawObject<T> (default(T));
+            return (T)ReadRawObject<T> (default(T));
         }
 
         public T ReadRawObject<T>(ContentTypeReader typeReader)

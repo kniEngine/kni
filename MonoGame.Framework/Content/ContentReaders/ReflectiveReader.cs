@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Content
 
             Type baseType = ReflectionHelpers.GetBaseType(TargetType);
             if (baseType != null && baseType != typeof(object))
-				_baseTypeReader = manager.GetTypeReader(baseType);
+                _baseTypeReader = manager.GetTypeReader(baseType);
 
             _constructor = TargetType.GetDefaultConstructor();
 
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Content
             if (ReflectionHelpers.GetCustomAttribute<ContentSerializerIgnoreAttribute>(member) != null) 
                 return null;
 
-            var contentSerializerAttribute = ReflectionHelpers.GetCustomAttribute<ContentSerializerAttribute>(member);
+            ContentSerializerAttribute contentSerializerAttribute = ReflectionHelpers.GetCustomAttribute<ContentSerializerAttribute>(member);
             if (contentSerializerAttribute == null)
             {
                 if (property != null)
@@ -172,9 +172,9 @@ namespace Microsoft.Xna.Framework.Content
                 obj = (T)existingInstance;
             else
                 obj = (_constructor == null ? (T)Activator.CreateInstance(typeof(T)) : (T)_constructor.Invoke(null));
-		
-			if(_baseTypeReader != null)
-				_baseTypeReader.Read(input, obj);
+        
+            if(_baseTypeReader != null)
+                _baseTypeReader.Read(input, obj);
 
             // Box the type.
             object boxed = (object)obj;

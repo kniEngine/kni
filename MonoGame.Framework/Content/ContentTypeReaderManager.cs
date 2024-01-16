@@ -47,16 +47,16 @@ namespace Microsoft.Xna.Framework.Content
         }
 
         // Trick to prevent the linker removing the code, but not actually execute the code
-        static bool falseflag = false;
+        static bool _trimmingFalseFlag = false;
 
         internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
         {
 #pragma warning disable 0219, 0649
             // Trick to prevent the linker removing the code, but not actually execute the code
-            if (falseflag)
+            if (_trimmingFalseFlag)
             {
-                // Dummy variables required for it to work on iDevices ** DO NOT DELETE ** 
-                // This forces the classes not to be optimized out when deploying to iDevices
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
 
                 // System types
                 var hBooleanReader = new BooleanReader();
@@ -79,11 +79,11 @@ namespace Microsoft.Xna.Framework.Content
                 var hIntListReader = new ListReader<Int32>();
                 var hArrayFloatReader = new ArrayReader<Single>();
                 var hStringListReader = new ListReader<StringReader>();
+
                 // Framework types
                 var hBoundingBoxReader = new BoundingBoxReader();
                 var hBoundingFrustumReader = new BoundingFrustumReader();
                 var hBoundingSphereReader = new BoundingSphereReader();
-                var hColorReader = new ColorReader();
                 var hComplexReader = new ComplexReader();
                 var hCurveReader = new CurveReader();
                 var hExternalReferenceReader = new ExternalReferenceReader();
@@ -103,7 +103,16 @@ namespace Microsoft.Xna.Framework.Content
                 var hVector3ListReader = new ListReader<Vector3>();
                 var hListVector2Reader = new ListReader<Vector2>();
                 var hNullableRectReader = new NullableReader<Rectangle>();
+            }
+
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
                 // Framework.Graphics types
+                var hColorReader = new ColorReader();
                 var hAlphaTestEffectReader = new AlphaTestEffectReader();
                 var hBasicEffectReader = new BasicEffectReader();
                 var hDualTextureEffectReader = new DualTextureEffectReader();
@@ -119,18 +128,34 @@ namespace Microsoft.Xna.Framework.Content
                 var hVertexBufferReader = new VertexBufferReader();
                 var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
                 var hEnumBlendReader = new EnumReader<Graphics.Blend>();
+            }
+
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
                 // Framework.Audio types
-                var hSongReader = new SongReader();
                 var hSoundEffectReader = new SoundEffectReader();
+            }
+
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
                 // Framework.Media types
+                var hSongReader = new SongReader();
                 var hVideoReader = new VideoReader();
             }
 #pragma warning restore 0219, 0649
 
             // The first content byte i read tells me the number of content readers in this XNB file
             int numberOfReaders = reader.Read7BitEncodedInt();
-            var contentReaders = new ContentTypeReader[numberOfReaders];
-            var needsInitialize = new BitArray(numberOfReaders);
+            ContentTypeReader[] contentReaders = new ContentTypeReader[numberOfReaders];
+            BitArray needsInitialize = new BitArray(numberOfReaders);
             _contentReaders = new Dictionary<Type, ContentTypeReader>(numberOfReaders);
 
             // Lock until we're done allocating and initializing any new

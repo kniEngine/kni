@@ -19,23 +19,23 @@ namespace Microsoft.Xna.Framework.Content
 
         protected internal override Array Read(ContentReader input, Array existingInstance)
         {
-            var rank = input.ReadInt32();
+            int rank = input.ReadInt32();
             if (rank < 1)
                 throw new RankException();
 
-            var dimensions = new int[rank];
-            var count = 1;
+            int[] dimensions = new int[rank];
+            int count = 1;
             for (int d = 0; d < dimensions.Length; d++)
                 count *= dimensions[d] = input.ReadInt32();
 
 
-            var array = existingInstance;
+            Array array = existingInstance;
             if (array == null)
                 array = Array.CreateInstance(typeof(T), dimensions);//new T[count];
             else if (dimensions.Length != array.Rank)
                 throw new RankException("existingInstance");
 
-            var indices = new int[rank];
+            int[] indices = new int[rank];
 
             for (int i = 0; i < count; i++)
             {
@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Content
                     value = input.ReadObject<T>(elementReader);
                 else
                 {
-                    var readerType = input.Read7BitEncodedInt();
+                    int readerType = input.Read7BitEncodedInt();
                     if (readerType > 0)
                         value = input.ReadObject<T>(input.TypeReaders[readerType - 1]);
                     else

@@ -12,9 +12,10 @@ namespace Microsoft.Xna.Framework.Content
     {
         protected internal override BoundingBox Read(ContentReader input, BoundingBox existingInstance)
         {
-            var min = input.ReadVector3();
-            var max = input.ReadVector3();
-            var result = new BoundingBox(min, max);
+            Vector3 min = input.ReadVector3();
+            Vector3 max = input.ReadVector3();
+
+            BoundingBox result = new BoundingBox(min, max);
             return result;
         }
     }

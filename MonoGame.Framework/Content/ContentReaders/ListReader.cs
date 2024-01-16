@@ -14,8 +14,8 @@ namespace Microsoft.Xna.Framework.Content
 
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
-			Type readerType = typeof(T);
-			elementReader = manager.GetTypeReader(readerType);
+            Type readerType = typeof(T);
+            elementReader = manager.GetTypeReader(readerType);
         }
 
         public override bool CanDeserializeIntoExistingObject
@@ -32,17 +32,17 @@ namespace Microsoft.Xna.Framework.Content
             if (ReflectionHelpers.IsValueType(typeof(T)))
             {
                 for (int i = 0; i < count; i++)
-				{
-                	list.Add(input.ReadObject<T>(elementReader));
+                {
+                    list.Add(input.ReadObject<T>(elementReader));
                 }
-			}
-			else
-			{
+            }
+            else
+            {
                 for (int i = 0; i < count; i++)
                 {
-                    var readerType = input.Read7BitEncodedInt();
-                	list.Add(readerType > 0 ? input.ReadObject<T>(input.TypeReaders[readerType - 1]) : default(T));
-				}
+                    int readerType = input.Read7BitEncodedInt();
+                    list.Add(readerType > 0 ? input.ReadObject<T>(input.TypeReaders[readerType - 1]) : default(T));
+                }
             }
             return list;
         }
