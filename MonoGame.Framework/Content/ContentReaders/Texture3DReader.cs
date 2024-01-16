@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Content
             for (int i = 0; i < levelCount; i++)
             {
                 int dataSize = input.ReadInt32();
-                byte[] data = ContentManager.ScratchBufferPool.Get(dataSize);
+                byte[] data = ContentBufferPool.Current.Get(dataSize);
                 input.Read(data, 0, dataSize);
                 texture.SetData(i, 0, 0, width, height, 0, depth, data, 0, dataSize);
 
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Content
                 height = Math.Max(height >> 1, 1);
                 depth = Math.Max(depth >> 1, 1);
 
-                ContentManager.ScratchBufferPool.Return(data);
+                ContentBufferPool.Current.Return(data);
             }
 
             return texture;

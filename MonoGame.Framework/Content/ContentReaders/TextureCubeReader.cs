@@ -28,10 +28,10 @@ namespace Microsoft.Xna.Framework.Content
                 for (int i = 0; i < levels; i++)
                 {
                     int faceSize = input.ReadInt32();
-                    byte[] faceData = ContentManager.ScratchBufferPool.Get(faceSize);
+                    byte[] faceData = ContentBufferPool.Current.Get(faceSize);
                     input.Read(faceData, 0, faceSize);
                     textureCube.SetData<byte>((CubeMapFace)face, i, null, faceData, 0, faceSize);
-                    ContentManager.ScratchBufferPool.Return(faceData);
+                    ContentBufferPool.Current.Return(faceData);
                 }
             }
 
