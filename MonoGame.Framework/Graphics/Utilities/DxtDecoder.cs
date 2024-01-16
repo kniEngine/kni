@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 
-namespace Microsoft.Xna.Framework.Content
+namespace Microsoft.Xna.Platform.Graphics.Utilities
 {
     internal static class DxtDecoder
     {
