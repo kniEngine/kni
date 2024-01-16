@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using Microsoft.Xna.Framework.Graphics;
+
 namespace Microsoft.Xna.Framework.Content
 {
     internal class VertexDeclarationReader : ContentTypeReader<VertexDeclaration>
