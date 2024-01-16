@@ -26,25 +26,6 @@
     <Compile Include="Graphics\Effect\IEffectMatrices.cs" />
     <Compile Include="Graphics\Effect\SkinnedEffect.cs" />
     <Compile Include="Graphics\Effect\SpriteEffect.cs" />
-    <Compile Include="Graphics\PackedVector\Alpha8.cs" />
-    <Compile Include="Graphics\PackedVector\Bgr565.cs" />
-    <Compile Include="Graphics\PackedVector\Bgra4444.cs" />
-    <Compile Include="Graphics\PackedVector\Bgra5551.cs" />
-    <Compile Include="Graphics\PackedVector\Byte4.cs" />
-    <Compile Include="Graphics\PackedVector\HalfSingle.cs" />
-    <Compile Include="Graphics\PackedVector\HalfTypeHelper.cs" />
-    <Compile Include="Graphics\PackedVector\HalfVector2.cs" />
-    <Compile Include="Graphics\PackedVector\HalfVector4.cs" />
-    <Compile Include="Graphics\PackedVector\IPackedVector.cs" />
-    <Compile Include="Graphics\PackedVector\NormalizedByte2.cs" />
-    <Compile Include="Graphics\PackedVector\NormalizedByte4.cs" />
-    <Compile Include="Graphics\PackedVector\NormalizedShort2.cs" />
-    <Compile Include="Graphics\PackedVector\NormalizedShort4.cs" />
-    <Compile Include="Graphics\PackedVector\Rg32.cs" />
-    <Compile Include="Graphics\PackedVector\Rgba1010102.cs" />
-    <Compile Include="Graphics\PackedVector\Rgba64.cs" />
-    <Compile Include="Graphics\PackedVector\Short2.cs" />
-    <Compile Include="Graphics\PackedVector\Short4.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollectionStrategy.cs" />
@@ -190,7 +171,6 @@
     <Compile Include="Graphics\TextureCollectionStrategy.cs" />
     <Compile Include="Graphics\TextureCube.cs" />
     <Compile Include="Graphics\Viewport.cs" />
-    <Compile Include="Color.cs" />
   </ItemGroup>
 
   <ItemGroup>
