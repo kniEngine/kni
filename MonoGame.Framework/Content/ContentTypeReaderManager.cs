@@ -115,7 +115,6 @@ namespace Microsoft.Xna.Framework.Content
                 // This forces the classes not to be optimized out when deploying with trimming
 
                 // Framework.Graphics types
-                var hColorReader = new ColorReader();
                 var hAlphaTestEffectReader = new AlphaTestEffectReader();
                 var hBasicEffectReader = new BasicEffectReader();
                 var hDualTextureEffectReader = new DualTextureEffectReader();
