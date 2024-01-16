@@ -10,14 +10,14 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Microsoft.Xna.Framework.Content
 {
     internal class ModelReader : ContentTypeReader<Model>
-	{
+    {
 //      List<VertexBuffer> vertexBuffers = new List<VertexBuffer>();
 //      List<IndexBuffer> indexBuffers = new List<IndexBuffer>();
 //      List<Effect> effects = new List<Effect>();
 //      List<GraphicsResource> sharedResources = new List<GraphicsResource>();
 
-		protected internal override Model Read(ContentReader input, Model existingInstance)
-		{
+        protected internal override Model Read(ContentReader input, Model existingInstance)
+        {
             // Read the bone names and transforms.
             uint boneCount = input.ReadUInt32();
             bool is8BitBoneReference = (boneCount < 255);
@@ -28,11 +28,11 @@ namespace Microsoft.Xna.Framework.Content
             for (uint i = 0; i < boneCount; i++)
             {
                 string name = input.ReadObject<string>();
-				var matrix = input.ReadMatrix();
+                var matrix = input.ReadMatrix();
                 var bone = new ModelBone { Transform = matrix, Index = (int)i, Name = name };
                 bones.Add(bone);
             }
-			
+            
             // Read the bone hierarchy.
             for (int i = 0; i < boneCount; i++)
             {
@@ -99,46 +99,46 @@ namespace Microsoft.Xna.Framework.Content
                     else
                         part = new ModelMeshPart();
 
-					part.VertexOffset = input.ReadInt32();
+                    part.VertexOffset = input.ReadInt32();
                     part.NumVertices = input.ReadInt32();
                     part.StartIndex = input.ReadInt32();
                     part.PrimitiveCount = input.ReadInt32();
 
                     // tag
                     part.Tag = input.ReadObject<object>();
-					
-					parts.Add(part);
-					
-					int jj = (int)j;
-					input.ReadSharedResource<VertexBuffer>(delegate (VertexBuffer v)
-					{
-						parts[jj].VertexBuffer = v;
-					});
-					input.ReadSharedResource<IndexBuffer>(delegate (IndexBuffer v)
-					{
-						parts[jj].IndexBuffer = v;
-					});
-					input.ReadSharedResource<Effect>(delegate (Effect v)
-					{
-						parts[jj].Effect = v;
-					});
+                    
+                    parts.Add(part);
+                    
+                    int jj = (int)j;
+                    input.ReadSharedResource<VertexBuffer>(delegate (VertexBuffer v)
+                    {
+                        parts[jj].VertexBuffer = v;
+                    });
+                    input.ReadSharedResource<IndexBuffer>(delegate (IndexBuffer v)
+                    {
+                        parts[jj].IndexBuffer = v;
+                    });
+                    input.ReadSharedResource<Effect>(delegate (Effect v)
+                    {
+                        parts[jj].Effect = v;
+                    });
 
-					
+                    
                 }
 
                 if (existingInstance != null)
                     continue;
 
-				ModelMesh mesh = new ModelMesh(input.GetGraphicsDevice(), parts);
+                ModelMesh mesh = new ModelMesh(input.GetGraphicsDevice(), parts);
 
                 // Tag reassignment
                 mesh.Tag = meshTag;
 
-				mesh.Name = name;
-				mesh.ParentBone = bones[parentBoneIndex];
-				mesh.ParentBone.AddMesh(mesh);
-				mesh.BoundingSphere = boundingSphere;
-				meshes.Add(mesh);
+                mesh.Name = name;
+                mesh.ParentBone = bones[parentBoneIndex];
+                mesh.ParentBone.AddMesh(mesh);
+                mesh.BoundingSphere = boundingSphere;
+                meshes.Add(mesh);
             }
 
             if (existingInstance != null)
@@ -156,13 +156,13 @@ namespace Microsoft.Xna.Framework.Content
 
             model.Root = bones[rootBoneIndex];
 
-			// Tag?
+            // Tag?
             model.Tag = input.ReadObject<object>();
-			
-			return model;
-		}
+            
+            return model;
+        }
 
-		static int ReadBoneReference(ContentReader input, bool is8BitBoneReference)
+        static int ReadBoneReference(ContentReader input, bool is8BitBoneReference)
         {
             // Read the bone ID, which may be encoded as either an 8 or 32 bit value.
             uint boneId = (is8BitBoneReference)
@@ -179,6 +179,6 @@ namespace Microsoft.Xna.Framework.Content
             return (int)(boneId - 1);
         }
 
-	}
+    }
 }
 

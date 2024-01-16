@@ -14,9 +14,9 @@ namespace Microsoft.Xna.Framework.Content
         {
             TextureCube textureCube = null;
 
-			SurfaceFormat surfaceFormat = (SurfaceFormat)input.ReadInt32();
-			int size = input.ReadInt32();
-			int levels = input.ReadInt32();
+            SurfaceFormat surfaceFormat = (SurfaceFormat)input.ReadInt32();
+            int size = input.ReadInt32();
+            int levels = input.ReadInt32();
 
             if (existingInstance == null)
                 textureCube = new TextureCube(input.GetGraphicsDevice(), size, levels > 1, surfaceFormat);

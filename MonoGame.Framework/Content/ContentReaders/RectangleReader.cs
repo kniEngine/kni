@@ -8,8 +8,8 @@ using Microsoft.Xna.Framework;
 
 namespace Microsoft.Xna.Framework.Content
 {
-	
-	internal class RectangleReader : ContentTypeReader<Rectangle>
+    
+    internal class RectangleReader : ContentTypeReader<Rectangle>
     {
         protected internal override Rectangle Read(ContentReader input, Rectangle existingInstance)
         {

@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Framework.Content
         {
             var min = input.ReadVector3();
             var max = input.ReadVector3();
+
             var result = new BoundingBox(min, max);
             return result;
         }

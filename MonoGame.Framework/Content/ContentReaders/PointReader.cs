@@ -8,13 +8,13 @@ using Microsoft.Xna.Framework;
 
 namespace Microsoft.Xna.Framework.Content
 {
-	internal class PointReader : ContentTypeReader<Point>
-	{
-		protected internal override Point Read(ContentReader input, Point existingInstance)
-		{
-			int X = input.ReadInt32();
-			int Y = input.ReadInt32();
-			return new Point(X, Y);
-		}
-	}
+    internal class PointReader : ContentTypeReader<Point>
+    {
+        protected internal override Point Read(ContentReader input, Point existingInstance)
+        {
+            int X = input.ReadInt32();
+            int Y = input.ReadInt32();
+            return new Point(X, Y);
+        }
+    }
 }

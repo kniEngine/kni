@@ -8,11 +8,11 @@ using Microsoft.Xna.Framework;
 
 namespace Microsoft.Xna.Framework.Content
 {
-	internal class ColorReader : ContentTypeReader<Color>
-	{
-		protected internal override Color Read(ContentReader input, Color existingInstance)
-		{
+    internal class ColorReader : ContentTypeReader<Color>
+    {
+        protected internal override Color Read(ContentReader input, Color existingInstance)
+        {
             return input.ReadColor();
-		}
-	}
+        }
+    }
 }

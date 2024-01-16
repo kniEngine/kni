@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Content
             // Trick to prevent the linker removing the code, but not actually execute the code
             if (falseflag)
             {
-                // Dummy variables required for it to work on iDevices ** DO NOT DELETE ** 
+                // Dummy variables required for it to work on iDevices ** DO NOT DELETE **
                 // This forces the classes not to be optimized out when deploying to iDevices
 
                 // System types
@@ -79,6 +79,7 @@ namespace Microsoft.Xna.Framework.Content
                 var hIntListReader = new ListReader<Int32>();
                 var hArrayFloatReader = new ArrayReader<Single>();
                 var hStringListReader = new ListReader<StringReader>();
+
                 // Framework types
                 var hBoundingBoxReader = new BoundingBoxReader();
                 var hBoundingFrustumReader = new BoundingFrustumReader();
@@ -103,6 +104,7 @@ namespace Microsoft.Xna.Framework.Content
                 var hVector3ListReader = new ListReader<Vector3>();
                 var hListVector2Reader = new ListReader<Vector2>();
                 var hNullableRectReader = new NullableReader<Rectangle>();
+
                 // Framework.Graphics types
                 var hAlphaTestEffectReader = new AlphaTestEffectReader();
                 var hBasicEffectReader = new BasicEffectReader();
@@ -119,9 +121,11 @@ namespace Microsoft.Xna.Framework.Content
                 var hVertexBufferReader = new VertexBufferReader();
                 var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
                 var hEnumBlendReader = new EnumReader<Graphics.Blend>();
+
                 // Framework.Audio types
                 var hSongReader = new SongReader();
                 var hSoundEffectReader = new SoundEffectReader();
+
                 // Framework.Media types
                 var hVideoReader = new VideoReader();
             }

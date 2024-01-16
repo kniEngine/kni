@@ -18,9 +18,9 @@ namespace Microsoft.Xna.Framework.Content
         private string assetName;
         private List<KeyValuePair<int, Action<object>>> sharedResourceFixups;
         private ContentTypeReader[] typeReaders;
-		internal int version;
+        internal int version;
         internal int xnbLength;
-		internal int sharedResourceCount;
+        internal int sharedResourceCount;
 
         internal ContentTypeReader[] TypeReaders
         {
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content
             this.recordDisposableObject = recordDisposableObject;
             this.contentManager = manager;
             this.assetName = assetName;
-			this.version = version;
+            this.version = version;
             this.xnbLength = xnbLength;
         }
 
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadRawObject<T>()
         {
-			return (T)ReadRawObject<T> (default(T));
+            return (T)ReadRawObject<T> (default(T));
         }
 
         public T ReadRawObject<T>(ContentTypeReader typeReader)
