@@ -199,9 +199,9 @@
     <Compile Include="Content\ContentSerializerRuntimeTypeAttribute.cs" />
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
 
-    <Compile Include="Utilities\Lz4Stream\Lz4DecoderStream.cs" />
-    <Compile Include="Utilities\LzxStream\LzxDecoderStream.cs" />
-    <Compile Include="Content\LzxDecoder.cs" />
+    <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
+    <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
+    <Compile Include="Content\Utilities\LzxDecoder.cs" />
 
     <Compile Include="Content\ContentReaders\AlphaTestEffectReader.cs" />
     <Compile Include="Content\ContentReaders\BasicEffectReader.cs" />
