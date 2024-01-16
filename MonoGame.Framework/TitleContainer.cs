@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentException("Invalid filename. TitleContainer.OpenStream requires a relative path.", name);
 
             // Normalize the file path.
-            var safeName = NormalizeRelativePath(name);
+            string safeName = NormalizeRelativePath(name);
 
             // Call the platform code to open the stream.  Any errors
             // at this point should result in a file not found.
@@ -68,8 +68,8 @@ namespace Microsoft.Xna.Framework
 
         internal static string NormalizeRelativePath(string name)
         {
-            var uri = new Uri("file:///" + FileHelpers.UrlEncode(name));
-            var path = uri.LocalPath;
+            Uri uri = new Uri("file:///" + FileHelpers.UrlEncode(name));
+            string path = uri.LocalPath;
             path = path.Substring(1);
             return path.Replace(FileHelpers.NotSeparator, FileHelpers.Separator);
         }

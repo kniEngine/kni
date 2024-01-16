@@ -30,23 +30,23 @@ namespace Microsoft.Xna.Framework
         private static Stream PlatformOpenStream(string safeName)
         {
 #if IOS || TVOS
-            var absolutePath = Path.Combine(Location, safeName);
+            string absolutePath = Path.Combine(Location, safeName);
             if (SupportRetina)
             {
-                for (var scale = RetinaScale; scale >= 2; scale--)
+                for (int scale = RetinaScale; scale >= 2; scale--)
                 {
                     // Insert the @#x immediately prior to the extension. If this file exists
                     // and we are on a Retina device, return this file instead.
-                    var absolutePathX = Path.Combine(Path.GetDirectoryName(absolutePath),
-                                                      Path.GetFileNameWithoutExtension(absolutePath)
-                                                      + "@" + scale + "x" + Path.GetExtension(absolutePath));
+                    string absolutePathX = Path.Combine(Path.GetDirectoryName(absolutePath),
+                                                        Path.GetFileNameWithoutExtension(absolutePath)
+                                                        + "@" + scale + "x" + Path.GetExtension(absolutePath));
                     if (File.Exists(absolutePathX))
                         return File.OpenRead(absolutePathX);
                 }
             }
             return File.OpenRead(absolutePath);
 #else
-            var absolutePath = Path.Combine(Location, safeName);
+            string absolutePath = Path.Combine(Location, safeName);
             return File.OpenRead(absolutePath);
 #endif
         }

@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework
         {
             Location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
 
-            ResourceContext = new Windows.ApplicationModel.Resources.Core.ResourceContext();
+            ResourceContext = new ResourceContext();
             FileResourceMap = ResourceManager.Current.MainResourceMap.GetSubtree("Files");
         }
 
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + name));
+                Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + name));
                 var randomAccessStream = await file.OpenReadAsync();
                 return randomAccessStream.AsStreamForRead();
             }
