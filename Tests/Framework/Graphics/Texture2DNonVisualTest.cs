@@ -6,8 +6,8 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using NUnit.Framework;
 
 namespace MonoGame.Tests.Graphics

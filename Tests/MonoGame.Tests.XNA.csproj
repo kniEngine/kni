@@ -79,8 +79,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MonoGame.Framework\Content\DxtDecoder.cs">
-      <Link>Utilities\DxtDecoder.cs</Link>
+    <Compile Include="..\MonoGame.Framework\Graphics\Utilities\DxtDecoder.cs">
+      <Link>Graphics\Utilities\DxtDecoder.cs</Link>
     </Compile>
     <Compile Include="..\Tools\MonoGame.Tools.Tests\AssetTestClasses.cs" >
       <Link>ContentPipeline\AssetTestClasses.cs</Link>
