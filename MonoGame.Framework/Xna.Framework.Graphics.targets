@@ -181,6 +181,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Graphics\Utilities\ContentReaderExtensions.cs" />
     <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
 
