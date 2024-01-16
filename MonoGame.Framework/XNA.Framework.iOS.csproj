@@ -170,6 +170,7 @@
     <Compile Include="Content\ContentSerializerRuntimeTypeAttribute.cs" />
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
 
+    <Compile Include="Content\Utilities\ContentBufferPool.cs" />
     <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoder.cs" />

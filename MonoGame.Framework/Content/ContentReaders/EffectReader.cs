@@ -11,10 +11,10 @@ namespace Microsoft.Xna.Framework.Content
         protected internal override Effect Read(ContentReader input, Effect existingInstance)
         {
             int dataSize = input.ReadInt32();
-            byte[] data = ContentManager.ScratchBufferPool.Get(dataSize);
+            byte[] data = ContentBufferPool.Current.Get(dataSize);
             input.Read(data, 0, dataSize);
             Effect effect = existingInstance ?? new Effect(input.GetGraphicsDevice(), data, 0, dataSize);
-            ContentManager.ScratchBufferPool.Return(data);
+            ContentBufferPool.Current.Return(data);
 
             return effect;
         }

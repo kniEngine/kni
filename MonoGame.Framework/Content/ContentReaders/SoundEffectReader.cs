@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Content
 
             // Read the audio data buffer.
             int dataSize = input.ReadInt32();
-            byte[] data = ContentManager.ScratchBufferPool.Get(dataSize);
+            byte[] data = ContentBufferPool.Current.Get(dataSize);
             input.Read(data, 0, dataSize);
 
             int loopStart = input.ReadInt32();
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Content
                         newData = MSADPCMToPCM.MSADPCM_TO_PCM(reader, channels, (short)((blockAlignment/channels)-22) );
                     }
                 }
-                ContentManager.ScratchBufferPool.Return(data);
+                ContentBufferPool.Current.Return(data);
 
                 header[0] = 1; // PCM format
                 header[14] = 16; // 16 bitsPerSample
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Content
             // Store the original asset name for debugging later.
             effect.Name = input.AssetName;
 
-            ContentManager.ScratchBufferPool.Return(data);
+            ContentBufferPool.Current.Return(data);
 
             return effect;
         }
