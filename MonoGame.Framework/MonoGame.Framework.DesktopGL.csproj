@@ -42,6 +42,7 @@
   </ItemGroup>
 
   <Import Project="Xna.Framework.Audio.targets" />
+  <Import Project="Xna.Framework.Graphics.PackedVector.targets" />
   <Import Project="Xna.Framework.Graphics.targets" />
   <Import Project="MonoGame.Framework.Common.targets" />
 

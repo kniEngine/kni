@@ -103,6 +103,9 @@ namespace Microsoft.Xna.Framework.Content
                 var hVector3ListReader = new ListReader<Vector3>();
                 var hListVector2Reader = new ListReader<Vector2>();
                 var hNullableRectReader = new NullableReader<Rectangle>();
+
+                // Framework.Graphics.PackedVector types
+                var hColorReader = new ColorReader();
             }
 
             // Trick to prevent the linker removing the code, but not actually execute the code
