@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Content
                 var hIntListReader = new ListReader<Int32>();
                 var hArrayFloatReader = new ArrayReader<Single>();
                 var hStringListReader = new ListReader<StringReader>();
-                // Famework types
+                // Framework types
                 var hBoundingBoxReader = new BoundingBoxReader();
                 var hBoundingFrustumReader = new BoundingFrustumReader();
                 var hBoundingSphereReader = new BoundingSphereReader();
