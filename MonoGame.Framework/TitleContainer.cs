@@ -15,13 +15,17 @@ namespace Microsoft.Xna.Framework
     {
         static partial void PlatformInit();
 
-        static TitleContainer() 
+        static TitleContainer()
         {
             Location = string.Empty;
             PlatformInit();
         }
 
-        static internal string Location { get; private set; }
+        static internal string Location 
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// Returns an open stream to an existing file in the title storage area.
@@ -38,16 +42,17 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentException("Invalid filename. TitleContainer.OpenStream requires a relative path.", name);
 
             // Normalize the file path.
-            string safeName = NormalizeRelativePath(name);
+            string safeName = TitleContainer.NormalizeRelativePath(name);
 
-            // Call the platform code to open the stream.  Any errors
-            // at this point should result in a file not found.
-            Stream stream;
+            // Call the platform code to open the stream.
+            // Any errors at this point should result in a file not found.
             try
             {
-                stream = PlatformOpenStream(safeName);
-                if (stream == null)
-                    throw FileNotFoundException(name, null);
+                Stream stream = PlatformOpenStream(safeName);
+                if (stream != null)
+                    return stream;
+                else
+                    throw new FileNotFoundException("Error loading \"" + name + "\". File not found.");
             }
             catch (FileNotFoundException)
             {
@@ -57,21 +62,16 @@ namespace Microsoft.Xna.Framework
             {
                 throw new FileNotFoundException(name, ex);
             }
-
-            return stream;
         }
 
-        private static Exception FileNotFoundException(string name, Exception inner)
-        {
-            return new FileNotFoundException("Error loading \"" + name + "\". File not found.", inner);
-        }
-
-        internal static string NormalizeRelativePath(string name)
+        private static string NormalizeRelativePath(string name)
         {
             Uri uri = new Uri("file:///" + FileHelpers.UrlEncode(name));
             string path = uri.LocalPath;
             path = path.Substring(1);
-            return path.Replace(FileHelpers.NotSeparator, FileHelpers.Separator);
+            path = path.Replace(FileHelpers.NotSeparator, FileHelpers.Separator);
+
+            return path;
         }
     }
 }
