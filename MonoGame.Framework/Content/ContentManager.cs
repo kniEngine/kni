@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Reflection;
 using System.IO;
 using MonoGame.Framework.Utilities;
-using Microsoft.Xna.Framework.Graphics;
 
 #if !(UAP || WINUI)
 using Microsoft.Xna.Framework.Audio;

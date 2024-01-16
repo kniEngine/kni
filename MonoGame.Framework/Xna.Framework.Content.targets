@@ -61,8 +61,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Utilities\Lz4Stream\Lz4DecoderStream.cs" />
-    <Compile Include="Utilities\LzxStream\LzxDecoderStream.cs" />
+    <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
+    <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
   </ItemGroup>
 
