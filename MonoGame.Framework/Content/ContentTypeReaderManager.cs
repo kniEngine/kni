@@ -84,7 +84,6 @@ namespace Microsoft.Xna.Framework.Content
                 var hBoundingBoxReader = new BoundingBoxReader();
                 var hBoundingFrustumReader = new BoundingFrustumReader();
                 var hBoundingSphereReader = new BoundingSphereReader();
-                var hColorReader = new ColorReader();
                 var hComplexReader = new ComplexReader();
                 var hCurveReader = new CurveReader();
                 var hExternalReferenceReader = new ExternalReferenceReader();
@@ -113,6 +112,7 @@ namespace Microsoft.Xna.Framework.Content
                 // This forces the classes not to be optimized out when deploying with trimming
 
                 // Framework.Graphics types
+                var hColorReader = new ColorReader();
                 var hAlphaTestEffectReader = new AlphaTestEffectReader();
                 var hBasicEffectReader = new BasicEffectReader();
                 var hDualTextureEffectReader = new DualTextureEffectReader();
@@ -137,7 +137,6 @@ namespace Microsoft.Xna.Framework.Content
                 // This forces the classes not to be optimized out when deploying with trimming
 
                 // Framework.Audio types
-                var hSongReader = new SongReader();
                 var hSoundEffectReader = new SoundEffectReader();
             }
 
@@ -148,6 +147,7 @@ namespace Microsoft.Xna.Framework.Content
                 // This forces the classes not to be optimized out when deploying with trimming
 
                 // Framework.Media types
+                var hSongReader = new SongReader();
                 var hVideoReader = new VideoReader();
             }
 #pragma warning restore 0219, 0649
