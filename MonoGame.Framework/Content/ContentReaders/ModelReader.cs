@@ -28,21 +28,21 @@ namespace Microsoft.Xna.Framework.Content
             for (uint i = 0; i < boneCount; i++)
             {
                 string name = input.ReadObject<string>();
-                var matrix = input.ReadMatrix();
-                var bone = new ModelBone { Transform = matrix, Index = (int)i, Name = name };
+                Matrix matrix = input.ReadMatrix();
+                ModelBone bone = new ModelBone { Transform = matrix, Index = (int)i, Name = name };
                 bones.Add(bone);
             }
             
             // Read the bone hierarchy.
             for (int i = 0; i < boneCount; i++)
             {
-                var bone = bones[i];
+                ModelBone bone = bones[i];
 
                 //Debug.WriteLine("Bone {0} hierarchy:", i);
 
                 // Read the parent bone reference.
                 //Debug.WriteLine("Parent: ");
-                var parentIndex = ReadBoneReference(input, is8BitBoneReference);
+                int parentIndex = ReadBoneReference(input, is8BitBoneReference);
 
                 if (parentIndex != -1)
                 {
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Content
 
                     for (uint j = 0; j < childCount; j++)
                     {
-                        var childIndex = ReadBoneReference(input, is8BitBoneReference);
+                        int childIndex = ReadBoneReference(input, is8BitBoneReference);
                         if (childIndex != -1)
                         {
                             bone.AddChild(bones[childIndex]);
@@ -78,12 +78,12 @@ namespace Microsoft.Xna.Framework.Content
 
                 //Debug.WriteLine("Mesh {0}", i);
                 string name = input.ReadObject<string>();
-                var parentBoneIndex = ReadBoneReference(input, is8BitBoneReference);
-                //Opt: var boundingSphere = input.ReadRawObject<BoundingSphere>();
-                var boundingSphere = new BoundingSphere(input.ReadVector3(), input.ReadSingle());
+                int parentBoneIndex = ReadBoneReference(input, is8BitBoneReference);
+                //Opt: BoundingSphere boundingSphere = input.ReadRawObject<BoundingSphere>();
+                BoundingSphere boundingSphere = new BoundingSphere(input.ReadVector3(), input.ReadSingle());
 
                 // Tag
-                var meshTag = input.ReadObject<object>();
+                object meshTag = input.ReadObject<object>();
 
                 // Read the mesh part data.
                 int partCount = input.ReadInt32();
@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Read the final pieces of model data.
-            var rootBoneIndex = ReadBoneReference(input, is8BitBoneReference);
+            int rootBoneIndex = ReadBoneReference(input, is8BitBoneReference);
 
             Model model = new Model(input.GetGraphicsDevice(), bones, meshes);
 

@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public ContentSerializerAttribute Clone()
         {
-            var clone = new ContentSerializerAttribute();
+            ContentSerializerAttribute clone = new ContentSerializerAttribute();
             clone.AllowNull = AllowNull;
             clone._collectionItemName = _collectionItemName;
             clone.ElementName = ElementName;

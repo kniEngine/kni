@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Content
             if (ReflectionHelpers.GetCustomAttribute<ContentSerializerIgnoreAttribute>(member) != null) 
                 return null;
 
-            var contentSerializerAttribute = ReflectionHelpers.GetCustomAttribute<ContentSerializerAttribute>(member);
+            ContentSerializerAttribute contentSerializerAttribute = ReflectionHelpers.GetCustomAttribute<ContentSerializerAttribute>(member);
             if (contentSerializerAttribute == null)
             {
                 if (property != null)

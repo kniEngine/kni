@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.IO;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Framework.Graphics;
@@ -29,7 +30,7 @@ namespace Microsoft.Xna.Framework.Content
         private List<IDisposable> disposableAssets = new List<IDisposable>();
         private bool disposed;
 
-        public readonly static HashSet<Type> IgnoreReloadGraphicsAssetsTypes = new HashSet<Type>(new[] 
+        public readonly static HashSet<Type> IgnoreReloadGraphicsAssetsTypes = new HashSet<Type>(new Type[] 
         {
                 typeof(Microsoft.Xna.Framework.Audio.SoundEffect),
         });
@@ -94,7 +95,7 @@ namespace Microsoft.Xna.Framework.Content
                 bool contains = false;
                 for (int i = ContentManagers.Count - 1; i >= 0; --i)
                 {
-                    var contentRef = ContentManagers[i];
+                    WeakReference contentRef = ContentManagers[i];
                     if (ReferenceEquals(contentRef.Target, contentManager))
                         contains = true;
                     if (!contentRef.IsAlive)
@@ -113,7 +114,7 @@ namespace Microsoft.Xna.Framework.Content
                 // take the opportunity to prune the list of any finalized content managers.
                 for (int i = ContentManagers.Count - 1; i >= 0; --i)
                 {
-                    var contentRef = ContentManagers[i];
+                    WeakReference contentRef = ContentManagers[i];
                     if (!contentRef.IsAlive || ReferenceEquals(contentRef.Target, contentManager))
                         ContentManagers.RemoveAt(i);
                 }
@@ -128,10 +129,10 @@ namespace Microsoft.Xna.Framework.Content
                 // opportunity to prune the list of any finalized content managers.
                 for (int i = ContentManagers.Count - 1; i >= 0; --i)
                 {
-                    var contentRef = ContentManagers[i];
+                    WeakReference contentRef = ContentManagers[i];
                     if (contentRef.IsAlive)
                     {
-                        var contentManager = (ContentManager)contentRef.Target;
+                        ContentManager contentManager = (ContentManager)contentRef.Target;
                         if (contentManager != null)
                             contentManager.ReloadGraphicsAssets();
                     }
@@ -274,7 +275,7 @@ namespace Microsoft.Xna.Framework.Content
         {
             try
             {
-                var assetPath = Path.Combine(RootDirectory, assetName) + ".xnb";
+                string assetPath = Path.Combine(RootDirectory, assetName) + ".xnb";
 
                 // This is primarily for editor support. 
                 // Setting the RootDirectory to an absolute path is useful in editor
@@ -376,7 +377,7 @@ namespace Microsoft.Xna.Framework.Content
                 decompressedStream = stream;
             }
 
-            var reader = new ContentReader(this, decompressedStream,
+            ContentReader reader = new ContentReader(this, decompressedStream,
                                                         originalAssetName, version, xnbLength, recordDisposableObject);
             
             return reader;
@@ -402,7 +403,7 @@ namespace Microsoft.Xna.Framework.Content
 
         protected virtual void ReloadGraphicsAssets()
         {
-            foreach (var asset in LoadedAssets)
+            foreach (KeyValuePair<string,object> asset in LoadedAssets)
             {
                 if (IgnoreReloadGraphicsAssetsTypes.Contains(asset.Value.GetType()))
                     continue;                
@@ -412,8 +413,8 @@ namespace Microsoft.Xna.Framework.Content
                 if (asset.Key == null)
                     ReloadAsset(asset.Key, Convert.ChangeType(asset.Value, asset.Value.GetType()));
 
-                var methodInfo = ReflectionHelpers.GetMethodInfo(typeof(ContentManager), "ReloadAsset");
-                var genericMethod = methodInfo.MakeGenericMethod(asset.Value.GetType());
+                MethodInfo methodInfo = ReflectionHelpers.GetMethodInfo(typeof(ContentManager), "ReloadAsset");
+                MethodInfo genericMethod = methodInfo.MakeGenericMethod(asset.Value.GetType());
                 genericMethod.Invoke(this, new object[] { asset.Key, Convert.ChangeType(asset.Value, asset.Value.GetType()) }); 
             }
         }
@@ -430,10 +431,10 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ObjectDisposedException("ContentManager");
             }
 
-            var stream = OpenStream(assetName);
-            using (var xnbReader = new BinaryReader(stream))
+            Stream stream = OpenStream(assetName);
+            using (BinaryReader xnbReader = new BinaryReader(stream))
             {
-                using (var reader = GetContentReaderFromXnb(assetName, stream, xnbReader, null))
+                using (ContentReader reader = GetContentReaderFromXnb(assetName, stream, xnbReader, null))
                 {
                     reader.ReadAsset<T>(currentAsset);
                 }
@@ -443,7 +444,7 @@ namespace Microsoft.Xna.Framework.Content
         public virtual void Unload()
         {
             // Look for disposable assets.
-            foreach (var disposable in disposableAssets)
+            foreach (IDisposable disposable in disposableAssets)
             {
                 if (disposable != null)
                     disposable.Dispose();
@@ -484,7 +485,7 @@ namespace Microsoft.Xna.Framework.Content
             {   
                 lock (_bufferSet)
                 {
-                    foreach (var buffer in _bufferSet)
+                    foreach (byte[] buffer in _bufferSet)
                     {
                         if (buffer.Length >= size)
                         {

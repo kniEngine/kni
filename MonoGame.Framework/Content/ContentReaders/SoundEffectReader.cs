@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.IO;
 using Microsoft.Xna.Framework.Audio;
 
 
@@ -35,28 +36,28 @@ namespace Microsoft.Xna.Framework.Content
             // We let the sound effect deal with parsing this based
             // on what format the audio data actually is.
 
-            var headerSize = input.ReadInt32();
-            var header = input.ReadBytes(headerSize);
+            int headerSize = input.ReadInt32();
+            byte[] header = input.ReadBytes(headerSize);
 
             // Read the audio data buffer.
-            var dataSize = input.ReadInt32();
-            var data = ContentManager.ScratchBufferPool.Get(dataSize);
+            int dataSize = input.ReadInt32();
+            byte[] data = ContentManager.ScratchBufferPool.Get(dataSize);
             input.Read(data, 0, dataSize);
 
-            var loopStart = input.ReadInt32();
-            var loopLength = input.ReadInt32();
-            var durationMs = input.ReadInt32();
+            int loopStart = input.ReadInt32();
+            int loopLength = input.ReadInt32();
+            int durationMs = input.ReadInt32();
 
 #if DIRECTX
-            var format = BitConverter.ToInt16(header, 0);
-            var channels = BitConverter.ToInt16(header, 2);
-            var blockAlignment = BitConverter.ToInt16(header, 12);
+            short format = BitConverter.ToInt16(header, 0);
+            short channels = BitConverter.ToInt16(header, 2);
+            short blockAlignment = BitConverter.ToInt16(header, 12);
             if (format == 2 && blockAlignment == 1024)
             {
                 byte[] newData;
-                using (var origDataStream = new System.IO.MemoryStream(data, 0, dataSize))
+                using (Stream origDataStream = new MemoryStream(data, 0, dataSize))
                 {
-                    using (var reader = new System.IO.BinaryReader(origDataStream))
+                    using (BinaryReader reader = new BinaryReader(origDataStream))
                     {
                         newData = MSADPCMToPCM.MSADPCM_TO_PCM(reader, channels, (short)((blockAlignment/channels)-22) );
                     }
@@ -66,7 +67,7 @@ namespace Microsoft.Xna.Framework.Content
                 header[0] = 1; // PCM format
                 header[14] = 16; // 16 bitsPerSample
                 // Create the effect.
-                var effect2 = existingInstance ?? new SoundEffect(header, newData, newData.Length, durationMs, loopStart, loopLength);
+                SoundEffect effect2 = existingInstance ?? new SoundEffect(header, newData, newData.Length, durationMs, loopStart, loopLength);
                 // Store the original asset name for debugging later.
                 effect2.Name = input.AssetName;
                 return effect2;
@@ -74,7 +75,7 @@ namespace Microsoft.Xna.Framework.Content
 #endif
 
             // Create the effect.
-            var effect = existingInstance ?? new SoundEffect(header, data, dataSize, durationMs, loopStart, loopLength);
+            SoundEffect effect = existingInstance ?? new SoundEffect(header, data, dataSize, durationMs, loopStart, loopLength);
 
             // Store the original asset name for debugging later.
             effect.Name = input.AssetName;
@@ -203,12 +204,12 @@ namespace Microsoft.Xna.Framework.Audio
          *
          * NOTE: The original MSADPCMToPCM class returns as a short[] array!
          */
-        public static byte[] MSADPCM_TO_PCM(System.IO.BinaryReader Source, short numChannels, short blockAlign) 
+        public static byte[] MSADPCM_TO_PCM(BinaryReader Source, short numChannels, short blockAlign) 
         {
             // We write to output when reading the PCM data, then we convert
             // it back to a short array at the end.
-            var output = new System.IO.MemoryStream();
-            var pcmOut = new System.IO.BinaryWriter(output);
+            MemoryStream output = new MemoryStream();
+            BinaryWriter pcmOut = new BinaryWriter(output);
 
             // We'll be using this to get each sample from the blocks.
             byte[] nibbleBlock = new byte[2];

@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content
         {
             Texture2D texture = null;
 
-            var surfaceFormat = (SurfaceFormat)input.ReadInt32();
+            SurfaceFormat surfaceFormat = (SurfaceFormat)input.ReadInt32();
             int width = input.ReadInt32();
             int height = input.ReadInt32();
             int levelCount = input.ReadInt32();
@@ -63,8 +63,8 @@ namespace Microsoft.Xna.Framework.Content
 
             for (int level = 0; level < levelCount; level++)
             {
-                var levelDataSizeInBytes = input.ReadInt32();
-                var levelData = ContentManager.ScratchBufferPool.Get(levelDataSizeInBytes);
+                int levelDataSizeInBytes = input.ReadInt32();
+                byte[] levelData = ContentManager.ScratchBufferPool.Get(levelDataSizeInBytes);
                 input.Read(levelData, 0, levelDataSizeInBytes);
                 int levelWidth = Math.Max(width >> level, 1);
                 int levelHeight = Math.Max(height >> level, 1);

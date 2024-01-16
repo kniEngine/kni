@@ -133,8 +133,8 @@ namespace Microsoft.Xna.Framework.Content
 
             // The first content byte i read tells me the number of content readers in this XNB file
             int numberOfReaders = reader.Read7BitEncodedInt();
-            var contentReaders = new ContentTypeReader[numberOfReaders];
-            var needsInitialize = new BitArray(numberOfReaders);
+            ContentTypeReader[] contentReaders = new ContentTypeReader[numberOfReaders];
+            BitArray needsInitialize = new BitArray(numberOfReaders);
             _contentReaders = new Dictionary<Type, ContentTypeReader>(numberOfReaders);
 
             // Lock until we're done allocating and initializing any new

@@ -14,14 +14,14 @@ namespace Microsoft.Xna.Framework.Content
     {
         protected internal override EffectMaterial Read(ContentReader input, EffectMaterial existingInstance)
         {
-            var effect = input.ReadExternalReference<Effect>();
-            var effectMaterial = new EffectMaterial(effect);
+            Effect effect = input.ReadExternalReference<Effect>();
+            EffectMaterial effectMaterial = new EffectMaterial(effect);
 
-            var dict = input.ReadObject<Dictionary<string, object>>();
+            Dictionary<string,object> dict = input.ReadObject<Dictionary<string, object>>();
 
             foreach (KeyValuePair<string, object> item in dict)
             {
-                var parameter = effectMaterial.Parameters[item.Key];
+                EffectParameter parameter = effectMaterial.Parameters[item.Key];
                 if (parameter != null)
                 {
                     Type itemType = item.Value.GetType();

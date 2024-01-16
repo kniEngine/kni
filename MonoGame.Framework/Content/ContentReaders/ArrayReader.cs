@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 for (uint i = 0; i < count; i++)
                 {
-                    var readerType = input.Read7BitEncodedInt();
+                    int readerType = input.Read7BitEncodedInt();
                     array[i] = readerType > 0 ? input.ReadObject<T>(input.TypeReaders[readerType - 1]) : default(T);
                 }
             }
