@@ -63,7 +63,7 @@
     <Compile Include="Media\WMS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
     <Compile Include="Media\WMS\ConcreteVideo.cs" />
-    <Compile Include="TitleContainer.Desktop.cs" />
+    <Compile Include="TitleContainer.WindowsDX11.cs" />
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Platform\Utilities\TimerHelper.cs" />

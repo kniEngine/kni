@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework
     {
         private static Stream PlatformOpenStream(string safeName)
         {
-            var request = new XMLHttpRequest();
+            XMLHttpRequest request = new XMLHttpRequest();
 
             request.Open("GET", safeName, false);
             request.OverrideMimeType("text/plain; charset=x-user-defined");
@@ -21,13 +21,13 @@ namespace Microsoft.Xna.Framework
 
             if (request.Status == 200)
             {
-                var responseText = request.ResponseText;
+                string responseText = request.ResponseText;
 
                 byte[] buffer = new byte[responseText.Length];
                 for (int i = 0; i < responseText.Length; i++)
                     buffer[i] = (byte)(responseText[i] & 0xff);
 
-                var ms = new MemoryStream(buffer);
+                Stream ms = new MemoryStream(buffer);
 
                 return ms;
             }

@@ -12,21 +12,12 @@ namespace Microsoft.Xna.Framework
     {
         static partial void PlatformInit()
         {
-#if WINDOWSDX || DESKTOPGL
-#if DESKTOPGL
-            // Check for the package Resources Folder first. This is where the assets
-            // will be bundled.
-            if (CurrentPlatform.OS == OS.MacOSX)
-                Location = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Resources");
-            if (!Directory.Exists(Location))
-#endif
             Location = AppDomain.CurrentDomain.BaseDirectory;
-#endif
         }
 
         private static Stream PlatformOpenStream(string safeName)
         {
-            var absolutePath = Path.Combine(Location, safeName);
+            string absolutePath = Path.Combine(Location, safeName);
             return File.OpenRead(absolutePath);
         }
     }
