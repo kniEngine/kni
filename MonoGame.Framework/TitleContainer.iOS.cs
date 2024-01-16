@@ -11,24 +11,23 @@ namespace Microsoft.Xna.Framework
 {
     partial class TitleContainer
     {
-        static internal bool SupportRetina { get; private set; }
-        static internal int RetinaScale { get; private set; }
+        private bool _supportRetina;
+        private int _retinaScale;
 
-        static partial void PlatformInit()
+        private void PlatformInit()
         {
-            Location = NSBundle.MainBundle.ResourcePath;
+            _location = NSBundle.MainBundle.ResourcePath;
 
-            SupportRetina = UIScreen.MainScreen.Scale >= 2.0f;
-            RetinaScale = (int)Math.Round(UIScreen.MainScreen.Scale);
+            _supportRetina = UIScreen.MainScreen.Scale >= 2.0f;
+            _retinaScale = (int)Math.Round(UIScreen.MainScreen.Scale);
         }
 
-
-        private static Stream PlatformOpenStream(string safeName)
+        private Stream PlatformOpenStream(string safeName)
         {
             string absolutePath = Path.Combine(Location, safeName);
-            if (SupportRetina)
+            if (_supportRetina)
             {
-                for (int scale = RetinaScale; scale >= 2; scale--)
+                for (int scale = _retinaScale; scale >= 2; scale--)
                 {
                     // Insert the @#x immediately prior to the extension. If this file exists
                     // and we are on a Retina device, return this file instead.

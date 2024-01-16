@@ -10,17 +10,18 @@ namespace Microsoft.Xna.Framework
 {
     partial class TitleContainer
     {
-        static partial void PlatformInit()
+
+        private void PlatformInit()
         {
             // Check for the package Resources Folder first. This is where the assets
             // will be bundled.
             if (CurrentPlatform.OS == OS.MacOSX)
-                Location = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Resources");
+                _location = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Resources");
             if (!Directory.Exists(Location))
-                Location = AppDomain.CurrentDomain.BaseDirectory;
+                _location = AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        private static Stream PlatformOpenStream(string safeName)
+        private Stream PlatformOpenStream(string safeName)
         {
             string absolutePath = Path.Combine(Location, safeName);
             return File.OpenRead(absolutePath);
