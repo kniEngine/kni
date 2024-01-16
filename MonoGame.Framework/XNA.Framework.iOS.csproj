@@ -112,7 +112,7 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.MacOS.cs" />
+    <Compile Include="TitleContainer.iOS.cs" />
   </ItemGroup>
 
   <ItemGroup>
