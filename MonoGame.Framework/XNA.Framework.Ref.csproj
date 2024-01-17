@@ -62,7 +62,7 @@
     <Compile Include="Media\Ref\ConcreteSong.cs" />
     <Compile Include="Media\Ref\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Ref\ConcreteVideo.cs" />
-    <Compile Include="TitleContainer.Ref.cs" />
+    <Compile Include="ConcreteTitleContainer.Ref.cs" />
   </ItemGroup>
   
   <ItemGroup>

@@ -150,7 +150,8 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.WindowsDX11.cs" />
+    <Compile Include="TitleContainerStrategy.cs" />
+    <Compile Include="ConcreteTitleContainer.WindowsDX11.cs" />
   </ItemGroup>
 
   <ItemGroup>

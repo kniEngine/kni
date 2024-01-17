@@ -131,7 +131,8 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.SDL.cs" />
+    <Compile Include="TitleContainerStrategy.cs" />
+    <Compile Include="ConcreteTitleContainer.SDL.cs" />
   </ItemGroup>
 
   <ItemGroup>

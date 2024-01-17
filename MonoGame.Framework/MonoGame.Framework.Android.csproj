@@ -91,7 +91,7 @@
     <Compile Include="Media\Android\ConcreteVideo.cs" />
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
-    <Compile Include="TitleContainer.Android.cs" />
+    <Compile Include="ConcreteTitleContainer.Android.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
     

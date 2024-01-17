@@ -147,7 +147,8 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.WinRT.cs" />
+    <Compile Include="TitleContainerStrategy.cs" />
+    <Compile Include="ConcreteTitleContainer.UAP.cs" />
   </ItemGroup>
 
   <ItemGroup>
