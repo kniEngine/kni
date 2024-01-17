@@ -141,7 +141,8 @@
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
     <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.Android.cs" />
+    <Compile Include="TitleContainerStrategy.cs" />
+    <Compile Include="ConcreteTitleContainer.Android.cs" />
   </ItemGroup>
 
   <ItemGroup>

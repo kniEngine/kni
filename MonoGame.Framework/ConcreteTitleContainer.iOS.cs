@@ -2,19 +2,26 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.IO;
 using Foundation;
+using Microsoft.Xna.Framework;
 using UIKit;
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
-    partial class TitleContainer
+    internal sealed class ConcreteTitleContainer : TitleContainerStrategy
     {
+        private string _location = string.Empty;
+
+        public override string Location { get { return _location; } }
+
         private bool _supportRetina;
         private int _retinaScale;
 
-        private void PlatformInit()
+        public ConcreteTitleContainer() : base()
         {
             _location = NSBundle.MainBundle.ResourcePath;
 
@@ -22,9 +29,10 @@ namespace Microsoft.Xna.Framework
             _retinaScale = (int)Math.Round(UIScreen.MainScreen.Scale);
         }
 
-        private Stream PlatformOpenStream(string safeName)
+        public override Stream PlatformOpenStream(string name)
         {
-            string absolutePath = Path.Combine(Location, safeName);
+            string absolutePath = Path.Combine(_location, name);
+
             if (_supportRetina)
             {
                 for (int scale = _retinaScale; scale >= 2; scale--)
@@ -38,6 +46,7 @@ namespace Microsoft.Xna.Framework
                         return File.OpenRead(absolutePathX);
                 }
             }
+
             return File.OpenRead(absolutePath);
         }
     }

@@ -1,22 +1,22 @@
-// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
+// Copyright (C)2024 Nick Kastellanos
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework;
 using nkast.Wasm.XHR;
 
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
-    partial class TitleContainer
+    internal sealed class ConcreteTitleContainer : TitleContainerStrategy
     {
+        public override string Location { get { return string.Empty; } }
 
-        private void PlatformInit()
+        public ConcreteTitleContainer() : base()
         {
         }
 
-        private Stream PlatformOpenStream(string safeName)
+        public override Stream PlatformOpenStream(string safeName)
         {
             XMLHttpRequest request = new XMLHttpRequest();
 

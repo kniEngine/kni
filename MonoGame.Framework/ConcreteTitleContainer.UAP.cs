@@ -2,8 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.IO;
+using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
 
 #if UAP
@@ -14,14 +17,18 @@ using Windows.ApplicationModel.Resources.Core;
 using Microsoft.Windows.ApplicationModel.Resources;
 #endif
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
-    partial class TitleContainer
+    internal sealed class ConcreteTitleContainer : TitleContainerStrategy
     {
+        private string _location = string.Empty;
+
+        public override string Location { get { return _location; } }
+
         private ResourceContext _resourceContext;
         private ResourceMap _fileResourceMap;
 
-        private void PlatformInit()
+        public ConcreteTitleContainer() : base()
         {
             _location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
 
@@ -29,9 +36,9 @@ namespace Microsoft.Xna.Framework
             _fileResourceMap = ResourceManager.Current.MainResourceMap.GetSubtree("Files");
         }
 
-        private Stream PlatformOpenStream(string safeName)
+        public override Stream PlatformOpenStream(string name)
         {
-            return Task.Run(() => PlatformOpenStreamAsync(safeName).Result).Result;
+            return Task.Run(() => PlatformOpenStreamAsync(name).Result).Result;
         }
 
         private async Task<Stream> PlatformOpenStreamAsync(string name)

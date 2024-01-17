@@ -106,7 +106,8 @@ namespace Microsoft.Xna.Platform
             game.Services.AddService(typeof(ConcreteGame), this);
 
             //This also runs the TitleContainer static constructor, ensuring it is done on the main thread
-            Directory.SetCurrentDirectory(TitleContainer.Location);
+            string location = TitleContainer.Location;
+            Directory.SetCurrentDirectory(location);
 
             _applicationObservers = new List<NSObject>();
 

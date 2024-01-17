@@ -2,28 +2,34 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.IO;
 using MonoGame.Framework.Utilities;
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
-    partial class TitleContainer
+    internal sealed class ConcreteTitleContainer : TitleContainerStrategy
     {
+        private string _location = string.Empty;
 
-        private void PlatformInit()
+        public override string Location { get { return _location; } }
+
+        public ConcreteTitleContainer() : base()
         {
             // Check for the package Resources Folder first. This is where the assets
             // will be bundled.
             if (CurrentPlatform.OS == OS.MacOSX)
                 _location = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "Resources");
-            if (!Directory.Exists(Location))
+            if (!Directory.Exists(_location))
                 _location = AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        private Stream PlatformOpenStream(string safeName)
+        public override Stream PlatformOpenStream(string name)
         {
-            string absolutePath = Path.Combine(Location, safeName);
+            string absolutePath = Path.Combine(_location, name);
+
             return File.OpenRead(absolutePath);
         }
     }

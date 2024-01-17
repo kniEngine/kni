@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.IO;
 using Microsoft.Xna.Platform;
@@ -22,7 +24,7 @@ namespace Microsoft.Xna.Framework
     /// <summary>
     /// Provides functionality for opening a stream in the title storage area.
     /// </summary>
-    public sealed partial class TitleContainer : ITitleContainer
+    public sealed class TitleContainer : ITitleContainer
     {
         private static TitleContainer _current;
 
@@ -62,18 +64,18 @@ namespace Microsoft.Xna.Framework
         }
 
 
+        private TitleContainerStrategy _strategy;
+
         private TitleContainer()
         {
-            PlatformInit();
+            _strategy = new ConcreteTitleContainer();
         }
 
         #region ITitleContainer
 
-        private string _location = string.Empty;
-
         string ITitleContainer.Location
         {
-            get { return _location; }
+            get { return _strategy.Location; }
         }
 
         Stream ITitleContainer.OpenStream(string name)
@@ -92,7 +94,7 @@ namespace Microsoft.Xna.Framework
             // Any errors at this point should result in a file not found.
             try
             {
-                Stream stream = PlatformOpenStream(safeName);
+                Stream stream = _strategy.PlatformOpenStream(safeName);
                 if (stream != null)
                     return stream;
                 else

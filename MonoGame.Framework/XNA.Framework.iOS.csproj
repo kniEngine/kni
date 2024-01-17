@@ -112,7 +112,8 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.iOS.cs" />
+    <Compile Include="TitleContainerStrategy.cs" />
+    <Compile Include="ConcreteTitleContainer.iOS.cs" />
   </ItemGroup>
 
   <ItemGroup>
