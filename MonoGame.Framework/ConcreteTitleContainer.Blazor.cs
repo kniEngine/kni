@@ -16,11 +16,11 @@ namespace Microsoft.Xna.Platform
         {
         }
 
-        public override Stream PlatformOpenStream(string safeName)
+        public override Stream PlatformOpenStream(string name)
         {
             XMLHttpRequest request = new XMLHttpRequest();
 
-            request.Open("GET", safeName, false);
+            request.Open("GET", name, false);
             request.OverrideMimeType("text/plain; charset=x-user-defined");
             request.Send();
 
