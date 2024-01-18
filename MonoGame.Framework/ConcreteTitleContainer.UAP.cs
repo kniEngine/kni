@@ -9,14 +9,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using System.Threading.Tasks;
 
-#if UAP
-using Windows.ApplicationModel.Resources.Core;
-#endif
-
-#if WINUI
-using Microsoft.Windows.ApplicationModel.Resources;
-#endif
-
 namespace Microsoft.Xna.Platform
 {
     internal sealed class ConcreteTitleContainer : TitleContainerStrategy
@@ -25,15 +17,9 @@ namespace Microsoft.Xna.Platform
 
         public override string Location { get { return _location; } }
 
-        private ResourceContext _resourceContext;
-        private ResourceMap _fileResourceMap;
-
         public ConcreteTitleContainer() : base()
         {
             _location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
-
-            _resourceContext = new ResourceContext();
-            _fileResourceMap = ResourceManager.Current.MainResourceMap.GetSubtree("Files");
         }
 
         public override Stream PlatformOpenStream(string name)
