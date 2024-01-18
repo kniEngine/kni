@@ -19,7 +19,8 @@ namespace Microsoft.Xna.Framework.Content
             if (!String.IsNullOrEmpty(path))
             {
                 // Add the ContentManager's RootDirectory
-                string rootDirectoryFullPath = input.ContentManager.RootDirectoryFullPath;
+                string assetsLocationFullPath = TitleContainer.Location;
+                string rootDirectoryFullPath = Path.Combine(assetsLocationFullPath, input.ContentManager.RootDirectory);
                 string dirPath = Path.Combine(rootDirectoryFullPath, input.AssetName);
 
                 // Resolve the relative path
@@ -28,7 +29,8 @@ namespace Microsoft.Xna.Framework.Content
 
             string name = Path.GetFileNameWithoutExtension(path);
             Uri streamSource = new Uri(path, UriKind.RelativeOrAbsolute);
-            return existingInstance ?? new Song(name, streamSource, durationMs);
+            Song result = existingInstance ?? new Song(name, streamSource, durationMs);
+            return result;
         }
     }
 }

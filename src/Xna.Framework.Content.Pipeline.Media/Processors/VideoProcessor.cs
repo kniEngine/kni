@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     {
         public override VideoContent Process(VideoContent input, ContentProcessorContext context)
         {
-            var relative = Path.GetDirectoryName(PathHelper.GetRelativePath(context.OutputDirectory, context.OutputFilename));
-            var relVideoPath = PathHelper.Normalize(Path.Combine(relative, Path.GetFileName(input.Filename)));
-            var absVideoPath = PathHelper.Normalize(Path.Combine(context.OutputDirectory, relVideoPath));
+            string relative = Path.GetDirectoryName(PathHelper.GetRelativePath(context.OutputDirectory, context.OutputFilename));
+            string relVideoPath = PathHelper.Normalize(Path.Combine(relative, Path.GetFileName(input.Filename)));
+            string absVideoPath = PathHelper.Normalize(Path.Combine(context.OutputDirectory, relVideoPath));
 
             // Make sure the output folder for the video exists.
             Directory.CreateDirectory(Path.GetDirectoryName(absVideoPath));
@@ -24,7 +24,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             context.AddOutputFile(absVideoPath);
 
             // Fixup relative path
-            input.Filename = PathHelper.GetRelativePath(context.OutputFilename, absVideoPath);
+            string relativeMediaPath = PathHelper.GetRelativePath(context.OutputFilename, absVideoPath);
+            input.Filename = relativeMediaPath;
 
             return input;
         }

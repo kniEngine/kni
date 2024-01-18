@@ -43,11 +43,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         public override SongContent Process(AudioContent input, ContentProcessorContext context)
         {
             // The xnb name is the basis for the final song filename.
-            var songFileName = context.OutputFilename;
+            string songFileName = context.OutputFilename;
 
             // Convert and write out the song media file.
-            var profile = AudioProfile.ForPlatform(context.TargetPlatform);
-            var finalQuality = profile.ConvertStreamingAudio(context.TargetPlatform, _quality, input, ref songFileName);
+            AudioProfile profile = AudioProfile.ForPlatform(context.TargetPlatform);
+            ConversionQuality finalQuality = profile.ConvertStreamingAudio(context.TargetPlatform, _quality, input, ref songFileName);
 
             // Let the pipeline know about the song file so it can clean things up.
             context.AddOutputFile(songFileName);
@@ -55,7 +55,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", _quality, finalQuality);
 
             // Return the XNB song content.
-            return new SongContent(PathHelper.GetRelativePath(Path.GetDirectoryName(context.OutputFilename) + Path.DirectorySeparatorChar, songFileName), input.Duration);
+            string relativeMediaPath = PathHelper.GetRelativePath(Path.GetDirectoryName(context.OutputFilename) + Path.DirectorySeparatorChar, songFileName);
+            return new SongContent(relativeMediaPath, input.Duration);
         }
     }
 }

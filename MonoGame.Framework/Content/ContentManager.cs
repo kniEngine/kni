@@ -445,11 +445,6 @@ namespace Microsoft.Xna.Framework.Content
             get { return _rootDirectory; }
             set { _rootDirectory = value; }
         }
-
-        internal string RootDirectoryFullPath
-        {
-            get { return Path.Combine(TitleContainer.Location, this.RootDirectory); }
-        }
         
         public IServiceProvider ServiceProvider
         {
