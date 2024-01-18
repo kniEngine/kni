@@ -24,7 +24,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             context.AddOutputFile(absVideoPath);
 
             // Fixup relative path
-            input.Filename = PathHelper.GetRelativePath(context.OutputFilename, absVideoPath);
+            string relativeMediaPath = PathHelper.GetRelativePath(context.OutputFilename, absVideoPath);
+            input.Filename = relativeMediaPath;
 
             return input;
         }

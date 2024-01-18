@@ -55,7 +55,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", _quality, finalQuality);
 
             // Return the XNB song content.
-            return new SongContent(PathHelper.GetRelativePath(Path.GetDirectoryName(context.OutputFilename) + Path.DirectorySeparatorChar, songFileName), input.Duration);
+            string relativeMediaPath = PathHelper.GetRelativePath(Path.GetDirectoryName(context.OutputFilename) + Path.DirectorySeparatorChar, songFileName);
+            return new SongContent(relativeMediaPath, input.Duration);
         }
     }
 }
