@@ -52,7 +52,6 @@ namespace Microsoft.Xna.Framework.Content
         internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
         {
             PreserveContentTypeReaders();
-            PreserveAudioContentTypeReaders();
             PreserveMediaContentTypeReaders();
 
             // The first content byte i read tells me the number of content readers in this XNB file
@@ -178,20 +177,6 @@ namespace Microsoft.Xna.Framework.Content
 #pragma warning restore 0219, 0649
         }
 
-        private static void PreserveAudioContentTypeReaders()
-        {
-#pragma warning disable 0219, 0649
-            // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimmingFalseFlag)
-            {
-                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
-                // This forces the classes not to be optimized out when deploying with trimming
-
-                // Framework.Audio types
-                var hSoundEffectReader = new SoundEffectReader();
-            }
-#pragma warning restore 0219, 0649
-        }
 
         private static void PreserveMediaContentTypeReaders()
         {
