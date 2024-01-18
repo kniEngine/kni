@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     class DualTextureEffectReader : ContentTypeReader<DualTextureEffect>
     {
-        protected internal override DualTextureEffect Read(ContentReader input, DualTextureEffect existingInstance)
+        protected override DualTextureEffect Read(ContentReader input, DualTextureEffect existingInstance)
         {
             DualTextureEffect effect = new DualTextureEffect(input.GetGraphicsDevice());
             effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;

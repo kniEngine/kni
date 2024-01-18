@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class Texture3DReader : ContentTypeReader<Texture3D>
     {
-        protected internal override Texture3D Read(ContentReader input, Texture3D existingInstance)
+        protected override Texture3D Read(ContentReader input, Texture3D existingInstance)
         {
             Texture3D texture = null;
 

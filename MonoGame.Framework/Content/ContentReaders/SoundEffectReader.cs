@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class SoundEffectReader : ContentTypeReader<SoundEffect>
     {
-        protected internal override SoundEffect Read(ContentReader input, SoundEffect existingInstance)
+        protected override SoundEffect Read(ContentReader input, SoundEffect existingInstance)
         {         
             // XNB format for SoundEffect...
             //            

@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     class EnvironmentMapEffectReader : ContentTypeReader<EnvironmentMapEffect>
     {
-        protected internal override EnvironmentMapEffect Read(ContentReader input, EnvironmentMapEffect existingInstance)
+        protected override EnvironmentMapEffect Read(ContentReader input, EnvironmentMapEffect existingInstance)
         {
             EnvironmentMapEffect effect = new EnvironmentMapEffect(input.GetGraphicsDevice());
             effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;

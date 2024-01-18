@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class VertexDeclarationReader : ContentTypeReader<VertexDeclaration>
     {
-        protected internal override VertexDeclaration Read(ContentReader input, VertexDeclaration existingInstance)
+        protected override VertexDeclaration Read(ContentReader input, VertexDeclaration existingInstance)
         {
             int vertexStride = input.ReadInt32();
             int elementCount = input.ReadInt32();

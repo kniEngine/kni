@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class SpriteFontReader : ContentTypeReader<SpriteFont>
     {
-        protected internal override SpriteFont Read(ContentReader input, SpriteFont existingInstance)
+        protected override SpriteFont Read(ContentReader input, SpriteFont existingInstance)
         {
             if (existingInstance != null)
             {

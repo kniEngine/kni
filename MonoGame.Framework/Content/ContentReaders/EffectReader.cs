@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class EffectReader : ContentTypeReader<Effect>
     {
-        protected internal override Effect Read(ContentReader input, Effect existingInstance)
+        protected override Effect Read(ContentReader input, Effect existingInstance)
         {
             int dataSize = input.ReadInt32();
             byte[] data = input.BufferPool.Get(dataSize);

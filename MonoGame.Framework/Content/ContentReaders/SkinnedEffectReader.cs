@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     class SkinnedEffectReader : ContentTypeReader<SkinnedEffect>
     {
-        protected internal override SkinnedEffect Read(ContentReader input, SkinnedEffect existingInstance)
+        protected override SkinnedEffect Read(ContentReader input, SkinnedEffect existingInstance)
         {
             SkinnedEffect effect = new SkinnedEffect(input.GetGraphicsDevice());
             effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;

@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class Texture2DReader : ContentTypeReader<Texture2D>
     {
-        protected internal override Texture2D Read(ContentReader input, Texture2D existingInstance)
+        protected override Texture2D Read(ContentReader input, Texture2D existingInstance)
         {
             Texture2D texture = null;
 
