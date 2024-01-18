@@ -51,108 +51,10 @@ namespace Microsoft.Xna.Framework.Content
 
         internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
         {
-#pragma warning disable 0219, 0649
-            // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimmingFalseFlag)
-            {
-                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
-                // This forces the classes not to be optimized out when deploying with trimming
-
-                // System types
-                var hBooleanReader = new BooleanReader();
-                var hByteReader = new ByteReader();
-                var hCharReader = new CharReader();
-                var hDateTimeReader = new DateTimeReader();
-                var hDecimalReader = new DecimalReader();
-                var hDoubleReader = new DoubleReader();
-                var hInt16Reader = new Int16Reader();
-                var hInt32Reader = new Int32Reader();
-                var hInt64Reader = new Int64Reader();
-                var hSByteReader = new SByteReader();
-                var hSingleReader = new SingleReader();
-                var hStringReader = new StringReader();
-                var TimeSpanReader = new TimeSpanReader();
-                var hUInt16Reader = new UInt16Reader();
-                var hUInt32Reader = new UInt32Reader();
-                var hUInt64Reader = new UInt64Reader();
-                var hCharListReader = new ListReader<Char>();
-                var hIntListReader = new ListReader<Int32>();
-                var hArrayFloatReader = new ArrayReader<Single>();
-                var hStringListReader = new ListReader<StringReader>();
-
-                // Framework types
-                var hBoundingBoxReader = new BoundingBoxReader();
-                var hBoundingFrustumReader = new BoundingFrustumReader();
-                var hBoundingSphereReader = new BoundingSphereReader();
-                var hComplexReader = new ComplexReader();
-                var hCurveReader = new CurveReader();
-                var hExternalReferenceReader = new ExternalReferenceReader();
-                var hMatrixReader = new MatrixReader();
-                var hPlaneReader = new PlaneReader();
-                var hPointReader = new PointReader();
-                var hQuaternionReader = new QuaternionReader();
-                var hRayReader = new RayReader();
-                var hRectangleReader = new RectangleReader();
-                var hVector2Reader = new Vector2Reader();
-                var hVector3Reader = new Vector3Reader();
-                var hVector4Reader = new Vector4Reader();
-                var hArrayMatrixReader = new ArrayReader<Matrix>();
-                var hRectangleArrayReader = new ArrayReader<Rectangle>();
-                var hArrayVector2Reader = new ArrayReader<Vector2>();
-                var hRectangleListReader = new ListReader<Rectangle>();
-                var hVector3ListReader = new ListReader<Vector3>();
-                var hListVector2Reader = new ListReader<Vector2>();
-                var hNullableRectReader = new NullableReader<Rectangle>();
-
-                // Framework.Graphics.PackedVector types
-                var hColorReader = new ColorReader();
-            }
-
-            // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimmingFalseFlag)
-            {
-                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
-                // This forces the classes not to be optimized out when deploying with trimming
-
-                // Framework.Graphics types
-                var hAlphaTestEffectReader = new AlphaTestEffectReader();
-                var hBasicEffectReader = new BasicEffectReader();
-                var hDualTextureEffectReader = new DualTextureEffectReader();
-                var hEffectMaterialReader = new EffectMaterialReader();
-                var hEffectReader = new EffectReader();
-                var hIndexBufferReader = new IndexBufferReader();
-                var hModelReader = new ModelReader();
-                var hSkinnedEffectReader = new SkinnedEffectReader();
-                var hSpriteFontReader = new SpriteFontReader();
-                var hTexture2DReader = new Texture2DReader();
-                var hTexture3DReader = new Texture3DReader();
-                var hTextureCubeReader = new TextureCubeReader();
-                var hVertexBufferReader = new VertexBufferReader();
-                var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
-                var hEnumBlendReader = new EnumReader<Graphics.Blend>();
-            }
-
-            // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimmingFalseFlag)
-            {
-                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
-                // This forces the classes not to be optimized out when deploying with trimming
-
-                // Framework.Audio types
-                var hSoundEffectReader = new SoundEffectReader();
-            }
-
-            // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimmingFalseFlag)
-            {
-                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
-                // This forces the classes not to be optimized out when deploying with trimming
-
-                // Framework.Media types
-                var hSongReader = new SongReader();
-                var hVideoReader = new VideoReader();
-            }
-#pragma warning restore 0219, 0649
+            PreserveContentTypeReaders();
+            PreserveGraphicsContentTypeReaders();
+            PreserveAudioContentTypeReaders();
+            PreserveMediaContentTypeReaders();
 
             // The first content byte i read tells me the number of content readers in this XNB file
             int numberOfReaders = reader.Read7BitEncodedInt();
@@ -214,6 +116,127 @@ namespace Microsoft.Xna.Framework.Content
             } // lock (_locker)
 
             return contentReaders;
+        }
+
+        private static void PreserveContentTypeReaders()
+        {
+#pragma warning disable 0219, 0649
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
+                // System types
+                var hBooleanReader = new BooleanReader();
+                var hByteReader = new ByteReader();
+                var hCharReader = new CharReader();
+                var hDateTimeReader = new DateTimeReader();
+                var hDecimalReader = new DecimalReader();
+                var hDoubleReader = new DoubleReader();
+                var hInt16Reader = new Int16Reader();
+                var hInt32Reader = new Int32Reader();
+                var hInt64Reader = new Int64Reader();
+                var hSByteReader = new SByteReader();
+                var hSingleReader = new SingleReader();
+                var hStringReader = new StringReader();
+                var TimeSpanReader = new TimeSpanReader();
+                var hUInt16Reader = new UInt16Reader();
+                var hUInt32Reader = new UInt32Reader();
+                var hUInt64Reader = new UInt64Reader();
+                var hCharListReader = new ListReader<Char>();
+                var hIntListReader = new ListReader<Int32>();
+                var hArrayFloatReader = new ArrayReader<Single>();
+                var hStringListReader = new ListReader<StringReader>();
+
+                // Framework types
+                var hBoundingBoxReader = new BoundingBoxReader();
+                var hBoundingFrustumReader = new BoundingFrustumReader();
+                var hBoundingSphereReader = new BoundingSphereReader();
+                var hComplexReader = new ComplexReader();
+                var hCurveReader = new CurveReader();
+                var hExternalReferenceReader = new ExternalReferenceReader();
+                var hMatrixReader = new MatrixReader();
+                var hPlaneReader = new PlaneReader();
+                var hPointReader = new PointReader();
+                var hQuaternionReader = new QuaternionReader();
+                var hRayReader = new RayReader();
+                var hRectangleReader = new RectangleReader();
+                var hVector2Reader = new Vector2Reader();
+                var hVector3Reader = new Vector3Reader();
+                var hVector4Reader = new Vector4Reader();
+                var hArrayMatrixReader = new ArrayReader<Matrix>();
+                var hRectangleArrayReader = new ArrayReader<Rectangle>();
+                var hArrayVector2Reader = new ArrayReader<Vector2>();
+                var hRectangleListReader = new ListReader<Rectangle>();
+                var hVector3ListReader = new ListReader<Vector3>();
+                var hListVector2Reader = new ListReader<Vector2>();
+                var hNullableRectReader = new NullableReader<Rectangle>();
+
+                // Framework.Graphics.PackedVector types
+                var hColorReader = new ColorReader();
+            }
+#pragma warning restore 0219, 0649
+        }
+
+        private static void PreserveGraphicsContentTypeReaders()
+        {
+#pragma warning disable 0219, 0649
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
+                // Framework.Graphics types
+                var hAlphaTestEffectReader = new AlphaTestEffectReader();
+                var hBasicEffectReader = new BasicEffectReader();
+                var hDualTextureEffectReader = new DualTextureEffectReader();
+                var hEffectMaterialReader = new EffectMaterialReader();
+                var hEffectReader = new EffectReader();
+                var hIndexBufferReader = new IndexBufferReader();
+                var hModelReader = new ModelReader();
+                var hSkinnedEffectReader = new SkinnedEffectReader();
+                var hSpriteFontReader = new SpriteFontReader();
+                var hTexture2DReader = new Texture2DReader();
+                var hTexture3DReader = new Texture3DReader();
+                var hTextureCubeReader = new TextureCubeReader();
+                var hVertexBufferReader = new VertexBufferReader();
+                var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
+                var hEnumBlendReader = new EnumReader<Graphics.Blend>();
+            }
+#pragma warning restore 0219, 0649
+        }
+
+        private static void PreserveAudioContentTypeReaders()
+        {
+#pragma warning disable 0219, 0649
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
+                // Framework.Audio types
+                var hSoundEffectReader = new SoundEffectReader();
+            }
+#pragma warning restore 0219, 0649
+        }
+
+        private static void PreserveMediaContentTypeReaders()
+        {
+#pragma warning disable 0219, 0649
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
+                // Framework.Media types
+                var hSongReader = new SongReader();
+                var hVideoReader = new VideoReader();
+            }
+#pragma warning restore 0219, 0649
         }
 
         /// <summary>
