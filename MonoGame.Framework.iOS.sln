@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 17.1.32210.238
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework", "src\Xna.Framework\Xna.Framework.csproj", "{741B4B1E-89E4-434C-8867-6129838AFD51}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics.PackedVector", "src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj", "{FF11302E-6A9F-49AA-960A-9584BC4BDA26}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.iOS", "MonoGame.Framework\MonoGame.Framework.iOS.csproj", "{77CB9792-B9E2-452F-ABDF-6E06C6A4A058}"
 EndProject
 Global
@@ -44,5 +46,17 @@ Global
 		{741B4B1E-89E4-434C-8867-6129838AFD51}.Release|x64.Build.0 = Release|Any CPU
 		{741B4B1E-89E4-434C-8867-6129838AFD51}.Release|x86.ActiveCfg = Release|Any CPU
 		{741B4B1E-89E4-434C-8867-6129838AFD51}.Release|x86.Build.0 = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|x64.Build.0 = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|x86.Build.0 = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|x64.ActiveCfg = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|x64.Build.0 = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|x86.ActiveCfg = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

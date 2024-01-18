@@ -19,6 +19,7 @@
     
     <dependencies>
         <dependency id="nkast.Xna.Framework" version="$version$" />
+        <dependency id="nkast.Xna.Framework.Graphics.PackedVector" version="$version$" />
     </dependencies>
     
   </metadata>

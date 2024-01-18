@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Graphics.PackedVector\</BaseOutputPath>
+    
+    <Version>3.10.9001.0</Version>
+    <AssemblyVersion>3.10.9001.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <ProjectGuid>{FF11302E-6A9F-49AA-960A-9584BC4BDA26}</ProjectGuid>
+    <AssemblyName>Xna.Framework.Graphics.PackedVector</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Graphics.PackedVector</RootNamespace>
+    <DefineConstants></DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>The Graphics.PackedVector framework.</Description>
+    <PackageTags>KNI;.net core;core;.net standard;standard</PackageTags>
+    <PackageId>nkast.Xna.Framework.Graphics.PackedVector</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Graphics\PackedVector\Alpha8.cs" />
+    <Compile Include="Graphics\PackedVector\Bgr565.cs" />
+    <Compile Include="Graphics\PackedVector\Bgra4444.cs" />
+    <Compile Include="Graphics\PackedVector\Bgra5551.cs" />
+    <Compile Include="Graphics\PackedVector\Byte4.cs" />
+    <Compile Include="Graphics\PackedVector\HalfSingle.cs" />
+    <Compile Include="Graphics\PackedVector\HalfTypeHelper.cs" />
+    <Compile Include="Graphics\PackedVector\HalfVector2.cs" />
+    <Compile Include="Graphics\PackedVector\HalfVector4.cs" />
+    <Compile Include="Graphics\PackedVector\IPackedVector.cs" />
+    <Compile Include="Graphics\PackedVector\NormalizedByte2.cs" />
+    <Compile Include="Graphics\PackedVector\NormalizedByte4.cs" />
+    <Compile Include="Graphics\PackedVector\NormalizedShort2.cs" />
+    <Compile Include="Graphics\PackedVector\NormalizedShort4.cs" />
+    <Compile Include="Graphics\PackedVector\Rg32.cs" />
+    <Compile Include="Graphics\PackedVector\Rgba1010102.cs" />
+    <Compile Include="Graphics\PackedVector\Rgba64.cs" />
+    <Compile Include="Graphics\PackedVector\Short2.cs" />
+    <Compile Include="Graphics\PackedVector\Short4.cs" />
+    <Compile Include="Color.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
+      <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
+      <Name>Xna.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

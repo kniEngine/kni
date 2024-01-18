@@ -22,6 +22,7 @@
     <delete dir="${project::get-base-directory()}\MonoGame.Framework.Content.Pipeline\obj" />
     
     <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Design\Xna.Framework.Design.csproj /t:Clean /p:Configuration=Release" />
     
     <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Clean /p:Configuration=Release" />
@@ -92,7 +93,9 @@
   <target name="build_framework" description="Build framework">
 
       <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:restore" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj /t:Build /p:Configuration=Release" />
 
   </target>
     

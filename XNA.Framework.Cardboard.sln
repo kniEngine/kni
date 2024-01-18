@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.1145
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework", "src\Xna.Framework\Xna.Framework.csproj", "{741B4B1E-89E4-434C-8867-6129838AFD51}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics.PackedVector", "src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj", "{FF11302E-6A9F-49AA-960A-9584BC4BDA26}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleCardboard", "MonoGame.Framework\Platform\Cardboard\GoogleCardboard\GoogleCardboard.csproj", "{9D3687F8-435F-4AE2-94E0-1169BDEC04BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Framework.Cardboard", "MonoGame.Framework\XNA.Framework.Cardboard.csproj", "{30FE0FB2-0F00-4196-AE1C-D3EE54F267E2}"
@@ -17,6 +19,10 @@ Global
 		{741B4B1E-89E4-434C-8867-6129838AFD51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{741B4B1E-89E4-434C-8867-6129838AFD51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{741B4B1E-89E4-434C-8867-6129838AFD51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF11302E-6A9F-49AA-960A-9584BC4BDA26}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9D3687F8-435F-4AE2-94E0-1169BDEC04BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9D3687F8-435F-4AE2-94E0-1169BDEC04BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D3687F8-435F-4AE2-94E0-1169BDEC04BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
