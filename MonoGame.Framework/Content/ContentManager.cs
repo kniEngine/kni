@@ -25,11 +25,6 @@ namespace Microsoft.Xna.Framework.Content
         private List<IDisposable> disposableAssets = new List<IDisposable>();
         private bool disposed;
 
-        public readonly static HashSet<Type> IgnoreReloadGraphicsAssetsTypes = new HashSet<Type>(new Type[] 
-        {
-                typeof(Microsoft.Xna.Framework.Audio.SoundEffect),
-        });
-        
         private static object ContentManagerLock = new object();
         private static List<WeakReference> ContentManagers = new List<WeakReference>();
 
@@ -398,9 +393,6 @@ namespace Microsoft.Xna.Framework.Content
         {
             foreach (KeyValuePair<string,object> asset in LoadedAssets)
             {
-                if (IgnoreReloadGraphicsAssetsTypes.Contains(asset.Value.GetType()))
-                    continue;                
-                
                 // This never executes as asset.Key is never null.  This just forces the 
                 // linker to include the ReloadAsset function when AOT compiled.
                 if (asset.Key == null)
