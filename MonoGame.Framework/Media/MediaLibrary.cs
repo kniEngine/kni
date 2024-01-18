@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Platform.Media;
 
 
@@ -35,6 +36,24 @@ namespace Microsoft.Xna.Framework.Media
         {
             _strategy = MediaFactory.Current.CreateMediaLibraryStrategy(mediaSource);
 		}
+
+        // Trick to prevent the linker removing the code, but not actually execute the code
+        static bool _trimmingFalseFlag = false;
+        internal static void PreserveMediaContentTypeReaders()
+        {
+#pragma warning disable 0219, 0649
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
+                // Framework.Media types
+                var hSongReader = new SongReader();
+                var hVideoReader = new VideoReader();
+            }
+#pragma warning restore 0219, 0649
+        }
 
         /// <summary>
         /// Load the contents of MediaLibrary. This blocking call might take up to a few minutes depending on the platform and the size of the user's music library.

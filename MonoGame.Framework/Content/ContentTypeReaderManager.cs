@@ -46,13 +46,9 @@ namespace Microsoft.Xna.Framework.Content
             return null;
         }
 
-        // Trick to prevent the linker removing the code, but not actually execute the code
-        static bool _trimmingFalseFlag = false;
-
         internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
         {
             PreserveContentTypeReaders();
-            PreserveMediaContentTypeReaders();
 
             // The first content byte i read tells me the number of content readers in this XNB file
             int numberOfReaders = reader.Read7BitEncodedInt();
@@ -116,6 +112,8 @@ namespace Microsoft.Xna.Framework.Content
             return contentReaders;
         }
 
+        // Trick to prevent the linker removing the code, but not actually execute the code
+        static bool _trimmingFalseFlag = false;
         private static void PreserveContentTypeReaders()
         {
 #pragma warning disable 0219, 0649
@@ -173,23 +171,6 @@ namespace Microsoft.Xna.Framework.Content
 
                 // Framework.Graphics.PackedVector types
                 var hColorReader = new ColorReader();
-            }
-#pragma warning restore 0219, 0649
-        }
-
-
-        private static void PreserveMediaContentTypeReaders()
-        {
-#pragma warning disable 0219, 0649
-            // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimmingFalseFlag)
-            {
-                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
-                // This forces the classes not to be optimized out when deploying with trimming
-
-                // Framework.Media types
-                var hSongReader = new SongReader();
-                var hVideoReader = new VideoReader();
             }
 #pragma warning restore 0219, 0649
         }
