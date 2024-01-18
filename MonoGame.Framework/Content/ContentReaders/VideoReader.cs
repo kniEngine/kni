@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content
             int width = input.ReadObject<int>();
             int height = input.ReadObject<int>();
             float framesPerSecond = input.ReadObject<float>();
-            int soundTrackType = input.ReadObject<int>();  // 0 = Music, 1 = Dialog, 2 = Music and dialog
+            VideoSoundtrackType soundTrackType = (VideoSoundtrackType)input.ReadObject<int>();  // 0 = Music, 1 = Dialog, 2 = Music and dialog
 
             if (!String.IsNullOrEmpty(path))
             {
@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Content
                 Width = width,
                 Height = height,
                 FramesPerSecond = framesPerSecond,
-                VideoSoundtrackType = (VideoSoundtrackType)soundTrackType
+                VideoSoundtrackType = soundTrackType
             };
         }
     }
