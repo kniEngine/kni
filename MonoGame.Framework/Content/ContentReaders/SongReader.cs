@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Content
             if (!String.IsNullOrEmpty(path))
             {
                 // Add the ContentManager's RootDirectory
-                string rootDirectoryFullPath = input.ContentManager.RootDirectoryFullPath;
+                string rootDirectoryFullPath = Path.Combine(TitleContainer.Location, input.ContentManager.RootDirectory);
                 string dirPath = Path.Combine(rootDirectoryFullPath, input.AssetName);
 
                 // Resolve the relative path
