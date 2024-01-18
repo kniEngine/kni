@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Framework.Content
             if (!String.IsNullOrEmpty(path))
             {
                 // Add the ContentManager's RootDirectory
-                string assetsLocationFullPath = TitleContainer.Location;
+                string assetsLocationFullPath = ((ITitleContainer)TitleContainer.Current).Location;
                 string rootDirectoryFullPath = Path.Combine(assetsLocationFullPath, input.ContentManager.RootDirectory);
                 string dirPath = Path.Combine(rootDirectoryFullPath, input.AssetName);
 

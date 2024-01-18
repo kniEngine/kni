@@ -136,7 +136,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.Video = video;
 
-            _mediaEngine.Source = System.IO.Path.Combine(TitleContainer.Location, base.Video.FileName);
+            string assetsLocationFullPath = ((ITitleContainer)TitleContainer.Current).Location;
+            _mediaEngine.Source = System.IO.Path.Combine(assetsLocationFullPath, base.Video.FileName);
             _mediaEngine.Play();
 
             State = MediaState.Playing;
