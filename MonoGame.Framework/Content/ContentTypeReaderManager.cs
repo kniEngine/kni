@@ -52,7 +52,6 @@ namespace Microsoft.Xna.Framework.Content
         internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
         {
             PreserveContentTypeReaders();
-            PreserveGraphicsContentTypeReaders();
             PreserveAudioContentTypeReaders();
             PreserveMediaContentTypeReaders();
 
@@ -175,35 +174,6 @@ namespace Microsoft.Xna.Framework.Content
 
                 // Framework.Graphics.PackedVector types
                 var hColorReader = new ColorReader();
-            }
-#pragma warning restore 0219, 0649
-        }
-
-        private static void PreserveGraphicsContentTypeReaders()
-        {
-#pragma warning disable 0219, 0649
-            // Trick to prevent the linker removing the code, but not actually execute the code
-            if (_trimmingFalseFlag)
-            {
-                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
-                // This forces the classes not to be optimized out when deploying with trimming
-
-                // Framework.Graphics types
-                var hAlphaTestEffectReader = new AlphaTestEffectReader();
-                var hBasicEffectReader = new BasicEffectReader();
-                var hDualTextureEffectReader = new DualTextureEffectReader();
-                var hEffectMaterialReader = new EffectMaterialReader();
-                var hEffectReader = new EffectReader();
-                var hIndexBufferReader = new IndexBufferReader();
-                var hModelReader = new ModelReader();
-                var hSkinnedEffectReader = new SkinnedEffectReader();
-                var hSpriteFontReader = new SpriteFontReader();
-                var hTexture2DReader = new Texture2DReader();
-                var hTexture3DReader = new Texture3DReader();
-                var hTextureCubeReader = new TextureCubeReader();
-                var hVertexBufferReader = new VertexBufferReader();
-                var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
-                var hEnumBlendReader = new EnumReader<Graphics.Blend>();
             }
 #pragma warning restore 0219, 0649
         }

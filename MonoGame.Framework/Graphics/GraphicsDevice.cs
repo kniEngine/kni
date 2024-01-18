@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 
@@ -108,6 +109,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
         {
+            PreserveGraphicsContentTypeReaders();
+
             _strategy = GraphicsFactory.Current.CreateGraphicsDeviceStrategy(this, adapter, graphicsProfile, false, presentationParameters);
             _strategy.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
             _strategy.DeviceReset += (sender, e) => { OnDeviceReset(e); };
@@ -129,6 +132,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
         {
+            PreserveGraphicsContentTypeReaders();
+
             _strategy = GraphicsFactory.Current.CreateGraphicsDeviceStrategy(this, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters);
             _strategy.DeviceResetting += (sender, e) => { OnDeviceResetting(e); };
             _strategy.DeviceReset += (sender, e) => { OnDeviceReset(e); };
@@ -141,6 +146,37 @@ namespace Microsoft.Xna.Framework.Graphics
         ~GraphicsDevice()
         {
             Dispose(false);
+        }
+
+        // Trick to prevent the linker removing the code, but not actually execute the code
+        static bool _trimmingFalseFlag = false;
+        private static void PreserveGraphicsContentTypeReaders()
+        {
+#pragma warning disable 0219, 0649
+            // Trick to prevent the linker removing the code, but not actually execute the code
+            if (_trimmingFalseFlag)
+            {
+                // Dummy variables required for it to work with trimming ** DO NOT DELETE **
+                // This forces the classes not to be optimized out when deploying with trimming
+
+                // Framework.Graphics types
+                var hAlphaTestEffectReader = new AlphaTestEffectReader();
+                var hBasicEffectReader = new BasicEffectReader();
+                var hDualTextureEffectReader = new DualTextureEffectReader();
+                var hEffectMaterialReader = new EffectMaterialReader();
+                var hEffectReader = new EffectReader();
+                var hIndexBufferReader = new IndexBufferReader();
+                var hModelReader = new ModelReader();
+                var hSkinnedEffectReader = new SkinnedEffectReader();
+                var hSpriteFontReader = new SpriteFontReader();
+                var hTexture2DReader = new Texture2DReader();
+                var hTexture3DReader = new Texture3DReader();
+                var hTextureCubeReader = new TextureCubeReader();
+                var hVertexBufferReader = new VertexBufferReader();
+                var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
+                var hEnumBlendReader = new EnumReader<Graphics.Blend>();
+            }
+#pragma warning restore 0219, 0649
         }
 
         public Rectangle ScissorRectangle
