@@ -30,13 +30,11 @@ namespace Microsoft.Xna.Framework.Content
                 path = FileHelpers.ResolveRelativePath(dirPath, path);
             }
 
-            Video result = new Video(input.GetGraphicsDevice(), path, durationMS)
-            {
-                Width = width,
-                Height = height,
-                FramesPerSecond = framesPerSecond,
-                VideoSoundtrackType = soundTrackType
-            };
+            Video result = new Video(input.GetGraphicsDevice(), path, durationMS);
+            result.Width = width;
+            result.Height = height;
+            result.FramesPerSecond = framesPerSecond;
+            result.VideoSoundtrackType = soundTrackType;
             return result;
         }
     }
