@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework.Content
             for (int level = 0; level < levelCount; level++)
             {
                 int levelDataSizeInBytes = input.ReadInt32();
-                byte[] levelData = ContentBufferPool.Current.Get(levelDataSizeInBytes);
+                byte[] levelData = input.BufferPool.Get(levelDataSizeInBytes);
                 input.Read(levelData, 0, levelDataSizeInBytes);
                 int levelWidth = Math.Max(width >> level, 1);
                 int levelHeight = Math.Max(height >> level, 1);
@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework.Content
                 }
                 
                 texture.SetData(level, null, levelData, 0, levelDataSizeInBytes);
-                ContentBufferPool.Current.Return(levelData);
+                input.BufferPool.Return(levelData);
             }
                     
             texture.Name = input.AssetName;

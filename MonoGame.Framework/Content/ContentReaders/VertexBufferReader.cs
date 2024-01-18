@@ -14,12 +14,12 @@ namespace Microsoft.Xna.Framework.Content
             VertexDeclaration declaration = input.ReadRawObject<VertexDeclaration>();
             int vertexCount = (int)input.ReadUInt32();
             int dataSize = vertexCount * declaration.VertexStride;
-            byte[] data = ContentBufferPool.Current.Get(dataSize);
+            byte[] data = input.BufferPool.Get(dataSize);
             input.Read(data, 0, dataSize);
 
             VertexBuffer buffer = existingInstance ?? new VertexBuffer(input.GetGraphicsDevice(), declaration, vertexCount, BufferUsage.None);
             buffer.SetData(data, 0, dataSize);
-            ContentBufferPool.Current.Return(data);
+            input.BufferPool.Return(data);
             return buffer;
         }
     }
