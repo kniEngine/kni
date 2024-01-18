@@ -48,11 +48,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        static internal string Location
-        {
-            get { return ((ITitleContainer)TitleContainer.Current).Location; }
-        }
-
         /// <summary>
         /// Returns an open stream to an existing file in the title storage area.
         /// </summary>
