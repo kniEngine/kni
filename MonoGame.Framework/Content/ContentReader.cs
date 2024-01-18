@@ -47,6 +47,11 @@ namespace Microsoft.Xna.Framework.Content
             get { return assetName; }
         }
 
+        internal ContentBufferPool BufferPool
+        {
+            get { return ContentBufferPool.Current; }
+        }
+
         internal object ReadAsset<T>()
         {
             InitializeTypeReaders();

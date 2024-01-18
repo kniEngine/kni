@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Content
 {
-    internal class ContentBufferPool : IComparer<byte[]>
+    public class ContentBufferPool : IComparer<byte[]>
     {
-        public const int MinimumBufferSize = 2 * 1024 * 1024;
+        private const int MinimumBufferSize = 2 * 1024 * 1024;
 
         private static readonly ContentBufferPool _current = new ContentBufferPool();
 
