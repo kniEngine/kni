@@ -58,11 +58,15 @@ namespace Microsoft.Xna.Framework.Media
 
 		internal Song(string name, Uri streamSource)
 		{
+            MediaLibrary.PreserveMediaContentTypeReaders();
+
             _strategy = MediaFactory.Current.CreateSongStrategy(name, streamSource);
         }
 
         internal Song(SongStrategy strategy)
         {
+            MediaLibrary.PreserveMediaContentTypeReaders();
+
             _strategy = strategy;
         }
 

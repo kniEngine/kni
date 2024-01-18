@@ -76,6 +76,8 @@ namespace Microsoft.Xna.Framework.Media
 
         internal Video(GraphicsDevice graphicsDevice, string fileName, float durationMS)
         {
+            MediaLibrary.PreserveMediaContentTypeReaders();
+
             _strategy = MediaFactory.Current.CreateVideoStrategy(graphicsDevice, fileName, TimeSpan.FromMilliseconds(durationMS));
 
         }
