@@ -90,8 +90,8 @@ namespace Microsoft.Xna.Framework.Audio
                     _wav.Stop();
                 if (_streaming)
                     _wav.Dispose();
-				else					
-					_wav._isXAct = false;					
+                else					
+                    _wav._isXAct = false;					
                 _wav = null;
             }
 
@@ -206,8 +206,8 @@ namespace Microsoft.Xna.Framework.Audio
                 _wav.Stop();
                 if (_streaming)
                     _wav.Dispose();
-				else
-                	_wav._isXAct = false;				
+                else
+                    _wav._isXAct = false;				
                 _wav = null;
             }
             _loopIndex = 0;
@@ -280,8 +280,8 @@ namespace Microsoft.Xna.Framework.Audio
                 {
                     if (_streaming)
                         _wav.Dispose();
-					else
-	                    _wav._isXAct = false;						
+                    else
+                        _wav._isXAct = false;						
                     _wav = null;
                     _loopIndex = 0;
                 }

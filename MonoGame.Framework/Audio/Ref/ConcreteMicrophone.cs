@@ -14,12 +14,12 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformStart(string deviceName)
         {
-			throw new PlatformNotSupportedException();
+            throw new PlatformNotSupportedException();
         }
 
         internal override void PlatformStop()
         {
-			throw new PlatformNotSupportedException();
+            throw new PlatformNotSupportedException();
         }
 
         internal override bool PlatformIsHeadset()
@@ -28,11 +28,11 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         internal override bool PlatformUpdate()
-		{
-			throw new PlatformNotSupportedException();
-		}
-		
-		internal override int PlatformGetData(byte[] buffer, int offset, int count)
+        {
+            throw new PlatformNotSupportedException();
+        }
+        
+        internal override int PlatformGetData(byte[] buffer, int offset, int count)
         {
             throw new PlatformNotSupportedException();
         }

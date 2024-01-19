@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Audio
     /// </remarks>
     [DataContract]
     public sealed class InstancePlayLimitException : Exception
-	{
-	}
+    {
+    }
 }
 

@@ -15,12 +15,12 @@ namespace Microsoft.Xna.Platform.Audio
     {
         internal override void PlatformStart(string deviceName)
         {
-			throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         internal override void PlatformStop()
         {
-			throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         internal override bool PlatformIsHeadset()
@@ -29,11 +29,11 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         internal override bool PlatformUpdate()
-		{
-			throw new NotImplementedException();
-		}
-		
-		internal override int PlatformGetData(byte[] buffer, int offset, int count)
+        {
+            throw new NotImplementedException();
+        }
+        
+        internal override int PlatformGetData(byte[] buffer, int offset, int count)
         {
             throw new NotImplementedException();
         }
