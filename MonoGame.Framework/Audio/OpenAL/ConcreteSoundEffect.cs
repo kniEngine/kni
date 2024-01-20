@@ -76,6 +76,13 @@ namespace Microsoft.Xna.Platform.Audio
                     break;
                 case ALFormat.MonoFloat32:
                 case ALFormat.StereoFloat32:
+                    if (!concreteAudioService.SupportsIeee)
+                    {
+                        // If 32-bit IEEE float is not supported, convert to 16-bit signed PCM
+                        buffer = AudioLoader.ConvertFloatTo16(buffer, bufferOffset, bufferSize);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    else
                     {
                         InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
                     }
@@ -123,16 +130,6 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void InitializeIeeeFloat(byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
-
-            if (!concreteAudioService.SupportsIeee)
-            {
-                // If 32-bit IEEE float is not supported, convert to 16-bit signed PCM
-                buffer = AudioLoader.ConvertFloatTo16(buffer, offset, count);
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-                return;
-            }
-
             ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
 
             // bind buffer
