@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Audio
         {
             _sampleRate = sampleRate;
             _channels = channels;
-            var format = new WaveFormat(sampleRate, channels);
+            WaveFormat format = new WaveFormat(sampleRate, channels);
 
             _voice = new SourceVoice(ConcreteAudioService.Device, format, true);
             _voice.BufferEnd += OnBufferEnd;
@@ -83,8 +83,8 @@ namespace Microsoft.Xna.Platform.Audio
             byte[] dataBuffer = _bufferPool.Get(count);
             Buffer.BlockCopy(buffer, offset, dataBuffer, 0, count);
 
-            var stream = DataStream.Create(dataBuffer, true, false, 0, true);
-            var audioBuffer = new AudioBuffer(stream);
+            DataStream stream = DataStream.Create(dataBuffer, true, false, 0, true);
+            AudioBuffer audioBuffer = new AudioBuffer(stream);
             audioBuffer.AudioBytes = count;
             audioBuffer.Context = new IntPtr(unchecked(_uid++));
 
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             for (int i = _queuedBuffers.Count - 1; i >= 0; i--)
             {
-                var queuedBuffer = _queuedBuffers[i];
+                QueuedBuffer queuedBuffer = _queuedBuffers[i];
                 _queuedBuffers.RemoveAt(i);
 
                 queuedBuffer.AudioBuffer.Stream.Dispose();
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     if (_queuedBuffers[i].AudioBuffer.Context == context)
                     {
-                        var queuedBuffer = _queuedBuffers[i];
+                        QueuedBuffer queuedBuffer = _queuedBuffers[i];
                         _queuedBuffers.RemoveAt(i);
 
                         queuedBuffer.AudioBuffer.Stream.Dispose();
@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 for (int i = _queuedBuffers.Count - 1; i >= 0; i--)
                 {
-                    var queuedBuffer = _queuedBuffers[i];
+                    QueuedBuffer queuedBuffer = _queuedBuffers[i];
                     _queuedBuffers.RemoveAt(i);
 
                     queuedBuffer.AudioBuffer.Stream.Dispose();
@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Platform.Audio
 
                 lock (_bufferPool)
                 {
-                    var index = FirstLargerThan(size);
+                    int index = FirstLargerThan(size);
 
                     if (index == -1)
                     {
@@ -217,7 +217,7 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     if (_bufferPool.Count >= _maxBuffers)
                         return;
-                    var index = FirstLargerThan(buffer.Length);
+                    int index = FirstLargerThan(buffer.Length);
                     if (index == -1)
                         _bufferPool.Add(buffer);
                     else
@@ -230,13 +230,13 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 if (_bufferPool.Count == 0) return -1;
 
-                var l = 0;
-                var r = _bufferPool.Count - 1;
+                int l = 0;
+                int r = _bufferPool.Count - 1;
 
                 while (l <= r)
                 {
-                    var m = (l + r) / 2;
-                    var buffer = _bufferPool[m];
+                    int m = (l + r) / 2;
+                    byte[] buffer = _bufferPool[m];
                     if (buffer.Length < size)
                     {
                         l = m + 1;

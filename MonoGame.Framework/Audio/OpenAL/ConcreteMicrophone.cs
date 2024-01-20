@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Audio
             AlcError error = OpenAL.ALC.GetErrorForDevice(_captureDevice);
             if (error != AlcError.NoError)
             {
-                var msg = String.Format("{0} - OpenAL Error: {1}", operation, error);
+                string msg = String.Format("{0} - OpenAL Error: {1}", operation, error);
                 throw new NoMicrophoneConnectedException(msg);
             }
         }
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (sampleCount > 0)
             {
-                var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+                GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
                 try
                 {
                     OpenAL.ALC.CaptureSamples(_captureDevice, handle.AddrOfPinnedObject() + offset, sampleCount);

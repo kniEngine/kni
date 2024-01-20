@@ -34,13 +34,13 @@ namespace Microsoft.Xna.Platform.Audio
                 throw new ArgumentException("Ensure that the specified stream contains valid PCM or IEEE Float wave data.", ex);
             }
 
-            var dataStream = soundStream.ToDataStream();
+            DataStream dataStream = soundStream.ToDataStream();
             int sampleCount = 0;
             switch (soundStream.Format.Encoding)
             {
                 case WaveFormatEncoding.Adpcm:
                     {
-                        var samplesPerBlock = (soundStream.Format.BlockAlign / soundStream.Format.Channels - 7) * 2 + 2;
+                        int samplesPerBlock = (soundStream.Format.BlockAlign / soundStream.Format.Channels - 7) * 2 + 2;
                         sampleCount = ((int)dataStream.Length / soundStream.Format.BlockAlign) * samplesPerBlock;
                     }
                     break;
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Audio
         {
             // We make a copy because old versions of 
             // DataStream.Create(...) didn't work correctly for offsets.
-            var bufferCopy = new byte[length];
+            byte[] bufferCopy = new byte[length];
             Buffer.BlockCopy(buffer, offset, bufferCopy, 0, length);
 
             return DataStream.Create(bufferCopy, true, false);
@@ -77,11 +77,11 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
-            var format = BitConverter.ToInt16(header, 0);
-            var channels = BitConverter.ToInt16(header, 2);
-            var sampleRate = BitConverter.ToInt32(header, 4);
-            var blockAlignment = BitConverter.ToInt16(header, 12);
-            var sampleBits = BitConverter.ToInt16(header, 14);
+            short format = BitConverter.ToInt16(header, 0);
+            short channels = BitConverter.ToInt16(header, 2);
+            int sampleRate = BitConverter.ToInt32(header, 4);
+            short blockAlignment = BitConverter.ToInt16(header, 12);
+            short sampleBits = BitConverter.ToInt16(header, 14);
 
             WaveFormat waveFormat;
             if (format == 1)

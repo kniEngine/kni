@@ -36,8 +36,8 @@ namespace Microsoft.Xna.Framework.Audio
 
             _audioengine = audioEngine;
 
-            using (var stream = EnsureRandomAccessStream(TitleContainer.OpenStream(fileName)))
-            using (var reader = new BinaryReader(stream))
+            using (Stream stream = EnsureRandomAccessStream(TitleContainer.OpenStream(fileName)))
+            using (BinaryReader reader = new BinaryReader(stream))
             {
                 // Thanks to Liandril for "xactxtract" for some of the offsets.
 
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Audio
                         reader.ReadByte(); // flags
                         uint soundOffset = reader.ReadUInt32();
 
-                        var oldPosition = stream.Position;
+                        long oldPosition = stream.Position;
                         stream.Seek(soundOffset, SeekOrigin.Begin);
                         XactSound sound = new XactSound(audioEngine, this, reader);
                         stream.Seek(oldPosition, SeekOrigin.Begin);
@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Framework.Audio
                             uint soundOffset = reader.ReadUInt32();
                             reader.ReadUInt32(); //unkn
 
-                            var oldPosition = stream.Position;
+                            long oldPosition = stream.Position;
                             stream.Seek(soundOffset, SeekOrigin.Begin);
                             XactSound sound = new XactSound(audioEngine, this, reader);
                             stream.Seek(oldPosition, SeekOrigin.Begin);
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Framework.Audio
                                             reader.ReadByte(); // weightMin
                                             reader.ReadByte(); // weightMax
 
-                                            var oldPosition = stream.Position;
+                                            long oldPosition = stream.Position;
                                             stream.Seek(soundOffset, SeekOrigin.Begin);
                                             cueSounds[j] = new XactSound(audioEngine, this, reader);
                                             stream.Seek(oldPosition, SeekOrigin.Begin);
@@ -181,7 +181,7 @@ namespace Microsoft.Xna.Framework.Audio
                                             reader.ReadSingle(); // weightMax
                                             reader.ReadUInt32(); // flags
 
-                                            var oldPosition = stream.Position;
+                                            long oldPosition = stream.Position;
                                             stream.Seek(soundOffset, SeekOrigin.Begin);
                                             cueSounds[j] = new XactSound(audioEngine, this, reader);
                                             stream.Seek(oldPosition, SeekOrigin.Begin);
@@ -219,7 +219,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             if (!stream.CanSeek)
             {
-                var memStream = new MemoryStream();
+                Stream memStream = new MemoryStream();
                 stream.CopyTo(memStream);
                 memStream.Seek(0, SeekOrigin.Begin);
                 stream.Dispose();
@@ -231,12 +231,12 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal SoundEffectInstance GetSoundEffectInstance(int waveBankIndex, int trackIndex, out bool streaming)
         {
-            var waveBank = _waveBanks[waveBankIndex];
+            WaveBank waveBank = _waveBanks[waveBankIndex];
 
             // If the wave bank has not been resolved then do so now.
             if (waveBank == null)
             {
-                var name = _waveBankNames[waveBankIndex];
+                string name = _waveBankNames[waveBankIndex];
                 if (!_audioengine.Wavebanks.TryGetValue(name, out waveBank))
                     throw new Exception("The wave bank '" + name + "' was not found!");
                 _waveBanks[waveBankIndex] = waveBank;                
@@ -268,7 +268,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             IsInUse = true;
 
-            var cue = new Cue(_audioengine, name, sounds, probs);
+            Cue cue = new Cue(_audioengine, name, sounds, probs);
             cue.Prepare();
             return cue;
         }
@@ -291,7 +291,7 @@ namespace Microsoft.Xna.Framework.Audio
                 throw new ArgumentException();
 
             IsInUse = true;
-            var cue = new Cue(_audioengine, name, sounds, probs);
+            Cue cue = new Cue(_audioengine, name, sounds, probs);
             cue.Prepare();
             cue.Play();
         }
@@ -320,7 +320,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             IsInUse = true;
 
-            var cue = new Cue(_audioengine, name, sounds, probs);
+            Cue cue = new Cue(_audioengine, name, sounds, probs);
             cue.Prepare();
             cue.Apply3D(listener, emitter);
             cue.Play();

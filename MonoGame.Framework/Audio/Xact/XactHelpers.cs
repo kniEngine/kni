@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Audio
             const double b = 0.432254984608615;
             const double c = 80.1748600297963;
             const double d = 67.7385212334047;
-            var dB = (float)(((a - d) / (1 + (Math.Pow(decibles / c, b)))) + d);
+            float dB = (float)(((a - d) / (1 + (Math.Pow(decibles / c, b)))) + d);
 
             return dB;
         }
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Audio
             const double b = 0.432254984608615;
             const double c = 80.1748600297963;
             const double d = 67.7385212334047;
-            var dB = (float)(((a - d) / (1 + (Math.Pow(decibles / c, b)))) + d);
+            float dB = (float)(((a - d) / (1 + (Math.Pow(decibles / c, b)))) + d);
 
             return ParseVolumeFromDecibels(dB);
         }

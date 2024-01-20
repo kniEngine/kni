@@ -53,12 +53,12 @@ namespace Microsoft.Xna.Framework.Audio
             _duration = TimeSpan.FromMilliseconds(durationMs);
 
             // Peek at the format... handle regular PCM data.
-            var format = BitConverter.ToInt16(header, 0);
+            short format = BitConverter.ToInt16(header, 0);
             if (format == 1)
             {
-                var channels = BitConverter.ToInt16(header, 2);
-                var sampleRate = BitConverter.ToInt32(header, 4);
-                var bitsPerSample = BitConverter.ToInt16(header, 14);
+                short channels = BitConverter.ToInt16(header, 2);
+                int sampleRate = BitConverter.ToInt32(header, 4);
+                short bitsPerSample = BitConverter.ToInt16(header, 14);
                 _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
                 _strategy.PlatformInitializePcm(buffer, 0, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                 return;
@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework.Audio
             if (buffer == null || buffer.Length == 0)
                 throw new ArgumentException("Ensure that the buffer length is non-zero.", "buffer");
 
-            var blockAlign = (int)channels * 2;
+            int blockAlign = (int)channels * 2;
             if (count <= 0)
                 throw new ArgumentException("Ensure that the count is greater than zero.", "count");
             if ((count % blockAlign) != 0)
@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Framework.Audio
             if (((ulong)count + (ulong)offset) > (ulong)buffer.Length)
                 throw new ArgumentException("Ensure that the offset+count region lines within the buffer.", "offset");
 
-            var totalSamples = count / blockAlign;
+            int totalSamples = count / blockAlign;
 
             if (loopStart < 0)
                 throw new ArgumentException("The loopStart cannot be negative.", "loopStart");

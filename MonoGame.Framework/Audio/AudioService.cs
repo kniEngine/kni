@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             get
             {
-                var current = _current;
+                AudioService current = _current;
                 if (current != null)
                     return current;
 
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Audio
                 // This forces the classes not to be optimized out when deploying with trimming
 
                 // Framework.Audio types
-                var hSoundEffectReader = new SoundEffectReader();
+                SoundEffectReader hSoundEffectReader = new SoundEffectReader();
             }
 #pragma warning restore 0219, 0649
         }
@@ -237,7 +237,7 @@ namespace Microsoft.Xna.Framework.Audio
                 if (!(_playingInstances.Count < MAX_PLAYING_INSTANCES))
                     return false;
 
-                var inst = GetInstance(effect);
+                SoundEffectInstance inst = GetInstance(effect);
 
                 inst.Play();
             }
@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Framework.Audio
                 if (!(_playingInstances.Count < MAX_PLAYING_INSTANCES))
                     return false;
 
-                var inst = GetInstance(effect);
+                SoundEffectInstance inst = GetInstance(effect);
 
                 inst.Volume = volume;
                 inst.Pitch = pitch;
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal SoundEffectInstance GetInstance(SoundEffect effect, bool isXAct = false)
         {
-            var inst = GetPooledInstance(effect, isXAct);
+            SoundEffectInstance inst = GetPooledInstance(effect, isXAct);
             if (inst == null)
                 inst = new SoundEffectInstance(this, effect, true, isXAct);
 
@@ -312,11 +312,11 @@ namespace Microsoft.Xna.Framework.Audio
             if (sampleRate < 8000 || sampleRate > 48000)
                 throw new ArgumentOutOfRangeException("sampleRate");
 
-            var numChannels = (int)channels;
+            int numChannels = (int)channels;
             if (numChannels != 1 && numChannels != 2)
                 throw new ArgumentOutOfRangeException("channels");
 
-            var dur = sizeInBytes / (sampleRate * numChannels * 16f / 8f);
+            float dur = sizeInBytes / (sampleRate * numChannels * 16f / 8f);
 
             return TimeSpan.FromSeconds(dur);
         }
@@ -335,7 +335,7 @@ namespace Microsoft.Xna.Framework.Audio
             if (sampleRate < 8000 || sampleRate > 48000)
                 throw new ArgumentOutOfRangeException("sampleRate");
 
-            var numChannels = (int)channels;
+            int numChannels = (int)channels;
             if (numChannels != 1 && numChannels != 2)
                 throw new ArgumentOutOfRangeException("channels");
 

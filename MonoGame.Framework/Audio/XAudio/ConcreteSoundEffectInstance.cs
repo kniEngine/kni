@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Audio
                 return;
 
             // Convert from XNA Emitter to a SharpDX Emitter
-            var e = ToDXEmitter(emitter);
+            Emitter e = ToDXEmitter(emitter);
             e.CurveDistanceScaler = SoundEffect.DistanceScale;
             e.DopplerScaler = SoundEffect.DopplerScale;
             e.ChannelCount = _concreteSoundEffect._format.Channels;
@@ -63,17 +63,17 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             // Convert from XNA Listener to a SharpDX Listener
-            var l = ToDXListener(listener);
+            Listener l = ToDXListener(listener);
 
             // Number of channels in the sound being played.
             // Not actually sure if XNA supported 3D attenuation of sterio sounds, but X3DAudio does.
-            var srcChannelCount = _concreteSoundEffect._format.Channels;
+            int srcChannelCount = _concreteSoundEffect._format.Channels;
 
             // Number of output channels.
-            var dstChannelCount = ConcreteAudioService.MasterVoice.VoiceDetails.InputChannelCount;
+            int dstChannelCount = ConcreteAudioService.MasterVoice.VoiceDetails.InputChannelCount;
 
             // XNA supports distance attenuation and doppler.            
-            var dpsSettings = ConcreteAudioService.Device3D.Calculate(l, e, CalculateFlags.Matrix | CalculateFlags.Doppler, srcChannelCount, dstChannelCount);
+            DspSettings dpsSettings = ConcreteAudioService.Device3D.Calculate(l, e, CalculateFlags.Matrix | CalculateFlags.Doppler, srcChannelCount, dstChannelCount);
 
             // Apply Volume settings (from distance attenuation) ...
             _voice.SetOutputMatrix(ConcreteAudioService.MasterVoice, srcChannelCount, dstChannelCount, dpsSettings.MatrixCoefficients, 0);
@@ -88,10 +88,10 @@ namespace Microsoft.Xna.Platform.Audio
         private Emitter ToDXEmitter(AudioEmitter emitter)
         {
             // Pulling out Vector properties for efficiency.
-            var pos = emitter.Position;
-            var vel = emitter.Velocity;
-            var forward = emitter.Forward;
-            var up = emitter.Up;
+            Vector3 pos = emitter.Position;
+            Vector3 vel = emitter.Velocity;
+            Vector3 forward = emitter.Forward;
+            Vector3 up = emitter.Up;
 
             // From MSDN:
             //  X3DAudio uses a left-handed Cartesian coordinate system, 
@@ -127,10 +127,10 @@ namespace Microsoft.Xna.Platform.Audio
         private Listener ToDXListener(AudioListener listener)
         {
             // Pulling out Vector properties for efficiency.
-            var pos = listener.Position;
-            var vel = listener.Velocity;
-            var forward = listener.Forward;
-            var up = listener.Up;
+            Vector3 pos = listener.Position;
+            Vector3 vel = listener.Velocity;
+            Vector3 forward = listener.Forward;
+            Vector3 up = listener.Up;
 
             // From MSDN:
             //  X3DAudio uses a left-handed Cartesian coordinate system, 
@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Platform.Audio
         internal override void PlatformPlay(bool isLooped)
         {
             // Choose the correct buffer depending on if we are looped.
-            var buffer = _concreteSoundEffect.GetDXDataBuffer(isLooped);
+            AudioBuffer buffer = _concreteSoundEffect.GetDXDataBuffer(isLooped);
 
             if (_voice.State.BuffersQueued > 0)
             {
@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     _voice.Stop();
                     _voice.FlushSourceBuffers();
-                    var buffer = _concreteSoundEffect.GetDXDataBuffer(false);
+                    AudioBuffer buffer = _concreteSoundEffect.GetDXDataBuffer(false);
                     _voice.SubmitSourceBuffer(buffer, null);
                 }
             }
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Platform.Audio
                 if (isLooped)
                 {
                     // enable loop while sound is playing
-                    var loopedBuffer = _concreteSoundEffect.GetDXDataBuffer(true);
+                    AudioBuffer loopedBuffer = _concreteSoundEffect.GetDXDataBuffer(true);
                     _voice.SubmitSourceBuffer(loopedBuffer, null);
                 }
                 else
@@ -257,8 +257,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void UpdateOutputMatrix(float pan)
         {
-            var srcChannelCount = _voice.VoiceDetails.InputChannelCount;
-            var dstChannelCount = ConcreteAudioService.MasterVoice.VoiceDetails.InputChannelCount;
+            int srcChannelCount = _voice.VoiceDetails.InputChannelCount;
+            int dstChannelCount = ConcreteAudioService.MasterVoice.VoiceDetails.InputChannelCount;
 
             // Set the pan on the correct channels based on the reverb mix.
             if (!(_reverbMix > 0.0f))
@@ -276,7 +276,7 @@ namespace Microsoft.Xna.Platform.Audio
             // Assumes there are at least 2 speaker channels to output to
 
             // Clear all the channels.
-            var outputMatrix = _outputMatrix;
+            float[] outputMatrix = _outputMatrix;
             Array.Clear(outputMatrix, 0, outputMatrix.Length);
 
             if (inputChannels == 1) // Mono source
@@ -320,7 +320,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             // NOTE: This is copy of what XAudio2.SemitonesToFrequencyRatio() does
             // which avoids the native call and is actually more accurate.
-            var xapitch = (float)Math.Pow(2.0, pitch);
+            float xapitch = (float)Math.Pow(2.0, pitch);
             _voice.SetFrequencyRatio(xapitch);
         }
 
@@ -355,7 +355,7 @@ namespace Microsoft.Xna.Platform.Audio
             if (_voice == null || ConcreteAudioService.MasterVoice == null)
                 return;
 
-            var filter = new FilterParameters
+            FilterParameters filter = new FilterParameters
             {
                 Frequency = XAudio2.CutoffFrequencyToRadians(frequency, _voice.VoiceDetails.InputSampleRate),
                 OneOverQ = 1.0f / filterQ,
@@ -369,7 +369,7 @@ namespace Microsoft.Xna.Platform.Audio
             if (_voice == null || ConcreteAudioService.MasterVoice == null)
                 return;
 
-            var filter = new FilterParameters { Frequency = 1.0f, OneOverQ = 1.0f, Type = FilterType.LowPassFilter };
+            FilterParameters filter = new FilterParameters { Frequency = 1.0f, OneOverQ = 1.0f, Type = FilterType.LowPassFilter };
             _voice.SetFilterParameters(filter);
         }
 

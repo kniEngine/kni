@@ -229,14 +229,14 @@ namespace Microsoft.Xna.Platform.Audio
             if ((offset + count > data.Length) || ((count % 3) != 0))
                 throw new ArgumentException("Invalid 24-bit PCM data received");
             // Sample count includes both channels if stereo
-            var sampleCount = count / 3;
-            var outData = new byte[sampleCount * sizeof(short)];
+            int sampleCount = count / 3;
+            byte[] outData = new byte[sampleCount * sizeof(short)];
             fixed (byte* src = &data[offset])
             {
                 fixed (byte* dst = &outData[0])
                 {
-                    var srcIndex = 0;
-                    var dstIndex = 0;
+                    int srcIndex = 0;
+                    int dstIndex = 0;
                     for (int i = 0; i < sampleCount; ++i)
                     {
                         // Drop the least significant byte from the 24-bit sample to get the 16-bit sample
@@ -256,8 +256,8 @@ namespace Microsoft.Xna.Platform.Audio
             if ((offset + count > data.Length) || ((count % 4) != 0))
                 throw new ArgumentException("Invalid 32-bit float PCM data received");
             // Sample count includes both channels if stereo
-            var sampleCount = count / 4;
-            var outData = new byte[sampleCount * sizeof(short)];
+            int sampleCount = count / 4;
+            byte[] outData = new byte[sampleCount * sizeof(short)];
             fixed (byte* src = &data[offset])
             {
                 float* f = (float*)src;
@@ -349,7 +349,7 @@ namespace Microsoft.Xna.Platform.Audio
             if ((count % blockAlignment) > 0)
                 sampleCountLastBlock = (((count % blockAlignment) / channels) - 4) / 4 * 8 + 1;
             int sampleCount = ((count / blockAlignment) * sampleCountFullBlock) + sampleCountLastBlock;
-            var samples = new byte[sampleCount * sizeof(short) * channels];
+            byte[] samples = new byte[sampleCount * sizeof(short) * channels];
             int sampleOffset = 0;
 
             while (count > 0)
@@ -506,7 +506,7 @@ namespace Microsoft.Xna.Platform.Audio
             if ((count % blockAlignment) > 0)
                 sampleCountLastBlock = (((count % blockAlignment) / channels) - 7) * 2 + 2;
             int sampleCount = ((count / blockAlignment) * sampleCountFullBlock) + sampleCountLastBlock;
-            var samples = new byte[sampleCount * sizeof(short) * channels];
+            byte[] samples = new byte[sampleCount * sizeof(short) * channels];
             int sampleOffset = 0;
 
             bool stereo = channels == 2;

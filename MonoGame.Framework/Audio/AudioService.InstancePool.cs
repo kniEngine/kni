@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Audio
             if (inst.PooledInstancesNode == null)
                 return;
 
-            var maxPooledInstances = Math.Min(512, MAX_PLAYING_INSTANCES) * 2;
+            int maxPooledInstances = Math.Min(512, MAX_PLAYING_INSTANCES) * 2;
             if (_pooledInstances.Count >= maxPooledInstances)
             {
                 var firstNode = _pooledInstances.First;

@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             reader.ReadUInt16(); //unkn
 
-            var volume = XactHelpers.ParseVolumeFromDecibels(reader.ReadByte());
+            float volume = XactHelpers.ParseVolumeFromDecibels(reader.ReadByte());
             _volume = new float[1] { volume };
 
             byte visibilityFlags = reader.ReadByte();
@@ -73,8 +73,8 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal int GetPlayingInstanceCount()
         {
-            var sum = 0;
-            for (var i = 0; i < _sounds.Count; i++)
+            int sum = 0;
+            for (int i = 0; i < _sounds.Count; i++)
             {
                 if (_sounds[i].Playing)
                     sum++;
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal XactSound GetOldestInstance()
         {
-            for (var i = 0; i < _sounds.Count; i++)
+            for (int i = 0; i < _sounds.Count; i++)
             {
                 if (_sounds[i].Playing)
                     return _sounds[i];
@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public void Pause()
         {
-            foreach (var sound in _sounds)
+            foreach (XactSound sound in _sounds)
                 sound.Pause();
         }
 
@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public void Resume()
         {
-            foreach (var sound in _sounds)
+            foreach (XactSound sound in _sounds)
                 sound.Resume();
         }
 
@@ -120,7 +120,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public void Stop(AudioStopOptions options)
         {
-            foreach (var sound in _sounds)
+            foreach (XactSound sound in _sounds)
                 sound.Stop(options);
         }
 
@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             _volume[0] = volume;
 
-            foreach (var sound in _sounds)
+            foreach (XactSound sound in _sounds)
                 sound.UpdateCategoryVolume(volume);
         }
 
@@ -186,7 +186,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             if (obj is AudioCategory)
             {
-                var other = (AudioCategory)obj;
+                AudioCategory other = (AudioCategory)obj;
                 return _engine == other._engine && _name.Equals(other._name, StringComparison.Ordinal);
             }
 

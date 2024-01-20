@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Audio
             if (loopStart != 0)
                 throw new NotImplementedException();
 
-            var numOfChannels = (int)channels;
+            int numOfChannels = (int)channels;
             
             _audioBuffer = ConcreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
 
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Audio
                     {
                         case 16: // PCM 16bit
                             short* pBuffer16 = (short*)pBuffer;
-                            var dest = new float[loopLength];
+                            float[] dest = new float[loopLength];
                             for (int c = 0; c < numOfChannels; c++)
                             {
                                 for (int i = 0; i < loopLength; i++)

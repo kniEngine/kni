@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Platform.Audio
                 sampleBits = 16;
             }
 
-            var format = AudioLoader.GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
+            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Platform.Audio
                 return;
             }
 
-            var format = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
+            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Audio
                 return;
             }
 
-            var format = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
+            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(format, blockAlignment);
 
             // Buffer length must be aligned with the block alignment
@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Platform.Audio
                 return;
             }
 
-            var format = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
+            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(format, blockAlignment);
 
             // bind buffer
@@ -122,13 +122,13 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
-            var wavFormat = BitConverter.ToInt16(header, 0);
-            var channels = BitConverter.ToInt16(header, 2);
-            var sampleRate = BitConverter.ToInt32(header, 4);
-            var blockAlignment = BitConverter.ToInt16(header, 12);
-            var bitsPerSample = BitConverter.ToInt16(header, 14);
+            short wavFormat = BitConverter.ToInt16(header, 0);
+            short channels = BitConverter.ToInt16(header, 2);
+            int sampleRate = BitConverter.ToInt32(header, 4);
+            short blockAlignment = BitConverter.ToInt16(header, 12);
+            short bitsPerSample = BitConverter.ToInt16(header, 14);
 
-            var format = AudioLoader.GetSoundFormat(wavFormat, channels, bitsPerSample);
+            ALFormat format = AudioLoader.GetSoundFormat(wavFormat, channels, bitsPerSample);
             PlatformInitializeBuffer(buffer, index, count, format, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
         }
 

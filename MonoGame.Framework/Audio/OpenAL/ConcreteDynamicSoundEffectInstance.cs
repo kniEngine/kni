@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Audio
             ConcreteAudioService.OpenAL.CheckError("Failed to queue the buffer.");
 
             // If the source has run out of buffers, restart it
-            var sourceState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
+            ALSourceState sourceState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
             if (state == SoundState.Playing && sourceState == ALSourceState.Stopped)
             {
                 ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Platform.Audio
                 ConcreteAudioService.OpenAL.CheckError("Failed to unqueue buffers.");
                 for (int i = 0; i < processedBuffers; i++)
                 {
-                    var buffer = _queuedBuffers.Dequeue();
+                    int buffer = _queuedBuffers.Dequeue();
                     ConcreteAudioService.OpenAL.DeleteBuffer(buffer);
                     ConcreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
                 }
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             }
 
-            var sourceState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
+            ALSourceState sourceState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
             ConcreteAudioService.OpenAL.CheckError("Failed to get state.");
             if (sourceState != ALSourceState.Stopped)
             {
@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Platform.Audio
             // Remove all queued buffers
             while (_queuedBuffers.Count > 0)
             {
-                var buffer = _queuedBuffers.Dequeue();
+                int buffer = _queuedBuffers.Dequeue();
                 ConcreteAudioService.OpenAL.DeleteBuffer(buffer);
                 ConcreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
             }
