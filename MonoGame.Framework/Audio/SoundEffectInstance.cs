@@ -179,7 +179,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// <remarks>In OpenAL Panning/3D works only with mono sounds.</remarks>
         public void Apply3D(AudioListener[] listeners, AudioEmitter emitter)
         {
-            foreach (var listener in listeners)
+            foreach (AudioListener listener in listeners)
                 _strategy.PlatformApply3D(listener, emitter);
         }
 

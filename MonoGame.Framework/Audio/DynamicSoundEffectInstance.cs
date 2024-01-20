@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = _dynamicState;
+                SoundState state = _dynamicState;
                 switch (state)
                 {
                     case SoundState.Paused:
@@ -169,7 +169,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = _dynamicState;
+                SoundState state = _dynamicState;
                 switch (state)
                 {
                     case SoundState.Playing:
@@ -203,7 +203,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = _dynamicState;
+                SoundState state = _dynamicState;
                 switch (state)
                 {
                     case SoundState.Playing:
@@ -235,7 +235,7 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 AssertNotDisposed();
 
-                var state = _dynamicState;
+                SoundState state = _dynamicState;
                 switch (state)
                 {
                     case SoundState.Stopped:
@@ -332,7 +332,7 @@ namespace Microsoft.Xna.Framework.Audio
                     throw new ArgumentException("Buffer is shorter than the specified number of bytes from the offset.");
 
                 // Ensure that the buffer length and start position match alignment.
-                var sampleSize = 2 * (int)_channels;
+                int sampleSize = 2 * (int)_channels;
                 if (count % sampleSize != 0)
                     throw new ArgumentException("Number of bytes does not match format alignment.");
                 if (offset % sampleSize != 0)

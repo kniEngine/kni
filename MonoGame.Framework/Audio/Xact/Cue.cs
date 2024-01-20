@@ -137,10 +137,10 @@ namespace Microsoft.Xna.Framework.Audio
                     _engine.ActiveCues.Add(this);
 
                 //TODO: Probabilities
-                var index = XactHelpers.Random.Next(_sounds.Length);
+                int index = XactHelpers.Random.Next(_sounds.Length);
                 _curSound = _sounds[index];
 
-                var volume = UpdateRpcCurves();
+                float volume = UpdateRpcCurves();
 
                 _curSound.Play(volume, _engine);
             }
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             // Do a simple linear search... which is fast
             // for as little variables as most cues have.
-            for (var i = 0; i < _variables.Length; i++)
+            for (int i = 0; i < _variables.Length; i++)
             {
                 if (_variables[i].Name == name)
                     return i;
@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Framework.Audio
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
 
-            var i = FindVariable(name);
+            int i = FindVariable(name);
             if (i == -1 || !_variables[i].IsPublic)
                 throw new IndexOutOfRangeException("The specified variable index is invalid.");
 
@@ -217,7 +217,7 @@ namespace Microsoft.Xna.Framework.Audio
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
 
-            var i = FindVariable(name);
+            int i = FindVariable(name);
             if (i == -1 || !_variables[i].IsPublic)
                 throw new IndexOutOfRangeException("The specified variable index is invalid.");
 
@@ -241,28 +241,28 @@ namespace Microsoft.Xna.Framework.Audio
             if (_played && !_applied3D)
                 throw new InvalidOperationException("You must call Apply3D on a Cue before calling Play to be able to call Apply3D after calling Play.");
 
-            var direction = listener.Position - emitter.Position;
+            Vector3 direction = listener.Position - emitter.Position;
 
             lock (_engine.UpdateLock)
             {
                 // Set the distance for falloff.
-                var distance = direction.Length();
-                var i = FindVariable("Distance");
+                float distance = direction.Length();
+                int i = FindVariable("Distance");
                 _variables[i].SetValue(distance);
 
                 // Calculate the orientation.
                 if (distance > 0.0f)
                     direction /= distance;
-                var right = Vector3.Cross(listener.Up, listener.Forward);
-                var slope = Vector3.Dot(direction, listener.Forward);
-                var angle = MathHelper.ToDegrees((float)Math.Acos(slope));
-                var j = FindVariable("OrientationAngle");
+                Vector3 right = Vector3.Cross(listener.Up, listener.Forward);
+                float slope = Vector3.Dot(direction, listener.Forward);
+                float angle = MathHelper.ToDegrees((float)Math.Acos(slope));
+                int j = FindVariable("OrientationAngle");
                 _variables[j].SetValue(angle);
                 if (_curSound != null)
                     _curSound.SetCuePan(Vector3.Dot(direction, right));
 
                 // Calculate doppler effect.
-                var relativeVelocity = emitter.Velocity - listener.Velocity;
+                Vector3 relativeVelocity = emitter.Velocity - listener.Velocity;
                 relativeVelocity *= emitter.DopplerScale;
             }
 
@@ -281,20 +281,20 @@ namespace Microsoft.Xna.Framework.Audio
 
         private float UpdateRpcCurves()
         {
-            var volume = 1.0f;
+            float volume = 1.0f;
 
             // Evaluate the runtime parameter controls.
-            var rpcCurves = _curSound.RpcCurves;
+            int[] rpcCurves = _curSound.RpcCurves;
             if (rpcCurves.Length > 0)
             {
-                var pitch = 0.0f;
-                var reverbMix = 1.0f;
+                float pitch = 0.0f;
+                float reverbMix = 1.0f;
                 float? filterFrequency = null;
                 float? filterQFactor = null;
 
-                for (var i = 0; i < rpcCurves.Length; i++)
+                for (int i = 0; i < rpcCurves.Length; i++)
                 {
-                    var rpcCurve = _engine.RpcCurves[rpcCurves[i]];
+                    RpcCurve rpcCurve = _engine.RpcCurves[rpcCurves[i]];
 
                     // Some curves are driven by global variables and others by cue instance variables.
                     float value;

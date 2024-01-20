@@ -164,7 +164,7 @@ namespace Microsoft.Xna.Platform.Audio
             // check if the sound has stopped
             if (state == SoundState.Playing)
             {
-                var alState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
+                ALSourceState alState = ConcreteAudioService.OpenAL.GetSourceState(_sourceId);
                 ConcreteAudioService.OpenAL.CheckError("Failed to get source state.");
 
                 if (alState == ALSourceState.Stopped)
@@ -252,9 +252,9 @@ namespace Microsoft.Xna.Platform.Audio
         {
             if (applyFilter && ConcreteAudioService.Filter > 0)
             {
-                var freq = frequency / 20000f;
-                var lf = 1.0f - freq;
-                var efx = ConcreteAudioService.OpenAL.Efx;
+                float freq = frequency / 20000f;
+                float lf = 1.0f - freq;
+                EffectsExtension efx = ConcreteAudioService.OpenAL.Efx;
                 efx.Filter(ConcreteAudioService.Filter, EfxFilteri.FilterType, (int)filterType);
                 ConcreteAudioService.OpenAL.CheckError("Failed to set filter.");
                 switch (filterType)

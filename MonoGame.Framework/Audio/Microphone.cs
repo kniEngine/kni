@@ -152,8 +152,8 @@ namespace Microsoft.Xna.Framework.Audio
         /// Starts microphone capture.
         /// </summary>
         public void Start()
-        { 
-            var state = State;
+        {
+            MicrophoneState state = State;
             switch (state)
             {
                 case MicrophoneState.Started:
@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         public void Stop()
         {
-            var state = State;
+            MicrophoneState state = State;
             switch (state)
             {
                 case MicrophoneState.Started:
@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal void UpdateBuffer()
         {
-            var state = _state;
+            MicrophoneState state = _state;
             switch (state)
             {
                 case MicrophoneState.Started:

@@ -74,9 +74,11 @@ namespace Microsoft.Xna.Platform.Audio
     abstract public class SoundEffectStrategy : IDisposable
     {
         internal abstract void PlatformLoadAudioStream(Stream stream, out TimeSpan duration);
+
+        internal abstract void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength);
         internal abstract void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength);
         internal abstract void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength);
-        internal abstract void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength);
+
 
         #region IDisposable
         ~SoundEffectStrategy()

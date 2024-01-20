@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Audio
         {
             get
             {
-                var current = _current;
+                AudioFactory current = _current;
                 if (current != null)
                     return current;
 

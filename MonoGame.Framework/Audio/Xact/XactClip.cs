@@ -31,32 +31,32 @@ namespace Microsoft.Xna.Framework.Audio
 
             UseReverb = useReverb;
 
-            var volumeDb = XactHelpers.ParseDecibels(clipReader.ReadByte());
+            float volumeDb = XactHelpers.ParseDecibels(clipReader.ReadByte());
             _defaultVolume = XactHelpers.ParseVolumeFromDecibels(volumeDb);
-            var clipOffset = clipReader.ReadUInt32();
+            uint clipOffset = clipReader.ReadUInt32();
 
             // Read the filter info.
-            var filterQAndFlags = clipReader.ReadUInt16();
+            ushort filterQAndFlags = clipReader.ReadUInt16();
             FilterEnabled = (filterQAndFlags & 1) == 1;
             FilterMode = (FilterMode)((filterQAndFlags >> 1) & 3);
             FilterQ = (filterQAndFlags >> 3) * 0.01f;
             FilterFrequency = clipReader.ReadUInt16();
 
-            var oldPosition = clipReader.BaseStream.Position;
+            long oldPosition = clipReader.BaseStream.Position;
             clipReader.BaseStream.Seek(clipOffset, SeekOrigin.Begin);
             
-            var numEvents = clipReader.ReadByte();
+            byte numEvents = clipReader.ReadByte();
             _events = new ClipEvent[numEvents];
             
-            for (var i=0; i<numEvents; i++) 
+            for (int i = 0; i<numEvents; i++) 
             {
-                var eventInfo = clipReader.ReadUInt32();
-                var randomOffset = clipReader.ReadUInt16() * 0.001f;
+                uint eventInfo = clipReader.ReadUInt32();
+                float randomOffset = clipReader.ReadUInt16() * 0.001f;
 
                 // TODO: eventInfo still has 11 bits that are unknown!
-                var eventId = eventInfo & 0x1F;
-                var timeStamp = ((eventInfo >> 5) & 0xFFFF) * 0.001f;
-                var unknown = eventInfo >> 21;
+                uint eventId = eventInfo & 0x1F;
+                float timeStamp = ((eventInfo >> 5) & 0xFFFF) * 0.001f;
+                uint unknown = eventInfo >> 21;
 
                 switch (eventId)
                 {
@@ -70,16 +70,16 @@ namespace Microsoft.Xna.Framework.Audio
                     clipReader.ReadByte();
 
                     // Event flags
-                    var eventFlags = clipReader.ReadByte();
-                    var playRelease = (eventFlags & 0x01) == 0x01;
-                    var panEnabled = (eventFlags & 0x02) == 0x02;
-                    var useCenterSpeaker = (eventFlags & 0x04) == 0x04;
+                    byte eventFlags = clipReader.ReadByte();
+                    bool playRelease = (eventFlags & 0x01) == 0x01;
+                    bool panEnabled = (eventFlags & 0x02) == 0x02;
+                    bool useCenterSpeaker = (eventFlags & 0x04) == 0x04;
 
                     int trackIndex = clipReader.ReadUInt16();
                     int waveBankIndex = clipReader.ReadByte();					
-                    var loopCount = clipReader.ReadByte();
-                    var panAngle = clipReader.ReadUInt16() / 100.0f;
-                    var panArc = clipReader.ReadUInt16() / 100.0f;
+                    byte loopCount = clipReader.ReadByte();
+                    float panAngle = clipReader.ReadUInt16() / 100.0f;
+                    float panArc = clipReader.ReadUInt16() / 100.0f;
                     
                     _events[i] = new PlayWaveEvent(
                         this,
@@ -106,40 +106,40 @@ namespace Microsoft.Xna.Framework.Audio
                     clipReader.ReadByte();
 
                     // Event flags
-                    var eventFlags = clipReader.ReadByte();
-                    var playRelease = (eventFlags & 0x01) == 0x01;
-                    var panEnabled = (eventFlags & 0x02) == 0x02;
-                    var useCenterSpeaker = (eventFlags & 0x04) == 0x04;
+                    byte eventFlags = clipReader.ReadByte();
+                    bool playRelease = (eventFlags & 0x01) == 0x01;
+                    bool panEnabled = (eventFlags & 0x02) == 0x02;
+                    bool useCenterSpeaker = (eventFlags & 0x04) == 0x04;
 
-                    var loopCount = clipReader.ReadByte();
-                    var panAngle = clipReader.ReadUInt16() / 100.0f;
-                    var panArc = clipReader.ReadUInt16() / 100.0f;
+                    byte loopCount = clipReader.ReadByte();
+                    float panAngle = clipReader.ReadUInt16() / 100.0f;
+                    float panArc = clipReader.ReadUInt16() / 100.0f;
 
                     // The number of tracks for the variations.
-                    var numTracks = clipReader.ReadUInt16();
+                    ushort numTracks = clipReader.ReadUInt16();
 
                     // Not sure what most of this is.
-                    var moreFlags = clipReader.ReadByte();
-                    var newWaveOnLoop = (moreFlags & 0x40) == 0x40;
-                    
+                    byte moreFlags = clipReader.ReadByte();
+                    bool newWaveOnLoop = (moreFlags & 0x40) == 0x40;
+
                     // The variation playlist type seems to be 
                     // stored in the bottom 4bits only.
-                    var variationType = (VariationType)(moreFlags & 0x0F);
+                    VariationType variationType = (VariationType)(moreFlags & 0x0F);
 
                     // Unknown!
                     clipReader.ReadBytes(5);
 
                     // Read in the variation playlist.
-                    var waveBanks = new int[numTracks];
-                    var tracks = new int[numTracks];
-                    var weights = new byte[numTracks];
-                    var totalWeights = 0;
-                    for (var j = 0; j < numTracks; j++)
+                    int[] waveBanks = new int[numTracks];
+                    int[] tracks = new int[numTracks];
+                    byte[] weights = new byte[numTracks];
+                            int totalWeights = 0;
+                    for (int j = 0; j < numTracks; j++)
                     {
                         tracks[j] = clipReader.ReadUInt16();
                         waveBanks[j] = clipReader.ReadByte();
-                        var minWeight = clipReader.ReadByte();
-                        var maxWeight = clipReader.ReadByte();
+                        byte minWeight = clipReader.ReadByte();
+                        byte maxWeight = clipReader.ReadByte();
                         weights[j] = (byte)(maxWeight - minWeight);
                         totalWeights += weights[j];
                     }
@@ -169,35 +169,35 @@ namespace Microsoft.Xna.Framework.Audio
                     clipReader.ReadByte();
 
                     // Event flags
-                    var eventFlags = clipReader.ReadByte();
-                    var playRelease = (eventFlags & 0x01) == 0x01;
-                    var panEnabled = (eventFlags & 0x02) == 0x02;
-                    var useCenterSpeaker = (eventFlags & 0x04) == 0x04;
+                    byte eventFlags = clipReader.ReadByte();
+                    bool playRelease = (eventFlags & 0x01) == 0x01;
+                    bool panEnabled = (eventFlags & 0x02) == 0x02;
+                    bool useCenterSpeaker = (eventFlags & 0x04) == 0x04;
 
                     int trackIndex = clipReader.ReadUInt16();
                     int waveBankIndex = clipReader.ReadByte();
-                    var loopCount = clipReader.ReadByte();
-                    var panAngle = clipReader.ReadUInt16() / 100.0f;
-                    var panArc = clipReader.ReadUInt16() / 100.0f;
+                    byte loopCount = clipReader.ReadByte();
+                    float panAngle = clipReader.ReadUInt16() / 100.0f;
+                    float panArc = clipReader.ReadUInt16() / 100.0f;
 
                     // Pitch variation range
-                    var minPitch = clipReader.ReadInt16() / 1000.0f;
-                    var maxPitch = clipReader.ReadInt16() / 1000.0f;
+                    float minPitch = clipReader.ReadInt16() / 1000.0f;
+                    float maxPitch = clipReader.ReadInt16() / 1000.0f;
 
                     // Volume variation range
-                    var minVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
-                    var maxVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
+                    float minVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
+                    float maxVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
 
                     // Filter variation
-                    var minFrequency = clipReader.ReadSingle();
-                    var maxFrequency = clipReader.ReadSingle();
-                    var minQ = clipReader.ReadSingle();
-                    var maxQ = clipReader.ReadSingle();
+                    float minFrequency = clipReader.ReadSingle();
+                    float maxFrequency = clipReader.ReadSingle();
+                    float minQ = clipReader.ReadSingle();
+                    float maxQ = clipReader.ReadSingle();
 
                     // Unknown!
                     clipReader.ReadByte();
 
-                    var variationFlags = clipReader.ReadByte();
+                    byte variationFlags = clipReader.ReadByte();
 
                     // Enable pitch variation
                     Vector2? pitchVar = null;
@@ -239,34 +239,34 @@ namespace Microsoft.Xna.Framework.Audio
                     clipReader.ReadByte();
 
                     // Event flags
-                    var eventFlags = clipReader.ReadByte();
-                    var playRelease = (eventFlags & 0x01) == 0x01;
-                    var panEnabled = (eventFlags & 0x02) == 0x02;
-                    var useCenterSpeaker = (eventFlags & 0x04) == 0x04;
+                    byte eventFlags = clipReader.ReadByte();
+                    bool playRelease = (eventFlags & 0x01) == 0x01;
+                    bool panEnabled = (eventFlags & 0x02) == 0x02;
+                    bool useCenterSpeaker = (eventFlags & 0x04) == 0x04;
 
-                    var loopCount = clipReader.ReadByte();
-                    var panAngle = clipReader.ReadUInt16() / 100.0f;
-                    var panArc = clipReader.ReadUInt16() / 100.0f;
+                    byte loopCount = clipReader.ReadByte();
+                    float panAngle = clipReader.ReadUInt16() / 100.0f;
+                    float panArc = clipReader.ReadUInt16() / 100.0f;
 
                     // Pitch variation range
-                    var minPitch = clipReader.ReadInt16() / 1000.0f;
-                    var maxPitch = clipReader.ReadInt16() / 1000.0f;
+                    float minPitch = clipReader.ReadInt16() / 1000.0f;
+                    float maxPitch = clipReader.ReadInt16() / 1000.0f;
 
                     // Volume variation range
-                    var minVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
-                    var maxVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
+                    float minVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
+                    float maxVolume = XactHelpers.ParseVolumeFromDecibels(clipReader.ReadByte());
 
                     // Filter variation range
-                    var minFrequency = clipReader.ReadSingle();
-                    var maxFrequency = clipReader.ReadSingle();
-                    var minQ = clipReader.ReadSingle();
-                    var maxQ = clipReader.ReadSingle();
+                    float minFrequency = clipReader.ReadSingle();
+                    float maxFrequency = clipReader.ReadSingle();
+                    float minQ = clipReader.ReadSingle();
+                    float maxQ = clipReader.ReadSingle();
 
                     // Unknown!
                     clipReader.ReadByte();
 
                     // TODO: Still has unknown bits!
-                    var variationFlags = clipReader.ReadByte();
+                    byte variationFlags = clipReader.ReadByte();
 
                     // Enable pitch variation
                     Vector2? pitchVar = null;
@@ -284,30 +284,30 @@ namespace Microsoft.Xna.Framework.Audio
                         filterVar = new Vector4(minFrequency, maxFrequency - minFrequency, minQ, maxQ - minQ);
 
                     // The number of tracks for the variations.
-                    var numTracks = clipReader.ReadUInt16();
+                    ushort numTracks = clipReader.ReadUInt16();
 
                     // Not sure what most of this is.
-                    var moreFlags = clipReader.ReadByte();
-                    var newWaveOnLoop = (moreFlags & 0x40) == 0x40;
+                    byte moreFlags = clipReader.ReadByte();
+                    bool newWaveOnLoop = (moreFlags & 0x40) == 0x40;
 
                     // The variation playlist type seems to be 
                     // stored in the bottom 4bits only.
-                    var variationType = (VariationType)(moreFlags & 0x0F);
+                    VariationType variationType = (VariationType)(moreFlags & 0x0F);
 
                     // Unknown!
                     clipReader.ReadBytes(5);
 
                     // Read in the variation playlist.
-                    var waveBanks = new int[numTracks];
-                    var tracks = new int[numTracks];
-                    var weights = new byte[numTracks];
-                    var totalWeights = 0;
-                    for (var j = 0; j < numTracks; j++)
+                    int[] waveBanks = new int[numTracks];
+                    int[] tracks = new int[numTracks];
+                    byte[] weights = new byte[numTracks];
+                    int totalWeights = 0;
+                    for (int j = 0; j < numTracks; j++)
                     {
                         tracks[j] = clipReader.ReadUInt16();
                         waveBanks[j] = clipReader.ReadByte();
-                        var minWeight = clipReader.ReadByte();
-                        var maxWeight = clipReader.ReadByte();
+                        byte minWeight = clipReader.ReadByte();
+                        byte maxWeight = clipReader.ReadByte();
                         weights[j] = (byte)(maxWeight - minWeight);
                         totalWeights += weights[j];
                     }
@@ -341,12 +341,12 @@ namespace Microsoft.Xna.Framework.Audio
                     clipReader.ReadBytes(2);
 
                     // Event flags
-                    var eventFlags = clipReader.ReadByte();
-                    var isAdd = (eventFlags & 0x01) == 0x01;
+                    byte eventFlags = clipReader.ReadByte();
+                    bool isAdd = (eventFlags & 0x01) == 0x01;
 
                     // The replacement or additive volume.
-                    var decibles = clipReader.ReadSingle() / 100.0f;
-                    var volume = XactHelpers.ParseVolumeFromDecibels(decibles + (isAdd ? volumeDb : 0));
+                    float decibles = clipReader.ReadSingle() / 100.0f;
+                    float volume = XactHelpers.ParseVolumeFromDecibels(decibles + (isAdd ? volumeDb : 0));
 
                     // Unknown!
                     clipReader.ReadBytes(9);
@@ -385,7 +385,7 @@ namespace Microsoft.Xna.Framework.Audio
             // Play the next event.
             while (_nextEvent < _events.Length)
             {
-                var evt = _events[_nextEvent];
+                ClipEvent evt = _events[_nextEvent];
                 if (_time < evt.TimeStamp)
                     break;
 
@@ -394,10 +394,10 @@ namespace Microsoft.Xna.Framework.Audio
             }
 
             // Update all the active events.
-            var isPlaying = _nextEvent < _events.Length;
-            for (var i = 0; i < _nextEvent; i++)
+            bool isPlaying = _nextEvent < _events.Length;
+            for (int i = 0; i < _nextEvent; i++)
             {
-                var evt = _events[i];
+                ClipEvent evt = _events[i];
                 isPlaying |= evt.Update(dt);
             }
 
@@ -408,7 +408,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal void SetFade(float fadeInDuration, float fadeOutDuration)
         {
-            foreach (var evt in _events)
+            foreach (ClipEvent evt in _events)
             {
                 if (evt is PlayWaveEvent)
                     evt.SetFade(fadeInDuration, fadeOutDuration);
@@ -418,9 +418,9 @@ namespace Microsoft.Xna.Framework.Audio
         internal void UpdateState(float volume, float pitch, float reverbMix, float? filterFrequency, float? filterQFactor)
         {
             _volumeScale = volume;
-            var trackVolume = _volume * _volumeScale;
+            float trackVolume = _volume * _volumeScale;
 
-            foreach (var evt in _events)
+            foreach (ClipEvent evt in _events)
                 evt.SetState(trackVolume, pitch, reverbMix, filterFrequency, filterQFactor);
         }
 
@@ -435,7 +435,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         public void Resume()
         {
-            foreach (var evt in _events)
+            foreach (ClipEvent evt in _events)
                 evt.Resume();
 
             State = SoundState.Playing;
@@ -443,7 +443,7 @@ namespace Microsoft.Xna.Framework.Audio
         
         public void Stop()
         {
-            foreach (var evt in _events)
+            foreach (ClipEvent evt in _events)
                 evt.Stop();
 
             State = SoundState.Stopped;
@@ -451,7 +451,7 @@ namespace Microsoft.Xna.Framework.Audio
         
         public void Pause()
         {
-            foreach (var evt in _events)
+            foreach (ClipEvent evt in _events)
                 evt.Pause();
 
             State = SoundState.Paused;
@@ -481,14 +481,14 @@ namespace Microsoft.Xna.Framework.Audio
 
         private void UpdateVolumes()
         {
-            var volume = _volume * _volumeScale;
-            foreach (var evt in _events)
+            float volume = _volume * _volumeScale;
+            foreach (ClipEvent evt in _events)
                 evt.SetTrackVolume(volume);
         }
 
         public void SetPan(float pan)
         {
-            foreach (var evt in _events)
+            foreach (ClipEvent evt in _events)
                 evt.SetTrackPan(pan);
         }
     }

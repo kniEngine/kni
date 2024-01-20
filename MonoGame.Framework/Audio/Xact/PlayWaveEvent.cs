@@ -90,8 +90,8 @@ namespace Microsoft.Xna.Framework.Audio
                     _wav.Stop();
                 if (_streaming)
                     _wav.Dispose();
-				else					
-					_wav._isXAct = false;					
+                else					
+                    _wav._isXAct = false;					
                 _wav = null;
             }
 
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         private void Play(bool pickNewWav)
         {
-            var trackCount = _tracks.Length;
+            int trackCount = _tracks.Length;
 
             // Do we need to pick a new wav to play first?
             if (pickNewWav)
@@ -120,8 +120,8 @@ namespace Microsoft.Xna.Framework.Audio
                             _wavIndex = XactHelpers.Random.Next() % trackCount;
                         else
                         {
-                            var sum = XactHelpers.Random.Next(_totalWeights);
-                            for (var i=0; i < trackCount; i++)
+                            int sum = XactHelpers.Random.Next(_totalWeights);
+                            for (int i = 0; i < trackCount; i++)
                             {
                                 sum -= _weights[i];
                                 if (sum <= 0)
@@ -139,9 +139,9 @@ namespace Microsoft.Xna.Framework.Audio
                             _wavIndex = XactHelpers.Random.Next() % trackCount;
                         else
                         {
-                            var last = _wavIndex;
-                            var sum = XactHelpers.Random.Next(_totalWeights);
-                            for (var i=0; i < trackCount; i++)
+                            int last = _wavIndex;
+                            int sum = XactHelpers.Random.Next(_totalWeights);
+                            for (int i = 0; i < trackCount; i++)
                             {
                                 sum -= _weights[i];
                                 if (sum <= 0)
@@ -206,8 +206,8 @@ namespace Microsoft.Xna.Framework.Audio
                 _wav.Stop();
                 if (_streaming)
                     _wav.Dispose();
-				else
-                	_wav._isXAct = false;				
+                else
+                    _wav._isXAct = false;				
                 _wav = null;
             }
             _loopIndex = 0;
@@ -280,8 +280,8 @@ namespace Microsoft.Xna.Framework.Audio
                 {
                     if (_streaming)
                         _wav.Dispose();
-					else
-	                    _wav._isXAct = false;						
+                    else
+                        _wav._isXAct = false;						
                     _wav = null;
                     _loopIndex = 0;
                 }

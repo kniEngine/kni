@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 if (_reverbVoice == null)
                 {
-                    var details = MasterVoice.VoiceDetails;
+                    VoiceDetails details = MasterVoice.VoiceDetails;
                     _reverbVoice = new SubmixVoice(Device, details.InputChannelCount, details.InputSampleRate);
 
 #if SHARPDX263
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform.Audio
 #else
                     var reverb = new SharpDX.XAudio2.Fx.Reverb(Device);
 #endif
-                    var desc = new EffectDescriptor(reverb);
+                    EffectDescriptor desc = new EffectDescriptor(reverb);
                     desc.InitialState = true;
                     desc.OutputChannelCount = details.InputChannelCount;
                     _reverbVoice.SetEffectChain(desc);
@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Platform.Audio
         {
              // All parameters related to sampling rate or time are relative to a 48kHz 
             // voice and must be scaled for use with other sampling rates.
-            var timeScale = 48000.0f / ReverbVoice.VoiceDetails.InputSampleRate;
+            float timeScale = 48000.0f / ReverbVoice.VoiceDetails.InputSampleRate;
 
             var settings = new SharpDX.XAudio2.Fx.ReverbParameters
             {

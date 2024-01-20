@@ -141,13 +141,13 @@ namespace Microsoft.Xna.Platform.Audio
                     var appContext = Android.App.Application.Context;
                     Android.Util.Log.Debug("OAL", appContext.PackageManager.HasSystemFeature(PackageManager.FeatureAudioLowLatency) ? "Supports low latency audio playback." : "Does not support low latency audio playback.");
 
-                    var audioManager = appContext.GetSystemService(Context.AudioService) as AudioManager;
+                    AudioManager audioManager = appContext.GetSystemService(Context.AudioService) as AudioManager;
                     if (audioManager != null)
                     {
-                        var frequencyStr = audioManager.GetProperty(AudioManager.PropertyOutputSampleRate);
+                        string frequencyStr = audioManager.GetProperty(AudioManager.PropertyOutputSampleRate);
                         if (!string.IsNullOrEmpty(frequencyStr))
                             frequency = int.Parse(frequencyStr, CultureInfo.InvariantCulture);
-                        var updateSizeStr = audioManager.GetProperty(AudioManager.PropertyOutputFramesPerBuffer);
+                        string updateSizeStr = audioManager.GetProperty(AudioManager.PropertyOutputFramesPerBuffer);
                         if (!string.IsNullOrEmpty(updateSizeStr))
                             updateSize = int.Parse(updateSizeStr, CultureInfo.InvariantCulture);
                     }
@@ -244,12 +244,12 @@ namespace Microsoft.Xna.Platform.Audio
 
             while (true)
             {
-                var deviceIdentifier = InteropHelpers.Utf8ToString(deviceList);
+                string deviceIdentifier = InteropHelpers.Utf8ToString(deviceList);
 
                 if (string.IsNullOrEmpty(deviceIdentifier))
                     break;
 
-                var microphone = new Microphone(deviceIdentifier);
+                Microphone microphone = new Microphone(deviceIdentifier);
                 microphones.Add(microphone);
                 if (deviceIdentifier == defaultDevice)
                     defaultMicrophone = microphone;
@@ -288,7 +288,7 @@ namespace Microsoft.Xna.Platform.Audio
             if (ReverbEffect != 0)
                 return;
 
-            var efx = OpenAL.Efx;
+            EffectsExtension efx = OpenAL.Efx;
             efx.GenAuxiliaryEffectSlots(1, out ReverbSlot);
             efx.GenEffect(out ReverbEffect);
             efx.Effect(ReverbEffect, EfxEffecti.EffectType, (int)EfxEffectType.Reverb);

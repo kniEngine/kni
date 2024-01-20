@@ -34,13 +34,13 @@ namespace Microsoft.Xna.Platform.Audio
                 throw new ArgumentException("Ensure that the specified stream contains valid PCM or IEEE Float wave data.", ex);
             }
 
-            var dataStream = soundStream.ToDataStream();
+            DataStream dataStream = soundStream.ToDataStream();
             int sampleCount = 0;
             switch (soundStream.Format.Encoding)
             {
                 case WaveFormatEncoding.Adpcm:
                     {
-                        var samplesPerBlock = (soundStream.Format.BlockAlign / soundStream.Format.Channels - 7) * 2 + 2;
+                        int samplesPerBlock = (soundStream.Format.BlockAlign / soundStream.Format.Channels - 7) * 2 + 2;
                         sampleCount = ((int)dataStream.Length / soundStream.Format.BlockAlign) * samplesPerBlock;
                     }
                     break;
@@ -57,54 +57,76 @@ namespace Microsoft.Xna.Platform.Audio
             CreateBuffers(soundStream.Format, dataStream, 0, sampleCount);
         }
 
-        private static DataStream ToDataStream(byte[] buffer, int offset, int length)
+        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
+            short format = BitConverter.ToInt16(header, 0);
+            short channels = BitConverter.ToInt16(header, 2);
+            int sampleRate = BitConverter.ToInt32(header, 4);
+            short blockAlignment = BitConverter.ToInt16(header, 12);
+            short bitsPerSample = BitConverter.ToInt16(header, 14);
+
+            WaveFormat waveFormat;
+            switch (format)
+            {
+                case 1:
+                    waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
+                    break;
+                case 2:
+                    waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
+                    break;
+                case 3:
+                    waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channels);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Unsupported wave format!");
+            }
+
             // We make a copy because old versions of 
             // DataStream.Create(...) didn't work correctly for offsets.
-            var bufferCopy = new byte[length];
-            Buffer.BlockCopy(buffer, offset, bufferCopy, 0, length);
+            byte[] bufferCopy = new byte[count];
+            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
 
-            return DataStream.Create(bufferCopy, true, false);
-        }
+            DataStream dataStream = DataStream.Create(bufferCopy, true, false);
 
-        internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
-        {
-            CreateBuffers(  new WaveFormat(sampleRate, sampleBits, channels),
-                            ToDataStream(buffer, index, count),
+            CreateBuffers(  waveFormat,
+                            dataStream,
                             loopStart,
                             loopLength);
         }
 
-        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
+        internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            var format = BitConverter.ToInt16(header, 0);
-            var channels = BitConverter.ToInt16(header, 2);
-            var sampleRate = BitConverter.ToInt32(header, 4);
-            var blockAlignment = BitConverter.ToInt16(header, 12);
-            var sampleBits = BitConverter.ToInt16(header, 14);
+            WaveFormat waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
 
-            WaveFormat waveFormat;
-            if (format == 1)
-                waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
-            else if (format == 2)
-                waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
-            else if (format == 3)
-                waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channels);
-            else
-                throw new NotSupportedException("Unsupported wave format!");
+            // We make a copy because old versions of 
+            // DataStream.Create(...) didn't work correctly for offsets.
+            byte[] bufferCopy = new byte[count];
+            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
+
+            DataStream dataStream = DataStream.Create(bufferCopy, true, false);
 
             CreateBuffers(  waveFormat,
-                            ToDataStream(buffer, index, count),
+                            dataStream,
                             loopStart,
                             loopLength);
         }
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-                CreateBuffers(  new WaveFormatAdpcm(sampleRate, channels, (blockAlignment + 22) * channels),
-                                ToDataStream(buffer, index, count),
-                                loopStart,
-                                loopLength);
+            WaveFormat waveFormat = new WaveFormatAdpcm(sampleRate, channels, (blockAlignment + 22) * channels);
+
+            // We make a copy because old versions of 
+            // DataStream.Create(...) didn't work correctly for offsets.
+            byte[] bufferCopy = new byte[count];
+            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
+
+            DataStream dataStream = DataStream.Create(bufferCopy, true, false);
+
+            CreateBuffers(  waveFormat,
+                            dataStream,
+                            loopStart,
+                            loopLength);
         }
 
         private void CreateBuffers(WaveFormat format, DataStream dataStream, int loopStart, int loopLength)

@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Audio
             _audioServiceStrategy = audioServiceStrategy;
             _concreteSoundEffect = (ConcreteSoundEffect)sfxStrategy;
 
-            var context = ConcreteAudioService.Context;
+            AudioContext context = ConcreteAudioService.Context;
 
             _stereoPannerNode = ConcreteAudioService.Context.CreateStereoPanner();
             _gainNode = ConcreteAudioService.Context.CreateGain();
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformPlay(bool isLooped)
         {
-            var context = ConcreteAudioService.Context;
+            AudioContext context = ConcreteAudioService.Context;
 
             _bufferSource = context.CreateBufferSource();
             _bufferSource.Loop = isLooped;
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformStop()
         {
-            var context = ConcreteAudioService.Context;
+            AudioContext context = ConcreteAudioService.Context;
 
             _bufferSource.OnEnded -= _bufferSource_OnEnded;
             _ended = false;
