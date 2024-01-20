@@ -57,12 +57,12 @@ namespace Microsoft.Xna.Platform.Audio
             CreateBuffers(soundStream.Format, dataStream, 0, sampleCount);
         }
 
-        private static DataStream ToDataStream(byte[] buffer, int offset, int length)
+        private static DataStream ToDataStream(byte[] buffer, int index, int count)
         {
             // We make a copy because old versions of 
             // DataStream.Create(...) didn't work correctly for offsets.
-            byte[] bufferCopy = new byte[length];
-            Buffer.BlockCopy(buffer, offset, bufferCopy, 0, length);
+            byte[] bufferCopy = new byte[count];
+            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
 
             return DataStream.Create(bufferCopy, true, false);
         }
