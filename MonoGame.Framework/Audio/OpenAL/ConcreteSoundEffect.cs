@@ -92,11 +92,11 @@ namespace Microsoft.Xna.Platform.Audio
                 sampleBits = 16;
             }
 
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, count, format, sampleRate);
+            _soundBuffer.BindDataBuffer(buffer, index, count, alFormat, sampleRate);
         }
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
@@ -116,11 +116,11 @@ namespace Microsoft.Xna.Platform.Audio
                 return;
             }
 
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, offset, count, format, sampleRate);
+            _soundBuffer.BindDataBuffer(buffer, offset, count, alFormat, sampleRate);
         }
 
         private void InitializeAdpcm(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
@@ -135,15 +135,15 @@ namespace Microsoft.Xna.Platform.Audio
                 return;
             }
 
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(format, blockAlignment);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
+            int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);
 
             // Buffer length must be aligned with the block alignment
             int alignedCount = count - (count % blockAlignment);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, alignedCount, format, sampleRate, sampleAlignment);
+            _soundBuffer.BindDataBuffer(buffer, index, alignedCount, alFormat, sampleRate, sampleAlignment);
         }
 
         private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
@@ -158,12 +158,12 @@ namespace Microsoft.Xna.Platform.Audio
                 return;
             }
 
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(format, blockAlignment);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
+            int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, count, format, sampleRate, sampleAlignment);
+            _soundBuffer.BindDataBuffer(buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
         #endregion
