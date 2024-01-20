@@ -69,13 +69,19 @@ namespace Microsoft.Xna.Platform.Audio
             switch (format)
             {
                 case 1:
-                    waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
+                    {
+                        waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
+                    }
                     break;
                 case 2:
-                    waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
+                    {
+                        waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
+                    }
                     break;
                 case 3:
-                    waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channels);
+                    {
+                        waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channels);
+                    }
                     break;
 
                 default:

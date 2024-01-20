@@ -38,6 +38,7 @@ namespace Microsoft.Xna.Platform.Audio
                         this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                         return;
                     }
+                    break;
             }
         }
 

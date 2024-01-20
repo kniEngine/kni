@@ -62,19 +62,27 @@ namespace Microsoft.Xna.Platform.Audio
                 case ALFormat.Mono16:
                 case ALFormat.Stereo8:
                 case ALFormat.Stereo16:
-                    PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    {
+                        PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    }
                     break;
                 case ALFormat.MonoMSAdpcm:
                 case ALFormat.StereoMSAdpcm:
-                    InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    {
+                        InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    }
                     break;
                 case ALFormat.MonoFloat32:
                 case ALFormat.StereoFloat32:
-                    InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                    {
+                        InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                    }
                     break;
                 case ALFormat.MonoIma4:
                 case ALFormat.StereoIma4:
-                    InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    {
+                        InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    }
                     break;
                 default:
                     throw new NotSupportedException("Unsupported wave format!");
