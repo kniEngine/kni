@@ -70,6 +70,13 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsDepthNonLinear = false;
             SupportsTextureMaxLevel = true;
 #endif
+
+            // 16bit textures
+            SupportsBgra5551 = false;
+            SupportsBgra4444 = false;
+            SupportsAbgr5551 = true;
+            SupportsAbgr4444 = true;
+
             // Texture compression
             SupportsS3tc = GL.Extensions.Contains("GL_EXT_texture_compression_s3tc") ||
                            GL.Extensions.Contains("GL_OES_texture_compression_S3TC") ||

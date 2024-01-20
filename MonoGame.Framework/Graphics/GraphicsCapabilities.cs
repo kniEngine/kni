@@ -36,6 +36,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public bool SupportsDepthNonLinear { get; protected set; }
 
+        public bool SupportsBgra5551 { get; protected set; }
+        public bool SupportsAbgr5551 { get; protected set; }
+        public bool SupportsBgra4444 { get; protected set; }
+        public bool SupportsAbgr4444 { get; protected set; }
+
         /// <summary>
         /// Gets the support for DXT1
         /// </summary>

@@ -37,6 +37,12 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsDepthNonLinear = false;
             SupportsTextureMaxLevel = false;
 
+            // 16bit textures
+            SupportsBgra5551 = true;
+            SupportsBgra4444 = true;
+            SupportsAbgr5551 = false;
+            SupportsAbgr4444 = false;
+
             // Texture compression
             SupportsDxt1 = true;
             SupportsS3tc = true;

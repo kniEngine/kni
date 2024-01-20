@@ -37,6 +37,12 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsDepthNonLinear = false;
             SupportsTextureMaxLevel = false;
 
+            // 16bit textures
+            SupportsBgra5551 = false;
+            SupportsBgra4444 = false;
+            SupportsAbgr5551 = true;
+            SupportsAbgr4444 = true;
+
             // Texture compression
             SupportsS3tc = GL.GetExtension("WEBGL_compressed_texture_s3tc");
             SupportsDxt1 = GL.GetExtension("WEBGL_compressed_texture_s3tc");
