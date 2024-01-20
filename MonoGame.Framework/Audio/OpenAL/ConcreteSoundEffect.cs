@@ -70,6 +70,13 @@ namespace Microsoft.Xna.Platform.Audio
                     break;
                 case ALFormat.MonoMSAdpcm:
                 case ALFormat.StereoMSAdpcm:
+                    if (!concreteAudioService.SupportsAdpcm)
+                    {
+                        // If MS-ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = AudioLoader.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    else
                     {
                         InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
@@ -125,7 +132,18 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            InitializeAdpcm(buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+
+            if (!concreteAudioService.SupportsAdpcm)
+            {
+                // If MS-ADPCM is not supported, convert to 16-bit signed PCM
+                buffer = AudioLoader.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
+                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+            }
+            else
+            {
+                InitializeAdpcm(buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
+            }
         }
 
         private void InitializeIeeeFloat(byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
@@ -138,16 +156,7 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         private void InitializeAdpcm(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
-        {
-            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
-
-            if (!concreteAudioService.SupportsAdpcm)
-            {
-                // If MS-ADPCM is not supported, convert to 16-bit signed PCM
-                buffer = AudioLoader.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-                return;
-            }
+        {           
 
             ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);

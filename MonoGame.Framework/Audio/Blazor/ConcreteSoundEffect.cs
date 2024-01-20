@@ -84,7 +84,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+
         }
 
         #endregion
