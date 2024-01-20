@@ -40,6 +40,54 @@ namespace Microsoft.Xna.Platform.Audio
             PlatformInitializeBuffer(buffer, 0, buffer.Length, format, channels, freq, blockAlignment, bitsPerSample, 0, 0);
         }
 
+        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
+        {
+            short format = BitConverter.ToInt16(header, 0);
+            short channels = BitConverter.ToInt16(header, 2);
+            int sampleRate = BitConverter.ToInt32(header, 4);
+            short blockAlignment = BitConverter.ToInt16(header, 12);
+            short bitsPerSample = BitConverter.ToInt16(header, 14);
+
+            switch (format)
+            {
+                case 1:
+                    {
+                        this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                        return;
+                    }
+            }
+
+            ALFormat alFormat = AudioLoader.GetSoundFormat(format, channels, bitsPerSample);
+            PlatformInitializeBuffer(buffer, index, count, alFormat, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
+        }
+
+        private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, ALFormat format, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
+        {
+            switch (format)
+            {
+                case ALFormat.Mono8:
+                case ALFormat.Mono16:
+                case ALFormat.Stereo8:
+                case ALFormat.Stereo16:
+                    PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    break;
+                case ALFormat.MonoMSAdpcm:
+                case ALFormat.StereoMSAdpcm:
+                    InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    break;
+                case ALFormat.MonoFloat32:
+                case ALFormat.StereoFloat32:
+                    InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                    break;
+                case ALFormat.MonoIma4:
+                case ALFormat.StereoIma4:
+                    InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    break;
+                default:
+                    throw new NotSupportedException("Unsupported wave format!");
+            }
+        }
+
         internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
             if (sampleBits == 24)
@@ -56,6 +104,11 @@ namespace Microsoft.Xna.Platform.Audio
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer.BindDataBuffer(buffer, index, count, format, sampleRate);
+        }
+
+        internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
+        {
+            InitializeAdpcm(buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
         }
 
         private void InitializeIeeeFloat(byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
@@ -118,59 +171,6 @@ namespace Microsoft.Xna.Platform.Audio
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer.BindDataBuffer(buffer, index, count, format, sampleRate, sampleAlignment);
-        }
-
-        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
-        {
-            short format = BitConverter.ToInt16(header, 0);
-            short channels = BitConverter.ToInt16(header, 2);
-            int sampleRate = BitConverter.ToInt32(header, 4);
-            short blockAlignment = BitConverter.ToInt16(header, 12);
-            short bitsPerSample = BitConverter.ToInt16(header, 14);
-
-            switch (format)
-            {
-                case 1:
-                    {
-                        this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                        return;
-                    }
-            }
-
-            ALFormat alFormat = AudioLoader.GetSoundFormat(format, channels, bitsPerSample);
-            PlatformInitializeBuffer(buffer, index, count, alFormat, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
-        }
-
-        private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, ALFormat format, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
-        {
-            switch (format)
-            {
-                case ALFormat.Mono8:
-                case ALFormat.Mono16:
-                case ALFormat.Stereo8:
-                case ALFormat.Stereo16:
-                    PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                    break;
-                case ALFormat.MonoMSAdpcm:
-                case ALFormat.StereoMSAdpcm:
-                    InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
-                    break;
-                case ALFormat.MonoFloat32:
-                case ALFormat.StereoFloat32:
-                    InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
-                    break;
-                case ALFormat.MonoIma4:
-                case ALFormat.StereoIma4:
-                    InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
-                    break;
-                default:
-                    throw new NotSupportedException("Unsupported wave format!");
-            }
-        }
-
-        internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
-        {
-            InitializeAdpcm(buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
         }
 
         #endregion

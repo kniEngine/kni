@@ -23,6 +23,23 @@ namespace Microsoft.Xna.Platform.Audio
             duration = TimeSpan.Zero;
         }
 
+        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
+        {
+            short format = BitConverter.ToInt16(header, 0);
+
+            switch (format)
+            {
+                case 1:
+                    {
+                        short channels = BitConverter.ToInt16(header, 2);
+                        int sampleRate = BitConverter.ToInt32(header, 4);
+                        short bitsPerSample = BitConverter.ToInt16(header, 14);
+                        this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                        return;
+                    }
+            }
+        }
+
         internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
             ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
@@ -61,23 +78,6 @@ namespace Microsoft.Xna.Platform.Audio
                 }
             }
 
-        }
-
-        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
-        {
-            short format = BitConverter.ToInt16(header, 0);
-
-            switch (format)
-            {
-                case 1:
-                    {
-                        short channels = BitConverter.ToInt16(header, 2);
-                        int sampleRate = BitConverter.ToInt32(header, 4);
-                        short bitsPerSample = BitConverter.ToInt16(header, 14);
-                        this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                        return;
-                    }
-            }
         }
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)

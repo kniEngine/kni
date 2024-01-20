@@ -67,14 +67,6 @@ namespace Microsoft.Xna.Platform.Audio
             return DataStream.Create(bufferCopy, true, false);
         }
 
-        internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
-        {
-            CreateBuffers(  new WaveFormat(sampleRate, sampleBits, channels),
-                            ToDataStream(buffer, index, count),
-                            loopStart,
-                            loopLength);
-        }
-
         internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
             short format = BitConverter.ToInt16(header, 0);
@@ -104,6 +96,14 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             CreateBuffers(  waveFormat,
+                            ToDataStream(buffer, index, count),
+                            loopStart,
+                            loopLength);
+        }
+
+        internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
+        {
+            CreateBuffers(  new WaveFormat(sampleRate, sampleBits, channels),
                             ToDataStream(buffer, index, count),
                             loopStart,
                             loopLength);
