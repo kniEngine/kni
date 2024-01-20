@@ -52,25 +52,8 @@ namespace Microsoft.Xna.Framework.Audio
         {
             _duration = TimeSpan.FromMilliseconds(durationMs);
 
-            // Peek at the format... handle regular PCM data.
-            short format = BitConverter.ToInt16(header, 0);
-
-            switch (format)
-            {
-                case 1:
-                    {
-                        short channels = BitConverter.ToInt16(header, 2);
-                        int sampleRate = BitConverter.ToInt32(header, 4);
-                        short bitsPerSample = BitConverter.ToInt16(header, 14);
-                        _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
-                        _strategy.PlatformInitializePcm(buffer, 0, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                        return;
-                    }
-            }
-
-            // Everything else is platform specific.
             _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
-            _strategy.PlatformInitializeFormat(header, buffer, 0, bufferSize, loopStart, loopLength);
+            _strategy.PlatformInitialize(header, buffer, 0, bufferSize, durationMs, loopStart, loopLength);
         }
 
         // Only used from XACT WaveBank.

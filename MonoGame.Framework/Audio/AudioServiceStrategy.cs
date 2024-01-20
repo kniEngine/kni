@@ -78,6 +78,28 @@ namespace Microsoft.Xna.Platform.Audio
         internal abstract void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength);
         internal abstract void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength);
 
+
+        internal void PlatformInitialize(byte[] header, byte[] buffer, int index, int count, int durationMs, int loopStart, int loopLength)
+        {
+            // Peek at the format... handle regular PCM data.
+            short format = BitConverter.ToInt16(header, 0);
+
+            switch (format)
+            {
+                case 1:
+                    {
+                        short channels = BitConverter.ToInt16(header, 2);
+                        int sampleRate = BitConverter.ToInt32(header, 4);
+                        short bitsPerSample = BitConverter.ToInt16(header, 14);
+                        this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                        return;
+                    }
+            }
+
+            // Everything else is platform specific.
+            this.PlatformInitializeFormat(header, buffer, index, count, loopStart, loopLength);
+        }
+
         #region IDisposable
         ~SoundEffectStrategy()
         {
