@@ -87,6 +87,9 @@ namespace Microsoft.Xna.Platform.Audio
             switch (format)
             {
                 case 1:
+                    this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    return;
+
                     waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
                     break;
                 case 2:
