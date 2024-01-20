@@ -48,16 +48,8 @@ namespace Microsoft.Xna.Platform.Audio
             short blockAlignment = BitConverter.ToInt16(header, 12);
             short bitsPerSample = BitConverter.ToInt16(header, 14);
 
-            switch (format)
-            {
-                case 1:
-                    {
-                        this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                        return;
-                    }
-            }
-
             ALFormat alFormat = AudioLoader.GetSoundFormat(format, channels, bitsPerSample);
+
             PlatformInitializeBuffer(buffer, index, count, alFormat, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
         }
 
