@@ -54,14 +54,18 @@ namespace Microsoft.Xna.Framework.Audio
 
             // Peek at the format... handle regular PCM data.
             short format = BitConverter.ToInt16(header, 0);
-            if (format == 1)
+
+            switch (format)
             {
-                short channels = BitConverter.ToInt16(header, 2);
-                int sampleRate = BitConverter.ToInt32(header, 4);
-                short bitsPerSample = BitConverter.ToInt16(header, 14);
-                _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
-                _strategy.PlatformInitializePcm(buffer, 0, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                return;
+                case 1:
+                    {
+                        short channels = BitConverter.ToInt16(header, 2);
+                        int sampleRate = BitConverter.ToInt32(header, 4);
+                        short bitsPerSample = BitConverter.ToInt16(header, 14);
+                        _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
+                        _strategy.PlatformInitializePcm(buffer, 0, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                        return;
+                    }
             }
 
             // Everything else is platform specific.

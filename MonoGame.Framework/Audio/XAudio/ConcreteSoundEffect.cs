@@ -84,14 +84,21 @@ namespace Microsoft.Xna.Platform.Audio
             short sampleBits = BitConverter.ToInt16(header, 14);
 
             WaveFormat waveFormat;
-            if (format == 1)
-                waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
-            else if (format == 2)
-                waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
-            else if (format == 3)
-                waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channels);
-            else
-                throw new NotSupportedException("Unsupported wave format!");
+            switch (format)
+            {
+                case 1:
+                    waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
+                    break;
+                case 2:
+                    waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
+                    break;
+                case 3:
+                    waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channels);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Unsupported wave format!");
+            }
 
             CreateBuffers(  waveFormat,
                             ToDataStream(buffer, index, count),
