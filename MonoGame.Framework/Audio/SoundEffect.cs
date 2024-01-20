@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Audio
             _duration = TimeSpan.FromMilliseconds(durationMs);
 
             _strategy = AudioFactory.Current.CreateSoundEffectStrategy();
-            _strategy.PlatformInitialize(header, buffer, 0, bufferSize, durationMs, loopStart, loopLength);
+            _strategy.PlatformInitializeFormat(header, buffer, 0, bufferSize, loopStart, loopLength);
         }
 
         // Only used from XACT WaveBank.

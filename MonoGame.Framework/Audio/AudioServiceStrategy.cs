@@ -79,11 +79,6 @@ namespace Microsoft.Xna.Platform.Audio
         internal abstract void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength);
 
 
-        internal void PlatformInitialize(byte[] header, byte[] buffer, int index, int count, int durationMs, int loopStart, int loopLength)
-        {
-            this.PlatformInitializeFormat(header, buffer, index, count, loopStart, loopLength);
-        }
-
         #region IDisposable
         ~SoundEffectStrategy()
         {
