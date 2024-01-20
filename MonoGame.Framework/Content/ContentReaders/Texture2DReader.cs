@@ -58,6 +58,20 @@ namespace Microsoft.Xna.Framework.Content
                 case SurfaceFormat.NormalizedByte4:
                     convertedFormat = SurfaceFormat.Color;
                     break;
+                case SurfaceFormat.Bgra5551:
+                    if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsBgra5551)
+                    {
+                        //if (((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsAbgr5551)
+                        //    convertedFormat = SurfaceFormat.Abgr5551;
+                    }
+                    break;
+                case SurfaceFormat.Bgra4444:
+                    if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsBgra4444)
+                    {
+                        //if (((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsAbgr4444)
+                        //    convertedFormat = SurfaceFormat.Abgr4444;
+                    }
+                    break;
             }
             
             texture = existingInstance ?? new Texture2D(input.GetGraphicsDevice(), width, height, levelCountOutput > 1, convertedFormat);
@@ -106,41 +120,45 @@ namespace Microsoft.Xna.Framework.Content
                             }
                         break;
                     case SurfaceFormat.Bgra5551:
+                        if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsBgra5551)
                         {
-#if OPENGL
-                            // Shift the channels to suit OpenGL
-                            int offset = 0;
-                            for (int y = 0; y < levelHeight; y++)
+                            //if (convertedFormat == SurfaceFormat.Abgr5551)
                             {
-                                for (int x = 0; x < levelWidth; x++)
+                                // Shift the channels to suit OpenGL
+                                int offset = 0;
+                                for (int y = 0; y < levelHeight; y++)
                                 {
-                                    ushort pixel = BitConverter.ToUInt16(levelData, offset);
-                                    pixel = (ushort)(((pixel & 0x7FFF) << 1) | ((pixel & 0x8000) >> 15));
-                                    levelData[offset] = (byte)(pixel);
-                                    levelData[offset + 1] = (byte)(pixel >> 8);
-                                    offset += 2;
+                                    for (int x = 0; x < levelWidth; x++)
+                                    {
+                                        ushort pixel = BitConverter.ToUInt16(levelData, offset);
+                                        pixel = (ushort)(((pixel & 0x7FFF) << 1) | ((pixel & 0x8000) >> 15));
+                                        levelData[offset] = (byte)(pixel);
+                                        levelData[offset + 1] = (byte)(pixel >> 8);
+                                        offset += 2;
+                                    }
                                 }
                             }
-#endif
                         }
                         break;
                     case SurfaceFormat.Bgra4444:
+                        if (!((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsBgra4444)
                         {
-#if OPENGL
-                            // Shift the channels to suit OpenGL
-                            int offset = 0;
-                            for (int y = 0; y < levelHeight; y++)
+                            //if (convertedFormat == SurfaceFormat.Abgr4444)
                             {
-                                for (int x = 0; x < levelWidth; x++)
+                                // Shift the channels to suit OpenGL
+                                int offset = 0;
+                                for (int y = 0; y < levelHeight; y++)
                                 {
-                                    ushort pixel = BitConverter.ToUInt16(levelData, offset);
-                                    pixel = (ushort)(((pixel & 0x0FFF) << 4) | ((pixel & 0xF000) >> 12));
-                                    levelData[offset] = (byte)(pixel);
-                                    levelData[offset + 1] = (byte)(pixel >> 8);
-                                    offset += 2;
+                                    for (int x = 0; x < levelWidth; x++)
+                                    {
+                                        ushort pixel = BitConverter.ToUInt16(levelData, offset);
+                                        pixel = (ushort)(((pixel & 0x0FFF) << 4) | ((pixel & 0xF000) >> 12));
+                                        levelData[offset] = (byte)(pixel);
+                                        levelData[offset + 1] = (byte)(pixel >> 8);
+                                        offset += 2;
+                                    }
                                 }
                             }
-#endif
                         }
                         break;
                     case SurfaceFormat.NormalizedByte4:
