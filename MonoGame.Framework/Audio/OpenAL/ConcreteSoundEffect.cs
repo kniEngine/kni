@@ -56,6 +56,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, ALFormat format, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
         {
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+
             switch (format)
             {
                 case ALFormat.Mono8:
@@ -80,6 +82,13 @@ namespace Microsoft.Xna.Platform.Audio
                     break;
                 case ALFormat.MonoIma4:
                 case ALFormat.StereoIma4:
+                    if (!concreteAudioService.SupportsIma4)
+                    {
+                        // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = AudioLoader.ConvertIma4ToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    else
                     {
                         InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
@@ -156,16 +165,6 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
         {
-            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
-
-            if (!concreteAudioService.SupportsIma4)
-            {
-                // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
-                buffer = AudioLoader.ConvertIma4ToPcm(buffer, index, count, channels, blockAlignment);
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-                return;
-            }
-
             ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);
 
