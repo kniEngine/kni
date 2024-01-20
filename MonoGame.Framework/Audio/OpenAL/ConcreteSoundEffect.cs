@@ -122,14 +122,14 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
-            short wavFormat = BitConverter.ToInt16(header, 0);
+            short format = BitConverter.ToInt16(header, 0);
             short channels = BitConverter.ToInt16(header, 2);
             int sampleRate = BitConverter.ToInt32(header, 4);
             short blockAlignment = BitConverter.ToInt16(header, 12);
             short bitsPerSample = BitConverter.ToInt16(header, 14);
 
-            ALFormat format = AudioLoader.GetSoundFormat(wavFormat, channels, bitsPerSample);
-            PlatformInitializeBuffer(buffer, index, count, format, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(format, channels, bitsPerSample);
+            PlatformInitializeBuffer(buffer, index, count, alFormat, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
         }
 
         private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, ALFormat format, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)

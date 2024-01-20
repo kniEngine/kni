@@ -81,13 +81,13 @@ namespace Microsoft.Xna.Platform.Audio
             short channels = BitConverter.ToInt16(header, 2);
             int sampleRate = BitConverter.ToInt32(header, 4);
             short blockAlignment = BitConverter.ToInt16(header, 12);
-            short sampleBits = BitConverter.ToInt16(header, 14);
+            short bitsPerSample = BitConverter.ToInt16(header, 14);
 
             WaveFormat waveFormat;
             switch (format)
             {
                 case 1:
-                    waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
+                    waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
                     break;
                 case 2:
                     waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
