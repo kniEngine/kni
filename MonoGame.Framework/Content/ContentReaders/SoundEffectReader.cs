@@ -306,26 +306,16 @@ namespace Microsoft.Xna.Framework.Audio
             } 
             else 
             {
-#if (UAP || WINUI)            
+                System.Console.WriteLine("MSADPCM WAVEDATA IS NOT MONO OR STEREO!");
                 pcmOut.Dispose();
                 output.Dispose();
-#else
-                System.Console.WriteLine("MSADPCM WAVEDATA IS NOT MONO OR STEREO!");
-                pcmOut.Close();
-                output.Close();
-#endif
 
                 return null;
             }
 
             // We're done writing PCM data...
-#if (UAP || WINUI)
             pcmOut.Dispose();
             output.Dispose();
-#else
-            pcmOut.Close();
-            output.Close();
-#endif
 
             // Return the array.
             return output.ToArray();
