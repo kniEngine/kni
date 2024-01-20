@@ -92,26 +92,31 @@ namespace Microsoft.Xna.Platform.Audio
                     throw new NotSupportedException("Unsupported wave format!");
             }
 
+            DataStream dataStream = ToDataStream(buffer, index, count);
             CreateBuffers(  waveFormat,
-                            ToDataStream(buffer, index, count),
+                            dataStream,
                             loopStart,
                             loopLength);
         }
 
         internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            CreateBuffers(  new WaveFormat(sampleRate, sampleBits, channels),
-                            ToDataStream(buffer, index, count),
+            WaveFormat waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
+            DataStream dataStream = ToDataStream(buffer, index, count);
+            CreateBuffers(  waveFormat,
+                            dataStream,
                             loopStart,
                             loopLength);
         }
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-                CreateBuffers(  new WaveFormatAdpcm(sampleRate, channels, (blockAlignment + 22) * channels),
-                                ToDataStream(buffer, index, count),
-                                loopStart,
-                                loopLength);
+            WaveFormat waveFormat = new WaveFormatAdpcm(sampleRate, channels, (blockAlignment + 22) * channels);
+            DataStream dataStream = ToDataStream(buffer, index, count);
+            CreateBuffers(  waveFormat,
+                            dataStream,
+                            loopStart,
+                            loopLength);
         }
 
         private void CreateBuffers(WaveFormat format, DataStream dataStream, int loopStart, int loopLength)
