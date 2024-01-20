@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
 
             if (index != 0)
                 throw new NotImplementedException();
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             int numOfChannels = (int)channels;
             
-            _audioBuffer = ConcreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
+            _audioBuffer = concreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
 
             // convert buffer to float (-1,+1) and set data for each channel.
             unsafe

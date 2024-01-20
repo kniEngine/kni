@@ -105,9 +105,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void InitializeIeeeFloat(byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
 
-            if (!ConcreteAudioService.SupportsIeee)
+            if (!concreteAudioService.SupportsIeee)
             {
                 // If 32-bit IEEE float is not supported, convert to 16-bit signed PCM
                 buffer = AudioLoader.ConvertFloatTo16(buffer, offset, count);
@@ -124,9 +124,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void InitializeAdpcm(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
         {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
 
-            if (!ConcreteAudioService.SupportsAdpcm)
+            if (!concreteAudioService.SupportsAdpcm)
             {
                 // If MS-ADPCM is not supported, convert to 16-bit signed PCM
                 buffer = AudioLoader.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
@@ -147,9 +147,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
         {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
 
-            if (!ConcreteAudioService.SupportsIma4)
+            if (!concreteAudioService.SupportsIma4)
             {
                 // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
                 buffer = AudioLoader.ConvertIma4ToPcm(buffer, index, count, channels, blockAlignment);
