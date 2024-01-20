@@ -3,7 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 // Copyright (C)2021 Nick Kastellanos
-﻿
+
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
@@ -19,6 +19,7 @@ namespace Microsoft.Xna.Platform.Audio
     class ConcreteSoundEffect : SoundEffectStrategy
     {
         private ALSoundBuffer _soundBuffer;
+
 
         #region Initialization
 

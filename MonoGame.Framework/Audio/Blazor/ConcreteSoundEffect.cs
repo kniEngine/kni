@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Audio
         #endregion
 
         internal AudioBuffer GetAudioBuffer()
-        { 
+        {
             return _audioBuffer;
         }
 
