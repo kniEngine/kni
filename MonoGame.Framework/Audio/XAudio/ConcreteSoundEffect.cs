@@ -57,16 +57,6 @@ namespace Microsoft.Xna.Platform.Audio
             CreateBuffers(soundStream.Format, dataStream, 0, sampleCount);
         }
 
-        private static DataStream ToDataStream(byte[] buffer, int index, int count)
-        {
-            // We make a copy because old versions of 
-            // DataStream.Create(...) didn't work correctly for offsets.
-            byte[] bufferCopy = new byte[count];
-            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
-
-            return DataStream.Create(bufferCopy, true, false);
-        }
-
         internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
             short format = BitConverter.ToInt16(header, 0);
@@ -92,7 +82,13 @@ namespace Microsoft.Xna.Platform.Audio
                     throw new NotSupportedException("Unsupported wave format!");
             }
 
-            DataStream dataStream = ToDataStream(buffer, index, count);
+            // We make a copy because old versions of 
+            // DataStream.Create(...) didn't work correctly for offsets.
+            byte[] bufferCopy = new byte[count];
+            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
+
+            DataStream dataStream = DataStream.Create(bufferCopy, true, false);
+
             CreateBuffers(  waveFormat,
                             dataStream,
                             loopStart,
@@ -102,7 +98,14 @@ namespace Microsoft.Xna.Platform.Audio
         internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
             WaveFormat waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
-            DataStream dataStream = ToDataStream(buffer, index, count);
+
+            // We make a copy because old versions of 
+            // DataStream.Create(...) didn't work correctly for offsets.
+            byte[] bufferCopy = new byte[count];
+            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
+
+            DataStream dataStream = DataStream.Create(bufferCopy, true, false);
+
             CreateBuffers(  waveFormat,
                             dataStream,
                             loopStart,
@@ -112,7 +115,14 @@ namespace Microsoft.Xna.Platform.Audio
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
             WaveFormat waveFormat = new WaveFormatAdpcm(sampleRate, channels, (blockAlignment + 22) * channels);
-            DataStream dataStream = ToDataStream(buffer, index, count);
+
+            // We make a copy because old versions of 
+            // DataStream.Create(...) didn't work correctly for offsets.
+            byte[] bufferCopy = new byte[count];
+            Buffer.BlockCopy(buffer, index, bufferCopy, 0, count);
+
+            DataStream dataStream = DataStream.Create(bufferCopy, true, false);
+
             CreateBuffers(  waveFormat,
                             dataStream,
                             loopStart,
