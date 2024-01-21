@@ -17,7 +17,9 @@ namespace Microsoft.Xna.Framework.Content
             string path = input.ReadString();
             int durationMs = input.ReadObject<int>();
 
-            if (!String.IsNullOrEmpty(path))
+            if (String.IsNullOrEmpty(path))
+                throw new InvalidOperationException();
+
             {
                 // Add the ContentManager's RootDirectory
                 string assetsLocationFullPath = ((ITitleContainer)TitleContainer.Current).Location;
