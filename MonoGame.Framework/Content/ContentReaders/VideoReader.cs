@@ -21,7 +21,9 @@ namespace Microsoft.Xna.Framework.Content
             float framesPerSecond = input.ReadObject<float>();
             VideoSoundtrackType soundTrackType = (VideoSoundtrackType)input.ReadObject<int>();  // 0 = Music, 1 = Dialog, 2 = Music and dialog
 
-            if (!String.IsNullOrEmpty(path))
+            if (String.IsNullOrEmpty(path))
+                throw new InvalidOperationException();
+
             {
                 // Add the ContentManager's RootDirectory
                 string assetsLocationFullPath = ((ITitleContainer)TitleContainer.Current).Location;
