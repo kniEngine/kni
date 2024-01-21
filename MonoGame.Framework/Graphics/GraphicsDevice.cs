@@ -173,8 +173,6 @@ namespace Microsoft.Xna.Framework.Graphics
                 var hTexture3DReader = new Texture3DReader();
                 var hTextureCubeReader = new TextureCubeReader();
                 var hVertexBufferReader = new VertexBufferReader();
-                var hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
-                var hEnumBlendReader = new EnumReader<Graphics.Blend>();
             }
 #pragma warning restore 0219, 0649
         }
