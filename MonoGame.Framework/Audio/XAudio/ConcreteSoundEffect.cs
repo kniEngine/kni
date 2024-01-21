@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Platform.Audio.Utilities;
 using SharpDX;
 using SharpDX.XAudio2;
 using SharpDX.Multimedia;
@@ -74,6 +75,18 @@ namespace Microsoft.Xna.Platform.Audio
                     }
                     break;
                 case 2:
+                    if (blockAlignment == 1024)
+                    {
+                        // If MS-ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
+                        index = 0;
+                        count = buffer.Length;
+
+                        waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
+                        format = 1;
+                        bitsPerSample = 16;
+                    }
+                    else
                     {
                         waveFormat = new WaveFormatAdpcm(sampleRate, channels, blockAlignment);
                     }
