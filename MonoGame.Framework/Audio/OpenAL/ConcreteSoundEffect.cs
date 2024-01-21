@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Platform.Audio.OpenAL;
+using Microsoft.Xna.Platform.Audio.Utilities;
 
 #if IOS || TVOS
 using AudioToolbox;
@@ -73,7 +74,7 @@ namespace Microsoft.Xna.Platform.Audio
                     if (!concreteAudioService.SupportsAdpcm)
                     {
                         // If MS-ADPCM is not supported, convert to 16-bit signed PCM
-                        buffer = AudioLoader.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
                         PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
                     }
                     else
@@ -137,7 +138,7 @@ namespace Microsoft.Xna.Platform.Audio
             if (!concreteAudioService.SupportsAdpcm)
             {
                 // If MS-ADPCM is not supported, convert to 16-bit signed PCM
-                buffer = AudioLoader.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
+                buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
                 PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
             }
             else
