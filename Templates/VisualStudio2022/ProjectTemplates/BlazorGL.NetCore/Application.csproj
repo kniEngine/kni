@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="nkast.Xna.Framework" Version="3.10.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics.PackedVector" Version="3.10.9001" />
     <PackageReference Include="nkast.Xna.Framework.Blazor" Version="3.10.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.10.9001-rc" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.11" />

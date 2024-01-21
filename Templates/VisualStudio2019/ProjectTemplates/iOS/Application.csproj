@@ -108,6 +108,9 @@
     <Reference Include="Xna.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\netstandard2.0\Xna.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="XNA.Framework.Graphics.PackedVector">
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\netstandard2.0\Xna.Framework.Graphics.PackedVector.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\iOS\MonoGame.Framework.dll</HintPath>
     </Reference>
