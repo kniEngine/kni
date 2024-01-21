@@ -49,6 +49,7 @@ namespace Microsoft.Xna.Framework.Content
         internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
         {
             PreserveContentTypeReaders();
+            Microsoft.Xna.Framework.Audio.AudioService.PreserveAudioContentTypeReaders();
 
             // The first content byte i read tells me the number of content readers in this XNB file
             int numberOfReaders = reader.Read7BitEncodedInt();
