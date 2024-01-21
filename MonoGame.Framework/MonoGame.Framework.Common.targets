@@ -126,8 +126,6 @@
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainerStrategy.cs" />
   </ItemGroup>
 
 </Project>

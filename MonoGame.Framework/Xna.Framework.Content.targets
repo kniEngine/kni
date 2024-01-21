@@ -65,6 +65,8 @@
     <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
+    <Compile Include="TitleContainer.cs" />
+    <Compile Include="TitleContainerStrategy.cs" />
   </ItemGroup>
 
 </Project>
