@@ -141,8 +141,6 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
-    <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainerStrategy.cs" />
     <Compile Include="ConcreteTitleContainer.Android.cs" />
   </ItemGroup>
 
@@ -205,6 +203,8 @@
     <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
+    <Compile Include="TitleContainer.cs" />
+    <Compile Include="TitleContainerStrategy.cs" />
 
     <Compile Include="Content\ContentReaders\AlphaTestEffectReader.cs" />
     <Compile Include="Content\ContentReaders\BasicEffectReader.cs" />
