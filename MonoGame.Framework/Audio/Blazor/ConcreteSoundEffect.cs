@@ -26,23 +26,25 @@ namespace Microsoft.Xna.Platform.Audio
         internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
             short format = BitConverter.ToInt16(header, 0);
+            short channels = BitConverter.ToInt16(header, 2);
+            int sampleRate = BitConverter.ToInt32(header, 4);
+            short blockAlignment = BitConverter.ToInt16(header, 12);
+            short bitsPerSample = BitConverter.ToInt16(header, 14);
 
             switch (format)
             {
                 case 1:
                     {
-                        short channels = BitConverter.ToInt16(header, 2);
-                        int sampleRate = BitConverter.ToInt32(header, 4);
-                        short bitsPerSample = BitConverter.ToInt16(header, 14);
                         this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                         return;
                     }
+                    break;
             }
         }
 
         internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
 
             if (index != 0)
                 throw new NotImplementedException();
@@ -51,7 +53,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             int numOfChannels = (int)channels;
             
-            _audioBuffer = ConcreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
+            _audioBuffer = concreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
 
             // convert buffer to float (-1,+1) and set data for each channel.
             unsafe
@@ -82,13 +84,14 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+
         }
 
         #endregion
 
         internal AudioBuffer GetAudioBuffer()
-        { 
+        {
             return _audioBuffer;
         }
 

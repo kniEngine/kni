@@ -3,11 +3,12 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 // Copyright (C)2021 Nick Kastellanos
-﻿
+
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Platform.Audio.OpenAL;
+using Microsoft.Xna.Platform.Audio.Utilities;
 
 #if IOS || TVOS
 using AudioToolbox;
@@ -19,6 +20,7 @@ namespace Microsoft.Xna.Platform.Audio
     class ConcreteSoundEffect : SoundEffectStrategy
     {
         private ALSoundBuffer _soundBuffer;
+
 
         #region Initialization
 
@@ -55,25 +57,56 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, ALFormat format, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
         {
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+
             switch (format)
             {
                 case ALFormat.Mono8:
                 case ALFormat.Mono16:
                 case ALFormat.Stereo8:
                 case ALFormat.Stereo16:
-                    PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    {
+                        PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    }
                     break;
                 case ALFormat.MonoMSAdpcm:
                 case ALFormat.StereoMSAdpcm:
-                    InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    if (!concreteAudioService.SupportsAdpcm)
+                    {
+                        // If MS-ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    else
+                    {
+                        InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    }
                     break;
                 case ALFormat.MonoFloat32:
                 case ALFormat.StereoFloat32:
-                    InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                    if (!concreteAudioService.SupportsIeee)
+                    {
+                        // If 32-bit IEEE float is not supported, convert to 16-bit signed PCM
+                        buffer = AudioLoader.ConvertFloatTo16(buffer, bufferOffset, bufferSize);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    else
+                    {
+                        InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                    }
                     break;
                 case ALFormat.MonoIma4:
                 case ALFormat.StereoIma4:
-                    InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    if (!concreteAudioService.SupportsIma4)
+                    {
+                        // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = AudioLoader.ConvertIma4ToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    else
+                    {
+                        InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                    }
                     break;
                 default:
                     throw new NotSupportedException("Unsupported wave format!");
@@ -91,78 +124,60 @@ namespace Microsoft.Xna.Platform.Audio
                 sampleBits = 16;
             }
 
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, count, format, sampleRate);
+            _soundBuffer.BindDataBuffer(buffer, index, count, alFormat, sampleRate);
         }
 
         internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            InitializeAdpcm(buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
+            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+
+            if (!concreteAudioService.SupportsAdpcm)
+            {
+                // If MS-ADPCM is not supported, convert to 16-bit signed PCM
+                buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
+                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+            }
+            else
+            {
+                InitializeAdpcm(buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
+            }
         }
 
         private void InitializeIeeeFloat(byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
-
-            if (!ConcreteAudioService.SupportsIeee)
-            {
-                // If 32-bit IEEE float is not supported, convert to 16-bit signed PCM
-                buffer = AudioLoader.ConvertFloatTo16(buffer, offset, count);
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-                return;
-            }
-
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, offset, count, format, sampleRate);
+            _soundBuffer.BindDataBuffer(buffer, offset, count, alFormat, sampleRate);
         }
 
         private void InitializeAdpcm(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
-        {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+        {           
 
-            if (!ConcreteAudioService.SupportsAdpcm)
-            {
-                // If MS-ADPCM is not supported, convert to 16-bit signed PCM
-                buffer = AudioLoader.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-                return;
-            }
-
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(format, blockAlignment);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
+            int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);
 
             // Buffer length must be aligned with the block alignment
             int alignedCount = count - (count % blockAlignment);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, alignedCount, format, sampleRate, sampleAlignment);
+            _soundBuffer.BindDataBuffer(buffer, index, alignedCount, alFormat, sampleRate, sampleAlignment);
         }
 
         private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
         {
-            ConcreteAudioService ConcreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
-
-            if (!ConcreteAudioService.SupportsIma4)
-            {
-                // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
-                buffer = AudioLoader.ConvertIma4ToPcm(buffer, index, count, channels, blockAlignment);
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-                return;
-            }
-
-            ALFormat format = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(format, blockAlignment);
+            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
+            int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, count, format, sampleRate, sampleAlignment);
+            _soundBuffer.BindDataBuffer(buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
         #endregion
