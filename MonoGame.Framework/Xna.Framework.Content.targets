@@ -68,6 +68,7 @@
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
     <Compile Include="Content\Utilities\ReflectionHelpers.cs" />
     <Compile Include="TitleContainer.cs" />
+    <Compile Include="TitleContainerFactory.cs" />
     <Compile Include="TitleContainerStrategy.cs" />
   </ItemGroup>
 

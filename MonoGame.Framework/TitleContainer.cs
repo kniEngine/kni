@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework
 
         private TitleContainer()
         {
-            _strategy = new ConcreteTitleContainer();
+            _strategy = TitleContainerFactory.Current.CreateTitleContainerStrategy();
         }
 
         #region ITitleContainer

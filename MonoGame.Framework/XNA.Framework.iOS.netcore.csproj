@@ -77,6 +77,7 @@
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
     <Compile Include="ConcreteTitleContainer.iOS.cs" />
+    <Compile Include="ConcreteTitleContainerFactory.iOS.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.iOS.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
 

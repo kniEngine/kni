@@ -132,6 +132,7 @@
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
     <Compile Include="ConcreteTitleContainer.SDL.cs" />
+    <Compile Include="ConcreteTitleContainerFactory.SDL.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -196,6 +197,7 @@
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
     <Compile Include="Content\Utilities\ReflectionHelpers.cs" />
     <Compile Include="TitleContainer.cs" />
+    <Compile Include="TitleContainerFactory.cs" />
     <Compile Include="TitleContainerStrategy.cs" />
 
     <Compile Include="Content\ContentReaders\AlphaTestEffectReader.cs" />

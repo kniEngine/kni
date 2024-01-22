@@ -66,6 +66,7 @@
 	
   <ItemGroup>
     <Compile Include="ConcreteTitleContainer.SDL.cs" />
+    <Compile Include="ConcreteTitleContainerFactory.SDL.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
     <Compile Include="Platform\SDL\ConcreteGame.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />

@@ -66,6 +66,7 @@
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
     <Compile Include="Media\WMS\ConcreteVideo.cs" />
     <Compile Include="ConcreteTitleContainer.WindowsDX11.cs" />
+    <Compile Include="ConcreteTitleContainerFactory.WindowsDX11.cs" />
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Platform\Utilities\TimerHelper.cs" />
