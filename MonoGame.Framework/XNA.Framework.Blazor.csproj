@@ -66,6 +66,7 @@
     <Compile Include="Media\Blazor\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Blazor\ConcreteVideo.cs" />
     <Compile Include="ConcreteTitleContainer.Blazor.cs" />
+    <Compile Include="ConcreteTitleContainerFactory.Blazor.cs" />
   </ItemGroup>
   
   <ItemGroup>
