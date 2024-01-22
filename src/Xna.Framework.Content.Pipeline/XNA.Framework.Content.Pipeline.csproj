@@ -166,11 +166,9 @@
     <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe64.Dirty.cs" />
     <Compile Include="Utilities\LZ4\LZ4Codec.Unsafe64HC.Dirty.cs" />
     <Compile Include="Utilities\PathHelper.cs" />
+    <Compile Include="Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MonoGame.Framework\Utilities\ReflectionHelpers.cs">
-      <Link>Utilities\ReflectionHelpers.cs</Link>
-    </Compile>
     <Compile Include="..\..\MonoGame.Framework\Content\ContentExtensions.cs">
       <Link>Utilities\ContentExtensions.cs</Link>
     </Compile>

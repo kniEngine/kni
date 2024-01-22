@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
