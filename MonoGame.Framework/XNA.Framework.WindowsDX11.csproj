@@ -537,6 +537,7 @@
     <Compile Include="Media\WMS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WMS\ConcreteVideo.cs" />
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
+    <Compile Include="Media\Utilities\FileHelpers.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumStrategy.cs" />
     <Compile Include="Media\AlbumCollection.cs" />

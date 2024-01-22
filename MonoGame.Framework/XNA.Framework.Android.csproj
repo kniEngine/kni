@@ -534,6 +534,7 @@
     <Compile Include="Media\Android\ConcreteSong.cs" />
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
+    <Compile Include="Media\Utilities\FileHelpers.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumStrategy.cs" />
     <Compile Include="Media\AlbumCollection.cs" />

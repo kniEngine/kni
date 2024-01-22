@@ -523,6 +523,7 @@
     <Compile Include="Media\DesktopGL\ConcreteSong.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideo.cs" />
+    <Compile Include="Media\Utilities\FileHelpers.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumStrategy.cs" />
     <Compile Include="Media\AlbumCollection.cs" />

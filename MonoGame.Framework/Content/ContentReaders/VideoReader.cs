@@ -6,7 +6,7 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Media.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
 {

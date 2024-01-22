@@ -536,6 +536,7 @@
     <Compile Include="Media\WME\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WME\ConcreteVideo.cs" />
     <Compile Include="Media\WME\MusicProperties.cs" />
+    <Compile Include="Media\Utilities\FileHelpers.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumStrategy.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
