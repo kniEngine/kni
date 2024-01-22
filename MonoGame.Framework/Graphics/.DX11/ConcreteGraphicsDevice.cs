@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using DX = SharpDX;
 using DXGI = SharpDX.DXGI;
 using D2D = SharpDX.Direct2D1;

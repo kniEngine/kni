@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 

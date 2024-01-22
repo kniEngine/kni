@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 using StbImageSharp;
 using StbImageWriteSharp;
