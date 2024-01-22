@@ -6,7 +6,7 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Platform.Utilities
 {
     internal static partial class ReflectionHelpers
     {
@@ -16,15 +16,6 @@ namespace MonoGame.Framework.Utilities
             return targetType.GetTypeInfo().IsValueType;
 #else
             return targetType.IsValueType;
-#endif
-        }
-
-        public static Type GetBaseType(Type targetType)
-        {
-#if WINRT
-            return targetType.GetTypeInfo().BaseType;
-#else
-            return targetType.BaseType;
 #endif
         }
 
@@ -38,69 +29,6 @@ namespace MonoGame.Framework.Utilities
 #else
             return targetType.Assembly;
 #endif
-        }
-
-        /// <summary>
-        /// Returns true if the given type represents a non-object type that is not abstract.
-        /// </summary>
-        public static bool IsConcreteClass(Type t)
-        {
-            if (t == typeof(object))
-                return false;
-#if WINRT
-            var ti = t.GetTypeInfo();
-            return (ti.IsClass && !ti.IsAbstract);
-#else            
-            return (t.IsClass && !t.IsAbstract);
-#endif
-        }
-
-        public static MethodInfo GetMethodInfo(Type type, string methodName)
-        {
-#if WINRT
-            return type.GetTypeInfo().GetDeclaredMethod(methodName);
-#else
-            return type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
-#endif
-        }
-
-        public static MethodInfo GetPropertyGetMethod(PropertyInfo property)
-        {
-#if WINRT
-            return property.GetMethod;
-#else
-            return property.GetGetMethod();
-#endif
-        }
-
-        public static MethodInfo GetPropertySetMethod(PropertyInfo property)
-        {
-#if WINRT
-            return property.SetMethod;
-#else
-            return property.GetSetMethod();
-#endif
-        }
-
-        public static T GetCustomAttribute<T>(MemberInfo member) where T : Attribute
-        {
-#if WINRT
-            return member.GetCustomAttribute(typeof(T)) as T;
-#else
-            return Attribute.GetCustomAttribute(member, typeof(T)) as T;
-#endif
-        }
-
-        /// <summary>
-        /// Returns true if the get method of the given property exist and are public.
-        /// Note that we allow a getter-only property to be serialized (and deserialized),
-        /// *if* CanDeserializeIntoExistingObject is true for the property type.
-        /// </summary>
-        public static bool PropertyIsPublic(PropertyInfo property)
-        {
-            var getMethod = GetPropertyGetMethod(property);
-
-            return (getMethod != null && getMethod.IsPublic);
         }
 
         /// <summary>
@@ -132,26 +60,5 @@ namespace MonoGame.Framework.Utilities
 #endif
         }
 
-        internal static int SizeOf<T>()
-        {
-            return ManagedSizeOf<T>.Value;
-        }
-
-        /// <summary>
-        /// Generics handler for Marshal.SizeOf
-        /// </summary>
-        private static class ManagedSizeOf<T>
-        {
-            static public int Value { get; private set; }
-
-            static ManagedSizeOf()
-            {
-#if NET40 || NET45 || NET40_OR_GREATER
-                Value = Marshal.SizeOf(typeof(T));
-#else
-                Value = Marshal.SizeOf<T>();
-#endif
-            }
-        }
     }
 }

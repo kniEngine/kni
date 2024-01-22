@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
 

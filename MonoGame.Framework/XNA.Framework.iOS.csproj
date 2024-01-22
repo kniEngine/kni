@@ -171,9 +171,11 @@
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
 
     <Compile Include="Content\Utilities\ContentBufferPool.cs" />
+    <Compile Include="Content\Utilities\FileHelpers.cs" />
     <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
+    <Compile Include="Content\Utilities\ReflectionHelpers.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainerStrategy.cs" />
 
@@ -504,6 +506,7 @@
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
+    <Compile Include="Media\Utilities\FileHelpers.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumStrategy.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
@@ -538,7 +541,6 @@
     <Compile Include="Platform\Microsoft\Devices\Sensors\SensorReadingEventArgs.cs" />
     <Compile Include="Platform\Microsoft\Devices\Sensors\SensorState.cs" />
     <Compile Include="Utilities\Hash.cs" />
-    <Compile Include="Utilities\FileHelpers.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Utilities\ZLibStream\ZlibStream.cs" />

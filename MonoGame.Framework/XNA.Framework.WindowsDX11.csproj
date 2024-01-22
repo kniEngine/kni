@@ -209,9 +209,11 @@
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
 
     <Compile Include="Content\Utilities\ContentBufferPool.cs" />
+    <Compile Include="Content\Utilities\FileHelpers.cs" />
     <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
+    <Compile Include="Content\Utilities\ReflectionHelpers.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainerStrategy.cs" />
 
@@ -535,6 +537,7 @@
     <Compile Include="Media\WMS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WMS\ConcreteVideo.cs" />
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
+    <Compile Include="Media\Utilities\FileHelpers.cs" />
     <Compile Include="Media\Album.cs" />
     <Compile Include="Media\AlbumStrategy.cs" />
     <Compile Include="Media\AlbumCollection.cs" />
@@ -562,7 +565,6 @@
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Utilities\Hash.cs" />
-    <Compile Include="Utilities\FileHelpers.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Platform\Utilities\TimerHelper.cs" />
     <Compile Include="Utilities\ZLibStream\ZlibStream.cs" />

@@ -1,6 +1,6 @@
-﻿using MonoGame.Framework.Utilities;
+﻿using System.IO;
 using NUnit.Framework;
-using System.IO;
+using Microsoft.Xna.Platform.Content.Utilities;
 
 namespace MonoGame.Tests.Framework
 {

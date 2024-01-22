@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Content.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
 {

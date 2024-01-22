@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Content.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
 {
