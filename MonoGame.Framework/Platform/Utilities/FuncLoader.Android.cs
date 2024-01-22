@@ -2,6 +2,7 @@ using Android.App;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Utilities;
 
 namespace MonoGame.Framework.Utilities
 {

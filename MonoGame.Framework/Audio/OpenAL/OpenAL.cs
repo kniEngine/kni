@@ -6,6 +6,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Platform.Utilities;
 using MonoGame.Framework.Utilities;
 #if ANDROID
 using System.IO;
