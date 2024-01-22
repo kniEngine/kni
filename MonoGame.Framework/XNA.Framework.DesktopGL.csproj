@@ -190,9 +190,11 @@
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
 
     <Compile Include="Content\Utilities\ContentBufferPool.cs" />
+    <Compile Include="Content\Utilities\FileHelpers.cs" />
     <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoder.cs" />
+    <Compile Include="Content\Utilities\ReflectionHelpers.cs" />
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainerStrategy.cs" />
 

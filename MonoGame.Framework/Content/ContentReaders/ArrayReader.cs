@@ -3,7 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Content.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
 {
