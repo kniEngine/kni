@@ -57,13 +57,13 @@
     <Compile Include="Graphics\.GL.SDL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdaptersProvider.cs" />
-	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsContext.SDL.cs" />
-	<Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsContext.SDL.cs" />
+    <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
     <Compile Include="Graphics\.GL.SDL\OpenGL.SDL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
   </ItemGroup>
-	
+
   <ItemGroup>
     <Compile Include="ConcreteTitleContainer.SDL.cs" />
     <Compile Include="ConcreteTitleContainerFactory.SDL.cs" />

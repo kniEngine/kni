@@ -210,10 +210,10 @@
     <Compile Include="Graphics\.GL\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
-	<Compile Include="Graphics\.GL\States\ConcreteBlendState.cs" />
-	<Compile Include="Graphics\.GL\States\ConcreteDepthStencilState.cs" />
-	<Compile Include="Graphics\.GL\States\ConcreteRasterizerState.cs" />
-	<Compile Include="Graphics\.GL\States\ConcreteSamplerState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteBlendState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteDepthStencilState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteRasterizerState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteSamplerState.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
@@ -233,8 +233,8 @@
     <Compile Include="Graphics\.GL\ConcreteTexture2D.Stream.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
-	<Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
-	<Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.GL\GLExtensions.cs" />
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
@@ -244,8 +244,8 @@
     <Compile Include="Graphics\.GL.iOS\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsAdaptersProvider.cs" />
-	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsContext.iOS.cs" />
-	<Compile Include="Graphics\.GL.iOS\ConcreteGraphicsDevice.iOS.cs" />
+    <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsContext.iOS.cs" />
+    <Compile Include="Graphics\.GL.iOS\ConcreteGraphicsDevice.iOS.cs" />
     <Compile Include="Graphics\.GL.iOS\OpenGL.iOS.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
 
@@ -486,7 +486,7 @@
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
     <Compile Include="Input\MouseState.cs" />
-	<Compile Include="Input\TextInputEventArgs.cs" />
+    <Compile Include="Input\TextInputEventArgs.cs" />
     <Compile Include="Input\Oculus\IOculusInput.cs" />
     <Compile Include="Input\Oculus\TouchButtons.cs" />
     <Compile Include="Input\Oculus\TouchButtonState.cs" />
@@ -657,4 +657,3 @@
   </ItemGroup>
 
 </Project>
-
