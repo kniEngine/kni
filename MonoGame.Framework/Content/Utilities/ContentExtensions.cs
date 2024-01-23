@@ -1,21 +1,27 @@
-﻿using System;
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
-namespace Microsoft.Xna.Framework.Content
+namespace Microsoft.Xna.Platform.Content.Utilities
 {
     internal static class ContentExtensions
     {
-        public static ConstructorInfo GetDefaultConstructor(this Type type)
+        public static FieldInfo[] GetAllFields(this Type type)
         {
 #if WINRT
-            TypeInfo typeInfo = type.GetTypeInfo();
-            ConstructorInfo ctor = typeInfo.DeclaredConstructors.FirstOrDefault(c => !c.IsStatic && c.GetParameters().Length == 0);
-            return ctor;
+            FieldInfo[] fields= type.GetTypeInfo().DeclaredFields.ToArray();
+            IEnumerable<FieldInfo> nonStaticFields = from field in fields
+                    where !field.IsStatic
+                    select field;
+            return nonStaticFields.ToArray();
 #else
-            BindingFlags attrs = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
-            return type.GetConstructor(attrs, null, new Type[0], null);
+            BindingFlags attrs = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            return type.GetFields(attrs);
 #endif
         }
 
@@ -43,17 +49,15 @@ namespace Microsoft.Xna.Framework.Content
         }
 
 
-        public static FieldInfo[] GetAllFields(this Type type)
+        public static ConstructorInfo GetDefaultConstructor(this Type type)
         {
 #if WINRT
-            FieldInfo[] fields= type.GetTypeInfo().DeclaredFields.ToArray();
-            IEnumerable<FieldInfo> nonStaticFields = from field in fields
-                    where !field.IsStatic
-                    select field;
-            return nonStaticFields.ToArray();
+            TypeInfo typeInfo = type.GetTypeInfo();
+            ConstructorInfo ctor = typeInfo.DeclaredConstructors.FirstOrDefault(c => !c.IsStatic && c.GetParameters().Length == 0);
+            return ctor;
 #else
-            BindingFlags attrs = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            return type.GetFields(attrs);
+            BindingFlags attrs = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
+            return type.GetConstructor(attrs, null, new Type[0], null);
 #endif
         }
 
