@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         private AudioService()
         {
-            //PreserveAudioContentTypeReaders();
+            PreserveAudioContentTypeReaders();
 
             _strategy = AudioFactory.Current.CreateAudioServiceStrategy();
             _strategy.PlatformPopulateCaptureDevices(_microphones, ref _defaultMicrophone);
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         // Trick to prevent the linker removing the code, but not actually execute the code
         static bool _trimmingFalseFlag = false;
-        internal static void PreserveAudioContentTypeReaders()
+        private static void PreserveAudioContentTypeReaders()
         {
 #pragma warning disable 0219, 0649
             // Trick to prevent the linker removing the code, but not actually execute the code
