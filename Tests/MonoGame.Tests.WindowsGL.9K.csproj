@@ -1040,6 +1040,10 @@
       <Name>Xna.Framework.Graphics.PackedVector</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Project>{1dc4c439-a8a6-4a11-ab3b-a88dcba05449}</Project>
+      <Name>Xna.Framework.Content</Name>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
       <Name>Xna.Framework.Design</Name>

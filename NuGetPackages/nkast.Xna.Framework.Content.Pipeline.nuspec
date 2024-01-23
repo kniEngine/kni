@@ -21,10 +21,12 @@
         <group targetFramework=".NETFramework4.0">
             <dependency id="nkast.Xna.Framework" version="$version$" />
             <dependency id="nkast.Xna.Framework.Graphics.PackedVector" version="$version$" />
+            <dependency id="nkast.Xna.Framework.Content" version="$version$" />
         </group>
         <group targetFramework="netstandard2.0">
             <dependency id="nkast.Xna.Framework" version="$version$" />
             <dependency id="nkast.Xna.Framework.Graphics.PackedVector" version="$version$" />
+            <dependency id="nkast.Xna.Framework.Content" version="$version$" />
         </group>
     </dependencies>
     

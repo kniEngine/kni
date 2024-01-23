@@ -108,10 +108,12 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File '..\..\Artifacts\Xna.Framework\Release\net40\*.*'
   File '..\..\Artifacts\Xna.Framework.Design\Release\net40\*.*'
   File '..\..\Artifacts\Xna.Framework.Graphics.PackedVector\Release\net40\*.*'
+  File '..\..\Artifacts\Xna.Framework.Content\Release\net40\*.*'
   SetOutPath '$INSTDIR\Assemblies\Framework\netstandard2.0'
   File '..\..\Artifacts\Xna.Framework\Release\netstandard2.0\*.*'
   File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
   File '..\..\Artifacts\Xna.Framework.Graphics.PackedVector\Release\netstandard2.0\*.*'
+  File '..\..\Artifacts\Xna.Framework.Content\Release\netstandard2.0\*.*'
   
   ; Install Reference Assemblies
   SetOutPath '$INSTDIR\Assemblies\Ref\net40'

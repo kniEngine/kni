@@ -43,6 +43,10 @@
       <Name>Xna.Framework.Graphics.PackedVector</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Project>{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}</Project>
+      <Name>Xna.Framework.Content</Name>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -123,70 +127,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Content\ContentReaders\ArrayReader.cs" />
-    <Compile Include="Content\ContentReaders\BooleanReader.cs" />
-    <Compile Include="Content\ContentReaders\BoundingBoxReader.cs" />
-    <Compile Include="Content\ContentReaders\BoundingFrustumReader.cs" />
-    <Compile Include="Content\ContentReaders\BoundingSphereReader.cs" />
-    <Compile Include="Content\ContentReaders\ByteReader.cs" />
-    <Compile Include="Content\ContentReaders\CharReader.cs" />
-    <Compile Include="Content\ContentReaders\ColorReader.cs" />
-    <Compile Include="Content\ContentReaders\ComplexReader.cs" />
-    <Compile Include="Content\ContentReaders\CurveReader.cs" />
-    <Compile Include="Content\ContentReaders\DateTimeReader.cs" />
-    <Compile Include="Content\ContentReaders\DecimalReader.cs" />
-    <Compile Include="Content\ContentReaders\DictionaryReader.cs" />
-    <Compile Include="Content\ContentReaders\DoubleReader.cs" />
-    <Compile Include="Content\ContentReaders\EnumReader.cs" />
-    <Compile Include="Content\ContentReaders\ExternalReferenceReader.cs" />
-    <Compile Include="Content\ContentReaders\Int16Reader.cs" />
-    <Compile Include="Content\ContentReaders\Int32Reader.cs" />
-    <Compile Include="Content\ContentReaders\Int64Reader.cs" />
-    <Compile Include="Content\ContentReaders\ListReader.cs" />
-    <Compile Include="Content\ContentReaders\MatrixReader.cs" />
-    <Compile Include="Content\ContentReaders\MultiArrayReader.cs" />
-    <Compile Include="Content\ContentReaders\NullableReader.cs" />
-    <Compile Include="Content\ContentReaders\PlaneReader.cs" />
-    <Compile Include="Content\ContentReaders\PointReader.cs" />
-    <Compile Include="Content\ContentReaders\QuaternionReader.cs" />
-    <Compile Include="Content\ContentReaders\RayReader.cs" />
-    <Compile Include="Content\ContentReaders\RectangleReader.cs" />
-    <Compile Include="Content\ContentReaders\ReflectiveReader.cs" />
-    <Compile Include="Content\ContentReaders\SByteReader.cs" />
-    <Compile Include="Content\ContentReaders\SingleReader.cs" />
-    <Compile Include="Content\ContentReaders\StringReader.cs" />
-    <Compile Include="Content\ContentReaders\TimeSpanReader.cs" />
-    <Compile Include="Content\ContentReaders\UInt16Reader.cs" />
-    <Compile Include="Content\ContentReaders\UInt32Reader.cs" />
-    <Compile Include="Content\ContentReaders\UInt64Reader.cs" />
-    <Compile Include="Content\ContentReaders\Vector2Reader.cs" />
-    <Compile Include="Content\ContentReaders\Vector3Reader.cs" />
-    <Compile Include="Content\ContentReaders\Vector4Reader.cs" />
-
-    <Compile Include="Content\ContentLoadException.cs" />
-    <Compile Include="Content\ContentManager.cs" />
-    <Compile Include="Content\ContentReader.cs" />
-    <Compile Include="Content\ContentSerializerAttribute.cs" />
-    <Compile Include="Content\ContentSerializerIgnoreAttribute.cs" />
-    <Compile Include="Content\ContentTypeReader.cs" />
-    <Compile Include="Content\ContentTypeReaderManager.cs" />
-    <Compile Include="Content\ResourceContentManager.cs" />
-
-    <Compile Include="Content\ContentSerializerCollectionItemNameAttribute.cs" />
-    <Compile Include="Content\ContentSerializerRuntimeTypeAttribute.cs" />
-    <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
-
-    <Compile Include="Content\Utilities\ContentBufferPool.cs" />
-    <Compile Include="Content\Utilities\ContentExtensions.cs" />
-    <Compile Include="Content\Utilities\FileHelpers.cs" />
-    <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
-    <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
-    <Compile Include="Content\Utilities\LzxDecoder.cs" />
-    <Compile Include="Content\Utilities\ReflectionHelpers.cs" />
-    <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainerFactory.cs" />
-    <Compile Include="TitleContainerStrategy.cs" />
-
     <Compile Include="Content\ContentReaders\SoundEffectReader.cs" />
     <Compile Include="Content\ContentReaders\SongReader.cs" />
     <Compile Include="Content\ContentReaders\VideoReader.cs" />
