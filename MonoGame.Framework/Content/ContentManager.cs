@@ -15,8 +15,9 @@ namespace Microsoft.Xna.Framework.Content
 {
     public partial class ContentManager : IDisposable
     {
-        const byte ContentCompressedLzx = 0x80;
-        const byte ContentCompressedLz4 = 0x40;
+        const byte ContentFlagCompressedLzx = 0x80;
+        const byte ContentFlagCompressedLz4 = 0x40;
+        const byte ContentFlagHiDef = 0x01;
 
         private string _rootDirectory = string.Empty;
         private IServiceProvider serviceProvider;
@@ -332,30 +333,31 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ContentLoadException("Asset does not appear to target a known platform. Platform Identifier: '" + (char)platform+"'.");
 
             byte version = xnbReader.ReadByte();
+
+            if (version != 5 && version != 4)
+                throw new ContentLoadException("Invalid XNB version");
+
             byte flags = xnbReader.ReadByte();
 
-            bool compressedLzx = (flags & ContentCompressedLzx) != 0;
-            bool compressedLz4 = (flags & ContentCompressedLz4) != 0;
-            if (version != 5 && version != 4)
-            {
-                throw new ContentLoadException("Invalid XNB version");
-            }
+            bool isCompressedLzx = (flags & ContentFlagCompressedLzx) != 0;
+            bool isCompressedLz4 = (flags & ContentFlagCompressedLz4) != 0;
+            bool isHiDef = (flags & ContentFlagHiDef) != 0;
 
             // The next int32 is the length of the XNB file
             int xnbLength = xnbReader.ReadInt32();
 
             Stream decompressedStream = null;
-            if (compressedLzx || compressedLz4)
+            if (isCompressedLzx || isCompressedLz4)
             {
                 // Decompress the xnb
                 int decompressedSize = xnbReader.ReadInt32();
 
-                if (compressedLzx)
+                if (isCompressedLzx)
                 {
                     int compressedSize = xnbLength - 14;
                     decompressedStream = new LzxDecoderStream(stream, decompressedSize, compressedSize);
                 }
-                else if (compressedLz4)
+                else if (isCompressedLz4)
                 {
                     decompressedStream = new Lz4DecoderStream(stream);
                 }
@@ -366,7 +368,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             ContentReader reader = new ContentReader(this, decompressedStream,
-                                                        originalAssetName, version, xnbLength, recordDisposableObject);
+                                                     originalAssetName, version, xnbLength, recordDisposableObject);
             
             return reader;
         }
