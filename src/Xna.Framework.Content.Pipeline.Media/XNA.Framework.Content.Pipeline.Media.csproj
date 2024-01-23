@@ -59,6 +59,11 @@
       <Name>Xna.Framework</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Framework\Xna.Framework.WindowsDX11.csproj">
+      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
+      <Name>Xna.Framework.WindowsDX11</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
       <Project>{73509F44-3566-4B79-BB47-C7C6E2AA2351}</Project>
       <Name>Xna.Framework.Content.Pipeline</Name>
