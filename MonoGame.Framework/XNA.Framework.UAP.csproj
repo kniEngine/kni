@@ -244,10 +244,10 @@
     <Compile Include="Graphics\.DX11\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
-	<Compile Include="Graphics\.DX11\States\ConcreteBlendState.cs" />
-	<Compile Include="Graphics\.DX11\States\ConcreteDepthStencilState.cs" />
-	<Compile Include="Graphics\.DX11\States\ConcreteRasterizerState.cs" />
-	<Compile Include="Graphics\.DX11\States\ConcreteSamplerState.cs" />
+    <Compile Include="Graphics\.DX11\States\ConcreteBlendState.cs" />
+    <Compile Include="Graphics\.DX11\States\ConcreteDepthStencilState.cs" />
+    <Compile Include="Graphics\.DX11\States\ConcreteRasterizerState.cs" />
+    <Compile Include="Graphics\.DX11\States\ConcreteSamplerState.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteIndexBuffer.cs" />
@@ -270,8 +270,8 @@
     <Compile Include="Graphics\.DX11\ConcreteTexture2D.Stream.cs" />
     <Compile Include="Graphics\.DX11\ConcreteTexture3D.cs" />
     <Compile Include="Graphics\.DX11\ConcreteTextureCube.cs" />
-	<Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />
-	<Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteSamplerStateCollection.cs" />
+    <Compile Include="Graphics\.DX11\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.DX11\GraphicsSharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\IRenderTargetStrategyDX11.cs" />
     <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
