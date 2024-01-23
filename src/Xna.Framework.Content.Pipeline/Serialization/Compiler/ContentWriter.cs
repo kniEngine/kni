@@ -19,10 +19,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     public sealed class ContentWriter : BinaryWriter
     {
         const byte XnbFormatVersion = 5;
-        const byte HiDefContent = 0x01;
-        const byte ContentCompressedLzx = 0x80;
-        const byte ContentCompressedLz4 = 0x40;
         const int HeaderSize = 6;
+
+        const byte ContentFlagCompressedLzx = 0x80;
+        const byte ContentFlagCompressedLz4 = 0x40;
+        const byte ContentFlagHiDef = 0x01;
 
         ContentCompiler compiler;
         TargetPlatform targetPlatform;
@@ -30,7 +31,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         string rootDirectory;
         string referenceRelocationPath;
         bool compressContent;
-        bool disposed;
+        bool _isDisposed;
         List<ContentTypeWriter> typeWriters = new List<ContentTypeWriter>();
         Dictionary<Type, int> typeWriterMap = new Dictionary<Type, int>();
         Dictionary<Type, ContentTypeWriter> typeMap = new Dictionary<Type, ContentTypeWriter>();
@@ -101,7 +102,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -113,7 +114,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                         bodyStream.Dispose();
                     bodyStream = null;
                 }
-                disposed = true;
+                _isDisposed = true;
             }
 
             base.Dispose(disposing);
@@ -199,8 +200,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             Write('B');
             Write(targetPlatformIdentifiers[(int)targetPlatform]);
             Write(XnbFormatVersion);
+
+            byte flags = default(byte);
+
             // We cannot use LZX compression, so we use the public domain LZ4 compression. Use one of the spare bits in the flags byte to specify LZ4.
-            byte flags = (byte)((targetProfile == GraphicsProfile.HiDef ? HiDefContent : (byte)0) | (compressContent ? ContentCompressedLz4 : (byte)0));
+            if (compressContent)
+                flags |= ContentFlagCompressedLz4;
+
+            if (targetProfile == GraphicsProfile.HiDef)
+            {
+                flags |= ContentFlagHiDef;
+            }
+
             Write(flags);
         }
 
