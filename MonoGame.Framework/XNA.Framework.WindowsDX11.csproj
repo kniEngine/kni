@@ -195,7 +195,6 @@
     <Compile Include="Content\ContentReaders\Vector3Reader.cs" />
     <Compile Include="Content\ContentReaders\Vector4Reader.cs" />
 
-    <Compile Include="Content\ContentExtensions.cs" />
     <Compile Include="Content\ContentLoadException.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\ContentReader.cs" />
@@ -210,6 +209,7 @@
     <Compile Include="Content\ContentSerializerTypeVersionAttribute.cs" />
 
     <Compile Include="Content\Utilities\ContentBufferPool.cs" />
+    <Compile Include="Content\Utilities\ContentExtensions.cs" />
     <Compile Include="Content\Utilities\FileHelpers.cs" />
     <Compile Include="Content\Utilities\Lz4DecoderStream.cs" />
     <Compile Include="Content\Utilities\LzxDecoderStream.cs" />
