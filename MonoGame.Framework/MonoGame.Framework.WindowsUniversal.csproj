@@ -49,11 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- System.ComponentModel is not in WinRT APIs, so we can't use TypeConverter -->
-    <Compile Remove="Content\ResourceContentManager.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.UWP.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />

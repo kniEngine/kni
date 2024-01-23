@@ -199,6 +199,7 @@
     <Compile Include="Content\ContentSerializerIgnoreAttribute.cs" />
     <Compile Include="Content\ContentTypeReader.cs" />
     <Compile Include="Content\ContentTypeReaderManager.cs" />
+    <Compile Include="Content\ResourceContentManager.cs" />
 
     <Compile Include="Content\ContentSerializerCollectionItemNameAttribute.cs" />
     <Compile Include="Content\ContentSerializerRuntimeTypeAttribute.cs" />
