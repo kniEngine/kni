@@ -14,12 +14,12 @@ namespace Microsoft.Xna.Framework
     {
         private static AndroidCompatibility _current;
 
-		/// <summary>
-		/// Because the Kindle Fire devices default orientation is fliped by 180 degrees from all the other android devices
-		/// on the market we need to do some special processing to make sure that LandscapeLeft is the correct way round.
-		/// This list contains all the Build.Model strings of the effected devices, it should be added to if and when
-		/// more devices exhibit the same issues.
-		/// </summary>
+        /// <summary>
+        /// Because the Kindle Fire devices default orientation is fliped by 180 degrees from all the other android devices
+        /// on the market we need to do some special processing to make sure that LandscapeLeft is the correct way round.
+        /// This list contains all the Build.Model strings of the effected devices, it should be added to if and when
+        /// more devices exhibit the same issues.
+        /// </summary>
         private readonly string[] Kindles = new[] { "KFTT", "KFJWI", "KFJWA", "KFSOWI", "KFTHWA", "KFTHWI", "KFAPWA", "KFAPWI" };
 
         public bool FlipLandscape { get; private set; }
@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework
 
         private AndroidCompatibility(Activity activity)
         {
-			FlipLandscape = Kindles.Contains(Build.Model);
+            FlipLandscape = Kindles.Contains(Build.Model);
             NaturalOrientation = GetDeviceNaturalOrientation(activity);
         }
 

@@ -79,85 +79,85 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Framework
 {
-	partial class iOSGameView
+    partial class iOSGameView
     {
-		
-		static GestureType EnabledGestures
-		{
-			get { return TouchPanel.EnabledGestures; }
-		}
-		
-		#region Touches
+        
+        static GestureType EnabledGestures
+        {
+            get { return TouchPanel.EnabledGestures; }
+        }
+        
+        #region Touches
 
-		public override void TouchesBegan(NSSet touches, UIEvent evt)
-		{
-			base.TouchesBegan(touches, evt);
-			FillTouchCollection(touches);
-		}
+        public override void TouchesBegan(NSSet touches, UIEvent evt)
+        {
+            base.TouchesBegan(touches, evt);
+            FillTouchCollection(touches);
+        }
 
-		public override void TouchesEnded(NSSet touches, UIEvent evt)
-		{
-			base.TouchesEnded(touches, evt);
-			FillTouchCollection(touches);
-		}
+        public override void TouchesEnded(NSSet touches, UIEvent evt)
+        {
+            base.TouchesEnded(touches, evt);
+            FillTouchCollection(touches);
+        }
 
-		public override void TouchesMoved(NSSet touches, UIEvent evt)
-		{
-			base.TouchesMoved(touches, evt);
-			FillTouchCollection(touches);
-		}
+        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        {
+            base.TouchesMoved(touches, evt);
+            FillTouchCollection(touches);
+        }
 
-		public override void TouchesCancelled(NSSet touches, UIEvent evt)
-		{
-			base.TouchesCancelled(touches, evt);
-			FillTouchCollection(touches);
-		}
-		
-		// TODO: Review FillTouchCollection
-		private void FillTouchCollection(NSSet touches)
-		{
-			if ((long)touches.Count == 0)
-				return;
+        public override void TouchesCancelled(NSSet touches, UIEvent evt)
+        {
+            base.TouchesCancelled(touches, evt);
+            FillTouchCollection(touches);
+        }
+        
+        // TODO: Review FillTouchCollection
+        private void FillTouchCollection(NSSet touches)
+        {
+            if ((long)touches.Count == 0)
+                return;
 
-			var touchesArray = touches.ToArray<UITouch>();
-			for (int i = 0; i < touchesArray.Length; ++i)
+            var touchesArray = touches.ToArray<UITouch>();
+            for (int i = 0; i < touchesArray.Length; ++i)
             {
-				var touch = touchesArray [i];
+                var touch = touchesArray [i];
 
-				//Get position touch
-				var location = touch.LocationInView(touch.View);
-				var position = GetOffsetPosition(new Vector2 ((float)location.X, (float)location.Y), true);
-				var id = (int)(long)(IntPtr)touch.Handle;
+                //Get position touch
+                var location = touch.LocationInView(touch.View);
+                var position = GetOffsetPosition(new Vector2 ((float)location.X, (float)location.Y), true);
+                var id = (int)(long)(IntPtr)touch.Handle;
 
-				switch (touch.Phase) 
+                switch (touch.Phase) 
                 {
-				//case UITouchPhase.Stationary:
-				case UITouchPhase.Moved:
-					TouchPanel.AddEvent(id, TouchLocationState.Moved, position);					
-					break;
-				case UITouchPhase.Began:
+                //case UITouchPhase.Stationary:
+                case UITouchPhase.Moved:
+                    TouchPanel.AddEvent(id, TouchLocationState.Moved, position);					
+                    break;
+                case UITouchPhase.Began:
                     TouchPanel.AddEvent(id, TouchLocationState.Pressed, position);
-					break;
-				case UITouchPhase.Ended	:
+                    break;
+                case UITouchPhase.Ended	:
                     TouchPanel.AddEvent(id, TouchLocationState.Released, position);
-					break;
-				case UITouchPhase.Cancelled:
+                    break;
+                case UITouchPhase.Cancelled:
                     TouchPanel.AddEvent(id, TouchLocationState.Released, position);
-					break;
-				default:
-					break;
-				}
-			}
-		}
-		
-		// TODO: Review GetOffsetPosition, hopefully it can be removed now.
-		public Vector2 GetOffsetPosition(Vector2 position, bool useScale)
-		{
-			if (useScale)
-				return position * (float)Layer.ContentsScale;
-			return position;
-		}
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        
+        // TODO: Review GetOffsetPosition, hopefully it can be removed now.
+        public Vector2 GetOffsetPosition(Vector2 position, bool useScale)
+        {
+            if (useScale)
+                return position * (float)Layer.ContentsScale;
+            return position;
+        }
 
-		#endregion Touches
-	}
+        #endregion Touches
+    }
 }

@@ -117,8 +117,8 @@ namespace Microsoft.Xna.Platform
 
             // Create a full-screen window
             _mainWindow = new UIWindow(UIScreen.MainScreen.Bounds);
-			//_mainWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
-			
+            //_mainWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+            
             game.Services.AddService(typeof(UIWindow), _mainWindow);
 
             _viewController = new iOSGameViewController(this);
@@ -305,10 +305,10 @@ namespace Microsoft.Xna.Platform
         private void Application_WillTerminate(NSNotification notification)
         {
             // FIXME: Cleanly end the run loop.
-			if (Game != null)
-			{
-				// TODO MonoGameGame.Terminate();
-			}
+            if (Game != null)
+            {
+                // TODO MonoGameGame.Terminate();
+            }
         }
 
         #endregion Notification Handling
@@ -329,31 +329,31 @@ namespace Microsoft.Xna.Platform
 
         #endregion
 
-		private void ViewController_InterfaceOrientationChanged(object sender, EventArgs e)
-		{
-			var orientation = CurrentOrientation;
+        private void ViewController_InterfaceOrientationChanged(object sender, EventArgs e)
+        {
+            var orientation = CurrentOrientation;
 
-			// FIXME: The presentation parameters for the GraphicsDevice should
-			//            be managed by the GraphicsDevice itself.  Not by ConcreteGame.
-			var gdm = (GraphicsDeviceManager)Game.Services.GetService(typeof(IGraphicsDeviceManager));
+            // FIXME: The presentation parameters for the GraphicsDevice should
+            //            be managed by the GraphicsDevice itself.  Not by ConcreteGame.
+            var gdm = (GraphicsDeviceManager)Game.Services.GetService(typeof(IGraphicsDeviceManager));
 
             TouchPanel.DisplayOrientation = orientation;
 
-			if (gdm != null)
-			{	
+            if (gdm != null)
+            {	
 
-				var presentParams = gdm.GraphicsDevice.PresentationParameters;
-				presentParams.BackBufferWidth = gdm.PreferredBackBufferWidth;
-				presentParams.BackBufferHeight = gdm.PreferredBackBufferHeight;
+                var presentParams = gdm.GraphicsDevice.PresentationParameters;
+                presentParams.BackBufferWidth = gdm.PreferredBackBufferWidth;
+                presentParams.BackBufferHeight = gdm.PreferredBackBufferHeight;
 
-				presentParams.DisplayOrientation = orientation;
+                presentParams.DisplayOrientation = orientation;
 
                 // Recalculate our views.
                 ViewController.View.LayoutSubviews();
-				
+                
                 gdm.ApplyChanges();
-			}
-			
-		}
-	}
+            }
+            
+        }
+    }
 }

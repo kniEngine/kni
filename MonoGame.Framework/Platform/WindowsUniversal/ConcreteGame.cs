@@ -270,7 +270,7 @@ namespace Microsoft.Xna.Platform
                 else base.IsMouseVisible = value;
             }
         }
-		
+        
         protected override void Dispose(bool disposing)
         {
             // Make sure we dispose the graphics system.

@@ -7,19 +7,19 @@ using Android.App;
 
 namespace Microsoft.Xna.Framework
 {
-	internal class ScreenReceiver : BroadcastReceiver
-	{	
-		public static bool ScreenLocked;
-		
-		public override void OnReceive(Context context, Intent intent)
-		{
-			Android.Util.Log.Info("Kni", intent.Action.ToString());
-			if(intent.Action == Intent.ActionScreenOff)
-			{
+    internal class ScreenReceiver : BroadcastReceiver
+    {	
+        public static bool ScreenLocked;
+        
+        public override void OnReceive(Context context, Intent intent)
+        {
+            Android.Util.Log.Info("Kni", intent.Action.ToString());
+            if(intent.Action == Intent.ActionScreenOff)
+            {
                 OnLocked();
-			}
-			else if(intent.Action == Intent.ActionScreenOn)
-			{
+            }
+            else if(intent.Action == Intent.ActionScreenOn)
+            {
                 // If the user turns the screen on just after it has automatically turned off, 
                 // the keyguard will not have had time to activate and the ActionUserPreset intent
                 // will not be broadcast. We need to check if the lock is currently active
@@ -28,9 +28,9 @@ namespace Microsoft.Xna.Framework
                 KeyguardManager keyguard = (KeyguardManager)context.GetSystemService(Context.KeyguardService);
                 if (!keyguard.InKeyguardRestrictedInputMode())
                     OnUnlocked();
-			}
-			else if(intent.Action == Intent.ActionUserPresent)
-			{
+            }
+            else if(intent.Action == Intent.ActionUserPresent)
+            {
                 // This intent is broadcast when the user unlocks the phone
                 OnUnlocked();
             }
@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework
                     }
                 }
             }
-		}
+        }
 
         private void OnLocked()
         {

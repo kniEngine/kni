@@ -12,7 +12,7 @@ using Microsoft.Xna.Platform;
 
 namespace Microsoft.Xna.Framework
 {
-	[CLSCompliant(false)]
+    [CLSCompliant(false)]
     public class AndroidGameActivity : Activity
     {
         internal Game Game { private get; set; }
@@ -22,15 +22,15 @@ namespace Microsoft.Xna.Framework
 
         public bool AutoPauseAndResumeMediaPlayer = true;
 
-		/// <summary>
-		/// OnCreate called when the activity is launched from cold or after the app
-		/// has been killed due to a higher priority app needing the memory
-		/// </summary>
-		/// <param name='savedInstanceState'>
-		/// Saved instance state.
-		/// </param>
-		protected override void OnCreate(Bundle savedInstanceState)
-		{
+        /// <summary>
+        /// OnCreate called when the activity is launched from cold or after the app
+        /// has been killed due to a higher priority app needing the memory
+        /// </summary>
+        /// <param name='savedInstanceState'>
+        /// Saved instance state.
+        /// </param>
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
             // Detection of NaturalOrientation. This must happend as soon as possible at start up.
             AndroidCompatibility.Initialize(this);
             
@@ -44,27 +44,27 @@ namespace Microsoft.Xna.Framework
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
 
-			IntentFilter filter = new IntentFilter();
-		    filter.AddAction(Intent.ActionScreenOff);
-		    filter.AddAction(Intent.ActionScreenOn);
-		    filter.AddAction(Intent.ActionUserPresent);
+            IntentFilter filter = new IntentFilter();
+            filter.AddAction(Intent.ActionScreenOff);
+            filter.AddAction(Intent.ActionScreenOn);
+            filter.AddAction(Intent.ActionUserPresent);
             filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
-		    
-		    screenReceiver = new ScreenReceiver();
-		    RegisterReceiver(screenReceiver, filter);
+            
+            screenReceiver = new ScreenReceiver();
+            RegisterReceiver(screenReceiver, filter);
 
             _orientationListener = new OrientationListener(this);
 
             AndroidGameWindow.Activity = this;
-		}
+        }
 
         public static event EventHandler Paused;
 
-		public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
-		{
-			// we need to refresh the viewport here.
-			base.OnConfigurationChanged(newConfig);
-		}
+        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+        {
+            // we need to refresh the viewport here.
+            base.OnConfigurationChanged(newConfig);
+        }
 
         protected override void OnPause()
         {
@@ -107,8 +107,8 @@ namespace Microsoft.Xna.Framework
             ((ConcreteGame)Game.Strategy).OnWindowFocusChanged(hasFocus);
         }
 
-		protected override void OnDestroy()
-		{
+        protected override void OnDestroy()
+        {
             UnregisterReceiver(screenReceiver);
             ScreenReceiver.ScreenLocked = false;
             _orientationListener = null;
@@ -119,21 +119,21 @@ namespace Microsoft.Xna.Framework
                 Game = null;
             }
 
-			base.OnDestroy();
-		}
+            base.OnDestroy();
+        }
     }
 
-	[CLSCompliant(false)]
-	public static class ActivityExtensions
+    [CLSCompliant(false)]
+    public static class ActivityExtensions
     {
         public static ActivityAttribute GetActivityAttribute(this AndroidGameActivity obj)
         {			
             var attr = obj.GetType().GetCustomAttributes(typeof(ActivityAttribute), true);
-			if (attr != null)
-			{
-            	return ((ActivityAttribute)attr[0]);
-			}
-			return null;
+            if (attr != null)
+            {
+                return ((ActivityAttribute)attr[0]);
+            }
+            return null;
         }
     }
 
