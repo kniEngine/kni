@@ -26,9 +26,6 @@ namespace Microsoft.Xna.Framework.Content
         private List<IDisposable> disposableAssets = new List<IDisposable>();
         private bool disposed;
 
-        private static object ContentManagerLock = new object();
-        private static List<WeakReference> ContentManagers = new List<WeakReference>();
-
         private static readonly List<char> _targetPlatformIdentifiers = new List<char>()
         {
             // XNA content identifiers
@@ -75,64 +72,6 @@ namespace Microsoft.Xna.Framework.Content
             PlatformStaticInit();
         }
 
-        private static void AddContentManager(ContentManager contentManager)
-        {
-            lock (ContentManagerLock)
-            {
-                // Check if the list contains this content manager already. Also take
-                // the opportunity to prune the list of any finalized content managers.
-                bool contains = false;
-                for (int i = ContentManagers.Count - 1; i >= 0; --i)
-                {
-                    WeakReference contentRef = ContentManagers[i];
-                    if (ReferenceEquals(contentRef.Target, contentManager))
-                        contains = true;
-                    if (!contentRef.IsAlive)
-                        ContentManagers.RemoveAt(i);
-                }
-                if (!contains)
-                    ContentManagers.Add(new WeakReference(contentManager));
-            }
-        }
-
-        private static void RemoveContentManager(ContentManager contentManager)
-        {
-            lock (ContentManagerLock)
-            {
-                // Check if the list contains this content manager and remove it. Also
-                // take the opportunity to prune the list of any finalized content managers.
-                for (int i = ContentManagers.Count - 1; i >= 0; --i)
-                {
-                    WeakReference contentRef = ContentManagers[i];
-                    if (!contentRef.IsAlive || ReferenceEquals(contentRef.Target, contentManager))
-                        ContentManagers.RemoveAt(i);
-                }
-            }
-        }
-
-        internal static void ReloadGraphicsContent()
-        {
-            lock (ContentManagerLock)
-            {
-                // Reload the graphic assets of each content manager. Also take the
-                // opportunity to prune the list of any finalized content managers.
-                for (int i = ContentManagers.Count - 1; i >= 0; --i)
-                {
-                    WeakReference contentRef = ContentManagers[i];
-                    if (contentRef.IsAlive)
-                    {
-                        ContentManager contentManager = (ContentManager)contentRef.Target;
-                        if (contentManager != null)
-                            contentManager.ReloadGraphicsAssets();
-                    }
-                    else
-                    {
-                        ContentManagers.RemoveAt(i);
-                    }
-                }
-            }
-        }
-
         // Use C# destructor syntax for finalization code.
         // This destructor will run only if the Dispose method
         // does not get called.
@@ -153,7 +92,6 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ArgumentNullException("serviceProvider");
             }
             this.serviceProvider = serviceProvider;
-            AddContentManager(this);
         }
 
         public ContentManager(IServiceProvider serviceProvider, string rootDirectory)
@@ -168,7 +106,6 @@ namespace Microsoft.Xna.Framework.Content
             }
             this.RootDirectory = rootDirectory;
             this.serviceProvider = serviceProvider;
-            AddContentManager(this);
         }
 
         public void Dispose()
@@ -177,8 +114,6 @@ namespace Microsoft.Xna.Framework.Content
             // Tell the garbage collector not to call the finalizer
             // since all the cleanup will already be done.
             GC.SuppressFinalize(this);
-            // Once disposed, content manager wont be used again
-            RemoveContentManager(this);
         }
 
         // If disposing is true, it was called explicitly and we should dispose managed objects.
@@ -389,43 +324,6 @@ namespace Microsoft.Xna.Framework.Content
         protected virtual Dictionary<string, object> LoadedAssets
         {
             get { return loadedAssets; }
-        }
-
-        protected virtual void ReloadGraphicsAssets()
-        {
-            foreach (KeyValuePair<string,object> asset in LoadedAssets)
-            {
-                // This never executes as asset.Key is never null.  This just forces the 
-                // linker to include the ReloadAsset function when AOT compiled.
-                if (asset.Key == null)
-                    ReloadAsset(asset.Key, Convert.ChangeType(asset.Value, asset.Value.GetType()));
-
-                MethodInfo methodInfo = ReflectionHelpers.GetMethodInfo(typeof(ContentManager), "ReloadAsset");
-                MethodInfo genericMethod = methodInfo.MakeGenericMethod(asset.Value.GetType());
-                genericMethod.Invoke(this, new object[] { asset.Key, Convert.ChangeType(asset.Value, asset.Value.GetType()) }); 
-            }
-        }
-
-        protected virtual void ReloadAsset<T>(string originalAssetName, T currentAsset)
-        {
-            string assetName = originalAssetName;
-            if (string.IsNullOrEmpty(assetName))
-            {
-                throw new ArgumentNullException("assetName");
-            }
-            if (disposed)
-            {
-                throw new ObjectDisposedException("ContentManager");
-            }
-
-            Stream stream = OpenStream(assetName);
-            using (BinaryReader xnbReader = new BinaryReader(stream))
-            {
-                using (ContentReader reader = GetContentReaderFromXnb(assetName, stream, xnbReader, null))
-                {
-                    reader.ReadAsset<T>(currentAsset);
-                }
-            }
         }
 
         public virtual void Unload()
