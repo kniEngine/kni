@@ -66,8 +66,6 @@ namespace Microsoft.Xna.Framework
         internal event EventHandler Tick;
 
 
-        internal bool IsResuming { get; private set; }
-
         public AndroidSurfaceView(Context context, AndroidGameWindow gameWindow, Game game)
             : base(context)
         {
@@ -803,29 +801,8 @@ namespace Microsoft.Xna.Framework
 
             if (_game.Strategy.GraphicsDevice != null)
             {
-                ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_ReInitializeContext();
-
-                IsResuming = true;
-                if (_gameWindow.Resumer != null)
-                {
-                    _gameWindow.Resumer.LoadContent();
-                }
-
-                // Reload textures on a different thread so the resumer can be drawn
-                System.Threading.Thread bgThread = new System.Threading.Thread(
-                    o =>
-                    {
-                        Android.Util.Log.Debug("MonoGame", "Begin reloading graphics content");
-                        Microsoft.Xna.Framework.Content.ContentManager.ReloadGraphicsContent();
-                        Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
-
-                        // DeviceReset events
-                        ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
-
-                        IsResuming = false;
-                    });
-
-                bgThread.Start();
+                // DeviceReset events
+                ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
             }
         }
 

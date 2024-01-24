@@ -29,7 +29,6 @@ namespace Microsoft.Xna.Framework
         internal static AndroidGameActivity Activity { get; set; }
 
         internal AndroidSurfaceView GameView { get; private set; }
-        internal IResumeManager Resumer;
 
         private readonly Game _game;
         private Rectangle _clientBounds;
@@ -39,12 +38,6 @@ namespace Microsoft.Xna.Framework
         internal TouchEventListener _touchEventListener;
 
         public override IntPtr Handle { get { return GameView.Handle; } }
-
-
-        public void SetResumer(IResumeManager resumer)
-        {
-            Resumer = resumer;
-        }
 
         public AndroidGameWindow(AndroidGameActivity activity, Game game)
         {
@@ -89,21 +82,11 @@ namespace Microsoft.Xna.Framework
 
             if (_game != null)
             {
-                if (!GameView.IsResuming && ((ConcreteGame)_game.Strategy).IsActivityActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occurred
+                if (((ConcreteGame)_game.Strategy).IsActivityActive && !ScreenReceiver.ScreenLocked)
                 {
                     _game.Tick();
                 }
-                else if (_game.Strategy.GraphicsDevice != null)
-                {
-                    _game.Strategy.GraphicsDevice.Clear(Color.Black);
-                    if (GameView.IsResuming && Resumer != null)
-                    {
-                        Resumer.Draw();
-                    }
-                    _game.Strategy.EndDraw();
-                }
             }
-
         }
 
         #endregion

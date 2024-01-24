@@ -65,19 +65,6 @@ namespace Microsoft.Xna.Framework.Content
             return result;
         }
 
-        internal object ReadAsset<T>(T existingInstance)
-        {
-            InitializeTypeReaders();
-
-            // Read primary object
-            object result = ReadObject<T>(existingInstance);
-
-            // Read shared resources
-            ReadSharedResources();
-
-            return result;
-        }
-
         internal void InitializeTypeReaders()
         {
             typeReaderManager = new ContentTypeReaderManager();
@@ -98,7 +85,7 @@ namespace Microsoft.Xna.Framework.Content
                 string key = assetName.Replace('\\', '/') +"_SharedResource_" + i + "_" + this.xnbLength;
                 contentManager.loadedSharedResources.TryGetValue(key, out existingInstance);
                 
-                sharedResources[i] = InnerReadObject<object>(existingInstance);
+                sharedResources[i] = ReadObject<object>(existingInstance);
 
                 if (existingInstance == null)
                     contentManager.loadedSharedResources[key] = sharedResources[i];
@@ -136,7 +123,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadObject<T>()
         {
-            return InnerReadObject<T>(default(T));
+            return ReadObject<T>(default(T));
         }
 
         public T ReadObject<T>(ContentTypeReader typeReader)
@@ -147,11 +134,6 @@ namespace Microsoft.Xna.Framework.Content
         }
 
         public T ReadObject<T>(T existingInstance)
-        {
-            return InnerReadObject(existingInstance);
-        }
-
-        private T InnerReadObject<T>(T existingInstance)
         {
             int typeReaderIndex = Read7BitEncodedInt();
             if (typeReaderIndex == 0)
