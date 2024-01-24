@@ -46,8 +46,8 @@ using Android.Views;
 
 namespace Microsoft.Xna.Framework.Input
 {
-	public static class Keyboard
-	{
+    public static class Keyboard
+    {
         private static List<Keys> keys = new List<Keys>();
 
         private static readonly IDictionary<Keycode, Keys> KeyMap = LoadKeyMap();
@@ -181,14 +181,14 @@ namespace Microsoft.Xna.Framework.Input
             return maps;
         }
 
-	    public static KeyboardState GetState()
-		{
-			return new KeyboardState(keys);
-		}
-		
-		public static KeyboardState GetState(PlayerIndex playerIndex)
-		{
+        public static KeyboardState GetState()
+        {
             return new KeyboardState(keys);
-		}
-	}
+        }
+        
+        public static KeyboardState GetState(PlayerIndex playerIndex)
+        {
+            return new KeyboardState(keys);
+        }
+    }
 }

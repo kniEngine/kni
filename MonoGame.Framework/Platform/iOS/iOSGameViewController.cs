@@ -42,10 +42,10 @@ namespace Microsoft.Xna.Framework
 
         public override void LoadView()
         {
-			CGRect frame;
+            CGRect frame;
             if (ParentViewController != null && ParentViewController.View != null)
             {
-				frame = new CGRect(CGPoint.Empty, ParentViewController.View.Frame.Size);
+                frame = new CGRect(CGPoint.Empty, ParentViewController.View.Frame.Size);
             }
             else
             {
@@ -56,11 +56,11 @@ namespace Microsoft.Xna.Framework
                 // iOS 8+ reports resolution correctly in all cases
                 if (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight)
                 {
-					frame = new CGRect(0, 0, (double)Math.Max(screen.Bounds.Width, screen.Bounds.Height), (double)Math.Min(screen.Bounds.Width, screen.Bounds.Height));
+                    frame = new CGRect(0, 0, (double)Math.Max(screen.Bounds.Width, screen.Bounds.Height), (double)Math.Min(screen.Bounds.Width, screen.Bounds.Height));
                 }
                 else
                 {
-					frame = new CGRect(0, 0, screen.Bounds.Width, screen.Bounds.Height);
+                    frame = new CGRect(0, 0, screen.Bounds.Width, screen.Bounds.Height);
                 }
                 #else
                 frame = new CGRect(0, 0, screen.Bounds.Width, screen.Bounds.Height);
@@ -125,9 +125,9 @@ namespace Microsoft.Xna.Framework
 
         #region iOS 8 or newer
 
-		public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
+        public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
-			CGSize oldSize = View.Bounds.Size;
+            CGSize oldSize = View.Bounds.Size;
 
             if (oldSize != toSize)
             {

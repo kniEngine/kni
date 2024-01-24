@@ -245,7 +245,7 @@ namespace Microsoft.Xna.Framework
                     break;
             }
         }
-		
+        
         private static DisplayOrientation ToOrientation(DisplayOrientations orientations)
         {
             var result = DisplayOrientation.Default;
