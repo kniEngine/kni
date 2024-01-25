@@ -135,7 +135,6 @@
     <Compile Include="Graphics\GraphicsDevice.cs" />
     <Compile Include="Graphics\GraphicsDeviceStrategy.cs" />
     <Compile Include="Graphics\GraphicsDeviceStatus.cs" />
-    <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="Graphics\GraphicsFactory.cs" />
     <Compile Include="Graphics\GraphicsMetrics.cs" />
     <Compile Include="Graphics\GraphicsProfile.cs" />
@@ -202,6 +201,7 @@
   <ItemGroup>
     <Compile Include="Graphics\Utilities\ContentReaderExtensions.cs" />
     <Compile Include="Graphics\Utilities\DxtDecoder.cs" />
+    <Compile Include="Graphics\Utilities\GraphicsExtensions.cs" />
     <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
 
