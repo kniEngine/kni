@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {

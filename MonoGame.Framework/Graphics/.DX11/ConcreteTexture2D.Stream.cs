@@ -10,6 +10,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using MonoGame.Utilities.Png;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
@@ -158,7 +159,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #if UAP || WINUI
         private async Task SaveAsImageAsync_UAP(Guid encoderId, Stream stream, int width, int height)
         {
-            byte[] pixelData = new byte[Width * Height * GraphicsExtensions.GetSize(Format)];
+            byte[] pixelData = new byte[Width * Height * Format.GetSize()];
             GetData(0,0, Bounds, pixelData, 0, pixelData.Length);
 
             // TODO: We need to convert from Format to R8G8B8A8!

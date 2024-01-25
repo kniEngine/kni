@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 using WasmDom = nkast.Wasm.Dom;
 
