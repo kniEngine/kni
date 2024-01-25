@@ -4,9 +4,10 @@
 
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Platform.Graphics.Utilities
 {
     static class GraphicsExtensions
     {
