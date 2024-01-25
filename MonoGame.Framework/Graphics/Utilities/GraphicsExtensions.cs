@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics.Utilities
 {
-    static class GraphicsExtensions
+    public static class GraphicsExtensions
     {
         public static int GetSize(this VertexElementFormat elementFormat)
         {
