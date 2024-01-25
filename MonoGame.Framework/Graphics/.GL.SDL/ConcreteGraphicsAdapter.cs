@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -14,12 +14,13 @@ using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
+    internal class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
         private DisplayModeCollection _supportedDisplayModes;
-        string _description = string.Empty;
+        private DisplayMode _currentDisplayMode;
+        private string _description = string.Empty;
 
         int _displayIndex;
 
@@ -73,6 +74,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 bool displayChanged = false;
                 var displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
                 displayChanged = displayIndex != _displayIndex;
+
                 if (_supportedDisplayModes == null || displayChanged)
                 {
                     var modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
@@ -89,7 +91,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         // We are only using one format, Color
                         // mode.Format gets the Color format from SDL
-                        var displayMode = new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+                        var displayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
                         if (!modes.Contains(displayMode))
                             modes.Add(displayMode);
                     }
@@ -99,7 +101,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         if (a.Format <= b.Format && a.Width <= b.Width && a.Height <= b.Height) return -1;
                         else return 1;
                     });
-                    _supportedDisplayModes = new DisplayModeCollection(modes);
+                    _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
                 }
 
                 return _supportedDisplayModes;
@@ -110,12 +112,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                var displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
+                int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
 
                 Sdl.Display.Mode mode;
                 SDL.DISPLAY.GetCurrentDisplayMode(displayIndex, out mode);
 
-                return new DisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+                _currentDisplayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+
+                return _currentDisplayMode;
             }
         }
 
@@ -145,18 +149,18 @@ namespace Microsoft.Xna.Platform.Graphics
         internal int glMinorVersion { get { return _glMinorVersion; } }
 
 
-        public ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter()
         {
-            IntPtr glSharedContextWindowHandle = IntPtr.Zero;
-            IntPtr glSharedContext = IntPtr.Zero;
+            IntPtr glWindowHandle = IntPtr.Zero;
+            IntPtr glContext = IntPtr.Zero;
             try
             {
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMinorVersion, 0);
 
-                glSharedContextWindowHandle = SDL.WINDOW.Create("KnisDefaultAdapterWindow", 0, 0, 0, 0,
+                glWindowHandle = SDL.WINDOW.Create("KnisDefaultAdapterWindow", 0, 0, 0, 0,
                     Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
-                glSharedContext = SDL.OpenGL.CreateGLContext(glSharedContextWindowHandle);
+                glContext = SDL.OpenGL.CreateGLContext(glWindowHandle);
 
                 try
                 {
@@ -217,10 +221,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                if (glSharedContext != IntPtr.Zero)
-                    SDL.OpenGL.DeleteContext(glSharedContext);
-                if (glSharedContextWindowHandle != IntPtr.Zero)
-                    SDL.WINDOW.Destroy(glSharedContextWindowHandle);
+                if (glContext != IntPtr.Zero)
+                    SDL.OpenGL.DeleteContext(glContext);
+                if (glWindowHandle != IntPtr.Zero)
+                    SDL.WINDOW.Destroy(glWindowHandle);
             }
         }
 

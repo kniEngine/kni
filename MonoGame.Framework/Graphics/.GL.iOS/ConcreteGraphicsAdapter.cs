@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -14,13 +14,13 @@ using UIKit;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
+    internal class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         private DisplayModeCollection _supportedDisplayModes;
-        string _description = string.Empty;
+        private DisplayMode _currentDisplayMode;
+        private string _description = string.Empty;
 
-
-		internal UIScreen _screen;
+        private UIScreen _screen;
 
 
         public override string Platform_DeviceName
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         if (a.Format <= b.Format && a.Width <= b.Width && a.Height <= b.Height) return -1;
                         else return 1;
                     });
-                    _supportedDisplayModes = new DisplayModeCollection(modes);
+                    _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
                 }
 
                 return _supportedDisplayModes;
@@ -91,9 +91,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                return new DisplayMode((int)(_screen.Bounds.Width * _screen.Scale),
-                       (int)(_screen.Bounds.Height * _screen.Scale),
-                       SurfaceFormat.Color);
+                int screenWidth  = (int)(_screen.Bounds.Width  * _screen.Scale);
+                int screenHeight = (int)(_screen.Bounds.Height * _screen.Scale);
+                _currentDisplayMode = base.CreateDisplayMode(screenWidth, screenHeight, SurfaceFormat.Color);
+
+                return _currentDisplayMode;
             }
         }
 
@@ -105,8 +107,10 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
         }
 
-        public ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter(UIScreen mainScreen)
         {
+            this._screen = mainScreen;
+
         }
 
         public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)

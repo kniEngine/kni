@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
+    internal class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         private DisplayModeCollection _supportedDisplayModes;
-        string _description = string.Empty;
+        private DisplayMode _currentDisplayMode;
+        private string _description = string.Empty;
 
         public override string Platform_DeviceName
         {
@@ -67,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override DisplayMode Platform_CurrentDisplayMode
         {
-            get { return new DisplayMode(800, 600, SurfaceFormat.Color); }
+            get { return _currentDisplayMode; }
         }
 
         public override bool Platform_IsWideScreen
@@ -78,8 +79,9 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
         }
 
-        public ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter()
         {
+            _currentDisplayMode = base.CreateDisplayMode(800, 600, SurfaceFormat.Color);
         }
 
         public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
