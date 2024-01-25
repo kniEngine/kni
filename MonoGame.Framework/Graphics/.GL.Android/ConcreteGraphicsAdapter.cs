@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -16,10 +16,11 @@ using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
+    internal class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         private DisplayModeCollection _supportedDisplayModes;
-        string _description = string.Empty;
+        private DisplayMode _currentDisplayMode;
+        private string _description = string.Empty;
 
 
 
@@ -80,7 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         if (a.Format <= b.Format && a.Width <= b.Width && a.Height <= b.Height) return -1;
                         else return 1;
                     });
-                    _supportedDisplayModes = new DisplayModeCollection(modes);
+                    _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
                 }
 
                 return _supportedDisplayModes;
@@ -92,7 +93,9 @@ namespace Microsoft.Xna.Platform.Graphics
             get
             {
                 View view = ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView;
-                return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
+                _currentDisplayMode = base.CreateDisplayMode(view.Width, view.Height, SurfaceFormat.Color);
+
+                return _currentDisplayMode;
             }
         }
 
@@ -104,7 +107,7 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
         }
 
-        public ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter()
         {
         }
 

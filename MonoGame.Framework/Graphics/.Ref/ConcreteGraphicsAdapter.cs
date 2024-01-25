@@ -1,4 +1,4 @@
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
+    internal class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
         public override string Platform_DeviceName
         {
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter()
         {
         }
 

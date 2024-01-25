@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -16,11 +16,11 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
+    internal class ConcreteGraphicsAdapter : GraphicsAdapterStrategy
     {
-        internal DXGI.Adapter1 _adapter;
-        internal DisplayModeCollection _supportedDisplayModes;
-        internal DisplayMode _currentDisplayMode;
+        private DXGI.Adapter1 _dxAdapter;
+        private DisplayModeCollection _supportedDisplayModes;
+        private DisplayMode _currentDisplayMode;
 
         public override DisplayModeCollection Platform_SupportedDisplayModes
         {
@@ -38,8 +38,76 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio >= (16.0f / 10.0f); }
         }
 
-        public ConcreteGraphicsAdapter()
+        private static readonly Dictionary<DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<DXGI.Format, SurfaceFormat>
         {
+            { DXGI.Format.R8G8B8A8_UNorm, SurfaceFormat.Color },
+            { DXGI.Format.B8G8R8A8_UNorm, SurfaceFormat.Color },
+            { DXGI.Format.B5G6R5_UNorm, SurfaceFormat.Bgr565 },
+        };
+
+        internal ConcreteGraphicsAdapter(DXGI.Adapter1 dxAdapter, DXGI.Output dxMonitor)
+        {
+            _dxAdapter = dxAdapter;
+
+            this.Platform_DeviceName = dxMonitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
+            this.Platform_Description = dxAdapter.Description1.Description.TrimEnd(new char[] { '\0' });
+            this.Platform_DeviceId = dxAdapter.Description1.DeviceId;
+            this.Platform_Revision = dxAdapter.Description1.Revision;
+            this.Platform_VendorId = dxAdapter.Description1.VendorId;
+            this.Platform_SubSystemId = dxAdapter.Description1.SubsystemId;
+            this.Platform_MonitorHandle = dxMonitor.Description.MonitorHandle;
+
+            int desktopWidth  = dxMonitor.Description.DesktopBounds.Right  - dxMonitor.Description.DesktopBounds.Left;
+            int desktopHeight = dxMonitor.Description.DesktopBounds.Bottom - dxMonitor.Description.DesktopBounds.Top;
+
+            List<DisplayMode> modes = new List<DisplayMode>();
+
+            foreach (KeyValuePair<DXGI.Format, SurfaceFormat> formatTranslation in FormatTranslations)
+            {
+                DXGI.ModeDescription[] displayModes;
+
+                // This can fail on headless machines, so just assume the desktop size
+                // is a valid mode and return that... so at least our unit tests work.
+                try
+                {
+                    displayModes = dxMonitor.GetDisplayModeList(formatTranslation.Key, 0);
+                }
+                catch (DX.SharpDXException)
+                {
+                    DisplayMode mode = base.CreateDisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
+
+                    modes.Add(mode);
+                    _currentDisplayMode = mode;
+                    break;
+                }
+
+
+                foreach (DXGI.ModeDescription dxModeDesc in displayModes)
+                {
+                    DisplayMode mode = base.CreateDisplayMode(dxModeDesc.Width, dxModeDesc.Height, formatTranslation.Value);
+
+                    // Skip duplicate modes with the same width/height/formats.
+                    if (modes.Contains(mode))
+                        continue;
+
+                    modes.Add(mode);
+
+                    if (_currentDisplayMode == null)
+                    {
+                        if (mode.Width == desktopWidth && mode.Height == desktopHeight && mode.Format == SurfaceFormat.Color)
+                            _currentDisplayMode = mode;
+                    }
+                }
+            }
+
+            _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
+
+            if (_currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
+            {
+                _currentDisplayMode = base.CreateDisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
+            }
+
+            return;
         }
 
         public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
@@ -50,7 +118,7 @@ namespace Microsoft.Xna.Platform.Graphics
             D3D.FeatureLevel highestSupportedLevel;
             try
             {
-                highestSupportedLevel = D3D11.Device.GetSupportedFeatureLevel(_adapter);
+                highestSupportedLevel = D3D11.Device.GetSupportedFeatureLevel(_dxAdapter);
             }
             catch (DX.SharpDXException ex)
             {

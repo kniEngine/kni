@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -20,18 +20,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public ConcreteGraphicsAdaptersProvider()
         {
+            List<GraphicsAdapter> adapterList = CreateAdapterList();
+            _adapters = new ReadOnlyCollection<GraphicsAdapter>(adapterList);
+        }
+
+        private List<GraphicsAdapter> CreateAdapterList()
+        {
             List<GraphicsAdapter> adapterList = new List<GraphicsAdapter>(1);
-            ConcreteGraphicsAdapter strategy = new ConcreteGraphicsAdapter();
-            GraphicsAdapter adapter = new GraphicsAdapter(strategy);
-            strategy._screen = UIScreen.MainScreen;
+
+            ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(UIScreen.MainScreen);
+            GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);
 
             adapterList.Add(adapter);
 
             // The first adapter is considered the default.
             ((IPlatformGraphicsAdapter)adapterList[0]).Strategy.Platform_IsDefaultAdapter = true;
 
-            _adapters = new ReadOnlyCollection<GraphicsAdapter>(adapterList);
-            return;
+            return adapterList;
         }
 
         public override ReadOnlyCollection<GraphicsAdapter> Platform_Adapters
