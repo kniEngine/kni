@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -19,6 +20,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// ignored in <see cref="GetHashCode"/> and <see cref="Equals(VertexDeclaration)"/>!)
     /// </remarks>
     public class VertexDeclaration : IEquatable<VertexDeclaration>
+        , IPlatformVertexDeclaration
     {
 
         #region ----- Data shared between structurally identical vertex declarations -----
@@ -132,7 +134,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Gets the internal vertex elements array.
         /// </summary>
         /// <value>The internal vertex elements array.</value>
-        internal VertexElement[] InternalVertexElements
+        VertexElement[] IPlatformVertexDeclaration.InternalVertexElements
         {
             get { return _data.Elements; }
         }
