@@ -345,7 +345,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            _mainContext = new GraphicsContext(this);
+            _mainContext = base.CreateGraphicsContext();
 
 #if UAP || WINUI
             // Create the Direct2D device.

@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformSetup(PresentationParameters presentationParameters)
         {
-            _mainContext = new GraphicsContext(this);
+            _mainContext = base.CreateGraphicsContext();
 
             var GL = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().GL;
 

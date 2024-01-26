@@ -59,8 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformSetup(PresentationParameters presentationParameters)
         {
-            // create context.
-            _mainContext = new GraphicsContext(this);
+            _mainContext = base.CreateGraphicsContext();
             //_glContext = new LogContent(_glContext);
 
             _capabilities = new ConcreteGraphicsCapabilities();
