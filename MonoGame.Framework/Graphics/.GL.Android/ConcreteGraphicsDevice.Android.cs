@@ -44,7 +44,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformSetup(PresentationParameters presentationParameters)
         {
-            _mainContext = new GraphicsContext(this);
+            _mainContext = base.CreateGraphicsContext();
+
             var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             // try getting the context version
