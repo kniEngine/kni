@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTextureCube);
         }
 
-        internal TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, 
+        protected TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format,
             bool isInternal)
             : base()
         {

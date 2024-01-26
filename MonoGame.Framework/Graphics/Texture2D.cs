@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
         }
         
-        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize)
+        private Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize)
             : this(graphicsDevice, width, height, mipMap, format, shared, arraySize, true)
         {
             _strategyTexture2D = ((IPlatformGraphicsContext)graphicsDevice.MainContext).Strategy.CreateTexture2DStrategy(width, height, mipMap, format, arraySize, shared);
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
         }
 
-        internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize,
+        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize,
             bool isInternal)
             : base()
         {
