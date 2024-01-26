@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal VertexDeclarationAttributeInfo GetVertexAttribInfo(VertexDeclaration vertexDeclaration, int maxVertexBufferSlots)
         {
-            VertexElement[] vertexElements = vertexDeclaration.InternalVertexElements;
+            VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexDeclaration).InternalVertexElements;
 
             VertexDeclarationAttributeInfo vertexAttribInfo;
             if (_vertexAttribInfoCache.TryGetValue(vertexElements, out vertexAttribInfo))

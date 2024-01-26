@@ -189,9 +189,12 @@ namespace Microsoft.Xna.Framework.Graphics
         internal static D3D11.InputElement[] GetInputElements(ImmutableVertexInputLayout vertexInputLayout)
         {
             List<D3D11.InputElement> list = new List<D3D11.InputElement>();
+
             for (int i = 0; i < vertexInputLayout.Count; i++)
             {
-                foreach (VertexElement vertexElement in vertexInputLayout.VertexDeclarations[i].InternalVertexElements)
+                VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexInputLayout.VertexDeclarations[i]).InternalVertexElements;
+
+                foreach (VertexElement vertexElement in vertexElements)
                 {
                     D3D11.InputElement inputElement = GetInputElement(vertexElement, i, vertexInputLayout.InstanceFrequencies[i]);
                     list.Add(inputElement);
