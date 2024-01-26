@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public event EventHandler<EventArgs> ContentLost;
 
-        internal RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize,
+        protected RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat format, bool shared, int arraySize,
             bool isInternal)
             : base(graphicsDevice, width, height, mipMap, format, shared, arraySize, true)
         {
