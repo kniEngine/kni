@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _d3dContext = d3dContext;
 
 #if WINDOWSDX
-            GraphicsDebug = new GraphicsDebug(this);
+            GraphicsDebug = base.CreateGraphicsDebug();
 #endif
 
         }

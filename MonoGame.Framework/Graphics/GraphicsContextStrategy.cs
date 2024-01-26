@@ -501,6 +501,11 @@ namespace Microsoft.Xna.Platform.Graphics
         protected abstract void PlatformApplyDefaultRenderTarget();
         protected abstract IRenderTarget PlatformApplyRenderTargets();
 
+        protected GraphicsDebug CreateGraphicsDebug()
+        {
+            return new GraphicsDebug(this);
+        }
+
         public T ToConcrete<T>() where T : GraphicsContextStrategy
         {
             return (T)this;
