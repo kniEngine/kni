@@ -287,7 +287,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 _device.Textures[0] = texture;
 
-                ((IPlatformGraphicsDevice)_device).Strategy.CurrentContext.SB_DrawIndexedPrimitives(
+                ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).SB_DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
                     baseVertex, //0, numVertices,
                     0, primitiveCount);
@@ -303,7 +303,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // because pass.Apply() might have set a texture from the effect.
                     _device.Textures[0] = texture;
 
-                    ((IPlatformGraphicsDevice)_device).Strategy.CurrentContext.SB_DrawIndexedPrimitives(
+                    ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).SB_DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
                         baseVertex, //0, numVertices,
                         0, primitiveCount);
