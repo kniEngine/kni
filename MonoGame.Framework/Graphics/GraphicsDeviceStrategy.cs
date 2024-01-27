@@ -243,7 +243,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public virtual void Present()
         {
             // reset _graphicsMetrics
-            MainContext._graphicsMetrics = new GraphicsMetrics();
+            ((IPlatformGraphicsContext)MainContext).Strategy._graphicsMetrics = new GraphicsMetrics();
         }
 
         public abstract void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct;

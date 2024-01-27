@@ -21,9 +21,6 @@ namespace Microsoft.Xna.Framework.Graphics
         private GraphicsDeviceStrategy _deviceStrategy;
         private bool _isDisposed = false;
 
-
-        internal GraphicsMetrics _graphicsMetrics;
-
         GraphicsContextStrategy IPlatformGraphicsContext.Strategy { get { return _strategy; } }
         GraphicsDeviceStrategy IPlatformGraphicsContext.DeviceStrategy { get { return _deviceStrategy; } }
 
@@ -45,8 +42,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public GraphicsMetrics Metrics
         {
-            get { return _graphicsMetrics; }
-            set { _graphicsMetrics = value; }
+            get { return _strategy._graphicsMetrics; }
+            set { _strategy._graphicsMetrics = value; }
         }
 
         /// <summary>
@@ -139,22 +136,16 @@ namespace Microsoft.Xna.Framework.Graphics
                                  | ClearOptions.DepthBuffer
                                  | ClearOptions.Stencil;
             _strategy.Clear(options, color.ToVector4(), _strategy.Viewport.MaxDepth, 0);
-
-            unchecked { _graphicsMetrics._clearCount++; }
         }
 
         public void Clear(ClearOptions options, Color color, float depth, int stencil)
         {
             _strategy.Clear(options, color.ToVector4(), depth, stencil);
-
-            unchecked { _graphicsMetrics._clearCount++; }
         }
 
         public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             _strategy.Clear(options, color, depth, stencil);
-
-            unchecked { _graphicsMetrics._clearCount++; }
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
@@ -283,11 +274,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             _strategy.ApplyRenderTargets(renderTargets);
-
-            if (renderTargetCount == 0)
-                unchecked { _graphicsMetrics._targetCount++; }
-            else
-                unchecked { _graphicsMetrics._targetCount += renderTargetCount; }
         }
 
         /// <summary>
@@ -349,9 +335,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
             _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
-
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         // internal DrawIndexedPrimitives without checks, used by SpriteBatcher.
@@ -373,9 +356,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
             _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
-
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -450,10 +430,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawUserPrimitives.");
 
 
-            _strategy.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
-
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            _strategy.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, primitiveCount, vertexDeclaration, vertexCount);
         }
 
         /// <summary>
@@ -497,10 +474,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int vertexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
 
 
-            _strategy.DrawPrimitives(primitiveType, vertexStart, vertexCount);
-
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            _strategy.DrawPrimitives(primitiveType, vertexStart, primitiveCount, vertexCount);
         }
 
         /// <summary>
@@ -598,9 +572,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
             _strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
-
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -701,9 +672,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
             _strategy.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
-
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         /// <summary>
@@ -767,9 +735,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
             _strategy.DrawInstancedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount, baseInstance, instanceCount);
-
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
         }
 
         /// <summary>

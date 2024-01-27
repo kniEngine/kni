@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     shaderStage.SetShaderResource(i, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
 
-                    unchecked { _contextStrategy.Context._graphicsMetrics._textureCount++; }
+                    unchecked { ((IPlatformGraphicsContext)_contextStrategy.Context).Strategy._graphicsMetrics._textureCount++; }
                 }
                 else
                     shaderStage.SetShaderResource(i, null);
