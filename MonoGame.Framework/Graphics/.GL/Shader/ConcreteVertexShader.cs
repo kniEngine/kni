@@ -63,18 +63,18 @@ namespace Microsoft.Xna.Platform.Graphics
             // Get the vertex attribute info and cache it
             VertexDeclarationAttributeInfo attrInfo = new VertexDeclarationAttributeInfo(maxVertexBufferSlots);
 
-            foreach (VertexElement ve in vertexElements)
+            for (int v = 0; v < vertexElements.Length; v++)
             {
-                int attributeLocation = vertexShaderStrategy.GetAttributeLocation(ve.VertexElementUsage, ve.UsageIndex);
+                int attributeLocation = vertexShaderStrategy.GetAttributeLocation(vertexElements[v].VertexElementUsage, vertexElements[v].UsageIndex);
                 // XNA appears to ignore usages it can't find a match for, so we will do the same
                 if (attributeLocation < 0)
                     continue;
 
                 VertexDeclarationAttributeInfoElement vertexAttribInfoElement = new VertexDeclarationAttributeInfoElement();
-                vertexAttribInfoElement.NumberOfElements = ve.VertexElementFormat.ToGLNumberOfElements();
-                vertexAttribInfoElement.VertexAttribPointerType = ve.VertexElementFormat.ToGLVertexAttribPointerType();
-                vertexAttribInfoElement.Normalized = ve.ToGLVertexAttribNormalized();
-                vertexAttribInfoElement.Offset = ve.Offset;
+                vertexAttribInfoElement.NumberOfElements = vertexElements[v].VertexElementFormat.ToGLNumberOfElements();
+                vertexAttribInfoElement.VertexAttribPointerType = vertexElements[v].VertexElementFormat.ToGLVertexAttribPointerType();
+                vertexAttribInfoElement.Normalized = vertexElements[v].ToGLVertexAttribNormalized();
+                vertexAttribInfoElement.Offset = vertexElements[v].Offset;
                 vertexAttribInfoElement.AttributeLocation = attributeLocation;
 
                 attrInfo.Elements.Add(vertexAttribInfoElement);

@@ -194,9 +194,9 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexInputLayout.VertexDeclarations[i]).InternalVertexElements;
 
-                foreach (VertexElement vertexElement in vertexElements)
+                for (int v = 0; v < vertexElements.Length; v++)
                 {
-                    D3D11.InputElement inputElement = GetInputElement(vertexElement, i, vertexInputLayout.InstanceFrequencies[i]);
+                    D3D11.InputElement inputElement = GetInputElement(ref vertexElements[v], i, vertexInputLayout.InstanceFrequencies[i]);
                     list.Add(inputElement);
                 }
             }
@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <exception cref="NotSupportedException">
         /// Unknown vertex element format or usage!
         /// </exception>
-        internal static D3D11.InputElement GetInputElement(VertexElement vertexElement, int slot, int instanceFrequency)
+        internal static D3D11.InputElement GetInputElement(ref VertexElement vertexElement, int slot, int instanceFrequency)
         {
             D3D11.InputElement element = new D3D11.InputElement();
 
