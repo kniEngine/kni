@@ -127,6 +127,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (flags != 0)
                     this.D3dContext.ClearDepthStencilView(_currentDepthStencilView, flags, depth, (byte)stencil);
+
+                unchecked { base._graphicsMetrics._clearCount++; }
             }
         }
 
@@ -247,7 +249,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 this.D3dContext.VertexShader.Set(((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>().DXVertexShader);
 
-                unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
+                unchecked { base._graphicsMetrics._vertexShaderCount++; }
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
@@ -261,7 +263,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.D3dContext.PixelShader.Set(((IPlatformShader)this.PixelShader).Strategy.ToConcrete<ConcretePixelShader>().DXPixelShader);
                 _pixelShaderDirty = false;
 
-                unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
+                unchecked { base._graphicsMetrics._pixelShaderCount++; }
             }
 
 
@@ -306,7 +308,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
+        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int primitiveCount, int vertexCount)
         {
             lock (this.SyncHandle)
             {
@@ -317,6 +319,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, vertexStart);
+
+                unchecked { base._graphicsMetrics._drawCount++; }
+                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
             }
         }
 
@@ -332,6 +337,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyPrimitiveType(primitiveType);
                 int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, baseVertex);
+
+                unchecked { base._graphicsMetrics._drawCount++; }
+                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
             }
         }
 
@@ -359,6 +367,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, 0);
                 }
+
+                unchecked { base._graphicsMetrics._drawCount++; }
+                unchecked { base._graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
             }
         }
 
@@ -430,7 +441,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return startIndex;
         }
 
-        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
+        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration, int vertexCount)
             //where T : struct
         {
             // TODO: Do not set public VertexBuffers.
@@ -446,6 +457,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, startVertex);
+
+                unchecked { base._graphicsMetrics._drawCount++; }
+                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
             }
         }
 
@@ -467,6 +481,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
+
+                unchecked { base._graphicsMetrics._drawCount++; }
+                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
             }
         }
 
@@ -488,6 +505,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
+
+                unchecked { base._graphicsMetrics._drawCount++; }
+                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
             }
         }
 

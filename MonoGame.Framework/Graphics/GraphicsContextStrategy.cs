@@ -28,6 +28,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool _isDisposed = false;
 
+        protected internal GraphicsMetrics _graphicsMetrics;
+
         protected internal Rectangle _scissorRectangle;
         protected internal bool _scissorRectangleDirty;
         protected internal Viewport _viewport;
@@ -400,6 +402,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 renderTargetWidth = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferWidth;
                 renderTargetHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
+
+                unchecked { _graphicsMetrics._targetCount++; }
             }
             else
             {
@@ -414,6 +418,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 renderTargetWidth = renderTarget.Width;
                 renderTargetHeight = renderTarget.Height;
+
+                if (renderTargets.Length == 0)
+                    unchecked { _graphicsMetrics._targetCount++; }
+                else
+                    unchecked { _graphicsMetrics._targetCount += renderTargets.Length; }
             }
 
             // Set the viewport to the size of the first render target.
@@ -428,8 +437,6 @@ namespace Microsoft.Xna.Platform.Graphics
                                      | ClearOptions.DepthBuffer
                                      | ClearOptions.Stencil;
                 this.Clear(options, this.DiscardColor.ToVector4(), this.Viewport.MaxDepth, 0);
-
-                unchecked { this.Context._graphicsMetrics._clearCount++; }
             }
         }
 
@@ -459,10 +466,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public abstract void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount);
+        public abstract void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int primitiveCount, int vertexCount);
         public abstract void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount);
         public abstract void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount);
-        public abstract void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount) where T : struct;
+        public abstract void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration, int vertexCount) where T : struct;
         public abstract void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct;
         public abstract void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration) where T : struct;
         public abstract void Flush();

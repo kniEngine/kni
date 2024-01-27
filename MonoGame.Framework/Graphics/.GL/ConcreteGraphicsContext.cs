@@ -148,6 +148,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 #endif
 
+            unchecked { _graphicsMetrics._clearCount++; }
+
             // Restore the previous render state.
             ScissorRectangle = prevScissorRect;
             DepthStencilState = prevDepthStencilState;
@@ -249,12 +251,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (_vertexShaderDirty)
                 {
-                    unchecked { this.Context._graphicsMetrics._vertexShaderCount++; }
+                    unchecked { base._graphicsMetrics._vertexShaderCount++; }
                 }
 
                 if (_pixelShaderDirty)
                 {
-                    unchecked { this.Context._graphicsMetrics._pixelShaderCount++; }
+                    unchecked { base._graphicsMetrics._pixelShaderCount++; }
                 }
 
                 _vertexShaderDirty = false;
@@ -572,7 +574,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int vertexCount)
+        public override void DrawPrimitives(PrimitiveType primitiveType, int vertexStart, int primitiveCount, int vertexCount)
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
@@ -588,6 +590,9 @@ namespace Microsoft.Xna.Platform.Graphics
                           vertexStart,
                           vertexCount);
             GL.CheckGLError();
+
+            unchecked { _graphicsMetrics._drawCount++; }
+            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
@@ -622,9 +627,10 @@ namespace Microsoft.Xna.Platform.Graphics
                                 indexElementType,
                                 indexOffsetInBytes);
                 GL.CheckGLError();
-
             }
 
+            unchecked { _graphicsMetrics._drawCount++; }
+            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
         }
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
@@ -668,9 +674,12 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             GL.CheckGLError();
+
+            unchecked { _graphicsMetrics._drawCount++; }
+            unchecked { _graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
         }
 
-        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount)
+        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration, int vertexCount)
             //where T : struct
         {
             PlatformApplyState();
@@ -695,6 +704,9 @@ namespace Microsoft.Xna.Platform.Graphics
                               vertexOffset,
                               vertexCount);
                 GL.CheckGLError();
+
+                unchecked { _graphicsMetrics._drawCount++; }
+                unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
             }
             finally
             {
@@ -736,6 +748,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     DrawElementsType.UnsignedShort,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(short))));
                 GL.CheckGLError();
+
+                unchecked { _graphicsMetrics._drawCount++; }
+                unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
             }
             finally
             {
@@ -778,6 +793,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     DrawElementsType.UnsignedInt,
                     (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(int))));
                 GL.CheckGLError();
+
+                unchecked { _graphicsMetrics._drawCount++; }
+                unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
             }
             finally
             {
