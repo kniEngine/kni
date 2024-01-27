@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BindTexture(((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTexture);
                     GL.CheckGLError();
 
-                    unchecked { ((IPlatformGraphicsContext)_contextStrategy.Context).Strategy._graphicsMetrics._textureCount++; }
+                    unchecked { _contextStrategy._graphicsMetrics._textureCount++; }
                 }
 
                 // clear texture bit
