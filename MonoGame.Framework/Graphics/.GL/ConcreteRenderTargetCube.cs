@@ -64,6 +64,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 return _isContentLost;
             }
         }
+
+        public void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
+        {
+
+        }
         #endregion IRenderTargetStrategy
 
 

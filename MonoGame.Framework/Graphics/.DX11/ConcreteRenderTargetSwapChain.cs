@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal override void ResolveSubresource(GraphicsContextStrategy contextStrategy)
+        public override void ResolveSubresource(GraphicsContextStrategy contextStrategy)
         {
             // Using a multisampled SwapChainRenderTarget as a source Texture is not supported.
             //base.ResolveSubresource(contextStrategy);

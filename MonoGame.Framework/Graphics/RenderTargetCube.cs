@@ -35,6 +35,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <value>The usage mode of the render target.</value>
         public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTargetCube.RenderTargetUsage; } }
 
+        IRenderTargetStrategy IRenderTarget.RenderTargetStrategy { get { return _strategyRenderTargetCube; } }
+
         /// <inheritdoc/>
         int IRenderTarget.Width { get { return this.Size; } }
 

@@ -69,6 +69,23 @@ namespace Microsoft.Xna.Platform.Graphics
                 return _isContentLost;
             }
         }
+
+        public virtual void ResolveSubresource(GraphicsContextStrategy contextStrategy)
+        {
+            lock (contextStrategy.SyncHandle)
+            {
+                D3D11.DeviceContext d3dContext = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+
+                System.Diagnostics.Debug.Assert(_msTexture != null);
+
+                d3dContext.ResolveSubresource(
+                    _msTexture,
+                    0,
+                    this.GetTexture(),
+                    0,
+                    this.Format.ToDXFormat());
+            }
+        }
         #endregion IRenderTargetStrategy
 
 
@@ -221,23 +238,6 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
             return new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
-        }
-
-        internal virtual void ResolveSubresource(GraphicsContextStrategy contextStrategy)
-        {
-            lock (contextStrategy.SyncHandle)
-            {
-                D3D11.DeviceContext d3dContext = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
-
-                System.Diagnostics.Debug.Assert(_msTexture != null);
-
-                d3dContext.ResolveSubresource(
-                    _msTexture,
-                    0,
-                    this.GetTexture(),
-                    0,
-                    this.Format.ToDXFormat());
-            }
         }
 
         protected override void PlatformGraphicsContextLost()
