@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (flags != 0)
                     this.D3dContext.ClearDepthStencilView(_currentDepthStencilView, flags, depth, (byte)stencil);
 
-                unchecked { base._graphicsMetrics._clearCount++; }
+                base.Metrics_AddClearCount();
             }
         }
 
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 this.D3dContext.VertexShader.Set(((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>().DXVertexShader);
 
-                unchecked { base._graphicsMetrics._vertexShaderCount++; }
+                base.Metrics_AddVertexShaderCount();
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
@@ -263,7 +263,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.D3dContext.PixelShader.Set(((IPlatformShader)this.PixelShader).Strategy.ToConcrete<ConcretePixelShader>().DXPixelShader);
                 _pixelShaderDirty = false;
 
-                unchecked { base._graphicsMetrics._pixelShaderCount++; }
+                base.Metrics_AddPixelShaderCount();
             }
 
 
@@ -320,8 +320,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, vertexStart);
 
-                unchecked { base._graphicsMetrics._drawCount++; }
-                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
+                base.Metrics_AddDrawCount();
+                base.Metrics_AddPrimitiveCount(primitiveCount);
             }
         }
 
@@ -338,8 +338,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, baseVertex);
 
-                unchecked { base._graphicsMetrics._drawCount++; }
-                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
+                base.Metrics_AddDrawCount();
+                base.Metrics_AddPrimitiveCount(primitiveCount);
             }
         }
 
@@ -368,8 +368,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, 0);
                 }
 
-                unchecked { base._graphicsMetrics._drawCount++; }
-                unchecked { base._graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
+                base.Metrics_AddDrawCount();
+                base.Metrics_AddPrimitiveCount(primitiveCount * instanceCount);
             }
         }
 
@@ -458,8 +458,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.Draw(vertexCount, startVertex);
 
-                unchecked { base._graphicsMetrics._drawCount++; }
-                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
+                base.Metrics_AddDrawCount();
+                base.Metrics_AddPrimitiveCount(primitiveCount);
             }
         }
 
@@ -482,8 +482,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
 
-                unchecked { base._graphicsMetrics._drawCount++; }
-                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
+                base.Metrics_AddDrawCount();
+                base.Metrics_AddPrimitiveCount(primitiveCount);
             }
         }
 
@@ -506,8 +506,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyPrimitiveType(primitiveType);
                 this.D3dContext.DrawIndexed(indexCount, startIndex, startVertex);
 
-                unchecked { base._graphicsMetrics._drawCount++; }
-                unchecked { base._graphicsMetrics._primitiveCount += primitiveCount; }
+                base.Metrics_AddDrawCount();
+                base.Metrics_AddPrimitiveCount(primitiveCount);
             }
         }
 

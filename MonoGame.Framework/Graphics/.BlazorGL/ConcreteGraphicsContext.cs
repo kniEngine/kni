@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.Clear(bb);
             GL.CheckGLError();
 
-            unchecked { _graphicsMetrics._clearCount++; }
+            base.Metrics_AddClearCount();
 
             // Restore the previous render state.
             ScissorRectangle = prevScissorRect;
@@ -212,12 +212,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (_vertexShaderDirty)
                 {
-                    unchecked { base._graphicsMetrics._vertexShaderCount++; }
+                    base.Metrics_AddVertexShaderCount();
                 }
 
                 if (_pixelShaderDirty)
                 {
-                    unchecked { base._graphicsMetrics._pixelShaderCount++; }
+                    base.Metrics_AddPixelShaderCount();
                 }
 
                 _vertexShaderDirty = false;
@@ -544,8 +544,8 @@ namespace Microsoft.Xna.Platform.Graphics
                           vertexCount);
             GL.CheckGLError();
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            base.Metrics_AddDrawCount();
+            base.Metrics_AddPrimitiveCount(primitiveCount);
         }
 
         public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
@@ -568,8 +568,8 @@ namespace Microsoft.Xna.Platform.Graphics
                             indexOffsetInBytes);
             GL.CheckGLError();
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            base.Metrics_AddDrawCount();
+            base.Metrics_AddPrimitiveCount(primitiveCount);
         }
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
@@ -584,8 +584,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             throw new NotImplementedException();
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += (primitiveCount * instanceCount); }
+            base.Metrics_AddDrawCount();
+            base.Metrics_AddPrimitiveCount(primitiveCount * instanceCount);
         }
 
         public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration, int vertexCount)
@@ -631,8 +631,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             vbo.Dispose();
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            base.Metrics_AddDrawCount();
+            base.Metrics_AddPrimitiveCount(primitiveCount);
         }
 
         public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
@@ -699,8 +699,8 @@ namespace Microsoft.Xna.Platform.Graphics
             ibo.Dispose();
             vbo.Dispose();
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            base.Metrics_AddDrawCount();
+            base.Metrics_AddPrimitiveCount(primitiveCount);
         }
 
         public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
@@ -713,8 +713,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             throw new NotImplementedException();
 
-            unchecked { _graphicsMetrics._drawCount++; }
-            unchecked { _graphicsMetrics._primitiveCount += primitiveCount; }
+            base.Metrics_AddDrawCount();
+            base.Metrics_AddPrimitiveCount(primitiveCount);
         }
 
         public override void Flush()

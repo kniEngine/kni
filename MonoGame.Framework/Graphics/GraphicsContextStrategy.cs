@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private bool _isDisposed = false;
 
-        protected internal GraphicsMetrics _graphicsMetrics;
+        internal GraphicsMetrics _graphicsMetrics;
 
         protected internal Rectangle _scissorRectangle;
         protected internal bool _scissorRectangleDirty;
@@ -519,6 +519,17 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return (T)this;
         }
+
+        #region Metrics
+        protected void Metrics_AddClearCount() { unchecked { _graphicsMetrics._clearCount++; } }
+        protected void Metrics_AddDrawCount() { unchecked { _graphicsMetrics._drawCount++; } }
+        protected void Metrics_AddPixelShaderCount() { unchecked { _graphicsMetrics._pixelShaderCount++; } }
+        protected void Metrics_AddTargetCount() { unchecked { _graphicsMetrics._targetCount++; } }
+        protected void Metrics_AddVertexShaderCount() { unchecked { _graphicsMetrics._vertexShaderCount++; } }
+        protected void Metrics_AddPrimitiveCount(int primitiveCount) { unchecked { _graphicsMetrics._primitiveCount += primitiveCount; } }
+        public void Metrics_AddSpriteCount(int batchCount) { unchecked { _graphicsMetrics._spriteCount += batchCount; } }
+        public void Metrics_AddTextureCount() { unchecked { _graphicsMetrics._textureCount++; } }
+        #endregion Metrics
 
 
         #region IDisposable Members
