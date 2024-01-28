@@ -20,6 +20,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		
 		public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTarget3D.RenderTargetUsage; } }
 
+        IRenderTargetStrategy IRenderTarget.RenderTargetStrategy { get { return _strategyRenderTarget3D; } }
+
         public bool IsContentLost { get { return _strategyRenderTarget3D.IsContentLost; } }
 
         public event EventHandler<EventArgs> ContentLost;

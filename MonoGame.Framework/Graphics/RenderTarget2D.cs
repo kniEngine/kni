@@ -12,13 +12,15 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public class RenderTarget2D : Texture2D, IRenderTarget
 	{
-        protected internal IRenderTarget2DStrategy _strategyRenderTarget2D;
+        protected IRenderTarget2DStrategy _strategyRenderTarget2D;
 
 		public DepthFormat DepthStencilFormat { get { return _strategyRenderTarget2D.DepthStencilFormat; } }
 		
 		public int MultiSampleCount { get { return _strategyRenderTarget2D.MultiSampleCount; } }
 		
 		public RenderTargetUsage RenderTargetUsage { get { return _strategyRenderTarget2D.RenderTargetUsage; } }
+
+        IRenderTargetStrategy IRenderTarget.RenderTargetStrategy { get { return _strategyRenderTarget2D; } }
 
         public bool IsContentLost { get { return _strategyRenderTarget2D.IsContentLost; } }
 

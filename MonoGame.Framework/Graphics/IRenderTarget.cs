@@ -64,5 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         /// <value>The usage mode of the render target.</value>
         RenderTargetUsage RenderTargetUsage { get; }
+
+        IRenderTargetStrategy RenderTargetStrategy { get; }
     }
 }

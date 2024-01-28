@@ -661,7 +661,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 RenderTarget2D renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
                 if (renderTarget != null && renderTarget.MultiSampleCount > 1)
                 {
-                    ((ConcreteRenderTarget2D)renderTarget._strategyRenderTarget2D).ResolveSubresource(this);
+                    ((IRenderTarget)renderTarget).RenderTargetStrategy.ResolveSubresource(this);
                 }
 
                 // Generate mipmaps.

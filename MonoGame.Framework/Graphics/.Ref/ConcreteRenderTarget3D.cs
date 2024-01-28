@@ -44,6 +44,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { throw new PlatformNotSupportedException(); }
         }
+
+        public void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
+        {
+            throw new PlatformNotSupportedException();
+        }
         #endregion IRenderTargetStrategy
 
 
