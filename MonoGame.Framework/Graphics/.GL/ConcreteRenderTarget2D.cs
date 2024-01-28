@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -39,7 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer
             ||  GL.RenderbufferStorageMultisample == null)
                 maxMultiSampleCount = 0;
-            this._multiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
 

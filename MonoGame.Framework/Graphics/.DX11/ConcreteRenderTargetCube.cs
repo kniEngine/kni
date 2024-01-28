@@ -8,6 +8,7 @@ using DX = SharpDX;
 using D3D = SharpDX.Direct3D;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
@@ -29,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this._depthStencilFormat = preferredDepthFormat;
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
-            this._multiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
 
