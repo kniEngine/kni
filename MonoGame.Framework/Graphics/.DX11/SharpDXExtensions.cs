@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using SharpDX.Mathematics.Interop;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
@@ -158,6 +159,35 @@ namespace Microsoft.Xna.Platform.Graphics
                 default:
                     return DXGI.Format.R8G8B8A8_UNorm;
             }
+        }
+
+        static public int GetPitch(this SurfaceFormat format, int width)
+        {
+            Debug.Assert(width > 0, "The width is negative!");
+
+            switch (format)
+            {
+                case SurfaceFormat.Dxt1:
+                case SurfaceFormat.Dxt1SRgb:
+                case SurfaceFormat.Dxt1a:
+                case SurfaceFormat.RgbPvrtc2Bpp:
+                case SurfaceFormat.RgbaPvrtc2Bpp:
+                case SurfaceFormat.RgbEtc1:
+                case SurfaceFormat.Rgb8Etc2:
+                case SurfaceFormat.Srgb8Etc2:
+                case SurfaceFormat.Rgb8A1Etc2:
+                case SurfaceFormat.Srgb8A1Etc2:
+                case SurfaceFormat.Dxt3:
+                case SurfaceFormat.Dxt3SRgb:
+                case SurfaceFormat.Dxt5:
+                case SurfaceFormat.Dxt5SRgb:
+                case SurfaceFormat.RgbPvrtc4Bpp:
+                case SurfaceFormat.RgbaPvrtc4Bpp:
+                    return ((width + 3) / 4) * format.GetSize();
+
+                default:
+                    return width * format.GetSize();
+            };
         }
 
         static public D3D11.Comparison ToDXComparisonFunction(this CompareFunction compare)

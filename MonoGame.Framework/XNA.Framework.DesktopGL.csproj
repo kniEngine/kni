@@ -470,6 +470,7 @@
     <Compile Include="Graphics\Utilities\DxtDecoder.cs" />
     <Compile Include="Graphics\Utilities\GraphicsExtensions.cs" />
     <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
+    <Compile Include="Graphics\Utilities\TextureHelpers.cs" />
 
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />

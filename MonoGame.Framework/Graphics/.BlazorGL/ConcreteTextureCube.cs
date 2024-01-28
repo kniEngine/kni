@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -15,7 +16,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format,
                                      bool isRenderTarget)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
 
@@ -23,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
 

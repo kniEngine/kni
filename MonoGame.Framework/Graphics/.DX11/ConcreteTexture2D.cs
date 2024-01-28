@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
                                    bool isRenderTarget)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             int w, h;
-            Texture.GetSizeForLevel(Width, Height, level, out w, out h);
+            TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
 
             // For DXT compressed formats the width and height must be
             // a multiple of 4 for the complete mip level to be set.
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, w), 0);
+                    d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, this.Format.GetPitch(w), 0);
                 }
             }
             finally
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
+                    d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
                 }
             }
             finally

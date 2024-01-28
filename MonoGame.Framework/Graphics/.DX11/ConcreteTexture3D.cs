@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format,
                                    bool isRenderTarget)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height, depth))
         {
             this._width = width;
             this._height = height;
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height, depth))
         {
             this._width = width;
             this._height = height;
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
-                int rowPitch = Texture.GetPitch(this.Format, width);
+                int rowPitch = this.Format.GetPitch(width);
                 int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.
                 DX.DataBox box = new DX.DataBox(dataPtr, rowPitch, slicePitch);
 

@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 
 #if DESKTOPGL
@@ -253,7 +254,7 @@ namespace Microsoft.Xna.Platform.Graphics
 		          throw new ArgumentOutOfRangeException("height", height, "'height' cannot be less than or equal to zero");
 
 #if DESKTOPGL
-            Color[] data = Texture2D.GetColorData(this);
+            Color[] data = TextureHelpers.GetColorData(this);
             fixed (Color* pData = data)
             {
                 ImageWriter writer = new ImageWriter();
@@ -277,7 +278,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new ArgumentOutOfRangeException("height", height, "'height' cannot be less than or equal to zero");
 
 #if DESKTOPGL
-            Color[] data = Texture2D.GetColorData(this);
+            Color[] data = TextureHelpers.GetColorData(this);
             fixed (Color* pData = data)
             {
                 ImageWriter writer = new ImageWriter();

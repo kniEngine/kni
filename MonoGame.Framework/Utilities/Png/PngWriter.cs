@@ -5,14 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MonoGame.Framework.Utilities;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace MonoGame.Utilities.Png
 {
@@ -34,7 +32,7 @@ namespace MonoGame.Utilities.Png
             _width = texture2D.Width;
             _height = texture2D.Height;
 
-            _colorData = Texture2D.GetColorData(texture2D);
+            _colorData = TextureHelpers.GetColorData(texture2D);
 
             // write PNG signature
             outputStream.Write(HeaderChunk.PngSignature, 0, HeaderChunk.PngSignature.Length);

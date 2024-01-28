@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format,
                                      bool isRenderTarget)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
 
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal ConcreteTextureCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, size))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, size))
         {
             this._size = size;
 
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
-                DX.DataBox box = new DX.DataBox(dataPtr, Texture.GetPitch(this.Format, checkedRect.Width), 0);
+                DX.DataBox box = new DX.DataBox(dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
 
                 int subresourceIndex = (int)face * this.LevelCount + level;
 
