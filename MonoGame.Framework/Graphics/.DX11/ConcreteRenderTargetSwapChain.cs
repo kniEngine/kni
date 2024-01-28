@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -33,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _presentInterval = presentInterval;
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
-            _multiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            _multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
 
             ((ConcreteRenderTarget2D)this)._renderTargetViews = new D3D11.RenderTargetView[1];
