@@ -223,11 +223,11 @@ namespace Microsoft.Xna.Platform.Graphics
             return new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
         }
 
-        internal virtual void ResolveSubresource()
+        internal virtual void ResolveSubresource(GraphicsContextStrategy contextStrategy)
         {
-            lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
+            lock (contextStrategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 System.Diagnostics.Debug.Assert(_msTexture != null);
 
