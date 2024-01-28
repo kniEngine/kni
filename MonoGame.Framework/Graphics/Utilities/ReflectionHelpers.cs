@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Xna.Platform.Graphics.Utilities
 {
-    internal static partial class ReflectionHelpers
+    public static class ReflectionHelpers
     {
         public static bool IsValueType(Type targetType)
         {
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics.Utilities
 #endif
         }
 
-        internal static int SizeOf<T>()
+        public static int SizeOf<T>()
         {
             return ManagedSizeOf<T>.Value;
         }
