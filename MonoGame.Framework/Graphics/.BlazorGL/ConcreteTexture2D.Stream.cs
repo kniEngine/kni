@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 using StbImageSharp;
 using StbImageWriteSharp;
@@ -75,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (height <= 0)
                 throw new ArgumentOutOfRangeException("height", height, "'height' cannot be less than or equal to zero");
 
-            Color[] data = Texture2D.GetColorData(this);
+            Color[] data = TextureHelpers.GetColorData(this);
             fixed (Color* pData = data)
             {
                 ImageWriter writer = new ImageWriter();
@@ -92,7 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (height <= 0)
                 throw new ArgumentOutOfRangeException("height", height, "'height' cannot be less than or equal to zero");
 
-            Color[] data = Texture2D.GetColorData(this);
+            Color[] data = TextureHelpers.GetColorData(this);
             fixed (Color* pData = data)
             {
                 ImageWriter writer = new ImageWriter();

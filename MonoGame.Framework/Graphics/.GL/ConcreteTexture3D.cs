@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format,
                                    bool isRenderTarget)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height, depth))
         {
             this._width = width;
             this._height = height;
@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal ConcreteTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height, depth))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height, depth))
         {
             this._width = width;
             this._height = height;

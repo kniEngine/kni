@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
                                    bool isRenderTarget)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height))
         {
             this._width  = width;
             this._height = height;
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int w, h;
-            Texture.GetSizeForLevel(Width, Height, level, out w, out h);
+            TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);

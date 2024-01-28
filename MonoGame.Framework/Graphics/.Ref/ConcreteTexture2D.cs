@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -13,14 +14,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
                                    bool isRenderTarget)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height))
         {
 
             System.Diagnostics.Debug.Assert(isRenderTarget);
         }
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared)
-            : base(contextStrategy, format, Texture.CalculateMipLevels(mipMap, width, height))
+            : base(contextStrategy, format, TextureHelpers.CalculateMipLevels(mipMap, width, height))
         {
 
             this.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
