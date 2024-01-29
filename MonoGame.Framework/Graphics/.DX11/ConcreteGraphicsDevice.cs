@@ -560,10 +560,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
             // Clear the current render targets.
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._currentDepthStencilView = null;
-            Array.Clear(((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._currentRenderTargets, 0, ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._currentRenderTargets.Length);
-            Array.Clear(((IPlatformGraphicsContext)_mainContext).Strategy._currentRenderTargetBindings, 0, ((IPlatformGraphicsContext)_mainContext).Strategy._currentRenderTargetBindings.Length);
-            ((IPlatformGraphicsContext)_mainContext).Strategy._currentRenderTargetCount = 0;
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().ClearCurrentRenderTargets();
 
             // Make sure all pending rendering commands are flushed.
             ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.Flush();

@@ -941,12 +941,12 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!this.IsRenderTargetBound)
                 return;
 
-            RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[0];
+            RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[0];
             IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
             if (renderTarget.MultiSampleCount > 0)
             {
                 int glResolveFramebuffer = 0;
-                if (!_glResolveFramebuffers.TryGetValue(_currentRenderTargetBindings, out glResolveFramebuffer))
+                if (!_glResolveFramebuffers.TryGetValue(base.CurrentRenderTargetBindings, out glResolveFramebuffer))
                 {
                     glResolveFramebuffer = GL.GenFramebuffer();
                     GL.CheckGLError();
@@ -955,14 +955,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     for (int i = 0; i < base.RenderTargetCount; i++)
                     {
-                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)_currentRenderTargetBindings[i].RenderTarget;
+                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)base.CurrentRenderTargetBindings[i].RenderTarget;
 
                         FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
                         TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
                         GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, renderTargetGL.GLTexture, 0);
                         GL.CheckGLError();
                     }
-                    _glResolveFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glResolveFramebuffer);
+                    _glResolveFramebuffers.Add((RenderTargetBinding[])base.CurrentRenderTargetBindings.Clone(), glResolveFramebuffer);
                 }
                 else
                 {
@@ -977,13 +977,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                 }
 
-                int glFramebuffer = _glFramebuffers[_currentRenderTargetBindings];
+                int glFramebuffer = _glFramebuffers[base.CurrentRenderTargetBindings];
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
                 GL.CheckGLError();
 
                 for (int i = 0; i < base.RenderTargetCount; i++)
                 {
-                    renderTargetBinding = _currentRenderTargetBindings[i];
+                    renderTargetBinding = base.CurrentRenderTargetBindings[i];
                     renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
 
                     GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + i);
@@ -1013,7 +1013,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             for (int i = 0; i < base.RenderTargetCount; i++)
             {
-                renderTargetBinding = _currentRenderTargetBindings[i];
+                renderTargetBinding = base.CurrentRenderTargetBindings[i];
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
                     IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>();
@@ -1041,13 +1041,13 @@ namespace Microsoft.Xna.Platform.Graphics
         protected override IRenderTarget PlatformApplyRenderTargets()
         {
             int glFramebuffer = 0;
-            if (!_glFramebuffers.TryGetValue(_currentRenderTargetBindings, out glFramebuffer))
+            if (!_glFramebuffers.TryGetValue(base.CurrentRenderTargetBindings, out glFramebuffer))
             {
                 glFramebuffer = GL.GenFramebuffer();
                 GL.CheckGLError();
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GL.CheckGLError();
-                RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[0];
+                RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[0];
                 IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>();
 
                 GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
@@ -1057,7 +1057,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 for (int i = 0; i < base.RenderTargetCount; i++)
                 {
-                    renderTargetBinding = _currentRenderTargetBindings[i];
+                    renderTargetBinding = base.CurrentRenderTargetBindings[i];
                     renderTargetGL = ((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
                     FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
 
@@ -1076,7 +1076,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 CheckFramebufferStatus();
 
-                _glFramebuffers.Add((RenderTargetBinding[])_currentRenderTargetBindings.Clone(), glFramebuffer);
+                _glFramebuffers.Add((RenderTargetBinding[])base.CurrentRenderTargetBindings.Clone(), glFramebuffer);
             }
             else
             {
@@ -1095,7 +1095,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Textures will need to be rebound to render correctly in the new render target.
             ((IPlatformTextureCollection)_pixelTextures).Strategy.Dirty();
 
-            return _currentRenderTargetBindings[0].RenderTarget as IRenderTarget;
+            return base.CurrentRenderTargetBindings[0].RenderTarget as IRenderTarget;
         }
 
         internal void PlatformUnbindRenderTarget(IRenderTargetStrategyGL renderTargetStrategy)

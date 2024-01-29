@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // the DepthFormat of the current rendertarget. When the user set
             // a new rendertarget the DepthBias will be wrong.
             DepthFormat activeDepthFormat = (contextStrategy.IsRenderTargetBound)
-                                          ? contextStrategy._currentRenderTargetBindings[0].DepthFormat
+                                          ? contextStrategy.CurrentRenderTargetBindings[0].DepthFormat
                                           : base.GraphicsDeviceStrategy.PresentationParameters.DepthStencilFormat;
 
             _state = CreateDXState(base.GraphicsDeviceStrategy, activeDepthFormat);
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.RasterizerState GetDxState(ConcreteGraphicsContext context)
         {
             DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
-                                          ? context._currentRenderTargetBindings[0].DepthFormat
+                                          ? context.CurrentRenderTargetBindings[0].DepthFormat
                                           : base.GraphicsDeviceStrategy.PresentationParameters.DepthStencilFormat;
 
             return _state;

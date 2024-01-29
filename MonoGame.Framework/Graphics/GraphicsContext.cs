@@ -188,8 +188,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
-                SetRenderTargets(_strategy._singleRenderTargetBinding);
+                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
+                SetRenderTargets(_strategy.SingleRenderTargetBinding);
             }
         }
 
@@ -201,8 +201,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
-                SetRenderTargets(_strategy._singleRenderTargetBinding);
+                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
+                SetRenderTargets(_strategy.SingleRenderTargetBinding);
             }
         }
 
@@ -218,8 +218,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_strategy._singleRenderTargetBinding);
+                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_strategy.SingleRenderTargetBinding);
             }
         }
 
@@ -232,8 +232,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy._singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_strategy._singleRenderTargetBinding);
+                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_strategy.SingleRenderTargetBinding);
             }
         }
 
@@ -261,8 +261,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 bool isEqual = true;
                 for (int i = 0; i < _strategy.RenderTargetCount; i++)
                 {
-                    if (_strategy._currentRenderTargetBindings[i].RenderTarget != renderTargets[i].RenderTarget ||
-                        _strategy._currentRenderTargetBindings[i].ArraySlice != renderTargets[i].ArraySlice)
+                    if (_strategy.CurrentRenderTargetBindings[i].RenderTarget != renderTargets[i].RenderTarget ||
+                        _strategy.CurrentRenderTargetBindings[i].ArraySlice != renderTargets[i].ArraySlice)
                     {
                         isEqual = false;
                         break;
