@@ -37,7 +37,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public event EventHandler<EventArgs> Disposing;
 
-        internal event EventHandler<PresentationEventArgs> PresentationChanged;
+        private event EventHandler<PresentationEventArgs> _presentationChanged;
+        event EventHandler<PresentationEventArgs> IPlatformGraphicsDevice.PresentationChanged
+        {
+            add { _presentationChanged += value; }
+            remove { _presentationChanged -= value; }
+        }
 
         public bool IsDisposed
         {
@@ -314,7 +319,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void OnPresentationChanged(PresentationEventArgs e)
         {
-            var handler = PresentationChanged;
+            var handler = _presentationChanged;
             if (handler != null)
                 handler(this, e);
         }
