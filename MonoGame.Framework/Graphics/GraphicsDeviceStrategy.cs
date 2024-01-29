@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Platform.Graphics
     public interface IPlatformGraphicsDevice
     {
         GraphicsDeviceStrategy Strategy { get; }
+
+        event EventHandler<PresentationEventArgs> PresentationChanged;
     }
 
     public abstract class GraphicsDeviceStrategy : IDisposable
