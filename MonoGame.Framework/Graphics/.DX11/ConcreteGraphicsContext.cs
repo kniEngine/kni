@@ -655,7 +655,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             for (int i = 0; i < base.RenderTargetCount; i++)
             {
-                RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[i];
+                RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[i];
 
                 // Resolve MSAA render targets
                 RenderTarget2D renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
@@ -698,20 +698,20 @@ namespace Microsoft.Xna.Platform.Graphics
             // to the device as a texture resource.
             lock (this.SyncHandle)
             {
-                ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.VertexShader);
-                ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(_currentRenderTargetBindings, this.D3dContext.PixelShader);
+                ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(base.CurrentRenderTargetBindings, this.D3dContext.VertexShader);
+                ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>().ClearTargets(base.CurrentRenderTargetBindings, this.D3dContext.PixelShader);
             }
 
             for (int i = 0; i < base.RenderTargetCount; i++)
             {
-                RenderTargetBinding renderTargetBinding = _currentRenderTargetBindings[i];
+                RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[i];
                 IRenderTargetStrategyDX11 targetDX = (IRenderTargetStrategyDX11)((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>();
                 _currentRenderTargets[i] = targetDX.GetRenderTargetView(renderTargetBinding.ArraySlice);
             }
 
             // Use the depth from the first target.
-            IRenderTargetStrategyDX11 renderTargetDX = (IRenderTargetStrategyDX11)((IPlatformTexture)_currentRenderTargetBindings[0].RenderTarget).GetTextureStrategy<ITextureStrategy>();
-            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(_currentRenderTargetBindings[0].ArraySlice);
+            IRenderTargetStrategyDX11 renderTargetDX = (IRenderTargetStrategyDX11)((IPlatformTexture)base.CurrentRenderTargetBindings[0].RenderTarget).GetTextureStrategy<ITextureStrategy>();
+            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(base.CurrentRenderTargetBindings[0].ArraySlice);
 
             // Set the targets.
             lock (this.SyncHandle)
@@ -719,7 +719,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.D3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);
             }
 
-            return (IRenderTarget)_currentRenderTargetBindings[0].RenderTarget;
+            return (IRenderTarget)base.CurrentRenderTargetBindings[0].RenderTarget;
+        }
+
+        internal void ClearCurrentRenderTargets()
+        {
+            _currentDepthStencilView = null;
+            Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
+            Array.Clear(base.CurrentRenderTargetBindings, 0, base.CurrentRenderTargetBindings.Length);
+            base._currentRenderTargetCount = 0;
         }
 
 

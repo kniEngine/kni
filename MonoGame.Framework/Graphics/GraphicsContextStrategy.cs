@@ -89,9 +89,9 @@ namespace Microsoft.Xna.Platform.Graphics
         internal TextureCollection _vertexTextures;
         internal TextureCollection _pixelTextures;
 
-        protected internal readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
-        internal int _currentRenderTargetCount;
-        internal readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
+        private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
+        protected int _currentRenderTargetCount;
+        private readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
 
         private Color _discardColor = new Color(68, 34, 136, 255);
 
@@ -100,7 +100,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public readonly object SyncHandle = new object();
 
+        public RenderTargetBinding[] CurrentRenderTargetBindings { get { return _currentRenderTargetBindings; } }
         public int RenderTargetCount { get { return _currentRenderTargetCount; } }
+        public RenderTargetBinding[] SingleRenderTargetBinding { get { return _singleRenderTargetBinding; } }
         public bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
 
         /// <summary>
