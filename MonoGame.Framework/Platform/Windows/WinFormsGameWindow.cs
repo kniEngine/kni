@@ -276,7 +276,7 @@ namespace MonoGame.Framework
                 // gameloop is paused during windows resize.
                 try 
                 {
-                    if (!((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.MainContext.IsRenderTargetBound)
+                    if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
                     {   
                         ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.Present();
                     }

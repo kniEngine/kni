@@ -507,7 +507,7 @@ namespace Microsoft.Xna.Framework
             device.PresentationParameters.BackBufferWidth = width;
             device.PresentationParameters.BackBufferHeight = height;
 
-            if (!((IPlatformGraphicsDevice)device).Strategy._mainContext.IsRenderTargetBound)
+            if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)device).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
                 device.Viewport = new Viewport(0, 0, width, height);
                 device.ScissorRectangle = new Rectangle(0, 0, width, height);
