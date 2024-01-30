@@ -139,9 +139,7 @@
     <Compile Include="Framework\Graphics\ProfileReachTest.cs" />
     <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
     <Compile Include="Framework\Visual\VisualTestGame.cs" />
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\AssetTestUtility.cs">
-      <Link>ContentPipeline\AssetTestUtility.cs</Link>
-    </Compile>
+    <Compile Include="ContentPipeline\AssetTestUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Audio\Win\Tests.xgs">

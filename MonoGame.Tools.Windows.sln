@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content.Pipeline", "Content
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Framework.WindowsDX11", "MonoGame.Framework\XNA.Framework.WindowsDX11.csproj", "{7DE47032-A904-4C29-BD22-2D235E8D91BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Tools.Tests", "Tools\MonoGame.Tools.Tests\MonoGame.Tools.Tests.csproj", "{0029401D-131E-41CB-8D77-4D8DDD00513D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline", "src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj", "{D6FC6C8F-3CB7-495B-BB2E-879A18095434}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline.Audio", "src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj", "{309F4626-65AB-4033-82CE-C8B4CBDB7566}"
@@ -129,18 +127,6 @@ Global
 		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Release|x64.Build.0 = Release|Any CPU
 		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Release|x86.ActiveCfg = Release|Any CPU
 		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Release|x86.Build.0 = Release|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Debug|x64.Build.0 = Debug|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Debug|x86.Build.0 = Debug|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Release|x64.ActiveCfg = Release|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Release|x64.Build.0 = Release|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Release|x86.ActiveCfg = Release|Any CPU
-		{0029401D-131E-41CB-8D77-4D8DDD00513D}.Release|x86.Build.0 = Release|Any CPU
 		{D6FC6C8F-3CB7-495B-BB2E-879A18095434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6FC6C8F-3CB7-495B-BB2E-879A18095434}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6FC6C8F-3CB7-495B-BB2E-879A18095434}.Debug|x64.ActiveCfg = Debug|Any CPU

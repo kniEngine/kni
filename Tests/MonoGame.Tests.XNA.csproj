@@ -82,63 +82,31 @@
     <Compile Include="..\MonoGame.Framework\Graphics\Utilities\DxtDecoder.cs">
       <Link>Graphics\Utilities\DxtDecoder.cs</Link>
     </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\AssetTestClasses.cs" >
-      <Link>ContentPipeline\AssetTestClasses.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\AssetTestUtility.cs" >
-      <Link>ContentPipeline\AssetTestUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\AudioContentTests.cs" >
-      <Link>ContentPipeline\AudioContentTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\BitmapContentTests.cs" >
-      <Link>ContentPipeline\BitmapContentTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\FbxImporterTests.cs" >
-      <Link>ContentPipeline\FbxImporterTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\FontDescriptionTests.cs" >
-      <Link>ContentPipeline\FontDescriptionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\IntermediateDeserializerTest.cs" >
-      <Link>ContentPipeline\IntermediateDeserializerTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\IntermediateSerializerTest.cs" >
-      <Link>ContentPipeline\IntermediateSerializerTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\MeshBuilderTests.cs" >
-      <Link>ContentPipeline\MeshBuilderTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\MeshHelperTest.cs" >
-      <Link>ContentPipeline\MeshHelperTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\ModelProcessorTests.cs" >
-      <Link>ContentPipeline\ModelProcessorTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\Mp3ImporterTests.cs" >
-      <Link>ContentPipeline\Mp3ImporterTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\TestContentBuildLogger.cs" >
-      <Link>ContentPipeline\TestContentBuildLogger.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\TestImporterContext.cs" >
-      <Link>ContentPipeline\TestImporterContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\TestProcessorContext.cs" >
-      <Link>ContentPipeline\TestProcessorContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\TextureContentTests.cs" >
-      <Link>ContentPipeline\TextureContentTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\TextureProcessorTests.cs" >
-      <Link>ContentPipeline\TextureProcessorTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\WavImporterTests.cs" >
-      <Link>ContentPipeline\WavImporterTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tools\MonoGame.Tools.Tests\WmaImporterTests.cs" >
-      <Link>ContentPipeline\WmaImporterTests.cs</Link>
-    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>	  
+    <Compile Include="ContentPipeline\AssetTestClasses.cs" />
+    <Compile Include="ContentPipeline\AssetTestUtility.cs" />
+    <Compile Include="ContentPipeline\AudioContentTests.cs" />
+    <Compile Include="ContentPipeline\BitmapContentTests.cs" />
+    <Compile Include="ContentPipeline\FbxImporterTests.cs" />
+    <Compile Include="ContentPipeline\FontDescriptionTests.cs" />
+    <Compile Include="ContentPipeline\IntermediateDeserializerTest.cs" />
+    <Compile Include="ContentPipeline\IntermediateSerializerTest.cs" />
+    <Compile Include="ContentPipeline\MeshBuilderTests.cs" />
+    <Compile Include="ContentPipeline\MeshHelperTest.cs" />
+    <Compile Include="ContentPipeline\ModelProcessorTests.cs" />
+    <Compile Include="ContentPipeline\Mp3ImporterTests.cs" />
+    <Compile Include="ContentPipeline\TestContentBuildLogger.cs" />
+    <Compile Include="ContentPipeline\TestImporterContext.cs" />
+    <Compile Include="ContentPipeline\TestProcessorContext.cs" />
+    <Compile Include="ContentPipeline\TextureContentTests.cs" />
+    <Compile Include="ContentPipeline\TextureProcessorTests.cs" />
+    <Compile Include="ContentPipeline\WavImporterTests.cs" />
+    <Compile Include="ContentPipeline\WmaImporterTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Audio\SoundEffectTest.cs" />
