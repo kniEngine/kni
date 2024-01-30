@@ -15,22 +15,22 @@ namespace Microsoft.Xna.Framework
     /// <summary>
     /// The system window used by a <see cref="Game"/>.
     /// </summary>
-	public abstract class GameWindow
-	{
-		#region Properties
+    public abstract class GameWindow
+    {
+        #region Properties
 
-	    /// <summary>
-	    /// Indicates if users can resize this <see cref="GameWindow"/>.
-	    /// </summary>
-		[DefaultValue(false)]
-		public abstract bool AllowUserResizing { get; set; }
+        /// <summary>
+        /// Indicates if users can resize this <see cref="GameWindow"/>.
+        /// </summary>
+        [DefaultValue(false)]
+        public abstract bool AllowUserResizing { get; set; }
 
-	    /// <summary>
-	    /// The client rectangle of the <see cref="GameWindow"/>.
-	    /// </summary>
-		public abstract Rectangle ClientBounds { get; }
+        /// <summary>
+        /// The client rectangle of the <see cref="GameWindow"/>.
+        /// </summary>
+        public abstract Rectangle ClientBounds { get; }
 
-	    internal bool _allowAltF4 = true;
+        internal bool _allowAltF4 = true;
 
         /// <summary>
         /// Gets or sets a bool that enables usage of Alt+F4 for window closing on desktop platforms. Value is true by default.
@@ -41,26 +41,26 @@ namespace Microsoft.Xna.Framework
             set { _allowAltF4 = value; }
         }
 
-	    /// <summary>
-	    /// The display orientation on a mobile device.
-	    /// </summary>
-		public abstract DisplayOrientation CurrentOrientation { get; }
+        /// <summary>
+        /// The display orientation on a mobile device.
+        /// </summary>
+        public abstract DisplayOrientation CurrentOrientation { get; }
 
-	    /// <summary>
-	    /// The handle to the window used by the backend windowing service.
-		///
-		/// For WindowsDX this is the Win32 window handle (HWND).
-		/// For DesktopGL this is the SDL window handle.
-		/// For UWP this is a handle to an IUnknown interface for the CoreWindow.
-	    /// </summary>
-		public abstract IntPtr Handle { get; }
+        /// <summary>
+        /// The handle to the window used by the backend windowing service.
+        ///
+        /// For WindowsDX this is the Win32 window handle (HWND).
+        /// For DesktopGL this is the SDL window handle.
+        /// For UWP this is a handle to an IUnknown interface for the CoreWindow.
+        /// </summary>
+        public abstract IntPtr Handle { get; }
 
-	    /// <summary>
-	    /// The name of the screen the window is currently on.
-	    /// </summary>
-		public abstract string ScreenDeviceName { get; }
+        /// <summary>
+        /// The name of the screen the window is currently on.
+        /// </summary>
+        public abstract string ScreenDeviceName { get; }
 
-		private string _title;
+        private string _title;
 
         /// <summary>
         /// Gets or sets the title of the game window.
@@ -71,8 +71,8 @@ namespace Microsoft.Xna.Framework
         /// </remarks>
         public string Title
         {
-			get { return _title; }
-			set 
+            get { return _title; }
+            set 
             {
                 if (value != null)
                 {
@@ -84,8 +84,8 @@ namespace Microsoft.Xna.Framework
                 }
                 else
                     throw new ArgumentNullException("Title");
-			}
-		}
+            }
+        }
 
         /// <summary>
         /// Determines whether the border of the window is visible. Currently only supported on the WindowsDX and DesktopGL platforms.
@@ -100,53 +100,53 @@ namespace Microsoft.Xna.Framework
         }
 
         internal MouseState MouseState;
-	    internal TouchPanelState TouchPanelState;
+        internal TouchPanelState TouchPanelState;
 
-	    /// <summary>
-	    /// Create a <see cref="GameWindow"/>.
-	    /// </summary>
+        /// <summary>
+        /// Create a <see cref="GameWindow"/>.
+        /// </summary>
         protected GameWindow()
         {
             TouchPanelState = new TouchPanelState(this);
         }
 
-		#endregion Properties
+        #endregion Properties
 
-		#region Events
+        #region Events
 
-	    /// <summary>
-	    /// Raised when the user resized the window or the window switches from fullscreen mode to
-	    /// windowed mode or vice versa.
-	    /// </summary>
-		public event EventHandler<EventArgs> ClientSizeChanged;
+        /// <summary>
+        /// Raised when the user resized the window or the window switches from fullscreen mode to
+        /// windowed mode or vice versa.
+        /// </summary>
+        public event EventHandler<EventArgs> ClientSizeChanged;
 
-	    /// <summary>
-	    /// Raised when <see cref="CurrentOrientation"/> changed.
-	    /// </summary>
-		public event EventHandler<EventArgs> OrientationChanged;
+        /// <summary>
+        /// Raised when <see cref="CurrentOrientation"/> changed.
+        /// </summary>
+        public event EventHandler<EventArgs> OrientationChanged;
 
-	    /// <summary>
-	    /// Raised when <see cref="ScreenDeviceName"/> changed.
-	    /// </summary>
-		public event EventHandler<EventArgs> ScreenDeviceNameChanged;
+        /// <summary>
+        /// Raised when <see cref="ScreenDeviceName"/> changed.
+        /// </summary>
+        public event EventHandler<EventArgs> ScreenDeviceNameChanged;
 
 #if WINDOWSDX || UAP || WINUI || DESKTOPGL
 
         /// <summary>
-		/// Use this event to user text input.
-		/// 
-		/// This event is not raised by noncharacter keys except control characters such as backspace, tab, carriage return and escape.
-		/// This event also supports key repeat.
-		/// </summary>
-		/// <remarks>
-		/// This event is only supported on desktop platforms.
-		/// </remarks>
-		public event EventHandler<TextInputEventArgs> TextInput;
+        /// Use this event to user text input.
+        /// 
+        /// This event is not raised by noncharacter keys except control characters such as backspace, tab, carriage return and escape.
+        /// This event also supports key repeat.
+        /// </summary>
+        /// <remarks>
+        /// This event is only supported on desktop platforms.
+        /// </remarks>
+        public event EventHandler<TextInputEventArgs> TextInput;
 
         /// <summary>
         /// Buffered keyboard KeyDown event.
         /// </summary>
-		public event EventHandler<InputKeyEventArgs> KeyDown;
+        public event EventHandler<InputKeyEventArgs> KeyDown;
 
         /// <summary>
         /// Buffered keyboard KeyUp event.
@@ -165,50 +165,50 @@ namespace Microsoft.Xna.Framework
 
         #endregion Events
 
-	    /// <summary>
-	    /// Called when the window gains focus.
-	    /// </summary>
-		protected void OnActivated()
-		{
-		}
+        /// <summary>
+        /// Called when the window gains focus.
+        /// </summary>
+        protected void OnActivated()
+        {
+        }
 
-		internal void OnClientSizeChanged()
-		{
+        internal void OnClientSizeChanged()
+        {
             var handler = ClientSizeChanged;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-		}
+        }
 
-	    /// <summary>
-	    /// Called when the window loses focus.
-	    /// </summary>
-		protected void OnDeactivated()
-		{
-		}
+        /// <summary>
+        /// Called when the window loses focus.
+        /// </summary>
+        protected void OnDeactivated()
+        {
+        }
          
-	    /// <summary>
-	    /// Called when <see cref="CurrentOrientation"/> changed. Raises the <see cref="OnOrientationChanged"/> event.
-	    /// </summary>
-		protected void OnOrientationChanged()
-		{
+        /// <summary>
+        /// Called when <see cref="CurrentOrientation"/> changed. Raises the <see cref="OnOrientationChanged"/> event.
+        /// </summary>
+        protected void OnOrientationChanged()
+        {
             var handler = OrientationChanged;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-		}
+        }
 
-		protected void OnPaint()
-		{
-		}
+        protected void OnPaint()
+        {
+        }
 
-	    /// <summary>
-	    /// Called when <see cref="ScreenDeviceName"/> changed. Raises the <see cref="ScreenDeviceNameChanged"/> event.
-	    /// </summary>
-		protected void OnScreenDeviceNameChanged()
-		{
+        /// <summary>
+        /// Called when <see cref="ScreenDeviceName"/> changed. Raises the <see cref="ScreenDeviceNameChanged"/> event.
+        /// </summary>
+        protected void OnScreenDeviceNameChanged()
+        {
             var handler = ScreenDeviceNameChanged;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-		}
+        }
 
         internal void OnFileDrop(FileDropEventArgs e)
         {
@@ -219,37 +219,37 @@ namespace Microsoft.Xna.Framework
 
         protected internal abstract void SetSupportedOrientations(DisplayOrientation orientations);
 
-	    /// <summary>
-	    /// Set the title of this window to the given string.
-	    /// </summary>
-	    /// <param name="title">The new title of the window.</param>
-		protected abstract void SetTitle(string title);
+        /// <summary>
+        /// Set the title of this window to the given string.
+        /// </summary>
+        /// <param name="title">The new title of the window.</param>
+        protected abstract void SetTitle(string title);
 
 
         #region Keyboard events
 
 #if WINDOWSDX || UAP || WINUI || DESKTOPGL
-	    /// <summary>
-	    /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
-	    /// </summary>
-		internal void Platform_OnTextInput(char character, Keys key)
-		{
+        /// <summary>
+        /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
+        /// </summary>
+        internal void Platform_OnTextInput(char character, Keys key)
+        {
             var handler = TextInput;
             if (handler != null)
                 handler(this, new TextInputEventArgs(key, character));
-		}
+        }
         internal void Platform_OnKeyDown(Keys key)
-	    {
+        {
             var handler = KeyDown;
             if (handler != null)
                 handler(this, new InputKeyEventArgs(key));
-	    }
+        }
         internal void Platform_OnKeyUp(Keys key)
-	    {
+        {
             var handler = KeyUp;
             if (handler != null)
                 handler(this, new InputKeyEventArgs(key));
-	    }
+        }
 
         internal bool Platform_IsTextInputAttached() { return (TextInput != null); }
         internal bool Platform_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
