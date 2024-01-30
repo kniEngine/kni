@@ -68,6 +68,8 @@
     <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Audio.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Graphics.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Media.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+  
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Builder.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
 
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsDX.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
