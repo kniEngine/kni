@@ -379,9 +379,12 @@ namespace Microsoft.Xna.Framework.Audio
                     if (_isDisposed)
                         return;
 
-                    Stop();
-                    _strategy.Dispose();
-                    _strategy = null;
+                    if (_strategy != null)
+                    {
+                        Stop();
+                        _strategy.Dispose();
+                        _strategy = null;
+                    }
 
                     _audioService = null;
                     _effect = null;
@@ -398,8 +401,11 @@ namespace Microsoft.Xna.Framework.Audio
                     if (_isDisposed)
                         return;
 
-                    Stop();
-                    _strategy = null;
+                    if (_strategy != null)
+                    { 
+                        Stop();
+                        _strategy = null;
+                    }
 
                     _audioService = null;
                     _effect = null;
