@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
     public abstract class VertexBufferStrategy : GraphicsResourceStrategy
     {
-        internal readonly GraphicsContextStrategy _contextStrategy;
+        protected readonly GraphicsContextStrategy _contextStrategy;
 
         private VertexDeclaration _vertexDeclaration;
         private int _vertexCount;

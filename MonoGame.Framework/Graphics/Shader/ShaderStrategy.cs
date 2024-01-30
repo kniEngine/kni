@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
     public abstract class ShaderStrategy : GraphicsResourceStrategy
     {
-        internal readonly GraphicsContextStrategy _contextStrategy;
+        protected readonly GraphicsContextStrategy _contextStrategy;
 
         private SamplerInfo[] _samplers;
         private int[] _CBuffers;
