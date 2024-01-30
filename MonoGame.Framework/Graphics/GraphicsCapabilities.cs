@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected int _maxVertexBufferSlots;
 
-        internal int MaxVertexBufferSlots { get { return _maxVertexBufferSlots; } }
+        public int MaxVertexBufferSlots { get { return _maxVertexBufferSlots; } }
 
         /// <summary>
         /// True, if the underlying platform supports floating point textures. 
