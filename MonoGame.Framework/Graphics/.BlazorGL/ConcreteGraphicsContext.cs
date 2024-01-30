@@ -244,7 +244,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Lookup the shader program.
             ShaderProgram shaderProgram;
-            int shaderProgramHash = (this.VertexShader.HashKey ^ this.PixelShader.HashKey);
+            int shaderProgramHash = (((IPlatformShader)this.VertexShader).Strategy.HashKey ^ ((IPlatformShader)this.PixelShader).Strategy.HashKey);
             if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
