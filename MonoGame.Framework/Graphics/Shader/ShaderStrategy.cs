@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
     public abstract class ShaderStrategy : GraphicsResourceStrategy
     {
-        internal readonly GraphicsContextStrategy _contextStrategy;
+        protected readonly GraphicsContextStrategy _contextStrategy;
 
         private SamplerInfo[] _samplers;
         private int[] _CBuffers;
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public SamplerInfo[] Samplers { get { return _samplers; } }
         public int[] CBuffers { get { return _CBuffers; } }
         public VertexAttribute[] Attributes { get { return _attributes; } }
-        internal int HashKey { get { return _hashKey; } }
+        public int HashKey { get { return _hashKey; } }
 
 
         protected ShaderStrategy(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)

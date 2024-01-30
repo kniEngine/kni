@@ -34,13 +34,5 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _strategy.Clear();
         }
-
-        /// <summary>
-        /// Marks all texture slots as dirty.
-        /// </summary>
-        internal void Dirty()
-        {
-            _strategy.Dirty();
-        }
     }
 }

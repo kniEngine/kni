@@ -17,11 +17,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         ShaderStrategy IPlatformShader.Strategy { get { return _strategy; } }
         
-        /// <summary>
-        /// A hash value which can be used to compare shaders.
-        /// </summary>
-        internal int HashKey { get { return _strategy.HashKey; } }
-
         public SamplerInfo[] Samplers { get { return _strategy.Samplers; } }
 
         public int[] CBuffers { get { return _strategy.CBuffers; } }

@@ -126,10 +126,6 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _strategy.Indices = value; }
         }
 
-
-        public int RenderTargetCount { get { return _strategy.RenderTargetCount; } }
-        internal bool IsRenderTargetBound { get { return _strategy.IsRenderTargetBound; } }
-
         public void Clear(Color color)
         {
             ClearOptions options = ClearOptions.Target

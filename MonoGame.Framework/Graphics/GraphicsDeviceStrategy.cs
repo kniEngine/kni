@@ -186,7 +186,7 @@ namespace Microsoft.Xna.Platform.Graphics
         protected abstract void PlatformSetup(PresentationParameters presentationParameters);
         protected abstract void PlatformInitialize();
 
-        internal void OnContextLost(EventArgs e)
+        protected void OnContextLost(EventArgs e)
         {
             var handler = ContextLost;
             if (handler != null)
@@ -207,7 +207,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 handler(this, e);
         }
 
-        internal void OnDeviceReset(EventArgs e)
+        protected internal void OnDeviceReset(EventArgs e)
         {
             var handler = DeviceReset;
             if (handler != null)

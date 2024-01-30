@@ -299,7 +299,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Present()
         {
             // We cannot present with a RT set on the device.
-            if (_strategy._mainContext.IsRenderTargetBound)
+            if (((IPlatformGraphicsContext)_strategy._mainContext).Strategy.IsRenderTargetBound)
                 throw new InvalidOperationException("Cannot call Present when a render target is active.");
 
             _strategy.Present();
@@ -395,14 +395,9 @@ namespace Microsoft.Xna.Framework.Graphics
             CurrentContext.SetRenderTargets(renderTargets);
         }
 
-        public int RenderTargetCount
-        {
-            get { return CurrentContext.RenderTargetCount; }
-        }
-
         public RenderTargetBinding[] GetRenderTargets()
         {
-            RenderTargetBinding[] bindings = new RenderTargetBinding[RenderTargetCount];
+            RenderTargetBinding[] bindings = new RenderTargetBinding[((IPlatformGraphicsContext)CurrentContext).Strategy.RenderTargetCount];
             GetRenderTargets(bindings);
             return bindings;
         }

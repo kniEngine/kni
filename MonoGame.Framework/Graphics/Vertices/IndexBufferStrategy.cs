@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
     public abstract class IndexBufferStrategy : GraphicsResourceStrategy
     {
-        internal readonly GraphicsContextStrategy _contextStrategy;
+        protected readonly GraphicsContextStrategy _contextStrategy;
 
         private IndexElementSize _indexElementSize;
         private int _indexCount;

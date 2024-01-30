@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
     public abstract class OcclusionQueryStrategy : GraphicsResourceStrategy
     {
-        internal readonly GraphicsContextStrategy _contextStrategy;
+        protected readonly GraphicsContextStrategy _contextStrategy;
 
 
         public abstract int PixelCount { get; }
