@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected internal Rectangle _scissorRectangle;
         protected internal bool _scissorRectangleDirty;
-        protected internal Viewport _viewport;
+        public Viewport _viewport;
 
         // states
         private BlendState _blendState;
