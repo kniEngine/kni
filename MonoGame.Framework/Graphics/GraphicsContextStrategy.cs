@@ -51,9 +51,9 @@ namespace Microsoft.Xna.Platform.Graphics
         protected internal bool _rasterizerStateDirty;
 
         // actual states
-        protected internal BlendState _actualBlendState;
-        protected internal DepthStencilState _actualDepthStencilState;
-        protected internal RasterizerState _actualRasterizerState;
+        public BlendState _actualBlendState;
+        public DepthStencilState _actualDepthStencilState;
+        public RasterizerState _actualRasterizerState;
 
         // predefined states
         internal BlendState _blendStateAdditive;
@@ -82,8 +82,8 @@ namespace Microsoft.Xna.Platform.Graphics
         protected internal VertexBufferBindings _vertexBuffers;
 
         // buffers dirty flags
-        protected internal bool _indexBufferDirty;
-        protected internal bool _vertexBuffersDirty;
+        public bool _indexBufferDirty;
+        public bool _vertexBuffersDirty;
 
         // textures
         internal TextureCollection _vertexTextures;
