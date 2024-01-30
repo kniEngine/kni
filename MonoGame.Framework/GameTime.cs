@@ -61,12 +61,12 @@ namespace Microsoft.Xna.Framework
         /// <param name="totalRealTime">The total game time elapsed since the start of the <see cref="Game"/>.</param>
         /// <param name="elapsedRealTime">The time elapsed since the last call to <see cref="Game.Update"/>.</param>
         /// <param name="isRunningSlowly">A value indicating if the <see cref="Game"/> is running slowly.</param>
-		public GameTime(TimeSpan totalRealTime, TimeSpan elapsedRealTime, bool isRunningSlowly)
-		{
+        public GameTime(TimeSpan totalRealTime, TimeSpan elapsedRealTime, bool isRunningSlowly)
+        {
             TotalGameTime = totalRealTime;
             ElapsedGameTime = elapsedRealTime;
-		    IsRunningSlowly = isRunningSlowly;
-		}
+            IsRunningSlowly = isRunningSlowly;
+        }
     }
 }
 

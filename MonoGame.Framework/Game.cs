@@ -413,7 +413,7 @@ namespace Microsoft.Xna.Framework
         protected virtual void Update(GameTime gameTime)
         {
             Strategy.Update(gameTime);
-		}
+        }
 
         /// <summary>
         /// Called when the game should draw a frame.
@@ -437,32 +437,32 @@ namespace Microsoft.Xna.Framework
             if (handler != null)
                 handler(this, args);
         }
-		
+        
         /// <summary>
         /// Called when the game gains focus. Raises the <see cref="Activated"/> event.
         /// </summary>
         /// <param name="args">The arguments to the <see cref="Activated"/> event.</param>
-		protected virtual void OnActivated(EventArgs args)
-		{
-			AssertNotDisposed();
+        protected virtual void OnActivated(EventArgs args)
+        {
+            AssertNotDisposed();
 
             var handler = Activated;
             if (handler != null)
                 handler(this, args);
-		}
-		
+        }
+        
         /// <summary>
         /// Called when the game loses focus. Raises the <see cref="Deactivated"/> event.
         /// </summary>
         /// <param name="args">The arguments to the <see cref="Deactivated"/> event.</param>
-		protected virtual void OnDeactivated(EventArgs args)
-		{
-			AssertNotDisposed();
+        protected virtual void OnDeactivated(EventArgs args)
+        {
+            AssertNotDisposed();
 
             var handler = Deactivated;
             if (handler != null)
                 handler(this, args);
-		}
+        }
 
         #endregion Protected Methods
 
@@ -476,7 +476,7 @@ namespace Microsoft.Xna.Framework
             if (Strategy.BeforeUpdate())
             {
                 ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-				
+
                 Update(gameTime);
 
                 //The TouchPanel needs to know the time for when touches arrive
@@ -522,11 +522,11 @@ namespace Microsoft.Xna.Framework
             Strategy.InitializeComponents();
         }
 
-		internal void DoExiting()
-		{
-			OnExiting(EventArgs.Empty);
-			UnloadContent();
-		}
+        internal void DoExiting()
+        {
+            OnExiting(EventArgs.Empty);
+            UnloadContent();
+        }
 
         #endregion Internal Methods
 

@@ -21,11 +21,11 @@ namespace Microsoft.Xna.Framework
         /// Indicates if <see cref="Draw"/> will be called.
         /// </summary>
         bool Visible { get; }
-		
+
         /// <summary>
         /// Raised when <see cref="DrawOrder"/> changed.
         /// </summary>
-		event EventHandler<EventArgs> DrawOrderChanged;
+        event EventHandler<EventArgs> DrawOrderChanged;
 
         /// <summary>
         /// Raised when <see cref="Visible"/> changed.
