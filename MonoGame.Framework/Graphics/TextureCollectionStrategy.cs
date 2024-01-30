@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
             Dirty();
         }
 
-        internal void Dirty(int index)
+        public void Dirty(int index)
         {
             uint mask = ((uint)1) << index;
             _dirty |= mask;
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
         /// <summary>
         /// Marks all texture slots as dirty.
         /// </summary>
-        internal void Dirty()
+        public void Dirty()
         {
             for (int i = 0; i < _textures.Length; i++)
                 _dirty |= (((uint)1) << i);

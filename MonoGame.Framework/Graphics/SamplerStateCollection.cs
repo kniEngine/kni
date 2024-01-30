@@ -39,12 +39,5 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.Clear();
         }
 
-        /// <summary>
-        /// Mark all the sampler slots as dirty.
-        /// </summary>
-        internal void Dirty()
-        {
-            _strategy.Dirty();
-        }
     }
 }
