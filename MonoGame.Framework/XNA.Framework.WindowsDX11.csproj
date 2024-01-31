@@ -10,19 +10,16 @@
     <NoWarn>1591,0436</NoWarn>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DocumentationFile>bin\Windows\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
     <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
-    <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
-    <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>

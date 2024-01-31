@@ -10,19 +10,16 @@
     <NoWarn>1591,0436</NoWarn>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <OutputPath>bin\WindowsGL\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\WindowsGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DocumentationFile>bin\WindowsGL\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
     <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
-    <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
-    <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
