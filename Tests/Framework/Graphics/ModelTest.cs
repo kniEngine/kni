@@ -111,8 +111,8 @@ namespace MonoGame.Tests.Graphics
         [Test]
         public void CopyBoneTransformsFrom_Exceptions()
         {
-            var someBones = new[] { new ModelBone() }.ToList();
-            var model = new Model(gd, someBones, new List<ModelMesh>());
+            List<ModelBone> someBones = new ModelBone[] { new ModelBone() }.ToList();
+            Model model = new Model(someBones, new List<ModelMesh>());
 
             Assert.Throws<ArgumentNullException>(() => model.CopyBoneTransformsFrom(null));
             Assert.Throws<ArgumentOutOfRangeException>(() => model.CopyBoneTransformsFrom(new Matrix[0]));
@@ -121,8 +121,8 @@ namespace MonoGame.Tests.Graphics
         [Test]
         public void CopyBoneTransformsTo_Exceptions()
         {
-            var someBones = new[] { new ModelBone() }.ToList();
-            var model = new Model(gd, someBones, new List<ModelMesh>());
+            List<ModelBone> someBones = new ModelBone[] { new ModelBone() }.ToList();
+            Model model = new Model(someBones, new List<ModelMesh>());
             Assert.Throws<ArgumentNullException>(() => model.CopyBoneTransformsTo(null));
             Assert.Throws<ArgumentOutOfRangeException>(() => model.CopyBoneTransformsTo(new Matrix[0]));
         }
