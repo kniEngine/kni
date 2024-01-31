@@ -335,7 +335,7 @@ namespace Microsoft.Xna.Framework.Storage
         {
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             ShowSelectorAsynchronousShow del = new ShowSelectorAsynchronousShow(Show);
-#if WINDOWS_UA
+#if (UAP || WINUI)
             _showDelegate = del;
 #endif
             return del.BeginInvoke(player, sizeInBytes, directoryCount, callback, state);
