@@ -3,7 +3,6 @@
   <ItemGroup>
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />
-    <Compile Include="Storage\StorageDeviceHelper.cs" />
   </ItemGroup>  
 
 </Project>

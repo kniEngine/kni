@@ -61,14 +61,10 @@ namespace Microsoft.Xna.Framework.Storage
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx</remarks>
     public sealed class StorageDevice
     {
-        
-        PlayerIndex? player;
+        PlayerIndex? _player;
+        int _directoryCount;
+        StorageContainer _storageContainer;
 
-        int directoryCount;
-        private int DirectoryCount { get { return this.directoryCount; } }
-
-        StorageContainer storageContainer;
-        
         /// <summary>
         /// Creates a new <see cref="StorageDevice"/> instance.
         /// </summary>
@@ -77,8 +73,8 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="directoryCount"></param>
         internal StorageDevice(PlayerIndex? player, int sizeInBytes, int directoryCount) 
         {
-            this.player = player;
-            this.directoryCount = directoryCount;
+            this._player = player;
+            this._directoryCount = directoryCount;
         }
         
         /// <summary>
@@ -87,23 +83,13 @@ namespace Microsoft.Xna.Framework.Storage
         public long FreeSpace
         {
             get
-            { 
-                // I do not know if the DriveInfo is is implemented on Mac or not
-                // thus the try catch
-                try
-                {
+            {
 #if (UAP || WINUI)
-                    return long.MaxValue;
+                return long.MaxValue;
 #else
-                    return new DriveInfo(GetDevicePath).AvailableFreeSpace;
+                return new DriveInfo(GetDevicePath).AvailableFreeSpace;
 #endif
-                }
-                catch (Exception)
-                {
-                    StorageDeviceHelper.Path = StorageRoot;
-                    return StorageDeviceHelper.FreeSpace;
-                }
-            } 
+            }
         }
 
         /// <summary>
@@ -113,20 +99,11 @@ namespace Microsoft.Xna.Framework.Storage
         {
             get
             {
-                // I do not know if the DriveInfo is is implemented on Mac or not
-                // thus the try catch
-                try
-                {
 #if (UAP || WINUI)
-                    return true;
+                return true;
 #else
-                    return new DriveInfo(GetDevicePath).IsReady;
+                return new DriveInfo(GetDevicePath).IsReady;
 #endif
-                }
-                catch (Exception)
-                {
-                    return true;
-                }
             } 
         }
 
@@ -137,26 +114,13 @@ namespace Microsoft.Xna.Framework.Storage
         {
             get
             {
-                
-                // I do not know if the DriveInfo is is implemented on Mac or not
-                // thus the try catch
-                try
-                {
 #if (UAP || WINUI)
-                    return long.MaxValue;
+                return long.MaxValue;
 #else
-
-                    // Not sure if this should be TotalSize or TotalFreeSize
-                    return new DriveInfo(GetDevicePath).TotalSize;
+                // Not sure if this should be TotalSize or TotalFreeSize
+                return new DriveInfo(GetDevicePath).TotalSize;
 #endif
-                }
-                catch (Exception)
-                {
-                    StorageDeviceHelper.Path = StorageRoot;
-                    return StorageDeviceHelper.TotalSpace;
-                }
-                    
-            } 
+            }
         }
         
         string GetDevicePath
@@ -165,13 +129,13 @@ namespace Microsoft.Xna.Framework.Storage
             {
                 // We may not need to store the StorageContainer in the future
                 // when we get DeviceChanged events working.
-                if (storageContainer == null)
+                if (_storageContainer == null)
                 {
                     return StorageRoot;
                 }
                 else
                 {
-                    return storageContainer._storagePath;
+                    return _storageContainer._storagePath;
                 }				
             }
         }
@@ -183,15 +147,10 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public static event EventHandler<EventArgs> DeviceChanged;
 
-        private bool SuppressEventHandlerWarningsUntilEventsAreProperlyImplemented()
-        {
-            return DeviceChanged != null;
-        }
-
 #if (UAP || WINUI)
         // Dirty trick to avoid the need to get the delegate from the IAsyncResult (can't be done in WinRT)
-        static Delegate showDelegate;
-        static Delegate containerDelegate;
+        static Delegate _showDelegate;
+        static Delegate _containerDelegate;
 #endif
 
         // Summary:
@@ -216,23 +175,10 @@ namespace Microsoft.Xna.Framework.Storage
         
         private IAsyncResult OpenContainer(string displayName, AsyncCallback callback, object state)
         {
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
-            try
-            {
-                OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
-#if (UAP || WINUI)
-                containerDelegate = AsynchronousOpen;
-#endif
-                return AsynchronousOpen.BeginInvoke(displayName, callback, state);
-            }
-            finally
-            {
-            }
-#else
-            var tcs = new TaskCompletionSource<StorageContainer>(state);
-            var task = Task.Run<StorageContainer>(() => Open(displayName));
-            task.ContinueWith(t =>
+#if ANDROID || IOS || TVOS || NETFX_CORE
+            TaskCompletionSource<StorageContainer> tcs = new TaskCompletionSource<StorageContainer>(state);
+            Task<StorageContainer> task = Task.Run<StorageContainer>(() => Open(displayName));
+            task.ContinueWith((t) =>
             {
                 // Copy the task result into the returned task.
                 if (t.IsFaulted)
@@ -247,14 +193,26 @@ namespace Microsoft.Xna.Framework.Storage
                     callback(tcs.Task);
             });
             return tcs.Task;
+#else
+            try
+            {
+                OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
+#if (UAP || WINUI)
+                _containerDelegate = AsynchronousOpen;
+#endif
+                return AsynchronousOpen.BeginInvoke(displayName, callback, state);
+            }
+            finally
+            {
+            }
 #endif
         }
     
         // Private method to handle the creation of the StorageDevice
         private StorageContainer Open(string displayName) 
         {
-            storageContainer = new StorageContainer(this, displayName, this.player);
-            return storageContainer;
+            _storageContainer = new StorageContainer(this, displayName, _player);
+            return _storageContainer;
         }
         
         //
@@ -296,6 +254,7 @@ namespace Microsoft.Xna.Framework.Storage
         {
             return BeginShowSelector(player, 0, 0, callback, state);
         }
+
         //
         // Summary:
         //     Begins the process for displaying the storage device selector user interface,
@@ -318,17 +277,10 @@ namespace Microsoft.Xna.Framework.Storage
         //     A user-created object used to uniquely identify the request, or null.
         public static IAsyncResult BeginShowSelector(int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
-            var del = new ShowSelectorAsynchronousShowNoPlayer(Show);
-
-#if (UAP || WINUI)
-            showDelegate = del;
-#endif
-            return del.BeginInvoke(sizeInBytes, directoryCount, callback, state);
-#else
-            var tcs = new TaskCompletionSource<StorageDevice>(state);
-            var task = Task.Run<StorageDevice>(() => Show(sizeInBytes, directoryCount));
-            task.ContinueWith(t =>
+#if ANDROID || IOS || TVOS || NETFX_CORE
+            TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
+            Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(sizeInBytes, directoryCount));
+            task.ContinueWith((t) =>
             {
                 // Copy the task result into the returned task.
                 if (t.IsFaulted)
@@ -343,9 +295,15 @@ namespace Microsoft.Xna.Framework.Storage
                     callback(tcs.Task);
             });
             return tcs.Task;
+#else
+            ShowSelectorAsynchronousShowNoPlayer del = new ShowSelectorAsynchronousShowNoPlayer(Show);
+
+#if (UAP || WINUI)
+            _showDelegate = del;
+#endif
+            return del.BeginInvoke(sizeInBytes, directoryCount, callback, state);
 #endif
         }
-
         
         //
         // Summary:
@@ -374,16 +332,10 @@ namespace Microsoft.Xna.Framework.Storage
         //     A user-created object used to uniquely identify the request, or null.
         public static IAsyncResult BeginShowSelector(PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
-            var del = new ShowSelectorAsynchronousShow(Show);
-#if WINDOWS_UA
-            showDelegate = del;
-#endif
-            return del.BeginInvoke(player, sizeInBytes, directoryCount, callback, state);
-#else
-            var tcs = new TaskCompletionSource<StorageDevice>(state);
-            var task = Task.Run<StorageDevice>(() => Show(player, sizeInBytes, directoryCount));
-            task.ContinueWith(t =>
+#if ANDROID || IOS || TVOS || NETFX_CORE
+            TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
+            Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(player, sizeInBytes, directoryCount));
+            task.ContinueWith((t) =>
             {
                 // Copy the task result into the returned task.
                 if (t.IsFaulted)
@@ -398,6 +350,12 @@ namespace Microsoft.Xna.Framework.Storage
                     callback(tcs.Task);
             });
             return tcs.Task;
+#else
+            ShowSelectorAsynchronousShow del = new ShowSelectorAsynchronousShow(Show);
+#if (UAP || WINUI)
+            _showDelegate = del;
+#endif
+            return del.BeginInvoke(player, sizeInBytes, directoryCount, callback, state);
 #endif
         }
     
@@ -431,14 +389,22 @@ namespace Microsoft.Xna.Framework.Storage
         //     The IAsyncResult returned from BeginOpenContainer.
         public StorageContainer EndOpenContainer(IAsyncResult result)
         {
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
+#if ANDROID || IOS || TVOS || NETFX_CORE
+            try
+            {
+                return ((Task<StorageContainer>)result).Result;
+            }
+            catch (AggregateException ex)
+            {
+                throw;
+            }
+#else
             StorageContainer returnValue = null;
             try
             {
 #if (UAP || WINUI)
                 // AsyncResult does not exist in WinRT
-                var asyncResult = containerDelegate as OpenContainerAsynchronous;
+                var asyncResult = _containerDelegate as OpenContainerAsynchronous;
                 if (asyncResult != null)
                 {
                     // Wait for the WaitHandle to become signaled.
@@ -447,13 +413,13 @@ namespace Microsoft.Xna.Framework.Storage
                     // Call EndInvoke to retrieve the results.
                     returnValue = asyncResult.EndInvoke(result);
                 }
-                containerDelegate = null;
+                _containerDelegate = null;
 #else
                 // Retrieve the delegate.
                 AsyncResult asyncResult = result as AsyncResult;
                 if (asyncResult != null)
                 {
-                    var asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
+                    OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
 
                     // Wait for the WaitHandle to become signaled.
                     result.AsyncWaitHandle.WaitOne();
@@ -471,17 +437,7 @@ namespace Microsoft.Xna.Framework.Storage
             }
             
             return returnValue;
-#else
-            try
-            {
-                return ((Task<StorageContainer>)result).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw;
-            }
 #endif
-
         }			
 
         //
@@ -494,8 +450,16 @@ namespace Microsoft.Xna.Framework.Storage
         //     The IAsyncResult returned from BeginShowSelector.
         public static StorageDevice EndShowSelector(IAsyncResult result) 
         {
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
+#if ANDROID || IOS || TVOS || NETFX_CORE
+            try
+            {
+                return ((Task<StorageDevice>)result).Result;
+            }
+            catch (AggregateException ex)
+            {
+                throw;
+            }
+#else
             if (!result.IsCompleted)
             {
                 // Wait for the WaitHandle to become signaled.
@@ -510,14 +474,15 @@ namespace Microsoft.Xna.Framework.Storage
   #endif
                 }
             }
+
   #if (UAP || WINUI)
-            var del = showDelegate;
-            showDelegate = null;
+            var del = _showDelegate;
+            _showDelegate = null;
   #else
             // Retrieve the delegate.
             AsyncResult asyncResult = (AsyncResult)result;
 
-            var del = asyncResult.AsyncDelegate;
+            object del = asyncResult.AsyncDelegate;
   #endif
 
             if (del is ShowSelectorAsynchronousShow)
@@ -526,15 +491,6 @@ namespace Microsoft.Xna.Framework.Storage
                 return (del as ShowSelectorAsynchronousShowNoPlayer).EndInvoke(result);
             else
                 throw new ArgumentException("result");
-#else
-            try
-            {
-                return ((Task<StorageDevice>)result).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw;
-            }
 #endif
 
         }
