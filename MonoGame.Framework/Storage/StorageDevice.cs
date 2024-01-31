@@ -65,8 +65,6 @@ namespace Microsoft.Xna.Framework.Storage
         int _directoryCount;
         StorageContainer _storageContainer;
 
-        private int DirectoryCount { get { return _directoryCount; } }
-
         /// <summary>
         /// Creates a new <see cref="StorageDevice"/> instance.
         /// </summary>
