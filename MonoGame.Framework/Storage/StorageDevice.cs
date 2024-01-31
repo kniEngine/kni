@@ -36,7 +36,8 @@ using MonoGame.Framework.Utilities;
 
 #if (UAP || WINUI)
 using Windows.Storage;
-#else
+#endif
+#if NET4_0_OR_GREATER
 using System.Runtime.Remoting.Messaging;
 #endif
 
@@ -414,7 +415,7 @@ namespace Microsoft.Xna.Framework.Storage
                     returnValue = asyncResult.EndInvoke(result);
                 }
                 _containerDelegate = null;
-#else
+#elif NET4_0_OR_GREATER
                 // Retrieve the delegate.
                 AsyncResult asyncResult = result as AsyncResult;
                 if (asyncResult != null)
@@ -428,6 +429,8 @@ namespace Microsoft.Xna.Framework.Storage
                     if (asyncDelegate != null)
                         returnValue = asyncDelegate.EndInvoke(result);
                 }
+#else // NET6_0_OR_GREATER
+                throw new NotImplementedException();
 #endif
             }
             finally
@@ -475,15 +478,18 @@ namespace Microsoft.Xna.Framework.Storage
                 }
             }
 
-  #if (UAP || WINUI)
+#if (UAP || WINUI)
             var del = _showDelegate;
             _showDelegate = null;
-  #else
+#elif NET4_0_OR_GREATER
             // Retrieve the delegate.
             AsyncResult asyncResult = (AsyncResult)result;
 
             object del = asyncResult.AsyncDelegate;
-  #endif
+#else // NET6_0_OR_GREATER
+            object del;
+            throw new NotImplementedException();
+#endif
 
             if (del is ShowSelectorAsynchronousShow)
                 return (del as ShowSelectorAsynchronousShow).EndInvoke(result);
