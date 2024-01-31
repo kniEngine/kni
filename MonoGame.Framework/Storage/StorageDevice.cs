@@ -61,10 +61,11 @@ namespace Microsoft.Xna.Framework.Storage
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx</remarks>
     public sealed class StorageDevice
     {
-        PlayerIndex? player;
-        int directoryCount;
-        private int DirectoryCount { get { return this.directoryCount; } }
-        StorageContainer storageContainer;
+        PlayerIndex? _player;
+        int _directoryCount;
+        StorageContainer _storageContainer;
+
+        private int DirectoryCount { get { return _directoryCount; } }
 
         /// <summary>
         /// Creates a new <see cref="StorageDevice"/> instance.
@@ -74,8 +75,8 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="directoryCount"></param>
         internal StorageDevice(PlayerIndex? player, int sizeInBytes, int directoryCount) 
         {
-            this.player = player;
-            this.directoryCount = directoryCount;
+            this._player = player;
+            this._directoryCount = directoryCount;
         }
         
         /// <summary>
@@ -130,13 +131,13 @@ namespace Microsoft.Xna.Framework.Storage
             {
                 // We may not need to store the StorageContainer in the future
                 // when we get DeviceChanged events working.
-                if (storageContainer == null)
+                if (_storageContainer == null)
                 {
                     return StorageRoot;
                 }
                 else
                 {
-                    return storageContainer._storagePath;
+                    return _storageContainer._storagePath;
                 }				
             }
         }
@@ -150,8 +151,8 @@ namespace Microsoft.Xna.Framework.Storage
 
 #if (UAP || WINUI)
         // Dirty trick to avoid the need to get the delegate from the IAsyncResult (can't be done in WinRT)
-        static Delegate showDelegate;
-        static Delegate containerDelegate;
+        static Delegate _showDelegate;
+        static Delegate _containerDelegate;
 #endif
 
         // Summary:
@@ -182,7 +183,7 @@ namespace Microsoft.Xna.Framework.Storage
             {
                 OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
 #if (UAP || WINUI)
-                containerDelegate = AsynchronousOpen;
+                _containerDelegate = AsynchronousOpen;
 #endif
                 return AsynchronousOpen.BeginInvoke(displayName, callback, state);
             }
@@ -213,8 +214,8 @@ namespace Microsoft.Xna.Framework.Storage
         // Private method to handle the creation of the StorageDevice
         private StorageContainer Open(string displayName) 
         {
-            storageContainer = new StorageContainer(this, displayName, this.player);
-            return storageContainer;
+            _storageContainer = new StorageContainer(this, displayName, _player);
+            return _storageContainer;
         }
         
         //
@@ -283,7 +284,7 @@ namespace Microsoft.Xna.Framework.Storage
             ShowSelectorAsynchronousShowNoPlayer del = new ShowSelectorAsynchronousShowNoPlayer(Show);
 
 #if (UAP || WINUI)
-            showDelegate = del;
+            _showDelegate = del;
 #endif
             return del.BeginInvoke(sizeInBytes, directoryCount, callback, state);
 #else
@@ -337,7 +338,7 @@ namespace Microsoft.Xna.Framework.Storage
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             ShowSelectorAsynchronousShow del = new ShowSelectorAsynchronousShow(Show);
 #if WINDOWS_UA
-            showDelegate = del;
+            _showDelegate = del;
 #endif
             return del.BeginInvoke(player, sizeInBytes, directoryCount, callback, state);
 #else
@@ -398,7 +399,7 @@ namespace Microsoft.Xna.Framework.Storage
             {
 #if (UAP || WINUI)
                 // AsyncResult does not exist in WinRT
-                var asyncResult = containerDelegate as OpenContainerAsynchronous;
+                var asyncResult = _containerDelegate as OpenContainerAsynchronous;
                 if (asyncResult != null)
                 {
                     // Wait for the WaitHandle to become signaled.
@@ -407,7 +408,7 @@ namespace Microsoft.Xna.Framework.Storage
                     // Call EndInvoke to retrieve the results.
                     returnValue = asyncResult.EndInvoke(result);
                 }
-                containerDelegate = null;
+                _containerDelegate = null;
 #else
                 // Retrieve the delegate.
                 AsyncResult asyncResult = result as AsyncResult;
@@ -470,8 +471,8 @@ namespace Microsoft.Xna.Framework.Storage
             }
 
   #if (UAP || WINUI)
-            var del = showDelegate;
-            showDelegate = null;
+            var del = _showDelegate;
+            _showDelegate = null;
   #else
             // Retrieve the delegate.
             AsyncResult asyncResult = (AsyncResult)result;
