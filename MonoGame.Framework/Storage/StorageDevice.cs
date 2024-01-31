@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             TaskCompletionSource<StorageContainer> tcs = new TaskCompletionSource<StorageContainer>(state);
             Task<StorageContainer> task = Task.Run<StorageContainer>(() => Open(displayName));
-            task.ContinueWith(t =>
+            task.ContinueWith((t) =>
             {
                 // Copy the task result into the returned task.
                 if (t.IsFaulted)
@@ -290,7 +290,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
             Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(sizeInBytes, directoryCount));
-            task.ContinueWith(t =>
+            task.ContinueWith((t) =>
             {
                 // Copy the task result into the returned task.
                 if (t.IsFaulted)
@@ -344,7 +344,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
             Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(player, sizeInBytes, directoryCount));
-            task.ContinueWith(t =>
+            task.ContinueWith((t) =>
             {
                 // Copy the task result into the returned task.
                 if (t.IsFaulted)
