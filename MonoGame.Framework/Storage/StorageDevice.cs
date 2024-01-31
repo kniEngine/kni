@@ -61,14 +61,11 @@ namespace Microsoft.Xna.Framework.Storage
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx</remarks>
     public sealed class StorageDevice
     {
-        
         PlayerIndex? player;
-
         int directoryCount;
         private int DirectoryCount { get { return this.directoryCount; } }
-
         StorageContainer storageContainer;
-        
+
         /// <summary>
         /// Creates a new <see cref="StorageDevice"/> instance.
         /// </summary>
@@ -87,13 +84,13 @@ namespace Microsoft.Xna.Framework.Storage
         public long FreeSpace
         {
             get
-            { 
+            {
 #if (UAP || WINUI)
                 return long.MaxValue;
 #else
                 return new DriveInfo(GetDevicePath).AvailableFreeSpace;
 #endif
-            } 
+            }
         }
 
         /// <summary>
@@ -124,7 +121,7 @@ namespace Microsoft.Xna.Framework.Storage
                 // Not sure if this should be TotalSize or TotalFreeSize
                 return new DriveInfo(GetDevicePath).TotalSize;
 #endif
-            } 
+            }
         }
         
         string GetDevicePath
@@ -259,6 +256,7 @@ namespace Microsoft.Xna.Framework.Storage
         {
             return BeginShowSelector(player, 0, 0, callback, state);
         }
+
         //
         // Summary:
         //     Begins the process for displaying the storage device selector user interface,
@@ -308,7 +306,6 @@ namespace Microsoft.Xna.Framework.Storage
             return tcs.Task;
 #endif
         }
-
         
         //
         // Summary:
@@ -444,7 +441,6 @@ namespace Microsoft.Xna.Framework.Storage
                 throw;
             }
 #endif
-
         }			
 
         //
@@ -457,7 +453,6 @@ namespace Microsoft.Xna.Framework.Storage
         //     The IAsyncResult returned from BeginShowSelector.
         public static StorageDevice EndShowSelector(IAsyncResult result) 
         {
-
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             if (!result.IsCompleted)
             {
@@ -473,6 +468,7 @@ namespace Microsoft.Xna.Framework.Storage
   #endif
                 }
             }
+
   #if (UAP || WINUI)
             var del = showDelegate;
             showDelegate = null;

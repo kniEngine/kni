@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using MonoGame.Framework.Utilities;
+
 #if (UAP || WINUI)
 using System.Linq;
 using Windows.Storage;
@@ -46,7 +47,7 @@ namespace Microsoft.Xna.Framework.Storage
 
             _device = device;
             _name = name;
-            
+
             // From the examples the root is based on MyDocuments folder
 #if (UAP || WINUI)
             string saved = "";
@@ -63,7 +64,7 @@ namespace Microsoft.Xna.Framework.Storage
             string saved = Path.Combine(root,"SavedGames");
 #endif
             _storagePath = Path.Combine(saved, name);
-            
+
             string playerSave = string.Empty;
             if (playerIndex.HasValue)
                 playerSave = Path.Combine(_storagePath, "Player" + (int)playerIndex.Value);
@@ -78,20 +79,24 @@ namespace Microsoft.Xna.Framework.Storage
         /// <summary>
         /// Returns display name of the title.
         /// </summary>
-        public string DisplayName { 
+        public string DisplayName
+        {
             get { return _name; }
         }
         
         /// <summary>
         /// Gets a bool value indicating whether the instance has been disposed.
         /// </summary>
-        public bool IsDisposed { get; private set; }
+        public bool IsDisposed
+        {
+            get; private set;
+        }
 
         /// <summary>
         /// Returns the <see cref="StorageDevice"/> that holds logical files for the container.
         /// </summary>
-        public StorageDevice StorageDevice { 
-            
+        public StorageDevice StorageDevice
+        {
             get {return _device; }
         }
 
@@ -110,7 +115,7 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(directory))
                 throw new ArgumentNullException("Parameter directory must contain a value.");
-            
+
             // relative so combine with our path
             string dirPath = Path.Combine(_storagePath, directory);
 
@@ -128,9 +133,9 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             if (!Directory.Exists(path))
             {
-            Directory.CreateDirectory(path);
+                Directory.CreateDirectory(path);
             }
-#endif			
+#endif
         }
         
         /// <summary>
@@ -142,9 +147,9 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(file))
                 throw new ArgumentNullException("Parameter file must contain a value.");
-            
+
             // relative so combine with our path
-            string filePath= Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -152,9 +157,9 @@ namespace Microsoft.Xna.Framework.Storage
             return awaiter.GetResult();
 #else
             // return A new file with read/write access.
-            return File.Create(filePath);				
-#endif			
-        }		
+            return File.Create(filePath);
+#endif
+        }
         
         /// <summary>
         /// Deletes specified directory for the storage-container.
@@ -164,7 +169,7 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(directory))
                 throw new ArgumentNullException("Parameter directory must contain a value.");
-            
+
             // relative so combine with our path
             string dirPath = Path.Combine(_storagePath, directory);
 
@@ -176,7 +181,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             Directory.Delete(dirPath);
 #endif
-        }		
+        }
         
         /// <summary>
         /// Deletes a file from the storage-container.
@@ -186,9 +191,9 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(file))
                 throw new ArgumentNullException("Parameter file must contain a value.");
-            
+
             // relative so combine with our path
-            string filePath= Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -196,10 +201,9 @@ namespace Microsoft.Xna.Framework.Storage
             deleteFile.DeleteAsync().AsTask().Wait();
 #else
             // Now let's try to delete it
-            File.Delete(filePath);		
+            File.Delete(filePath);
 #endif
         }
-                
 
         /// <summary>
         /// Returns true if specified path exists in the storage-container, false otherwise.
@@ -210,7 +214,7 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(directory))
                 throw new ArgumentNullException("Parameter directory must contain a value.");
-            
+
             // relative so combine with our path
             string dirPath = Path.Combine(_storagePath, directory);
 
@@ -220,7 +224,7 @@ namespace Microsoft.Xna.Framework.Storage
             try
             {
                 StorageFolder result = folder.GetFolderAsync(dirPath).GetResults();
-            return result != null;
+                return result != null;
             }
             catch
             {
@@ -229,18 +233,17 @@ namespace Microsoft.Xna.Framework.Storage
 #else            
             return Directory.Exists(dirPath);
 #endif
-        }	
+        }
             
         /// <summary>
         /// Disposes un-managed objects referenced by this object.
         /// </summary>
         public void Dispose()
         {
-
             // Fill this in when we figure out what we should be disposing
             IsDisposed = true;
-        }	
-            
+        }
+
         /// <summary>
         /// Returns true if the specified file exists in the storage-container, false otherwise.
         /// </summary>
@@ -250,9 +253,9 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(file))
                 throw new ArgumentNullException("Parameter file must contain a value.");
-            
+
             // relative so combine with our path
-            string filePath= Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -270,8 +273,8 @@ namespace Microsoft.Xna.Framework.Storage
             // return A new file with read/write access.
             return File.Exists(filePath);		
 #endif
-        }			
-    
+        }
+
         /// <summary>
         /// Returns list of directory names in the storage-container.
         /// </summary>
@@ -285,7 +288,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return Directory.GetDirectories(_storagePath);
 #endif
-        }				
+        }
 
         /// <summary>
         /// Returns list of directory names with given search pattern.
@@ -310,7 +313,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return Directory.GetFiles(_storagePath);
 #endif
-        }				
+        }
 
         /// <summary>
         /// Returns list of file names with given search pattern.
@@ -331,7 +334,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return Directory.GetFiles(_storagePath, searchPattern);
 #endif
-        }				
+        }
 
 
         /// <summary>
@@ -343,7 +346,7 @@ namespace Microsoft.Xna.Framework.Storage
         public Stream OpenFile(string file, FileMode fileMode)
         {
             return OpenFile(file, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
-        }				
+        }
 
         /// <summary>
         /// Opens a file contained in storage-container.
@@ -355,7 +358,7 @@ namespace Microsoft.Xna.Framework.Storage
         public Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess)
         {
             return OpenFile(file, fileMode, fileAccess, FileShare.ReadWrite);
-        }				
+        }
 
         /// <summary>
         /// Opens a file contained in storage-container.
@@ -369,9 +372,9 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(file))
                 throw new ArgumentNullException("Parameter file must contain a value.");
-        
+
             // relative so combine with our path
-            string filePath= Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -405,6 +408,6 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return File.Open(filePath, fileMode, fileAccess, fileShare);
 #endif
-        }				
+        }
     }
 }
