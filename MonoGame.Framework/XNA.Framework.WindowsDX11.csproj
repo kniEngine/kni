@@ -22,7 +22,6 @@
     <DocumentationFile>bin\Windows\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE;WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -32,7 +31,6 @@
     <DocumentationFile>bin\Windows\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
     <DefineConstants>TRACE;WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
