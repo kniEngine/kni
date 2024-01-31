@@ -101,11 +101,6 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public event EventHandler<EventArgs> Disposing;
 
-        private bool SuppressEventHandlerWarningsUntilEventsAreProperlyImplemented()
-        {
-            return Disposing != null;
-        }
-
         /// <summary>
         /// Creates a new directory in the storage-container.
         /// </summary>

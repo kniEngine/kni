@@ -151,11 +151,6 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public static event EventHandler<EventArgs> DeviceChanged;
 
-        private bool SuppressEventHandlerWarningsUntilEventsAreProperlyImplemented()
-        {
-            return DeviceChanged != null;
-        }
-
 #if (UAP || WINUI)
         // Dirty trick to avoid the need to get the delegate from the IAsyncResult (can't be done in WinRT)
         static Delegate showDelegate;
