@@ -15,7 +15,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
@@ -24,7 +23,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
     <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
