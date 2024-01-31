@@ -193,8 +193,8 @@ namespace Microsoft.Xna.Framework.Storage
             {
             }
 #else
-            var tcs = new TaskCompletionSource<StorageContainer>(state);
-            var task = Task.Run<StorageContainer>(() => Open(displayName));
+            TaskCompletionSource<StorageContainer> tcs = new TaskCompletionSource<StorageContainer>(state);
+            Task<StorageContainer> task = Task.Run<StorageContainer>(() => Open(displayName));
             task.ContinueWith(t =>
             {
                 // Copy the task result into the returned task.
@@ -282,15 +282,15 @@ namespace Microsoft.Xna.Framework.Storage
         public static IAsyncResult BeginShowSelector(int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
-            var del = new ShowSelectorAsynchronousShowNoPlayer(Show);
+            ShowSelectorAsynchronousShowNoPlayer del = new ShowSelectorAsynchronousShowNoPlayer(Show);
 
 #if (UAP || WINUI)
             showDelegate = del;
 #endif
             return del.BeginInvoke(sizeInBytes, directoryCount, callback, state);
 #else
-            var tcs = new TaskCompletionSource<StorageDevice>(state);
-            var task = Task.Run<StorageDevice>(() => Show(sizeInBytes, directoryCount));
+            TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
+            Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(sizeInBytes, directoryCount));
             task.ContinueWith(t =>
             {
                 // Copy the task result into the returned task.
@@ -338,14 +338,14 @@ namespace Microsoft.Xna.Framework.Storage
         public static IAsyncResult BeginShowSelector(PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
-            var del = new ShowSelectorAsynchronousShow(Show);
+            ShowSelectorAsynchronousShow del = new ShowSelectorAsynchronousShow(Show);
 #if WINDOWS_UA
             showDelegate = del;
 #endif
             return del.BeginInvoke(player, sizeInBytes, directoryCount, callback, state);
 #else
-            var tcs = new TaskCompletionSource<StorageDevice>(state);
-            var task = Task.Run<StorageDevice>(() => Show(player, sizeInBytes, directoryCount));
+            TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
+            Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(player, sizeInBytes, directoryCount));
             task.ContinueWith(t =>
             {
                 // Copy the task result into the returned task.
@@ -416,7 +416,7 @@ namespace Microsoft.Xna.Framework.Storage
                 AsyncResult asyncResult = result as AsyncResult;
                 if (asyncResult != null)
                 {
-                    var asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
+                    OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
 
                     // Wait for the WaitHandle to become signaled.
                     result.AsyncWaitHandle.WaitOne();
@@ -480,7 +480,7 @@ namespace Microsoft.Xna.Framework.Storage
             // Retrieve the delegate.
             AsyncResult asyncResult = (AsyncResult)result;
 
-            var del = asyncResult.AsyncDelegate;
+            object del = asyncResult.AsyncDelegate;
   #endif
 
             if (del is ShowSelectorAsynchronousShow)

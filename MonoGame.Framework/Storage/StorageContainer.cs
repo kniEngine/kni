@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using MonoGame.Framework.Utilities;
@@ -48,7 +49,7 @@ namespace Microsoft.Xna.Framework.Storage
             
             // From the examples the root is based on MyDocuments folder
 #if (UAP || WINUI)
-            var saved = "";
+            string saved = "";
 #elif DESKTOPGL
             string saved = "";
             if(CurrentPlatform.OS == OS.Linux || CurrentPlatform.OS == OS.MacOSX)
@@ -58,12 +59,12 @@ namespace Microsoft.Xna.Framework.Storage
             else
                 throw new Exception("Unexpected platform!");
 #else
-            var root = StorageDevice.StorageRoot;
-            var saved = Path.Combine(root,"SavedGames");
+            string root = StorageDevice.StorageRoot;
+            string saved = Path.Combine(root,"SavedGames");
 #endif
             _storagePath = Path.Combine(saved, name);
             
-            var playerSave = string.Empty;
+            string playerSave = string.Empty;
             if (playerIndex.HasValue)
                 playerSave = Path.Combine(_storagePath, "Player" + (int)playerIndex.Value);
             
@@ -111,7 +112,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter directory must contain a value.");
             
             // relative so combine with our path
-            var dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(_storagePath, directory);
 
             // Now let's try to create it
             CreateDirectoryAbsolute(dirPath);
@@ -121,7 +122,7 @@ namespace Microsoft.Xna.Framework.Storage
         {
             // Now let's try to create it
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
             var task = folder.CreateFolderAsync(path, CreationCollisionOption.OpenIfExists);
             task.AsTask().Wait();
 #else
@@ -143,10 +144,10 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
             
             // relative so combine with our path
-            var filePath= Path.Combine(_storagePath, file);
+            string filePath= Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
             var awaiter = folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter();
             return awaiter.GetResult();
 #else
@@ -165,11 +166,11 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter directory must contain a value.");
             
             // relative so combine with our path
-            var dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(_storagePath, directory);
 
             // Now let's try to delete itd
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
             var deleteFolder = folder.GetFolderAsync(dirPath).AsTask().GetAwaiter().GetResult();
             deleteFolder.DeleteAsync().AsTask().Wait();
 #else
@@ -187,11 +188,11 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
             
             // relative so combine with our path
-            var filePath= Path.Combine(_storagePath, file);
+            string filePath= Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
-            var deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            StorageFile deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
             deleteFile.DeleteAsync().AsTask().Wait();
 #else
             // Now let's try to delete it
@@ -211,14 +212,14 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter directory must contain a value.");
             
             // relative so combine with our path
-            var dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(_storagePath, directory);
 
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
 
             try
             {
-                var result = folder.GetFolderAsync(dirPath).GetResults();
+                StorageFolder result = folder.GetFolderAsync(dirPath).GetResults();
             return result != null;
             }
             catch
@@ -251,14 +252,14 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
             
             // relative so combine with our path
-            var filePath= Path.Combine(_storagePath, file);
+            string filePath= Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
             // GetFile returns an exception if the file doesn't exist, so we catch it here and return the boolean.
             try
             {
-                var existsFile = folder.GetFileAsync(filePath).GetAwaiter().GetResult();
+                StorageFile existsFile = folder.GetFileAsync(filePath).GetAwaiter().GetResult();
                 return existsFile != null;
             }
             catch
@@ -278,8 +279,8 @@ namespace Microsoft.Xna.Framework.Storage
         public string[] GetDirectoryNames()
         {
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
-            var results = folder.GetFoldersAsync().AsTask().GetAwaiter().GetResult();
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            IReadOnlyList<StorageFolder> results = folder.GetFoldersAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFolder, string>(e => e.Name).ToArray();
 #else
             return Directory.GetDirectories(_storagePath);
@@ -303,7 +304,7 @@ namespace Microsoft.Xna.Framework.Storage
         public string[] GetFileNames()
         {
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
             var results = folder.GetFilesAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFile, string>(e => e.Name).ToArray();
 #else
@@ -322,10 +323,10 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter searchPattern must contain a value.");
 
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
-            var options = new QueryOptions( CommonFileQuery.DefaultQuery, new [] { searchPattern } );
-            var query = folder.CreateFileQueryWithOptions(options);
-            var files = query.GetFilesAsync().AsTask().GetAwaiter().GetResult();
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            QueryOptions options = new QueryOptions( CommonFileQuery.DefaultQuery, new [] { searchPattern } );
+            StorageFileQueryResult query = folder.CreateFileQueryWithOptions(options);
+            IReadOnlyList<StorageFile> files = query.GetFilesAsync().AsTask().GetAwaiter().GetResult();
             return files.Select<StorageFile, string>(e => e.Name).ToArray();
 #else
             return Directory.GetFiles(_storagePath, searchPattern);
@@ -370,10 +371,10 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
         
             // relative so combine with our path
-            var filePath= Path.Combine(_storagePath, file);
+            string filePath= Path.Combine(_storagePath, file);
 
 #if (UAP || WINUI)
-            var folder = ApplicationData.Current.LocalFolder;
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
             if (fileMode == FileMode.Create || fileMode == FileMode.CreateNew)
             {
                 return folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult();
@@ -385,7 +386,7 @@ namespace Microsoft.Xna.Framework.Storage
                 else
                 {
                     // Not using OpenStreamForReadAsync because the stream position is placed at the end of the file, instead of the beginning
-                    var f = folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult();
+                    StorageFile f = folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult();
                     return f.OpenAsync(FileAccessMode.ReadWrite).AsTask().GetAwaiter().GetResult().AsStream();
                 }
             }
@@ -398,7 +399,7 @@ namespace Microsoft.Xna.Framework.Storage
                 //if (fileMode == FileMode.Append)
                 // Not using OpenStreamForReadAsync because the stream position is placed at the end of the file, instead of the beginning
                 folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult().OpenAsync(FileAccessMode.ReadWrite).AsTask().GetAwaiter().GetResult().AsStream();
-                var f = folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult();
+                StorageFile f = folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult();
                 return f.OpenAsync(FileAccessMode.ReadWrite).AsTask().GetAwaiter().GetResult().AsStream();
             }
 #else
