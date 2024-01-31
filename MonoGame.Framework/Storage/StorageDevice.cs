@@ -194,9 +194,6 @@ namespace Microsoft.Xna.Framework.Storage
             });
             return tcs.Task;
 #else
-#endif
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             try
             {
                 OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
@@ -299,9 +296,6 @@ namespace Microsoft.Xna.Framework.Storage
             });
             return tcs.Task;
 #else
-#endif
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             ShowSelectorAsynchronousShowNoPlayer del = new ShowSelectorAsynchronousShowNoPlayer(Show);
 
 #if (UAP || WINUI)
@@ -357,9 +351,6 @@ namespace Microsoft.Xna.Framework.Storage
             });
             return tcs.Task;
 #else
-#endif
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             ShowSelectorAsynchronousShow del = new ShowSelectorAsynchronousShow(Show);
 #if (UAP || WINUI)
             _showDelegate = del;
@@ -408,9 +399,6 @@ namespace Microsoft.Xna.Framework.Storage
                 throw;
             }
 #else
-#endif
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             StorageContainer returnValue = null;
             try
             {
@@ -472,9 +460,6 @@ namespace Microsoft.Xna.Framework.Storage
                 throw;
             }
 #else
-#endif
-
-#if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             if (!result.IsCompleted)
             {
                 // Wait for the WaitHandle to become signaled.
