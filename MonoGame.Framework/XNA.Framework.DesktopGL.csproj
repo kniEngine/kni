@@ -1,53 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net4.5</TargetFramework>
     <ProjectGuid>{6D75E618-19CA-4C51-9546-F10965FBC0B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <OutputPath>bin\WindowsGL\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\WindowsGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DocumentationFile>bin\WindowsGL\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
+    <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
+	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
-    <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
-    <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+	
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
@@ -779,5 +759,5 @@
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

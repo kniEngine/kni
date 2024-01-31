@@ -1,54 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net4.0</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <ProjectGuid>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DocumentationFile>bin\Windows\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
+    <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
+	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
-    <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
-    <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>TRACE;WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+	
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
   </PropertyGroup>
+	
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="SharpDX">
       <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
     </Reference>
@@ -669,5 +651,5 @@
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.dx11.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.dx11.fxo" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
