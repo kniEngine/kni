@@ -30,6 +30,8 @@ namespace Microsoft.Xna.Framework.Storage
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx#ID4EDB</remarks>
     public class StorageContainer : IDisposable
     {
+        bool _isDisposed;
+
         internal readonly string _storagePath;
         private readonly StorageDevice _device;
         private readonly string _name;
@@ -89,7 +91,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public bool IsDisposed
         {
-            get; private set;
+            get { return _isDisposed; }
         }
 
         /// <summary>
@@ -241,7 +243,7 @@ namespace Microsoft.Xna.Framework.Storage
         public void Dispose()
         {
             // Fill this in when we figure out what we should be disposing
-            IsDisposed = true;
+            _isDisposed = true;
         }
 
         /// <summary>
