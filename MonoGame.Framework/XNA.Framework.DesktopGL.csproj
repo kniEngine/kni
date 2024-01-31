@@ -17,7 +17,7 @@
     <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>

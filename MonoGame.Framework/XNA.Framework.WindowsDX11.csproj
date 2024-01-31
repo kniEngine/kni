@@ -17,7 +17,7 @@
     <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>TRACE;WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
