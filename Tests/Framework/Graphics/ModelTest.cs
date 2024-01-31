@@ -74,7 +74,7 @@ namespace MonoGame.Tests.Graphics
         [Test]
         public void ShouldConstructAndInitialize()
         {
-            var actual = new Model(gd, new List<ModelBone>(), new List<ModelMesh>());
+            var actual = new Model(new List<ModelBone>(), new List<ModelMesh>());
 
             Assert.That(actual.Bones, Is.Empty, "bones initial list is converted to Bones collection");
             Assert.That(actual.Meshes, Is.Empty, "meshes initial list is converted to Meshes collection");
@@ -88,19 +88,18 @@ namespace MonoGame.Tests.Graphics
             var emptyMeshesList = new List<ModelMesh>();
 
             // testing constructor's defined exceptions.
-            Assert.Throws<ArgumentNullException>(() => new Model(null, emptyBonesList, emptyMeshesList));
-            Assert.Throws<ArgumentNullException>(() => new Model(gd, null, emptyMeshesList));
-            Assert.Throws<ArgumentNullException>(() => new Model(gd, emptyBonesList, null));
+            Assert.Throws<ArgumentNullException>(() => new Model(null, emptyMeshesList));
+            Assert.Throws<ArgumentNullException>(() => new Model(emptyBonesList, null));
         }
 
         [Test]
         public void ShouldReadTransformationsFromBones()
         {
-            var someBones = new[] { new ModelBone(), new ModelBone() }.ToList();
-            var model = new Model(gd, someBones, new List<ModelMesh>());
+            List<ModelBone> someBones = new ModelBone[] { new ModelBone(), new ModelBone() }.ToList();
+            Model model = new Model(someBones, new List<ModelMesh>());
 
-            var expected = new[] { Matrix.Identity * 1, Matrix.Identity * 2 };
-            var actual = new Matrix[2];
+            Matrix[] expected = new Matrix[] { Matrix.Identity * 1, Matrix.Identity * 2 };
+            Matrix[] actual = new Matrix[2];
             Assume.That(actual, Is.Not.EqualTo(expected));
 
             model.CopyBoneTransformsFrom(expected);

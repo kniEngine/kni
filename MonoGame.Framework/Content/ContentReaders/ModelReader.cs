@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Framework.Content
             // Read the final pieces of model data.
             int rootBoneIndex = ReadBoneReference(input, is8BitBoneReference);
 
-            Model model = new Model(input.GetGraphicsDevice(), bones, meshes);
+            Model model = new Model(bones, meshes);
 
             model.Root = bones[rootBoneIndex];
 

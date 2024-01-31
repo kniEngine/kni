@@ -10,12 +10,10 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// A basic 3D model with per mesh parent bones.
     /// </summary>
-	public sealed class Model
-	{
-		private static Matrix[] sharedDrawBoneMatrices;
-		
-		private GraphicsDevice graphicsDevice;
-
+    public sealed class Model
+    {
+        private static Matrix[] _sharedDrawBoneMatrices;
+        
         /// <summary>
         /// A collection of <see cref="ModelBone"/> objects which describe how each mesh in the
         /// mesh collection for this model relates to its parent mesh.
@@ -57,17 +55,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <exception cref="ArgumentNullException">
         /// <paramref name="meshes"/> is null.
         /// </exception>
-        internal Model(GraphicsDevice graphicsDevice, List<ModelBone> bones, List<ModelMesh> meshes)
-		{
-            if (graphicsDevice == null)
-                throw new ArgumentNullException("graphicsDevice");
-
-			// TODO: Complete member initialization
-			this.graphicsDevice = graphicsDevice;
-
-			Bones = new ModelBoneCollection(bones);
-			Meshes = new ModelMeshCollection(meshes);
-		}
+        internal Model(List<ModelBone> bones, List<ModelMesh> meshes)
+        {
+            Bones = new ModelBoneCollection(bones);
+            Meshes = new ModelMeshCollection(meshes);
+        }
 
         /// <summary>
         /// Draws the model meshes.
@@ -77,27 +69,27 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="projection">The projection transform.</param>
         /// <exception cref="InvalidOperationException"></exception>
         public void Draw(Matrix world, Matrix view, Matrix projection) 
-		{       
+        {       
             int boneCount = this.Bones.Count;
-			
-			if (sharedDrawBoneMatrices == null ||
-				sharedDrawBoneMatrices.Length < boneCount)
-			{
-				sharedDrawBoneMatrices = new Matrix[boneCount];    
-			}
-			
-			// Look up combined bone matrices for the entire model.            
-			CopyAbsoluteBoneTransformsTo(sharedDrawBoneMatrices);
+            
+            if (_sharedDrawBoneMatrices == null ||
+                _sharedDrawBoneMatrices.Length < boneCount)
+            {
+                _sharedDrawBoneMatrices = new Matrix[boneCount];    
+            }
+            
+            // Look up combined bone matrices for the entire model.            
+            CopyAbsoluteBoneTransformsTo(_sharedDrawBoneMatrices);
 
             // Draw the model.
             foreach (ModelMesh mesh in Meshes)
             {
                 foreach (Effect effect in mesh.Effects)
                 {
-					IEffectMatrices effectMatricies = effect as IEffectMatrices;
-					if (effectMatricies != null)
+                    IEffectMatrices effectMatricies = effect as IEffectMatrices;
+                    if (effectMatricies != null)
                     {						
-                        effectMatricies.World = sharedDrawBoneMatrices[mesh.ParentBone.Index] * world;
+                        effectMatricies.World = _sharedDrawBoneMatrices[mesh.ParentBone.Index] * world;
                         effectMatricies.View = view;
                         effectMatricies.Projection = projection;
                     }
@@ -107,33 +99,33 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 mesh.Draw();
             }
-		}
+        }
 
         /// <summary>
         /// Copies bone transforms relative to all parent bones of the each bone from this model to a given array.
         /// </summary>
         /// <param name="destinationBoneTransforms">The array receiving the transformed bones.</param>
         public void CopyAbsoluteBoneTransformsTo(Matrix[] destinationBoneTransforms)
-		{
-			if (destinationBoneTransforms == null)
-				throw new ArgumentNullException("destinationBoneTransforms");
+        {
+            if (destinationBoneTransforms == null)
+                throw new ArgumentNullException("destinationBoneTransforms");
             if (destinationBoneTransforms.Length < this.Bones.Count)
-				throw new ArgumentOutOfRangeException("destinationBoneTransforms");
+                throw new ArgumentOutOfRangeException("destinationBoneTransforms");
             int count = this.Bones.Count;
-			for (int i = 0; i < count; i++)
-			{
+            for (int i = 0; i < count; i++)
+            {
                 ModelBone modelBone = (this.Bones)[i];
-				if (modelBone.Parent == null)
-				{
-					destinationBoneTransforms[i] = modelBone.transform;
-				}
-				else
-				{
-					int index = modelBone.Parent.Index;
-					Matrix.Multiply(ref modelBone.transform, ref destinationBoneTransforms[index], out destinationBoneTransforms[i]);
-				}
-			}
-		}
+                if (modelBone.Parent == null)
+                {
+                    destinationBoneTransforms[i] = modelBone.transform;
+                }
+                else
+                {
+                    int index = modelBone.Parent.Index;
+                    Matrix.Multiply(ref modelBone.transform, ref destinationBoneTransforms[index], out destinationBoneTransforms[i]);
+                }
+            }
+        }
 
         /// <summary>
         /// Copies bone transforms relative to <see cref="Model.Root"/> bone from a given array to this model.
