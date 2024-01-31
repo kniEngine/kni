@@ -16,11 +16,14 @@
     <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
+	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
   </PropertyGroup>
+	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
+	
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
