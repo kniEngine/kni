@@ -6,7 +6,7 @@ dotnet pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output NuGetP
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Graphics.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.10.9001.0  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Media.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.10.9001.0  -Properties Configuration=Release
 
-"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Builder.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.10.9001.0  -Properties Configuration=Release
+"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Builder.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.10.9001-rc  -Properties Configuration=Release
 
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.WindowsDX.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.10.9001.0  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.DesktopGL.nuspec		-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.10.9001.0  -Properties Configuration=Release
