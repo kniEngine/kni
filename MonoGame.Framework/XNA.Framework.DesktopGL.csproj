@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net4.5</TargetFramework>
     <ProjectGuid>{6D75E618-19CA-4C51-9546-F10965FBC0B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
     <OutputPath>bin\WindowsGL\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
@@ -28,11 +28,6 @@
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
@@ -764,5 +759,5 @@
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

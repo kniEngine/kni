@@ -2,14 +2,15 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net4.0</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <ProjectGuid>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
     <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
@@ -28,12 +29,8 @@
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
   </PropertyGroup>
+	
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="SharpDX">
       <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
     </Reference>
@@ -654,5 +651,5 @@
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.dx11.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.dx11.fxo" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
