@@ -3,7 +3,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFramework>net4.0</TargetFramework>
+    <TargetFrameworks>net40</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <ProjectGuid>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -11,9 +11,10 @@
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\WindowsDX\</BaseOutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
     <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
