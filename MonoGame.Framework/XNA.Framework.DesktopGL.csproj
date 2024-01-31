@@ -3,16 +3,17 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFramework>net4.5</TargetFramework>
+    <TargetFrameworks>net40</TargetFrameworks>
     <ProjectGuid>{6D75E618-19CA-4C51-9546-F10965FBC0B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <OutputPath>bin\WindowsGL\$(Platform)\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\WindowsGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\$(Platform)\$(Configuration)\MonoGame.Framework.xml</DocumentationFile>
+    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <BaseOutputPath>..\Artifacts\MonoGame.Framework\DesktopGL\</BaseOutputPath>
+    <IntermediateOutputPath>obj\SdlGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>

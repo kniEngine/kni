@@ -45,8 +45,8 @@
     <file src="NuGetPackages\build\WindowsDX\MonoGame.Framework.WindowsDX.9000.targets" target="build\MonoGame.Framework.WindowsDX.9000.targets" />
     
     <!-- C# Assemblies -->
-    <file src="MonoGame.Framework\bin\Windows\AnyCPU\Release\MonoGame.Framework.dll" target="lib\net40\MonoGame.Framework.dll" />
-    <file src="MonoGame.Framework\bin\Windows\AnyCPU\Release\MonoGame.Framework.xml" target="lib\net40\MonoGame.Framework.xml" />
+    <file src="Artifacts\MonoGame.Framework\WindowsDX\Release\net40\MonoGame.Framework.dll" target="lib\net40\MonoGame.Framework.dll" />
+    <file src="Artifacts\MonoGame.Framework\WindowsDX\Release\net40\MonoGame.Framework.xml" target="lib\net40\MonoGame.Framework.xml" />
     
     <file src="Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\MonoGame.Framework.dll" target="lib\net6.0-windows7.0\MonoGame.Framework.dll" />
     <file src="Artifacts\MonoGame.Framework\WindowsDX\Release\net6.0-windows\MonoGame.Framework.xml" target="lib\net6.0-windows7.0\MonoGame.Framework.xml" />

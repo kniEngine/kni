@@ -124,8 +124,8 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   
   ; Install DesktopGL Assemblies
   SetOutPath '$INSTDIR\Assemblies\DesktopGL'
-  File /nonfatal '..\..\MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\*.dll'
-  File /nonfatal '..\..\MonoGame.Framework\bin\WindowsGL\AnyCPU\Release\*.xml'
+  File /nonfatal '..\..\Artifacts\MonoGame.Framework\DesktopGL\Release\net40\*.dll'
+  File /nonfatal '..\..\Artifacts\MonoGame.Framework\DesktopGL\Release\net40\*.xml'
   File '..\..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib'
   File '..\..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib'
   File '..\..\ThirdParty\Dependencies\MonoGame.Framework.dll.config'
@@ -145,8 +145,8 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   
   ; Install Windows Desktop DirectX Assemblies
   SetOutPath '$INSTDIR\Assemblies\Windows'
-  File '..\..\MonoGame.Framework\bin\Windows\AnyCPU\Release\*.dll'
-  File '..\..\MonoGame.Framework\bin\Windows\AnyCPU\Release\*.xml'
+  File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net40\*.dll'
+  File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net40\*.xml'
   
   ; Install Oculus Ovr DirectX Assemblies
   SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\net40'
