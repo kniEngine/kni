@@ -23,7 +23,6 @@
     <DefineConstants>DEBUG;OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -34,7 +33,6 @@
     <DefineConstants>OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
