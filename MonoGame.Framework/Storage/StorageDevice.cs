@@ -88,21 +88,11 @@ namespace Microsoft.Xna.Framework.Storage
         {
             get
             { 
-                // I do not know if the DriveInfo is is implemented on Mac or not
-                // thus the try catch
-                try
-                {
 #if (UAP || WINUI)
-                    return long.MaxValue;
+                return long.MaxValue;
 #else
-                    return new DriveInfo(GetDevicePath).AvailableFreeSpace;
+                return new DriveInfo(GetDevicePath).AvailableFreeSpace;
 #endif
-                }
-                catch (Exception)
-                {
-                    StorageDeviceHelper.Path = StorageRoot;
-                    return StorageDeviceHelper.FreeSpace;
-                }
             } 
         }
 
@@ -113,20 +103,11 @@ namespace Microsoft.Xna.Framework.Storage
         {
             get
             {
-                // I do not know if the DriveInfo is is implemented on Mac or not
-                // thus the try catch
-                try
-                {
 #if (UAP || WINUI)
-                    return true;
+                return true;
 #else
-                    return new DriveInfo(GetDevicePath).IsReady;
+                return new DriveInfo(GetDevicePath).IsReady;
 #endif
-                }
-                catch (Exception)
-                {
-                    return true;
-                }
             } 
         }
 
@@ -137,25 +118,12 @@ namespace Microsoft.Xna.Framework.Storage
         {
             get
             {
-                
-                // I do not know if the DriveInfo is is implemented on Mac or not
-                // thus the try catch
-                try
-                {
 #if (UAP || WINUI)
-                    return long.MaxValue;
+                return long.MaxValue;
 #else
-
-                    // Not sure if this should be TotalSize or TotalFreeSize
-                    return new DriveInfo(GetDevicePath).TotalSize;
+                // Not sure if this should be TotalSize or TotalFreeSize
+                return new DriveInfo(GetDevicePath).TotalSize;
 #endif
-                }
-                catch (Exception)
-                {
-                    StorageDeviceHelper.Path = StorageRoot;
-                    return StorageDeviceHelper.TotalSpace;
-                }
-                    
             } 
         }
         
