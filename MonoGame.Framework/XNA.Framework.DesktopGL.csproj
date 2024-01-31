@@ -17,13 +17,13 @@
     <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;TRACE;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
