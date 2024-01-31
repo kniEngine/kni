@@ -175,6 +175,9 @@ namespace Microsoft.Xna.Framework.Storage
         
         private IAsyncResult OpenContainer(string displayName, AsyncCallback callback, object state)
         {
+#if ANDROID || IOS || TVOS || NETFX_CORE
+#else
+#endif
 
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             try
@@ -278,6 +281,10 @@ namespace Microsoft.Xna.Framework.Storage
         //     A user-created object used to uniquely identify the request, or null.
         public static IAsyncResult BeginShowSelector(int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
+#if ANDROID || IOS || TVOS || NETFX_CORE
+#else
+#endif
+
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             ShowSelectorAsynchronousShowNoPlayer del = new ShowSelectorAsynchronousShowNoPlayer(Show);
 
@@ -333,6 +340,10 @@ namespace Microsoft.Xna.Framework.Storage
         //     A user-created object used to uniquely identify the request, or null.
         public static IAsyncResult BeginShowSelector(PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
+#if ANDROID || IOS || TVOS || NETFX_CORE
+#else
+#endif
+
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             ShowSelectorAsynchronousShow del = new ShowSelectorAsynchronousShow(Show);
 #if (UAP || WINUI)
@@ -390,6 +401,9 @@ namespace Microsoft.Xna.Framework.Storage
         //     The IAsyncResult returned from BeginOpenContainer.
         public StorageContainer EndOpenContainer(IAsyncResult result)
         {
+#if ANDROID || IOS || TVOS || NETFX_CORE
+#else
+#endif
 
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             StorageContainer returnValue = null;
@@ -452,6 +466,10 @@ namespace Microsoft.Xna.Framework.Storage
         //     The IAsyncResult returned from BeginShowSelector.
         public static StorageDevice EndShowSelector(IAsyncResult result) 
         {
+#if ANDROID || IOS || TVOS || NETFX_CORE
+#else
+#endif
+
 #if !ANDROID && !IOS && !TVOS && !NETFX_CORE
             if (!result.IsCompleted)
             {
