@@ -46,7 +46,8 @@
   -->
   <Target Name="CollectContentReferences">
 
-    <Warning Text="'MonoGame.Content.Builder17.targets' is deprecated. In your .csproj file, replace 'MonoGame.Content.Builder17.targets' with 'Kni.Content.Builder.targets', 'MonoGameContentReference' with 'KniContentReference', 'MonoGamePlatform' with 'KniPlatform', and 'MonoGameMGCBAdditionalArguments' with 'KniContentBuilderArguments'." />
+    <Warning Text="'MonoGame.Content.Builder17.targets' is deprecated. In your .csproj file, replace 'MonoGameContentReference' with 'KniContentReference', 'MonoGamePlatform' with 'KniPlatform', and 'MonoGameMGCBAdditionalArguments' with 'KniContentBuilderArguments'." />
+    <Warning Text="'MonoGame.Content.Builder17.targets. In your .csproj file, remove '&lt;Import Project=&quot;$ (MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder17.targets&quot; /&gt;' and add a reference to nuget package 'nkast.Xna.Framework.Content.Pipeline.Builder'." />
 
     <ItemGroup >
       <MonoGameContentReference Include="**/*.mgcb" />

@@ -46,6 +46,8 @@
   -->
   <Target Name="CollectContentReferences">
 
+    <Warning Text="'Kni.Content.Builder.targets' is deprecated. In your .csproj file, remove '&lt;Import Project=&quot;$ (MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets&quot; /&gt;' and add a reference to nuget package 'nkast.Xna.Framework.Content.Pipeline.Builder'." />
+
     <ItemGroup >
       <KniContentReference Include="**/*.mgcb" />
     </ItemGroup>
