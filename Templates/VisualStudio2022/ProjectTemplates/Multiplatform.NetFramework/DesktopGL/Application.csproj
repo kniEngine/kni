@@ -46,6 +46,7 @@
   <ItemGroup>
     <PackageReference Include="nkast.Xna.Framework" Version="3.10.9001" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.9000" Version="3.10.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.10.9001-rc" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -63,5 +64,5 @@
   </ItemGroup>
   <Import Project="..\$ext_safeprojectname$.Shared\$ext_safeprojectname$.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
+
 </Project>

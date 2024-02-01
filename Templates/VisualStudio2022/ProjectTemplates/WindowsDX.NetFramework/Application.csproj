@@ -52,6 +52,7 @@
   <ItemGroup>
     <PackageReference Include="nkast.Xna.Framework" Version="3.10.9001" />
     <PackageReference Include="MonoGame.Framework.WindowsDX.9000" Version="3.10.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.10.9001-rc" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
@@ -61,5 +62,5 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
+
 </Project>

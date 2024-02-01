@@ -52,6 +52,7 @@
   <ItemGroup>
     <PackageReference Include="nkast.Xna.Framework" Version="3.10.9001" />
     <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.10.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.10.9001-rc" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,5 +76,5 @@
     <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\Kni.Content.Builder.targets" />
+
 </Project>
