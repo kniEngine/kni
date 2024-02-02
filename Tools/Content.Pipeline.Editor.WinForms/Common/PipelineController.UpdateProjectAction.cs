@@ -15,6 +15,8 @@ namespace Content.Pipeline.Editor
         private readonly IView _view;
         private readonly IController _con;
         private readonly bool _referencesChanged;
+        private readonly bool _packageReferencesChanged;
+
 
         private ProjectState _state;
 
@@ -36,6 +38,10 @@ namespace Content.Pipeline.Editor
                 case "References":
                     _state.References = new List<string>((List<string>)previousValue);
                     _referencesChanged = true;
+                    break;
+                case "PackageReferences":
+                    _state.PackageReferences = new List<string>((List<string>)previousValue);
+                    _packageReferencesChanged = true;
                     break;
                 case "Platform":
                     _state.Platform = (TargetPlatform)previousValue;
@@ -71,7 +77,7 @@ namespace Content.Pipeline.Editor
             _state.Apply(item);
             _state = state;
 
-            if (_referencesChanged)
+            if (_referencesChanged || _packageReferencesChanged)
                 _con.OnReferencesModified();
             else
                 _con.OnProjectModified();

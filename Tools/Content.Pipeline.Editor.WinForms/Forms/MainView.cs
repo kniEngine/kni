@@ -160,6 +160,8 @@ namespace Content.Pipeline.Editor
         {
             if (args.ChangedItem.Label == "References")
                 _controller.OnReferencesModified();
+            if (args.ChangedItem.Label == "PackageReferences")
+                _controller.OnReferencesModified();
 
             var obj = _propertyGrid.SelectedObject as PipelineProjectProxy;
 
