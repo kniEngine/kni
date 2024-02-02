@@ -58,9 +58,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (faceInfo == null)
                 throw new PipelineException("Could not find \"" + input.FontName + "\" font.");
 
-            if (!File.Exists(faceInfo.FontFile))
-                throw new PipelineException("Could not find \"" + input.FontName + "\" font from file \""+ faceInfo.FontFile +"\".");
-
             context.Logger.LogMessage("Building Font {0}", faceInfo.FontFile);
 
             // Get the platform specific texture profile.
@@ -219,6 +216,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             if (faceInfo.Style == input.Style)
                                 return faceInfo;
                         }
+                        string errorMsg = String.Format("Font '{0}' does not have style '{1}'.", input.FontName, input.Style);
+                        throw new InvalidContentException(errorMsg);
                     }
                 }
             }
@@ -262,6 +261,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             if (faceInfo.Style == input.Style)
                                 return faceInfo;
                         }
+                        string errorMsg = String.Format("Font '{0}' does not have style '{1}'.", input.FontName, input.Style);
+                        throw new InvalidContentException(errorMsg);
                     }
                 }
             }
