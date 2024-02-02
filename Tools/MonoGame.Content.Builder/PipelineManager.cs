@@ -125,9 +125,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Make sure we're not adding the same assembly twice.
             assemblyFilePath = PathHelper.Normalize(assemblyFilePath);
-            if (!Assemblies.Contains(assemblyFilePath))
+            if (!this.Assemblies.Contains(assemblyFilePath))
             {
-                Assemblies.Add(assemblyFilePath);
+                this.Assemblies.Add(assemblyFilePath);
 
                 //TODO need better way to update caches
                 _processors = null;

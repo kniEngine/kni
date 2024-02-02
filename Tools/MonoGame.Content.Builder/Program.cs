@@ -3,7 +3,6 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.IO;
 
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
@@ -25,7 +24,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             ContentBuilder content = new ContentBuilder();
 
             // Parse the command line.
-            var parser = new CommandLineParser(content)
+            CommandLineParser parser = new CommandLineParser(content)
             {
                 Title = "KNI Content Builder\n" +
                         "Builds optimized game content for KNI projects."
@@ -35,7 +34,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return -1;
             
             // Print a startup message.
-            var buildStarted = DateTime.Now;
+            DateTime buildStarted = DateTime.Now;
             if (!content.Quiet)
                 Console.WriteLine("Build started {0}\n", buildStarted);
 
