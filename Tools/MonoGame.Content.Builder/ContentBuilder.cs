@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -293,22 +292,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         {
             if (string.IsNullOrWhiteSpace(parameter))
                 return parameter;
-            return parameter
-                .Replace("$(Platform)", Platform.ToString())
-                .Replace("$(Configuration)", Config)
-                .Replace("$(Config)", Config)
-                .Replace("$(Profile)", this.Profile.ToString());
+
+            parameter = parameter.Replace("$(Platform)", Platform.ToString());
+            parameter = parameter.Replace("$(Configuration)", Config);
+            parameter = parameter.Replace("$(Config)", Config);
+            parameter = parameter.Replace("$(Profile)", this.Profile.ToString());
+
+            return parameter;
         }
 
         public void Build()
         {
-            var projectDirectory = PathHelper.Normalize(Directory.GetCurrentDirectory());
+            string projectDirectory = PathHelper.Normalize(Directory.GetCurrentDirectory());
 
-            var outputPath = ReplaceSymbols(_outputDir);
+            string outputPath = ReplaceSymbols(_outputDir);
             if (!Path.IsPathRooted(outputPath))
                 outputPath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, outputPath)));
 
-            var intermediatePath = ReplaceSymbols(_intermediateDir);
+            string intermediatePath = ReplaceSymbols(_intermediateDir);
             if (!Path.IsPathRooted(intermediatePath))
                 intermediatePath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, intermediatePath)));
 
@@ -317,13 +318,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Feed all the assembly references to the pipeline manager
             // so it can resolve importers, processors, writers, and types.
-            foreach (var r in References)
-            {
-                var assembly = ReplaceSymbols(r);
-                if (!Path.IsPathRooted(assembly))
-                    assembly = Path.GetFullPath(Path.Combine(projectDirectory, assembly));
-                _manager.AddAssembly(assembly);
-            }
+            AddReferences(_manager, projectDirectory, this.References);
 
             // Load the previously serialized list of built content.
             SourceFileCollection previousFileCollection = LoadFileCollection(intermediatePath);
@@ -382,6 +377,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Process copy items (files that bypass the content pipeline)
             CopyItems(_copyItems, projectDirectory, outputPath);
+        }
+
+        private void AddReferences(PipelineManager manager, string projectDirectory, List<string> references)
+        {
+            foreach (string r in references)
+            {
+                string assemblyFile = ReplaceSymbols(r);
+                if (!Path.IsPathRooted(assemblyFile))
+                    assemblyFile = Path.GetFullPath(Path.Combine(projectDirectory, assemblyFile));
+
+                manager.AddAssembly(assemblyFile);
+            }
         }
 
         private void CleanItems(SourceFileCollection previousFileCollection, bool targetChanged)
@@ -639,7 +646,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         
         private void WriteError(InvalidContentException ex, string sourceFile)
         {
-            var message = string.Empty;
+            string message = string.Empty;
             if (ex.ContentIdentity != null && !string.IsNullOrEmpty(ex.ContentIdentity.SourceFilename))
             {
                 message = ex.ContentIdentity.SourceFilename;
@@ -656,7 +663,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             message += ": error ";
 
             // extract errorCode from message
-            var match = System.Text.RegularExpressions.Regex.Match(ex.Message, @"([A-Z]+[0-9]+):(.+)");
+            System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(ex.Message, @"([A-Z]+[0-9]+):(.+)");
             if (match.Success || match.Groups.Count == 2)
                 message += match.Groups[1].Value + " : " + match.Groups[2].Value;
             else
