@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
@@ -326,6 +327,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // so it can resolve importers, processors, writers, and types.
             AddReferences(_manager, projectDirectory, this.References);
 
+            AddPackageReferences(_manager, projectDirectory, intermediatePath, this.PackageReferences);
+
             // Load the previously serialized list of built content.
             SourceFileCollection previousFileCollection = LoadFileCollection(intermediatePath);
             if (previousFileCollection == null)
@@ -395,6 +398,83 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                 manager.AddAssembly(assemblyFile);
             }
+        }
+
+        private void AddPackageReferences(PipelineManager manager, string projectDirectory, string intermediatePath, List<string> packageReferences)
+        {
+            if (packageReferences.Count == 0)
+                return;
+
+            const string projName = "PackageReferencesLibrary";
+            string fullProjPath = Path.Combine(intermediatePath, projName);
+
+            if (!Directory.Exists(intermediatePath))
+                Directory.CreateDirectory(intermediatePath);
+
+            string newCmd = String.Format("new classlib --framework \"netstandard2.0\" -o {0}", projName);
+            newCmd += " --force";
+            ExecuteDotnet(intermediatePath, newCmd);
+
+            foreach (string packageReference in packageReferences)
+            {
+                string package = packageReference;
+                string version = String.Empty;
+
+                string[] split = packageReference.Split(' ');
+                if (split.Length == 2)
+                {
+                    package = split[0];
+                    version = split[1];
+                }
+
+                string addCmd = String.Format("add {0}.csproj package {1} ", projName, package);
+                addCmd += " --no-restore";
+                if (!String.IsNullOrEmpty(version))
+                    addCmd += " --version " + version;
+                ExecuteDotnet(fullProjPath, addCmd);
+            }
+
+            string publishDir = "publish";
+            string cleanCmd = String.Format("clean {0}.csproj --output {1}", projName, publishDir);
+            cleanCmd += " --nologo";
+            ExecuteDotnet(fullProjPath, cleanCmd);
+            string publishCmd = String.Format("publish {0}.csproj --output {1}", projName, publishDir);
+            publishCmd += " --nologo";
+            ExecuteDotnet(fullProjPath, publishCmd);
+
+            string fullPublishDir = Path.Combine(fullProjPath, publishDir);
+            string[] references = Directory.GetFiles(fullPublishDir, "*.dll");
+
+            foreach (string assemblyFile in references)
+            {
+                // skip the empty project.
+                if (assemblyFile.EndsWith("\\PackageReferencesLibrary\\publish\\PackageReferencesLibrary.dll"))
+                    continue;
+
+                manager.AddAssembly(assemblyFile);
+            }
+        }
+
+        private void ExecuteDotnet(string workingDirectory, string args)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo("dotnet", args);
+            startInfo.CreateNoWindow = true;
+            startInfo.WorkingDirectory = workingDirectory;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+
+            using (Process process = Process.Start(startInfo))
+            {
+                process.WaitForExit();
+                if (process.ExitCode != 0)
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    Console.Write(output);
+                    throw new PipelineException(output);
+                }
+            }
+            
         }
 
         private void CleanItems(SourceFileCollection previousFileCollection, bool targetChanged)
