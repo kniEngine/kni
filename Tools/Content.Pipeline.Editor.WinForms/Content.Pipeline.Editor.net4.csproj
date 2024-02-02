@@ -99,6 +99,12 @@
     <Compile Include="Forms\NewContentDialog.Designer.cs">
       <DependentUpon>NewContentDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PackageReferenceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PackageReferenceDialog.Designer.cs">
+      <DependentUpon>PackageReferenceDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MultiSelectTreeview.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -226,6 +232,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PackageReferenceDialog.resx">
+      <DependentUpon>PackageReferenceDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TextEditDialog.resx">
       <DependentUpon>TextEditDialog.cs</DependentUpon>
     </EmbeddedResource>

@@ -50,6 +50,13 @@ namespace Content.Pipeline.Editor
             get { return _project.References; }
             set { _project.References = value; }
         }
+        [Category("Settings")]
+        [Editor(typeof(PackageReferenceListEditor), typeof(UITypeEditor))]
+        public List<string> PackageReferences
+        {
+            get { return _project.PackageReferences; }
+            set { _project.PackageReferences = value; }
+        }
 
         [Category("Settings")]
         [Description("The platform to target when building content.")]
