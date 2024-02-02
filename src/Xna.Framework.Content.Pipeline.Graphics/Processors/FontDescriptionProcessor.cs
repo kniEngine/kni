@@ -219,6 +219,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             if (faceInfo.Style == input.Style)
                                 return faceInfo;
                         }
+                        string errorMsg = String.Format("Font '{0}' does not have style '{1}'.", input.FontName, input.Style);
+                        throw new InvalidContentException(errorMsg);
                     }
                 }
             }
@@ -262,6 +264,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             if (faceInfo.Style == input.Style)
                                 return faceInfo;
                         }
+                        string errorMsg = String.Format("Font '{0}' does not have style '{1}'.", input.FontName, input.Style);
+                        throw new InvalidContentException(errorMsg);
                     }
                 }
             }
