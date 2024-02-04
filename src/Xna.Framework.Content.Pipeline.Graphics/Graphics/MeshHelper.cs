@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -67,11 +69,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 normalsChannel = geom.Vertices.Channels.Get<Vector3>(VertexChannelNames.Normal());
             }
 
-            VertexChannel<int> positionIndices = geom.Vertices.PositionIndices;
-            Debug.Assert(positionIndices.Count == normalsChannel.Count, "The position and channel sizes were different!");
-
             // Accumulate all the triangle face normals for each vertex.
-            Vector3[] normals = new Vector3[positionIndices.Count];
+            Vector3[] normals = new Vector3[normalsChannel.Count];
             for (int i = 0; i < geom.Indices.Count; i += 3)
             {
                 int ia = geom.Indices[i + 0];
@@ -106,9 +105,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     // by Shuangshuang Jin, Robert R. Lewis, David West.
                     //
 
-                    normals[positionIndices[ia]] += faceNormal;
-                    normals[positionIndices[ib]] += faceNormal;
-                    normals[positionIndices[ic]] += faceNormal;
+                    Vector3.Add(ref normals[ia], ref faceNormal, out normals[ia]);
+                    Vector3.Add(ref normals[ib], ref faceNormal, out normals[ib]);
+                    Vector3.Add(ref normals[ic], ref faceNormal, out normals[ic]);
                 }
             }
 
@@ -139,12 +138,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 Debug.Assert(!normals[i].IsNaN(), "Bad normal!");
                 Debug.Assert(normals[i].IsFinite(), "Bad normal!");
                 Debug.Assert(normals[i].Length() >= 0.9999f, "Bad normal!");
-            }
 
-            for (int i = 0; i < normalsChannel.Count; i++)
-            {
                 // Set the new normals on the vertex channel.
-                normalsChannel[i] = normals[positionIndices[i]];
+                normalsChannel[i] = normals[i];
             }
 
             return;
