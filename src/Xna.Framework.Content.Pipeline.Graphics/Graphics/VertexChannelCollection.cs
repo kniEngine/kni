@@ -155,6 +155,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // ...before throwing the exception again
                 throw;
             }
+
             // Return the new converted channel
             return result;
         }
@@ -170,6 +171,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             int index = IndexOf(name);
             if (index < 0)
                 throw new ArgumentException("name");
+
             return ConvertChannelContent<TargetType>(index);
         }
 
@@ -183,10 +185,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             if (index < 0 || index >= _channels.Count)
                 throw new ArgumentOutOfRangeException("index");
+
             VertexChannel channel = this[index];
+
             // Make sure the channel type is as expected
             if (channel.ElementType != typeof(T))
                 throw new InvalidOperationException("Mismatched channel type");
+
             return (VertexChannel<T>)channel;
         }
 
@@ -201,6 +206,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             int index = IndexOf(name);
             if (index < 0)
                 throw new ArgumentException("name");
+
             return Get<T>(index);
         }
 
@@ -222,6 +228,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
+
             return _channels.FindIndex((v) => v.Name == name);
         }
 
@@ -234,6 +241,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             if (item == null)
                 throw new ArgumentNullException("item");
+
             return _channels.IndexOf(item);
         }
 
@@ -254,6 +262,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // Don't insert a channel with the same name
             if (IndexOf(name) >= 0)
                 throw new ArgumentException("Vertex channel with name " + name + " already exists");
+
             VertexChannel<ElementType> channel = new VertexChannel<ElementType>(name);
             if (channelData != null)
             {
@@ -302,6 +311,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 _channels.RemoveAt(index);
                 return true;
             }
+
             return false;
         }
 

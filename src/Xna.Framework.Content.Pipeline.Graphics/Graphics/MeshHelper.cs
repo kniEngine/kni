@@ -104,10 +104,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // Normalize the gathered vertex normals.
             for (int i = 0; i < normals.Length; i++)
             {
-                Vector3 normal = normals[i];
-                float len = normal.Length();
+                float len = normals[i].Length();
                 if (len > 0.0f)
-                    normals[i] = normal / len;
+                    normals[i] = normals[i] / len;
                 else
                 {
                     // TODO: It would be nice to be able to log this to
@@ -115,7 +114,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                     // TODO: We could maybe void this by a better algorithm
                     // above for generating the normals.
-                    
+
                     // We have a zero length normal.  You can argue that putting
                     // anything here is better than nothing, but by leaving it to
                     // zero it allows the caller to detect this and react to it.
@@ -125,7 +124,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             // Set the new normals on the vertex channel.
             for (int i = 0; i < channel.Count; i++)
+            {
                 channel[i] = normals[positionIndices[i]];
+            }
         }
 
         /// <summary>
@@ -137,8 +138,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="binormalChannelName"></param>
         public static void CalculateTangentFrames(MeshContent mesh, string textureCoordinateChannelName, string tangentChannelName, string binormalChannelName)
         {
-            foreach (var geom in mesh.Geometry)
-                CalculateTangentFrames(geom, textureCoordinateChannelName, tangentChannelName, binormalChannelName);                            
+            for (int g = 0; g < mesh.Geometry.Count; g++)
+            {
+                GeometryContent geom = mesh.Geometry[g];
+
+                CalculateTangentFrames(geom, textureCoordinateChannelName, tangentChannelName, binormalChannelName);
+            }
         }
 
         public static void CalculateTangentFrames(GeometryContent geom, string textureCoordinateChannelName, string tangentChannelName, string binormalChannelName)
