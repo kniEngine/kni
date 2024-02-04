@@ -41,12 +41,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </remarks>
         public static void CalculateNormals(GeometryContent geom, bool overwriteExistingNormals)
         {
-            VertexChannel<Vector3> channel;
+            VertexChannel<Vector3> normalsChannel;
             // Look for an existing normals channel.
             if (!geom.Vertices.Channels.Contains(VertexChannelNames.Normal()))
             {
                 // We don't have existing normals, so add a new channel.
-                channel = geom.Vertices.Channels.Add<Vector3>(VertexChannelNames.Normal(), null);
+                normalsChannel = geom.Vertices.Channels.Add<Vector3>(VertexChannelNames.Normal(), null);
             }
             else
             {
@@ -55,11 +55,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 if (!overwriteExistingNormals)
                     return;
 
-                channel = geom.Vertices.Channels.Get<Vector3>(VertexChannelNames.Normal());
+                normalsChannel = geom.Vertices.Channels.Get<Vector3>(VertexChannelNames.Normal());
             }
 
             VertexChannel<int> positionIndices = geom.Vertices.PositionIndices;
-            Debug.Assert(positionIndices.Count == channel.Count, "The position and channel sizes were different!");
+            Debug.Assert(positionIndices.Count == normalsChannel.Count, "The position and channel sizes were different!");
 
             // Accumulate all the triangle face normals for each vertex.
             Vector3[] normals = new Vector3[positionIndices.Count];
@@ -77,7 +77,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 float len = faceNormal.Length();
                 if (len > 0.0f)
                 {
-                    faceNormal = faceNormal / len;
+                    faceNormal.X /= len;
+                    faceNormal.Y /= len;
+                    faceNormal.Z /= len;
 
                     // We are using the "Mean Weighted Equally" method where each
                     // face has an equal weight in the final normal calculation.
@@ -106,7 +108,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 float len = normals[i].Length();
                 if (len > 0.0f)
-                    normals[i] = normals[i] / len;
+                {
+                    normals[i].X /= len;
+                    normals[i].Y /= len;
+                    normals[i].Z /= len;
+                }
                 else
                 {
                     // TODO: It would be nice to be able to log this to
@@ -123,9 +129,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Set the new normals on the vertex channel.
-            for (int i = 0; i < channel.Count; i++)
+            for (int i = 0; i < normalsChannel.Count; i++)
             {
-                channel[i] = normals[positionIndices[i]];
+                normalsChannel[i] = normals[positionIndices[i]];
             }
         }
 
