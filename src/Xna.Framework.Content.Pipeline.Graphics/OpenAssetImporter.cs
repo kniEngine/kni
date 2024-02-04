@@ -510,20 +510,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             NodeContent node = null;
             if (aiNode.HasMeshes)
             {
-                var mesh = new MeshContent
+                MeshContent mesh = new MeshContent
                 {
                     Name = aiNode.Name,
                     Identity = _identity,
                     Transform = ToXna(GetRelativeTransform(aiNode, aiParent))
                 };
 
-                foreach (var meshIndex in aiNode.MeshIndices)
+                foreach (int meshIndex in aiNode.MeshIndices)
                 {
                     var aiMesh = _scene.Meshes[meshIndex];
                     if (!aiMesh.HasVertices)
                         continue;
 
-                    var geom = CreateGeometry(mesh, aiMesh);
+                    GeometryContent geom = CreateGeometry(mesh, aiMesh);
                     mesh.Geometry.Add(geom);
                 }
 
@@ -600,7 +600,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 {
                     foreach (var animation in _scene.Animations)
                     {
-                        var animationContent = ImportAnimation(animation, node.Name);
+                        AnimationContent animationContent = ImportAnimation(animation, node.Name);
                         if (animationContent.Channels.Count > 0)
                             node.Animations.Add(animationContent.Name, animationContent);
                     }
@@ -617,14 +617,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
         private GeometryContent CreateGeometry(MeshContent mesh, Mesh aiMesh)
         {
-            var geom = new GeometryContent
+            GeometryContent geom = new GeometryContent
             {
               Identity = _identity,
               Material = _materials[aiMesh.MaterialIndex]
             };
 
             // Vertices
-            var baseVertex = mesh.Positions.Count;
+            int baseVertex = mesh.Positions.Count;
             foreach (var vert in aiMesh.Vertices)
                 mesh.Positions.Add(ToXna(vert));
             geom.Vertices.AddRange(Enumerable.Range(baseVertex, aiMesh.VertexCount));
@@ -633,12 +633,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             if (aiMesh.HasBones)
             {
                 var xnaWeights = new List<BoneWeightCollection>();
-                var vertexCount = geom.Vertices.VertexCount;
+                int vertexCount = geom.Vertices.VertexCount;
                 bool missingBoneWeights = false;
-                for (var i = 0; i < vertexCount; i++)
+                for (int i = 0; i < vertexCount; i++)
                 {
                     var list = new BoneWeightCollection();
-                    for (var boneIndex = 0; boneIndex < aiMesh.BoneCount; boneIndex++)
+                    for (int boneIndex = 0; boneIndex < aiMesh.BoneCount; boneIndex++)
                     {
                         var bone = aiMesh.Bones[boneIndex];
                         foreach (var weight in bone.VertexWeights)
@@ -676,10 +676,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             if (aiMesh.HasNormals)
                 geom.Vertices.Channels.Add(VertexChannelNames.Normal(), aiMesh.Normals.Select(ToXna));
 
-            for (var i = 0; i < aiMesh.TextureCoordinateChannelCount; i++)
+            for (int i = 0; i < aiMesh.TextureCoordinateChannelCount; i++)
                 geom.Vertices.Channels.Add(VertexChannelNames.TextureCoordinate(i), aiMesh.TextureCoordinateChannels[i].Select(ToXnaTexCoord));
 
-            for (var i = 0; i < aiMesh.VertexColorChannelCount; i++)
+            for (int i = 0; i < aiMesh.VertexColorChannelCount; i++)
                 geom.Vertices.Channels.Add(VertexChannelNames.Color(i), aiMesh.VertexColorChannels[i].Select(ToXnaColor));
 
             return geom;
@@ -700,7 +700,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             // Walk the tree upwards to find the root bones.
             var rootBones = new HashSet<Node>();
-            foreach (var boneName in _deformationBones.Keys)
+            foreach (string boneName in _deformationBones.Keys)
                 rootBones.Add(FindRootBone(_scene, boneName));
 
             if (rootBones.Count > 1)
@@ -771,7 +771,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 return;
 
             // Convert nodes to bones and attach to root node.
-            var rootBoneContent = (BoneContent)ImportBones(_rootBone, _rootBone.Parent, null);
+            BoneContent rootBoneContent = (BoneContent)ImportBones(_rootBone, _rootBone.Parent, null);
             _rootNode.Children.Add(rootBoneContent);
 
             if (!_scene.HasAnimations)

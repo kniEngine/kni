@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             get
             {
-                var remap = _positionIndices[index];
+                int remap = _positionIndices[index];
                 return _geometry.Parent.Positions[remap];
             } 
             set
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="arrayIndex">Index of the first copied position.</param>
         public void CopyTo(Vector3[] array, int arrayIndex)
         {
-            foreach (var vec in this)
+            foreach (Vector3 vec in this)
                 array[arrayIndex++] = vec;
         }
 
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>Interface for enumerating the collection of position values.</returns>
         public IEnumerator<Vector3> GetEnumerator()
         {
-            for (var i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++)
                 yield return this[i];
         }
 
@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>Index of the specified position or -1 if not found.</returns>
         public int IndexOf(Vector3 item)
         {
-            for (var i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++)
                 if (this[i] == item)
                     return i;
 
