@@ -1,4 +1,8 @@
-﻿using System;
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -14,6 +18,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         static bool IsFinite(this Vector3 v)
         {
             return IsFinite(v.X) && IsFinite(v.Y) && IsFinite(v.Z);
+        }
+
+        static bool IsNaN(this Vector3 v)
+        {
+            return float.IsNaN(v.X) || float.IsNaN(v.Y) || float.IsNaN(v.Z);
         }
 
         /// <summary>
@@ -126,13 +135,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     // zero it allows the caller to detect this and react to it.
                     normals[i] = Vector3.Zero;
                 }
+
+                Debug.Assert(!normals[i].IsNaN(), "Bad normal!");
+                Debug.Assert(normals[i].IsFinite(), "Bad normal!");
+                Debug.Assert(normals[i].Length() >= 0.9999f, "Bad normal!");
             }
 
-            // Set the new normals on the vertex channel.
             for (int i = 0; i < normalsChannel.Count; i++)
             {
+                // Set the new normals on the vertex channel.
                 normalsChannel[i] = normals[positionIndices[i]];
             }
+
+            return;
         }
 
         /// <summary>
