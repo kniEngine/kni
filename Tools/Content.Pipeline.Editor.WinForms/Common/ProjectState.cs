@@ -26,7 +26,7 @@ namespace Content.Pipeline.Editor
         /// </summary>        
         public static ProjectState Get(PipelineProject proj)
         {
-            var state = new ProjectState()
+            ProjectState state = new ProjectState()
                 {
                     OriginalPath = proj.OriginalPath,
                     OutputDir = proj.OutputDir,
@@ -47,7 +47,7 @@ namespace Content.Pipeline.Editor
         {
             proj.OutputDir = OutputDir;
             proj.IntermediateDir = IntermediateDir;
-            proj.References = new List<string>(References);
+            proj.References = new List<string>(this.References);
             proj.Platform = Platform;
             proj.Profile = Profile;
             proj.Config = Config;

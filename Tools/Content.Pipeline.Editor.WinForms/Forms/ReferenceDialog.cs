@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Windows.Forms.Design;
@@ -23,8 +19,11 @@ namespace Content.Pipeline.Editor
 
         private void ReferenceDialog_Load(object sender, EventArgs e)
         {
-            foreach (string item in Lines)
-                listView1.Items.Add(new ListViewItem(new[] { Path.GetFileName(item), item }));
+            foreach (string item in this.Lines)
+            {
+                string[] itemValues = new string[] { Path.GetFileName(item), item };
+                listView1.Items.Add(new ListViewItem(itemValues));
+            }
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
@@ -36,8 +35,9 @@ namespace Content.Pipeline.Editor
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string pl = ((PipelineController)MainView._controller).ProjectLocation;
-                if (!pl.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString()))
-                    pl += System.IO.Path.DirectorySeparatorChar;
+                if (!pl.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                    pl += Path.DirectorySeparatorChar;
+
                 Uri folderUri = new Uri(pl);
 
                 foreach(string filename in dialog.FileNames)
@@ -45,10 +45,11 @@ namespace Content.Pipeline.Editor
                     Uri pathUri = new Uri(filename);
                     string fl = Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', System.IO.Path.DirectorySeparatorChar));
 
-                    if (!Lines.Contains(fl))
+                    if (!this.Lines.Contains(fl))
                     {
-                        Lines.Add(fl);
-                        listView1.Items.Add(new ListViewItem(new[] { Path.GetFileName(fl), fl }));
+                        this.Lines.Add(fl);
+                        string[] itemValues = new string[] { Path.GetFileName(fl), fl };
+                        listView1.Items.Add(new ListViewItem(itemValues));
                     }
                 }
             }
@@ -61,7 +62,7 @@ namespace Content.Pipeline.Editor
             {
                 int index = int.Parse(indices[i].ToString());
                 listView1.Items.RemoveAt(indices[i]);
-                Lines.RemoveAt(index);
+                this.Lines.RemoveAt(index);
 
             }
         }
@@ -79,8 +80,8 @@ namespace Content.Pipeline.Editor
 
         public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value)
         {
-            var svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-            var lines = (List<string>)value;
+            IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+            List<string> lines = (List<string>)value;
             if (svc != null && lines != null)
             {
                 using (var form = new ReferenceDialog())

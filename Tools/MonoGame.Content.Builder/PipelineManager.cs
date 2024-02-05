@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             LoadAssembly(typeof(Microsoft.Xna.Framework.Content.Pipeline.Processors.EffectProcessor).Assembly); // Graphics Effects
 
             // import the referenced Processors
-            foreach (var assemblyPath in Assemblies)
+            foreach (string assemblyPath in Assemblies)
             {
                 try
                 {

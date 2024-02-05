@@ -46,7 +46,7 @@ namespace Content.Pipeline.Editor
         public List<string> References 
         {
             set { _project.References = value; }
-            get { return _project.References; } 
+            get { return _project.References; }
         }
 
         [CommandLineParameter(
@@ -302,7 +302,7 @@ namespace Content.Pipeline.Editor
             line = FormatDivider("References");
             io.WriteLine(line);
 
-            foreach (var i in _project.References)
+            foreach (string i in _project.References)
             {
                 line = string.Format(lineFormat, "reference", i);
                 io.WriteLine(line);
@@ -388,7 +388,7 @@ namespace Content.Pipeline.Editor
         {
             _project.OriginalPath = projectFilePath.Remove(projectFilePath.LastIndexOf('.')) + ".mgcb";
 
-            using (var io = XmlReader.Create(File.OpenText(projectFilePath)))
+            using (XmlReader io = XmlReader.Create(File.OpenText(projectFilePath)))
             {
                 while (io.Read())
                 {
