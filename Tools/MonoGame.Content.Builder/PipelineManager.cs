@@ -839,7 +839,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// <returns>The asset name.</returns>
         public string GetAssetName(string sourceFileName, string importerName, string processorName, OpaqueDataDictionary processorParameters, ContentBuildLogger logger)
         {
-            Debug.Assert(Path.IsPathRooted(sourceFileName), "Absolute path expected.");
+            if (!Path.IsPathRooted(sourceFileName))
+                sourceFileName = Path.Combine(this.ProjectDirectory, sourceFileName);
 
             // Get source file name, which is used for lookup in _pipelineBuildEvents.
             sourceFileName = PathHelper.Normalize(sourceFileName);
