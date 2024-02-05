@@ -222,13 +222,13 @@ namespace Content.Pipeline.Editor
         {
             Unload();
 
-            var assemblyPaths = new List<string>();
+            List<string> assemblyPaths = new List<string>();
 
-            var projectRoot = project.Location;
+            string projectRoot = project.Location;
 
-            foreach (var i in project.References)
+            foreach (string i in project.References)
             {
-                var path = Path.Combine(projectRoot, i);
+                string path = Path.Combine(projectRoot, i);
 
                 if (string.IsNullOrEmpty(path))
                     throw new ArgumentException("assemblyFilePath cannot be null!");
@@ -244,15 +244,15 @@ namespace Content.Pipeline.Editor
             ResolveAssemblies(assemblyPaths);
 
             var importerDescriptions = new ImporterTypeDescription[_importers.Count];
-            var cur = 0;
+            int cur = 0;
             foreach (var item in _importers)
             {
                 // Find the abstract base class ContentImporter<T>.
-                var baseType = item.Type.BaseType;
+                Type baseType = item.Type.BaseType;
                 while (!baseType.IsAbstract)
                     baseType = baseType.BaseType;
 
-                var outputType = baseType.GetGenericArguments()[0];
+                Type outputType = baseType.GetGenericArguments()[0];
                 var desc = new ImporterTypeDescription()
                     {
                         TypeName = item.Type.Name,
@@ -292,7 +292,7 @@ namespace Content.Pipeline.Editor
                     properties.Add(p);
                 }
 
-                var inputType = (obj as IContentProcessor).InputType;
+                Type inputType = (obj as IContentProcessor).InputType;
                 var desc = new ProcessorTypeDescription()
                 {
                     TypeName = item.Type.Name,
