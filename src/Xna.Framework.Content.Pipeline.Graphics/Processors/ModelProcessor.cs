@@ -187,8 +187,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     VertexBufferContent geomBuffer = geometry.Vertices.CreateVertexBuffer();
 
-                    // geometries are supposed to all have the same decl, so just steal one of these
-                    vertexBuffer.VertexDeclaration = geomBuffer.VertexDeclaration;
+                    // geometries are supposed to all have the same declaration, so just steal one of these
+                    if (vertexBuffer.VertexDeclaration.VertexStride == null 
+                    &&  vertexBuffer.VertexDeclaration.VertexElements.Count == 0)
+                    {
+                        vertexBuffer.VertexDeclaration = geomBuffer.VertexDeclaration;
+                    }
+                    else
+                    {
+                        if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
+                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
+                            throw new InvalidOperationException("Invalid geometry");
+                    }
 
                     vertexBuffer.Write(vertexBuffer.VertexData.Length, 1, geomBuffer.VertexData);
 
