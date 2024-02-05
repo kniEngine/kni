@@ -50,6 +50,16 @@ namespace Content.Pipeline.Editor
         }
 
         [CommandLineParameter(
+            Name = "packageReference",
+            ValueName = "package",
+            Description = "Adds a nuget package reference for resolving content importers, processors, and writers.")]
+        public List<string> PackageReferences
+        {
+            set { _project.PackageReferences = value; }
+            get { return _project.PackageReferences; }
+        }
+
+        [CommandLineParameter(
             Name = "platform",
             ValueName = "targetPlatform",
             Description = "Set the target platform for this build.  Defaults to Windows.")]
@@ -305,6 +315,12 @@ namespace Content.Pipeline.Editor
             foreach (string i in _project.References)
             {
                 line = string.Format(lineFormat, "reference", i);
+                io.WriteLine(line);
+            }
+
+            foreach (string i in _project.PackageReferences)
+            {
+                line = string.Format(lineFormat, "packageReference", i);
                 io.WriteLine(line);
             }
 
