@@ -15,6 +15,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             uint vertexCount = (uint)(value.VertexData.Length / value.VertexDeclaration.VertexStride);
 
+            int rem = (value.VertexData.Length % value.VertexDeclaration.VertexStride.Value);
+            if (rem != 0)
+                throw new PipelineException("Invalid VertexData.Length");
+
             output.Write((uint)vertexCount);
             output.Write(value.VertexData);
         }
