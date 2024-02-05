@@ -44,12 +44,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Print the finishing info.
             if (!content.Quiet)
             {
-                Console.WriteLine("\nBuild {0} succeeded, {1} failed.\n", content.SuccessCount, content.ErrorCount);
+                Console.WriteLine("\nBuild {0} succeeded, {1} failed.\n", 
+                                  content.SuccessCount, content.ErrorCount);
                 Console.WriteLine("Time elapsed {0:hh\\:mm\\:ss\\.fff}.", DateTime.Now - buildStarted);
             }
             else
             {
-                Console.WriteLine("KNI content pipeline builder: {0} succeeded, {1} failed, took {2:hh\\:mm\\:ss\\.fff}.", content.SuccessCount, content.ErrorCount, DateTime.Now - buildStarted);
+                Console.WriteLine("KNI content pipeline builder: {0} succeeded, {1} failed, took {2:hh\\:mm\\:ss\\.fff}.", 
+                                  content.SuccessCount, content.ErrorCount, DateTime.Now - buildStarted);
             }
 
             // Return the error count.

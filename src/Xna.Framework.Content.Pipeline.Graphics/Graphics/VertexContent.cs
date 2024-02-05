@@ -51,10 +51,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <summary>
         /// Constructs a VertexContent instance.
         /// </summary>
-        internal VertexContent(GeometryContent geom)
+        internal VertexContent(GeometryContent geometry)
         {
             _positionIndices = new VertexChannel<int>("PositionIndices");
-            _positions = new IndirectPositionCollection(geom, _positionIndices);
+            _positions = new IndirectPositionCollection(geometry, _positionIndices);
             _channels = new VertexChannelCollection(this);
         }
 
@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             _positionIndices.Items.RemoveAt(index);
 
-            foreach (var channel in _channels)
+            foreach (VertexChannel channel in _channels)
                 channel.Items.RemoveAt(index);
         }
 

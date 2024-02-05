@@ -536,13 +536,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 // Remove completed tasks.
                 for (int i = activeBuildTasks.Count - 1; i >= 0; i--)
                 {
-                    var task = activeBuildTasks[i];
+                    Task<BuildEvent> task = activeBuildTasks[i];
                     if (task.IsCompleted || task.IsCanceled || task.IsFaulted)
                     {
                         activeBuildTasks.RemoveAt(i);
                         if (task.IsCompleted)
                         {
-                            var buildState = task.AsyncState as BuildAsyncState;
+                            BuildAsyncState buildState = task.AsyncState as BuildAsyncState;
 
                             fileCollection.AddFile(buildState.SourceFile, buildState.OutputFile);
                             SuccessCount++;
@@ -585,10 +585,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                                 if (!this.Quiet)
                                 {
                                     string skipSourceFileOutput = String.Format("Skipping {0}", item.SourceFile);
-                                    if (!string.IsNullOrEmpty(item.Link))
-                                    {
-                                        //skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
-                                    }
+                                    //if (!string.IsNullOrEmpty(item.Link))
+                                    //    skipSourceFileOutput = String.Format("Skipping {0} => {1}", item.SourceFile, item.Link);
                                     Console.WriteLine(skipSourceFileOutput);
                                 }
                                 SuccessCount++;

@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Framework.Content
                 // Setting the RootDirectory to an absolute path is useful in editor
                 // situations, but TitleContainer can ONLY be passed relative paths.                
                 if (Path.IsPathRooted(assetPath))                
-                    return File.OpenRead(assetPath);                
+                    return File.OpenRead(assetPath);
                 
                 return TitleContainer.OpenStream(assetPath);
             }

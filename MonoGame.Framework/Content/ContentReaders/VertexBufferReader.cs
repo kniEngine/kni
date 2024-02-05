@@ -12,6 +12,7 @@ namespace Microsoft.Xna.Framework.Content
         protected internal override VertexBuffer Read(ContentReader input, VertexBuffer existingInstance)
         {
             VertexDeclaration declaration = input.ReadRawObject<VertexDeclaration>();
+
             int vertexCount = (int)input.ReadUInt32();
             int dataSize = vertexCount * declaration.VertexStride;
             byte[] data = input.BufferPool.Get(dataSize);

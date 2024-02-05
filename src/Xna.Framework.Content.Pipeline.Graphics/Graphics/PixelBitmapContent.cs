@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public PixelBitmapContent(int width, int height)
         {
             if (!TryGetFormat(out _format))
-                throw new InvalidOperationException(string.Format("Color format \"{0}\" is not supported",typeof(T).ToString()));
+                throw new InvalidOperationException(String.Format("Color format \"{0}\" is not supported",typeof(T).ToString()));
             Height = height;
             Width = width;
 
@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Convert from a Vector4 format
-            var src = sourceBitmap as PixelBitmapContent<Vector4>;
+            PixelBitmapContent<Vector4> src = sourceBitmap as PixelBitmapContent<Vector4>;
             if (default(T) is IPackedVector)
             {
                 Parallel.For(0, sourceRegion.Height, (y) =>
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // Convert to a Vector4 format
-            var dest = destinationBitmap as PixelBitmapContent<Vector4>;
+            PixelBitmapContent<Vector4> dest = destinationBitmap as PixelBitmapContent<Vector4>;
             if (default(T) is IPackedVector)
             {
                 Parallel.For(0, sourceRegion.Height, (y) =>

@@ -59,9 +59,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <summary>
         /// Initializes a new instance of IndirectPositionCollection.
         /// </summary>
-        internal IndirectPositionCollection(GeometryContent geom, VertexChannel<int> positionIndices)
+        internal IndirectPositionCollection(GeometryContent geometry, VertexChannel<int> positionIndices)
         {
-            _geometry = geom;
+            _geometry = geometry;
             _positionIndices = positionIndices;
         }
 

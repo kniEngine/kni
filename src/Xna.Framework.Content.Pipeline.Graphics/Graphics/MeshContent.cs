@@ -50,17 +50,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // Normals are "tangent covectors", which need to be transformed using the
             // transpose of the inverse matrix!
             Matrix inverseTranspose = Matrix.Transpose(Matrix.Invert(xform));
-            foreach (GeometryContent geom in _geometry)
+            foreach (GeometryContent geometry in _geometry)
             {
-                foreach (VertexChannel channel in geom.Vertices.Channels)
+                foreach (VertexChannel vertexChannel in geometry.Vertices.Channels)
                 {
-                    VertexChannel<Vector3> vector3Channel = channel as VertexChannel<Vector3>;
+                    VertexChannel<Vector3> vector3Channel = vertexChannel as VertexChannel<Vector3>;
                     if (vector3Channel == null)
                         continue;
 
-                    if (channel.Name.StartsWith("Normal") ||
-                        channel.Name.StartsWith("Binormal") ||
-                        channel.Name.StartsWith("Tangent"))
+                    if (vertexChannel.Name.StartsWith("Normal")
+                    ||  vertexChannel.Name.StartsWith("Binormal")
+                    ||  vertexChannel.Name.StartsWith("Tangent"))
                     {
                         for (int i = 0; i < vector3Channel.Count; i++)
                         {

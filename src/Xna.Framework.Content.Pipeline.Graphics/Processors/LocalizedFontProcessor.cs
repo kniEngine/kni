@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 context.AddDependency(absolutePath);
             }
 
-            var parameters = new OpaqueDataDictionary();
+            OpaqueDataDictionary parameters = new OpaqueDataDictionary();
             parameters.Add("PremultiplyAlpha", PremultiplyAlpha);
             parameters.Add("TextureFormat", TextureFormat);
             // After adding the necessary characters, we can use the built in

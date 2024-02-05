@@ -92,8 +92,13 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Fixup shared resources by calling each registered action
-            foreach (KeyValuePair<int,Action<object>> fixup in sharedResourceFixups)
-                fixup.Value(sharedResources[fixup.Key]);
+            for (int i = 0; i < sharedResourceFixups.Count; ++i)
+            {
+                KeyValuePair<int, Action<object>> fixup = sharedResourceFixups[i];
+                object sharedResource = sharedResources[fixup.Key];
+                Action<object> fixupAction = fixup.Value;
+                fixupAction(sharedResource);
+            }
         }
 
         public T ReadExternalReference<T>()

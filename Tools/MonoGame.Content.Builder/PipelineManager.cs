@@ -630,7 +630,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                             Parameters = assetCachedBuildEvent.Parameters,
                         };
 
-                        // Give the asset a chance to rebuild.                    
+                        // Give the asset a chance to rebuild.
                         BuildContent(logger, depBuildEvent, assetCachedBuildEvent, asset);
                     }
                 }
@@ -651,6 +651,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     // Store the new event into the intermediate folder.
                     SaveBuildEvent(destFilePath, buildEvent);
                 }
+
             }
             finally
             {

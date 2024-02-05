@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             for (int i = 0; i < sharedResources.Count; i++)
             {
-                var resource = sharedResources[i];
+                object resource = sharedResources[i];
                 WriteObject<object>(resource);
             }
         }
@@ -235,8 +235,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         bool WriteCompressedStream(MemoryStream stream)
         {
             // Compress stream
-            var maxLength = LZ4Codec.MaximumOutputLength((int)stream.Length);
-            var outputArray = new byte[maxLength * 2];
+            int maxLength = LZ4Codec.MaximumOutputLength((int)stream.Length);
+            byte[] outputArray = new byte[maxLength * 2];
             int resultLength = LZ4Codec.Encode32HC(stream.GetBuffer(), 0, (int)stream.Length, outputArray, 0, maxLength);
             if (resultLength < 0)
                 return false;
@@ -332,11 +332,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 Write7BitEncodedInt(0);
             else
             {
-                var typeWriter = GetTypeWriter(value.GetType());
+                ContentTypeWriter typeWriter = GetTypeWriter(value.GetType());
 
                 // Because zero means null object, we add one to 
                 // the index before writing it to the file.
-                var index = typeWriterMap[typeWriter.GetType()];
+                int index = typeWriterMap[typeWriter.GetType()];
                 Write7BitEncodedInt(index + 1);
 
                 typeWriter.InternalWrite(this, value);
@@ -522,7 +522,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <returns>True if the type can be deserialized into an existing object.</returns>
         internal bool CanDeserializeIntoExistingObject(Type type)
         {
-            var typeWriter = compiler.GetTypeWriter(type);
+            ContentTypeWriter typeWriter = compiler.GetTypeWriter(type);
             return typeWriter != null && typeWriter.CanDeserializeIntoExistingObject;
         }
     }

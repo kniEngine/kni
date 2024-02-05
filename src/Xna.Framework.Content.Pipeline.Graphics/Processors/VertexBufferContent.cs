@@ -17,27 +17,40 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     /// <remarks>This type directly corresponds to the runtime VertexBuffer class, and when a VertexBufferContent object is passed to the content compiler, the vertex data deserializes directly into a VertexBuffer at runtime. VertexBufferContent objects are not directly created by importers. The preferred method is to store vertex data in the more flexible VertexContent class.</remarks>
     public class VertexBufferContent : ContentItem
     {
-        readonly MemoryStream stream;
+        VertexDeclarationContent _vertexDeclaration;
+
+        readonly MemoryStream _memoryStream;
 
         /// <summary>
         /// Gets the array containing the raw bytes of the packed vertex data. Use this method to get and set the contents of the vertex buffer.
         /// </summary>
         /// <value>Raw data of the packed vertex data.</value>
-        public byte[] VertexData { get { return stream.ToArray(); } }
+        public byte[] VertexData 
+        {
+            get
+            {
+                byte[] result = _memoryStream.ToArray();
+                return result;
+            }
+        }
 
         /// <summary>
         /// Gets and sets the associated VertexDeclarationContent object.
         /// </summary>
         /// <value>The associated VertexDeclarationContent object.</value>
-        public VertexDeclarationContent VertexDeclaration { get; set; }
+        public VertexDeclarationContent VertexDeclaration
+        {
+            get { return _vertexDeclaration; }
+            set { _vertexDeclaration = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of VertexBufferContent.
         /// </summary>
         public VertexBufferContent()
         {
-            stream = new MemoryStream();
-            VertexDeclaration = new VertexDeclarationContent();
+            _memoryStream = new MemoryStream();
+            _vertexDeclaration = new VertexDeclarationContent();
         }
 
         /// <summary>
@@ -47,8 +60,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         public VertexBufferContent(int size)
             : base()
         {
-            stream = new MemoryStream(size);
-            VertexDeclaration = new VertexDeclarationContent();
+            _memoryStream = new MemoryStream(size);
+            _vertexDeclaration = new VertexDeclarationContent();
         }
 
         /// <summary>
@@ -109,9 +122,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// <exception cref="NotSupportedException">The specified data type cannot be packed into a vertex buffer.</exception>
         public void Write(int offset, int stride, Type dataType, IEnumerable data)
         {
-            var size = SizeOf(dataType);
-            var bytes = new byte[size];
-            var ptr = Marshal.AllocHGlobal(size);
+            int size = SizeOf(dataType);
+            byte[] bytes = new byte[size];
+            IntPtr ptr = Marshal.AllocHGlobal(size);
 
             // NOTE: This is not a very fast way to serialize 
             // an unknown struct type, but it is reliable.
@@ -120,14 +133,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // being the bottleneck of the content pipeline
             // are almost non-existent.
 
-            stream.Seek(offset, SeekOrigin.Begin);
-            foreach (var item in data)
+            _memoryStream.Seek(offset, SeekOrigin.Begin);
+            foreach (object item in data)
             {
-                var next = stream.Position + stride;
+                long next = _memoryStream.Position + stride;
                 Marshal.StructureToPtr(item, ptr, false);
                 Marshal.Copy(ptr, bytes, 0, size);
-                stream.Write(bytes, 0, size);
-                stream.Seek(next, SeekOrigin.Begin);
+                _memoryStream.Write(bytes, 0, size);
+                _memoryStream.Seek(next, SeekOrigin.Begin);
             }
 
             Marshal.FreeHGlobal(ptr);
