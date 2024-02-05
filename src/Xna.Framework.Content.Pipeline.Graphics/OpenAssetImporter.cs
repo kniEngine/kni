@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             public Matrix GetTransform(Vector3? scale, Quaternion? rotation, Vector3? translation)
             {
-                var transform = Matrix.Identity;
+                Matrix transform = Matrix.Identity;
 
                 if (GeometricScaling.HasValue)
                     transform *= GeometricScaling.Value;
@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             if (CurrentPlatform.OS == OS.Linux)
             {
-                var targetDir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+                string targetDir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
 
                 try
                 {
@@ -274,7 +274,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             _identity = new ContentIdentity(filename, _importerName);
 
-            using (var importer = new AssimpContext())
+            using (AssimpContext importer = new AssimpContext())
             {
                 // FBXPreservePivotsConfig(false) can be set to remove transformation
                 // pivots. However, Assimp does not automatically correct animations!
@@ -334,7 +334,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // mesh, we can flatten it out so the mesh is the root node.
                 if (_rootNode.Children.Count == 1 && _rootNode.Children[0] is MeshContent)
                 {
-                    var absXform = _rootNode.Children[0].AbsoluteTransform;
+                    Matrix absXform = _rootNode.Children[0].AbsoluteTransform;
                     _rootNode = _rootNode.Children[0];
                     _rootNode.Identity = _identity;
                     _rootNode.Transform = absXform;
@@ -352,12 +352,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private void ImportMaterials()
         {
             _materials = new List<MaterialContent>();
-            foreach (var aiMaterial in _scene.Materials)
+            foreach (Material aiMaterial in _scene.Materials)
             {
                 // TODO: What about AlphaTestMaterialContent, DualTextureMaterialContent, 
                 // EffectMaterialContent, EnvironmentMapMaterialContent, and SkinnedMaterialContent?
 
-                var material = new BasicMaterialContent
+                BasicMaterialContent material = new BasicMaterialContent
                 {
                     Name = aiMaterial.Name,
                     Identity = _identity,
@@ -396,8 +396,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
         private ExternalReference<TextureContent> ImportTextureContentRef(TextureSlot textureSlot, bool ext = false)
         {
-            var texture = new ExternalReference<TextureContent>(textureSlot.FilePath, _identity);
-            texture.OpaqueData.Add("TextureCoordinate", string.Format("TextureCoordinate{0}", textureSlot.UVIndex));
+            ExternalReference<TextureContent> texture = new ExternalReference<TextureContent>(textureSlot.FilePath, _identity);
+            texture.OpaqueData.Add("TextureCoordinate", String.Format("TextureCoordinate{0}", textureSlot.UVIndex));
 
             // ext is set by ImportMaterialsEx()
             if (ext)
@@ -417,35 +417,35 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private void ImportMaterialsExt()
         {
             _materials = new List<MaterialContent>();
-            foreach (var aiMaterial in _scene.Materials)
+            foreach (Material aiMaterial in _scene.Materials)
             {
                 // TODO: Should we create a special AssImpMaterial?
 
-                var material = new MaterialContent
+                MaterialContent material = new MaterialContent
                 {
                     Name = aiMaterial.Name,
                     Identity = _identity,
                 };
 
-                var slots = aiMaterial.GetAllMaterialTextures();
-                foreach (var tex in slots)
+                TextureSlot[] textureSlots = aiMaterial.GetAllMaterialTextures();
+                foreach (TextureSlot textureSlot in textureSlots)
                 {
                     string name;
 
                     // Force the XNA naming standard for diffuse textures
                     // which allows the material to work with the stock
                     // model processor.
-                    if (tex.TextureType == TextureType.Diffuse)
+                    if (textureSlot.TextureType == TextureType.Diffuse)
                         name = BasicMaterialContent.TextureKey;
                     else
-                        name = tex.TextureType.ToString();
+                        name = textureSlot.TextureType.ToString();
 
                     // We might have multiple textures of the same type so number
                     // them starting with 2 like in DualTextureMaterialContent.
-                    if (tex.TextureIndex > 0)
-                        name += (tex.TextureIndex + 1);
+                    if (textureSlot.TextureIndex > 0)
+                        name += (textureSlot.TextureIndex + 1);
 
-                    material.Textures.Add(name, ImportTextureContentRef(tex, true));
+                    material.Textures.Add(name, ImportTextureContentRef(textureSlot, true));
                 }
 
                 if (aiMaterial.HasBlendMode)
@@ -519,12 +519,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 foreach (int meshIndex in aiNode.MeshIndices)
                 {
-                    var aiMesh = _scene.Meshes[meshIndex];
+                    Mesh aiMesh = _scene.Meshes[meshIndex];
                     if (!aiMesh.HasVertices)
                         continue;
 
-                    GeometryContent geom = CreateGeometry(mesh, aiMesh);
-                    mesh.Geometry.Add(geom);
+                    GeometryContent geometry = CreateGeometry(mesh, aiMesh);
+                    mesh.Geometry.Add(geometry);
                 }
 
                 node = mesh;
@@ -575,7 +575,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 else if (aiNode.Name.EndsWith("_GeometricScaling"))
                     pivot.GeometricScaling = transform;
                 else
-                    throw new InvalidContentException(string.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), _identity);
+                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), _identity);
             }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
@@ -598,9 +598,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 if (_scene.HasAnimations)
                 {
-                    foreach (var animation in _scene.Animations)
+                    foreach (Animation aiAnimation in _scene.Animations)
                     {
-                        AnimationContent animationContent = ImportAnimation(animation, node.Name);
+                        AnimationContent animationContent = ImportAnimation(aiAnimation, node.Name);
                         if (animationContent.Channels.Count > 0)
                             node.Animations.Add(animationContent.Name, animationContent);
                     }
@@ -609,15 +609,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             Debug.Assert(parent != null);
 
-            foreach (var child in aiNode.Children)
-                ImportNodes(child, aiParent, parent);
+            foreach (Node aiChild in aiNode.Children)
+                ImportNodes(aiChild, aiParent, parent);
 
             return node;
         }
 
         private GeometryContent CreateGeometry(MeshContent mesh, Mesh aiMesh)
         {
-            GeometryContent geom = new GeometryContent
+            GeometryContent geometry = new GeometryContent
             {
               Identity = _identity,
               Material = _materials[aiMesh.MaterialIndex]
@@ -625,28 +625,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             // Vertices
             int baseVertex = mesh.Positions.Count;
-            foreach (var vert in aiMesh.Vertices)
-                mesh.Positions.Add(ToXna(vert));
-            geom.Vertices.AddRange(Enumerable.Range(baseVertex, aiMesh.VertexCount));
-            geom.Indices.AddRange(aiMesh.GetIndices());
+            foreach (Vector3D aiVert in aiMesh.Vertices)
+                mesh.Positions.Add(ToXna(aiVert));
+            geometry.Vertices.AddRange(Enumerable.Range(baseVertex, aiMesh.VertexCount));
+            geometry.Indices.AddRange(aiMesh.GetIndices());
 
             if (aiMesh.HasBones)
             {
-                var xnaWeights = new List<BoneWeightCollection>();
-                int vertexCount = geom.Vertices.VertexCount;
+                List<BoneWeightCollection> xnaWeights = new List<BoneWeightCollection>();
+                int vertexCount = geometry.Vertices.VertexCount;
                 bool missingBoneWeights = false;
                 for (int i = 0; i < vertexCount; i++)
                 {
-                    var list = new BoneWeightCollection();
+                    BoneWeightCollection list = new BoneWeightCollection();
                     for (int boneIndex = 0; boneIndex < aiMesh.BoneCount; boneIndex++)
                     {
-                        var bone = aiMesh.Bones[boneIndex];
-                        foreach (var weight in bone.VertexWeights)
+                        Bone aiBone = aiMesh.Bones[boneIndex];
+                        foreach (VertexWeight aiWeight in aiBone.VertexWeights)
                         {
-                            if (weight.VertexID != i)
+                            if (aiWeight.VertexID != i)
                                 continue;
 
-                            list.Add(new BoneWeight(bone.Name, weight.Weight));
+                            list.Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
                         }
                     }
 
@@ -669,20 +669,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         aiMesh.Name);
                 }
 
-                geom.Vertices.Channels.Add(VertexChannelNames.Weights(0), xnaWeights);
+                geometry.Vertices.Channels.Add(VertexChannelNames.Weights(0), xnaWeights);
             }
 
             // Individual channels go here
             if (aiMesh.HasNormals)
-                geom.Vertices.Channels.Add(VertexChannelNames.Normal(), aiMesh.Normals.Select(ToXna));
+                geometry.Vertices.Channels.Add(VertexChannelNames.Normal(), aiMesh.Normals.Select(ToXna));
 
             for (int i = 0; i < aiMesh.TextureCoordinateChannelCount; i++)
-                geom.Vertices.Channels.Add(VertexChannelNames.TextureCoordinate(i), aiMesh.TextureCoordinateChannels[i].Select(ToXnaTexCoord));
+                geometry.Vertices.Channels.Add(VertexChannelNames.TextureCoordinate(i), aiMesh.TextureCoordinateChannels[i].Select(ToXnaTexCoord));
 
             for (int i = 0; i < aiMesh.VertexColorChannelCount; i++)
-                geom.Vertices.Channels.Add(VertexChannelNames.Color(i), aiMesh.VertexColorChannels[i].Select(ToXnaColor));
+                geometry.Vertices.Channels.Add(VertexChannelNames.Color(i), aiMesh.VertexColorChannels[i].Select(ToXnaColor));
 
-            return geom;
+            return geometry;
         }
 
         /// <summary>
@@ -699,7 +699,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 return;
 
             // Walk the tree upwards to find the root bones.
-            var rootBones = new HashSet<Node>();
+            HashSet<Node> rootBones = new HashSet<Node>();
             foreach (string boneName in _deformationBones.Keys)
                 rootBones.Add(FindRootBone(_scene, boneName));
 
@@ -721,13 +721,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             Debug.Assert(scene != null);
 
-            var offsetMatrices = new Dictionary<string, Matrix>();
+            Dictionary<string, Matrix> offsetMatrices = new Dictionary<string, Matrix>();
             if (scene.HasMeshes)
-                foreach (var mesh in scene.Meshes)
-                    if (mesh.HasBones)
-                        foreach (var bone in mesh.Bones)
-                            if (!offsetMatrices.ContainsKey(bone.Name))
-                                offsetMatrices[bone.Name] = ToXna(bone.OffsetMatrix);
+                foreach (Mesh aiMesh in scene.Meshes)
+                    if (aiMesh.HasBones)
+                        foreach (Bone aiBone in aiMesh.Bones)
+                            if (!offsetMatrices.ContainsKey(aiBone.Name))
+                                offsetMatrices[aiBone.Name] = ToXna(aiBone.OffsetMatrix);
 
             return offsetMatrices;
         }
@@ -778,9 +778,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 return;
 
             // Convert animations and add to root bone.
-            foreach (var animation in _scene.Animations)
+            foreach (Animation aiAnimation in _scene.Animations)
             {
-                var animationContent = ImportAnimation(animation);
+                AnimationContent animationContent = ImportAnimation(aiAnimation);
                 rootBoneContent.Animations.Add(animationContent.Name, animationContent);
             }
         }
@@ -892,8 +892,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 parent = node;
             }
 
-            foreach (var child in aiNode.Children)
-                ImportBones(child, aiParent, parent);
+            foreach (Node aiChild in aiNode.Children)
+                ImportBones(aiChild, aiParent, parent);
 
             return node;
         }
@@ -906,7 +906,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <returns>The animation converted to XNA.</returns>
         private AnimationContent ImportAnimation(Animation aiAnimation, string nodeName = null)
         {
-            var animation = new AnimationContent
+            AnimationContent animation = new AnimationContent
             {
                 Name = GetAnimationName(aiAnimation.Name),
                 Identity = _identity,
@@ -931,7 +931,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                                            .GroupBy(channel => GetNodeName(channel.NodeName));
             }
 
-            foreach (var channelGroup in channelGroups)
+            foreach (IGrouping<string,NodeAnimationChannel> channelGroup in channelGroups)
             {
                 string boneName = channelGroup.Key;
                 AnimationChannel channel = new AnimationChannel();
@@ -945,7 +945,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 List<QuaternionKey> rotationKeys = EmptyQuaternionKeys;
                 List<VectorKey> translationKeys = EmptyVectorKeys;
 
-                foreach (var aiChannel in channelGroup)
+                foreach (NodeAnimationChannel aiChannel in channelGroup)
                 {
                     if (aiChannel.NodeName.EndsWith("_$AssimpFbx$_Scaling"))
                     {
@@ -1097,16 +1097,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Copies the current node and all descendant nodes into a list.
         /// </summary>
-        /// <param name="node">The current node.</param>
+        /// <param name="aiNode">The current node.</param>
         /// <param name="list">The list.</param>
-        private static void GetSubtree(Node node, List<Node> list)
+        private static void GetSubtree(Node aiNode, List<Node> list)
         {
-            Debug.Assert(node != null);
+            Debug.Assert(aiNode != null);
             Debug.Assert(list != null);
 
-            list.Add(node);
-            foreach (var child in node.Children)
-                GetSubtree(child, list);
+            list.Add(aiNode);
+            foreach (Node aiChild in aiNode.Children)
+                GetSubtree(aiChild, list);
         }
 
         /// <summary>
@@ -1132,7 +1132,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
 
             if (parent == null && ancestor != null)
-                throw new ArgumentException(string.Format("Node \"{0}\" is not an ancestor of \"{1}\".", ancestor.Name, node.Name));
+                throw new ArgumentException(String.Format("Node \"{0}\" is not an ancestor of \"{1}\".", ancestor.Name, node.Name));
 
             return transform;
         }

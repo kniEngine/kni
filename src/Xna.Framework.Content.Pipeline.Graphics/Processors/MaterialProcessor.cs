@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// <remarks>textureName can be used to determine which processor to use. For example, if a texture is being used as a normal map, the user may not want to use the ModelTextureProcessor on it, which compresses textures.</remarks>
         protected virtual ExternalReference<TextureContent> BuildTexture(string textureName, ExternalReference<TextureContent> texture, ContentProcessorContext context)
         {
-            var parameters = new OpaqueDataDictionary();
+            OpaqueDataDictionary parameters = new OpaqueDataDictionary();
             parameters.Add("ColorKeyColor", ColorKeyColor);
             parameters.Add("ColorKeyEnabled", ColorKeyEnabled);
             parameters.Add("GenerateMipmaps", GenerateMipmaps);
@@ -147,12 +147,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Apply specified default effect.
             if (input is BasicMaterialContent && DefaultEffect != MaterialProcessorDefaultEffect.BasicEffect)
             {
-                var newMaterial = CreateDefaultMaterial(DefaultEffect);
+                MaterialContent newMaterial = CreateDefaultMaterial(DefaultEffect);
                 
                 // Preserve material properties.
                 newMaterial.Name = input.Name;
                 newMaterial.Identity = input.Identity;
-                foreach (var item in input.OpaqueData)
+                foreach (KeyValuePair<string,object> item in input.OpaqueData)
                     newMaterial.OpaqueData.Add(item.Key, item.Value);
                 foreach (var item in input.Textures)
                     newMaterial.Textures.Add(item.Key, item.Value);
@@ -161,7 +161,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             // Docs say that if it's a basic effect, only build the diffuse texture.
-            var basic = input as BasicMaterialContent;
+            BasicMaterialContent basic = input as BasicMaterialContent;
             if (basic != null)
             {
                 ExternalReference<TextureContent> texture;
@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             // Build custom effects
-            var effectMaterial = input as EffectMaterialContent;
+            EffectMaterialContent effectMaterial = input as EffectMaterialContent;
             if (effectMaterial != null && effectMaterial.CompiledEffect == null)
             {
                 if (effectMaterial.Effect == null)
@@ -183,11 +183,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             // Build all textures
-            var keys = new List<string>(input.Textures.Keys);
+            List<string> keys = new List<string>(input.Textures.Keys);
             foreach (string key in keys)
             {
-                var texture = input.Textures[key];
-                var builtTexture = BuildTexture(texture.Filename, texture, context);
+                ExternalReference<TextureContent> texture = input.Textures[key];
+                ExternalReference<TextureContent> builtTexture = BuildTexture(texture.Filename, texture, context);
                 input.Textures[key] = builtTexture;
             }
 

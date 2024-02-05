@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 _currentGeometryContent = new GeometryContent();
                 _currentGeometryContent.Material = _currentMaterial;
-                foreach (var kvp in _currentOpaqueData)
+                foreach (KeyValuePair<string, object> kvp in _currentOpaqueData)
                     _currentGeometryContent.OpaqueData.Add(kvp.Key, kvp.Value);
 
                 // we have to copy our vertex channels to the new geometry
@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 VertexChannel channel = _currentGeometryContent.Vertices.Channels[i];
                 object data = _vertexChannelData[i];
                 if (data == null)
-                    throw new InvalidOperationException(string.Format("Missing vertex channel data for channel {0}", channel.Name));
+                    throw new InvalidOperationException(String.Format("Missing vertex channel data for channel {0}", channel.Name));
 
                 channel.Items.Add(data);
             }
@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public void SetVertexChannelData(int vertexDataIndex, object channelData)
         {
             if (_currentGeometryContent.Vertices.Channels[vertexDataIndex].ElementType != channelData.GetType())
-                throw new InvalidOperationException(string.Format("Channel {0} data has a different type from input. Expected: {1}. Actual: {2}",
+                throw new InvalidOperationException(String.Format("Channel {0} data has a different type from input. Expected: {1}. Actual: {2}",
                     vertexDataIndex, _currentGeometryContent.Vertices.Channels[vertexDataIndex].ElementType, channelData.GetType()));
 
             _vertexChannelData[vertexDataIndex] = channelData;

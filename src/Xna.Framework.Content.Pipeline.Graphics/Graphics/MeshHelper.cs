@@ -37,27 +37,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </remarks>
         public static void CalculateNormals(MeshContent mesh, bool overwriteExistingNormals)
         {
-            foreach (var geom in mesh.Geometry)
-                CalculateNormals(geom, overwriteExistingNormals);
+            foreach (GeometryContent geometry in mesh.Geometry)
+                CalculateNormals(geometry, overwriteExistingNormals);
         }
 
         /// <summary>
         /// Generates vertex normals by accumulation of triangle face normals.
         /// </summary>
-        /// <param name="geom">The geometry which will receive the normals.</param>
+        /// <param name="geometry">The geometry which will receive the normals.</param>
         /// <param name="overwriteExistingNormals">Overwrite or skip over geometry with existing normals.</param>
         /// <remarks>
         /// We use a "Mean Weighted Equally" method generate vertex normals from triangle 
         /// face normals.  If normal cannot be calculated from the geometry we set it to zero.
         /// </remarks>
-        public static void CalculateNormals(GeometryContent geom, bool overwriteExistingNormals)
+        public static void CalculateNormals(GeometryContent geometry, bool overwriteExistingNormals)
         {
             VertexChannel<Vector3> normalsChannel;
             // Look for an existing normals channel.
-            if (!geom.Vertices.Channels.Contains(VertexChannelNames.Normal()))
+            if (!geometry.Vertices.Channels.Contains(VertexChannelNames.Normal()))
             {
                 // We don't have existing normals, so add a new channel.
-                normalsChannel = geom.Vertices.Channels.Add<Vector3>(VertexChannelNames.Normal(), null);
+                normalsChannel = geometry.Vertices.Channels.Add<Vector3>(VertexChannelNames.Normal(), null);
             }
             else
             {
@@ -66,20 +66,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 if (!overwriteExistingNormals)
                     return;
 
-                normalsChannel = geom.Vertices.Channels.Get<Vector3>(VertexChannelNames.Normal());
+                normalsChannel = geometry.Vertices.Channels.Get<Vector3>(VertexChannelNames.Normal());
             }
 
             // Accumulate all the triangle face normals for each vertex.
             Vector3[] normals = new Vector3[normalsChannel.Count];
-            for (int i = 0; i < geom.Indices.Count; i += 3)
+            for (int i = 0; i < geometry.Indices.Count; i += 3)
             {
-                int ia = geom.Indices[i + 0];
-                int ib = geom.Indices[i + 1];
-                int ic = geom.Indices[i + 2];
+                int ia = geometry.Indices[i + 0];
+                int ib = geometry.Indices[i + 1];
+                int ic = geometry.Indices[i + 2];
 
-                Vector3 aa = geom.Vertices.Positions[ia];
-                Vector3 bb = geom.Vertices.Positions[ib];
-                Vector3 cc = geom.Vertices.Positions[ic];
+                Vector3 aa = geometry.Vertices.Positions[ia];
+                Vector3 bb = geometry.Vertices.Positions[ib];
+                Vector3 cc = geometry.Vertices.Positions[ic];
 
                 Vector3 faceNormal = Vector3.Cross(cc - bb, bb - aa);
                 float len = faceNormal.Length();
@@ -157,17 +157,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             for (int g = 0; g < mesh.Geometry.Count; g++)
             {
-                GeometryContent geom = mesh.Geometry[g];
+                GeometryContent geometry = mesh.Geometry[g];
 
-                CalculateTangentFrames(geom, textureCoordinateChannelName, tangentChannelName, binormalChannelName);
+                CalculateTangentFrames(geometry, textureCoordinateChannelName, tangentChannelName, binormalChannelName);
             }
         }
 
-        public static void CalculateTangentFrames(GeometryContent geom, string textureCoordinateChannelName, string tangentChannelName, string binormalChannelName)
+        public static void CalculateTangentFrames(GeometryContent geometry, string textureCoordinateChannelName, string tangentChannelName, string binormalChannelName)
         {
-            VertexContent verts = geom.Vertices;
-            IndexCollection indices = geom.Indices;
-            VertexChannelCollection channels = geom.Vertices.Channels;
+            VertexContent verts = geometry.Vertices;
+            IndexCollection indices = geometry.Indices;
+            VertexChannelCollection channels = geometry.Vertices.Channels;
 
             VertexChannel<Vector3> normals = channels.Get<Vector3>(VertexChannelNames.Normal(0));
             VertexChannel<Vector2> uvs = channels.Get<Vector2>(textureCoordinateChannelName);
@@ -412,9 +412,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             // TODO Improve performance with spatial partitioning scheme
             List<IndexUpdateList> indexLists = new List<IndexUpdateList>();
-            foreach (GeometryContent geom in mesh.Geometry)
+            foreach (GeometryContent geometry in mesh.Geometry)
             {
-                IndexUpdateList list = new IndexUpdateList(geom.Vertices.PositionIndices);
+                IndexUpdateList list = new IndexUpdateList(geometry.Vertices.PositionIndices);
                 indexLists.Add(list);
             }
 
@@ -509,8 +509,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             if (mesh == null)
                 throw new ArgumentNullException("mesh");
-            foreach (var geom in mesh.Geometry)
-                MergeDuplicateVertices(geom);
+
+            foreach (GeometryContent geometry in mesh.Geometry)
+                MergeDuplicateVertices(geometry);
         }
 
         public static void OptimizeForCache(MeshContent mesh)
@@ -532,14 +533,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             if (mesh == null)
                 throw new ArgumentNullException("mesh");
 
-            foreach (GeometryContent geom in mesh.Geometry)
+            foreach (GeometryContent geometry in mesh.Geometry)
             {
-                for (int i = 0; i < geom.Indices.Count; i += 3)
+                for (int i = 0; i < geometry.Indices.Count; i += 3)
                 {
-                    int first = geom.Indices[i];
-                    int last = geom.Indices[i+2];
-                    geom.Indices[i] = last;
-                    geom.Indices[i+2] = first;
+                    int first = geometry.Indices[i];
+                    int last = geometry.Indices[i+2];
+                    geometry.Indices[i] = last;
+                    geometry.Indices[i+2] = first;
                 }
             }
         }
@@ -580,8 +581,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 node.Transform = inverseTransform * node.Transform * transform;
 
                 // Transform animations.
-                foreach (var animationContent in node.Animations.Values)
-                    foreach (var animationChannel in animationContent.Channels.Values)
+                foreach (AnimationContent animation in node.Animations.Values)
+                    foreach (AnimationChannel animationChannel in animation.Channels.Values)
                         for (int i = 0; i < animationChannel.Count; i++)
                             animationChannel[i].Transform = inverseTransform * animationChannel[i].Transform * transform;
             }
@@ -612,13 +613,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         private static void UpdatePositionIndices(MeshContent mesh, int from, int to)
         {
-            foreach (var geom in mesh.Geometry)
+            foreach (GeometryContent geometry in mesh.Geometry)
             {
-                for (int i = 0; i < geom.Vertices.PositionIndices.Count; i++)
+                for (int i = 0; i < geometry.Vertices.PositionIndices.Count; i++)
                 {
-                    int index = geom.Vertices.PositionIndices[i];
+                    int index = geometry.Vertices.PositionIndices[i];
                     if (index == from)
-                        geom.Vertices.PositionIndices[i] = to;
+                        geometry.Vertices.PositionIndices[i] = to;
                 }
             }
         }

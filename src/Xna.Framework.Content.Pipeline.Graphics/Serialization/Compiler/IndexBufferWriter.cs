@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
@@ -12,8 +13,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         protected override void Write(ContentWriter output, IndexCollection value)
         {
             // Check if the buffer and can be saved as Int16.
-            var shortIndices = true;
-            foreach(var index in value)
+            bool shortIndices = true;
+            foreach(int index in value)
             {
                 if(index > ushort.MaxValue)
                 {
@@ -24,19 +25,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             output.Write(shortIndices);
 
-            var byteCount = shortIndices
-                                ? value.Count * 2
-                                : value.Count * 4;
+            int indicesSize = shortIndices ? 2 : 4;
+            int byteCount = value.Count * indicesSize;
 
             output.Write(byteCount);
             if (shortIndices)
             {
-                foreach (var item in value)
+                foreach (int item in value)
                     output.Write((ushort)item);
             }
             else
             {
-                foreach (var item in value)
+                foreach (int item in value)
                     output.Write(item);
             }
         }
@@ -48,8 +48,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            var type = typeof(ContentReader);
-            var readerType = type.Namespace + ".IndexBufferReader, " + type.AssemblyQualifiedName;
+            Type type = typeof(ContentReader);
+            string readerType = type.Namespace + ".IndexBufferReader, " + type.AssemblyQualifiedName;
             return readerType;
         }
     }
