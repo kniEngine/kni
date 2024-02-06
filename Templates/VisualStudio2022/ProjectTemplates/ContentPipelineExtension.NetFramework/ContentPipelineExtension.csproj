@@ -37,6 +37,9 @@
       <PackageReference Include="nkast.Xna.Framework" Version="3.10.9001">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="nkast.Xna.Framework.Graphics.PackedVector" Version="3.10.9001" >
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
       <PackageReference Include="nkast.Xna.Framework.Ref" Version="3.10.9001">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

@@ -1035,6 +1035,11 @@
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj">
+      <Project>{FF11302E-6A9F-49AA-960A-9584BC4BDA26}</Project>
+      <Name>Xna.Framework.Graphics.PackedVector</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
       <Name>Xna.Framework.Design</Name>

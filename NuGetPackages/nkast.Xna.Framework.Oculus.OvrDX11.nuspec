@@ -20,6 +20,7 @@
     <dependencies>
         <group targetFramework=".NETFramework4.0">
             <dependency id="nkast.Xna.Framework" version="$version$" />
+            <dependency id="nkast.Xna.Framework.Graphics.PackedVector" version="$version$" />
             <dependency id="MonoGame.Framework.WindowsDX.9000" version="$version$" />
             <dependency id="nkast.LibOVR" version="1.0.0" />
             <dependency id="SharpDX" version="4.0.1" />
@@ -28,6 +29,7 @@
         </group>
         <group targetFramework="net6.0-windows7.0">
             <dependency id="nkast.Xna.Framework" version="$version$" />
+            <dependency id="nkast.Xna.Framework.Graphics.PackedVector" version="$version$" />
             <dependency id="MonoGame.Framework.WindowsDX.9000" version="$version$" />
             <dependency id="nkast.LibOVR" version="1.0.0" />
             <dependency id="SharpDX" version="4.0.1" exclude="Build,Analyzers" />
