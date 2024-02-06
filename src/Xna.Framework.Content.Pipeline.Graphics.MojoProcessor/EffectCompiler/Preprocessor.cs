@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     public class Preprocessor
     {
-        public CppNet.Preprocessor _pp = new CppNet.Preprocessor();
+        private CppNet.Preprocessor _pp = new CppNet.Preprocessor();
 
 
         internal void AddMacro(string name, string value)

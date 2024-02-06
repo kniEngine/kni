@@ -20,6 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Include="Processors\PassThroughProcessor.cs" />
     <Compile Include="LoadedTypeCollection.cs" />
     <Compile Include="XmlImporter.cs" />

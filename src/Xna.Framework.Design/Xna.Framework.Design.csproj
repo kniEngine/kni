@@ -25,10 +25,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Include="Design\Vector2Converter.cs" />
     <Compile Include="Design\Vector3Converter.cs" />
     <Compile Include="Design\Vector4Converter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>

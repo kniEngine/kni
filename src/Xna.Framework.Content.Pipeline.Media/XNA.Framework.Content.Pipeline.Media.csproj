@@ -20,6 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Include="Processors\SongContent.cs" />
     <Compile Include="Processors\SongProcessor.cs" />
     <Compile Include="Processors\VideoProcessor.cs" />
