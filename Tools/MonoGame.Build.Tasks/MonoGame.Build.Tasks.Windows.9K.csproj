@@ -10,7 +10,7 @@
     <RootNamespace>MonoGame.Build.Tasks</RootNamespace>
     <AssemblyName>MonoGame.Build.Tasks</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>CS1591</NoWarn>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>

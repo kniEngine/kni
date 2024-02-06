@@ -10,7 +10,7 @@
     <RootNamespace>MonoGame.Tests</RootNamespace>
     <AssemblyName>MonoGame.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>CS1591</NoWarn>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
