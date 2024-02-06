@@ -43,12 +43,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Constructs a model. 
         /// </summary>
-        /// <param name="graphicsDevice">A valid reference to <see cref="GraphicsDevice"/>.</param>
         /// <param name="bones">The collection of bones.</param>
         /// <param name="meshes">The collection of meshes.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="graphicsDevice"/> is null.
-        /// </exception>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="bones"/> is null.
         /// </exception>

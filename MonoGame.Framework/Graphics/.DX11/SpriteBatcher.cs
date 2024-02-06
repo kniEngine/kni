@@ -167,7 +167,6 @@ namespace Microsoft.Xna.Platform.Graphics
         /// Sorts the batch items
         /// </summary>
         /// <param name="sortMode">The type of depth sorting desired for the rendering.</param>
-        /// <param name="sortMode"></param>
         public override void SortBatch(SpriteSortMode sortMode)
         {
             switch (sortMode)

@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Initializes a new instance of the <see cref="InputLayoutCache"/> class.
         /// </summary>
-        /// <param name="graphicsDevice">The graphics device.</param>
+        /// <param name="graphicsDeviceStrategy">The graphics device strategy.</param>
         /// <param name="shaderByteCode">The byte code of the vertex shader.</param>
         public InputLayoutCache(GraphicsDeviceStrategy graphicsDeviceStrategy, byte[] shaderByteCode)
         {
