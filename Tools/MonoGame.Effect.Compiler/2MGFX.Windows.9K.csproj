@@ -10,7 +10,7 @@
     <RootNamespace>TwoMGFX</RootNamespace>
     <AssemblyName>2MGFX</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>1591,0436</NoWarn>
+    <NoWarn>1591</NoWarn>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
