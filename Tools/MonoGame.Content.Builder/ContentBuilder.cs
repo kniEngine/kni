@@ -108,6 +108,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public readonly List<string> References = new List<string>();
 
         [CommandLineParameter(
+            Name = "packageReference",
+            ValueName = "package",
+            Description = "Adds a nuget package reference for resolving content importers, processors, and writers.")]
+        public readonly List<string> PackageReferences = new List<string>();
+
+        [CommandLineParameter(
             Name = "platform",
             Flag = "t",
             ValueName = "targetPlatform",
