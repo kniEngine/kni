@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// </summary>
     public class ContentImporterAttribute : Attribute
     {
-        List<string> extensions = new List<string>();
+        List<string> _extensions = new List<string>();
 
         /// <summary>
         /// Gets and sets the caching of the content during importation.
@@ -33,28 +33,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Gets the supported file name extensions of the importer.
         /// </summary>
-        public IEnumerable<string> FileExtensions { get { return extensions; } }
+        public IEnumerable<string> FileExtensions { get { return _extensions; } }
 
         /// <summary>
         /// Initializes a new instance of ContentImporterAttribute and sets the file name extension supported by the importer.
         /// </summary>
         /// <param name="fileExtension">The list of file name extensions supported by the importer. Prefix each extension with a '.'.</param>
-        public ContentImporterAttribute(
-            string fileExtension
-            )
+        public ContentImporterAttribute(string fileExtension)
         {
-            extensions.Add(fileExtension);
+            _extensions.Add(fileExtension);
         }
 
         /// <summary>
         /// Initializes a new instance of ContentImporterAttribute and sets the file name extensions supported by the importer.
         /// </summary>
         /// <param name="fileExtensions">The list of file name extensions supported by the importer. Prefix each extension with a '.'.</param>
-        public ContentImporterAttribute(
-            params string[] fileExtensions
-            )
+        public ContentImporterAttribute(params string[] fileExtensions)
         {
-            extensions.AddRange(fileExtensions);
+            _extensions.AddRange(fileExtensions);
         }
     }
 }
