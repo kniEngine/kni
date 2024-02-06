@@ -10,7 +10,7 @@
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Builder</RootNamespace>
     <AssemblyName>MGCB</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS1591</NoWarn>
+    <NoWarn>CS1591;CS1574;CS0419</NoWarn>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
