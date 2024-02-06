@@ -346,8 +346,6 @@ namespace Microsoft.Xna.Platform
         /// is called for all IUpdatable components.  Returning false from this
         /// method will result in this round of Update calls being skipped.
         /// </summary>
-        /// <param name="gameTime"></param>
-        /// <returns></returns>
         public abstract bool BeforeUpdate();
 
         /// <summary>
