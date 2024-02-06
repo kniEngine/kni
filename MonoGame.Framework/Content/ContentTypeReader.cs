@@ -35,6 +35,7 @@ namespace Microsoft.Xna.Framework.Content
             // Do nothing. Are we supposed to add ourselves to the manager?
         }
 
+        /// <param name="existingInstance">The object receiving the data, or null if a new instance of the object should be created.</param>
         protected internal abstract object Read(ContentReader input, object existingInstance);
     }
 
@@ -46,7 +47,7 @@ namespace Microsoft.Xna.Framework.Content
             // Nothing
         }
 
-        /// <param name="existingInstance">The object receiving the data, or null if a new instance of the object should be created.</param>
+        /// <inheritdoc/>
         protected internal override object Read(ContentReader input, object existingInstance)
         {
             if (existingInstance == null)

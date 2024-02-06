@@ -1,4 +1,4 @@
-﻿/// Copyright (C)2023 Nick Kastellanos
+﻿// Copyright (C)2023 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework.Graphics;

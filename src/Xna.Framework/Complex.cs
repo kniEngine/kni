@@ -338,7 +338,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Deconstruction method for <see cref="Complex"/>.
         /// </summary>
-        /// <param name="real">The real part of this < see cref = "Complex" /> number.</param>
+        /// <param name="real">The real part of this <see cref="Complex" /> number.</param>
         /// <param name="imaginary">The imaginary part of this <see cref="Complex"/> number.</param>
         public void Deconstruct(out float real, out float imaginary)
         {
@@ -472,6 +472,7 @@ namespace Microsoft.Xna.Framework
             return R.GetHashCode() + i.GetHashCode();
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return String.Format("{{R: {0}, i: {1} }}", R, i);
