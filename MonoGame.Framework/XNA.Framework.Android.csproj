@@ -11,7 +11,7 @@
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS1591;CS1574;CS0419</NoWarn>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>

@@ -19,7 +19,7 @@
     <DefineConstants>WINDOWSDX;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWindowsForms>true</UseWindowsForms>
-    <NoWarn>CS1591;CS1574;CS0419</NoWarn>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The MonoGame runtime for Windows using DirectX API's.</Description>
     <PackageTags>monogame;.net core;core;.net standard;standard;windowsdx</PackageTags>

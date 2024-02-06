@@ -18,7 +18,7 @@
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>OVR;DIRECTX11;</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS1591;CS1574;CS0419</NoWarn>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Ovr Oculus library for the KNI Framework (DirectX 11).</Description>
     <PackageTags>KNI;XNA;MonoGame</PackageTags>

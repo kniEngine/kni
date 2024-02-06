@@ -19,7 +19,7 @@
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants></DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS1591;CS1574;CS0419</NoWarn>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>XNA framework for the WebAssembly.</Description>
     <PackageTags>KNI;monogame;.net core;core;.net standard;standard;Blazor;webassembly</PackageTags>
