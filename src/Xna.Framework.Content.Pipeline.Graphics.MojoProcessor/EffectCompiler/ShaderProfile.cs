@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
 
-        public static D3DC.ShaderBytecode CompileHLSL(EffectContent input, ContentProcessorContext context, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
+        internal static D3DC.ShaderBytecode CompileHLSL(EffectContent input, ContentProcessorContext context, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, bool backwardsCompatibility, ref string errorsAndWarnings)
         {
             try
             {
