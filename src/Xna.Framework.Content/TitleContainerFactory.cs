@@ -18,6 +18,9 @@ namespace Microsoft.Xna.Platform
                 if (current != null)
                     return current;
 
+                Console.WriteLine("TitleContainerFactory not found..");
+                Console.WriteLine("Initialize title with 'TitleContainerFactory.RegisterTitleContainerFactory(new ConcreteTitleContainerFactory());'.");
+
                 TitleContainerFactory titleContainerFactory = CreateTitleContainerFactory();
                 TitleContainerFactory.RegisterTitleContainerFactory(titleContainerFactory);
 
@@ -27,7 +30,31 @@ namespace Microsoft.Xna.Platform
 
         private static TitleContainerFactory CreateTitleContainerFactory()
         {
-            return new ConcreteTitleContainerFactory();
+            Console.WriteLine("Registering Concrete TitleContainerFactoryStrategy through reflection.");
+
+            // find and create Concrete TitleContainerStrategy through reflection.
+            var currentAsm = typeof(TitleContainerStrategy).Assembly;
+
+            // search in current Assembly
+            foreach (var type in currentAsm.GetExportedTypes())
+                if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
+                    return (TitleContainerFactory)Activator.CreateInstance(type);
+
+            // search in loaded Assemblies
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var refAsm in asm.GetReferencedAssemblies())
+                {
+                    if (refAsm.FullName == currentAsm.FullName)
+                    {
+                        foreach (var type in asm.GetExportedTypes())
+                            if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
+                                return (TitleContainerFactory)Activator.CreateInstance(type);
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static void RegisterTitleContainerFactory(TitleContainerFactory titleContainerFactory)

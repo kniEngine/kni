@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     class VertexBufferReader : ContentTypeReader<VertexBuffer>
     {
-        protected internal override VertexBuffer Read(ContentReader input, VertexBuffer existingInstance)
+        protected override VertexBuffer Read(ContentReader input, VertexBuffer existingInstance)
         {
             VertexDeclaration declaration = input.ReadRawObject<VertexDeclaration>();
 

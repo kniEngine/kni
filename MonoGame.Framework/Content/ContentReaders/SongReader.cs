@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class SongReader : ContentTypeReader<Song>
     {
-        protected internal override Song Read(ContentReader input, Song existingInstance)
+        protected override Song Read(ContentReader input, Song existingInstance)
         {
             string path = input.ReadString();
             int durationMs = input.ReadObject<int>();

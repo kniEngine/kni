@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content
 //      List<Effect> effects = new List<Effect>();
 //      List<GraphicsResource> sharedResources = new List<GraphicsResource>();
 
-        protected internal override Model Read(ContentReader input, Model existingInstance)
+        protected override Model Read(ContentReader input, Model existingInstance)
         {
             // Read the bone names and transforms.
             uint boneCount = input.ReadUInt32();

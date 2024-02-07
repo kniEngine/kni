@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class EffectMaterialReader : ContentTypeReader<EffectMaterial>
     {
-        protected internal override EffectMaterial Read(ContentReader input, EffectMaterial existingInstance)
+        protected override EffectMaterial Read(ContentReader input, EffectMaterial existingInstance)
         {
             Effect effect = input.ReadExternalReference<Effect>();
             EffectMaterial effectMaterial = new EffectMaterial(effect);

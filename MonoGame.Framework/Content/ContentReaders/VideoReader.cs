@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class VideoReader : ContentTypeReader<Video>
     {
-        protected internal override Video Read(ContentReader input, Video existingInstance)
+        protected override Video Read(ContentReader input, Video existingInstance)
         {
             string path = input.ReadObject<string>();
             int durationMS = input.ReadObject<int>();

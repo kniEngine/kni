@@ -39,10 +39,13 @@
       <Name>Xna.Framework.Graphics.PackedVector</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Project>{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}</Project>
+      <Name>Xna.Framework.Content</Name>
+    </ProjectReference>
   </ItemGroup>
 
   <Import Project="Xna.Framework.Audio.targets" />
-  <Import Project="Xna.Framework.Content.targets" />
   <Import Project="Xna.Framework.Graphics.targets" />
   <Import Project="MonoGame.Framework.Common.targets" />
 

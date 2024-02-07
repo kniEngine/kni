@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content
     internal class TextureCubeReader : ContentTypeReader<TextureCube>
     {
 
-        protected internal override TextureCube Read(ContentReader input, TextureCube existingInstance)
+        protected override TextureCube Read(ContentReader input, TextureCube existingInstance)
         {
             TextureCube textureCube = null;
 

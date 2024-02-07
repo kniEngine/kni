@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class BasicEffectReader : ContentTypeReader<BasicEffect>
     {
-        protected internal override BasicEffect Read(ContentReader input, BasicEffect existingInstance)
+        protected override BasicEffect Read(ContentReader input, BasicEffect existingInstance)
         {
             BasicEffect effect = new BasicEffect(input.GetGraphicsDevice());
             Texture2D texture = input.ReadExternalReference<Texture>() as Texture2D;

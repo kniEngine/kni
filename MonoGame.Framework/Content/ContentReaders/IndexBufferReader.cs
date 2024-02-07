@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     class IndexBufferReader : ContentTypeReader<IndexBuffer>
     {
-        protected internal override IndexBuffer Read(ContentReader input, IndexBuffer existingInstance)
+        protected override IndexBuffer Read(ContentReader input, IndexBuffer existingInstance)
         {
             IndexBuffer indexBuffer = existingInstance;
 
