@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics.Pack
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content", "src\Xna.Framework.Content\Xna.Framework.Content.csproj", "{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics", "src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj", "{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.iOS", "MonoGame.Framework\MonoGame.Framework.iOS.csproj", "{77CB9792-B9E2-452F-ABDF-6E06C6A4A058}"
 EndProject
 Global
@@ -72,5 +74,17 @@ Global
 		{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}.Release|x64.Build.0 = Release|Any CPU
 		{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}.Release|x86.ActiveCfg = Release|Any CPU
 		{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}.Release|x86.Build.0 = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|x64.Build.0 = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

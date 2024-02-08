@@ -156,9 +156,10 @@
       <Name>Xna.Framework.Graphics.PackedVector</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
-      <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
-      <Name>XNA.Framework.WindowsDX11</Name>
+    <ProjectReference Include="..\..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+      <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
+      <Name>Xna.Framework.Graphics</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
       <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
