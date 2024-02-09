@@ -194,6 +194,14 @@ namespace Microsoft.Xna.Platform.Audio
             ReverbVoice.SetEffectParameters(0, settings);
         }
 
+        public override void Suspend()
+        {
+        }
+
+        public override void Resume()
+        {
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

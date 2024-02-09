@@ -106,8 +106,8 @@ namespace Microsoft.Xna.Platform.Audio
             {
 #if ANDROID
                 // Attach activity event handlers so we can pause and resume all playing sounds
-                AndroidSurfaceView.OnPauseGameThread += Activity_Paused;
-                AndroidSurfaceView.OnResumeGameThread += Activity_Resumed;
+                AndroidSurfaceView.OnPauseGameThread += (object sender, EventArgs e) => { this.Suspend(); };
+                AndroidSurfaceView.OnResumeGameThread += (object sender, EventArgs e) => { this.Resume(); };
 
                 // Query the device for the ideal frequency and update buffer size so
                 // we can get the low latency sound path.
@@ -357,19 +357,21 @@ namespace Microsoft.Xna.Platform.Audio
             return pos;
         }
 
-#if ANDROID
-        void Activity_Paused(object sender, EventArgs e)
+        public override void Suspend()
         {
+#if ANDROID
             // Pause all currently playing sounds by pausing the mixer
             OpenAL.ALC.DevicePause(_device);
+#endif
         }
 
-        void Activity_Resumed(object sender, EventArgs e)
+        public override void Resume()
         {
+#if ANDROID
             // Resume all sounds that were playing when the activity was paused
             OpenAL.ALC.DeviceResume(_device);
-        }
 #endif
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -45,6 +45,14 @@ namespace Microsoft.Xna.Platform.Audio
         {
         }
 
+        public override void Suspend()
+        {
+        }
+
+        public override void Resume()
+        {
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

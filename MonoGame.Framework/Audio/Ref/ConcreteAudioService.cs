@@ -39,6 +39,14 @@ namespace Microsoft.Xna.Platform.Audio
             throw new PlatformNotSupportedException();
         }
 
+        public override void Suspend()
+        {
+        }
+
+        public override void Resume()
+        {
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
