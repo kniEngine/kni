@@ -148,7 +148,6 @@
     <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
     <Compile Include="Framework\Visual\VisualTestGame.cs" />
   </ItemGroup>
-	
   <ItemGroup>
     <Compile Include="ContentPipeline\BuilderTargetsTest.cs" />
     <Compile Include="ContentPipeline\AssetTestClasses.cs" />
@@ -179,7 +178,6 @@
     <Compile Include="ContentPipeline\WavImporterTests.cs" />
     <Compile Include="ContentPipeline\WmaImporterTests.cs" />
   </ItemGroup>
-	
   <ItemGroup>
     <Content Include="Assets\Audio\Win\Tests.xgs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1140,6 +1138,10 @@
       <Project>{FF11302E-6A9F-49AA-960A-9584BC4BDA26}</Project>
       <Name>Xna.Framework.Graphics.PackedVector</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+      <Project>{4b8d3f73-bbd2-4057-b86b-8b73b957dc0f}</Project>
+      <Name>Xna.Framework.Graphics</Name>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>

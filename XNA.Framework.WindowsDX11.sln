@@ -34,6 +34,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics.Pack
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content", "src\Xna.Framework.Content\Xna.Framework.Content.csproj", "{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics", "src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj", "{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Design", "src\Xna.Framework.Design\Xna.Framework.Design.csproj", "{E37F98D7-C4E8-4556-B322-AEF99638ECE1}"
 EndProject
 Global
@@ -98,6 +100,10 @@ Global
 		{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
