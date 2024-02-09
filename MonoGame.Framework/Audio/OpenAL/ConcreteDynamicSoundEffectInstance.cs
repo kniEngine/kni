@@ -37,6 +37,8 @@ namespace Microsoft.Xna.Platform.Audio
             _sourceId = ConcreteAudioService.ReserveSource();
         }
 
+        public int BuffersNeeded { get; set; }
+
         public int DynamicPlatformGetPendingBufferCount()
         {
             return _queuedBuffers.Count;
@@ -140,12 +142,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             // Raise the event for each removed buffer
-            if (_dynamicSoundEffectInstanceRef.Target != null)
-            {
-                DynamicSoundEffectInstance instance = (DynamicSoundEffectInstance)_dynamicSoundEffectInstanceRef.Target;
-                for (int i = 0; i < processedBuffers; i++)
-                    instance._dstrategy_OnBufferNeeded();
-            }
+            this.BuffersNeeded+= processedBuffers;
         }
 
         protected override void Dispose(bool disposing)

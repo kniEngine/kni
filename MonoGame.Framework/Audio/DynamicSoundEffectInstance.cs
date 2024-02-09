@@ -18,7 +18,6 @@ namespace Microsoft.Xna.Framework.Audio
         private IDynamicSoundEffectInstanceStrategy _dynamicStrategy;
 
         private const int TargetPendingBufferCount = 3;
-        private int _buffersNeeded;
         private bool _initialBuffersNeeded;
         
         private int _sampleRate;
@@ -97,14 +96,6 @@ namespace Microsoft.Xna.Framework.Audio
             _dynamicStrategy = _audioService._strategy.CreateDynamicSoundEffectInstanceStrategy(_sampleRate, (int)_channels, Pan);
             _strategy = (SoundEffectInstanceStrategy)_dynamicStrategy;
             _dynamicStrategy.DynamicSoundEffectInstance = this;
-        }
-
-        internal void _dstrategy_OnBufferNeeded()
-        {
-            lock (AudioService.SyncHandle)
-            {
-                _buffersNeeded++;
-            }
         }
 
         #endregion
@@ -357,14 +348,14 @@ namespace Microsoft.Xna.Framework.Audio
                 _dynamicStrategy.DynamicPlatformUpdateBuffers();
 
                 if (_initialBuffersNeeded)
-                    _buffersNeeded = Math.Max(_buffersNeeded, TargetPendingBufferCount - 1 - PendingBufferCount);
+                    _dynamicStrategy.BuffersNeeded = Math.Max(_dynamicStrategy.BuffersNeeded, TargetPendingBufferCount - 1 - PendingBufferCount);
 
                 // Raise the event
                 var bufferNeededHandler = BufferNeeded;
                 if (bufferNeededHandler != null)
                 {
                     // raise the event for each processed buffer
-                    while(_buffersNeeded-- != 0)
+                    while(_dynamicStrategy.BuffersNeeded-- != 0)
                         bufferNeededHandler(this, EventArgs.Empty);
 
                     if (State == SoundState.Playing && PendingBufferCount < TargetPendingBufferCount)
@@ -372,7 +363,7 @@ namespace Microsoft.Xna.Framework.Audio
                 }
 
                 _initialBuffersNeeded = true;
-                _buffersNeeded = 0;
+                _dynamicStrategy.BuffersNeeded = 0;
             }
         }
 

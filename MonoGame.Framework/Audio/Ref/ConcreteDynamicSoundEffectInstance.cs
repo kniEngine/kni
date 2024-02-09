@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Platform.Audio
             throw new PlatformNotSupportedException();
         }
 
+        public int BuffersNeeded { get; set; }
+
         public int DynamicPlatformGetPendingBufferCount()
         {
             throw new PlatformNotSupportedException();
