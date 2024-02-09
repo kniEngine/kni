@@ -48,27 +48,27 @@ namespace Microsoft.Xna.Platform.Audio
             return _queuedBuffers.Count;
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             _voice.Stop();
         }
 
-        internal override void PlatformPlay(bool isLooped)
+        public override void PlatformPlay(bool isLooped)
         {
             _voice.Start();
         }
 
-        internal override void PlatformResume(bool isLooped)
+        public override void PlatformResume(bool isLooped)
         {
             _voice.Start();
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             _voice.Stop();
         }
 
-        internal override void PlatformRelease(bool isLooped)
+        public override void PlatformRelease(bool isLooped)
         {
             System.Diagnostics.Debug.Assert(isLooped == false);
 

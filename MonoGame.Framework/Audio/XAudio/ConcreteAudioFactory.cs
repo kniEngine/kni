@@ -4,7 +4,7 @@ namespace Microsoft.Xna.Platform.Audio
 {
     public sealed class ConcreteAudioFactory : AudioFactory
     {
-        internal override AudioServiceStrategy CreateAudioServiceStrategy()
+        public override AudioServiceStrategy CreateAudioServiceStrategy()
         {
             return new ConcreteAudioService();
         }

@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Audio
             return (float)Math.Pow(2, xnaPitch);
         }
 
-        internal override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
+        public override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
         {
             // set up matrix to transform world space coordinates to listener space coordinates
             Matrix worldSpaceToListenerSpace = Matrix.Transpose(Matrix.CreateWorld(listener.Position, listener.Forward, listener.Up));
@@ -74,13 +74,13 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             ConcreteAudioService.OpenAL.SourcePause(_sourceId);
             ConcreteAudioService.OpenAL.CheckError("Failed to pause source.");
         }
 
-        internal override void PlatformPlay(bool isLooped)
+        public override void PlatformPlay(bool isLooped)
         {
             _sourceId = ConcreteAudioService.ReserveSource();
 
@@ -125,13 +125,13 @@ namespace Microsoft.Xna.Platform.Audio
             ConcreteAudioService.OpenAL.CheckError("Failed to play source.");
         }
 
-        internal override void PlatformResume(bool isLooped)
+        public override void PlatformResume(bool isLooped)
         {
             ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
             ConcreteAudioService.OpenAL.CheckError("Failed to play source.");
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             ConcreteAudioService.OpenAL.SourceStop(_sourceId);
             ConcreteAudioService.OpenAL.CheckError("Failed to stop source.");
@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Platform.Audio
             _sourceId = 0;
         }
 
-        internal override void PlatformRelease(bool isLooped)
+        public override void PlatformRelease(bool isLooped)
         {
             if (isLooped)
             {
@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override bool PlatformUpdateState(ref SoundState state)
+        public override bool PlatformUpdateState(ref SoundState state)
         {
             // check if the sound has stopped
             if (state == SoundState.Playing)
@@ -179,7 +179,7 @@ namespace Microsoft.Xna.Platform.Audio
             return false;
         }
 
-        internal override void PlatformSetIsLooped(bool isLooped, SoundState state)
+        public override void PlatformSetIsLooped(bool isLooped, SoundState state)
         {
             if (_sourceId != 0)
             {
@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformSetPan(float pan)
+        public override void PlatformSetPan(float pan)
         {
             // OpenAL doesn't support Panning. We emulate it using 3D audio.
             // If the user set both Pan and Apply3D(), only the last call takes effect.
@@ -203,7 +203,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformSetPitch(float pitch)
+        public override void PlatformSetPitch(float pitch)
         {
             _pitch = pitch;
 
@@ -214,7 +214,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformSetVolume(float volume)
+        public override void PlatformSetVolume(float volume)
         {
             _volume = volume;
 
@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformSetReverbMix(SoundState state, float mix, float pan)
+        public override void PlatformSetReverbMix(SoundState state, float mix, float pan)
         {
             if (!ConcreteAudioService.OpenAL.Efx.IsInitialized)
                 return;
@@ -279,7 +279,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformSetFilter(SoundState state, FilterMode mode, float filterQ, float frequency)
+        public override void PlatformSetFilter(SoundState state, FilterMode mode, float filterQ, float frequency)
         {
             if (!ConcreteAudioService.OpenAL.Efx.IsInitialized)
                 return;
@@ -308,7 +308,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformClearFilter()
+        public override void PlatformClearFilter()
         {
             if (!ConcreteAudioService.OpenAL.Efx.IsInitialized)
                 return;

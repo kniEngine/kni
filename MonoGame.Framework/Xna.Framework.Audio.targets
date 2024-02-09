@@ -10,7 +10,6 @@
     <Compile Include="Audio\AudioService.InstancePool.cs" />
     <Compile Include="Audio\AudioService.Microphones.cs" />
     <Compile Include="Audio\AudioServiceStrategy.cs" />
-    <Compile Include="Audio\AudioUtil.cs" />
     <Compile Include="Audio\DynamicSoundEffectInstance.cs" />
     <Compile Include="Audio\InstancePlayLimitException.cs" />
     <Compile Include="Audio\Microphone.cs" />

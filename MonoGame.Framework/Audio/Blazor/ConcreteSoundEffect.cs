@@ -18,12 +18,12 @@ namespace Microsoft.Xna.Platform.Audio
 
         #region Initialization
 
-        internal override void PlatformLoadAudioStream(Stream stream, out TimeSpan duration)
+        public override void PlatformLoadAudioStream(Stream stream, out TimeSpan duration)
         {
             duration = TimeSpan.Zero;
         }
 
-        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
+        public override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
             short format = BitConverter.ToInt16(header, 0);
             short channels = BitConverter.ToInt16(header, 2);
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
+        public override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
             ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
 
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         }
 
-        internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
+        public override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
             ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
 

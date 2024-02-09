@@ -42,13 +42,13 @@ namespace Microsoft.Xna.Platform.Audio
             return _queuedBuffers.Count;
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             ConcreteAudioService.OpenAL.SourcePause(_sourceId);
             ConcreteAudioService.OpenAL.CheckError("Failed to pause the source.");
         }
 
-        internal override void PlatformPlay(bool isLooped)
+        public override void PlatformPlay(bool isLooped)
         {
             // Ensure that the source is not looped (due to source recycling)
             ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, false);
@@ -58,13 +58,13 @@ namespace Microsoft.Xna.Platform.Audio
             ConcreteAudioService.OpenAL.CheckError("Failed to play the source.");
         }
 
-        internal override void PlatformResume(bool isLooped)
+        public override void PlatformResume(bool isLooped)
         {
             ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
             ConcreteAudioService.OpenAL.CheckError("Failed to play the source.");
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             ConcreteAudioService.OpenAL.SourceStop(_sourceId);
             ConcreteAudioService.OpenAL.CheckError("Failed to stop the source.");
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Audio
             DynamicPlatformClearBuffers();
         }
 
-        internal override void PlatformRelease(bool isLooped)
+        public override void PlatformRelease(bool isLooped)
         {
             System.Diagnostics.Debug.Assert(isLooped == false);
 

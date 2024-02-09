@@ -115,17 +115,17 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy sfxStrategy, float pan)
+        public override SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy sfxStrategy, float pan)
         {
             return new ConcreteSoundEffectInstance(this, sfxStrategy, pan);
         }
 
-        internal override IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels, float pan)
+        public override IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels, float pan)
         {
             return new ConcreteDynamicSoundEffectInstance(this, sampleRate, channels, pan);
         }
 
-        internal override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
+        public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
         {
         }
 
@@ -153,13 +153,13 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override int PlatformGetMaxPlayingInstances()
+        public override int PlatformGetMaxPlayingInstances()
         {
             // These platforms are only limited by memory.
             return int.MaxValue;
         }
 
-        internal override void PlatformSetReverbSettings(ReverbSettings reverbSettings)
+        public override void PlatformSetReverbSettings(ReverbSettings reverbSettings)
         {
              // All parameters related to sampling rate or time are relative to a 48kHz 
             // voice and must be scaled for use with other sampling rates.

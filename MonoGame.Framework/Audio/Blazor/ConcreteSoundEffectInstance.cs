@@ -49,16 +49,16 @@ namespace Microsoft.Xna.Platform.Audio
 
         #endregion // Initialization
 
-        internal override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
+        public override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
         {
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             throw new NotImplementedException();
         }
 
-        internal override void PlatformPlay(bool isLooped)
+        public override void PlatformPlay(bool isLooped)
         {
             AudioContext context = ConcreteAudioService.Context;
 
@@ -74,12 +74,12 @@ namespace Microsoft.Xna.Platform.Audio
             _bufferSource.Start();
         }
 
-        internal override void PlatformResume(bool isLooped)
+        public override void PlatformResume(bool isLooped)
         {
             throw new NotImplementedException();
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             AudioContext context = ConcreteAudioService.Context;
 
@@ -92,11 +92,11 @@ namespace Microsoft.Xna.Platform.Audio
             _bufferSource = null;
         }
 
-        internal override void PlatformRelease(bool isLooped)
+        public override void PlatformRelease(bool isLooped)
         {
         }
 
-        internal override bool PlatformUpdateState(ref SoundState state)
+        public override bool PlatformUpdateState(ref SoundState state)
         {
             if (state != SoundState.Stopped && _ended)
             {
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Platform.Audio
             return false;
         }
 
-        internal override void PlatformSetIsLooped(bool isLooped, SoundState state)
+        public override void PlatformSetIsLooped(bool isLooped, SoundState state)
         {
             if (_bufferSource != null)
             {
@@ -121,33 +121,33 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformSetPan(float pan)
+        public override void PlatformSetPan(float pan)
         {
             _pan = pan;
             if (_bufferSource != null)
                 _stereoPannerNode.Pan.SetTargetAtTime(pan, 0, 0.05f);
         }
 
-        internal override void PlatformSetPitch(float pitch)
+        public override void PlatformSetPitch(float pitch)
         {
         }
 
-        internal override void PlatformSetVolume(float volume)
+        public override void PlatformSetVolume(float volume)
         {
             _volume = volume;
             if (_bufferSource != null)
                 _gainNode.Gain.SetTargetAtTime(volume, 0, 0.05f);
         }
 
-        internal override void PlatformSetReverbMix(SoundState state, float mix, float pan)
+        public override void PlatformSetReverbMix(SoundState state, float mix, float pan)
         {
         }
 
-        internal override void PlatformSetFilter(SoundState state, FilterMode mode, float filterQ, float frequency)
+        public override void PlatformSetFilter(SoundState state, FilterMode mode, float filterQ, float frequency)
         {
         }
 
-        internal override void PlatformClearFilter()
+        public override void PlatformClearFilter()
         {
         }
 

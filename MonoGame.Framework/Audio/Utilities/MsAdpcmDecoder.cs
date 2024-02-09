@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Microsoft.Xna.Platform.Audio.Utilities
 {
-    internal static class MsAdpcmDecoder
+    public static class MsAdpcmDecoder
     {
 
         #region MS-ADPCM decoding
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Audio.Utilities
         }
 
         // Convert buffer containing MS-ADPCM wav data to a 16-bit signed PCM buffer
-        internal static byte[] ConvertMsAdpcmToPcm(byte[] buffer, int offset, int count, int channels, int blockAlignment)
+        public static byte[] ConvertMsAdpcmToPcm(byte[] buffer, int offset, int count, int channels, int blockAlignment)
         {
             MsAdpcmState channel0 = new MsAdpcmState();
             MsAdpcmState channel1 = new MsAdpcmState();

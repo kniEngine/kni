@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         #region Initialization
 
-        internal override void PlatformLoadAudioStream(Stream stream, out TimeSpan duration)
+        public override void PlatformLoadAudioStream(Stream stream, out TimeSpan duration)
         {
             SoundStream soundStream = null;
             try
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Audio
             CreateBuffers(soundStream.Format, dataStream, 0, sampleCount);
         }
 
-        internal override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
+        public override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
             short format = BitConverter.ToInt16(header, 0);
             short channels = BitConverter.ToInt16(header, 2);
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Platform.Audio
                             loopLength);
         }
 
-        internal override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
+        public override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
             WaveFormat waveFormat = new WaveFormat(sampleRate, sampleBits, channels);
 
@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Platform.Audio
                             loopLength);
         }
 
-        internal override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
+        public override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
             WaveFormat waveFormat = new WaveFormatAdpcm(sampleRate, channels, (blockAlignment + 22) * channels);
 

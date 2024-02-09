@@ -36,27 +36,27 @@ namespace Microsoft.Xna.Platform.Audio
             throw new NotImplementedException();
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             throw new NotImplementedException();
         }
 
-        internal override void PlatformPlay(bool isLooped)
+        public override void PlatformPlay(bool isLooped)
         {
             throw new NotImplementedException();
         }
 
-        internal override void PlatformResume(bool isLooped)
+        public override void PlatformResume(bool isLooped)
         {
             throw new NotImplementedException();
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             throw new NotImplementedException();
         }
 
-        internal override void PlatformRelease(bool isLooped)
+        public override void PlatformRelease(bool isLooped)
         {
             System.Diagnostics.Debug.Assert(isLooped == false);
 
