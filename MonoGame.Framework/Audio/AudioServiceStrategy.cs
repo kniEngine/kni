@@ -13,6 +13,8 @@ namespace Microsoft.Xna.Platform.Audio
         public abstract SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy _strategy, float _pan);
         public abstract IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels, float pan);
 
+        public abstract void Suspend();
+        public abstract void Resume();
         public abstract int PlatformGetMaxPlayingInstances();
         public abstract void PlatformSetReverbSettings(ReverbSettings reverbSettings);
 

@@ -121,6 +121,34 @@ namespace Microsoft.Xna.Framework.Audio
 
         }
 
+        internal static void Suspend()
+        {
+            if (_current == null) return;
+
+            // Shutdown
+            lock (SyncHandle)
+            {
+                if (_current != null)
+                {
+                    _current._strategy.Suspend();
+                }
+            }
+        }
+
+        internal static void Resume()
+        {
+            if (_current == null) return;
+
+            // Shutdown
+            lock (SyncHandle)
+            {
+                if (_current != null)
+                {
+                    _current._strategy.Resume();
+                }
+            }
+        }
+
         internal static void Shutdown()
         {
             if (_current == null) return;
