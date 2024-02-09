@@ -59,10 +59,6 @@ namespace Microsoft.Xna.Framework
         private readonly AndroidGameWindow _gameWindow;
         private readonly Game _game;
 
-        // Events that are triggered on the game thread
-        internal static event EventHandler OnPauseGameThread;
-        internal static event EventHandler OnResumeGameThread;
-
         internal event EventHandler Tick;
 
 
@@ -325,9 +321,7 @@ namespace Microsoft.Xna.Framework
             if (_glSurfaceAvailable) 
             {
                 // trigger callbacks, must resume openAL device here
-                var handler = OnResumeGameThread;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
+                Microsoft.Xna.Framework.Audio.AudioService.Resume();
 
                 // go to next state
                 _appState = AppState.Running;
@@ -409,9 +403,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // trigger callbacks, must pause openAL device here
-            var handler = OnPauseGameThread;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            Microsoft.Xna.Framework.Audio.AudioService.Suspend();
 
             // go to next state
             _appState = AppState.Paused;
