@@ -20,72 +20,72 @@ namespace Microsoft.Xna.Platform.Audio
 
         #endregion // Initialization
 
-        internal override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
+        public override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformPlay(bool isLooped)
+        public override void PlatformPlay(bool isLooped)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformResume(bool isLooped)
+        public override void PlatformResume(bool isLooped)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformRelease(bool isLooped)
+        public override void PlatformRelease(bool isLooped)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override bool PlatformUpdateState(ref SoundState state)
+        public override bool PlatformUpdateState(ref SoundState state)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformSetIsLooped(bool isLooped, SoundState state)
+        public override void PlatformSetIsLooped(bool isLooped, SoundState state)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformSetPan(float pan)
+        public override void PlatformSetPan(float pan)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformSetPitch(float pitch)
+        public override void PlatformSetPitch(float pitch)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformSetVolume(float volume)
+        public override void PlatformSetVolume(float volume)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformSetReverbMix(SoundState state, float mix, float pan)
+        public override void PlatformSetReverbMix(SoundState state, float mix, float pan)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformSetFilter(SoundState state, FilterMode mode, float filterQ, float frequency)
+        public override void PlatformSetFilter(SoundState state, FilterMode mode, float filterQ, float frequency)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformClearFilter()
+        public override void PlatformClearFilter()
         {
             throw new PlatformNotSupportedException();
         }
@@ -93,9 +93,9 @@ namespace Microsoft.Xna.Platform.Audio
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {                
+            {
             }
-            
+
         }
 
     }

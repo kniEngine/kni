@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal override void PlatformStart(string deviceName)
+        public override void PlatformStart(string deviceName)
         {
             int sampleSizeInBytes = GetSampleSizeInBytes(BufferDuration) * 2;
             _captureDevice = OpenAL.ALC.CaptureOpenDevice(deviceName, checked((uint)SampleRate), ALFormat.Mono16, sampleSizeInBytes);
@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform.Audio
             CheckALCError("Failed to start capture.");
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             OpenAL.ALC.CaptureStop(_captureDevice);
             CheckALCError("Failed to stop capture.");
@@ -63,18 +63,18 @@ namespace Microsoft.Xna.Platform.Audio
             return sampleCount;
         }
 
-        internal override bool PlatformIsHeadset()
+        public override bool PlatformIsHeadset()
         {
             throw new NotImplementedException();
         }
 
-        internal override bool PlatformUpdate()
+        public override bool PlatformUpdate()
         {
             int sampleCount = GetQueuedSampleCount();
             return (sampleCount > 0);
         }
 
-        internal override int PlatformGetData(byte[] buffer, int offset, int count)
+        public override int PlatformGetData(byte[] buffer, int offset, int count)
         {
             int sampleCount = GetQueuedSampleCount();
             sampleCount = Math.Min(count / 2, sampleCount); // 16bit adjust

@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        internal abstract AudioServiceStrategy CreateAudioServiceStrategy();
+        public abstract AudioServiceStrategy CreateAudioServiceStrategy();
         public abstract MicrophoneStrategy CreateMicrophoneStrategy();
         public abstract SoundEffectStrategy CreateSoundEffectStrategy();
     }

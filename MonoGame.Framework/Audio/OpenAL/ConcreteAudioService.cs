@@ -70,12 +70,12 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
 
-        internal override SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy sfxStrategy, float pan)
+        public override SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy sfxStrategy, float pan)
         {
             return new ConcreteSoundEffectInstance(this, sfxStrategy, pan);
         }
 
-        internal override IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels, float pan)
+        public override IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels, float pan)
         {
             return new ConcreteDynamicSoundEffectInstance(this, sampleRate, channels, pan);
         }
@@ -227,7 +227,7 @@ namespace Microsoft.Xna.Platform.Audio
             return false;
         }
 
-        internal override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
+        public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
         {
             if (!OpenAL.ALC.IsExtensionPresent(_device, "ALC_EXT_CAPTURE"))
                 return;
@@ -266,7 +266,7 @@ namespace Microsoft.Xna.Platform.Audio
 #endif
         }
 
-        internal override int PlatformGetMaxPlayingInstances()
+        public override int PlatformGetMaxPlayingInstances()
         {
 #if DESKTOPGL
             // MacOS & Linux shares a limit of 256.
@@ -280,7 +280,7 @@ namespace Microsoft.Xna.Platform.Audio
 #endif
         }
 
-        internal override void PlatformSetReverbSettings(ReverbSettings reverbSettings)
+        public override void PlatformSetReverbSettings(ReverbSettings reverbSettings)
         {
             if (!OpenAL.Efx.IsInitialized)
                 return;

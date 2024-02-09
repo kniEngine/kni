@@ -8,31 +8,31 @@ namespace Microsoft.Xna.Platform.Audio
 {
     /// <summary>
     /// Provides microphones capture features.
-    /// </summary>	
+    /// </summary>
     public sealed class ConcreteMicrophone : MicrophoneStrategy
     {
 
-        internal override void PlatformStart(string deviceName)
+        public override void PlatformStart(string deviceName)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override bool PlatformIsHeadset()
+        public override bool PlatformIsHeadset()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override bool PlatformUpdate()
+        public override bool PlatformUpdate()
         {
             throw new PlatformNotSupportedException();
         }
-        
-        internal override int PlatformGetData(byte[] buffer, int offset, int count)
+
+        public override int PlatformGetData(byte[] buffer, int offset, int count)
         {
             throw new PlatformNotSupportedException();
         }

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Microsoft.Xna.Platform.Audio
 {
-    class ReverbSettings
+    public class ReverbSettings
     {
         private readonly DspParameter[] _parameters = new DspParameter[22];
 
