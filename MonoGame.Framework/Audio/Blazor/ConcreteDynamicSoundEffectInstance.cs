@@ -31,6 +31,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         }
 
+        public int BuffersNeeded { get; set; }
+
         public int DynamicPlatformGetPendingBufferCount()
         {
             throw new NotImplementedException();

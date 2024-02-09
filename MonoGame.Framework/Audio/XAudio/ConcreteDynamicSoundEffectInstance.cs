@@ -31,7 +31,6 @@ namespace Microsoft.Xna.Platform.Audio
             set { _dynamicSoundEffectInstanceRef.Target = value; }
         }
 
-
         internal ConcreteDynamicSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, int sampleRate, int channels, float pan)
             : base(audioServiceStrategy, null, pan)
         {
@@ -42,6 +41,8 @@ namespace Microsoft.Xna.Platform.Audio
             _voice = new SourceVoice(ConcreteAudioService.Device, format, true);
             _voice.BufferEnd += OnBufferEnd;
         }
+
+        public int BuffersNeeded { get; set; }
 
         public int DynamicPlatformGetPendingBufferCount()
         {
@@ -116,7 +117,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void OnBufferEnd(IntPtr context)
         {
-            lock (AudioService.SyncHandle)
+            lock (base.AudioServiceSyncHandle)
             {
                 // Release the queued buffer
                 for (int i = 0; i < _queuedBuffers.Count; i++)
@@ -133,10 +134,9 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 // Raise the event
-                if (_dynamicSoundEffectInstanceRef.Target != null)
+                lock (base.AudioServiceSyncHandle)
                 {
-                    DynamicSoundEffectInstance instance = (DynamicSoundEffectInstance)_dynamicSoundEffectInstanceRef.Target;
-                    instance._dstrategy_OnBufferNeeded();
+                    this.BuffersNeeded++;
                 }
             }
         }
