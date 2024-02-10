@@ -4,9 +4,9 @@
 
 using System;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {
-    static class XactHelpers
+    public static class XactHelpers
     {
         static internal readonly Random Random = new Random();
 
