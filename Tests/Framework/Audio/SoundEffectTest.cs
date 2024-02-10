@@ -38,79 +38,79 @@ namespace MonoGame.Tests.Audio
         public void GetSampleDuration()
         {
             // Test sizeInBytes range.
-            Assert.Throws<ArgumentException>(() => AudioService.GetSampleDuration(-1, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleDuration(1, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleDuration(2, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleDuration(3, 8000, AudioChannels.Mono));
+            Assert.Throws<ArgumentException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(-1, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(1, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(3, 8000, AudioChannels.Mono));
             
             // Test sampleRate range.
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, -1, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, 0, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, 8000-1, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleDuration(2, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleDuration(2, 48000, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, 48000 + 1, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, int.MaxValue, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, -1, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 0, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000-1, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 48000, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 48000 + 1, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, int.MaxValue, AudioChannels.Mono));
 
             // Test channel range.
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, 8000, (AudioChannels)(-1)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, 8000, (AudioChannels)0));
-            Assert.DoesNotThrow(() => AudioService.GetSampleDuration(2, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleDuration(2, 8000, AudioChannels.Stereo));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, 8000, (AudioChannels)3));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleDuration(2, 8000, (AudioChannels)int.MaxValue));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, (AudioChannels)(-1)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, (AudioChannels)0));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, AudioChannels.Stereo));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, (AudioChannels)3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(2, 8000, (AudioChannels)int.MaxValue));
 
             // Test for zero duration.
-            Assert.AreEqual(TimeSpan.Zero, AudioService.GetSampleDuration(0, 8000, AudioChannels.Mono));
-            Assert.AreEqual(TimeSpan.Zero, AudioService.GetSampleDuration(0, 48000, AudioChannels.Mono));
-            Assert.AreEqual(TimeSpan.Zero, AudioService.GetSampleDuration(0, 8000, AudioChannels.Stereo));
-            Assert.AreEqual(TimeSpan.Zero, AudioService.GetSampleDuration(0, 48000, AudioChannels.Stereo));
+            Assert.AreEqual(TimeSpan.Zero, Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(0, 8000, AudioChannels.Mono));
+            Assert.AreEqual(TimeSpan.Zero, Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(0, 48000, AudioChannels.Mono));
+            Assert.AreEqual(TimeSpan.Zero, Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(0, 8000, AudioChannels.Stereo));
+            Assert.AreEqual(TimeSpan.Zero, Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(0, 48000, AudioChannels.Stereo));
 
             // Test for one second.
-            Assert.AreEqual(TimeSpan.FromSeconds(1), AudioService.GetSampleDuration(16000, 8000, AudioChannels.Mono));
-            Assert.AreEqual(TimeSpan.FromSeconds(1), AudioService.GetSampleDuration(96000, 48000, AudioChannels.Mono));
-            Assert.AreEqual(TimeSpan.FromSeconds(1), AudioService.GetSampleDuration(32000, 8000, AudioChannels.Stereo));
-            Assert.AreEqual(TimeSpan.FromSeconds(1), AudioService.GetSampleDuration(192000, 48000, AudioChannels.Stereo));
+            Assert.AreEqual(TimeSpan.FromSeconds(1), Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(16000, 8000, AudioChannels.Mono));
+            Assert.AreEqual(TimeSpan.FromSeconds(1), Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(96000, 48000, AudioChannels.Mono));
+            Assert.AreEqual(TimeSpan.FromSeconds(1), Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(32000, 8000, AudioChannels.Stereo));
+            Assert.AreEqual(TimeSpan.FromSeconds(1), Microsoft.Xna.Platform.Audio.AudioService.GetSampleDuration(192000, 48000, AudioChannels.Stereo));
         }
 
         [Test]
         public void GetSampleSizeInBytes()
         {
             // Test duration range.
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.MinValue, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(0x7FFFFFF), 8000, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(0x7FFFFFF + 1), 8000, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.MaxValue, 8000, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.MinValue, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(0x7FFFFFF), 8000, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(0x7FFFFFF + 1), 8000, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.MaxValue, 8000, AudioChannels.Mono));
 
             // Test sampleRate range.
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, -1, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 0, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000 - 1, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000 + 1, AudioChannels.Mono));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, int.MaxValue, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, -1, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 0, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000 - 1, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000 + 1, AudioChannels.Mono));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, int.MaxValue, AudioChannels.Mono));
 
             // Test channel range.
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)(-1)));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)0));
-            Assert.DoesNotThrow(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
-            Assert.DoesNotThrow(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Stereo));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)3));
-            Assert.Throws<ArgumentOutOfRangeException>(() => AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)int.MaxValue));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)(-1)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)0));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
+            Assert.DoesNotThrow(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Stereo));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, (AudioChannels)int.MaxValue));
 
             // Test for zero duration.
-            Assert.AreEqual(0, AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
-            Assert.AreEqual(0, AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000, AudioChannels.Mono));
-            Assert.AreEqual(0, AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Stereo));
-            Assert.AreEqual(0, AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000, AudioChannels.Stereo));
+            Assert.AreEqual(0, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Mono));
+            Assert.AreEqual(0, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000, AudioChannels.Mono));
+            Assert.AreEqual(0, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 8000, AudioChannels.Stereo));
+            Assert.AreEqual(0, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.Zero, 48000, AudioChannels.Stereo));
 
             // Test for one second.
-            Assert.AreEqual(16000, AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 8000, AudioChannels.Mono));
-            Assert.AreEqual(96000, AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 48000, AudioChannels.Mono));
-            Assert.AreEqual(32000, AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 8000, AudioChannels.Stereo));
-            Assert.AreEqual(192000, AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 48000, AudioChannels.Stereo));
+            Assert.AreEqual(16000, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 8000, AudioChannels.Mono));
+            Assert.AreEqual(96000, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 48000, AudioChannels.Mono));
+            Assert.AreEqual(32000, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 8000, AudioChannels.Stereo));
+            Assert.AreEqual(192000, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 48000, AudioChannels.Stereo));
         }
 
         [Test]
