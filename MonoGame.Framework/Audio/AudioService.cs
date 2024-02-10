@@ -19,9 +19,9 @@ namespace Microsoft.Xna.Framework.Audio
 
         private LinkedList<SoundEffectInstance> _playingInstances = new LinkedList<SoundEffectInstance>();
         private readonly LinkedList<DynamicSoundEffectInstance> _dynamicPlayingInstances = new LinkedList<DynamicSoundEffectInstance>();
-        
 
         internal readonly static object SyncHandle = new object();
+
 
 
         internal static AudioService Current
