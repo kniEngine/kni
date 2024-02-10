@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void OnBufferEnd(IntPtr context)
         {
-            lock (base.AudioServiceSyncHandle)
+            lock (AudioService.SyncHandle)
             {
                 // Release the queued buffer
                 for (int i = 0; i < _queuedBuffers.Count; i++)
@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 // Raise the event
-                lock (base.AudioServiceSyncHandle)
+                lock (AudioService.SyncHandle)
                 {
                     this.BuffersNeeded++;
                 }

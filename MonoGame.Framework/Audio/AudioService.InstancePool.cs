@@ -6,10 +6,11 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {
-    internal sealed partial class AudioService
+    public sealed partial class AudioService
     {
         private LinkedList<SoundEffectInstance> _pooledInstances = new LinkedList<SoundEffectInstance>();
 

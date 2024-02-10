@@ -6,7 +6,6 @@
 
 using System;
 using Microsoft.Xna.Platform;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -77,7 +76,7 @@ namespace Microsoft.Xna.Framework
                         Strategy = null;
                     }
 
-                    AudioService.Shutdown();
+                    Microsoft.Xna.Platform.Audio.AudioService.Shutdown();
                 }
 
 #if ANDROID

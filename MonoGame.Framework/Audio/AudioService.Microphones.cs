@@ -6,13 +6,14 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {
     /// <summary>
     /// Handles the buffer events of all DynamicSoundEffectInstance instances.
     /// </summary>
-    internal sealed partial class AudioService
+    public sealed partial class AudioService
     {
         internal Microphone _defaultMicrophone = null;
         internal List<Microphone> _microphones = new List<Microphone>();
