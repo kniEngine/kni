@@ -64,6 +64,9 @@
     <Reference Include="Xna.Framework.Graphics">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\netstandard2.0\Xna.Framework.Graphics.dll</HintPath>
     </Reference>
+    <Reference Include="Xna.Framework.Audio">
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\netstandard2.0\Xna.Framework.Audio.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Android\MonoGame.Framework.dll</HintPath>
     </Reference>

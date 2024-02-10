@@ -45,13 +45,6 @@
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.Content.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Xna.Framework.Graphics">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.Graphics.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Ref\net40\MonoGame.Framework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Xna.Framework.Content.Pipeline">
       <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.dll</HintPath>
       <Private>False</Private>
@@ -62,10 +55,6 @@
     </Reference>
     <Reference Include="Xna.Framework.Content.Pipeline.Graphics">
       <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.Graphics.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Xna.Framework.Content.Pipeline.Graphics.MojoProcessor">
-      <HintPath>$(MonoGameInstallDirectory)\MSBuild\MonoGame\v3.0\Tools\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Xna.Framework.Content.Pipeline.Media">
