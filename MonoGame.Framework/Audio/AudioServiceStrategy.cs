@@ -7,6 +7,11 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Microsoft.Xna.Platform.Audio
 {
+    public interface IPlatformAudioService
+    {
+        AudioServiceStrategy Strategy { get; }
+    }
+
     abstract public class AudioServiceStrategy : IDisposable
     {
         // factory methods
@@ -19,7 +24,11 @@ namespace Microsoft.Xna.Platform.Audio
         public abstract void PlatformSetReverbSettings(ReverbSettings reverbSettings);
 
         public abstract void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone);
-        
+
+        public T ToConcrete<T>() where T : AudioServiceStrategy
+        {
+            return (T)this;
+        }
 
         #region IDisposable
         ~AudioServiceStrategy()
