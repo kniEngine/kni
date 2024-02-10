@@ -320,7 +320,7 @@ namespace Microsoft.Xna.Framework
             // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
             if (_glSurfaceAvailable) 
             {
-                // trigger callbacks, must resume openAL device here
+                // must resume openAL device here
                 Microsoft.Xna.Platform.Audio.AudioService.Resume();
 
                 // go to next state
@@ -402,7 +402,7 @@ namespace Microsoft.Xna.Framework
                 _glSurfaceAvailable = false;
             }
 
-            // trigger callbacks, must pause openAL device here
+            // must pause openAL device here
             Microsoft.Xna.Platform.Audio.AudioService.Suspend();
 
             // go to next state
