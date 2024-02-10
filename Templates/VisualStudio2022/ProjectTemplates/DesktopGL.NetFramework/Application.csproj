@@ -53,6 +53,7 @@
     <PackageReference Include="nkast.Xna.Framework.Graphics.PackedVector" Version="3.10.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content" Version="3.10.9001" />
     <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.10.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.10.9001" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.9000" Version="3.10.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.10.9001-rc" />
   </ItemGroup>

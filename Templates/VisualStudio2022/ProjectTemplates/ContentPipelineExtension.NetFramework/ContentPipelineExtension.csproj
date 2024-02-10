@@ -43,9 +43,6 @@
     <PackageReference Include="nkast.Xna.Framework.Content" Version="3.10.9001" >
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-      <PackageReference Include="nkast.Xna.Framework.Ref" Version="3.10.9001">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
       <PackageReference Include="nkast.Xna.Framework.Content.Pipeline" Version="3.10.9001">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
