@@ -30,6 +30,11 @@ namespace Microsoft.Xna.Platform.Audio
             return (T)this;
         }
 
+        protected Microphone CreateMicrophone(string deviceIdentifier)
+        {
+            return new Microphone(deviceIdentifier);
+        }
+
         #region IDisposable
         ~AudioServiceStrategy()
         {

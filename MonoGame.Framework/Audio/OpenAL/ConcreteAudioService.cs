@@ -245,7 +245,7 @@ namespace Microsoft.Xna.Platform.Audio
                 if (string.IsNullOrEmpty(deviceIdentifier))
                     break;
 
-                Microphone microphone = new Microphone(deviceIdentifier);
+                Microphone microphone = base.CreateMicrophone(deviceIdentifier);
                 microphones.Add(microphone);
                 if (deviceIdentifier == defaultDevice)
                     defaultMicrophone = microphone;
@@ -256,7 +256,7 @@ namespace Microsoft.Xna.Platform.Audio
 #else
             // Xamarin platforms don't provide an handle to alGetString that allow to marshal string arrays
             // so we're basically only adding the default microphone
-            Microphone microphone = new Microphone(defaultDevice);
+            Microphone microphone = base.CreateMicrophone(defaultDevice);
             microphones.Add(microphone);
             defaultMicrophone = microphone;
 #endif
