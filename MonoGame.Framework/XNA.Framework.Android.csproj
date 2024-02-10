@@ -81,6 +81,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Content\ContentReaders\SoundEffectReader.cs" />
     <Compile Include="Audio\Utilities\MsAdpcmDecoder.cs" />
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="Audio\AudioEmitter.cs" />
@@ -159,7 +160,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Content\ContentReaders\SoundEffectReader.cs" />
     <Compile Include="Content\ContentReaders\SongReader.cs" />
     <Compile Include="Content\ContentReaders\VideoReader.cs" />
   </ItemGroup>

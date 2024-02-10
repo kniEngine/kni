@@ -1,5 +1,9 @@
 <Project>
-    
+
+  <ItemGroup>
+    <Compile Include="Content\ContentReaders\SoundEffectReader.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Audio\Utilities\MsAdpcmDecoder.cs" />
     <Compile Include="Audio\AudioChannels.cs" />
@@ -19,7 +23,14 @@
     <Compile Include="Audio\SoundEffectInstance.cs" />
     <Compile Include="Audio\SoundState.cs" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Compile Include="Audio\Xact\DspParameter.cs" />
+    <Compile Include="Audio\Xact\FilterMode.cs" />
+    <Compile Include="Audio\Xact\MiniFormatTag.cs" />
+    <Compile Include="Audio\Xact\ReverbSettings.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Audio\Xact\AudioCategory.cs" />
     <Compile Include="Audio\Xact\AudioEngine.cs" />
@@ -27,12 +38,8 @@
     <Compile Include="Audio\Xact\ClipEvent.cs" />
     <Compile Include="Audio\Xact\CrossfadeType.cs" />
     <Compile Include="Audio\Xact\Cue.cs" />
-    <Compile Include="Audio\Xact\DspParameter.cs" />
-    <Compile Include="Audio\Xact\FilterMode.cs" />
     <Compile Include="Audio\Xact\MaxInstanceBehavior.cs" />
-    <Compile Include="Audio\Xact\MiniFormatTag.cs" />
     <Compile Include="Audio\Xact\PlayWaveEvent.cs" />
-    <Compile Include="Audio\Xact\ReverbSettings.cs" />
     <Compile Include="Audio\Xact\RpcCurve.cs" />
     <Compile Include="Audio\Xact\RpcParameter.cs" />
     <Compile Include="Audio\Xact\RpcPoint.cs" />
