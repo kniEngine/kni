@@ -1126,10 +1126,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
-      <Project>{1dc4c439-a8a6-4a11-ab3b-a88dcba05449}</Project>
-      <Name>Xna.Framework.Content</Name>
-    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
@@ -1139,17 +1135,21 @@
       <Name>Xna.Framework.Graphics.PackedVector</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Project>{1dc4c439-a8a6-4a11-ab3b-a88dcba05449}</Project>
+      <Name>Xna.Framework.Content</Name>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
       <Project>{4b8d3f73-bbd2-4057-b86b-8b73b957dc0f}</Project>
       <Name>Xna.Framework.Graphics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Audio\Xna.Framework.Audio.csproj">
+      <Project>{3f81f76d-f0f3-44fe-a256-40af153c33f7}</Project>
+      <Name>Xna.Framework.Audio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
       <Name>Xna.Framework.Design</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
-      <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
-      <Name>XNA.Framework.WindowsDX11</Name>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
       <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
@@ -1170,6 +1170,10 @@
     <ProjectReference Include="..\src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj">
       <Project>{63486463-8aee-483e-862a-7720cd62b4df}</Project>
       <Name>Xna.Framework.Content.Pipeline.Media</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
+      <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
+      <Name>XNA.Framework.WindowsDX11</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools\MonoGame.Content.Builder\MGCB.Windows.9K.csproj">
       <Project>{4243474D-572E-6E69-646F-77734D474342}</Project>

@@ -51,52 +51,10 @@
       <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
       <Name>Xna.Framework.Graphics</Name>
     </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Content\ContentReaders\SoundEffectReader.cs" />
-    <Compile Include="Audio\Utilities\MsAdpcmDecoder.cs" />
-    <Compile Include="Audio\AudioChannels.cs" />
-    <Compile Include="Audio\AudioEmitter.cs" />
-    <Compile Include="Audio\AudioFactory.cs" />
-    <Compile Include="Audio\AudioListener.cs" />
-    <Compile Include="Audio\AudioService.cs" />
-    <Compile Include="Audio\AudioService.Microphones.cs" />
-    <Compile Include="Audio\AudioService.InstancePool.cs" />
-    <Compile Include="Audio\AudioServiceStrategy.cs" />
-    <Compile Include="Audio\DynamicSoundEffectInstance.cs" />
-    <Compile Include="Audio\InstancePlayLimitException.cs" />
-    <Compile Include="Audio\Microphone.cs" />
-    <Compile Include="Audio\NoAudioHardwareException.cs" />
-    <Compile Include="Audio\NoMicrophoneConnectedException.cs" />
-    <Compile Include="Audio\SoundEffect.cs" />
-    <Compile Include="Audio\SoundEffectInstance.cs" />
-    <Compile Include="Audio\SoundState.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Audio\Xact\AudioCategory.cs" />
-    <Compile Include="Audio\Xact\AudioEngine.cs" />
-    <Compile Include="Audio\Xact\AudioStopOptions.cs" />
-    <Compile Include="Audio\Xact\ClipEvent.cs" />
-    <Compile Include="Audio\Xact\CrossfadeType.cs" />
-    <Compile Include="Audio\Xact\Cue.cs" />
-    <Compile Include="Audio\Xact\DspParameter.cs" />
-    <Compile Include="Audio\Xact\FilterMode.cs" />
-    <Compile Include="Audio\Xact\MaxInstanceBehavior.cs" />
-    <Compile Include="Audio\Xact\MiniFormatTag.cs" />
-    <Compile Include="Audio\Xact\PlayWaveEvent.cs" />
-    <Compile Include="Audio\Xact\ReverbSettings.cs" />
-    <Compile Include="Audio\Xact\RpcCurve.cs" />
-    <Compile Include="Audio\Xact\RpcParameter.cs" />
-    <Compile Include="Audio\Xact\RpcPoint.cs" />
-    <Compile Include="Audio\Xact\RpcPointType.cs" />
-    <Compile Include="Audio\Xact\RpcVariable.cs" />
-    <Compile Include="Audio\Xact\SoundBank.cs" />
-    <Compile Include="Audio\Xact\VolumeEvent.cs" />
-    <Compile Include="Audio\Xact\WaveBank.cs" />
-    <Compile Include="Audio\Xact\XactClip.cs" />
-    <Compile Include="Audio\Xact\XactHelpers.cs" />
-    <Compile Include="Audio\Xact\XactSound.cs" />
+    <ProjectReference Include="..\src\Xna.Framework.Audio\Xna.Framework.Audio.csproj">
+      <Project>{3F81F76D-F0F3-44FE-A256-40AF153C33F7}</Project>
+      <Name>Xna.Framework.Audio</Name>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

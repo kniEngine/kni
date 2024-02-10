@@ -1031,10 +1031,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
-      <Project>{4b8d3f73-bbd2-4057-b86b-8b73b957dc0f}</Project>
-      <Name>Xna.Framework.Graphics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
@@ -1048,9 +1044,37 @@
       <Project>{1dc4c439-a8a6-4a11-ab3b-a88dcba05449}</Project>
       <Name>Xna.Framework.Content</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+      <Project>{4b8d3f73-bbd2-4057-b86b-8b73b957dc0f}</Project>
+      <Name>Xna.Framework.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Audio\Xna.Framework.Audio.csproj">
+      <Project>{3f81f76d-f0f3-44fe-a256-40af153c33f7}</Project>
+      <Name>Xna.Framework.Audio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
       <Name>Xna.Framework.Design</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
+      <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
+      <Name>Xna.Framework.Content.Pipeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj">
+      <Project>{acd26013-5730-4caf-9468-3baae867a8a2}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content.Pipeline.Graphics\Xna.Framework.Content.Pipeline.Graphics.csproj">
+      <Project>{7a3fa1d0-1b03-49cb-9e1b-b9dbf27d74b1}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj">
+      <Project>{476ee43e-e93b-4019-b8b7-ad52c4216456}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Graphics.MojoProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj">
+      <Project>{63486463-8aee-483e-862a-7720cd62b4df}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Media</Name>
     </ProjectReference>
     <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.DesktopGL.csproj">
       <Project>{6D75E618-19CA-4C51-9546-F10965FBC0B8}</Project>
