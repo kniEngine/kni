@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
             if (index != 0)
                 throw new NotImplementedException();
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
         }
 

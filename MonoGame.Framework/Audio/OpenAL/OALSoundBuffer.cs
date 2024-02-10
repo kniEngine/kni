@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public int Buffer { get; private set; }
 
-        internal ConcreteAudioService ConcreteAudioService { get { return (ConcreteAudioService)_audioService._strategy; } }
+        internal ConcreteAudioService ConcreteAudioService { get { return ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>(); } }
 
 
         public ALSoundBuffer(AudioService audioService)

@@ -13,16 +13,17 @@ using Microsoft.Xna.Framework.Audio;
 namespace Microsoft.Xna.Platform.Audio
 {   
     public sealed partial class AudioService : IDisposable
+        , IPlatformAudioService
     {
         private volatile static AudioService _current;
-        internal AudioServiceStrategy _strategy { get; private set; }
+        private AudioServiceStrategy _strategy;
 
         private LinkedList<SoundEffectInstance> _playingInstances = new LinkedList<SoundEffectInstance>();
         private readonly LinkedList<DynamicSoundEffectInstance> _dynamicPlayingInstances = new LinkedList<DynamicSoundEffectInstance>();
 
         public readonly static object SyncHandle = new object();
 
-
+        AudioServiceStrategy IPlatformAudioService.Strategy { get { return _strategy; } }
 
         public static AudioService Current
         {

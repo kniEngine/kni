@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, ALFormat format, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
         {
-            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
             switch (format)
             {
@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
         {
-            ConcreteAudioService concreteAudioService = (ConcreteAudioService)AudioService.Current._strategy;
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
             if (!concreteAudioService.SupportsAdpcm)
             {

@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Audio
             _volume = 1.0f;
             _pitch = 0.0f;
 
-            _strategy = audioService._strategy.CreateSoundEffectInstanceStrategy(_effect._strategy, _pan);
+            _strategy = ((IPlatformAudioService)audioService).Strategy.CreateSoundEffectInstanceStrategy(_effect._strategy, _pan);
         }
 
         /// <summary>
