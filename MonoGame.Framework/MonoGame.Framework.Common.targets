@@ -5,7 +5,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Content\ContentReaders\SoundEffectReader.cs" />
     <Compile Include="Content\ContentReaders\SongReader.cs" />
     <Compile Include="Content\ContentReaders\VideoReader.cs" />
   </ItemGroup>

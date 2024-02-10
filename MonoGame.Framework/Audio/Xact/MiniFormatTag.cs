@@ -2,9 +2,9 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {
-    enum MiniFormatTag 
+    public enum MiniFormatTag
     {
         Pcm = 0x0,
         Xma = 0x1,

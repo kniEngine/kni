@@ -7,24 +7,24 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Platform;
-using Microsoft.Xna.Platform.Audio;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Platform.Audio
 {   
-    internal sealed partial class AudioService : IDisposable
+    public sealed partial class AudioService : IDisposable
     {
         private volatile static AudioService _current;
         internal AudioServiceStrategy _strategy { get; private set; }
 
         private LinkedList<SoundEffectInstance> _playingInstances = new LinkedList<SoundEffectInstance>();
         private readonly LinkedList<DynamicSoundEffectInstance> _dynamicPlayingInstances = new LinkedList<DynamicSoundEffectInstance>();
-        
 
-        internal readonly static object SyncHandle = new object();
+        public readonly static object SyncHandle = new object();
 
 
-        internal static AudioService Current
+
+        public static AudioService Current
         {
             get
             {
@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         }
 
-        internal static void Suspend()
+        public static void Suspend()
         {
             if (_current == null) return;
 
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        internal static void Resume()
+        public static void Resume()
         {
             if (_current == null) return;
 
@@ -149,7 +149,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        internal static void Shutdown()
+        public static void Shutdown()
         {
             if (_current == null) return;
 
@@ -181,7 +181,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        internal void SetReverbSettings(ReverbSettings reverbSettings)
+        public void SetReverbSettings(ReverbSettings reverbSettings)
         {
             _strategy.PlatformSetReverbSettings(reverbSettings);
         }

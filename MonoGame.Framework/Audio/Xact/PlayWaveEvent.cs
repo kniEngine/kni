@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Framework.Audio
                     if (_streaming)
                         _wav.Dispose();
                     else
-                        _wav._isXAct = false;						
+                        _wav._isXAct = false;
                     _wav = null;
                     _loopIndex = 0;
                 }

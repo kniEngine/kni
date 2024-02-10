@@ -321,7 +321,7 @@ namespace Microsoft.Xna.Framework
             if (_glSurfaceAvailable) 
             {
                 // trigger callbacks, must resume openAL device here
-                Microsoft.Xna.Framework.Audio.AudioService.Resume();
+                Microsoft.Xna.Platform.Audio.AudioService.Resume();
 
                 // go to next state
                 _appState = AppState.Running;
@@ -403,7 +403,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // trigger callbacks, must pause openAL device here
-            Microsoft.Xna.Framework.Audio.AudioService.Suspend();
+            Microsoft.Xna.Platform.Audio.AudioService.Suspend();
 
             // go to next state
             _appState = AppState.Paused;

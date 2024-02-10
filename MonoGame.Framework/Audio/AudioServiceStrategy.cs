@@ -102,8 +102,6 @@ namespace Microsoft.Xna.Platform.Audio
     {
         protected SoundEffectInstanceStrategy(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy, float pan) { }
 
-        protected object AudioServiceSyncHandle { get { return AudioService.SyncHandle; } }
-
         public abstract void PlatformApply3D(AudioListener listener, AudioEmitter emitter);
         public abstract void PlatformSetIsLooped(bool isLooped, SoundState state);
         public abstract void PlatformSetPan(float pan);
