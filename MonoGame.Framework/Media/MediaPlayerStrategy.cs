@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Media
             OnPlatformActiveSongChanged();
         }
 
-        internal void OnSongFinishedPlaying()
+        protected void OnSongFinishedPlaying()
         {
             Song activeSong = Queue.ActiveSong;
 
