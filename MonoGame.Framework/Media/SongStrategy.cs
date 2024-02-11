@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Platform.Media
             set { _trackNumber = value; }
         }
 
-        internal SongStrategy()
+        protected SongStrategy()
         {
         }
 

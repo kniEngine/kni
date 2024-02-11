@@ -29,10 +29,12 @@ namespace Microsoft.Xna.Platform.Media
         public NSUrl AssetUrl { get { return this._assetUrl; } }
 
         internal ConcreteSongStrategy()
+            : base()
         {
         }
 
         internal ConcreteSongStrategy(string name, Uri streamSource)
+            : base()
         {
             this.Name = name;
             this._streamSource = streamSource;

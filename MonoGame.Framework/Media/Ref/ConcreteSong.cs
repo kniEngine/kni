@@ -10,6 +10,7 @@ namespace Microsoft.Xna.Platform.Media
     {
 
         internal ConcreteSongStrategy(string name, Uri streamSource)
+            : base()
         {
             throw new PlatformNotSupportedException();
         }
