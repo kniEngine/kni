@@ -1,14 +1,9 @@
-// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-// Copyright (C)2023 Nick Kastellanos
+// Copyright (C)2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
-
 
 namespace Microsoft.Xna.Platform.Media
 {
@@ -20,12 +15,12 @@ namespace Microsoft.Xna.Platform.Media
         {
             get
             {
-                var current = _current;
+                MediaFactory current = _current;
                 if (current != null)
                     return current;
 
-                MediaFactory audioFactory = CreateMediaFactory();
-                MediaFactory.RegisterMediaFactory(audioFactory);
+                MediaFactory mediaFactory = CreateMediaFactory();
+                MediaFactory.RegisterMediaFactory(mediaFactory);
 
                 return _current;
             }
@@ -38,7 +33,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public static void RegisterMediaFactory(MediaFactory mediaFactory)
         {
-            // lock
+            lock (typeof(MediaFactory))
             {
                 if (_current == null)
                 {
@@ -47,9 +42,7 @@ namespace Microsoft.Xna.Platform.Media
                     _current = mediaFactory;
                 }
                 else
-                {
                     throw new InvalidOperationException("MediaFactory allready registered.");
-                }
             }
         }
 
