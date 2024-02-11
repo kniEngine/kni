@@ -23,11 +23,6 @@ namespace Microsoft.Xna.Framework.Media
 
         #region Public API
 
-        /// <summary>
-        /// I actually think this is a file PATH...
-        /// </summary>
-        public string FileName { get { return _strategy.FileName; } }
-
 		/// <summary>
 		/// Gets the duration of the Video.
         /// </summary>
