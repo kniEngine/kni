@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Platform.Media
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgr32);
+                _lastFrame = new Texture2D(((IPlatformVideo)base.Video).Strategy.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgr32);
 
             VideoPlatformStream _videoPlatformStream = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GetVideoPlatformStream();
             byte[] texData = _videoPlatformStream.SampleGrabber.TextureData;

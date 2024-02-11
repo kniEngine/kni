@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform.Media
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new RenderTarget2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgra32, DepthFormat.None);
+                _lastFrame = new RenderTarget2D(((IPlatformVideo)base.Video).Strategy.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Bgra32, DepthFormat.None);
 
 
             if (base.State == MediaState.Playing)

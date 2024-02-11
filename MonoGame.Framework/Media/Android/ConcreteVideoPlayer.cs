@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Media
             {
                 base.Video = value;
                 if (value != null)
-                    CreateGLVideoSurfaceTexture(((IPlatformGraphicsDevice)value.GraphicsDevice).Strategy);
+                    CreateGLVideoSurfaceTexture(((IPlatformGraphicsDevice)((IPlatformVideo)value).Strategy.GraphicsDevice).Strategy);
             }
         }
 
@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Platform.Media
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(this.Video.GraphicsDevice, this.Video.Width, this.Video.Height, false, SurfaceFormat.Color);
+                _lastFrame = new Texture2D(((IPlatformVideo)base.Video).Strategy.GraphicsDevice, this.Video.Width, this.Video.Height, false, SurfaceFormat.Color);
 
             var GL = ((IPlatformGraphicsContext)_graphicsDeviceStrategy.MainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
