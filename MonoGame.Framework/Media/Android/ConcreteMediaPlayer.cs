@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override bool PlatformIsMuted
+        public override bool PlatformIsMuted
         {
             set
             {
@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override TimeSpan PlatformPlayPosition
+        public override TimeSpan PlatformPlayPosition
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform.Media
             return false;
         }
 
-        internal override float PlatformVolume
+        public override float PlatformVolume
         {
             set
             {
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override bool PlatformGameHasControl
+        public override bool PlatformGameHasControl
         {
             get { return true; }
         }
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
         
-        internal override void PlatformPlaySong(Song song)
+        public override void PlatformPlaySong(Song song)
         {
             if (Queue.ActiveSong != null)
             {
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformResume()
+        public override void PlatformResume()
         {
             Song activeSong = Queue.ActiveSong;
             if (activeSong != null)
@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             foreach (Song queuedSong in Queue.Songs)
             {

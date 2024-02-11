@@ -54,12 +54,12 @@ namespace Microsoft.Xna.Platform.Media
 
         internal MediaQueue Queue { get {return _queue; }}
 
-        internal virtual float PlatformVolume
+        public virtual float PlatformVolume
         {
             get { return _volume; }
             set { _volume = value; }
         }
-        internal virtual bool PlatformIsMuted
+        public virtual bool PlatformIsMuted
         {
             get { return _isMuted; }
             set { _isMuted = value; }
@@ -81,14 +81,14 @@ namespace Microsoft.Xna.Platform.Media
             set { _isVisualizationEnabled = value; }
         }
 
-        internal abstract bool PlatformGameHasControl { get; }
-        internal abstract TimeSpan PlatformPlayPosition { get; }
+        public abstract bool PlatformGameHasControl { get; }
+        public abstract TimeSpan PlatformPlayPosition { get; }
 
         protected abstract bool PlatformUpdateState(ref MediaState state);
-        internal abstract void PlatformPlaySong(Song song);
-        internal abstract void PlatformPause();
-        internal abstract void PlatformResume();
-        internal abstract void PlatformStop();
+        public abstract void PlatformPlaySong(Song song);
+        public abstract void PlatformPause();
+        public abstract void PlatformResume();
+        public abstract void PlatformStop();
 
 
         internal void OnPlatformActiveSongChanged()

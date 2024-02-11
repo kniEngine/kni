@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override bool PlatformIsMuted
+        public override bool PlatformIsMuted
         {
             get { throw new PlatformNotSupportedException(); }
             set { throw new PlatformNotSupportedException(); }
@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Media
             set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override TimeSpan PlatformPlayPosition
+        public override TimeSpan PlatformPlayPosition
         {
             get { throw new PlatformNotSupportedException(); }
         }
@@ -44,35 +44,35 @@ namespace Microsoft.Xna.Platform.Media
             throw new PlatformNotSupportedException();
         }
 
-        internal override float PlatformVolume
+        public override float PlatformVolume
         {
             get { throw new PlatformNotSupportedException(); }
             set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override bool PlatformGameHasControl
+        public override bool PlatformGameHasControl
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
         #endregion
 
-        internal override void PlatformPlaySong(Song song)
+        public override void PlatformPlaySong(Song song)
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformResume()
+        public override void PlatformResume()
         {
             throw new PlatformNotSupportedException();
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             throw new PlatformNotSupportedException();
         }
