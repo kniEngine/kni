@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Media
             get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override string Filename
+        public override string Filename
         {
             get { throw new PlatformNotSupportedException(); }
         }

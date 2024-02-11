@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override string Filename
+        public override string Filename
         {
             get
             {

@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Media
             get { return base.IsRated; }
         }
 
-        internal override string Filename
+        public override string Filename
         {
             get
             {
