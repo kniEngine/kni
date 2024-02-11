@@ -88,11 +88,11 @@ namespace Microsoft.Xna.Platform.Media
                 }
             }
             if (_lastFrame == null)
-                _lastFrame = new Texture2D(base.Video.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+                _lastFrame = new Texture2D(((IPlatformVideo)base.Video).Strategy.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
 
             if (_isPlaying && _frameAvailable)
             {
-                var GL = ((IPlatformGraphicsContext) ((IPlatformGraphicsDevice)base.Video.GraphicsDevice).Strategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                var GL = ((IPlatformGraphicsContext) ((IPlatformGraphicsDevice)((IPlatformVideo)base.Video).Strategy.GraphicsDevice).Strategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
                 ConcreteTexture2D texture2D = ((IPlatformTexture)_lastFrame).GetTextureStrategy<ConcreteTexture2D>();
 

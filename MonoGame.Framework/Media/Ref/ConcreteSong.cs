@@ -10,6 +10,7 @@ namespace Microsoft.Xna.Platform.Media
     {
 
         internal ConcreteSongStrategy(string name, Uri streamSource)
+            : base()
         {
             throw new PlatformNotSupportedException();
         }
@@ -44,7 +45,7 @@ namespace Microsoft.Xna.Platform.Media
             get { throw new PlatformNotSupportedException(); }
         }
 
-        internal override string Filename
+        public override string Filename
         {
             get { throw new PlatformNotSupportedException(); }
         }

@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Platform.Media
         internal Uri StreamSource { get { return _streamSource; } }
 
         internal ConcreteSongStrategy(string name, Uri streamSource)
+            : base()
         {
             this.Name = name;
             this._streamSource = streamSource;
@@ -52,7 +53,7 @@ namespace Microsoft.Xna.Platform.Media
             get { return base.IsRated; }
         }
 
-        internal override string Filename
+        public override string Filename
         {
             get { return StreamSource.OriginalString; }
         }

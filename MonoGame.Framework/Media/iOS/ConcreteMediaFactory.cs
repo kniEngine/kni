@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override IList<MediaSource> GetAvailableMediaSources()
         {
-            MediaSource[] result = { new MediaSource(UIDevice.CurrentDevice.SystemName, MediaSourceType.LocalDevice) };
+            MediaSource[] result = { base.CreateMediaSource(UIDevice.CurrentDevice.SystemName, MediaSourceType.LocalDevice) };
             return result;
         }
 

@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
-        internal override bool PlatformIsMuted
+        public override bool PlatformIsMuted
         {
             set
             {
@@ -74,12 +74,12 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override TimeSpan PlatformPlayPosition
+        public override TimeSpan PlatformPlayPosition
         {
             get { return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime); }
         }
 
-        internal override bool PlatformGameHasControl
+        public override bool PlatformGameHasControl
         {
             get { return true; }
         }
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Media
             return false;
         }
 
-        internal override float PlatformVolume
+        public override float PlatformVolume
         {
             get { return base.PlatformVolume; }
             set
@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Platform.Media
 
         #endregion
 
-        internal override void PlatformPlaySong(Song song)
+        public override void PlatformPlaySong(Song song)
         {
             _mediaEngineEx.Source = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().StreamSource.OriginalString;
             _mediaEngineEx.Load();
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Platform.Media
             //We start playing when we get a LoadedData event in MediaEngineExOnPlaybackEvent
         }
 
-        internal override void PlatformPause()
+        public override void PlatformPause()
         {
             if (_sessionState == SessionState.Started)
             {
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformResume()
+        public override void PlatformResume()
         {
             if (_sessionState == SessionState.Paused)
             {
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformStop()
+        public override void PlatformStop()
         {
             if (_sessionState != SessionState.Stopped)
             {

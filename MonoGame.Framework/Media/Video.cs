@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Framework.Media
         private bool _isDisposed;
 
         VideoStrategy IPlatformVideo.Strategy { get { return _strategy; } }
-        internal GraphicsDevice GraphicsDevice { get { return _strategy.GraphicsDevice; } }
 
         #region Public API
 
