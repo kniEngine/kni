@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Platform.Media
 
             this.Video = video;
             
-            var afd = Android.App.Application.Context.Assets.OpenFd(this.Video.FileName);
+            var afd = Android.App.Application.Context.Assets.OpenFd(((IPlatformVideo)this.Video).Strategy.FileName);
             if (afd == null)
                 return;
 
