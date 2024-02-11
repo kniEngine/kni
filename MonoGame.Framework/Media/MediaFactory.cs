@@ -54,5 +54,10 @@ namespace Microsoft.Xna.Platform.Media
         public abstract VideoStrategy CreateVideoStrategy(GraphicsDevice graphicsDevice, string fileName, TimeSpan timeSpan);
 
         public abstract IList<MediaSource> GetAvailableMediaSources();
+
+        protected MediaSource CreateMediaSource(string name, MediaSourceType type)
+        {
+            return new MediaSource(name, type);
+        }
     }
 }
