@@ -77,8 +77,10 @@ namespace Microsoft.Xna.Platform.Media
         {
             float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-            foreach (Song queuedSong in base.Queue.Songs)
+            for (int i = 0; i < base.Queue.Count; i++)
             {
+                Song queuedSong = base.Queue[i];
+
                 _androidPlayer.SetVolume(innerVolume, innerVolume);
             }
         }
@@ -139,8 +141,10 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            foreach (Song queuedSong in base.Queue.Songs)
+            for (int i = 0; i < base.Queue.Count; i++)
             {
+                Song queuedSong = base.Queue[i];
+
                 Song activeSong = base.Queue.ActiveSong;
                 _androidPlayer.Stop();
                 _playingSong = null;
