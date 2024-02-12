@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformClearQueue()
+        protected internal override void PlatformClearQueue()
         {
             while (base.Queue.Count > 0)
             {
@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Platform.Media
                 ((IPlatformSong)song).Strategy.PlayCount = 0;
                 ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.Zero;
 
-                base.Queue.Remove(song);
+                base.RemoveQueuedSong(song);
             }
 
             _numSongsInQueuePlayed = 0;
