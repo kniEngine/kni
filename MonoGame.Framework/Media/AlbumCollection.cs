@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public void Dispose()
         {
-            foreach (var album in this._innerList)
+            foreach (Album album in this._innerList)
                 album.Dispose();
         }
     }

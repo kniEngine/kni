@@ -182,7 +182,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformClearQueue()
+        protected internal override void PlatformClearQueue()
         {
             while (base.Queue.Count > 0)
             {
@@ -196,7 +196,7 @@ namespace Microsoft.Xna.Platform.Media
                     ((IPlatformSong)song).Strategy.PlayCount = 0;
                 }
 
-                base.Queue.Remove(song);
+                base.RemoveQueuedSong(song);
             }
 
             _numSongsInQueuePlayed = 0;
@@ -231,20 +231,20 @@ namespace Microsoft.Xna.Platform.Media
         event FinishedPlayingHandler DonePlaying;
 
         private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
-		{
+        {
             FinishedPlayingHandler handler = DonePlaying;
             if (handler != null)
                 handler();
-		}
+        }
 
-		/// <summary>
-		/// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-		/// </summary>
-		internal void SetEventHandler(FinishedPlayingHandler handler)
-		{
-			if (DonePlaying == null)
-			    DonePlaying += handler;
-		}
+        /// <summary>
+        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
+        /// </summary>
+        internal void SetEventHandler(FinishedPlayingHandler handler)
+        {
+            if (DonePlaying == null)
+                DonePlaying += handler;
+        }
 
 
         #region IDisposable

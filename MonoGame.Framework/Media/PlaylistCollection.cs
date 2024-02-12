@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework.Media
 
     public sealed class PlaylistCollection : ICollection<Playlist>, IEnumerable<Playlist>, IEnumerable, IDisposable
     {
-		private bool _isReadOnly = false;
-		private List<Playlist> _innerList = new List<Playlist>();
-		
+        private bool _isReadOnly = false;
+        private List<Playlist> _innerList = new List<Playlist>();
+        
         public void Dispose()
         {
         }
@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             return _innerList.GetEnumerator();
         }
-		
+        
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _innerList.GetEnumerator();
@@ -33,8 +33,8 @@ namespace Microsoft.Xna.Framework.Media
         {
             get { return _innerList.Count; }
         }
-		
-		public bool IsReadOnly
+        
+        public bool IsReadOnly
         {
             get { return this._isReadOnly; }
         }
@@ -43,8 +43,8 @@ namespace Microsoft.Xna.Framework.Media
         {
             get { return this._innerList[index]; }
         }
-		
-		public void Add(Playlist item)
+        
+        public void Add(Playlist item)
         {
             if (item == null)
                 throw new ArgumentNullException();
@@ -66,8 +66,8 @@ namespace Microsoft.Xna.Framework.Media
 
             this._innerList.Add(item);
         }
-		
-		public void Clear()
+        
+        public void Clear()
         {
             _innerList.Clear();
         }
@@ -89,8 +89,8 @@ namespace Microsoft.Xna.Framework.Media
         {
             _innerList.CopyTo(array, arrayIndex);
         }
-		
-		public int IndexOf(Playlist item)
+        
+        public int IndexOf(Playlist item)
         {
             return _innerList.IndexOf(item);
         }

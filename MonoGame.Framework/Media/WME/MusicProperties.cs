@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -29,7 +30,7 @@ namespace Microsoft.Xna.Platform.Media
             this.Path = this.File.Path;
             this.DateCreated = this.File.DateCreated;
 
-            var properties = Task.Run(async () => await file.Properties.RetrievePropertiesAsync(new String[]
+            IDictionary<string,object> properties = Task.Run(async () => await file.Properties.RetrievePropertiesAsync(new String[]
                 {
                     "System.Music.AlbumTitle",
                     "System.Music.AlbumArtist",
@@ -67,7 +68,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public static MusicProperties Deserialize(BinaryReader stream)
         {
-            var instance = new MusicProperties();
+            MusicProperties instance = new MusicProperties();
             instance.Path = stream.ReadString();
             instance.DateCreated = new DateTimeOffset(stream.ReadInt64(), new TimeSpan(stream.ReadInt64()));
 

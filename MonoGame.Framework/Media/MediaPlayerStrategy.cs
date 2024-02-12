@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Media
         private readonly MediaQueue _queue = new MediaQueue();
         // Need to hold onto this to keep track of how many songs
         // have played when in shuffle mode
-        internal int _numSongsInQueuePlayed = 0;
+        protected int _numSongsInQueuePlayed = 0;
 
         private readonly WeakReference _mediaPlayerRef = new WeakReference(null);
         internal FrameworkMedia.MediaPlayer MediaPlayer
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal virtual void PlatformClearQueue()
+        protected internal virtual void PlatformClearQueue()
         {
             while (_queue.Count > 0)
             {
@@ -118,6 +118,11 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             _numSongsInQueuePlayed = 0;
+        }
+
+        protected void RemoveQueuedSong(Song song)
+        {
+            this.Queue.Remove(song);
         }
 
         internal void PlatformMoveNext()
@@ -143,7 +148,7 @@ namespace Microsoft.Xna.Platform.Media
                 direction = 0;
             }
 
-            var nextSong = _queue.GetNextSong(direction, PlatformIsShuffled);
+            Song nextSong = _queue.GetNextSong(direction, PlatformIsShuffled);
             if (nextSong != null)
             {
                 if (nextSong.IsDisposed)

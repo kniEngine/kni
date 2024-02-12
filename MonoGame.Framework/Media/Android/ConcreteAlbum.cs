@@ -79,11 +79,11 @@ namespace Microsoft.Xna.Platform.Media
         [CLSCompliant(false)]
         public Bitmap Platform_GetAlbumArt(int width = 0, int height = 0)
         {
-            var albumArt = MediaStore.Images.Media.GetBitmap(ConcreteMediaLibraryStrategy.Context.ContentResolver, this._thumbnail);
+            Bitmap albumArt = MediaStore.Images.Media.GetBitmap(ConcreteMediaLibraryStrategy.Context.ContentResolver, this._thumbnail);
             if (width == 0 || height == 0)
                 return albumArt;
 
-            var scaledAlbumArt = Bitmap.CreateScaledBitmap(albumArt, width, height, true);
+            Bitmap scaledAlbumArt = Bitmap.CreateScaledBitmap(albumArt, width, height, true);
             albumArt.Dispose();
             return scaledAlbumArt;
         }

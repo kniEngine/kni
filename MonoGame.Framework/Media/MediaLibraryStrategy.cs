@@ -37,6 +37,27 @@ namespace Microsoft.Xna.Platform.Media
         abstract public void SavePicture(string name, byte[] imageBuffer);
         abstract public void SavePicture(string name, Stream source);
 
+
+        protected SongCollection CreateSongCollection(List<Song> songs)
+        {
+            return new SongCollection(songs);
+        }
+
+        protected Song CreateSong(SongStrategy strategy)
+        {
+            return new Song(strategy);
+        }
+
+        internal AlbumCollection CreateAlbumCollection(List<Album> albums)
+        {
+            return new AlbumCollection(albums);
+        }
+
+        protected Album CreateAlbum(AlbumStrategy strategy)
+        {
+            return new Album(strategy);
+        }
+
         #region IDisposable
         ~MediaLibraryStrategy()
         {

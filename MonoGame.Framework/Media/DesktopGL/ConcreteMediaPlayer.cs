@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Platform.Media
 
                 DynamicSoundEffectInstance player = mediaPlatformStream.Player;
 
-                var state = player.State;
+                SoundState state = player.State;
                 switch (state)
                 {
                     case SoundState.Playing:
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override void PlatformClearQueue()
+        protected internal override void PlatformClearQueue()
         {
             while (base.Queue.Count > 0)
             {
@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Platform.Media
                     mediaPlatformStream.DestroyPlayer();
                 }
 
-                base.Queue.Remove(song);
+                base.RemoveQueuedSong(song);
             }
 
             _numSongsInQueuePlayed = 0;
@@ -226,7 +226,7 @@ namespace Microsoft.Xna.Platform.Media
 
         private void sfxi_BufferNeeded(object sender, EventArgs e)
         {
-            var sfxi = (DynamicSoundEffectInstance)sender;
+            DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
             int count = SubmitBuffer(sfxi, _reader);
 
             if (count == 0 && sfxi.PendingBufferCount <= 0)

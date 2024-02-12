@@ -11,20 +11,20 @@ namespace Microsoft.Xna.Framework.Media
         public TimeSpan Duration
         {
             get;
-			internal set;
+            internal set;
         }
 
         public string Name
         {
             get;
-			internal set;
+            internal set;
         }
 
-		public void Dispose()
+        public void Dispose()
         {
         }
 
-		
+        
         /*public SongCollection Songs
         {
             get

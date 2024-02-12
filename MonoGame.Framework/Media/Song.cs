@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework.Media
         /// Gets the Genre of the Song.
         /// </summary>
         public Genre Genre { get { return _strategy.Genre; } }
-		
+        
         public TimeSpan Duration { get { return _strategy.Duration; } }
 
         public bool IsProtected { get { return _strategy.IsProtected; } }
@@ -56,8 +56,8 @@ namespace Microsoft.Xna.Framework.Media
             _strategy.Duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
-		internal Song(string name, Uri streamSource)
-		{
+        internal Song(string name, Uri streamSource)
+        {
             MediaLibrary.PreserveMediaContentTypeReaders();
 
             _strategy = MediaFactory.Current.CreateSongStrategy(name, streamSource);

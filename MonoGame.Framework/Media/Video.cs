@@ -23,8 +23,8 @@ namespace Microsoft.Xna.Framework.Media
 
         #region Public API
 
-		/// <summary>
-		/// Gets the duration of the Video.
+        /// <summary>
+        /// Gets the duration of the Video.
         /// </summary>
         public TimeSpan Duration { get { return _strategy.Duration; } }
 

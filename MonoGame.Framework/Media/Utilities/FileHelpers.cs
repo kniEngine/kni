@@ -53,12 +53,12 @@ namespace Microsoft.Xna.Platform.Media.Utilities
                 filePath = ForwardSlashString + filePath;
 
             // Get a uri for filePath using the file:// schema and no host.
-            var src = new Uri("file://" + UrlEncode(filePath));
+            Uri src = new Uri("file://" + UrlEncode(filePath));
 
-            var dst = new Uri(src, UrlEncode(relativeFile));
+            Uri dst = new Uri(src, UrlEncode(relativeFile));
             // The uri now contains the path to the relativeFile with 
             // relative addresses resolved... get the local path.
-            var localPath = dst.LocalPath;
+            string localPath = dst.LocalPath;
 
             if (!hasForwardSlash && localPath.StartsWith("/"))
                 localPath = localPath.Substring(1);
@@ -70,18 +70,18 @@ namespace Microsoft.Xna.Platform.Media.Utilities
 
         internal static string UrlEncode(string url)
         {
-            var encoder = new UTF8Encoding();
-            var safeline = new StringBuilder(encoder.GetByteCount(url) * 3);
+            UTF8Encoding encoder = new UTF8Encoding();
+            StringBuilder safeline = new StringBuilder(encoder.GetByteCount(url) * 3);
 
-            foreach (var c in url)
+            foreach (char c in url)
             {
                 if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) || Array.IndexOf(UrlSafeChars, c) != -1)
                     safeline.Append(c);
                 else
                 {
-                    var bytes = encoder.GetBytes(c.ToString());
+                    byte[] bytes = encoder.GetBytes(c.ToString());
 
-                    foreach (var num in bytes)
+                    foreach (byte num in bytes)
                     {
                         safeline.Append("%");
                         safeline.Append(num.ToString("X"));
