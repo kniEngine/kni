@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Media
             {
                 base.PlatformIsMuted = value;
 
-                if (Queue.Count > 0)
+                if (base.Queue.Count > 0)
                     SetChannelVolumes();
             }
         }
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             get
             {
-                Song activeSong = Queue.ActiveSong;
+                Song activeSong = base.Queue.ActiveSong;
                 if (activeSong == null)
                     return TimeSpan.Zero;
 
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Media
             {
                 base.PlatformVolume = value;
 
-                if (Queue.ActiveSong != null)
+                if (base.Queue.ActiveSong != null)
                     SetChannelVolumes();
             }
         }
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-            foreach (Song queuedSong in Queue.Songs)
+            foreach (Song queuedSong in base.Queue.Songs)
             {
                 _androidPlayer.SetVolume(innerVolume, innerVolume);
             }
@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Platform.Media
         
         public override void PlatformPlaySong(Song song)
         {
-            if (Queue.ActiveSong != null)
+            if (base.Queue.ActiveSong != null)
             {
                 float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformPause()
         {
-            Song activeSong = Queue.ActiveSong;
+            Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
                 _androidPlayer.Pause();
@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformResume()
         {
-            Song activeSong = Queue.ActiveSong;
+            Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
                 _androidPlayer.Start();
@@ -139,9 +139,9 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            foreach (Song queuedSong in Queue.Songs)
+            foreach (Song queuedSong in base.Queue.Songs)
             {
-                Song activeSong = Queue.ActiveSong;
+                Song activeSong = base.Queue.ActiveSong;
                 _androidPlayer.Stop();
                 _playingSong = null;
                 ((IPlatformSong)activeSong).Strategy.PlayCount = 0;
@@ -153,16 +153,16 @@ namespace Microsoft.Xna.Platform.Media
 
         internal override void PlatformClearQueue()
         {
-            while (Queue.Count > 0)
+            while (base.Queue.Count > 0)
             {
-                Song song = Queue[0];
+                Song song = base.Queue[0];
 
                 _androidPlayer.Stop();
                 _playingSong = null;
                 ((IPlatformSong)song).Strategy.PlayCount = 0;
                 ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.Zero;
-                
-                Queue.Remove(song);
+
+                base.Queue.Remove(song);
             }
 
             _numSongsInQueuePlayed = 0;

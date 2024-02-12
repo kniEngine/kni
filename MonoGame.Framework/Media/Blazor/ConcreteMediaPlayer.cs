@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformPlaySong(Song song)
         {
-            if (Queue.ActiveSong != null)
+            if (base.Queue.ActiveSong != null)
             {
                 _webPlayer.Src = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().StreamSource.OriginalString;
                 _webPlayer.Load();
@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformPause()
         {
-            Song activeSong = Queue.ActiveSong;
+            Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
                 _webPlayer.Pause();
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformResume()
         {
-            Song activeSong = Queue.ActiveSong;
+            Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
                 _webPlayer.Play();
@@ -114,9 +114,9 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            foreach (Song queuedSong in Queue.Songs)
+            foreach (Song queuedSong in base.Queue.Songs)
             {
-                Song activeSong = Queue.ActiveSong;
+                Song activeSong = base.Queue.ActiveSong;
                 _webPlayer.Pause();
                 _webPlayer.Src = "";
                 _playingSong = null;
