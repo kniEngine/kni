@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Platform.Media
                             if (!albums.TryGetValue(properties.Album, out album))
                             {
                                 WinFileProperties.StorageItemThumbnail thumbnail = Task.Run(async () => await properties.File.GetThumbnailAsync(WinFileProperties.ThumbnailMode.MusicView, 300, WinFileProperties.ThumbnailOptions.ResizeThumbnail)).Result;
-                                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(properties.Album, albumArtist, genre, new SongCollection(), thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
+                                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(properties.Album, albumArtist, genre, new SongCollection(new List<Song>()), thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
                                 album = new Album(albumStrategy);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);

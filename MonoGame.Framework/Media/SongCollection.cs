@@ -12,12 +12,8 @@ namespace Microsoft.Xna.Framework.Media
 	public class SongCollection : ICollection<Song>, IEnumerable<Song>, IEnumerable, IDisposable
 	{
 		private bool _isReadOnly = false;
-		private List<Song> _innerList = new List<Song>();
+		private List<Song> _innerList;
 
-        internal SongCollection()
-        {
-
-        }
 
         internal SongCollection(List<Song> songs)
         {
@@ -84,9 +80,12 @@ namespace Microsoft.Xna.Framework.Media
         
         public SongCollection Clone()
         {
-            SongCollection sc = new SongCollection();
+            List<Song> songs = new List<Song>();
+            SongCollection sc = new SongCollection(songs);
+
             foreach (Song song in this._innerList)
                 sc.Add(song);
+
             return sc;
         }
         
