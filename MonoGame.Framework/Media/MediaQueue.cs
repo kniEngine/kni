@@ -49,11 +49,6 @@ namespace Microsoft.Xna.Framework.Media
             get { return _songs[index]; }
         }
 
-        internal IEnumerable<Song> Songs
-        {
-            get { return _songs; }
-        }
-
         internal void Add(Song song)
         {
             _songs.Add(song);
