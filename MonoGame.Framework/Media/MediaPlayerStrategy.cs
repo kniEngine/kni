@@ -64,13 +64,13 @@ namespace Microsoft.Xna.Platform.Media
             get { return _isMuted; }
             set { _isMuted = value; }
         }
-        internal virtual bool PlatformIsRepeating
+        public virtual bool PlatformIsRepeating
         {
             get { return _isRepeating; }
             set { _isRepeating = value; }
         }
 
-        internal virtual bool PlatformIsShuffled
+        public virtual bool PlatformIsShuffled
         {
             get { return _isShuffled; }
             set { _isShuffled = value; }

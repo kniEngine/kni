@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override bool PlatformIsRepeating
+        public override bool PlatformIsRepeating
         {
             get { return base.PlatformIsRepeating; }
             set
@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override bool PlatformIsShuffled
+        public override bool PlatformIsShuffled
         {
             get { return base.PlatformIsShuffled; }
             set { base.PlatformIsShuffled = value; }
