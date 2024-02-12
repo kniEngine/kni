@@ -9,17 +9,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Graphics;
-using SharpDX.MediaFoundation;
 using DX = SharpDX;
 using DXGI = SharpDX.DXGI;
+using DXRaw = SharpDX.Mathematics.Interop;
+using MediaFoundation = SharpDX.MediaFoundation;
 
 
 namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
-        DXGIDeviceManager _devManager;
-        private MediaEngine _mediaEngine;
+        MediaFoundation.DXGIDeviceManager _devManager;
+        private MediaFoundation.MediaEngine _mediaEngine;
 
         private Texture2D _lastFrame;
 
@@ -63,33 +64,33 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteVideoPlayerStrategy()
         {
-            MediaManager.Startup();
+            MediaFoundation.MediaManager.Startup();
 
-            _devManager = new DXGIDeviceManager();
+            _devManager = new MediaFoundation.DXGIDeviceManager();
             _devManager.ResetDevice(((IPlatformGraphicsDevice)ConcreteGame.ConcreteGameInstance.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice);
 
-            using (var factory = new MediaEngineClassFactory())
-            using (var attributes = new MediaEngineAttributes
+            using (MediaFoundation.MediaEngineClassFactory factory = new MediaFoundation.MediaEngineClassFactory())
+            using (MediaFoundation.MediaEngineAttributes attributes = new MediaFoundation.MediaEngineAttributes
             {
                 VideoOutputFormat = (int)DXGI.Format.B8G8R8A8_UNorm,
                 DxgiManager = _devManager
             })
             {
-                _mediaEngine = new MediaEngine(factory, attributes, MediaEngineCreateFlags.None, OnMediaEngineEvent);
+                _mediaEngine = new MediaFoundation.MediaEngine(factory, attributes, MediaFoundation.MediaEngineCreateFlags.None, OnMediaEngineEvent);
             }
         }
 
-        private void OnMediaEngineEvent(MediaEngineEvent mediaEvent, long param1, int param2)
+        private void OnMediaEngineEvent(MediaFoundation.MediaEngineEvent mediaEvent, long param1, int param2)
         {
             if (!_mediaEngine.HasVideo())
                 return;
 
             switch (mediaEvent)
             {
-                case MediaEngineEvent.Play:
+                case MediaFoundation.MediaEngineEvent.Play:
                     break;
                 
-                case MediaEngineEvent.Ended:
+                case MediaFoundation.MediaEngineEvent.Ended:
                     if (IsLooped)
                     {
                         PlatformPlay(base.Video);
@@ -119,7 +120,7 @@ namespace Microsoft.Xna.Platform.Media
                 long pts;
                 if (_mediaEngine.HasVideo() && _mediaEngine.OnVideoStreamTick(out pts) && _mediaEngine.ReadyState >= 2)
                 {
-                    var region = new SharpDX.Mathematics.Interop.RawRectangle(0, 0, base.Video.Width, base.Video.Height);
+                    DXRaw.RawRectangle region = new DXRaw.RawRectangle(0, 0, base.Video.Width, base.Video.Height);
                     DX.ComObject dstSurfRef = (DX.ComObject)_lastFrame.GetD3D11Resource();
                     _mediaEngine.TransferVideoFrame(dstSurfRef, null, region, null);
                 }

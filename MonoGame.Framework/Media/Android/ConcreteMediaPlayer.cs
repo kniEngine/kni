@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Platform.Media
                 }
                 else
                 {
-                    var afd = Android.App.Application.Context.Assets.OpenFd(
+                    Android.Content.Res.AssetFileDescriptor afd = Android.App.Application.Context.Assets.OpenFd(
                         ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().StreamSource.OriginalString);
                     if (afd == null)
                         return;

@@ -84,27 +84,27 @@ namespace Microsoft.Xna.Platform.Media
                 }
 
 
-                var files = new List<StorageFile>();
+                List<StorageFile> files = new List<StorageFile>();
                 await this.GetAllFiles(_musicFolder, files);
 
-                var songList = new List<Song>();
-                var albumList = new List<Album>();
+                List<Song> songList = new List<Song>();
+                List<Album> albumList = new List<Album>();
 
-                var artists = new Dictionary<string, Artist>();
-                var albums = new Dictionary<string, Album>();
-                var genres = new Dictionary<string, Genre>();
+                Dictionary<string,Artist> artists = new Dictionary<string, Artist>();
+                Dictionary<string,Album> albums = new Dictionary<string, Album>();
+                Dictionary<string,Genre> genres = new Dictionary<string, Genre>();
 
-                var cache = new Dictionary<string, MusicProperties>();
+                Dictionary<string, MusicProperties> cache = new Dictionary<string, MusicProperties>();
 
                 // Read cache
-                var cacheFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(CacheFile, CreationCollisionOption.OpenIfExists);
-                using (var baseStream = await cacheFile.OpenStreamForReadAsync())
-                using (var stream = new BinaryReader(baseStream))
+                StorageFile cacheFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(CacheFile, CreationCollisionOption.OpenIfExists);
+                using (Stream baseStream = await cacheFile.OpenStreamForReadAsync())
+                using (BinaryReader stream = new BinaryReader(baseStream))
                     try
                     {
                         for (; baseStream.Position < baseStream.Length;)
                         {
-                            var entry = MusicProperties.Deserialize(stream);
+                            MusicProperties entry = MusicProperties.Deserialize(stream);
                             cache.Add(entry.Path, entry);
                         }
                     }
@@ -112,13 +112,13 @@ namespace Microsoft.Xna.Platform.Media
 
                 // Write cache
                 cacheFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(CacheFile, CreationCollisionOption.ReplaceExisting);
-                using (var stream = new BinaryWriter(await cacheFile.OpenStreamForWriteAsync()))
+                using (BinaryWriter stream = new BinaryWriter(await cacheFile.OpenStreamForWriteAsync()))
                 {
                     int prevProgress = 0;
 
                     for (int i = 0; i < files.Count; i++)
                     {
-                        var file = files[i];
+                        StorageFile file = files[i];
                         try
                         {
                             MusicProperties properties;
@@ -153,14 +153,14 @@ namespace Microsoft.Xna.Platform.Media
                             Album album;
                             if (!albums.TryGetValue(properties.Album, out album))
                             {
-                                var thumbnail = Task.Run(async () => await properties.File.GetThumbnailAsync(WinFileProperties.ThumbnailMode.MusicView, 300, WinFileProperties.ThumbnailOptions.ResizeThumbnail)).Result;
+                                WinFileProperties.StorageItemThumbnail thumbnail = Task.Run(async () => await properties.File.GetThumbnailAsync(WinFileProperties.ThumbnailMode.MusicView, 300, WinFileProperties.ThumbnailOptions.ResizeThumbnail)).Result;
                                 AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(properties.Album, albumArtist, genre, new SongCollection(), thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
                                 album = new Album(albumStrategy);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);
                             }
 
-                            var songStrategy = new ConcreteSongStrategy();
+                            ConcreteSongStrategy songStrategy = new ConcreteSongStrategy();
                             songStrategy.Album = album;
                             songStrategy.Artist = artist;
                             songStrategy.Genre = genre;
@@ -206,16 +206,16 @@ namespace Microsoft.Xna.Platform.Media
 
         private async Task GetAllFiles(StorageFolder storageFolder, List<StorageFile> musicFiles)
         {
-            foreach (var item in await storageFolder.GetItemsAsync())
+            foreach (IStorageItem item in await storageFolder.GetItemsAsync())
                 if (item is StorageFile)
                 {
-                    var file = item as StorageFile;
+                    StorageFile file = item as StorageFile;
                     if (file.ContentType.StartsWith("audio") && !file.ContentType.EndsWith("url"))
                         musicFiles.Add(file);
                 }
                 else
                 {
-                    var folder = item as StorageFolder;
+                    StorageFolder folder = item as StorageFolder;
                     await this.GetAllFiles(folder, musicFiles);
                 }
         }

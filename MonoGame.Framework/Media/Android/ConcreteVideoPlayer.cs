@@ -196,7 +196,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformPlay(Video video)
         {
-            var state = State;
+            MediaState state = State;
             if (state == MediaState.Playing || state == MediaState.Paused)
             {
                 _player.Stop();
@@ -204,8 +204,8 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             this.Video = video;
-            
-            var afd = Android.App.Application.Context.Assets.OpenFd(((IPlatformVideo)this.Video).Strategy.FileName);
+
+            Android.Content.Res.AssetFileDescriptor afd = Android.App.Application.Context.Assets.OpenFd(((IPlatformVideo)this.Video).Strategy.FileName);
             if (afd == null)
                 return;
 

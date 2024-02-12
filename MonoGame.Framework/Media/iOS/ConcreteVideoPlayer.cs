@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Platform.Media
 
         private MPMoviePlayerViewController CreateMovieView(NSUrl url)
         {
-            var movieView = new MPMoviePlayerViewController(url);
+            MPMoviePlayerViewController movieView = new MPMoviePlayerViewController(url);
             MovieView.MoviePlayer.ScalingMode = MPMovieScalingMode.AspectFill;
             MovieView.MoviePlayer.ControlStyle = MPMovieControlStyle.None;
             MovieView.MoviePlayer.PrepareToPlay();

@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Media
             List<Song> songList = new List<Song>();
             List<Album> albumList = new List<Album>();
 
-            using (var musicCursor = Context.ContentResolver.Query(MediaStore.Audio.Media.ExternalContentUri, null, null, null, null))
+            using (Android.Database.ICursor musicCursor = Context.ContentResolver.Query(MediaStore.Audio.Media.ExternalContentUri, null, null, null, null))
             {
                 if (musicCursor != null)
                 {
@@ -119,9 +119,9 @@ namespace Microsoft.Xna.Platform.Media
                             string titleProperty = musicCursor.GetString(titleColumn);
 
                             long assetId = musicCursor.GetLong(assetIdColumn);
-                            var assetUri = ContentUris.WithAppendedId(MediaStore.Audio.Media.ExternalContentUri, assetId);
+                            Uri assetUri = ContentUris.WithAppendedId(MediaStore.Audio.Media.ExternalContentUri, assetId);
                             long albumId = albumIdColumn > -1 ? musicCursor.GetInt(albumIdColumn) : -1;
-                            var albumArtUri = albumId > -1 ? ContentUris.WithAppendedId(Uri.Parse("content://media/external/audio/albumart"), albumId) : null;
+                            Uri albumArtUri = albumId > -1 ? ContentUris.WithAppendedId(Uri.Parse("content://media/external/audio/albumart"), albumId) : null;
 
                             Artist artist;
                             if (!artists.TryGetValue(artistProperty, out artist))
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Platform.Media
                                 albumList.Add(album);
                             }
 
-                            var songStrategy = new ConcreteSongStrategy();
+                            ConcreteSongStrategy songStrategy = new ConcreteSongStrategy();
                             songStrategy.Album = album;
                             songStrategy.Artist = artist;
                             songStrategy.Genre = genre;

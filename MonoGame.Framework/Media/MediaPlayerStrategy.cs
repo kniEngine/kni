@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform.Media
                 direction = 0;
             }
 
-            var nextSong = _queue.GetNextSong(direction, PlatformIsShuffled);
+            Song nextSong = _queue.GetNextSong(direction, PlatformIsShuffled);
             if (nextSong != null)
             {
                 if (nextSong.IsDisposed)

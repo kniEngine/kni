@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Framework.Media
             get { return _strategy.PlatformVolume; }
             set
             {
-                var volume = MathHelper.Clamp(value, 0, 1);
+                float volume = MathHelper.Clamp(value, 0, 1);
                 _strategy.PlatformVolume = volume;
             }
         }
@@ -259,7 +259,7 @@ namespace Microsoft.Xna.Framework.Media
             if (song == null)
                 throw new ArgumentNullException("song", "This method does not accept null for this parameter.");
 
-            var previousSong = _strategy.Queue.Count > 0
+            Song previousSong = _strategy.Queue.Count > 0
                              ? _strategy.Queue[0]
                              : null;
 
@@ -290,7 +290,7 @@ namespace Microsoft.Xna.Framework.Media
 
             _strategy.PlatformClearQueue();
 
-            foreach (var song in collection)
+            foreach (Song song in collection)
                 _strategy.Queue.Add(song);
 
             _strategy.Queue.ActiveSongIndex = index;

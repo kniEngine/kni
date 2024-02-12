@@ -6,8 +6,8 @@ using System;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Microsoft.Xna.Framework.Media;
-using SharpDX.MediaFoundation;
 using SharpDX.Multimedia;
+using MediaFoundation = SharpDX.MediaFoundation;
 
 
 namespace Microsoft.Xna.Platform.Media
@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Platform.Media
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
         // RAYB: This needs to be turned back into a readonly.
-        private MediaEngine _mediaEngineEx;
+        private MediaFoundation.MediaEngine _mediaEngineEx;
 
         private CoreDispatcher _dispatcher;
 
@@ -24,27 +24,27 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteMediaPlayerStrategy()
         {
-            MediaManager.Startup(true);
-            using (var factory = new MediaEngineClassFactory())
-            using (var attributes = new MediaEngineAttributes { AudioCategory = AudioStreamCategory.GameMedia })
+            MediaFoundation.MediaManager.Startup(true);
+            using (MediaFoundation.MediaEngineClassFactory factory = new MediaFoundation.MediaEngineClassFactory())
+            using (MediaFoundation.MediaEngineAttributes attributes = new MediaFoundation.MediaEngineAttributes { AudioCategory = AudioStreamCategory.GameMedia })
             {
-                var creationFlags = MediaEngineCreateFlags.AudioOnly;
+                MediaFoundation.MediaEngineCreateFlags creationFlags = MediaFoundation.MediaEngineCreateFlags.AudioOnly;
 
-                var mediaEngine = new MediaEngine(factory, attributes, creationFlags, MediaEngineExOnPlaybackEvent);
-                _mediaEngineEx = mediaEngine.QueryInterface<MediaEngineEx>();
+                MediaFoundation.MediaEngine mediaEngine = new MediaFoundation.MediaEngine(factory, attributes, creationFlags, MediaEngineExOnPlaybackEvent);
+                _mediaEngineEx = mediaEngine.QueryInterface<MediaFoundation.MediaEngineEx>();
             }
 
             _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
-        private void MediaEngineExOnPlaybackEvent(MediaEngineEvent mediaEvent, long param1, int param2)
+        private void MediaEngineExOnPlaybackEvent(MediaFoundation.MediaEngineEvent mediaEvent, long param1, int param2)
         {
-            if (mediaEvent == MediaEngineEvent.LoadedData)
+            if (mediaEvent == MediaFoundation.MediaEngineEvent.LoadedData)
             {
                 if (_sessionState == SessionState.Started)
                     _mediaEngineEx.Play();
             }
-            if (mediaEvent == MediaEngineEvent.Ended)
+            if (mediaEvent == MediaFoundation.MediaEngineEvent.Ended)
             {
                 _sessionState = SessionState.Stopped;
 

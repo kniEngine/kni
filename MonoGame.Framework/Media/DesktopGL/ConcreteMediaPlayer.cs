@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Platform.Media
 
                 DynamicSoundEffectInstance player = mediaPlatformStream.Player;
 
-                var state = player.State;
+                SoundState state = player.State;
                 switch (state)
                 {
                     case SoundState.Playing:
@@ -226,7 +226,7 @@ namespace Microsoft.Xna.Platform.Media
 
         private void sfxi_BufferNeeded(object sender, EventArgs e)
         {
-            var sfxi = (DynamicSoundEffectInstance)sender;
+            DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
             int count = SubmitBuffer(sfxi, _reader);
 
             if (count == 0 && sfxi.PendingBufferCount <= 0)

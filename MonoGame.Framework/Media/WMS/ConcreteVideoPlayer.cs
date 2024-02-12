@@ -7,8 +7,8 @@ using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using DX = SharpDX;
-using SharpDX.MediaFoundation;
 using SharpDX.Win32;
+using DXRaw = SharpDX.Mathematics.Interop;
 using MediaFoundation = SharpDX.MediaFoundation;
 
 
@@ -16,9 +16,9 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
-        private MediaSession _session;
-        private AudioStreamVolume _volumeController;
-        private PresentationClock _clock;
+        private MediaFoundation.MediaSession _session;
+        private MediaFoundation.AudioStreamVolume _volumeController;
+        private MediaFoundation.PresentationClock _clock;
 
         private Texture2D _lastFrame;
 
@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Media
 
         private Callback _callback;
 
-        private class Callback : IAsyncCallback
+        private class Callback : MediaFoundation.IAsyncCallback
         {
             private ConcreteVideoPlayerStrategy _player;
 
@@ -41,23 +41,23 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             public IDisposable Shadow { get; set; }
-            public void Invoke(AsyncResult asyncResultRef)
+            public void Invoke(MediaFoundation.AsyncResult asyncResultRef)
             {
-                using (MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResultRef))
+                using (MediaFoundation.MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResultRef))
                 {
                     switch (mediaEvent.TypeInfo)
                     {
-                        case MediaEventTypes.SessionTopologyStatus:
+                        case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
                             // Trigger an "on Video Ended" event here if needed
-                            if (mediaEvent.Get(EventAttributeKeys.TopologyStatus) == TopologyStatus.Ready)
+                            if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
                                 _player.OnTopologyReady();
                             break;
 
-                        case MediaEventTypes.SessionEnded:
+                        case MediaFoundation.MediaEventTypes.SessionEnded:
                             _player.OnMediaEngineEvent(mediaEvent);
                             break;
 
-                        case MediaEventTypes.SessionStopped:
+                        case MediaFoundation.MediaEventTypes.SessionStopped:
                             _player.OnMediaEngineEvent(mediaEvent);
                             break;
                     }
@@ -70,8 +70,8 @@ namespace Microsoft.Xna.Platform.Media
                 _player._session.BeginGetEvent(this, null);
             }
 
-            public AsyncCallbackFlags Flags { get; private set; }
-            public WorkQueueId WorkQueueId { get; private set; }
+            public MediaFoundation.AsyncCallbackFlags Flags { get; private set; }
+            public MediaFoundation.WorkQueueId WorkQueueId { get; private set; }
         }
 
         public override MediaState State
@@ -116,19 +116,19 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteVideoPlayerStrategy()
         {
-            MediaManager.Startup(true);
+            MediaFoundation.MediaManager.Startup(true);
             MediaFoundation.MediaFactory.CreateMediaSession(null, out _session);
         }
 
 
-        private void OnMediaEngineEvent(MediaEvent mediaEvent)
+        private void OnMediaEngineEvent(MediaFoundation.MediaEvent mediaEvent)
         {
             switch (mediaEvent.TypeInfo)
             {
-                case MediaEventTypes.SessionTopologyStatus:
+                case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
                     break;
 
-                case MediaEventTypes.SessionEnded:
+                case MediaFoundation.MediaEventTypes.SessionEnded:
                     if (IsLooped)
                     {
                         _session.Start(null, _positionBeginning);
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Platform.Media
                     }
                     break;
 
-                case MediaEventTypes.SessionStopped:
+                case MediaFoundation.MediaEventTypes.SessionStopped:
                     break;
             }
         }
@@ -166,16 +166,16 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (_clock != null)
             {
-                ClockState clockState;
+                MediaFoundation.ClockState clockState;
                 _clock.GetState(0, out clockState);
 
                 switch (clockState)
                 {
-                    case ClockState.Running:
+                    case MediaFoundation.ClockState.Running:
                         state = MediaState.Playing;
                         return;
 
-                    case ClockState.Paused:
+                    case MediaFoundation.ClockState.Paused:
                         state = MediaState.Paused;
                         return;
                 }
@@ -211,10 +211,10 @@ namespace Microsoft.Xna.Platform.Media
 
             // Set the new video.
             VideoPlatformStream _videoPlatformStream = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GetVideoPlatformStream();
-            _session.SetTopology(SessionSetTopologyFlags.Immediate, _videoPlatformStream.Topology);
+            _session.SetTopology(MediaFoundation.SessionSetTopologyFlags.Immediate, _videoPlatformStream.Topology);
 
             // Get the clock.
-            _clock = _session.Clock.QueryInterface<PresentationClock>();
+            _clock = _session.Clock.QueryInterface<MediaFoundation.PresentationClock>();
 
             // Start playing.
             _session.Start(null, _positionCurrent);
@@ -296,14 +296,14 @@ namespace Microsoft.Xna.Platform.Media
 
             // HACK: Need SharpDX to fix this.
             // The GUID is specified in a GuidAttribute attached to the class
-            Type audioStreamVolumeType = typeof(AudioStreamVolume);
+            Type audioStreamVolumeType = typeof(MediaFoundation.AudioStreamVolume);
             GuidAttribute audioStreamVolumeGuidAttrib = (GuidAttribute)audioStreamVolumeType.GetCustomAttributes(typeof(GuidAttribute), false)[0];
             Guid audioStreamVolumeGuid = Guid.Parse(audioStreamVolumeGuidAttrib.Value); 
 
             // Get the volume interface.
             IntPtr volumeObjectPtr;
-            MediaFoundation.MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, audioStreamVolumeGuid, out volumeObjectPtr);
-            _volumeController = DX.CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
+            MediaFoundation.MediaFactory.GetService(_session, MediaFoundation.MediaServiceKeys.StreamVolume, audioStreamVolumeGuid, out volumeObjectPtr);
+            _volumeController = DX.CppObject.FromPointer<MediaFoundation.AudioStreamVolume>(volumeObjectPtr);
 
             SetChannelVolumes();
         }
@@ -317,7 +317,7 @@ namespace Microsoft.Xna.Platform.Media
                 _lastFrame = null;
             }
 
-            MediaManager.Shutdown();
+            MediaFoundation.MediaManager.Shutdown();
 
             base.Dispose(disposing);
         }
@@ -326,68 +326,68 @@ namespace Microsoft.Xna.Platform.Media
 
     internal sealed class VideoPlatformStream : IDisposable
     {
-        private Topology _topology;
+        private MediaFoundation.Topology _topology;
         private VideoSampleGrabber _sampleGrabber;
-        MediaType _mediaType;
+        MediaFoundation.MediaType _mediaType;
 
-        internal Topology Topology { get { return _topology; } }
+        internal MediaFoundation.Topology Topology { get { return _topology; } }
         internal VideoSampleGrabber SampleGrabber { get { return _sampleGrabber; } }
 
         internal VideoPlatformStream(string filename)
         {
-            MediaManager.Startup(true);
+            MediaFoundation.MediaManager.Startup(true);
 
             MediaFoundation.MediaFactory.CreateTopology(out _topology);
 
             MediaFoundation.MediaSource mediaSource;
             {
-                SourceResolver resolver = new SourceResolver();
+                MediaFoundation.SourceResolver resolver = new MediaFoundation.SourceResolver();
 
-                ObjectType otype;
-                DX.ComObject source = resolver.CreateObjectFromURL(filename, SourceResolverFlags.MediaSource, null, out otype);
+                MediaFoundation.ObjectType otype;
+                DX.ComObject source = resolver.CreateObjectFromURL(filename, MediaFoundation.SourceResolverFlags.MediaSource, null, out otype);
                 mediaSource = source.QueryInterface<MediaFoundation.MediaSource>();
                 resolver.Dispose();
                 source.Dispose();
             }
 
-            PresentationDescriptor presDesc;
+            MediaFoundation.PresentationDescriptor presDesc;
             mediaSource.CreatePresentationDescriptor(out presDesc);
 
             for (int i = 0; i < presDesc.StreamDescriptorCount; i++)
             {
-                SharpDX.Mathematics.Interop.RawBool selected;
-                StreamDescriptor desc;
+                DXRaw.RawBool selected;
+                MediaFoundation.StreamDescriptor desc;
                 presDesc.GetStreamDescriptorByIndex(i, out selected, out desc);
 
                 if (selected)
                 {
-                    TopologyNode sourceNode;
-                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.SourceStreamNode, out sourceNode);
+                    MediaFoundation.TopologyNode sourceNode;
+                    MediaFoundation.MediaFactory.CreateTopologyNode(MediaFoundation.TopologyType.SourceStreamNode, out sourceNode);
 
-                    sourceNode.Set(TopologyNodeAttributeKeys.Source, mediaSource);
-                    sourceNode.Set(TopologyNodeAttributeKeys.PresentationDescriptor, presDesc);
-                    sourceNode.Set(TopologyNodeAttributeKeys.StreamDescriptor, desc);
+                    sourceNode.Set(MediaFoundation.TopologyNodeAttributeKeys.Source, mediaSource);
+                    sourceNode.Set(MediaFoundation.TopologyNodeAttributeKeys.PresentationDescriptor, presDesc);
+                    sourceNode.Set(MediaFoundation.TopologyNodeAttributeKeys.StreamDescriptor, desc);
 
-                    TopologyNode outputNode;
-                    MediaFoundation.MediaFactory.CreateTopologyNode(TopologyType.OutputNode, out outputNode);
+                    MediaFoundation.TopologyNode outputNode;
+                    MediaFoundation.MediaFactory.CreateTopologyNode(MediaFoundation.TopologyType.OutputNode, out outputNode);
 
                     Guid majorType = desc.MediaTypeHandler.MajorType;
-                    if (majorType == MediaTypeGuids.Video)
+                    if (majorType == MediaFoundation.MediaTypeGuids.Video)
                     {
-                        _mediaType = new MediaType();
-                        _mediaType.Set(MediaTypeAttributeKeys.MajorType, MediaTypeGuids.Video);
+                        _mediaType = new MediaFoundation.MediaType();
+                        _mediaType.Set(MediaFoundation.MediaTypeAttributeKeys.MajorType, MediaFoundation.MediaTypeGuids.Video);
                         // Specify that we want the data to come in as RGB32.
-                        _mediaType.Set(MediaTypeAttributeKeys.Subtype, new Guid("00000016-0000-0010-8000-00AA00389B71"));
+                        _mediaType.Set(MediaFoundation.MediaTypeAttributeKeys.Subtype, new Guid("00000016-0000-0010-8000-00AA00389B71"));
 
                         _sampleGrabber = new VideoSampleGrabber();
-                        Activate activate;
+                        MediaFoundation.Activate activate;
                         MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
                         outputNode.Object = activate;
                     }
 
-                    if (majorType == MediaTypeGuids.Audio)
+                    if (majorType == MediaFoundation.MediaTypeGuids.Audio)
                     {
-                        Activate activate;
+                        MediaFoundation.Activate activate;
                         MediaFoundation.MediaFactory.CreateAudioRendererActivate(out activate);
                         outputNode.Object = activate;
                     }
@@ -438,7 +438,7 @@ namespace Microsoft.Xna.Platform.Media
 
             }
 
-            MediaManager.Shutdown();
+            MediaFoundation.MediaManager.Shutdown();
 
             //base.Dispose(disposing);
         }
