@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.Media
             return new Song(strategy);
         }
 
-        internal AlbumCollection CreateAlbumCollection(List<Album> albums)
+        protected AlbumCollection CreateAlbumCollection(List<Album> albums)
         {
             return new AlbumCollection(albums);
         }
