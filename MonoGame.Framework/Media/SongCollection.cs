@@ -9,10 +9,10 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public class SongCollection : ICollection<Song>, IEnumerable<Song>, IEnumerable, IDisposable
-	{
-		private bool _isReadOnly = false;
-		private List<Song> _innerList;
+    public class SongCollection : ICollection<Song>, IEnumerable<Song>, IEnumerable, IDisposable
+    {
+        private bool _isReadOnly = false;
+        private List<Song> _innerList;
 
 
         internal SongCollection(List<Song> songs)
@@ -20,15 +20,15 @@ namespace Microsoft.Xna.Framework.Media
             this._innerList = songs;
         }
 
-		public void Dispose()
+        public void Dispose()
         {
         }
-		
-		public IEnumerator<Song> GetEnumerator()
+        
+        public IEnumerator<Song> GetEnumerator()
         {
             return _innerList.GetEnumerator();
         }
-		
+        
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _innerList.GetEnumerator();
@@ -38,18 +38,18 @@ namespace Microsoft.Xna.Framework.Media
         {
             get { return _innerList.Count; }
         }
-		
-		public bool IsReadOnly
+        
+        public bool IsReadOnly
         {
-		    get { return this._isReadOnly; }
+            get { return this._isReadOnly; }
         }
 
         public Song this[int index]
         {
             get { return this._innerList[index]; }
         }
-		
-		public void Add(Song item)
+        
+        public void Add(Song item)
         {
 
             if (item == null)
@@ -72,8 +72,8 @@ namespace Microsoft.Xna.Framework.Media
 
             this._innerList.Add(item);
         }
-		
-		public void Clear()
+        
+        public void Clear()
         {
             _innerList.Clear();
         }
@@ -98,8 +98,8 @@ namespace Microsoft.Xna.Framework.Media
         {
             _innerList.CopyTo(array, arrayIndex);
         }
-		
-		public int IndexOf(Song item)
+        
+        public int IndexOf(Song item)
         {
             return _innerList.IndexOf(item);
         }
@@ -108,6 +108,6 @@ namespace Microsoft.Xna.Framework.Media
         {
             return _innerList.Remove(item);
         }
-	}
+    }
 }
 

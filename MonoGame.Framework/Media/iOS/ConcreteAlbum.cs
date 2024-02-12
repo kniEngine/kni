@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Media
             if (height == 0)
                 height = (int)this._thumbnail.Bounds.Height;
 
-			return this._thumbnail.ImageWithSize(new CGSize(width, height));
+            return this._thumbnail.ImageWithSize(new CGSize(width, height));
         }
 
         [CLSCompliant(false)]

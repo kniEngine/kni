@@ -119,9 +119,9 @@ namespace Microsoft.Xna.Platform.Media
             _songCollection = base.CreateSongCollection(songList);
 
             /*_playLists = new PlaylistCollection();
-					
-			MPMediaQuery playlists = new MPMediaQuery();
-			playlists.GroupingType = MPMediaGrouping.Playlist;
+                    
+            MPMediaQuery playlists = new MPMediaQuery();
+            playlists.GroupingType = MPMediaGrouping.Playlist;
             for (int i = 0; i < playlists.Collections.Length; i++)
             {
                 MPMediaItemCollection item = playlists.Collections[i];

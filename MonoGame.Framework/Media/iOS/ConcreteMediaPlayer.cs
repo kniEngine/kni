@@ -231,20 +231,20 @@ namespace Microsoft.Xna.Platform.Media
         event FinishedPlayingHandler DonePlaying;
 
         private void OnFinishedPlaying(object sender, NSNotificationEventArgs args)
-		{
+        {
             FinishedPlayingHandler handler = DonePlaying;
             if (handler != null)
                 handler();
-		}
+        }
 
-		/// <summary>
-		/// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-		/// </summary>
-		internal void SetEventHandler(FinishedPlayingHandler handler)
-		{
-			if (DonePlaying == null)
-			    DonePlaying += handler;
-		}
+        /// <summary>
+        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
+        /// </summary>
+        internal void SetEventHandler(FinishedPlayingHandler handler)
+        {
+            if (DonePlaying == null)
+                DonePlaying += handler;
+        }
 
 
         #region IDisposable

@@ -10,7 +10,7 @@ using Microsoft.Xna.Platform.Media;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public partial class MediaLibrary : IDisposable
+    public partial class MediaLibrary : IDisposable
         , IPlatformMediaLibrary
     {
         private MediaLibraryStrategy _strategy;
@@ -28,14 +28,14 @@ namespace Microsoft.Xna.Framework.Media
 
 
         public MediaLibrary()
-		{
+        {
             _strategy = MediaFactory.Current.CreateMediaLibraryStrategy();
         }
 
-		public MediaLibrary(MediaSource mediaSource)
+        public MediaLibrary(MediaSource mediaSource)
         {
             _strategy = MediaFactory.Current.CreateMediaLibraryStrategy(mediaSource);
-		}
+        }
 
         // Trick to prevent the linker removing the code, but not actually execute the code
         static bool _trimmingFalseFlag = false;
@@ -60,11 +60,11 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         /// <param name="progressCallback">Callback that reports back the progress of the music library loading in percents (0-100).</param>
         public void Load(Action<int> progressCallback = null)
-	    {
+        {
             _strategy.Load(progressCallback);
         }
-		
-		
+        
+        
         public void SavePicture(string name, byte[] imageBuffer)
         {
             _strategy.SavePicture(name, imageBuffer);
