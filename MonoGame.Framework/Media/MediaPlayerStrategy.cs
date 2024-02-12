@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal MediaQueue Queue { get {return _queue; }}
+        public MediaQueue Queue { get {return _queue; } }
 
         public virtual float PlatformVolume
         {
@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Platform.Media
 
         protected void OnSongFinishedPlaying()
         {
-            Song activeSong = Queue.ActiveSong;
+            Song activeSong = this.Queue.ActiveSong;
 
             _numSongsInQueuePlayed++;
             
