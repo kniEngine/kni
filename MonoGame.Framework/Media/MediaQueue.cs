@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Media
 		    set { _activeSongIndex = value; }
 		}
 
-        internal int Count
+        public int Count
         {
             get { return songs.Count; }
         }
