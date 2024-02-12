@@ -79,8 +79,8 @@ namespace Microsoft.Xna.Platform.Media
                 MPMediaItemArtwork thumbnail = collection.RepresentativeItem.ValueForProperty(MPMediaItem.ArtworkProperty) as MPMediaItemArtwork;
 
                 List<Song> albumSongs = new List<Song>((int)collection.Count);
-                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(albumName, new Artist(albumArtist), new Genre(albumGenre), new SongCollection(albumSongs), thumbnail);
-                Album album = new Album(albumStrategy);
+                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(albumName, new Artist(albumArtist), new Genre(albumGenre), base.CreateSongCollection(albumSongs), thumbnail);
+                Album album = base.CreateAlbum(albumStrategy);
                 albumList.Add(album);
 
                 foreach (MPMediaItem item in collection.Items)
@@ -108,15 +108,15 @@ namespace Microsoft.Xna.Platform.Media
                     ((ConcreteSongStrategy)songStrategy)._assetUrl = assetUrl;
 #endif
                     ((ConcreteSongStrategy)songStrategy)._mediaItem = item;
-                    Song song = new Song(songStrategy);
+                    Song song = base.CreateSong(songStrategy);
 
                     albumSongs.Add(song);
                     songList.Add(song);
                 }
             }
 
-            _albumCollection = new AlbumCollection(albumList);
-            _songCollection = new SongCollection(songList);
+            _albumCollection = base.CreateAlbumCollection(albumList);
+            _songCollection = base.CreateSongCollection(songList);
 
             /*_playLists = new PlaylistCollection();
 					

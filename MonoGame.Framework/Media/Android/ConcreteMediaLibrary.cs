@@ -97,8 +97,8 @@ namespace Microsoft.Xna.Platform.Media
                     if (titleColumn == -1 || durationColumn == -1 || assetIdColumn == -1)
                     {
                         Debug.WriteLine("Missing essential properties from music library. Returning empty library.");
-                        _albumCollection = new AlbumCollection(albumList);
-                        _songCollection = new SongCollection(songList);
+                        _albumCollection = base.CreateAlbumCollection(albumList);
+                        _songCollection = base.CreateSongCollection(songList);
                         return;
                     }
 
@@ -147,8 +147,8 @@ namespace Microsoft.Xna.Platform.Media
                             Album album;
                             if (!albums.TryGetValue(albumNameProperty, out album))
                             {
-                                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(albumNameProperty, albumArtist, genre, new SongCollection(new List<Song>()), albumArtUri);
-                                album = new Album(albumStrategy);
+                                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(albumNameProperty, albumArtist, genre, base.CreateSongCollection(new List<Song>()), albumArtUri);
+                                album = base.CreateAlbum(albumStrategy);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);
                             }
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Platform.Media
                             songStrategy.Name = titleProperty;
                             songStrategy.Duration = duration;
                             songStrategy._assetUri = assetUri;
-                            Song song = new Song(songStrategy);
+                            Song song = base.CreateSong(songStrategy);
 
                             song.Album.Songs.Add(song);
                             songList.Add(song);
@@ -174,8 +174,8 @@ namespace Microsoft.Xna.Platform.Media
                 musicCursor.Close();
             }
 
-            _albumCollection = new AlbumCollection(albumList);
-            _songCollection = new SongCollection(songList);
+            _albumCollection = base.CreateAlbumCollection(albumList);
+            _songCollection = base.CreateSongCollection(songList);
         }
 
         public override void SavePicture(string name, byte[] imageBuffer)

@@ -77,8 +77,8 @@ namespace Microsoft.Xna.Platform.Media
                     catch (Exception e)
                     {
                         Debug.WriteLine("Failed to access Music Library: " + e.Message);
-                        _albumCollection = new AlbumCollection(new List<Album>());
-                        _songCollection = new SongCollection(new List<Song>());
+                        _albumCollection = base.CreateAlbumCollection(new List<Album>());
+                        _songCollection = base.CreateSongCollection(new List<Song>());
                         return;
                     }
                 }
@@ -154,8 +154,8 @@ namespace Microsoft.Xna.Platform.Media
                             if (!albums.TryGetValue(properties.Album, out album))
                             {
                                 WinFileProperties.StorageItemThumbnail thumbnail = Task.Run(async () => await properties.File.GetThumbnailAsync(WinFileProperties.ThumbnailMode.MusicView, 300, WinFileProperties.ThumbnailOptions.ResizeThumbnail)).Result;
-                                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(properties.Album, albumArtist, genre, new SongCollection(new List<Song>()), thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
-                                album = new Album(albumStrategy);
+                                AlbumStrategy albumStrategy = new ConcreteAlbumStrategy(properties.Album, albumArtist, genre, base.CreateSongCollection(new List<Song>()), thumbnail.Type == WinFileProperties.ThumbnailType.Image ? thumbnail : null);
+                                album = base.CreateAlbum(albumStrategy);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);
                             }
@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Platform.Media
                             songStrategy.Artist = artist;
                             songStrategy.Genre = genre;
                             songStrategy._musicProperties = properties;
-                            Song song = new Song(songStrategy);
+                            Song song = base.CreateSong(songStrategy);
 
                             song.Album.Songs.Add(song);
                             songList.Add(song);
@@ -188,8 +188,8 @@ namespace Microsoft.Xna.Platform.Media
                 if (progressCallback != null)
                     progressCallback.Invoke(100);
 
-                _albumCollection = new AlbumCollection(albumList);
-                _songCollection = new SongCollection(songList);
+                _albumCollection = base.CreateAlbumCollection(albumList);
+                _songCollection = base.CreateSongCollection(songList);
             }).Wait();
         }
 
