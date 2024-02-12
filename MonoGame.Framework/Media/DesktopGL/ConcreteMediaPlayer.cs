@@ -75,9 +75,11 @@ namespace Microsoft.Xna.Platform.Media
         private void SetChannelVolumes()
         {
             float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
-            
-            foreach (Song queuedSong in base.Queue.Songs)
+
+            for (int i = 0; i < base.Queue.Count; i++)
             {
+                Song queuedSong = base.Queue[i];
+
                 MediaPlatformStream mediaPlatformStream = ((IPlatformSong)queuedSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)
                     mediaPlatformStream.Player.Volume = innerVolume;
@@ -142,8 +144,10 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            foreach (Song queuedSong in base.Queue.Songs)
+            for (int i = 0; i < base.Queue.Count; i++)
             {
+                Song queuedSong = base.Queue[i];
+
                 Song activeSong = base.Queue.ActiveSong;
                 MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
                 if (mediaPlatformStream.Player != null)

@@ -114,8 +114,10 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            foreach (Song queuedSong in base.Queue.Songs)
+            for (int i = 0; i < base.Queue.Count; i++)
             {
+                Song queuedSong = base.Queue[i];
+
                 Song activeSong = base.Queue.ActiveSong;
                 _webPlayer.Pause();
                 _webPlayer.Src = "";
