@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal override bool PlatformIsRepeating
+        public override bool PlatformIsRepeating
         {
             set
             {

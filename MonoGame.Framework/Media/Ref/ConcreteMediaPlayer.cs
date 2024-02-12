@@ -22,13 +22,13 @@ namespace Microsoft.Xna.Platform.Media
             set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override bool PlatformIsRepeating
+        public override bool PlatformIsRepeating
         {
             get { throw new PlatformNotSupportedException(); }
             set { throw new PlatformNotSupportedException(); }
         }
 
-        internal override bool PlatformIsShuffled
+        public override bool PlatformIsShuffled
         {
             get { throw new PlatformNotSupportedException(); }
             set { throw new PlatformNotSupportedException(); }
