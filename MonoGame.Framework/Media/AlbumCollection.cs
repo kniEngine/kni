@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Media
         }
 
 
-        public AlbumCollection(List<Album> albums)
+        internal AlbumCollection(List<Album> albums)
         {
             this._innerList = albums;
         }
