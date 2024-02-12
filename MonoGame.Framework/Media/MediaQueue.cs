@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework.Media
 {
 	public sealed class MediaQueue
 	{
-        List<Song> songs = new List<Song>();
+        private List<Song> _songs = new List<Song>();
 		private int _activeSongIndex = -1;
-		private Random random = new Random();
+		private Random _random = new Random();
 
 
 		public MediaQueue()
@@ -26,10 +26,10 @@ namespace Microsoft.Xna.Framework.Media
 		{
 			get
 			{
-				if (songs.Count == 0 || _activeSongIndex < 0)
+				if (_songs.Count == 0 || _activeSongIndex < 0)
 					return null;
 				
-				return songs[_activeSongIndex];
+				return _songs[_activeSongIndex];
 			}
 		}
 		
@@ -41,37 +41,37 @@ namespace Microsoft.Xna.Framework.Media
 
         public int Count
         {
-            get { return songs.Count; }
+            get { return _songs.Count; }
         }
 
         public Song this[int index]
         {
-            get { return songs[index]; }
+            get { return _songs[index]; }
         }
 
         internal IEnumerable<Song> Songs
         {
-            get { return songs; }
+            get { return _songs; }
         }
 
         internal void Add(Song song)
         {
-            songs.Add(song);
+            _songs.Add(song);
         }
 
         internal void Remove(Song song)
         {
-            songs.Remove(song);
+            _songs.Remove(song);
         }
 
 		internal Song GetNextSong(int direction, bool shuffle)
 		{
 			if (shuffle)
-				_activeSongIndex = random.Next(songs.Count);
+				_activeSongIndex = _random.Next(_songs.Count);
 			else			
-				_activeSongIndex = (int)MathHelper.Clamp(_activeSongIndex + direction, 0, songs.Count - 1);
+				_activeSongIndex = (int)MathHelper.Clamp(_activeSongIndex + direction, 0, _songs.Count - 1);
 			
-			return songs[_activeSongIndex];
+			return _songs[_activeSongIndex];
 		}
 
 	}
