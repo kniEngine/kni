@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\kniPackage.props" />
   <PropertyGroup>
     <BaseOutputPath>..\..\Artifacts\Xna.Framework.Content.Pipeline\</BaseOutputPath>
     
@@ -18,6 +19,9 @@
     <DefineConstants></DefineConstants>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>KNI Framework Framework Content Pipeline.</Description>
+    <PackageTags>KNI;</PackageTags>
+    <PackageId>nkast.Xna.Framework.Content.Pipeline</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -177,7 +181,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
-      <Name>XNA.Framework</Name>
+      <Name>Xna.Framework</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Xna.Framework.Content\Xna.Framework.Content.csproj">

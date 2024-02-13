@@ -67,12 +67,11 @@
     <exec program="dotnet" commandline="pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.Ref.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Audio.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Graphics.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Media.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
-  
+    <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Graphics\Xna.Framework.Content.Pipeline.Graphics.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+
     <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Builder.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}-rc  -Properties Configuration=Release" />
 
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsDX.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
