@@ -23,6 +23,8 @@
                 <dependency id="nkast.Xna.Framework" version="$version$" />
                 <dependency id="nkast.Xna.Framework.Content" version="$version$" />
                 <dependency id="nkast.Xna.Framework.Graphics" version="$version$" />
+                <dependency id="nkast.Xna.Framework.Audio" version="$version$" />
+                <dependency id="nkast.Xna.Framework.Media" version="$version$" />
                 <dependency id="SharpDX" version="4.0.1" />
                 <dependency id="SharpDX.Direct2D1" version="4.0.1" />
                 <dependency id="SharpDX.Direct3D11" version="4.0.1" />

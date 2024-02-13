@@ -19,8 +19,10 @@
     
     <dependencies>
         <dependency id="nkast.Xna.Framework" version="$version$" />
-        <dependency id="nkast.Xna.Framework.Graphics" version="$version$" />
         <dependency id="nkast.Xna.Framework.Content" version="$version$" />
+        <dependency id="nkast.Xna.Framework.Graphics" version="$version$" />
+        <dependency id="nkast.Xna.Framework.Audio" version="$version$" />
+        <dependency id="nkast.Xna.Framework.Media" version="$version$" />
     </dependencies>
     
   </metadata>
