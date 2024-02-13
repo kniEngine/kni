@@ -22,7 +22,6 @@
     <delete dir="${project::get-base-directory()}\MonoGame.Framework.Content.Pipeline\obj" />
     
     <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:Clean /p:Configuration=Release" />
-    <exec program="dotnet" commandline="build src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:Clean /p:Configuration=Release" />
@@ -97,14 +96,12 @@
   <target name="build_framework" description="Build framework">
 
       <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:restore" />
-      <exec program="dotnet" commandline="build src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Media\Xna.Framework.Media.csproj /t:restore" />
 
       <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:Build /p:Configuration=Release" />
-      <exec program="dotnet" commandline="build src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:Build /p:Configuration=Release" />

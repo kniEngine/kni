@@ -253,11 +253,6 @@
       <Name>Xna.Framework</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj">
-      <Project>{FF11302E-6A9F-49AA-960A-9584BC4BDA26}</Project>
-      <Name>Xna.Framework.Graphics.PackedVector</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
       <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
       <Name>Xna.Framework.Graphics</Name>
