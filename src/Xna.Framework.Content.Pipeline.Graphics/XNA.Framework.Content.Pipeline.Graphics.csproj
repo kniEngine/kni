@@ -194,6 +194,7 @@
     <Compile Include="OpenAssetImporter.cs" />
     <Compile Include="TextureImporter.cs" />
     <Compile Include="XImporter.cs" />
+    <Compile Include="Utilities\ContentWriterExtensions.cs" />
     <Compile Include="Utilities\FreeImageAPI.cs" />
     <Compile Include="Utilities\FreeImageAPIC.cs" />
     <Compile Include="Utilities\GraphicsExtensions.cs" />
