@@ -12,7 +12,12 @@ namespace Microsoft.Xna.Framework.Content
     {
         protected internal override Color Read(ContentReader input, Color existingInstance)
         {
-            return input.ReadColor();
+            Color result = new Color();
+            result.R = input.ReadByte();
+            result.G = input.ReadByte();
+            result.B = input.ReadByte();
+            result.A = input.ReadByte();
+            return result;
         }
     }
 }
