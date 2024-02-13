@@ -1,0 +1,90 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Media\</BaseOutputPath>
+    
+    <Version>3.10.9001.0</Version>
+    <AssemblyVersion>3.10.9001.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <ProjectGuid>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</ProjectGuid>
+    <AssemblyName>Xna.Framework.Media</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Media</RootNamespace>
+    <DefineConstants></DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>The Media framework.</Description>
+    <PackageTags>.net core;core;.net standard;standard</PackageTags>
+    <PackageId>nkast.Xna.Framework.Media</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Content\ContentReaders\SongReader.cs" />
+    <Compile Include="Content\ContentReaders\VideoReader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Media\Utilities\FileHelpers.cs" />
+    <Compile Include="Media\Album.cs" />
+    <Compile Include="Media\AlbumStrategy.cs" />
+    <Compile Include="Media\AlbumCollection.cs" />
+    <Compile Include="Media\Artist.cs" />
+    <Compile Include="Media\Genre.cs" />
+    <Compile Include="Media\MediaFactory.cs" />
+    <Compile Include="Media\MediaLibrary.cs" />
+    <Compile Include="Media\MediaLibraryStrategy.cs" />
+    <Compile Include="Media\MediaPlayer.cs" />
+    <Compile Include="Media\MediaPlayerStrategy.cs" />
+    <Compile Include="Media\MediaQueue.cs" />
+    <Compile Include="Media\MediaSource.cs" />
+    <Compile Include="Media\MediaSourceType.cs" />
+    <Compile Include="Media\MediaState.cs" />
+    <Compile Include="Media\PlaylistCollection.cs" />
+    <Compile Include="Media\Playlist.cs" />
+    <Compile Include="Media\Song.cs" />
+    <Compile Include="Media\SongCollection.cs" />
+    <Compile Include="Media\SongStrategy.cs" />
+    <Compile Include="Media\VideoSoundtrackType.cs" />
+    <Compile Include="Media\Video.cs" />
+    <Compile Include="Media\VideoStrategy.cs" />
+    <Compile Include="Media\VideoPlayer.cs" />
+    <Compile Include="Media\VideoPlayerStrategy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
+      <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
+      <Name>Xna.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Project>{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}</Project>
+      <Name>Xna.Framework.Content</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+      <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
+      <Name>Xna.Framework.Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

@@ -57,6 +57,10 @@
       <Project>{3F81F76D-F0F3-44FE-A256-40AF153C33F7}</Project>
       <Name>Xna.Framework.Audio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Media\Xna.Framework.Media.csproj">
+      <Project>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</Project>
+      <Name>Xna.Framework.Media</Name>
+    </ProjectReference>
   </ItemGroup>
 
   <Import Project="MonoGame.Framework.Common.targets" />

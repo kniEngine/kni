@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected internal override void PlatformClearQueue()
+        protected override void PlatformClearQueue()
         {
             while (base.Queue.Count > 0)
             {

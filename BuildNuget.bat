@@ -3,6 +3,7 @@ dotnet pack src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.Packe
 dotnet pack src\Xna.Framework.Content\Xna.Framework.Content.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack src\Xna.Framework.Audio\Xna.Framework.Audio.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
+dotnet pack src\Xna.Framework.Media\Xna.Framework.Media.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.nuspec			-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.10.9001.0  -Properties Configuration=Release

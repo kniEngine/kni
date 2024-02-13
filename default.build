@@ -26,6 +26,7 @@
     <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build src\Xna.Framework.Media\Xna.Framework.Media.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Design\Xna.Framework.Design.csproj /t:Clean /p:Configuration=Release" />
     
     <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Clean /p:Configuration=Release" />
@@ -100,12 +101,14 @@
       <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:restore" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Media\Xna.Framework.Media.csproj /t:restore" />
 
       <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Graphics.PackedVector\Xna.Framework.Graphics.PackedVector.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Media\Xna.Framework.Media.csproj /t:Build /p:Configuration=Release" />
 
   </target>
     
