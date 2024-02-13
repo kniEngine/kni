@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class ColorReader : ContentTypeReader<Color>
     {
-        protected internal override Color Read(ContentReader input, Color existingInstance)
+        protected override Color Read(ContentReader input, Color existingInstance)
         {
             Color result = new Color();
             result.R = input.ReadByte();

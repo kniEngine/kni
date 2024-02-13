@@ -164,6 +164,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Dummy variables required for it to work with trimming ** DO NOT DELETE **
                 // This forces the classes not to be optimized out when deploying with trimming
 
+                // Framework.Graphics.PackedVector types
+                var hColorReader = new ColorReader();
+
                 // Framework.Graphics types
                 var hAlphaTestEffectReader = new AlphaTestEffectReader();
                 var hBasicEffectReader = new BasicEffectReader();
