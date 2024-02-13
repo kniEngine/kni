@@ -282,15 +282,5 @@ namespace Microsoft.Xna.Framework.Content
             return result;
         }
 
-        public Color ReadColor()
-        {
-            Color result = new Color();
-            result.R = ReadByte();
-            result.G = ReadByte();
-            result.B = ReadByte();
-            result.A = ReadByte();
-            return result;
-        }
-
     }
 }
