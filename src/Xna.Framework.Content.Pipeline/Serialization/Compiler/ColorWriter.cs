@@ -20,7 +20,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <param name="value">The value to write to the output.</param>
         protected override void Write(ContentWriter output, TOutput value)
         {
-            output.Write(value);
+            output.Write(value.R);
+            output.Write(value.G);
+            output.Write(value.B);
+            output.Write(value.A);
         }
     }
 }
