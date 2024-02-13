@@ -251,6 +251,12 @@ namespace Microsoft.Xna.Framework.Content
             if (readerType != null)
                 return readerType;
 
+            resolvedReaderTypeName = readerTypeName;
+            resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Media";
+            readerType = Type.GetType(resolvedReaderTypeName);
+            if (readerType != null)
+                return readerType;
+
             throw new ContentLoadException(
                     "Could not find ContentTypeReader Type. Please ensure the name of the Assembly that contains the Type matches the assembly in the full type name: " +
                     readerTypeName + " (" + resolvedReaderTypeName + ")");

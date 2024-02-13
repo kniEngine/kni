@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Audio", "src\Xna.Framework.Audio\Xna.Framework.Audio.csproj", "{3F81F76D-F0F3-44FE-A256-40AF153C33F7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Media", "src\Xna.Framework.Media\XNA.Framework.Media.csproj", "{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.iOS.netcore", "MonoGame.Framework\XNA.Framework.iOS.netcore.csproj", "{D93291EF-3419-412E-BC56-376BD6A02224}"
 EndProject
 Global
@@ -40,6 +42,10 @@ Global
 		{3F81F76D-F0F3-44FE-A256-40AF153C33F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F81F76D-F0F3-44FE-A256-40AF153C33F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F81F76D-F0F3-44FE-A256-40AF153C33F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D93291EF-3419-412E-BC56-376BD6A02224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D93291EF-3419-412E-BC56-376BD6A02224}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D93291EF-3419-412E-BC56-376BD6A02224}.Release|Any CPU.ActiveCfg = Release|Any CPU
