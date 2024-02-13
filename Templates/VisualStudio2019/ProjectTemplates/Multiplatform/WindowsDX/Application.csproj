@@ -47,9 +47,6 @@
     <Reference Include="Xna.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Xna.Framework.Graphics.PackedVector">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.Graphics.PackedVector.dll</HintPath>
-    </Reference>
     <Reference Include="Xna.Framework.Content">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.Content.dll</HintPath>
     </Reference>
