@@ -59,6 +59,9 @@
     <Reference Include="Xna.Framework.Audio">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.Audio.dll</HintPath>
     </Reference>
+    <Reference Include="Xna.Framework.Media">
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Framework\net40\Xna.Framework.Media.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
