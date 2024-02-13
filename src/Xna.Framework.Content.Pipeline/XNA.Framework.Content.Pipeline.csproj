@@ -111,7 +111,6 @@
     <Compile Include="Serialization\Compiler\BoundingBoxWriter.cs" />
     <Compile Include="Serialization\Compiler\BoundingFrustumWriter.cs" />
     <Compile Include="Serialization\Compiler\BoundingSphereWriter.cs" />
-    <Compile Include="Serialization\Compiler\ColorWriter.cs" />
     <Compile Include="Serialization\Compiler\ComplexWriter.cs" />
     <Compile Include="Serialization\Compiler\CurveWriter.cs" />
     <Compile Include="Serialization\Compiler\MatrixWriter.cs" />
