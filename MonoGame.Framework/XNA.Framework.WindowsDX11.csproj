@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <Version>3.10.9001.0</Version>
     <AssemblyVersion>3.10.9001.0</AssemblyVersion>
@@ -22,6 +23,11 @@
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
+    <Description>XNA framework for Windows Desktop platform (DirectX11).</Description>
+    <PackageTags>KNI;</PackageTags>
+    <PackageId>MonoGame.Framework.WindowsDX.9000</PackageId>
+    <Product>Xna.Framework</Product>
+    <Company>Kastellanos Nikos</Company>
   </PropertyGroup>
 	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -299,6 +305,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\NuGetPackages\build\WindowsDX\MonoGame.Framework.WindowsDX.9000.targets" Pack="true">
+      <Link>build\MonoGame.Framework.WindowsDX.9000.targets</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\MonoGame.Framework.WindowsDX.9000.targets</PackagePath>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.dx11.fxo" />
