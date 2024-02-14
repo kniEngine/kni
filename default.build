@@ -126,9 +126,6 @@
 
       <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:restore" />
       <exec program="${msbuild17}" commandline="XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release /m" />
-      
-      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj /t:restore" />
-      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.WindowsDX.csproj /t:Build /p:Configuration=Release" />
 
       <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj /t:Build /p:Configuration=Release" />
       

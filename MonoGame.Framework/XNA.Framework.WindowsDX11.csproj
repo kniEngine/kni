@@ -1,9 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Version>3.10.9001.0</Version>
+    <AssemblyVersion>3.10.9001.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFrameworks>net40</TargetFrameworks>
+    <TargetFrameworks>net40;net6.0-windows</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <ProjectGuid>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -32,27 +37,13 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <Reference Include="SharpDX">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.Direct3D11.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.MediaFoundation">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.MediaFoundation.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.XAudio2">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.XAudio2.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.XInput">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.XInput.dll</HintPath>
-    </Reference>
+    <PackageReference Version="4.0.1" Include="SharpDX" />
+    <PackageReference Version="4.0.1" Include="SharpDX.Direct2D1" />
+    <PackageReference Version="4.0.1" Include="SharpDX.Direct3D11" />
+    <PackageReference Version="4.0.1" Include="SharpDX.DXGI" />
+    <PackageReference Version="4.0.1" Include="SharpDX.MediaFoundation" />
+    <PackageReference Version="4.0.1" Include="SharpDX.XAudio2" />
+    <PackageReference Version="4.0.1" Include="SharpDX.XInput" />
   </ItemGroup>
 
   <ItemGroup>
@@ -300,6 +291,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.Windows.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.fxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.dx11.fxo" />
