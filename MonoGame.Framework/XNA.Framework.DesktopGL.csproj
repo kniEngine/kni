@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <Version>3.10.9001.0</Version>
     <AssemblyVersion>3.10.9001.0</AssemblyVersion>
@@ -21,6 +22,11 @@
     <IntermediateOutputPath>obj\SdlGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
+    <Description>XNA framework for SDL Desktop Platforms (OpenGL).</Description>
+    <PackageTags>KNI;</PackageTags>
+    <PackageId>MonoGame.Framework.DesktopGL.9000</PackageId>
+    <Product>Xna.Framework</Product>
+    <Company>Kastellanos Nikos</Company>
   </PropertyGroup>
 	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -377,41 +383,55 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\ThirdParty\Dependencies\SDL\Windows\x86\SDL2.dll">
+    <None Include="..\ThirdParty\Dependencies\SDL\Windows\x86\SDL2.dll" Pack="true">
       <Link>x86\SDL2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\x86\SDL2.dll</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\SDL\Windows\x64\SDL2.dll">
+    <None Include="..\ThirdParty\Dependencies\SDL\Windows\x64\SDL2.dll" Pack="true">
       <Link>x64\SDL2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\x64\SDL2.dll</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\openal-soft\Windows\x86\soft_oal.dll">
+    <None Include="..\ThirdParty\Dependencies\openal-soft\Windows\x86\soft_oal.dll" Pack="true">
       <Link>x86\soft_oal.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\x86\soft_oal.dll</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\openal-soft\Windows\x64\soft_oal.dll">
+    <None Include="..\ThirdParty\Dependencies\openal-soft\Windows\x64\soft_oal.dll" Pack="true">
       <Link>x64\soft_oal.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\x64\soft_oal.dll</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\SDL\Linux\x64\libSDL2-2.0.so.0">
+    <None Include="..\ThirdParty\Dependencies\SDL\Linux\x64\libSDL2-2.0.so.0" Pack="true">
       <Link>x64\libSDL2-2.0.so.0</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\x64\libSDL2-2.0.so.0</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\openal-soft\Linux\x86\libopenal.so.1">
+    <None Include="..\ThirdParty\Dependencies\openal-soft\Linux\x86\libopenal.so.1" Pack="true">
       <Link>x86\libopenal.so.1</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\x86\libopenal.so.1</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\openal-soft\Linux\x64\libopenal.so.1">
+    <None Include="..\ThirdParty\Dependencies\openal-soft\Linux\x64\libopenal.so.1" Pack="true">
       <Link>x64\libopenal.so.1</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\x64\libopenal.so.1</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib">
+    <None Include="..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib" Pack="true">
       <Link>libSDL2.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\libSDL2.dylib</PackagePath>
     </None>
-    <None Include="..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib">
+    <None Include="..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib" Pack="true">
       <Link>libopenal.1.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\native\libopenal.1.dylib</PackagePath>
+    </None>
+    <None Include="..\NuGetPackages\build\DesktopGL\MonoGame.Framework.DesktopGL.9000.targets" Pack="true">
+      <Link>build\MonoGame.Framework.DesktopGL.9000.targets</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackagePath>build\MonoGame.Framework.DesktopGL.9000.targets</PackagePath>
     </None>
   </ItemGroup>
   <ItemGroup>
