@@ -74,11 +74,11 @@
 
     <exec program="${nugetPath}" commandline="pack NuGetPackages/nkast.Xna.Framework.Content.Pipeline.Builder.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}-rc  -Properties Configuration=Release" />
 
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsDX.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.Android.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.iOS.nuspec			-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
 
+    <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.WindowsDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.DesktopGL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack XNA.Framework.Blazor.sln --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
