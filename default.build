@@ -136,11 +136,8 @@
   
   <target name="build_desktopGL" description="Build DesktopGL">
 
-      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Build /p:Configuration=Release" />
-      
-      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:restore" />
-      <exec program="dotnet" commandline="build MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.DesktopGL.csproj /t:restore" />
+      <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
       
   </target>
 
