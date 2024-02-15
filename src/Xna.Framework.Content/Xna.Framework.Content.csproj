@@ -101,6 +101,7 @@
     <Compile Include="TitleContainer.cs" />
     <Compile Include="TitleContainerFactory.cs" />
     <Compile Include="TitleContainerStrategy.cs" />
+    <Compile Include="TitlePlatform.cs" />
   </ItemGroup>
 
   <ItemGroup>

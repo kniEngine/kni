@@ -10,6 +10,8 @@ namespace Microsoft.Xna.Platform
     {
         public override string Location { get { throw new PlatformNotSupportedException(); } }
 
+        public override TitlePlatform Platform { get { throw new PlatformNotSupportedException(); } }
+
         public ConcreteTitleContainer() : base()
         {
             throw new PlatformNotSupportedException();

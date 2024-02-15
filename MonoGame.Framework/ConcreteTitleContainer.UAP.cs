@@ -15,7 +15,11 @@ namespace Microsoft.Xna.Platform
     {
         private string _location = string.Empty;
 
+        private TitlePlatform _platform = TitlePlatform.UAP;
+
         public override string Location { get { return _location; } }
+
+        public override TitlePlatform Platform { get { return _platform; } }
 
         public ConcreteTitleContainer() : base()
         {
