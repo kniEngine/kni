@@ -458,7 +458,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         }
 
         /// <summary>
-        /// Writes a Matrix value.
+        /// Writes a Quaternion value.
         /// </summary>
         /// <param name="value">Value to write.</param>
         public void Write(Quaternion value)
