@@ -131,6 +131,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
         }
 
+        public override GraphicsBackend Backend
+        {
+            get { return GraphicsBackend.OpenGL; }
+        }
+
 
         private OGL _gl;
         private string _glVersion;

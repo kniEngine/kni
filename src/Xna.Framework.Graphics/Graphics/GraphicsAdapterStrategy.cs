@@ -31,6 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract DisplayModeCollection Platform_SupportedDisplayModes { get; }
         public abstract DisplayMode Platform_CurrentDisplayMode { get; }
         public abstract bool Platform_IsWideScreen { get; }
+        public abstract GraphicsBackend Backend { get; }
 
         public abstract bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
 

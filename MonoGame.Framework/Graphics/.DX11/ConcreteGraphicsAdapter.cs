@@ -38,6 +38,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio >= (16.0f / 10.0f); }
         }
 
+        public override GraphicsBackend Backend
+        {
+            get { return GraphicsBackend.DirectX11; }
+        }
+
         private static readonly Dictionary<DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<DXGI.Format, SurfaceFormat>
         {
             { DXGI.Format.R8G8B8A8_UNorm, SurfaceFormat.Color },
