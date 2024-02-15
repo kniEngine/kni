@@ -66,6 +66,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
+        public override GraphicsBackend Backend
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
         internal ConcreteGraphicsAdapter()
         {
         }

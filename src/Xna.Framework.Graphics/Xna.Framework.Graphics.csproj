@@ -180,6 +180,7 @@
     <Compile Include="Graphics\GraphicsAdapter.cs" />
     <Compile Include="Graphics\GraphicsAdaptersProviderStrategy.cs" />
     <Compile Include="Graphics\GraphicsAdapterStrategy.cs" />
+    <Compile Include="Graphics\GraphicsBackend.cs" />
     <Compile Include="Graphics\GraphicsCapabilities.cs" />
     <Compile Include="Graphics\GraphicsContext.cs" />
     <Compile Include="Graphics\GraphicsContextStrategy.cs" />

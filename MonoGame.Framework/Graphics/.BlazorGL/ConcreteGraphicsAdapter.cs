@@ -79,6 +79,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return Platform_CurrentDisplayMode.AspectRatio > (4.0f / 3.0f); }
         }
 
+        public override GraphicsBackend Backend
+        {
+            get { return GraphicsBackend.WebGL; }
+        }
+
         internal ConcreteGraphicsAdapter()
         {
             _currentDisplayMode = base.CreateDisplayMode(800, 600, SurfaceFormat.Color);

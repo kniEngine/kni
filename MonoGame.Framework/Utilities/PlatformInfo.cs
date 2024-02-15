@@ -49,6 +49,7 @@ namespace MonoGame.Framework.Utilities
         /// <summary>
         /// Graphics backend
         /// </summary>
+        [Obsolete("Use Adapter.Backend")] // marked obsolete after v3.10
         public static GraphicsBackend GraphicsBackend
         {
             get

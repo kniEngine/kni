@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return _strategy.Platform_DeviceId; }
         }
-        
+
         public int Revision
         {
             get { return _strategy.Platform_Revision; }
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get { return _strategy.Platform_VendorId; }
         }
-        
+
         public int SubSystemId
         {
             get { return _strategy.Platform_SubSystemId; }
@@ -101,6 +101,11 @@ namespace Microsoft.Xna.Framework.Graphics
         public bool IsWideScreen
         {
             get { return _strategy.Platform_IsWideScreen; }
+        }
+
+        public GraphicsBackend Backend
+        {
+            get { return _strategy.Backend; }
         }
 
         internal GraphicsAdapter(GraphicsAdapterStrategy strategy)
