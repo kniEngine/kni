@@ -11,6 +11,8 @@ namespace Microsoft.Xna.Platform
     {
         public abstract string Location { get; }
 
+        public abstract TitlePlatform Platform { get; }
+
         protected TitleContainerStrategy()
         {
             

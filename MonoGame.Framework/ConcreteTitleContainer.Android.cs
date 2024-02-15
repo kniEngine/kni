@@ -12,7 +12,11 @@ namespace Microsoft.Xna.Platform
 {
     internal sealed class ConcreteTitleContainer : TitleContainerStrategy
     {
+        private TitlePlatform _platform = TitlePlatform.Android;
+
         public override string Location { get { return string.Empty; } }
+
+        public override TitlePlatform Platform { get { return _platform; } }
 
         public ConcreteTitleContainer() : base()
         {

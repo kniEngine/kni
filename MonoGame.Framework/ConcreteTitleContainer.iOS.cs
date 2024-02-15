@@ -16,7 +16,11 @@ namespace Microsoft.Xna.Platform
     {
         private string _location = string.Empty;
 
+        private TitlePlatform _platform = TitlePlatform.iOS;
+
         public override string Location { get { return _location; } }
+
+        public override TitlePlatform Platform { get { return _platform; } }
 
         private bool _supportRetina;
         private int _retinaScale;

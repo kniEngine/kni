@@ -14,6 +14,7 @@ namespace MonoGame.Framework.Utilities
         /// <summary>
         /// Underlying game platform type
         /// </summary>
+        [Obsolete("Use TitleContainer.Platform")] // marked obsolete after v3.10
         public static MonoGamePlatform MonoGamePlatform
         {
             get

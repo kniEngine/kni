@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Content.Utilities;
 
@@ -15,6 +16,7 @@ namespace Microsoft.Xna.Platform
     {
         string Location { get; }
 
+        TitlePlatform Platform { get; }
         Stream OpenStream(string name);
     }
 }
@@ -48,6 +50,11 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        public static TitlePlatform Platform
+        {
+            get { return ((ITitleContainer)TitleContainer.Current).Platform; }
+        }
+
         /// <summary>
         /// Returns an open stream to an existing file in the title storage area.
         /// </summary>
@@ -57,7 +64,6 @@ namespace Microsoft.Xna.Framework
         {
             return ((ITitleContainer)TitleContainer.Current).OpenStream(name);
         }
-
 
         private TitleContainerStrategy _strategy;
 
@@ -72,6 +78,12 @@ namespace Microsoft.Xna.Framework
         {
             get { return _strategy.Location; }
         }
+
+        TitlePlatform ITitleContainer.Platform
+        {
+            get { return _strategy.Platform; }
+        }
+
 
         Stream ITitleContainer.OpenStream(string name)
         {
