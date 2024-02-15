@@ -69,10 +69,13 @@
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Project>{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}</Project>
+      <Name>Xna.Framework.Content</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
       <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
       <Name>Xna.Framework.Graphics</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
       <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
