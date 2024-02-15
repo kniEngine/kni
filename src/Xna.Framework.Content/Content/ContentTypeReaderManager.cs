@@ -31,8 +31,8 @@ namespace Microsoft.Xna.Framework.Content
             _contentTypeReadersCache = new Dictionary<string, Type>();
             _contentReadersCache = new Dictionary<Type, ContentTypeReader>(255);
             _contentAssemblyName = ReflectionHelpers.GetAssembly(typeof(ContentTypeReaderManager)).FullName;
-            _contentGraphicsAssemblyName = "MonoGame.Framework";
-            _contentVideoAssemblyName = "MonoGame.Framework";
+            _contentGraphicsAssemblyName = "Xna.Framework.Graphics";
+            _contentVideoAssemblyName = "Xna.Framework.Media";
 
             _isRunningOnNetCore = ReflectionHelpers.GetAssembly(typeof(System.Object)).GetName().Name == "System.Private.CoreLib";
 
@@ -250,6 +250,12 @@ namespace Microsoft.Xna.Framework.Content
 
             resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Media";
+            readerType = Type.GetType(resolvedReaderTypeName);
+            if (readerType != null)
+                return readerType;
+
+            resolvedReaderTypeName = readerTypeName;
+            resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Graphics";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
