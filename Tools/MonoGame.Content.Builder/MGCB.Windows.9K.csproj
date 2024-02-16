@@ -17,7 +17,7 @@
     <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Debug\MGCB.xml</DocumentationFile>
-    <DefineConstants>DEBUG;TRACE;WINDOWSDX</DefineConstants>
+    <DefineConstants>TRACE;WINDOWSDX</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
