@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4243474D-572E-6E69-646F-77734D474342}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Builder</RootNamespace>
