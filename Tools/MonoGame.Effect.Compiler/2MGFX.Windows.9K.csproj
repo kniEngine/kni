@@ -4,8 +4,6 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{46474D32-2E58-6957-6E64-6F7773324D47}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>TwoMGFX</RootNamespace>
