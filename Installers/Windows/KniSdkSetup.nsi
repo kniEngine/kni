@@ -87,11 +87,14 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ; Install the Kni tools to a single shared folder.
   SetOutPath ${MSBuildInstallDir}\Tools
   File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\net6.0\*.exe'
+  File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\net6.0\*.runtimeconfig.json'
   File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\net6.0\*.dll'
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.exe'
+  File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.runtimeconfig.json'
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.dll'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\Templates'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\PipelineEditor.exe'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\PipelineEditor.exe.runtimeconfig.json'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\PipelineEditor.xml'
   File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
 
