@@ -64,12 +64,10 @@ namespace Content.Pipeline.Editor
 				mode = FileMode.Truncate;
 
             using (Stream isoStream = new IsolatedStorageFileStream(SettingsPath, mode, _isoStore))
+            using (TextWriter writer = new StreamWriter(isoStream))
             {
-                using (TextWriter writer = new StreamWriter(isoStream))
-                {
-                    var serializer = new XmlSerializer(typeof(PipelineSettings));
-                    serializer.Serialize(writer, this);
-                }
+                XmlSerializer serializer = new XmlSerializer(typeof(PipelineSettings));
+                serializer.Serialize(writer, this);
             }
         }
 
@@ -78,12 +76,10 @@ namespace Content.Pipeline.Editor
             if (_isoStore.FileExists(SettingsPath))
             {
                 using (Stream isoStream = new IsolatedStorageFileStream(SettingsPath, FileMode.Open, _isoStore))
+                using (TextReader reader = new StreamReader(isoStream))
                 {
-                    using (TextReader reader = new StreamReader(isoStream))
-                    {
-                        var serializer = new XmlSerializer(typeof(PipelineSettings));
-                        Current = (PipelineSettings)serializer.Deserialize(reader);
-                    }
+                    XmlSerializer serializer = new XmlSerializer(typeof(PipelineSettings));
+                    Current = (PipelineSettings)serializer.Deserialize(reader);
                 }
             }
         }
