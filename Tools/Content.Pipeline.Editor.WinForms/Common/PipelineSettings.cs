@@ -17,7 +17,7 @@ namespace Content.Pipeline.Editor
         private const string SettingsPath = "Settings.xml";
         private IsolatedStorageFile _isoStore;
 
-        public static PipelineSettings Default { get; private set; }
+        public static PipelineSettings Current { get; private set; }
 
         public List<string> ProjectHistory;
         public string StartupProject;
@@ -27,7 +27,7 @@ namespace Content.Pipeline.Editor
 
         static PipelineSettings()
         {
-            Default = new PipelineSettings();
+            Current = new PipelineSettings();
         }
         
         public PipelineSettings()
@@ -84,7 +84,7 @@ namespace Content.Pipeline.Editor
                     using (var reader = new StreamReader(isoStream))
                     {
                         var serializer = new XmlSerializer(typeof(PipelineSettings));
-                        Default = (PipelineSettings)serializer.Deserialize(reader);
+                        Current = (PipelineSettings)serializer.Deserialize(reader);
                     }
                 }
             }
