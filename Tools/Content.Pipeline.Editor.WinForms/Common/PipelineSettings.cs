@@ -4,35 +4,37 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.IsolatedStorage;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace Content.Pipeline.Editor
 {
     public class PipelineSettings
     {
-        private const string SettingsPath = "Settings.xml";
-        private IsolatedStorageFile _isoStore;
-
-        public static PipelineSettings Default { get; private set; }
-
-        public List<string> ProjectHistory;
+        public List<string> ProjectHistory = new List<string>();
         public string StartupProject;
         public Microsoft.Xna.Framework.Point Size;
         public int HSeparator, VSeparator;
         public bool Maximized, FilterOutput;
+    }
 
-        static PipelineSettings()
+    public class PipelineSettingsMgr
+    {
+        private const string SettingsPath = "Settings.xml";
+        private IsolatedStorageFile _isoStore;
+
+        public static PipelineSettingsMgr Current { get; private set; }
+        
+        public static PipelineSettings Settings;
+
+        static PipelineSettingsMgr()
         {
-            Default = new PipelineSettings();
+            Current = new PipelineSettingsMgr();
         }
         
-        public PipelineSettings()
+        public PipelineSettingsMgr()
         {
-            ProjectHistory = new List<string>();
             _isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);            
         }
 
@@ -41,37 +43,35 @@ namespace Content.Pipeline.Editor
         /// </summary>
         public void AddProjectHistory(string file)
         {
-            var cleanFile = file.Trim();
-            ProjectHistory.Remove(cleanFile);
-            ProjectHistory.Add(cleanFile);
+            string cleanFile = file.Trim();
+            Settings.ProjectHistory.Remove(cleanFile);
+            Settings.ProjectHistory.Add(cleanFile);
         }
         
         public void RemoveProjectHistory(string file)
         {
-            var cleanFile = file.Trim();
-            ProjectHistory.Remove(cleanFile);
+            string cleanFile = file.Trim();
+            Settings.ProjectHistory.Remove(cleanFile);
         }
 
         public void Clear()
         {
-            ProjectHistory.Clear();
-            StartupProject = null;
+            Settings.ProjectHistory.Clear();
+            Settings.StartupProject = null;
             Save();
         }
 
         public void Save()
         {
-            var mode = FileMode.CreateNew;
+            FileMode mode = FileMode.CreateNew;
             if (_isoStore.FileExists (SettingsPath)) 
 				mode = FileMode.Truncate;
 
-            using (var isoStream = new IsolatedStorageFileStream(SettingsPath, mode, _isoStore))
+            using (Stream isoStream = new IsolatedStorageFileStream(SettingsPath, mode, _isoStore))
+            using (TextWriter writer = new StreamWriter(isoStream))
             {
-                using (var writer = new StreamWriter(isoStream))
-                {
-                    var serializer = new XmlSerializer(typeof(PipelineSettings));
-                    serializer.Serialize(writer, this);
-                }
+                XmlSerializer serializer = new XmlSerializer(typeof(PipelineSettings));
+                serializer.Serialize(writer, Settings);
             }
         }
 
@@ -79,13 +79,11 @@ namespace Content.Pipeline.Editor
 		{
             if (_isoStore.FileExists(SettingsPath))
             {
-                using (var isoStream = new IsolatedStorageFileStream(SettingsPath, FileMode.Open, _isoStore))
+                using (Stream isoStream = new IsolatedStorageFileStream(SettingsPath, FileMode.Open, _isoStore))
+                using (TextReader reader = new StreamReader(isoStream))
                 {
-                    using (var reader = new StreamReader(isoStream))
-                    {
-                        var serializer = new XmlSerializer(typeof(PipelineSettings));
-                        Default = (PipelineSettings)serializer.Deserialize(reader);
-                    }
+                    XmlSerializer serializer = new XmlSerializer(typeof(PipelineSettings));
+                    Settings = (PipelineSettings)serializer.Deserialize(reader);
                 }
             }
         }
