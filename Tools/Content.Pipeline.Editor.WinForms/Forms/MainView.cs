@@ -96,22 +96,22 @@ namespace Content.Pipeline.Editor
 
         private void InitOutputWindowContextMenu()
         {
-            ContextMenu contextMenu = new ContextMenu();
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
 
-            MenuItem miCopy = new MenuItem("&Copy");
+            ToolStripMenuItem miCopy = new ToolStripMenuItem("&Copy");
             miCopy.Click += (o, a) =>
             {
                 if (!string.IsNullOrEmpty(_outputWindow.SelectedText))
                     Clipboard.SetText(_outputWindow.SelectedText);
             };
 
-            MenuItem miSelectAll = new MenuItem("&Select all");
+            ToolStripMenuItem miSelectAll = new ToolStripMenuItem("&Select all");
             miSelectAll.Click += (o, a) => _outputWindow.SelectAll();
 
-            contextMenu.MenuItems.Add(miCopy);
-            contextMenu.MenuItems.Add(miSelectAll);
+            contextMenu.Items.Add(miCopy);
+            contextMenu.Items.Add(miSelectAll);
 
-            _outputWindow.ContextMenu = contextMenu;
+            _outputWindow.ContextMenuStrip = contextMenu;
         }
 
         public void OnTemplateDefined(ContentItemTemplate template)
