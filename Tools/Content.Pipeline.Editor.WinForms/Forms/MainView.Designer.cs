@@ -721,6 +721,7 @@ namespace Content.Pipeline.Editor
             this._splitEditorOutput.SplitterDistance = 306;
             this._splitEditorOutput.TabIndex = 4;
             this._splitEditorOutput.TabStop = false;
+            this._splitEditorOutput.SplitterMoved += _splitEditorOutput_SplitterMoved;
             // 
             // _splitTreeProps
             // 
@@ -740,6 +741,7 @@ namespace Content.Pipeline.Editor
             this._splitTreeProps.SplitterDistance = 198;
             this._splitTreeProps.TabIndex = 1;
             this._splitTreeProps.TabStop = false;
+            this._splitTreeProps.SplitterMoved += _splitTreeProps_SplitterMoved;
             // 
             // _treeView
             // 
