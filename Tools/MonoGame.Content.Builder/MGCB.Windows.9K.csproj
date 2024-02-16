@@ -2,14 +2,15 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net472</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <ProjectGuid>{4243474D-572E-6E69-646F-77734D474342}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Builder</RootNamespace>
     <AssemblyName>MGCB</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS1591;CS1574;CS0419</NoWarn>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
     <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\$(Platform)\$(Configuration)\MGCB.xml</DocumentationFile>
@@ -23,11 +24,7 @@
 	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
-	
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Convertors\StringToColorConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -45,10 +42,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="SourceFileCollection.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
@@ -87,4 +81,12 @@
       <Name>Xna.Framework.Content.Pipeline.Media</Name>
     </ProjectReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
