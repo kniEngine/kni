@@ -4,10 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.IsolatedStorage;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace Content.Pipeline.Editor
