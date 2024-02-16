@@ -17,13 +17,13 @@
     <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Debug\2MGFX.xml</DocumentationFile>
-    <DefineConstants>TRACE;WINDOWSDX</DefineConstants>
+    <DefineConstants>WINDOWSDX</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Release\2MGFX.xml</DocumentationFile>
-    <DefineConstants>TRACE;WINDOWSDX</DefineConstants>
+    <DefineConstants>WINDOWSDX</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
