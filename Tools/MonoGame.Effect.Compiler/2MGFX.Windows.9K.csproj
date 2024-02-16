@@ -22,7 +22,6 @@
     <DocumentationFile>bin\Windows\AnyCPU\Debug\2MGFX.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE;WINDOWSDX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -32,7 +31,6 @@
     <DocumentationFile>bin\Windows\AnyCPU\Release\2MGFX.xml</DocumentationFile>
     <DefineConstants>TRACE;WINDOWSDX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
