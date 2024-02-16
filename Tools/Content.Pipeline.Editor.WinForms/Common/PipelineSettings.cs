@@ -39,14 +39,14 @@ namespace Content.Pipeline.Editor
         /// </summary>
         public void AddProjectHistory(string file)
         {
-            var cleanFile = file.Trim();
+            string cleanFile = file.Trim();
             ProjectHistory.Remove(cleanFile);
             ProjectHistory.Add(cleanFile);
         }
         
         public void RemoveProjectHistory(string file)
         {
-            var cleanFile = file.Trim();
+            string cleanFile = file.Trim();
             ProjectHistory.Remove(cleanFile);
         }
 
@@ -59,13 +59,13 @@ namespace Content.Pipeline.Editor
 
         public void Save()
         {
-            var mode = FileMode.CreateNew;
+            FileMode mode = FileMode.CreateNew;
             if (_isoStore.FileExists (SettingsPath)) 
 				mode = FileMode.Truncate;
 
-            using (var isoStream = new IsolatedStorageFileStream(SettingsPath, mode, _isoStore))
+            using (Stream isoStream = new IsolatedStorageFileStream(SettingsPath, mode, _isoStore))
             {
-                using (var writer = new StreamWriter(isoStream))
+                using (TextWriter writer = new StreamWriter(isoStream))
                 {
                     var serializer = new XmlSerializer(typeof(PipelineSettings));
                     serializer.Serialize(writer, this);
@@ -77,9 +77,9 @@ namespace Content.Pipeline.Editor
 		{
             if (_isoStore.FileExists(SettingsPath))
             {
-                using (var isoStream = new IsolatedStorageFileStream(SettingsPath, FileMode.Open, _isoStore))
+                using (Stream isoStream = new IsolatedStorageFileStream(SettingsPath, FileMode.Open, _isoStore))
                 {
-                    using (var reader = new StreamReader(isoStream))
+                    using (TextReader reader = new StreamReader(isoStream))
                     {
                         var serializer = new XmlSerializer(typeof(PipelineSettings));
                         Current = (PipelineSettings)serializer.Deserialize(reader);
