@@ -16,9 +16,9 @@
     <AssemblyName>2MGFX</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\$(Platform)\$(Configuration)\2MGFX.xml</DocumentationFile>	  
     <DefineConstants>$(DefineConstants);WINDOWSDX</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
