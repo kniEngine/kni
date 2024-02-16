@@ -1,0 +1,298 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>3.10.9001.0</Version>
+    <AssemblyVersion>3.10.9001.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ProjectGuid>{5212C44E-1573-43C2-85E8-5751A12FBBFD}</ProjectGuid>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Content.Pipeline.Editor</RootNamespace>
+    <AssemblyName>PipelineEditor</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <LangVersion>Default</LangVersion>
+  </PropertyGroup>
+	
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\Convertors\StringToColorConverter.cs" />
+    <Compile Include="Common\ActionStack.cs" />
+    <Compile Include="Common\AssemblyAttributes.cs" />
+    <Compile Include="Common\CommandLineParser.cs" />
+    <Compile Include="Common\ContentFolder.cs" />
+    <Compile Include="Common\ContentItem.cs" />
+    <Compile Include="Common\ContentItem.Processor.cs" />
+    <Compile Include="Common\ContentItem.Importer.cs" />
+    <Compile Include="Common\ContentItemTemplate.cs" />
+    <Compile Include="Common\ContentItemState.cs" />
+    <Compile Include="Common\FileType.cs" />
+    <Compile Include="Common\Selection.cs" />
+    <Compile Include="Common\PathHelper.cs" />
+    <Compile Include="Common\ProjectState.cs" />
+    <Compile Include="Common\PipelineController.MoveAction.cs" />
+    <Compile Include="Common\PipelineController.NewAction.cs" />
+    <Compile Include="Common\PipelineController.ExcludeAction.cs" />
+    <Compile Include="Common\PipelineController.IncludeAction.cs" />
+    <Compile Include="Common\PipelineController.UpdateContentItemAction.cs" />
+    <Compile Include="Common\PipelineController.UpdateProjectAction.cs" />
+    <Compile Include="Common\PipelineSettings.cs" />
+    <Compile Include="Common\IController.cs" />
+    <Compile Include="Common\IProjectItem.cs" />
+    <Compile Include="Common\IProjectObserver.cs" />
+    <Compile Include="Common\IView.cs" />
+    <Compile Include="Common\OutputParser.cs" />
+    <Compile Include="Common\PipelineProjectParser.cs" />
+    <Compile Include="Common\Util.cs" />
+    <Compile Include="Common\StringExtensions.cs" />
+    <Compile Include="Common\CustomPropertyDescriptors.cs" />
+    <Compile Include="Common\PipelineController.cs" />
+    <Compile Include="Common\PipelineProject.cs" />
+    <Compile Include="Common\PipelineTypes.cs" />
+    <Compile Include="Forms\BuildIcons.cs" />
+    <Compile Include="Forms\ContentIcons.cs" />
+    <Compile Include="Forms\EditorIcons.cs" />
+    <Compile Include="Forms\FolderSelectDialog.cs" />
+    <Compile Include="Forms\MainView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainView.Designer.cs">
+      <DependentUpon>MainView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewContentDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewContentDialog.Designer.cs">
+      <DependentUpon>NewContentDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MultiSelectTreeview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\FilterOutputControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\TabControlEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\PipelineProjectProxy.cs" />
+    <Compile Include="Forms\TreeViewExtensions.cs" />
+    <Compile Include="Forms\SortedEnumTypeConverter.cs" />
+    <Compile Include="Forms\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReferenceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReferenceDialog.Designer.cs">
+      <DependentUpon>ReferenceDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TextEditDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TextEditDialog.Designer.cs">
+      <DependentUpon>TextEditDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
+      <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
+      <Name>Xna.Framework.Design</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework\Xna.Framework.csproj">
+      <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
+      <Name>Xna.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Project>{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}</Project>
+      <Name>Xna.Framework.Content</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+      <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
+      <Name>Xna.Framework.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
+      <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
+      <Name>Xna.Framework.Content.Pipeline</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj">
+      <Project>{acd26013-5730-4caf-9468-3baae867a8a2}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Graphics\Xna.Framework.Content.Pipeline.Graphics.csproj">
+      <Project>{7a3fa1d0-1b03-49cb-9e1b-b9dbf27d74b1}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor\Xna.Framework.Content.Pipeline.Graphics.MojoProcessor.csproj">
+      <Project>{476ee43e-e93b-4019-b8b7-ad52c4216456}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Graphics.MojoProcessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj">
+      <Project>{63486463-8aee-483e-862a-7720cd62b4df}</Project>
+      <Name>Xna.Framework.Content.Pipeline.Media</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Content.Builder\MGCB.Windows.9K.csproj">
+      <Project>{4243474d-572e-6e69-646f-77734d474342}</Project>
+      <Name>MGCB.Windows.9K</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Templates\Effect.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\Effect.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\Effect.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\LocalizedSpriteFont.spritefont" />
+    <None Include="Templates\LocalizedSpriteFont.template" />
+    <None Include="Templates\SpriteEffect.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\SpriteEffect.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\Xml.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\XmlContent.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\XmlContent.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\Font.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\SpriteFont.spritefont">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Templates\SpriteFont.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\TextEditDialog.resx">
+      <DependentUpon>TextEditDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainView.resx">
+      <DependentUpon>MainView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReferenceDialog.resx">
+      <DependentUpon>ReferenceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewContentDialog.resx">
+      <DependentUpon>NewContentDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App.ico" />
+    <EmbeddedResource Include="Icons\blueprint.png" />
+    <EmbeddedResource Include="Icons\missing.png" />
+    <EmbeddedResource Include="Icons\folder_closed.png" />
+    <EmbeddedResource Include="Icons\folder_open.png" />
+    <EmbeddedResource Include="Icons\folder_missing.png" />
+    <EmbeddedResource Include="Icons\settings.png" />
+    <EmbeddedResource Include="Icons\build_begin_end.png" />
+    <EmbeddedResource Include="Icons\build_clean.png" />
+    <EmbeddedResource Include="Icons\build_fail.png" />
+    <EmbeddedResource Include="Icons\build_processing.png" />
+    <EmbeddedResource Include="Icons\build_queued.png" />
+    <EmbeddedResource Include="Icons\build_skip.png" />
+    <EmbeddedResource Include="Icons\build_succeed.png" />
+    <EmbeddedResource Include="Icons\Toolbar\New.png">
+      <LogicalName>Toolbar.New.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\Open.png">
+      <LogicalName>Toolbar.Open.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\Save.png">
+      <LogicalName>Toolbar.Save.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\NewItem.png">
+      <LogicalName>Toolbar.NewItem.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\ExistingItem.png">
+      <LogicalName>Toolbar.ExistingItem.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\NewFolder.png">
+      <LogicalName>Toolbar.NewFolder.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\ExistingFolder.png">
+      <LogicalName>Toolbar.ExistingFolder.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\Build.png">
+      <LogicalName>Toolbar.Build.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\Rebuild.png">
+      <LogicalName>Toolbar.Rebuild.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\Clean.png">
+      <LogicalName>Toolbar.Clean.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Toolbar\FilterOutput.png">
+      <LogicalName>Toolbar.FilterOutput.png</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <_PostBuildHookTimestamp>@(IntermediateAssembly->'%(FullPath).timestamp')</_PostBuildHookTimestamp>
+  </PropertyGroup>
+  <Target Name="PostBuildHooks" Inputs="@(IntermediateAssembly);@(ReferencePath)" Outputs="@(IntermediateAssembly);$(_PostBuildHookTimestamp)" AfterTargets="CoreCompile" BeforeTargets="AfterCompile">
+    <Touch Files="$(_PostBuildHookTimestamp)" AlwaysCreate="True" />
+  </Target>
+
+
+</Project>
