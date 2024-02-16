@@ -19,7 +19,7 @@ namespace Content.Pipeline.Editor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            PipelineSettings.Current.Load();
+            PipelineSettingsMgr.Current.Load();
 
 			var view = new MainView();
             if (args != null && args.Length > 0)

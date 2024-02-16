@@ -12,25 +12,29 @@ namespace Content.Pipeline.Editor
 {
     public class PipelineSettings
     {
-        private const string SettingsPath = "Settings.xml";
-        private IsolatedStorageFile _isoStore;
-
-        public static PipelineSettings Current { get; private set; }
-
-        public List<string> ProjectHistory;
+        public List<string> ProjectHistory = new List<string>();
         public string StartupProject;
         public Microsoft.Xna.Framework.Point Size;
         public int HSeparator, VSeparator;
         public bool Maximized, FilterOutput;
+    }
 
-        static PipelineSettings()
+    public class PipelineSettingsMgr
+    {
+        private const string SettingsPath = "Settings.xml";
+        private IsolatedStorageFile _isoStore;
+
+        public static PipelineSettingsMgr Current { get; private set; }
+        
+        public static PipelineSettings Settings;
+
+        static PipelineSettingsMgr()
         {
-            Current = new PipelineSettings();
+            Current = new PipelineSettingsMgr();
         }
         
-        public PipelineSettings()
+        public PipelineSettingsMgr()
         {
-            ProjectHistory = new List<string>();
             _isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);            
         }
 
@@ -40,20 +44,20 @@ namespace Content.Pipeline.Editor
         public void AddProjectHistory(string file)
         {
             string cleanFile = file.Trim();
-            ProjectHistory.Remove(cleanFile);
-            ProjectHistory.Add(cleanFile);
+            Settings.ProjectHistory.Remove(cleanFile);
+            Settings.ProjectHistory.Add(cleanFile);
         }
         
         public void RemoveProjectHistory(string file)
         {
             string cleanFile = file.Trim();
-            ProjectHistory.Remove(cleanFile);
+            Settings.ProjectHistory.Remove(cleanFile);
         }
 
         public void Clear()
         {
-            ProjectHistory.Clear();
-            StartupProject = null;
+            Settings.ProjectHistory.Clear();
+            Settings.StartupProject = null;
             Save();
         }
 
@@ -67,7 +71,7 @@ namespace Content.Pipeline.Editor
             using (TextWriter writer = new StreamWriter(isoStream))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(PipelineSettings));
-                serializer.Serialize(writer, this);
+                serializer.Serialize(writer, Settings);
             }
         }
 
@@ -79,7 +83,7 @@ namespace Content.Pipeline.Editor
                 using (TextReader reader = new StreamReader(isoStream))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(PipelineSettings));
-                    Current = (PipelineSettings)serializer.Deserialize(reader);
+                    Settings = (PipelineSettings)serializer.Deserialize(reader);
                 }
             }
         }

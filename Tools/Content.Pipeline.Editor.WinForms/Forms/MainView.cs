@@ -252,7 +252,7 @@ namespace Content.Pipeline.Editor
                 // TODO: clear removed projects from DropDownItems
 
                 // attach added projects to DropDownItems
-                foreach (string project in PipelineSettings.Current.ProjectHistory)
+                foreach (string project in PipelineSettingsMgr.Settings.ProjectHistory)
                 {
                     if (_openRecentMenuItem.DropDownItems.ContainsKey(project))
                         continue;
@@ -598,12 +598,12 @@ namespace Content.Pipeline.Editor
             // already a project specified via command line.
             if (string.IsNullOrEmpty(OpenProjectPath))
             {
-                var startupProject = PipelineSettings.Current.StartupProject;
+                var startupProject = PipelineSettingsMgr.Settings.StartupProject;
                 if (!string.IsNullOrEmpty(startupProject) && File.Exists(startupProject))                
                     OpenProjectPath = startupProject;                
             }
 
-            PipelineSettings.Current.StartupProject = null;
+            PipelineSettingsMgr.Settings.StartupProject = null;
             
             if (!string.IsNullOrEmpty(OpenProjectPath))
             {
@@ -618,21 +618,21 @@ namespace Content.Pipeline.Editor
         {
             if (this.WindowState != FormWindowState.Maximized)
             {
-                PipelineSettings.Current.Size.X = this.Width;
-                PipelineSettings.Current.Size.Y = this.Height;
+                PipelineSettingsMgr.Settings.Size.X = this.Width;
+                PipelineSettingsMgr.Settings.Size.Y = this.Height;
             }
         }
 
         private void _splitTreeProps_SplitterMoved(object sender, SplitterEventArgs e)
         {
             if (this.WindowState != FormWindowState.Maximized)
-                PipelineSettings.Current.HSeparator = _splitTreeProps.SplitterDistance;
+                PipelineSettingsMgr.Settings.HSeparator = _splitTreeProps.SplitterDistance;
         }
 
         private void _splitEditorOutput_SplitterMoved(object sender, SplitterEventArgs e)
         {
             if (this.WindowState != FormWindowState.Maximized)
-                PipelineSettings.Current.VSeparator = _splitEditorOutput.SplitterDistance;
+                PipelineSettingsMgr.Settings.VSeparator = _splitEditorOutput.SplitterDistance;
         }
 
         private void MainView_FormClosing(object sender, FormClosingEventArgs e)
@@ -642,9 +642,9 @@ namespace Content.Pipeline.Editor
                 if (!_controller.Exit())
                     e.Cancel = true;
 
-                PipelineSettings.Current.Maximized = (this.WindowState == FormWindowState.Maximized);
-                PipelineSettings.Current.FilterOutput = _filterOutputMenuItem.Checked;
-                PipelineSettings.Current.Save();
+                PipelineSettingsMgr.Settings.Maximized = (this.WindowState == FormWindowState.Maximized);
+                PipelineSettingsMgr.Settings.FilterOutput = _filterOutputMenuItem.Checked;
+                PipelineSettingsMgr.Current.Save();
             }
         }        
 
@@ -1002,26 +1002,26 @@ namespace Content.Pipeline.Editor
             SendMessage(_outputWindow.Handle, EM_SETWORDBREAKPROC, IntPtr.Zero, ptr_func);
 
             // load settings
-            if (PipelineSettings.Current.Size.X != 0)
+            if (PipelineSettingsMgr.Settings.Size.X != 0)
             {
-                this.Width = PipelineSettings.Current.Size.X;
-                this.Height = PipelineSettings.Current.Size.Y;
+                this.Width = PipelineSettingsMgr.Settings.Size.X;
+                this.Height = PipelineSettingsMgr.Settings.Size.Y;
 
-                _splitEditorOutput.SplitterDistance = PipelineSettings.Current.VSeparator;
-                _splitTreeProps.SplitterDistance = PipelineSettings.Current.HSeparator;
+                _splitEditorOutput.SplitterDistance = PipelineSettingsMgr.Settings.VSeparator;
+                _splitTreeProps.SplitterDistance = PipelineSettingsMgr.Settings.HSeparator;
 
-                _filterOutputMenuItem.Checked = _toolFilterOutput.Checked = PipelineSettings.Current.FilterOutput;
+                _filterOutputMenuItem.Checked = _toolFilterOutput.Checked = PipelineSettingsMgr.Settings.FilterOutput;
 
-                if (PipelineSettings.Current.Maximized)
+                if (PipelineSettingsMgr.Settings.Maximized)
                     this.WindowState = FormWindowState.Maximized;
             }
             else
             {
-                PipelineSettings.Current.Size.X = this.Width;
-                PipelineSettings.Current.Size.Y = this.Height;
+                PipelineSettingsMgr.Settings.Size.X = this.Width;
+                PipelineSettingsMgr.Settings.Size.Y = this.Height;
 
-                PipelineSettings.Current.VSeparator = _splitEditorOutput.SplitterDistance;
-                PipelineSettings.Current.HSeparator = _splitTreeProps.SplitterDistance;
+                PipelineSettingsMgr.Settings.VSeparator = _splitEditorOutput.SplitterDistance;
+                PipelineSettingsMgr.Settings.HSeparator = _splitTreeProps.SplitterDistance;
             }
             
             _outputTabs.SelectedIndex = _filterOutputMenuItem.Checked ? 1 : 0;

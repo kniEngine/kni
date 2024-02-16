@@ -230,9 +230,9 @@ namespace Content.Pipeline.Editor
                 ProjectOpen = true;
                 ProjectDirty = false;
 
-                PipelineSettings.Current.AddProjectHistory(projectFilePath);
-                PipelineSettings.Current.StartupProject = projectFilePath;
-                PipelineSettings.Current.Save();
+                PipelineSettingsMgr.Current.AddProjectHistory(projectFilePath);
+                PipelineSettingsMgr.Settings.StartupProject = projectFilePath;
+                PipelineSettingsMgr.Current.Save();
             }
 #if !DEBUG
             catch (Exception e)
@@ -264,8 +264,8 @@ namespace Content.Pipeline.Editor
             _actionStack.Clear();
             View.OutputClear();
 
-            PipelineSettings.Current.StartupProject = null;
-            PipelineSettings.Current.Save();
+            PipelineSettingsMgr.Settings.StartupProject = null;
+            PipelineSettingsMgr.Current.Save();
 
             Selection.Clear(this);
             UpdateTree();
@@ -320,9 +320,9 @@ namespace Content.Pipeline.Editor
             // Note: This is where a project loaded via 'new project' or 'import project' 
             //       get recorded into PipelineSettings because up until this point they did not
             //       exist as files on disk.
-            PipelineSettings.Current.AddProjectHistory(_project.OriginalPath);
-            PipelineSettings.Current.StartupProject = _project.OriginalPath;
-            PipelineSettings.Current.Save();
+            PipelineSettingsMgr.Current.AddProjectHistory(_project.OriginalPath);
+            PipelineSettingsMgr.Settings.StartupProject = _project.OriginalPath;
+            PipelineSettingsMgr.Current.Save();
 
             return true;
         }
