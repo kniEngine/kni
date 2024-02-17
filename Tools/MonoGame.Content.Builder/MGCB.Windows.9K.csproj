@@ -18,11 +18,12 @@
     <AssemblyName>MGCB</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS1591;CS1574;CS0419</NoWarn>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);WINDOWSDX</DefineConstants>
     <LangVersion>Default</LangVersion>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
 	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -48,6 +49,10 @@
     <Compile Include="ProcessorContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SourceFileCollection.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App.ico" />
   </ItemGroup>
 
   <ItemGroup>

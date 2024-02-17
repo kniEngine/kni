@@ -23,7 +23,6 @@
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <OutputPath>bin\AnyCPU\Debug\net4</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\AnyCPU\Debug\net4\PipelineEditor.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,7 +33,6 @@
     <DebugType>none</DebugType>
     <OutputPath>bin\AnyCPU\Release\net4</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\AnyCPU\Release\net4\PipelineEditor.xml</DocumentationFile>
     <DefineConstants>TRACE;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
