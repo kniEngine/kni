@@ -14,6 +14,7 @@ set username=username
 "C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Xna.Framework.Content.Pipeline.Media    3.10.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
 
 "C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Xna.Framework.Content.Pipeline.Builder  3.10.9001-rc -Source "C:\Users\%username%\.nuget\localPackages"   -NonInteractive
+"C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Xna.Framework.Content.Pipeline.Builder.Windows  3.10.9001-rc -Source "C:\Users\%username%\.nuget\localPackages"   -NonInteractive
 
 "C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Xna.Framework.Blazor                    3.10.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
 "C:\Program Files (x86)\nuget\nuget.exe" delete MonoGame.Framework.WindowsDX.9000             3.10.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
@@ -38,6 +39,7 @@ set username=username
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Framework.Content.Pipeline.Media.3.10.9001.nupkg    -Source "C:\Users\%username%\.nuget\localPackages"
 
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Framework.Content.Pipeline.Builder.3.10.9001-rc.nupkg -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Framework.Content.Pipeline.Builder.Windows.3.10.9001-rc.nupkg -Source "C:\Users\%username%\.nuget\localPackages"
 
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Framework.Blazor.3.10.9001.nupkg                    -Source "C:\Users\%username%\.nuget\localPackages"
 "C:\Program Files (x86)\nuget\nuget.exe" add output\MonoGame.Framework.WindowsDX.9000.3.10.9001.nupkg             -Source "C:\Users\%username%\.nuget\localPackages"
