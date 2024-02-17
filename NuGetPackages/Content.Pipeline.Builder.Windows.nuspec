@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>nkast.Xna.Framework.Content.Pipeline.Builder.Windows</id>
+    <version>$version$</version>
+    <title>nkast.Xna.Framework.Content.Pipeline.Builder.Windows</title>
+    <authors>Kastellanos Nikos</authors>
+    <owners>Kastellanos Nikos</owners>
+    <licenseUrl>https://github.com/kniEngine/kni/blob/develop/LICENSE.txt</licenseUrl>
+    <!--<LicenseExpression>MS-PL</LicenseExpression>-->
+    <projectUrl>https://github.com/kniEngine/kni</projectUrl>
+    <!--<Icon>Images\Icon.png</Icon>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>KNI Framework Content Pipeline Builder (WinForms, WPF and DirectX11 backend).</description>
+    <summary>MSBuild task to build content for KNI (Windows).</summary>
+    <copyright>©2024 Kastellanos Nikos</copyright>
+    <language>en-US</language>
+    
+  </metadata>
+  <files>
+    <file src="NuGetPackages\build\Builder\nkast.Xna.Framework.Content.Pipeline.Builder.targets" target="build\nkast.Xna.Framework.Content.Pipeline.Builder.targets" />
+
+    <!-- tools -->
+    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\runtimes\win7-x64\native\*.dll" target="tools\runtimes\win7-x64\native" />
+    
+    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.exe" target="tools" />
+    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.dll" target="tools" />
+    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.runtimeconfig.json" target="tools" />
+    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.dll.config" target="tools" />    
+    
+    <!-- Nuget Icon -->
+    <file src="Images\Icon.png" target="\" />
+  </files>
+</package>
