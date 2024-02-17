@@ -94,7 +94,7 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.dll'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\Templates'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\PipelineEditor.exe'
-  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\PipelineEditor.exe.runtimeconfig.json'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\PipelineEditor.runtimeconfig.json'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net6.0-windows\PipelineEditor.xml'
   File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
 

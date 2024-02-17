@@ -22,7 +22,7 @@
 
     <!-- tools -->
     <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.exe" target="tools" />
-    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.exe.runtimeconfig.json" target="tools" />
+    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.runtimeconfig.json" target="tools" />
     <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.dll" target="tools" />
     <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net6.0-windows\*.dll.config" target="tools" />
     
