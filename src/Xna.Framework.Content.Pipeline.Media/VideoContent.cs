@@ -4,8 +4,8 @@
 
 using System;
 using System.Linq;
-using Microsoft.Xna.Framework.Media;
 using System.Globalization;
+using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline
 {
