@@ -20,6 +20,7 @@
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);WINDOWSDX</DefineConstants>
     <LangVersion>Default</LangVersion>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
 	
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -37,6 +38,10 @@
     <Compile Include="BuildLogger.cs" />
     <Compile Include="ImporterContext.cs" />
     <Compile Include="ProcessorContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App.ico" />
   </ItemGroup>
 
   <ItemGroup>
