@@ -17,6 +17,7 @@ namespace Content.Pipeline.Editor
         public Microsoft.Xna.Framework.Point Size;
         public int HSeparator, VSeparator;
         public bool Maximized, FilterOutput;
+
     }
 
     public class PipelineSettingsMgr
@@ -24,13 +25,16 @@ namespace Content.Pipeline.Editor
         private const string SettingsPath = "Settings.xml";
         private IsolatedStorageFile _isoStore;
 
+        public bool IsInit;
+
         public static PipelineSettingsMgr Current { get; private set; }
         
-        public static PipelineSettings Settings;
+        public static PipelineSettings Settings { get; private set; }
 
         static PipelineSettingsMgr()
         {
             Current = new PipelineSettingsMgr();
+            Settings = new PipelineSettings();
         }
         
         public PipelineSettingsMgr()
@@ -86,6 +90,8 @@ namespace Content.Pipeline.Editor
                     Settings = (PipelineSettings)serializer.Deserialize(reader);
                 }
             }
+
+            return;
         }
     }
 }
