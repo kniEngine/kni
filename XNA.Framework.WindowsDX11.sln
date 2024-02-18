@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGCB.Windows.9K", "Tools\Mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Build.Tasks.Windows.9K", "Tools\MonoGame.Build.Tasks\MonoGame.Build.Tasks.Windows.9K.csproj", "{E2D9E2AE-B875-D3D6-92B1-ECDC6C642E54}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Pipeline.Editor.net6", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net6.csproj", "{5212C44E-1573-43C2-85E8-5751A12FBBFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Pipeline.Editor.net8", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net8.csproj", "{5212C44E-1573-43C2-85E8-5751A12FBBFD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content.Pipeline", "Content.Pipeline", "{C413C655-EEE6-4757-9CDB-7D61AFBC001E}"
 EndProject
