@@ -616,7 +616,7 @@ namespace Content.Pipeline.Editor
 
         private void MainView_SizeChanged(object sender, EventArgs e)
         {
-            if (this.WindowState != FormWindowState.Maximized)
+            if (this.WindowState != FormWindowState.Maximized && PipelineSettingsMgr.Current.IsInit)
             {
                 PipelineSettingsMgr.Settings.Size.X = this.Width;
                 PipelineSettingsMgr.Settings.Size.Y = this.Height;
@@ -625,13 +625,13 @@ namespace Content.Pipeline.Editor
 
         private void _splitTreeProps_SplitterMoved(object sender, SplitterEventArgs e)
         {
-            if (this.WindowState != FormWindowState.Maximized)
+            if (this.WindowState != FormWindowState.Maximized && PipelineSettingsMgr.Current.IsInit)
                 PipelineSettingsMgr.Settings.HSeparator = _splitTreeProps.SplitterDistance;
         }
 
         private void _splitEditorOutput_SplitterMoved(object sender, SplitterEventArgs e)
         {
-            if (this.WindowState != FormWindowState.Maximized)
+            if (this.WindowState != FormWindowState.Maximized && PipelineSettingsMgr.Current.IsInit)
                 PipelineSettingsMgr.Settings.VSeparator = _splitEditorOutput.SplitterDistance;
         }
 
@@ -1002,7 +1002,7 @@ namespace Content.Pipeline.Editor
             SendMessage(_outputWindow.Handle, EM_SETWORDBREAKPROC, IntPtr.Zero, ptr_func);
 
             // load settings
-            if (PipelineSettingsMgr.Settings.Size.X != 0)
+            if (PipelineSettingsMgr.Settings.VSeparator != 0)
             {
                 this.Width = PipelineSettingsMgr.Settings.Size.X;
                 this.Height = PipelineSettingsMgr.Settings.Size.Y;
@@ -1023,7 +1023,8 @@ namespace Content.Pipeline.Editor
                 PipelineSettingsMgr.Settings.VSeparator = _splitEditorOutput.SplitterDistance;
                 PipelineSettingsMgr.Settings.HSeparator = _splitTreeProps.SplitterDistance;
             }
-            
+            PipelineSettingsMgr.Current.IsInit = true;
+
             _outputTabs.SelectedIndex = _filterOutputMenuItem.Checked ? 1 : 0;
         }
 
