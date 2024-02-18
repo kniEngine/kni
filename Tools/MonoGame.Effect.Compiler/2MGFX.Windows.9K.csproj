@@ -8,7 +8,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <ProjectGuid>{46474D32-2E58-6957-6E64-6F7773324D47}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>TwoMGFX</RootNamespace>

@@ -8,7 +8,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFrameworks>net472;net6.0-windows;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0-windows;net8.0</TargetFrameworks>
     <ProjectGuid>{4243474D-572E-6E69-646F-77734D474342}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Builder</RootNamespace>
@@ -23,7 +23,7 @@
     <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0-windows' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0-windows' ">
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
@@ -97,7 +97,7 @@
     </ProjectReference>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0-windows' Or '$(TargetFramework)' == 'net472' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0-windows' Or '$(TargetFramework)' == 'net472' ">
     <ProjectReference Include="..\..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
       <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
       <Name>XNA.Framework.WindowsDX11</Name>
