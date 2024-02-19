@@ -43,10 +43,6 @@
       <HintPath>..\..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
     </Reference>
 
-    <PackageReference Include="Microsoft.NETCore.Platforms">
-      <Version>2.0.2</Version>
-    </PackageReference>
-
   </ItemGroup>
 
   <ItemGroup>
