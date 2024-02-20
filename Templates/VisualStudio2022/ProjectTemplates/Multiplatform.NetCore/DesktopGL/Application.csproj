@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RollForward>Major</RollForward>
     <ProjectGuid>$guid4$</ProjectGuid>
     <OutputType>WinExe</OutputType>

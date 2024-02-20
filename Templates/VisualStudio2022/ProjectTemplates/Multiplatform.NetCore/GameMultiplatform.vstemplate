@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
   <TemplateData>
-    <Name>KNI Multiplatform Project (.net6-8)</Name>
+    <Name>KNI Multiplatform Project (.net8)</Name>
     <Description>A KNI project for multiple platforms with shared content.</Description>
-    <TemplateID>Kni.CS.MultiplatformGame.Net6</TemplateID>
+    <TemplateID>Kni.CS.MultiplatformGame.Net8</TemplateID>
     <TemplateGroupID>VC-Managed</TemplateGroupID>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>KNI</ProjectSubType>
