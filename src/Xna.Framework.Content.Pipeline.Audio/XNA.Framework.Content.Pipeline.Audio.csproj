@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net40;netstandard2.0;net8</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
     <AssemblyName>Xna.Framework.Content.Pipeline.Audio</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Audio</RootNamespace>

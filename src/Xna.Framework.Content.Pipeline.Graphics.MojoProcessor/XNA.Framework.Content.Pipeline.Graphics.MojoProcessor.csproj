@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net40;netstandard2.0;net8</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
     <AssemblyName>Xna.Framework.Content.Pipeline.Graphics.MojoProcessor</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Graphics</RootNamespace>
@@ -32,7 +32,7 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net8' ">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net8.0' ">
     <Reference Include="SharpDX">
       <HintPath>..\..\ThirdParty\SharpDX\4.0.1\netstandard1.3\SharpDX.dll</HintPath>
     </Reference>
