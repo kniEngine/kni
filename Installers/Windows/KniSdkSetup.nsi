@@ -96,7 +96,8 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\runtimes'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\PipelineEditor.exe'
   File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\PipelineEditor.runtimeconfig.json'
-  File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\PipelineEditor.dll'
+  File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.dll'
 
   ; Associate .mgcb files open in the Pipeline tool.
   !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '15.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
