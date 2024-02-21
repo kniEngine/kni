@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 try
                 {
                     // OGL.Initialize() must be called while we have a gl context,
-                    // because of OGL.LoadEntryPoints() & and OGL.LoadExtensions().
+                    // because of OGL.LoadEntryPoints() & and OGL.InitExtensions().
                     OGL_SDL.Initialize();
                     _gl = OGL.Current;
                 }

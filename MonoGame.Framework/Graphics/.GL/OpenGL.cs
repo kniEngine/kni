@@ -520,7 +520,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         {
             GetNativeLibrary();
             LoadEntryPoints();
-            LoadExtensions();
+            InitExtensions();
         }
 
         protected abstract IntPtr GetNativeLibrary();
@@ -1529,14 +1529,15 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         }
 
-        internal List<string> Extensions = new List<string>();
+        private List<string> _extensions;
+        internal List<string> Extensions { get { return _extensions; } }
 
         [Conditional("DEBUG")]
-        void LogExtensions(string extstring)
+        void LogExtensions(string extstring, List<string> extensions)
         {
 #if __ANDROID__
             Android.Util.Log.Verbose("GL","Supported Extensions");
-            foreach (string ext in Extensions)
+            foreach (string ext in extensions)
                 Android.Util.Log.Verbose("GL", "   " + ext);
 #else
             System.Diagnostics.Debug.WriteLine("Supported GL Extensions");
@@ -1544,14 +1545,17 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 #endif
         }
 
-        internal void LoadExtensions()
+        internal void InitExtensions()
         {
             string extstring = this.GetString(StringName.Extensions);
             ErrorCode error = this.GetError();
             if (error != ErrorCode.NO_ERROR || string.IsNullOrEmpty(extstring))
                 return;
-            Extensions.AddRange(extstring.Split(' '));
-            LogExtensions(extstring);
+
+            string[] extList = extstring.Split(' ');
+            _extensions = new List<string>(extList.Length);
+            _extensions.AddRange(extList);
+            LogExtensions(extstring, _extensions);
 
             if (GenRenderbuffers == null && Extensions.Contains("GL_EXT_framebuffer_object"))
             {
@@ -1568,8 +1572,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
                 GenerateMipmap = LoadFunctionOrNull<GenerateMipmapDelegate>("glGenerateMipmapEXT");
                 BlitFramebuffer = LoadFunctionOrNull<BlitFramebufferDelegate>("glBlitFramebufferEXT");
                 CheckFramebufferStatus = LoadFunctionOrNull<CheckFramebufferStatusDelegate>("glCheckFramebufferStatusEXT");
-
             }
+
             if (RenderbufferStorageMultisample == null)
             {                
                 if (Extensions.Contains("GL_APPLE_framebuffer_multisample"))
@@ -1670,9 +1674,10 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             UniformMatrix4fv(location, count, transpose, value);
         }
 
-        internal unsafe string GetString(StringName name)
+        internal string GetString(StringName name)
         {
-            return Marshal.PtrToStringAnsi(GetStringInternal(name));
+            IntPtr pStr = GetStringInternal(name);
+            return Marshal.PtrToStringAnsi(pStr);
         }
 
         internal string GetProgramInfoLog(int programId)
