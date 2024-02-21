@@ -520,7 +520,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         {
             GetNativeLibrary();
             LoadEntryPoints();
-            LoadExtensions();
+            InitExtensions();
         }
 
         protected abstract IntPtr GetNativeLibrary();
@@ -1544,7 +1544,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 #endif
         }
 
-        internal void LoadExtensions()
+        internal void InitExtensions()
         {
             string extstring = this.GetString(StringName.Extensions);
             ErrorCode error = this.GetError();
