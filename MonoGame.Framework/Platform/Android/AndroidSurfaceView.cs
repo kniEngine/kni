@@ -303,6 +303,7 @@ namespace Microsoft.Xna.Framework
 
                 CreateGLContext();
                 _glContextAvailable = true;
+
                 if (!_glSurfaceAvailable)
                     CreateGLSurface();
 
