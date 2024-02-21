@@ -1532,11 +1532,11 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         internal List<string> Extensions = new List<string>();
 
         [Conditional("DEBUG")]
-        void LogExtensions(string extstring)
+        void LogExtensions(string extstring, List<string> extensions)
         {
 #if __ANDROID__
             Android.Util.Log.Verbose("GL","Supported Extensions");
-            foreach (string ext in Extensions)
+            foreach (string ext in extensions)
                 Android.Util.Log.Verbose("GL", "   " + ext);
 #else
             System.Diagnostics.Debug.WriteLine("Supported GL Extensions");
@@ -1551,7 +1551,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             if (error != ErrorCode.NO_ERROR || string.IsNullOrEmpty(extstring))
                 return;
             Extensions.AddRange(extstring.Split(' '));
-            LogExtensions(extstring);
+            LogExtensions(extstring, Extensions);
 
             if (GenRenderbuffers == null && Extensions.Contains("GL_EXT_framebuffer_object"))
             {
