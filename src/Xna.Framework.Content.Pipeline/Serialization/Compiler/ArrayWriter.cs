@@ -39,8 +39,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             if (value == null)
                 throw new ArgumentNullException("value");
+
             output.Write(value.Length);
-            foreach (var element in value)
+            foreach (T element in value)
                 output.WriteObject(element, _elementWriter);
         }
     }

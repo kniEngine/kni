@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
@@ -11,15 +12,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     {
         protected override void Write(ContentWriter output, CompiledEffectContent value)
         {
-            var code = value.GetEffectCode();
-            output.Write(code.Length);
-            output.Write(code);
+            byte[] bytecode = value.GetEffectCode();
+
+            output.Write(bytecode.Length);
+            output.Write(bytecode);
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            var type = typeof(ContentReader);
-            var readerType = type.Namespace + ".EffectReader, " + type.Assembly.FullName;
+            Type type = typeof(ContentReader);
+            string asmName = type.Assembly.FullName;
+
+            string readerType = type.Namespace + ".EffectReader, " + asmName;
             return readerType;
         }
     }

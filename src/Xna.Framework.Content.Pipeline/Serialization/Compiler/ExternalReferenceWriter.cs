@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     /// <summary>
@@ -37,8 +39,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            var type = typeof(ContentReader);
-            var readerType = type.Namespace + ".ExternalReferenceReader, " + type.Assembly.FullName;
+            Type type = typeof(ContentReader);
+            string readerType = type.Namespace + ".ExternalReferenceReader, " + type.Assembly.FullName;
             return readerType;
         }
 
