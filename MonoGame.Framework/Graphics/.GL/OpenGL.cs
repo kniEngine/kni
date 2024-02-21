@@ -1572,8 +1572,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
                 GenerateMipmap = LoadFunctionOrNull<GenerateMipmapDelegate>("glGenerateMipmapEXT");
                 BlitFramebuffer = LoadFunctionOrNull<BlitFramebufferDelegate>("glBlitFramebufferEXT");
                 CheckFramebufferStatus = LoadFunctionOrNull<CheckFramebufferStatusDelegate>("glCheckFramebufferStatusEXT");
-
             }
+
             if (RenderbufferStorageMultisample == null)
             {                
                 if (Extensions.Contains("GL_APPLE_framebuffer_multisample"))
