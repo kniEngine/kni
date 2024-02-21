@@ -1529,7 +1529,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         }
 
-        internal List<string> Extensions = new List<string>();
+        private List<string> _extensions;
+        internal List<string> Extensions { get { return _extensions; } }
 
         [Conditional("DEBUG")]
         void LogExtensions(string extstring, List<string> extensions)
@@ -1550,8 +1551,11 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             ErrorCode error = this.GetError();
             if (error != ErrorCode.NO_ERROR || string.IsNullOrEmpty(extstring))
                 return;
-            Extensions.AddRange(extstring.Split(' '));
-            LogExtensions(extstring, Extensions);
+
+            string[] extList = extstring.Split(' ');
+            _extensions = new List<string>(extList.Length);
+            _extensions.AddRange(extList);
+            LogExtensions(extstring, _extensions);
 
             if (GenRenderbuffers == null && Extensions.Contains("GL_EXT_framebuffer_object"))
             {
