@@ -12,10 +12,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     {
         protected override void Write(ContentWriter output, CompiledEffectContent value)
         {
-            byte[] code = value.GetEffectCode();
+            byte[] bytecode = value.GetEffectCode();
 
-            output.Write(code.Length);
-            output.Write(code);
+            output.Write(bytecode.Length);
+            output.Write(bytecode);
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
