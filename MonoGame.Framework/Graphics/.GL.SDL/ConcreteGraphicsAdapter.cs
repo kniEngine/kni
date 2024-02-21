@@ -172,6 +172,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // OGL.Initialize() must be called while we have a gl context,
                     // because of OGL.LoadEntryPoints() & and OGL.InitExtensions().
                     OGL_SDL.Initialize();
+                    OGL_SDL.Current.InitExtensions();
                     _gl = OGL.Current;
                 }
                 catch (EntryPointNotFoundException)

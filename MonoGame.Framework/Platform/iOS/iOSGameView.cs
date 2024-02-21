@@ -196,6 +196,7 @@ namespace Microsoft.Xna.Framework
             this.MakeCurrent();
 
             OGL_IOS.Initialize();
+            OGL_IOS.Current.InitExtensions();
             _glapi = OGL.Current;
         }
 
