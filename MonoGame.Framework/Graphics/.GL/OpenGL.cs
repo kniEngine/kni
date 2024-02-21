@@ -520,7 +520,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         {
             GetNativeLibrary();
             LoadEntryPoints();
-            InitExtensions();
         }
 
         protected abstract IntPtr GetNativeLibrary();
