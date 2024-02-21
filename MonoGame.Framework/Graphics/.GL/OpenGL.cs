@@ -1547,6 +1547,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         internal void InitExtensions()
         {
+            if (Extensions != null)
+                throw new InvalidOperationException("Extensions allready initialized.");
+
             string extstring = this.GetString(StringName.Extensions);
             ErrorCode error = this.GetError();
             if (error != ErrorCode.NO_ERROR || string.IsNullOrEmpty(extstring))
