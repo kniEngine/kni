@@ -1674,9 +1674,10 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             UniformMatrix4fv(location, count, transpose, value);
         }
 
-        internal unsafe string GetString(StringName name)
+        internal string GetString(StringName name)
         {
-            return Marshal.PtrToStringAnsi(GetStringInternal(name));
+            IntPtr pStr = GetStringInternal(name);
+            return Marshal.PtrToStringAnsi(pStr);
         }
 
         internal string GetProgramInfoLog(int programId)
