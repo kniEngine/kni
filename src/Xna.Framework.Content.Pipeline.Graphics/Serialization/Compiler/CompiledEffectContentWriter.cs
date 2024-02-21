@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
             Type type = typeof(ContentReader);
-            string asmName = type.Assembly.FullName;
+            string asmName = "Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
 
             string readerType = type.Namespace + ".EffectReader, " + asmName;
             return readerType;

@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             string typeName = TargetType.FullName;
             string asmName = TargetType.Assembly.FullName;
 
-            if (asmName.StartsWith("MonoGame.Framework,"))
+            if (asmName.StartsWith("Xna.Framework,"))
                 asmName = "Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
 
             return typeName + ", " + asmName;

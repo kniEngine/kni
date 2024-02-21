@@ -47,10 +47,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         }
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
-        {
+        {        
             Type type = typeof(ContentReader);
+            string asmName = "Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
 
-            string readerType = type.Namespace + ".IndexBufferReader, " + type.AssemblyQualifiedName;
+            string readerType = type.Namespace + ".IndexBuffer, " + asmName;
             return readerType;
         }
     }
