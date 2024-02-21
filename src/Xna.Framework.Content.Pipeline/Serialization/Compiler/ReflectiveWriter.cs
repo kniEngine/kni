@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             _compiler = compiler;
 
-            var type = ReflectionHelpers.GetBaseType(TargetType);                
+            Type type = ReflectionHelpers.GetBaseType(TargetType);                
             if (type != null && type != typeof(object) && !TargetType.IsValueType)
                 _baseType = type;
 
@@ -132,8 +132,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
         private static void Write(object parent, ContentWriter output, MemberInfo member)
         {
-            var property = member as PropertyInfo;
-            var field = member as FieldInfo;
+            PropertyInfo property = member as PropertyInfo;
+            FieldInfo field = member as FieldInfo;
             Debug.Assert(field != null || property != null);
 
             Type elementType;
@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 output.WriteSharedResource(memberObject);
             else
             {
-                var writer = output.GetTypeWriter(elementType);
+                ContentTypeWriter writer = output.GetTypeWriter(elementType);
                 if (writer == null || elementType == typeof(object) || elementType == typeof(Array))
                     output.WriteObject(memberObject);
                 else
@@ -181,14 +181,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             if (_baseType != null)
             {
-                var baseTypeWriter = output.GetTypeWriter(_baseType);
+                ContentTypeWriter baseTypeWriter = output.GetTypeWriter(_baseType);
                 baseTypeWriter.InternalWrite(output, value);
             }
 
-            foreach (var property in _properties)
+            foreach (PropertyInfo property in _properties)
                 Write(value, output, property);
 
-            foreach (var field in _fields)
+            foreach (FieldInfo field in _fields)
                 Write(value, output, field);
         }
     }

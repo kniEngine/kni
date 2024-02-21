@@ -27,10 +27,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             _genericArgWriters = new List<ContentTypeWriter>();
 
-            var arguments = TargetType.GetGenericArguments();
+            Type[] arguments = TargetType.GetGenericArguments();
             foreach (Type argType in arguments)
             {
-                var argWriter = output.GetTypeWriter(argType);
+                ContentTypeWriter argWriter = output.GetTypeWriter(argType);
                 _genericArgWriters.Add(argWriter);
             }
         }
@@ -43,11 +43,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
             // Change "Writer" in this class name to "Reader" and use the runtime type namespace and assembly
-            var readerClassName = this.GetType().Name.Replace("Writer", "Reader");
+            string readerClassName = this.GetType().Name.Replace("Writer", "Reader");
 
             // Add generic arguments
             readerClassName += "[";
-            foreach (var argWriter in _genericArgWriters)
+            foreach (ContentTypeWriter argWriter in _genericArgWriters)
             {
                 readerClassName += "[";
                 readerClassName += argWriter.GetRuntimeType(targetPlatform);
@@ -66,8 +66,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            var typeName = TargetType.FullName;
-            var asmName = TargetType.Assembly.FullName;
+            string typeName = TargetType.FullName;
+            string asmName = TargetType.Assembly.FullName;
 
             if (asmName.StartsWith("MonoGame.Framework,"))
                 asmName = "Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";

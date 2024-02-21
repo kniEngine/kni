@@ -13,8 +13,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     {
         protected override void Write(ContentWriter output, Texture2DContent value)
         {
-            var mipmaps = value.Faces[0];   // Mipmap chain.
-            var level0 = mipmaps[0];        // Most detailed mipmap level.
+            MipmapChain mipmaps = value.Faces[0];   // Mipmap chain.
+            BitmapContent level0 = mipmaps[0];        // Most detailed mipmap level.
 
             SurfaceFormat format;
             if (!level0.TryGetFormat(out format))
@@ -25,9 +25,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             output.Write(level0.Height);
             output.Write(mipmaps.Count);    // Number of mipmap levels.
 
-            foreach (var level in mipmaps)
+            foreach (BitmapContent level in mipmaps)
             {
-                var pixelData = level.GetPixelData();
+                byte[] pixelData = level.GetPixelData();
                 output.Write(pixelData.Length);
                 output.Write(pixelData);
             }
