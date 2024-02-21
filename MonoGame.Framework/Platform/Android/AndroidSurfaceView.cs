@@ -300,14 +300,16 @@ namespace Microsoft.Xna.Framework
 
                 if (OGL_DROID.Current == null)
                     OGL_DROID.Initialize();
-                if (OGL_DROID.Current.Extensions == null)
-                    OGL_DROID.Current.InitExtensions();
 
                 CreateGLContext();
                 _glContextAvailable = true;
 
                 if (!_glSurfaceAvailable)
                     CreateGLSurface();
+
+                // OGL.InitExtensions() must be called while we have a gl context.
+                if (OGL_DROID.Current.Extensions == null)
+                    OGL_DROID.Current.InitExtensions();
 
                 if (contextLost && _glContextAvailable)
                 {
