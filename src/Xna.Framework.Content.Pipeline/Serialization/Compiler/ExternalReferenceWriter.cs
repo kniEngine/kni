@@ -39,15 +39,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            Type type = typeof(ContentReader);
-            string readerType = type.Namespace + ".ExternalReferenceReader, " + type.Assembly.FullName;
-            return readerType;
+            string readerNamespace = "Microsoft.Xna.Framework.Content";
+            string readerName = ".ExternalReferenceReader";
+            string readerAssembly = ", " + typeof(ContentReader).Assembly.FullName;
+
+            string runtimeReader = readerNamespace + readerName + readerAssembly;
+            return runtimeReader;
         }
 
         /// <inheritdoc/>
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return _targetWriter.GetRuntimeType(targetPlatform);
+            string runtimeType = _targetWriter.GetRuntimeType(targetPlatform);
+            return runtimeType;
         }
     }
 }
