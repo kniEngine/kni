@@ -72,10 +72,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return string.Concat(   "Microsoft.Xna.Framework.Content.",
-                                    "MultiArrayReader`1[[",
-                                    _elementWriter.GetRuntimeType(targetPlatform),
-                                    "]]");
+            string readerNamespace = "Microsoft.Xna.Framework.Content";
+            string readerName = ".MultiArrayReader`1"
+                              + "[["
+                              + _elementWriter.GetRuntimeType(targetPlatform)
+                              + "]]"
+                              ;
+            // From looking at XNA-produced XNBs, it appears built-in
+            // type readers don't need assembly qualification.
+            string readerAssembly = String.Empty;
+
+            string runtimeReader = readerNamespace + readerName + readerAssembly;
+            return runtimeReader;
         }
     }
 }

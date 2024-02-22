@@ -21,11 +21,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            Type type = typeof(ContentReader);
-            string asmName = type.Assembly.FullName;
+            string readerNamespace = "Microsoft.Xna.Framework.Content";
+            string readerName = ".EffectReader";
+            string readerAssembly = ", " + typeof(ContentReader).Assembly.FullName;
 
-            string readerType = type.Namespace + ".EffectReader, " + asmName;
-            return readerType;
+            string runtimeReader = readerNamespace + readerName + readerAssembly;
+            return runtimeReader;
         }
     }
 }

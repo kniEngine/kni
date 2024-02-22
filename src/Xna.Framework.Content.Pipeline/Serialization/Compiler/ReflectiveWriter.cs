@@ -180,9 +180,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return "Microsoft.Xna.Framework.Content.ReflectiveReader`1[[" + 
-                        GetRuntimeType(targetPlatform) 
-                    + "]]";
+            string readerNamespace = "Microsoft.Xna.Framework.Content";
+            string readerName = ".ReflectiveReader`1"
+                              + "[["
+                              + GetRuntimeType(targetPlatform) 
+                              + "]]"
+                              ;
+            // From looking at XNA-produced XNBs, it appears built-in
+            // type readers don't need assembly qualification.
+            string readerAssembly = String.Empty;
+
+            string runtimeReader = readerNamespace + readerName + readerAssembly;
+            return runtimeReader;
         }
 
         /// <inheritdoc/>

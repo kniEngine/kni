@@ -61,7 +61,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <returns>The qualified name.</returns>
         public virtual string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return _targetType.FullName + ", " + _targetType.Assembly.FullName;
+            string typeFullName = _targetType.FullName;
+            string typeAssembly = _targetType.Assembly.FullName;
+
+            string runtimeType = typeFullName + ", " + typeAssembly;
+            return runtimeType;
         }
 
         /// <summary>

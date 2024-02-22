@@ -38,38 +38,43 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
+            string readerNamespace = "Microsoft.Xna.Framework.Content";
             // Change "Writer" in this class name to "Reader" and use the runtime type namespace and assembly
-            string readerClassName = this.GetType().Name.Replace("Writer", "Reader");
+            string readerName = this.GetType().Name.Replace("Writer", "Reader");
 
             // Add generic arguments
-            readerClassName += "[";
+            readerName += "[";
             foreach (ContentTypeWriter argWriter in _genericArgWriters)
             {
-                readerClassName += "[";
-                readerClassName += argWriter.GetRuntimeType(targetPlatform);
-                readerClassName += "]";
+                readerName += "[";
+                readerName += argWriter.GetRuntimeType(targetPlatform);
+                readerName += "]";
                 // Important: Do not add a space char after the comma because 
                 // this will not work with Type.GetType in Xamarin.Android!
-                readerClassName += ",";
+                readerName += ",";
             }
-            readerClassName = readerClassName.TrimEnd(',', ' ');
-            readerClassName += "]";
+            readerName = readerName.TrimEnd(',', ' ');
+            readerName += "]";
 
             // From looking at XNA-produced XNBs, it appears built-in
             // type readers don't need assembly qualification.
-            return "Microsoft.Xna.Framework.Content." + readerClassName;
+            string readerAssembly = String.Empty;
+
+            string runtimeReader = readerNamespace + "." + readerName + readerAssembly;
+            return runtimeReader;
         }
 
         /// <inheritdoc/>
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            string typeName = TargetType.FullName;
-            string asmName = TargetType.Assembly.FullName;
+            string typeFullName = TargetType.FullName;
+            string typeAssembly = TargetType.Assembly.FullName;
 
-            if (asmName.StartsWith("MonoGame.Framework,"))
-                asmName = "Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
+            if (typeAssembly.StartsWith("MonoGame.Framework,"))
+                typeAssembly = "Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
 
-            return typeName + ", " + asmName;
+            string runtimeType = typeFullName + ", " + typeAssembly;
+            return runtimeType;
         }
     }
 }
