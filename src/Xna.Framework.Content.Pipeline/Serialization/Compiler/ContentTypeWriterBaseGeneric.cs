@@ -68,10 +68,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
             string typeFullName = TargetType.FullName;
-            string typeAssembly = TargetType.Assembly.FullName;
-
-            if (typeAssembly.StartsWith("MonoGame.Framework,"))
-                typeAssembly = "Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
+            string typeAssembly = "Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
 
             string runtimeType = typeFullName + ", " + typeAssembly;
             return runtimeType;

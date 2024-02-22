@@ -44,13 +44,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <inheritdoc/>
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            string typeName = TargetType.FullName;
-            string typeAssembly = TargetType.Assembly.FullName;
+            string typeNamespace = "Microsoft.Xna.Framework.Audio";
+            string typeName = ".SoundEffect";
+            string typeAssembly = ", Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
 
-            if (typeAssembly.StartsWith("MonoGame.Framework,"))
-                typeAssembly = "Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
-
-            string runtimeType = typeName + ", " + typeAssembly;
+            string runtimeType = typeNamespace + typeName + typeAssembly;
             return runtimeType;
         }
     }
