@@ -41,11 +41,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             }
         }
 
+        /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
             return "Microsoft.Xna.Framework.Content.IndexBufferReader, Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
         }
 
+        /// <inheritdoc/>
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
             Type type = typeof(ContentReader);

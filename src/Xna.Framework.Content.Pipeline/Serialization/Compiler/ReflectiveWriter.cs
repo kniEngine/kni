@@ -162,21 +162,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             }
         }
 
-        public override string GetRuntimeType(TargetPlatform targetPlatform)
-        {
-            if (string.IsNullOrEmpty(_runtimeType))
-                return base.GetRuntimeType(targetPlatform);
-
-            return _runtimeType;
-        }
-
-        public override string GetRuntimeReader(TargetPlatform targetPlatform)
-        {
-            return "Microsoft.Xna.Framework.Content.ReflectiveReader`1[[" + 
-                        GetRuntimeType(targetPlatform) 
-                    + "]]";
-        }
-
         protected override void Write(ContentWriter output, object value)
         {
             if (_baseType != null)
@@ -190,6 +175,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             foreach (FieldInfo field in _fields)
                 Write(value, output, field);
+        }
+
+        /// <inheritdoc/>
+        public override string GetRuntimeReader(TargetPlatform targetPlatform)
+        {
+            return "Microsoft.Xna.Framework.Content.ReflectiveReader`1[[" + 
+                        GetRuntimeType(targetPlatform) 
+                    + "]]";
+        }
+
+        /// <inheritdoc/>
+        public override string GetRuntimeType(TargetPlatform targetPlatform)
+        {
+            if (string.IsNullOrEmpty(_runtimeType))
+                return base.GetRuntimeType(targetPlatform);
+
+            return _runtimeType;
         }
     }
 }

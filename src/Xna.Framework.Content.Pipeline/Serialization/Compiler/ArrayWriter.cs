@@ -27,14 +27,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             _elementWriter = output.GetTypeWriter(typeof(T));
         }
 
-        public override string GetRuntimeReader(TargetPlatform targetPlatform)
-        {
-            return string.Concat(   "Microsoft.Xna.Framework.Content.",
-                                    "ArrayReader`1[[", 
-                                    _elementWriter.GetRuntimeType(targetPlatform), 
-                                    "]]");
-        }
-
         protected override void Write(ContentWriter output, T[] value)
         {
             if (value == null)
@@ -43,6 +35,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             output.Write(value.Length);
             foreach (T element in value)
                 output.WriteObject(element, _elementWriter);
+        }
+
+        /// <inheritdoc/>
+        public override string GetRuntimeReader(TargetPlatform targetPlatform)
+        {
+            return string.Concat(   "Microsoft.Xna.Framework.Content.",
+                                    "ArrayReader`1[[", 
+                                    _elementWriter.GetRuntimeType(targetPlatform), 
+                                    "]]");
         }
     }
 }

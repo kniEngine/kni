@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             output.Write(bytecode);
         }
 
+        /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
             Type type = typeof(ContentReader);
