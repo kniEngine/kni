@@ -191,7 +191,7 @@
     <Compile Include="Serialization\Compiler\ModelWriter.cs" />
     <Compile Include="Serialization\Compiler\SkinnedEffectWriter.cs" />
     <Compile Include="Serialization\Compiler\SpriteFontContentWriter.cs" />
-    <Compile Include="Serialization\Compiler\Texture2DContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\Texture2DWriter.cs" />
     <Compile Include="Serialization\Compiler\TextureCubeWriter.cs" />
     <Compile Include="Serialization\Compiler\TextureWriter.cs" />
     <Compile Include="Serialization\Compiler\VertexBufferWriter.cs" />

@@ -45,7 +45,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Serialization\Compiler\SoundEffectContentWriter.cs" />
+    <Compile Include="Serialization\Compiler\SoundEffectWriter.cs" />
   </ItemGroup>
   
   <ItemGroup>
