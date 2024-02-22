@@ -35,11 +35,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             }
         }
 
-        /// <summary>
-        /// Gets the assembly qualified name of the runtime loader for this type.
-        /// </summary>
-        /// <param name="targetPlatform">Name of the platform.</param>
-        /// <returns>Name of the runtime loader.</returns>
+        /// <inheritdoc/>
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
             // Change "Writer" in this class name to "Reader" and use the runtime type namespace and assembly
@@ -64,6 +60,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             return "Microsoft.Xna.Framework.Content." + readerClassName;
         }
 
+        /// <inheritdoc/>
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
             string typeName = TargetType.FullName;
