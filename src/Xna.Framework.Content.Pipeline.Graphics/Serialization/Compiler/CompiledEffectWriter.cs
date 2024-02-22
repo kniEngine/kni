@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             string readerNamespace = "Microsoft.Xna.Framework.Content";
             string readerName = ".EffectReader";
-            string readerAssembly = ", " + typeof(ContentReader).Assembly.FullName;
+            string readerAssembly = ", Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
 
             string runtimeReader = readerNamespace + readerName + readerAssembly;
             return runtimeReader;
