@@ -32,9 +32,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             string typeNamespace = "Microsoft.Xna.Framework.Graphics";
             string typeName = TargetType.Name;
-            string typeAssembly = ", Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
+            string typeAssembly = TargetType.Assembly.FullName;
 
-            string runtimeType = typeNamespace + "." + typeName + typeAssembly;
+            if (typeAssembly.StartsWith("Xna.Framework.Graphics,"))
+                typeAssembly = "Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
+
+            string runtimeType = typeNamespace + "." + typeName + ", " + typeAssembly;
             return runtimeType;
         }
     }
