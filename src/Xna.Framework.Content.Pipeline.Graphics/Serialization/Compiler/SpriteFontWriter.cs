@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 {
     [ContentTypeWriter]
-    public class SpriteFontContentWriter : ContentTypeWriter<SpriteFontContent>
+    public class SpriteFontWriter : ContentTypeWriter<SpriteFontContent>
     {
         protected override void Write(ContentWriter output, SpriteFontContent value)
         {
