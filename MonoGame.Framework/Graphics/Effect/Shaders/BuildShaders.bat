@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-SET KNIFXC="..\..\..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\2MGFX.exe"
+SET KNIFXC="..\..\..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\KNIFXC.exe"
 
 @for /f %%f IN ('dir /b *.fx') do (
 

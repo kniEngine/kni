@@ -12,7 +12,7 @@
     <ProjectGuid>{46474D32-2E58-6957-6E64-6F7773324D47}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>EffectCompiler</RootNamespace>
-    <AssemblyName>2MGFX</AssemblyName>
+    <AssemblyName>KNIFXC</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
