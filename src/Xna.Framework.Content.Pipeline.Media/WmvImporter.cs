@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading Windows Media Video (.wmv) files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".wmv", DisplayName = "Wmv Importer - MonoGame", DefaultProcessor = "VideoProcessor")]
+    [ContentImporter(".wmv", DisplayName = "Wmv Importer - KNI", DefaultProcessor = "VideoProcessor")]
     public class WmvImporter : ContentImporter<VideoContent>
     {
         /// <summary>

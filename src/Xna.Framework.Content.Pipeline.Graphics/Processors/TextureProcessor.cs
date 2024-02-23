@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
-    [ContentProcessor(DisplayName="Texture - MonoGame")]
+    [ContentProcessor(DisplayName="Texture - KNI")]
     public class TextureProcessor : ContentProcessor<TextureContent, TextureContent>
     {
         public TextureProcessor()

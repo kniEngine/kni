@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading .wav audio files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".wav", DisplayName = "Wav Importer - MonoGame", DefaultProcessor = "SoundEffectProcessor")]
+    [ContentImporter(".wav", DisplayName = "Wav Importer - KNI", DefaultProcessor = "SoundEffectProcessor")]
     public class WavImporter : ContentImporter<AudioContent>
     {
         /// <summary>

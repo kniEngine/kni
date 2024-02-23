@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
-    [ContentProcessor(DisplayName = "Model - MonoGame")]
+    [ContentProcessor(DisplayName = "Model - KNI")]
     public class ModelProcessor : ContentProcessor<NodeContent, ModelContent>
     {
         private ContentIdentity _identity;

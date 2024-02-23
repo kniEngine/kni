@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading Windows Media Audio (.wma) files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".wma", DisplayName = "Wma Importer - MonoGame", DefaultProcessor = "SongProcessor")]
+    [ContentImporter(".wma", DisplayName = "Wma Importer - KNI", DefaultProcessor = "SongProcessor")]
     public class WmaImporter : ContentImporter<AudioContent>
     {
         /// <summary>

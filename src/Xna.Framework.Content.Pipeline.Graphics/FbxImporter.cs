@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading AutoDesk (.fbx) files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".fbx", DisplayName = "Fbx Importer - MonoGame", DefaultProcessor = "ModelProcessor")]
+    [ContentImporter(".fbx", DisplayName = "Fbx Importer - KNI", DefaultProcessor = "ModelProcessor")]
     public class FbxImporter : ContentImporter<NodeContent>
     {
         public override NodeContent Import(string filename, ContentImporterContext context)

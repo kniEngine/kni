@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading MP3 audio files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".mp3", DisplayName = "Mp3 Importer - MonoGame", DefaultProcessor = "SongProcessor")]
+    [ContentImporter(".mp3", DisplayName = "Mp3 Importer - KNI", DefaultProcessor = "SongProcessor")]
     public class Mp3Importer : ContentImporter<AudioContent>
     {
         /// <summary>

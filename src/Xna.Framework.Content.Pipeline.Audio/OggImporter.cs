@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading .ogg audio files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".ogg", DisplayName = "Ogg Importer - MonoGame", DefaultProcessor = "SongProcessor")]
+    [ContentImporter(".ogg", DisplayName = "Ogg Importer - KNI", DefaultProcessor = "SongProcessor")]
     public class OggImporter : ContentImporter<AudioContent>
     {
         /// <summary>
