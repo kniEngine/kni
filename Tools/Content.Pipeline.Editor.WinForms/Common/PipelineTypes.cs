@@ -12,7 +12,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Content.Pipeline.Editor.Convertors;
 
 namespace Content.Pipeline.Editor
 {
@@ -336,8 +335,6 @@ namespace Content.Pipeline.Editor
 
         public static TypeConverter FindConverter(Type type)
         {
-            if (type == typeof(Color))
-                return new StringToColorConverter();
 
             return TypeDescriptor.GetConverter(type);
         }

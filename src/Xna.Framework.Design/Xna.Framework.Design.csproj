@@ -30,6 +30,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="Design\ColorConverter.cs" />
     <Compile Include="Design\Vector2Converter.cs" />
     <Compile Include="Design\Vector3Converter.cs" />
     <Compile Include="Design\Vector4Converter.cs" />
