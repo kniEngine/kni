@@ -216,7 +216,7 @@ Task("BuildContentPipeline")
     .IsDependentOn("Prep")
     .Does(() =>
 {
-    PackDotnet("Tools/MonoGame.Effect.Compiler/MonoGame.Effect.Compiler.csproj");
+    PackDotnet("Tools/EffectCompiler/EffectCompiler.csproj");
 
     PackDotnet("MonoGame.Framework.Content.Pipeline/MonoGame.Framework.Content.Pipeline.csproj");
 });
@@ -227,7 +227,7 @@ Task("BuildTools")
 {
     PackDotnet("Tools/MonoGame.Content.Builder/MonoGame.Content.Builder.csproj");
 
-    PackDotnet("Tools/MonoGame.Effect.Compiler/MonoGame.Effect.Compiler.csproj");
+    PackDotnet("Tools/EffectCompiler/EffectCompiler.csproj");
 
     PackDotnet("Tools/MonoGame.Content.Builder.Task/MonoGame.Content.Builder.Task.csproj");
 

@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MGFXC")]
-[assembly: AssemblyCopyright("Copyright (C)2022 The MonoGame Team, ©2022 Nick Kastellanos")]
+[assembly: AssemblyCopyright("Copyright (C)2022 The MonoGame Team, ©2022-2024 Nick Kastellanos")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

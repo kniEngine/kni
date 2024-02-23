@@ -12,7 +12,7 @@ using System.Reflection;
 using System.ComponentModel;
 
 
-namespace MonoGame.EffectCompiler
+namespace EffectCompiler
 {
     // Reusable, reflection based helper for parsing commandline options.
     //

@@ -6,11 +6,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.EffectCompiler
+namespace EffectCompiler
 {
     internal class ProcessorContext : ContentProcessorContext
     {

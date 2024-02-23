@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
-namespace MonoGame.EffectCompiler
+namespace EffectCompiler
 {
     public static class Program
     {
@@ -18,7 +18,7 @@ namespace MonoGame.EffectCompiler
         {
             var options = new Options();
             var parser = new CommandLineParser(options);
-            parser.Title = "mgfxc - The MonoGame Effect compiler.";
+            parser.Title = "mgfxc - The KNI Effect compiler.";
 
             if (!parser.ParseCommandLine(args))
                 return 1;

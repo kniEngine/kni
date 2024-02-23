@@ -1,15 +1,15 @@
 @echo off
 setlocal
 
-SET MGFXC="..\..\..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\2mgfx.exe"
+SET KNIFXC="..\..\..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\2MGFX.exe"
 
 @for /f %%f IN ('dir /b *.fx') do (
 
   echo %%~nf.fx
   
-  call %MGFXC% %%~nf.fx ..\Resources\%%~nf.dx11.fxo /Platform:Windows
+  call %KNIFXC% %%~nf.fx ..\Resources\%%~nf.dx11.fxo /Platform:Windows
 
-  call %MGFXC% %%~nf.fx ..\Resources\%%~nf.ogl.fxo /Platform:Android
+  call %KNIFXC% %%~nf.fx ..\Resources\%%~nf.ogl.fxo /Platform:Android
 
 )
 
