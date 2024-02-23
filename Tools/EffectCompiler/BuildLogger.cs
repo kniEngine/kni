@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 
 
-namespace MonoGame.EffectCompiler
+namespace EffectCompiler
 {
     internal class BuildLogger : ContentBuildLogger
     {

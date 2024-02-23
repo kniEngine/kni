@@ -86,9 +86,9 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
 
   ; Install the Kni tools to a single shared folder.
   SetOutPath ${MSBuildInstallDir}\Tools
-  File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\net8.0\*.exe'
-  File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\net8.0\*.runtimeconfig.json'
-  File /r '..\..\Tools\MonoGame.Effect.Compiler\bin\Windows\AnyCPU\Release\net8.0\*.dll'
+  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.exe'
+  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.runtimeconfig.json'
+  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.dll'
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.exe'
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.runtimeconfig.json'
   File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.dll'

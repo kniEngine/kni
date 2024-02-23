@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.DesktopG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Content.Builder", "Tools\MonoGame.Content.Builder\MonoGame.Content.Builder.csproj", "{B3201192-46D5-40C5-A24E-493EC66D8C9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Effect.Compiler", "Tools\MonoGame.Effect.Compiler\MonoGame.Effect.Compiler.csproj", "{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Content.Builder.Task", "Tools\MonoGame.Content.Builder.Task\MonoGame.Content.Builder.Task.csproj", "{BC63B70D-1F03-4FF3-B823-12642D52CB74}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Packaging.Flatpak", "Tools\MonoGame.Packaging.Flatpak\MonoGame.Packaging.Flatpak.csproj", "{2AAE746F-0EBE-48B4-8657-2B469B3E1C8F}"
@@ -69,18 +67,6 @@ Global
 		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|x64.Build.0 = Release|Any CPU
 		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|x86.ActiveCfg = Release|Any CPU
 		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|x86.Build.0 = Release|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Debug|x64.Build.0 = Debug|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Debug|x86.Build.0 = Debug|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Release|x64.ActiveCfg = Release|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Release|x64.Build.0 = Release|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Release|x86.ActiveCfg = Release|Any CPU
-		{1CCEF3CE-3E70-4A17-BCBD-73137881CEEB}.Release|x86.Build.0 = Release|Any CPU
 		{BC63B70D-1F03-4FF3-B823-12642D52CB74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC63B70D-1F03-4FF3-B823-12642D52CB74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC63B70D-1F03-4FF3-B823-12642D52CB74}.Debug|x64.ActiveCfg = Debug|Any CPU

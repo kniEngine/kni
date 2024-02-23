@@ -1,12 +1,12 @@
-# MonoGame Effects Compiler (MGFXC)
+# KNI Effects Compiler (MGFXC)
 
-The MGFXC tool is used to compile [DirectX Effect files](https://docs.microsoft.com/en-us/windows/win32/direct3d9/writing-an-effect) (shaders) for usage with MonoGame. It will compile shaders into mgfxo files ready to be consumed by the ```Effect``` class.
+The MGFXC tool is used to compile [DirectX Effect files](https://docs.microsoft.com/en-us/windows/win32/direct3d9/writing-an-effect) (shaders) for usage with KNI. It will compile shaders into fxo files ready to be consumed by the ```Effect``` class.
 
-The MGCB Editor uses MGFXC to compile effects and wrap them into an xnb file, so they can be loaded using the `ContentManager`.
+The MGFXC uses the EffectProcessor to compile effects and extract them from the xnb file.
 
-If you compile effects directly with MGFXC you can load effects using the `Microsoft.Framework.Xna.Graphics.Effect` constructor that takes a byte array with the effect code.
+If you compile effects with MGFXC you can load effects using the `Microsoft.Framework.Xna.Graphics.Effect` constructor that takes a byte array with the effect code.
 
-Effects compiled directly are not content files and can not be loaded by the `ContentManager`.
+Effects compiled with MGFXC are not content files and can not be loaded by the `ContentManager`.
 
 ## Installation
 
@@ -41,7 +41,7 @@ The `/Platform` option defines the platform we're targeting with this effect fil
 
 - Windows
 - DesktopGL
--Android
+- Android
 
 ### Help
 
@@ -52,7 +52,7 @@ If you use `/?`, `/help`, or simply pass no parameters to MGFXC you will get inf
 The resulting compiled effect file can be used from your game code like so:
 
 ```csharp
-byte[] bytecode = File.ReadAllBytes("mycompiled.mgfx");
+byte[] bytecode = File.ReadAllBytes("mycompiled.fxo");
 var effect = new Effect(bytecode);
 ```
 

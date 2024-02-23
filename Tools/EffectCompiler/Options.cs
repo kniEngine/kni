@@ -7,7 +7,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 
-namespace MonoGame.EffectCompiler
+namespace EffectCompiler
 {
 
     public class Options
