@@ -10,7 +10,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Xna.Framework.Content.Pipeline.Builder.Convertors;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -102,18 +101,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             OutputDirectory = PathHelper.NormalizeDirectory(outputDir);
             IntermediateDirectory = PathHelper.NormalizeDirectory(intermediateDir);
             Quiet = quiet;
-
-            RegisterCustomConverters();
-        }
-
-        public void AssignTypeConverter<TType, TTypeConverter>()
-        {
-            TypeDescriptor.AddAttributes(typeof (TType), new TypeConverterAttribute (typeof (TTypeConverter)));
-        }
-
-        private void RegisterCustomConverters()
-        {
-            AssignTypeConverter<Microsoft.Xna.Framework.Color, StringToColorConverter>();
         }
 
         public void AddAssembly(string assemblyFilePath)

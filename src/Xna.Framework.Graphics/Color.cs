@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.ComponentModel;
 using System.Text;
 using System.Runtime.Serialization;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
+    [TypeConverter("Microsoft.Xna.Framework.Design.ColorConverter, Xna.Framework.Design")]
     public struct Color : IPackedVector<UInt32>, IEquatable<Color>
     {
         static Color()
