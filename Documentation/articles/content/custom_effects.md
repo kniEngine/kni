@@ -7,7 +7,7 @@ There currently is no effect system or shader language that supports all the pla
 
 ## MGFX
 
-MGFX is KNI's own "FX" runtime and tools which with the following core goals:
+MGFX is KNI's "Effect" runtime and tools which with the following core goals:
 
 * Support a similar technique, passes, shaders structure as Microsoft FX files.
 * Have a textual format for ease of editing.
@@ -28,14 +28,12 @@ KNI has the following effects built-in and fully supported on current platforms:
 
 Under the hood these effects use the same system and tools as one would for a custom Effect.  The source of these effects can be found in the ['MonoGame.Framework\Graphics\Effect\Shaders'](https://github.com/kniEngine/kni/tree/main/MonoGame.Framework/Graphics/Effect/Shaders) folder.
 
-> If your game requires an extra little bit of performance you can easily hand edit the existing effects to remove unnecessary features or optimize for specific hardware and rebuild them with the MGFX tool.
-
 ## Custom Effects
 
 To use a custom effect with KNI you must do one of the following:
 
 * Run the effect file through the [content processor](~/articles/tools/mgcb.md) for loading via the [`ContentManager`](xref:Microsoft.Xna.Framework.Content.ContentManager) (Recommended).
-* Process your effect file with the [MGFXC tool](~/articles/tools/mgfxc.md) and load them yourself at runtime.
+* Process your effect file with the [KNIFXC tool](~/articles/tools/knifxc.md) and load them yourself at runtime.
 
 ## Effect Writing Tips
 
@@ -66,7 +64,7 @@ These are some tips for writing or converting effects for use with MonoGame.
 ---
 
 
-Custom symbols can be defined from the [MGCB Editor](~/articles/tools/mgcb_editor.md) or via [2MGFX](~/articles/tools/mgfxc.md).
+Custom symbols can be defined from the [MGCB Editor](~/articles/tools/mgcb_editor.md) or via [KNIFXC](~/articles/tools/knifxc.md).
 
 * Make sure the pixel shaders inputs **exactly match** the vertex shader outputs so the parameters are passed in the correct registers. The parameters need to have the same size and order. Omitting parameters might not break compilation, but can cause unexpected results.
 * Note that on GL platforms default values on Effect parameters do not work.  Either set the parameter from code or use a real constant like a #define.

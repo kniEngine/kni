@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MGFXC")]
+[assembly: AssemblyTitle("KNIFXC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MGFXC")]
+[assembly: AssemblyProduct("KNIFXC")]
 [assembly: AssemblyCopyright("Copyright (C)2022 The MonoGame Team, ©2022-2024 Nick Kastellanos")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

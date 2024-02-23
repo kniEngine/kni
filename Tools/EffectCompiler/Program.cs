@@ -18,7 +18,7 @@ namespace EffectCompiler
         {
             var options = new Options();
             var parser = new CommandLineParser(options);
-            parser.Title = "mgfxc - The KNI Effect compiler.";
+            parser.Title = "knifxc - The KNI Effect compiler.";
 
             if (!parser.ParseCommandLine(args))
                 return 1;

@@ -1,26 +1,26 @@
-# KNI Effects Compiler (MGFXC)
+# KNI Effects Compiler (KNIFXC)
 
-The MGFXC tool is used to compile [DirectX Effect files](https://docs.microsoft.com/en-us/windows/win32/direct3d9/writing-an-effect) (shaders) for usage with KNI. It will compile shaders into fxo files ready to be consumed by the ```Effect``` class.
+The KNIFXC tool is used to compile [DirectX Effect files](https://docs.microsoft.com/en-us/windows/win32/direct3d9/writing-an-effect) (shaders) for usage with KNI. It will compile shaders into fxo files ready to be consumed by the ```Effect``` class.
 
-The MGFXC uses the EffectProcessor to compile effects and extract them from the xnb file.
+The KNIFXC uses the EffectProcessor to compile effects and extract them from the xnb file.
 
-If you compile effects with MGFXC you can load effects using the `Microsoft.Framework.Xna.Graphics.Effect` constructor that takes a byte array with the effect code.
+If you compile effects with KNIFXC you can load effects using the `Microsoft.Framework.Xna.Graphics.Effect` constructor that takes a byte array with the effect code.
 
-Effects compiled with MGFXC are not content files and can not be loaded by the `ContentManager`.
+Effects compiled with KNIFXC are not content files and can not be loaded by the `ContentManager`.
 
 ## Installation
 
-MGFXC can be installed as a [.NET tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools).
+KNIFXC can be installed as a [.NET tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools).
 Make sure you have the .NET SDK installed. You can download it [here](https://dotnet.microsoft.com/download).
 
-In a terminal run `dotnet tool install -g dotnet-mgfxc` to install MGFXC.
+In a terminal run `dotnet tool install -g dotnet-knifxc` to install KNIFXC.
 
 ## Command Line
 
 The command line options are:
 
 ```bat
-mgfxc <SourceFile> <OutputFile> [/Debug] [/Platform:<Windows,DesktopGL,Android>]
+KNIFXC <SourceFile> <OutputFile> [/Debug] [/Platform:<Windows,DesktopGL,Android>]
 ```
 
 ### Source File
@@ -45,7 +45,7 @@ The `/Platform` option defines the platform we're targeting with this effect fil
 
 ### Help
 
-If you use `/?`, `/help`, or simply pass no parameters to MGFXC you will get information about these command-line options.
+If you use `/?`, `/help`, or simply pass no parameters to KNIFXC you will get information about these command-line options.
 
 ## Runtime Use
 

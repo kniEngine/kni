@@ -44,9 +44,7 @@ There are a number of shading languages that you can use depending on the platfo
 
 The Effect system in XNA/MonoGame was designed around the HLSL language as it is based around the .fx format, which allows a developer to write both vertex and pixel shaders in one place. Historically both GLSL and HLSL have separate vertex and pixel shaders.  HLSL until recently compiled and linked these at build time, however, GLSL does this at runtime.
 
-Without a content pipeline or some form of tooling a developer would need to write two shaders, one for HLSL and one for GLSL. The good news is the MonoGame MGFX.exe tool can create a shader in .fx format and also enable it to work in GLSL. It does this by using an open-source library called libmojoshader, which does some funky HLSL to GLSL instruction conversion to create an OpenGL-based shader, but rather than doing that at runtime, we do it at build time so we do not need to deploy mojoshader with the OpenGL based games. All this saves you the hassle of having to write and maintain two shaders.
-
-> From MonoGame 3.8, the MGFX tool can build content on any platform. For MonoGame 3.7 or earlier, MGFX only runs on a windows box, this is because it needs the DirectX shader tooling to compile the HLSL before passing it to libmojoshader for conversion (for OpenGL platform targets).
+Without a content pipeline or some form of tooling a developer would need to write two shaders, one for HLSL and one for GLSL. The good news is the MonoGame KNIFXC.exe tool can create a shader in .fx format and also enable it to work in GLSL. It does this by using an open-source library called libMojoShader, which does some funky HLSL to GLSL instruction conversion to create an OpenGL-based shader, but rather than doing that at runtime, we do it at build time so we do not need to deploy mojoshader with the OpenGL based games. All this saves you the hassle of having to write and maintain two shaders.
 
 ## Models
 
