@@ -114,6 +114,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             foreach (int cb in shader._cbuffers)
                 Write((byte)cb);
 
+
+            Debug.WriteLine("Write _attributes (" + shader._attributes.Length + ")");
+            foreach (ShaderData.Attribute attrib in shader._attributes)
+            {
+                Debug.WriteLine(" ");
+                Debug.WriteLine(" name: " + attrib.name);
+                Debug.WriteLine(" usage: " + attrib.usage);
+                Debug.WriteLine(" index: " + attrib.index);
+                Debug.WriteLine(" location: " + attrib.location);
+            }
+
             Write((byte)shader._attributes.Length);
             foreach (ShaderData.Attribute attrib in shader._attributes)
             {
