@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
-    [ContentProcessorAttribute(DisplayName = "Font Texture - MonoGame")]
+    [ContentProcessorAttribute(DisplayName = "Font Texture - KNI")]
     public class FontTextureProcessor : ContentProcessor<Texture2DContent, SpriteFontContent>
     {
         private Vector4 transparentPixel = Color.Magenta.ToVector4();

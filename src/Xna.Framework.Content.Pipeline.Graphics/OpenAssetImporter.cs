@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         ".ter", // Terragen Terrain
         ".hmp", // 3D GameStudio (3DGS) Terrain
         ".ndo", // Izware Nendo
-        DisplayName = "Open Asset Import Library - MonoGame", DefaultProcessor = "ModelProcessor")]
+        DisplayName = "Open Asset Import Library - KNI", DefaultProcessor = "ModelProcessor")]
     public class OpenAssetImporter : ContentImporter<NodeContent>
     {
         // Assimp has a few limitations (not all FBX files are supported):

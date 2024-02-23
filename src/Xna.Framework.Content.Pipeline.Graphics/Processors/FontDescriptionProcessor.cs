@@ -17,7 +17,7 @@ using SharpFont;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
-    [ContentProcessor(DisplayName = "Sprite Font Description - MonoGame")]
+    [ContentProcessor(DisplayName = "Sprite Font Description - KNI")]
     public class FontDescriptionProcessor : ContentProcessor<FontDescription, SpriteFontContent>
     {
         private static object _fontFamilyInfoCacheLocker = new object();

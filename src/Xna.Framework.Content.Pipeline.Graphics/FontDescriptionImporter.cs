@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 	/// <summary>
 	/// Provides methods for reading .spritefont files for use in the Content Pipeline.
 	/// </summary>
-	[ContentImporter(".spritefont", DisplayName = "Sprite Font Importer - MonoGame", DefaultProcessor = "FontDescriptionProcessor")]
+	[ContentImporter(".spritefont", DisplayName = "Sprite Font Importer - KNI", DefaultProcessor = "FontDescriptionProcessor")]
 	public class FontDescriptionImporter : ContentImporter<FontDescription>
 	{
 		/// <summary>

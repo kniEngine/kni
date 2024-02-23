@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
     /// <summary>
     /// Provides methods for reading DirectX Object (.x) files for use in the Content Pipeline.
     /// </summary>
-    [ContentImporter(".x", DisplayName = "X Importer - MonoGame", DefaultProcessor = "ModelProcessor")]
+    [ContentImporter(".x", DisplayName = "X Importer - KNI", DefaultProcessor = "ModelProcessor")]
     public class XImporter : ContentImporter<NodeContent>
     {
         /// <summary>

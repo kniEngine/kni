@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     /// <summary>
     /// A sound effect processor that processes an intermediate AudioContent type. This type encapsulates the source audio content, producing a SoundEffect type that can be used in the game.
     /// </summary>
-    [ContentProcessor(DisplayName = "Sound Effect - MonoGame")]
+    [ContentProcessor(DisplayName = "Sound Effect - KNI")]
     public class SoundEffectProcessor : ContentProcessor<AudioContent, SoundEffectContent>
     {
         ConversionQuality quality = ConversionQuality.Best;

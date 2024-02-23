@@ -4,7 +4,7 @@
 
 namespace Microsoft.Xna.Framework.Content.Pipeline
 {
-    [ContentImporter(".mp4", DisplayName = "H.264 Video - MonoGame", DefaultProcessor = "VideoProcessor")]
+    [ContentImporter(".mp4", DisplayName = "H.264 Video - KNI", DefaultProcessor = "VideoProcessor")]
     public class H264Importer : ContentImporter<VideoContent>
     {
         public H264Importer()

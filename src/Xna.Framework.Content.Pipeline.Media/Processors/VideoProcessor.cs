@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
-    [ContentProcessor(DisplayName = "Video - MonoGame")]
+    [ContentProcessor(DisplayName = "Video - KNI")]
     public class VideoProcessor : ContentProcessor<VideoContent, VideoContent>
     {
         public override VideoContent Process(VideoContent input, ContentProcessorContext context)

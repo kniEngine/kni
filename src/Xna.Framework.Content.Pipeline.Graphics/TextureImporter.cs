@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         ".webp", // WebP
                         ".xbm", // X BitMap
                         ".xpm", // X PixMap
-                    DisplayName = "Texture Importer - MonoGame", DefaultProcessor = "TextureProcessor")]
+                    DisplayName = "Texture Importer - KNI", DefaultProcessor = "TextureProcessor")]
     public class TextureImporter : ContentImporter<TextureContent>
     {
         /// <summary>
