@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Audio", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Media", "src\Xna.Framework.Media\XNA.Framework.Media.csproj", "{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.iOS", "MonoGame.Framework\XNA.Framework.iOS.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.iOS.Xamarin", "MonoGame.Framework\XNA.Framework.iOS.Xamarin.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
