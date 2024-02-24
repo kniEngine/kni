@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics", "src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj", "{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleCardboard.Xamarin", "MonoGame.Framework\Platform\Cardboard\GoogleCardboard\GoogleCardboard.Xamarin.csproj", "{9D3687F8-435F-4AE2-94E0-1169BDEC04BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleCardboard.Xamarin", "MonoGame.Framework\Platform\Cardboard\GoogleCardboard.Xamarin\GoogleCardboard.Xamarin.csproj", "{9D3687F8-435F-4AE2-94E0-1169BDEC04BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Audio", "src\Xna.Framework.Audio\Xna.Framework.Audio.csproj", "{3F81F76D-F0F3-44FE-A256-40AF153C33F7}"
 EndProject
