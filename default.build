@@ -37,10 +37,10 @@
     
     <exec program="${msbuild17}" commandline="XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild17}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
-    <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.Android.Xamarin.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.Xamarin.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="XNA.Framework.iOS.Xamarin.sln /t:Clean /p:Configuration=Release" />
     
   </target>
   
@@ -145,14 +145,14 @@
     <if test="${os == 'MacOS'}">
       <if test="${file::exists('/Developer/MonoTouch/MSBuild/Xamarin.ObjcBinding.CSharp.targets') 
                or file::exists('/Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Xamarin.ObjcBinding.CSharp.targets')}">
-        <exec program="msbuild" commandline="XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
-        <exec program="msbuild" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
+        <exec program="msbuild" commandline="XNA.Framework.Xamarin.iOS.sln /t:Clean /p:Configuration=Release" />
+        <exec program="msbuild" commandline="XNA.Framework.Xamarin.iOS.sln /t:Build /p:Configuration=Release" />
       </if>
     </if>
     -->
 
-      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.Xamarin.sln /t:restore" />
+      <exec program="${msbuild17}" commandline="XNA.Framework.iOS.Xamarin.sln /t:Build /p:Configuration=Release" />
 
       <exec program="${msbuild17}" commandline='XNA.Framework.iOS.netcore.sln /t:Restore /p:Configuration=Release' />
       <exec program="${msbuild17}" commandline='XNA.Framework.iOS.netcore.sln /t:Build /p:Configuration=Release' />
@@ -163,12 +163,12 @@
 
       <!--
       <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild17}" commandline="XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
-        <exec program="${msbuild17}" commandline="XNA.Framework.Android.sln /t:Build /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="XNA.Framework.Android.Xamarin.sln /t:Clean /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="XNA.Framework.Android.Xamarin.sln /t:Build /p:Configuration=Release" />
       </if>
       -->
       <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild15}" commandline="XNA.Framework.Android.sln /t:Build /p:Configuration=Release" />
+        <exec program="${msbuild15}" commandline="XNA.Framework.Android.Xamarin.sln /t:Build /p:Configuration=Release" />
       </if>
 
       <exec program="${msbuild17}" commandline='XNA.Framework.Android.netcore.sln /t:Restore /p:Configuration=Release' />
@@ -178,7 +178,7 @@
   
   <target name="build_cardboard" description="Build Cardboard">
       <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.sln /t:Build /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.Xamarin.sln /t:Build /p:Configuration=Release" />
       </if>
   </target>
 
