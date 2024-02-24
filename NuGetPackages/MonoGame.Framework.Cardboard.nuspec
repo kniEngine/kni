@@ -45,7 +45,14 @@
     <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />
     <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\MonoGame.Framework.xml" target="lib\MonoAndroid\MonoGame.Framework.xml" />
     <file src="MonoGame.Framework\bin\Cardboard\AnyCPU\Release\GoogleCardboard.dll"    target="lib\MonoAndroid\GoogleCardboard.dll" />
-    
+
+    <!-- C# Assemblies (.netcore) -->
+    <file src="Artifacts\MonoGame.Framework\Cardboard\Release\net8.0-android\MonoGame.Framework.aar" target="lib\net8.0-android\MonoGame.Framework.aar" />
+    <file src="Artifacts\MonoGame.Framework\Cardboard\Release\net8.0-android\MonoGame.Framework.dll" target="lib\net8.0-android\MonoGame.Framework.dll" />
+    <file src="Artifacts\MonoGame.Framework\Cardboard\Release\net8.0-android\MonoGame.Framework.xml" target="lib\net8.0-android\MonoGame.Framework.xml" />
+    <file src="Artifacts\MonoGame.Framework\Cardboard\Release\net8.0-android\GoogleCardboard.dll"    target="lib\net8.0-android\GoogleCardboard.aar" />
+    <file src="Artifacts\MonoGame.Framework\Cardboard\Release\net8.0-android\GoogleCardboard.dll"    target="lib\net8.0-android\GoogleCardboard.dll" />
+        
     <!-- Nuget Icon -->
     <file src="Images\Icon.png" target="\" />
   </files>

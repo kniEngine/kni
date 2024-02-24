@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFramework>net8.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+  </PropertyGroup>
+	
+  <ItemGroup>
+    <AndroidLibrary Remove="Jars\cardboard.jar" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <TransformFile Remove="Transforms\EnumFields.xml" />
+    <TransformFile Remove="Transforms\EnumMethods.xml" />
+    <TransformFile Remove="Transforms\Metadata.xml" />
+  </ItemGroup>
+	
+</Project>
