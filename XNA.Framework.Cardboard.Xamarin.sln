@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Audio", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Media", "src\Xna.Framework.Media\XNA.Framework.Media.csproj", "{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Framework.Cardboard", "MonoGame.Framework\XNA.Framework.Cardboard.Xamarin.csproj", "{30FE0FB2-0F00-4196-AE1C-D3EE54F267E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Framework.Cardboard.Xamarin", "MonoGame.Framework\XNA.Framework.Cardboard.Xamarin.csproj", "{30FE0FB2-0F00-4196-AE1C-D3EE54F267E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
