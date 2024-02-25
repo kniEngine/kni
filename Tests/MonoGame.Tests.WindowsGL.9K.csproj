@@ -17,13 +17,13 @@
     <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>TRACE;WINDOWSDX;DESKTOPGL</DefineConstants>
+    <DefineConstants>WINDOWSDX;DESKTOPGL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>TRACE;WINDOWSDX;DESKTOPGL</DefineConstants>
+    <DefineConstants>WINDOWSDX;DESKTOPGL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
