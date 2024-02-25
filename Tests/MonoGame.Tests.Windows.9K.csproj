@@ -10,6 +10,7 @@
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,13 +18,11 @@
     <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Debug\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>WINDOWSDX;DIRECTX</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Windows\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Release\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>WINDOWSDX;DIRECTX</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

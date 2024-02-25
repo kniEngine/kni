@@ -10,6 +10,7 @@
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <DefineConstants>$(DefineConstants);WINDOWSDX;DESKTOPGL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,13 +18,11 @@
     <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>WINDOWSDX;DESKTOPGL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Tests.xml</DocumentationFile>
-    <DefineConstants>WINDOWSDX;DESKTOPGL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
