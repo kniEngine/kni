@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Audio", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Framework.DesktopGL", "MonoGame.Framework\XNA.Framework.DesktopGL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Tests.WindowsGL.9K", "Tests\MonoGame.Tests.WindowsGL.9K.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Media", "src\Xna.Framework.Media\XNA.Framework.Media.csproj", "{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}"
 EndProject

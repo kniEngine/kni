@@ -4,17 +4,16 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <TargetFrameworks>net472</TargetFrameworks>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ProjectGuid>{DED2DDB6-D4BE-656D-2E54-657374732E57}</ProjectGuid>
+    <ProjectGuid>{DED2DDB6-D4BE-B1B4-2E54-657374732E57}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>MonoGame.Tests</RootNamespace>
-    <AssemblyName>MonoGame.Tests</AssemblyName>
+    <AssemblyName>Kni.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX</DefineConstants>
+    <OutputPath>bin\DesktopGL\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\DesktopGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>$(DefineConstants);WINDOWSDX;DESKTOPGL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
 
@@ -28,15 +27,6 @@
   <ItemGroup>
     <PackageReference Include="NUnitLite" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="SharpDX">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.DXGI.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -83,9 +73,8 @@
     <Compile Include="Framework\VertexTests.cs" />
     <Compile Include="Framework\Audio\SoundEffectTest.cs" />
     <Compile Include="Framework\Audio\XactTest.cs" />
-    <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
-    <Compile Include="Framework\WindowsDX\Audio\SoundEffectInstanceXAudioTest.cs" />
+    <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Components\DrawFrameNumberComponent.cs" />
     <Compile Include="Framework\Components\FlexibleGameComponent.cs" />
     <Compile Include="Framework\Components\FrameCompareComponent.cs" />
@@ -107,7 +96,6 @@
     <Compile Include="Framework\Graphics\GraphicsDeviceTestFixtureBase.cs" />
     <Compile Include="Framework\Graphics\IndexBufferTest.cs" />
     <Compile Include="Framework\Graphics\Texture2DNonVisualTest.cs" />
-    <Compile Include="Framework\Graphics\Texture3DNonVisualTest.cs" />
     <Compile Include="Framework\Input\GamePadTest.cs" />
     <Compile Include="Framework\Input\JoystickTest.cs" />
     <Compile Include="Framework\Input\KeyboardTest.cs" />
@@ -120,7 +108,6 @@
     <Compile Include="Framework\Graphics\SamplerStateTest.cs" />
     <Compile Include="Framework\Graphics\ScissorRectangleTest.cs" />
     <Compile Include="Framework\Graphics\Texture2DTest.cs" />
-    <Compile Include="Framework\Graphics\Texture3DTest.cs" />
     <Compile Include="Framework\Graphics\TextureCubeTest.cs" />
     <Compile Include="Framework\Graphics\VertexBufferTest.cs" />
     <Compile Include="Framework\Visual\MiscellaneousTests.cs" />
@@ -133,37 +120,7 @@
     <Compile Include="Framework\Graphics\ProfileReachTest.cs" />
     <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
     <Compile Include="Framework\Visual\VisualTestGame.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="ContentPipeline\BuilderTargetsTest.cs" />
-    <Compile Include="ContentPipeline\AssetTestClasses.cs" />
     <Compile Include="ContentPipeline\AssetTestUtility.cs" />
-    <Compile Include="ContentPipeline\AudioContentTests.cs" />
-    <Compile Include="ContentPipeline\BitmapContentTests.cs" />
-    <Compile Include="ContentPipeline\ContentCompilerTest.cs" />
-    <Compile Include="ContentPipeline\EffectProcessorTests.cs" />
-    <Compile Include="ContentPipeline\FbxImporterTests.cs" />
-    <Compile Include="ContentPipeline\FontDescriptionTests.cs" />
-    <Compile Include="ContentPipeline\FontTextureProcessorTests.cs" />
-    <Compile Include="ContentPipeline\FontDescriptionProcessorTests.cs" />
-    <Compile Include="ContentPipeline\IntermediateDeserializerTest.cs" />
-    <Compile Include="ContentPipeline\IntermediateSerializerTest.cs" />
-    <Compile Include="ContentPipeline\MeshBuilderTests.cs" />
-    <Compile Include="ContentPipeline\MeshHelperTest.cs" />
-    <Compile Include="ContentPipeline\ModelProcessorTests.cs" />
-    <Compile Include="ContentPipeline\Mp3ImporterTests.cs" />
-    <Compile Include="ContentPipeline\OggImporterTests.cs" />
-    <Compile Include="ContentPipeline\TestCompiler.cs" />
-    <Compile Include="ContentPipeline\OpenAssetImporterTests.cs" />
-    <Compile Include="ContentPipeline\TestContentBuildLogger.cs" />
-    <Compile Include="ContentPipeline\TestImporterContext.cs" />
-    <Compile Include="ContentPipeline\TestProcessorContext.cs" />
-    <Compile Include="ContentPipeline\TextureContentTests.cs" />
-    <Compile Include="ContentPipeline\TextureImporterTests.cs" />
-    <Compile Include="ContentPipeline\TextureProcessorTests.cs" />
-    <Compile Include="ContentPipeline\WavImporterTests.cs" />
-    <Compile Include="ContentPipeline\WmaImporterTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -346,60 +303,6 @@
     </Content>
     <Content Include="..\MonoGame.Framework\Graphics\Effect\Shaders\Structures.fxh">
       <Link>Assets\Effects\Stock\Structures.fxh</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\DefinesTest.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\Instancing.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\ParserTest.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\PreprocessorInclude.fxh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\PreprocessorTest.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\Include.fxh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\TextureArrayEffect.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\VertexTextureEffect.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\Bevels.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\BlackOut.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\ColorFlip.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\Grayscale.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\HighContrast.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\Invert.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\NoEffect.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\RainbowH.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\CustomSpriteBatchEffect.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\CustomSpriteBatchEffectComparisonSampler.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\ReferenceImages\BlendState\VisualTests.png">
@@ -891,43 +794,31 @@
     <Content Include="Assets\Fonts\Strings.resx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\Bevels.xnb">
+    <Content Include="Assets\Effects\OpenGL\Bevels.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\BlackOut.xnb">
+    <Content Include="Assets\Effects\OpenGL\BlackOut.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\ColorFlip.xnb">
+    <Content Include="Assets\Effects\OpenGL\ColorFlip.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\Grayscale.xnb">
+    <Content Include="Assets\Effects\OpenGL\Grayscale.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\HighContrast.xnb">
+    <Content Include="Assets\Effects\OpenGL\HighContrast.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\Invert.xnb">
+    <Content Include="Assets\Effects\OpenGL\Invert.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\NoEffect.xnb">
+    <Content Include="Assets\Effects\OpenGL\NoEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\RainbowH.xnb">
+    <Content Include="Assets\Effects\OpenGL\RainbowH.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\CustomSpriteBatchEffect.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\DirectX\CustomSpriteBatchEffectComparisonSampler.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\DirectX\Instancing.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\DirectX\TextureArrayEffect.xnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Effects\DirectX\VertexTextureEffect.xnb">
+    <Content Include="Assets\Effects\OpenGL\CustomSpriteBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Textures\GlassPane.xnb">
@@ -1111,6 +1002,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\ThirdParty\Dependencies\SDL\Windows\x64\SDL2.dll">
+      <Link>SDL2.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\ThirdParty\Dependencies\openal-soft\Windows\x64\soft_oal.dll">
+      <Link>soft_oal.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
 
@@ -1155,13 +1057,9 @@
       <Project>{63486463-8aee-483e-862a-7720cd62b4df}</Project>
       <Name>Xna.Framework.Content.Pipeline.Media</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.WindowsDX11.csproj">
-      <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
-      <Name>XNA.Framework.WindowsDX11</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tools\MonoGame.Content.Builder\MGCB.Windows.9K.csproj">
-      <Project>{4243474D-572E-6E69-646F-77734D474342}</Project>
-      <Name>MGCB.Windows.9K</Name>
+    <ProjectReference Include="..\MonoGame.Framework\XNA.Framework.DesktopGL.csproj">
+      <Project>{6D75E618-19CA-4C51-9546-F10965FBC0B8}</Project>
+      <Name>XNA.Framework.DesktopGL</Name>
     </ProjectReference>
   </ItemGroup>
 
