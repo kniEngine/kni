@@ -21,7 +21,6 @@
     <IntermediateOutputPath>obj\Windows\AnyCPU\Debug</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Debug\MonoGame.Tests.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE;WINDOWSDX;DIRECTX</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -30,7 +29,6 @@
     <IntermediateOutputPath>obj\Windows\AnyCPU\Release</IntermediateOutputPath>
     <DocumentationFile>bin\Windows\AnyCPU\Release\MonoGame.Tests.xml</DocumentationFile>
     <DefineConstants>TRACE;WINDOWSDX;DIRECTX</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
