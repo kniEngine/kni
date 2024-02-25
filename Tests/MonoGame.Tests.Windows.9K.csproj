@@ -13,7 +13,6 @@
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <OutputPath>bin\Windows\AnyCPU\Debug</OutputPath>
