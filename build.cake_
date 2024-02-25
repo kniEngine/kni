@@ -149,7 +149,7 @@ Task("TestDesktopGL")
     .Does(() =>
 {
     CreateDirectory("Artifacts/Tests/DesktopGL/Debug");
-    DotNetRun("../../../../Tests/MonoGame.Tests.DesktopGL.csproj", "", new DotNetRunSettings
+    DotNetRun("../../../../Tests/Kni.Tests.DesktopGL.csproj", "", new DotNetRunSettings
     {
         WorkingDirectory = "Artifacts/Tests/DesktopGL/Debug",
         ArgumentCustomization = args => args.Append("--teamcity")
@@ -171,7 +171,7 @@ Task("TestWindowsDX")
     .Does(() =>
 {
     CreateDirectory("Artifacts/Tests/WindowsDX/Debug");
-    DotNetRun("../../../../Tests/MonoGame.Tests.WindowsDX.csproj", "", new DotNetRunSettings
+    DotNetRun("../../../../Tests/Kni.Tests.WindowsDX11.csproj", "", new DotNetRunSettings
     {
         WorkingDirectory = "Artifacts/Tests/WindowsDX/Debug",
         ArgumentCustomization = args => args.Append("--teamcity")

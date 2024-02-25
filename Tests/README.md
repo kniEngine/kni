@@ -1,17 +1,17 @@
-# MonoGame Tests
+# KNI Tests
 
-The MonoGame Tests run against XNA on Windows and MonoGame on Windows,
-macOS and Linux.  They serve as an assurance that MonoGame conforms
+The KNI Tests run against XNA on Windows and KNI on Windows,
+macOS and Linux.  They serve as an assurance that KNI conforms
 as closely as possible to XNA.
 
-Simple unit tests make assertions about MonoGame's core class
+Simple unit tests make assertions about KNI's core class
 properties, methods and behavior to guarantee compatibility with XNA in
 those regards.  Additionally, visual tests verify via frame capture and
-comparison that MonoGame renders equivalently to XNA.
+comparison that KNI renders equivalently to XNA.
 
 Currently, on Windows, the tests can be run using NUnit and target
-either XNA or MonoGame.  On macOS and Linux, the tests target
-MonoGame and are implemented in an executable assembly that can be run
+either XNA or KNI.  On macOS and Linux, the tests target
+KNI and are implemented in an executable assembly that can be run
 and debugged directly.  After execution using the custom test runner,
 and HTML report of the results will be loaded in your default browser,
 and a log of stdout can be found in bin\$(Configuration)\stdout.txt.
@@ -64,7 +64,7 @@ calls and can render as usual in between.
 If you still think you need a visual test to properly test a feature,
 read the paragraphs below to get a sense of how to get started.
 
-MonoGame's visual tests are implemented as ```Game```s and
+KNI's visual tests are implemented as ```Game```s and
 ```GameComponent```s whose output is captured and compared to known-good
 reference renderings.  Performance is ignored in these tests:  the focus
 here is correct drawing.

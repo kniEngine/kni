@@ -206,7 +206,7 @@
   <target name="run_tests" description="Run all the tests" >
 
     <if test="${os == 'Win32NT' and '$rununittests'=='true'  }">
-      <exec program="MonoGame.Tests.exe" workingdir="Tests/bin/Windows/AnyCPU/Release/" basedir="Test/bin/Windows/AnyCPU/Release/"/>
+      <exec program="Kni.Tests.exe" workingdir="Tests/bin/WindowsDX11/AnyCPU/Release/net472/" basedir="Tests/bin/WindowsDX11/AnyCPU/Release/net472/"/>
     </if>
 
   </target>
