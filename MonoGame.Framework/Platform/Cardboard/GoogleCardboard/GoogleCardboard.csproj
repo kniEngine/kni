@@ -6,13 +6,17 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <AndroidLibrary Remove="Jars\cardboard.jar" />
+    <AndroidLibrary Include="Jars\cardboard.jar" />
   </ItemGroup>
 	
   <ItemGroup>
-    <TransformFile Remove="Transforms\EnumFields.xml" />
-    <TransformFile Remove="Transforms\EnumMethods.xml" />
-    <TransformFile Remove="Transforms\Metadata.xml" />
+    <TransformFile Include="Transforms\EnumFields.xml" />
+    <TransformFile Include="Transforms\EnumMethods.xml" />
+    <TransformFile Include="Transforms\Metadata.xml" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <None Remove="Additions\AboutAdditions.txt" />
   </ItemGroup>
 	
 </Project>
