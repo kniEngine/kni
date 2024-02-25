@@ -11,9 +11,9 @@
     <AssemblyName>MonoGame.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DocumentationFile>bin\Windows\$(Platform)\$(Configuration)\\MonoGame.Tests.xml</DocumentationFile>
     <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>

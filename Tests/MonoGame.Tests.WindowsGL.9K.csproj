@@ -10,9 +10,9 @@
     <AssemblyName>MonoGame.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\WindowsGL\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\WindowsGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\$(Platform)\$(Configuration)\\MonoGame.Tests.xml</DocumentationFile>
     <DefineConstants>$(DefineConstants);WINDOWSDX;DESKTOPGL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
