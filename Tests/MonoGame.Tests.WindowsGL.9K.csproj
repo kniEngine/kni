@@ -10,19 +10,16 @@
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <OutputPath>bin\WindowsGL\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\WindowsGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DocumentationFile>bin\WindowsGL\$(Platform)\$(Configuration)\\MonoGame.Tests.xml</DocumentationFile>
     <DefineConstants>$(DefineConstants);WINDOWSDX;DESKTOPGL</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\WindowsGL\AnyCPU\Debug</OutputPath>
-    <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\AnyCPU\Debug\MonoGame.Tests.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\WindowsGL\AnyCPU\Release</OutputPath>
-    <IntermediateOutputPath>obj\WindowsGL\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsGL\AnyCPU\Release\MonoGame.Tests.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
