@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DED2DDB6-D4BE-656D-2E54-657374732E57}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>MonoGame.Tests</RootNamespace>
