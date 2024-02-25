@@ -22,7 +22,6 @@
     <DocumentationFile>bin\Windows\AnyCPU\Debug\MonoGame.Tests.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE;WINDOWSDX;DIRECTX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -32,7 +31,6 @@
     <DocumentationFile>bin\Windows\AnyCPU\Release\MonoGame.Tests.xml</DocumentationFile>
     <DefineConstants>TRACE;WINDOWSDX;DIRECTX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
