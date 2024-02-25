@@ -3,7 +3,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <ProjectGuid>{DED2DDB6-D4BE-656D-2E54-657374732E57}</ProjectGuid>
     <OutputType>Exe</OutputType>
