@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
     <ProjectGuid>{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}</ProjectGuid>
     <AssemblyName>Xna.Framework.Content</AssemblyName>

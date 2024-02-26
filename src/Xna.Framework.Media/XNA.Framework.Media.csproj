@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
     <ProjectGuid>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</ProjectGuid>
     <AssemblyName>Xna.Framework.Media</AssemblyName>

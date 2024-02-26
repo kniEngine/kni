@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
     <ProjectGuid>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</ProjectGuid>
     <AssemblyName>Xna.Framework.Graphics</AssemblyName>
