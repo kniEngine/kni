@@ -807,6 +807,10 @@ namespace Microsoft.Xna.Framework
             if (_game.GraphicsDevice != null)
             {
                 ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer = _glFramebuffer;
+
+                // GL Context is modified by cardboard. We have to reset your cached state.
+                GraphicsContext mainContext = ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.MainContext;
+                ((IPlatformGraphicsContext)mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().Cardboard_ResetContext();
             }
 
             if (_game.GraphicsDevice != null)
