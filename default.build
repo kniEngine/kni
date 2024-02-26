@@ -4,7 +4,6 @@
   <description>The KNI automated build script.</description>
 
   <property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
-  <property name="msbuild15" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\msbuild.exe" />
   <property name="msbuild17" value="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe" />
 
   <property name="nugetPath" value="C:\Program Files (x86)\NuGet3\nuget.exe" />
@@ -173,7 +172,7 @@
       </if>
       -->
       <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild15}" commandline="XNA.Framework.Android.Xamarin.sln /t:Build /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="XNA.Framework.Android.Xamarin.sln /t:Build /p:Configuration=Release" />
       </if>
 
       <exec program="dotnet" commandline='build XNA.Framework.Android.netcore.sln /t:Restore /p:Configuration=Release' />
