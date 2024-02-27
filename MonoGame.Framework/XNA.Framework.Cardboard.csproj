@@ -48,7 +48,6 @@
       <Project>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</Project>
       <Name>Xna.Framework.Media</Name>
     </ProjectReference>
-    <ProjectReference Include="Platform\Cardboard\GoogleCardboard\GoogleCardboard.csproj" />
   </ItemGroup>
 
   <Import Project="MonoGame.Framework.Common.targets" />
