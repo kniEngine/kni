@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -18,7 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (current != null)
                     return current;
 
-                Console.WriteLine("GraphicsFactory not found..");
+                Console.WriteLine("GraphicsFactory not found.");
                 Console.WriteLine("Initialize graphics with 'GraphicsFactory.RegisterGraphicsFactory(new ConcreteGraphicsFactory());'.");
 
                 GraphicsFactory graphicsFactory = CreateGraphicsFactory();
@@ -33,21 +34,21 @@ namespace Microsoft.Xna.Platform.Graphics
             Console.WriteLine("Registering Concrete GraphicsFactoryStrategy through reflection.");
 
             // find and create Concrete GraphicsFactoryStrategy through reflection.
-            var currentAsm = typeof(GraphicsFactory).Assembly;
+            Assembly currentAsm = typeof(GraphicsFactory).Assembly;
 
             // search in current Assembly
-            foreach (var type in currentAsm.GetExportedTypes())
+            foreach (Type type in currentAsm.GetExportedTypes())
                 if (type.IsSubclassOf(typeof(GraphicsFactory)) && !type.IsAbstract)
                     return (GraphicsFactory)Activator.CreateInstance(type);
 
             // search in loaded Assemblies
-            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (var refAsm in asm.GetReferencedAssemblies())
+                foreach (AssemblyName refAsm in asm.GetReferencedAssemblies())
                 {
                     if (refAsm.FullName == currentAsm.FullName)
                     {
-                        foreach (var type in asm.GetExportedTypes())
+                        foreach (Type type in asm.GetExportedTypes())
                             if (type.IsSubclassOf(typeof(GraphicsFactory)) && !type.IsAbstract)
                                 return (GraphicsFactory)Activator.CreateInstance(type);
                     }

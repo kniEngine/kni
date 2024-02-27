@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 
 namespace Microsoft.Xna.Platform
@@ -18,9 +19,8 @@ namespace Microsoft.Xna.Platform
                 if (current != null)
                     return current;
 
-                Console.WriteLine("TitleContainerFactory not found..");
+                Console.WriteLine("TitleContainerFactory not found.");
                 Console.WriteLine("Initialize title with 'TitleContainerFactory.RegisterTitleContainerFactory(new ConcreteTitleContainerFactory());'.");
-
                 TitleContainerFactory titleContainerFactory = CreateTitleContainerFactory();
                 TitleContainerFactory.RegisterTitleContainerFactory(titleContainerFactory);
 
@@ -33,21 +33,21 @@ namespace Microsoft.Xna.Platform
             Console.WriteLine("Registering Concrete TitleContainerFactoryStrategy through reflection.");
 
             // find and create Concrete TitleContainerStrategy through reflection.
-            var currentAsm = typeof(TitleContainerStrategy).Assembly;
+            Assembly currentAsm = typeof(TitleContainerStrategy).Assembly;
 
             // search in current Assembly
-            foreach (var type in currentAsm.GetExportedTypes())
+            foreach (Type type in currentAsm.GetExportedTypes())
                 if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
                     return (TitleContainerFactory)Activator.CreateInstance(type);
 
             // search in loaded Assemblies
-            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (var refAsm in asm.GetReferencedAssemblies())
+                foreach (AssemblyName refAsm in asm.GetReferencedAssemblies())
                 {
                     if (refAsm.FullName == currentAsm.FullName)
                     {
-                        foreach (var type in asm.GetExportedTypes())
+                        foreach (Type type in asm.GetExportedTypes())
                             if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
                                 return (TitleContainerFactory)Activator.CreateInstance(type);
                     }

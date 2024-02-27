@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework.Audio;
 
 namespace Microsoft.Xna.Platform.Audio
@@ -18,7 +19,7 @@ namespace Microsoft.Xna.Platform.Audio
                 if (current != null)
                     return current;
 
-                Console.WriteLine("AudioFactory not found..");
+                Console.WriteLine("AudioFactory not found.");
                 Console.WriteLine("Initialize audio with 'AudioFactory.RegisterAudioFactory(new ConcreteAudioFactory());'.");
                 AudioFactory audioFactory = CreateAudioFactory();
                 AudioFactory.RegisterAudioFactory(audioFactory);
@@ -32,21 +33,21 @@ namespace Microsoft.Xna.Platform.Audio
             Console.WriteLine("Registering Concrete AudioFactoryStrategy through reflection.");
 
             // find and create Concrete AudioFactoryStrategy through reflection.
-            var currentAsm = typeof(AudioFactory).Assembly;
+            Assembly currentAsm = typeof(AudioFactory).Assembly;
 
             // seach in current Assembly
-            foreach (var type in currentAsm.GetExportedTypes())
+            foreach (Type type in currentAsm.GetExportedTypes())
                 if (type.IsSubclassOf(typeof(AudioFactory)) && !type.IsAbstract)
                     return (AudioFactory)Activator.CreateInstance(type);
 
             // seach in loaded Assemblies
-            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (var refAsm in asm.GetReferencedAssemblies())
+                foreach (AssemblyName refAsm in asm.GetReferencedAssemblies())
                 {
                     if (refAsm.FullName == currentAsm.FullName)
                     {
-                        foreach (var type in asm.GetExportedTypes())
+                        foreach (Type type in asm.GetExportedTypes())
                             if (type.IsSubclassOf(typeof(AudioFactory)) && !type.IsAbstract)
                                 return (AudioFactory)Activator.CreateInstance(type);
                     }

@@ -20,6 +20,8 @@ namespace Microsoft.Xna.Platform.Media
                 if (current != null)
                     return current;
 
+                Console.WriteLine("MediaFactory not found.");
+                Console.WriteLine("Initialize media with 'MediaFactory.RegisterMediaFactory(new ConcreteMediaFactory());'.");
                 MediaFactory mediaFactory = CreateMediaFactory();
                 MediaFactory.RegisterMediaFactory(mediaFactory);
 
