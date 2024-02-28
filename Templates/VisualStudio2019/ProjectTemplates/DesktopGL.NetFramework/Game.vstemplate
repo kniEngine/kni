@@ -1,29 +1,36 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>KNI Cross Platform Desktop Project</Name>
+    <Name>KNI Cross Platform Desktop Project (.NET Framework)</Name>
     <Description>A KNI game project for Windows, Mac and Linux using OpenGL.</Description>
     <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>KNI</ProjectSubType>
+    <LanguageTag>C#</LanguageTag>
+    <PlatformTag>DesktopGL</PlatformTag>
+    <ProjectTypeTag>Games</ProjectTypeTag>
+    <ProjectTypeTag>KNI</ProjectTypeTag>
+    <ProjectTypeTag>Desktop</ProjectTypeTag>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <ProjectSubType>
-    </ProjectSubType>
     <SortOrder>43300</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>Game</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
-    <Hidden>true</Hidden>
-    <PromptForSaveOnCreation>false</PromptForSaveOnCreation>
+    <Icon>TemplateIcon.png</Icon>
     <CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="Application.csproj" File="Application.csproj" ReplaceParameters="true">
+    <Project TargetFileName="DesktopGLApplication.csproj" File="Application.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Icon.ico">Icon.ico</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Icon.bmp">Icon.bmp</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="app.manifest">app.manifest</ProjectItem>
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Content" TargetFolderName="Content">
+        <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Content.mgcb">Content.mgcb</ProjectItem>
       </Folder>
     </Project>
   </TemplateContent>
