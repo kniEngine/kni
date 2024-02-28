@@ -20,7 +20,7 @@
     $if$($includeKeyFile$==true)
     <PackageCertificateKeyFile>$ext_safeprojectname$_TemporaryKey.pfx</PackageCertificateKeyFile>
     $endif$
-    <MonoGamePlatform>WindowsStoreApp</MonoGamePlatform>
+    <KniPlatform>WindowsStoreApp</KniPlatform>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +101,7 @@
     <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.10.9001" />
     <PackageReference Include="nkast.Xna.Framework.Media" Version="3.10.9001" />
     <PackageReference Include="MonoGame.Framework.WindowsUniversal.9000" Version="3.10.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.10.9001-rc" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -130,9 +131,9 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">
+    <KniContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">
       <Link>Content\$ext_safeprojectname$Content.mgcb</Link>
-    </MonoGameContentReference>
+    </KniContentReference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -154,5 +155,5 @@
   </PropertyGroup>
   <Import Project="..\$ext_safeprojectname$.Shared\$ext_safeprojectname$.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+
 </Project>
