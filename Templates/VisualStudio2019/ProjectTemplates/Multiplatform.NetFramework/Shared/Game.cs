@@ -24,7 +24,7 @@ namespace $ext_safeprojectname$
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 #if (ANDROID || iOS)
-            _graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
 #endif
 
         }
