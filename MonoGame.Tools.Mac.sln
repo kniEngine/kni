@@ -5,8 +5,6 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 17.1.32210.238
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.DesktopGL", "MonoGame.Framework\MonoGame.Framework.DesktopGL.csproj", "{5B5871CA-AD66-4B5E-B097-B7144CF1B570}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Content.Builder", "Tools\MonoGame.Content.Builder\MonoGame.Content.Builder.csproj", "{B3201192-46D5-40C5-A24E-493EC66D8C9B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Templates.VSMacExtension", "Templates\MonoGame.Templates.VSMacExtension\MonoGame.Templates.VSMacExtension.csproj", "{5E9F1C86-8C62-4C8B-B354-AFEC30D643D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework.Content.Pipeline", "Framework.Content.Pipeline", "{7B3AE3AC-511B-4835-B677-B7F9BB22A296}"
@@ -53,18 +51,6 @@ Global
 		{5B5871CA-AD66-4B5E-B097-B7144CF1B570}.Release|x64.Build.0 = Release|Any CPU
 		{5B5871CA-AD66-4B5E-B097-B7144CF1B570}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B5871CA-AD66-4B5E-B097-B7144CF1B570}.Release|x86.Build.0 = Release|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Debug|x64.Build.0 = Debug|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Debug|x86.Build.0 = Debug|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|x64.ActiveCfg = Release|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|x64.Build.0 = Release|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|x86.ActiveCfg = Release|Any CPU
-		{B3201192-46D5-40C5-A24E-493EC66D8C9B}.Release|x86.Build.0 = Release|Any CPU
 		{5E9F1C86-8C62-4C8B-B354-AFEC30D643D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E9F1C86-8C62-4C8B-B354-AFEC30D643D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E9F1C86-8C62-4C8B-B354-AFEC30D643D4}.Debug|x64.ActiveCfg = Debug|Any CPU
