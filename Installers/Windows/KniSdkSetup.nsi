@@ -79,10 +79,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ; Install the VS support files.
   SetOutPath ${MSBuildInstallDir}
   File '..\..\Tools\Build.Targets\Kni.Content.Builder.targets'
-  File '..\..\Tools\Build.Targets\MonoGame.Content.Builder.targets'
-  File '..\..\Tools\Build.Targets\MonoGame.Content.Builder17.targets'
-  File '..\..\Tools\Build.Targets\MonoGame.Common.props'
-  File '..\..\Tools\MonoGame.Build.Tasks\bin\Windows\AnyCPU\Release\MonoGame.Build.Tasks.dll'
 
   ; Install the Kni tools to a single shared folder.
   SetOutPath ${MSBuildInstallDir}\Tools

@@ -225,11 +225,7 @@ Task("BuildTools")
     .IsDependentOn("BuildContentPipeline")
     .Does(() =>
 {
-    PackDotnet("Tools/MonoGame.Content.Builder/MonoGame.Content.Builder.csproj");
-
     PackDotnet("Tools/EffectCompiler/EffectCompiler.csproj");
-
-    PackDotnet("Tools/MonoGame.Content.Builder.Task/MonoGame.Content.Builder.Task.csproj");
 
     PackDotnet("Tools/MonoGame.Packaging.Flatpak/MonoGame.Packaging.Flatpak.csproj");
     
