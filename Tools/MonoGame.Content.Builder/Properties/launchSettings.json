@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Debug ContentFont": {
+      "commandName": "Project",
+      "commandLineArgs": "/@:Content.mgcb /Rebuild /SingleThread",
+      "workingDirectory": "X:\\kniEngine\\kni\\Tests\\Assets\\Projects\\Content\\"
+    },
+    "Debug DirectX Effects": {
+      "commandName": "Project",
+      "commandLineArgs": "/@:DirectX.mgcb /Rebuild /SingleThread",
+      "workingDirectory": "X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\"
+    },
+    "Debug OpenGL Effects": {
+      "commandName": "Project",
+      "commandLineArgs": "/@:OpenGL.mgcb /Rebuild /SingleThread",
+      "workingDirectory": "X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\"
+    }
+  }
+}

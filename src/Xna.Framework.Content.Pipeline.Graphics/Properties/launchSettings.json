@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Font Debug ContentFont": {
+      "commandName": "Executable",
+      "executablePath": "X:\\kniEngine\\kni\\Tools\\MonoGame.Content.Builder\\bin\\Windows\\AnyCPU\\Debug\\net8.0-windows\\MGCB.exe",
+      "commandLineArgs": "/@:Content.mgcb /Rebuild /SingleThread",
+      "workingDirectory": "X:\\kniEngine\\kni\\\\Tests\\Assets\\Projects\\Content\\"
+    }
+  }
+}
