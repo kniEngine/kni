@@ -8,14 +8,14 @@
 
   <Identity
     Name="$guid9$"
-    Publisher="$XmlEscapedPublisherDistinguishedName$"
+    Publisher="CN=PublisherDistinguishedName"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="$guid9$" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>$projectname$</DisplayName>
-    <PublisherDisplayName>$XmlEscapedPublisher$</PublisherDisplayName>
+    <PublisherDisplayName>publisherDisplayName</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
