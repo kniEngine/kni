@@ -36,11 +36,6 @@ namespace Microsoft.Xna.Platform.Graphics
             // find and create Concrete GraphicsFactoryStrategy through reflection.
             Assembly currentAsm = typeof(GraphicsFactory).Assembly;
 
-            // search in current Assembly
-            foreach (Type type in currentAsm.GetExportedTypes())
-                if (type.IsSubclassOf(typeof(GraphicsFactory)) && !type.IsAbstract)
-                    return (GraphicsFactory)Activator.CreateInstance(type);
-
             // search in loaded Assemblies
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {

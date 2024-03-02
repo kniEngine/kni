@@ -36,11 +36,6 @@ namespace Microsoft.Xna.Platform.Media
             // find and create Concrete MediaFactoryStrategy through reflection.
             Assembly currentAsm = typeof(MediaFactory).Assembly;
 
-            // search in current Assembly
-            foreach (Type type in currentAsm.GetExportedTypes())
-                if (type.IsSubclassOf(typeof(MediaFactory)) && !type.IsAbstract)
-                    return (MediaFactory)Activator.CreateInstance(type);
-
             // search in loaded Assemblies
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
