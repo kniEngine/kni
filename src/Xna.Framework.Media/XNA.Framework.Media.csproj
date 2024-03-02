@@ -30,8 +30,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="Content\ContentReaders\SongReader.cs" />
-    <Compile Include="Content\ContentReaders\VideoReader.cs" />
+    <Compile Include="Content\SongReader.cs" />
+    <Compile Include="Content\VideoReader.cs" />
   </ItemGroup>
 
   <ItemGroup>
