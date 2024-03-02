@@ -1,0 +1,7 @@
+<linker>
+  <assembly fullname="Xna.Framework.Media" >
+    <type fullname="Microsoft.Xna.Framework.Content.SongReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.VideoReader" preserve="all" />
+  </assembly>
+</linker>
+

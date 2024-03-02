@@ -1,0 +1,21 @@
+<linker>
+  <assembly fullname="Xna.Framework.Graphics" >
+	  <type fullname="Microsoft.Xna.Framework.Content.AlphaTestEffectReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.BasicEffectReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.ColorReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.DualTextureEffectReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.EffectMaterialReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.EffectReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.EnvironmentMapEffectReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.IndexBufferReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.ModelReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.SkinnedEffectReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.SpriteFontReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.Texture2DReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.Texture3DReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.TextureCubeReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.TextureReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.VertexBufferReader" preserve="all" />
+	  <type fullname="Microsoft.Xna.Framework.Content.VertexDeclarationReader" preserve="all" />
+  </assembly>
+</linker>

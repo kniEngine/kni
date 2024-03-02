@@ -1,0 +1,17 @@
+<linker>
+  <assembly fullname="MonoGame.Framework" >
+    <type fullname="Microsoft.Xna.Platform.ConcreteTitleContainerFactory" >
+      <method name=".ctor" />
+    </type>
+    <type fullname="Microsoft.Xna.Platform.Graphics.ConcreteGraphicsFactory" >
+      <method name=".ctor" />
+    </type>
+    <type fullname="Microsoft.Xna.Platform.Audio.ConcreteAudioFactory" >
+      <method name=".ctor" />
+    </type>
+    <type fullname="Microsoft.Xna.Platform.Media.ConcreteMediaFactory">
+      <method name=".ctor" />
+    </type>
+  </assembly>
+</linker>
+
