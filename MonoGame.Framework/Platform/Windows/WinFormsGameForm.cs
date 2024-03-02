@@ -293,7 +293,7 @@ namespace Microsoft.Xna.Framework.Windows
                     return ((scancode & 0x1FF) == 0x36)
                                ? Microsoft.Xna.Framework.Input.Keys.RightShift
                                 : Microsoft.Xna.Framework.Input.Keys.LeftShift;
-                // Note that the Alt key is now refered to as Menu.
+                // Note that the Alt key is now referred to as Menu.
                 case System.Windows.Forms.Keys.Menu:
                 case System.Windows.Forms.Keys.Alt:
                     return extended
