@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework
 
             if (inputElement is SwapChainPanel)
             {
-                // Create a thread to precess input events.
+                // Create a thread to process input events.
                 WorkItemHandler workItemHandler = new WorkItemHandler( (action) =>
                 {
                     CoreInputDeviceTypes inputDevices = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
@@ -291,7 +291,7 @@ namespace Microsoft.Xna.Framework
                     // we can detect right shift by checking the scancode value.
                     // left shift is 0x2A, right shift is 0x36. IsExtendedKey is always false.
                     return (keyStatus.ScanCode == 0x36) ? Keys.RightShift : Keys.LeftShift;
-                // Note that the Alt key is now refered to as Menu.
+                // Note that the Alt key is now referred to as Menu.
                 // ALT key doesn't get fired by KeyUp/KeyDown events.
                 // One solution could be to check CoreWindow.GetKeyState(...) on every tick.
                 case Windows.System.VirtualKey.Menu:
