@@ -12,6 +12,7 @@
     <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <ProjectGuid>{6D75E618-19CA-4C51-9546-F10965FBC0B8}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

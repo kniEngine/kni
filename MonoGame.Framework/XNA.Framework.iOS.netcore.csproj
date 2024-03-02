@@ -15,6 +15,7 @@
     <TargetFramework>net8.0-ios</TargetFramework>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <LangVersion>Default</LangVersion>
+    <IsTrimmable>True</IsTrimmable>
     <ProjectGuid>{D93291EF-3419-412E-BC56-376BD6A02224}</ProjectGuid>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>

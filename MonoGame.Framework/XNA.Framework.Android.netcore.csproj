@@ -14,6 +14,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net8.0-android</TargetFramework>
     <LangVersion>Default</LangVersion>
+    <IsTrimmable>True</IsTrimmable>
     <ProjectGuid>{CF09A088-6F64-4FA3-8FF8-E5B39F8BB0E6}</ProjectGuid>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
