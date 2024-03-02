@@ -35,11 +35,6 @@ namespace Microsoft.Xna.Platform.Audio
             // find and create Concrete AudioFactoryStrategy through reflection.
             Assembly currentAsm = typeof(AudioFactory).Assembly;
 
-            // seach in current Assembly
-            foreach (Type type in currentAsm.GetExportedTypes())
-                if (type.IsSubclassOf(typeof(AudioFactory)) && !type.IsAbstract)
-                    return (AudioFactory)Activator.CreateInstance(type);
-
             // seach in loaded Assemblies
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {

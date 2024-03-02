@@ -35,11 +35,6 @@ namespace Microsoft.Xna.Platform
             // find and create Concrete TitleContainerStrategy through reflection.
             Assembly currentAsm = typeof(TitleContainerStrategy).Assembly;
 
-            // search in current Assembly
-            foreach (Type type in currentAsm.GetExportedTypes())
-                if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
-                    return (TitleContainerFactory)Activator.CreateInstance(type);
-
             // search in loaded Assemblies
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
