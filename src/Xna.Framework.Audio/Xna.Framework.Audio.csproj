@@ -13,6 +13,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
+    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
     <ProjectGuid>{3F81F76D-F0F3-44FE-A256-40AF153C33F7}</ProjectGuid>
     <AssemblyName>Xna.Framework.Audio</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework.Audio</RootNamespace>
