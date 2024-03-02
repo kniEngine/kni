@@ -1,0 +1,43 @@
+<linker>
+  <assembly fullname="Xna.Framework.Content" >
+    <type fullname="Microsoft.Xna.Framework.Content.ArrayReader`1" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.BooleanReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.BoundingBoxReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.BoundingFrustumReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.BoundingSphereReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.ByteReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.CharReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.ComplexReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.CurveReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.DateTimeReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.DecimalReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.DictionaryReader`2" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.DoubleReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.EnumReader`1" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.ExternalReferenceReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.Int16Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.Int32Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.Int64Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.ListReader`1" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.MatrixReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.MultiArrayReader`1" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.NullableReader`1" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.PlaneReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.PointReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.QuaternionReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.RayReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.RectangleReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.ReflectiveReader`1" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.SByteReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.SingleReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.StringReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.TimeSpanReader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.UInt16Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.UInt32Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.UInt64Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.Vector2Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.Vector3Reader" preserve="all" />
+    <type fullname="Microsoft.Xna.Framework.Content.Vector4Reader" preserve="all" />
+  </assembly>
+</linker>
+

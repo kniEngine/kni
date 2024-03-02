@@ -1,0 +1,6 @@
+<linker>
+  <assembly fullname="Xna.Framework.Audio" >
+    <type fullname="Microsoft.Xna.Framework.Content.SoundEffectReader" preserve="all" />
+  </assembly>
+</linker>
+
