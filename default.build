@@ -219,7 +219,6 @@
     <nant buildfile="Templates/VisualStudio2019/default.build" target="build" />
     <nant buildfile="Templates/VisualStudio2022/default.build" target="build" />
     <nant buildfile="Templates/default.build" target="build" />
-    <nant buildfile="Templates/VisualStudioForMac/default.build" target="build" />
     <nant buildfile="Installers/default.build" target="build" />
   </target>
 
