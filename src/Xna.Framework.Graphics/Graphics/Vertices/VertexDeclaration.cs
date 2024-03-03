@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// properties <see cref="GraphicsResource.Name"/> and <see cref="GraphicsResource.Tag"/> are
     /// ignored in <see cref="GetHashCode"/> and <see cref="Equals(VertexDeclaration)"/>!)
     /// </remarks>
-    public class VertexDeclaration : IEquatable<VertexDeclaration>
+    public class VertexDeclaration : IEquatable<VertexDeclaration>, IDisposable
         , IPlatformVertexDeclaration
     {
 
@@ -317,5 +317,30 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             return !Equals(left, right);
         }
+
+
+        #region IDisposable Implementation
+
+        ~VertexDeclaration()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
+
+        #endregion IDisposable Implementation
+
     }
 }
