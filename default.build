@@ -30,7 +30,6 @@
     <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Clean /p:Configuration=Release" />
     
     <exec program="dotnet" commandline="build XNA.Framework.WindowsDX11.sln /t:Clean /p:Configuration=Release" />
-    <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj /t:Clean /p:Configuration=Release" />
     
     <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
     
@@ -131,8 +130,6 @@
 
       <exec program="dotnet" commandline="build XNA.Framework.WindowsDX11.sln /t:restore" />
       <exec program="dotnet" commandline="build XNA.Framework.WindowsDX11.sln /t:Build /p:Configuration=Release /m" />
-
-      <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj /t:Build /p:Configuration=Release" />
       
   </target>
   

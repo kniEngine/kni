@@ -52,7 +52,7 @@
       <Private>False</Private>
     </ProjectReference>
     <PackageReference Include="nkast.LibOVR" Version="1.0.0" />
-    <PackageReference Include="SharpDX"  Version="4.0.1" />
+    <PackageReference Include="SharpDX" Version="4.0.1" />
     <PackageReference Include="SharpDX.DXGI" Version="4.0.1" />
     <PackageReference Include="SharpDX.Direct3D11" Version="4.0.1" />
   </ItemGroup>
