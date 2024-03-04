@@ -5,6 +5,8 @@
     <TargetFramework>net8.0-android</TargetFramework>
     <ProjectGuid>$guid2$</ProjectGuid>
     <OutputType>Exe</OutputType>
+    <IsTrimmable>True</IsTrimmable>
+	<TrimMode>partial</TrimMode>
     <RootNamespace>$ext_safeprojectname$</RootNamespace>
     <AssemblyName>$ext_safeprojectname$</AssemblyName>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>

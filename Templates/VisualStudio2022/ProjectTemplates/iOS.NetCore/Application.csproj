@@ -6,6 +6,8 @@
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Exe</OutputType>
+    <IsTrimmable>True</IsTrimmable>
+	<TrimMode>partial</TrimMode>
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
