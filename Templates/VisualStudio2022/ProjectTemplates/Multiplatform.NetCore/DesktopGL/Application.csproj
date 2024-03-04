@@ -6,6 +6,8 @@
     <RollForward>Major</RollForward>
     <ProjectGuid>$guid4$</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <PublishTrimmed>True</PublishTrimmed>
+    <PublishAot>True</PublishAot>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>$ext_safeprojectname$</RootNamespace>
     <AssemblyName>$ext_safeprojectname$</AssemblyName>
