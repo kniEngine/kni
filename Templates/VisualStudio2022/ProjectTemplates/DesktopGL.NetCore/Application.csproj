@@ -7,6 +7,7 @@
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <PublishTrimmed>True</PublishTrimmed>
+    <PublishAot>True</PublishAot>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
