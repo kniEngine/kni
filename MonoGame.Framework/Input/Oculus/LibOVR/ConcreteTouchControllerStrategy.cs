@@ -62,6 +62,8 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             {
                 hasXButton = true;
                 hasYButton = true;
+                hasLeftXThumbStick = true;
+                hasLeftYThumbStick = true;
                 //capabilities.HasLeftStickButton = true;
                 //capabilities.HasStartButton = true;
             }
@@ -70,6 +72,8 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             {
                 hasAButton = true;
                 hasBButton = true;
+                hasRightXThumbStick = true;
+                hasRightYThumbStick = true;
                 //capabilities.HasRightStickButton = true;
                 //capabilities.HasBackButton = true;
             }
