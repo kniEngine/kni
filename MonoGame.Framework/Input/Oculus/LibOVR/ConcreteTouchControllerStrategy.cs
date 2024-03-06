@@ -1,7 +1,8 @@
-﻿// Copyright (C)2022 Nick Kastellanos
+﻿// Copyright (C)2022-24 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Oculus;
@@ -134,11 +135,9 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             Buttons buttons = default(Buttons);
             Buttons touches = default(Buttons);
 
-            //thumbSticks = new GamePadThumbSticks(
-            //    leftPosition: new Vector2(gamepad.LeftThumbX, gamepad.LeftThumbY) / (float)short.MaxValue,
-            //    rightPosition: new Vector2(gamepad.RightThumbX, gamepad.RightThumbY) / (float)short.MaxValue,
-            //        leftDeadZoneMode: leftDeadZoneMode,
-            //        rightDeadZoneMode: rightDeadZoneMode);
+            thumbSticks = new GamePadThumbSticks(
+                leftPosition:  new Vector2(ovrInputState.Thumbstick[0].X, ovrInputState.Thumbstick[0].Y),
+                rightPosition: new Vector2(ovrInputState.Thumbstick[1].X, ovrInputState.Thumbstick[1].Y));
 
             triggers = new GamePadTriggers(
                     leftTrigger: ovrInputState.IndexTrigger[0],
