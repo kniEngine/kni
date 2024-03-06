@@ -173,6 +173,8 @@ namespace Microsoft.Xna.Platform.Input.Oculus
 
             float TriggerThresholdOn = 0.6f;
             float TriggerThresholdOff = 0.7f;
+            float ThumbstickThresholdOn = 0.5f;
+            float ThumbstickThresholdOff = 0.4f;
             // virtual trigger buttons
             if (ovrInputState.IndexTrigger[0] > TriggerThresholdOn && (_virtualButtons & Buttons.LeftTrigger) == 0)
                 _virtualButtons |= Buttons.LeftTrigger;
@@ -191,9 +193,41 @@ namespace Microsoft.Xna.Platform.Input.Oculus
                 _virtualButtons |= Buttons.RightGrip;
             else if (ovrInputState.HandTriggerRaw[1] < TriggerThresholdOff && (_virtualButtons & Buttons.RightGrip) != 0)
                 _virtualButtons &= ~Buttons.RightGrip;
+            // virtual thumbstick buttons
+            if (ovrInputState.Thumbstick[0].X < -ThumbstickThresholdOn && (_virtualButtons & Buttons.LeftThumbstickLeft) == 0)
+                _virtualButtons |= Buttons.LeftThumbstickLeft;
+            else if (ovrInputState.Thumbstick[0].X > -ThumbstickThresholdOff && (_virtualButtons & Buttons.LeftThumbstickLeft) != 0)
+                _virtualButtons &= ~Buttons.LeftThumbstickLeft;
+            if (ovrInputState.Thumbstick[1].X < -ThumbstickThresholdOn && (_virtualButtons & Buttons.RightThumbstickLeft) == 0)
+                _virtualButtons |= Buttons.RightThumbstickLeft;
+            else if (ovrInputState.Thumbstick[1].X > -ThumbstickThresholdOff && (_virtualButtons & Buttons.RightThumbstickLeft) != 0)
+                _virtualButtons &= ~Buttons.RightThumbstickLeft;
+            if (ovrInputState.Thumbstick[0].X > ThumbstickThresholdOn && (_virtualButtons & Buttons.LeftThumbstickRight) == 0)
+                _virtualButtons |= Buttons.LeftThumbstickRight;
+            else if (ovrInputState.Thumbstick[0].X < ThumbstickThresholdOff && (_virtualButtons & Buttons.LeftThumbstickRight) != 0)
+                _virtualButtons &= ~Buttons.LeftThumbstickRight;
+            if (ovrInputState.Thumbstick[1].X > ThumbstickThresholdOn && (_virtualButtons & Buttons.RightThumbstickRight) == 0)
+                _virtualButtons |= Buttons.RightThumbstickRight;
+            else if (ovrInputState.Thumbstick[1].X < ThumbstickThresholdOff && (_virtualButtons & Buttons.RightThumbstickRight) != 0)
+                _virtualButtons &= ~Buttons.RightThumbstickRight;
+            if (ovrInputState.Thumbstick[0].Y < -ThumbstickThresholdOn && (_virtualButtons & Buttons.LeftThumbstickDown) == 0)
+                _virtualButtons |= Buttons.LeftThumbstickDown;
+            else if (ovrInputState.Thumbstick[0].Y > -ThumbstickThresholdOff && (_virtualButtons & Buttons.LeftThumbstickDown) != 0)
+                _virtualButtons &= ~Buttons.LeftThumbstickDown;
+            if (ovrInputState.Thumbstick[1].Y < -ThumbstickThresholdOn && (_virtualButtons & Buttons.RightThumbstickDown) == 0)
+                _virtualButtons |= Buttons.RightThumbstickDown;
+            else if (ovrInputState.Thumbstick[1].Y > -ThumbstickThresholdOff && (_virtualButtons & Buttons.RightThumbstickDown) != 0)
+                _virtualButtons &= ~Buttons.RightThumbstickDown;
+            if (ovrInputState.Thumbstick[0].Y > ThumbstickThresholdOn && (_virtualButtons & Buttons.LeftThumbstickUp) == 0)
+                _virtualButtons |= Buttons.LeftThumbstickUp;
+            else if (ovrInputState.Thumbstick[0].Y < ThumbstickThresholdOff && (_virtualButtons & Buttons.LeftThumbstickUp) != 0)
+                _virtualButtons &= ~Buttons.LeftThumbstickUp;
+            if (ovrInputState.Thumbstick[1].Y > ThumbstickThresholdOn && (_virtualButtons & Buttons.RightThumbstickUp) == 0)
+                _virtualButtons |= Buttons.RightThumbstickUp;
+            else if (ovrInputState.Thumbstick[1].Y < ThumbstickThresholdOff && (_virtualButtons & Buttons.RightThumbstickUp) != 0)
+                _virtualButtons &= ~Buttons.RightThumbstickUp;
 
             buttons |= _virtualButtons;
-
 
             // left touches
             if (((int)ovrInputState.Touches & (int)OvrTouch.A) != 0)
