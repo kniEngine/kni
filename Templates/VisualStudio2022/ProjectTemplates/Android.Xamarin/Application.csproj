@@ -50,13 +50,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="nkast.Xna.Framework" Version="3.10.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.10.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.10.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.10.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.10.9001" />
-    <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.10.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.10.9001-rc" />
+    <PackageReference Include="nkast.Xna.Framework" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9001" />
+    <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.11.9001" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

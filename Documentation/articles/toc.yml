@@ -17,6 +17,8 @@
   href: migrate_37.md
 - name: Migrating from 3.8.0
   href: migrate_38.md
+  name: Migrating from 3.10.9001
+  href: migrate_3_10.md
 - name: Migrating from XNA
   href: migrate_xna.md
 - name: Packaging

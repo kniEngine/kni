@@ -1,5 +1,78 @@
 ﻿# Changelog
 
+## 3.11.9001 Release - March 09, 2024
+
+### Fixed
+ - [Content.Pipeline] fixed FontDescriptionStyle (Regular,Bold,Italic) #1019, #1056, #1142.
+ - [Content.Pipeline] fixed FontDescriptionStyle flags #1053.
+ - [Content.Pipeline] fixed FontDescription.Name. Resolve FontFamily #1060.
+ - [Content.Pipeline] fixed MeshHelper.CalculateNormals() #1128.
+ - [Content.Pipeline] fixed ProcessorContext.BuildAsset<Tin,Tout> asset path #1147.
+ - [PipelineEditor] fixed content Editor layout. Preserve splitter positions & window size. #1214, #1225.
+ - [GL] bugfix: #991 zero-initialized RenderTargetBinding instances being accessed in PlatformUnbindRenderTarget #998.
+ - [Android] fixed GL InitExtensions() #1239.
+ - [Android] fixed LzxDecoderStream #1261.
+ - [UAP.XAML] fixed PresentationParameters.DeviceWindowHandle #970.
+ - fixed SoundEffectInstance finalizer #1281.
+ - fixed default initialization of PresentationParameters #985.
+ - fixed spelling errors in comments #1063, #1281, #1209.
+ - fixed WindowsDX VS2019 template #1106.
+
+### Performance
+ - Optimized VertexElements iteration #1115.
+
+### Changed
+ - [Content.Pipeline] local fonts must specify the full filename + extension #1055.
+ - [Content.Pipeline] Builder.Task nuget package to replace build targets #1139, #1140, #1141 #1224, #1270.
+ - [Content.Pipeline] VertexBufferWriter will throw PipelineException on invalid VertexData.Length #1150.
+ - [Content.Pipeline] ModelProcessor throws InvalidOperationException on invalid geometry #1151.
+ - [Content.Pipeline] ContentWriter.Write(Color) & ContentReader.ReadColor() replaced with extensions #1190, #1191.
+ - [Content.Pipeline] Upgrade content pipeline to net8 #1229, #1230, #1235.
+ - [Content.Pipeline] 2MGFX tool renamed to Knifx #1251.
+ - [Content.Pipeline] renamed stock importers #1252.
+ - [PipelineEditor] Upgrade ContentMenu to ContentMenuStrip #1213.
+ - [PipelineEditor] Upgrade content editor from net4.x to net8 #1216, #1217, #1218, #1219, #1220, #1223, #1226.
+  - set Tools icon (content editor, MGCB, 2MGFX) #1221.
+ - [BlazorGL] Upgrade WebAssembly packages to v6.0.27 #1233.
+ - [BlazorGL] Upgrade Wasm packages to v8.0.0 #1249, #1287.
+ - [Android] Disabled fast deployment in net8 template #1279.
+ - [Android/iOS] Enable trimming in iOS, Android templates #1288.
+ - [DesktopGL] Enable trimming and nativeAOT in DesktopGL templates #1288.
+ - [DX11] GraphicsAdapter.DriverType & GraphicsAdapter.UseDriverType moved to PresentationParameters #1007.
+ - [LibOVR] Upgrade LibOVR packages to v2.0 #1286.
+ - [LibOVR] implement TouchController.ThumbSticks #1290, #1291, #1292.
+ - DesktopGL & WindowsDX11 projects upgraded to netcode SDK #1131.
+ - test files merged #1129.
+ - VS2019 project templates updated to use nuget packages #1269.
+ - updated VS2022 template icons #1289.
+ - The library MonoGame.Framework is split into MonoGame.Framework, Xna.Framework.Content, Xna.Framework.Graphics, Xna.Framework.Audio, and Xna.Framework.Media #1166, #1167, #1176, #1188.
+ - PlatformInfo.GraphicsBackend marked obsolete. Use Adapter.Backend #1202.
+ - PlatformInfo.MonoGamePlatform marked obsolete.Use TitleContainer.Platform #1208.
+ - Upgrade platforms to net8 #1228, #1236.
+ - Upgrade templates to net8 #1237.
+ - Upgrade framework to net8 #1263.
+
+### Added
+ - 
+ - RenderTargetBinding(RenderTarget3D) .ctor is now visible in all platforms #982.
+ - ResourceContentReader class is now visible in all platforms #1100.
+ - Added ContentReader.BufferPool property #1092.
+ - Added MediaQueue.Count property #1182.
+ - Added Adapter.Backend #1202.
+ - Added TitleContainer.Platform #1208.
+ - Added ColorConverter class #1253.
+ - Added MGCB debug profiles #1274.
+ - Enable trimming in framework libraries #1282, 1283.
+ - VertexDeclaration implements IDisposable #1284.
+
+### Removed
+ - [UAP.XAML] removed custom game constructor #961.
+ - [UAP] removed UAP gameloop thread #968.
+ - [UAP] removed template WizardExtension #1272.
+ - removed PresentationParameters.Clear() method #962.
+ - removed PresentationParameters.SwapChanPanel property #972, #975.
+ - removed Video.FileName property #1178.
+
 ## 3.10.9001 Release - November 30, 2023
 
 ### Fixed
