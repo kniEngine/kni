@@ -87,3 +87,34 @@ with:
     <script src="_content/nkast.Wasm.Audio/js/Audio.8.0.0.js"></script>
 ```
 
+
+## Trimming
+
+### Enable Trimming (Android)
+
+Edit your .csproj file and add:
+
+```xml
+  <PropertyGroup>
+    <IsTrimmable>True</IsTrimmable>
+	<TrimMode>partial</TrimMode>	
+  </PropertyGroup>
+```
+
+### Enable Trimming (BlazorGL)
+
+Edit your .csproj file and upgrade TargetFramework from net6.0 to net8.0.
+Trimming is enabled by default.
+
+
+### Enable Trimming and Aot (DesktopGL)
+
+Edit your .csproj file and upgrade TargetFramework from net6.0 to net8.0.
+Then add:
+
+```xml
+  <PropertyGroup>
+    <PublishTrimmed>True</PublishTrimmed>
+    <PublishAot>True</PublishAot>	
+  </PropertyGroup>
+```
