@@ -183,12 +183,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             ValidateArrayBounds<T>(0, data, startIndex, elementCount);
             Rectangle textureBounds = new Rectangle(0, 0, Math.Max(Width >> level, 1), Math.Max(Height >> level, 1));
+            bool rectHasValue = rect.HasValue;
             if (rect == null)
                 rect = textureBounds;
             ValidateRect<T>(level, ref textureBounds, rect.Value);
             Rectangle checkedRect;
             ValidateParams<T>(level, rect.Value, elementCount, ref textureBounds, out checkedRect);
-            if (rect.HasValue)
+            if (rectHasValue)
                 _strategyTexture2D.SetData<T>(level, 0, checkedRect, data, startIndex, elementCount);
             else           
                 _strategyTexture2D.SetData<T>(level, data, startIndex, elementCount);
