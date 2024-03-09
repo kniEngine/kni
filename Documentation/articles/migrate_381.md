@@ -1,4 +1,4 @@
-# Migrating from MonoGame 3.8.1 to KNI 3.11.9001
+# Migrating from MonoGame 3.8.1 to KNI 3.11
 
 
 ## Migrating Framework
@@ -12,12 +12,12 @@ Edit your .csproj file of the main project and replace:
 to:
 
 ```xml   
-    <PackageReference Include="nkast.Xna.Framework" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9001" />
-    <PackageReference Include="MonoGame.Framework.{Platform}.9000" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9002" />
+    <PackageReference Include="MonoGame.Framework.{Platform}.9000" Version="3.11.9002" />
 ```
 
 where {Platform} is Windows, DesktopGL, Android, etc.
@@ -31,12 +31,12 @@ For libraries, edit your .csproj file and replace:
 to:
 
 ```xml   
-    <PackageReference Include="nkast.Xna.Framework" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Ref" Version="3.11.9001" PrivateAssets="All" />
+    <PackageReference Include="nkast.Xna.Framework" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Ref" Version="3.11.9002" PrivateAssets="All" />
 ```
 
 ### Migrating Framework (Android)
@@ -75,7 +75,7 @@ Then replace:
 With:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.11.9002" />
 ```
 
 Then rename 'MonoGameContentReference':
