@@ -1,4 +1,4 @@
-# Migrating from 3.10.9001 to 3.11.9001
+# Migrating from 3.10 to 3.11
 
 
 ## Migrating Framework
@@ -13,12 +13,12 @@ Edit your .csproj file and replace:
 to:
 
 ```xml   
-    <PackageReference Include="nkast.Xna.Framework" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9001" />
-    <PackageReference Include="MonoGame.Framework.{Platform}.9000" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9002" />
+    <PackageReference Include="MonoGame.Framework.{Platform}.9000" Version="3.11.9002" />
 ```
 
 ## Migrating Content Builder
@@ -33,7 +33,7 @@ Then add:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.11.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.11.9002" />
   </ItemGroup>
 ```
 
