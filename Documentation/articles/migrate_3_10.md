@@ -87,6 +87,21 @@ with:
     <script src="_content/nkast.Wasm.Audio/js/Audio.8.0.0.js"></script>
 ```
 
+### Migrating OculusVR projects
+
+Edit your .csproj file and replace:
+
+```xml
+    <PackageReference Include="nkast.Xna.Framework.Oculus.OvrDX11" Version="3.10.9001" />
+    <PackageReference Include="nkast.LibOVR" Version="1.0.0" />
+```
+
+with:
+
+```xml
+    <PackageReference Include="nkast.Xna.Framework.Oculus.OvrDX11" Version="3.11.9002" />
+    <PackageReference Include="nkast.LibOVR" Version="2.0.0" />
+```
 
 ## Trimming
 
