@@ -33,7 +33,7 @@
     <PackageReference Include="nkast.Xna.Framework.Graphics" Version="3.11.9002" />
     <PackageReference Include="nkast.Xna.Framework.Audio" Version="3.11.9002" />
     <PackageReference Include="nkast.Xna.Framework.Media" Version="3.11.9002" />
-    <PackageReference Include="nkast.Xna.Framework.Blazor" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Blazor" Version="3.11.9003" />
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.11.9002" />
   </ItemGroup>
 
