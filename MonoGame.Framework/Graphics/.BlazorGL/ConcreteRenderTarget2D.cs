@@ -132,5 +132,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
             base.PlatformGraphicsContextLost();
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+
+            ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy);
+
+            base.Dispose(disposing);
+        }
     }
 }
