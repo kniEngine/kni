@@ -6,25 +6,23 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using System.IO;
-using Microsoft.Xna.Platform.Content.Utilities;
 
 
 namespace Microsoft.Xna.Framework.Content
 {
-    public partial class ContentManager : IDisposable
+    public class ContentManager : IDisposable
     {
         const byte ContentFlagCompressedLzx = 0x80;
         const byte ContentFlagCompressedLz4 = 0x40;
         const byte ContentFlagHiDef = 0x01;
 
         private string _rootDirectory = string.Empty;
-        private IServiceProvider serviceProvider;
-        private Dictionary<string, object> loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        internal Dictionary<string, object> loadedSharedResources = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        private List<IDisposable> disposableAssets = new List<IDisposable>();
-        private bool disposed;
+        private IServiceProvider _serviceProvider;
+        private Dictionary<string, object> _loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        internal Dictionary<string, object> _loadedSharedResources = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private List<IDisposable> _disposableAssets = new List<IDisposable>();
+        private bool _isDisposed;
 
         private static readonly List<char> _targetPlatformIdentifiers = new List<char>()
         {
@@ -63,35 +61,13 @@ namespace Microsoft.Xna.Framework.Content
             'G', // Google Stadia
         };
 
-
-        static partial void PlatformStaticInit();
-
-        static ContentManager()
-        {
-            // Allow any per-platform static initialization to occur.
-            PlatformStaticInit();
-        }
-
-        // Use C# destructor syntax for finalization code.
-        // This destructor will run only if the Dispose method
-        // does not get called.
-        // It gives your base class the opportunity to finalize.
-        // Do not provide destructors in types derived from this class.
-        ~ContentManager()
-        {
-            // Do not re-create Dispose clean-up code here.
-            // Calling Dispose(false) is optimal in terms of
-            // readability and maintainability.
-            Dispose(false);
-        }
-
         public ContentManager(IServiceProvider serviceProvider)
         {
             if (serviceProvider == null)
             {
                 throw new ArgumentNullException("serviceProvider");
             }
-            this.serviceProvider = serviceProvider;
+            this._serviceProvider = serviceProvider;
         }
 
         public ContentManager(IServiceProvider serviceProvider, string rootDirectory)
@@ -105,31 +81,35 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ArgumentNullException("rootDirectory");
             }
             this.RootDirectory = rootDirectory;
-            this.serviceProvider = serviceProvider;
+            this._serviceProvider = serviceProvider;
+        }
+
+
+        #region IDisposable Implementation
+        ~ContentManager()
+        {
+            Dispose(false);
         }
 
         public void Dispose()
         {
             Dispose(true);
-            // Tell the garbage collector not to call the finalizer
-            // since all the cleanup will already be done.
             GC.SuppressFinalize(this);
         }
 
-        // If disposing is true, it was called explicitly and we should dispose managed objects.
-        // If disposing is false, it was called by the finalizer and managed objects should not be disposed.
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
                     Unload();
                 }
 
-                disposed = true;
+                _isDisposed = true;
             }
         }
+        #region IDisposable Implementation
 
         public virtual T LoadLocalized<T> (string assetName)
         {
@@ -163,7 +143,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 throw new ArgumentNullException("assetName");
             }
-            if (disposed)
+            if (_isDisposed)
             {
                 throw new ObjectDisposedException("ContentManager");
             }
@@ -180,7 +160,7 @@ namespace Microsoft.Xna.Framework.Content
 
             // Check for a previously loaded asset first
             object asset = null;
-            if (loadedAssets.TryGetValue(key, out asset))
+            if (_loadedAssets.TryGetValue(key, out asset))
             {
                 if (asset is T)
                 {
@@ -191,7 +171,7 @@ namespace Microsoft.Xna.Framework.Content
             // Load the asset.
             result = ReadAsset<T>(assetName, null);
 
-            loadedAssets[key] = result;
+            _loadedAssets[key] = result;
             return result;
         }
         
@@ -229,7 +209,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 throw new ArgumentNullException("assetName");
             }
-            if (disposed)
+            if (_isDisposed)
             {
                 throw new ObjectDisposedException("ContentManager");
             }
@@ -325,8 +305,8 @@ namespace Microsoft.Xna.Framework.Content
 
             // Avoid recording disposable objects twice. ReloadAsset will try to record the disposables again.
             // We don't know which asset recorded which disposable so just guard against storing multiple of the same instance.
-            if (!disposableAssets.Contains(disposable))
-                disposableAssets.Add(disposable);
+            if (!_disposableAssets.Contains(disposable))
+                _disposableAssets.Add(disposable);
         }
 
         /// <summary>
@@ -334,21 +314,21 @@ namespace Microsoft.Xna.Framework.Content
         /// </summary>
         protected virtual Dictionary<string, object> LoadedAssets
         {
-            get { return loadedAssets; }
+            get { return _loadedAssets; }
         }
 
         public virtual void Unload()
         {
             // Look for disposable assets.
-            foreach (IDisposable disposable in disposableAssets)
+            foreach (IDisposable disposable in _disposableAssets)
             {
                 if (disposable != null)
                     disposable.Dispose();
             }
 
-            disposableAssets.Clear();
-            loadedAssets.Clear();
-            loadedSharedResources.Clear();
+            _disposableAssets.Clear();
+            _loadedAssets.Clear();
+            _loadedSharedResources.Clear();
         }
 
         public string RootDirectory
@@ -359,7 +339,7 @@ namespace Microsoft.Xna.Framework.Content
         
         public IServiceProvider ServiceProvider
         {
-            get { return this.serviceProvider; }
+            get { return this._serviceProvider; }
         }
 
     }
