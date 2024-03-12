@@ -13,7 +13,7 @@ using Microsoft.Xna.Platform.Content.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
 {
-    public partial class ContentManager : IDisposable
+    public class ContentManager : IDisposable
     {
         const byte ContentFlagCompressedLzx = 0x80;
         const byte ContentFlagCompressedLz4 = 0x40;
