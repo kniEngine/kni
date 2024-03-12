@@ -63,20 +63,6 @@ namespace Microsoft.Xna.Framework.Content
             'G', // Google Stadia
         };
 
-
-        // Use C# destructor syntax for finalization code.
-        // This destructor will run only if the Dispose method
-        // does not get called.
-        // It gives your base class the opportunity to finalize.
-        // Do not provide destructors in types derived from this class.
-        ~ContentManager()
-        {
-            // Do not re-create Dispose clean-up code here.
-            // Calling Dispose(false) is optimal in terms of
-            // readability and maintainability.
-            Dispose(false);
-        }
-
         public ContentManager(IServiceProvider serviceProvider)
         {
             if (serviceProvider == null)
@@ -100,16 +86,19 @@ namespace Microsoft.Xna.Framework.Content
             this.serviceProvider = serviceProvider;
         }
 
+
+        #region IDisposable Implementation
+        ~ContentManager()
+        {
+            Dispose(false);
+        }
+
         public void Dispose()
         {
             Dispose(true);
-            // Tell the garbage collector not to call the finalizer
-            // since all the cleanup will already be done.
             GC.SuppressFinalize(this);
         }
 
-        // If disposing is true, it was called explicitly and we should dispose managed objects.
-        // If disposing is false, it was called by the finalizer and managed objects should not be disposed.
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)
@@ -122,6 +111,7 @@ namespace Microsoft.Xna.Framework.Content
                 disposed = true;
             }
         }
+        #region IDisposable Implementation
 
         public virtual T LoadLocalized<T> (string assetName)
         {
