@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Content
         private Dictionary<string, object> loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         internal Dictionary<string, object> loadedSharedResources = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private List<IDisposable> disposableAssets = new List<IDisposable>();
-        private bool disposed;
+        private bool _isDisposed;
 
         private static readonly List<char> _targetPlatformIdentifiers = new List<char>()
         {
@@ -101,14 +101,14 @@ namespace Microsoft.Xna.Framework.Content
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
                     Unload();
                 }
 
-                disposed = true;
+                _isDisposed = true;
             }
         }
         #region IDisposable Implementation
@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 throw new ArgumentNullException("assetName");
             }
-            if (disposed)
+            if (_isDisposed)
             {
                 throw new ObjectDisposedException("ContentManager");
             }
@@ -211,7 +211,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 throw new ArgumentNullException("assetName");
             }
-            if (disposed)
+            if (_isDisposed)
             {
                 throw new ObjectDisposedException("ContentManager");
             }
