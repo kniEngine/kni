@@ -313,7 +313,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     //PostProcessSteps.ValidateDataStructure |
                     );
 
-                FindSkeleton();     // Find _rootBone, _bones, _deformationBones.
+                // Find _rootBone, _bones, _deformationBones.
+                FindSkeleton();
 
                 // Create _materials.
                 ImportMaterials();  
