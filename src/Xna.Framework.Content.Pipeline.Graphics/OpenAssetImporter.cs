@@ -330,6 +330,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     rootNode.Transform = absXform;
                 }
 
+                ImportMetadata(aiScene, rootNode);
+
                 aiScene.Clear();
 
                 return rootNode;
@@ -1135,6 +1137,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             int index = name.IndexOf("_$AssimpFbx$", StringComparison.Ordinal);
             return (index >= 0) ? name.Remove(index) : name;
+        }
+
+        private static void ImportMetadata(Scene _scene, NodeContent rootNode)
+        {
+            foreach (var metaDataPair in _scene.Metadata)
+            {
+                string key = "metadata:" + metaDataPair.Key;
+                object value = metaDataPair.Value.Data;
+
+                if (metaDataPair.Value.DataType == MetaDataType.Vector3D)
+                    value = ToXna((Vector3D)value);
+
+                rootNode.OpaqueData.Add(key, value);
+            }
         }
 
         #region Conversion Helpers
