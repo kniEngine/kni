@@ -228,7 +228,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private Dictionary<string, FbxPivot> _pivots;              // The transformation pivots.
 
         // XNA content
-        private NodeContent _rootNode;
         private List<MaterialContent> _materials;
 
 
@@ -319,23 +318,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // Create _materials.
                 ImportMaterials();  
 
-                ImportNodes(context);  // Create _pivots and _rootNode (incl. children).
-                ImportSkeleton();      // Create skeleton (incl. animations) and add to _rootNode.
+                // Create _pivots and _rootNode (incl. children).
+                NodeContent rootNode = ImportNodes(context);
+                // Create skeleton (incl. animations) and add to _rootNode.
+                ImportSkeleton(rootNode);
 
                 // If we have a simple hierarchy with no bones and just the one
                 // mesh, we can flatten it out so the mesh is the root node.
-                if (_rootNode.Children.Count == 1 && _rootNode.Children[0] is MeshContent)
+                if (rootNode.Children.Count == 1 && rootNode.Children[0] is MeshContent)
                 {
-                    Matrix absXform = _rootNode.Children[0].AbsoluteTransform;
-                    _rootNode = _rootNode.Children[0];
-                    _rootNode.Identity = _identity;
-                    _rootNode.Transform = absXform;
+                    Matrix absXform = rootNode.Children[0].AbsoluteTransform;
+                    rootNode = rootNode.Children[0];
+                    rootNode.Identity = _identity;
+                    rootNode.Transform = absXform;
                 }
 
                 _scene.Clear();
-            }
 
-            return _rootNode;
+                return rootNode;
+            }
         }
 
         /// <summary>
@@ -478,10 +479,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Converts all Assimp nodes to XNA nodes. (Nodes representing bones are excluded!)
         /// </summary>
-        private void ImportNodes(ContentImporterContext context)
+        private NodeContent ImportNodes(ContentImporterContext context)
         {
             _pivots = new Dictionary<string, FbxPivot>();
-            _rootNode = ImportNodes(context, _scene.RootNode, null,  null);
+            NodeContent rootNode = ImportNodes(context, _scene.RootNode, null,  null);
+            return rootNode;
         }
 
         /// <summary>
@@ -757,14 +759,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Imports the skeleton including all skeletal animations.
         /// </summary>
-        private void ImportSkeleton()
+        private void ImportSkeleton(NodeContent rootNode)
         {
             if (_rootBone == null)
                 return;
 
             // Convert nodes to bones and attach to root node.
             BoneContent rootBoneContent = (BoneContent)ImportBones(_rootBone, _rootBone.Parent, null);
-            _rootNode.Children.Add(rootBoneContent);
+            rootNode.Children.Add(rootBoneContent);
 
             if (!_scene.HasAnimations)
                 return;
