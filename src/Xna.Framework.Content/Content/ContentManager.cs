@@ -64,14 +64,6 @@ namespace Microsoft.Xna.Framework.Content
         };
 
 
-        static partial void PlatformStaticInit();
-
-        static ContentManager()
-        {
-            // Allow any per-platform static initialization to occur.
-            PlatformStaticInit();
-        }
-
         // Use C# destructor syntax for finalization code.
         // This destructor will run only if the Dispose method
         // does not get called.
