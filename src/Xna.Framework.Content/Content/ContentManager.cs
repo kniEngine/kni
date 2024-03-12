@@ -18,10 +18,10 @@ namespace Microsoft.Xna.Framework.Content
         const byte ContentFlagHiDef = 0x01;
 
         private string _rootDirectory = string.Empty;
-        private IServiceProvider serviceProvider;
-        private Dictionary<string, object> loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        internal Dictionary<string, object> loadedSharedResources = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        private List<IDisposable> disposableAssets = new List<IDisposable>();
+        private IServiceProvider _serviceProvider;
+        private Dictionary<string, object> _loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        internal Dictionary<string, object> _loadedSharedResources = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private List<IDisposable> _disposableAssets = new List<IDisposable>();
         private bool _isDisposed;
 
         private static readonly List<char> _targetPlatformIdentifiers = new List<char>()
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 throw new ArgumentNullException("serviceProvider");
             }
-            this.serviceProvider = serviceProvider;
+            this._serviceProvider = serviceProvider;
         }
 
         public ContentManager(IServiceProvider serviceProvider, string rootDirectory)
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ArgumentNullException("rootDirectory");
             }
             this.RootDirectory = rootDirectory;
-            this.serviceProvider = serviceProvider;
+            this._serviceProvider = serviceProvider;
         }
 
 
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.Content
 
             // Check for a previously loaded asset first
             object asset = null;
-            if (loadedAssets.TryGetValue(key, out asset))
+            if (_loadedAssets.TryGetValue(key, out asset))
             {
                 if (asset is T)
                 {
@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Framework.Content
             // Load the asset.
             result = ReadAsset<T>(assetName, null);
 
-            loadedAssets[key] = result;
+            _loadedAssets[key] = result;
             return result;
         }
         
@@ -305,8 +305,8 @@ namespace Microsoft.Xna.Framework.Content
 
             // Avoid recording disposable objects twice. ReloadAsset will try to record the disposables again.
             // We don't know which asset recorded which disposable so just guard against storing multiple of the same instance.
-            if (!disposableAssets.Contains(disposable))
-                disposableAssets.Add(disposable);
+            if (!_disposableAssets.Contains(disposable))
+                _disposableAssets.Add(disposable);
         }
 
         /// <summary>
@@ -314,21 +314,21 @@ namespace Microsoft.Xna.Framework.Content
         /// </summary>
         protected virtual Dictionary<string, object> LoadedAssets
         {
-            get { return loadedAssets; }
+            get { return _loadedAssets; }
         }
 
         public virtual void Unload()
         {
             // Look for disposable assets.
-            foreach (IDisposable disposable in disposableAssets)
+            foreach (IDisposable disposable in _disposableAssets)
             {
                 if (disposable != null)
                     disposable.Dispose();
             }
 
-            disposableAssets.Clear();
-            loadedAssets.Clear();
-            loadedSharedResources.Clear();
+            _disposableAssets.Clear();
+            _loadedAssets.Clear();
+            _loadedSharedResources.Clear();
         }
 
         public string RootDirectory
@@ -339,7 +339,7 @@ namespace Microsoft.Xna.Framework.Content
         
         public IServiceProvider ServiceProvider
         {
-            get { return this.serviceProvider; }
+            get { return this._serviceProvider; }
         }
 
     }

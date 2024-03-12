@@ -83,12 +83,12 @@ namespace Microsoft.Xna.Framework.Content
             {
                 object existingInstance;
                 string key = assetName.Replace('\\', '/') +"_SharedResource_" + i + "_" + this.xnbLength;
-                contentManager.loadedSharedResources.TryGetValue(key, out existingInstance);
+                contentManager._loadedSharedResources.TryGetValue(key, out existingInstance);
                 
                 sharedResources[i] = ReadObject<object>(existingInstance);
 
                 if (existingInstance == null)
-                    contentManager.loadedSharedResources[key] = sharedResources[i];
+                    contentManager._loadedSharedResources[key] = sharedResources[i];
             }
 
             // Fixup shared resources by calling each registered action
