@@ -212,8 +212,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         }
         #endregion
 
-        private static readonly List<VectorKey> EmptyVectorKeys = new List<VectorKey>();
-        private static readonly List<QuaternionKey> EmptyQuaternionKeys = new List<QuaternionKey>();
+        private static readonly List<VectorKey> EmptyVectorKeys = new List<VectorKey>(0);
+        private static readonly List<QuaternionKey> EmptyQuaternionKeys = new List<QuaternionKey>(0);
 
         private readonly string _importerName;
 
