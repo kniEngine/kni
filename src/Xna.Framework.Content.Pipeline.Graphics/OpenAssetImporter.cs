@@ -243,12 +243,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             _importerName = importerName;
         }
 
-        /// <summary>
-        /// This disables some Assimp model loading features so that
-        /// the resulting content is the same as what the XNA FbxImporter 
-        /// </summary>
-        public bool XnaComptatible { get; set; }
-
         public override NodeContent Import(string filename, ContentImporterContext context)
         {
             if (filename == null)
