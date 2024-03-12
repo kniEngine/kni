@@ -332,6 +332,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 ImportMetadata(aiScene, rootNode);
 
+                MetaTransform(rootNode);
+
                 aiScene.Clear();
 
                 return rootNode;
@@ -1151,6 +1153,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 rootNode.OpaqueData.Add(key, value);
             }
+        }
+
+        private static Vector3 GetAxis(int axis)
+        {
+            switch (axis)
+            {
+                case 0: return Vector3.UnitX;
+                case 1: return Vector3.UnitY;
+                case 2: return Vector3.UnitZ;
+                default: throw new InvalidOperationException("axis");
+            }
+        }
+
+        private static void MetaTransform(NodeContent rootNode)
+        {
+            Matrix metaTransform = Matrix.Identity;
+
+            int metaCoordAxis = rootNode.OpaqueData.GetValue<int>("metadata:CoordAxis", 0);
+            int metaCoordAxisSign = rootNode.OpaqueData.GetValue<int>("metadata:UpAxisSign", 1);
+            metaTransform.Right = GetAxis(metaCoordAxis) * metaCoordAxisSign;
+
+            int metaUpAxis = rootNode.OpaqueData.GetValue<int>("metadata:UpAxis", 1);
+            int metaUpAxisSign = rootNode.OpaqueData.GetValue<int>("metadata:UpAxisSign", 1);
+            metaTransform.Up = GetAxis(metaUpAxis) * metaUpAxisSign;
+
+            int metaFrontAxis = rootNode.OpaqueData.GetValue<int>("metadata:FrontAxis", 2);
+            int metaFrontAxisSign = rootNode.OpaqueData.GetValue<int>("metadata:FrontAxisSign", 1);
+            metaTransform.Forward = GetAxis(metaFrontAxis) * metaFrontAxisSign;
+
+            float metaUnitScaleFactor = rootNode.OpaqueData.GetValue<float>("metadata:UnitScaleFactor", 1f);
+                metaTransform *= Matrix.CreateScale(metaUnitScaleFactor);
+
+                MeshHelper.TransformScene(rootNode, metaTransform);
         }
 
         #region Conversion Helpers
