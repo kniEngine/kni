@@ -348,11 +348,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // TODO: What about AlphaTestMaterialContent, DualTextureMaterialContent, 
                 // EffectMaterialContent, EnvironmentMapMaterialContent, and SkinnedMaterialContent?
 
-                BasicMaterialContent material = new BasicMaterialContent
-                {
-                    Name = aiMaterial.Name,
-                    Identity = _identity,
-                };
+                BasicMaterialContent material = new BasicMaterialContent();
+                material.Name = aiMaterial.Name;
+                material.Identity = _identity;
 
                 if (aiMaterial.HasTextureDiffuse)
                     material.Texture = ImportTextureContentRef(aiMaterial.TextureDiffuse);
@@ -413,11 +411,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             foreach (Material aiMaterial in aiMaterials)
             {
-                MaterialContent material = new MaterialContent
-                {
-                    Name = aiMaterial.Name,
-                    Identity = _identity,
-                };
+                MaterialContent material = new MaterialContent();
+                material.Name = aiMaterial.Name;
+                material.Identity = _identity;
 
                 TextureSlot[] textureSlots = aiMaterial.GetAllMaterialTextures();
                 foreach (TextureSlot textureSlot in textureSlots)
@@ -505,12 +501,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             NodeContent node = null;
             if (aiNode.HasMeshes)
             {
-                MeshContent mesh = new MeshContent
-                {
-                    Name = aiNode.Name,
-                    Identity = _identity,
-                    Transform = ToXna(GetRelativeTransform(aiNode, aiParent))
-                };
+                MeshContent mesh = new MeshContent();
+                mesh.Name = aiNode.Name;
+                mesh.Identity = _identity;
+                mesh.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
 
                 foreach (int meshIndex in aiNode.MeshIndices)
                 {
@@ -574,12 +568,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
-                node = new NodeContent
-                {
-                    Name = aiNode.Name,
-                    Identity = _identity,
-                    Transform = ToXna(GetRelativeTransform(aiNode, aiParent))
-                };
+                node = new NodeContent();
+                node.Name = aiNode.Name;
+                node.Identity = _identity;
+                node.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
             }
 
             if (node != null)
@@ -612,11 +604,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
         private GeometryContent CreateGeometry(ContentImporterContext context, MeshContent mesh, Mesh aiMesh, List<MaterialContent> materials)
         {
-            GeometryContent geometry = new GeometryContent
-            {
-              Identity = _identity,
-              Material = materials[aiMesh.MaterialIndex]
-            };
+            GeometryContent geometry = new GeometryContent();
+            geometry.Identity = _identity;
+            geometry.Material = materials[aiMesh.MaterialIndex];
 
             // Vertices
             int baseVertex = mesh.Positions.Count;
@@ -800,21 +790,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (aiNode.Name.Contains(mangling))
                 {
                     // Null leaf node
-                    node = new NodeContent
-                    {
-                        Name = aiNode.Name.Replace(mangling, string.Empty),
-                        Identity = _identity,
-                        Transform = ToXna(GetRelativeTransform(aiNode, aiParent))
-                    };
+                    node = new NodeContent();
+                    node.Name = aiNode.Name.Replace(mangling, string.Empty);
+                    node.Identity = _identity;
+                    node.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
                 }
                 else if (_bones.Contains(aiNode))
                 {
                     // Bone
-                    node = new BoneContent
-                    {
-                      Name = aiNode.Name,
-                      Identity = _identity
-                    };
+                    node = new BoneContent();
+                    node.Name = aiNode.Name;
+                    node.Identity = _identity;
 
                     // node.Transform is irrelevant for bones. This transform is just the
                     // pose of the node at the time of the export. This could, for example,
@@ -901,12 +887,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <returns>The animation converted to XNA.</returns>
         private AnimationContent ImportAnimation(Animation aiAnimation, string nodeName = null)
         {
-            AnimationContent animation = new AnimationContent
-            {
-                Name = GetAnimationName(aiAnimation.Name),
-                Identity = _identity,
-                Duration = TimeSpan.FromSeconds(aiAnimation.DurationInTicks / aiAnimation.TicksPerSecond)
-            };
+            AnimationContent animation = new AnimationContent();
+            animation.Name = GetAnimationName(aiAnimation.Name);
+            animation.Identity = _identity;
+            animation.Duration = TimeSpan.FromSeconds(aiAnimation.DurationInTicks / aiAnimation.TicksPerSecond);
 
             // In Assimp animation channels may be split into separate channels.
             //   "nodeXyz" --> "nodeXyz_$AssimpFbx$_Translation",
