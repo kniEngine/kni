@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Framework.Content
                 _isDisposed = true;
             }
         }
-        #region IDisposable Implementation
+        #endregion IDisposable Implementation
 
         public virtual T LoadLocalized<T> (string assetName)
         {
