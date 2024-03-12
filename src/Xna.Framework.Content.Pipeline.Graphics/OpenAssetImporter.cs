@@ -226,9 +226,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private List<Node> _bones = new List<Node>();           // All nodes attached to the root bone.
         private Dictionary<string, FbxPivot> _pivots;              // The transformation pivots.
 
-        // XNA content
-        private List<MaterialContent> _materials;
-
 
         /// <summary>
         /// Default constructor.
@@ -316,10 +313,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 FindSkeleton(aiScene);
 
                 // Create _materials.
-                ImportMaterials(aiScene);  
+                List<MaterialContent> materials = ImportMaterials(aiScene.Materials);
 
                 // Create _pivots and _rootNode (incl. children).
-                NodeContent rootNode = ImportNodes(context, aiScene);
+                NodeContent rootNode = ImportNodes(context, aiScene, materials);
                 // Create skeleton (incl. animations) and add to _rootNode.
                 ImportSkeleton(aiScene, rootNode);
 
@@ -342,10 +339,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Converts all Assimp <see cref="Material"/>s to standard XNA compatible <see cref="MaterialContent"/>s.
         /// </summary>
-        private void ImportMaterials(Scene aiScene)
+        private List<MaterialContent> ImportMaterials(List<Material> aiMaterials)
         {
-            _materials = new List<MaterialContent>();
-            foreach (Material aiMaterial in aiScene.Materials)
+            List<MaterialContent> materials = new List<MaterialContent>();
+
+            foreach (Material aiMaterial in aiMaterials)
             {
                 // TODO: What about AlphaTestMaterialContent, DualTextureMaterialContent, 
                 // EffectMaterialContent, EnvironmentMapMaterialContent, and SkinnedMaterialContent?
@@ -383,8 +381,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (aiMaterial.HasShininessStrength)
                     material.SpecularPower = aiMaterial.ShininessStrength; // aiMaterial.Shininess; // TNC: maintain backward compatibility. Should this be (ShininessStrength*Shininess)?
                 
-                _materials.Add(material);
+                materials.Add(material);
             }
+
+            return materials;
         }
 
         private ExternalReference<TextureContent> ImportTextureContentRef(TextureSlot textureSlot, bool ext = false)
@@ -407,13 +407,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Returns all the Assimp <see cref="Material"/> features as a <see cref="MaterialContent"/>.
         /// </summary>
-        private void ImportMaterialsExt(Scene aiScene)
+        private List<MaterialContent> ImportMaterialsExt(List<Material> aiMaterials)
         {
-            _materials = new List<MaterialContent>();
-            foreach (Material aiMaterial in aiScene.Materials)
-            {
-                // TODO: Should we create a special AssImpMaterial?
+            List<MaterialContent> materials = new List<MaterialContent>();
 
+            foreach (Material aiMaterial in aiMaterials)
+            {
                 MaterialContent material = new MaterialContent
                 {
                     Name = aiMaterial.Name,
@@ -472,17 +471,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (aiMaterial.HasWireFrame)
                     material.OpaqueData.Add("WireFrame", aiMaterial.IsWireFrameEnabled);
 
-                _materials.Add(material);
+                materials.Add(material);
             }
+
+            return materials;
         }
 
         /// <summary>
         /// Converts all Assimp nodes to XNA nodes. (Nodes representing bones are excluded!)
         /// </summary>
-        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene)
+        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, List<MaterialContent> materials)
         {
             _pivots = new Dictionary<string, FbxPivot>();
-            NodeContent rootNode = ImportNodes(context, aiScene, aiScene.RootNode, null,  null);
+            NodeContent rootNode = ImportNodes(context, aiScene, aiScene.RootNode, materials, null,  null);
             return rootNode;
         }
 
@@ -497,7 +498,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// It may be necessary to skip certain "preserve pivot" nodes in the hierarchy. The
         /// converted node needs to be relative to <paramref name="aiParent"/>, not <c>node.Parent</c>.
         /// </remarks>
-        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, Node aiNode, Node aiParent, NodeContent parent)
+        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, Node aiNode, List<MaterialContent> materials, Node aiParent, NodeContent parent)
         {
             Debug.Assert(aiNode != null);
 
@@ -517,7 +518,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     if (!aiMesh.HasVertices)
                         continue;
 
-                    GeometryContent geometry = CreateGeometry(context, mesh, aiMesh);
+                    GeometryContent geometry = CreateGeometry(context, mesh, aiMesh, materials);
                     mesh.Geometry.Add(geometry);
                 }
 
@@ -604,17 +605,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(parent != null);
 
             foreach (Node aiChild in aiNode.Children)
-                ImportNodes(context, aiScene, aiChild, aiParent, parent);
+                ImportNodes(context, aiScene, aiChild, materials, aiParent, parent);
 
             return node;
         }
 
-        private GeometryContent CreateGeometry(ContentImporterContext context, MeshContent mesh, Mesh aiMesh)
+        private GeometryContent CreateGeometry(ContentImporterContext context, MeshContent mesh, Mesh aiMesh, List<MaterialContent> materials)
         {
             GeometryContent geometry = new GeometryContent
             {
               Identity = _identity,
-              Material = _materials[aiMesh.MaterialIndex]
+              Material = materials[aiMesh.MaterialIndex]
             };
 
             // Vertices
