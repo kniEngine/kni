@@ -6,9 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using System.IO;
-using Microsoft.Xna.Platform.Content.Utilities;
 
 
 namespace Microsoft.Xna.Framework.Content
