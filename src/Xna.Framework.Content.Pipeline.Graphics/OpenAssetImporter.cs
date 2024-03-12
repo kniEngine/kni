@@ -215,6 +215,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private static readonly List<VectorKey> EmptyVectorKeys = new List<VectorKey>();
         private static readonly List<QuaternionKey> EmptyQuaternionKeys = new List<QuaternionKey>();
 
+        private readonly string _importerName;
+
         // XNA Content importer
         private ContentIdentity _identity;
 
@@ -229,7 +231,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private NodeContent _rootNode;
         private List<MaterialContent> _materials;
 
-        private readonly string _importerName;
 
         /// <summary>
         /// Default constructor.
