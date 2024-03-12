@@ -216,7 +216,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private static readonly List<QuaternionKey> EmptyQuaternionKeys = new List<QuaternionKey>();
 
         // XNA Content importer
-        private ContentImporterContext _context;
         private ContentIdentity _identity;
 
         // Assimp scene
@@ -256,8 +255,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 throw new ArgumentNullException("filename");
             if (context == null)
                 throw new ArgumentNullException("context");
-
-            _context = context;
 
             if (CurrentPlatform.OS == OS.Linux)
             {
@@ -327,8 +324,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // Create _materials.
                 ImportMaterials();  
 
-                ImportNodes();      // Create _pivots and _rootNode (incl. children).
-                ImportSkeleton();   // Create skeleton (incl. animations) and add to _rootNode.
+                ImportNodes(context);  // Create _pivots and _rootNode (incl. children).
+                ImportSkeleton();      // Create skeleton (incl. animations) and add to _rootNode.
 
                 // If we have a simple hierarchy with no bones and just the one
                 // mesh, we can flatten it out so the mesh is the root node.
@@ -486,10 +483,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Converts all Assimp nodes to XNA nodes. (Nodes representing bones are excluded!)
         /// </summary>
-        private void ImportNodes()
+        private void ImportNodes(ContentImporterContext context)
         {
             _pivots = new Dictionary<string, FbxPivot>();
-            _rootNode = ImportNodes(_scene.RootNode, null,  null);
+            _rootNode = ImportNodes(context, _scene.RootNode, null,  null);
         }
 
         /// <summary>
@@ -503,7 +500,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// It may be necessary to skip certain "preserve pivot" nodes in the hierarchy. The
         /// converted node needs to be relative to <paramref name="aiParent"/>, not <c>node.Parent</c>.
         /// </remarks>
-        private NodeContent ImportNodes(Node aiNode, Node aiParent, NodeContent parent)
+        private NodeContent ImportNodes(ContentImporterContext context, Node aiNode, Node aiParent, NodeContent parent)
         {
             Debug.Assert(aiNode != null);
 
@@ -523,7 +520,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     if (!aiMesh.HasVertices)
                         continue;
 
-                    GeometryContent geometry = CreateGeometry(mesh, aiMesh);
+                    GeometryContent geometry = CreateGeometry(context, mesh, aiMesh);
                     mesh.Geometry.Add(geometry);
                 }
 
@@ -610,12 +607,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(parent != null);
 
             foreach (Node aiChild in aiNode.Children)
-                ImportNodes(aiChild, aiParent, parent);
+                ImportNodes(context, aiChild, aiParent, parent);
 
             return node;
         }
 
-        private GeometryContent CreateGeometry(MeshContent mesh, Mesh aiMesh)
+        private GeometryContent CreateGeometry(ContentImporterContext context, MeshContent mesh, Mesh aiMesh)
         {
             GeometryContent geometry = new GeometryContent
             {
@@ -662,7 +659,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 if (missingBoneWeights)
                 {
-                    _context.Logger.LogWarning(
+                    context.Logger.LogWarning(
                         string.Empty, 
                         _identity, 
                         "No bone weights found for one or more vertices of skinned mesh '{0}'.",
