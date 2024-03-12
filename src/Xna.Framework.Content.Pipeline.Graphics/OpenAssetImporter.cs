@@ -212,25 +212,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         }
         #endregion
 
-        private static readonly List<VectorKey> EmptyVectorKeys = new List<VectorKey>();
-        private static readonly List<QuaternionKey> EmptyQuaternionKeys = new List<QuaternionKey>();
+        private static readonly List<VectorKey> EmptyVectorKeys = new List<VectorKey>(0);
+        private static readonly List<QuaternionKey> EmptyQuaternionKeys = new List<QuaternionKey>(0);
+
+        private readonly string _importerName;
 
         // XNA Content importer
-        private ContentImporterContext _context;
         private ContentIdentity _identity;
 
         // Assimp scene
-        private Scene _scene;
         private Dictionary<string, Matrix> _deformationBones;   // The names and offset matrices of all deformation bones.
         private Node _rootBone;                                 // The node that represents the root bone.
         private List<Node> _bones = new List<Node>();           // All nodes attached to the root bone.
         private Dictionary<string, FbxPivot> _pivots;              // The transformation pivots.
 
-        // XNA content
-        private NodeContent _rootNode;
-        private List<MaterialContent> _materials;
-
-        private readonly string _importerName;
 
         /// <summary>
         /// Default constructor.
@@ -244,20 +239,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             _importerName = importerName;
         }
 
-        /// <summary>
-        /// This disables some Assimp model loading features so that
-        /// the resulting content is the same as what the XNA FbxImporter 
-        /// </summary>
-        public bool XnaComptatible { get; set; }
-
         public override NodeContent Import(string filename, ContentImporterContext context)
         {
             if (filename == null)
                 throw new ArgumentNullException("filename");
             if (context == null)
                 throw new ArgumentNullException("context");
-
-            _context = context;
 
             if (CurrentPlatform.OS == OS.Linux)
             {
@@ -291,7 +278,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // the model as is. We don't want to lose any information, i.e. empty
                 // nodes shoud not be thrown away, meshes/materials should not be merged,
                 // etc. Custom model processors may depend on this information!
-                _scene = importer.ImportFile(filename,
+                Scene aiScene = importer.ImportFile(filename,
                     PostProcessSteps.FindDegenerates |
                     PostProcessSteps.FindInvalidData |
                     PostProcessSteps.FlipUVs |              // Required for Direct3D
@@ -322,46 +309,48 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     //PostProcessSteps.ValidateDataStructure |
                     );
 
-                FindSkeleton();     // Find _rootBone, _bones, _deformationBones.
+                // Find _rootBone, _bones, _deformationBones.
+                FindSkeleton(aiScene);
 
                 // Create _materials.
-                ImportMaterials();  
+                List<MaterialContent> materials = ImportMaterials(aiScene.Materials);
 
-                ImportNodes();      // Create _pivots and _rootNode (incl. children).
-                ImportSkeleton();   // Create skeleton (incl. animations) and add to _rootNode.
+                // Create _pivots and _rootNode (incl. children).
+                NodeContent rootNode = ImportNodes(context, aiScene, materials);
+                // Create skeleton (incl. animations) and add to _rootNode.
+                ImportSkeleton(aiScene, rootNode);
 
                 // If we have a simple hierarchy with no bones and just the one
                 // mesh, we can flatten it out so the mesh is the root node.
-                if (_rootNode.Children.Count == 1 && _rootNode.Children[0] is MeshContent)
+                if (rootNode.Children.Count == 1 && rootNode.Children[0] is MeshContent)
                 {
-                    Matrix absXform = _rootNode.Children[0].AbsoluteTransform;
-                    _rootNode = _rootNode.Children[0];
-                    _rootNode.Identity = _identity;
-                    _rootNode.Transform = absXform;
+                    Matrix absXform = rootNode.Children[0].AbsoluteTransform;
+                    rootNode = rootNode.Children[0];
+                    rootNode.Identity = _identity;
+                    rootNode.Transform = absXform;
                 }
 
-                _scene.Clear();
-            }
+                aiScene.Clear();
 
-            return _rootNode;
+                return rootNode;
+            }
         }
 
         /// <summary>
         /// Converts all Assimp <see cref="Material"/>s to standard XNA compatible <see cref="MaterialContent"/>s.
         /// </summary>
-        private void ImportMaterials()
+        private List<MaterialContent> ImportMaterials(List<Material> aiMaterials)
         {
-            _materials = new List<MaterialContent>();
-            foreach (Material aiMaterial in _scene.Materials)
+            List<MaterialContent> materials = new List<MaterialContent>();
+
+            foreach (Material aiMaterial in aiMaterials)
             {
                 // TODO: What about AlphaTestMaterialContent, DualTextureMaterialContent, 
                 // EffectMaterialContent, EnvironmentMapMaterialContent, and SkinnedMaterialContent?
 
-                BasicMaterialContent material = new BasicMaterialContent
-                {
-                    Name = aiMaterial.Name,
-                    Identity = _identity,
-                };
+                BasicMaterialContent material = new BasicMaterialContent();
+                material.Name = aiMaterial.Name;
+                material.Identity = _identity;
 
                 if (aiMaterial.HasTextureDiffuse)
                     material.Texture = ImportTextureContentRef(aiMaterial.TextureDiffuse);
@@ -390,8 +379,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (aiMaterial.HasShininessStrength)
                     material.SpecularPower = aiMaterial.ShininessStrength; // aiMaterial.Shininess; // TNC: maintain backward compatibility. Should this be (ShininessStrength*Shininess)?
                 
-                _materials.Add(material);
+                materials.Add(material);
             }
+
+            return materials;
         }
 
         private ExternalReference<TextureContent> ImportTextureContentRef(TextureSlot textureSlot, bool ext = false)
@@ -414,18 +405,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Returns all the Assimp <see cref="Material"/> features as a <see cref="MaterialContent"/>.
         /// </summary>
-        private void ImportMaterialsExt()
+        private List<MaterialContent> ImportMaterialsExt(List<Material> aiMaterials)
         {
-            _materials = new List<MaterialContent>();
-            foreach (Material aiMaterial in _scene.Materials)
-            {
-                // TODO: Should we create a special AssImpMaterial?
+            List<MaterialContent> materials = new List<MaterialContent>();
 
-                MaterialContent material = new MaterialContent
-                {
-                    Name = aiMaterial.Name,
-                    Identity = _identity,
-                };
+            foreach (Material aiMaterial in aiMaterials)
+            {
+                MaterialContent material = new MaterialContent();
+                material.Name = aiMaterial.Name;
+                material.Identity = _identity;
 
                 TextureSlot[] textureSlots = aiMaterial.GetAllMaterialTextures();
                 foreach (TextureSlot textureSlot in textureSlots)
@@ -479,17 +467,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (aiMaterial.HasWireFrame)
                     material.OpaqueData.Add("WireFrame", aiMaterial.IsWireFrameEnabled);
 
-                _materials.Add(material);
+                materials.Add(material);
             }
+
+            return materials;
         }
 
         /// <summary>
         /// Converts all Assimp nodes to XNA nodes. (Nodes representing bones are excluded!)
         /// </summary>
-        private void ImportNodes()
+        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, List<MaterialContent> materials)
         {
             _pivots = new Dictionary<string, FbxPivot>();
-            _rootNode = ImportNodes(_scene.RootNode, null,  null);
+            NodeContent rootNode = ImportNodes(context, aiScene, aiScene.RootNode, materials, null,  null);
+            return rootNode;
         }
 
         /// <summary>
@@ -503,27 +494,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// It may be necessary to skip certain "preserve pivot" nodes in the hierarchy. The
         /// converted node needs to be relative to <paramref name="aiParent"/>, not <c>node.Parent</c>.
         /// </remarks>
-        private NodeContent ImportNodes(Node aiNode, Node aiParent, NodeContent parent)
+        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, Node aiNode, List<MaterialContent> materials, Node aiParent, NodeContent parent)
         {
             Debug.Assert(aiNode != null);
 
             NodeContent node = null;
             if (aiNode.HasMeshes)
             {
-                MeshContent mesh = new MeshContent
-                {
-                    Name = aiNode.Name,
-                    Identity = _identity,
-                    Transform = ToXna(GetRelativeTransform(aiNode, aiParent))
-                };
+                MeshContent mesh = new MeshContent();
+                mesh.Name = aiNode.Name;
+                mesh.Identity = _identity;
+                mesh.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
 
                 foreach (int meshIndex in aiNode.MeshIndices)
                 {
-                    Mesh aiMesh = _scene.Meshes[meshIndex];
+                    Mesh aiMesh = aiScene.Meshes[meshIndex];
                     if (!aiMesh.HasVertices)
                         continue;
 
-                    GeometryContent geometry = CreateGeometry(mesh, aiMesh);
+                    GeometryContent geometry = CreateGeometry(context, mesh, aiMesh, materials);
                     mesh.Geometry.Add(geometry);
                 }
 
@@ -579,12 +568,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
-                node = new NodeContent
-                {
-                    Name = aiNode.Name,
-                    Identity = _identity,
-                    Transform = ToXna(GetRelativeTransform(aiNode, aiParent))
-                };
+                node = new NodeContent();
+                node.Name = aiNode.Name;
+                node.Identity = _identity;
+                node.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
             }
 
             if (node != null)
@@ -596,9 +583,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 aiParent = aiNode;
                 parent = node;
 
-                if (_scene.HasAnimations)
+                if (aiScene.HasAnimations)
                 {
-                    foreach (Animation aiAnimation in _scene.Animations)
+                    foreach (Animation aiAnimation in aiScene.Animations)
                     {
                         AnimationContent animationContent = ImportAnimation(aiAnimation, node.Name);
                         if (animationContent.Channels.Count > 0)
@@ -610,18 +597,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(parent != null);
 
             foreach (Node aiChild in aiNode.Children)
-                ImportNodes(aiChild, aiParent, parent);
+                ImportNodes(context, aiScene, aiChild, materials, aiParent, parent);
 
             return node;
         }
 
-        private GeometryContent CreateGeometry(MeshContent mesh, Mesh aiMesh)
+        private GeometryContent CreateGeometry(ContentImporterContext context, MeshContent mesh, Mesh aiMesh, List<MaterialContent> materials)
         {
-            GeometryContent geometry = new GeometryContent
-            {
-              Identity = _identity,
-              Material = _materials[aiMesh.MaterialIndex]
-            };
+            GeometryContent geometry = new GeometryContent();
+            geometry.Identity = _identity;
+            geometry.Material = materials[aiMesh.MaterialIndex];
 
             // Vertices
             int baseVertex = mesh.Positions.Count;
@@ -662,7 +647,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 if (missingBoneWeights)
                 {
-                    _context.Logger.LogWarning(
+                    context.Logger.LogWarning(
                         string.Empty, 
                         _identity, 
                         "No bone weights found for one or more vertices of skinned mesh '{0}'.",
@@ -688,20 +673,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Identifies the nodes that represent bones and stores the bone offset matrices.
         /// </summary>
-        private void FindSkeleton()
+        private void FindSkeleton(Scene aiScene)
         {
             // See http://assimp.sourceforge.net/lib_html/data.html, section "Bones"
             // and notes above.
 
             // First, identify all deformation bones.
-            _deformationBones = FindDeformationBones(_scene);
+            _deformationBones = FindDeformationBones(aiScene);
             if (_deformationBones.Count == 0)
                 return;
 
             // Walk the tree upwards to find the root bones.
             HashSet<Node> rootBones = new HashSet<Node>();
             foreach (string boneName in _deformationBones.Keys)
-                rootBones.Add(FindRootBone(_scene, boneName));
+                rootBones.Add(FindRootBone(aiScene, boneName));
 
             if (rootBones.Count > 1)
                 throw new InvalidContentException("Multiple skeletons found. Please ensure that the model does not contain more that one skeleton.", _identity);
@@ -765,20 +750,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Imports the skeleton including all skeletal animations.
         /// </summary>
-        private void ImportSkeleton()
+        private void ImportSkeleton(Scene aiScene, NodeContent rootNode)
         {
             if (_rootBone == null)
                 return;
 
             // Convert nodes to bones and attach to root node.
             BoneContent rootBoneContent = (BoneContent)ImportBones(_rootBone, _rootBone.Parent, null);
-            _rootNode.Children.Add(rootBoneContent);
+            rootNode.Children.Add(rootBoneContent);
 
-            if (!_scene.HasAnimations)
+            if (!aiScene.HasAnimations)
                 return;
 
             // Convert animations and add to root bone.
-            foreach (Animation aiAnimation in _scene.Animations)
+            foreach (Animation aiAnimation in aiScene.Animations)
             {
                 AnimationContent animationContent = ImportAnimation(aiAnimation);
                 rootBoneContent.Animations.Add(animationContent.Name, animationContent);
@@ -805,21 +790,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (aiNode.Name.Contains(mangling))
                 {
                     // Null leaf node
-                    node = new NodeContent
-                    {
-                        Name = aiNode.Name.Replace(mangling, string.Empty),
-                        Identity = _identity,
-                        Transform = ToXna(GetRelativeTransform(aiNode, aiParent))
-                    };
+                    node = new NodeContent();
+                    node.Name = aiNode.Name.Replace(mangling, string.Empty);
+                    node.Identity = _identity;
+                    node.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
                 }
                 else if (_bones.Contains(aiNode))
                 {
                     // Bone
-                    node = new BoneContent
-                    {
-                      Name = aiNode.Name,
-                      Identity = _identity
-                    };
+                    node = new BoneContent();
+                    node.Name = aiNode.Name;
+                    node.Identity = _identity;
 
                     // node.Transform is irrelevant for bones. This transform is just the
                     // pose of the node at the time of the export. This could, for example,
@@ -906,12 +887,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <returns>The animation converted to XNA.</returns>
         private AnimationContent ImportAnimation(Animation aiAnimation, string nodeName = null)
         {
-            AnimationContent animation = new AnimationContent
-            {
-                Name = GetAnimationName(aiAnimation.Name),
-                Identity = _identity,
-                Duration = TimeSpan.FromSeconds(aiAnimation.DurationInTicks / aiAnimation.TicksPerSecond)
-            };
+            AnimationContent animation = new AnimationContent();
+            animation.Name = GetAnimationName(aiAnimation.Name);
+            animation.Identity = _identity;
+            animation.Duration = TimeSpan.FromSeconds(aiAnimation.DurationInTicks / aiAnimation.TicksPerSecond);
 
             // In Assimp animation channels may be split into separate channels.
             //   "nodeXyz" --> "nodeXyz_$AssimpFbx$_Translation",
