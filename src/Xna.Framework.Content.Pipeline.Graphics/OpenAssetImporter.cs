@@ -221,7 +221,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private ContentIdentity _identity;
 
         // Assimp scene
-        private Scene _scene;
         private Dictionary<string, Matrix> _deformationBones;   // The names and offset matrices of all deformation bones.
         private Node _rootBone;                                 // The node that represents the root bone.
         private List<Node> _bones = new List<Node>();           // All nodes attached to the root bone.
@@ -282,7 +281,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // the model as is. We don't want to lose any information, i.e. empty
                 // nodes shoud not be thrown away, meshes/materials should not be merged,
                 // etc. Custom model processors may depend on this information!
-                _scene = importer.ImportFile(filename,
+                Scene aiScene = importer.ImportFile(filename,
                     PostProcessSteps.FindDegenerates |
                     PostProcessSteps.FindInvalidData |
                     PostProcessSteps.FlipUVs |              // Required for Direct3D
@@ -314,15 +313,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     );
 
                 // Find _rootBone, _bones, _deformationBones.
-                FindSkeleton();
+                FindSkeleton(aiScene);
 
                 // Create _materials.
-                ImportMaterials();  
+                ImportMaterials(aiScene);  
 
                 // Create _pivots and _rootNode (incl. children).
-                NodeContent rootNode = ImportNodes(context);
+                NodeContent rootNode = ImportNodes(context, aiScene);
                 // Create skeleton (incl. animations) and add to _rootNode.
-                ImportSkeleton(rootNode);
+                ImportSkeleton(aiScene, rootNode);
 
                 // If we have a simple hierarchy with no bones and just the one
                 // mesh, we can flatten it out so the mesh is the root node.
@@ -334,7 +333,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     rootNode.Transform = absXform;
                 }
 
-                _scene.Clear();
+                aiScene.Clear();
 
                 return rootNode;
             }
@@ -343,10 +342,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Converts all Assimp <see cref="Material"/>s to standard XNA compatible <see cref="MaterialContent"/>s.
         /// </summary>
-        private void ImportMaterials()
+        private void ImportMaterials(Scene aiScene)
         {
             _materials = new List<MaterialContent>();
-            foreach (Material aiMaterial in _scene.Materials)
+            foreach (Material aiMaterial in aiScene.Materials)
             {
                 // TODO: What about AlphaTestMaterialContent, DualTextureMaterialContent, 
                 // EffectMaterialContent, EnvironmentMapMaterialContent, and SkinnedMaterialContent?
@@ -408,10 +407,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Returns all the Assimp <see cref="Material"/> features as a <see cref="MaterialContent"/>.
         /// </summary>
-        private void ImportMaterialsExt()
+        private void ImportMaterialsExt(Scene aiScene)
         {
             _materials = new List<MaterialContent>();
-            foreach (Material aiMaterial in _scene.Materials)
+            foreach (Material aiMaterial in aiScene.Materials)
             {
                 // TODO: Should we create a special AssImpMaterial?
 
@@ -480,10 +479,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Converts all Assimp nodes to XNA nodes. (Nodes representing bones are excluded!)
         /// </summary>
-        private NodeContent ImportNodes(ContentImporterContext context)
+        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene)
         {
             _pivots = new Dictionary<string, FbxPivot>();
-            NodeContent rootNode = ImportNodes(context, _scene.RootNode, null,  null);
+            NodeContent rootNode = ImportNodes(context, aiScene, aiScene.RootNode, null,  null);
             return rootNode;
         }
 
@@ -498,7 +497,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// It may be necessary to skip certain "preserve pivot" nodes in the hierarchy. The
         /// converted node needs to be relative to <paramref name="aiParent"/>, not <c>node.Parent</c>.
         /// </remarks>
-        private NodeContent ImportNodes(ContentImporterContext context, Node aiNode, Node aiParent, NodeContent parent)
+        private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, Node aiNode, Node aiParent, NodeContent parent)
         {
             Debug.Assert(aiNode != null);
 
@@ -514,7 +513,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 foreach (int meshIndex in aiNode.MeshIndices)
                 {
-                    Mesh aiMesh = _scene.Meshes[meshIndex];
+                    Mesh aiMesh = aiScene.Meshes[meshIndex];
                     if (!aiMesh.HasVertices)
                         continue;
 
@@ -591,9 +590,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 aiParent = aiNode;
                 parent = node;
 
-                if (_scene.HasAnimations)
+                if (aiScene.HasAnimations)
                 {
-                    foreach (Animation aiAnimation in _scene.Animations)
+                    foreach (Animation aiAnimation in aiScene.Animations)
                     {
                         AnimationContent animationContent = ImportAnimation(aiAnimation, node.Name);
                         if (animationContent.Channels.Count > 0)
@@ -605,7 +604,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(parent != null);
 
             foreach (Node aiChild in aiNode.Children)
-                ImportNodes(context, aiChild, aiParent, parent);
+                ImportNodes(context, aiScene, aiChild, aiParent, parent);
 
             return node;
         }
@@ -683,20 +682,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Identifies the nodes that represent bones and stores the bone offset matrices.
         /// </summary>
-        private void FindSkeleton()
+        private void FindSkeleton(Scene aiScene)
         {
             // See http://assimp.sourceforge.net/lib_html/data.html, section "Bones"
             // and notes above.
 
             // First, identify all deformation bones.
-            _deformationBones = FindDeformationBones(_scene);
+            _deformationBones = FindDeformationBones(aiScene);
             if (_deformationBones.Count == 0)
                 return;
 
             // Walk the tree upwards to find the root bones.
             HashSet<Node> rootBones = new HashSet<Node>();
             foreach (string boneName in _deformationBones.Keys)
-                rootBones.Add(FindRootBone(_scene, boneName));
+                rootBones.Add(FindRootBone(aiScene, boneName));
 
             if (rootBones.Count > 1)
                 throw new InvalidContentException("Multiple skeletons found. Please ensure that the model does not contain more that one skeleton.", _identity);
@@ -760,7 +759,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Imports the skeleton including all skeletal animations.
         /// </summary>
-        private void ImportSkeleton(NodeContent rootNode)
+        private void ImportSkeleton(Scene aiScene, NodeContent rootNode)
         {
             if (_rootBone == null)
                 return;
@@ -769,11 +768,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             BoneContent rootBoneContent = (BoneContent)ImportBones(_rootBone, _rootBone.Parent, null);
             rootNode.Children.Add(rootBoneContent);
 
-            if (!_scene.HasAnimations)
+            if (!aiScene.HasAnimations)
                 return;
 
             // Convert animations and add to root bone.
-            foreach (Animation aiAnimation in _scene.Animations)
+            foreach (Animation aiAnimation in aiScene.Animations)
             {
                 AnimationContent animationContent = ImportAnimation(aiAnimation);
                 rootBoneContent.Animations.Add(animationContent.Name, animationContent);
