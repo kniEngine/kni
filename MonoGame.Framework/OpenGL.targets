@@ -43,12 +43,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo" />
-    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo" />
+	<EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo">
+      <LogicalName>Resources.AlphaTestEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo">
+      <LogicalName>Resources.BasicEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo">
+      <LogicalName>Resources.DualTextureEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.fxo">
+      <LogicalName>Resources.EnvironmentMapEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo">
+      <LogicalName>Resources.SkinnedEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo">
+      <LogicalName>Resources.SpriteEffect.fxo</LogicalName>
+	</EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -175,13 +175,6 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return ReflectionHelpers.GetAssembly(typeof(ConcreteGraphicsDevice)); }
         }
 
-        public override string ResourceNameAlphaTestEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.ogl.fxo"; } }
-        public override string ResourceNameBasicEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.BasicEffect.ogl.fxo"; } }
-        public override string ResourceNameDualTextureEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.DualTextureEffect.ogl.fxo"; } }
-        public override string ResourceNameEnvironmentMapEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.EnvironmentMapEffect.ogl.fxo"; } }
-        public override string ResourceNameSkinnedEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SkinnedEffect.ogl.fxo"; } }
-        public override string ResourceNameSpriteEffect { get { return "Microsoft.Xna.Framework.Graphics.Effect.Resources.SpriteEffect.ogl.fxo"; } }
-
         internal void OnPresentationChanged()
         {
             ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);

@@ -240,12 +240,13 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         public abstract Assembly ConcreteAssembly { get; }
-        public abstract string ResourceNameAlphaTestEffect { get; }
-        public abstract string ResourceNameBasicEffect { get; }
-        public abstract string ResourceNameDualTextureEffect { get; }
-        public abstract string ResourceNameEnvironmentMapEffect { get; }
-        public abstract string ResourceNameSkinnedEffect { get; }
-        public abstract string ResourceNameSpriteEffect { get; }
+
+        internal const string ResourceNameAlphaTestEffect = "Resources.BasicEffect.fxo";
+        internal const string ResourceNameBasicEffect = "Resources.BasicEffect.fxo";
+        internal const string ResourceNameDualTextureEffect = "Resources.DualTextureEffect.fxo";
+        internal const string ResourceNameEnvironmentMapEffect = "Resources.EnvironmentMapEffect.fxo";
+        internal const string ResourceNameSkinnedEffect = "Resources.SkinnedEffect.fxo";
+        internal const string ResourceNameSpriteEffect = "Resources.SpriteEffect.fxo";
 
         internal byte[] GetResourceStreamBytes(string resourceName)
         {
