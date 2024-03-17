@@ -8,11 +8,12 @@
 #include "Macros.fxh"
 
 
-DECLARE_TEXTURE(Texture, 0);
+Texture2D<float4> Texture : register(t0);
+sampler TextureSampler : register(s0);
 
 
-BEGIN_CONSTANTS
-
+cbuffer Parameters : register(b0)
+{
     float4 DiffuseColor             _vs(c0)  _ps(c1)  _cb(c0);
     float3 EmissiveColor            _vs(c1)  _ps(c2)  _cb(c1);
     float3 SpecularColor            _vs(c2)  _ps(c3)  _cb(c2);
@@ -38,11 +39,9 @@ BEGIN_CONSTANTS
     float4x4 World                  _vs(c19)          _cb(c15);
     float3x3 WorldInverseTranspose  _vs(c23)          _cb(c19);
 
-MATRIX_CONSTANTS
 
     float4x4 WorldViewProj          _vs(c15)          _cb(c0);
-
-END_CONSTANTS
+};
 
 
 #include "Structures.fxh"
@@ -351,7 +350,7 @@ float4 PSBasic(VSOutput pin) : SV_Target0
 // Pixel shader: texture.
 float4 PSBasicTxFog(VSOutputTxFog pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
     
     ApplyFog(color, pin.Specular.w);
     
@@ -362,7 +361,7 @@ float4 PSBasicTxFog(VSOutputTxFog pin) : SV_Target0
 // Pixel shader: texture, no fog.
 float4 PSBasicTx(VSOutputTx pin) : SV_Target0
 {
-    return SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    return Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
 }
 
 
@@ -392,7 +391,7 @@ float4 PSBasicVertexLighting(VSOutputFog pin) : SV_Target0
 // Pixel shader: vertex lighting + texture.
 float4 PSBasicVertexLightingTxFog(VSOutputTxFog pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
     
     AddSpecular(color, pin.Specular.rgb);
     ApplyFog(color, pin.Specular.w);
@@ -404,7 +403,7 @@ float4 PSBasicVertexLightingTxFog(VSOutputTxFog pin) : SV_Target0
 // Pixel shader: vertex lighting + texture, no fog.
 float4 PSBasicVertexLightingTx(VSOutputTxFog pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
     
     AddSpecular(color, pin.Specular.rgb);
     
@@ -434,7 +433,7 @@ float4 PSBasicPixelLighting(VSOutputPixelLighting pin) : SV_Target0
 // Pixel shader: pixel lighting + texture.
 float4 PSBasicPixelLightingTx(VSOutputPixelLightingTx pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
     
     float3 eyeVector = normalize(EyePosition - pin.PositionWS.xyz);
     float3 worldNormal = normalize(pin.NormalWS);
@@ -453,42 +452,42 @@ float4 PSBasicPixelLightingTx(VSOutputPixelLightingTx pin) : SV_Target0
 // NOTE: The order of the techniques here are
 // defined to match the indexing in BasicEffect.cs.
 
-TECHNIQUE( BasicEffect,							VSBasic,		PSBasic );
-TECHNIQUE( BasicEffect_Fog,						VSBasicFog,			PSBasicFog );
-TECHNIQUE( BasicEffect_VertexColor,				VSBasicVc,		PSBasic );
-TECHNIQUE( BasicEffect_VertexColor_Fog,			VSBasicVcFog,		PSBasicFog );
+TECHNIQUE_SM2( BasicEffect,							VSBasic,		PSBasic );
+TECHNIQUE_SM2( BasicEffect_Fog,						VSBasicFog,			PSBasicFog );
+TECHNIQUE_SM2( BasicEffect_VertexColor,				VSBasicVc,		PSBasic );
+TECHNIQUE_SM2( BasicEffect_VertexColor_Fog,			VSBasicVcFog,		PSBasicFog );
 
-TECHNIQUE( BasicEffect_Texture,					VSBasicTx,		PSBasicTx );
-TECHNIQUE( BasicEffect_Texture_Fog,				VSBasicTxFog,		PSBasicTxFog );
-TECHNIQUE( BasicEffect_Texture_VertexColor,		VSBasicTxVc,	PSBasicTx );
-TECHNIQUE( BasicEffect_Texture_VertexColor_Fog,	VSBasicTxVcFog,		PSBasicTxFog );
+TECHNIQUE_SM2( BasicEffect_Texture,					VSBasicTx,		PSBasicTx );
+TECHNIQUE_SM2( BasicEffect_Texture_Fog,				VSBasicTxFog,		PSBasicTxFog );
+TECHNIQUE_SM2( BasicEffect_Texture_VertexColor,		VSBasicTxVc,	PSBasicTx );
+TECHNIQUE_SM2( BasicEffect_Texture_VertexColor_Fog,	VSBasicTxVcFog,		PSBasicTxFog );
 
-TECHNIQUE( BasicEffect_VertexLighting,							VSBasicVertexLighting,		PSBasicVertexLighting );
-TECHNIQUE( BasicEffect_VertexLighting_Fog,						VSBasicVertexLighting,		PSBasicVertexLightingFog );
-TECHNIQUE( BasicEffect_VertexLighting_VertexColor,				VSBasicVertexLightingVc,	PSBasicVertexLighting );
-TECHNIQUE( BasicEffect_VertexLighting_VertexColor_Fog,			VSBasicVertexLightingVc,	PSBasicVertexLightingFog );
+TECHNIQUE_SM2( BasicEffect_VertexLighting,							VSBasicVertexLighting,		PSBasicVertexLighting );
+TECHNIQUE_SM2( BasicEffect_VertexLighting_Fog,						VSBasicVertexLighting,		PSBasicVertexLightingFog );
+TECHNIQUE_SM2( BasicEffect_VertexLighting_VertexColor,				VSBasicVertexLightingVc,	PSBasicVertexLighting );
+TECHNIQUE_SM2( BasicEffect_VertexLighting_VertexColor_Fog,			VSBasicVertexLightingVc,	PSBasicVertexLightingFog );
 
-TECHNIQUE( BasicEffect_VertexLighting_Texture,					VSBasicVertexLightingTx,	PSBasicVertexLightingTx );
-TECHNIQUE( BasicEffect_VertexLighting_Texture_Fog,				VSBasicVertexLightingTx,	PSBasicVertexLightingTxFog );
-TECHNIQUE( BasicEffect_VertexLighting_Texture_VertexColor,		VSBasicVertexLightingTxVc,	PSBasicVertexLightingTx );
-TECHNIQUE( BasicEffect_VertexLighting_Texture_VertexColor_Fog,	VSBasicVertexLightingTxVc,	PSBasicVertexLightingTxFog );
+TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture,					VSBasicVertexLightingTx,	PSBasicVertexLightingTx );
+TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture_Fog,				VSBasicVertexLightingTx,	PSBasicVertexLightingTxFog );
+TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture_VertexColor,		VSBasicVertexLightingTxVc,	PSBasicVertexLightingTx );
+TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture_VertexColor_Fog,	VSBasicVertexLightingTxVc,	PSBasicVertexLightingTxFog );
 
-TECHNIQUE( BasicEffect_OneLight,							VSBasicOneLight,		PSBasicVertexLighting );
-TECHNIQUE( BasicEffect_OneLight_Fog,						VSBasicOneLight,		PSBasicVertexLightingFog );
-TECHNIQUE( BasicEffect_OneLight_VertexColor,				VSBasicOneLightVc,		PSBasicVertexLighting );
-TECHNIQUE( BasicEffect_OneLight_VertexColor_Fog,			VSBasicOneLightVc,		PSBasicVertexLightingFog );
+TECHNIQUE_SM2( BasicEffect_OneLight,							VSBasicOneLight,		PSBasicVertexLighting );
+TECHNIQUE_SM2( BasicEffect_OneLight_Fog,						VSBasicOneLight,		PSBasicVertexLightingFog );
+TECHNIQUE_SM2( BasicEffect_OneLight_VertexColor,				VSBasicOneLightVc,		PSBasicVertexLighting );
+TECHNIQUE_SM2( BasicEffect_OneLight_VertexColor_Fog,			VSBasicOneLightVc,		PSBasicVertexLightingFog );
 
-TECHNIQUE( BasicEffect_OneLight_Texture,					VSBasicOneLightTx,		PSBasicVertexLightingTx );
-TECHNIQUE( BasicEffect_OneLight_Texture_Fog,				VSBasicOneLightTx,		PSBasicVertexLightingTxFog );
-TECHNIQUE( BasicEffect_OneLight_Texture_VertexColor,		VSBasicOneLightTxVc,	PSBasicVertexLightingTx );
-TECHNIQUE( BasicEffect_OneLight_Texture_VertexColor_Fog,	VSBasicOneLightTxVc,	PSBasicVertexLightingTxFog );
+TECHNIQUE_SM2( BasicEffect_OneLight_Texture,					VSBasicOneLightTx,		PSBasicVertexLightingTx );
+TECHNIQUE_SM2( BasicEffect_OneLight_Texture_Fog,				VSBasicOneLightTx,		PSBasicVertexLightingTxFog );
+TECHNIQUE_SM2( BasicEffect_OneLight_Texture_VertexColor,		VSBasicOneLightTxVc,	PSBasicVertexLightingTx );
+TECHNIQUE_SM2( BasicEffect_OneLight_Texture_VertexColor_Fog,	VSBasicOneLightTxVc,	PSBasicVertexLightingTxFog );
 
-TECHNIQUE( BasicEffect_PixelLighting,							VSBasicPixelLighting,		PSBasicPixelLighting );
-TECHNIQUE( BasicEffect_PixelLighting_Fog,						VSBasicPixelLighting,		PSBasicPixelLighting );
-TECHNIQUE( BasicEffect_PixelLighting_VertexColor,				VSBasicPixelLightingVc,		PSBasicPixelLighting );
-TECHNIQUE( BasicEffect_PixelLighting_VertexColor_Fog,			VSBasicPixelLightingVc,		PSBasicPixelLighting );
+TECHNIQUE_SM2( BasicEffect_PixelLighting,							VSBasicPixelLighting,		PSBasicPixelLighting );
+TECHNIQUE_SM2( BasicEffect_PixelLighting_Fog,						VSBasicPixelLighting,		PSBasicPixelLighting );
+TECHNIQUE_SM2( BasicEffect_PixelLighting_VertexColor,				VSBasicPixelLightingVc,		PSBasicPixelLighting );
+TECHNIQUE_SM2( BasicEffect_PixelLighting_VertexColor_Fog,			VSBasicPixelLightingVc,		PSBasicPixelLighting );
 
-TECHNIQUE( BasicEffect_PixelLighting_Texture,					VSBasicPixelLightingTx,		PSBasicPixelLightingTx );
-TECHNIQUE( BasicEffect_PixelLighting_Texture_Fog,				VSBasicPixelLightingTx,		PSBasicPixelLightingTx );
-TECHNIQUE( BasicEffect_PixelLighting_Texture_VertexColor,		VSBasicPixelLightingTxVc,	PSBasicPixelLightingTx );
-TECHNIQUE( BasicEffect_PixelLighting_Texture_VertexColor_Fog,	VSBasicPixelLightingTxVc,	PSBasicPixelLightingTx );
+TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture,					VSBasicPixelLightingTx,		PSBasicPixelLightingTx );
+TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture_Fog,				VSBasicPixelLightingTx,		PSBasicPixelLightingTx );
+TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture_VertexColor,		VSBasicPixelLightingTxVc,	PSBasicPixelLightingTx );
+TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture_VertexColor_Fog,	VSBasicPixelLightingTxVc,	PSBasicPixelLightingTx );

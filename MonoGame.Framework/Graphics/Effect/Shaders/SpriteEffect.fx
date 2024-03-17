@@ -8,15 +8,15 @@
 #include "Macros.fxh"
 
 
-DECLARE_TEXTURE(Texture, 0);
+Texture2D<float4> Texture : register(t0);
+sampler TextureSampler : register(s0);
 
 
-BEGIN_CONSTANTS
-MATRIX_CONSTANTS
+cbuffer Parameters : register(b0)
+{
 
     float4x4 MatrixTransform    _vs(c0) _cb(c0);
-
-END_CONSTANTS
+};
 
 
 struct VSOutputFog
@@ -40,7 +40,7 @@ VSOutputFog SpriteVertexShader(	float4 position	: POSITION0,
 
 float4 SpritePixelShader(VSOutputFog input) : SV_Target0
 {
-    return SAMPLE_TEXTURE(Texture, input.texCoord) * input.color;
+    return Texture.Sample(TextureSampler, input.texCoord) * input.color;
 }
 
-TECHNIQUE( SpriteBatch, SpriteVertexShader, SpritePixelShader );
+TECHNIQUE_SM2( SpriteBatch, SpriteVertexShader, SpritePixelShader );
