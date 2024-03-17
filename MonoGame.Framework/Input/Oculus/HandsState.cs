@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         
         public Matrix GetHandTransform(int handIndex)
         {
-            switch (eyeIndex)
+            switch (handIndex)
             {
                 case 0:
                     return LHandTransform;
