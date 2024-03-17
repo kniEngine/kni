@@ -8,21 +8,20 @@
 #include "Macros.fxh"
 
 
-DECLARE_TEXTURE(Texture, 0);
+Texture2D<float4> Texture : register(t0);
+sampler TextureSampler : register(s0);
 
 
-BEGIN_CONSTANTS
-
+cbuffer Parameters : register(b0)
+{
     float4 DiffuseColor     _vs(c0) _cb(c0);
     float4 AlphaTest        _ps(c0) _cb(c1);
     float3 FogColor         _ps(c1) _cb(c2);
     float4 FogVector        _vs(c5) _cb(c3);
 
-MATRIX_CONSTANTS
 
     float4x4 WorldViewProj  _vs(c1) _cb(c0);
-
-END_CONSTANTS
+};
 
 
 #include "Structures.fxh"
@@ -90,7 +89,7 @@ VSOutputTx VSAlphaTestVc(VSInputTxVc vin)
 // Pixel shader: less/greater compare function.
 float4 PSAlphaTestLtGtFog(VSOutputTxFog pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
 
     clip((color.a < AlphaTest.x) ? AlphaTest.z : AlphaTest.w);
 
@@ -103,7 +102,7 @@ float4 PSAlphaTestLtGtFog(VSOutputTxFog pin) : SV_Target0
 // Pixel shader: less/greater compare function, no fog.
 float4 PSAlphaTestLtGt(VSOutputTx pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
     
     clip((color.a < AlphaTest.x) ? AlphaTest.z : AlphaTest.w);
 
@@ -114,7 +113,7 @@ float4 PSAlphaTestLtGt(VSOutputTx pin) : SV_Target0
 // Pixel shader: equal/notequal compare function.
 float4 PSAlphaTestEqNeFog(VSOutputTxFog pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
     
     clip((abs(color.a - AlphaTest.x) < AlphaTest.y) ? AlphaTest.z : AlphaTest.w);
 
@@ -127,7 +126,7 @@ float4 PSAlphaTestEqNeFog(VSOutputTxFog pin) : SV_Target0
 // Pixel shader: equal/notequal compare function, no fog.
 float4 PSAlphaTestEqNe(VSOutputTx pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
     
     clip((abs(color.a - AlphaTest.x) < AlphaTest.y) ? AlphaTest.z : AlphaTest.w);
 
@@ -138,14 +137,14 @@ float4 PSAlphaTestEqNe(VSOutputTx pin) : SV_Target0
 // NOTE: The order of the techniques here are
 // defined to match the indexing in AlphaTestEffect.cs.
 
-TECHNIQUE( AlphaTestEffect_LTGT,					VSAlphaTest,	PSAlphaTestLtGt );
-TECHNIQUE( AlphaTestEffect_LTGT_Fog,				VSAlphaTestFog,		PSAlphaTestLtGtFog );
-TECHNIQUE( AlphaTestEffect_LTGT_VertexColor,		VSAlphaTestVc,	PSAlphaTestLtGt );
-TECHNIQUE( AlphaTestEffect_LTGT_VertexColor_Fog,	VSAlphaTestVcFog,	PSAlphaTestLtGtFog );
+TECHNIQUE_SM2(AlphaTestEffect_LTGT, VSAlphaTest, PSAlphaTestLtGt);
+TECHNIQUE_SM2(AlphaTestEffect_LTGT_Fog, VSAlphaTestFog, PSAlphaTestLtGtFog);
+TECHNIQUE_SM2(AlphaTestEffect_LTGT_VertexColor, VSAlphaTestVc, PSAlphaTestLtGt);
+TECHNIQUE_SM2(AlphaTestEffect_LTGT_VertexColor_Fog, VSAlphaTestVcFog, PSAlphaTestLtGtFog);
 
-TECHNIQUE( AlphaTestEffect_EQNE,					VSAlphaTest,	PSAlphaTestEqNe );
-TECHNIQUE( AlphaTestEffect_EQNE_Fog,				VSAlphaTestFog,		PSAlphaTestEqNeFog );
-TECHNIQUE( AlphaTestEffect_EQNE_VertexColor,		VSAlphaTestVc,	PSAlphaTestEqNe );
-TECHNIQUE( AlphaTestEffect_EQNE_VertexColor_Fog,	VSAlphaTestVcFog,	PSAlphaTestEqNeFog );
+TECHNIQUE_SM2(AlphaTestEffect_EQNE, VSAlphaTest, PSAlphaTestEqNe);
+TECHNIQUE_SM2(AlphaTestEffect_EQNE_Fog, VSAlphaTestFog, PSAlphaTestEqNeFog);
+TECHNIQUE_SM2(AlphaTestEffect_EQNE_VertexColor, VSAlphaTestVc, PSAlphaTestEqNe);
+TECHNIQUE_SM2(AlphaTestEffect_EQNE_VertexColor_Fog, VSAlphaTestVcFog, PSAlphaTestEqNeFog);
 
 

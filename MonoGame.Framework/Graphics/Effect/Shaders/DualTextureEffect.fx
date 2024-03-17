@@ -8,21 +8,21 @@
 #include "Macros.fxh"
 
 
-DECLARE_TEXTURE(Texture, 0);
-DECLARE_TEXTURE(Texture2, 1);
+Texture2D<float4> Texture : register(t0);
+sampler TextureSampler : register(s0);
+Texture2D<float4> Texture2 : register(t1);
+sampler Texture2Sampler : register(s1);
 
 
-BEGIN_CONSTANTS
-
+cbuffer Parameters : register(b0)
+{
     float4 DiffuseColor     _vs(c0) _cb(c0);
     float3 FogColor         _ps(c0) _cb(c1);
     float4 FogVector        _vs(c5) _cb(c2);
 
-MATRIX_CONSTANTS
 
     float4x4 WorldViewProj  _vs(c1) _cb(c0);
-
-END_CONSTANTS
+};
 
 
 #include "Structures.fxh"
@@ -94,8 +94,8 @@ VSOutputTx2 VSDualTextureVc(VSInputTx2Vc vin)
 // Pixel shader: basic.
 float4 PSDualTextureFog(VSOutputTx2Fog pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord);
-    float4 overlay = SAMPLE_TEXTURE(Texture2, pin.TexCoord2);
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord);
+    float4 overlay = Texture2.Sample(Texture2Sampler, pin.TexCoord2);
 
     color.rgb *= 2;    
     color *= overlay * pin.Diffuse;
@@ -109,8 +109,8 @@ float4 PSDualTextureFog(VSOutputTx2Fog pin) : SV_Target0
 // Pixel shader: no fog.
 float4 PSDualTexture(VSOutputTx2 pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord);
-    float4 overlay = SAMPLE_TEXTURE(Texture2, pin.TexCoord2);
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord);
+    float4 overlay = Texture2.Sample(Texture2Sampler, pin.TexCoord2);
     
     color.rgb *= 2;    
     color *= overlay * pin.Diffuse;
@@ -122,7 +122,7 @@ float4 PSDualTexture(VSOutputTx2 pin) : SV_Target0
 // NOTE: The order of the techniques here are
 // defined to match the indexing in DualTextureEffect_Fog.cs.
 
-TECHNIQUE( DualTextureEffect,					VSDualTexture,		PSDualTexture );
-TECHNIQUE( DualTextureEffect_Fog,				VSDualTextureFog,		PSDualTextureFog );
-TECHNIQUE( DualTextureEffect_VertexColor,		VSDualTextureVc,	PSDualTexture );
-TECHNIQUE( DualTextureEffect_VertexColor_Fog,	VSDualTextureVcFog,		PSDualTextureFog );
+TECHNIQUE_SM2( DualTextureEffect,					VSDualTexture,		PSDualTexture );
+TECHNIQUE_SM2( DualTextureEffect_Fog,				VSDualTextureFog,		PSDualTextureFog );
+TECHNIQUE_SM2( DualTextureEffect_VertexColor,		VSDualTextureVc,	PSDualTexture );
+TECHNIQUE_SM2( DualTextureEffect_VertexColor_Fog,	VSDualTextureVcFog,		PSDualTextureFog );

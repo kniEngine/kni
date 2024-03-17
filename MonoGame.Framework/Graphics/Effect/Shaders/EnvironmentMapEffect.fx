@@ -8,12 +8,14 @@
 #include "Macros.fxh"
 
 
-DECLARE_TEXTURE(Texture, 0);
-DECLARE_CUBEMAP(EnvironmentMap, 1);
+Texture2D<float4> Texture : register(t0);
+sampler TextureSampler : register(s0);
+TextureCube<float4> EnvironmentMap : register(t1);
+sampler EnvironmentMapSampler : register(s1);
 
 
-BEGIN_CONSTANTS
-
+cbuffer Parameters : register(b0)
+{
     float3 EnvironmentMapSpecular   _ps(c0)  _cb(c0);
     float  FresnelFactor            _vs(c0)  _cb(c0.w);
     float  EnvironmentMapAmount     _vs(c1)  _cb(c2.w);
@@ -38,11 +40,9 @@ BEGIN_CONSTANTS
     float4x4 World                  _vs(c16) _cb(c12);
     float3x3 WorldInverseTranspose  _vs(c19) _cb(c16);
 
-MATRIX_CONSTANTS
 
     float4x4 WorldViewProj          _vs(c12) _cb(c0);
-
-END_CONSTANTS
+};
 
 
 // We don't use these parameters, but Lighting.fxh won't compile without them.
@@ -123,8 +123,8 @@ VSOutputTxEnvMap VSEnvMapOneLightFresnel(VSInputNmTx vin)
 // Pixel shader: basic.
 float4 PSEnvMapFog(VSOutputTxEnvMap pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
-    float4 envmap = SAMPLE_CUBEMAP(EnvironmentMap, pin.EnvCoord) * color.a;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
+    float4 envmap = EnvironmentMap.Sample(EnvironmentMapSampler, pin.EnvCoord) * color.a;
 
     color.rgb = lerp(color.rgb, envmap.rgb, pin.Specular.rgb);
     
@@ -137,8 +137,8 @@ float4 PSEnvMapFog(VSOutputTxEnvMap pin) : SV_Target0
 // Pixel shader: no fog.
 float4 PSEnvMap(VSOutputTxEnvMap pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
-    float4 envmap = SAMPLE_CUBEMAP(EnvironmentMap, pin.EnvCoord) * color.a;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
+    float4 envmap = EnvironmentMap.Sample(EnvironmentMapSampler, pin.EnvCoord) * color.a;
 
     color.rgb = lerp(color.rgb, envmap.rgb, pin.Specular.rgb);
     
@@ -149,8 +149,8 @@ float4 PSEnvMap(VSOutputTxEnvMap pin) : SV_Target0
 // Pixel shader: specular.
 float4 PSEnvMapSpecularFog(VSOutputTxEnvMap pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
-    float4 envmap = SAMPLE_CUBEMAP(EnvironmentMap, pin.EnvCoord) * color.a;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
+    float4 envmap = EnvironmentMap.Sample(EnvironmentMapSampler, pin.EnvCoord) * color.a;
 
     color.rgb = lerp(color.rgb, envmap.rgb, pin.Specular.rgb);
     color.rgb += EnvironmentMapSpecular * envmap.a;
@@ -164,8 +164,8 @@ float4 PSEnvMapSpecularFog(VSOutputTxEnvMap pin) : SV_Target0
 // Pixel shader: specular, no fog.
 float4 PSEnvMapSpecular(VSOutputTxEnvMap pin) : SV_Target0
 {
-    float4 color = SAMPLE_TEXTURE(Texture, pin.TexCoord) * pin.Diffuse;
-    float4 envmap = SAMPLE_CUBEMAP(EnvironmentMap, pin.EnvCoord) * color.a;
+    float4 color = Texture.Sample(TextureSampler, pin.TexCoord) * pin.Diffuse;
+    float4 envmap = EnvironmentMap.Sample(EnvironmentMapSampler, pin.EnvCoord) * color.a;
 
     color.rgb = lerp(color.rgb, envmap.rgb, pin.Specular.rgb);
     color.rgb += EnvironmentMapSpecular * envmap.a;
@@ -177,22 +177,22 @@ float4 PSEnvMapSpecular(VSOutputTxEnvMap pin) : SV_Target0
 // NOTE: The order of the techniques here are
 // defined to match the indexing in EnvironmentMapEffect.cs.
 
-TECHNIQUE( EnvironmentMapEffect,						VSEnvMap,			PSEnvMap );
-TECHNIQUE( EnvironmentMapEffect_Fog,					VSEnvMap,			PSEnvMapFog );
-TECHNIQUE( EnvironmentMapEffect_Fresnel,				VSEnvMapFresnel,	PSEnvMap );
-TECHNIQUE( EnvironmentMapEffect_Fresnel_Fog,			VSEnvMapFresnel,	PSEnvMapFog );
+TECHNIQUE_SM2( EnvironmentMapEffect,						VSEnvMap,			PSEnvMap );
+TECHNIQUE_SM2( EnvironmentMapEffect_Fog,					VSEnvMap,			PSEnvMapFog );
+TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel,				VSEnvMapFresnel,	PSEnvMap );
+TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel_Fog,			VSEnvMapFresnel,	PSEnvMapFog );
 
-TECHNIQUE( EnvironmentMapEffect_Specular,				VSEnvMap,			PSEnvMapSpecular );
-TECHNIQUE( EnvironmentMapEffect_Specular_Fog,			VSEnvMap,			PSEnvMapSpecularFog );
-TECHNIQUE( EnvironmentMapEffect_Fresnel_Specular,		VSEnvMapFresnel,	PSEnvMapSpecular );
-TECHNIQUE( EnvironmentMapEffect_Fresnel_Specular_Fog,	VSEnvMapFresnel,	PSEnvMapSpecularFog );
+TECHNIQUE_SM2( EnvironmentMapEffect_Specular,				VSEnvMap,			PSEnvMapSpecular );
+TECHNIQUE_SM2( EnvironmentMapEffect_Specular_Fog,			VSEnvMap,			PSEnvMapSpecularFog );
+TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel_Specular,		VSEnvMapFresnel,	PSEnvMapSpecular );
+TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel_Specular_Fog,	VSEnvMapFresnel,	PSEnvMapSpecularFog );
 
-TECHNIQUE( EnvironmentMapEffect_OneLight,						VSEnvMapOneLight,			PSEnvMap );
-TECHNIQUE( EnvironmentMapEffect_OneLight_Fog,					VSEnvMapOneLight,			PSEnvMapFog );
-TECHNIQUE( EnvironmentMapEffect_OneLight_Fresnel,				VSEnvMapOneLightFresnel,	PSEnvMap );
-TECHNIQUE( EnvironmentMapEffect_OneLight_Fresnel_Fog,			VSEnvMapOneLightFresnel,	PSEnvMapFog );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight,						VSEnvMapOneLight,			PSEnvMap );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fog,					VSEnvMapOneLight,			PSEnvMapFog );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel,				VSEnvMapOneLightFresnel,	PSEnvMap );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel_Fog,			VSEnvMapOneLightFresnel,	PSEnvMapFog );
 
-TECHNIQUE( EnvironmentMapEffect_OneLight_Specular,				VSEnvMapOneLight,			PSEnvMapSpecular );
-TECHNIQUE( EnvironmentMapEffect_OneLight_Specular_Fog,			VSEnvMapOneLight,			PSEnvMapSpecularFog );
-TECHNIQUE( EnvironmentMapEffect_OneLight_Fresnel_Specular,		VSEnvMapOneLightFresnel,	PSEnvMapSpecular );
-TECHNIQUE( EnvironmentMapEffect_OneLight_Fresnel_Specular_Fog,	VSEnvMapOneLightFresnel,	PSEnvMapSpecularFog );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Specular,				VSEnvMapOneLight,			PSEnvMapSpecular );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Specular_Fog,			VSEnvMapOneLight,			PSEnvMapSpecularFog );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel_Specular,		VSEnvMapOneLightFresnel,	PSEnvMapSpecular );
+TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel_Specular_Fog,	VSEnvMapOneLightFresnel,	PSEnvMapSpecularFog );
