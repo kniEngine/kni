@@ -568,29 +568,26 @@ namespace Microsoft.Xna.Platform
         }
 
         // Dispose loaded game components
-        internal void DisposeComponentsAndContentAndManager(bool disposing)
+        internal void DisposeComponentsAndContentAndManager()
         {
-            if (disposing)
+            for (int i = 0; i < _components.Count; i++)
             {
-                for (int i = 0; i < _components.Count; i++)
-                {
-                    IDisposable disposable = _components[i] as IDisposable;
-                    if (disposable != null)
-                        disposable.Dispose();
-                }
-                _components = null;
+                IDisposable disposable = _components[i] as IDisposable;
+                if (disposable != null)
+                    disposable.Dispose();
+            }
+            _components = null;
 
-                if (_content != null)
-                {
-                    _content.Dispose();
-                    _content = null;
-                }
+            if (_content != null)
+            {
+                _content.Dispose();
+                _content = null;
+            }
 
-                if (_graphicsDeviceManager != null)
-                {
-                    ((IDisposable)_graphicsDeviceManager).Dispose();
-                    _graphicsDeviceManager = null;
-                }
+            if (_graphicsDeviceManager != null)
+            {
+                ((IDisposable)_graphicsDeviceManager).Dispose();
+                _graphicsDeviceManager = null;
             }
         }
 
