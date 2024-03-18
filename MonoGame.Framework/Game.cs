@@ -392,7 +392,8 @@ namespace Microsoft.Xna.Framework
             // are initialized.
             // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.game.initialize.aspx
             // Initialize all existing components
-            InitializeExistingComponents();
+            for (int i = 0; i < Strategy.Components.Count; i++)
+                Strategy.Components[i].Initialize();
 
             Strategy._graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
             if (Strategy._graphicsDeviceService != null)
@@ -528,18 +529,6 @@ namespace Microsoft.Xna.Framework
         }
 
         #endregion Internal Methods
-
-        // NOTE: InitializeExistingComponents really should only be called once.
-        //       Game.Initialize is the only method in a position to guarantee
-        //       that no component will get a duplicate Initialize call.
-        //       Further calls to Initialize occur immediately in response to
-        //       Components.ComponentAdded.
-        private void InitializeExistingComponents()
-        {
-            for(int i = 0; i < Components.Count; ++i)
-                Components[i].Initialize();
-        }
-
     }
 
 }
