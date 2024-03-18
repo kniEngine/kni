@@ -564,7 +564,25 @@ namespace Microsoft.Xna.Platform
             {
                 if (disposing)
                 {
-                    DisposeComponentsAndContentAndManager();
+                    for (int i = 0; i < _components.Count; i++)
+                    {
+                        IDisposable disposable = _components[i] as IDisposable;
+                        if (disposable != null)
+                            disposable.Dispose();
+                    }
+                    _components = null;
+
+                    if (_content != null)
+                    {
+                        _content.Dispose();
+                        _content = null;
+                    }
+
+                    if (_graphicsDeviceManager != null)
+                    {
+                        ((IDisposable)_graphicsDeviceManager).Dispose();
+                        _graphicsDeviceManager = null;
+                    }
                 }
 
                 _services.RemoveService(typeof(GameStrategy));
@@ -573,30 +591,6 @@ namespace Microsoft.Xna.Platform
                 TouchPanel.PrimaryWindow = null;
 
                 _isDisposed = true;
-            }
-        }
-
-        // Dispose loaded game components
-        private void DisposeComponentsAndContentAndManager()
-        {
-            for (int i = 0; i < _components.Count; i++)
-            {
-                IDisposable disposable = _components[i] as IDisposable;
-                if (disposable != null)
-                    disposable.Dispose();
-            }
-            _components = null;
-
-            if (_content != null)
-            {
-                _content.Dispose();
-                _content = null;
-            }
-
-            if (_graphicsDeviceManager != null)
-            {
-                ((IDisposable)_graphicsDeviceManager).Dispose();
-                _graphicsDeviceManager = null;
             }
         }
 
