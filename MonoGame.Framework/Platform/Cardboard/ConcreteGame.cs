@@ -54,6 +54,9 @@ namespace Microsoft.Xna.Platform
                 AndroidGameActivity.Paused -= Activity_Paused;
                 AndroidGameActivity.Resumed -= Activity_Resumed;
             }
+
+            AndroidGameWindow.Activity = null;
+
             base.Dispose(disposing);
         }
 

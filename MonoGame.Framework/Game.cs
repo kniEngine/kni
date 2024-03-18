@@ -73,10 +73,6 @@ namespace Microsoft.Xna.Framework
                     Microsoft.Xna.Platform.Audio.AudioService.Shutdown();
                 }
 
-#if ANDROID
-                AndroidGameWindow.Activity = null;
-#endif
-
                 _isDisposed = true;
             }
         }
