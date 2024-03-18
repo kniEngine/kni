@@ -130,8 +130,6 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public event EventHandler<EventArgs> ScreenDeviceNameChanged;
 
-#if WINDOWSDX || UAP || WINUI || DESKTOPGL
-
         /// <summary>
         /// Use this event to user text input.
         /// 
@@ -152,8 +150,6 @@ namespace Microsoft.Xna.Framework
         /// Buffered keyboard KeyUp event.
         /// </summary>
         public event EventHandler<InputKeyEventArgs> KeyUp;
-
-#endif
 
         /// <summary>
         /// This event is raised when user drops a file into the game window
@@ -228,7 +224,6 @@ namespace Microsoft.Xna.Framework
 
         #region Keyboard events
 
-#if WINDOWSDX || UAP || WINUI || DESKTOPGL
         /// <summary>
         /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
         /// </summary>
@@ -253,7 +248,6 @@ namespace Microsoft.Xna.Framework
 
         internal bool Platform_IsTextInputAttached() { return (TextInput != null); }
         internal bool Platform_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
-#endif
 
         #endregion Keyboard events
 
