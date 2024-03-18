@@ -374,16 +374,14 @@ namespace Microsoft.Xna.Framework
         {
             // TODO: This should be removed once all platforms use the new GraphicsDeviceManager
 #if DESKTOPGL || ANDROID || IOS || TVOS
-            // applyChanges
+            // ApplyChanges
             {
-                bool willBeFullScreen = GraphicsDevice.PresentationParameters.IsFullScreen;
+                GraphicsDevice graphicsDevice = Strategy.GraphicsDevice;
+                PresentationParameters pp = graphicsDevice.PresentationParameters;
+                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
 
-                Viewport viewport = new Viewport(0, 0,
-                                            GraphicsDevice.PresentationParameters.BackBufferWidth,
-                                            GraphicsDevice.PresentationParameters.BackBufferHeight);
-                GraphicsDevice.Viewport = viewport;
-
-                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height, willBeFullScreen);
+                bool willBeFullScreen = pp.IsFullScreen;
+                Strategy.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, willBeFullScreen);
             }
 #endif
 
@@ -396,9 +394,11 @@ namespace Microsoft.Xna.Framework
                 Strategy.Components[i].Initialize();
 
             Strategy._graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
-            if (Strategy._graphicsDeviceService != null)
+
+            IGraphicsDeviceService graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+            if (graphicsDeviceService != null)
             {
-                if (Strategy._graphicsDeviceService.GraphicsDevice != null)
+                if (graphicsDeviceService.GraphicsDevice != null)
                     LoadContent();
             }
         }
