@@ -90,6 +90,20 @@ namespace Microsoft.Xna.Platform
             _isExiting |= isExiting;
         }
 
+        public override void Initialize()
+        {
+            // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
+            {
+                GraphicsDevice graphicsDevice = this.GraphicsDevice;
+                PresentationParameters pp = graphicsDevice.PresentationParameters;
+                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
+
+                _window.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
+            }
+
+            base.Initialize();
+        }
+
         public override bool IsMouseVisible
         {
             get { return base.IsMouseVisible; }
@@ -107,8 +121,7 @@ namespace Microsoft.Xna.Platform
         {
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Window.Handle);
             string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
-            bool willBeFullScreen = pp.IsFullScreen;
-            EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, willBeFullScreen);
+            _window.EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
         }
 
         private void RunLoop()
@@ -135,11 +148,6 @@ namespace Microsoft.Xna.Platform
         public override bool BeforeUpdate()
         {
             return true;
-        }
-
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
-        {
-            _window.EndScreenDeviceChange(screenDeviceName, clientWidth, clientHeight, willBeFullScreen);
         }
 
         protected override void Dispose(bool disposing)

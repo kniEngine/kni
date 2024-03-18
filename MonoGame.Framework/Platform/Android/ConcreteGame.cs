@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Media;
@@ -54,6 +55,9 @@ namespace Microsoft.Xna.Platform
                 AndroidGameActivity.Paused -= Activity_Paused;
                 AndroidGameActivity.Resumed -= Activity_Resumed;
             }
+
+            AndroidGameWindow.Activity = null;
+
             base.Dispose(disposing);
         }
 
@@ -99,11 +103,20 @@ namespace Microsoft.Xna.Platform
             _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
         }
 
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
+        public override void Initialize()
         {
-            // Force the Viewport to be correctly set
-            var gdm = this.GraphicsDeviceManager;
-            gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+            // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
+            {
+                GraphicsDevice graphicsDevice = this.GraphicsDevice;
+                PresentationParameters pp = graphicsDevice.PresentationParameters;
+                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
+
+                // Force the Viewport to be correctly set
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                gdm.GetStrategy<ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+            }
+
+            base.Initialize();
         }
         
         private bool _hasWindowFocus = true;

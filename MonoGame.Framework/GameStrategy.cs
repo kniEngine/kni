@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform
         #region Fields
 
         private GameServiceContainer _services;
-        internal IGraphicsDeviceService _graphicsDeviceService;
+        private IGraphicsDeviceService _graphicsDeviceService;
         private IGraphicsDeviceManager _graphicsDeviceManager;
 
         private ContentManager _content;
@@ -60,6 +60,8 @@ namespace Microsoft.Xna.Platform
             _services = new GameServiceContainer();
             _components = new GameComponentCollection();
             _content = new ContentManager(_services);
+
+            _services.AddService(typeof(GameStrategy), this);
         }
 
         ~GameStrategy()
@@ -287,6 +289,19 @@ namespace Microsoft.Xna.Platform
 
         public abstract void BeforeInitialize();
 
+        public virtual void Initialize()
+        {
+            // According to the information given on MSDN (see link below), all
+            // GameComponents in Components at the time Initialize() is called
+            // are initialized.
+            // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.game.initialize.aspx
+            // Initialize all existing components
+            for (int i = 0; i < this.Components.Count; i++)
+                this.Components[i].Initialize();
+
+            this._graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+        }
+
         internal void InitializeComponents()
         {
             // We need to do this after virtual Initialize(...) is called.
@@ -349,24 +364,6 @@ namespace Microsoft.Xna.Platform
         public abstract bool BeforeUpdate();
 
         /// <summary>
-        /// Completes a device transition.
-        /// </summary>
-        /// <param name='screenDeviceName'>
-        /// Screen device name.
-        /// </param>
-        /// <param name='clientWidth'>
-        /// The new width of the game's client window.
-        /// </param>
-        /// <param name='clientHeight'>
-        /// The new height of the game's client window.
-        /// </param>
-        /// <param name='willBeFullScreen'>
-        /// Specifies whether the device will be in full-screen mode upon completion of the change.
-        /// </param>
-        public virtual void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
-        { }
-
-        /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.
         /// Frame timing is generally handled by the Game class, but some platforms still handle it elsewhere. Once all platforms
         /// rely on the Game class's functionality, this method and any overrides should be removed.
@@ -410,7 +407,7 @@ namespace Microsoft.Xna.Platform
 
         public virtual void EndDraw()
         {
-            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            IGraphicsDeviceManager gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
             if (gdm != null)
                 gdm.EndDraw();
 
@@ -483,7 +480,7 @@ namespace Microsoft.Xna.Platform
             }
 
             // Do not allow any update to take longer than our maximum.
-            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
+            TimeSpan maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
             if (_currElapsedTime > maxElapsedTime)
                 _currElapsedTime = maxElapsedTime;
 
@@ -560,37 +557,35 @@ namespace Microsoft.Xna.Platform
         {
             if (!_isDisposed)
             {
+                if (disposing)
+                {
+                    for (int i = 0; i < _components.Count; i++)
+                    {
+                        IDisposable disposable = _components[i] as IDisposable;
+                        if (disposable != null)
+                            disposable.Dispose();
+                    }
+                    _components = null;
+
+                    if (_content != null)
+                    {
+                        _content.Dispose();
+                        _content = null;
+                    }
+
+                    if (_graphicsDeviceManager != null)
+                    {
+                        ((IDisposable)_graphicsDeviceManager).Dispose();
+                        _graphicsDeviceManager = null;
+                    }
+                }
+
+                _services.RemoveService(typeof(GameStrategy));
+
                 Mouse.PrimaryWindow = null;
                 TouchPanel.PrimaryWindow = null;
 
                 _isDisposed = true;
-            }
-        }
-
-        // Dispose loaded game components
-        internal void DisposeComponentsAndContentAndManager(bool disposing)
-        {
-            if (disposing)
-            {
-                for (int i = 0; i < _components.Count; i++)
-                {
-                    var disposable = _components[i] as IDisposable;
-                    if (disposable != null)
-                        disposable.Dispose();
-                }
-                _components = null;
-
-                if (_content != null)
-                {
-                    _content.Dispose();
-                    _content = null;
-                }
-
-                if (_graphicsDeviceManager != null)
-                {
-                    ((IDisposable)_graphicsDeviceManager).Dispose();
-                    _graphicsDeviceManager = null;
-                }
             }
         }
 
@@ -621,7 +616,7 @@ namespace Microsoft.Xna.Platform
                 if (_addDrawableJournal.Remove(new DrawableJournalEntry(component, -1)))
                     return;
 
-                var index = _drawableComponents.IndexOf(component);
+                int index = _drawableComponents.IndexOf(component);
                 if (index >= 0)
                 {
                     component.VisibleChanged -= Component_VisibleChanged;
@@ -652,8 +647,8 @@ namespace Microsoft.Xna.Platform
 
             private void Component_DrawOrderChanged(object sender, EventArgs e)
             {
-                var component = (IDrawable)sender;
-                var index = _drawableComponents.IndexOf(component);
+                IDrawable component = (IDrawable)sender;
+                int index = _drawableComponents.IndexOf(component);
 
                 _addDrawableJournal.Add(new DrawableJournalEntry(component, _addDrawableJournalCount++));
 
@@ -715,13 +710,13 @@ namespace Microsoft.Xna.Platform
 
                 while (iItems < _drawableComponents.Count && iAddJournal < _addDrawableJournal.Count)
                 {
-                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
-                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
-                    if (Comparer<int>.Default.Compare(addJournalItem.DrawOrder, _drawableComponents[iItems].DrawOrder) < 0)
+                    IDrawable addDrawableItem = _addDrawableJournal[iAddJournal].Component;
+                    // If addDrawableItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addDrawableItem.DrawOrder, _drawableComponents[iItems].DrawOrder) < 0)
                     {
-                        addJournalItem.VisibleChanged += Component_VisibleChanged;
-                        addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
-                        _drawableComponents.Insert(iItems, addJournalItem);
+                        addDrawableItem.VisibleChanged += Component_VisibleChanged;
+                        addDrawableItem.DrawOrderChanged += Component_DrawOrderChanged;
+                        _drawableComponents.Insert(iItems, addDrawableItem);
                         iAddJournal++;
                     }
                     // Always increment iItems, either because we inserted and
@@ -733,10 +728,10 @@ namespace Microsoft.Xna.Platform
                 // If _addJournal had any "tail" items, append them all now.
                 for (; iAddJournal < _addDrawableJournal.Count; iAddJournal++)
                 {
-                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
-                    addJournalItem.VisibleChanged += Component_VisibleChanged;
-                    addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
-                    _drawableComponents.Add(addJournalItem);
+                    IDrawable addDrawableItem = _addDrawableJournal[iAddJournal].Component;
+                    addDrawableItem.VisibleChanged += Component_VisibleChanged;
+                    addDrawableItem.DrawOrderChanged += Component_DrawOrderChanged;
+                    _drawableComponents.Add(addDrawableItem);
                 }
 
                 _addDrawableJournal.Clear();
@@ -798,7 +793,7 @@ namespace Microsoft.Xna.Platform
                 if (_addUpdateableJournal.Remove(new UpdateableJournalEntry(component, -1)))
                     return;
 
-                var index = _updateableComponents.IndexOf(component);
+                int index = _updateableComponents.IndexOf(component);
                 if (index >= 0)
                 {
                     component.EnabledChanged -= Component_EnabledChanged;
@@ -831,8 +826,8 @@ namespace Microsoft.Xna.Platform
 
             private void Component_UpdateOrderChanged(object sender, EventArgs e)
             {
-                var component = (IUpdateable)sender;
-                var index = _updateableComponents.IndexOf(component);
+                IUpdateable component = (IUpdateable)sender;
+                int index = _updateableComponents.IndexOf(component);
 
                 _addUpdateableJournal.Add(new UpdateableJournalEntry(component, _addUpdateableJournalCount++));
 
@@ -894,13 +889,13 @@ namespace Microsoft.Xna.Platform
 
                 while (iItems < _updateableComponents.Count && iAddJournal < _addUpdateableJournal.Count)
                 {
-                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
-                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
-                    if (Comparer<int>.Default.Compare(addJournalItem.UpdateOrder, _updateableComponents[iItems].UpdateOrder) < 0)
+                    IUpdateable addUpdateableItem = _addUpdateableJournal[iAddJournal].Component;
+                    // If addUpdateableItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addUpdateableItem.UpdateOrder, _updateableComponents[iItems].UpdateOrder) < 0)
                     {
-                        addJournalItem.EnabledChanged += Component_EnabledChanged;
-                        addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
-                        _updateableComponents.Insert(iItems, addJournalItem);
+                        addUpdateableItem.EnabledChanged += Component_EnabledChanged;
+                        addUpdateableItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+                        _updateableComponents.Insert(iItems, addUpdateableItem);
                         iAddJournal++;
                     }
                     // Always increment iItems, either because we inserted and
@@ -912,11 +907,11 @@ namespace Microsoft.Xna.Platform
                 // If _addJournal had any "tail" items, append them all now.
                 for (; iAddJournal < _addUpdateableJournal.Count; iAddJournal++)
                 {
-                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
-                    addJournalItem.EnabledChanged += Component_EnabledChanged;
-                    addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+                    IUpdateable addUpdateableItem = _addUpdateableJournal[iAddJournal].Component;
+                    addUpdateableItem.EnabledChanged += Component_EnabledChanged;
+                    addUpdateableItem.UpdateOrderChanged += Component_UpdateOrderChanged;
 
-                    _updateableComponents.Add(addJournalItem);
+                    _updateableComponents.Add(addUpdateableItem);
                 }
 
                 _addUpdateableJournal.Clear();

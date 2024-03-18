@@ -32,8 +32,6 @@ namespace Microsoft.Xna.Framework
 
             Strategy.Activated += Platform_Activated;
             Strategy.Deactivated += Platform_Deactivated;
-            Services.AddService(typeof(GameStrategy), Strategy);
-
         }
 
         ~Game()
@@ -63,14 +61,10 @@ namespace Microsoft.Xna.Framework
             {
                 if (disposing)
                 {
-                    Strategy.DisposeComponentsAndContentAndManager(disposing);
-
                     if (Strategy != null)
                     {
                         Strategy.Activated -= Platform_Activated;
                         Strategy.Deactivated -= Platform_Deactivated;
-
-                        Services.RemoveService(typeof(GameStrategy));
 
                         Strategy.Dispose();
                         Strategy = null;
@@ -78,10 +72,6 @@ namespace Microsoft.Xna.Framework
 
                     Microsoft.Xna.Platform.Audio.AudioService.Shutdown();
                 }
-
-#if ANDROID
-                AndroidGameWindow.Activity = null;
-#endif
 
                 _isDisposed = true;
             }
@@ -372,32 +362,12 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         protected virtual void Initialize()
         {
-            // TODO: This should be removed once all platforms use the new GraphicsDeviceManager
-#if DESKTOPGL || ANDROID || IOS || TVOS
-            // applyChanges
+            Strategy.Initialize();
+
+            IGraphicsDeviceService graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+            if (graphicsDeviceService != null)
             {
-                var willBeFullScreen = GraphicsDevice.PresentationParameters.IsFullScreen;
-
-                Viewport viewport = new Viewport(0, 0,
-                                            GraphicsDevice.PresentationParameters.BackBufferWidth,
-                                            GraphicsDevice.PresentationParameters.BackBufferHeight);
-                GraphicsDevice.Viewport = viewport;
-
-                Strategy.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height, willBeFullScreen);
-            }
-#endif
-
-            // According to the information given on MSDN (see link below), all
-            // GameComponents in Components at the time Initialize() is called
-            // are initialized.
-            // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.game.initialize.aspx
-            // Initialize all existing components
-            InitializeExistingComponents();
-
-            Strategy._graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
-            if (Strategy._graphicsDeviceService != null)
-            {
-                if (Strategy._graphicsDeviceService.GraphicsDevice != null)
+                if (graphicsDeviceService.GraphicsDevice != null)
                     LoadContent();
             }
         }
@@ -488,7 +458,7 @@ namespace Microsoft.Xna.Framework
             AssertNotDisposed();
 
             bool gdmBeginDraw;
-            var gdm = (IGraphicsDeviceManager)Strategy.Services.GetService(typeof(IGraphicsDeviceManager));
+            IGraphicsDeviceManager gdm = (IGraphicsDeviceManager)Strategy.Services.GetService(typeof(IGraphicsDeviceManager));
             if (gdm != null)
                 gdmBeginDraw = gdm.BeginDraw();
             else // (gdm == null)
@@ -510,7 +480,7 @@ namespace Microsoft.Xna.Framework
 
             if (Strategy.GraphicsDevice == null)
             {
-                var gdm = Strategy.GraphicsDeviceManager;
+                GraphicsDeviceManager gdm = Strategy.GraphicsDeviceManager;
                 if (gdm != null)
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
             }
@@ -528,18 +498,6 @@ namespace Microsoft.Xna.Framework
         }
 
         #endregion Internal Methods
-
-        // NOTE: InitializeExistingComponents really should only be called once.
-        //       Game.Initialize is the only method in a position to guarantee
-        //       that no component will get a duplicate Initialize call.
-        //       Further calls to Initialize occur immediately in response to
-        //       Components.ComponentAdded.
-        private void InitializeExistingComponents()
-        {
-            for(int i = 0; i < Components.Count; ++i)
-                Components[i].Initialize();
-        }
-
     }
 
 }
