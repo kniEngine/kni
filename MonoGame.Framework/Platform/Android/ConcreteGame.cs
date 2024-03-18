@@ -111,18 +111,12 @@ namespace Microsoft.Xna.Platform
                 PresentationParameters pp = graphicsDevice.PresentationParameters;
                 graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
 
-                bool willBeFullScreen = pp.IsFullScreen;
-                this.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, willBeFullScreen);
+                // Force the Viewport to be correctly set
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                gdm.GetStrategy<ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
             }
 
             base.Initialize();
-        }
-
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
-        {
-            // Force the Viewport to be correctly set
-            var gdm = this.GraphicsDeviceManager;
-            gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
         }
         
         private bool _hasWindowFocus = true;

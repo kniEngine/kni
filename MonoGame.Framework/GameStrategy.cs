@@ -364,24 +364,6 @@ namespace Microsoft.Xna.Platform
         public abstract bool BeforeUpdate();
 
         /// <summary>
-        /// Completes a device transition.
-        /// </summary>
-        /// <param name='screenDeviceName'>
-        /// Screen device name.
-        /// </param>
-        /// <param name='clientWidth'>
-        /// The new width of the game's client window.
-        /// </param>
-        /// <param name='clientHeight'>
-        /// The new height of the game's client window.
-        /// </param>
-        /// <param name='willBeFullScreen'>
-        /// Specifies whether the device will be in full-screen mode upon completion of the change.
-        /// </param>
-        public virtual void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
-        { }
-
-        /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.
         /// Frame timing is generally handled by the Game class, but some platforms still handle it elsewhere. Once all platforms
         /// rely on the Game class's functionality, this method and any overrides should be removed.

@@ -168,9 +168,6 @@ namespace Microsoft.Xna.Platform
                 GraphicsDevice graphicsDevice = this.GraphicsDevice;
                 PresentationParameters pp = graphicsDevice.PresentationParameters;
                 graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-
-                bool willBeFullScreen = pp.IsFullScreen;
-                this.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, willBeFullScreen);
             }
 
             base.Initialize();
