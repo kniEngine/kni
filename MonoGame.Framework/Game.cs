@@ -32,8 +32,6 @@ namespace Microsoft.Xna.Framework
 
             Strategy.Activated += Platform_Activated;
             Strategy.Deactivated += Platform_Deactivated;
-            Strategy.Services.AddService(typeof(GameStrategy), Strategy);
-
         }
 
         ~Game()
@@ -69,8 +67,6 @@ namespace Microsoft.Xna.Framework
 
                         Strategy.Activated -= Platform_Activated;
                         Strategy.Deactivated -= Platform_Deactivated;
-
-                        Strategy.Services.RemoveService(typeof(GameStrategy));
 
                         Strategy.Dispose();
                         Strategy = null;

@@ -60,6 +60,8 @@ namespace Microsoft.Xna.Platform
             _services = new GameServiceContainer();
             _components = new GameComponentCollection();
             _content = new ContentManager(_services);
+
+            _services.AddService(typeof(GameStrategy), this);
         }
 
         ~GameStrategy()
@@ -560,6 +562,8 @@ namespace Microsoft.Xna.Platform
         {
             if (!_isDisposed)
             {
+                _services.RemoveService(typeof(GameStrategy));
+
                 Mouse.PrimaryWindow = null;
                 TouchPanel.PrimaryWindow = null;
 
