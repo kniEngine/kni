@@ -362,19 +362,6 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         protected virtual void Initialize()
         {
-            // TODO: This should be removed once all platforms use the new GraphicsDeviceManager
-#if DESKTOPGL || ANDROID || IOS || TVOS
-            // ApplyChanges
-            {
-                GraphicsDevice graphicsDevice = Strategy.GraphicsDevice;
-                PresentationParameters pp = graphicsDevice.PresentationParameters;
-                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-
-                bool willBeFullScreen = pp.IsFullScreen;
-                Strategy.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, willBeFullScreen);
-            }
-#endif
-
             Strategy.Initialize();
 
             IGraphicsDeviceService graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));

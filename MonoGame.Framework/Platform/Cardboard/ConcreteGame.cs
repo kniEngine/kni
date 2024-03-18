@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Media;
@@ -104,6 +105,16 @@ namespace Microsoft.Xna.Platform
 
         public override void Initialize()
         {
+            // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
+            {
+                GraphicsDevice graphicsDevice = this.GraphicsDevice;
+                PresentationParameters pp = graphicsDevice.PresentationParameters;
+                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
+
+                bool willBeFullScreen = pp.IsFullScreen;
+                this.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, willBeFullScreen);
+            }
+
             base.Initialize();
         }
 
