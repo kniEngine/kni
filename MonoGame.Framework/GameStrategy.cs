@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform
         #region Fields
 
         private GameServiceContainer _services;
-        internal IGraphicsDeviceService _graphicsDeviceService;
+        private IGraphicsDeviceService _graphicsDeviceService;
         private IGraphicsDeviceManager _graphicsDeviceManager;
 
         private ContentManager _content;
@@ -288,6 +288,19 @@ namespace Microsoft.Xna.Platform
         }
 
         public abstract void BeforeInitialize();
+
+        public virtual void Initialize()
+        {
+            // According to the information given on MSDN (see link below), all
+            // GameComponents in Components at the time Initialize() is called
+            // are initialized.
+            // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.game.initialize.aspx
+            // Initialize all existing components
+            for (int i = 0; i < this.Components.Count; i++)
+                this.Components[i].Initialize();
+
+            this._graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+        }
 
         internal void InitializeComponents()
         {

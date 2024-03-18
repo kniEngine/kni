@@ -375,15 +375,7 @@ namespace Microsoft.Xna.Framework
             }
 #endif
 
-            // According to the information given on MSDN (see link below), all
-            // GameComponents in Components at the time Initialize() is called
-            // are initialized.
-            // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.game.initialize.aspx
-            // Initialize all existing components
-            for (int i = 0; i < Strategy.Components.Count; i++)
-                Strategy.Components[i].Initialize();
-
-            Strategy._graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
+            Strategy.Initialize();
 
             IGraphicsDeviceService graphicsDeviceService = (IGraphicsDeviceService)Services.GetService(typeof(IGraphicsDeviceService));
             if (graphicsDeviceService != null)
