@@ -102,6 +102,11 @@ namespace Microsoft.Xna.Platform
             _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen)
         {
             // Force the Viewport to be correctly set

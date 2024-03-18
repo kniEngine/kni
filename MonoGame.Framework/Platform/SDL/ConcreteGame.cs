@@ -90,6 +90,11 @@ namespace Microsoft.Xna.Platform
             _isExiting |= isExiting;
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
         public override bool IsMouseVisible
         {
             get { return base.IsMouseVisible; }
