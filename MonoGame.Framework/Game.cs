@@ -63,10 +63,10 @@ namespace Microsoft.Xna.Framework
             {
                 if (disposing)
                 {
-                    Strategy.DisposeComponentsAndContentAndManager(disposing);
-
                     if (Strategy != null)
                     {
+                        Strategy.DisposeComponentsAndContentAndManager(disposing);
+
                         Strategy.Activated -= Platform_Activated;
                         Strategy.Deactivated -= Platform_Deactivated;
 
