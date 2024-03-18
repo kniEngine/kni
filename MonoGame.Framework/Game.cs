@@ -376,7 +376,7 @@ namespace Microsoft.Xna.Framework
 #if DESKTOPGL || ANDROID || IOS || TVOS
             // applyChanges
             {
-                var willBeFullScreen = GraphicsDevice.PresentationParameters.IsFullScreen;
+                bool willBeFullScreen = GraphicsDevice.PresentationParameters.IsFullScreen;
 
                 Viewport viewport = new Viewport(0, 0,
                                             GraphicsDevice.PresentationParameters.BackBufferWidth,
@@ -488,7 +488,7 @@ namespace Microsoft.Xna.Framework
             AssertNotDisposed();
 
             bool gdmBeginDraw;
-            var gdm = (IGraphicsDeviceManager)Strategy.Services.GetService(typeof(IGraphicsDeviceManager));
+            IGraphicsDeviceManager gdm = (IGraphicsDeviceManager)Strategy.Services.GetService(typeof(IGraphicsDeviceManager));
             if (gdm != null)
                 gdmBeginDraw = gdm.BeginDraw();
             else // (gdm == null)
@@ -510,7 +510,7 @@ namespace Microsoft.Xna.Framework
 
             if (Strategy.GraphicsDevice == null)
             {
-                var gdm = Strategy.GraphicsDeviceManager;
+                GraphicsDeviceManager gdm = Strategy.GraphicsDeviceManager;
                 if (gdm != null)
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
             }

@@ -410,7 +410,7 @@ namespace Microsoft.Xna.Platform
 
         public virtual void EndDraw()
         {
-            var gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
+            IGraphicsDeviceManager gdm = (IGraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager));
             if (gdm != null)
                 gdm.EndDraw();
 
@@ -483,7 +483,7 @@ namespace Microsoft.Xna.Platform
             }
 
             // Do not allow any update to take longer than our maximum.
-            var maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
+            TimeSpan maxElapsedTime = TimeSpan.FromTicks(Math.Max(MaxElapsedTime.Ticks, TargetElapsedTime.Ticks));
             if (_currElapsedTime > maxElapsedTime)
                 _currElapsedTime = maxElapsedTime;
 
@@ -574,7 +574,7 @@ namespace Microsoft.Xna.Platform
             {
                 for (int i = 0; i < _components.Count; i++)
                 {
-                    var disposable = _components[i] as IDisposable;
+                    IDisposable disposable = _components[i] as IDisposable;
                     if (disposable != null)
                         disposable.Dispose();
                 }
@@ -621,7 +621,7 @@ namespace Microsoft.Xna.Platform
                 if (_addDrawableJournal.Remove(new DrawableJournalEntry(component, -1)))
                     return;
 
-                var index = _drawableComponents.IndexOf(component);
+                int index = _drawableComponents.IndexOf(component);
                 if (index >= 0)
                 {
                     component.VisibleChanged -= Component_VisibleChanged;
@@ -652,8 +652,8 @@ namespace Microsoft.Xna.Platform
 
             private void Component_DrawOrderChanged(object sender, EventArgs e)
             {
-                var component = (IDrawable)sender;
-                var index = _drawableComponents.IndexOf(component);
+                IDrawable component = (IDrawable)sender;
+                int index = _drawableComponents.IndexOf(component);
 
                 _addDrawableJournal.Add(new DrawableJournalEntry(component, _addDrawableJournalCount++));
 
@@ -715,7 +715,7 @@ namespace Microsoft.Xna.Platform
 
                 while (iItems < _drawableComponents.Count && iAddJournal < _addDrawableJournal.Count)
                 {
-                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
+                    IDrawable addJournalItem = _addDrawableJournal[iAddJournal].Component;
                     // If addJournalItem is less than (belongs before) _items[iItems], insert it.
                     if (Comparer<int>.Default.Compare(addJournalItem.DrawOrder, _drawableComponents[iItems].DrawOrder) < 0)
                     {
@@ -733,7 +733,7 @@ namespace Microsoft.Xna.Platform
                 // If _addJournal had any "tail" items, append them all now.
                 for (; iAddJournal < _addDrawableJournal.Count; iAddJournal++)
                 {
-                    var addJournalItem = _addDrawableJournal[iAddJournal].Component;
+                    IDrawable addJournalItem = _addDrawableJournal[iAddJournal].Component;
                     addJournalItem.VisibleChanged += Component_VisibleChanged;
                     addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
                     _drawableComponents.Add(addJournalItem);
@@ -798,7 +798,7 @@ namespace Microsoft.Xna.Platform
                 if (_addUpdateableJournal.Remove(new UpdateableJournalEntry(component, -1)))
                     return;
 
-                var index = _updateableComponents.IndexOf(component);
+                int index = _updateableComponents.IndexOf(component);
                 if (index >= 0)
                 {
                     component.EnabledChanged -= Component_EnabledChanged;
@@ -831,8 +831,8 @@ namespace Microsoft.Xna.Platform
 
             private void Component_UpdateOrderChanged(object sender, EventArgs e)
             {
-                var component = (IUpdateable)sender;
-                var index = _updateableComponents.IndexOf(component);
+                IUpdateable component = (IUpdateable)sender;
+                int index = _updateableComponents.IndexOf(component);
 
                 _addUpdateableJournal.Add(new UpdateableJournalEntry(component, _addUpdateableJournalCount++));
 
@@ -894,7 +894,7 @@ namespace Microsoft.Xna.Platform
 
                 while (iItems < _updateableComponents.Count && iAddJournal < _addUpdateableJournal.Count)
                 {
-                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
+                    IUpdateable addJournalItem = _addUpdateableJournal[iAddJournal].Component;
                     // If addJournalItem is less than (belongs before) _items[iItems], insert it.
                     if (Comparer<int>.Default.Compare(addJournalItem.UpdateOrder, _updateableComponents[iItems].UpdateOrder) < 0)
                     {
@@ -912,7 +912,7 @@ namespace Microsoft.Xna.Platform
                 // If _addJournal had any "tail" items, append them all now.
                 for (; iAddJournal < _addUpdateableJournal.Count; iAddJournal++)
                 {
-                    var addJournalItem = _addUpdateableJournal[iAddJournal].Component;
+                    IUpdateable addJournalItem = _addUpdateableJournal[iAddJournal].Component;
                     addJournalItem.EnabledChanged += Component_EnabledChanged;
                     addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
 
