@@ -562,6 +562,11 @@ namespace Microsoft.Xna.Platform
         {
             if (!_isDisposed)
             {
+                if (disposing)
+                {
+                    DisposeComponentsAndContentAndManager();
+                }
+
                 _services.RemoveService(typeof(GameStrategy));
 
                 Mouse.PrimaryWindow = null;
@@ -572,7 +577,7 @@ namespace Microsoft.Xna.Platform
         }
 
         // Dispose loaded game components
-        internal void DisposeComponentsAndContentAndManager()
+        private void DisposeComponentsAndContentAndManager()
         {
             for (int i = 0; i < _components.Count; i++)
             {
