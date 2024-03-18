@@ -716,13 +716,13 @@ namespace Microsoft.Xna.Platform
 
                 while (iItems < _drawableComponents.Count && iAddJournal < _addDrawableJournal.Count)
                 {
-                    IDrawable addJournalItem = _addDrawableJournal[iAddJournal].Component;
-                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
-                    if (Comparer<int>.Default.Compare(addJournalItem.DrawOrder, _drawableComponents[iItems].DrawOrder) < 0)
+                    IDrawable addDrawableItem = _addDrawableJournal[iAddJournal].Component;
+                    // If addDrawableItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addDrawableItem.DrawOrder, _drawableComponents[iItems].DrawOrder) < 0)
                     {
-                        addJournalItem.VisibleChanged += Component_VisibleChanged;
-                        addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
-                        _drawableComponents.Insert(iItems, addJournalItem);
+                        addDrawableItem.VisibleChanged += Component_VisibleChanged;
+                        addDrawableItem.DrawOrderChanged += Component_DrawOrderChanged;
+                        _drawableComponents.Insert(iItems, addDrawableItem);
                         iAddJournal++;
                     }
                     // Always increment iItems, either because we inserted and
@@ -734,10 +734,10 @@ namespace Microsoft.Xna.Platform
                 // If _addJournal had any "tail" items, append them all now.
                 for (; iAddJournal < _addDrawableJournal.Count; iAddJournal++)
                 {
-                    IDrawable addJournalItem = _addDrawableJournal[iAddJournal].Component;
-                    addJournalItem.VisibleChanged += Component_VisibleChanged;
-                    addJournalItem.DrawOrderChanged += Component_DrawOrderChanged;
-                    _drawableComponents.Add(addJournalItem);
+                    IDrawable addDrawableItem = _addDrawableJournal[iAddJournal].Component;
+                    addDrawableItem.VisibleChanged += Component_VisibleChanged;
+                    addDrawableItem.DrawOrderChanged += Component_DrawOrderChanged;
+                    _drawableComponents.Add(addDrawableItem);
                 }
 
                 _addDrawableJournal.Clear();
@@ -895,13 +895,13 @@ namespace Microsoft.Xna.Platform
 
                 while (iItems < _updateableComponents.Count && iAddJournal < _addUpdateableJournal.Count)
                 {
-                    IUpdateable addJournalItem = _addUpdateableJournal[iAddJournal].Component;
-                    // If addJournalItem is less than (belongs before) _items[iItems], insert it.
-                    if (Comparer<int>.Default.Compare(addJournalItem.UpdateOrder, _updateableComponents[iItems].UpdateOrder) < 0)
+                    IUpdateable addUpdateableItem = _addUpdateableJournal[iAddJournal].Component;
+                    // If addUpdateableItem is less than (belongs before) _items[iItems], insert it.
+                    if (Comparer<int>.Default.Compare(addUpdateableItem.UpdateOrder, _updateableComponents[iItems].UpdateOrder) < 0)
                     {
-                        addJournalItem.EnabledChanged += Component_EnabledChanged;
-                        addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
-                        _updateableComponents.Insert(iItems, addJournalItem);
+                        addUpdateableItem.EnabledChanged += Component_EnabledChanged;
+                        addUpdateableItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+                        _updateableComponents.Insert(iItems, addUpdateableItem);
                         iAddJournal++;
                     }
                     // Always increment iItems, either because we inserted and
@@ -913,11 +913,11 @@ namespace Microsoft.Xna.Platform
                 // If _addJournal had any "tail" items, append them all now.
                 for (; iAddJournal < _addUpdateableJournal.Count; iAddJournal++)
                 {
-                    IUpdateable addJournalItem = _addUpdateableJournal[iAddJournal].Component;
-                    addJournalItem.EnabledChanged += Component_EnabledChanged;
-                    addJournalItem.UpdateOrderChanged += Component_UpdateOrderChanged;
+                    IUpdateable addUpdateableItem = _addUpdateableJournal[iAddJournal].Component;
+                    addUpdateableItem.EnabledChanged += Component_EnabledChanged;
+                    addUpdateableItem.UpdateOrderChanged += Component_UpdateOrderChanged;
 
-                    _updateableComponents.Add(addJournalItem);
+                    _updateableComponents.Add(addUpdateableItem);
                 }
 
                 _addUpdateableJournal.Clear();
