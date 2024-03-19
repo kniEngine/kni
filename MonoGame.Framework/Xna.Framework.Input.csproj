@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\Artifacts\Xna.Framework.Input\</BaseOutputPath>
+    
+    <Version>3.11.9002.0</Version>
+    <AssemblyVersion>3.11.9002.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
+    <ProjectGuid>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</ProjectGuid>
+    <AssemblyName>Xna.Framework.Input</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Input</RootNamespace>
+    <DefineConstants></DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>The Input framework.</Description>
+    <PackageTags>.net core;core;.net standard;standard</PackageTags>
+    <PackageId>nkast.Xna.Framework.Input</PackageId>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="Input\Buttons.cs" />
+    <Compile Include="Input\ButtonState.cs" />
+    <Compile Include="Input\GamePad.cs" />
+    <Compile Include="Input\GamePadButtons.cs" />
+    <Compile Include="Input\GamePadCapabilities.cs" />
+    <Compile Include="Input\GamePadDeadZone.cs" />
+    <Compile Include="Input\GamePadDPad.cs" />
+    <Compile Include="Input\GamePadState.cs" />
+    <Compile Include="Input\GamePadThumbSticks.cs" />
+    <Compile Include="Input\GamePadTriggers.cs" />
+    <Compile Include="Input\GamePadType.cs" />
+    <Compile Include="Input\InputKeyEventArgs.cs" />
+    <Compile Include="Input\Joystick.cs" />
+    <Compile Include="Input\JoystickCapabilities.cs" />
+    <Compile Include="Input\JoystickHat.cs" />
+    <Compile Include="Input\JoystickState.cs" />
+    <Compile Include="Input\Keyboard.cs" />
+    <Compile Include="Input\KeyboardState.cs" />
+    <Compile Include="Input\Keys.cs" />
+    <Compile Include="Input\KeyState.cs" />
+    <Compile Include="Input\Mouse.cs" />
+    <Compile Include="Input\MouseCursor.cs" />
+    <Compile Include="Input\MouseState.cs" />
+    <Compile Include="Input\TextInputEventArgs.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Src\Xna.Framework\Xna.Framework.csproj" />
+    <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
