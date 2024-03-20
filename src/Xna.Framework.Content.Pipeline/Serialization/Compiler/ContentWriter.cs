@@ -94,9 +94,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             // Normalize the directory format so PathHelper.GetRelativePath will compute external references correctly.
             this._referenceRelocationPath = PathHelper.NormalizeDirectory(referenceRelocationPath);
 
-            _outputStream = this.OutStream;
+            _outputStream = base.OutStream;
             _bodyStream = new MemoryStream();
-            this.OutStream = _bodyStream;
+            base.OutStream = _bodyStream;
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 if (disposing)
                 {
                     // Make sure the binary writer has the original stream back
-                    this.OutStream = _outputStream;
+                    base.OutStream = _outputStream;
 
                     // Dispose managed resources we allocated
                     if (_bodyStream != null)
@@ -131,9 +131,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             // Write shared resources to the end of body stream
             WriteSharedResources();
 
-            using (var contentStream = new MemoryStream())
+            using (MemoryStream contentStream = new MemoryStream())
             {
-                this.OutStream = contentStream;
+                base.OutStream = contentStream;
                 WriteTypeWriters();
                 _bodyStream.Position = 0;
                 _bodyStream.CopyTo(contentStream);
@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     if (compressContent)
                     {
                         compressedStream = new MemoryStream();
-                        this.OutStream = compressedStream;
+                        base.OutStream = compressedStream;
                         if (!WriteCompressedStream(contentStream))
                         {
                             // The compression failed (sometimes LZ4 does fail, for various reasons), so just write
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                         }
                     }
 
-                    this.OutStream = _outputStream;
+                    base.OutStream = _outputStream;
                     WriteHeader();
                     if (compressedStream != null)
                     {
@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         void WriteTypeWriters()
         {
             Write7BitEncodedInt(_typeWriters.Count);
-            foreach (var typeWriter in _typeWriters)
+            foreach (ContentTypeWriter typeWriter in _typeWriters)
             {
                 Write(typeWriter.GetRuntimeReader(_targetPlatform));
                 Write(typeWriter.TypeVersion);
@@ -246,7 +246,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             UInt32 totalSize = (UInt32)(HeaderSize + resultLength + sizeof(UInt32) + sizeof(UInt32));
             Write(totalSize);
             Write((int)stream.Length);
-            OutStream.Write(outputArray, 0, resultLength);
+            base.OutStream.Write(outputArray, 0, resultLength);
             return true;
         }
 
@@ -259,7 +259,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             UInt32 totalSize = (UInt32)(HeaderSize + stream.Length + sizeof(UInt32));
             Write(totalSize);
-            stream.CopyTo(OutStream);
+            stream.CopyTo(base.OutStream);
             return true;
         }
 
