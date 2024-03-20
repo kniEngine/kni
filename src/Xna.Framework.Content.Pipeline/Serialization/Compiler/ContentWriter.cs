@@ -237,15 +237,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <returns>true if the write succeeds</returns>
         bool WriteCompressedStream(MemoryStream stream)
         {
+            byte[] compressedData = stream.GetBuffer();
+
             // Compress stream
-            int maxLength = LZ4Codec.MaximumOutputLength((int)stream.Length);
+            int maxLength = LZ4Codec.MaximumOutputLength((int)compressedData.Length);
             byte[] outputArray = new byte[maxLength * 2];
-            int resultLength = LZ4Codec.Encode32HC(stream.GetBuffer(), 0, (int)stream.Length, outputArray, 0, maxLength);
+            int resultLength = LZ4Codec.Encode32HC(compressedData, 0, (int)compressedData.Length, outputArray, 0, maxLength);
             if (resultLength < 0)
                 return false;
             UInt32 totalSize = (UInt32)(HeaderSize + resultLength + sizeof(UInt32) + sizeof(UInt32));
             Write(totalSize);
-            Write((int)stream.Length);
+            Write((int)compressedData.Length);
             base.OutStream.Write(outputArray, 0, resultLength);
             return true;
         }
