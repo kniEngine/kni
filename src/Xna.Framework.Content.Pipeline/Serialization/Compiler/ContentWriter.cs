@@ -2,10 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework.Content.Pipeline.Utilities.LZ4;
 using Microsoft.Xna.Framework.Content.Pipeline.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,21 +19,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     /// <remarks>A new ContentWriter is constructed for each compilation operation.</remarks>
     public sealed class ContentWriter : BinaryWriter
     {
-        const byte XnbFormatVersion = 5;
-        const int HeaderSize = 6;
-
-        const byte ContentFlagCompressedLzx = 0x80;
-        const byte ContentFlagCompressedLz4 = 0x40;
-        const byte ContentFlagHiDef = 0x01;
-
         ContentCompiler _compiler;
         TargetPlatform _targetPlatform;
         GraphicsProfile _targetProfile;
-        bool compressContent;
         string _rootDirectory;
         string _referenceRelocationPath;
 
-        bool _isDisposed;
         List<ContentTypeWriter> _typeWriters = new List<ContentTypeWriter>();
         Dictionary<Type, int> _typeWriterMap = new Dictionary<Type, int>();
         Dictionary<Type, ContentTypeWriter> _typeMap = new Dictionary<Type, ContentTypeWriter>();
@@ -40,27 +32,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         List<object> _sharedResources = new List<object>();
         Dictionary<object, int> _sharedResourceMap = new Dictionary<object, int>();
 
-        Stream _outputStream;
-        Stream _bodyStream;
+        internal IList<object> SharedResources  { get {return _sharedResources; } }
 
-        // This array must remain in sync with TargetPlatform
-        static char[] _targetPlatformIdentifiers = new[]
-        {
-            'w', // Windows (DirectX)
-            'x', // Xbox360
-            'i', // iOS
-            'a', // Android
-            'd', // DesktopGL
-            'X', // MacOSX
-            'W', // WindowsStoreApp
-            'n', // NativeClient
-            'r', // RaspberryPi
-            'P', // PlayStation4
-            '5', // PlayStation5
-            'O', // XboxOne
-            'S', // Nintendo Switch
-            'b', // BlazorGL
-        };
+        internal ICollection<ContentTypeWriter> TypeWriters { get {return _typeWriters; } }
 
         /// <summary>
         /// Gets the content build target platform.
@@ -79,24 +53,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <param name="output">The stream to write the XNB file to.</param>
         /// <param name="targetPlatform">The platform the XNB is intended for.</param>
         /// <param name="targetProfile">The graphics profile of the target.</param>
-        /// <param name="compressContent">True if the content should be compressed.</param>
         /// <param name="rootDirectory">The root directory of the content.</param>
         /// <param name="referenceRelocationPath">The path of the XNB file, used to calculate relative paths for external references.</param>
-        internal ContentWriter(ContentCompiler compiler, Stream output, TargetPlatform targetPlatform, GraphicsProfile targetProfile, bool compressContent, string rootDirectory, string referenceRelocationPath)
+        internal ContentWriter(ContentCompiler compiler, Stream output, TargetPlatform targetPlatform, GraphicsProfile targetProfile, string rootDirectory, string referenceRelocationPath)
             : base(output)
         {
             this._compiler = compiler;
             this._targetPlatform = targetPlatform;
             this._targetProfile = targetProfile;
-            this.compressContent = compressContent;
             this._rootDirectory = rootDirectory;
 
             // Normalize the directory format so PathHelper.GetRelativePath will compute external references correctly.
             this._referenceRelocationPath = PathHelper.NormalizeDirectory(referenceRelocationPath);
-
-            _outputStream = base.OutStream;
-            _bodyStream = new MemoryStream();
-            base.OutStream = _bodyStream;
         }
 
         /// <summary>
@@ -105,123 +73,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            if (!_isDisposed)
+            if (disposing)
             {
-                if (disposing)
-                {
-                    // Make sure the binary writer has the original stream back
-                    base.OutStream = _outputStream;
-
-                    // Dispose managed resources we allocated
-                    if (_bodyStream != null)
-                        _bodyStream.Dispose();
-                    _bodyStream = null;
-                }
-                _isDisposed = true;
             }
 
             base.Dispose(disposing);
         }
 
         /// <summary>
-        /// All content has been written, so now finalize the header, footer and anything else that needs finalizing.
-        /// </summary>
-        public override void Flush()
-        {
-            // Write shared resources to the end of body stream
-            WriteSharedResources();
-
-            using (MemoryStream contentStream = new MemoryStream())
-            {
-                base.OutStream = contentStream;
-                WriteTypeWriters();
-                _bodyStream.Position = 0;
-                _bodyStream.CopyTo(contentStream);
-                contentStream.Position = 0;
-
-                // Before we write the header, try to compress the body stream. If compression fails, we want to
-                // turn off the compressContent flag so the correct flags are written in the header
-                Stream compressedStream = null;
-                try
-                {
-                    if (compressContent)
-                    {
-                        compressedStream = new MemoryStream();
-                        base.OutStream = compressedStream;
-                        if (!WriteCompressedStream(contentStream))
-                        {
-                            // The compression failed (sometimes LZ4 does fail, for various reasons), so just write
-                            // it out uncompressed.
-                            compressContent = false;
-                            compressedStream.Dispose();
-                            compressedStream = null;
-                        }
-                    }
-
-                    base.OutStream = _outputStream;
-                    WriteHeader();
-                    if (compressedStream != null)
-                    {
-                        compressedStream.Position = 0;
-                        compressedStream.CopyTo(_outputStream);
-                    }
-                    else
-                    {
-                        WriteUncompressedStream(contentStream);
-                    }
-                }
-                finally
-                {
-                    if (compressedStream != null)
-                        compressedStream.Dispose();
-                }
-            }
-            base.Flush();
-        }
-
-        /// <summary>
-        /// Write the table of content type writers.
-        /// </summary>
-        void WriteTypeWriters()
-        {
-            Write7BitEncodedInt(_typeWriters.Count);
-            foreach (ContentTypeWriter typeWriter in _typeWriters)
-            {
-                Write(typeWriter.GetRuntimeReader(_targetPlatform));
-                Write(typeWriter.TypeVersion);
-            }
-            Write7BitEncodedInt(_sharedResources.Count);
-        }
-
-        /// <summary>
-        /// Write the header to the output stream.
-        /// </summary>
-        void WriteHeader()
-        {
-            Write('X');
-            Write('N');
-            Write('B');
-            Write(_targetPlatformIdentifiers[(int)_targetPlatform]);
-            Write(XnbFormatVersion);
-
-            byte flags = default(byte);
-
-            // We cannot use LZX compression, so we use the public domain LZ4 compression. Use one of the spare bits in the flags byte to specify LZ4.
-            if (compressContent)
-                flags |= ContentFlagCompressedLz4;
-
-            if (_targetProfile == GraphicsProfile.HiDef)
-            {
-                flags |= ContentFlagHiDef;
-            }
-
-            Write(flags);
-        }
-
-        /// <summary>
         /// Write all shared resources at the end of the file.
         /// </summary>
-        void WriteSharedResources()
+        internal void WriteSharedResources(IList<object> sharedResources)
         {
             for (int i = 0; i < _sharedResources.Count; i++)
             {
@@ -230,40 +92,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             }
         }
 
-        /// <summary>
-        /// Compress the stream and write it to the output.
-        /// </summary>
-        /// <param name="stream">The stream to compress and write to the output.</param>
-        /// <returns>true if the write succeeds</returns>
-        bool WriteCompressedStream(MemoryStream stream)
-        {
-            byte[] compressedData = stream.GetBuffer();
-
-            // Compress stream
-            int maxLength = LZ4Codec.MaximumOutputLength((int)compressedData.Length);
-            byte[] outputArray = new byte[maxLength * 2];
-            int resultLength = LZ4Codec.Encode32HC(compressedData, 0, (int)compressedData.Length, outputArray, 0, maxLength);
-            if (resultLength < 0)
-                return false;
-            UInt32 totalSize = (UInt32)(HeaderSize + resultLength + sizeof(UInt32) + sizeof(UInt32));
-            Write(totalSize);
-            Write((int)compressedData.Length);
-            base.OutStream.Write(outputArray, 0, resultLength);
-            return true;
-        }
-
-        /// <summary>
-        /// Write the uncompressed stream to the output.
-        /// </summary>
-        /// <param name="stream">The stream to write to the output.</param>
-        /// <returns>true if the write succeeds</returns>
-        bool WriteUncompressedStream(Stream stream)
-        {
-            UInt32 totalSize = (UInt32)(HeaderSize + stream.Length + sizeof(UInt32));
-            Write(totalSize);
-            stream.CopyTo(base.OutStream);
-            return true;
-        }
 
         /// <summary>
         /// Gets a ContentTypeWriter for the given type.
@@ -408,23 +236,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <param name="value">The object to record.</param>
         public void WriteSharedResource<T>(T value)
         {
-            if (value == null)
-            {
-                // Zero means a null value
-                Write7BitEncodedInt(0);
-            }
-            else
+            int index = GetSharedResourceIndex(value);
+            Write7BitEncodedInt(index);
+        }
+
+        private int GetSharedResourceIndex(object value)
+        {
+            if (value != null)
             {
                 int index;
                 if (!_sharedResourceMap.TryGetValue(value, out index))
                 {
                     // Add it to the list of shared resources
-                    index = _sharedResources.Count;
                     _sharedResources.Add(value);
+                    index = _sharedResources.Count - 1;
+
                     _sharedResourceMap.Add(value, index);
                 }
-                // Because zero means null value, we add one before writing the index to the file
-                Write7BitEncodedInt(index + 1);
+                return (index + 1); // Because zero means null value, we add one to the index
+            }
+            else
+            {
+                return 0; // Zero means a null value
             }
         }
 
