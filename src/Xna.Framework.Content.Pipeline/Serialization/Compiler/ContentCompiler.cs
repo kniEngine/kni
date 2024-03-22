@@ -286,7 +286,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             int maxLength = LZ4Codec.MaximumOutputLength((int)plainData.Length);
             byte[] outputArray = new byte[maxLength * 2];
             int resultLength = LZ4Codec.Encode32HC(plainData, 0, (int)plainData.Length, outputArray, 0, maxLength);
-            if (resultLength < 0)
+            if (resultLength <= plainData.Length)
                 return null;
 
             MemoryStream compressedStream = new MemoryStream();
