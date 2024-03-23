@@ -30,15 +30,15 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public abstract Rectangle ClientBounds { get; }
 
-        internal bool _allowAltF4 = true;
+        private bool _disableAltF4;
 
         /// <summary>
         /// Gets or sets a bool that enables usage of Alt+F4 for window closing on desktop platforms. Value is true by default.
         /// </summary>
-        public virtual bool AllowAltF4
+        public bool AllowAltF4
         { 
-            get { return _allowAltF4; }
-            set { _allowAltF4 = value; }
+            get { return !_disableAltF4; }
+            set { _disableAltF4 = !value; }
         }
 
         /// <summary>

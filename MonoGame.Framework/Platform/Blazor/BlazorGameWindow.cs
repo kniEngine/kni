@@ -95,15 +95,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public override bool AllowAltF4
-        {
-             get { return base.AllowAltF4; }
-             set
-             {
-                 base.AllowAltF4 = value;
-             }
-        }
-
         public override DisplayOrientation CurrentOrientation
         {
             get { return DisplayOrientation.Default; }

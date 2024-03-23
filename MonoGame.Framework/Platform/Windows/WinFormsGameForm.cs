@@ -63,8 +63,6 @@ namespace Microsoft.Xna.Framework.Windows
         public const int WM_TABLET_QUERYSYSTEMGESTURESTA = (0x02C0 + 12);
 
 
-        public bool AllowAltF4 = true;
-
         internal bool IsResizing { get; set; }
 
         public WinFormsGameForm(WinFormsGameWindow window)
@@ -178,12 +176,16 @@ namespace Microsoft.Xna.Framework.Windows
 
                 case WM_SYSCOMMAND:
 
-                    var wParam = m.WParam.ToInt32();
+                    int wParam = m.WParam.ToInt32();
 
-                    if (!AllowAltF4 && wParam == 0xF060 && m.LParam.ToInt32() == 0 && Focused)
+                    if (wParam == 0xF060) // SC_CLOSE
                     {
-                        m.Result = IntPtr.Zero;
-                        return;
+                        bool disableAltF4 = !_window.AllowAltF4;
+                        if (!disableAltF4 && m.LParam.ToInt32() == 0 && Focused)
+                        {
+                            m.Result = IntPtr.Zero;
+                            return;
+                        }
                     }
 
                     // Disable the system menu from being toggled by
