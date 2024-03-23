@@ -69,8 +69,6 @@ namespace Microsoft.Xna.Framework
                         Strategy.Dispose();
                         Strategy = null;
                     }
-
-                    Microsoft.Xna.Platform.Audio.AudioService.Shutdown();
                 }
 
                 _isDisposed = true;
