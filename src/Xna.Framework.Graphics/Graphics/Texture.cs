@@ -9,9 +9,9 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public abstract class Texture : GraphicsResource
+    public abstract class Texture : GraphicsResource
         , IPlatformTexture
-	{
+    {
         protected ITextureStrategy _strategyTexture;
         
         private readonly int _sortingKey = Interlocked.Increment(ref _lastSortingKey);
@@ -27,8 +27,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         internal int SortingKey { get { return _sortingKey; } }
 
-		public SurfaceFormat Format { get { return _strategyTexture.Format; } }		
-		public int LevelCount { get { return _strategyTexture.LevelCount; } }
+        public SurfaceFormat Format { get { return _strategyTexture.Format; } }		
+        public int LevelCount { get { return _strategyTexture.LevelCount; } }
 
 
         protected Texture()

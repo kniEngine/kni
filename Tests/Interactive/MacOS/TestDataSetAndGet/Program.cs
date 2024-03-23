@@ -7,13 +7,10 @@
 //-----------------------------------------------------------------------------
 #endregion
 
-#region Using Statements
 using System;
-
 using MonoMac.Foundation;
 using MonoMac.AppKit;
 using MonoMac.ObjCRuntime;
-#endregion
 
 namespace TestDataSetAndGet
 {

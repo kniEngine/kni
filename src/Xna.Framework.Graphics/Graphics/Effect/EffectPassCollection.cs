@@ -5,7 +5,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public class EffectPassCollection : IEnumerable<EffectPass>
     {
-		private readonly EffectPass[] _passes;
+        private readonly EffectPass[] _passes;
 
         internal EffectPassCollection(EffectPass [] passes)
         {
@@ -31,13 +31,13 @@ namespace Microsoft.Xna.Framework.Graphics
             get 
             {
                 // TODO: Add a name to pass lookup table.
-				foreach (var pass in _passes) 
+                foreach (var pass in _passes) 
                 {
-					if (pass.Name == name)
-						return pass;
-				}
-				return null;
-		    }
+                    if (pass.Name == name)
+                        return pass;
+                }
+                return null;
+            }
         }
 
         public int Count

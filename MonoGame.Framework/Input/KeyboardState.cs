@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Input
     /// <summary>
     /// Holds the state of keystrokes by a keyboard.
     /// </summary>
-	public struct KeyboardState
+    public struct KeyboardState
     {
         private const byte CapsLockModifier = 1;
         private const byte NumLockModifier = 2;

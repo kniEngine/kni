@@ -4,35 +4,35 @@
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	/// <summary>
-	/// Defines types for effect parameters and shader constants.
-	/// </summary>
-	public enum EffectParameterType
-	{
+    /// <summary>
+    /// Defines types for effect parameters and shader constants.
+    /// </summary>
+    public enum EffectParameterType
+    {
         /// <summary>
         /// Pointer to void type.
         /// </summary>
-		Void,
+        Void,
         /// <summary>
         /// Boolean type. Any non-zero will be <c>true</c>; <c>false</c> otherwise.
         /// </summary>
-		Bool,
+        Bool,
         /// <summary>
         /// 32-bit integer type.
         /// </summary>
-		Int32,
+        Int32,
         /// <summary>
         /// Float type.
         /// </summary>
-		Single,
+        Single,
         /// <summary>
         /// String type.
         /// </summary>
-		String,
+        String,
         /// <summary>
         /// Any texture type.
         /// </summary>
-		Texture,
+        Texture,
         /// <summary>
         /// 1D-texture type.
         /// </summary>
@@ -48,6 +48,6 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Cubic texture type.
         /// </summary>
-		TextureCube
-	}
+        TextureCube
+    }
 }

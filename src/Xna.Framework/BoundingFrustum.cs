@@ -342,10 +342,10 @@ namespace Microsoft.Xna.Framework
         /// Returns a copy of internal corners array.
         /// </summary>
         /// <param name="corners">The array which values will be replaced to corner values of this instance. It must have size of <see cref="BoundingFrustum.CornerCount"/>.</param>
-		public void GetCorners(Vector3[] corners)
+        public void GetCorners(Vector3[] corners)
         {
-			if (corners == null) throw new ArgumentNullException("corners");
-		    if (corners.Length < CornerCount) throw new ArgumentOutOfRangeException("corners");
+            if (corners == null) throw new ArgumentNullException("corners");
+            if (corners.Length < CornerCount) throw new ArgumentOutOfRangeException("corners");
 
             this._corners.CopyTo(corners, 0);
         }
@@ -366,9 +366,9 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if specified <see cref="BoundingBox"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingBox box)
         {
-			var result = false;
-			this.Intersects(ref box, out result);
-			return result;
+            var result = false;
+            this.Intersects(ref box, out result);
+            return result;
         }
 
         /// <summary>
@@ -378,10 +378,10 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if specified <see cref="BoundingBox"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise as an output parameter.</param>
         public void Intersects(ref BoundingBox box, out bool result)
         {
-			var containment = default(ContainmentType);
-			this.Contains(ref box, out containment);
-			result = containment != ContainmentType.Disjoint;
-		}
+            var containment = default(ContainmentType);
+            this.Contains(ref box, out containment);
+            result = containment != ContainmentType.Disjoint;
+        }
 
         /// <summary>
         /// Gets whether or not a specified <see cref="BoundingFrustum"/> intersects with this <see cref="BoundingFrustum"/>.

@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
     internal enum StencilFace
     {
         Front = 0x0404,
-        Back = 0x0405,
+        Back  = 0x0405,
     }
     internal enum DrawBuffersEnum
     {
@@ -48,32 +48,32 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum ShaderType
     {
-        VertexShader = 0x8B31,
+        VertexShader   = 0x8B31,
         FragmentShader = 0x8B30,
     }
 
     internal enum ShaderParameter
     {
-        LogLength = 0x8B84,
+        LogLength     = 0x8B84,
         CompileStatus = 0x8B81,
-        SourceLength = 0x8B88,
+        SourceLength  = 0x8B88,
     }
 
     internal enum GetProgramParameterName
     {
-        LogLength = 0x8B84,
+        LogLength  = 0x8B84,
         LinkStatus = 0x8B82,
     }
 
     internal enum DrawElementsType
     {
         UnsignedShort = 0x1403,
-        UnsignedInt = 0x1405,
+        UnsignedInt   = 0x1405,
     }
 
     internal enum QueryTarget
     {
-        SamplesPassed = 0x8914,
+        SamplesPassed    = 0x8914,
         SamplesPassedExt = 0x8C2F,
     }
 
@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum BufferTarget
     {
-        ArrayBuffer = 0x8892,
+        ArrayBuffer        = 0x8892,
         ElementArrayBuffer = 0x8893,
     }
 
@@ -133,8 +133,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum FramebufferTarget
     {
-        Framebuffer = 0x8D40,
-        FramebufferExt = 0x8D40,
+        Framebuffer     = 0x8D40,
+        FramebufferExt  = 0x8D40,
         ReadFramebuffer = 0x8CA8,
     }
 
@@ -143,10 +143,11 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         Rgba8 = 0x8058,
         DepthComponent16 = 0x81a5,
         DepthComponent24 = 0x81a6,
-        Depth24Stencil8 = 0x88F0,
+        Depth24Stencil8  = 0x88F0,
+
         // GLES Values
         DepthComponent24Oes = 0x81A6,
-        Depth24Stencil8Oes = 0x88F0,
+        Depth24Stencil8Oes  = 0x88F0,
         StencilIndex8 = 0x8D48,
 
         DepthComponent16NonlinearNv = 0x8E2C,
@@ -196,13 +197,13 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum CullFaceMode
     {
-        Back = 0x0405,
+        Back  = 0x0405,
         Front = 0x0404,
     }
 
     internal enum FrontFaceDirection
     {
-        Cw = 0x0900,
+        Cw  = 0x0900,
         Ccw = 0x0901,
     }
 
@@ -274,26 +275,26 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum StringName
     {
-        Vendor = 0x1F00,
-        Renderer = 0x1F01,
-        Version = 0x1F02,
+        Vendor     = 0x1F00,
+        Renderer   = 0x1F01,
+        Version    = 0x1F02,
         Extensions = 0x1F03,
     }
 
     internal enum FramebufferAttachment
     {
-        ColorAttachment0 = 0x8CE0,
-        DepthAttachment = 0x8D00,
-        StencilAttachment = 0x8D20,
-        ColorAttachmentExt = 0x1800,
-        DepthAttachementExt = 0x1801,
+        ColorAttachment0     = 0x8CE0,
+        DepthAttachment      = 0x8D00,
+        StencilAttachment    = 0x8D20,
+        ColorAttachmentExt   = 0x1800,
+        DepthAttachementExt  = 0x1801,
         StencilAttachmentExt = 0x1802,
     }
 
     internal enum GLPrimitiveType
     {
-        Points = 0x0000,
-        Lines = 0x0001,
+        Points    = 0x0000,
+        Lines     = 0x0001,
         LineStrip = 0x0003,
         Triangles = 0x0004,
         TriangleStrip = 0x0005,
@@ -302,9 +303,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
     [Flags]
     internal enum ClearBufferMask
     {
-        DepthBufferBit = 0x00000100,
+        DepthBufferBit   = 0x00000100,
         StencilBufferBit = 0x00000400,
-        ColorBufferBit = 0x00004000,
+        ColorBufferBit   = 0x00004000,
     }
 
     internal enum ErrorCode
@@ -417,7 +418,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
     internal enum PixelStoreParameter
     {
         UnpackAlignment = 0x0CF5,
-        PackAlignment = 0x0D05,
+        PackAlignment   = 0x0D05,
     }
 
     internal enum StencilOp
@@ -466,7 +467,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum TextureMagFilter
     {
-        Linear = 0x2601,
+        Linear  = 0x2601,
         Nearest = 0x2600,
     }
 

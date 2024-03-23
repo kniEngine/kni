@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework
     /// </summary>
     public static class MathHelper
     {
-    	/// <summary>
+        /// <summary>
         /// Represents the mathematical constant e(2.71828175).
         /// </summary>
         public const float E = (float)Math.E;
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework
             return value1 + (value2 - value1) * amount1 + (value3 - value1) * amount2;
         }
 
-	/// <summary>
+    /// <summary>
         /// Performs a Catmull-Rom interpolation using the specified positions.
         /// </summary>
         /// <param name="value1">The first position in the interpolation.</param>
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Framework
                 (3.0 * value2 - value1 - 3.0 * value3 + value4) * amountCubed));
         }
 
- 	/// <summary>
+    /// <summary>
         /// Restricts a value to be within a specified range.
         /// </summary>
         /// <param name="value">The value to clamp.</param>
@@ -295,7 +295,7 @@ namespace Microsoft.Xna.Framework
         { 
             return (float)(degrees * 0.017453292519943295769236907684886);
         }
-	 
+     
         /// <summary>
         /// Reduces a given angle to a value between π and -π.
         /// </summary>

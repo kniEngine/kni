@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Color buffer.
         /// </summary>
-		Target = 1,
+        Target = 1,
         /// <summary>
         /// Depth buffer.
         /// </summary>

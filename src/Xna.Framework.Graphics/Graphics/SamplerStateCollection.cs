@@ -27,12 +27,12 @@ namespace Microsoft.Xna.Framework.Graphics
             
             Clear();
         }
-		
-		public SamplerState this[int index] 
+        
+        public SamplerState this[int index] 
         {
-			get { return _strategy[index]; }
-			set { _strategy[index] = value; }
-		}
+            get { return _strategy[index]; }
+            set { _strategy[index] = value; }
+        }
 
         internal void Clear()
         {

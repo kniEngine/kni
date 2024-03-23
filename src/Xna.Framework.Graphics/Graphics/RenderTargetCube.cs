@@ -43,10 +43,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <inheritdoc/>
         int IRenderTarget.Height { get { return this.Size; } }
 
-		public bool IsContentLost { get { return _strategyRenderTargetCube.IsContentLost; } }
+        public bool IsContentLost { get { return _strategyRenderTargetCube.IsContentLost; } }
 
-		public event EventHandler<EventArgs> ContentLost;
-		
+        public event EventHandler<EventArgs> ContentLost;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderTargetCube"/> class.
         /// </summary>
@@ -83,9 +83,9 @@ namespace Microsoft.Xna.Framework.Graphics
         
         protected static SurfaceFormat QuerySelectedFormat(GraphicsDevice graphicsDevice, SurfaceFormat preferredFormat)
         {
-			SurfaceFormat selectedFormat = preferredFormat;
-			DepthFormat selectedDepthFormat;
-			int selectedMultiSampleCount;
+            SurfaceFormat selectedFormat = preferredFormat;
+            DepthFormat selectedDepthFormat;
+            int selectedMultiSampleCount;
 
             if (graphicsDevice != null)
             {

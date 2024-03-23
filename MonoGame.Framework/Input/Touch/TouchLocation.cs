@@ -1,104 +1,66 @@
-#region License
-// /*
-// Microsoft Public License (Ms-PL)
-// MonoGame - Copyright © 2009-2010 The MonoGame Team
-// 
-// All rights reserved.
-// 
-// This license governs use of the accompanying software. If you use the software, you accept this license. If you do not
-// accept the license, do not use the software.
-// 
-// 1. Definitions
-// The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under 
-// U.S. copyright law.
-// 
-// A "contribution" is the original software, or any additions or changes to the software.
-// A "contributor" is any person that distributes its contribution under this license.
-// "Licensed patents" are a contributor's patent claims that read directly on its contribution.
-// 
-// 2. Grant of Rights
-// (A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, 
-// each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.
-// (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, 
-// each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.
-// 
-// 3. Conditions and Limitations
-// (A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.
-// (B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, 
-// your patent license from such contributor to the software ends automatically.
-// (C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution 
-// notices that are present in the software.
-// (D) If you distribute any portion of the software in source code form, you may do so only under this license by including 
-// a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object 
-// code form, you may only do so under a license that complies with this license.
-// (E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees
-// or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent
-// permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular
-// purpose and non-infringement.
-// */
-#endregion License
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
 
-#region Using clause
 using System;
 using System.Diagnostics;
-#endregion Using clause
 
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
     public struct TouchLocation : IEquatable<TouchLocation>
     {
-		/// <summary>
-		///Attributes 
-		/// </summary>
-		private int _id;
-		private TouchLocationState _state;
-		private Vector2 _position;
-		private Vector2 _previousPosition;
-		private TouchLocationState _previousState;
+        /// <summary>
+        ///Attributes 
+        /// </summary>
+        private int _id;
+        private TouchLocationState _state;
+        private Vector2 _position;
+        private Vector2 _previousPosition;
+        private TouchLocationState _previousState;
 
         /// <summary>
         /// Helper for assigning an invalid touch location.
         /// </summary>
         internal static readonly TouchLocation Invalid = new TouchLocation();
 
-		#region Properties
+        #region Properties
 
-		public int Id 
-		{ 
-			get
-	        {
-	            return _id;
-	        }
-		}
+        public int Id 
+        { 
+            get
+            {
+                return _id;
+            }
+        }
 
         public Vector2 Position 
-		{ 
-			get
-	        {
-	            return _position;
-	        }
-		}
-		
-		public float Pressure 
-		{ 
-			get
-        	{
-            	return 0f;
-        	}
-		}
-								
+        { 
+            get
+            {
+                return _position;
+            }
+        }
+        
+        public float Pressure 
+        { 
+            get
+            {
+                return 0f;
+            }
+        }
+                                
         public TouchLocationState State 
-		{ 
-			get
-	        {
-	            return _state;
-	        } 
-		}
-		
-		#endregion
-		
-		#region Constructors
+        { 
+            get
+            {
+                return _state;
+            } 
+        }
+        
+        #endregion
+        
+        #region Constructors
 
         public TouchLocation(int id, TouchLocationState state, Vector2 position)
             : this(id, state, position, TouchLocationState.Invalid, Vector2.Zero)
@@ -116,15 +78,15 @@ namespace Microsoft.Xna.Framework.Input.Touch
             _previousPosition = previousPosition;
         }
 
-		#endregion
+        #endregion
 
         public override bool Equals(object obj)
         {
-			if (obj is TouchLocation)
-				return Equals((TouchLocation)obj);
+            if (obj is TouchLocation)
+                return Equals((TouchLocation)obj);
 
-			return false;
-		}
+            return false;
+        }
 
         public bool Equals(TouchLocation other)
         {
@@ -145,40 +107,40 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         public bool TryGetPreviousLocation(out TouchLocation aPreviousLocation)
         {
-			if (_previousState == TouchLocationState.Invalid)
-			{
-				aPreviousLocation._id = -1;
-				aPreviousLocation._state = TouchLocationState.Invalid;
+            if (_previousState == TouchLocationState.Invalid)
+            {
+                aPreviousLocation._id = -1;
+                aPreviousLocation._state = TouchLocationState.Invalid;
                 aPreviousLocation._position = Vector2.Zero;
-				aPreviousLocation._previousState = TouchLocationState.Invalid;
-				aPreviousLocation._previousPosition = Vector2.Zero; 
+                aPreviousLocation._previousState = TouchLocationState.Invalid;
+                aPreviousLocation._previousPosition = Vector2.Zero; 
                 return false;
-			}
+            }
 
-			aPreviousLocation._id = _id;
-			aPreviousLocation._state = _previousState;
-			aPreviousLocation._position = _previousPosition;
-			aPreviousLocation._previousState = TouchLocationState.Invalid;
-			aPreviousLocation._previousPosition = Vector2.Zero;
+            aPreviousLocation._id = _id;
+            aPreviousLocation._state = _previousState;
+            aPreviousLocation._position = _previousPosition;
+            aPreviousLocation._previousState = TouchLocationState.Invalid;
+            aPreviousLocation._previousPosition = Vector2.Zero;
             return true;
         }
 
         public static bool operator !=(TouchLocation left, TouchLocation right)
         {
-			return  left._id != right._id || 
-			        left._state != right._state ||
-			        left._position != right._position ||
-			        left._previousState != right._previousState ||
-			        left._previousPosition != right._previousPosition;
+            return  left._id != right._id || 
+                    left._state != right._state ||
+                    left._position != right._position ||
+                    left._previousState != right._previousState ||
+                    left._previousPosition != right._previousPosition;
         }
 
         public static bool operator ==(TouchLocation left, TouchLocation right)
         {
             return  left._id == right._id && 
-			        left._state == right._state &&
-			        left._position == right._position &&
-			        left._previousState == right._previousState &&
-			        left._previousPosition == right._previousPosition;
+                    left._state == right._state &&
+                    left._position == right._position &&
+                    left._previousState == right._previousState &&
+                    left._previousPosition == right._previousPosition;
         }
 
     }

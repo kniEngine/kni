@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework
     /// <summary>
     /// Interface for curve evaluation. Implemented by <see cref="Curve"/>
     /// </summary>    
-	public interface ICurveEvaluator<T>
+    public interface ICurveEvaluator<T>
     {
         /// <summary>
         /// Evaluate the value at a position of this <see cref="ICurveEvaluator{T}"/>.

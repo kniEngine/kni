@@ -29,6 +29,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-	}
+    }
 }
 

@@ -126,26 +126,26 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         Dxt5SRgb = 35,
 
-		/// <summary>
-        /// PowerVR texture compression format (iOS and Android).
-		/// </summary>
-		RgbPvrtc2Bpp = 50,
         /// <summary>
         /// PowerVR texture compression format (iOS and Android).
         /// </summary>
-		RgbPvrtc4Bpp = 51,
+        RgbPvrtc2Bpp = 50,
         /// <summary>
         /// PowerVR texture compression format (iOS and Android).
         /// </summary>
-		RgbaPvrtc2Bpp = 52,
+        RgbPvrtc4Bpp = 51,
         /// <summary>
         /// PowerVR texture compression format (iOS and Android).
         /// </summary>
-		RgbaPvrtc4Bpp = 53,
-		/// <summary>
+        RgbaPvrtc2Bpp = 52,
+        /// <summary>
+        /// PowerVR texture compression format (iOS and Android).
+        /// </summary>
+        RgbaPvrtc4Bpp = 53,
+        /// <summary>
         /// Ericcson Texture Compression (Android)
-		/// </summary>
-		RgbEtc1 = 60,
+        /// </summary>
+        RgbEtc1 = 60,
         /// <summary>
         /// DXT1 version where 1-bit alpha is used.
         /// </summary>
@@ -159,29 +159,29 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         RgbaAtcInterpolatedAlpha = 81,
 
-		/// <summary>
+        /// <summary>
         /// Etc2 RGB8 (Android/iOS withh OpenglES 3.0)
-		/// </summary>
+        /// </summary>
         Rgb8Etc2 = 90,
-		/// <summary>
+        /// <summary>
         /// Etc2 SRGB8 (Android/iOS withh OpenglES 3.0)
-		/// </summary>
+        /// </summary>
         Srgb8Etc2 = 91,
-		/// <summary>
+        /// <summary>
         /// Etc2 RGB8A1 (Android/iOS withh OpenglES 3.0)
-		/// </summary>
+        /// </summary>
         Rgb8A1Etc2 = 92,
-		/// <summary>
+        /// <summary>
         /// Etc2 SRGB8A1 (Android/iOS withh OpenglES 3.0)
-		/// </summary>
+        /// </summary>
         Srgb8A1Etc2 = 93,
-		/// <summary>
+        /// <summary>
         /// Etc2 RGBA8 EAC (Android/iOS withh OpenglES 3.0)
-		/// </summary>
+        /// </summary>
         Rgba8Etc2 = 94,
-		/// <summary>
+        /// <summary>
         /// Etc2 SRGB8A8 EAC (Android/iOS withh OpenglES 3.0)
-		/// </summary>
+        /// </summary>
         SRgb8A8Etc2 = 95,
 
         #endregion

@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         /// <summary>
         /// The current state key which is used to detect
-		/// if the parameter value has been changed.
+        /// if the parameter value has been changed.
         /// </summary>
         internal ulong StateKey { get; private set; }
 

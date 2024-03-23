@@ -22,6 +22,6 @@ namespace Microsoft.Xna.Platform.Graphics
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 
-	}
+    }
 }
 

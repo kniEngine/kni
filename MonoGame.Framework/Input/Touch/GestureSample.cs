@@ -1,45 +1,9 @@
-﻿#region License
-// /*
-// Microsoft Public License (Ms-PL)
-// MonoGame - Copyright © 2009-2010 The MonoGame Team
-// 
-// All rights reserved.
-// 
-// This license governs use of the accompanying software. If you use the software, you accept this license. If you do not
-// accept the license, do not use the software.
-// 
-// 1. Definitions
-// The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under 
-// U.S. copyright law.
-// 
-// A "contribution" is the original software, or any additions or changes to the software.
-// A "contributor" is any person that distributes its contribution under this license.
-// "Licensed patents" are a contributor's patent claims that read directly on its contribution.
-// 
-// 2. Grant of Rights
-// (A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, 
-// each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.
-// (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, 
-// each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.
-// 
-// 3. Conditions and Limitations
-// (A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.
-// (B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, 
-// your patent license from such contributor to the software ends automatically.
-// (C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution 
-// notices that are present in the software.
-// (D) If you distribute any portion of the software in source code form, you may do so only under this license by including 
-// a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object 
-// code form, you may only do so under a license that complies with this license.
-// (E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees
-// or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent
-// permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular
-// purpose and non-infringement.
-// */
-#endregion License
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
 
-using Microsoft.Xna.Framework;
 using System;
+using Microsoft.Xna.Framework;
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
@@ -49,14 +13,14 @@ namespace Microsoft.Xna.Framework.Input.Touch
     public struct GestureSample
     {
         // attributes
-		private GestureType _gestureType;
-		private TimeSpan _timestamp;
-		private Vector2 _position;
-		private Vector2 _position2;
-		private Vector2 _delta;
-		private Vector2 _delta2;
-		
-		#region Properties
+        private GestureType _gestureType;
+        private TimeSpan _timestamp;
+        private Vector2 _position;
+        private Vector2 _position2;
+        private Vector2 _delta;
+        private Vector2 _delta2;
+        
+        #region Properties
 
         /// <summary>
         /// Gets the type of the gesture.
@@ -65,7 +29,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             get
             {
-				return this._gestureType;
+                return this._gestureType;
             }
         }
 
@@ -76,7 +40,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             get
             {
-				return this._timestamp;
+                return this._timestamp;
             }
         }
 
@@ -87,7 +51,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             get
             {
-				return this._position;
+                return this._position;
             }
         }
 
@@ -98,7 +62,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             get
             {
-				return this._position2;
+                return this._position2;
             }
         }
 
@@ -109,7 +73,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             get
             {
-				return this._delta;
+                return this._delta;
             }
         }
 
@@ -120,11 +84,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             get
             {
-				return this._delta2;
+                return this._delta2;
             }
         }
-		#endregion
-		
+        #endregion
+        
         /// <summary>
         /// Initializes a new <see cref="GestureSample"/>.
         /// </summary>
@@ -136,12 +100,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <param name="delta2"></param>
         public GestureSample(GestureType gestureType, TimeSpan timestamp, Vector2 position, Vector2 position2, Vector2 delta, Vector2 delta2)
         {
-			this._gestureType = gestureType;
-			this._timestamp = timestamp;
-			this._position = position;
-			this._position2 = position2;
-			this._delta = delta;
-			this._delta2 = delta2;
+            this._gestureType = gestureType;
+            this._timestamp = timestamp;
+            this._position = position;
+            this._position2 = position2;
+            this._delta = delta;
+            this._delta2 = delta2;
         }
     }
 }
