@@ -39,16 +39,6 @@ namespace Microsoft.Xna.Platform
         {
             ConcreteGame._concreteGameInstance = this;
 
-            // register factories
-            try { Microsoft.Xna.Platform.TitleContainerFactory.RegisterTitleContainerFactory(new Microsoft.Xna.Platform.ConcreteTitleContainerFactory()); }
-            catch (InvalidOperationException) { }
-            try { Microsoft.Xna.Platform.Graphics.GraphicsFactory.RegisterGraphicsFactory(new Microsoft.Xna.Platform.Graphics.ConcreteGraphicsFactory()); }
-            catch (InvalidOperationException) { }
-            try { Microsoft.Xna.Platform.Audio.AudioFactory.RegisterAudioFactory(new Microsoft.Xna.Platform.Audio.ConcreteAudioFactory()); }
-            catch (InvalidOperationException) { }
-            try { Microsoft.Xna.Platform.Media.MediaFactory.RegisterMediaFactory(new Microsoft.Xna.Platform.Media.ConcreteMediaFactory()); }
-            catch (InvalidOperationException) { }
-
             game.Services.AddService(typeof(ConcreteGame), this);
 
             string appLocation = ((ITitleContainer)TitleContainer.Current).Location;
