@@ -7,8 +7,8 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Defines a set of graphic capabilities.
     /// </summary>
-	public enum GraphicsProfile
-	{
+    public enum GraphicsProfile
+    {
         /// <summary>
         /// Use a limited set of graphic features and capabilities, allowing the game to support the widest variety of devices.
         /// </summary>
@@ -22,5 +22,5 @@ namespace Microsoft.Xna.Framework.Graphics
         FL10_1 = 3,
         FL11_0 = 4,
         FL11_1 = 5,
-	}
+    }
 }

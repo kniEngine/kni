@@ -13,12 +13,12 @@ namespace Microsoft.Xna.Framework.Graphics
     [DataContract]
     public struct Viewport
     {
-		private int x;
-		private int y;
-		private int w;
-		private int h;
-		private float minDepth;
-		private float maxDepth;
+        private int x;
+        private int y;
+        private int w;
+        private int h;
+        private float minDepth;
+        private float maxDepth;
 
         #region Properties
 
@@ -28,9 +28,9 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public int Height
         {
-			get { return this.h; }
-			set { h = value; }
-		}
+            get { return this.h; }
+            set { h = value; }
+        }
 
         /// <summary>
         /// The upper limit of depth of this viewport.
@@ -38,9 +38,9 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public float MaxDepth
         {
-			get { return this.maxDepth; }
-			set { maxDepth = value; }
-		}
+            get { return this.maxDepth; }
+            set { maxDepth = value; }
+        }
 
         /// <summary>
         /// The lower limit of depth of this viewport.
@@ -48,9 +48,9 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public float MinDepth
         {
-			get { return this.minDepth; }
-			set { minDepth = value; }
-		}
+            get { return this.minDepth; }
+            set { minDepth = value; }
+        }
 
         /// <summary>
         /// The width of the bounds in pixels.
@@ -58,9 +58,9 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public int Width
         {
-			get { return this.w; }
-			set { w = value; }
-		}
+            get { return this.w; }
+            set { w = value; }
+        }
 
         /// <summary>
         /// The y coordinate of the beginning of this viewport.
@@ -68,59 +68,59 @@ namespace Microsoft.Xna.Framework.Graphics
         [DataMember]
         public int Y
         {
-			get { return this.y; }
-			set { y = value; }
-		}
+            get { return this.y; }
+            set { y = value; }
+        }
 
         /// <summary>
         /// The x coordinate of the beginning of this viewport.
         /// </summary>
         [DataMember]
         public int X 
-		{
-			get{ return x;}
-			set{ x = value;}
-		}
+        {
+            get{ return x;}
+            set{ x = value;}
+        }
 
-		#endregion
-		
+        #endregion
+        
         /// <summary>
         /// Gets the aspect ratio of this <see cref="Viewport"/>, which is width / height. 
         /// </summary>
-		public float AspectRatio 
-		{
-			get
-			{
-				if ((h != 0) && (w != 0))
-				{
-					return ((float)w / (float)h);
-				}
-				return 0f;
-			}
-		}
-		
+        public float AspectRatio 
+        {
+            get
+            {
+                if ((h != 0) && (w != 0))
+                {
+                    return ((float)w / (float)h);
+                }
+                return 0f;
+            }
+        }
+        
         /// <summary>
         /// Gets or sets a boundary of this <see cref="Viewport"/>.
         /// </summary>
-		public Rectangle Bounds 
-		{
+        public Rectangle Bounds 
+        {
             get { return new Rectangle(x, y, w, h); }
-			set
-			{
-				x = value.X;
-				y = value.Y;
-				w = value.Width;
-				h = value.Height;
-			}
-		}
+            set
+            {
+                x = value.X;
+                y = value.Y;
+                w = value.Width;
+                h = value.Height;
+            }
+        }
 
         /// <summary>
         /// Returns the subset of the viewport that is guaranteed to be visible on a lower quality display.
         /// </summary>
-		public Rectangle TitleSafeArea 
-		{
-			get { return GraphicsDevice.GetTitleSafeArea(x, y, w, h); }
-		}
+        public Rectangle TitleSafeArea 
+        {
+            get { return GraphicsDevice.GetTitleSafeArea(x, y, w, h); }
+        }
 
 
         /// <summary>
@@ -150,16 +150,16 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="width">The width of the view bounds in pixels.</param>
         /// <param name="height">The height of the view bounds in pixels.</param>
         public Viewport(int x, int y, int width, int height) : this(x, y, width, height, 0.0f,  1.0f)
-		{
-		}
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="Viewport"/> struct.
         /// </summary>
         /// <param name="bounds">A <see cref="Rectangle"/> that defines the location and size of the <see cref="Viewport"/> in a render target.</param>
-		public Viewport(Rectangle bounds) : this(bounds.X, bounds.Y, bounds.Width, bounds.Height)
-		{
-		}
+        public Viewport(Rectangle bounds) : this(bounds.X, bounds.Y, bounds.Width, bounds.Height)
+        {
+        }
 
         /// <summary>
         /// Projects a <see cref="Vector3"/> from model space into screen space.
@@ -207,12 +207,12 @@ namespace Microsoft.Xna.Framework.Graphics
             Matrix.Multiply(ref world, ref view, out view);
             Matrix.Multiply(ref view, ref projection, out projection);
             Matrix.Invert(ref projection, out projection);
-		    source.X = (((source.X - this.x) / ((float) this.w)) * 2f) - 1f;
-		    source.Y = -((((source.Y - this.y) / ((float) this.h)) * 2f) - 1f);
-		    source.Z = (source.Z - this.minDepth) / (this.maxDepth - this.minDepth);
+            source.X = (((source.X - this.x) / ((float) this.w)) * 2f) - 1f;
+            source.Y = -((((source.Y - this.y) / ((float) this.h)) * 2f) - 1f);
+            source.Z = (source.Z - this.minDepth) / (this.maxDepth - this.minDepth);
             float w = (source.X * projection.M14) + (source.Y * projection.M24) + (source.Z * projection.M34) + projection.M44;
             Vector3.Transform(ref source, ref projection, out source);
-		    
+            
             float invW = 1 / w;
             source.X = source.X * invW;
             source.Y = source.Y * invW;
@@ -227,9 +227,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <returns>A <see cref="String"/> representation of this <see cref="Viewport"/>.</returns>
         public override string ToString()
-	    {
-	        return "{X:" + x + ", Y:" + y + ", Width:" + w + ", Height:" + h + ", MinDepth:" + minDepth + ", MaxDepth:" + maxDepth + "}";
-	    }
+        {
+            return "{X:" + x + ", Y:" + y + ", Width:" + w + ", Height:" + h + ", MinDepth:" + minDepth + ", MaxDepth:" + maxDepth + "}";
+        }
     }
 }
 

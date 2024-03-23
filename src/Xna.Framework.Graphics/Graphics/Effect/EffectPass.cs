@@ -8,14 +8,14 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private readonly Effect _effect;
 
-		private readonly PixelShader _pixelShader;
+        private readonly PixelShader _pixelShader;
         private readonly VertexShader _vertexShader;
 
         private readonly BlendState _blendState;
         private readonly DepthStencilState _depthStencilState;
         private readonly RasterizerState _rasterizerState;
 
-		public string Name { get; private set; }
+        public string Name { get; private set; }
 
         public EffectAnnotationCollection Annotations { get; private set; }
 

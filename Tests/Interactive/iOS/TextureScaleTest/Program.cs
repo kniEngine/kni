@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------------
 #endregion
 
-#region Using Statements
 using System;
 
 #if IOS || TVOS
@@ -15,8 +14,6 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 #endif
 
-
-#endregion
 
 namespace MonoTest
 {

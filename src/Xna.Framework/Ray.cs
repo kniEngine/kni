@@ -187,17 +187,17 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingBox box, out float? result)
         {
-			result = Intersects(box);
+            result = Intersects(box);
         }
 
         public float? Intersects(BoundingFrustum frustum)
         {
             if (frustum == null)
-			{
-				throw new ArgumentNullException("frustum");
-			}
-			
-			return frustum.Intersects(this);			
+            {
+                throw new ArgumentNullException("frustum");
+            }
+            
+            return frustum.Intersects(this);			
         }
 
         /// <summary>

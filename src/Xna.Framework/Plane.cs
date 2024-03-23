@@ -268,9 +268,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>A normalized version of the specified <see cref="Plane"/>.</returns>
         public static Plane Normalize(Plane value)
         {
-			Plane result;
-			Normalize(ref value, out result);
-			return result;
+            Plane result;
+            Normalize(ref value, out result);
+            return result;
         }
 
         /// <summary>

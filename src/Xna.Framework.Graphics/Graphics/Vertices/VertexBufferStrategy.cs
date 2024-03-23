@@ -20,15 +20,15 @@ namespace Microsoft.Xna.Platform.Graphics
         private int _vertexCount;
         private BufferUsage _bufferUsage;
 
-		public VertexDeclaration VertexDeclaration
+        public VertexDeclaration VertexDeclaration
         {
             get { return _vertexDeclaration; }
         }
-		public int VertexCount
+        public int VertexCount
         {
             get { return _vertexCount; }
         }
-		public BufferUsage BufferUsage
+        public BufferUsage BufferUsage
         {
             get { return _bufferUsage; }
         }

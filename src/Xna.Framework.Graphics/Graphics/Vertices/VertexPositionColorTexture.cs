@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Color = color;
             TextureCoordinate = textureCoordinate;
         }
-		
+        
         VertexDeclaration IVertexType.VertexDeclaration
         {
             get

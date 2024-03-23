@@ -11,15 +11,15 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public interface IGraphicsDeviceService
     {
-		/// <summary>
-		/// The provided <see cref="Graphics.GraphicsDevice"/>.
-		/// </summary>
-		GraphicsDevice GraphicsDevice { get; }
+        /// <summary>
+        /// The provided <see cref="Graphics.GraphicsDevice"/>.
+        /// </summary>
+        GraphicsDevice GraphicsDevice { get; }
 
         /// <summary>
         /// Raised when a new <see cref="Graphics.GraphicsDevice"/> has been created.
         /// </summary>
-		event EventHandler<EventArgs> DeviceCreated;
+        event EventHandler<EventArgs> DeviceCreated;
 
         /// <summary>
         /// Raised when the <see cref="GraphicsDevice"/> is disposed.

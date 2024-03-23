@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
         /// <summary>
         /// Whether the device supports anisotropic texture filtering
         /// </summary>
-		public bool SupportsTextureFilterAnisotropic { get; protected set; }
+        public bool SupportsTextureFilterAnisotropic { get; protected set; }
 
         public bool SupportsDepth24 { get; protected set; }
 

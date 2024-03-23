@@ -91,25 +91,25 @@ namespace Microsoft.Xna.Framework
             double dmin = 0;
 
             if (Center.X < box.Min.X)
-				dmin += (Center.X - box.Min.X) * (Center.X - box.Min.X);
+                dmin += (Center.X - box.Min.X) * (Center.X - box.Min.X);
 
-			else if (Center.X > box.Max.X)
-					dmin += (Center.X - box.Max.X) * (Center.X - box.Max.X);
+            else if (Center.X > box.Max.X)
+                    dmin += (Center.X - box.Max.X) * (Center.X - box.Max.X);
 
-			if (Center.Y < box.Min.Y)
-				dmin += (Center.Y - box.Min.Y) * (Center.Y - box.Min.Y);
+            if (Center.Y < box.Min.Y)
+                dmin += (Center.Y - box.Min.Y) * (Center.Y - box.Min.Y);
 
-			else if (Center.Y > box.Max.Y)
-				dmin += (Center.Y - box.Max.Y) * (Center.Y - box.Max.Y);
+            else if (Center.Y > box.Max.Y)
+                dmin += (Center.Y - box.Max.Y) * (Center.Y - box.Max.Y);
 
-			if (Center.Z < box.Min.Z)
-				dmin += (Center.Z - box.Min.Z) * (Center.Z - box.Min.Z);
+            if (Center.Z < box.Min.Z)
+                dmin += (Center.Z - box.Min.Z) * (Center.Z - box.Min.Z);
 
-			else if (Center.Z > box.Max.Z)
-				dmin += (Center.Z - box.Max.Z) * (Center.Z - box.Max.Z);
+            else if (Center.Z > box.Max.Z)
+                dmin += (Center.Z - box.Max.Z) * (Center.Z - box.Max.Z);
 
-			if (dmin <= Radius * Radius) 
-				return ContainmentType.Intersects;
+            if (dmin <= Radius * Radius) 
+                return ContainmentType.Intersects;
             
             //else disjoint
             return ContainmentType.Disjoint;
@@ -452,7 +452,7 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if <see cref="BoundingBox"/> intersects with this sphere; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingBox box)
         {
-			return box.Intersects(this);
+            return box.Intersects(this);
         }
 
         /// <summary>

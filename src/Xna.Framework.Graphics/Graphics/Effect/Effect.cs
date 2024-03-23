@@ -12,7 +12,7 @@ using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class Effect : GraphicsResource
+    public partial class Effect : GraphicsResource
     {
         struct MGFXHeader 
         {
@@ -58,19 +58,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private Shader[] _shaders;
 
-	    private readonly bool _isClone;
+        private readonly bool _isClone;
 
         internal Effect(GraphicsDevice graphicsDevice)
             : base(graphicsDevice)
-		{
-		}
-			
-		protected Effect(Effect cloneSource)
+        {
+        }
+            
+        protected Effect(Effect cloneSource)
             : this(cloneSource.GraphicsDevice)
-		{
+        {
             _isClone = true;
             Clone(cloneSource);
-		}
+        }
 
         public Effect(GraphicsDevice graphicsDevice, byte[] effectCode)
             : this(graphicsDevice, effectCode, 0, effectCode.Length)
@@ -80,24 +80,24 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public Effect (GraphicsDevice graphicsDevice, byte[] effectCode, int index, int count)
             : this(graphicsDevice)
-		{
-			// By default we currently cache all unique byte streams
-			// and use cloning to populate the effect with parameters,
-			// techniques, and passes.
-			//
-			// This means all the immutable types in an effect:
-			//
-			//  - Shaders
-			//  - Annotations
-			//  - Names
-			//  - State Objects
-			//
-			// Are shared for every instance of an effect while the 
-			// parameter values and constant buffers are copied.
-			//
-			// This might need to change slightly if/when we support
-			// shared constant buffers as 'new' should return unique
-			// effects without any shared instance state.
+        {
+            // By default we currently cache all unique byte streams
+            // and use cloning to populate the effect with parameters,
+            // techniques, and passes.
+            //
+            // This means all the immutable types in an effect:
+            //
+            //  - Shaders
+            //  - Annotations
+            //  - Names
+            //  - State Objects
+            //
+            // Are shared for every instance of an effect while the 
+            // parameter values and constant buffers are copied.
+            //
+            // This might need to change slightly if/when we support
+            // shared constant buffers as 'new' should return unique
+            // effects without any shared instance state.
  
             //Read the header
             MGFXHeader header = new MGFXHeader(effectCode, index);
@@ -197,10 +197,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// http://msdn.microsoft.com/en-us/library/windows/desktop/ff476138(v=vs.85).aspx
         /// </remarks>
         /// <returns>The cloned effect.</returns>
-		public virtual Effect Clone()
-		{
+        public virtual Effect Clone()
+        {
             return new Effect(this);
-		}
+        }
 
         protected internal virtual void OnApply()
         {

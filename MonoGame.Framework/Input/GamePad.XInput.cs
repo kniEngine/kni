@@ -202,7 +202,7 @@ namespace Microsoft.Xna.Framework.Input
                 leftPosition: new Vector2(gamepad.LeftThumbX, gamepad.LeftThumbY) / (float)short.MaxValue,
                 rightPosition: new Vector2(gamepad.RightThumbX, gamepad.RightThumbY) / (float)short.MaxValue,
                     leftDeadZoneMode: leftDeadZoneMode,
-					rightDeadZoneMode: rightDeadZoneMode);
+                    rightDeadZoneMode: rightDeadZoneMode);
 
             var triggers = new GamePadTriggers(
                     leftTrigger: gamepad.LeftTrigger / (float)byte.MaxValue,

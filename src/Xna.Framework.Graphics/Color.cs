@@ -382,8 +382,8 @@ namespace Microsoft.Xna.Framework
             get { unchecked { return (byte)(_packedValue >> 24); } }
             set { _packedValue = (_packedValue & 0x00ffffff) | ((uint)value << 24); }
         }
-		
-	/// <summary>
+        
+    /// <summary>
         /// Compares whether two <see cref="Color"/> instances are equal.
         /// </summary>
         /// <param name="left"><see cref="Color"/> instance on the left of the equal sign.</param>
@@ -393,8 +393,8 @@ namespace Microsoft.Xna.Framework
         {
             return (left._packedValue == right._packedValue);
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// Compares whether two <see cref="Color"/> instances are not equal.
         /// </summary>
         /// <param name="left"><see cref="Color"/> instance on the left of the not equal sign.</param>
@@ -413,7 +413,7 @@ namespace Microsoft.Xna.Framework
         {
             return _packedValue.GetHashCode();
         }
-	
+    
         /// <summary>
         /// Compares whether current instance is equal to specified object.
         /// </summary>
@@ -434,8 +434,8 @@ namespace Microsoft.Xna.Framework
             get;
             private set;
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// AliceBlue color (R:240,G:248,B:255,A:255).
         /// </summary>
         public static Color AliceBlue
@@ -456,13 +456,13 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Aqua color (R:0,G:255,B:255,A:255).
         /// </summary>
-	public static Color Aqua
+    public static Color Aqua
         {
             get;
             private set;
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// Aquamarine color (R:127,G:255,B:212,A:255).
         /// </summary>
         public static Color Aquamarine
@@ -474,13 +474,13 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Azure color (R:240,G:255,B:255,A:255).
         /// </summary>
-	public static Color Azure
+    public static Color Azure
         {
             get;
             private set;
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// Beige color (R:245,G:245,B:220,A:255).
         /// </summary>
         public static Color Beige
@@ -600,13 +600,13 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Cornsilk color (R:255,G:248,B:220,A:255).
         /// </summary>
-	public static Color Cornsilk
+    public static Color Cornsilk
         {
             get;
             private set;
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// Crimson color (R:220,G:20,B:60,A:255).
         /// </summary>
         public static Color Crimson
@@ -627,13 +627,13 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// DarkBlue color (R:0,G:0,B:139,A:255).
         /// </summary>
-	public static Color DarkBlue
+    public static Color DarkBlue
         {
             get;
             private set;
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// DarkCyan color (R:0,G:139,B:139,A:255).
         /// </summary>
         public static Color DarkCyan
@@ -654,13 +654,13 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// DarkGray color (R:169,G:169,B:169,A:255).
         /// </summary>
-	public static Color DarkGray
+    public static Color DarkGray
         {
             get;
             private set;
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// DarkGreen color (R:0,G:100,B:0,A:255).
         /// </summary>
         public static Color DarkGreen
@@ -723,7 +723,7 @@ namespace Microsoft.Xna.Framework
             private set;
         }
         
-	/// <summary>
+    /// <summary>
         /// DarkSalmon color (R:233,G:150,B:122,A:255).
         /// </summary>
         public static Color DarkSalmon
@@ -840,7 +840,7 @@ namespace Microsoft.Xna.Framework
             private set;
         }
         
-	/// <summary>
+    /// <summary>
         /// Fuchsia color (R:255,G:0,B:255,A:255).
         /// </summary>
         public static Color Fuchsia
@@ -1486,7 +1486,7 @@ namespace Microsoft.Xna.Framework
             private set;
         }
 
-    	/// <summary>
+        /// <summary>
         /// SaddleBrown color (R:139,G:69,B:19,A:255).
         /// </summary>
         public static Color SaddleBrown
@@ -1494,7 +1494,7 @@ namespace Microsoft.Xna.Framework
             get;
             private set;
         }
-    	 
+         
         /// <summary>
         /// Salmon color (R:250,G:128,B:114,A:255).
         /// </summary>
@@ -1522,7 +1522,7 @@ namespace Microsoft.Xna.Framework
             private set;
         }
         
-    	/// <summary>
+        /// <summary>
         /// SeaShell color (R:255,G:245,B:238,A:255).
         /// </summary>
         public static Color SeaShell
@@ -1531,7 +1531,7 @@ namespace Microsoft.Xna.Framework
             private set;
         }
         
-    	/// <summary>
+        /// <summary>
         /// Sienna color (R:160,G:82,B:45,A:255).
         /// </summary>
         public static Color Sienna
@@ -1540,7 +1540,7 @@ namespace Microsoft.Xna.Framework
             private set;
         }
         
-    	/// <summary>
+        /// <summary>
         /// Silver color (R:192,G:192,B:192,A:255).
         /// </summary>
         public static Color Silver
@@ -1639,7 +1639,7 @@ namespace Microsoft.Xna.Framework
             private set;
         }
         
-    	/// <summary>
+        /// <summary>
         /// Turquoise color (R:64,G:224,B:208,A:255).
         /// </summary>
         public static Color Turquoise
@@ -1660,12 +1660,12 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Wheat color (R:245,G:222,B:179,A:255).
         /// </summary>
-	public static Color Wheat
+    public static Color Wheat
         {
             get;
             private set;
         }
-	
+    
         /// <summary>
         /// White color (R:255,G:255,B:255,A:255).
         /// </summary>
@@ -1712,7 +1712,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>Interpolated <see cref="Color"/>.</returns>
         public static Color Lerp(Color start, Color end, Single amount)
         {
-			amount = MathHelper.Clamp(amount, 0, 1);
+            amount = MathHelper.Clamp(amount, 0, 1);
             return new Color(
                 (int)MathHelper.Lerp(start.R, end.R, amount),
                 (int)MathHelper.Lerp(start.G, end.G, amount),
@@ -1734,25 +1734,25 @@ namespace Microsoft.Xna.Framework
                 (int)MathHelper.LerpPrecise(start.B, end.B, amount),
                 (int)MathHelper.LerpPrecise(start.A, end.A, amount));
         }
-		
-	    /// <summary>
+        
+        /// <summary>
         /// Multiply <see cref="Color"/> by value.
         /// </summary>
         /// <param name="left">Source <see cref="Color"/>.</param>
         /// <param name="right">Multiplicator.</param>
         /// <returns>Multiplication result.</returns>
-	    public static Color Multiply(Color left, float right)
-	    {
-	        return new Color((int)(left.R * right), (int)(left.G * right), (int)(left.B * right), (int)(left.A * right));
-	    }
-	
-	    /// <summary>
+        public static Color Multiply(Color left, float right)
+        {
+            return new Color((int)(left.R * right), (int)(left.G * right), (int)(left.B * right), (int)(left.A * right));
+        }
+    
+        /// <summary>
         /// Multiply <see cref="Color"/> by value.
         /// </summary>
         /// <param name="left">Source <see cref="Color"/>.</param>
         /// <param name="right">Multiplicator.</param>
         /// <returns>Multiplication result.</returns>
-	    public static Color operator *(Color left, float right)
+        public static Color operator *(Color left, float right)
         {
             return new Color((int)(left.R * right), (int)(left.G * right), (int)(left.B * right), (int)(left.A * right));
         }
@@ -1785,7 +1785,7 @@ namespace Microsoft.Xna.Framework
         {
             return new Vector4(R / 255.0f, G / 255.0f, B / 255.0f, A / 255.0f);
         }
-	
+    
 
         internal string DebugDisplayString
         {
@@ -1806,8 +1806,8 @@ namespace Microsoft.Xna.Framework
         /// {R:[red] G:[green] B:[blue] A:[alpha]}
         /// </summary>
         /// <returns><see cref="String"/> representation of this <see cref="Color"/>.</returns>
-	public override string ToString()
-	{
+    public override string ToString()
+    {
         StringBuilder sb = new StringBuilder(25);
         sb.Append("{R:");
         sb.Append(R);
@@ -1819,9 +1819,9 @@ namespace Microsoft.Xna.Framework
         sb.Append(A);
         sb.Append("}");
         return sb.ToString();
-	}
-	
-	/// <summary>
+    }
+    
+    /// <summary>
         /// Translate a non-premultipled alpha <see cref="Color"/> to a <see cref="Color"/> that contains premultiplied alpha.
         /// </summary>
         /// <param name="vector">A <see cref="Vector4"/> representing color.</param>
@@ -1830,8 +1830,8 @@ namespace Microsoft.Xna.Framework
         {
             return new Color(vector.X * vector.W, vector.Y * vector.W, vector.Z * vector.W, vector.W);
         }
-	
-	/// <summary>
+    
+    /// <summary>
         /// Translate a non-premultipled alpha <see cref="Color"/> to a <see cref="Color"/> that contains premultiplied alpha.
         /// </summary>
         /// <param name="r">Red component value.</param>
@@ -1845,15 +1845,15 @@ namespace Microsoft.Xna.Framework
         }
 
         #region IEquatable<Color> Members
-	
-	/// <summary>
+    
+    /// <summary>
         /// Compares whether current instance is equal to specified <see cref="Color"/>.
         /// </summary>
         /// <param name="other">The <see cref="Color"/> to compare.</param>
         /// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
         public bool Equals(Color other)
         {
-	    return this.PackedValue == other.PackedValue;
+        return this.PackedValue == other.PackedValue;
         }
 
         #endregion
