@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -60,6 +61,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
+            ConstantBufferData[] dx11CBuffersData;
+            string dx11ShaderProfileName = shaderProfileName;
+            dx11ShaderProfileName = dx11ShaderProfileName.Replace("s_2_0", "s_4_0_level_9_1");
+            dx11ShaderProfileName = dx11ShaderProfileName.Replace("s_3_0", "s_4_0_level_9_3");
+            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx11ShaderProfileName, true, ref errorsAndWarnings))
+            {
+                // Use reflection to get details of the shader.
+                using (D3DC.ShaderReflection shaderReflection = new D3DC.ShaderReflection(shaderBytecodeDX11.Data))
+                {
+                    LogDX11ShaderReflection(shaderReflection);
+                    dx11CBuffersData = GetDX11ConstantBuffers(shaderReflection);
+                }
+            }
+
             // For now GLSL is only supported via translation
             // using MojoShader which works from DX9 HLSL bytecode.
             string dx9ShaderProfileName = shaderProfileName;
@@ -67,12 +82,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0_level_9_3", "s_3_0");
             using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx9ShaderProfileName, false, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, shaderInfo, shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
+                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, shaderInfo, shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode, dx11CBuffersData);
                 return shaderDataDX9;
             }
         }
 
-        private static ShaderData CreateGLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
+        private static ShaderData CreateGLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode, ConstantBufferData[] dx11CBuffersData)
         {
             ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
 
@@ -217,7 +232,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
 
             // Gather all the parameters used by this shader.
-            AddConstantBuffers(cbuffers, dxshader, symbols);
+            AddConstantBuffers(cbuffers, dxshader, symbols, dx11CBuffersData);
 
             string glslCode = parseData.output;
 
@@ -250,7 +265,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return dxshader;
         }
 
-        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, MojoShader.Symbol[] symbols)
+        private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, MojoShader.Symbol[] symbols, ConstantBufferData[] dx11CBuffersData)
         {
             var symbol_types = new[]
             {
@@ -263,8 +278,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             for (int i = 0; i < symbol_types.Length; i++)
             {
                 ConstantBufferData cbuffer = ShaderProfileGL.CreateConstantBufferData(symbol_types[i].name,
-                                                                                          symbol_types[i].set,
-                                                                                          symbols);
+                                                                                      symbol_types[i].set,
+                                                                                      symbols);
 
                 if (cbuffer.Size == 0)
                     continue;
@@ -274,11 +289,48 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 {
                     cbuffer_index.Add(cbuffers.Count);
                     cbuffers.Add(cbuffer);
+
+                    foreach (EffectObject.EffectParameterContent param in cbuffer.Parameters)
+                        SetReflectionData(dx11CBuffersData, param);
                 }
                 else
+                {
                     cbuffer_index.Add(match);
+                }
             }
+
             dxshader._cbuffers = cbuffer_index.ToArray();
+        }
+
+        private static void SetReflectionData(ConstantBufferData[] dx11CBuffersData, EffectObject.EffectParameterContent param)
+        {
+            foreach (ConstantBufferData dx11cb in dx11CBuffersData)
+            {
+                foreach (EffectObject.EffectParameterContent dx11param in dx11cb.Parameters)
+                {
+                    if (param.name == dx11param.name
+                    && param.type == dx11param.type
+                    && param.class_ == dx11param.class_)
+                    {
+                        // set reflection data
+                        if (param.data is Array && dx11param.data is Array)
+                        {
+                            Array paramArray = param.data as Array;
+                            Array dx11paramArray = dx11param.data as Array;
+                            if (paramArray.Length == dx11paramArray.Length)
+                            {
+                                Array.Copy(dx11paramArray, paramArray, paramArray.Length);
+                            }
+                            else
+                            {
+                                Debug.Assert(paramArray.Length == dx11paramArray.Length);
+                            }
+                        }
+                        return;
+                    }
+                }
+            }
+            return;
         }
 
         private static ConstantBufferData CreateConstantBufferData(string name, MojoShader.SymbolRegisterSet set, MojoShader.Symbol[] symbols)
