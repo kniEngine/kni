@@ -62,9 +62,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             // For now GLSL is only supported via translation
             // using MojoShader which works from DX9 HLSL bytecode.
-            shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_1", "s_2_0");
-            shaderProfileName = shaderProfileName.Replace("s_4_0_level_9_3", "s_3_0");
-            using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, false, ref errorsAndWarnings))
+            string dx9ShaderProfileName = shaderProfileName;
+            dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0_level_9_1", "s_2_0");
+            dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0_level_9_3", "s_3_0");
+            using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx9ShaderProfileName, false, ref errorsAndWarnings))
             {
                 ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, shaderInfo, shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
                 return shaderDataDX9;
@@ -73,7 +74,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static ShaderData CreateGLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
         {
-
             ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
 
             // Use MojoShader to convert the HLSL bytecode to GLSL.
