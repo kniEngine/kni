@@ -120,11 +120,11 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(header.EffectKey, out effect))
                 {
-                    using (var stream = new MemoryStream(effectCode, index + header.HeaderSize, count - header.HeaderSize, false))
+                    using (Stream stream = new MemoryStream(effectCode, index + header.HeaderSize, count - header.HeaderSize, false))
                     {
                         if (header.Version == 8 || header.Version == 9)
                         {
-                            using (var reader = new EffectReader09(stream, graphicsDevice, header))
+                            using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, header))
                             {
                                 // Create Effect.
                                 effect = reader.ReadEffect();
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         }
                         else
                         {
-                            using (var reader = new EffectReader10(stream, graphicsDevice, header))
+                            using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, header))
                             {
                                 // Create Effect.
                                 effect = reader.ReadEffect();
@@ -171,11 +171,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Make a copy of the immutable constant buffers.
             ConstantBuffers = new ConstantBuffer[cloneSource.ConstantBuffers.Length];
-            for (var i = 0; i < cloneSource.ConstantBuffers.Length; i++)
+            for (int i = 0; i < cloneSource.ConstantBuffers.Length; i++)
                 ConstantBuffers[i] = new ConstantBuffer(cloneSource.ConstantBuffers[i]);
 
             // Find and set the current technique.
-            for (var i = 0; i < cloneSource.Techniques.Count; i++)
+            for (int i = 0; i < cloneSource.Techniques.Count; i++)
             {
                 if (cloneSource.Techniques[i] == cloneSource.CurrentTechnique)
                 {
@@ -217,14 +217,14 @@ namespace Microsoft.Xna.Framework.Graphics
                     // Only the original source can dispose the shaders.
                     if (_shaders != null)
                     {
-                        foreach (var shader in _shaders)
+                        foreach (Shader shader in _shaders)
                             shader.Dispose();
                     }
                 }
 
                 if (ConstantBuffers != null)
                 {
-                    foreach (var buffer in ConstantBuffers)
+                    foreach (ConstantBuffer buffer in ConstantBuffers)
                         buffer.Dispose();
                     ConstantBuffers = null;
                 }

@@ -8,7 +8,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Platform.Graphics;
-using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -19,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
             private readonly GraphicsDevice _graphicsDevice;
             private readonly MGFXHeader _header;
 
-            public EffectReader10(MemoryStream stream, GraphicsDevice graphicsDevice, MGFXHeader header) : base(stream)
+            public EffectReader10(Stream stream, GraphicsDevice graphicsDevice, MGFXHeader header) : base(stream)
             {
                 this._header = header;
                 this._graphicsDevice = graphicsDevice;
@@ -37,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             internal Effect ReadEffect()
             {
-                var effect = new Effect(_graphicsDevice);
+                Effect effect = new Effect(_graphicsDevice);
 
                 effect.ConstantBuffers = ReadConstantBuffers();
                 effect._shaders = ReadShaders();
@@ -47,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 effect.CurrentTechnique = effect.Techniques[0];
 
                 // Check file tail to ensure we parsed the content correctly.
-                var tail = ReadInt32();
+                int tail = ReadInt32();
                 if (tail != MGFXHeader.MGFXSignature)
                     throw new ArgumentException("The MGFX effect code was not parsed correctly.", "effectCode");
 
@@ -56,30 +55,30 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private ConstantBuffer[] ReadConstantBuffers()
             {
-                var buffersCount = (int)ReadInt32();
-                var constantBuffers = new ConstantBuffer[buffersCount];
-                for (var c = 0; c < buffersCount; c++)
+                int buffersCount = ReadInt32();
+                ConstantBuffer[] constantBuffers = new ConstantBuffer[buffersCount];
+                for (int c = 0; c < buffersCount; c++)
                     constantBuffers[c] = ReadConstantBuffer();
                 return constantBuffers;
             }
 
             ConstantBuffer ReadConstantBuffer()
             {
-                var name = ReadString();
+                string name = ReadString();
 
                 // Create the backing system memory buffer.
-                var sizeInBytes = (int)ReadInt16();
+                int sizeInBytes = (int)ReadInt16();
 
                 // Read the parameter index values.
-                var parameters = new int[ReadInt32()];
-                var offsets = new int[parameters.Length];
-                for (var i = 0; i < parameters.Length; i++)
+                int[] parameters = new int[ReadInt32()];
+                int[] offsets = new int[parameters.Length];
+                for (int i = 0; i < parameters.Length; i++)
                 {
-                    parameters[i] = (int)ReadInt32();
-                    offsets[i] = (int)ReadUInt16();
+                    parameters[i] = ReadInt32();
+                    offsets[i]    = (int)ReadUInt16();
                 }
 
-                var buffer = new ConstantBuffer(_graphicsDevice,
+                ConstantBuffer buffer = new ConstantBuffer(_graphicsDevice,
                                                 name,
                                                 parameters,
                                                 offsets,
@@ -90,9 +89,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private Shader[] ReadShaders()
             {
-                var shadersCount = (int)ReadInt32();
-                var shaders = new Shader[shadersCount];
-                for (var s = 0; s < shadersCount; s++)
+                int shadersCount = ReadInt32();
+                Shader[] shaders = new Shader[shadersCount];
+                for (int s = 0; s < shadersCount; s++)
                     shaders[s] = ReadShader();
                 return shaders;
             }
@@ -101,12 +100,12 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 ShaderStage shaderStage = (ShaderStage)ReadByte();
 
-                var shaderLength = ReadInt32();
-                var shaderBytecode = ReadBytes(shaderLength);
+                int shaderLength = ReadInt32();
+                byte[] shaderBytecode = ReadBytes(shaderLength);
 
-                var samplerCount = (int)ReadByte();
-                var samplers = new SamplerInfo[samplerCount];
-                for (var s = 0; s < samplerCount; s++)
+                int samplerCount = (int)ReadByte();
+                SamplerInfo[] samplers = new SamplerInfo[samplerCount];
+                for (int s = 0; s < samplerCount; s++)
                 {
                     samplers[s].type = (SamplerType)ReadByte();
                     samplers[s].textureSlot = ReadByte();
@@ -119,14 +118,14 @@ namespace Microsoft.Xna.Framework.Graphics
                     samplers[s].textureParameter = ReadByte();
                 }
 
-                var cbufferCount = (int)ReadByte();
-                var cBuffers = new int[cbufferCount];
-                for (var c = 0; c < cbufferCount; c++)
+                int cbufferCount = (int)ReadByte();
+                int[] cBuffers = new int[cbufferCount];
+                for (int c = 0; c < cbufferCount; c++)
                     cBuffers[c] = ReadByte();
 
-                var attributeCount = (int)ReadByte();
-                var attributes = new VertexAttribute[attributeCount];
-                for (var a = 0; a < attributeCount; a++)
+                int attributeCount = (int)ReadByte();
+                VertexAttribute[] attributes = new VertexAttribute[attributeCount];
+                for (int a = 0; a < attributeCount; a++)
                 {
                     attributes[a].name = ReadString();
                     attributes[a].usage = (VertexElementUsage)ReadByte();
@@ -154,7 +153,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private SamplerState ReadSamplerState()
             {
-                var state = new SamplerState();
+                SamplerState state = new SamplerState();
                 state.AddressU = (TextureAddressMode)ReadByte();
                 state.AddressV = (TextureAddressMode)ReadByte();
                 state.AddressW = (TextureAddressMode)ReadByte();
@@ -177,8 +176,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (count == 0)
                     return EffectParameterCollection.Empty;
 
-                var parameters = new EffectParameter[count];
-                for (var i = 0; i < count; i++)
+                EffectParameter[] parameters = new EffectParameter[count];
+                for (int i = 0; i < count; i++)
                     parameters[i] = ReadParameter();
 
                 return new EffectParameterCollection(parameters);
@@ -186,16 +185,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectParameter ReadParameter()
             {
-                var class_ = (EffectParameterClass)ReadByte();
-                var type = (EffectParameterType)ReadByte();
-                var name = ReadString();
-                var semantic = ReadString();
-                var annotations = ReadAnnotations();
-                var rowCount = (int)ReadByte();
-                var columnCount = (int)ReadByte();
+                EffectParameterClass class_ = (EffectParameterClass)ReadByte();
+                EffectParameterType type = (EffectParameterType)ReadByte();
+                string name = ReadString();
+                string semantic = ReadString();
+                EffectAnnotationCollection annotations = ReadAnnotations();
+                int rowCount    = (int)ReadByte();
+                int columnCount = (int)ReadByte();
 
-                var elements = ReadParameters();
-                var structMembers = ReadParameters();
+                EffectParameterCollection elements = ReadParameters();
+                EffectParameterCollection structMembers = ReadParameters();
 
                 object data = null;
                 if (elements.Count == 0 && structMembers.Count == 0)
@@ -206,16 +205,16 @@ namespace Microsoft.Xna.Framework.Graphics
                             if (_header.Profile == ShaderProfileType.OpenGL_Mojo)
                             {
                                 // MojoShader stores Booleans in a float type.
-                                var buffer = new float[rowCount * columnCount];
-                                for (var j = 0; j < buffer.Length; j++)
+                                float[] buffer = new float[rowCount * columnCount];
+                                for (int j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadInt32();
                                 data = buffer;
                             }
                             else
                             {
                                 // Booleans are stored in an integer type.
-                                var buffer = new int[rowCount * columnCount];
-                                for (var j = 0; j < buffer.Length; j++)
+                                int[] buffer = new int[rowCount * columnCount];
+                                for (int j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadInt32();
                                 data = buffer;
                             }
@@ -225,15 +224,15 @@ namespace Microsoft.Xna.Framework.Graphics
                             if (_header.Profile == ShaderProfileType.OpenGL_Mojo)
                             {
                                 // MojoShader stores Integers in a float type.
-                                var buffer = new float[rowCount * columnCount];
-                                for (var j = 0; j < buffer.Length; j++)
+                                float[] buffer = new float[rowCount * columnCount];
+                                for (int j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadInt32();
                                 data = buffer;
                             }
                             else
                             {
-                                var buffer = new int[rowCount * columnCount];
-                                for (var j = 0; j < buffer.Length; j++)
+                                int[] buffer = new int[rowCount * columnCount];
+                                for (int j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadInt32();
                                 data = buffer;
                             }
@@ -241,8 +240,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                         case EffectParameterType.Single:
                             {
-                                var buffer = new float[rowCount * columnCount];
-                                for (var j = 0; j < buffer.Length; j++)
+                                float[] buffer = new float[rowCount * columnCount];
+                                for (int j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadSingle();
                                 data = buffer;
                             }
@@ -267,14 +266,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)
             {
-                var techniqueCount = (int)ReadInt32();
+                int techniqueCount = ReadInt32();
 
-                var techniques = new EffectTechnique[techniqueCount];
-                for (var t = 0; t < techniqueCount; t++)
+                EffectTechnique[] techniques = new EffectTechnique[techniqueCount];
+                for (int t = 0; t < techniqueCount; t++)
                 {
-                    var name = ReadString();
-                    var annotations = ReadAnnotations();
-                    var passes = ReadPasses(effect);
+                    string name = ReadString();
+                    EffectAnnotationCollection annotations = ReadAnnotations();
+                    EffectPassCollection passes = ReadPasses(effect);
                     techniques[t] = new EffectTechnique(effect, name, passes, annotations);
                 }
 
@@ -283,24 +282,24 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectPassCollection ReadPasses(Effect effect)
             {
-                var passesCount = (int)ReadInt32();
-                var passes = new EffectPass[passesCount];
-                for (var i = 0; i < passesCount; i++)
+                int passesCount = ReadInt32();
+                EffectPass[] passes = new EffectPass[passesCount];
+                for (int i = 0; i < passesCount; i++)
                     ReadEffectPass(effect, passes, i);
                 return new EffectPassCollection(passes);
             }
 
             private void ReadEffectPass(Effect effect, EffectPass[] passes, int i)
             {
-                var name = ReadString();
-                var annotations = ReadAnnotations();
+                string name = ReadString();
+                EffectAnnotationCollection annotations = ReadAnnotations();
 
                 // Get the vertex and pixel shader.
                 VertexShader vertexShader = null;
                 PixelShader pixelShader = null;
                 {
-                    var vertexShaderIndex = (int)ReadInt32();
-                    var pixelShaderIndex = (int)ReadInt32();
+                    int vertexShaderIndex = ReadInt32();
+                    int pixelShaderIndex  = ReadInt32();
                     if (vertexShaderIndex >= 0)
                         vertexShader = (VertexShader)effect._shaders[vertexShaderIndex];
                     if (pixelShaderIndex >= 0)
@@ -371,11 +370,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectAnnotationCollection ReadAnnotations()
             {
-                var count = (int)ReadInt32();
+                int count = (int)ReadInt32();
                 if (count == 0)
                     return EffectAnnotationCollection.Empty;
 
-                var annotations = new EffectAnnotation[count];
+                EffectAnnotation[] annotations = new EffectAnnotation[count];
 
                 // TODO: Annotations are not implemented!
 

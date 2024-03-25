@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_parameters.Length == 0)
                 return Empty;
 
-            var parameters = new EffectParameter[_parameters.Length];
+            EffectParameter[] parameters = new EffectParameter[_parameters.Length];
             for (int i = 0; i < _parameters.Length; i++)
                 parameters[i] = new EffectParameter(_parameters[i]);
 

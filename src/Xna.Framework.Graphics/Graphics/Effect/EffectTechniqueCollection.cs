@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal EffectTechniqueCollection Clone(Effect effect)
         {
-            var techniques = new EffectTechnique[_techniques.Length];
+            EffectTechnique[] techniques = new EffectTechnique[_techniques.Length];
             for (int i = 0; i < _techniques.Length; i++)
                 techniques[i] = new EffectTechnique(effect, _techniques[i]);
 
@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Graphics
             get 
             {
                 // TODO: Add a name to technique lookup table.
-                foreach (var technique in _techniques) 
+                foreach (EffectTechnique technique in _techniques) 
                 {
                     if (technique.Name == name)
                         return technique;
