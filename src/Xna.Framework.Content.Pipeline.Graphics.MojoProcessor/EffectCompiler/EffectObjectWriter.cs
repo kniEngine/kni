@@ -159,10 +159,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private void WriteParameter(EffectObject.EffectParameterContent param)
         {
-            EffectParameterClass class_ = EffectObject.ToXNAParameterClass(param.class_);
-            EffectParameterTypeContent type = EffectObject.ToXNAParameterType(param.type);
-            Write((byte)class_);
-            Write((byte)type);
+            EffectParameterClass paramClass = EffectObject.ToXNAParameterClass(param.class_);
+            EffectParameterType paramType = EffectObject.ToXNAParameterType(param.type);
+            Write((byte)paramClass);
+            Write((byte)paramType);
 
             Write(param.name);
             Write(param.semantic);
@@ -177,11 +177,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             if (param.element_count == 0 && param.member_count == 0)
             {
-                switch (type)
+                switch (paramType)
                 {
-                    case EffectParameterTypeContent.Bool:
-                    case EffectParameterTypeContent.Int32:
-                    case EffectParameterTypeContent.Single:
+                    case EffectParameterType.Bool:
+                    case EffectParameterType.Int32:
+                    case EffectParameterType.Single:
                         Write((byte[])param.data);
                         break;
                 }

@@ -589,63 +589,63 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			}
         }
 
-        static public EffectParameterTypeContent ToXNAParameterType(PARAMETER_TYPE type)
+        static public EffectParameterType ToXNAParameterType(PARAMETER_TYPE type)
         {
 			switch (type) 
             {
 			    case PARAMETER_TYPE.BOOL:
-                    return EffectParameterTypeContent.Bool;
+                    return EffectParameterType.Bool;
 			    case PARAMETER_TYPE.INT:
-				    return EffectParameterTypeContent.Int32;
+				    return EffectParameterType.Int32;
 			    case PARAMETER_TYPE.FLOAT:
-				    return EffectParameterTypeContent.Single;
+				    return EffectParameterType.Single;
 			    case PARAMETER_TYPE.STRING:
-				    return EffectParameterTypeContent.String;
+				    return EffectParameterType.String;
 			    case PARAMETER_TYPE.TEXTURE:
-				    return EffectParameterTypeContent.Texture;
+				    return EffectParameterType.Texture;
 			    case PARAMETER_TYPE.TEXTURE1D:
-				    return EffectParameterTypeContent.Texture1D;
+				    return EffectParameterType.Texture1D;
 			    case PARAMETER_TYPE.TEXTURE2D:
-				    return EffectParameterTypeContent.Texture2D;
+				    return EffectParameterType.Texture2D;
 			    case PARAMETER_TYPE.TEXTURE3D:
-				    return EffectParameterTypeContent.Texture3D;
+				    return EffectParameterType.Texture3D;
 			    case PARAMETER_TYPE.TEXTURECUBE:
-				    return EffectParameterTypeContent.TextureCube;
+				    return EffectParameterType.TextureCube;
                 default:
                     throw new NotImplementedException();
 			}
         }
 
-        static internal VertexElementUsageContent ToXNAVertexElementUsage(MojoShader.Usage usage)
+        static internal VertexElementUsage ToXNAVertexElementUsage(MojoShader.Usage usage)
         {
             switch (usage)
             {
                 case MojoShader.Usage.POSITION:
-                    return VertexElementUsageContent.Position;
+                    return VertexElementUsage.Position;
 		        case MojoShader.Usage.BLENDWEIGHT:
-                    return VertexElementUsageContent.BlendWeight;
+                    return VertexElementUsage.BlendWeight;
                 case MojoShader.Usage.BLENDINDICES:
-                    return VertexElementUsageContent.BlendIndices;
+                    return VertexElementUsage.BlendIndices;
 		        case MojoShader.Usage.NORMAL:
-                    return VertexElementUsageContent.Normal;
+                    return VertexElementUsage.Normal;
                 case MojoShader.Usage.POINTSIZE:
-                    return VertexElementUsageContent.PointSize;
+                    return VertexElementUsage.PointSize;
                 case MojoShader.Usage.TEXCOORD:
-                    return VertexElementUsageContent.TextureCoordinate;
+                    return VertexElementUsage.TextureCoordinate;
                 case MojoShader.Usage.TANGENT:
-                    return VertexElementUsageContent.Tangent;
+                    return VertexElementUsage.Tangent;
                 case MojoShader.Usage.BINORMAL:
-                    return VertexElementUsageContent.Binormal;
+                    return VertexElementUsage.Binormal;
                 case MojoShader.Usage.TESSFACTOR:
-                    return VertexElementUsageContent.TessellateFactor;
+                    return VertexElementUsage.TessellateFactor;
                 case MojoShader.Usage.COLOR:
-                    return VertexElementUsageContent.Color;
+                    return VertexElementUsage.Color;
                 case MojoShader.Usage.FOG:
-                    return VertexElementUsageContent.Fog;
+                    return VertexElementUsage.Fog;
                 case MojoShader.Usage.DEPTH:
-                    return VertexElementUsageContent.Depth;
+                    return VertexElementUsage.Depth;
                 case MojoShader.Usage.SAMPLE:
-                    return VertexElementUsageContent.Sample;
+                    return VertexElementUsage.Sample;
 
                 default:
                     throw new NotImplementedException();
