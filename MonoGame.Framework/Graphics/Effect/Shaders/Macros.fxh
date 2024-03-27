@@ -19,10 +19,10 @@
                           } }
 
 
-#ifdef MGFX
+#ifdef __KNIFX__
 
 
-// HLSL Shader Model 4.0 macros (for targeting DirectX11)
+// HLSL Shader Model 4.0 macros (for targeting KNI)
 
 #define _vs(r)
 #define _ps(r)
@@ -31,7 +31,7 @@
 #else
 
 
-// HLSL Shader Model 2.0 & 3.0 macros (for targeting DirectX9/XNA or openGL/MojoShader)
+// HLSL Shader Model 2.0 & 3.0 macros (for targeting XNA)
 
 #define _vs(r)  : register(vs, r)
 #define _ps(r)  : register(ps, r)

@@ -41,7 +41,7 @@ float4 PS(PSInput input) : COLOR0
     return float4(input.TexCoord.xy, 0, 1);
 }
 
-#if __DIRECTX__
+#if __KNIFX__
 #define PS_PROFILE ps_4_0_level_9_3
 #define VS_PROFILE vs_4_0_level_9_3
 #else

@@ -18,7 +18,7 @@ float4 PS_Main(VSOutput input) : COLOR0
     return float4(comparisonResult, 0, 0, 1);
 }
 
-#if __DIRECTX__
+#if __KNIFX__
 #define PS_PROFILE ps_4_0_level_9_3
 #define VS_PROFILE vs_4_0_level_9_3
 #else
