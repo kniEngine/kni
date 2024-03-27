@@ -22,10 +22,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public override ShaderProfileType ProfileType { get { return ShaderProfileType.OpenGL_Mojo; } }
         public override string Name { get { return "OpenGL"; } }
 
-
-        private static readonly Regex GlslPixelShaderRegex = new Regex(@"^ps_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
-        private static readonly Regex GlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)$", RegexOptions.Compiled);
-
         public ShaderProfileGL()
         {
         }
@@ -42,20 +38,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override void ValidateShaderModels(PassInfo pass)
         {
-            int major, minor;
+            const int MojoMaxShaderVersion = 3;
 
             if (!string.IsNullOrEmpty(pass.vsFunction))
             {
-                ParseShaderModel(pass.vsModel, GlslVertexShaderRegex, out major, out minor);
-                if (major > 3)
-                    throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}' must be SM 3.0 or lower!", pass.vsModel, pass.vsFunction));
+                ShaderVersion vsShaderVersion = ShaderVersion.ParseVertexShaderModel(pass.vsModel);
+
+                if (vsShaderVersion.Major == -1)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}'.", pass.vsModel, pass.vsFunction));
+
+                if (vsShaderVersion.Major > MojoMaxShaderVersion)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}' must be SM 3.0 or lower.", pass.vsModel, pass.vsFunction));
             }
 
             if (!string.IsNullOrEmpty(pass.psFunction))
             {
-                ParseShaderModel(pass.psModel, GlslPixelShaderRegex, out major, out minor);
-                if (major > 3)
-                    throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}' must be SM 3.0 or lower!", pass.vsModel, pass.psFunction));
+                ShaderVersion psShaderVersion = ShaderVersion.ParsePixelShaderModel(pass.psModel);
+
+                if (psShaderVersion.Major == -1)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}'.", pass.psModel, pass.psFunction));
+
+                if (psShaderVersion.Major > MojoMaxShaderVersion)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}' must be SM 3.0 or lower.", pass.psModel, pass.psFunction));
             }
         }
 
