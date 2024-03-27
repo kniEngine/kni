@@ -20,10 +20,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public override ShaderProfileType ProfileType { get { return ShaderProfileType.DirectX_11; } }
         public override string Name { get { return "DirectX_11"; } }
 
-
-        private static readonly Regex HlslPixelShaderRegex = new Regex(@"^ps_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(9_1|9_3))?$", RegexOptions.Compiled);
-        private static readonly Regex HlslVertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(9_1|9_3))?$", RegexOptions.Compiled);
-
         public ShaderProfileDX11()
         {
         }
@@ -39,26 +35,30 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override void ValidateShaderModels(PassInfo pass)
         {
-            int major, minor;
-
             if (!string.IsNullOrEmpty(pass.vsFunction))
             {
-                ParseShaderModel(pass.vsModel, HlslVertexShaderRegex, out major, out minor);
-                if (major <= 3)
-                    throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}' must be SM 4.0 level 9.1 or higher!", pass.vsModel, pass.vsFunction));
+                ShaderVersion vsShaderVersion = ShaderVersion.ParseVertexShaderModel(pass.vsModel);
+                
+                if (vsShaderVersion.Major == -1)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}'.", pass.vsModel, pass.vsFunction));
             }
 
             if (!string.IsNullOrEmpty(pass.psFunction))
             {
-                ParseShaderModel(pass.psModel, HlslPixelShaderRegex, out major, out minor);
-                if (major <= 3)
-                    throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}' must be SM 4.0 level 9.1 or higher!", pass.vsModel, pass.psFunction));
+                ShaderVersion psShaderVersion = ShaderVersion.ParsePixelShaderModel(pass.psModel);
+
+                if (psShaderVersion.Major == -1)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}'.", pass.psModel, pass.psFunction));
+
             }
         }
 
         internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
-            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, true, ref errorsAndWarnings))
+            string dx11ShaderProfileName = shaderProfileName;
+            dx11ShaderProfileName = dx11ShaderProfileName.Replace("s_2_0", "s_4_0_level_9_1");
+            dx11ShaderProfileName = dx11ShaderProfileName.Replace("s_3_0", "s_4_0_level_9_3");
+            using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx11ShaderProfileName, true, ref errorsAndWarnings))
             {
                 ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(input, context, shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
                 return shaderDataDX11;

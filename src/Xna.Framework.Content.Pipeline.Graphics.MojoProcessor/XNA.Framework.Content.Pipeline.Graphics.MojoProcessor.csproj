@@ -66,6 +66,7 @@
     <Compile Include="EffectCompiler\ShaderProfileGL.cs" />
     <Compile Include="EffectCompiler\ShaderProfileType.cs" />
     <Compile Include="EffectCompiler\ShaderStage.cs" />
+    <Compile Include="EffectCompiler\ShaderVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExternalTool.cs" />
