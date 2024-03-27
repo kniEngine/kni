@@ -152,6 +152,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             Preprocessor pp = new Preprocessor();
 
+            pp.AddMacro("__KNIFX__", "1");
+
             // deprecated macro. Left for backward compatibility with MonoGame.
             pp.AddMacro("MGFX", "1");
 

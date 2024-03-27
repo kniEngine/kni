@@ -46,22 +46,23 @@ These are some tips for writing or converting effects for use with MonoGame.
 |  * `vs_4_0` and `ps_4_0` (requires `FL10_0` `GraphicsProfile` at runtime)|
 |  * `vs_4_1` and `ps_4_1` (requires `FL10_1` `GraphicsProfile` at runtime)|
 |  * `vs_5_0` and `ps_5_0` (requires `FL11_0` `GraphicsProfile` at runtime)|
----
-|When targeting GL platforms we automatically translate FX files to GLSL using a library called [MojoShader](http://icculus.org/mojoshader/).  The supported feature levels are the following:|
+|---|
+|When targeting GL platforms we automatically translate FX files to GLSL using a library called [MojoShader](http://icculus.org/mojoshader/).|
+|The supported feature levels are the following:|
 |---|
 |  * `vs_4_0_level_9_1` and `ps_4_0_level_9_1` (`Reach` `GraphicsProfile`)|
 |  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (`HiDef` `GraphicsProfile`)|
 |  * `vs_2_0` and `ps_2_0` (`Reach` `GraphicsProfile`)|
 |  * `vs_3_0` and `ps_3_0` (`HiDef` `GraphicsProfile`)|
----
-|You can use preprocessor checks to add conditional code or compilation depending on defined symbols. MonoGame defines the following symbols when compiling effects:|
 |---|
-|  * `MGFX`                        |
+|You can use preprocessor checks to add conditional code or compilation depending on defined symbols. KNI defines the following symbols when compiling effects:|
+|---|
+|  * `__KNIFX__`                   |
 |  * `__DEBUG__` when building with the Debug flag |
 |  * `__DIRECTX__` when targeting DirectX |
 |  * `__OPENGL__` when targeting OpenGL |
 |  * `__MOJOSHADER__` when building with MojoShader, targeting OpenGL |
----
+|---|
 
 
 Custom symbols can be defined from the [MGCB Editor](~/articles/tools/mgcb_editor.md) or via [KNIFXC](~/articles/tools/knifxc.md).
