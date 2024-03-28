@@ -165,15 +165,17 @@ namespace Microsoft.Xna.Framework.Input.Touch
                         _touchStates.RemoveAt(i);
                         break;
                     case TouchLocationState.Pressed:
-                        {
-                            TouchLocationData.AgeState(ref touch);
-                        }
+                        touch._previousState = touch.State;
+                        touch._previousPosition = touch.Position;
+                        if (touch.SameFrameReleased)
+                            touch._state = TouchLocationState.Released;
+                        else
+                            touch._state = TouchLocationState.Moved;
                         _touchStates[i] = touch;
                         break;
                     case TouchLocationState.Moved:
-                        {
-                            TouchLocationData.AgeState(ref touch);
-                        }
+                        touch._previousState = touch.State;
+                        touch._previousPosition = touch.Position;
                         _touchStates[i] = touch;
                         break;
                 }
@@ -307,15 +309,17 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 _gestureStates.RemoveAt(i);
                                 break;
                             case TouchLocationState.Pressed:
-                                {
-                                    TouchLocationData.AgeState(ref touch);
-                                }
+                                touch._previousState = touch.State;
+                                touch._previousPosition = touch.Position;
+                                if (touch.SameFrameReleased)
+                                    touch._state = TouchLocationState.Released;
+                                else
+                                    touch._state = TouchLocationState.Moved;
                                 _gestureStates[i] = touch;
                                 break;
                             case TouchLocationState.Moved:
-                                {
-                                    TouchLocationData.AgeState(ref touch);
-                                }
+                                touch._previousState = touch.State;
+                                touch._previousPosition = touch.Position;
                                 _gestureStates[i] = touch;
                                 break;
                         }
