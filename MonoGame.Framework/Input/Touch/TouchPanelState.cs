@@ -12,12 +12,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// The current touch state.
         /// </summary>
-        private readonly List<TouchLocationData> _touchState = new List<TouchLocationData>();
+        private readonly List<TouchLocationData> _touchStates = new List<TouchLocationData>();
 
         /// <summary>
         /// The current gesture state.
         /// </summary>
-        private readonly List<TouchLocationData> _gestureState = new List<TouchLocationData>();
+        private readonly List<TouchLocationData> _gestureStates = new List<TouchLocationData>();
 
         /// <summary>
         /// The positional scale to apply to touch input.
@@ -178,34 +178,34 @@ namespace Microsoft.Xna.Framework.Input.Touch
         public TouchCollection GetState()
         {
             //Clear out touches from previous frames that were released on the same frame they were touched that haven't been seen
-            for (int i = _touchState.Count - 1; i >= 0; i--)
+            for (int i = _touchStates.Count - 1; i >= 0; i--)
             {
-                TouchLocationData touch = _touchState[i];
+                TouchLocationData touch = _touchStates[i];
 
                 //If a touch was pressed and released in a previous frame and the user didn't ask about it then trash it.
                 if (touch.SameFrameReleased && touch.Timestamp < CurrentTimestamp && touch.State == TouchLocationState.Pressed)
                 {
-                    _touchState.RemoveAt(i);
+                    _touchStates.RemoveAt(i);
                 }
             }
 
-            TouchCollection result = (_touchState.Count > 0) ? new TouchCollection(_touchState) : TouchCollection.Empty;
+            TouchCollection result = (_touchStates.Count > 0) ? new TouchCollection(_touchStates) : TouchCollection.Empty;
             // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
-            for (int i = _touchState.Count - 1; i >= 0; i--)
+            for (int i = _touchStates.Count - 1; i >= 0; i--)
             {
-                TouchLocationData touch = _touchState[i];
+                TouchLocationData touch = _touchStates[i];
                 switch (touch.State)
                 {
                     case TouchLocationState.Released:
-                        _touchState.RemoveAt(i);
+                        _touchStates.RemoveAt(i);
                         break;
                     case TouchLocationState.Pressed:
                         touch.AgeState();
-                        _touchState[i] = touch;
+                        _touchStates[i] = touch;
                         break;
                     case TouchLocationState.Moved:
                         touch.AgeState();
-                        _touchState[i] = touch;
+                        _touchStates[i] = touch;
                         break;
                 }
             }
@@ -247,33 +247,33 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 // too large if no one happens to be requesting the state.
                 TouchLocationData evt = new TouchLocationData(touchId, state, position * _touchScale, CurrentTimestamp);
 
-                ApplyTouch(_touchState, evt);
+                ApplyTouch(_touchStates, evt);
 
                 //If we have gestures enabled then collect events for those too.
                 //We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-                if ((EnabledGestures != GestureType.None || _gestureState.Count > 0))
+                if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
                 {
-                    ApplyTouch(_gestureState, evt);
+                    ApplyTouch(_gestureStates, evt);
 
                     if (EnabledGestures != GestureType.None)
                         UpdateGestures(true);
 
                     // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
-                    for (int i = _gestureState.Count - 1; i >= 0; i--)
+                    for (int i = _gestureStates.Count - 1; i >= 0; i--)
                     {
-                        TouchLocationData touch = _gestureState[i];
+                        TouchLocationData touch = _gestureStates[i];
                         switch (touch.State)
                         {
                             case TouchLocationState.Released:
-                                _gestureState.RemoveAt(i);
+                                _gestureStates.RemoveAt(i);
                                 break;
                             case TouchLocationState.Pressed:
                                 touch.AgeState();
-                                _gestureState[i] = touch;
+                                _gestureStates[i] = touch;
                                 break;
                             case TouchLocationState.Moved:
                                 touch.AgeState();
-                                _gestureState[i] = touch;
+                                _gestureStates[i] = touch;
                                 break;
                         }
                     }
@@ -291,25 +291,25 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// </summary>
         internal void ReleaseAllTouches()
         {
-            int mostToRemove = Math.Max(_touchState.Count, _gestureState.Count);
+            int mostToRemove = Math.Max(_touchStates.Count, _gestureStates.Count);
             if (mostToRemove > 0)
             {
                 List<TouchLocationData> temp = new List<TouchLocationData>(mostToRemove);
 
                 // Submit a new event for each non-released location.
-                temp.AddRange(_touchState);
+                temp.AddRange(_touchStates);
                 foreach (TouchLocationData touch in temp)
                 {
                     if (touch.State != TouchLocationState.Released)
-                        ApplyTouch(_touchState, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
+                        ApplyTouch(_touchStates, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
                 }
 
                 temp.Clear();
-                temp.AddRange(_gestureState);
+                temp.AddRange(_gestureStates);
                 foreach (TouchLocationData touch in temp)
                 {
                     if (touch.State != TouchLocationState.Released)
-                        ApplyTouch(_gestureState, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
+                        ApplyTouch(_gestureStates, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
                 }
             }
 
@@ -381,7 +381,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // First get a count of touch locations which 
             // are not in the released state.
             int heldLocations = 0;
-            foreach (TouchLocationData touch in _gestureState)
+            foreach (TouchLocationData touch in _gestureStates)
                 heldLocations += touch.State != TouchLocationState.Released ? 1 : 0;
 
             // As soon as we have more than one held point then 
@@ -394,9 +394,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
 
             // Process the touch locations for gestures.
-            for (int i = 0; i < _gestureState.Count; i++)
+            for (int i = 0; i < _gestureStates.Count; i++)
             {
-                TouchLocationData touch = _gestureState[i];
+                TouchLocationData touch = _gestureStates[i];
                 switch (touch.State)
                 {
                     case TouchLocationState.Pressed:
