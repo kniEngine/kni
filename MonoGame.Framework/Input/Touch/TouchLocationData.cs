@@ -183,28 +183,28 @@ namespace Microsoft.Xna.Framework.Input.Touch
             return true;
         }
 
-        internal void AgeState()
+        internal static void AgeState(ref TouchLocationData touch)
         {
-            switch (_state)
+            switch (touch.State)
             {
                 case TouchLocationState.Moved:
-                    _previousState = _state;
-                    _previousPosition = _position;
+                    touch._previousState = touch.State;
+                    touch._previousPosition = touch.Position;
                     break;
 
                 case TouchLocationState.Released:
                 case TouchLocationState.Pressed:
                 case TouchLocationState.Invalid:
 
-                    System.Diagnostics.Debug.Assert(_state == TouchLocationState.Pressed, "Can only age the state of touches that are in the Pressed State");
+                    System.Diagnostics.Debug.Assert(touch.State == TouchLocationState.Pressed, "Can only age the state of touches that are in the Pressed State");
 
-                    _previousState = _state;
-                    _previousPosition = _position;
+                    touch._previousState = touch.State;
+                    touch._previousPosition = touch.Position;
 
-                    if (SameFrameReleased)
-                        _state = TouchLocationState.Released;
+                    if (touch.SameFrameReleased)
+                        touch._state = TouchLocationState.Released;
                     else
-                        _state = TouchLocationState.Moved;
+                        touch._state = TouchLocationState.Moved;
                     break;
             }
 

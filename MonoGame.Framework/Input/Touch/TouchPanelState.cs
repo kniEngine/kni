@@ -165,11 +165,15 @@ namespace Microsoft.Xna.Framework.Input.Touch
                         _touchStates.RemoveAt(i);
                         break;
                     case TouchLocationState.Pressed:
-                        touch.AgeState();
+                        {
+                            TouchLocationData.AgeState(ref touch);
+                        }
                         _touchStates[i] = touch;
                         break;
                     case TouchLocationState.Moved:
-                        touch.AgeState();
+                        {
+                            TouchLocationData.AgeState(ref touch);
+                        }
                         _touchStates[i] = touch;
                         break;
                 }
@@ -303,11 +307,15 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 _gestureStates.RemoveAt(i);
                                 break;
                             case TouchLocationState.Pressed:
-                                touch.AgeState();
+                                {
+                                    TouchLocationData.AgeState(ref touch);
+                                }
                                 _gestureStates[i] = touch;
                                 break;
                             case TouchLocationState.Moved:
-                                touch.AgeState();
+                                {
+                                    TouchLocationData.AgeState(ref touch);
+                                }
                                 _gestureStates[i] = touch;
                                 break;
                         }
