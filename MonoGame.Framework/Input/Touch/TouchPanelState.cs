@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
-    public class TouchPanelState
+    internal class TouchPanelState
     {
         /// <summary>
         /// The current touch state.
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets the display width of the touch panel.
         /// </summary>
-        public int DisplayWidth
+        internal int DisplayWidth
         {
             get { return _displaySize.X; }
             set
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets the display height of the touch panel.
         /// </summary>
-        public int DisplayHeight
+        internal int DisplayHeight
         {
             get { return _displaySize.Y; }
             set
@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets the display orientation of the touch panel.
         /// </summary>
-        public DisplayOrientation DisplayOrientation
+        internal DisplayOrientation DisplayOrientation
         {
             get;
             set;
@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets enabled gestures.
         /// </summary>
-        public GestureType EnabledGestures
+        internal GestureType EnabledGestures
         {
             get;
             set;
@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Returns true if a touch gesture is available.
         /// </summary>
-        public bool IsGestureAvailable
+        internal bool IsGestureAvailable
         {
             get
             {
@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// The window handle of the touch panel. Purely for Xna compatibility.
         /// </summary>
-        public IntPtr WindowHandle 
+        internal IntPtr WindowHandle 
         { 
             get;
             set;
@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// Returns capabilities of touch panel device.
         /// </summary>
         /// <returns><see cref="TouchPanelCapabilities"/></returns>
-        public TouchPanelCapabilities GetCapabilities()
+        internal TouchPanelCapabilities GetCapabilities()
         {
             Capabilities.Initialize();
             return Capabilities;
@@ -175,7 +175,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
         }
 
-        public TouchCollection GetState()
+        internal TouchCollection GetState()
         {
             //Clear out touches from previous frames that were released on the same frame they were touched that haven't been seen
             for (int i = _touchStates.Count - 1; i >= 0; i--)
@@ -316,12 +316,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // Release all the touch id mappings.
             _touchIds.Clear();
         }
-        
+
         /// <summary>
         /// Returns the next available gesture on touch panel device.
         /// </summary>
         /// <returns><see cref="GestureSample"/></returns>
-        public GestureSample ReadGesture()
+        internal GestureSample ReadGesture()
         {
             // Return the next gesture.
             return GestureList.Dequeue();
