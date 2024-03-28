@@ -261,11 +261,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                         existingTouch._state = evt.State;
 
                                     // If time has elapsed then update the velocity.
-                                    Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                     TimeSpan elapsed = evt.Timestamp - existingTouch.Timestamp;
                                     if (elapsed > TimeSpan.Zero)
                                     {
                                         // Use a simple low pass filter to accumulate velocity.
+                                        Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                         Vector2 velocity = delta / (float)elapsed.TotalSeconds;
                                         existingTouch._velocity += (velocity - existingTouch.Velocity) * 0.45f;
                                     }
@@ -338,11 +338,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                             existingTouch._state = evt.State;
 
                                         // If time has elapsed then update the velocity.
-                                        Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                         TimeSpan elapsed = evt.Timestamp - existingTouch.Timestamp;
                                         if (elapsed > TimeSpan.Zero)
                                         {
                                             // Use a simple low pass filter to accumulate velocity.
+                                            Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                             Vector2 velocity = delta / (float)elapsed.TotalSeconds;
                                             existingTouch._velocity += (velocity - existingTouch.Velocity) * 0.45f;
                                         }
@@ -449,11 +449,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                     existingTouch._state = TouchLocationState.Released;
 
                                     // If time has elapsed then update the velocity.
-                                    Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                     TimeSpan elapsed = CurrentTimestamp - existingTouch.Timestamp;
                                     if (elapsed > TimeSpan.Zero)
                                     {
                                         // Use a simple low pass filter to accumulate velocity.
+                                        Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                         Vector2 velocity = delta / (float)elapsed.TotalSeconds;
                                         existingTouch._velocity += (velocity - existingTouch.Velocity) * 0.45f;
                                     }
@@ -512,11 +512,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                     existingTouch._state = TouchLocationState.Released;
 
                                     // If time has elapsed then update the velocity.
-                                    Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                     TimeSpan elapsed = CurrentTimestamp - existingTouch.Timestamp;
                                     if (elapsed > TimeSpan.Zero)
                                     {
                                         // Use a simple low pass filter to accumulate velocity.
+                                        Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
                                         Vector2 velocity = delta / (float)elapsed.TotalSeconds;
                                         existingTouch._velocity += (velocity - existingTouch.Velocity) * 0.45f;
                                     }
