@@ -137,28 +137,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         }
 
         /// <summary>
-        /// Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
-        /// </summary>
-        private void AgeTouches(List<TouchLocationData> state)
-        {
-            for (int i = state.Count - 1; i >= 0; i--)
-            {
-                TouchLocationData touch = state[i];
-                switch (touch.State)
-                {
-                    case TouchLocationState.Released:
-                        state.RemoveAt(i);
-                        break;
-                    case TouchLocationState.Pressed:
-                    case TouchLocationState.Moved:
-                        touch.AgeState();
-                        state[i] = touch;
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
         /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, otherwise we update the existing touch it matches
         /// </summary>
         private void ApplyTouch(List<TouchLocationData> state, TouchLocationData touch)
@@ -208,7 +186,26 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
 
             TouchCollection result = (_touchState.Count > 0) ? new TouchCollection(_touchState) : TouchCollection.Empty;
-            AgeTouches(_touchState);
+            // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
+            for (int i = _touchState.Count - 1; i >= 0; i--)
+            {
+                TouchLocationData touch = _touchState[i];
+                switch (touch.State)
+                {
+                    case TouchLocationState.Released:
+                        _touchState.RemoveAt(i);
+                        break;
+                    case TouchLocationState.Pressed:
+                        touch.AgeState();
+                        _touchState[i] = touch;
+                        break;
+                    case TouchLocationState.Moved:
+                        touch.AgeState();
+                        _touchState[i] = touch;
+                        break;
+                }
+            }
+
             return result;
         }
 
@@ -257,7 +254,25 @@ namespace Microsoft.Xna.Framework.Input.Touch
                     if (EnabledGestures != GestureType.None)
                         UpdateGestures(true);
 
-                    AgeTouches(_gestureState);
+                    // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
+                    for (int i = _gestureState.Count - 1; i >= 0; i--)
+                    {
+                        TouchLocationData touch = _gestureState[i];
+                        switch (touch.State)
+                        {
+                            case TouchLocationState.Released:
+                                _gestureState.RemoveAt(i);
+                                break;
+                            case TouchLocationState.Pressed:
+                                touch.AgeState();
+                                _gestureState[i] = touch;
+                                break;
+                            case TouchLocationState.Moved:
+                                touch.AgeState();
+                                _gestureState[i] = touch;
+                                break;
+                        }
+                    }
                 }
             }
 
