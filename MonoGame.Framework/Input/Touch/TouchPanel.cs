@@ -22,11 +22,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
             return PrimaryWindow.TouchPanelState.GetState();
         }
 
-        public static TouchPanelState GetState(GameWindow window)
-        {
-            return window.TouchPanelState;
-        }
-
         public static TouchPanelCapabilities GetCapabilities()
         {
             return PrimaryWindow.TouchPanelState.GetCapabilities();
@@ -44,7 +39,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         public static GestureSample ReadGesture()
         {
             // Return the next gesture.
-            return PrimaryWindow.TouchPanelState.GestureList.Dequeue();			
+            return PrimaryWindow.TouchPanelState.ReadGesture();
         }
 
         /// <summary>
