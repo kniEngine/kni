@@ -8,10 +8,10 @@ namespace Microsoft.Xna.Framework.Input.Touch
     internal struct TouchLocationData : IEquatable<TouchLocationData>
     {
         private int _id;
-        private TouchLocationState _state;
+        internal TouchLocationState _state;
         private Vector2 _position;
-        private Vector2 _previousPosition;
-        private TouchLocationState _previousState;
+        internal Vector2 _previousPosition;
+        internal TouchLocationState _previousState;
 
         // Used for gesture recognition.
         private Vector2 _velocity;
@@ -182,35 +182,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
             return true;
         }
-
-        internal static void AgeState(ref TouchLocationData touch)
-        {
-            switch (touch.State)
-            {
-                case TouchLocationState.Moved:
-                    touch._previousState = touch.State;
-                    touch._previousPosition = touch.Position;
-                    break;
-
-                case TouchLocationState.Released:
-                case TouchLocationState.Pressed:
-                case TouchLocationState.Invalid:
-
-                    System.Diagnostics.Debug.Assert(touch.State == TouchLocationState.Pressed, "Can only age the state of touches that are in the Pressed State");
-
-                    touch._previousState = touch.State;
-                    touch._previousPosition = touch.Position;
-
-                    if (touch.SameFrameReleased)
-                        touch._state = TouchLocationState.Released;
-                    else
-                        touch._state = TouchLocationState.Moved;
-                    break;
-            }
-
-            return;
-        }
-
 
         public override int GetHashCode()
         {
