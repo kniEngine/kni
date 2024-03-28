@@ -337,42 +337,28 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 {
                     if (tmpTouch.State != TouchLocationState.Released)
                     {
-                        TouchLocationData evt = new TouchLocationData(tmpTouch.Id, TouchLocationState.Released, tmpTouch.Position, CurrentTimestamp);
-                        /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
-                        /// otherwise we update the existing touch it matches
-                        switch (evt.State)
+                        // Apply the given new touch to the existing touch it matches.
+                        for (int i = 0; i < _touchStates.Count; i++)
                         {
-                            case TouchLocationState.Pressed:
-                                _touchStates.Add(evt);
-                                break;
-
-                            case TouchLocationState.Moved:
-                            case TouchLocationState.Released:
-                            case TouchLocationState.Invalid:
-                                //Find the matching touch
-                                for (int i = 0; i < _touchStates.Count; i++)
+                            TouchLocationData existingTouch = _touchStates[i];
+                            if (existingTouch.Id == tmpTouch.Id)
+                            {
+                                //If we are moving straight from Pressed to Released and we've existed for multiple frames,
+                                // that means we've never been seen, so just get rid of us
+                                if (existingTouch.State == TouchLocationState.Pressed
+                                && existingTouch.PressTimestamp != CurrentTimestamp)
                                 {
-                                    TouchLocationData existingTouch = _touchStates[i];
-                                    if (existingTouch.Id == evt.Id)
-                                    {
-                                        //If we are moving straight from Pressed to Released and we've existed for multiple frames,
-                                        // that means we've never been seen, so just get rid of us
-                                        if (existingTouch.State == TouchLocationState.Pressed
-                                        && evt.State == TouchLocationState.Released
-                                        && existingTouch.PressTimestamp != evt.Timestamp)
-                                        {
-                                            _touchStates.RemoveAt(i);
-                                        }
-                                        else
-                                        {
-                                            //Otherwise update the touch based on the new one
-                                            existingTouch.UpdateState(evt);
-                                            _touchStates[i] = existingTouch;
-                                        }
-                                        break;
-                                    }
+                                    _touchStates.RemoveAt(i);
+                                }
+                                else
+                                {
+                                    TouchLocationData evt = new TouchLocationData(tmpTouch.Id, TouchLocationState.Released, tmpTouch.Position, CurrentTimestamp);
+                                    //Otherwise update the touch based on the new one
+                                    existingTouch.UpdateState(evt);
+                                    _touchStates[i] = existingTouch;
                                 }
                                 break;
+                            }
                         }
                     }
                 }
@@ -383,42 +369,28 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 {
                     if (tmpTouch.State != TouchLocationState.Released)
                     {
-                        TouchLocationData evt = new TouchLocationData(tmpTouch.Id, TouchLocationState.Released, tmpTouch.Position, CurrentTimestamp);
-                        /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
-                        /// otherwise we update the existing touch it matches
-                        switch (evt.State)
+                        // Apply the given new touch to the existing touch it matches.
+                        for (int i = 0; i < _gestureStates.Count; i++)
                         {
-                            case TouchLocationState.Pressed:
-                                _gestureStates.Add(evt);
-                                break;
-
-                            case TouchLocationState.Moved:
-                            case TouchLocationState.Released:
-                            case TouchLocationState.Invalid:
-                                //Find the matching touch
-                                for (int i = 0; i < _gestureStates.Count; i++)
+                            TouchLocationData existingTouch = _gestureStates[i];
+                            if (existingTouch.Id == tmpTouch.Id)
+                            {
+                                //If we are moving straight from Pressed to Released and we've existed for multiple frames,
+                                // that means we've never been seen, so just get rid of us
+                                if (existingTouch.State == TouchLocationState.Pressed
+                                && existingTouch.PressTimestamp != CurrentTimestamp)
                                 {
-                                    TouchLocationData existingTouch = _gestureStates[i];
-                                    if (existingTouch.Id == evt.Id)
-                                    {
-                                        //If we are moving straight from Pressed to Released and we've existed for multiple frames,
-                                        // that means we've never been seen, so just get rid of us
-                                        if (existingTouch.State == TouchLocationState.Pressed
-                                        && evt.State == TouchLocationState.Released
-                                        && existingTouch.PressTimestamp != evt.Timestamp)
-                                        {
-                                            _gestureStates.RemoveAt(i);
-                                        }
-                                        else
-                                        {
-                                            //Otherwise update the touch based on the new one
-                                            existingTouch.UpdateState(evt);
-                                            _gestureStates[i] = existingTouch;
-                                        }
-                                        break;
-                                    }
+                                    _gestureStates.RemoveAt(i);
+                                }
+                                else
+                                {
+                                    TouchLocationData evt = new TouchLocationData(tmpTouch.Id, TouchLocationState.Released, tmpTouch.Position, CurrentTimestamp);
+                                    //Otherwise update the touch based on the new one
+                                    existingTouch.UpdateState(evt);
+                                    _gestureStates[i] = existingTouch;
                                 }
                                 break;
+                            }
                         }
                     }
                 }
