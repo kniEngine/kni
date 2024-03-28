@@ -62,7 +62,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
             set
             {
                 _displaySize.X = value;
-                UpdateTouchScale();
+                // Recalculate the touch scale.
+                _touchScale.X = _displaySize.X / Window.ClientBounds.Width;
+                _touchScale.Y = _displaySize.Y / Window.ClientBounds.Height;
             }
         }
         /// <summary>
@@ -74,7 +76,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
             set
             {
                 _displaySize.Y = value;
-                UpdateTouchScale();
+                // Recalculate the touch scale.
+                _touchScale.X = _displaySize.X / Window.ClientBounds.Width;
+                _touchScale.Y = _displaySize.Y / Window.ClientBounds.Height;
             }
         }
 
@@ -279,16 +283,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // If this is a release unmap the hardware id.
             if (state == TouchLocationState.Released)
                 _touchIds.Remove(id);
-        }
-
-        private void UpdateTouchScale()
-        {
-            // Get the window size.
-            Vector2 windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
-
-            // Recalculate the touch scale.
-            _touchScale = new Vector2(  _displaySize.X / windowSize.X,
-                                        _displaySize.Y / windowSize.Y);
         }
 
         /// <summary>
