@@ -85,25 +85,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
             SameFrameReleased = false;
         }
 
-
-        /// <summary>
-        /// Returns a copy of the touch with the state changed to moved.
-        /// </summary>
-        /// <returns>The new touch location.</returns>
-        internal TouchLocationData AsMovedState()
-        {
-            TouchLocationData touch = this;
-
-            // Store the current state as the previous.
-            touch._previousState = touch._state;
-            touch._previousPosition = touch._position;
-
-            // Set the new state.
-            touch._state = TouchLocationState.Moved;
-
-            return touch;
-        }
-
         /// <summary>
         /// Updates the touch location using the new event.
         /// </summary>
