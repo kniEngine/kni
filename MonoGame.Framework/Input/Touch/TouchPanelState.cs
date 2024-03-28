@@ -246,7 +246,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 else
                                 {
                                     //Otherwise update the touch based on the new one
-                                    System.Diagnostics.Debug.Assert(existingTouch.Id == evt.Id, "The touch event must have the same Id!");
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
                                     System.Diagnostics.Debug.Assert(evt.State == TouchLocationState.Moved
                                                                  || evt.State == TouchLocationState.Released, "The new touch event should be a move or a release!");
@@ -324,7 +323,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                     else
                                     {
                                         //Otherwise update the touch based on the new one
-                                        System.Diagnostics.Debug.Assert(existingTouch.Id == evt.Id, "The touch event must have the same Id!");
                                         System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
                                         System.Diagnostics.Debug.Assert(evt.State == TouchLocationState.Moved
                                                                      || evt.State == TouchLocationState.Released, "The new touch event should be a move or a release!");
@@ -439,10 +437,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 else
                                 {
                                     //Otherwise update the touch based on the new one
-                                    System.Diagnostics.Debug.Assert(existingTouch.Id == tmpTouch.Id, "The touch event must have the same Id!");
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
-                                    System.Diagnostics.Debug.Assert(TouchLocationState.Released == TouchLocationState.Moved
-                                                                 || TouchLocationState.Released == TouchLocationState.Released, "The new touch event should be a move or a release!");
                                     System.Diagnostics.Debug.Assert(CurrentTimestamp >= existingTouch.Timestamp, "The touch event is older than our timestamp!");
 
                                     // Store the current state as the previous one.
@@ -451,8 +446,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
                                     // Set the new state.
                                     existingTouch._position = tmpTouch.Position;
-                                    if (TouchLocationState.Released == TouchLocationState.Released)
-                                        existingTouch._state = TouchLocationState.Released;
+                                    existingTouch._state = TouchLocationState.Released;
 
                                     // If time has elapsed then update the velocity.
                                     Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
@@ -466,7 +460,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    && existingTouch._state == TouchLocationState.Released
                                     && elapsed == TimeSpan.Zero)
                                     {
                                         //Lie that we are pressed for now
@@ -507,10 +500,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 else
                                 {
                                     //Otherwise update the touch based on the new one
-                                    System.Diagnostics.Debug.Assert(existingTouch.Id == tmpTouch.Id, "The touch event must have the same Id!");
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
-                                    System.Diagnostics.Debug.Assert(TouchLocationState.Released == TouchLocationState.Moved
-                                                                 || TouchLocationState.Released == TouchLocationState.Released, "The new touch event should be a move or a release!");
                                     System.Diagnostics.Debug.Assert(CurrentTimestamp >= existingTouch.Timestamp, "The touch event is older than our timestamp!");
 
                                     // Store the current state as the previous one.
@@ -519,8 +509,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
                                     // Set the new state.
                                     existingTouch._position = tmpTouch.Position;
-                                    if (TouchLocationState.Released == TouchLocationState.Released)
-                                        existingTouch._state = TouchLocationState.Released;
+                                    existingTouch._state = TouchLocationState.Released;
 
                                     // If time has elapsed then update the velocity.
                                     Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
@@ -534,7 +523,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    && existingTouch._state == TouchLocationState.Released
                                     && elapsed == TimeSpan.Zero)
                                     {
                                         //Lie that we are pressed for now
