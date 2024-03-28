@@ -52,15 +52,79 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         internal readonly GameWindow Window;
 
-        internal TouchPanelState(GameWindow window)
+
+        /// <summary>
+        /// Gets or sets the display width of the touch panel.
+        /// </summary>
+        public int DisplayWidth
         {
-            Window = window;
+            get { return _displaySize.X; }
+            set
+            {
+                _displaySize.X = value;
+                UpdateTouchScale();
+            }
+        }
+        /// <summary>
+        /// Gets or sets the display height of the touch panel.
+        /// </summary>
+        public int DisplayHeight
+        {
+            get { return _displaySize.Y; }
+            set
+            {
+                _displaySize.Y = value;
+                UpdateTouchScale();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the display orientation of the touch panel.
+        /// </summary>
+        public DisplayOrientation DisplayOrientation
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        /// Gets or sets enabled gestures.
+        /// </summary>
+        public GestureType EnabledGestures
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Returns true if a touch gesture is available.
+        /// </summary>
+        public bool IsGestureAvailable
+        {
+            get
+            {
+                // Process the pending gesture events. (May cause hold events)
+                UpdateGestures(false);
+
+                return GestureList.Count > 0;
+            }
         }
 
         /// <summary>
         /// The window handle of the touch panel. Purely for Xna compatibility.
         /// </summary>
-        public IntPtr WindowHandle { get; set; }
+        public IntPtr WindowHandle 
+        { 
+            get;
+            set;
+        }
+
+
+        internal TouchPanelState(GameWindow window)
+        {
+            Window = window;
+        }
 
         /// <summary>
         /// Returns capabilities of touch panel device.
@@ -243,63 +307,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // Release all the touch id mappings.
             _touchIds.Clear();
         }
-
-        /// <summary>
-        /// Gets or sets the display height of the touch panel.
-        /// </summary>
-        public int DisplayHeight
-        {
-            get
-            {
-                return _displaySize.Y;
-            }
-            set
-            {
-                _displaySize.Y = value;
-                UpdateTouchScale();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the display orientation of the touch panel.
-        /// </summary>
-        public DisplayOrientation DisplayOrientation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the display width of the touch panel.
-        /// </summary>
-        public int DisplayWidth
-        {
-            get
-            {
-                return _displaySize.X;
-            }
-            set
-            {
-                _displaySize.X = value;
-                UpdateTouchScale();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets enabled gestures.
-        /// </summary>
-        public GestureType EnabledGestures { get; set; }
-
-        /// <summary>
-        /// Returns true if a touch gesture is available.
-        /// </summary>
-        public bool IsGestureAvailable
-        {
-            get
-            {
-                // Process the pending gesture events. (May cause hold events)
-                UpdateGestures(false);
-
-                return GestureList.Count > 0;
-            }
-        }
-
+        
         /// <summary>
         /// Returns the next available gesture on touch panel device.
         /// </summary>
