@@ -400,14 +400,14 @@ namespace MonoGame.Tests.Framework
             //Create multiple touches in different states
 
             //Start a touch
-            var pos = new Vector2(1);
-            var pos2 = new Vector2(2);
+            Vector2 pos = new Vector2(1);
+            Vector2 pos2 = new Vector2(2);
             _tps.AddEvent(1, TouchLocationState.Pressed, pos);
 
             var state = _tps.GetState();
             Assert.AreEqual(1, state.Count);
 
-            var initialTouch = state[0];
+            TouchLocation initialTouch = state[0];
             Assert.AreEqual(TouchLocationState.Pressed, initialTouch.State);
             Assert.AreEqual(pos, initialTouch.Position);
 
@@ -417,8 +417,8 @@ namespace MonoGame.Tests.Framework
             {
                 state = _tps.GetState();
                 Assert.AreEqual(2, state.Count);
-                var touch = state.First(x => x.Id == initialTouch.Id);
-                var touch2 = state.First(x => x.Id != initialTouch.Id);
+                TouchLocation touch = state.First(x => x.Id == initialTouch.Id);
+                TouchLocation touch2 = state.First(x => x.Id != initialTouch.Id);
 
                 Assert.AreEqual(TouchLocationState.Moved, touch.State);
                 Assert.AreEqual(TouchLocationState.Pressed, touch2.State);
