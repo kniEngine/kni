@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
         }
         
-        internal TouchCollection(IList<TouchPanelState.TouchLocationData> touches)
+        internal TouchCollection(IList<TouchLocationData> touches)
         {
             if (touches == null)
                 throw new ArgumentNullException("touches");
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <returns></returns>
         public bool FindById(int id, out TouchLocation touchLocation)
         {
-            for (var i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (this[i].Id == id)
                 {
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <returns></returns>
         public int IndexOf(TouchLocation item)
         {
-            for (var i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (item == this[i])
                     return i;
@@ -192,7 +192,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <returns>Returns true if queried item is found, false otherwise.</returns>
         public bool Contains(TouchLocation item)
         {
-            for (var i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (item == this[i])
                     return true;
@@ -208,7 +208,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <param name="arrayIndex">The starting index of the copy operation.</param>
         public void CopyTo(TouchLocation[] array, int arrayIndex)
         {
-            for (var i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 array[arrayIndex + i] = this[i];
             }

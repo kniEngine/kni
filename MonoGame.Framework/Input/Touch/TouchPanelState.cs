@@ -12,12 +12,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// The current touch state.
         /// </summary>
-        private readonly List<TouchLocationData> _touchState = new List<TouchLocationData>();
+        private readonly List<TouchLocationData> _touchStates = new List<TouchLocationData>();
 
         /// <summary>
         /// The current gesture state.
         /// </summary>
-        private readonly List<TouchLocationData> _gestureState = new List<TouchLocationData>();
+        private readonly List<TouchLocationData> _gestureStates = new List<TouchLocationData>();
 
         /// <summary>
         /// The positional scale to apply to touch input.
@@ -52,15 +52,83 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         internal readonly GameWindow Window;
 
-        internal TouchPanelState(GameWindow window)
+
+        /// <summary>
+        /// Gets or sets the display width of the touch panel.
+        /// </summary>
+        public int DisplayWidth
         {
-            Window = window;
+            get { return _displaySize.X; }
+            set
+            {
+                _displaySize.X = value;
+                // Recalculate the touch scale.
+                _touchScale.X = _displaySize.X / Window.ClientBounds.Width;
+                _touchScale.Y = _displaySize.Y / Window.ClientBounds.Height;
+            }
+        }
+        /// <summary>
+        /// Gets or sets the display height of the touch panel.
+        /// </summary>
+        public int DisplayHeight
+        {
+            get { return _displaySize.Y; }
+            set
+            {
+                _displaySize.Y = value;
+                // Recalculate the touch scale.
+                _touchScale.X = _displaySize.X / Window.ClientBounds.Width;
+                _touchScale.Y = _displaySize.Y / Window.ClientBounds.Height;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the display orientation of the touch panel.
+        /// </summary>
+        public DisplayOrientation DisplayOrientation
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        /// Gets or sets enabled gestures.
+        /// </summary>
+        public GestureType EnabledGestures
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Returns true if a touch gesture is available.
+        /// </summary>
+        public bool IsGestureAvailable
+        {
+            get
+            {
+                // Process the pending gesture events. (May cause hold events)
+                UpdateGestures(false);
+
+                return GestureList.Count > 0;
+            }
         }
 
         /// <summary>
         /// The window handle of the touch panel. Purely for Xna compatibility.
         /// </summary>
-        public IntPtr WindowHandle { get; set; }
+        public IntPtr WindowHandle 
+        { 
+            get;
+            set;
+        }
+
+
+        internal TouchPanelState(GameWindow window)
+        {
+            Window = window;
+        }
 
         /// <summary>
         /// Returns capabilities of touch panel device.
@@ -70,28 +138,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             Capabilities.Initialize();
             return Capabilities;
-        }
-
-        /// <summary>
-        /// Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
-        /// </summary>
-        private void AgeTouches(List<TouchLocationData> state)
-        {
-            for (var i = state.Count - 1; i >= 0; i--)
-            {
-                var touch = state[i];
-                switch (touch.State)
-                {
-                    case TouchLocationState.Released:
-                        state.RemoveAt(i);
-                        break;
-                    case TouchLocationState.Pressed:
-                    case TouchLocationState.Moved:
-                        touch.AgeState();
-                        state[i] = touch;
-                        break;
-                }
-            }
         }
 
         /// <summary>
@@ -106,9 +152,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
 
             //Find the matching touch
-            for (var i = 0; i < state.Count; i++)
+            for (int i = 0; i < state.Count; i++)
             {
-                var existingTouch = state[i];
+                TouchLocationData existingTouch = state[i];
 
                 if (existingTouch.Id == touch.Id)
                 {
@@ -132,19 +178,38 @@ namespace Microsoft.Xna.Framework.Input.Touch
         public TouchCollection GetState()
         {
             //Clear out touches from previous frames that were released on the same frame they were touched that haven't been seen
-            for (var i = _touchState.Count - 1; i >= 0; i--)
+            for (int i = _touchStates.Count - 1; i >= 0; i--)
             {
-                var touch = _touchState[i];
+                TouchLocationData touch = _touchStates[i];
 
                 //If a touch was pressed and released in a previous frame and the user didn't ask about it then trash it.
                 if (touch.SameFrameReleased && touch.Timestamp < CurrentTimestamp && touch.State == TouchLocationState.Pressed)
                 {
-                    _touchState.RemoveAt(i);
+                    _touchStates.RemoveAt(i);
                 }
             }
 
-            var result = (_touchState.Count > 0) ? new TouchCollection(_touchState) : TouchCollection.Empty;
-            AgeTouches(_touchState);
+            TouchCollection result = (_touchStates.Count > 0) ? new TouchCollection(_touchStates) : TouchCollection.Empty;
+            // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
+            for (int i = _touchStates.Count - 1; i >= 0; i--)
+            {
+                TouchLocationData touch = _touchStates[i];
+                switch (touch.State)
+                {
+                    case TouchLocationState.Released:
+                        _touchStates.RemoveAt(i);
+                        break;
+                    case TouchLocationState.Pressed:
+                        touch.AgeState();
+                        _touchStates[i] = touch;
+                        break;
+                    case TouchLocationState.Moved:
+                        touch.AgeState();
+                        _touchStates[i] = touch;
+                        break;
+                }
+            }
+
             return result;
         }
 
@@ -180,20 +245,38 @@ namespace Microsoft.Xna.Framework.Input.Touch
             {
                 // Add the new touch event keeping the list from getting
                 // too large if no one happens to be requesting the state.
-                var evt = new TouchLocationData(touchId, state, position * _touchScale, CurrentTimestamp);
+                TouchLocationData evt = new TouchLocationData(touchId, state, position * _touchScale, CurrentTimestamp);
 
-                ApplyTouch(_touchState, evt);
+                ApplyTouch(_touchStates, evt);
 
                 //If we have gestures enabled then collect events for those too.
                 //We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-                if ((EnabledGestures != GestureType.None || _gestureState.Count > 0))
+                if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
                 {
-                    ApplyTouch(_gestureState, evt);
+                    ApplyTouch(_gestureStates, evt);
 
                     if (EnabledGestures != GestureType.None)
                         UpdateGestures(true);
 
-                    AgeTouches(_gestureState);
+                    // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
+                    for (int i = _gestureStates.Count - 1; i >= 0; i--)
+                    {
+                        TouchLocationData touch = _gestureStates[i];
+                        switch (touch.State)
+                        {
+                            case TouchLocationState.Released:
+                                _gestureStates.RemoveAt(i);
+                                break;
+                            case TouchLocationState.Pressed:
+                                touch.AgeState();
+                                _gestureStates[i] = touch;
+                                break;
+                            case TouchLocationState.Moved:
+                                touch.AgeState();
+                                _gestureStates[i] = touch;
+                                break;
+                        }
+                    }
                 }
             }
 
@@ -202,104 +285,38 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 _touchIds.Remove(id);
         }
 
-        private void UpdateTouchScale()
-        {
-            // Get the window size.
-            var windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
-
-            // Recalculate the touch scale.
-            _touchScale = new Vector2(  _displaySize.X / windowSize.X,
-                                        _displaySize.Y / windowSize.Y);
-        }
-
         /// <summary>
         /// This will release all touch locations.  It should only be 
         /// called on platforms where touch state is reset all at once.
         /// </summary>
         internal void ReleaseAllTouches()
         {
-            var mostToRemove = Math.Max(_touchState.Count, _gestureState.Count);
+            int mostToRemove = Math.Max(_touchStates.Count, _gestureStates.Count);
             if (mostToRemove > 0)
             {
-                var temp = new List<TouchLocationData>(mostToRemove);
+                List<TouchLocationData> temp = new List<TouchLocationData>(mostToRemove);
 
                 // Submit a new event for each non-released location.
-                temp.AddRange(_touchState);
-                foreach (var touch in temp)
+                temp.AddRange(_touchStates);
+                foreach (TouchLocationData touch in temp)
                 {
                     if (touch.State != TouchLocationState.Released)
-                        ApplyTouch(_touchState, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
+                        ApplyTouch(_touchStates, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
                 }
 
                 temp.Clear();
-                temp.AddRange(_gestureState);
-                foreach (var touch in temp)
+                temp.AddRange(_gestureStates);
+                foreach (TouchLocationData touch in temp)
                 {
                     if (touch.State != TouchLocationState.Released)
-                        ApplyTouch(_gestureState, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
+                        ApplyTouch(_gestureStates, new TouchLocationData(touch.Id, TouchLocationState.Released, touch.Position, CurrentTimestamp));
                 }
             }
 
             // Release all the touch id mappings.
             _touchIds.Clear();
         }
-
-        /// <summary>
-        /// Gets or sets the display height of the touch panel.
-        /// </summary>
-        public int DisplayHeight
-        {
-            get
-            {
-                return _displaySize.Y;
-            }
-            set
-            {
-                _displaySize.Y = value;
-                UpdateTouchScale();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the display orientation of the touch panel.
-        /// </summary>
-        public DisplayOrientation DisplayOrientation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the display width of the touch panel.
-        /// </summary>
-        public int DisplayWidth
-        {
-            get
-            {
-                return _displaySize.X;
-            }
-            set
-            {
-                _displaySize.X = value;
-                UpdateTouchScale();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets enabled gestures.
-        /// </summary>
-        public GestureType EnabledGestures { get; set; }
-
-        /// <summary>
-        /// Returns true if a touch gesture is available.
-        /// </summary>
-        public bool IsGestureAvailable
-        {
-            get
-            {
-                // Process the pending gesture events. (May cause hold events)
-                UpdateGestures(false);
-
-                return GestureList.Count > 0;
-            }
-        }
-
+        
         /// <summary>
         /// Returns the next available gesture on touch panel device.
         /// </summary>
@@ -363,8 +380,8 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
             // First get a count of touch locations which 
             // are not in the released state.
-            var heldLocations = 0;
-            foreach (var touch in _gestureState)
+            int heldLocations = 0;
+            foreach (TouchLocationData touch in _gestureStates)
                 heldLocations += touch.State != TouchLocationState.Released ? 1 : 0;
 
             // As soon as we have more than one held point then 
@@ -377,9 +394,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
 
             // Process the touch locations for gestures.
-            for (int i = 0; i < _gestureState.Count; i++)
+            for (int i = 0; i < _gestureStates.Count; i++)
             {
-                var touch = _gestureState[i];
+                TouchLocationData touch = _gestureStates[i];
                 switch (touch.State)
                 {
                     case TouchLocationState.Pressed:
@@ -412,7 +429,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                             }
 
                             // If we're not dragging try to process a hold event.
-                            var sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
+                            float sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
                             if (_dragGestureStarted == GestureType.None && sqDist < TapJitterTolerance * TapJitterTolerance)
                             {
                                 ProcessHold(ref touch);
@@ -458,7 +475,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
                             // From testing XNA it seems we need a velocity 
                             // of about 100 to classify this as a flick.
-                            var sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
+                            float sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
                             if (sqDist > TapJitterTolerance * TapJitterTolerance &&
                                     touch.Velocity.LengthSquared() > 100.0f * 100.0f &&
                                     GestureIsEnabled(GestureType.Flick))
@@ -524,7 +541,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             if (!GestureIsEnabled(GestureType.Hold) || _holdDisabled)
                 return;
 
-            var elapsed = CurrentTimestamp - touch.PressTimestamp;
+            TimeSpan elapsed = CurrentTimestamp - touch.PressTimestamp;
             if (elapsed < TimeRequiredForHold)
                 return;
 
@@ -544,13 +561,13 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
             // If the new tap is too far away from the last then
             // this cannot be a double tap event.
-            var sqDist = Vector2.DistanceSquared(touch.Position, _lastTap.Position);
+            float sqDist = Vector2.DistanceSquared(touch.Position, _lastTap.Position);
             if (sqDist > TapJitterTolerance * TapJitterTolerance)
                 return false;
 
             // Check that this tap happened within the standard 
             // double tap time threshold of 300 milliseconds.
-            var elapsed = touch.Timestamp - _lastTap.Timestamp;
+            TimeSpan elapsed = touch.Timestamp - _lastTap.Timestamp;
             if (elapsed.TotalMilliseconds > 300)
                 return false;
 
@@ -574,13 +591,13 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
             // If the release is too far away from the press 
             // position then this cannot be a tap event.
-            var sqDist = Vector2.DistanceSquared(touch.PressPosition, touch.Position);
+            float sqDist = Vector2.DistanceSquared(touch.PressPosition, touch.Position);
             if (sqDist > TapJitterTolerance * TapJitterTolerance)
                 return;
 
             // If we pressed and held too long then don't 
             // generate a tap event for it.
-            var elapsed = CurrentTimestamp - touch.PressTimestamp;
+            TimeSpan elapsed = CurrentTimestamp - touch.PressTimestamp;
             if (elapsed > TimeRequiredForHold)
                 return;
 
@@ -591,7 +608,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // Fire off the tap event immediately.
             if (GestureIsEnabled(GestureType.Tap))
             {
-                var tap = new GestureSample(
+                GestureSample tap = new GestureSample(
                     GestureType.Tap, touch.Timestamp,
                     touch.Position, Vector2.Zero,
                     Vector2.Zero, Vector2.Zero);
@@ -603,9 +620,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         private void ProcessDrag(ref TouchLocationData touch)
         {
-            var dragH = GestureIsEnabled(GestureType.HorizontalDrag);
-            var dragV = GestureIsEnabled(GestureType.VerticalDrag);
-            var dragF = GestureIsEnabled(GestureType.FreeDrag);
+            bool dragH = GestureIsEnabled(GestureType.HorizontalDrag);
+            bool dragV = GestureIsEnabled(GestureType.VerticalDrag);
+            bool dragF = GestureIsEnabled(GestureType.FreeDrag);
 
             if (!dragH && !dragV && !dragF)
                 return;
@@ -616,14 +633,14 @@ namespace Microsoft.Xna.Framework.Input.Touch
             if (touch.State != TouchLocationState.Moved || !touch.TryGetPreviousLocationData(out prevTouch))
                 return;
 
-            var delta = touch.Position - prevTouch.Position;
+            Vector2 delta = touch.Position - prevTouch.Position;
 
             // If we're free dragging then stick to it.
             if (_dragGestureStarted != GestureType.FreeDrag)
             {
-                var isHorizontalDelta = Math.Abs(delta.X) > Math.Abs(delta.Y * 2.0f);
-                var isVerticalDelta = Math.Abs(delta.Y) > Math.Abs(delta.X * 2.0f);
-                var classify = _dragGestureStarted == GestureType.None;
+                bool isHorizontalDelta = Math.Abs(delta.X) > Math.Abs(delta.Y * 2.0f);
+                bool isVerticalDelta = Math.Abs(delta.Y) > Math.Abs(delta.X * 2.0f);
+                bool classify = _dragGestureStarted == GestureType.None;
 
                 // Once we enter either vertical or horizontal drags
                 // we stick to it... regardless of the delta.
@@ -676,11 +693,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
             if (!touches[1].TryGetPreviousLocationData(out prevPos1))
                 prevPos1 = touches[1];
 
-            var delta0 = touches[0].Position - prevPos0.Position;
-            var delta1 = touches[1].Position - prevPos1.Position;
+            Vector2 delta0 = touches[0].Position - prevPos0.Position;
+            Vector2 delta1 = touches[1].Position - prevPos1.Position;
 
             // Get the newest timestamp.
-            var timestamp = touches[0].Timestamp > touches[1].Timestamp ? touches[0].Timestamp : touches[1].Timestamp;
+            TimeSpan timestamp = touches[0].Timestamp > touches[1].Timestamp ? touches[0].Timestamp : touches[1].Timestamp;
 
             // If we were already in a drag state then fire
             // off the drag completion event.
@@ -707,257 +724,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         }
 
         #endregion
-
-
-        internal struct TouchLocationData : IEquatable<TouchLocationData>
-        {
-            /// <summary>
-            ///Attributes 
-            /// </summary>
-            private int _id;
-            private TouchLocationState _state;
-            private Vector2 _position;
-            private Vector2 _previousPosition;
-            private TouchLocationState _previousState;
-
-            // Used for gesture recognition.
-            private Vector2 _velocity;
-            private Vector2 _pressPosition;
-            private TimeSpan _pressTimestamp;
-            private TimeSpan _timestamp;
-
-            /// <summary>
-            /// True if this touch was pressed and released on the same frame.
-            /// In this case we will keep it around for the user to get by GetState that frame.
-            /// However if they do not call GetState that frame, this touch will be forgotten.
-            /// </summary>
-            internal bool SameFrameReleased;
-
-            /// <summary>
-            /// Helper for assigning an invalid touch location.
-            /// </summary>
-            internal static readonly TouchLocationData Invalid = new TouchLocationData();
-
-            #region Properties
-
-            internal Vector2 PressPosition { get { return _pressPosition; } }
-
-            internal TimeSpan PressTimestamp { get { return _pressTimestamp; } }
-
-            internal TimeSpan Timestamp { get { return _timestamp; } }
-
-            internal Vector2 Velocity { get { return _velocity; } }
-
-            internal int Id { get { return _id; } }
-
-            internal Vector2 Position { get { return _position; } }
-
-            internal TouchLocationState State { get { return _state; } }
-
-            internal TouchLocation TouchLocation 
-            { 
-                get
-                {
-                    return new TouchLocation(this._id,
-                                             this._state, this._position,
-                                             this._previousState, this._previousPosition);
-                }
-            }
-
-            #endregion
-
-            #region Constructors
-
-            internal TouchLocationData(int id, TouchLocationState state, Vector2 position, TimeSpan timestamp)
-            {
-                _id = id;
-                _state = state;
-                _position = position;
-
-                _previousState = TouchLocationState.Invalid;
-                _previousPosition = Vector2.Zero;
-
-                _timestamp = timestamp;
-                _velocity = Vector2.Zero;
-
-                // If this is a pressed location then store the 
-                // current position and timestamp as pressed.
-                if (state == TouchLocationState.Pressed)
-                {
-                    _pressPosition = _position;
-                    _pressTimestamp = _timestamp;
-                }
-                else
-                {
-                    _pressPosition = Vector2.Zero;
-                    _pressTimestamp = TimeSpan.Zero;
-                }
-
-                SameFrameReleased = false;
-            }
-
-            #endregion
-
-            /// <summary>
-            /// Returns a copy of the touch with the state changed to moved.
-            /// </summary>
-            /// <returns>The new touch location.</returns>
-            internal TouchLocationData AsMovedState()
-            {
-                var touch = this;
-
-                // Store the current state as the previous.
-                touch._previousState = touch._state;
-                touch._previousPosition = touch._position;
-
-                // Set the new state.
-                touch._state = TouchLocationState.Moved;
-
-                return touch;
-            }
-
-            /// <summary>
-            /// Updates the touch location using the new event.
-            /// </summary>
-            /// <param name="touchEvent">The next event for this touch location.</param>
-            internal bool UpdateState(TouchLocationData touchEvent)
-            {
-                System.Diagnostics.Debug.Assert(Id == touchEvent.Id, "The touch event must have the same Id!");
-                System.Diagnostics.Debug.Assert(State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
-                System.Diagnostics.Debug.Assert(touchEvent.State == TouchLocationState.Moved ||
-                                touchEvent.State == TouchLocationState.Released, "The new touch event should be a move or a release!");
-                System.Diagnostics.Debug.Assert(touchEvent.Timestamp >= _timestamp, "The touch event is older than our timestamp!");
-
-                // Store the current state as the previous one.
-                _previousPosition = _position;
-                _previousState = _state;
-
-                // Set the new state.
-                _position = touchEvent._position;
-                if (touchEvent.State == TouchLocationState.Released)
-                    _state = touchEvent._state;
-
-                // If time has elapsed then update the velocity.
-                var delta = _position - _previousPosition;
-                var elapsed = touchEvent.Timestamp - _timestamp;
-                if (elapsed > TimeSpan.Zero)
-                {
-                    // Use a simple low pass filter to accumulate velocity.
-                    var velocity = delta / (float)elapsed.TotalSeconds;
-                    _velocity += (velocity - _velocity) * 0.45f;
-                }
-
-                //Going straight from pressed to released on the same frame
-                if (_previousState == TouchLocationState.Pressed && _state == TouchLocationState.Released && elapsed == TimeSpan.Zero)
-                {
-                    //Lie that we are pressed for now
-                    SameFrameReleased = true;
-                    _state = TouchLocationState.Pressed;
-                }
-
-                // Set the new timestamp.
-                _timestamp = touchEvent.Timestamp;
-
-                // Return true if the state actually changed.
-                return _state != _previousState || delta.LengthSquared() > 0.001f;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (obj is TouchLocationData)
-                    return Equals((TouchLocationData)obj);
-
-                return false;
-            }
-
-            public bool Equals(TouchLocationData other)
-            {
-                return _id.Equals(other._id) &&
-                        _position.Equals(other._position) &&
-                        _previousPosition.Equals(other._previousPosition);
-            }
-
-            public override int GetHashCode()
-            {
-                return _id;
-            }
-
-            public override string ToString()
-            {
-                return "Touch id:" + _id + " state:" + _state + " position:" + _position + " pressure:" + 0f + " prevState:" + _previousState + " prevPosition:" + _previousPosition + " previousPressure:" + 0f;
-            }
-
-            public bool TryGetPreviousLocationData(out TouchLocationData aPreviousLocation)
-            {
-                if (_previousState == TouchLocationState.Invalid)
-                {
-                    aPreviousLocation._id = -1;
-                    aPreviousLocation._state = TouchLocationState.Invalid;
-                    aPreviousLocation._position = Vector2.Zero;
-                    aPreviousLocation._previousState = TouchLocationState.Invalid;
-                    aPreviousLocation._previousPosition = Vector2.Zero;
-                    aPreviousLocation._timestamp = TimeSpan.Zero;
-                    aPreviousLocation._pressPosition = Vector2.Zero;
-                    aPreviousLocation._pressTimestamp = TimeSpan.Zero;
-                    aPreviousLocation._velocity = Vector2.Zero;
-                    aPreviousLocation.SameFrameReleased = false;
-                    return false;
-                }
-
-                aPreviousLocation._id = _id;
-                aPreviousLocation._state = _previousState;
-                aPreviousLocation._position = _previousPosition;
-                aPreviousLocation._previousState = TouchLocationState.Invalid;
-                aPreviousLocation._previousPosition = Vector2.Zero;
-                aPreviousLocation._timestamp = _timestamp;
-                aPreviousLocation._pressPosition = _pressPosition;
-                aPreviousLocation._pressTimestamp = _pressTimestamp;
-                aPreviousLocation._velocity = _velocity;
-                aPreviousLocation.SameFrameReleased = SameFrameReleased;
-                return true;
-            }
-
-            public static bool operator !=(TouchLocationData left, TouchLocationData right)
-            {
-                return left._id != right._id ||
-                       left._state != right._state ||
-                       left._position != right._position ||
-                       left._previousState != right._previousState ||
-                       left._previousPosition != right._previousPosition;
-            }
-
-            public static bool operator ==(TouchLocationData left, TouchLocationData right)
-            {
-                return left._id == right._id &&
-                       left._state == right._state &&
-                       left._position == right._position &&
-                       left._previousState == right._previousState &&
-                       left._previousPosition == right._previousPosition;
-            }
-
-
-            internal void AgeState()
-            {
-                if (_state == TouchLocationState.Moved)
-                {
-                    _previousState = _state;
-                    _previousPosition = _position;
-                }
-                else
-                {
-                    System.Diagnostics.Debug.Assert(_state == TouchLocationState.Pressed, "Can only age the state of touches that are in the Pressed State");
-
-                    _previousState = _state;
-                    _previousPosition = _position;
-
-                    if (SameFrameReleased)
-                        _state = TouchLocationState.Released;
-                    else
-                        _state = TouchLocationState.Moved;
-                }
-            }
-
-        }
 
     }
 }
