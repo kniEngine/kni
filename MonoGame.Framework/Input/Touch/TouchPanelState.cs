@@ -246,7 +246,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 else
                                 {
                                     //Otherwise update the touch based on the new one
-                                    existingTouch.UpdateState(evt);
+                                    TouchLocationData.UpdateState(ref existingTouch, evt);
                                     _touchStates[i] = existingTouch;
                                 }
                                 break;
@@ -287,7 +287,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                     else
                                     {
                                         //Otherwise update the touch based on the new one
-                                        existingTouch.UpdateState(evt);
+                                        TouchLocationData.UpdateState(ref existingTouch,evt);
                                         _gestureStates[i] = existingTouch;
                                     }
                                     break;
@@ -366,7 +366,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 {
                                     TouchLocationData evt = new TouchLocationData(tmpTouch.Id, TouchLocationState.Released, tmpTouch.Position, CurrentTimestamp);
                                     //Otherwise update the touch based on the new one
-                                    existingTouch.UpdateState(evt);
+                                    TouchLocationData.UpdateState(ref existingTouch, evt);
                                     _touchStates[i] = existingTouch;
                                 }
                                 break;
@@ -398,7 +398,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                                 {
                                     TouchLocationData evt = new TouchLocationData(tmpTouch.Id, TouchLocationState.Released, tmpTouch.Position, CurrentTimestamp);
                                     //Otherwise update the touch based on the new one
-                                    existingTouch.UpdateState(evt);
+                                    TouchLocationData.UpdateState(ref existingTouch, evt);
                                     _gestureStates[i] = existingTouch;
                                 }
                                 break;
