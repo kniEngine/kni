@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
         }
         
-        internal TouchCollection(IList<TouchPanelState.TouchLocationData> touches)
+        internal TouchCollection(IList<TouchLocationData> touches)
         {
             if (touches == null)
                 throw new ArgumentNullException("touches");

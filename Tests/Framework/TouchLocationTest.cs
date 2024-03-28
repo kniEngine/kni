@@ -15,14 +15,14 @@ namespace MonoGame.Tests.Framework
         [Description("AgeState is used to make touches that were placed and removed on the same frame appear over multiple frames when no actual update happens on the second frame. When it does this it should copy its details so they can be fetched from the previous state")]
         public void AgeStateUpdatesPreviousDetails([Values(true, false)] bool isSameFrameReleased)
         {
-            var touch = new TouchPanelState.TouchLocationData(1, TouchLocationState.Pressed, new Vector2(1, 2), TimeSpan.FromSeconds(1));
+            var touch = new TouchLocationData(1, TouchLocationState.Pressed, new Vector2(1, 2), TimeSpan.FromSeconds(1));
 
             if (isSameFrameReleased)
                 touch.SameFrameReleased = true;
 
             touch.AgeState();
 
-            TouchPanelState.TouchLocationData previous;
+            TouchLocationData previous;
             Assert.True(touch.TryGetPreviousLocationData(out previous));
 
             Assert.AreEqual(TouchLocationState.Pressed, previous.State);
