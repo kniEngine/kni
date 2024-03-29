@@ -4,9 +4,9 @@ using System;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Keyboard
+    public sealed partial class Keyboard
     {
-        private static KeyboardState PlatformGetState()
+        private KeyboardState PlatformGetState()
         {
             throw new PlatformNotSupportedException();
         }

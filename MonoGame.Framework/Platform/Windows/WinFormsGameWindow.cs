@@ -188,7 +188,7 @@ namespace MonoGame.Framework
         private void OnActivated(object sender, EventArgs eventArgs)
         {
             _concreteGame.IsActive = true;
-            Keyboard.SetActive(true);
+            Keyboard.Current.SetActive(true);
 
             DragAcceptFiles(Handle, true); //allows drag and dropping
         }
@@ -203,7 +203,7 @@ namespace MonoGame.Framework
                     MinimizeFullScreen();				
             }
             _concreteGame.IsActive = false;
-            Keyboard.SetActive(false);
+            Keyboard.Current.SetActive(false);
         }
 
         private void OnMouseEnter(object sender, EventArgs e)

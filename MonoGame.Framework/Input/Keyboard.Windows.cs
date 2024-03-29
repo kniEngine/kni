@@ -8,38 +8,36 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Keyboard
+    public sealed partial class Keyboard
     {
-        private static readonly byte[] DefinedKeyCodes;
+        private readonly byte[] DefinedKeyCodes;
 
-        private static readonly byte[] _keyState = new byte[256];
-        private static readonly List<Keys> _keys = new List<Keys>(10);
+        private readonly byte[] _keyState = new byte[256];
+        private readonly List<Keys> _keys = new List<Keys>(10);
 
-        private static bool _isActive;
+        private bool _isActive;
 
         [DllImport("user32.dll")]
         private static extern bool GetKeyboardState(byte[] lpKeyState);
 
-        private static readonly Predicate<Keys> IsKeyReleasedPredicate = key => IsKeyReleased((byte)key);
-
-        static Keyboard()
+        private Keyboard()
         {
-            var definedKeys = Enum.GetValues(typeof(Keys));
-            var keyCodes = new List<byte>(Math.Min(definedKeys.Length, 255));
-            foreach (var key in definedKeys)
+            Array definedKeys = Enum.GetValues(typeof(Keys));
+            List<byte> keyCodes = new List<byte>(Math.Min(definedKeys.Length, 255));
+            foreach (object key in definedKeys)
             {
-                var keyCode = (int)key;
+                int keyCode = (int)key;
                 if ((keyCode >= 1) && (keyCode <= 255))
                     keyCodes.Add((byte)keyCode);
             }
             DefinedKeyCodes = keyCodes.ToArray();
         }
 
-        private static KeyboardState PlatformGetState()
+        private KeyboardState PlatformGetState()
         {
             if (_isActive && GetKeyboardState(_keyState))
             {
-                _keys.RemoveAll(IsKeyReleasedPredicate);
+                _keys.RemoveAll( (key) => IsKeyReleased((byte)key) );
 
                 foreach (var keyCode in DefinedKeyCodes)
                 {
@@ -54,12 +52,12 @@ namespace Microsoft.Xna.Framework.Input
             return new KeyboardState(_keys, Console.CapsLock, Console.NumberLock);
         }
 
-        private static bool IsKeyReleased(byte keyCode)
+        private bool IsKeyReleased(byte keyCode)
         {
             return ((_keyState[keyCode] & 0x80) == 0);
         }
 
-        internal static void SetActive(bool isActive)
+        internal void SetActive(bool isActive)
         {
             _isActive = isActive;
             if (!_isActive)

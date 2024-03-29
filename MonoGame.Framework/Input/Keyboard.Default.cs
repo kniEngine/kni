@@ -6,16 +6,16 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Keyboard
+    public sealed partial class Keyboard
     {
-        static List<Keys> _keys;
+        private List<Keys> _keys;
 
-        private static KeyboardState PlatformGetState()
+        private KeyboardState PlatformGetState()
         {
             return new KeyboardState(_keys);
         }
 
-        internal static void SetKeys(List<Keys> keys)
+        internal void SetKeys(List<Keys> keys)
         {
             _keys = keys;
         }
