@@ -9,16 +9,16 @@ using System;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    static partial class GamePad
+    sealed partial class GamePad
     {
-        internal static bool MenuPressed = false;
+        internal bool MenuPressed = false;
 
-        private static int PlatformGetMaxNumberOfGamePads()
+        private int PlatformGetMaxNumberOfGamePads()
         {
             return 4;
         }
 
-        static bool IndexIsUsed(GCControllerPlayerIndex index)
+        private bool IndexIsUsed(GCControllerPlayerIndex index)
         {
             foreach (var ctrl in GCController.Controllers)
                 if (ctrl.PlayerIndex==(int)index) return true;
@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Input
             return false;
         }
 
-        static void AssingIndex(GCControllerPlayerIndex index)
+        private void AssingIndex(GCControllerPlayerIndex index)
         {
             if (IndexIsUsed(index))
                 return;
@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private static GamePadCapabilities PlatformGetCapabilities(int index)
+        private GamePadCapabilities PlatformGetCapabilities(int index)
         {
             var ind = (GCControllerPlayerIndex)index;
 
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Input
             return new GamePadCapabilities { IsConnected = false };
         }
                
-        private static GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             var ind = (GCControllerPlayerIndex)index;
 
@@ -161,12 +161,12 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private static bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             return false;
         }
 
-        private static GamePadCapabilities GetCapabilities(GCController controller)
+        private GamePadCapabilities GetCapabilities(GCController controller)
         {
             //All iOS controllers have these basics
             var capabilities = new GamePadCapabilities()

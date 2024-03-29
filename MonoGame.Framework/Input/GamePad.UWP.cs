@@ -3,27 +3,28 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using WGI = Windows.Gaming.Input;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    static partial class GamePad
+    sealed partial class GamePad
     {
         // Attempts to mimic SharpDX.XInput.Gamepad which defines the trigger threshold as 30 with a range of 0 to 255. 
         // The trigger here has a range of 0.0 to 1.0. So, 30 / 255 = 0.11765.
         private const double TriggerThreshold = 0.11765;
 
-        internal static bool Back;
+        internal bool Back;
 
-        private static WGI.Gamepad[] _gamepads;
-        static int tmp;
+        private WGI.Gamepad[] _gamepads;
+        private int tmp;
 
-        static GamePad()
+        private GamePad()
         {
             _gamepads = new WGI.Gamepad[PlatformGetMaxNumberOfGamePads()];
-            var gamepadsTmp = WGI.Gamepad.Gamepads;
+            IReadOnlyList<WGI.Gamepad> gamepadsTmp = WGI.Gamepad.Gamepads;
             tmp = gamepadsTmp.Count; // workaround UAP bug. first call to 'WGI.Gamepad.Gamepads' returns an empty instance.
-            var gamepads = WGI.Gamepad.Gamepads;
+            IReadOnlyList<WGI.Gamepad> gamepads = WGI.Gamepad.Gamepads;
             for (int i = 0; i < _gamepads.Length && i < gamepads.Count; i++)
                 _gamepads[i] = gamepads[i];
 
@@ -52,14 +53,14 @@ namespace Microsoft.Xna.Framework.Input
             };
         }
 
-        private static int PlatformGetMaxNumberOfGamePads()
+        private int PlatformGetMaxNumberOfGamePads()
         {
             return 16;
         }
 
-        private static GamePadCapabilities PlatformGetCapabilities(int index)
+        private GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            var gamepad = _gamepads[index];
+            WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
                 return new GamePadCapabilities();
 
@@ -95,29 +96,29 @@ namespace Microsoft.Xna.Framework.Input
             };
         }
 
-        private static GamePadState GetDefaultState()
+        private GamePadState GetDefaultState()
         {
-            var state = new GamePadState();
+            GamePadState state = new GamePadState();
             state.Buttons = new GamePadButtons(Back ? Buttons.Back : 0);
             return state;
         }
 
-        private static GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            var gamepad = _gamepads[index];
+            WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
                 return (index == 0 ? GetDefaultState() : GamePadState.Default);
             
-            var state = gamepad.GetCurrentReading();
+            WGI.GamepadReading state = gamepad.GetCurrentReading();
 
-            var sticks = new GamePadThumbSticks(
+            GamePadThumbSticks sticks = new GamePadThumbSticks(
                     new Vector2((float)state.LeftThumbstickX, (float)state.LeftThumbstickY),
                     new Vector2((float)state.RightThumbstickX, (float)state.RightThumbstickY),
                     leftDeadZoneMode,
                     rightDeadZoneMode
                 );
 
-            var triggers = new GamePadTriggers(
+            GamePadTriggers triggers = new GamePadTriggers(
                     (float)state.LeftTrigger,
                     (float)state.RightTrigger
                 );
@@ -142,23 +143,23 @@ namespace Microsoft.Xna.Framework.Input
             if (triggers.Right > TriggerThreshold)
                 buttonStates |= Buttons.RightTrigger;
 
-            var buttons = new GamePadButtons(buttonStates);
+            GamePadButtons buttons = new GamePadButtons(buttonStates);
 
-            var dpad = new GamePadDPad(
-                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadUp) ? ButtonState.Pressed : ButtonState.Released,
+            GamePadDPad dpad = new GamePadDPad(
+                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadUp)   ? ButtonState.Pressed : ButtonState.Released,
                     state.Buttons.HasFlag(WGI.GamepadButtons.DPadDown) ? ButtonState.Pressed : ButtonState.Released,
-                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadLeft) ? ButtonState.Pressed : ButtonState.Released,
+                    state.Buttons.HasFlag(WGI.GamepadButtons.DPadLeft)  ? ButtonState.Pressed : ButtonState.Released,
                     state.Buttons.HasFlag(WGI.GamepadButtons.DPadRight) ? ButtonState.Pressed : ButtonState.Released
                 );
 
-            var result = new GamePadState(sticks, triggers, buttons, dpad);
+            GamePadState result = new GamePadState(sticks, triggers, buttons, dpad);
             result.PacketNumber = (int)state.Timestamp;
             return result;
         }
 
-        private static bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            var gamepad = _gamepads[index];
+            WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
                 return false;
 

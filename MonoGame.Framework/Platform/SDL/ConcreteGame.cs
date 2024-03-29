@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Platform
 
             SDL.DisableScreenSaver();
 
-            GamePad.InitDatabase();
+            GamePad.Current.InitDatabase();
             Window = _window = new SdlGameWindow(Game);
         }
 

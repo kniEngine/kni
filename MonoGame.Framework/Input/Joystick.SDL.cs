@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Framework.Input
             Joysticks.Add(id, jdevice);
 
             if (SDL.GAMECONTROLLER.IsGameController(deviceId) == 1)
-                GamePad.AddDevice(deviceId);
+                GamePad.Current.AddDevice(deviceId);
         }
 
         internal static void RemoveDevice(int instanceid)
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Input
 
         internal static void CloseDevices()
         {
-            GamePad.CloseDevices();
+            GamePad.Current.CloseDevices();
 
             foreach (var entry in Joysticks)
                 SDL.JOYSTICK.Close(entry.Value);

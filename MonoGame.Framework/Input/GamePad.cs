@@ -3,14 +3,68 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Platform.Input;
+
+namespace Microsoft.Xna.Platform.Input
+{
+    public interface IGamePad
+    {
+        int MaximumGamePadCount { get; }
+
+        GamePadCapabilities GetCapabilities(PlayerIndex playerIndex);
+        GamePadCapabilities GetCapabilities(int index);
+        GamePadState GetState(PlayerIndex playerIndex);
+        GamePadState GetState(int index);
+        GamePadState GetState(PlayerIndex playerIndex, GamePadDeadZone deadZoneMode);
+        GamePadState GetState(int index, GamePadDeadZone deadZoneMode);
+        GamePadState GetState(PlayerIndex playerIndex, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode);
+        GamePadState GetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode);
+        bool SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor);
+        bool SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger);
+        bool SetVibration(int index, float leftMotor, float rightMotor);
+        bool SetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger);
+    }
+}
 
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary> 
     /// Supports querying the game controllers and setting the vibration motors.
     /// </summary>
-    public static partial class GamePad
+    public sealed partial class GamePad : IGamePad
     {
+        private static GamePad _current;
+
+        /// <summary>
+        /// Returns the current GamePad instance.
+        /// </summary> 
+        public static GamePad Current
+        {
+            get
+            {
+                if (_current != null)
+                    return _current;
+
+                lock (typeof(GamePad))
+                {
+                    if (_current == null)
+                        _current = new GamePad();
+
+                    return _current;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The maximum number of game pads supported on this system.
+        /// </summary>
+        public static int MaximumGamePadCount
+        {
+            get { return ((IGamePad)GamePad.Current).MaximumGamePadCount; }
+        }
+
         /// <summary>
         /// Returns the capabilities of the connected controller.
         /// </summary>
@@ -18,7 +72,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The capabilities of the controller.</returns>
         public static GamePadCapabilities GetCapabilities(PlayerIndex playerIndex)
         {
-            return GetCapabilities((int)playerIndex);
+            return ((IGamePad)GamePad.Current).GetCapabilities(playerIndex);
         }
 
         /// <summary>
@@ -28,10 +82,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The capabilities of the controller.</returns>
         public static GamePadCapabilities GetCapabilities(int index)
         {
-            if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
-                return new GamePadCapabilities();
-
-            return PlatformGetCapabilities(index);
+            return ((IGamePad)GamePad.Current).GetCapabilities(index);
         }
 
         /// <summary>
@@ -41,7 +92,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The state of the controller.</returns>
         public static GamePadState GetState(PlayerIndex playerIndex)
         {
-            return GetState((int)playerIndex, GamePadDeadZone.IndependentAxes);
+            return ((IGamePad)GamePad.Current).GetState(playerIndex);
         }
 
         /// <summary>
@@ -51,7 +102,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The state of the controller.</returns>
         public static GamePadState GetState(int index)
         {
-            return GetState(index, GamePadDeadZone.IndependentAxes);
+            return ((IGamePad)GamePad.Current).GetState(index);
         }
 
         /// <summary>
@@ -63,7 +114,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The state of the controller.</returns>
         public static GamePadState GetState(PlayerIndex playerIndex, GamePadDeadZone deadZoneMode)
         {
-            return GetState((int)playerIndex, deadZoneMode);
+            return ((IGamePad)GamePad.Current).GetState(playerIndex, deadZoneMode);
         }
 
         /// <summary>
@@ -75,7 +126,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The state of the controller.</returns>
         public static GamePadState GetState(int index, GamePadDeadZone deadZoneMode)
         {           
-            return GetState(index, deadZoneMode, deadZoneMode);
+            return ((IGamePad)GamePad.Current).GetState(index, deadZoneMode);
         }
 
         /// <summary>
@@ -88,7 +139,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The state of the controller.</returns>
         public static GamePadState GetState(PlayerIndex playerIndex, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            return GetState((int)playerIndex, leftDeadZoneMode, rightDeadZoneMode);
+            return ((IGamePad)GamePad.Current).GetState(playerIndex, leftDeadZoneMode, rightDeadZoneMode);
         }
 
         /// <summary>
@@ -101,10 +152,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The state of the controller.</returns>
         public static GamePadState GetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
-                return GamePadState.Default;
-
-            return PlatformGetState(index, leftDeadZoneMode, rightDeadZoneMode);
+            return ((IGamePad)GamePad.Current).GetState(index, leftDeadZoneMode, rightDeadZoneMode);
         }
 
         /// <summary>
@@ -116,7 +164,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Returns true if the vibration motors were set.</returns>
         public static bool SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor)
         {
-            return SetVibration((int)playerIndex, leftMotor, rightMotor, 0.0f, 0.0f);
+            return ((IGamePad)GamePad.Current).SetVibration(playerIndex, leftMotor, rightMotor);
         }
 
         /// <summary>
@@ -130,7 +178,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Returns true if the vibration motors were set.</returns>
         public static bool SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            return SetVibration((int)playerIndex, leftMotor, rightMotor, leftTrigger, rightTrigger);
+            return ((IGamePad)GamePad.Current).SetVibration(playerIndex, leftMotor, rightMotor, leftTrigger, rightTrigger);
         }
 
         /// <summary>
@@ -142,7 +190,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Returns true if the vibration motors were set.</returns>
         public static bool SetVibration(int index, float leftMotor, float rightMotor)
         {           
-            return SetVibration(index, leftMotor, rightMotor, 0.0f, 0.0f);
+            return ((IGamePad)GamePad.Current).SetVibration(index, leftMotor, rightMotor);
         }
 
         /// <summary>
@@ -156,18 +204,90 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Returns true if the vibration motors were set.</returns>
         public static bool SetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
+            return ((IGamePad)GamePad.Current).SetVibration(index, leftMotor, rightMotor, leftTrigger, rightTrigger);
+        }
+
+        //private GamePad()
+        //{
+        //}
+
+        #region IGamePad
+
+        int IGamePad.MaximumGamePadCount
+        {
+            get { return PlatformGetMaxNumberOfGamePads(); }
+        }
+
+        GamePadCapabilities IGamePad.GetCapabilities(PlayerIndex playerIndex)
+        {
+            return GetCapabilities((int)playerIndex);
+        }
+
+        GamePadCapabilities IGamePad.GetCapabilities(int index)
+        {
+            if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
+                return new GamePadCapabilities();
+
+            return PlatformGetCapabilities(index);
+        }
+
+        GamePadState IGamePad.GetState(PlayerIndex playerIndex)
+        {
+            return GetState((int)playerIndex, GamePadDeadZone.IndependentAxes);
+        }
+
+        GamePadState IGamePad.GetState(int index)
+        {
+            return GetState(index, GamePadDeadZone.IndependentAxes);
+        }
+
+        GamePadState IGamePad.GetState(PlayerIndex playerIndex, GamePadDeadZone deadZoneMode)
+        {
+            return GetState((int)playerIndex, deadZoneMode);
+        }
+
+        GamePadState IGamePad.GetState(int index, GamePadDeadZone deadZoneMode)
+        {
+            return GetState(index, deadZoneMode, deadZoneMode);
+        }
+
+        GamePadState IGamePad.GetState(PlayerIndex playerIndex, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        {
+            return GetState((int)playerIndex, leftDeadZoneMode, rightDeadZoneMode);
+        }
+
+        GamePadState IGamePad.GetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        {
+            if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
+                return GamePadState.Default;
+
+            return PlatformGetState(index, leftDeadZoneMode, rightDeadZoneMode);
+        }
+
+        bool IGamePad.SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor)
+        {
+            return SetVibration((int)playerIndex, leftMotor, rightMotor, 0.0f, 0.0f);
+        }
+
+        bool IGamePad.SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        {
+            return SetVibration((int)playerIndex, leftMotor, rightMotor, leftTrigger, rightTrigger);
+        }
+
+        bool IGamePad.SetVibration(int index, float leftMotor, float rightMotor)
+        {
+            return SetVibration(index, leftMotor, rightMotor, 0.0f, 0.0f);
+        }
+
+        bool IGamePad.SetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        {
             if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
                 return false;
 
             return PlatformSetVibration(index, MathHelper.Clamp(leftMotor, 0.0f, 1.0f), MathHelper.Clamp(rightMotor, 0.0f, 1.0f), MathHelper.Clamp(leftTrigger, 0.0f, 1.0f), MathHelper.Clamp(rightTrigger, 0.0f, 1.0f));
         }
 
-        /// <summary>
-        /// The maximum number of game pads supported on this system.
-        /// </summary>
-        public static int MaximumGamePadCount
-        {
-            get { return PlatformGetMaxNumberOfGamePads(); }
-        }
+
+        #endregion IGamePad
     }
 }
