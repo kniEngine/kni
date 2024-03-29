@@ -5,27 +5,63 @@
 // Copyright (C)2021 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Platform.Input;
+
+namespace Microsoft.Xna.Platform.Input
+{
+    public interface IMouse
+    {
+        IntPtr WindowHandle { get; set; }
+        bool IsRawInputAvailable { get; }
+
+        MouseState GetState();
+        void SetPosition(int x, int y);
+        void SetCursor(MouseCursor cursor);
+    }
+}
 
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
     /// Allows reading position and button click information from mouse.
     /// </summary>
-    public static partial class Mouse
+    public sealed partial class Mouse : IMouse
     {
+        private static Mouse _current;
+
         private static readonly MouseState _defaultState = new MouseState();
-        private static MouseCursor _mouseCursor;
 
-        internal static GameWindow PrimaryWindow;
+        private MouseCursor _mouseCursor;
+        internal GameWindow PrimaryWindow;
 
+        /// <summary>
+        /// Returns the current Mouse instance.
+        /// </summary> 
+        public static Mouse Current
+        {
+            get
+            {
+                if (_current != null)
+                    return _current;
+
+                lock (typeof(Mouse))
+                {
+                    if (_current == null)
+                        _current = new Mouse();
+
+                    return _current;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the window handle for current mouse processing.
         /// </summary> 
         public static IntPtr WindowHandle
         {
-            get { return PlatformGetWindowHandle(); }
-            set { PlatformSetWindowHandle(value); }
+            get { return ((IMouse)Mouse.Current).WindowHandle; }
+            set { ((IMouse)Mouse.Current).WindowHandle = value; }
         }
 
         /// <summary>
@@ -33,7 +69,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public static bool IsRawInputAvailable
         {
-            get { return PlatformIsRawInputAvailable(); }
+            get { return ((IMouse)Mouse.Current).IsRawInputAvailable; }
         }
 
         /// <summary>
@@ -43,14 +79,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>Current state of the mouse.</returns>
         public static MouseState GetState()
         {
-#if WINDOWSDX
-            return PlatformGetState();
-#endif
-
-            if (PrimaryWindow != null)
-                return PlatformGetState(PrimaryWindow);
-
-            return _defaultState;
+            return ((IMouse)Mouse.Current).GetState();
         }
 
         /// <summary>
@@ -60,7 +89,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="y">Relative vertical position of the cursor.</param>
         public static void SetPosition(int x, int y)
         {
-            PlatformSetPosition(x, y);
+            ((IMouse)Mouse.Current).SetPosition(x, y);
         }
 
         /// <summary>
@@ -69,8 +98,52 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="cursor">Mouse cursor to use for the cursor image.</param>
         public static void SetCursor(MouseCursor cursor)
         {
+            ((IMouse)Mouse.Current).SetCursor(cursor);
+        }
+
+
+        private Mouse()
+        {
+        }
+
+
+        #region IMouse
+
+        IntPtr IMouse.WindowHandle
+        {
+            get { return PlatformGetWindowHandle(); }
+            set { PlatformSetWindowHandle(value); }
+        }
+
+        bool IMouse.IsRawInputAvailable
+        {
+            get { return PlatformIsRawInputAvailable(); }
+        }
+
+        MouseState IMouse.GetState()
+        {
+#if DESKTOPGL || IOS || ANDROID || (UAP || WINUI)
+            if (PrimaryWindow != null)
+                return PlatformGetState(PrimaryWindow);
+            else
+                return _defaultState;
+#endif
+
+            return PlatformGetState();
+        }
+
+        void IMouse.SetPosition(int x, int y)
+        {
+            PlatformSetPosition(x, y);
+        }
+
+        void IMouse.SetCursor(MouseCursor cursor)
+        {
             PlatformSetCursor(cursor);
             _mouseCursor = cursor;
         }
+
+        #endregion IMouse
+
     }
 }

@@ -8,28 +8,33 @@ using System;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Mouse
+    public sealed partial class Mouse
     {
-        private static Sdl SDL { get { return Sdl.Current; } }
+        private Sdl SDL { get { return Sdl.Current; } }
 
-        internal static int ScrollX;
-        internal static int ScrollY;
+        internal int ScrollX;
+        internal int ScrollY;
 
-        private static IntPtr PlatformGetWindowHandle()
+        private IntPtr PlatformGetWindowHandle()
         {
             return PrimaryWindow.Handle;
         }
         
-        private static void PlatformSetWindowHandle(IntPtr windowHandle)
+        private void PlatformSetWindowHandle(IntPtr windowHandle)
         {
         }
 
-        private static bool PlatformIsRawInputAvailable()
+        private bool PlatformIsRawInputAvailable()
         {
             return true;
         }
 
-        private static MouseState PlatformGetState(GameWindow window)
+        private MouseState PlatformGetState()
+        {
+            throw new NotImplementedException();
+        }
+
+        private MouseState PlatformGetState(GameWindow window)
         {
             int x, y;
             var winFlags = SDL.WINDOW.GetWindowFlags(window.Handle);
@@ -51,7 +56,7 @@ namespace Microsoft.Xna.Framework.Input
             return window.MouseState;
         }
 
-        private static void PlatformSetPosition(int x, int y)
+        private void PlatformSetPosition(int x, int y)
         {
             PrimaryWindow.MouseState.X = x;
             PrimaryWindow.MouseState.Y = y;
@@ -59,7 +64,7 @@ namespace Microsoft.Xna.Framework.Input
             SDL.MOUSE.WarpInWindow(PrimaryWindow.Handle, x, y);
         }
 
-        private static void PlatformSetCursor(MouseCursor cursor)
+        private void PlatformSetCursor(MouseCursor cursor)
         {
             SDL.MOUSE.SetCursor(cursor.Handle);
         }
