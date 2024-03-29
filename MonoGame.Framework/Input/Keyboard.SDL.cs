@@ -6,21 +6,21 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Keyboard
+    public sealed partial class Keyboard
     {
-        private static Sdl SDL { get { return Sdl.Current; } }
+        private Sdl SDL { get { return Sdl.Current; } }
 
-        static List<Keys> _keys;
+        private List<Keys> _keys;
 
-        private static KeyboardState PlatformGetState()
+        private KeyboardState PlatformGetState()
         {
-            var modifiers = SDL.KEYBOARD.GetModState();
+            Sdl.Keyboard.Keymod modifiers = SDL.KEYBOARD.GetModState();
             return new KeyboardState(_keys,
                                      (modifiers & Sdl.Keyboard.Keymod.CapsLock) == Sdl.Keyboard.Keymod.CapsLock,
-                                     (modifiers & Sdl.Keyboard.Keymod.NumLock) == Sdl.Keyboard.Keymod.NumLock);
+                                     (modifiers & Sdl.Keyboard.Keymod.NumLock)  == Sdl.Keyboard.Keymod.NumLock);
         }
 
-        internal static void SetKeys(List<Keys> keys)
+        internal void SetKeys(List<Keys> keys)
         {
             _keys = keys;
         }

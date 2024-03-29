@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework
             };
 
             // keyboard events
-            Keyboard.SetKeys(_keys);
+            Keyboard.Current.SetKeys(_keys);
             _window.OnKeyDown += (object sender, char key, int keyCode) =>
             {
                 var xnakey = (Keys)keyCode;

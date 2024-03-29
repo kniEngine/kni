@@ -6,32 +6,32 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Keyboard
-    {   
-        static KeyboardState _keyboardState;
-        static KeyboardState _nextKeyboardState;
+    public sealed partial class Keyboard
+    {
+        private KeyboardState _keyboardState;
+        private KeyboardState _nextKeyboardState;
 
-        private static KeyboardState PlatformGetState()
+        private KeyboardState PlatformGetState()
         {
             return _keyboardState;
         }
 
-        internal static void UpdateState()
+        internal void UpdateState()
         {
             _keyboardState = _nextKeyboardState;
         }
 
-        internal static void SetKey(Keys key)
+        internal void SetKey(Keys key)
         {
             _nextKeyboardState.InternalSetKey(key);
         }
 
-        internal static void ClearKey(Keys key)
+        internal void ClearKey(Keys key)
         {
             _nextKeyboardState.InternalClearKey(key);
         }
                 
-        internal static void Clear()
+        internal void Clear()
         {
             _nextKeyboardState.InternalClearAllKeys();
         }
