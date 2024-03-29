@@ -5,40 +5,35 @@ using System;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Mouse
+    public sealed partial class Mouse
     {
 
-        private static IntPtr PlatformGetWindowHandle()
+        private IntPtr PlatformGetWindowHandle()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private static void PlatformSetWindowHandle(IntPtr windowHandle)
+        private void PlatformSetWindowHandle(IntPtr windowHandle)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private static bool PlatformIsRawInputAvailable()
+        private bool PlatformIsRawInputAvailable()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private static MouseState PlatformGetState()
+        private MouseState PlatformGetState()
         {
             throw new PlatformNotSupportedException();
         }
 
-        private static MouseState PlatformGetState(GameWindow window)
+        private void PlatformSetPosition(int x, int y)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private static void PlatformSetPosition(int x, int y)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private static void PlatformSetCursor(MouseCursor cursor)
+        private void PlatformSetCursor(MouseCursor cursor)
         {
             throw new PlatformNotSupportedException();
         }

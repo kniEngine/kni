@@ -237,8 +237,8 @@ namespace Microsoft.Xna.Framework
                         break;
                     case Sdl.EventType.MouseWheel:
                         const int wheelDelta = 120;
-                        Mouse.ScrollY += ev.Wheel.Y * wheelDelta;
-                        Mouse.ScrollX += ev.Wheel.X * wheelDelta;
+                        Mouse.Current.ScrollY += ev.Wheel.Y * wheelDelta;
+                        Mouse.Current.ScrollX += ev.Wheel.X * wheelDelta;
                         break;
                     case Sdl.EventType.KeyDown:
                     {

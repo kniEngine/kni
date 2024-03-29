@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class Mouse
+    public sealed partial class Mouse
     {
         [DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
         [return: MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
@@ -33,12 +33,12 @@ namespace Microsoft.Xna.Framework.Input
         private static Control _window;
         private static MouseInputWnd _mouseInputWnd = new MouseInputWnd();
 
-        private static IntPtr PlatformGetWindowHandle()
+        private IntPtr PlatformGetWindowHandle()
         {
             return (_window == null) ? IntPtr.Zero : _window.Handle;
         }
 
-        private static void PlatformSetWindowHandle(IntPtr windowHandle)
+        private void PlatformSetWindowHandle(IntPtr windowHandle)
         {
             // Unregister old window
             if (_mouseInputWnd.Handle != IntPtr.Zero)
@@ -48,17 +48,12 @@ namespace Microsoft.Xna.Framework.Input
             _mouseInputWnd.AssignHandle(windowHandle);
         }
 
-        private static bool PlatformIsRawInputAvailable()
+        private bool PlatformIsRawInputAvailable()
         {
             return _mouseInputWnd.IsRawInputAvailable;
         }
 
-        private static MouseState PlatformGetState(GameWindow window)
-        {
-            throw new NotImplementedException();
-        }
-        
-        private static MouseState PlatformGetState()
+        private MouseState PlatformGetState()
         {
             POINTSTRUCT pos;
             GetCursorPos(out pos);
@@ -85,7 +80,7 @@ namespace Microsoft.Xna.Framework.Input
                 );
         }
 
-        private static void PlatformSetPosition(int x, int y)
+        private void PlatformSetPosition(int x, int y)
         {
             var pt = new System.Drawing.Point(x, y);
 
@@ -96,7 +91,7 @@ namespace Microsoft.Xna.Framework.Input
             SetCursorPos(pt.X, pt.Y);
         }
 
-        private static void PlatformSetCursor(MouseCursor cursor)
+        private void PlatformSetCursor(MouseCursor cursor)
         {
             if (_window != null)
                 _window.Cursor = cursor.WinFormsCursor;
