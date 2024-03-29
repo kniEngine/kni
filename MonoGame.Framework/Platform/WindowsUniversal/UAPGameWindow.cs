@@ -343,7 +343,7 @@ namespace Microsoft.Xna.Framework
 
         private void UpdateBackButton()
         {
-            GamePad.Back = _backPressed;
+            GamePad.Current.Back = _backPressed;
             _backPressed = false;
         }
 

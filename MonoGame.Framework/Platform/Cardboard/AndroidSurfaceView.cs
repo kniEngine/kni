@@ -808,7 +808,7 @@ namespace Microsoft.Xna.Framework
         public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
         {
             bool handled = false;
-            if (GamePad.OnKeyDown(keyCode, e))
+            if (GamePad.Current.OnKeyDown(keyCode, e))
                 return true;
 
             handled = Keyboard.KeyDown(keyCode);
@@ -816,7 +816,7 @@ namespace Microsoft.Xna.Framework
             // we need to handle the Back key here because it doesn't work any other way
             if (keyCode == Keycode.Back)
             {
-                GamePad.Back = true;
+                GamePad.Current.Back = true;
                 handled = true;
             }
 
@@ -840,15 +840,15 @@ namespace Microsoft.Xna.Framework
         public override bool OnKeyUp(Keycode keyCode, KeyEvent e)
         {
             if (keyCode == Keycode.Back)
-                GamePad.Back = false;
-            if (GamePad.OnKeyUp(keyCode, e))
+                GamePad.Current.Back = false;
+            if (GamePad.Current.OnKeyUp(keyCode, e))
                 return true;
             return Keyboard.KeyUp(keyCode);
         }
 
         public override bool OnGenericMotionEvent(MotionEvent e)
         {
-            if (GamePad.OnGenericMotionEvent(e))
+            if (GamePad.Current.OnGenericMotionEvent(e))
                 return true;
 
             return base.OnGenericMotionEvent(e);

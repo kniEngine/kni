@@ -209,7 +209,7 @@ namespace Microsoft.Xna.Platform
         private void OnRenderFrame(bool isQueueEmpty)
         {
             ((UAPGameWindow)Window).Tick();
-            GamePad.Back = false;
+            GamePad.Current.Back = false;
 
             // Request next frame
             CoreWindow coreWindow = ((UAPGameWindow)Window).CoreWindow;

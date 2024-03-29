@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Input
 
         private static GamePadCapabilities CapabilitiesOfDevice(InputDevice device)
         {
-            var capabilities = new GamePadCapabilities();
+            GamePadCapabilities capabilities = new GamePadCapabilities();
             capabilities.IsConnected = true;
             capabilities.GamePadType = GamePadType.GamePad;
             capabilities.HasLeftVibrationMotor = capabilities.HasRightVibrationMotor = device.Vibrator.HasVibrator;
@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework.Input
             // HasKeys() was defined in Kitkat / API19 / Android 4.4
             if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Kitkat)
             {
-                var keyMap2 = new Keycode[keyMap.Length];
+                Keycode[] keyMap2 = new Keycode[keyMap.Length];
                 for(int i=0; i<keyMap.Length;i++)
                     keyMap2[i] = (Keycode)keyMap[i];
                 hasMap = KeyCharacterMap.DeviceHasKeys(keyMap2);
@@ -106,21 +106,21 @@ namespace Microsoft.Xna.Framework.Input
     }
 
 
-    static partial class GamePad
+    sealed partial class GamePad
     {
         // we will support up to 4 local controllers
-        private static readonly AndroidGamePad[] GamePads = new AndroidGamePad[4];
+        private readonly AndroidGamePad[] GamePads = new AndroidGamePad[4];
         // support the back button when we don't have a gamepad connected
-        internal static bool Back;
+        internal bool Back;
 
-        private static int PlatformGetMaxNumberOfGamePads()
+        private int PlatformGetMaxNumberOfGamePads()
         {
             return 4;
         }
 
-        private static GamePadCapabilities PlatformGetCapabilities(int index)
+        private GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            var gamePad = GamePads[index];
+            AndroidGamePad gamePad = GamePads[index];
             if (gamePad != null)
                 return gamePad._capabilities;
 
@@ -133,14 +133,14 @@ namespace Microsoft.Xna.Framework.Input
             return capabilities;
         }
 
-        private static GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            var gamePad = GamePads[index];
+            AndroidGamePad gamePad = GamePads[index];
             GamePadState state = GamePadState.Default;
             if (gamePad != null && gamePad._isConnected)
             {
                 // Check if the device was disconnected
-                var dvc = InputDevice.GetDevice(gamePad._deviceId);
+                InputDevice dvc = InputDevice.GetDevice(gamePad._deviceId);
                 if (dvc == null)
                 {
                     Android.Util.Log.Debug("MonoGame", "Detected controller disconnect [" + index + "] ");
@@ -173,20 +173,20 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private static bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            var gamePad = GamePads[index];
+            AndroidGamePad gamePad = GamePads[index];
             if (gamePad == null)
                 return false;
 
-            var vibrator = gamePad._device.Vibrator;
+            Android.OS.Vibrator vibrator = gamePad._device.Vibrator;
             if (!vibrator.HasVibrator)
                 return false;
             vibrator.Vibrate(500);
             return true;
         }
 
-        internal static AndroidGamePad GetGamePad(InputDevice device)
+        internal AndroidGamePad GetGamePad(InputDevice device)
         {
             if (device == null || (device.Sources & InputSourceType.Gamepad) != InputSourceType.Gamepad)
                 return null;
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.Input
             int firstDisconnectedPadId = -1;
             for (int i = 0; i < GamePads.Length; i++)
             {
-                var pad = GamePads[i];
+                AndroidGamePad pad = GamePads[i];
                 if (pad != null && pad._isConnected && pad._deviceId == device.Id)
                 {
                     return pad;
@@ -224,7 +224,7 @@ namespace Microsoft.Xna.Framework.Input
             if (firstDisconnectedPadId >= 0)
             {
                 Android.Util.Log.Debug("MonoGame", "Found new controller in place of disconnected controller [" + firstDisconnectedPadId + "] " + device.Name);
-                var pad = new AndroidGamePad(device);
+                AndroidGamePad pad = new AndroidGamePad(device);
                 GamePads[firstDisconnectedPadId] = pad;
                 return pad;
             }
@@ -233,9 +233,9 @@ namespace Microsoft.Xna.Framework.Input
             return null;
         }
 
-        internal static bool OnKeyDown(Keycode keyCode, KeyEvent e)
+        internal bool OnKeyDown(Keycode keyCode, KeyEvent e)
         {
-            var gamePad = GetGamePad(e.Device);
+            AndroidGamePad gamePad = GetGamePad(e.Device);
             if (gamePad == null)
                 return false;
 
@@ -248,9 +248,9 @@ namespace Microsoft.Xna.Framework.Input
             return true;
         }
 
-        internal static bool OnKeyUp(Keycode keyCode, KeyEvent e)
+        internal bool OnKeyUp(Keycode keyCode, KeyEvent e)
         {
-            var gamePad = GetGamePad(e.Device);
+            AndroidGamePad gamePad = GetGamePad(e.Device);
             if (gamePad == null)
                 return false;
 
@@ -258,9 +258,9 @@ namespace Microsoft.Xna.Framework.Input
             return true;
         }
 
-        internal static bool OnGenericMotionEvent(MotionEvent e)
+        internal bool OnGenericMotionEvent(MotionEvent e)
         {
-            var gamePad = GetGamePad(e.Device);
+            AndroidGamePad gamePad = GetGamePad(e.Device);
             if (gamePad == null)
                 return false;
 
@@ -314,7 +314,7 @@ namespace Microsoft.Xna.Framework.Input
             return true;
         }
 
-        private static Buttons ButtonForKeyCode(Keycode keyCode)
+        private Buttons ButtonForKeyCode(Keycode keyCode)
         {
             switch (keyCode)
             {
@@ -360,10 +360,10 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        internal static void Initialize()
+        internal void Initialize()
         {
             //Iterate and 'connect' any detected gamepads
-            foreach (var deviceId in InputDevice.GetDeviceIds())
+            foreach (int deviceId in InputDevice.GetDeviceIds())
             {
                 GetGamePad(InputDevice.GetDevice(deviceId));
             }

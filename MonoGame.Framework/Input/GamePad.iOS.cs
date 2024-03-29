@@ -7,26 +7,27 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    static partial class GamePad
+    sealed partial class GamePad
     {
-        private static int PlatformGetMaxNumberOfGamePads()
+        private int PlatformGetMaxNumberOfGamePads()
         {
             return 4;
         }
 
-        static bool IndexIsUsed(GCControllerPlayerIndex index)
+        private bool IndexIsUsed(GCControllerPlayerIndex index)
         {
-            foreach (var ctrl in GCController.Controllers)
+            foreach (GCController ctrl in GCController.Controllers)
                 if ((long)ctrl.PlayerIndex == (long)index) return true;
 
             return false;
         }
 
-        static void AssingIndex(GCControllerPlayerIndex index)
+        private void AssingIndex(GCControllerPlayerIndex index)
         {
             if (IndexIsUsed(index))
                 return;
-            foreach (var controller in GCController.Controllers)
+
+            foreach (GCController controller in GCController.Controllers)
             {
                 if ((long)controller.PlayerIndex == (long)index)
                     break;
@@ -42,13 +43,13 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private static GamePadCapabilities PlatformGetCapabilities(int index)
+        private GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            var ind = (GCControllerPlayerIndex)index;
+            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
 
             AssingIndex(ind);
 
-            foreach (var controller in GCController.Controllers)
+            foreach (GCController controller in GCController.Controllers)
             {
                 if (controller == null)
                     continue;
@@ -58,14 +59,13 @@ namespace Microsoft.Xna.Framework.Input
             return new GamePadCapabilities { IsConnected = false };
         }
 
-        private static GamePadCapabilities GetCapabilities(GCController controller)
+        private GamePadCapabilities GetCapabilities(GCController controller)
         {
             //All iOS controllers have these basics
-            var capabilities = new GamePadCapabilities()
-            {
-                IsConnected = false,
-                GamePadType = GamePadType.GamePad,
-            };
+            GamePadCapabilities capabilities = new GamePadCapabilities();
+            capabilities.IsConnected = false;
+            capabilities.GamePadType = GamePadType.GamePad;
+
             if (controller.ExtendedGamepad != null)
             {
                 capabilities.HasAButton = true;
@@ -103,9 +103,9 @@ namespace Microsoft.Xna.Framework.Input
             return capabilities;
         }
 
-        private static GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            var ind = (GCControllerPlayerIndex)index;
+            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
 
 
             Buttons buttons = 0;
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Input
 
             AssingIndex(ind);
 
-            foreach (var controller in GCController.Controllers)
+            foreach (GCController controller in GCController.Controllers)
             {
 
                 if (controller == null)
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework.Input
                     }
                 }
             }
-            var state = new GamePadState(
+            GamePadState state = new GamePadState(
                 new GamePadThumbSticks(leftThumbStickPosition, rightThumbStickPosition, leftDeadZoneMode, rightDeadZoneMode),
                 new GamePadTriggers(leftTriggerValue, rightTriggerValue),
                 new GamePadButtons(buttons),
@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private static bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             return false;
         }
