@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework
         private static TitleContainer _current;
 
         /// <summary>
-        /// Returns the current FrameworkDispatcher instance.
+        /// Returns the current TitleContainer instance.
         /// </summary> 
         public static TitleContainer Current
         {
