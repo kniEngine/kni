@@ -34,13 +34,13 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // DOWN                
                 case MotionEventActions.Down:
                 case MotionEventActions.PointerDown:
-                    TouchPanel.AddEvent(id, TouchLocationState.Pressed, position);
+                    TouchPanel.Current.AddEvent(id, TouchLocationState.Pressed, position);
                     break;
 
                 // UP                
                 case MotionEventActions.Up:
                 case MotionEventActions.PointerUp:
-                    TouchPanel.AddEvent(id, TouchLocationState.Released, position);
+                    TouchPanel.Current.AddEvent(id, TouchLocationState.Released, position);
                     break;
 
                 // MOVE                
@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         id = e.GetPointerId(i);
                         position.X = e.GetX(i);
                         position.Y = e.GetY(i);
-                        TouchPanel.AddEvent(id, TouchLocationState.Moved, position);
+                        TouchPanel.Current.AddEvent(id, TouchLocationState.Moved, position);
                     }
                     break;
 
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     for (int i = 0; i < e.PointerCount; i++)
                     {
                         id = e.GetPointerId(i);
-                        TouchPanel.AddEvent(id, TouchLocationState.Released, position);
+                        TouchPanel.Current.AddEvent(id, TouchLocationState.Released, position);
                     }
                     break;
             }

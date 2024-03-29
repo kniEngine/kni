@@ -133,16 +133,16 @@ namespace Microsoft.Xna.Framework
                 {
                 //case UITouchPhase.Stationary:
                 case UITouchPhase.Moved:
-                    TouchPanel.AddEvent(id, TouchLocationState.Moved, position);					
+                    TouchPanel.Current.AddEvent(id, TouchLocationState.Moved, position);					
                     break;
                 case UITouchPhase.Began:
-                    TouchPanel.AddEvent(id, TouchLocationState.Pressed, position);
+                    TouchPanel.Current.AddEvent(id, TouchLocationState.Pressed, position);
                     break;
                 case UITouchPhase.Ended	:
-                    TouchPanel.AddEvent(id, TouchLocationState.Released, position);
+                    TouchPanel.Current.AddEvent(id, TouchLocationState.Released, position);
                     break;
                 case UITouchPhase.Cancelled:
-                    TouchPanel.AddEvent(id, TouchLocationState.Released, position);
+                    TouchPanel.Current.AddEvent(id, TouchLocationState.Released, position);
                     break;
                 default:
                     break;
