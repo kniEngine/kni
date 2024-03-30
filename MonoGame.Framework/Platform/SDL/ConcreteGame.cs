@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Platform
                 _window.Dispose();
                 _window = null;
 
-                Joystick.CloseDevices();
+                Joystick.Current.CloseDevices();
 
                 SDL.Quit();
             }
