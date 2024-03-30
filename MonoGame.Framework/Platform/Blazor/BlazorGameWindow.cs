@@ -13,6 +13,7 @@ using Size = System.Drawing.Size;
 using nkast.Wasm.Canvas;
 using nkast.Wasm.Dom;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Input;
 
 namespace Microsoft.Xna.Framework
 {
@@ -151,7 +152,7 @@ namespace Microsoft.Xna.Framework
             };
 
             // keyboard events
-            Keyboard.Current.SetKeys(_keys);
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKeys(_keys);
             _window.OnKeyDown += (object sender, char key, int keyCode) =>
             {
                 var xnakey = (Keys)keyCode;

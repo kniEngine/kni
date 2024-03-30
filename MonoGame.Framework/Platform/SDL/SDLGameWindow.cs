@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework
             Instance = this;
 
             _keys = new List<Keys>();
-            Keyboard.Current.SetKeys(_keys);
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKeys(_keys);
             _dropList = new List<string>();
 
             _width = GraphicsDeviceManager.DefaultBackBufferWidth;

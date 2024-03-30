@@ -18,6 +18,7 @@ using Microsoft.Xna.Platform;
 using SysDrawing = System.Drawing;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Input;
 
 
 namespace MonoGame.Framework
@@ -188,7 +189,7 @@ namespace MonoGame.Framework
         private void OnActivated(object sender, EventArgs eventArgs)
         {
             _concreteGame.IsActive = true;
-            Keyboard.Current.SetActive(true);
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(true);
 
             DragAcceptFiles(Handle, true); //allows drag and dropping
         }
@@ -203,7 +204,7 @@ namespace MonoGame.Framework
                     MinimizeFullScreen();				
             }
             _concreteGame.IsActive = false;
-            Keyboard.Current.SetActive(false);
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(false);
         }
 
         private void OnMouseEnter(object sender, EventArgs e)

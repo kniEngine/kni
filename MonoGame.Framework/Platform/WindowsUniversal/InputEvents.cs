@@ -277,7 +277,7 @@ namespace Microsoft.Xna.Framework
         public void UpdateState()
         {
             // Update the keyboard state.
-            Keyboard.Current.UpdateState();
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().UpdateState();
         }
 
         internal static Keys KeyTranslate(Windows.System.VirtualKey inkey, CorePhysicalKeyStatus keyStatus)
@@ -308,14 +308,14 @@ namespace Microsoft.Xna.Framework
         {
             var xnaKey = KeyTranslate(args.VirtualKey, args.KeyStatus);
 
-            Keyboard.Current.ClearKey(xnaKey);
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().ClearKey(xnaKey);
         }
 
         private void CoreWindow_KeyDown(object sender, KeyEventArgs args)
         {
             var xnaKey = KeyTranslate(args.VirtualKey, args.KeyStatus);
 
-            Keyboard.Current.SetKey(xnaKey);
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKey(xnaKey);
 
             _lastEnqueuedKeyChar = new KeyChar();
             _lastEnqueuedKeyChar.Key = xnaKey;
@@ -331,7 +331,7 @@ namespace Microsoft.Xna.Framework
         {
             // If the window is resized then also 
             // drop any current key states.
-            Keyboard.Current.Clear();
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().Clear();
 
             // required of input can stop working if we change focus
             WakeupKeyboardInput();
@@ -342,7 +342,7 @@ namespace Microsoft.Xna.Framework
             // Forget about the held keys when we lose focus as we don't
             // receive key events for them while we are in the background
             if (args.WindowActivationState == CoreWindowActivationState.Deactivated)
-                Keyboard.Current.Clear();
+                ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().Clear();
 
             // required of input can stop working if we change focus
             WakeupKeyboardInput();
@@ -353,7 +353,7 @@ namespace Microsoft.Xna.Framework
             // Forget about the held keys when we disappear as we don't
             // receive key events for them while we are in the background
             if (!args.Visible)
-                Keyboard.Current.Clear();
+                ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().Clear();
 
             // required of input can stop working if we change focus
             WakeupKeyboardInput();

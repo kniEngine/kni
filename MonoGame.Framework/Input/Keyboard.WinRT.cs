@@ -2,16 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System.Collections.Generic;
+// Copyright (C)2024 Nick Kastellanos
 
-namespace Microsoft.Xna.Framework.Input
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
+
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class Keyboard
+    public sealed class ConcreteKeyboard : KeyboardStrategy
     {
         private KeyboardState _keyboardState;
         private KeyboardState _nextKeyboardState;
 
-        private KeyboardState PlatformGetState()
+        public override KeyboardState PlatformGetState()
         {
             return _keyboardState;
         }
