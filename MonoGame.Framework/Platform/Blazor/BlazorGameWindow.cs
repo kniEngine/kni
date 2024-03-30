@@ -14,6 +14,7 @@ using nkast.Wasm.Canvas;
 using nkast.Wasm.Dom;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Platform.Input.Touch;
 
 namespace Microsoft.Xna.Framework
 {
@@ -132,23 +133,23 @@ namespace Microsoft.Xna.Framework
             //Form.MouseLeave += OnMouseLeave;
 
             // Capture touch events.
-            TouchPanel.Current.PrimaryWindow = this;
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = this;
             TouchPanel.WindowHandle = new IntPtr(_window.Uid);
             _window.OnTouchStart += (object sender, float x, float y, int identifier) =>
             {
-                TouchPanel.Current.AddEvent(identifier, TouchLocationState.Pressed, new Vector2(x, y));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(identifier, TouchLocationState.Pressed, new Vector2(x, y));
             };
             _window.OnTouchMove += (object sender, float x, float y, int identifier) =>
             {
-                TouchPanel.Current.AddEvent(identifier, TouchLocationState.Moved, new Vector2(x, y));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(identifier, TouchLocationState.Moved, new Vector2(x, y));
             };
             _window.OnTouchEnd += (object sender, float x, float y, int identifier) =>
             {
-                TouchPanel.Current.AddEvent(identifier, TouchLocationState.Released, new Vector2(x, y));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(identifier, TouchLocationState.Released, new Vector2(x, y));
             };
             _window.OnTouchCancel += (object sender) =>
             {
-                TouchPanel.Current.PrimaryWindow.TouchPanelState.ReleaseAllTouches();
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow.TouchPanelState.ReleaseAllTouches();
             };
 
             // keyboard events

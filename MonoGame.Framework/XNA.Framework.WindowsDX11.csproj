@@ -150,6 +150,7 @@
     <Compile Include="ConcreteGraphicsDeviceManager.WindowsDX11.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
 
+    <Compile Include="Input\.WindowsDX\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Input\Touch\TouchLocationData.cs" />
     <Compile Include="Input\Touch\TouchLocationState.cs" />
     <Compile Include="Input\Touch\TouchPanel.cs" />
+    <Compile Include="Input\Touch\TouchPanelStrategy.cs" />
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\WMS\ConcreteAlbum.cs" />
