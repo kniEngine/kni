@@ -6,11 +6,19 @@ using System;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    static partial class Joystick
+    sealed partial class Joystick
     {
-        private const bool PlatformIsSupported = false;
+        private bool PlatformIsSupported
+        {
+            get { return false; }
+        }
 
-        private static JoystickCapabilities PlatformGetCapabilities(int index)
+        private int PlatformLastConnectedIndex
+        {
+            get { return -1; }
+        }
+
+        private JoystickCapabilities PlatformGetCapabilities(int index)
         {
             return new JoystickCapabilities()
             {
@@ -23,20 +31,13 @@ namespace Microsoft.Xna.Framework.Input
             };
         }
 
-        private static JoystickState PlatformGetState(int index)
+        private JoystickState PlatformGetState(int index)
         {
-            return _defaultJoystickState;
+            return Joystick.DefaultJoystickState;
         }
 
-        private static int PlatformLastConnectedIndex
-        {
-            get
-            {
-                return -1;
-            }
-        }
 
-        private static void PlatformGetState(ref JoystickState joystickState, int index)
+        private void PlatformGetState(int index, ref JoystickState joystickState)
         {
 
         }

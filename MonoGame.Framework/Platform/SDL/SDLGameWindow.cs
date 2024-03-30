@@ -215,10 +215,10 @@ namespace Microsoft.Xna.Framework
                         isExiting = true;
                         break;
                     case Sdl.EventType.JoyDeviceAdded:
-                        Joystick.AddDevices();
+                        Joystick.Current.AddDevices();
                         break;
                     case Sdl.EventType.JoyDeviceRemoved:
-                        Joystick.RemoveDevice(ev.JoystickDevice.Which);
+                        Joystick.Current.RemoveDevice(ev.JoystickDevice.Which);
                         break;
                     case Sdl.EventType.ControllerDeviceRemoved:
                         GamePad.Current.RemoveDevice(ev.ControllerDevice.Which);

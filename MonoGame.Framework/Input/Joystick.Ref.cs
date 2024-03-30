@@ -4,26 +4,29 @@ using System;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    static partial class Joystick
+    sealed partial class Joystick
     {
-        private const bool PlatformIsSupported = false;
-
-        private static JoystickCapabilities PlatformGetCapabilities(int index)
+        private bool PlatformIsSupported
         {
-            throw new PlatformNotSupportedException();
+            get { return false; } 
         }
 
-        private static JoystickState PlatformGetState(int index)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        private static int PlatformLastConnectedIndex
+        private int PlatformLastConnectedIndex
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        private static void PlatformGetState(ref JoystickState joystickState, int index)
+        private JoystickCapabilities PlatformGetCapabilities(int index)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        private JoystickState PlatformGetState(int index)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        private void PlatformGetState(int index, ref JoystickState joystickState)
         {
             throw new PlatformNotSupportedException();
         }
