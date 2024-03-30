@@ -3,12 +3,12 @@ using UIKit;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class KeyboardInput
+    public sealed partial class KeyboardInput
     {
-        private static TaskCompletionSource<string> tcs;
-        private static UIAlertView alert;
+        private TaskCompletionSource<string> tcs;
+        private UIAlertView alert;
 
-        private static Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
+        private Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
             tcs = new TaskCompletionSource<string>();
 
@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Input
             return tcs.Task;
         }
 
-        private static void PlatformCancel(string result)
+        private void PlatformCancel(string result)
         {
             if (!tcs.Task.IsCompleted)
                 tcs.SetResult(result);

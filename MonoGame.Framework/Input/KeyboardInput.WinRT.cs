@@ -28,19 +28,19 @@ using Microsoft.UI.Xaml.Media.Animation;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class KeyboardInput
+    public sealed partial class KeyboardInput
     {
-        private static readonly CoreDispatcher _dispatcher;
+        private readonly CoreDispatcher _dispatcher;
 
-        private static TaskCompletionSource<string> _tcs;
-        private static InputDialog _inputDialog;
+        private TaskCompletionSource<string> _tcs;
+        private InputDialog _inputDialog;
 
-        static KeyboardInput()
+        KeyboardInput()
         {
             _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
-        private static Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
+        private Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
             _tcs = new TaskCompletionSource<string>();
 
@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Input
                 async () =>
                 {
                     _inputDialog = new InputDialog();
-                    var result = await _inputDialog.ShowAsync(title, description, defaultText, usePasswordMode);
+                    string result = await _inputDialog.ShowAsync(title, description, defaultText, usePasswordMode);
 
                     if (!_tcs.Task.IsCompleted)
                         _tcs.SetResult(result);
@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input
             return _tcs.Task;
         }
 
-        private static void PlatformCancel(string result)
+        private void PlatformCancel(string result)
         {
             _dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await _inputDialog.CloseAsync());
 
@@ -150,8 +150,8 @@ namespace Microsoft.Xna.Framework.Input
         private static void OnInputTextChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var target = (InputDialog)d;
-            var newInputText = target.InputText;
+            InputDialog target = (InputDialog)d;
+            string newInputText = target.InputText;
             target.OnInputTextChanged(newInputText);
         }
 
@@ -219,17 +219,15 @@ namespace Microsoft.Xna.Framework.Input
             set { SetValue(TextStyleProperty, value); }
         }
 
-        private static void OnTextStyleChanged(
-            DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnTextStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var target = (InputDialog)d;
-            var oldTextStyle = (Style)e.OldValue;
-            var newTextStyle = target.TextStyle;
+            InputDialog target = (InputDialog)d;
+            Style oldTextStyle = (Style)e.OldValue;
+            Style newTextStyle = target.TextStyle;
             target.OnTextStyleChanged(oldTextStyle, newTextStyle);
         }
 
-        private void OnTextStyleChanged(
-            Style oldTextStyle, Style newTextStyle)
+        private void OnTextStyleChanged(Style oldTextStyle, Style newTextStyle)
         {
         }
 
@@ -541,7 +539,7 @@ namespace Microsoft.Xna.Framework.Input
 
         static async Task WaitForLayoutUpdateAsync(FrameworkElement frameworkElement)
         {
-            var tcs = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
             EventHandler<object> eventHandler = (sender, args) => tcs.SetResult(true);
             frameworkElement.LayoutUpdated += eventHandler;
             await tcs.Task;
@@ -550,9 +548,9 @@ namespace Microsoft.Xna.Framework.Input
 
         static IEnumerable<DependencyObject> GetDescendants(DependencyObject start)
         {
-            var queue = new Queue<DependencyObject>();
+            Queue<DependencyObject> queue = new Queue<DependencyObject>();
 
-            var popup = start as Popup;
+            Popup popup = start as Popup;
 
             if (popup != null)
             {
@@ -564,11 +562,11 @@ namespace Microsoft.Xna.Framework.Input
             }
             else
             {
-                var count = VisualTreeHelper.GetChildrenCount(start);
+                int count = VisualTreeHelper.GetChildrenCount(start);
 
-                for (var i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    var child = VisualTreeHelper.GetChild(start, i);
+                    DependencyObject child = VisualTreeHelper.GetChild(start, i);
                     queue.Enqueue(child);
                     yield return child;
                 }
@@ -576,7 +574,7 @@ namespace Microsoft.Xna.Framework.Input
 
             while (queue.Count > 0)
             {
-                var parent = queue.Dequeue();
+                DependencyObject parent = queue.Dequeue();
 
                 popup = parent as Popup;
 
@@ -590,11 +588,11 @@ namespace Microsoft.Xna.Framework.Input
                 }
                 else
                 {
-                    var count = VisualTreeHelper.GetChildrenCount(parent);
+                    int count = VisualTreeHelper.GetChildrenCount(parent);
 
-                    for (var i = 0; i < count; i++)
+                    for (int i = 0; i < count; i++)
                     {
-                        var child = VisualTreeHelper.GetChild(parent, i);
+                        DependencyObject child = VisualTreeHelper.GetChild(parent, i);
                         yield return child;
                         queue.Enqueue(child);
                     }
@@ -604,10 +602,10 @@ namespace Microsoft.Xna.Framework.Input
 
         private void ResizeLayoutRoot()
         {
-            var root =
-                _parentPanel ??
-                _parentContentControl ??
-                _temporaryParentPanel as FrameworkElement;
+            FrameworkElement root =
+                                _parentPanel ??
+                                _parentContentControl ??
+                                _temporaryParentPanel as FrameworkElement;
             _layoutRoot.Width = root.ActualWidth;
             _layoutRoot.Height = root.ActualHeight;
         }
@@ -628,7 +626,7 @@ namespace Microsoft.Xna.Framework.Input
             _dialogPopup.IsOpen = false;
             _buttonsPanel.Children.Clear();
 
-            foreach (var button in _buttons)
+            foreach (ButtonBase button in _buttons)
             {
                 button.Click -= OnButtonClick;
                 button.KeyUp -= OnGlobalKeyUp;
@@ -670,9 +668,9 @@ namespace Microsoft.Xna.Framework.Input
             string stateGroupName,
             string stateName)
         {
-            var tcs = new TaskCompletionSource<Storyboard>();
+            TaskCompletionSource<Storyboard> tcs = new TaskCompletionSource<Storyboard>();
 
-            var storyboard =
+            Storyboard storyboard =
                 GetStoryboardForVisualState(visualStatesHost, stateGroupName, stateName);
 
             if (storyboard != null)
@@ -705,7 +703,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             Storyboard storyboard = null;
 
-            var stateGroups = VisualStateManager.GetVisualStateGroups(visualStatesHost);
+            IList<VisualStateGroup> stateGroups = VisualStateManager.GetVisualStateGroups(visualStatesHost);
             VisualStateGroup stateGroup = null;
 
             if (!string.IsNullOrEmpty(stateGroupName))
@@ -722,7 +720,7 @@ namespace Microsoft.Xna.Framework.Input
 
             if (state == null)
             {
-                foreach (var group in stateGroups)
+                foreach (VisualStateGroup group in stateGroups)
                 {
                     state = group.States.FirstOrDefault(s => s.Name == stateName);
 
@@ -743,12 +741,12 @@ namespace Microsoft.Xna.Framework.Input
 
         private void OnButtonClick(object sender, RoutedEventArgs e)
         {
-            var clickedButton = (ButtonBase)sender;
+            ButtonBase clickedButton = (ButtonBase)sender;
             _dismissTaskSource.TrySetResult((int)clickedButton.Tag == 0 ? (_inputTextBox != null ? _inputTextBox.Text : _inputPasswordBox.Password) : null);
 
             if (_buttons.Count > 0)
             {
-                var button = (Button)_buttons[0];
+                Button button = (Button)_buttons[0];
                 button.Focus(FocusState.Programmatic);
             }
         }
@@ -780,7 +778,7 @@ namespace Microsoft.Xna.Framework.Input
 
             if (_buttons.Count > 0)
             {
-                var button = (Button)_buttons[0];
+                Button button = (Button)_buttons[0];
                 button.Focus(FocusState.Programmatic);
             }
         }
