@@ -2,13 +2,17 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using WGI = Windows.Gaming.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class GamePad
+    public sealed class ConcreteGamePad : GamePadStrategy
     {
         // Attempts to mimic SharpDX.XInput.Gamepad which defines the trigger threshold as 30 with a range of 0 to 255. 
         // The trigger here has a range of 0.0 to 1.0. So, 30 / 255 = 0.11765.
@@ -19,7 +23,7 @@ namespace Microsoft.Xna.Framework.Input
         private WGI.Gamepad[] _gamepads;
         private int tmp;
 
-        private GamePad()
+        public ConcreteGamePad()
         {
             _gamepads = new WGI.Gamepad[PlatformGetMaxNumberOfGamePads()];
             IReadOnlyList<WGI.Gamepad> gamepadsTmp = WGI.Gamepad.Gamepads;
@@ -53,12 +57,12 @@ namespace Microsoft.Xna.Framework.Input
             };
         }
 
-        private int PlatformGetMaxNumberOfGamePads()
+        public override int PlatformGetMaxNumberOfGamePads()
         {
             return 16;
         }
 
-        private GamePadCapabilities PlatformGetCapabilities(int index)
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
@@ -103,7 +107,7 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
@@ -157,7 +161,7 @@ namespace Microsoft.Xna.Framework.Input
             return result;
         }
 
-        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)

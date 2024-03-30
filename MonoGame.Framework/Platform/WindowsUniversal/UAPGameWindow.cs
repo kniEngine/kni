@@ -16,6 +16,8 @@ using Microsoft.Xna.Platform;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.Phone.UI.Input;
+using Microsoft.Xna.Platform.Input;
+
 
 #if UAP
 using Windows.UI.Xaml;
@@ -343,7 +345,7 @@ namespace Microsoft.Xna.Framework
 
         private void UpdateBackButton()
         {
-            GamePad.Current.Back = _backPressed;
+            ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().Back = _backPressed;
             _backPressed = false;
         }
 

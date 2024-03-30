@@ -2,9 +2,14 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
+using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Android.Views;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
     internal class AndroidGamePad
     {
@@ -105,20 +110,19 @@ namespace Microsoft.Xna.Framework.Input
         }
     }
 
-
-    sealed partial class GamePad
+    public sealed class ConcreteGamePad : GamePadStrategy
     {
         // we will support up to 4 local controllers
         private readonly AndroidGamePad[] GamePads = new AndroidGamePad[4];
         // support the back button when we don't have a gamepad connected
         internal bool Back;
 
-        private int PlatformGetMaxNumberOfGamePads()
+        public override int PlatformGetMaxNumberOfGamePads()
         {
             return 4;
         }
 
-        private GamePadCapabilities PlatformGetCapabilities(int index)
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             AndroidGamePad gamePad = GamePads[index];
             if (gamePad != null)
@@ -133,7 +137,7 @@ namespace Microsoft.Xna.Framework.Input
             return capabilities;
         }
 
-        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             AndroidGamePad gamePad = GamePads[index];
             GamePadState state = GamePadState.Default;
@@ -173,7 +177,7 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             AndroidGamePad gamePad = GamePads[index];
             if (gamePad == null)

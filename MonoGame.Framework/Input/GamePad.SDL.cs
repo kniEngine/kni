@@ -2,15 +2,19 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Platform.Utilities;
 using MonoGame.Framework.Utilities;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class GamePad
+    public sealed class ConcreteGamePad : GamePadStrategy
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
@@ -106,12 +110,12 @@ namespace Microsoft.Xna.Framework.Input
             Gamepads.Clear();
         }
 
-        private int PlatformGetMaxNumberOfGamePads()
+        public override int PlatformGetMaxNumberOfGamePads()
         {
             return 16;
         }
 
-        private GamePadCapabilities PlatformGetCapabilities(int index)
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             if (!Gamepads.ContainsKey(index))
                 return new GamePadCapabilities();
@@ -259,7 +263,7 @@ namespace Microsoft.Xna.Framework.Input
             return axis / 32767f;
         }
 
-        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             if (!Gamepads.ContainsKey(index))
                 return GamePadState.Default;
@@ -317,7 +321,7 @@ namespace Microsoft.Xna.Framework.Input
             return ret;
         }
 
-        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             if (!Gamepads.ContainsKey(index))
                 return false;
