@@ -5,12 +5,12 @@ using Android.Widget;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class KeyboardInput
+    public sealed partial class KeyboardInput
     {
-        private static TaskCompletionSource<string> tcs;
-        private static AlertDialog alert;
+        private TaskCompletionSource<string> tcs;
+        private AlertDialog alert;
 
-        private static Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
+        private Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
             tcs = new TaskCompletionSource<string>();
 
@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Input
                 alert.SetTitle(title);
                 alert.SetMessage(description);
 
-                var input = new EditText(AndroidGameWindow.Activity) { Text = defaultText };
+                EditText input = new EditText(AndroidGameWindow.Activity) { Text = defaultText };
 
                 if (defaultText != null)
                     input.SetSelection(defaultText.Length);
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Input
             return tcs.Task;
         }
 
-        private static void PlatformCancel(string result)
+        private void PlatformCancel(string result)
         {
             alert.Dismiss();
             tcs.SetResult(result);

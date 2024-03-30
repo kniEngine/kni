@@ -1,11 +1,49 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Xna.Platform.Input;
+
+namespace Microsoft.Xna.Platform.Input
+{
+    public interface IKeyboardInput
+    {
+        bool IsVisible { get; }
+
+        Task<string> Show(string title, string description, string defaultText = "", bool usePasswordMode = false);
+        void Cancel(string result);
+    }
+}
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class KeyboardInput
+    public sealed partial class KeyboardInput : IKeyboardInput
     {
-        public static bool IsVisible { get; private set; }
+        private static KeyboardInput _current;
+
+        /// <summary>
+        /// Returns the current Mouse instance.
+        /// </summary> 
+        public static KeyboardInput Current
+        {
+            get
+            {
+                if (_current != null)
+                    return _current;
+
+                lock (typeof(KeyboardInput))
+                {
+                    if (_current == null)
+                        _current = new KeyboardInput();
+
+                    return _current;
+                }
+            }
+        }
+
+
+        public static bool IsVisible
+        {
+            get { return ((IKeyboardInput)KeyboardInput.Current).IsVisible; } 
+        }
 
         /// <summary>
         /// Displays the keyboard input interface asynchronously.
@@ -23,16 +61,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </example>
         public static async Task<string> Show(string title, string description, string defaultText = "", bool usePasswordMode = false)
         {
-            if (IsVisible)
-                throw new Exception("The function cannot be completed at this time: the KeyboardInput UI is already active. Wait until KeyboardInput.IsVisible is false before issuing this call.");
-
-            IsVisible = true;
-
-            var result = await PlatformShow(title, description, defaultText, usePasswordMode);
-
-            IsVisible = false;
-
-            return result;
+            return await ((IKeyboardInput)KeyboardInput.Current).Show(title, description, defaultText, usePasswordMode);
         }
 
         /// <summary>
@@ -49,10 +78,47 @@ namespace Microsoft.Xna.Framework.Input
         /// </example>
         public static void Cancel(string result)
         {
+            ((IKeyboardInput)KeyboardInput.Current).Cancel(result);
+        }
+
+
+        //private KeyboardInput()
+        //{
+        //}
+
+
+        #region IKeyboardInput
+
+        private bool _isVisible;
+
+        bool IKeyboardInput.IsVisible
+        {
+            get { return _isVisible; }
+        }
+
+        async Task<string> IKeyboardInput.Show(string title, string description, string defaultText = "", bool usePasswordMode = false)
+        {
+            if (IsVisible)
+                throw new Exception("The function cannot be completed at this time: the KeyboardInput UI is already active. Wait until KeyboardInput.IsVisible is false before issuing this call.");
+
+            _isVisible = true;
+
+            string result = await PlatformShow(title, description, defaultText, usePasswordMode);
+
+            _isVisible = false;
+
+            return result;
+        }
+
+        void IKeyboardInput.Cancel(string result)
+        {
             if (!IsVisible)
                 throw new Exception("The function cannot be completed at this time: the MessageBox UI is not active.");
 
             PlatformCancel(result);
         }
+
+        #endregion IKeyboardInput
+
     }
 }
