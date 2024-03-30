@@ -37,6 +37,7 @@
     <Compile Include="Input\JoystickHat.cs" />
     <Compile Include="Input\JoystickState.cs" />
     <Compile Include="Input\Keyboard.cs" />
+    <Compile Include="Input\KeyboardStrategy.cs" />
     <Compile Include="Input\KeyboardInput.cs" />
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />

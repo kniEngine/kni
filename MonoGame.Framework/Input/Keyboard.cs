@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Platform.Input;
@@ -12,6 +14,11 @@ namespace Microsoft.Xna.Platform.Input
     {
         KeyboardState GetState();
     }
+
+    public interface IPlatformKeyboard
+    {
+        T GetStrategy<T>() where T : KeyboardStrategy;
+    }
 }
 
 namespace Microsoft.Xna.Framework.Input
@@ -19,7 +26,8 @@ namespace Microsoft.Xna.Framework.Input
     /// <summary>
     /// Allows getting keystrokes from keyboard.
     /// </summary>
-    public sealed partial class Keyboard : IKeyboard
+    public sealed class Keyboard : IKeyboard
+        , IPlatformKeyboard
     {
         private static Keyboard _current;
 
@@ -63,17 +71,24 @@ namespace Microsoft.Xna.Framework.Input
             return ((IKeyboard)Keyboard.Current).GetState();
         }
 
+        private KeyboardStrategy _strategy;
 
-        //private Keyboard()
-        //{
-        //}
+        T IPlatformKeyboard.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
+        private Keyboard()
+        {
+            _strategy = new ConcreteKeyboard();
+        }
 
 
         #region IKeyboard
 
         KeyboardState IKeyboard.GetState()
         {
-            return PlatformGetState();
+            return _strategy.PlatformGetState();
         }
 
         #endregion IKeyboard

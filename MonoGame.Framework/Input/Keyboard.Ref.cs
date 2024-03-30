@@ -1,12 +1,14 @@
-﻿// Copyright (C)2022 Nick Kastellanos
+﻿// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class Keyboard
+    public sealed class ConcreteKeyboard : KeyboardStrategy
     {
-        private KeyboardState PlatformGetState()
+
+        public override KeyboardState PlatformGetState()
         {
             throw new PlatformNotSupportedException();
         }

@@ -2,13 +2,16 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class Keyboard
+    public sealed class ConcreteKeyboard : KeyboardStrategy
     {
         private readonly byte[] DefinedKeyCodes;
 
@@ -20,7 +23,7 @@ namespace Microsoft.Xna.Framework.Input
         [DllImport("user32.dll")]
         private static extern bool GetKeyboardState(byte[] lpKeyState);
 
-        private Keyboard()
+        public ConcreteKeyboard()
         {
             Array definedKeys = Enum.GetValues(typeof(Keys));
             List<byte> keyCodes = new List<byte>(Math.Min(definedKeys.Length, 255));
@@ -33,7 +36,7 @@ namespace Microsoft.Xna.Framework.Input
             DefinedKeyCodes = keyCodes.ToArray();
         }
 
-        private KeyboardState PlatformGetState()
+        public override KeyboardState PlatformGetState()
         {
             if (_isActive && GetKeyboardState(_keyState))
             {
