@@ -1,19 +1,24 @@
 ﻿// MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
-using GameController;
+
+// Copyright (C)2024 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using GameController;
 using UIKit;
-using System;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class GamePad
+    public sealed class ConcreteGamePad : GamePadStrategy
     {
         internal bool MenuPressed = false;
 
-        private int PlatformGetMaxNumberOfGamePads()
+        public override int PlatformGetMaxNumberOfGamePads()
         {
             return 4;
         }
@@ -43,9 +48,9 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private GamePadCapabilities PlatformGetCapabilities(int index)
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            var ind = (GCControllerPlayerIndex)index;
+            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
 
             AssingIndex(ind);
 
@@ -58,13 +63,13 @@ namespace Microsoft.Xna.Framework.Input
             }
             return new GamePadCapabilities { IsConnected = false };
         }
-               
-        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+
+        public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            var ind = (GCControllerPlayerIndex)index;
+            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
 
 
-            var buttons = new List<Buttons>();
+            List<Buttons> buttons = new List<Buttons>();
             bool connected = false;
             ButtonState Up = ButtonState.Released;
             ButtonState Down = ButtonState.Released;
@@ -152,7 +157,7 @@ namespace Microsoft.Xna.Framework.Input
                     Right = controller.MicroGamepad.Dpad.Right.IsPressed ? ButtonState.Pressed : ButtonState.Released;
                 }
             }
-            var state = new GamePadState(
+            GamePadState state = new GamePadState(
                 new GamePadThumbSticks(leftThumbStickPosition, rightThumbStickPosition, leftDeadZoneMode, rightDeadZoneMode),
                 new GamePadTriggers(leftTriggerValue, rightTriggerValue),
                 new GamePadButtons(buttons.ToArray()),
@@ -161,7 +166,7 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             return false;
         }
@@ -220,7 +225,6 @@ namespace Microsoft.Xna.Framework.Input
             }
             return capabilities;
         }
-
 
     }
 }

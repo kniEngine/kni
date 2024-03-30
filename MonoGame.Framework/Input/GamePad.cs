@@ -26,6 +26,11 @@ namespace Microsoft.Xna.Platform.Input
         bool SetVibration(int index, float leftMotor, float rightMotor);
         bool SetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger);
     }
+
+    public interface IPlatformGamePad
+    {
+        T GetStrategy<T>() where T : GamePadStrategy;
+    }
 }
 
 namespace Microsoft.Xna.Framework.Input
@@ -33,7 +38,8 @@ namespace Microsoft.Xna.Framework.Input
     /// <summary> 
     /// Supports querying the game controllers and setting the vibration motors.
     /// </summary>
-    public sealed partial class GamePad : IGamePad
+    public sealed class GamePad : IGamePad
+        , IPlatformGamePad
     {
         private static GamePad _current;
 
@@ -207,15 +213,23 @@ namespace Microsoft.Xna.Framework.Input
             return ((IGamePad)GamePad.Current).SetVibration(index, leftMotor, rightMotor, leftTrigger, rightTrigger);
         }
 
-        //private GamePad()
-        //{
-        //}
+        private GamePadStrategy _strategy;
+
+        T IPlatformGamePad.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
+        private GamePad()
+        {
+            _strategy = new ConcreteGamePad();
+        }
 
         #region IGamePad
 
         int IGamePad.MaximumGamePadCount
         {
-            get { return PlatformGetMaxNumberOfGamePads(); }
+            get { return _strategy.PlatformGetMaxNumberOfGamePads(); }
         }
 
         GamePadCapabilities IGamePad.GetCapabilities(PlayerIndex playerIndex)
@@ -225,10 +239,10 @@ namespace Microsoft.Xna.Framework.Input
 
         GamePadCapabilities IGamePad.GetCapabilities(int index)
         {
-            if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
+            if (index < 0 || index >= _strategy.PlatformGetMaxNumberOfGamePads())
                 return new GamePadCapabilities();
 
-            return PlatformGetCapabilities(index);
+            return _strategy.PlatformGetCapabilities(index);
         }
 
         GamePadState IGamePad.GetState(PlayerIndex playerIndex)
@@ -258,10 +272,10 @@ namespace Microsoft.Xna.Framework.Input
 
         GamePadState IGamePad.GetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
+            if (index < 0 || index >= _strategy.PlatformGetMaxNumberOfGamePads())
                 return GamePadState.Default;
 
-            return PlatformGetState(index, leftDeadZoneMode, rightDeadZoneMode);
+            return _strategy.PlatformGetState(index, leftDeadZoneMode, rightDeadZoneMode);
         }
 
         bool IGamePad.SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor)
@@ -281,10 +295,10 @@ namespace Microsoft.Xna.Framework.Input
 
         bool IGamePad.SetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
+            if (index < 0 || index >= _strategy.PlatformGetMaxNumberOfGamePads())
                 return false;
 
-            return PlatformSetVibration(index, MathHelper.Clamp(leftMotor, 0.0f, 1.0f), MathHelper.Clamp(rightMotor, 0.0f, 1.0f), MathHelper.Clamp(leftTrigger, 0.0f, 1.0f), MathHelper.Clamp(rightTrigger, 0.0f, 1.0f));
+            return _strategy.PlatformSetVibration(index, MathHelper.Clamp(leftMotor, 0.0f, 1.0f), MathHelper.Clamp(rightMotor, 0.0f, 1.0f), MathHelper.Clamp(leftTrigger, 0.0f, 1.0f), MathHelper.Clamp(rightTrigger, 0.0f, 1.0f));
         }
 
 

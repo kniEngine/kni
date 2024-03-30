@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Input;
 
 namespace Microsoft.Xna.Framework.Input
 {
@@ -167,7 +168,7 @@ namespace Microsoft.Xna.Framework.Input
             Joysticks.Add(id, jdevice);
 
             if (SDL.GAMECONTROLLER.IsGameController(deviceId) == 1)
-                GamePad.Current.AddDevice(deviceId);
+                ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceId);
         }
 
         internal void RemoveDevice(int instanceid)
@@ -191,7 +192,7 @@ namespace Microsoft.Xna.Framework.Input
 
         internal void CloseDevices()
         {
-            GamePad.Current.CloseDevices();
+            ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().CloseDevices();
 
             foreach (KeyValuePair<int,IntPtr> entry in Joysticks)
                 SDL.JOYSTICK.Close(entry.Value);

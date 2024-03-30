@@ -2,14 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using GameController;
-using System.Collections.Generic;
+// Copyright (C)2024 Nick Kastellanos
 
-namespace Microsoft.Xna.Framework.Input
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using GameController;
+
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class GamePad
+    public sealed class ConcreteGamePad : GamePadStrategy
     {
-        private int PlatformGetMaxNumberOfGamePads()
+
+        public override int PlatformGetMaxNumberOfGamePads()
         {
             return 4;
         }
@@ -43,7 +49,7 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private GamePadCapabilities PlatformGetCapabilities(int index)
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
 
@@ -103,7 +109,7 @@ namespace Microsoft.Xna.Framework.Input
             return capabilities;
         }
 
-        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
 
@@ -231,7 +237,7 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             return false;
         }

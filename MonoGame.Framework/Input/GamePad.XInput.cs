@@ -2,14 +2,18 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using XInput = SharpDX.XInput;
 using GPBF = SharpDX.XInput.GamepadButtonFlags;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class GamePad
+    public sealed class ConcreteGamePad : GamePadStrategy
     {
         const int DeviceNotConnectedHResult = unchecked((int)0x8007048f);
 
@@ -27,12 +31,12 @@ namespace Microsoft.Xna.Framework.Input
         private readonly long[] _timeout = new long[4];
         private readonly long TimeoutTicks = TimeSpan.FromSeconds(1).Ticks;
 
-        private int PlatformGetMaxNumberOfGamePads()
+        public override int PlatformGetMaxNumberOfGamePads()
         {
             return 4;
         }
 
-        private GamePadCapabilities PlatformGetCapabilities(int index)
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
@@ -168,7 +172,7 @@ namespace Microsoft.Xna.Framework.Input
             return state;
         }
 
-        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
@@ -280,7 +284,7 @@ namespace Microsoft.Xna.Framework.Input
             return new GamePadButtons(ret);
         }
 
-        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             if (!_connected[index])
             {

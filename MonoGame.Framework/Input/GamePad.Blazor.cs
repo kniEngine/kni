@@ -1,30 +1,31 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
+﻿// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class GamePad
+    public sealed class ConcreteGamePad : GamePadStrategy
     {
-        private int PlatformGetMaxNumberOfGamePads()
+
+        public override int PlatformGetMaxNumberOfGamePads()
         {
             throw new NotImplementedException();
         }
 
-        private GamePadCapabilities PlatformGetCapabilities(int index)
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             throw new NotImplementedException();
         }
 
-        private GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             throw new NotImplementedException();
         }
 
-        private bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
+        public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             throw new NotImplementedException();
         }

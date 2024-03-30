@@ -222,12 +222,12 @@ namespace Microsoft.Xna.Framework
                         Joystick.Current.RemoveDevice(ev.JoystickDevice.Which);
                         break;
                     case Sdl.EventType.ControllerDeviceRemoved:
-                        GamePad.Current.RemoveDevice(ev.ControllerDevice.Which);
+                        ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().RemoveDevice(ev.ControllerDevice.Which);
                         break;
                     case Sdl.EventType.ControllerButtonUp:
                     case Sdl.EventType.ControllerButtonDown:
                     case Sdl.EventType.ControllerAxisMotion:
-                        GamePad.Current.UpdatePacketInfo(ev.ControllerDevice.Which, ev.ControllerDevice.TimeStamp);
+                        ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().UpdatePacketInfo(ev.ControllerDevice.Which, ev.ControllerDevice.TimeStamp);
                         break;
                     case Sdl.EventType.MouseMotion:
                         unchecked

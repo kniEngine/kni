@@ -19,6 +19,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Input;
+
 
 #if UAP
 using Windows.UI.Xaml;
@@ -209,7 +211,7 @@ namespace Microsoft.Xna.Platform
         private void OnRenderFrame(bool isQueueEmpty)
         {
             ((UAPGameWindow)Window).Tick();
-            GamePad.Current.Back = false;
+            ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().Back = false;
 
             // Request next frame
             CoreWindow coreWindow = ((UAPGameWindow)Window).CoreWindow;
