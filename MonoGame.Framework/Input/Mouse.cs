@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework.Input;
@@ -19,6 +19,11 @@ namespace Microsoft.Xna.Platform.Input
         void SetPosition(int x, int y);
         void SetCursor(MouseCursor cursor);
     }
+
+    public interface IPlatformMouse
+    {
+        T GetStrategy<T>() where T : MouseStrategy;
+    }
 }
 
 namespace Microsoft.Xna.Framework.Input
@@ -26,14 +31,14 @@ namespace Microsoft.Xna.Framework.Input
     /// <summary>
     /// Allows reading position and button click information from mouse.
     /// </summary>
-    public sealed partial class Mouse : IMouse
+    public sealed class Mouse : IMouse
+        , IPlatformMouse
     {
         private static Mouse _current;
 
         private static readonly MouseState _defaultState = new MouseState();
 
         private MouseCursor _mouseCursor;
-        internal GameWindow PrimaryWindow;
 
         /// <summary>
         /// Returns the current Mouse instance.
@@ -101,9 +106,16 @@ namespace Microsoft.Xna.Framework.Input
             ((IMouse)Mouse.Current).SetCursor(cursor);
         }
 
+        private MouseStrategy _strategy;
+
+        T IPlatformMouse.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
 
         private Mouse()
         {
+            _strategy = new ConcreteMouse();
         }
 
 
@@ -111,35 +123,35 @@ namespace Microsoft.Xna.Framework.Input
 
         IntPtr IMouse.WindowHandle
         {
-            get { return PlatformGetWindowHandle(); }
-            set { PlatformSetWindowHandle(value); }
+            get { return _strategy.PlatformGetWindowHandle(); }
+            set { _strategy.PlatformSetWindowHandle(value); }
         }
 
         bool IMouse.IsRawInputAvailable
         {
-            get { return PlatformIsRawInputAvailable(); }
+            get { return _strategy.PlatformIsRawInputAvailable(); }
         }
 
         MouseState IMouse.GetState()
         {
 #if DESKTOPGL || IOS || ANDROID || (UAP || WINUI)
-            if (PrimaryWindow != null)
-                return PlatformGetState(PrimaryWindow);
+            if (((ConcreteMouse)_strategy).PrimaryWindow != null)
+                return ((ConcreteMouse)_strategy).PlatformGetState(((ConcreteMouse)_strategy).PrimaryWindow);
             else
                 return _defaultState;
 #endif
 
-            return PlatformGetState();
+            return _strategy.PlatformGetState();
         }
 
         void IMouse.SetPosition(int x, int y)
         {
-            PlatformSetPosition(x, y);
+            _strategy.PlatformSetPosition(x, y);
         }
 
         void IMouse.SetCursor(MouseCursor cursor)
         {
-            PlatformSetCursor(cursor);
+            _strategy.PlatformSetCursor(cursor);
             _mouseCursor = cursor;
         }
 

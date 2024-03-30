@@ -2,17 +2,20 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using WinForms = System.Windows.Forms;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class Mouse
+    public sealed class ConcreteMouse : MouseStrategy
     {
+        internal GameWindow PrimaryWindow;
+
         [DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
         [return: MarshalAsAttribute(UnmanagedType.Bool)]
         private static extern bool SetCursorPos(int X, int Y);
@@ -34,12 +37,12 @@ namespace Microsoft.Xna.Framework.Input
         private static WinForms.Control _window;
         private static MouseInputWnd _mouseInputWnd = new MouseInputWnd();
 
-        private IntPtr PlatformGetWindowHandle()
+        public override IntPtr PlatformGetWindowHandle()
         {
             return (_window == null) ? IntPtr.Zero : _window.Handle;
         }
 
-        private void PlatformSetWindowHandle(IntPtr windowHandle)
+        public override void PlatformSetWindowHandle(IntPtr windowHandle)
         {
             // Unregister old window
             if (_mouseInputWnd.Handle != IntPtr.Zero)
@@ -49,12 +52,12 @@ namespace Microsoft.Xna.Framework.Input
             _mouseInputWnd.AssignHandle(windowHandle);
         }
 
-        private bool PlatformIsRawInputAvailable()
+        public override bool PlatformIsRawInputAvailable()
         {
             return _mouseInputWnd.IsRawInputAvailable;
         }
 
-        private MouseState PlatformGetState()
+        public override MouseState PlatformGetState()
         {
             POINTSTRUCT pos;
             GetCursorPos(out pos);
@@ -81,7 +84,7 @@ namespace Microsoft.Xna.Framework.Input
                 );
         }
 
-        private void PlatformSetPosition(int x, int y)
+        public override void PlatformSetPosition(int x, int y)
         {
             System.Drawing.Point pt = new System.Drawing.Point(x, y);
 
@@ -92,7 +95,7 @@ namespace Microsoft.Xna.Framework.Input
             SetCursorPos(pt.X, pt.Y);
         }
 
-        private void PlatformSetCursor(MouseCursor cursor)
+        public override void PlatformSetCursor(MouseCursor cursor)
         {
             if (_window != null)
                 _window.Cursor = cursor.WinFormsCursor;

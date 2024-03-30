@@ -43,6 +43,7 @@
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\MessageBox.cs" />
     <Compile Include="Input\Mouse.cs" />
+    <Compile Include="Input\MouseStrategy.cs" />
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseState.cs" />
 	<Compile Include="Input\TextInputEventArgs.cs" />

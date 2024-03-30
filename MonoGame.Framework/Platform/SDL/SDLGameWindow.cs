@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Input;
 using MonoGame.Framework.Utilities;
 
 
@@ -237,8 +238,8 @@ namespace Microsoft.Xna.Framework
                         break;
                     case Sdl.EventType.MouseWheel:
                         const int wheelDelta = 120;
-                        Mouse.Current.ScrollY += ev.Wheel.Y * wheelDelta;
-                        Mouse.Current.ScrollX += ev.Wheel.X * wheelDelta;
+                        ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollY += ev.Wheel.Y * wheelDelta;
+                        ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollX += ev.Wheel.X * wheelDelta;
                         break;
                     case Sdl.EventType.KeyDown:
                     {
