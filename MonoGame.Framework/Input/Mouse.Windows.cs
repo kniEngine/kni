@@ -5,15 +5,16 @@
 // Copyright (C)2021 Nick Kastellanos
 
 using System;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using WinForms = System.Windows.Forms;
 
 namespace Microsoft.Xna.Framework.Input
 {
     public sealed partial class Mouse
     {
         [DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
-        [return: MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        [return: MarshalAsAttribute(UnmanagedType.Bool)]
         private static extern bool SetCursorPos(int X, int Y);
         
         [StructLayout(LayoutKind.Sequential)]
@@ -30,7 +31,7 @@ namespace Microsoft.Xna.Framework.Input
         [DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
         internal static extern int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, out POINTSTRUCT pt, int cPoints);
 
-        private static Control _window;
+        private static WinForms.Control _window;
         private static MouseInputWnd _mouseInputWnd = new MouseInputWnd();
 
         private IntPtr PlatformGetWindowHandle()
@@ -44,7 +45,7 @@ namespace Microsoft.Xna.Framework.Input
             if (_mouseInputWnd.Handle != IntPtr.Zero)
                 _mouseInputWnd.ReleaseHandle();
 
-            _window = Control.FromHandle(windowHandle);
+            _window = WinForms.Control.FromHandle(windowHandle);
             _mouseInputWnd.AssignHandle(windowHandle);
         }
 
@@ -62,8 +63,8 @@ namespace Microsoft.Xna.Framework.Input
             if (_window != null)
                 MapWindowPoints(new HandleRef(null, IntPtr.Zero), new HandleRef(_window, _window.Handle), out pos, 1);
 
-            var clientPos = new System.Drawing.Point(pos.X, pos.Y);
-            var buttons = Control.MouseButtons;
+            Point clientPos = new Point(pos.X, pos.Y);
+            WinForms.MouseButtons buttons = WinForms.Control.MouseButtons;
             
             return new MouseState(
                 clientPos.X,
@@ -72,17 +73,17 @@ namespace Microsoft.Xna.Framework.Input
                 _mouseInputWnd.HorizontalScrollWheelValue,
                 _mouseInputWnd.RawX,
                 _mouseInputWnd.RawY,
-                (buttons & MouseButtons.Left) == MouseButtons.Left ? ButtonState.Pressed : ButtonState.Released,
-                (buttons & MouseButtons.Middle) == MouseButtons.Middle ? ButtonState.Pressed : ButtonState.Released,
-                (buttons & MouseButtons.Right) == MouseButtons.Right ? ButtonState.Pressed : ButtonState.Released,
-                (buttons & MouseButtons.XButton1) == MouseButtons.XButton1 ? ButtonState.Pressed : ButtonState.Released,
-                (buttons & MouseButtons.XButton2) == MouseButtons.XButton2 ? ButtonState.Pressed : ButtonState.Released
+                (buttons & WinForms.MouseButtons.Left)   == WinForms.MouseButtons.Left ? ButtonState.Pressed : ButtonState.Released,
+                (buttons & WinForms.MouseButtons.Middle) == WinForms.MouseButtons.Middle ? ButtonState.Pressed : ButtonState.Released,
+                (buttons & WinForms.MouseButtons.Right)  == WinForms.MouseButtons.Right ? ButtonState.Pressed : ButtonState.Released,
+                (buttons & WinForms.MouseButtons.XButton1) == WinForms.MouseButtons.XButton1 ? ButtonState.Pressed : ButtonState.Released,
+                (buttons & WinForms.MouseButtons.XButton2) == WinForms.MouseButtons.XButton2 ? ButtonState.Pressed : ButtonState.Released
                 );
         }
 
         private void PlatformSetPosition(int x, int y)
         {
-            var pt = new System.Drawing.Point(x, y);
+            System.Drawing.Point pt = new System.Drawing.Point(x, y);
 
             // map window position to screen position. If no window is set assume input was in screen position.
             if (_window != null)
@@ -119,16 +120,16 @@ namespace Microsoft.Xna.Framework.Input
             public int RawX = 0;
             public int RawY = 0;
 
-            protected override void WndProc(ref Message m)
+            protected override void WndProc(ref WinForms.Message m)
             {
                 switch (m.Msg)
                 {
                     case WM_MOUSEWHEEL:
-                        var delta = (short)(((ulong)m.WParam >> 16) & 0xffff);
+                        short delta = (short)(((ulong)m.WParam >> 16) & 0xffff);
                         ScrollWheelValue += delta;
                         break;
                     case WM_MOUSEHWHEEL:
-                        var deltaH = (short)(((ulong)m.WParam >> 16) & 0xffff);
+                        short deltaH = (short)(((ulong)m.WParam >> 16) & 0xffff);
                         HorizontalScrollWheelValue += deltaH;
                         break;
                     case WM_INPUT:
@@ -153,7 +154,7 @@ namespace Microsoft.Xna.Framework.Input
                     rid.Usage = 0x02;
                     rid.Flags = RIDEV_INPUTSINK;
                     rid.hwndTarget = Handle;
-                    var hr = RegisterRawInputDevices(ref rid, 1, (uint)Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
+                    bool hr = RegisterRawInputDevices(ref rid, 1, (uint)Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
                     IsRawInputAvailable = hr;
                 }
             }
@@ -166,7 +167,7 @@ namespace Microsoft.Xna.Framework.Input
                 rid.Usage = 0x02;
                 rid.Flags = RIDEV_REMOVE;
                 rid.hwndTarget = IntPtr.Zero;
-                var hr = RegisterRawInputDevices(ref rid, 1, (uint)Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
+                bool hr = RegisterRawInputDevices(ref rid, 1, (uint)Marshal.SizeOf(typeof(RAWINPUTDEVICE)));
                 IsRawInputAvailable = false;
 
                 base.ReleaseHandle();
@@ -248,7 +249,7 @@ namespace Microsoft.Xna.Framework.Input
 
             private const uint RI_MOUSE_WHEEL = 0x0400;
 
-            private unsafe void HandleRawInput(ref Message message)
+            private unsafe void HandleRawInput(ref WinForms.Message message)
             {
                 int hr;
                 uint dataSize = 0;
