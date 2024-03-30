@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         {
             TouchEvent ev;
             while (_queue.TryDequeue(out ev))                
-                TouchPanel.AddEvent(ev.Id, ev.State, ev.Pos);
+                TouchPanel.Current.AddEvent(ev.Id, ev.State, ev.Pos);
         }
 
         private struct TouchEvent
