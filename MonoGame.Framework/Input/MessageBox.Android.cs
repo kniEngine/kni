@@ -5,12 +5,12 @@ using Android.Content;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class MessageBox
+    public sealed partial class MessageBox
     {
-        private static TaskCompletionSource<int?> tcs;
-        private static AlertDialog alert;
+        private TaskCompletionSource<int?> tcs;
+        private AlertDialog alert;
 
-        private static Task<int?> PlatformShow(string title, string description, List<string> buttons)
+        private Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             tcs = new TaskCompletionSource<int?>();
             AndroidGameWindow.Activity.RunOnUiThread(() =>
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Input
             return tcs.Task;
         }
 
-        private static void PlatformCancel(int? result)
+        private void PlatformCancel(int? result)
         {
             alert.Dismiss();
             tcs.SetResult(result);

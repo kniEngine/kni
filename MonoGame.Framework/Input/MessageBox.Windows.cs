@@ -6,20 +6,20 @@ using System.Windows.Forms;
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public static partial class MessageBox
+    public sealed partial class MessageBox
     {
-        private static Form _dialog;
-        private static TaskCompletionSource<int?> _tcs;
+        private Form _dialog;
+        private TaskCompletionSource<int?> _tcs;
 
-        private static Task<int?> PlatformShow(string title, string description, List<string> buttons)
+        private Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             _tcs = new TaskCompletionSource<int?>();
 
-            var parent = Application.OpenForms[0];
+            Form parent = Application.OpenForms[0];
 
             parent.Invoke(new MethodInvoker(() =>
             {
-                var dialog = _dialog = new Form();
+                Form dialog = _dialog = new Form();
                 dialog.Text = title;
                 dialog.FormBorderStyle = FormBorderStyle.FixedDialog;
                 dialog.MinimizeBox = false;
@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Input
                 dialog.ControlBox = false;
                 dialog.StartPosition = FormStartPosition.CenterParent;
 
-                var desc = new Label();
+                Label desc = new Label();
                 desc.Text = description;
                 desc.Parent = dialog;
                 desc.Top = 25;
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Input
                 desc.Margin = new Padding(25, 0, 25, 0);
                 desc.Left = (desc.Parent.ClientSize.Width - desc.Width) / 2;
 
-                var bgroup = new FlowLayoutPanel();
+                FlowLayoutPanel bgroup = new FlowLayoutPanel();
                 bgroup.FlowDirection = FlowDirection.LeftToRight;
                 bgroup.Parent = dialog;
                 bgroup.Top = desc.Bottom + 25;
@@ -44,10 +44,10 @@ namespace Microsoft.Xna.Framework.Input
                 bgroup.Margin = new Padding(15);
                 bgroup.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
-                for (var i = 0; i < buttons.Count; i++)
+                for (int i = 0; i < buttons.Count; i++)
                 {
                     string btext = buttons[i];
-                    var button = new Button();
+                    Button button = new Button();
                     button.Text = btext;
                     button.DialogResult = (DialogResult)i+1;
                     button.Parent = bgroup;
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Input
                 dialog.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                 dialog.AutoSize = true;
 
-                var result = (int)dialog.ShowDialog(parent);
+                int result = (int)dialog.ShowDialog(parent);
                 _dialog = null;
 
                 if (_tcs.Task.IsCompleted)
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.Input
             return _tcs.Task;
         }
 
-        private static void PlatformCancel(int? result)
+        private void PlatformCancel(int? result)
         {
             if (_dialog != null)
                 _dialog.Close();
