@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             }
         }
 
-        internal static GameWindow PrimaryWindow;
+        internal GameWindow PrimaryWindow;
 
 
         /// <summary>

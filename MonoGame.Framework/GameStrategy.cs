@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform
                 if (_window == null)
                 {
                     Mouse.Current.PrimaryWindow = value;
-                    TouchPanel.PrimaryWindow = value;
+                    TouchPanel.Current.PrimaryWindow = value;
                 }
 
                 _window = value;
@@ -583,7 +583,7 @@ namespace Microsoft.Xna.Platform
                 _services.RemoveService(typeof(GameStrategy));
 
                 Mouse.Current.PrimaryWindow = null;
-                TouchPanel.PrimaryWindow = null;
+                TouchPanel.Current.PrimaryWindow = null;
 
                 _isDisposed = true;
             }

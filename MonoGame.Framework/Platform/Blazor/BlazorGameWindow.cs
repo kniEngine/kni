@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Framework
             //Form.MouseLeave += OnMouseLeave;
 
             // Capture touch events.
-            TouchPanel.PrimaryWindow = this;
+            TouchPanel.Current.PrimaryWindow = this;
             TouchPanel.WindowHandle = new IntPtr(_window.Uid);
             _window.OnTouchStart += (object sender, float x, float y, int identifier) =>
             {
@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Framework
             };
             _window.OnTouchCancel += (object sender) =>
             {
-                TouchPanel.PrimaryWindow.TouchPanelState.ReleaseAllTouches();
+                TouchPanel.Current.PrimaryWindow.TouchPanelState.ReleaseAllTouches();
             };
 
             // keyboard events
