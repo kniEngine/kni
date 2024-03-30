@@ -94,6 +94,7 @@
     <Compile Include="Media\DesktopGL\ConcreteSong.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideo.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideoPlayer.cs" />
+    <Compile Include="Input\.SDL2\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\GamePad.SDL.cs" />
     <Compile Include="Input\Joystick.SDL.cs" />
     <Compile Include="Input\Keyboard.SDL.cs" />

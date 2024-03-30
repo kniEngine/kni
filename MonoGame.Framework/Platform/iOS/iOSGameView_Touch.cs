@@ -76,6 +76,7 @@ using UIKit;
 
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Input.Touch;
 
 namespace Microsoft.Xna.Framework
 {
@@ -131,21 +132,21 @@ namespace Microsoft.Xna.Framework
 
                 switch (touch.Phase) 
                 {
-                //case UITouchPhase.Stationary:
-                case UITouchPhase.Moved:
-                    TouchPanel.Current.AddEvent(id, TouchLocationState.Moved, position);					
-                    break;
-                case UITouchPhase.Began:
-                    TouchPanel.Current.AddEvent(id, TouchLocationState.Pressed, position);
-                    break;
-                case UITouchPhase.Ended	:
-                    TouchPanel.Current.AddEvent(id, TouchLocationState.Released, position);
-                    break;
-                case UITouchPhase.Cancelled:
-                    TouchPanel.Current.AddEvent(id, TouchLocationState.Released, position);
-                    break;
-                default:
-                    break;
+                    //case UITouchPhase.Stationary:
+                    case UITouchPhase.Moved:
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Moved, position);					
+                        break;
+                    case UITouchPhase.Began:
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Pressed, position);
+                        break;
+                    case UITouchPhase.Ended	:
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Released, position);
+                        break;
+                    case UITouchPhase.Cancelled:
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Released, position);
+                        break;
+                    default:
+                        break;
                 }
             }
         }

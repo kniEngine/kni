@@ -2,12 +2,14 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Platform.Input.Touch;
 
-namespace Microsoft.Xna.Platform.Input
+namespace Microsoft.Xna.Platform.Input.Touch
 {
     public interface ITouchPanel
     {
@@ -22,6 +24,11 @@ namespace Microsoft.Xna.Platform.Input
         TouchCollection GetState();
         GestureSample ReadGesture();
     }
+
+    public interface IPlatformTouchPanel
+    {
+        T GetStrategy<T>() where T : TouchPanelStrategy;
+    }
 }
 
 namespace Microsoft.Xna.Framework.Input.Touch
@@ -30,6 +37,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
     /// Allows retrieval of information from Touch Panel device.
     /// </summary>
     public sealed class TouchPanel : ITouchPanel
+        , IPlatformTouchPanel
     {
         private static TouchPanel _current;
 
@@ -52,8 +60,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 }
             }
         }
-
-        internal GameWindow PrimaryWindow;
 
 
         /// <summary>
@@ -132,69 +138,72 @@ namespace Microsoft.Xna.Framework.Input.Touch
             return ((ITouchPanel)TouchPanel.Current).ReadGesture();
         }
 
+        private TouchPanelStrategy _strategy;
+
+        T IPlatformTouchPanel.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
         private TouchPanel()
         {
+            _strategy = new ConcreteTouchPanel();
         }
 
         #region ITouchPanel
 
         IntPtr ITouchPanel.WindowHandle
         {
-            get { return PrimaryWindow.TouchPanelState.WindowHandle; }
-            set { PrimaryWindow.TouchPanelState.WindowHandle = value; }
+            get { return _strategy.WindowHandle; }
+            set { _strategy.WindowHandle = value; }
         }
 
         int ITouchPanel.DisplayWidth
         {
-            get { return PrimaryWindow.TouchPanelState.DisplayWidth; }
-            set { PrimaryWindow.TouchPanelState.DisplayWidth = value; }
+            get { return _strategy.DisplayWidth; }
+            set { _strategy.DisplayWidth = value; }
         }
 
         int ITouchPanel.DisplayHeight
         {
-            get { return PrimaryWindow.TouchPanelState.DisplayHeight; }
-            set { PrimaryWindow.TouchPanelState.DisplayHeight = value; }
+            get { return _strategy.DisplayHeight; }
+            set { _strategy.DisplayHeight = value; }
         }
 
         DisplayOrientation ITouchPanel.DisplayOrientation
         {
-            get { return PrimaryWindow.TouchPanelState.DisplayOrientation; }
-            set { PrimaryWindow.TouchPanelState.DisplayOrientation = value; }
+            get { return _strategy.DisplayOrientation; }
+            set { _strategy.DisplayOrientation = value; }
         }
 
         GestureType ITouchPanel.EnabledGestures
         {
-            get { return PrimaryWindow.TouchPanelState.EnabledGestures; }
-            set { PrimaryWindow.TouchPanelState.EnabledGestures = value; }
+            get { return _strategy.EnabledGestures; }
+            set { _strategy.EnabledGestures = value; }
         }
 
         bool ITouchPanel.IsGestureAvailable
         {
-            get { return PrimaryWindow.TouchPanelState.IsGestureAvailable; }
-        }
-
-        TouchCollection ITouchPanel.GetState()
-        {
-            return PrimaryWindow.TouchPanelState.GetState();
+            get { return _strategy.IsGestureAvailable; }
         }
 
         TouchPanelCapabilities ITouchPanel.GetCapabilities()
         {
-            return PrimaryWindow.TouchPanelState.GetCapabilities();
+            return _strategy.GetCapabilities();
         }
+
+        TouchCollection ITouchPanel.GetState()
+        {
+            return _strategy.GetState();
+        }
+
 
         GestureSample ITouchPanel.ReadGesture()
         {
-            return PrimaryWindow.TouchPanelState.ReadGesture();
+            return _strategy.ReadGesture();
         }
 
         #endregion ITouchPanel
-
-
-        internal void AddEvent(int id, TouchLocationState state, Vector2 position)
-        {         
-            PrimaryWindow.TouchPanelState.AddEvent(id, state, position);
-        }
 
     }
 }

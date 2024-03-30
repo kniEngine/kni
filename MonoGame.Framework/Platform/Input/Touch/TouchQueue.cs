@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Microsoft.Xna.Platform.Input.Touch;
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
@@ -18,8 +19,8 @@ namespace Microsoft.Xna.Framework.Input.Touch
         public void ProcessQueued()
         {
             TouchEvent ev;
-            while (_queue.TryDequeue(out ev))                
-                TouchPanel.Current.AddEvent(ev.Id, ev.State, ev.Pos);
+            while (_queue.TryDequeue(out ev))
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(ev.Id, ev.State, ev.Pos);
         }
 
         private struct TouchEvent

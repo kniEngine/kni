@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Graphics\.DX11\ConcreteRenderTargetSwapChain.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
+    <Compile Include="Input\.WindowsDX\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\GamePad.XInput.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\Keyboard.Windows.cs" />

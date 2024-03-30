@@ -63,6 +63,7 @@
     <Compile Include="ConcreteGraphicsDeviceManager.Ref.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GamePlatform.Ref.cs" />
+    <Compile Include="Input\.Ref\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\GamePad.Ref.cs" />
     <Compile Include="Input\Joystick.Ref.cs" />
     <Compile Include="Input\Keyboard.Ref.cs" />

@@ -80,6 +80,7 @@
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.Android.cs" />
+    <Compile Include="Input\.Android\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\GamePad.Android.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\KeyboardInput.Android.cs" />
