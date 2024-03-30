@@ -12,6 +12,8 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Windows.Devices.Input;
 using Windows.System.Threading;
 using Windows.UI.Core;
+using Microsoft.Xna.Platform.Input;
+
 
 #if UAP
 using Windows.Graphics.Display;
@@ -261,9 +263,9 @@ namespace Microsoft.Xna.Framework
             else
                 verticalScrollDelta = state.MouseWheelDelta;
 
-            Mouse.Current.PrimaryWindow.MouseState = new MouseState(x, y, 
-                Mouse.Current.PrimaryWindow.MouseState.ScrollWheelValue + verticalScrollDelta,
-                Mouse.Current.PrimaryWindow.MouseState.HorizontalScrollWheelValue + horizontalScrollDelta,
+            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow.MouseState = new MouseState(x, y,
+                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow.MouseState.ScrollWheelValue + verticalScrollDelta,
+                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow.MouseState.HorizontalScrollWheelValue + horizontalScrollDelta,
                 0, 0,
                 state.IsLeftButtonPressed ? ButtonState.Pressed : ButtonState.Released,
                 state.IsMiddleButtonPressed ? ButtonState.Pressed : ButtonState.Released,

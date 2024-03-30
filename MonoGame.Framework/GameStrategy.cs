@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Input;
 
 
 namespace Microsoft.Xna.Platform
@@ -186,7 +187,7 @@ namespace Microsoft.Xna.Platform
             {
                 if (_window == null)
                 {
-                    Mouse.Current.PrimaryWindow = value;
+                    ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = value;
                     TouchPanel.Current.PrimaryWindow = value;
                 }
 
@@ -582,7 +583,7 @@ namespace Microsoft.Xna.Platform
 
                 _services.RemoveService(typeof(GameStrategy));
 
-                Mouse.Current.PrimaryWindow = null;
+                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
                 TouchPanel.Current.PrimaryWindow = null;
 
                 _isDisposed = true;

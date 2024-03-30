@@ -2,39 +2,43 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class Mouse
+    public sealed class ConcreteMouse : MouseStrategy
     {
+        internal GameWindow PrimaryWindow;
+
         private Sdl SDL { get { return Sdl.Current; } }
 
         internal int ScrollX;
         internal int ScrollY;
 
-        private IntPtr PlatformGetWindowHandle()
+        public override IntPtr PlatformGetWindowHandle()
         {
             return PrimaryWindow.Handle;
         }
-        
-        private void PlatformSetWindowHandle(IntPtr windowHandle)
+
+        public override void PlatformSetWindowHandle(IntPtr windowHandle)
         {
         }
 
-        private bool PlatformIsRawInputAvailable()
+        public override bool PlatformIsRawInputAvailable()
         {
             return true;
         }
 
-        private MouseState PlatformGetState()
+        public override MouseState PlatformGetState()
         {
             throw new NotImplementedException();
         }
 
-        private MouseState PlatformGetState(GameWindow window)
+        public MouseState PlatformGetState(GameWindow window)
         {
             int x, y;
             var winFlags = SDL.WINDOW.GetWindowFlags(window.Handle);
@@ -56,7 +60,7 @@ namespace Microsoft.Xna.Framework.Input
             return window.MouseState;
         }
 
-        private void PlatformSetPosition(int x, int y)
+        public override void PlatformSetPosition(int x, int y)
         {
             PrimaryWindow.MouseState.X = x;
             PrimaryWindow.MouseState.Y = y;
@@ -64,9 +68,10 @@ namespace Microsoft.Xna.Framework.Input
             SDL.MOUSE.WarpInWindow(PrimaryWindow.Handle, x, y);
         }
 
-        private void PlatformSetCursor(MouseCursor cursor)
+        public override void PlatformSetCursor(MouseCursor cursor)
         {
             SDL.MOUSE.SetCursor(cursor.Handle);
         }
+
     }
 }
