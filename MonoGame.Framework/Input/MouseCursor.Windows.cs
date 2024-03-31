@@ -68,18 +68,19 @@ namespace Microsoft.Xna.Framework.Input
             // convert ABGR to ARGB
             for (int i = 0; i < data.Length; i += 4)
             {
-                var r = data[i];
+                byte r = data[i];
                 data[i] = data[i + 2];
                 data[i + 2] = r;
             }
 
-            var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            GCHandle gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                using (var bitmap = new Bitmap(w, h, h * 4, PixelFormat.Format32bppArgb, gcHandle.AddrOfPinnedObject()))
+                IntPtr dataPtr = gcHandle.AddrOfPinnedObject();
+                using (Bitmap bitmap = new Bitmap(w, h, h * 4, PixelFormat.Format32bppArgb, dataPtr))
                 {
                     IconInfo iconInfo = default(IconInfo);
-                    var hIcon = bitmap.GetHicon();
+                    IntPtr hIcon = bitmap.GetHicon();
                     GetIconInfo(hIcon, out iconInfo);
                     iconInfo.xHotspot = originx;
                     iconInfo.yHotspot = originy;
