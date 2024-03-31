@@ -41,6 +41,7 @@
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Input\KeyboardStrategy.cs" />
     <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Input\KeyboardInputStrategy.cs" />
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\KeyState.cs" />

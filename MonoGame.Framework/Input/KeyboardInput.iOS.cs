@@ -1,14 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 using UIKit;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class KeyboardInput
+    public sealed class ConcreteKeyboardInput : KeyboardInputStrategy
     {
         private TaskCompletionSource<string> tcs;
         private UIAlertView alert;
 
-        private Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
+        public override Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
             tcs = new TaskCompletionSource<string>();
 
@@ -42,7 +46,7 @@ namespace Microsoft.Xna.Framework.Input
             return tcs.Task;
         }
 
-        private void PlatformCancel(string result)
+        public override void PlatformCancel(string result)
         {
             if (!tcs.Task.IsCompleted)
                 tcs.SetResult(result);
@@ -52,5 +56,6 @@ namespace Microsoft.Xna.Framework.Input
                 alert.DismissWithClickedButtonIndex(0, true);
             });
         }
+
     }
 }

@@ -1,7 +1,10 @@
-﻿using System;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -26,21 +29,21 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
 #endif
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class KeyboardInput
+    public sealed class ConcreteKeyboardInput : KeyboardInputStrategy
     {
         private readonly CoreDispatcher _dispatcher;
 
         private TaskCompletionSource<string> _tcs;
         private InputDialog _inputDialog;
 
-        KeyboardInput()
+        public ConcreteKeyboardInput()
         {
             _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
-        private Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
+        public override Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
             _tcs = new TaskCompletionSource<string>();
 
@@ -57,7 +60,7 @@ namespace Microsoft.Xna.Framework.Input
             return _tcs.Task;
         }
 
-        private void PlatformCancel(string result)
+        public override void PlatformCancel(string result)
         {
             _dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await _inputDialog.CloseAsync());
 

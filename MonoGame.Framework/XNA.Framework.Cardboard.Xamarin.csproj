@@ -188,6 +188,7 @@
     <Compile Include="Input\JoystickState.cs" />
     <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Input\KeyboardInputStrategy.cs" />
     <Compile Include="Input\KeyboardInput.Android.cs" />
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />

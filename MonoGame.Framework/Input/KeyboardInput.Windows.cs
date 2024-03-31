@@ -1,15 +1,19 @@
-﻿using System.Drawing;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class KeyboardInput
+    public sealed class ConcreteKeyboardInput : KeyboardInputStrategy
     {
         private Form _dialog;
         private TaskCompletionSource<string> _tcs;
         
-        private Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
+        public override Task<string> PlatformShow(string title, string description, string defaultText, bool usePasswordMode)
         {
             _tcs = new TaskCompletionSource<string>();
 
@@ -87,11 +91,12 @@ namespace Microsoft.Xna.Framework.Input
             return _tcs.Task;
         }
 
-        private void PlatformCancel(string result)
+        public override void PlatformCancel(string result)
         {
             if (_dialog != null)
                 _dialog.Close();
             _tcs.SetResult(result);
         }
+
     }
 }

@@ -65,6 +65,7 @@
 
     <Compile Remove="Input\MessageBox.cs" />
     <Compile Remove="Input\KeyboardInput.cs" />
+    <Compile Include="Input\KeyboardInputStrategy.cs" />
 
     <Compile Include="Platform\Blazor\ConcreteGame.cs" />
     <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
