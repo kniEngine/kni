@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
 using System.Threading.Tasks;
 using Microsoft.Xna.Platform.Input;
 
@@ -11,11 +13,17 @@ namespace Microsoft.Xna.Platform.Input
         Task<string> Show(string title, string description, string defaultText = "", bool usePasswordMode = false);
         void Cancel(string result);
     }
+
+    public interface IPlatformKeyboardInput
+    {
+        T GetStrategy<T>() where T : KeyboardInputStrategy;
+    }
 }
 
 namespace Microsoft.Xna.Framework.Input
 {
-    public sealed partial class KeyboardInput : IKeyboardInput
+    public sealed class KeyboardInput : IKeyboardInput
+        , IPlatformKeyboardInput
     {
         private static KeyboardInput _current;
 
@@ -81,10 +89,17 @@ namespace Microsoft.Xna.Framework.Input
             ((IKeyboardInput)KeyboardInput.Current).Cancel(result);
         }
 
+        private KeyboardInputStrategy _strategy;
 
-        //private KeyboardInput()
-        //{
-        //}
+        T IPlatformKeyboardInput.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
+        private KeyboardInput()
+        {
+            _strategy = new ConcreteKeyboardInput();
+        }
 
 
         #region IKeyboardInput
@@ -103,7 +118,7 @@ namespace Microsoft.Xna.Framework.Input
 
             _isVisible = true;
 
-            string result = await PlatformShow(title, description, defaultText, usePasswordMode);
+            string result = await _strategy.PlatformShow(title, description, defaultText, usePasswordMode);
 
             _isVisible = false;
 
@@ -115,7 +130,7 @@ namespace Microsoft.Xna.Framework.Input
             if (!IsVisible)
                 throw new Exception("The function cannot be completed at this time: the MessageBox UI is not active.");
 
-            PlatformCancel(result);
+            _strategy.PlatformCancel(result);
         }
 
         #endregion IKeyboardInput
