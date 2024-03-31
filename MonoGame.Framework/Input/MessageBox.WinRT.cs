@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -6,20 +8,20 @@ using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class MessageBox
+    public sealed class ConcreteMessageBox : MessageBoxStrategy
     {
         private readonly CoreDispatcher _dispatcher;
         private TaskCompletionSource<int?> _tcs;
         private IAsyncOperation<IUICommand> _dialogResult;
 
-        private MessageBox()
+        public ConcreteMessageBox()
         {
             _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 
-        private Task<int?> PlatformShow(string title, string description, List<string> buttons)
+        public override Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             // TODO: MessageDialog only supports two buttons
             if (buttons.Count == 3)
@@ -52,7 +54,7 @@ namespace Microsoft.Xna.Framework.Input
             return _tcs.Task;
         }
 
-        private void PlatformCancel(int? result)
+        public override void PlatformCancel(int? result)
         {
             // TODO: MessageDialog doesn't hide on Windows Phone 8.1
             _tcs.SetResult(result);

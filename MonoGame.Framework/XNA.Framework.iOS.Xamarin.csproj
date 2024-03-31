@@ -168,6 +168,7 @@
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\MessageBox.cs" />
+    <Compile Include="Input\MessageBoxStrategy.cs" />
     <Compile Include="Input\MessageBox.IOS.cs" />
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseStrategy.cs" />
