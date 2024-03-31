@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Input
     {
         private static Sdl SDL { get { return Sdl.Current; } }
 
-        private readonly bool _isBuildInMouseCursor;
+        private readonly MouseCursorType _cursorType;
         private IntPtr _handle;
         
         private IntPtr PlatformGetHandle()
@@ -23,40 +23,54 @@ namespace Microsoft.Xna.Framework.Input
 
         private bool PlatformIsBuildInMouseCursor
         {
-            get { return _isBuildInMouseCursor; }
+            get { return _cursorType != MouseCursorType.User; }
         }
 
-
-        private MouseCursor(bool isBuildInMouseCursor, IntPtr handle)
+        private MouseCursor(MouseCursorType cursorType)
         {
-            _isBuildInMouseCursor = isBuildInMouseCursor;
-            _handle = handle;
-        }
+            _cursorType = cursorType;
+            _handle = IntPtr.Zero;
 
-        private MouseCursor(bool isBuildInMouseCursor, Sdl.Mouse.SystemCursor cursor)
-        {
-            _isBuildInMouseCursor = isBuildInMouseCursor;
+            Sdl.Mouse.SystemCursor cursor = CursorTypeToSDLCursor(cursorType);
             _handle = SDL.MOUSE.CreateSystemCursor(cursor);
         }
 
-
-        private static void PlatformInitalize()
+        private Sdl.Mouse.SystemCursor CursorTypeToSDLCursor(MouseCursorType cursorType)
         {
-            Arrow = new MouseCursor(true, Sdl.Mouse.SystemCursor.Arrow);
-            IBeam = new MouseCursor(true, Sdl.Mouse.SystemCursor.IBeam);
-            Wait = new MouseCursor(true, Sdl.Mouse.SystemCursor.Wait);
-            Crosshair = new MouseCursor(true, Sdl.Mouse.SystemCursor.Crosshair);
-            WaitArrow = new MouseCursor(true, Sdl.Mouse.SystemCursor.WaitArrow);
-            SizeNWSE = new MouseCursor(true, Sdl.Mouse.SystemCursor.SizeNWSE);
-            SizeNESW = new MouseCursor(true, Sdl.Mouse.SystemCursor.SizeNESW);
-            SizeWE = new MouseCursor(true, Sdl.Mouse.SystemCursor.SizeWE);
-            SizeNS = new MouseCursor(true, Sdl.Mouse.SystemCursor.SizeNS);
-            SizeAll = new MouseCursor(true, Sdl.Mouse.SystemCursor.SizeAll);
-            No = new MouseCursor(true, Sdl.Mouse.SystemCursor.No);
-            Hand = new MouseCursor(true, Sdl.Mouse.SystemCursor.Hand);
+            switch (cursorType)
+            {
+                case MouseCursorType.Arrow:
+                    return Sdl.Mouse.SystemCursor.Arrow;
+                case MouseCursorType.IBeam:
+                    return Sdl.Mouse.SystemCursor.IBeam;
+                case MouseCursorType.Wait:
+                    return Sdl.Mouse.SystemCursor.Wait;
+                case MouseCursorType.Crosshair:
+                    return Sdl.Mouse.SystemCursor.Crosshair;
+                case MouseCursorType.WaitArrow:
+                    return Sdl.Mouse.SystemCursor.WaitArrow;
+                case MouseCursorType.SizeNWSE:
+                    return Sdl.Mouse.SystemCursor.SizeNWSE;
+                case MouseCursorType.SizeNESW:
+                    return Sdl.Mouse.SystemCursor.SizeNESW;
+                case MouseCursorType.SizeWE:
+                    return Sdl.Mouse.SystemCursor.SizeWE;
+                case MouseCursorType.SizeNS:
+                    return Sdl.Mouse.SystemCursor.SizeNS;
+                case MouseCursorType.SizeAll:
+                    return Sdl.Mouse.SystemCursor.SizeAll;
+                case MouseCursorType.No:
+                    return Sdl.Mouse.SystemCursor.No;
+                case MouseCursorType.Hand:
+                    return Sdl.Mouse.SystemCursor.Hand;
+
+                default:
+                    throw new InvalidOperationException("cursorType");
+            }
         }
 
-        private static MouseCursor PlatformFromTexture2D(byte[] data, int w, int h, int originx, int originy)
+
+        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
             IntPtr surface = IntPtr.Zero;
             try
@@ -69,7 +83,8 @@ namespace Microsoft.Xna.Framework.Input
                 if (handle == IntPtr.Zero)
                     throw new InvalidOperationException("Failed to set surface for mouse cursor: " + SDL.GetError());
 
-                return new MouseCursor(false, handle);
+                _cursorType = MouseCursorType.User;
+                _handle = handle;
             }
             finally
             {
@@ -82,13 +97,15 @@ namespace Microsoft.Xna.Framework.Input
         {
             if (dispose)
             {
-
             }
 
             if (_handle != IntPtr.Zero)
+            {
                 SDL.MOUSE.FreeCursor(_handle);
+                _handle = IntPtr.Zero;
+            }
 
-            _handle = IntPtr.Zero;
         }
+
     }
 }

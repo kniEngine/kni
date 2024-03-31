@@ -14,6 +14,24 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public partial class MouseCursor : IDisposable
     {
+        enum MouseCursorType
+        {
+            Arrow = 1,
+            IBeam,
+            Wait,
+            Crosshair,
+            WaitArrow,
+            SizeNWSE,
+            SizeNESW,
+            SizeWE,
+            SizeNS,
+            SizeAll,
+            No,
+            Hand,
+
+            User = 0x80
+        }
+
         /// <summary>
         /// Gets the default arrow cursor.
         /// </summary>
@@ -90,7 +108,7 @@ namespace Microsoft.Xna.Framework.Input
             byte[] data = new byte[w * h * 4];
             texture.GetData(data);
 
-            return PlatformFromTexture2D(data, w, h, originx, originy);
+            return new MouseCursor(data, w, h, originx, originy);
         }
 
         public IntPtr Handle { get { return PlatformGetHandle(); } }
@@ -99,7 +117,18 @@ namespace Microsoft.Xna.Framework.Input
 
         static MouseCursor()
         {
-            PlatformInitalize();
+            Arrow = new MouseCursor(MouseCursorType.Arrow);
+            IBeam = new MouseCursor(MouseCursorType.IBeam);
+            Wait = new MouseCursor(MouseCursorType.Wait);
+            Crosshair = new MouseCursor(MouseCursorType.Crosshair);
+            WaitArrow = new MouseCursor(MouseCursorType.WaitArrow);
+            SizeNWSE = new MouseCursor(MouseCursorType.SizeNWSE);
+            SizeNESW = new MouseCursor(MouseCursorType.SizeNESW);
+            SizeWE = new MouseCursor(MouseCursorType.SizeWE);
+            SizeNS = new MouseCursor(MouseCursorType.SizeNS);
+            SizeAll = new MouseCursor(MouseCursorType.SizeAll);
+            No = new MouseCursor(MouseCursorType.No);
+            Hand = new MouseCursor(MouseCursorType.Hand);
         }
 
         ~MouseCursor()
