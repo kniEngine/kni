@@ -81,11 +81,11 @@
     <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />
     <Compile Include="Input\.iOS\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.iOS\ConcreteGamePad.cs" />
-    <Compile Include="Input\Joystick.Default.cs" />
-    <Compile Include="Input\Keyboard.Default.cs" />
+    <Compile Include="Input\.iOS\ConcreteJoystick.cs" />
+    <Compile Include="Input\.iOS\ConcreteKeyboard.cs" />
     <Compile Include="Input\.iOS\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.iOS\ConcreteMessageBox.cs" />
-    <Compile Include="Input\Mouse.Default.cs" />
+    <Compile Include="Input\.iOS\ConcreteMouse.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
     <Compile Include="Media\iOS\ConcreteAlbum.cs" />
     <Compile Include="Media\iOS\ConcreteMediaFactory.cs" />

@@ -152,7 +152,7 @@
 
     <Compile Include="Input\.WindowsDX\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteGamePad.cs" />
-    <Compile Include="Input\Joystick.Default.cs" />
+    <Compile Include="Input\.WindowsDX\ConcreteJoystick.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteKeyboard.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouse.cs" />
     <Compile Include="Input\Buttons.cs" />

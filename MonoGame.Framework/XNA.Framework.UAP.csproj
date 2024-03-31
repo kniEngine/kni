@@ -166,11 +166,11 @@
 
     <Compile Include="Input\.UAP\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.UAP\ConcreteGamePad.cs" />
-    <Compile Include="Input\Joystick.Default.cs" />
+    <Compile Include="Input\.UAP\ConcreteJoystick.cs" />
     <Compile Include="Input\.UAP\ConcreteKeyboard.cs" />
     <Compile Include="Input\.UAP\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.UAP\ConcreteMessageBox.cs" />
-    <Compile Include="Input\Mouse.Default.cs" />
+    <Compile Include="Input\.UAP\ConcreteMouse.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
