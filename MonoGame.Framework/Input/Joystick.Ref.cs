@@ -1,32 +1,33 @@
-﻿// Copyright (C)2022 Nick Kastellanos
+﻿// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class Joystick
+    public sealed class ConcreteJoystick : JoystickStrategy
     {
-        private bool PlatformIsSupported
+        public override bool PlatformIsSupported
         {
-            get { return false; } 
+            get { return false; }
         }
 
-        private int PlatformLastConnectedIndex
+        public override int PlatformLastConnectedIndex
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        private JoystickCapabilities PlatformGetCapabilities(int index)
+        public override JoystickCapabilities PlatformGetCapabilities(int index)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private JoystickState PlatformGetState(int index)
+        public override JoystickState PlatformGetState(int index)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformGetState(int index, ref JoystickState joystickState)
+        public override void PlatformGetState(int index, ref JoystickState joystickState)
         {
             throw new PlatformNotSupportedException();
         }

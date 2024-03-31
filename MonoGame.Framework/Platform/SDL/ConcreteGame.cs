@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Platform.Input;
 using MonoGame.Framework.Utilities;
 
 
@@ -147,7 +148,7 @@ namespace Microsoft.Xna.Platform
                 _window.Dispose();
                 _window = null;
 
-                Joystick.Current.CloseDevices();
+                ((IPlatformJoystick)Joystick.Current).GetStrategy<ConcreteJoystick>().CloseDevices();
 
                 SDL.Quit();
             }
