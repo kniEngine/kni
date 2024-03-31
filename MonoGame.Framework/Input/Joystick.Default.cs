@@ -2,23 +2,26 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
+// Copyright (C)2024 Nick Kastellanos
 
-namespace Microsoft.Xna.Framework.Input
+using System;
+using Microsoft.Xna.Framework.Input;
+
+namespace Microsoft.Xna.Platform.Input
 {
-    sealed partial class Joystick
+    public sealed class ConcreteJoystick : JoystickStrategy
     {
-        private bool PlatformIsSupported
+        public override bool PlatformIsSupported
         {
             get { return false; }
         }
 
-        private int PlatformLastConnectedIndex
+        public override int PlatformLastConnectedIndex
         {
             get { return -1; }
         }
 
-        private JoystickCapabilities PlatformGetCapabilities(int index)
+        public override JoystickCapabilities PlatformGetCapabilities(int index)
         {
             return new JoystickCapabilities()
             {
@@ -31,13 +34,13 @@ namespace Microsoft.Xna.Framework.Input
             };
         }
 
-        private JoystickState PlatformGetState(int index)
+        public override JoystickState PlatformGetState(int index)
         {
-            return Joystick.DefaultJoystickState;
+            return JoystickStrategy.DefaultJoystickState;
         }
 
 
-        private void PlatformGetState(int index, ref JoystickState joystickState)
+        public override void PlatformGetState(int index, ref JoystickState joystickState)
         {
 
         }

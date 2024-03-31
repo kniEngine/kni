@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Platform.Input;
 
@@ -16,6 +18,11 @@ namespace Microsoft.Xna.Platform.Input
         JoystickState GetState(int index);
         void GetState(int index, ref JoystickState joystickState);
     }
+
+    public interface IPlatformJoystick
+    {
+        T GetStrategy<T>() where T : JoystickStrategy;
+    }
 }
 
 namespace Microsoft.Xna.Framework.Input
@@ -23,7 +30,8 @@ namespace Microsoft.Xna.Framework.Input
     /// <summary> 
     /// Allows interaction with joysticks. Unlike <see cref="GamePad"/> the number of Buttons/Axes/DPads is not limited.
     /// </summary>
-    public sealed partial class Joystick : IJoystick
+    public sealed class Joystick : IJoystick
+        , IPlatformJoystick
     {
         private static Joystick _current;
 
@@ -46,17 +54,6 @@ namespace Microsoft.Xna.Framework.Input
                 }
             }
         }
-
-        /// <summary>
-        /// A default <see cref="JoystickState"/>.
-        /// </summary>
-        private static JoystickState DefaultJoystickState = new JoystickState
-        {
-            IsConnected = false,
-            Axes = new int[0],
-            Buttons = new ButtonState[0],
-            Hats = new JoystickHat[0]
-        };
 
         /// <summary>
         /// Gets a value indicating whether the current platform supports reading raw joystick data.
@@ -108,15 +105,23 @@ namespace Microsoft.Xna.Framework.Input
             ((IJoystick)Joystick.Current).GetState(index, ref joystickState);
         }
 
+        private JoystickStrategy _strategy;
+
+        T IPlatformJoystick.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
         private Joystick()
         {
+            _strategy = new ConcreteJoystick();
         }
 
         #region IJoystick
 
         bool IJoystick.IsSupported
         {
-            get { return PlatformIsSupported; }
+            get { return _strategy.PlatformIsSupported; }
         }
 
         /// <summary>
@@ -127,7 +132,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         int IJoystick.LastConnectedIndex
         {
-            get { return PlatformLastConnectedIndex; }
+            get { return _strategy.PlatformLastConnectedIndex; }
         }
 
         /// <summary>
@@ -137,7 +142,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The capabilities of the joystick.</returns>
         JoystickCapabilities IJoystick.GetCapabilities(int index)
         {
-            return PlatformGetCapabilities(index);
+            return _strategy.PlatformGetCapabilities(index);
         }
 
         /// <summary>
@@ -147,7 +152,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>The state of the joystick.</returns>
         JoystickState IJoystick.GetState(int index)
         {
-            return PlatformGetState(index);
+            return _strategy.PlatformGetState(index);
         }
 
         /// <summary>
@@ -157,7 +162,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="index">Index of the joystick you want to access.</param>
         void IJoystick.GetState(int index, ref JoystickState joystickState)
         {
-            PlatformGetState(index, ref joystickState);
+            _strategy.PlatformGetState(index, ref joystickState);
         }
 
         #endregion
