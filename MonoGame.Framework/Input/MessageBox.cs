@@ -1,3 +1,5 @@
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +16,18 @@ namespace Microsoft.Xna.Platform.Input
         Task<int?> Show(string title, string description, IEnumerable<string> buttons);
         void Cancel(int? result);
     }
+
+    public interface IPlatformMessageBox
+    {
+        T GetStrategy<T>() where T : MessageBoxStrategy;
+    }
 }
 
 namespace Microsoft.Xna.Framework.Input
 {
 
     public sealed partial class MessageBox : IMessageBox
+        , IPlatformMessageBox
     {
         private static MessageBox _current;
 
@@ -85,9 +93,17 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        //private MessageBox()
-        //{ 
-        //}
+        private MessageBoxStrategy _strategy;
+
+        T IPlatformMessageBox.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
+        private MessageBox()
+        {
+            _strategy = new ConcreteMessageBox();
+        }
 
         #region IMessageBox
 
@@ -109,7 +125,7 @@ namespace Microsoft.Xna.Framework.Input
             if (buttonsList.Count > 3 || buttonsList.Count == 0)
                 throw new ArgumentException("Invalid number of buttons: one to three required", "buttons");
 
-            int? result = await PlatformShow(title, description, buttonsList);
+            int? result = await _strategy.PlatformShow(title, description, buttonsList);
 
             _isVisible = false;
 
@@ -121,7 +137,7 @@ namespace Microsoft.Xna.Framework.Input
             if (!IsVisible)
                 throw new Exception("The function cannot be completed at this time: the MessageBox UI is not active.");
 
-            PlatformCancel(result);
+            _strategy.PlatformCancel(result);
         }
 
         #endregion IMessageBox

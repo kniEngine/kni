@@ -1,17 +1,19 @@
-﻿using System;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class MessageBox
+    public sealed class ConcreteMessageBox : MessageBoxStrategy
     {
-        private Task<int?> PlatformShow(string title, string description, List<string> buttons)
+        public override Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             throw new NotImplementedException("MessageBox is not implemented on this platform.");
         }
 
-        private void PlatformCancel(int? result)
+        public override void PlatformCancel(int? result)
         {
             throw new NotImplementedException("MessageBox is not implemented on this platform.");
         }

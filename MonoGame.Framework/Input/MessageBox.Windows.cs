@@ -1,17 +1,19 @@
-﻿using System;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class MessageBox
+    public sealed class ConcreteMessageBox : MessageBoxStrategy
     {
         private Form _dialog;
         private TaskCompletionSource<int?> _tcs;
 
-        private Task<int?> PlatformShow(string title, string description, List<string> buttons)
+        public override Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             _tcs = new TaskCompletionSource<int?>();
 
@@ -71,7 +73,7 @@ namespace Microsoft.Xna.Framework.Input
             return _tcs.Task;
         }
 
-        private void PlatformCancel(int? result)
+        public override void PlatformCancel(int? result)
         {
             if (_dialog != null)
                 _dialog.Close();

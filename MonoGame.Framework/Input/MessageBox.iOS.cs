@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UIKit;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class MessageBox
+    public sealed class ConcreteMessageBox : MessageBoxStrategy
     {
         private TaskCompletionSource<int?> tcs;
         private UIAlertView alert;
 
-        private Task<int?> PlatformShow(string title, string description, List<string> buttons)
+        public override Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             tcs = new TaskCompletionSource<int?>();
             UIApplication.SharedApplication.InvokeOnMainThread(delegate
@@ -30,7 +33,7 @@ namespace Microsoft.Xna.Framework.Input
             return tcs.Task;
         }
 
-        private void PlatformCancel(int? result)
+        public override void PlatformCancel(int? result)
         {
             if (!tcs.Task.IsCompleted)
                 tcs.SetResult(result);

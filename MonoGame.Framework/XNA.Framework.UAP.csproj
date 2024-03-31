@@ -195,6 +195,7 @@
     <Compile Include="Platform\Input\KeysHelper.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\MessageBox.cs" />
+    <Compile Include="Input\MessageBoxStrategy.cs" />
     <Compile Include="Input\MessageBox.WinRT.cs" />
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseStrategy.cs" />

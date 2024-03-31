@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Microsoft.Xna.Framework;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public sealed partial class MessageBox
+    public sealed class ConcreteMessageBox : MessageBoxStrategy
     {
         private TaskCompletionSource<int?> tcs;
         private AlertDialog alert;
 
-        private Task<int?> PlatformShow(string title, string description, List<string> buttons)
+        public override Task<int?> PlatformShow(string title, string description, List<string> buttons)
         {
             tcs = new TaskCompletionSource<int?>();
             AndroidGameWindow.Activity.RunOnUiThread(() =>
@@ -56,7 +60,7 @@ namespace Microsoft.Xna.Framework.Input
             return tcs.Task;
         }
 
-        private void PlatformCancel(int? result)
+        public override void PlatformCancel(int? result)
         {
             alert.Dismiss();
             tcs.SetResult(result);
