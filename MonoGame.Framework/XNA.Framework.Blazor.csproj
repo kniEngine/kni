@@ -75,10 +75,10 @@
     <Compile Include="ConcreteGraphicsDeviceManager.Blazor.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Input\.Blazor\Touch\ConcreteTouchPanel.cs" />
-    <Compile Include="Input\GamePad.Blazor.cs" />
-    <Compile Include="Input\Joystick.Blazor.cs" />
-    <Compile Include="Input\Keyboard.Blazor.cs" />
-    <Compile Include="Input\Mouse.Blazor.cs" />
+    <Compile Include="Input\.Blazor\ConcreteGamePad.cs" />
+    <Compile Include="Input\.Blazor\ConcreteJoystick.cs" />
+    <Compile Include="Input\.Blazor\ConcreteKeyboard.cs" />
+    <Compile Include="Input\.Blazor\ConcreteMouse.cs" />
     <Compile Include="Input\MouseCursor.Blazor.cs" />
     <Compile Include="Media\Blazor\ConcreteAlbum.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaFactory.cs" />

@@ -168,11 +168,15 @@
     <Compile Include="ConcreteGraphicsDeviceManager.Cardboard.cs" />
 
     <Compile Include="Input\.Android\Touch\ConcreteTouchPanel.cs" />
+    <Compile Include="Input\.Android\ConcreteGamePad.cs" />
+    <Compile Include="Input\Joystick.Default.cs" />
+    <Compile Include="Input\.Android\ConcreteKeyboardInput.cs" />
+    <Compile Include="Input\.Android\ConcreteMessageBox.cs" />
+    <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
     <Compile Include="Input\GamePadStrategy.cs" />
-    <Compile Include="Input\GamePad.Android.cs" />
     <Compile Include="Input\GamePadButtons.cs" />
     <Compile Include="Input\GamePadCapabilities.cs" />
     <Compile Include="Input\GamePadDeadZone.cs" />
@@ -187,19 +191,15 @@
     <Compile Include="Input\JoystickCapabilities.cs" />
     <Compile Include="Input\JoystickHat.cs" />
     <Compile Include="Input\JoystickState.cs" />
-    <Compile Include="Input\Joystick.Default.cs" />
     <Compile Include="Input\KeyboardInput.cs" />
     <Compile Include="Input\KeyboardInputStrategy.cs" />
-    <Compile Include="Input\KeyboardInput.Android.cs" />
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\MessageBox.cs" />
     <Compile Include="Input\MessageBoxStrategy.cs" />
-    <Compile Include="Input\MessageBox.Android.cs" />
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseStrategy.cs" />
-    <Compile Include="Input\Mouse.Default.cs" />
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseCursor.Default.cs" />
     <Compile Include="Input\MouseState.cs" />
