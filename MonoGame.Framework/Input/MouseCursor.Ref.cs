@@ -7,6 +7,7 @@ namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
+        private readonly MouseCursorType _cursorType;
         
         private IntPtr PlatformGetHandle()
         {
@@ -19,7 +20,7 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        private MouseCursor(bool isBuildInMouseCursor)
+        private MouseCursor(MouseCursorType cursorType)
         {
             throw new PlatformNotSupportedException();
         }

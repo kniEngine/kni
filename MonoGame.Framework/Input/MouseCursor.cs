@@ -14,6 +14,24 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public partial class MouseCursor : IDisposable
     {
+        enum MouseCursorType
+        {
+            Arrow = 1,
+            IBeam,
+            Wait,
+            Crosshair,
+            WaitArrow,
+            SizeNWSE,
+            SizeNESW,
+            SizeWE,
+            SizeNS,
+            SizeAll,
+            No,
+            Hand,
+
+            User = 0x80
+        }
+
         /// <summary>
         /// Gets the default arrow cursor.
         /// </summary>

@@ -16,11 +16,11 @@ namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
-        private readonly bool _isBuildInMouseCursor;
+        private readonly MouseCursorType _cursorType;
         private IntPtr _handle;
         
         WinFormsCursor _winFormsCursor;
-        
+
         private IntPtr PlatformGetHandle()
         {
             return _handle;
@@ -28,39 +28,76 @@ namespace Microsoft.Xna.Framework.Input
 
         private bool PlatformIsBuildInMouseCursor
         {
-            get { return _isBuildInMouseCursor; }
+            get { return _cursorType != MouseCursorType.User; }
         }
 
         internal WinFormsCursor WinFormsCursor { get { return _winFormsCursor; } }
 
 
-        private MouseCursor(bool isBuildInMouseCursor, IntPtr handle)
+        private MouseCursor(IntPtr handle)
         {
-            _isBuildInMouseCursor = isBuildInMouseCursor;
+            _cursorType = MouseCursorType.User;
             _handle = handle;
+
             _winFormsCursor = new WinFormsCursor(handle);
         }
 
-        private MouseCursor(bool isBuildInMouseCursor, WinFormsCursor cursor)
+        private MouseCursor(MouseCursorType cursorType)
         {
-            _isBuildInMouseCursor = isBuildInMouseCursor;
-            _winFormsCursor = cursor;
+            _cursorType = cursorType;
+            _handle = IntPtr.Zero;
+
+            _winFormsCursor = CursorTypeToWinFormsCursor(cursorType);
+        }
+
+        private WinFormsCursor CursorTypeToWinFormsCursor(MouseCursorType cursorType)
+        {
+            switch (cursorType)
+            {
+                case MouseCursorType.Arrow:
+                    return WinFormsCursors.Arrow;
+                case MouseCursorType.IBeam:
+                    return WinFormsCursors.IBeam;
+                case MouseCursorType.Wait:
+                    return WinFormsCursors.WaitCursor;
+                case MouseCursorType.Crosshair:
+                    return WinFormsCursors.Cross;
+                case MouseCursorType.WaitArrow:
+                    return WinFormsCursors.AppStarting;
+                case MouseCursorType.SizeNWSE:
+                    return WinFormsCursors.SizeNWSE;
+                case MouseCursorType.SizeNESW:
+                    return WinFormsCursors.SizeNESW;
+                case MouseCursorType.SizeWE:
+                    return WinFormsCursors.SizeWE;
+                case MouseCursorType.SizeNS:
+                    return WinFormsCursors.SizeNS;
+                case MouseCursorType.SizeAll:
+                    return WinFormsCursors.SizeAll;
+                case MouseCursorType.No:
+                    return WinFormsCursors.No;
+                case MouseCursorType.Hand:
+                    return WinFormsCursors.Hand;
+
+                default:
+                    throw new InvalidOperationException("cursorType");
+            }
         }
 
         private static void PlatformInitalize()
         {
-            Arrow = new MouseCursor(true, WinFormsCursors.Arrow);
-            IBeam = new MouseCursor(true, WinFormsCursors.IBeam);
-            Wait = new MouseCursor(true, WinFormsCursors.WaitCursor);
-            Crosshair = new MouseCursor(true, WinFormsCursors.Cross);
-            WaitArrow = new MouseCursor(true, WinFormsCursors.AppStarting);
-            SizeNWSE = new MouseCursor(true, WinFormsCursors.SizeNWSE);
-            SizeNESW = new MouseCursor(true, WinFormsCursors.SizeNESW);
-            SizeWE = new MouseCursor(true, WinFormsCursors.SizeWE);
-            SizeNS = new MouseCursor(true, WinFormsCursors.SizeNS);
-            SizeAll = new MouseCursor(true, WinFormsCursors.SizeAll);
-            No = new MouseCursor(true, WinFormsCursors.No);
-            Hand = new MouseCursor(true, WinFormsCursors.Hand);
+            Arrow     = new MouseCursor(MouseCursorType.Arrow);
+            IBeam     = new MouseCursor(MouseCursorType.IBeam);
+            Wait      = new MouseCursor(MouseCursorType.Wait);
+            Crosshair = new MouseCursor(MouseCursorType.Crosshair);
+            WaitArrow = new MouseCursor(MouseCursorType.WaitArrow);
+            SizeNWSE  = new MouseCursor(MouseCursorType.SizeNWSE);
+            SizeNESW  = new MouseCursor(MouseCursorType.SizeNESW);
+            SizeWE    = new MouseCursor(MouseCursorType.SizeWE);
+            SizeNS    = new MouseCursor(MouseCursorType.SizeNS);
+            SizeAll   = new MouseCursor(MouseCursorType.SizeAll);
+            No        = new MouseCursor(MouseCursorType.No);
+            Hand      = new MouseCursor(MouseCursorType.Hand);
         }
 
         private static MouseCursor PlatformFromTexture2D(byte[] data, int w, int h, int originx, int originy)
@@ -69,7 +106,7 @@ namespace Microsoft.Xna.Framework.Input
             for (int i = 0; i < data.Length; i += 4)
             {
                 byte r = data[i];
-                data[i] = data[i + 2];
+                data[i + 0] = data[i + 2];
                 data[i + 2] = r;
             }
 
@@ -89,7 +126,7 @@ namespace Microsoft.Xna.Framework.Input
                     DeleteObject(iconInfo.ColorBitmap);
                     DeleteObject(iconInfo.MaskBitmap);
                     DestroyIcon(hIcon);
-                    return new MouseCursor(false, handle);
+                    return new MouseCursor(handle);
                 }
             }
             finally

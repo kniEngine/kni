@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
-        private readonly bool _isBuildInMouseCursor;
+        private readonly MouseCursorType _cursorType;
         private IntPtr _handle;
         
         private IntPtr PlatformGetHandle()
@@ -21,31 +21,31 @@ namespace Microsoft.Xna.Framework.Input
 
         private bool PlatformIsBuildInMouseCursor
         {
-            get { return _isBuildInMouseCursor; }
+            get { return _cursorType != MouseCursorType.User; }
         }
 
 
-        private MouseCursor(bool isBuildInMouseCursor)
+        private MouseCursor(MouseCursorType cursorType)
         {
-            _isBuildInMouseCursor = isBuildInMouseCursor;
+            _cursorType = cursorType;
             _handle = IntPtr.Zero;
         }
 
 
         private static void PlatformInitalize()
         {
-            Arrow = new MouseCursor(true);
-            IBeam = new MouseCursor(true);
-            Wait = new MouseCursor(true);
-            Crosshair = new MouseCursor(true);
-            WaitArrow = new MouseCursor(true);
-            SizeNWSE = new MouseCursor(true);
-            SizeNESW = new MouseCursor(true);
-            SizeWE = new MouseCursor(true);
-            SizeNS = new MouseCursor(true);
-            SizeAll = new MouseCursor(true);
-            No = new MouseCursor(true);
-            Hand = new MouseCursor(true);
+            Arrow     = new MouseCursor(MouseCursorType.Arrow);
+            IBeam     = new MouseCursor(MouseCursorType.IBeam);
+            Wait      = new MouseCursor(MouseCursorType.Wait);
+            Crosshair = new MouseCursor(MouseCursorType.Crosshair);
+            WaitArrow = new MouseCursor(MouseCursorType.WaitArrow);
+            SizeNWSE  = new MouseCursor(MouseCursorType.SizeNWSE);
+            SizeNESW  = new MouseCursor(MouseCursorType.SizeNESW);
+            SizeWE    = new MouseCursor(MouseCursorType.SizeWE);
+            SizeNS    = new MouseCursor(MouseCursorType.SizeNS);
+            SizeAll   = new MouseCursor(MouseCursorType.SizeAll);
+            No        = new MouseCursor(MouseCursorType.No);
+            Hand      = new MouseCursor(MouseCursorType.Hand);
         }
 
         private static MouseCursor PlatformFromTexture2D(byte[] data, int w, int h, int originx, int originy)
@@ -55,6 +55,10 @@ namespace Microsoft.Xna.Framework.Input
 
         private void PlatformDispose(bool dispose)
         {
+            if (dispose)
+            {
+            }
+
         }
     }
 }
