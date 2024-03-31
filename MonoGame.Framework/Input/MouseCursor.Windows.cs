@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private static void PlatformInitalize()
+        private static void PlatformInitialize()
         {
             Arrow     = new MouseCursor(MouseCursorType.Arrow);
             IBeam     = new MouseCursor(MouseCursorType.IBeam);

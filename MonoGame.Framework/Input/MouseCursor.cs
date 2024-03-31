@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Framework.Input
 
         static MouseCursor()
         {
-            PlatformInitalize();
+            PlatformInitialize();
         }
 
         ~MouseCursor()

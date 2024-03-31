@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        private static void PlatformInitalize()
+        private static void PlatformInitialize()
         {
             throw new PlatformNotSupportedException();
         }
