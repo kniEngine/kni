@@ -117,7 +117,18 @@ namespace Microsoft.Xna.Framework.Input
 
         static MouseCursor()
         {
-            PlatformInitialize();
+            Arrow = new MouseCursor(MouseCursorType.Arrow);
+            IBeam = new MouseCursor(MouseCursorType.IBeam);
+            Wait = new MouseCursor(MouseCursorType.Wait);
+            Crosshair = new MouseCursor(MouseCursorType.Crosshair);
+            WaitArrow = new MouseCursor(MouseCursorType.WaitArrow);
+            SizeNWSE = new MouseCursor(MouseCursorType.SizeNWSE);
+            SizeNESW = new MouseCursor(MouseCursorType.SizeNESW);
+            SizeWE = new MouseCursor(MouseCursorType.SizeWE);
+            SizeNS = new MouseCursor(MouseCursorType.SizeNS);
+            SizeAll = new MouseCursor(MouseCursorType.SizeAll);
+            No = new MouseCursor(MouseCursorType.No);
+            Hand = new MouseCursor(MouseCursorType.Hand);
         }
 
         ~MouseCursor()
