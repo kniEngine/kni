@@ -54,7 +54,7 @@
   
   <ItemGroup>
     <Compile Remove="Input\KeyboardInput.cs" />
-    <Compile Include="Input\KeyboardInputStrategy.cs" />
+    <Compile Remove="Input\KeyboardInputStrategy.cs" />
     <Compile Remove="Input\MessageBox.cs" />
   </ItemGroup>
   
