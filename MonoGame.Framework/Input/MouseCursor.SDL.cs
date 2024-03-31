@@ -26,14 +26,6 @@ namespace Microsoft.Xna.Framework.Input
             get { return _cursorType != MouseCursorType.User; }
         }
 
-
-        private MouseCursor(IntPtr handle)
-        {
-            _cursorType = MouseCursorType.User;
-            _handle = handle;
-
-        }
-
         private MouseCursor(MouseCursorType cursorType)
         {
             _cursorType = cursorType;
@@ -77,7 +69,8 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private static MouseCursor PlatformFromTexture2D(byte[] data, int w, int h, int originx, int originy)
+
+        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
             IntPtr surface = IntPtr.Zero;
             try
@@ -90,7 +83,8 @@ namespace Microsoft.Xna.Framework.Input
                 if (handle == IntPtr.Zero)
                     throw new InvalidOperationException("Failed to set surface for mouse cursor: " + SDL.GetError());
 
-                return new MouseCursor(handle);
+                _cursorType = MouseCursorType.User;
+                _handle = handle;
             }
             finally
             {

@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Framework.Input
             byte[] data = new byte[w * h * 4];
             texture.GetData(data);
 
-            return PlatformFromTexture2D(data, w, h, originx, originy);
+            return new MouseCursor(data, w, h, originx, originy);
         }
 
         public IntPtr Handle { get { return PlatformGetHandle(); } }

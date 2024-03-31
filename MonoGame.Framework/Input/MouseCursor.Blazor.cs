@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        private static MouseCursor PlatformFromTexture2D(byte[] data, int w, int h, int originx, int originy)
+        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
             throw new PlatformNotSupportedException();
         }

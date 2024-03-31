@@ -34,14 +34,6 @@ namespace Microsoft.Xna.Framework.Input
         internal WinFormsCursor WinFormsCursor { get { return _winFormsCursor; } }
 
 
-        private MouseCursor(IntPtr handle)
-        {
-            _cursorType = MouseCursorType.User;
-            _handle = handle;
-
-            _winFormsCursor = new WinFormsCursor(handle);
-        }
-
         private MouseCursor(MouseCursorType cursorType)
         {
             _cursorType = cursorType;
@@ -85,7 +77,7 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        private static MouseCursor PlatformFromTexture2D(byte[] data, int w, int h, int originx, int originy)
+        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
             // convert ABGR to ARGB
             for (int i = 0; i < data.Length; i += 4)
@@ -111,7 +103,10 @@ namespace Microsoft.Xna.Framework.Input
                     DeleteObject(iconInfo.ColorBitmap);
                     DeleteObject(iconInfo.MaskBitmap);
                     DestroyIcon(hIcon);
-                    return new MouseCursor(handle);
+
+                    _cursorType = MouseCursorType.User;
+                    _handle = handle;
+                    _winFormsCursor = new WinFormsCursor(handle);
                 }
             }
             finally
