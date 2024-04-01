@@ -186,11 +186,6 @@ namespace Microsoft.Xna.Platform
             get { return _window; }
             protected set
             {
-                if (this.Window == null)
-                {
-                    ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = value;
-                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = value;
-                }
 
                 _window = value;
             }
