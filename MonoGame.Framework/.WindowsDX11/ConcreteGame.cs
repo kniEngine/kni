@@ -19,13 +19,12 @@ namespace Microsoft.Xna.Platform
     {
         //internal static string LaunchParameters;
 
-        private WinFormsGameWindow _window;
+        private WinFormsGameWindow _gameWindow;
 
         public ConcreteGame(Game game) : base(game)
         {
-            _window = new WinFormsGameWindow(this);
-
-            Window = _window;
+            _gameWindow = new WinFormsGameWindow(this);
+            base.Window = _gameWindow;
         }
 
         internal override void Run()
@@ -41,7 +40,7 @@ namespace Microsoft.Xna.Platform
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
 
-            _window.RunLoop();
+            _gameWindow.RunLoop();
 
             Game.DoEndRun();
             Game.DoExiting();
@@ -60,7 +59,7 @@ namespace Microsoft.Xna.Platform
                 if (base.IsMouseVisible != value)
                 {
                     base.IsMouseVisible = value;
-                    _window.MouseVisibleToggled();
+                    _gameWindow.MouseVisibleToggled();
                 }
             }
         }
@@ -70,21 +69,21 @@ namespace Microsoft.Xna.Platform
             var gdm = this.GraphicsDeviceManager;
             if (gdm == null)
             {
-                _window.Initialize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+                _gameWindow.Initialize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
             }
             else
             {
                 var pp = this.GraphicsDevice.PresentationParameters;
-                _window.Initialize(pp);
+                _gameWindow.Initialize(pp);
             }
         }
         
         public override void TickExiting()
         {
-            if (_window != null)
-                _window.Dispose();
+            if (_gameWindow != null)
+                _gameWindow.Dispose();
 
-            _window = null;
+            _gameWindow = null;
             Window = null;
         }
 
@@ -94,17 +93,17 @@ namespace Microsoft.Xna.Platform
 
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
-            _window.OnPresentationChanged(pp);
+            _gameWindow.OnPresentationChanged(pp);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (_window != null)
+                if (_gameWindow != null)
                 {
-                    _window.Dispose();
-                    _window = null;
+                    _gameWindow.Dispose();
+                    _gameWindow = null;
                     Window = null;
                 }
                 
