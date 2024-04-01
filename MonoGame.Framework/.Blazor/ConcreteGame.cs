@@ -22,8 +22,7 @@ namespace Microsoft.Xna.Platform
         public ConcreteGame(Game game) : base(game)
         {
             _window = new BlazorGameWindow(this);
-
-            Window = _window;
+            base.Window = _window;
         }
 
         internal override void Run()

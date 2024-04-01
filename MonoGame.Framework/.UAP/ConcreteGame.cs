@@ -49,9 +49,7 @@ namespace Microsoft.Xna.Platform
             ConcreteGame._concreteGameInstance = this;
 
             UAPGameWindow uapGameWindow = UAPGameWindow.Instance;
-
-            // Setup the game window.
-            Window = uapGameWindow;
+            base.Window = uapGameWindow;
             uapGameWindow.Game = game;
 
             // Register the CoreWindow with the services registry

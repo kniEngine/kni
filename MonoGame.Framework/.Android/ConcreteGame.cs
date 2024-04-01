@@ -22,6 +22,8 @@ namespace Microsoft.Xna.Platform
         private static ConcreteGame _concreteGameInstance = null;
         internal static ConcreteGame GameConcreteInstance { get { return ConcreteGame._concreteGameInstance; } }
 
+        private AndroidGameWindow _gameWindow;
+
         public ConcreteGame(Game game) : base(game)
         {
             ConcreteGame._concreteGameInstance = this;
@@ -32,7 +34,8 @@ namespace Microsoft.Xna.Platform
             AndroidGameActivity.Resumed += Activity_Resumed;
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
-            Window = _gameWindow;
+            base.Window = _gameWindow;
+
             Services.AddService(typeof(View), _gameWindow.GameView);
 
             ConcreteMediaLibraryStrategy.Context = AndroidGameWindow.Activity;
@@ -51,7 +54,6 @@ namespace Microsoft.Xna.Platform
             base.Dispose(disposing);
         }
 
-        private AndroidGameWindow _gameWindow;
 
         public override void Exit()
         {

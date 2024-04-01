@@ -58,7 +58,9 @@ namespace Microsoft.Xna.Platform
 
             _viewController = new iOSGameViewController(this);
             game.Services.AddService(typeof(UIViewController), _viewController);
-            Window = new iOSGameWindow(_viewController);
+
+            GameWindow gameWindow = new iOSGameWindow(_viewController);
+            base.Window = gameWindow;
 
             _mainWindow.Add(_viewController.View);
 

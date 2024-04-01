@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
+        private SdlGameWindow _window;
+
         private Sdl SDL { get { return Sdl.Current; } }
 
         internal override void Run()
@@ -49,7 +51,6 @@ namespace Microsoft.Xna.Platform
 
 
         private bool _isExiting;
-        private SdlGameWindow _window;
 
         public ConcreteGame(Game game) : base(game)
         {
@@ -72,7 +73,8 @@ namespace Microsoft.Xna.Platform
             SDL.DisableScreenSaver();
 
             ((Microsoft.Xna.Platform.Input.IPlatformGamePad)GamePad.Current).GetStrategy<Microsoft.Xna.Platform.Input.ConcreteGamePad>().InitDatabase();
-            Window = _window = new SdlGameWindow(Game);
+            _window = new SdlGameWindow(Game);
+            base.Window = _window;
         }
 
         public override void BeforeInitialize()
