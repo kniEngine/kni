@@ -74,7 +74,6 @@
     <Compile Include="Input\.UAP\ConcreteMouse.cs" />
     <Compile Include="Input\.UAP\ConcreteMouseCursor.cs" />
     <Compile Include="Platform\Input\KeysHelper.cs" />
-    <Compile Include="Platform\Input\Touch\TouchQueue.cs" />
     <Compile Include="Media\WME\ConcreteAlbum.cs" />
     <Compile Include="Media\WME\ConcreteMediaFactory.cs" />
     <Compile Include="Media\WME\ConcreteMediaLibrary.cs" />
