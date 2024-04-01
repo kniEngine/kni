@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override void BeforeUpdate()
+        public override void Android_BeforeUpdate()
         {
             throw new PlatformNotSupportedException();
         }

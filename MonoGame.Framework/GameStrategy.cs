@@ -361,7 +361,7 @@ namespace Microsoft.Xna.Platform
         /// <summary>
         /// Gives derived classes an opportunity to do work just before Update is called.
         /// </summary>
-        public abstract void BeforeUpdate();
+        public abstract void Android_BeforeUpdate();
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.

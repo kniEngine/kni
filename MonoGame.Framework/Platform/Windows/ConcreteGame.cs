@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform
             Window = null;
         }
 
-        public override void BeforeUpdate()
+        public override void Android_BeforeUpdate()
         {
         }
 

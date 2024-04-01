@@ -440,7 +440,7 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            Strategy.BeforeUpdate();
+            Strategy.Android_BeforeUpdate();
 
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
 

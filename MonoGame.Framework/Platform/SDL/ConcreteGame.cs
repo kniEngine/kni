@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Platform
             _isExiting = true;
         }
 
-        public override void BeforeUpdate()
+        public override void Android_BeforeUpdate()
         {
         }
 

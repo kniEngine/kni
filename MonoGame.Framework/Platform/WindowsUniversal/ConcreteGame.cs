@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override void BeforeUpdate()
+        public override void Android_BeforeUpdate()
         {
         }
 

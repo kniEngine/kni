@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Platform
             _viewController.View.Present();
         }
 
-        public override void BeforeUpdate()
+        public override void Android_BeforeUpdate()
         {
         }
 
