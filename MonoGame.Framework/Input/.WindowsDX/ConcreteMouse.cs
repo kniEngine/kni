@@ -14,8 +14,6 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
-        internal GameWindow PrimaryWindow;
-
         [DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
         [return: MarshalAsAttribute(UnmanagedType.Bool)]
         private static extern bool SetCursorPos(int X, int Y);

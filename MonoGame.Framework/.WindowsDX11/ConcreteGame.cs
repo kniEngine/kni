@@ -10,9 +10,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Platform.Input;
 using Microsoft.Xna.Platform.Input.Touch;
 using MonoGame.Framework;
 
@@ -29,7 +27,6 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new WinFormsGameWindow(this);
             if (base.Window == null)
             {
-                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = _gameWindow;
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = _gameWindow;
             }
             base.Window = _gameWindow;
@@ -119,7 +116,6 @@ namespace Microsoft.Xna.Platform
 
             base.Dispose(disposing);
 
-            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
         }
     }

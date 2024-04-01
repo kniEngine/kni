@@ -18,9 +18,7 @@ using ObjCRuntime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Platform.Input;
 using Microsoft.Xna.Platform.Input.Touch;
 //using Microsoft.Xna.Framework.GamerServices;
 
@@ -64,7 +62,6 @@ namespace Microsoft.Xna.Platform
             GameWindow gameWindow = new iOSGameWindow(_viewController);
             if (base.Window == null)
             {
-                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = gameWindow;
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = gameWindow;
             }
             base.Window = gameWindow;
@@ -155,7 +152,6 @@ namespace Microsoft.Xna.Platform
                 }
             }
 
-            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
         }
 

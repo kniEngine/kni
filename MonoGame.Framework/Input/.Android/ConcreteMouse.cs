@@ -12,15 +12,17 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
-        internal GameWindow PrimaryWindow;
+        private IntPtr _wndHandle = IntPtr.Zero;
+        private MouseState _mouseState;
 
         public override IntPtr PlatformGetWindowHandle()
         {
-            return IntPtr.Zero;
+            return _wndHandle;
         }
 
         public override void PlatformSetWindowHandle(IntPtr windowHandle)
         {
+            _wndHandle = windowHandle;
         }
 
         public override bool PlatformIsRawInputAvailable()
@@ -30,18 +32,13 @@ namespace Microsoft.Xna.Platform.Input
 
         public override MouseState PlatformGetState()
         {
-            throw new NotImplementedException();
-        }
-
-        public MouseState PlatformGetState(GameWindow window)
-        {
-            return window.MouseState;
+            return _mouseState;
         }
 
         public override void PlatformSetPosition(int x, int y)
         {
-            PrimaryWindow.MouseState.X = x;
-            PrimaryWindow.MouseState.Y = y;
+            _mouseState.X = x;
+            _mouseState.Y = y;
         }
 
         public override void PlatformSetCursor(MouseCursor cursor)
