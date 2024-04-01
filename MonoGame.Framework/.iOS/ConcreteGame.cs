@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform
     sealed class ConcreteGame : GameStrategy
     {
         private iOSGameViewController _viewController;
-        private UIWindow _mainWindow;
+        private UIWindow _uiWindow;
         private List<NSObject> _applicationObservers;
         private CADisplayLink _displayLink;
 
@@ -51,10 +51,10 @@ namespace Microsoft.Xna.Platform
             #endif
 
             // Create a full-screen window
-            _mainWindow = new UIWindow(UIScreen.MainScreen.Bounds);
+            _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
             //_mainWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
             
-            game.Services.AddService(typeof(UIWindow), _mainWindow);
+            game.Services.AddService(typeof(UIWindow), _uiWindow);
 
             _viewController = new iOSGameViewController(this);
             game.Services.AddService(typeof(UIViewController), _viewController);
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform
             GameWindow gameWindow = new iOSGameWindow(_viewController);
             base.Window = gameWindow;
 
-            _mainWindow.Add(_viewController.View);
+            _uiWindow.Add(_viewController.View);
 
             _viewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
 
@@ -140,10 +140,10 @@ namespace Microsoft.Xna.Platform
                     _viewController = null;
                 }
 
-                if (_mainWindow != null)
+                if (_uiWindow != null)
                 {
-                    _mainWindow.Dispose();
-                    _mainWindow = null;
+                    _uiWindow.Dispose();
+                    _uiWindow = null;
                 }
             }
         }
@@ -168,12 +168,12 @@ namespace Microsoft.Xna.Platform
         private void StartRunLoop()
         {
             // Show the window
-            _mainWindow.MakeKeyAndVisible();
+            _uiWindow.MakeKeyAndVisible();
 
             // In iOS 8+ we need to set the root view controller *after* Window MakeKey
             // This ensures that the viewController's supported interface orientations
             // will be respected at launch
-            _mainWindow.RootViewController = _viewController;
+            _uiWindow.RootViewController = _viewController;
 
             BeginObservingUIApplication();
 
