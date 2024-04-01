@@ -8,7 +8,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Input;
 using WinFormsCursor = System.Windows.Forms.Cursor;
 using WinFormsCursors = System.Windows.Forms.Cursors;
 
@@ -16,59 +16,48 @@ namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
-        private readonly MouseCursorType _cursorType;
-        private IntPtr _handle;
-        
         WinFormsCursor _winFormsCursor;
-
-        private IntPtr PlatformGetHandle()
-        {
-            return _handle;
-        }
-
-        private bool PlatformIsBuildInMouseCursor
-        {
-            get { return _cursorType != MouseCursorType.User; }
-        }
 
         internal WinFormsCursor WinFormsCursor { get { return _winFormsCursor; } }
 
 
-        private MouseCursor(MouseCursorType cursorType)
+        private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            _cursorType = cursorType;
-            _handle = IntPtr.Zero;
+            _strategy = new MouseCursorStrategy();
+
+            _strategy._cursorType = cursorType;
+            _strategy._handle = IntPtr.Zero;
 
             _winFormsCursor = CursorTypeToWinFormsCursor(cursorType);
         }
 
-        private WinFormsCursor CursorTypeToWinFormsCursor(MouseCursorType cursorType)
+        private WinFormsCursor CursorTypeToWinFormsCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
             switch (cursorType)
             {
-                case MouseCursorType.Arrow:
+                case MouseCursorStrategy.MouseCursorType.Arrow:
                     return WinFormsCursors.Arrow;
-                case MouseCursorType.IBeam:
+                case MouseCursorStrategy.MouseCursorType.IBeam:
                     return WinFormsCursors.IBeam;
-                case MouseCursorType.Wait:
+                case MouseCursorStrategy.MouseCursorType.Wait:
                     return WinFormsCursors.WaitCursor;
-                case MouseCursorType.Crosshair:
+                case MouseCursorStrategy.MouseCursorType.Crosshair:
                     return WinFormsCursors.Cross;
-                case MouseCursorType.WaitArrow:
+                case MouseCursorStrategy.MouseCursorType.WaitArrow:
                     return WinFormsCursors.AppStarting;
-                case MouseCursorType.SizeNWSE:
+                case MouseCursorStrategy.MouseCursorType.SizeNWSE:
                     return WinFormsCursors.SizeNWSE;
-                case MouseCursorType.SizeNESW:
+                case MouseCursorStrategy.MouseCursorType.SizeNESW:
                     return WinFormsCursors.SizeNESW;
-                case MouseCursorType.SizeWE:
+                case MouseCursorStrategy.MouseCursorType.SizeWE:
                     return WinFormsCursors.SizeWE;
-                case MouseCursorType.SizeNS:
+                case MouseCursorStrategy.MouseCursorType.SizeNS:
                     return WinFormsCursors.SizeNS;
-                case MouseCursorType.SizeAll:
+                case MouseCursorStrategy.MouseCursorType.SizeAll:
                     return WinFormsCursors.SizeAll;
-                case MouseCursorType.No:
+                case MouseCursorStrategy.MouseCursorType.No:
                     return WinFormsCursors.No;
-                case MouseCursorType.Hand:
+                case MouseCursorStrategy.MouseCursorType.Hand:
                     return WinFormsCursors.Hand;
 
                 default:
@@ -79,6 +68,8 @@ namespace Microsoft.Xna.Framework.Input
 
         public MouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
+            _strategy = new MouseCursorStrategy();
+
             // convert ABGR to ARGB
             for (int i = 0; i < data.Length; i += 4)
             {
@@ -104,8 +95,9 @@ namespace Microsoft.Xna.Framework.Input
                     DeleteObject(iconInfo.MaskBitmap);
                     DestroyIcon(hIcon);
 
-                    _cursorType = MouseCursorType.User;
-                    _handle = handle;
+                    _strategy._cursorType = MouseCursorStrategy.MouseCursorType.User;
+                    _strategy._handle = handle;
+
                     _winFormsCursor = new WinFormsCursor(handle);
                 }
             }
@@ -121,12 +113,14 @@ namespace Microsoft.Xna.Framework.Input
             {
                 if (_winFormsCursor != null)
                     _winFormsCursor.Dispose();
+                _winFormsCursor = null;
             }
 
-            if (_handle != IntPtr.Zero)
-                DestroyIcon(_handle);
+            if (_strategy.Handle != IntPtr.Zero)
+            {
+                DestroyIcon(_strategy.Handle);
+            }
 
-            _winFormsCursor = null;
         }
 
         [StructLayout(LayoutKind.Sequential)]

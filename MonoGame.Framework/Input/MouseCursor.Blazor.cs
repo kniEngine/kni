@@ -5,30 +5,20 @@
 // Copyright (C)2021 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Input;
 
 namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
-        private readonly MouseCursorType _cursorType;
-        private IntPtr _handle;
-        
-        private IntPtr PlatformGetHandle()
-        {
-            return _handle;
-        }
 
-        private bool PlatformIsBuildInMouseCursor
+        private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            get { return _cursorType != MouseCursorType.User; }
-        }
+            _strategy = new MouseCursorStrategy();
 
+            _strategy._cursorType = cursorType;
+            _strategy._handle = IntPtr.Zero;
 
-        private MouseCursor(MouseCursorType cursorType)
-        {
-            _cursorType = cursorType;
-            _handle = IntPtr.Zero;
         }
 
 
@@ -44,5 +34,6 @@ namespace Microsoft.Xna.Framework.Input
             }
 
         }
+
     }
 }

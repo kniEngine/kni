@@ -1,26 +1,14 @@
 ﻿// Copyright (C)2022 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Input;
 
 namespace Microsoft.Xna.Framework.Input
 {
     public partial class MouseCursor
     {
-        private readonly MouseCursorType _cursorType;
-        
-        private IntPtr PlatformGetHandle()
-        {
-            throw new PlatformNotSupportedException();
-        }
 
-        private bool PlatformIsBuildInMouseCursor
-        {
-            get { throw new PlatformNotSupportedException(); }
-        }
-
-
-        private MouseCursor(MouseCursorType cursorType)
+        private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
             throw new PlatformNotSupportedException();
         }

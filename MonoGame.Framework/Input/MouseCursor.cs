@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Input;
 
 namespace Microsoft.Xna.Framework.Input
 {
@@ -14,23 +15,7 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public partial class MouseCursor : IDisposable
     {
-        enum MouseCursorType
-        {
-            Arrow = 1,
-            IBeam,
-            Wait,
-            Crosshair,
-            WaitArrow,
-            SizeNWSE,
-            SizeNESW,
-            SizeWE,
-            SizeNS,
-            SizeAll,
-            No,
-            Hand,
-
-            User = 0x80
-        }
+        private MouseCursorStrategy _strategy;
 
         /// <summary>
         /// Gets the default arrow cursor.
@@ -92,6 +77,24 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public static MouseCursor Hand { get; private set; }
 
+
+        static MouseCursor()
+        {
+            Arrow     = new MouseCursor(MouseCursorStrategy.MouseCursorType.Arrow);
+            IBeam     = new MouseCursor(MouseCursorStrategy.MouseCursorType.IBeam);
+            Wait      = new MouseCursor(MouseCursorStrategy.MouseCursorType.Wait);
+            Crosshair = new MouseCursor(MouseCursorStrategy.MouseCursorType.Crosshair);
+            WaitArrow = new MouseCursor(MouseCursorStrategy.MouseCursorType.WaitArrow);
+            SizeNWSE  = new MouseCursor(MouseCursorStrategy.MouseCursorType.SizeNWSE);
+            SizeNESW  = new MouseCursor(MouseCursorStrategy.MouseCursorType.SizeNESW);
+            SizeWE    = new MouseCursor(MouseCursorStrategy.MouseCursorType.SizeWE);
+            SizeNS    = new MouseCursor(MouseCursorStrategy.MouseCursorType.SizeNS);
+            SizeAll   = new MouseCursor(MouseCursorStrategy.MouseCursorType.SizeAll);
+            No        = new MouseCursor(MouseCursorStrategy.MouseCursorType.No);
+            Hand      = new MouseCursor(MouseCursorStrategy.MouseCursorType.Hand);
+        }
+
+
         /// <summary>
         /// Creates a mouse cursor from the specified texture.
         /// </summary>
@@ -111,25 +114,10 @@ namespace Microsoft.Xna.Framework.Input
             return new MouseCursor(data, w, h, originx, originy);
         }
 
-        public IntPtr Handle { get { return PlatformGetHandle(); } }
+        public IntPtr Handle { get { return _strategy.Handle; } }
 
-        private bool _isDisposed;
 
-        static MouseCursor()
-        {
-            Arrow = new MouseCursor(MouseCursorType.Arrow);
-            IBeam = new MouseCursor(MouseCursorType.IBeam);
-            Wait = new MouseCursor(MouseCursorType.Wait);
-            Crosshair = new MouseCursor(MouseCursorType.Crosshair);
-            WaitArrow = new MouseCursor(MouseCursorType.WaitArrow);
-            SizeNWSE = new MouseCursor(MouseCursorType.SizeNWSE);
-            SizeNESW = new MouseCursor(MouseCursorType.SizeNESW);
-            SizeWE = new MouseCursor(MouseCursorType.SizeWE);
-            SizeNS = new MouseCursor(MouseCursorType.SizeNS);
-            SizeAll = new MouseCursor(MouseCursorType.SizeAll);
-            No = new MouseCursor(MouseCursorType.No);
-            Hand = new MouseCursor(MouseCursorType.Hand);
-        }
+        #region IDisposable
 
         ~MouseCursor()
         {
@@ -138,21 +126,29 @@ namespace Microsoft.Xna.Framework.Input
 
         public void Dispose()
         {
-            if (PlatformIsBuildInMouseCursor)
-                throw new InvalidOperationException("Disposing Stock MouseCursors is not allowed.");
-
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool dispose)
         {
-            if (_isDisposed)
-                return;
-            
-            PlatformDispose(dispose);
+            if (dispose)
+            {
+                if (_strategy.IsBuildInMouseCursor)
+                throw new InvalidOperationException("Disposing Stock MouseCursors is not allowed.");
 
-            _isDisposed = true;
+                if (_strategy != null)
+                {
+                    PlatformDispose(true);
+                    _strategy.Dispose();
+                    _strategy = null;
+                }
+            }
+            
+            PlatformDispose(false);
         }
+
+        #endregion IDisposable
+
     }
 }

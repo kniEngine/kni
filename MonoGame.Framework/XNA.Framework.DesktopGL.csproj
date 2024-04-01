@@ -186,6 +186,7 @@
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseStrategy.cs" />
     <Compile Include="Input\MouseCursor.cs" />
+    <Compile Include="Input\MouseCursorStrategy.cs" />
     <Compile Include="Input\MouseCursor.SDL.cs" />
     <Compile Include="Input\MouseState.cs" />
     <Compile Include="Input\TextInputEventArgs.cs" />
