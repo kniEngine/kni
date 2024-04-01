@@ -440,15 +440,15 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            if (Strategy.BeforeUpdate())
-            {
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+            Strategy.Android_BeforeUpdate();
 
-                Update(gameTime);
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
 
-                //The TouchPanel needs to know the time for when touches arrive
-                TouchPanelState.CurrentTimestamp = gameTime.TotalGameTime;
-            }
+            Update(gameTime);
+
+            //The TouchPanel needs to know the time for when touches arrive
+            TouchPanelState.CurrentTimestamp = gameTime.TotalGameTime;
+
         }
 
         internal void DoDraw(GameTime gameTime)

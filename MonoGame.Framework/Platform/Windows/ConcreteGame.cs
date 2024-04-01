@@ -88,9 +88,8 @@ namespace Microsoft.Xna.Platform
             Window = null;
         }
 
-        public override bool BeforeUpdate()
+        public override void Android_BeforeUpdate()
         {
-            return true;
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
