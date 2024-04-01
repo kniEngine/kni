@@ -159,6 +159,7 @@
     <Compile Include="Input\.SDL2\ConcreteJoystick.cs" />
     <Compile Include="Input\.SDL2\ConcreteKeyboard.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouse.cs" />
+    <Compile Include="Input\.SDL2\ConcreteMouseCursor.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
@@ -187,7 +188,6 @@
     <Compile Include="Input\MouseStrategy.cs" />
     <Compile Include="Input\MouseCursor.cs" />
     <Compile Include="Input\MouseCursorStrategy.cs" />
-    <Compile Include="Input\MouseCursor.SDL.cs" />
     <Compile Include="Input\MouseState.cs" />
     <Compile Include="Input\TextInputEventArgs.cs" />
     <Compile Include="Input\Oculus\IOculusInput.cs" />

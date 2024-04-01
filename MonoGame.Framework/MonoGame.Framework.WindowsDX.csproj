@@ -67,8 +67,8 @@
     <Compile Include="Input\.WindowsDX\ConcreteJoystick.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteKeyboard.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouse.cs" />
+    <Compile Include="Input\.WindowsDX\ConcreteMouseCursor.cs" />
     <Compile Include="Platform\Input\KeysHelper.cs" />
-    <Compile Include="Input\MouseCursor.Windows.cs" />
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />

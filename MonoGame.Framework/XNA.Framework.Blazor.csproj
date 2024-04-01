@@ -79,7 +79,7 @@
     <Compile Include="Input\.Blazor\ConcreteJoystick.cs" />
     <Compile Include="Input\.Blazor\ConcreteKeyboard.cs" />
     <Compile Include="Input\.Blazor\ConcreteMouse.cs" />
-    <Compile Include="Input\MouseCursor.Blazor.cs" />
+    <Compile Include="Input\.Blazor\ConcreteMouseCursor.cs" />
     <Compile Include="Media\Blazor\ConcreteAlbum.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaFactory.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaLibrary.cs" />

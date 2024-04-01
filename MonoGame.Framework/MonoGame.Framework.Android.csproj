@@ -94,7 +94,7 @@
     <Compile Include="Input\.Android\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.Android\ConcreteMessageBox.cs" />
     <Compile Include="Input\.Android\ConcreteMouse.cs" />
-    <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Input\.Android\ConcreteMouseCursor.cs" />
     <Compile Include="Media\Android\ConcreteAlbum.cs" />
     <Compile Include="Media\Android\ConcreteMediaFactory.cs" />
     <Compile Include="Media\Android\ConcreteMediaLibrary.cs" />
