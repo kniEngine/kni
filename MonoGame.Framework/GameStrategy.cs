@@ -184,11 +184,7 @@ namespace Microsoft.Xna.Platform
         public GameWindow Window
         {
             get { return _window; }
-            protected set
-            {
-
-                _window = value;
-            }
+            protected set { _window = value; }
         }
 
         public TimeSpan InactiveSleepTime
