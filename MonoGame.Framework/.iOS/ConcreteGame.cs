@@ -137,6 +137,7 @@ namespace Microsoft.Xna.Platform
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
+
             if (disposing)
             {
                 if (_viewController != null)
@@ -153,6 +154,9 @@ namespace Microsoft.Xna.Platform
                     _uiWindow = null;
                 }
             }
+
+            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
         }
 
         public override void BeforeInitialize()

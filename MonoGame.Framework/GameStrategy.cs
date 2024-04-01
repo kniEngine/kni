@@ -10,10 +10,6 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Platform.Input;
-using Microsoft.Xna.Platform.Input.Touch;
 
 
 namespace Microsoft.Xna.Platform
@@ -572,9 +568,6 @@ namespace Microsoft.Xna.Platform
                 }
 
                 _services.RemoveService(typeof(GameStrategy));
-
-                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
 
                 _isDisposed = true;
             }
