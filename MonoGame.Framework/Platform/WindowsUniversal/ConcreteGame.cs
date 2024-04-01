@@ -236,7 +236,6 @@ namespace Microsoft.Xna.Platform
 
         public override bool BeforeUpdate()
         {
-            InputEvents.TouchQueue.ProcessQueued();
             return true;
         }
 

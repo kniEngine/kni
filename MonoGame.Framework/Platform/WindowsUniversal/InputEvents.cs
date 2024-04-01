@@ -13,6 +13,7 @@ using Windows.Devices.Input;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Platform.Input.Touch;
 
 
 #if UAP
@@ -46,10 +47,6 @@ namespace Microsoft.Xna.Framework
         public readonly ConcurrentQueue<KeyChar> TextQueue = new ConcurrentQueue<KeyChar>();
         private KeyChar _lastEnqueuedKeyChar;
 
-        private readonly TouchQueue _touchQueue = new TouchQueue();
-
-        internal static TouchQueue TouchQueue;
-
         // To convert from DIPs (device independent pixels) to actual screen resolution pixels.
         private static float _currentDipFactor;
 
@@ -58,8 +55,6 @@ namespace Microsoft.Xna.Framework
 
         public InputEvents(CoreWindow window, UIElement inputElement)
         {
-            InputEvents.TouchQueue = _touchQueue;
-
             // The key events are always tied to the window as those will
             // only arrive here if some other control hasn't gotten it.
             window.KeyDown += CoreWindow_KeyDown;
@@ -196,7 +191,7 @@ namespace Microsoft.Xna.Framework
             var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch)
-                _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos);
 
             if (!isTouch)
             {
@@ -218,7 +213,7 @@ namespace Microsoft.Xna.Framework
 
             if (isTouch && touchIsDown)
             {
-                _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Moved, pos);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Moved, pos);
             }
 
             if (!isTouch)
@@ -235,7 +230,7 @@ namespace Microsoft.Xna.Framework
             var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch) 
-                _touchQueue.Enqueue((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
 
             if (!isTouch)
             {
