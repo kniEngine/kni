@@ -86,7 +86,7 @@
     <Compile Include="Input\.iOS\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.iOS\ConcreteMessageBox.cs" />
     <Compile Include="Input\.iOS\ConcreteMouse.cs" />
-    <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Input\.iOS\ConcreteMouseCursor.cs" />
     <Compile Include="Media\iOS\ConcreteAlbum.cs" />
     <Compile Include="Media\iOS\ConcreteMediaFactory.cs" />
     <Compile Include="Media\iOS\ConcreteMediaLibrary.cs" />

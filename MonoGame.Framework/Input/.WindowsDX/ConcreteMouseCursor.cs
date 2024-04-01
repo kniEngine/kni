@@ -2,73 +2,60 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using WinFormsCursor = System.Windows.Forms.Cursor;
 using WinFormsCursors = System.Windows.Forms.Cursors;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public partial class MouseCursor
+    public sealed class ConcreteMouseCursor : MouseCursorStrategy
     {
-        private readonly MouseCursorType _cursorType;
-        private IntPtr _handle;
-        
         WinFormsCursor _winFormsCursor;
-
-        private IntPtr PlatformGetHandle()
-        {
-            return _handle;
-        }
-
-        private bool PlatformIsBuildInMouseCursor
-        {
-            get { return _cursorType != MouseCursorType.User; }
-        }
 
         internal WinFormsCursor WinFormsCursor { get { return _winFormsCursor; } }
 
 
-        private MouseCursor(MouseCursorType cursorType)
+        public ConcreteMouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            _cursorType = cursorType;
-            _handle = IntPtr.Zero;
+            this._cursorType = cursorType;
+            this._handle = IntPtr.Zero;
 
             _winFormsCursor = CursorTypeToWinFormsCursor(cursorType);
         }
 
-        private WinFormsCursor CursorTypeToWinFormsCursor(MouseCursorType cursorType)
+        private WinFormsCursor CursorTypeToWinFormsCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
             switch (cursorType)
             {
-                case MouseCursorType.Arrow:
+                case MouseCursorStrategy.MouseCursorType.Arrow:
                     return WinFormsCursors.Arrow;
-                case MouseCursorType.IBeam:
+                case MouseCursorStrategy.MouseCursorType.IBeam:
                     return WinFormsCursors.IBeam;
-                case MouseCursorType.Wait:
+                case MouseCursorStrategy.MouseCursorType.Wait:
                     return WinFormsCursors.WaitCursor;
-                case MouseCursorType.Crosshair:
+                case MouseCursorStrategy.MouseCursorType.Crosshair:
                     return WinFormsCursors.Cross;
-                case MouseCursorType.WaitArrow:
+                case MouseCursorStrategy.MouseCursorType.WaitArrow:
                     return WinFormsCursors.AppStarting;
-                case MouseCursorType.SizeNWSE:
+                case MouseCursorStrategy.MouseCursorType.SizeNWSE:
                     return WinFormsCursors.SizeNWSE;
-                case MouseCursorType.SizeNESW:
+                case MouseCursorStrategy.MouseCursorType.SizeNESW:
                     return WinFormsCursors.SizeNESW;
-                case MouseCursorType.SizeWE:
+                case MouseCursorStrategy.MouseCursorType.SizeWE:
                     return WinFormsCursors.SizeWE;
-                case MouseCursorType.SizeNS:
+                case MouseCursorStrategy.MouseCursorType.SizeNS:
                     return WinFormsCursors.SizeNS;
-                case MouseCursorType.SizeAll:
+                case MouseCursorStrategy.MouseCursorType.SizeAll:
                     return WinFormsCursors.SizeAll;
-                case MouseCursorType.No:
+                case MouseCursorStrategy.MouseCursorType.No:
                     return WinFormsCursors.No;
-                case MouseCursorType.Hand:
+                case MouseCursorStrategy.MouseCursorType.Hand:
                     return WinFormsCursors.Hand;
 
                 default:
@@ -77,7 +64,7 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
+        public ConcreteMouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
             // convert ABGR to ARGB
             for (int i = 0; i < data.Length; i += 4)
@@ -104,8 +91,9 @@ namespace Microsoft.Xna.Framework.Input
                     DeleteObject(iconInfo.MaskBitmap);
                     DestroyIcon(hIcon);
 
-                    _cursorType = MouseCursorType.User;
-                    _handle = handle;
+                    this._cursorType = MouseCursorStrategy.MouseCursorType.User;
+                    this._handle = handle;
+
                     _winFormsCursor = new WinFormsCursor(handle);
                 }
             }
@@ -115,18 +103,19 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private void PlatformDispose(bool dispose)
+        protected override void Dispose(bool dispose)
         {
             if (dispose)
             {
                 if (_winFormsCursor != null)
                     _winFormsCursor.Dispose();
+                _winFormsCursor = null;
             }
 
-            if (_handle != IntPtr.Zero)
-                DestroyIcon(_handle);
+            if (this.Handle != IntPtr.Zero)
+                DestroyIcon(this.Handle);
 
-            _winFormsCursor = null;
+            base.Dispose(dispose);
         }
 
         [StructLayout(LayoutKind.Sequential)]

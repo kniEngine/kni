@@ -173,6 +173,7 @@
     <Compile Include="Input\.Android\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.Android\ConcreteMessageBox.cs" />
     <Compile Include="Input\.Android\ConcreteMouse.cs" />
+    <Compile Include="Input\.Android\ConcreteMouseCursor.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
@@ -201,7 +202,7 @@
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseStrategy.cs" />
     <Compile Include="Input\MouseCursor.cs" />
-    <Compile Include="Input\MouseCursor.Default.cs" />
+    <Compile Include="Input\MouseCursorStrategy.cs" />
     <Compile Include="Input\MouseState.cs" />
     <Compile Include="Input\TextInputEventArgs.cs" />
     <Compile Include="Input\Oculus\IOculusInput.cs" />

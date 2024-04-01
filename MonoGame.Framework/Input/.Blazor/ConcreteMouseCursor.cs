@@ -1,8 +1,4 @@
-﻿// MonoGame - Copyright (C) The MonoGame Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-// Copyright (C)2021-2024 Nick Kastellanos
+﻿// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework.Input;

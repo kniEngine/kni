@@ -98,7 +98,9 @@ namespace Microsoft.Xna.Platform.Input
         public override void PlatformSetCursor(MouseCursor cursor)
         {
             if (_window != null)
-                _window.Cursor = cursor.WinFormsCursor;
+            {
+                _window.Cursor = ((IPlatformMouseCursor)cursor).GetStrategy<ConcreteMouseCursor>().WinFormsCursor;
+            }
         }
 
         #region Nested class MouseInputWnd
