@@ -160,6 +160,8 @@
     <Compile Include="Input\.SDL2\ConcreteKeyboard.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouse.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
+    <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
@@ -182,7 +184,6 @@
     <Compile Include="Input\KeyboardStrategy.cs" />
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />
-    <Compile Include="Platform\Input\KeysHelper.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseStrategy.cs" />
@@ -228,7 +229,6 @@
     <Compile Include="Platform\SDL\ConcreteGame.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
-    <Compile Include="Platform\Input\KeyboardUtil.SDL.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />

@@ -156,6 +156,7 @@
     <Compile Include="Input\.WindowsDX\ConcreteKeyboard.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouse.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
@@ -178,7 +179,6 @@
     <Compile Include="Input\KeyboardStrategy.cs" />
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />
-    <Compile Include="Platform\Input\KeysHelper.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\Mouse.cs" />
     <Compile Include="Input\MouseStrategy.cs" />
