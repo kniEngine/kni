@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
-        private SdlGameWindow _window;
+        private SdlGameWindow _gameWindow;
 
         private Sdl SDL { get { return Sdl.Current; } }
 
@@ -73,13 +73,13 @@ namespace Microsoft.Xna.Platform
             SDL.DisableScreenSaver();
 
             ((Microsoft.Xna.Platform.Input.IPlatformGamePad)GamePad.Current).GetStrategy<Microsoft.Xna.Platform.Input.ConcreteGamePad>().InitDatabase();
-            _window = new SdlGameWindow(Game);
-            base.Window = _window;
+            _gameWindow = new SdlGameWindow(Game);
+            base.Window = _gameWindow;
         }
 
         public override void BeforeInitialize()
         {
-            bool isExiting = _window.SdlRunLoop();
+            bool isExiting = _gameWindow.SdlRunLoop();
             _isExiting |= isExiting;
         }
 
@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Platform
                 PresentationParameters pp = graphicsDevice.PresentationParameters;
                 graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
 
-                _window.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
+                _gameWindow.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
             }
 
             base.Initialize();
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform
                 if (base.IsMouseVisible != value)
                 {
                     base.IsMouseVisible = value;
-                    _window.SetCursorVisible(Game.IsMouseVisible);
+                    _gameWindow.SetCursorVisible(Game.IsMouseVisible);
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Platform
         {
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Window.Handle);
             string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
-            _window.EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
+            _gameWindow.EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
         }
 
         private void RunLoop()
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Platform
 
             while (true)
             {
-                bool isExiting  = _window.SdlRunLoop();
+                bool isExiting  = _gameWindow.SdlRunLoop();
                 _isExiting |= isExiting;
 
                 if (!_isExiting)
@@ -144,10 +144,10 @@ namespace Microsoft.Xna.Platform
 
         protected override void Dispose(bool disposing)
         {
-            if (_window != null)
+            if (_gameWindow != null)
             {
-                _window.Dispose();
-                _window = null;
+                _gameWindow.Dispose();
+                _gameWindow = null;
 
                 ((IPlatformJoystick)Joystick.Current).GetStrategy<ConcreteJoystick>().CloseDevices();
 
