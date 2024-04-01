@@ -8,8 +8,6 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
-        internal GameWindow PrimaryWindow;
-
         private IntPtr _wndHandle = IntPtr.Zero;
         private MouseState _mouseState;
         private nkast.Wasm.Dom.Window _domWindow;

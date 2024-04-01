@@ -8,8 +8,6 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
-        internal GameWindow PrimaryWindow;
-
         public override IntPtr PlatformGetWindowHandle()
         {
             throw new PlatformNotSupportedException();

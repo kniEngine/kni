@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Input
 
         MouseState IMouse.GetState()
         {
-#if DESKTOPGL || IOS || ANDROID || (UAP || WINUI)
+#if DESKTOPGL || (UAP || WINUI)
             if (((ConcreteMouse)_strategy).PrimaryWindow != null)
                 return ((ConcreteMouse)_strategy).PlatformGetState(((ConcreteMouse)_strategy).PrimaryWindow);
             else
