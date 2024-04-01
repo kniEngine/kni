@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override bool BeforeUpdate()
+        public override void BeforeUpdate()
         {
             throw new PlatformNotSupportedException();
         }

@@ -88,9 +88,8 @@ namespace Microsoft.Xna.Platform
             Window = null;
         }
 
-        public override bool BeforeUpdate()
+        public override void BeforeUpdate()
         {
-            return true;
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)

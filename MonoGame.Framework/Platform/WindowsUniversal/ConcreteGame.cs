@@ -234,9 +234,8 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override bool BeforeUpdate()
+        public override void BeforeUpdate()
         {
-            return true;
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)

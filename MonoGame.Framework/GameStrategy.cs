@@ -359,11 +359,9 @@ namespace Microsoft.Xna.Platform
         public abstract void TickExiting();
 
         /// <summary>
-        /// Gives derived classes an opportunity to do work just before Update
-        /// is called for all IUpdatable components.  Returning false from this
-        /// method will result in this round of Update calls being skipped.
+        /// Gives derived classes an opportunity to do work just before Update is called.
         /// </summary>
-        public abstract bool BeforeUpdate();
+        public abstract void BeforeUpdate();
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.

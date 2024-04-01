@@ -198,9 +198,8 @@ namespace Microsoft.Xna.Platform
             _viewController.View.Present();
         }
 
-        public override bool BeforeUpdate()
+        public override void BeforeUpdate()
         {
-            return true;
         }
 
         public override void Exit()

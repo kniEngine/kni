@@ -64,15 +64,13 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override bool BeforeUpdate()
+        public override void BeforeUpdate()
         {
             if (!_initialized)
             {
                 Game.DoInitialize();
                 _initialized = true;
             }
-
-            return true;
         }
 
         public override void BeforeInitialize()
