@@ -8,12 +8,21 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Input;
 
+namespace Microsoft.Xna.Platform.Input
+{
+    public interface IPlatformMouseCursor
+    {
+        T GetStrategy<T>() where T : MouseCursorStrategy;
+    }
+}
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
     /// Describes a mouse cursor.
     /// </summary>
-    public partial class MouseCursor : IDisposable
+    public class MouseCursor : IDisposable
+        , IPlatformMouseCursor
     {
         private MouseCursorStrategy _strategy;
 
@@ -94,6 +103,20 @@ namespace Microsoft.Xna.Framework.Input
             Hand      = new MouseCursor(MouseCursorStrategy.MouseCursorType.Hand);
         }
 
+        T IPlatformMouseCursor.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
+        private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
+        {
+            _strategy = new ConcreteMouseCursor(cursorType);
+        }
+
+        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
+        {
+            _strategy = new ConcreteMouseCursor(data, w, h, originx, originy);
+        }
 
         /// <summary>
         /// Creates a mouse cursor from the specified texture.
@@ -139,13 +162,11 @@ namespace Microsoft.Xna.Framework.Input
 
                 if (_strategy != null)
                 {
-                    PlatformDispose(true);
                     _strategy.Dispose();
                     _strategy = null;
                 }
             }
-            
-            PlatformDispose(false);
+
         }
 
         #endregion IDisposable

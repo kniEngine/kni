@@ -2,36 +2,36 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public partial class MouseCursor
+    public sealed class ConcreteMouseCursor : MouseCursorStrategy
     {
 
-        private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
+        public ConcreteMouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            _strategy = new MouseCursorStrategy();
-
-            _strategy._cursorType = cursorType;
-            _strategy._handle = IntPtr.Zero;
+            this._cursorType = cursorType;
+            this._handle = IntPtr.Zero;
         }
 
 
-        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
+        public ConcreteMouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
             throw new PlatformNotSupportedException();
         }
 
-        private void PlatformDispose(bool dispose)
+        protected override void Dispose(bool dispose)
         {
             if (dispose)
             {
             }
 
+            base.Dispose(dispose);
         }
+
     }
 }

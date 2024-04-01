@@ -2,31 +2,29 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Framework.Input;
 using WinFormsCursor = System.Windows.Forms.Cursor;
 using WinFormsCursors = System.Windows.Forms.Cursors;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public partial class MouseCursor
+    public sealed class ConcreteMouseCursor : MouseCursorStrategy
     {
         WinFormsCursor _winFormsCursor;
 
         internal WinFormsCursor WinFormsCursor { get { return _winFormsCursor; } }
 
 
-        private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
+        public ConcreteMouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            _strategy = new MouseCursorStrategy();
-
-            _strategy._cursorType = cursorType;
-            _strategy._handle = IntPtr.Zero;
+            this._cursorType = cursorType;
+            this._handle = IntPtr.Zero;
 
             _winFormsCursor = CursorTypeToWinFormsCursor(cursorType);
         }
@@ -66,10 +64,8 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
+        public ConcreteMouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
-            _strategy = new MouseCursorStrategy();
-
             // convert ABGR to ARGB
             for (int i = 0; i < data.Length; i += 4)
             {
@@ -95,8 +91,8 @@ namespace Microsoft.Xna.Framework.Input
                     DeleteObject(iconInfo.MaskBitmap);
                     DestroyIcon(hIcon);
 
-                    _strategy._cursorType = MouseCursorStrategy.MouseCursorType.User;
-                    _strategy._handle = handle;
+                    this._cursorType = MouseCursorStrategy.MouseCursorType.User;
+                    this._handle = handle;
 
                     _winFormsCursor = new WinFormsCursor(handle);
                 }
@@ -107,7 +103,7 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private void PlatformDispose(bool dispose)
+        protected override void Dispose(bool dispose)
         {
             if (dispose)
             {
@@ -116,11 +112,10 @@ namespace Microsoft.Xna.Framework.Input
                 _winFormsCursor = null;
             }
 
-            if (_strategy.Handle != IntPtr.Zero)
-            {
-                DestroyIcon(_strategy.Handle);
-            }
+            if (this.Handle != IntPtr.Zero)
+                DestroyIcon(this.Handle);
 
+            base.Dispose(dispose);
         }
 
         [StructLayout(LayoutKind.Sequential)]

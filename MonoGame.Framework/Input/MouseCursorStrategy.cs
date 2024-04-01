@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Input
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool dispose)
+        protected virtual void Dispose(bool dispose)
         {
             if (dispose)
             {

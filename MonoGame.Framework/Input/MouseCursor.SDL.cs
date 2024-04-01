@@ -2,26 +2,23 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
-using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
-    public partial class MouseCursor
+    public sealed class ConcreteMouseCursor : MouseCursorStrategy
     {
         private static Sdl SDL { get { return Sdl.Current; } }
 
-        private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
+        public ConcreteMouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            _strategy = new MouseCursorStrategy();
-
-            _strategy._cursorType = cursorType;
-            _strategy._handle = IntPtr.Zero;
+            this._cursorType = cursorType;
 
             Sdl.Mouse.SystemCursor cursor = CursorTypeToSDLCursor(cursorType);
-            _strategy._handle = SDL.MOUSE.CreateSystemCursor(cursor);
+            this._handle = SDL.MOUSE.CreateSystemCursor(cursor);
         }
 
         private Sdl.Mouse.SystemCursor CursorTypeToSDLCursor(MouseCursorStrategy.MouseCursorType cursorType)
@@ -59,11 +56,10 @@ namespace Microsoft.Xna.Framework.Input
         }
 
 
-        public MouseCursor(byte[] data, int w, int h, int originx, int originy)
+        public ConcreteMouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
-            _strategy = new MouseCursorStrategy();
-
             IntPtr surface = IntPtr.Zero;
+
             try
             {
                 surface = SDL.CreateRGBSurfaceFrom(data, w, h, 32, w * 4, 0x000000ff, 0x0000FF00, 0x00FF0000, 0xFF000000);
@@ -74,8 +70,8 @@ namespace Microsoft.Xna.Framework.Input
                 if (handle == IntPtr.Zero)
                     throw new InvalidOperationException("Failed to set surface for mouse cursor: " + SDL.GetError());
 
-                _strategy._cursorType = MouseCursorStrategy.MouseCursorType.User;
-                _strategy._handle = handle;
+                this._cursorType = MouseCursorStrategy.MouseCursorType.User;
+                this._handle = handle;
             }
             finally
             {
@@ -84,17 +80,16 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
-        private void PlatformDispose(bool dispose)
+        protected override void Dispose(bool dispose)
         {
             if (dispose)
             {
             }
 
-            if (_strategy.Handle != IntPtr.Zero)
-            {
-                SDL.MOUSE.FreeCursor(_strategy.Handle);
-            }
+            if (this.Handle != IntPtr.Zero)
+                SDL.MOUSE.FreeCursor(this.Handle);
 
+            base.Dispose(dispose);
         }
 
     }
