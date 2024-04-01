@@ -62,9 +62,9 @@
     <None Remove="P:\MonoGame\Images\Icon.png" />
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.Ref.cs" />
+    <Compile Include=".Ref\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GamePlatform.Ref.cs" />
+    <Compile Include=".Ref\ConcreteGame.cs" />
     <Compile Include="Input\.Ref\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Ref\ConcreteGamePad.cs" />
     <Compile Include="Input\.Ref\ConcreteJoystick.cs" />
@@ -78,8 +78,8 @@
     <Compile Include="Media\Ref\ConcreteSong.cs" />
     <Compile Include="Media\Ref\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Ref\ConcreteVideo.cs" />
-    <Compile Include="ConcreteTitleContainer.Ref.cs" />
-    <Compile Include="ConcreteTitleContainerFactory.Ref.cs" />
+    <Compile Include=".Ref\ConcreteTitleContainer.cs" />
+    <Compile Include=".Ref\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
   
   <ItemGroup>

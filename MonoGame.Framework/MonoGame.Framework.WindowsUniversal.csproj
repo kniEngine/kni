@@ -63,7 +63,7 @@
 
   <ItemGroup>
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.UWP.cs" />
+    <Compile Include=".UAP\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Input\.UAP\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.UAP\ConcreteGamePad.cs" />
@@ -81,11 +81,11 @@
     <Compile Include="Media\WME\ConcreteSong.cs" />
     <Compile Include="Media\WME\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WME\MusicProperties.cs" />
-    <Compile Include="ConcreteTitleContainer.UAP.cs" />
-    <Compile Include="ConcreteTitleContainerFactory.UAP.cs" />
+    <Compile Include=".UAP\ConcreteTitleContainer.cs" />
+    <Compile Include=".UAP\ConcreteTitleContainerFactory.cs" />
     <Compile Include="Platform\WindowsUniversal\GameFrameworkViewSource.cs" />
     <Compile Include="Platform\WindowsUniversal\UAPFrameworkView.cs" />
-    <Compile Include="Platform\WindowsUniversal\ConcreteGame.cs" />
+    <Compile Include=".UAP\ConcreteGame.cs" />
     <Compile Include="Platform\WindowsUniversal\UAPGameWindow.cs" />
     <Compile Include="Platform\WindowsUniversal\XamlGame.cs" />
     <Compile Include="Platform\WindowsUniversal\InputEvents.cs" />

@@ -118,8 +118,8 @@
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="ConcreteTitleContainer.UAP.cs" />
-    <Compile Include="ConcreteTitleContainerFactory.UAP.cs" />
+    <Compile Include=".UAP\ConcreteTitleContainer.cs" />
+    <Compile Include=".UAP\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -162,7 +162,7 @@
     <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.UWP.cs" />
+    <Compile Include=".UAP\ConcreteGraphicsDeviceManager.cs" />
 
     <Compile Include="Input\.UAP\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.UAP\ConcreteGamePad.cs" />
@@ -240,7 +240,7 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\WindowsUniversal\GameFrameworkViewSource.cs" />
     <Compile Include="Platform\WindowsUniversal\UAPFrameworkView.cs" />
-    <Compile Include="Platform\WindowsUniversal\ConcreteGame.cs" />
+    <Compile Include=".UAP\ConcreteGame.cs" />
     <Compile Include="Platform\WindowsUniversal\UAPGameWindow.cs" />
     <Compile Include="Platform\WindowsUniversal\XamlGame.cs" />
     <Compile Include="Platform\WindowsUniversal\InputEvents.cs" />

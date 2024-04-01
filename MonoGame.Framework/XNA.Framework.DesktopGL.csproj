@@ -100,8 +100,8 @@
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="ConcreteTitleContainer.SDL.cs" />
-    <Compile Include="ConcreteTitleContainerFactory.SDL.cs" />
+    <Compile Include=".SDL2\ConcreteTitleContainer.cs" />
+    <Compile Include=".SDL2\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -152,7 +152,7 @@
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />
+    <Compile Include=".SDL2\ConcreteGraphicsDeviceManager.cs" />
 
     <Compile Include="Input\.SDL2\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.SDL2\ConcreteGamePad.cs" />
@@ -226,7 +226,7 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
-    <Compile Include="Platform\SDL\ConcreteGame.cs" />
+    <Compile Include=".SDL2\ConcreteGame.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
 
