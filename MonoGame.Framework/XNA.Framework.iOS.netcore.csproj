@@ -63,7 +63,7 @@
   <ItemGroup>
     <Compile Include="Platform\iOS\Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Platform\iOS\Devices\Sensors\Compass.cs" />
-    <Compile Include="Platform\iOS\ConcreteGame.cs" />
+    <Compile Include=".iOS\ConcreteGame.cs" />
     <Compile Include="Platform\iOS\iOSGameView.cs" />
     <Compile Include="Platform\iOS\iOSGameViewController.cs" />
     <Compile Include="Platform\iOS\iOSGameView_Touch.cs" />
@@ -81,7 +81,7 @@
       
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.iOS.cs" />
+    <Compile Include=".iOS\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Input\.iOS\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.iOS\ConcreteGamePad.cs" />
     <Compile Include="Input\.iOS\ConcreteJoystick.cs" />
@@ -97,8 +97,8 @@
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
-    <Compile Include="ConcreteTitleContainer.iOS.cs" />
-    <Compile Include="ConcreteTitleContainerFactory.iOS.cs" />
+    <Compile Include=".iOS\ConcreteTitleContainer.cs" />
+    <Compile Include=".iOS\ConcreteTitleContainerFactory.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.iOS.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
 

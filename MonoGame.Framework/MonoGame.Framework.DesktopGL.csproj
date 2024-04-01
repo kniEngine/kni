@@ -80,10 +80,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="ConcreteTitleContainer.SDL.cs" />
-    <Compile Include="ConcreteTitleContainerFactory.SDL.cs" />
+    <Compile Include=".SDL2\ConcreteTitleContainer.cs" />
+    <Compile Include=".SDL2\ConcreteTitleContainerFactory.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
-    <Compile Include="Platform\SDL\ConcreteGame.cs" />
+    <Compile Include=".SDL2\ConcreteGame.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
     <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />
+    <Compile Include=".SDL2\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />

@@ -101,8 +101,8 @@
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
     <Compile Include="NamespaceDocs.cs" />
-    <Compile Include="ConcreteTitleContainer.WindowsDX11.cs" />
-    <Compile Include="ConcreteTitleContainerFactory.WindowsDX11.cs" />
+    <Compile Include=".WindowsDX11\ConcreteTitleContainer.cs" />
+    <Compile Include=".WindowsDX11\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -147,7 +147,7 @@
 
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="ConcreteGraphicsDeviceManager.WindowsDX11.cs" />
+    <Compile Include=".WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
 
     <Compile Include="Input\.WindowsDX\Touch\ConcreteTouchPanel.cs" />
@@ -222,7 +222,7 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
-    <Compile Include="Platform\Windows\ConcreteGame.cs" />
+    <Compile Include=".WindowsDX11\ConcreteGame.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
