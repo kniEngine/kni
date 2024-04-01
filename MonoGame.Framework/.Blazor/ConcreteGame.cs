@@ -119,6 +119,9 @@ namespace Microsoft.Xna.Platform
             }
 
             base.Dispose(disposing);
+
+            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
         }
     }
 }
