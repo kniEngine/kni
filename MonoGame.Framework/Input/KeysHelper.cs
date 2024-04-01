@@ -4,8 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
     internal static class KeysHelper
     {

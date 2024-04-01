@@ -172,6 +172,7 @@
     <Compile Include="Input\.UAP\ConcreteMessageBox.cs" />
     <Compile Include="Input\.UAP\ConcreteMouse.cs" />
     <Compile Include="Input\.UAP\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
@@ -196,7 +197,6 @@
     <Compile Include="Input\KeyboardInputStrategy.cs" />
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />
-    <Compile Include="Platform\Input\KeysHelper.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\MessageBox.cs" />
     <Compile Include="Input\MessageBoxStrategy.cs" />

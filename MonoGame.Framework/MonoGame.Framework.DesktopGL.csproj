@@ -102,8 +102,8 @@
     <Compile Include="Input\.SDL2\ConcreteKeyboard.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouse.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouseCursor.cs" />
-    <Compile Include="Platform\Input\KeyboardUtil.SDL.cs" />
-    <Compile Include="Platform\Input\KeysHelper.cs" />
+    <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
+    <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="ConcreteGraphicsDeviceManager.SDL.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />

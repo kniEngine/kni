@@ -3,8 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace Microsoft.Xna.Platform.Input
 {
     internal static class KeyboardUtil
     {
