@@ -20,6 +20,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Platform.Input.Touch;
 
 
 #if UAP
@@ -49,6 +50,11 @@ namespace Microsoft.Xna.Platform
             ConcreteGame._concreteGameInstance = this;
 
             UAPGameWindow uapGameWindow = UAPGameWindow.Instance;
+            if (base.Window == null)
+            {
+                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = uapGameWindow;
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = uapGameWindow;
+            }
             base.Window = uapGameWindow;
             uapGameWindow.Game = game;
 

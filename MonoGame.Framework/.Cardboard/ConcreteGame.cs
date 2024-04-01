@@ -10,7 +10,10 @@ using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform.Input;
 using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Media;
 
@@ -34,6 +37,11 @@ namespace Microsoft.Xna.Platform
             AndroidGameActivity.Resumed += Activity_Resumed;
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
+            if (base.Window == null)
+            {
+                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = _gameWindow;
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = _gameWindow;
+            }
             base.Window = _gameWindow;
 
             Services.AddService(typeof(View), _gameWindow.GameView);
