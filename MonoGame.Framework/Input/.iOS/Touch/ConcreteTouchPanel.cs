@@ -1,8 +1,13 @@
-﻿// Copyright (C)2024 Nick Kastellanos
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2024 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using UIKit;
 
 namespace Microsoft.Xna.Platform.Input.Touch
 {
@@ -46,9 +51,27 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get { return PrimaryWindow.TouchPanelState.IsGestureAvailable; }
         }
 
+        internal ConcreteTouchPanel()
+        {
+            // Initialize Capabilities
+            // iPhone supports 5, iPad 11
+            _capabilities._isConnected = true;
+            switch (UIDevice.CurrentDevice.UserInterfaceIdiom)
+            {
+                case UIUserInterfaceIdiom.Phone:
+                    _capabilities._maximumTouchCount = 5;
+                    break;
+
+                default:
+                    _capabilities._maximumTouchCount = 11;
+                    break;
+            }
+
+        }
+
         public override TouchPanelCapabilities GetCapabilities()
         {
-            return PrimaryWindow.TouchPanelState.GetCapabilities();
+            return _capabilities;
         }
 
         public override TouchCollection GetState()

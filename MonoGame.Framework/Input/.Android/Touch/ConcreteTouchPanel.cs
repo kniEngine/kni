@@ -1,8 +1,13 @@
-﻿// Copyright (C)2024 Nick Kastellanos
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2024 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using Android.Content.PM;
 
 namespace Microsoft.Xna.Platform.Input.Touch
 {
@@ -46,9 +51,23 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get { return PrimaryWindow.TouchPanelState.IsGestureAvailable; }
         }
 
+        internal ConcreteTouchPanel()
+        {
+            // Initialize Capabilities
+            // http://developer.android.com/reference/android/content/pm/PackageManager.html#FEATURE_TOUCHSCREEN
+            PackageManager pm = AndroidGameWindow.Activity.PackageManager;
+            _capabilities._isConnected = pm.HasSystemFeature(PackageManager.FeatureTouchscreen);
+            if (pm.HasSystemFeature(PackageManager.FeatureTouchscreenMultitouchJazzhand))
+                _capabilities._maximumTouchCount = 5;
+            else if (pm.HasSystemFeature(PackageManager.FeatureTouchscreenMultitouchDistinct))
+                _capabilities._maximumTouchCount = 2;
+            else
+                _capabilities._maximumTouchCount = 1;
+        }
+
         public override TouchPanelCapabilities GetCapabilities()
         {
-            return PrimaryWindow.TouchPanelState.GetCapabilities();
+            return _capabilities;
         }
 
         public override TouchCollection GetState()
