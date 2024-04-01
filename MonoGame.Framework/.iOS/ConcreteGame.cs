@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform
 
             // Create a full-screen window
             _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
-            //_mainWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+            //_uiWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
             
             game.Services.AddService(typeof(UIWindow), _uiWindow);
 
