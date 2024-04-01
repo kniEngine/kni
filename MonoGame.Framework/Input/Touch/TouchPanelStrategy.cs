@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         private DisplayOrientation _displayOrientation;
         private GestureType _enabledGestures;
 
+        protected TouchPanelCapabilities _capabilities;
 
         public virtual IntPtr WindowHandle
         {

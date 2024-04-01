@@ -1,4 +1,8 @@
-﻿// Copyright (C)2024 Nick Kastellanos
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2024 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework;
@@ -46,9 +50,16 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get { return PrimaryWindow.TouchPanelState.IsGestureAvailable; }
         }
 
+        internal ConcreteTouchPanel()
+        {
+            // Initialize Capabilities
+            _capabilities._maximumTouchCount = GetSystemMetrics(SM_MAXIMUMTOUCHES);
+            _capabilities._isConnected = (_capabilities._maximumTouchCount > 0);
+        }
+
         public override TouchPanelCapabilities GetCapabilities()
         {
-            return PrimaryWindow.TouchPanelState.GetCapabilities();
+            return _capabilities;
         }
 
         public override TouchCollection GetState()
@@ -70,6 +81,12 @@ namespace Microsoft.Xna.Platform.Input.Touch
         {
             PrimaryWindow.TouchPanelState.ReleaseAllTouches();
         }
+
+
+        const int SM_MAXIMUMTOUCHES = 95;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]
+        static extern int GetSystemMetrics(int nIndex);
 
     }
 }

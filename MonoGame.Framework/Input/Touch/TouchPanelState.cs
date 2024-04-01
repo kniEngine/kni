@@ -48,8 +48,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         internal readonly Queue<GestureSample> GestureList = new Queue<GestureSample>();
 
-        private TouchPanelCapabilities Capabilities = new TouchPanelCapabilities();
-
         internal readonly GameWindow Window;
 
 
@@ -128,16 +126,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal TouchPanelState(GameWindow window)
         {
             Window = window;
-        }
-
-        /// <summary>
-        /// Returns capabilities of touch panel device.
-        /// </summary>
-        /// <returns><see cref="TouchPanelCapabilities"/></returns>
-        internal TouchPanelCapabilities GetCapabilities()
-        {
-            Capabilities.Initialize();
-            return Capabilities;
         }
 
         internal TouchCollection GetState()

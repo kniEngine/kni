@@ -46,9 +46,14 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get { return PrimaryWindow.TouchPanelState.IsGestureAvailable; }
         }
 
+        internal ConcreteTouchPanel()
+        {
+            // Initialize Capabilities
+        }
+
         public override TouchPanelCapabilities GetCapabilities()
         {
-            return PrimaryWindow.TouchPanelState.GetCapabilities();
+            return _capabilities;
         }
 
         public override TouchCollection GetState()
