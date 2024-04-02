@@ -812,7 +812,7 @@ namespace Microsoft.Xna.Framework
             if (((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().OnKeyDown(keyCode, e))
                 return true;
 
-            handled = Keyboard.KeyDown(keyCode);
+            handled = ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().KeyDown(keyCode);
 
             // we need to handle the Back key here because it doesn't work any other way
             if (keyCode == Keycode.Back)
@@ -844,7 +844,7 @@ namespace Microsoft.Xna.Framework
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().Back = false;
             if (((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().OnKeyUp(keyCode, e))
                 return true;
-            return Keyboard.KeyUp(keyCode);
+            return ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().KeyUp(keyCode);
         }
 
         public override bool OnGenericMotionEvent(MotionEvent e)
