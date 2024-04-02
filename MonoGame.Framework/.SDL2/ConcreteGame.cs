@@ -72,7 +72,6 @@ namespace Microsoft.Xna.Platform
 
             SDL.DisableScreenSaver();
 
-            ((Microsoft.Xna.Platform.Input.IPlatformGamePad)GamePad.Current).GetStrategy<Microsoft.Xna.Platform.Input.ConcreteGamePad>().InitDatabase();
             _gameWindow = new SdlGameWindow(Game);
             if (base.Window == null)
             {
@@ -153,8 +152,6 @@ namespace Microsoft.Xna.Platform
             {
                 _gameWindow.Dispose();
                 _gameWindow = null;
-
-                ((IPlatformJoystick)Joystick.Current).GetStrategy<ConcreteJoystick>().CloseDevices();
 
                 SDL.Quit();
             }
