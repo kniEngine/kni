@@ -31,6 +31,11 @@ namespace Microsoft.Xna.Platform.Input
         private readonly long[] _timeout = new long[4];
         private readonly long TimeoutTicks = TimeSpan.FromSeconds(1).Ticks;
 
+        // XInput Xbox Controller dead zones
+        // Dead zones are slightly different between left and right sticks, this may come from Microsoft usability tests
+        public override float LeftThumbDeadZone { get { return XInput.Gamepad.LeftThumbDeadZone / (float)short.MaxValue; } }
+        public override float RightThumbDeadZone { get { return XInput.Gamepad.RightThumbDeadZone / (float)short.MaxValue; } }
+
         public override int PlatformGetMaxNumberOfGamePads()
         {
             return 4;

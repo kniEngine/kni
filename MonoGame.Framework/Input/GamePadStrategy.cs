@@ -7,6 +7,8 @@ namespace Microsoft.Xna.Platform.Input
 {
     public abstract class GamePadStrategy
     {
+        public abstract float LeftThumbDeadZone { get; }
+        public abstract float RightThumbDeadZone { get; }
         public abstract int PlatformGetMaxNumberOfGamePads();
         public abstract GamePadCapabilities PlatformGetCapabilities(int index);
         public abstract GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode);
