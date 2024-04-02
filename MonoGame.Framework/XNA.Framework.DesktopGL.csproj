@@ -156,6 +156,7 @@
 
     <Compile Include="Input\.SDL2\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.SDL2\ConcreteGamePad.cs" />
+    <Compile Include="Input\.SDL2\ConcreteInputFactory.cs" />
     <Compile Include="Input\.SDL2\ConcreteJoystick.cs" />
     <Compile Include="Input\.SDL2\ConcreteKeyboard.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouse.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Input\GamePadThumbSticks.cs" />
     <Compile Include="Input\GamePadTriggers.cs" />
     <Compile Include="Input\GamePadType.cs" />
+    <Compile Include="Input\InputFactory.cs" />
     <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.cs" />
     <Compile Include="Input\JoystickStrategy.cs" />

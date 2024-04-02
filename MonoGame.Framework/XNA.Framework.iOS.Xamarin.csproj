@@ -140,6 +140,7 @@
 
     <Compile Include="Input\.iOS\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.iOS\ConcreteGamePad.cs" />
+    <Compile Include="Input\.iOS\ConcreteInputFactory.cs" />
     <Compile Include="Input\.iOS\ConcreteJoystick.cs" />
     <Compile Include="Input\.iOS\ConcreteKeyboard.cs" />
     <Compile Include="Input\.iOS\ConcreteKeyboardInput.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Input\GamePadThumbSticks.cs" />
     <Compile Include="Input\GamePadTriggers.cs" />
     <Compile Include="Input\GamePadType.cs" />
+    <Compile Include="Input\InputFactory.cs" />
     <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.cs" />
     <Compile Include="Input\JoystickStrategy.cs" />

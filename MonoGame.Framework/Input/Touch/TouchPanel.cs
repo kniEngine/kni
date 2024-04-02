@@ -7,6 +7,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Input;
 using Microsoft.Xna.Platform.Input.Touch;
 
 namespace Microsoft.Xna.Platform.Input.Touch
@@ -147,7 +148,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         private TouchPanel()
         {
-            _strategy = new ConcreteTouchPanel();
+            _strategy = InputFactory.Current.CreateTouchPanelStrategy();
         }
 
         #region ITouchPanel

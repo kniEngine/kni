@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Input
 
         private Keyboard()
         {
-            _strategy = new ConcreteKeyboard();
+            _strategy = InputFactory.Current.CreateKeyboardStrategy();
         }
 
 

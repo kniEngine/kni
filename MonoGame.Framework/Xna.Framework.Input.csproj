@@ -39,6 +39,7 @@
     <Compile Include="Input\GamePadThumbSticks.cs" />
     <Compile Include="Input\GamePadTriggers.cs" />
     <Compile Include="Input\GamePadType.cs" />
+    <Compile Include="Input\InputFactory.cs" />
     <Compile Include="Input\InputKeyEventArgs.cs" />
     <Compile Include="Input\Joystick.cs" />
     <Compile Include="Input\JoystickStrategy.cs" />

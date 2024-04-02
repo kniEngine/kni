@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework.Input
 
         private GamePad()
         {
-            _strategy = new ConcreteGamePad();
+            _strategy = InputFactory.Current.CreateGamePadStrategy();
         }
 
         #region IGamePad

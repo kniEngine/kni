@@ -110,12 +110,12 @@ namespace Microsoft.Xna.Framework.Input
 
         private MouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            _strategy = new ConcreteMouseCursor(cursorType);
+            _strategy = InputFactory.Current.CreateMouseCursorStrategy(cursorType);
         }
 
         public MouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
-            _strategy = new ConcreteMouseCursor(data, w, h, originx, originy);
+            _strategy = InputFactory.Current.CreateMouseCursorStrategy(data, w, h, originx, originy);
         }
 
         /// <summary>
