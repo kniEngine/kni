@@ -27,7 +27,21 @@ namespace Microsoft.Xna.Platform.Input
         private readonly Dictionary<int, GamePadInfo> Gamepads = new Dictionary<int, GamePadInfo>();
         private readonly Dictionary<int, int> _translationTable = new Dictionary<int, int>();
 
-        public void InitDatabase()
+        public ConcreteGamePad()
+        {
+            InitDatabase();
+        }
+
+        ~ConcreteGamePad()
+        {
+            foreach (KeyValuePair<int, GamePadInfo> entry in Gamepads)
+                SDL.GAMECONTROLLER.Close(entry.Value.Device);
+
+            Gamepads.Clear();            
+        }
+
+
+        private void InitDatabase()
         {
             using (Stream stream = ReflectionHelpers.GetAssembly(typeof(GamePad)).GetManifestResourceStream("gamecontrollerdb.txt"))
             {
@@ -67,7 +81,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(entry.Value.Device)) == instanceid)
                 {
                     Gamepads.Remove(entry.Key);
-                    DisposeDevice(entry.Value);
+                    SDL.GAMECONTROLLER.Close(entry.Value.Device);
                     break;
                 }
             }
@@ -95,19 +109,6 @@ namespace Microsoft.Xna.Platform.Input
                     info.PacketNumber = packetNumber < int.MaxValue ? (int)packetNumber : (int)(packetNumber - (uint)int.MaxValue);
                 }
             }
-        }
-
-        private void DisposeDevice(GamePadInfo info)
-        {
-            SDL.GAMECONTROLLER.Close(info.Device);
-        }
-
-        internal void CloseDevices()
-        {
-            foreach (KeyValuePair<int,GamePadInfo> entry in Gamepads)
-                DisposeDevice(entry.Value);
-
-            Gamepads.Clear();
         }
 
         public override int PlatformGetMaxNumberOfGamePads()

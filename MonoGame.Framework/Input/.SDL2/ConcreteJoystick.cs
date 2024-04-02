@@ -27,6 +27,18 @@ namespace Microsoft.Xna.Platform.Input
             get { return _lastConnectedIndex; }
         }
 
+        public ConcreteJoystick()
+        {
+
+        }
+
+        ~ConcreteJoystick()
+        {
+            foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
+                SDL.JOYSTICK.Close(entry.Value);
+
+            Joysticks.Clear();
+        }
 
         public override JoystickCapabilities PlatformGetCapabilities(int index)
         {
@@ -190,16 +202,6 @@ namespace Microsoft.Xna.Platform.Input
                     break;
                 }
             }
-        }
-
-        internal void CloseDevices()
-        {
-            ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().CloseDevices();
-
-            foreach (KeyValuePair<int,IntPtr> entry in Joysticks)
-                SDL.JOYSTICK.Close(entry.Value);
-
-            Joysticks.Clear();
         }
 
         private void RecalculateLastConnectedIndex()
