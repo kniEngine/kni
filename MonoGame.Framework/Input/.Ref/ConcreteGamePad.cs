@@ -10,6 +10,11 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteGamePad : GamePadStrategy
     {
 
+        // Default & SDL Xbox Controller dead zones
+        // Based on the XInput constants
+        public override float LeftThumbDeadZone { get { throw new PlatformNotSupportedException(); } }
+        public override float RightThumbDeadZone { get { throw new PlatformNotSupportedException(); } }
+
         public override int PlatformGetMaxNumberOfGamePads()
         {
             throw new PlatformNotSupportedException();

@@ -23,6 +23,11 @@ namespace Microsoft.Xna.Platform.Input
         private WGI.Gamepad[] _gamepads;
         private int tmp;
 
+        // Default & SDL Xbox Controller dead zones
+        // Based on the XInput constants
+        public override float LeftThumbDeadZone { get { return 0.24f; } }
+        public override float RightThumbDeadZone { get { return 0.265f; } }
+
         public ConcreteGamePad()
         {
             _gamepads = new WGI.Gamepad[PlatformGetMaxNumberOfGamePads()];

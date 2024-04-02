@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using Microsoft.Xna.Platform.Input;
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
@@ -9,18 +11,6 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public struct GamePadThumbSticks
     {
-#if DIRECTX && !(UAP || WINUI)
-        // XInput Xbox 360 Controller dead zones
-        // Dead zones are slightly different between left and right sticks, this may come from Microsoft usability tests
-        private const float leftThumbDeadZone = SharpDX.XInput.Gamepad.LeftThumbDeadZone / (float)short.MaxValue;
-        private const float rightThumbDeadZone = SharpDX.XInput.Gamepad.RightThumbDeadZone / (float)short.MaxValue;
-#else
-        // Default & SDL Xbox 360 Controller dead zones
-        // Based on the XInput constants
-        private const float leftThumbDeadZone = 0.24f;
-        private const float rightThumbDeadZone = 0.265f;
-#endif
-
         internal readonly Buttons _virtualButtons;
         private readonly Vector2 _left, _right;
 
@@ -50,6 +40,9 @@ namespace Microsoft.Xna.Framework.Input
 
         internal GamePadThumbSticks(Vector2 leftPosition, Vector2 rightPosition, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode) : this()
         {
+            float leftThumbDeadZone  = ((IPlatformGamePad)GamePad.Current).GetStrategy<GamePadStrategy>().LeftThumbDeadZone;
+            float rightThumbDeadZone = ((IPlatformGamePad)GamePad.Current).GetStrategy<GamePadStrategy>().RightThumbDeadZone;
+
             // Apply dead zone
             _left = ApplyDeadZone(leftDeadZoneMode, leftThumbDeadZone, leftPosition);
             _right = ApplyDeadZone(rightDeadZoneMode, rightThumbDeadZone, rightPosition);
