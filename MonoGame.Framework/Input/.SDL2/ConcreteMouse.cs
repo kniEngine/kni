@@ -12,6 +12,8 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
+        private IntPtr _wndHandle = IntPtr.Zero;
+
         internal GameWindow PrimaryWindow;
 
         private Sdl SDL { get { return Sdl.Current; } }
@@ -21,11 +23,13 @@ namespace Microsoft.Xna.Platform.Input
 
         public override IntPtr PlatformGetWindowHandle()
         {
+            //return _wndHandle;
             return PrimaryWindow.Handle;
         }
 
         public override void PlatformSetWindowHandle(IntPtr windowHandle)
         {
+            _wndHandle = windowHandle;
         }
 
         public override bool PlatformIsRawInputAvailable()
@@ -35,41 +39,47 @@ namespace Microsoft.Xna.Platform.Input
 
         public override MouseState PlatformGetState()
         {
-            throw new NotImplementedException();
-        }
+            if (this.PrimaryWindow != null)
+            {
+                GameWindow window = this.PrimaryWindow;
+                IntPtr wndHandle = window.Handle;
 
-        public MouseState PlatformGetState(GameWindow window)
-        {
-            int winFlags = SDL.WINDOW.GetWindowFlags(window.Handle);
+                int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
-            int x, y;
-            int wndx = 0, wndy = 0;
-            Sdl.Mouse.Button state = SDL.MOUSE.GetGlobalState(out x, out y);
-            SDL.WINDOW.GetPosition(window.Handle, out wndx, out wndy);
-            x = x - wndx;
-            y = y - wndy;
+                int x, y;
+                int wndx = 0, wndy = 0;
+                Sdl.Mouse.Button state = SDL.MOUSE.GetGlobalState(out x, out y);
+                SDL.WINDOW.GetPosition(wndHandle, out wndx, out wndy);
+                x = x - wndx;
+                y = y - wndy;
 
-            window.MouseState.LeftButton = (state & Sdl.Mouse.Button.Left) != 0 ? ButtonState.Pressed : ButtonState.Released;
-            window.MouseState.MiddleButton = (state & Sdl.Mouse.Button.Middle) != 0 ? ButtonState.Pressed : ButtonState.Released;
-            window.MouseState.RightButton = (state & Sdl.Mouse.Button.Right) != 0 ? ButtonState.Pressed : ButtonState.Released;
-            window.MouseState.XButton1 = (state & Sdl.Mouse.Button.X1Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
-            window.MouseState.XButton2 = (state & Sdl.Mouse.Button.X2Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                window.MouseState.LeftButton = (state & Sdl.Mouse.Button.Left) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                window.MouseState.MiddleButton = (state & Sdl.Mouse.Button.Middle) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                window.MouseState.RightButton = (state & Sdl.Mouse.Button.Right) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                window.MouseState.XButton1 = (state & Sdl.Mouse.Button.X1Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                window.MouseState.XButton2 = (state & Sdl.Mouse.Button.X2Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
 
-            window.MouseState.HorizontalScrollWheelValue = ScrollX;
-            window.MouseState.ScrollWheelValue = ScrollY;
+                window.MouseState.HorizontalScrollWheelValue = ScrollX;
+                window.MouseState.ScrollWheelValue = ScrollY;
 
-            window.MouseState.X = x;
-            window.MouseState.Y = y;
+                window.MouseState.X = x;
+                window.MouseState.Y = y;
 
-            return window.MouseState;
+                return window.MouseState;
+            }
+            else
+                return new MouseState();
         }
 
         public override void PlatformSetPosition(int x, int y)
         {
-            PrimaryWindow.MouseState.X = x;
-            PrimaryWindow.MouseState.Y = y;
+            GameWindow window = this.PrimaryWindow;
+            IntPtr wndHandle = window.Handle;
 
-            SDL.MOUSE.WarpInWindow(PrimaryWindow.Handle, x, y);
+            window.MouseState.X = x;
+            window.MouseState.Y = y;
+
+            SDL.MOUSE.WarpInWindow(wndHandle, x, y);
         }
 
         public override void PlatformSetCursor(MouseCursor cursor)
