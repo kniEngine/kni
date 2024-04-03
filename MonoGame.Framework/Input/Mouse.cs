@@ -36,8 +36,6 @@ namespace Microsoft.Xna.Framework.Input
     {
         private static Mouse _current;
 
-        private static readonly MouseState _defaultState = new MouseState();
-
         private MouseCursor _mouseCursor;
 
         /// <summary>
@@ -134,13 +132,6 @@ namespace Microsoft.Xna.Framework.Input
 
         MouseState IMouse.GetState()
         {
-#if DESKTOPGL || (UAP || WINUI)
-            if (((ConcreteMouse)_strategy).PrimaryWindow != null)
-                return ((ConcreteMouse)_strategy).PlatformGetState(((ConcreteMouse)_strategy).PrimaryWindow);
-            else
-                return _defaultState;
-#endif
-
             return _strategy.PlatformGetState();
         }
 

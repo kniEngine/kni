@@ -35,10 +35,15 @@ namespace Microsoft.Xna.Platform.Input
 
         public override MouseState PlatformGetState()
         {
-            throw new NotImplementedException();
+            if (this.PrimaryWindow != null)
+            {
+                return this.PlatformGetState(this.PrimaryWindow);
+            }
+            else
+                return new MouseState();
         }
 
-        public MouseState PlatformGetState(GameWindow window)
+        private MouseState PlatformGetState(GameWindow window)
         {
             int winFlags = SDL.WINDOW.GetWindowFlags(window.Handle);
 
