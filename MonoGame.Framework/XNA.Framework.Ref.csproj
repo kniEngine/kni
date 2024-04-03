@@ -67,6 +67,7 @@
     <Compile Include=".Ref\ConcreteGame.cs" />
     <Compile Include="Input\.Ref\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Ref\ConcreteGamePad.cs" />
+    <Compile Include="Input\.Ref\ConcreteInputFactory.cs" />
     <Compile Include="Input\.Ref\ConcreteJoystick.cs" />
     <Compile Include="Input\.Ref\ConcreteKeyboard.cs" />
     <Compile Include="Input\.Ref\ConcreteMouse.cs" />

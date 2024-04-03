@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework.Input
 
         private Mouse()
         {
-            _strategy = new ConcreteMouse();
+            _strategy = InputFactory.Current.CreateMouseStrategy();
         }
 
 

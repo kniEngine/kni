@@ -81,6 +81,7 @@
     <Compile Include=".iOS\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Input\.iOS\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.iOS\ConcreteGamePad.cs" />
+    <Compile Include="Input\.iOS\ConcreteInputFactory.cs" />
     <Compile Include="Input\.iOS\ConcreteJoystick.cs" />
     <Compile Include="Input\.iOS\ConcreteKeyboard.cs" />
     <Compile Include="Input\.iOS\ConcreteKeyboardInput.cs" />

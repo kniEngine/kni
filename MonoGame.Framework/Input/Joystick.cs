@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Input
 
         private Joystick()
         {
-            _strategy = new ConcreteJoystick();
+            _strategy = InputFactory.Current.CreateJoystickStrategy();
         }
 
         #region IJoystick
