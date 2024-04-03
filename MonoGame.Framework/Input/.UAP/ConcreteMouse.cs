@@ -32,15 +32,10 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (this.PrimaryWindow != null)
             {
-                return this.PlatformGetState(this.PrimaryWindow);
+                return this.PrimaryWindow.MouseState;
             }
             else
                 return new MouseState();
-        }
-
-        private MouseState PlatformGetState(GameWindow window)
-        {
-            return window.MouseState;
         }
 
         public override void PlatformSetPosition(int x, int y)
