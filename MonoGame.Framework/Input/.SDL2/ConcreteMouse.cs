@@ -42,13 +42,14 @@ namespace Microsoft.Xna.Platform.Input
             if (this.PrimaryWindow != null)
             {
                 GameWindow window = this.PrimaryWindow;
+                IntPtr wndHandle = window.Handle;
 
-                int winFlags = SDL.WINDOW.GetWindowFlags(window.Handle);
+                int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
                 int x, y;
                 int wndx = 0, wndy = 0;
                 Sdl.Mouse.Button state = SDL.MOUSE.GetGlobalState(out x, out y);
-                SDL.WINDOW.GetPosition(window.Handle, out wndx, out wndy);
+                SDL.WINDOW.GetPosition(wndHandle, out wndx, out wndy);
                 x = x - wndx;
                 y = y - wndy;
 
@@ -72,10 +73,13 @@ namespace Microsoft.Xna.Platform.Input
 
         public override void PlatformSetPosition(int x, int y)
         {
-            PrimaryWindow.MouseState.X = x;
-            PrimaryWindow.MouseState.Y = y;
+            GameWindow window = this.PrimaryWindow;
+            IntPtr wndHandle = window.Handle;
 
-            SDL.MOUSE.WarpInWindow(PrimaryWindow.Handle, x, y);
+            window.MouseState.X = x;
+            window.MouseState.Y = y;
+
+            SDL.MOUSE.WarpInWindow(wndHandle, x, y);
         }
 
         public override void PlatformSetCursor(MouseCursor cursor)
