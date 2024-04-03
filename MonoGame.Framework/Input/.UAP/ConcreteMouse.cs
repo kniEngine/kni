@@ -12,15 +12,18 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
+        private IntPtr _wndHandle = IntPtr.Zero;
+
         internal GameWindow PrimaryWindow;
 
         public override IntPtr PlatformGetWindowHandle()
         {
-            return IntPtr.Zero;
+            return _wndHandle;
         }
 
         public override void PlatformSetWindowHandle(IntPtr windowHandle)
         {
+            _wndHandle = windowHandle;
         }
 
         public override bool PlatformIsRawInputAvailable()

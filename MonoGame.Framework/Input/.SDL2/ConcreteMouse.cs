@@ -12,6 +12,8 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
+        private IntPtr _wndHandle = IntPtr.Zero;
+
         internal GameWindow PrimaryWindow;
 
         private Sdl SDL { get { return Sdl.Current; } }
@@ -21,11 +23,13 @@ namespace Microsoft.Xna.Platform.Input
 
         public override IntPtr PlatformGetWindowHandle()
         {
+            //return _wndHandle;
             return PrimaryWindow.Handle;
         }
 
         public override void PlatformSetWindowHandle(IntPtr windowHandle)
         {
+            _wndHandle = windowHandle;
         }
 
         public override bool PlatformIsRawInputAvailable()
