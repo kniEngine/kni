@@ -25,8 +25,8 @@ namespace MonoGame.Tests.Input
 
 
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             GameWindow gameWindow = new MockWindow();
 

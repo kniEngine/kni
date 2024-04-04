@@ -16,8 +16,8 @@ namespace MonoGame.Tests.Input
             return TimeSpan.FromSeconds(frameNo / 60D);
         }
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             GameWindow gameWindow = new MockWindow();
 
