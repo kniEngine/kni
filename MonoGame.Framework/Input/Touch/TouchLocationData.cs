@@ -10,6 +10,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         private int _id;
         internal TouchLocationState _state;
         internal Vector2 _position;
+
         internal Vector2 _previousPosition;
         internal TouchLocationState _previousState;
 
@@ -19,32 +20,29 @@ namespace Microsoft.Xna.Framework.Input.Touch
         private TimeSpan _pressTimestamp;
         internal TimeSpan _timestamp;
 
+
         /// <summary>
         /// True if this touch was pressed and released on the same frame.
         /// In this case we will keep it around for the user to get by GetState that frame.
         /// However if they do not call GetState that frame, this touch will be forgotten.
         /// </summary>
-        internal bool SameFrameReleased;
+        internal bool SameFrameReleased = false;
 
         /// <summary>
         /// Helper for assigning an invalid touch location.
         /// </summary>
         internal static readonly TouchLocationData Invalid = new TouchLocationData();
 
-
-        internal Vector2 PressPosition { get { return _pressPosition; } }
-
-        internal TimeSpan PressTimestamp { get { return _pressTimestamp; } }
-
-        internal TimeSpan Timestamp { get { return _timestamp; } }
-
-        internal Vector2 Velocity { get { return _velocity; } }
-
         internal int Id { get { return _id; } }
-
+        internal TouchLocationState State { get { return _state; } }
         internal Vector2 Position { get { return _position; } }
 
-        internal TouchLocationState State { get { return _state; } }
+        internal Vector2 Velocity { get { return _velocity; } }
+        internal Vector2 PressPosition { get { return _pressPosition; } }
+        internal TimeSpan PressTimestamp { get { return _pressTimestamp; } }
+        internal TimeSpan Timestamp { get { return _timestamp; } }
+
+
 
         internal TouchLocation TouchLocation
         {
@@ -82,7 +80,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 _pressTimestamp = TimeSpan.Zero;
             }
 
-            SameFrameReleased = false;
         }
 
         public bool TryGetPreviousLocationData(out TouchLocationData aPreviousLocation)
