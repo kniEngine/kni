@@ -206,7 +206,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
                                     &&  existingTouch._state == TouchLocationState.Released
-                                    &&  elapsed == TimeSpan.Zero)
+                                    &&  existingTouch.Timestamp == evt.Timestamp)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -283,7 +283,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                         //Going straight from pressed to released on the same frame
                                         if (existingTouch._previousState == TouchLocationState.Pressed
                                         &&  existingTouch._state == TouchLocationState.Released
-                                        &&  elapsed == TimeSpan.Zero)
+                                        &&  existingTouch.Timestamp == evt.Timestamp)
                                         {
                                             //Lie that we are pressed for now
                                             existingTouch.SameFrameReleased = true;
@@ -393,7 +393,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    &&  elapsed == TimeSpan.Zero)
+                                    &&  existingTouch.Timestamp == CurrentTimestamp)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -456,7 +456,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    &&  elapsed == TimeSpan.Zero)
+                                    &&  existingTouch.Timestamp == CurrentTimestamp)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
