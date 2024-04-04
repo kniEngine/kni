@@ -25,8 +25,8 @@ namespace MonoGame.Tests.Input
 
 
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             GameWindow gameWindow = new MockWindow();
 
@@ -39,7 +39,16 @@ namespace MonoGame.Tests.Input
 
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(TimeSpan.Zero);
+            TouchPanel.GetState();
+        }
+
         [Test]
+        [Order(0)]
         public void DoingNothingMakesNoGestures()
         {
             TouchPanel.EnabledGestures = AllGestures;
@@ -51,6 +60,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(1)]
         public void BasicTapGesture()
         {
             TouchPanel.EnabledGestures = GestureType.Tap;
@@ -75,6 +85,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(2)]
         [TestCase(true), TestCase(false)]
         public void BasicDoubleTapGesture(bool enableTap)
         {
@@ -132,6 +143,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(3)]
         [Description("Do 2 quick taps, but make the second tap not near the first. Should not make a double tap")]
         public void DoubleTapTooFar()
         {

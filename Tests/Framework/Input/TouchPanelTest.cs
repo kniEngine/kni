@@ -16,8 +16,8 @@ namespace MonoGame.Tests.Input
             return TimeSpan.FromSeconds(frameNo / 60D);
         }
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             GameWindow gameWindow = new MockWindow();
 
@@ -29,7 +29,16 @@ namespace MonoGame.Tests.Input
             TouchPanel.DisplayHeight = gameWindow.ClientBounds.Height;
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(TimeSpan.Zero);
+            TouchPanel.GetState();
+        }
+
         [Test]
+        [Order(0)]
         public void InitiallyHasNoTouches()
         {
             var state = TouchPanel.GetState();
@@ -39,6 +48,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(1)]
         public void PressedStartsATouch()
         {
             var pos = new Vector2(100, 50);
@@ -54,11 +64,12 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(2)]
         [Description("In XNA if you press then move your finger before GetState is called, the initial touch position is the latest position of the touch")]
         public void PressedThenMoveStartsATouchAtNewPosition()
         {
-            var pos = new Vector2(100, 50);
-            var pos2 = new Vector2(100, 100);
+            var pos = new Vector2(101, 50);
+            var pos2 = new Vector2(101, 100);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
 
@@ -72,12 +83,13 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(3)]
         [TestCase(TouchLocationState.Invalid)]
         [TestCase(TouchLocationState.Moved)]
         [TestCase(TouchLocationState.Released)]
         public void NonPressedDoesntStartATouch(TouchLocationState providedState)
         {
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, providedState, new Vector2(100, 50));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, providedState, new Vector2(102, 50));
 
             var state = TouchPanel.GetState();
 
@@ -85,9 +97,10 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(4)]
         public void PressedAgesToMovedAfterGetState()
         {
-            var pos = new Vector2(100, 50);
+            var pos = new Vector2(103, 50);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
             var initialState = TouchPanel.GetState();
@@ -104,9 +117,10 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(5)]
         public void MovingTouchUpdatesPosition()
         {
-            var pos1 = new Vector2(100, 50);
+            var pos1 = new Vector2(104, 50);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos1);
 
             var state = TouchPanel.GetState();
@@ -116,7 +130,7 @@ namespace MonoGame.Tests.Input
             Assert.AreEqual(TouchLocationState.Pressed, touch.State);
             Assert.AreEqual(pos1, touch.Position);
 
-            var pos2 = new Vector2(100, 50);
+            var pos2 = new Vector2(104, 50);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
 
             state = TouchPanel.GetState();
@@ -128,12 +142,13 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(6)]
         [TestCase(true)]
         [TestCase(false)]
         public void ReleasingTouchMakesItGoAway(bool moveInBetween)
         {
             //Touch the screen, we should get one touch with the given location in the pressed state
-            var pos = new Vector2(100, 50);
+            var pos = new Vector2(105, 50);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             
             var state = TouchPanel.GetState();
@@ -146,7 +161,7 @@ namespace MonoGame.Tests.Input
             //Now optionally move the touch, should give the same touch in the new location in the moved state
             if (moveInBetween)
             {
-                var pos2 = new Vector2(100, 100);
+                var pos2 = new Vector2(105, 100);
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
 
                 var movedState = TouchPanel.GetState();
@@ -159,7 +174,7 @@ namespace MonoGame.Tests.Input
             }
 
             //Release the touch, it should then show up as released touch
-            var pos3 = new Vector2(100, 150);
+            var pos3 = new Vector2(105, 150);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos3);
 
             var endState = TouchPanel.GetState();
@@ -176,13 +191,14 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(7)]
         [TestCase(true)]
         [TestCase(false)]
         [Description("In XNA if you press and release your finger over multiple frames where GetState is not called, the touch never shows up")]
         public void TouchBetweenGetStateCallsMakesNoTouch(bool moveInBetween)
         {
-            var pos = new Vector2(100, 50);
-            var pos2 = new Vector2(100, 150);
+            var pos = new Vector2(106, 50);
+            var pos2 = new Vector2(106, 150);
             int frame = 0;
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
@@ -202,6 +218,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(8)]
         [TestCase(true, true)]
         [TestCase(true, false)]
         [TestCase(false, true)]
@@ -209,8 +226,8 @@ namespace MonoGame.Tests.Input
         [Description("If you press and release a touch on the same frame we need to show it as pressed that frame and released in the next")]
         public void SameFrameTouchAndReleaseMakesTouch(bool moveInBetween, bool waitAFrameForNextState)
         {
-            var pos = new Vector2(100, 50);
-            var pos2 = new Vector2(100, 150);
+            var pos = new Vector2(107, 50);
+            var pos2 = new Vector2(107, 150);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
@@ -248,13 +265,14 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(9)]
         [TestCase(true)]
         [TestCase(false)]
         [Description("Press and release our finger on the same frame. Don't call GetState that frame, but do the next. We should not get the touch")]
         public void SameFrameTouchAndReleaseMissedIfWaitAFrameToGetState(bool moveInBetween)
         {
-            var pos = new Vector2(100, 50);
-            var pos2 = new Vector2(100, 150);
+            var pos = new Vector2(108, 50);
+            var pos2 = new Vector2(108, 150);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
@@ -266,11 +284,12 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(10)]
         [Description("Do multiple touches and check they behave as expected")]
         public void SimpleMultiTouchTest()
         {
             //Start with one touch
-            var pos = new Vector2(100, 50);
+            var pos = new Vector2(109, 50);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
             var state = TouchPanel.GetState();
@@ -369,6 +388,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(11)]
         [Description("Internally TouchPanelState uses a queue of TouchLocation updating state. If it gets longer than 100, it throws away the first ones, which is bad")]
         public void TooManyEventsLosesOldOnes()
         {
@@ -409,14 +429,15 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(12)]
         [TestCase(false), TestCase(true)]
         public void ReleaseAllTouchesTest(bool testBetween)
         {
             //Create multiple touches in different states
 
             //Start a touch
-            Vector2 pos = new Vector2(1);
-            Vector2 pos2 = new Vector2(2);
+            Vector2 pos = new Vector2(2);
+            Vector2 pos2 = new Vector2(3);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
             var state = TouchPanel.GetState();
