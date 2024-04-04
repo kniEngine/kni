@@ -360,8 +360,11 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 temp.AddRange(_touchStates);
                 foreach (TouchLocationData tmpTouch in temp)
                 {
-                    if (tmpTouch.State != TouchLocationState.Released)
+                    switch (tmpTouch.State)
                     {
+                        case TouchLocationState.Pressed:
+                        case TouchLocationState.Moved:
+                        case TouchLocationState.Invalid:
                             // Apply the given new touch to the existing touch it matches.
                             for (int i = 0; i < _touchStates.Count; i++)
                             {
@@ -411,6 +414,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     break;
                                 }
                             }
+                            break;
+
+                        case TouchLocationState.Released:
+                            break;
                     }
                 }
 
@@ -418,8 +425,11 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 temp.AddRange(_gestureStates);
                 foreach (TouchLocationData tmpTouch in temp)
                 {
-                    if (tmpTouch.State != TouchLocationState.Released)
+                    switch (tmpTouch.State)
                     {
+                        case TouchLocationState.Pressed:
+                        case TouchLocationState.Moved:
+                        case TouchLocationState.Invalid:
                             // Apply the given new touch to the existing touch it matches.
                             for (int i = 0; i < _gestureStates.Count; i++)
                             {
@@ -469,6 +479,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     break;
                                 }
                             }
+                            break;
+
+                        case TouchLocationState.Released:
+                            break;
                     }
                 }
             }
