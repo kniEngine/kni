@@ -202,8 +202,8 @@
     <Compile Include="Input\Touch\TouchLocationState.cs" />
     <Compile Include="Input\Touch\TouchPanel.cs" />
     <Compile Include="Input\Touch\TouchPanelStrategy.cs" />
+    <Compile Include="Input\Touch\TouchPanelStrategy.Legacy.cs" />
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
-    <Compile Include="Input\Touch\TouchPanelState.cs" />
     <Compile Include="Media\WMS\ConcreteAlbum.cs" />
     <Compile Include="Media\WMS\ConcreteMediaFactory.cs" />
     <Compile Include="Media\WMS\ConcreteMediaLibrary.cs" />

@@ -2,15 +2,15 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Input.Touch;
+using MonoGame.Tests.Framework;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Framework
+namespace MonoGame.Tests.Input
 {
     [TestFixture]
     internal class TouchPanelTest
     {
-        private TouchPanelState _tps;
-
         private TimeSpan GameTimeForFrame(int frameNo)
         {
             return TimeSpan.FromSeconds(frameNo / 60D);
@@ -19,14 +19,20 @@ namespace MonoGame.Tests.Framework
         [SetUp]
         public void SetUp()
         {
-            TouchPanelState.CurrentTimestamp = GameTimeForFrame(0);
-            _tps = new TouchPanelState(new MockWindow());
+            GameWindow gameWindow = new MockWindow();
+
+            TimeSpan currentTimestamp0 = GameTimeForFrame(0);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp0);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = gameWindow;
+            TouchPanel.WindowHandle = gameWindow.Handle;
+            TouchPanel.DisplayWidth = gameWindow.ClientBounds.Width;
+            TouchPanel.DisplayHeight = gameWindow.ClientBounds.Height;
         }
 
         [Test]
         public void InitiallyHasNoTouches()
         {
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
 
             Assert.AreEqual(0, state.Count);
             Assert.AreEqual(true, state.IsReadOnly);
@@ -36,9 +42,9 @@ namespace MonoGame.Tests.Framework
         public void PressedStartsATouch()
         {
             var pos = new Vector2(100, 50);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
 
             Assert.AreEqual(1, state.Count);
 
@@ -53,10 +59,10 @@ namespace MonoGame.Tests.Framework
         {
             var pos = new Vector2(100, 50);
             var pos2 = new Vector2(100, 100);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
-            _tps.AddEvent(1, TouchLocationState.Moved, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
 
             Assert.AreEqual(1, state.Count);
 
@@ -71,9 +77,9 @@ namespace MonoGame.Tests.Framework
         [TestCase(TouchLocationState.Released)]
         public void NonPressedDoesntStartATouch(TouchLocationState providedState)
         {
-            _tps.AddEvent(1, providedState, new Vector2(100, 50));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, providedState, new Vector2(100, 50));
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
 
             Assert.AreEqual(0, state.Count);
         }
@@ -82,12 +88,12 @@ namespace MonoGame.Tests.Framework
         public void PressedAgesToMovedAfterGetState()
         {
             var pos = new Vector2(100, 50);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
-            var initialState = _tps.GetState();
+            var initialState = TouchPanel.GetState();
             var initialTouch = initialState[0];
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
 
             Assert.AreEqual(1, state.Count);
 
@@ -101,9 +107,9 @@ namespace MonoGame.Tests.Framework
         public void MovingTouchUpdatesPosition()
         {
             var pos1 = new Vector2(100, 50);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos1);
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             var touch = state[0];
@@ -111,9 +117,9 @@ namespace MonoGame.Tests.Framework
             Assert.AreEqual(pos1, touch.Position);
 
             var pos2 = new Vector2(100, 50);
-            _tps.AddEvent(1, TouchLocationState.Moved, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
 
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             touch = state[0];
@@ -128,9 +134,9 @@ namespace MonoGame.Tests.Framework
         {
             //Touch the screen, we should get one touch with the given location in the pressed state
             var pos = new Vector2(100, 50);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             var initialTouch = state[0];
@@ -141,9 +147,9 @@ namespace MonoGame.Tests.Framework
             if (moveInBetween)
             {
                 var pos2 = new Vector2(100, 100);
-                _tps.AddEvent(1, TouchLocationState.Moved, pos2);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
 
-                var movedState = _tps.GetState();
+                var movedState = TouchPanel.GetState();
                 Assert.AreEqual(1, movedState.Count);
 
                 var touch = movedState[0];
@@ -154,9 +160,9 @@ namespace MonoGame.Tests.Framework
 
             //Release the touch, it should then show up as released touch
             var pos3 = new Vector2(100, 150);
-            _tps.AddEvent(1, TouchLocationState.Released, pos3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos3);
 
-            var endState = _tps.GetState();
+            var endState = TouchPanel.GetState();
             Assert.AreEqual(1, endState.Count);
 
             var endTouch = endState[0];
@@ -165,7 +171,7 @@ namespace MonoGame.Tests.Framework
             Assert.AreEqual(initialTouch.Id, endTouch.Id);
 
             //Finally get the TouchState again, we should now have no touches
-            var finalState = _tps.GetState();
+            var finalState = TouchPanel.GetState();
             Assert.AreEqual(0, finalState.Count);
         }
 
@@ -179,16 +185,19 @@ namespace MonoGame.Tests.Framework
             var pos2 = new Vector2(100, 150);
             int frame = 0;
 
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
             {
-                TouchPanelState.CurrentTimestamp = GameTimeForFrame(++frame);
-                _tps.AddEvent(1, TouchLocationState.Moved, pos2);
+                TimeSpan currentTimestampN1 = GameTimeForFrame(++frame);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
             }
-            TouchPanelState.CurrentTimestamp = GameTimeForFrame(++frame);
-            _tps.AddEvent(1, TouchLocationState.Released, pos2);
 
-            var state = _tps.GetState();
+            TimeSpan currentTimestampN2 = GameTimeForFrame(++frame);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
+
+            var state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count); //Should miss the touch that happened between
         }
 
@@ -202,12 +211,12 @@ namespace MonoGame.Tests.Framework
         {
             var pos = new Vector2(100, 50);
             var pos2 = new Vector2(100, 150);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
-                _tps.AddEvent(1, TouchLocationState.Moved, pos2);
-            _tps.AddEvent(1, TouchLocationState.Released, pos2);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count); //Should get the touch that happened between
 
             var touch = state[0];
@@ -215,9 +224,12 @@ namespace MonoGame.Tests.Framework
             Assert.AreEqual(TouchLocationState.Pressed, touch.State);
 
             if (waitAFrameForNextState)
-                TouchPanelState.CurrentTimestamp = GameTimeForFrame(1);
+            {
+                TimeSpan currentTimestamp1 = GameTimeForFrame(1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            }
 
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count); //Touch should still be there, but as released
 
             touch = state[0];
@@ -226,9 +238,12 @@ namespace MonoGame.Tests.Framework
 
 
             if (waitAFrameForNextState)
-                TouchPanelState.CurrentTimestamp = GameTimeForFrame(1);
+            {
+                TimeSpan currentTimestamp1 = GameTimeForFrame(1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            }
            
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count); //Touch should be gone now
         }
 
@@ -240,13 +255,13 @@ namespace MonoGame.Tests.Framework
         {
             var pos = new Vector2(100, 50);
             var pos2 = new Vector2(100, 150);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
-                _tps.AddEvent(1, TouchLocationState.Moved, pos2);
-            _tps.AddEvent(1, TouchLocationState.Released, pos2);
-
-            TouchPanelState.CurrentTimestamp = GameTimeForFrame(1);
-            var state = _tps.GetState();
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
+            TimeSpan currentTimestamp1 = GameTimeForFrame(1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            var state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count); //Shouldn't get the touch that happened last frame
         }
 
@@ -256,9 +271,9 @@ namespace MonoGame.Tests.Framework
         {
             //Start with one touch
             var pos = new Vector2(100, 50);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             var initialTouch1 = state[0];
@@ -268,9 +283,9 @@ namespace MonoGame.Tests.Framework
 
             //Start a second touch
             var pos2 = new Vector2(150, 100);
-            _tps.AddEvent(2, TouchLocationState.Pressed, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
 
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
 
             //First touch should now be moved, same location
@@ -286,9 +301,9 @@ namespace MonoGame.Tests.Framework
 
             //Move the second touch
             var pos3 = new Vector2(150, 150);
-            _tps.AddEvent(2, TouchLocationState.Moved, pos3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Moved, pos3);
             
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
 
             //touch1 should be the same
@@ -304,9 +319,9 @@ namespace MonoGame.Tests.Framework
 
             //Release the second touch
             var pos4 = new Vector2(150, 200);
-            _tps.AddEvent(2, TouchLocationState.Released, pos4);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, pos4);
 
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
 
             //touch1 should be the same
@@ -322,9 +337,9 @@ namespace MonoGame.Tests.Framework
 
             //Move the first touch, second touch shouldn't be there any more
             var pos5 = new Vector2(100, 200);
-            _tps.AddEvent(1, TouchLocationState.Moved, pos5);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos5);
 
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             //touch1 should be moved to the new position
@@ -337,9 +352,9 @@ namespace MonoGame.Tests.Framework
 
             //Release the first touch
             var pos6 = new Vector2(100, 250);
-            _tps.AddEvent(1, TouchLocationState.Released, pos6);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos6);
 
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             //touch1 should be released at the new position
@@ -349,7 +364,7 @@ namespace MonoGame.Tests.Framework
 
 
             //Now we should have no touches
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count);
         }
 
@@ -363,9 +378,9 @@ namespace MonoGame.Tests.Framework
 
             //Start a touch
             var pos = new Vector2(1);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             var initialTouch = state[0];
@@ -374,14 +389,14 @@ namespace MonoGame.Tests.Framework
 
 
             //Release the touch, make a new one and move it around lots
-            _tps.AddEvent(1, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
 
-            _tps.AddEvent(2, TouchLocationState.Pressed, new Vector2(2));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, new Vector2(2));
             for (var i = 3; i < 200; i++)
-                _tps.AddEvent(2, TouchLocationState.Moved, new Vector2(i));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Moved, new Vector2(i));
 
             //We should now have the first touch in the release state and the second touch in the pressed state at 199,199
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
 
             var newInitialTouch = state.First(x => x.Id == initialTouch.Id);
@@ -402,20 +417,20 @@ namespace MonoGame.Tests.Framework
             //Start a touch
             Vector2 pos = new Vector2(1);
             Vector2 pos2 = new Vector2(2);
-            _tps.AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
 
-            var state = _tps.GetState();
+            var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
 
             TouchLocation initialTouch = state[0];
             Assert.AreEqual(TouchLocationState.Pressed, initialTouch.State);
             Assert.AreEqual(pos, initialTouch.Position);
 
-            _tps.AddEvent(2, TouchLocationState.Pressed, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
 
             if (testBetween)
             {
-                state = _tps.GetState();
+                state = TouchPanel.GetState();
                 Assert.AreEqual(2, state.Count);
                 TouchLocation touch = state.First(x => x.Id == initialTouch.Id);
                 TouchLocation touch2 = state.First(x => x.Id != initialTouch.Id);
@@ -425,10 +440,10 @@ namespace MonoGame.Tests.Framework
             }
 
             //Call ReleaseAllTouches
-            _tps.ReleaseAllTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().ReleaseAllTouches();
 
             //If we saw the second touch happen then we should see it be released, otherwise it will be in pressed, then in released next time
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
 
             Assert.AreEqual(testBetween ? TouchLocationState.Released : TouchLocationState.Pressed, state.Single(p => p.Id != initialTouch.Id).State);
@@ -436,14 +451,14 @@ namespace MonoGame.Tests.Framework
 
             if (!testBetween)
             {
-                state = _tps.GetState();
+                state = TouchPanel.GetState();
                 Assert.AreEqual(1, state.Count);
 
                 Assert.AreEqual(TouchLocationState.Released, state[0].State);
             }
 
             //Then it should be empty
-            state = _tps.GetState();
+            state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count);
         }
     }

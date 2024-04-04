@@ -7,7 +7,6 @@
 using System;
 using System.ComponentModel;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 
 
 namespace Microsoft.Xna.Framework
@@ -100,14 +99,12 @@ namespace Microsoft.Xna.Framework
         }
 
         internal MouseState MouseState;
-        internal TouchPanelState TouchPanelState;
 
         /// <summary>
         /// Create a <see cref="GameWindow"/>.
         /// </summary>
         protected GameWindow()
         {
-            TouchPanelState = new TouchPanelState(this);
         }
 
         #endregion Properties

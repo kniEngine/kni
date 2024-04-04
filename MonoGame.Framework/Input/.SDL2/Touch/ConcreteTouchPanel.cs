@@ -12,38 +12,38 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public override IntPtr WindowHandle
         {
-            get { return PrimaryWindow.TouchPanelState.WindowHandle; }
-            set { PrimaryWindow.TouchPanelState.WindowHandle = value; }
+            get { return base.WindowHandle; }
+            set { base.WindowHandle = value; }
         }
 
         public override int DisplayWidth
         {
-            get { return PrimaryWindow.TouchPanelState.DisplayWidth; }
-            set { PrimaryWindow.TouchPanelState.DisplayWidth = value; }
+            get { return base.DisplayWidth; }
+            set { base.DisplayWidth = value; }
         }
 
         public override int DisplayHeight
         {
-            get { return PrimaryWindow.TouchPanelState.DisplayHeight; }
-            set { PrimaryWindow.TouchPanelState.DisplayHeight = value; }
+            get { return base.DisplayHeight; }
+            set { base.DisplayHeight = value; }
         }
 
         public override DisplayOrientation DisplayOrientation
         {
-            get { return PrimaryWindow.TouchPanelState.DisplayOrientation; }
-            set { PrimaryWindow.TouchPanelState.DisplayOrientation = value; }
+            get { return base.DisplayOrientation; }
+            set { base.DisplayOrientation = value; }
         }
 
         public override GestureType EnabledGestures
         {
-            get { return PrimaryWindow.TouchPanelState.EnabledGestures; }
-            set { PrimaryWindow.TouchPanelState.EnabledGestures = value; }
+            get { return base.EnabledGestures; }
+            set { base.EnabledGestures = value; }
         }
 
 
         public override bool IsGestureAvailable
         {
-            get { return PrimaryWindow.TouchPanelState.IsGestureAvailable; }
+            get { return base.IsGestureAvailable; }
         }
 
         internal ConcreteTouchPanel()
@@ -58,22 +58,24 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public override TouchCollection GetState()
         {
-            return PrimaryWindow.TouchPanelState.GetState();
+            return base.GetState();
         }
 
         public override GestureSample ReadGesture()
         {
-            return PrimaryWindow.TouchPanelState.ReadGesture();
+            return base.ReadGesture();
         }
 
         public override void AddEvent(int id, TouchLocationState state, Vector2 position)
         {
-            PrimaryWindow.TouchPanelState.AddEvent(id, state, position);
+            Point winSize = new Point(this.PrimaryWindow.ClientBounds.Width, this.PrimaryWindow.ClientBounds.Height);
+
+            base.LegacyAddEvent(id, state, position, winSize);
         }
 
         public override void ReleaseAllTouches()
         {
-            PrimaryWindow.TouchPanelState.ReleaseAllTouches();
+            base.ReleaseAllTouches();
         }
 
     }
