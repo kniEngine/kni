@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <remarks>
         /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
         /// </remarks>
-        public unsafe virtual void InvalidateTouches()
+        public virtual void InvalidateTouches()
         {
             // store enabled gesture types
             GestureType enabledGestures = this.EnabledGestures;
@@ -91,17 +91,18 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // we don't want the released touches to triger any gestures (tap, hold, etc ...)
                 this.EnabledGestures = GestureType.None;
 
-                // local copy of touchStates
-                int touchLocationsCount = _touchStates.Count;
-                TouchLocation* tmpTouchLocations = stackalloc TouchLocation[touchLocationsCount];
-                for (int i = 0; i < touchLocationsCount; i++)
-                    tmpTouchLocations[i] = _touchStates[i].TouchLocation;
-
-                for (int i = 0; i < touchLocationsCount; i++)
+                if (_touchIdsMap.Count > 0)
                 {
-                    // submit a fake Released event for each touch Id
-                    if (tmpTouchLocations[i].State != TouchLocationState.Released)
-                        AddEvent(tmpTouchLocations[i].Id, TouchLocationState.Released, tmpTouchLocations[i].Position);
+                    // local copy of touchStates
+                    int nativeTouchIdsCount = _touchIdsMap.Count;
+                    int[] nativeTouchIds = new int[nativeTouchIdsCount];
+                    _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+
+                    for (int i = 0; i < nativeTouchIdsCount; i++)
+                    {
+                        // submit a fake Released event for each touch Id
+                        AddEvent(nativeTouchIds[i], TouchLocationState.Released, Vector2.Zero);
+                    }
                 }
             }
             finally
