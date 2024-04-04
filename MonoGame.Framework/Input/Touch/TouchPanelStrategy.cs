@@ -1,6 +1,7 @@
 ﻿// Copyright (C)2024 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 
@@ -72,10 +73,42 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public abstract void AddEvent(int id, TouchLocationState state, Vector2 position);
 
-
-        public virtual void ReleaseAllTouches()
+        /// <summary>
+        /// This will invalidate the touch panel state.
+        /// </summary>
+        /// <remarks>
+        /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
+        /// </remarks>
+        public unsafe virtual void InvalidateTouches()
         {
-            this.LegacyReleaseAllTouches();
+            // store enabled gesture types
+            GestureType enabledGestures = this.EnabledGestures;
+
+            try
+            {
+                // Invalidate Gestures
+                // this should remove all pending gestures
+                // we don't want the released touches to triger any gestures (tap, hold, etc ...)
+                this.EnabledGestures = GestureType.None;
+
+                // local copy of touchStates
+                int touchLocationsCount = _touchStates.Count;
+                TouchLocation* tmpTouchLocations = stackalloc TouchLocation[touchLocationsCount];
+                for (int i = 0; i < touchLocationsCount; i++)
+                    tmpTouchLocations[i] = _touchStates[i].TouchLocation;
+
+                for (int i = 0; i < touchLocationsCount; i++)
+                {
+                    // submit a fake Released event for each touch Id
+                    if (tmpTouchLocations[i].State != TouchLocationState.Released)
+                        AddEvent(tmpTouchLocations[i].Id, TouchLocationState.Released, tmpTouchLocations[i].Position);
+                }
+            }
+            finally
+            {
+                // restore enabled gesture types
+                this.EnabledGestures = GestureType.None;
+            }
         }
 
     }

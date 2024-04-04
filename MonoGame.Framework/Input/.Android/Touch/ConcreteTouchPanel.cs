@@ -87,9 +87,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             base.LegacyAddEvent(id, state, position, winSize);
         }
 
-        public override void ReleaseAllTouches()
+        public override void InvalidateTouches()
         {
-            base.ReleaseAllTouches();
+            base.InvalidateTouches();
         }
 
     }

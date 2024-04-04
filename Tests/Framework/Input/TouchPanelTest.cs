@@ -440,7 +440,7 @@ namespace MonoGame.Tests.Input
             }
 
             //Call ReleaseAllTouches
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().ReleaseAllTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
 
             //If we saw the second touch happen then we should see it be released, otherwise it will be in pressed, then in released next time
             state = TouchPanel.GetState();

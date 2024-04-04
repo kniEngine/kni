@@ -149,7 +149,7 @@ namespace Microsoft.Xna.Framework
             };
             _window.OnTouchCancel += (object sender) =>
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().ReleaseAllTouches();
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
             };
 
             // keyboard events
