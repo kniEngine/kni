@@ -22,7 +22,7 @@ namespace MonoGame.Tests.Input
             GameWindow gameWindow = new MockWindow();
 
             TimeSpan currentTimestamp0 = GameTimeForFrame(0);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp0);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp0);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = gameWindow;
             TouchPanel.WindowHandle = gameWindow.Handle;
             TouchPanel.DisplayWidth = gameWindow.ClientBounds.Width;
@@ -189,12 +189,12 @@ namespace MonoGame.Tests.Input
             if (moveInBetween) //Moving shouldn't change the behavior
             {
                 TimeSpan currentTimestampN1 = GameTimeForFrame(++frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN1);
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
             }
 
             TimeSpan currentTimestampN2 = GameTimeForFrame(++frame);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN2);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
 
             var state = TouchPanel.GetState();
@@ -226,7 +226,7 @@ namespace MonoGame.Tests.Input
             if (waitAFrameForNextState)
             {
                 TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             }
 
             state = TouchPanel.GetState();
@@ -240,7 +240,7 @@ namespace MonoGame.Tests.Input
             if (waitAFrameForNextState)
             {
                 TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             }
            
             state = TouchPanel.GetState();
@@ -260,7 +260,7 @@ namespace MonoGame.Tests.Input
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             var state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count); //Shouldn't get the touch that happened last frame
         }

@@ -31,7 +31,7 @@ namespace MonoGame.Tests.Input
             GameWindow gameWindow = new MockWindow();
 
             TimeSpan currentTimestamp0 = GameTimeForFrame(0);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp0);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp0);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = gameWindow;
             TouchPanel.WindowHandle = gameWindow.Handle;
             TouchPanel.DisplayWidth = gameWindow.ClientBounds.Width;
@@ -45,7 +45,7 @@ namespace MonoGame.Tests.Input
             TouchPanel.EnabledGestures = AllGestures;
 
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             Assert.False(TouchPanel.IsGestureAvailable);
         }
@@ -58,13 +58,13 @@ namespace MonoGame.Tests.Input
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             var gesture = TouchPanel.ReadGesture();
@@ -88,13 +88,13 @@ namespace MonoGame.Tests.Input
             //Do a first tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             //Will make a tap event if tap is enabled
             if (enableTap)
@@ -114,7 +114,7 @@ namespace MonoGame.Tests.Input
             //Now do the second tap in the same location, this will make a double tap on press (but no tap)
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp3 = GameTimeForFrame(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp3);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             gesture = TouchPanel.ReadGesture();
@@ -126,7 +126,7 @@ namespace MonoGame.Tests.Input
             //This release should make no gestures
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, pos);
             TimeSpan currentTimestamp4 = GameTimeForFrame(4);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp4);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp4);
 
             Assert.False(TouchPanel.IsGestureAvailable);
         }
@@ -142,18 +142,18 @@ namespace MonoGame.Tests.Input
             //Do a first tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos1);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos1);
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             //Now do the second tap in a different location
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
             TimeSpan currentTimestamp3 = GameTimeForFrame(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp3);
 
             //Shouldn't make a double tap
             Assert.False(TouchPanel.IsGestureAvailable);
@@ -173,27 +173,27 @@ namespace MonoGame.Tests.Input
             //Place a finger down, this finger will never be released
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, new Vector2(10));
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Place a new finger down for a tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release it, should not make a tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, pos);
             //TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Press the finger down again, should not make a double tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(3, TouchLocationState.Pressed, pos);
             //TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             Assert.False(TouchPanel.IsGestureAvailable);
         }
@@ -208,25 +208,25 @@ namespace MonoGame.Tests.Input
             //Do a first tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             //Now wait 500ms (we require it within 300ms)
             for (int frame = 3; frame < 33; frame++)
             {
                 TimeSpan currentTimestampN = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN);
                 Assert.False(TouchPanel.IsGestureAvailable);
             }
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp33 = GameTimeForFrame(33);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp33);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp33);
 
             //Shouldn't make a double tap
             Assert.False(TouchPanel.IsGestureAvailable);
@@ -250,7 +250,7 @@ namespace MonoGame.Tests.Input
 
                 frame++;
                 gt = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(gt);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(gt);
             } while (gt < TouchPanelStrategy.TimeRequiredForHold);
 
             //The last Update should have generated a hold
@@ -274,13 +274,13 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release it, should make a tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
             Assert.True(TouchPanel.IsGestureAvailable);
 
             var gesture = TouchPanel.ReadGesture();
@@ -290,7 +290,7 @@ namespace MonoGame.Tests.Input
             //Place finger again, should make a double tap
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp3 = GameTimeForFrame(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp3);
             Assert.True(TouchPanel.IsGestureAvailable);
 
             gesture = TouchPanel.ReadGesture();
@@ -308,7 +308,7 @@ namespace MonoGame.Tests.Input
 
                 frame++;
                 gt = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(gt);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(gt);
             } while (gt < (TouchPanelStrategy.TimeRequiredForHold + alreadyPassedTime));
             
             //The last Update should have generated a hold
@@ -336,7 +336,7 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             //Move it until it should have made a drag
             int diff = 0;
@@ -350,7 +350,7 @@ namespace MonoGame.Tests.Input
 
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + diff * diffVec);
                 TimeSpan currentTimestampN1 = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN1);
             }
 
             //We should have a gesture now
@@ -372,7 +372,7 @@ namespace MonoGame.Tests.Input
             frame++;
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + diff * diffVec);
             TimeSpan currentTimestampN2 = GameTimeForFrame(frame);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN2);
 
             if (enabledGestures == AllDrags)
             {
@@ -400,7 +400,7 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             //Move it until it should have made a drag
             int diff = 0;
@@ -414,7 +414,7 @@ namespace MonoGame.Tests.Input
 
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff));
                 TimeSpan currentTimestampN1 = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN1);
             }
 
             //We should have a gesture now
@@ -432,7 +432,7 @@ namespace MonoGame.Tests.Input
             frame++;
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(diff));
             TimeSpan currentTimestampN2 = GameTimeForFrame(frame);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN2);
 
             if ((enabledGestures & GestureType.DragComplete) == GestureType.DragComplete)
             {
@@ -459,7 +459,7 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             //Move it until it should have made a drag
             int diff = 0;
@@ -473,7 +473,7 @@ namespace MonoGame.Tests.Input
 
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff, 0));
                 TimeSpan currentTimestampN = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN);
             }
 
             //We should have a gesture now
@@ -499,13 +499,13 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Drag it, should get a drag
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(40, 0));
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             var gesture = TouchPanel.ReadGesture();
@@ -517,14 +517,14 @@ namespace MonoGame.Tests.Input
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp3 = GameTimeForFrame(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp3);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release that touch, should make no gesture
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp4 = GameTimeForFrame(4);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp4);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp4);
             Assert.False(TouchPanel.IsGestureAvailable);
 
 
@@ -533,12 +533,12 @@ namespace MonoGame.Tests.Input
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp5 = GameTimeForFrame(5);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp5);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp5);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, startPos);
             TimeSpan currentTimestamp6 = GameTimeForFrame(6);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp6);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp6);
             Assert.False(TouchPanel.IsGestureAvailable);
         }
 
@@ -553,13 +553,13 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Drag it, should get a drag
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(40, 0));
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             var gesture = TouchPanel.ReadGesture();
@@ -571,7 +571,7 @@ namespace MonoGame.Tests.Input
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp3 = GameTimeForFrame(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp3);
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
@@ -581,7 +581,7 @@ namespace MonoGame.Tests.Input
             //Release that touch, should make no gesture
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp4 = GameTimeForFrame(4);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp4);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp4);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             gesture = TouchPanel.ReadGesture();
@@ -600,13 +600,13 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Drag it, should get a drag
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(40, 0));
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             var gesture = TouchPanel.ReadGesture();
@@ -618,19 +618,19 @@ namespace MonoGame.Tests.Input
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp3 = GameTimeForFrame(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp3);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release the finger, should make no gesture (gestures are disabled)
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp4 = GameTimeForFrame(4);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp4);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp4);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Press it down again
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp5 = GameTimeForFrame(5);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp5);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp5);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Enable both gestures again
@@ -639,7 +639,7 @@ namespace MonoGame.Tests.Input
             //Release the second touch, should make no gesture
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, startPos + new Vector2(80, 0));
             TimeSpan currentTimestamp6 = GameTimeForFrame(6);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp6);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp6);
 
             Assert.False(TouchPanel.IsGestureAvailable);
         }
@@ -654,18 +654,18 @@ namespace MonoGame.Tests.Input
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             //Drag it a bit
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos + new Vector2(40, 0));
             //TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             TouchPanel.EnabledGestures = GestureType.Tap;
 
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos + new Vector2(80, 0));
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             Assert.False(TouchPanel.IsGestureAvailable);
         }
@@ -679,7 +679,7 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             //Move it until it should have made a flick
             int diff = 0;
@@ -693,7 +693,7 @@ namespace MonoGame.Tests.Input
 
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff, 0));
                 TimeSpan currentTimestampN1 = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN1);
             }
             Assert.False(TouchPanel.IsGestureAvailable);
 
@@ -701,7 +701,7 @@ namespace MonoGame.Tests.Input
             frame++;
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(diff, 0));
             TimeSpan currentTimestampN2 = GameTimeForFrame(frame);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN2);
 
             //Now we should have the flick
             Assert.True(TouchPanel.IsGestureAvailable);
@@ -723,12 +723,12 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             //Then release it at the edge of the detection size
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(TouchPanelStrategy.TapJitterTolerance, 0));
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             //This should not make a flick. If the distance is 1 greater it will.
             Assert.False(TouchPanel.IsGestureAvailable);
@@ -747,7 +747,7 @@ namespace MonoGame.Tests.Input
             //Place the finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
 
             //Move it until it should have made a flick
             int diff = 0;
@@ -759,7 +759,7 @@ namespace MonoGame.Tests.Input
 
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff, 0));
                 TimeSpan currentTimestampN1 = GameTimeForFrame(frame);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN1);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN1);
 
                 //Each drag should make a FreeDrag
                 Assert.True(TouchPanel.IsGestureAvailable);
@@ -775,7 +775,7 @@ namespace MonoGame.Tests.Input
             frame++;
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(diff, 0));
             TimeSpan currentTimestampN2 = GameTimeForFrame(frame);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestampN2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestampN2);
 
             //Now we should have the flick
             Assert.True(TouchPanel.IsGestureAvailable);
@@ -808,13 +808,13 @@ namespace MonoGame.Tests.Input
             //Place a finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos1);
             TimeSpan currentTimestamp1 = GameTimeForFrame(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp1);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Place the other finger down
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
             TimeSpan currentTimestamp2 = GameTimeForFrame(2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp2);
 
             //Now we should have a pinch
             Assert.True(TouchPanel.IsGestureAvailable);
@@ -826,14 +826,14 @@ namespace MonoGame.Tests.Input
 
             //If we do nothing, we shouldn't get more pinch events
             TimeSpan currentTimestamp3 = GameTimeForFrame(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp3);
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //But if we move a finger, we should get an updated pinch
             pos2 += new Vector2(50, 0);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Moved, pos2);
             TimeSpan currentTimestamp4 = GameTimeForFrame(4);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp4);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp4);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             gesture = TouchPanel.ReadGesture();
@@ -846,7 +846,7 @@ namespace MonoGame.Tests.Input
             pos1 -= new Vector2(0, 50);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos1);
             TimeSpan currentTimestamp5 = GameTimeForFrame(5);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(currentTimestamp5);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(currentTimestamp5);
 
             Assert.True(TouchPanel.IsGestureAvailable);
             gesture = TouchPanel.ReadGesture();
