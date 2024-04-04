@@ -147,8 +147,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
             position.Y = position.Y * (DisplayHeight / winSize.Y);
 
             {
-                // Add the new touch event keeping the list from getting
-                // too large if no one happens to be requesting the state.
                 TouchLocationData evt = new TouchLocationData(touchId, state, position, CurrentTimestamp);
 
                 /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
