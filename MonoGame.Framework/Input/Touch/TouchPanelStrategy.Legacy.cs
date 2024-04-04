@@ -11,6 +11,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
 {
     public abstract partial class TouchPanelStrategy
     {
+        /// The value 1 is reserved for the mouse touch point.
+        private const int StartingTouchId = 2;
+
         /// <summary>
         /// The current touch state.
         /// </summary>
@@ -23,9 +26,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         /// <summary>
         /// The next touch location identifier.
-        /// The value 1 is reserved for the mouse touch point.
         /// </summary>
-        private int _nextTouchId = 2;
+        private int _nextTouchId = StartingTouchId;
 
         private TimeSpan _currentTimestamp;
 
@@ -135,8 +137,13 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 System.Diagnostics.Debug.Assert(state == TouchLocationState.Pressed);
                 if (state == TouchLocationState.Pressed)
                 {
-                    touchId = _nextTouchId++;
+                    touchId = _nextTouchId;
                     _touchIdsMap[nativeTouchId] = touchId;
+                    
+                    if (_nextTouchId < int.MaxValue)
+                        _nextTouchId++;
+                    else
+                        _nextTouchId = StartingTouchId;
                 }
                 else
                 {
