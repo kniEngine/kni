@@ -38,6 +38,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(0)]
         public void InitiallyHasNoTouches()
         {
             var state = TouchPanel.GetState();
@@ -47,6 +48,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(1)]
         public void PressedStartsATouch()
         {
             var pos = new Vector2(100, 50);
@@ -62,6 +64,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(2)]
         [Description("In XNA if you press then move your finger before GetState is called, the initial touch position is the latest position of the touch")]
         public void PressedThenMoveStartsATouchAtNewPosition()
         {
@@ -80,6 +83,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(3)]
         [TestCase(TouchLocationState.Invalid)]
         [TestCase(TouchLocationState.Moved)]
         [TestCase(TouchLocationState.Released)]
@@ -93,6 +97,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(4)]
         public void PressedAgesToMovedAfterGetState()
         {
             var pos = new Vector2(100, 50);
@@ -112,6 +117,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(5)]
         public void MovingTouchUpdatesPosition()
         {
             var pos1 = new Vector2(100, 50);
@@ -136,6 +142,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(6)]
         [TestCase(true)]
         [TestCase(false)]
         public void ReleasingTouchMakesItGoAway(bool moveInBetween)
@@ -184,6 +191,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(7)]
         [TestCase(true)]
         [TestCase(false)]
         [Description("In XNA if you press and release your finger over multiple frames where GetState is not called, the touch never shows up")]
@@ -210,6 +218,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(8)]
         [TestCase(true, true)]
         [TestCase(true, false)]
         [TestCase(false, true)]
@@ -256,6 +265,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(9)]
         [TestCase(true)]
         [TestCase(false)]
         [Description("Press and release our finger on the same frame. Don't call GetState that frame, but do the next. We should not get the touch")]
@@ -274,6 +284,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(10)]
         [Description("Do multiple touches and check they behave as expected")]
         public void SimpleMultiTouchTest()
         {
@@ -377,6 +388,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(11)]
         [Description("Internally TouchPanelState uses a queue of TouchLocation updating state. If it gets longer than 100, it throws away the first ones, which is bad")]
         public void TooManyEventsLosesOldOnes()
         {
@@ -417,6 +429,7 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
+        [Order(12)]
         [TestCase(false), TestCase(true)]
         public void ReleaseAllTouchesTest(bool testBetween)
         {
