@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// The mapping between platform specific touch ids
         /// and the touch ids we assign to touch locations.
         /// </summary>
-        private readonly Dictionary<int, int> _touchIds = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _touchIdsMap = new Dictionary<int, int>();
 
         internal readonly Queue<GestureSample> GestureList = new Queue<GestureSample>();
 
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return result;
         }
 
-        protected void LegacyAddEvent(int id, TouchLocationState state, Vector2 position, Point winSize)
+        protected void LegacyAddEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
         {
             // Different platforms return different touch identifiers
             // based on the specifics of their implementation and the
@@ -123,20 +123,25 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // ourselves on the press and looking them up on move 
             // and release events.
             // 
-            if (state == TouchLocationState.Pressed)
+            int touchId;
+            // Try to find the touch id.
+            if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                _touchIds[id] = _nextTouchId++;
+                System.Diagnostics.Debug.Assert(state == TouchLocationState.Pressed);
+                if (state == TouchLocationState.Pressed)
+                {
+                    touchId = _nextTouchId++;
+                    _touchIdsMap[nativeTouchId] = touchId;
+                }
+                else
+                {
+                    // If we got here that means either the device is sending
+                    // us bad, out of order, or old touch events.
+                    // In any case just ignore them.
+                    return;
+                }
             }
 
-            // Try to find the touch id.
-            int touchId;
-            if (!_touchIds.TryGetValue(id, out touchId))
-            {
-                // If we got here that means either the device is sending
-                // us bad, out of order, or old touch events.  In any case
-                // just ignore them.
-                return;
-            }
 
             {
                 // scale position
@@ -330,7 +335,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             // If this is a release unmap the hardware id.
             if (state == TouchLocationState.Released)
-                _touchIds.Remove(id);
+                _touchIdsMap.Remove(nativeTouchId);
         }
 
         /// <summary>
@@ -472,7 +477,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
 
             // Release all the touch id mappings.
-            _touchIds.Clear();
+            _touchIdsMap.Clear();
         }
 
         /// <summary>
