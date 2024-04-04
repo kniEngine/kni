@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform.Input.Touch
 {
-    public class ConcreteTouchPanel : TouchPanelStrategy
+    public sealed class ConcreteTouchPanel : TouchPanelStrategy
     {
         internal GameWindow PrimaryWindow;
 
