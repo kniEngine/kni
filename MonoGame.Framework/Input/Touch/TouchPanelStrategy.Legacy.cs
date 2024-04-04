@@ -641,17 +641,19 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                             // From testing XNA it seems we need a velocity 
                             // of about 100 to classify this as a flick.
-                            float sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
-                            if (sqDist > TapJitterTolerance * TapJitterTolerance
-                            &&  touch.Velocity.LengthSquared() > 100.0f * 100.0f
-                            &&  IsGestureEnabled(GestureType.Flick))
+                            if (IsGestureEnabled(GestureType.Flick))
                             {
-                                GestureList.Enqueue(new GestureSample(
-                                                        GestureType.Flick, touch.Timestamp,
-                                                        Vector2.Zero, Vector2.Zero,
-                                                        touch.Velocity, Vector2.Zero));
+                                float sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
+                                if (sqDist > TapJitterTolerance * TapJitterTolerance
+                                &&  touch.Velocity.LengthSquared() > 100.0f * 100.0f)
+                                {
+                                    GestureList.Enqueue(new GestureSample(
+                                                            GestureType.Flick, touch.Timestamp,
+                                                            Vector2.Zero, Vector2.Zero,
+                                                            touch.Velocity, Vector2.Zero));
 
-                                //fall through, a drag should still happen even if a flick does
+                                    //fall through, a drag should still happen even if a flick does
+                                }
                             }
 
                             // If a drag is active then we need to finalize it.
