@@ -287,7 +287,7 @@ namespace Microsoft.Xna.Framework
                     // so we need to clear them out.
                     if (wasPortrait != requestPortrait)
                     {
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().ReleaseAllTouches();
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
                     }
 
                     AndroidGameWindow.Activity.RequestedOrientation = requestedOrientation;
