@@ -9,6 +9,7 @@ using Microsoft.Xna.Platform;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Input.Touch;
 
 
 namespace Microsoft.Xna.Framework
@@ -447,7 +448,7 @@ namespace Microsoft.Xna.Framework
             Update(gameTime);
 
             //The TouchPanel needs to know the time for when touches arrive
-            TouchPanelState.CurrentTimestamp = gameTime.TotalGameTime;
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp(gameTime.TotalGameTime);
 
         }
 

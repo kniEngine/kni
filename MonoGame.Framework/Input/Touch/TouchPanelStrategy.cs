@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform.Input.Touch
 {
-    public abstract class TouchPanelStrategy
+    public abstract partial class TouchPanelStrategy
     {
         private IntPtr _windowHandle;
         private int _displayWidth;
@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         {
             get
             {
-                throw new NotImplementedException();
+                return this.LegacyIsGestureAvailable;
             }
         }
 
@@ -62,22 +62,20 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public virtual TouchCollection GetState()
         {
-            throw new NotImplementedException();
+            return this.LegacyGetState();
         }
 
         public virtual GestureSample ReadGesture()
         {
-            throw new NotImplementedException();
+            return this.LegacyReadGesture();
         }
 
-        public virtual void AddEvent(int id, TouchLocationState state, Vector2 position)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void AddEvent(int id, TouchLocationState state, Vector2 position);
+
 
         public virtual void ReleaseAllTouches()
         {
-            throw new NotImplementedException();
+            this.LegacyReleaseAllTouches();
         }
 
     }

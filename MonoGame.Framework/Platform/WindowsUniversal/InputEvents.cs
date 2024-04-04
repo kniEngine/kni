@@ -191,7 +191,7 @@ namespace Microsoft.Xna.Framework
             var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch)
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos);
 
             if (!isTouch)
             {
@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework
 
             if (isTouch && touchIsDown)
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Moved, pos);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Moved, pos);
             }
 
             if (!isTouch)
@@ -230,7 +230,7 @@ namespace Microsoft.Xna.Framework
             var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch) 
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
 
             if (!isTouch)
             {

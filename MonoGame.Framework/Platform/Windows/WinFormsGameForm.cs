@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Platform.Input.Touch;
 using MonoGame.Framework;
 
 
@@ -222,7 +223,7 @@ namespace Microsoft.Xna.Framework.Windows
                 position = PointToClient(position);
                 var vec = new Vector2(position.X, position.Y);
 
-                _window.TouchPanelState.AddEvent(id, state, vec);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, state, vec);
             }
 
             base.WndProc(ref m);

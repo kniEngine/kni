@@ -9,7 +9,7 @@ namespace MonoGame.Tests.Framework
 
         public override Rectangle ClientBounds
         {
-            get { throw new NotImplementedException(); }
+            get { return new Rectangle(100, 10, 800, 480); }
         }
 
         public override DisplayOrientation CurrentOrientation
@@ -19,7 +19,7 @@ namespace MonoGame.Tests.Framework
 
         public override IntPtr Handle
         {
-            get { throw new NotImplementedException(); }
+            get { return new IntPtr(this.GetHashCode()); }
         }
 
         public override string ScreenDeviceName
