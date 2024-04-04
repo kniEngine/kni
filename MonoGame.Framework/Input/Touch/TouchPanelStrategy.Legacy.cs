@@ -146,9 +146,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             position.X = position.X * (DisplayWidth / winSize.X);
             position.Y = position.Y * (DisplayHeight / winSize.Y);
 
-            {
-                TouchLocationData evt = new TouchLocationData(touchId, state, position, CurrentTimestamp);
+            TouchLocationData evt = new TouchLocationData(touchId, state, position, CurrentTimestamp);
 
+            {
                 /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
                 /// otherwise we update the existing touch it matches
                 switch (evt.State)
