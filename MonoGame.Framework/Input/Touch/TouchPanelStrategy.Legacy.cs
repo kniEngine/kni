@@ -77,8 +77,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                 //If a touch was pressed and released in a previous frame and the user didn't ask about it then trash it.
                 if (touch.SameFrameReleased
-                &&  touch.Timestamp < currentTimestamp
-                &&  touch.State == TouchLocationState.Pressed)
+                &&  touch.State == TouchLocationState.Pressed
+                &&  touch.Timestamp < currentTimestamp)
                 {
                     _touchStates.RemoveAt(i);
                 }
@@ -164,8 +164,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         break;
 
                     case TouchLocationState.Moved:
-                    case TouchLocationState.Released:
                     case TouchLocationState.Invalid:
+                    case TouchLocationState.Released:
                         //Find the matching touch
                         for (int i = 0; i < _touchStates.Count; i++)
                         {
@@ -174,8 +174,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             {
                                 //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                 // that means we've never been seen, so just get rid of us
-                                if (existingTouch.State == TouchLocationState.Pressed
-                                &&  evt.State == TouchLocationState.Released
+                                if (evt.State == TouchLocationState.Released
+                                &&  existingTouch.State == TouchLocationState.Pressed
                                 &&  existingTouch.PressTimestamp != evt.Timestamp)
                                 {
                                     _touchStates.RemoveAt(i);
@@ -208,8 +208,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     }
 
                                     //Going straight from pressed to released on the same frame
-                                    if (existingTouch._previousState == TouchLocationState.Pressed
-                                    &&  existingTouch._state == TouchLocationState.Released
+                                    if (existingTouch._state == TouchLocationState.Released
+                                    &&  existingTouch._previousState == TouchLocationState.Pressed
                                     &&  existingTouch.Timestamp == currentTimestamp)
                                     {
                                         //Lie that we are pressed for now
@@ -241,8 +241,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             break;
 
                         case TouchLocationState.Moved:
-                        case TouchLocationState.Released:
                         case TouchLocationState.Invalid:
+                        case TouchLocationState.Released:
                             //Find the matching touch
                             for (int i = 0; i < _gestureStates.Count; i++)
                             {
@@ -251,8 +251,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 {
                                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                     // that means we've never been seen, so just get rid of us
-                                    if (existingTouch.State == TouchLocationState.Pressed
-                                    &&  evt.State == TouchLocationState.Released
+                                    if (evt.State == TouchLocationState.Released
+                                    &&  existingTouch.State == TouchLocationState.Pressed
                                     &&  existingTouch.PressTimestamp != evt.Timestamp)
                                     {
                                         _gestureStates.RemoveAt(i);
@@ -285,8 +285,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                         }
 
                                         //Going straight from pressed to released on the same frame
-                                        if (existingTouch._previousState == TouchLocationState.Pressed
-                                        &&  existingTouch._state == TouchLocationState.Released
+                                        if (existingTouch._state == TouchLocationState.Released
+                                        &&  existingTouch._previousState == TouchLocationState.Pressed
                                         &&  existingTouch.Timestamp == currentTimestamp)
                                         {
                                             //Lie that we are pressed for now
