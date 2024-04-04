@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// In this case we will keep it around for the user to get by GetState that frame.
         /// However if they do not call GetState that frame, this touch will be forgotten.
         /// </summary>
-        internal bool SameFrameReleased = false;
+        internal bool SameFrameReleased;
 
         /// <summary>
         /// Helper for assigning an invalid touch location.
@@ -80,6 +80,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 _pressTimestamp = TimeSpan.Zero;
             }
 
+            SameFrameReleased = false;
         }
 
         public bool TryGetPreviousLocationData(out TouchLocationData aPreviousLocation)
