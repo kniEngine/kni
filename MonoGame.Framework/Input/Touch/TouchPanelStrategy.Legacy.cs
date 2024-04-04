@@ -142,12 +142,11 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 }
             }
 
+            // scale position
+            position.X = position.X * (DisplayWidth / winSize.X);
+            position.Y = position.Y * (DisplayHeight / winSize.Y);
 
             {
-                // scale position
-                position.X = position.X * (DisplayWidth / winSize.X);
-                position.Y = position.Y * (DisplayHeight / winSize.Y);
-
                 // Add the new touch event keeping the list from getting
                 // too large if no one happens to be requesting the state.
                 TouchLocationData evt = new TouchLocationData(touchId, state, position, CurrentTimestamp);
