@@ -73,7 +73,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 TouchLocationData touch = _touchStates[i];
 
                 //If a touch was pressed and released in a previous frame and the user didn't ask about it then trash it.
-                if (touch.SameFrameReleased && touch.Timestamp < CurrentTimestamp && touch.State == TouchLocationState.Pressed)
+                if (touch.SameFrameReleased
+                &&  touch.Timestamp < CurrentTimestamp
+                &&  touch.State == TouchLocationState.Pressed)
                 {
                     _touchStates.RemoveAt(i);
                 }
@@ -169,8 +171,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                 // that means we've never been seen, so just get rid of us
                                 if (existingTouch.State == TouchLocationState.Pressed
-                                && evt.State == TouchLocationState.Released
-                                && existingTouch.PressTimestamp != evt.Timestamp)
+                                &&  evt.State == TouchLocationState.Released
+                                &&  existingTouch.PressTimestamp != evt.Timestamp)
                                 {
                                     _touchStates.RemoveAt(i);
                                 }
@@ -203,8 +205,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    && existingTouch._state == TouchLocationState.Released
-                                    && elapsed == TimeSpan.Zero)
+                                    &&  existingTouch._state == TouchLocationState.Released
+                                    &&  elapsed == TimeSpan.Zero)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -246,8 +248,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                     // that means we've never been seen, so just get rid of us
                                     if (existingTouch.State == TouchLocationState.Pressed
-                                    && evt.State == TouchLocationState.Released
-                                    && existingTouch.PressTimestamp != evt.Timestamp)
+                                    &&  evt.State == TouchLocationState.Released
+                                    &&  existingTouch.PressTimestamp != evt.Timestamp)
                                     {
                                         _gestureStates.RemoveAt(i);
                                     }
@@ -280,8 +282,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                         //Going straight from pressed to released on the same frame
                                         if (existingTouch._previousState == TouchLocationState.Pressed
-                                        && existingTouch._state == TouchLocationState.Released
-                                        && elapsed == TimeSpan.Zero)
+                                        &&  existingTouch._state == TouchLocationState.Released
+                                        &&  elapsed == TimeSpan.Zero)
                                         {
                                             //Lie that we are pressed for now
                                             existingTouch.SameFrameReleased = true;
@@ -361,7 +363,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                 // that means we've never been seen, so just get rid of us
                                 if (existingTouch.State == TouchLocationState.Pressed
-                                && existingTouch.PressTimestamp != CurrentTimestamp)
+                                &&  existingTouch.PressTimestamp != CurrentTimestamp)
                                 {
                                     _touchStates.RemoveAt(i);
                                 }
@@ -391,7 +393,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    && elapsed == TimeSpan.Zero)
+                                    &&  elapsed == TimeSpan.Zero)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -424,7 +426,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                 // that means we've never been seen, so just get rid of us
                                 if (existingTouch.State == TouchLocationState.Pressed
-                                && existingTouch.PressTimestamp != CurrentTimestamp)
+                                &&  existingTouch.PressTimestamp != CurrentTimestamp)
                                 {
                                     _gestureStates.RemoveAt(i);
                                 }
@@ -454,7 +456,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    && elapsed == TimeSpan.Zero)
+                                    &&  elapsed == TimeSpan.Zero)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -564,8 +566,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         {
                             // The DoubleTap event is emitted on first press as
                             // opposed to Tap which happens on release.
-                            if (touch.State == TouchLocationState.Pressed &&
-                                ProcessDoubleTap(ref touch))
+                            if (touch.State == TouchLocationState.Pressed
+                            &&  ProcessDoubleTap(ref touch))
                                 break;
 
                             // Any time more than one finger is down and pinch is
@@ -573,13 +575,13 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             if (IsGestureEnabled(GestureType.Pinch) && heldLocations > 1)
                             {
                                 // Save or update the first pinch point.
-                                if (_pinchTouch[0].State == TouchLocationState.Invalid ||
-                                        _pinchTouch[0].Id == touch.Id)
+                                if (_pinchTouch[0].State == TouchLocationState.Invalid
+                                ||  _pinchTouch[0].Id == touch.Id)
                                     _pinchTouch[0] = touch;
 
                                 // Save or update the second pinch point.
-                                else if (_pinchTouch[1].State == TouchLocationState.Invalid ||
-                                            _pinchTouch[1].Id == touch.Id)
+                                else if (_pinchTouch[1].State == TouchLocationState.Invalid
+                                     ||  _pinchTouch[1].Id == touch.Id)
                                     _pinchTouch[1] = touch;
 
                                 // NOTE: Actual pinch processing happens outside and
@@ -612,9 +614,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             // If this is one of the pinch locations then we
                             // need to fire off the complete event and stop
                             // the pinch gesture operation.
-                            if (_pinchGestureStarted &&
-                                    (touch.Id == _pinchTouch[0].Id ||
-                                        touch.Id == _pinchTouch[1].Id))
+                            if (_pinchGestureStarted
+                            &&  (touch.Id == _pinchTouch[0].Id || touch.Id == _pinchTouch[1].Id))
                             {
                                 if (IsGestureEnabled(GestureType.PinchComplete))
                                     GestureList.Enqueue(new GestureSample(
@@ -636,9 +637,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             // From testing XNA it seems we need a velocity 
                             // of about 100 to classify this as a flick.
                             float sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
-                            if (sqDist > TapJitterTolerance * TapJitterTolerance &&
-                                    touch.Velocity.LengthSquared() > 100.0f * 100.0f &&
-                                    IsGestureEnabled(GestureType.Flick))
+                            if (sqDist > TapJitterTolerance * TapJitterTolerance
+                            &&  touch.Velocity.LengthSquared() > 100.0f * 100.0f
+                            &&  IsGestureEnabled(GestureType.Flick))
                             {
                                 GestureList.Enqueue(new GestureSample(
                                                         GestureType.Flick, touch.Timestamp,
@@ -674,9 +675,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 return;
 
             // If we have two pinch points then update the pinch state.
-            if (IsGestureEnabled(GestureType.Pinch) &&
-                    _pinchTouch[0].State != TouchLocationState.Invalid &&
-                    _pinchTouch[1].State != TouchLocationState.Invalid)
+            if (IsGestureEnabled(GestureType.Pinch)
+            &&  _pinchTouch[0].State != TouchLocationState.Invalid
+            &&  _pinchTouch[1].State != TouchLocationState.Invalid)
                 ProcessPinch(_pinchTouch);
             else
             {
@@ -716,7 +717,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         private bool ProcessDoubleTap(ref TouchLocationData touch)
         {
-            if (!IsGestureEnabled(GestureType.DoubleTap) || _tapDisabled || _lastTap.State == TouchLocationState.Invalid)
+            if (!IsGestureEnabled(GestureType.DoubleTap)
+            ||  _tapDisabled
+            ||  _lastTap.State == TouchLocationState.Invalid)
                 return false;
 
             // If the new tap is too far away from the last then
@@ -790,7 +793,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // Make sure this is a move event and that we have
             // a previous touch location.
             TouchLocationData prevTouch;
-            if (touch.State != TouchLocationState.Moved || !touch.TryGetPreviousLocationData(out prevTouch))
+            if (touch.State != TouchLocationState.Moved
+            ||  !touch.TryGetPreviousLocationData(out prevTouch))
                 return;
 
             Vector2 delta = touch.Position - prevTouch.Position;
@@ -804,12 +808,14 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                 // Once we enter either vertical or horizontal drags
                 // we stick to it... regardless of the delta.
-                if (dragH && ((classify && isHorizontalDelta) || _dragGestureStarted == GestureType.HorizontalDrag))
+                if (dragH
+                &&  ((classify && isHorizontalDelta) || _dragGestureStarted == GestureType.HorizontalDrag))
                 {
                     delta.Y = 0;
                     _dragGestureStarted = GestureType.HorizontalDrag;
                 }
-                else if (dragV && ((classify && isVerticalDelta) || _dragGestureStarted == GestureType.VerticalDrag))
+                else if (dragV
+                     && ((classify && isVerticalDelta) || _dragGestureStarted == GestureType.VerticalDrag))
                 {
                     delta.X = 0;
                     _dragGestureStarted = GestureType.VerticalDrag;
@@ -830,7 +836,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
 
             // If the drag could not be classified then no gesture.
-            if (_dragGestureStarted == GestureType.None || _dragGestureStarted == GestureType.DragComplete)
+            if (_dragGestureStarted == GestureType.None
+            ||  _dragGestureStarted == GestureType.DragComplete)
                 return;
 
             _tapDisabled = true;
