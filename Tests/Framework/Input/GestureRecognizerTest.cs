@@ -39,6 +39,14 @@ namespace MonoGame.Tests.Input
 
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp(TimeSpan.Zero);
+            TouchPanel.GetState();
+        }
+
         [Test]
         public void DoingNothingMakesNoGestures()
         {
