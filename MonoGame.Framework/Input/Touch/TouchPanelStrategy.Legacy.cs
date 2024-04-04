@@ -59,7 +59,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get
             {
                 // Process the pending gesture events. (May cause hold events)
-                UpdateGestures(false);
+                TimeSpan currentTimestamp = this.CurrentTimestamp;
+                UpdateGestures(currentTimestamp, false);
 
                 return GestureList.Count > 0;
             }
@@ -67,6 +68,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         private TouchCollection LegacyGetState()
         {
+            TimeSpan currentTimestamp = this.CurrentTimestamp;
+
             //Clear out touches from previous frames that were released on the same frame they were touched that haven't been seen
             for (int i = _touchStates.Count - 1; i >= 0; i--)
             {
@@ -74,7 +77,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                 //If a touch was pressed and released in a previous frame and the user didn't ask about it then trash it.
                 if (touch.SameFrameReleased
-                &&  touch.Timestamp < CurrentTimestamp
+                &&  touch.Timestamp < currentTimestamp
                 &&  touch.State == TouchLocationState.Pressed)
                 {
                     _touchStates.RemoveAt(i);
@@ -148,7 +151,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             position.X = position.X * (DisplayWidth / winSize.X);
             position.Y = position.Y * (DisplayHeight / winSize.Y);
 
-            TouchLocationData evt = new TouchLocationData(touchId, state, position, CurrentTimestamp);
+            TimeSpan currentTimestamp = this.CurrentTimestamp;
+            TouchLocationData evt = new TouchLocationData(touchId, state, position, currentTimestamp);
 
             {
                 /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
@@ -182,7 +186,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
                                     System.Diagnostics.Debug.Assert(evt.State == TouchLocationState.Moved
                                                                  || evt.State == TouchLocationState.Released, "The new touch event should be a move or a release!");
-                                    System.Diagnostics.Debug.Assert(evt.Timestamp >= existingTouch.Timestamp, "The touch event is older than our timestamp!");
+                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp!");
 
                                     // Store the current state as the previous one.
                                     existingTouch._previousPosition = existingTouch.Position;
@@ -194,7 +198,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                         existingTouch._state = evt.State;
 
                                     // If time has elapsed then update the velocity.
-                                    TimeSpan elapsed = evt.Timestamp - existingTouch.Timestamp;
+                                    TimeSpan elapsed = currentTimestamp - existingTouch.Timestamp;
                                     if (elapsed > TimeSpan.Zero)
                                     {
                                         // Use a simple low pass filter to accumulate velocity.
@@ -206,7 +210,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
                                     &&  existingTouch._state == TouchLocationState.Released
-                                    &&  existingTouch.Timestamp == evt.Timestamp)
+                                    &&  existingTouch.Timestamp == currentTimestamp)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -214,7 +218,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     }
 
                                     // Set the new timestamp.
-                                    existingTouch._timestamp = evt.Timestamp;
+                                    existingTouch._timestamp = currentTimestamp;
 
                                     _touchStates[i] = existingTouch;
                                 }
@@ -259,7 +263,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                         System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
                                         System.Diagnostics.Debug.Assert(evt.State == TouchLocationState.Moved
                                                                      || evt.State == TouchLocationState.Released, "The new touch event should be a move or a release!");
-                                        System.Diagnostics.Debug.Assert(evt.Timestamp >= existingTouch.Timestamp, "The touch event is older than our timestamp!");
+                                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp!");
 
                                         // Store the current state as the previous one.
                                         existingTouch._previousPosition = existingTouch.Position;
@@ -271,7 +275,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                             existingTouch._state = evt.State;
 
                                         // If time has elapsed then update the velocity.
-                                        TimeSpan elapsed = evt.Timestamp - existingTouch.Timestamp;
+                                        TimeSpan elapsed = currentTimestamp - existingTouch.Timestamp;
                                         if (elapsed > TimeSpan.Zero)
                                         {
                                             // Use a simple low pass filter to accumulate velocity.
@@ -283,7 +287,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                         //Going straight from pressed to released on the same frame
                                         if (existingTouch._previousState == TouchLocationState.Pressed
                                         &&  existingTouch._state == TouchLocationState.Released
-                                        &&  existingTouch.Timestamp == evt.Timestamp)
+                                        &&  existingTouch.Timestamp == currentTimestamp)
                                         {
                                             //Lie that we are pressed for now
                                             existingTouch.SameFrameReleased = true;
@@ -291,7 +295,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                         }
 
                                         // Set the new timestamp.
-                                        existingTouch._timestamp = evt.Timestamp;
+                                        existingTouch._timestamp = currentTimestamp;
 
                                         _gestureStates[i] = existingTouch;
                                     }
@@ -302,7 +306,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     }
 
                     if (EnabledGestures != GestureType.None)
-                        UpdateGestures(true);
+                        UpdateGestures(currentTimestamp, true);
 
                     // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
                     for (int i = _gestureStates.Count - 1; i >= 0; i--)
@@ -346,6 +350,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int mostToRemove = Math.Max(_touchStates.Count, _gestureStates.Count);
             if (mostToRemove > 0)
             {
+                TimeSpan currentTimestamp = this.CurrentTimestamp;
                 List<TouchLocationData> temp = new List<TouchLocationData>(mostToRemove);
 
                 // Submit a new event for each non-released location.
@@ -363,7 +368,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                 // that means we've never been seen, so just get rid of us
                                 if (existingTouch.State == TouchLocationState.Pressed
-                                &&  existingTouch.PressTimestamp != CurrentTimestamp)
+                                &&  existingTouch.PressTimestamp != currentTimestamp)
                                 {
                                     _touchStates.RemoveAt(i);
                                 }
@@ -371,7 +376,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 {
                                     //Otherwise update the touch based on the new one
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
-                                    System.Diagnostics.Debug.Assert(CurrentTimestamp >= existingTouch.Timestamp, "The touch event is older than our timestamp!");
+                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp!");
 
                                     // Store the current state as the previous one.
                                     existingTouch._previousPosition = existingTouch.Position;
@@ -382,7 +387,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     existingTouch._state = TouchLocationState.Released;
 
                                     // If time has elapsed then update the velocity.
-                                    TimeSpan elapsed = CurrentTimestamp - existingTouch.Timestamp;
+                                    TimeSpan elapsed = currentTimestamp - existingTouch.Timestamp;
                                     if (elapsed > TimeSpan.Zero)
                                     {
                                         // Use a simple low pass filter to accumulate velocity.
@@ -393,7 +398,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    &&  existingTouch.Timestamp == CurrentTimestamp)
+                                    &&  existingTouch.Timestamp == currentTimestamp)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -401,7 +406,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     }
 
                                     // Set the new timestamp.
-                                    existingTouch._timestamp = CurrentTimestamp;
+                                    existingTouch._timestamp = currentTimestamp;
 
                                     _touchStates[i] = existingTouch;
                                 }
@@ -426,7 +431,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                                 // that means we've never been seen, so just get rid of us
                                 if (existingTouch.State == TouchLocationState.Pressed
-                                &&  existingTouch.PressTimestamp != CurrentTimestamp)
+                                &&  existingTouch.PressTimestamp != currentTimestamp)
                                 {
                                     _gestureStates.RemoveAt(i);
                                 }
@@ -434,7 +439,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 {
                                     //Otherwise update the touch based on the new one
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location!");
-                                    System.Diagnostics.Debug.Assert(CurrentTimestamp >= existingTouch.Timestamp, "The touch event is older than our timestamp!");
+                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp!");
 
                                     // Store the current state as the previous one.
                                     existingTouch._previousPosition = existingTouch.Position;
@@ -445,7 +450,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     existingTouch._state = TouchLocationState.Released;
 
                                     // If time has elapsed then update the velocity.
-                                    TimeSpan elapsed = CurrentTimestamp - existingTouch.Timestamp;
+                                    TimeSpan elapsed = currentTimestamp - existingTouch.Timestamp;
                                     if (elapsed > TimeSpan.Zero)
                                     {
                                         // Use a simple low pass filter to accumulate velocity.
@@ -456,7 +461,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                                     //Going straight from pressed to released on the same frame
                                     if (existingTouch._previousState == TouchLocationState.Pressed
-                                    &&  existingTouch.Timestamp == CurrentTimestamp)
+                                    &&  existingTouch.Timestamp == currentTimestamp)
                                     {
                                         //Lie that we are pressed for now
                                         existingTouch.SameFrameReleased = true;
@@ -464,7 +469,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     }
 
                                     // Set the new timestamp.
-                                    existingTouch._timestamp = CurrentTimestamp;
+                                    existingTouch._timestamp = currentTimestamp;
 
                                     _gestureStates[i] = existingTouch;
                                 }
@@ -526,7 +531,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         bool _holdDisabled;
 
 
-        private void UpdateGestures(bool stateChanged)
+        private void UpdateGestures(TimeSpan currentTimestamp, bool stateChanged)
         {
             // These are observed XNA gesture rules which we follow below.  Please
             // add to them if a new case is found.
@@ -594,7 +599,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             float sqDist = Vector2.DistanceSquared(touch.Position, touch.PressPosition);
                             if (_dragGestureStarted == GestureType.None && sqDist < TapJitterTolerance * TapJitterTolerance)
                             {
-                                ProcessHold(ref touch);
+                                ProcessHold(currentTimestamp, ref touch);
                                 break;
                             }
 
@@ -663,7 +668,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             }
 
                             // If all else fails try to process it as a tap.
-                            ProcessTap(ref touch);
+                            ProcessTap(currentTimestamp, ref touch);
                             break;
                         }
                 }
@@ -697,12 +702,12 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
-        private void ProcessHold(ref TouchLocationData touch)
+        private void ProcessHold(TimeSpan currentTimestamp, ref TouchLocationData touch)
         {
             if (!IsGestureEnabled(GestureType.Hold) || _holdDisabled)
                 return;
 
-            TimeSpan elapsed = CurrentTimestamp - touch.PressTimestamp;
+            TimeSpan elapsed = currentTimestamp - touch.PressTimestamp;
             if (elapsed < TimeRequiredForHold)
                 return;
 
@@ -747,7 +752,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         private TouchLocationData _lastTap;
 
-        private void ProcessTap(ref TouchLocationData touch)
+        private void ProcessTap(TimeSpan currentTimestamp, ref TouchLocationData touch)
         {
             if (_tapDisabled)
                 return;
@@ -760,7 +765,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             // If we pressed and held too long then don't 
             // generate a tap event for it.
-            TimeSpan elapsed = CurrentTimestamp - touch.PressTimestamp;
+            TimeSpan elapsed = currentTimestamp - touch.PressTimestamp;
             if (elapsed > TimeRequiredForHold)
                 return;
 
