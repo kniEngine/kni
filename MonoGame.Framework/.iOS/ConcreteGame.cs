@@ -16,11 +16,8 @@ using CoreAnimation;
 using ObjCRuntime;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Platform.Input.Touch;
-//using Microsoft.Xna.Framework.GamerServices;
 
 
 namespace Microsoft.Xna.Platform
@@ -62,7 +59,7 @@ namespace Microsoft.Xna.Platform
             GameWindow gameWindow = new iOSGameWindow(_viewController);
             if (base.Window == null)
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = gameWindow;
+                TouchPanel.WindowHandle = gameWindow.Handle;
             }
             base.Window = gameWindow;
 
@@ -152,7 +149,7 @@ namespace Microsoft.Xna.Platform
                 }
             }
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
+            TouchPanel.WindowHandle = IntPtr.Zero;
         }
 
         public override void BeforeInitialize()

@@ -10,27 +10,22 @@ using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
-using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Microsoft.Xna.Framework;
-//using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
-using Microsoft.Xna.Platform.Input.Touch;
 
 
 #if UAP
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 #endif
 
 #if WINUI
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Media;
 #endif
 
 namespace Microsoft.Xna.Platform
@@ -53,7 +48,7 @@ namespace Microsoft.Xna.Platform
             if (base.Window == null)
             {
                 ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = uapGameWindow;
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = uapGameWindow;
+                TouchPanel.WindowHandle = uapGameWindow.Handle;
             }
             base.Window = uapGameWindow;
             uapGameWindow.Game = game;
@@ -287,7 +282,7 @@ namespace Microsoft.Xna.Platform
             base.Dispose(disposing);
 
             ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
+            TouchPanel.WindowHandle = IntPtr.Zero;
         }
     }
 }
