@@ -38,6 +38,8 @@ namespace MonoGame.Tests.Input
         [TearDown]
         public void TearDown()
         {
+            TouchPanel.EnabledGestures = GestureType.None;
+
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
@@ -256,8 +258,8 @@ namespace MonoGame.Tests.Input
             {
                 Assert.False(TouchPanel.IsGestureAvailable);
 
-                TimeSpan frameSpan = GameTimeForFrame(1);
-                gt.Add(frameSpan);
+                TimeSpan frameSpan = new TimeSpan(TouchPanelStrategy.TimeRequiredForHold.Ticks / 4);
+                gt = gt + frameSpan;
                 Thread.Sleep(frameSpan);
                 FrameworkDispatcher.Update();
             } while (gt < TouchPanelStrategy.TimeRequiredForHold);
@@ -312,8 +314,8 @@ namespace MonoGame.Tests.Input
             {
                 Assert.False(TouchPanel.IsGestureAvailable);
 
-                TimeSpan frameSpan = GameTimeForFrame(1);
-                gt.Add(frameSpan);
+                TimeSpan frameSpan = new TimeSpan(TouchPanelStrategy.TimeRequiredForHold.Ticks / 4);
+                gt = gt + frameSpan;
                 Thread.Sleep(frameSpan);
                 FrameworkDispatcher.Update();
             } 
