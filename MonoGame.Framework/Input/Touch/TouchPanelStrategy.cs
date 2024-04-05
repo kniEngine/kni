@@ -56,6 +56,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
+        protected TouchPanelStrategy()
+        {
+        }
+
         public virtual TouchPanelCapabilities GetCapabilities()
         {
             throw new NotImplementedException();

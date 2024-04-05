@@ -51,7 +51,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get { return base.IsGestureAvailable; }
         }
 
-        internal ConcreteTouchPanel()
+        public ConcreteTouchPanel()
+            : base()
         {
             // Initialize Capabilities
             // http://developer.android.com/reference/android/content/pm/PackageManager.html#FEATURE_TOUCHSCREEN
