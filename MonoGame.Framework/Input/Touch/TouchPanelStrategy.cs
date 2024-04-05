@@ -115,6 +115,12 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         AddEvent(nativeTouchIds[i], TouchLocationState.Released, Vector2.Zero);
                     }
                 }
+
+                _touchIdsMap.Clear();
+                GestureList.Clear();
+                _touchStates.Clear();
+                _gestureStates.Clear();
+                _lastTap = default(TouchLocationData);
             }
             finally
             {
