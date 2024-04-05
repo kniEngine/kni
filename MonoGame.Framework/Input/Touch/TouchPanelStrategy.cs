@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             finally
             {
                 // restore enabled gesture types
-                this.EnabledGestures = GestureType.None;
+                this.EnabledGestures = enabledGestures;
             }
         }
 
