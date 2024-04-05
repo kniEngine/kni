@@ -33,7 +33,7 @@ namespace MonoGame.Tests.Input
         {
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
             Thread.Sleep(GameTimeForFrame(1));
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp();
+            FrameworkDispatcher.Update();
             TouchPanel.GetState();
         }
 
@@ -205,12 +205,12 @@ namespace MonoGame.Tests.Input
             if (moveInBetween) //Moving shouldn't change the behavior
             {
                 Thread.Sleep(GameTimeForFrame(1));
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp();
+                FrameworkDispatcher.Update();
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
             }
 
             Thread.Sleep(GameTimeForFrame(1));
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp();
+            FrameworkDispatcher.Update();
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
 
             var state = TouchPanel.GetState();
@@ -243,7 +243,7 @@ namespace MonoGame.Tests.Input
             if (waitAFrameForNextState)
             {
                 Thread.Sleep(GameTimeForFrame(1));
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp();
+                FrameworkDispatcher.Update();
             }
 
             state = TouchPanel.GetState();
@@ -257,7 +257,7 @@ namespace MonoGame.Tests.Input
             if (waitAFrameForNextState)
             {
                 Thread.Sleep(GameTimeForFrame(1));
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp();
+                FrameworkDispatcher.Update();
             }
            
             state = TouchPanel.GetState();
@@ -278,7 +278,7 @@ namespace MonoGame.Tests.Input
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
             Thread.Sleep(GameTimeForFrame(1));
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().UpdateCurrentTimestamp();
+            FrameworkDispatcher.Update();
             var state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count); //Shouldn't get the touch that happened last frame
         }

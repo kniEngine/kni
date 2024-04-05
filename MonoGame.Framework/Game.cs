@@ -446,10 +446,6 @@ namespace Microsoft.Xna.Framework
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
 
             Update(gameTime);
-
-            //The TouchPanel needs to know the time for when touches arrive
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().UpdateCurrentTimestamp();
-
         }
 
         internal void DoDraw(GameTime gameTime)

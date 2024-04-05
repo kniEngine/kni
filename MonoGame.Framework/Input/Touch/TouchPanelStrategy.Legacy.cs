@@ -37,10 +37,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// </summary>
         internal TimeSpan CurrentTimestamp
         {
-            get { return _currentTimestamp; } 
+            get { return _currentTimestamp; }
         }
 
-        internal void UpdateCurrentTimestamp()
+        private void UpdateCurrentTimestamp()
         {
             _currentTimestamp = _stopwatch.Elapsed;
             _currentFramestamp++;
@@ -72,7 +72,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         private TouchCollection LegacyGetState()
         {
-            TimeSpan currentTimestamp = this.CurrentTimestamp;
             int currentFramestamp = this._currentFramestamp;
 
             //Clear out touches from previous frames that were released on the same frame they were touched that haven't been seen

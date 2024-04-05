@@ -62,6 +62,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
         protected TouchPanelStrategy()
         {
             _stopwatch = Stopwatch.StartNew();
+
+            // the current implementation need to update on each frame
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += this.UpdateCurrentTimestamp;
         }
 
         public virtual TouchPanelCapabilities GetCapabilities()
