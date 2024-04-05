@@ -52,7 +52,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get { return base.IsGestureAvailable; }
         }
 
-        internal ConcreteTouchPanel()
+        public ConcreteTouchPanel()
+            : base()
         {
             // Initialize Capabilities
             _capabilities._maximumTouchCount = 0;

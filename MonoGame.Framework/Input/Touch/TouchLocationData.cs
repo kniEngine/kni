@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         private TimeSpan _pressTimestamp;
         internal TimeSpan _timestamp;
 
+        internal int _framestamp;
 
         /// <summary>
         /// True if this touch was pressed and released on the same frame.
@@ -41,6 +42,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal Vector2 PressPosition { get { return _pressPosition; } }
         internal TimeSpan PressTimestamp { get { return _pressTimestamp; } }
         internal TimeSpan Timestamp { get { return _timestamp; } }
+        internal int Framestamp { get { return _framestamp; } }
 
 
 
@@ -55,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         }
 
 
-        internal TouchLocationData(int id, TouchLocationState state, Vector2 position, TimeSpan timestamp)
+        internal TouchLocationData(int id, TouchLocationState state, Vector2 position, TimeSpan timestamp, int framestamp)
         {
             _id = id;
             _state = state;
@@ -65,14 +67,15 @@ namespace Microsoft.Xna.Framework.Input.Touch
             _previousPosition = Vector2.Zero;
 
             _timestamp = timestamp;
+            _framestamp = framestamp;
             _velocity = Vector2.Zero;
 
             // If this is a pressed location then store the 
             // current position and timestamp as pressed.
             if (state == TouchLocationState.Pressed)
             {
-                _pressPosition = _position;
-                _pressTimestamp = _timestamp;
+                _pressPosition = position;
+                _pressTimestamp = timestamp;
             }
             else
             {
@@ -93,6 +96,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 aPreviousLocation._previousState = TouchLocationState.Invalid;
                 aPreviousLocation._previousPosition = Vector2.Zero;
                 aPreviousLocation._timestamp = TimeSpan.Zero;
+                aPreviousLocation._framestamp = 0;
                 aPreviousLocation._pressPosition = Vector2.Zero;
                 aPreviousLocation._pressTimestamp = TimeSpan.Zero;
                 aPreviousLocation._velocity = Vector2.Zero;
@@ -106,6 +110,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
             aPreviousLocation._previousState = TouchLocationState.Invalid;
             aPreviousLocation._previousPosition = Vector2.Zero;
             aPreviousLocation._timestamp = _timestamp;
+            aPreviousLocation._framestamp = _framestamp;
             aPreviousLocation._pressPosition = _pressPosition;
             aPreviousLocation._pressTimestamp = _pressTimestamp;
             aPreviousLocation._velocity = _velocity;
