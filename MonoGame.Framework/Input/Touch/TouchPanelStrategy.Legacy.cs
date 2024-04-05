@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     // Update the touch based on the new one
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
                                     System.Diagnostics.Debug.Assert(evt.State == TouchLocationState.Moved, "The new touch event should be a move or a release.");
-                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp.");
+                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                                     // Store the current state as the previous one.
                                     existingTouch._previousPosition = existingTouch.Position;
@@ -235,7 +235,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                 {
                                     //Otherwise update the touch based on the new one
                                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp.");
+                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                                     // Store the current state as the previous one.
                                     existingTouch._previousPosition = existingTouch.Position;
@@ -295,7 +295,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                         // Update the touch based on the new one
                                         System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
                                         System.Diagnostics.Debug.Assert(evt.State == TouchLocationState.Moved, "The new touch event should be a move or a release.");
-                                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp.");
+                                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                                         // Store the current state as the previous one.
                                         existingTouch._previousPosition = existingTouch.Position;
@@ -347,7 +347,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     {
                                         //Otherwise update the touch based on the new one
                                         System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                                       System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The touch event is older than our timestamp.");
+                                       System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                                         // Store the current state as the previous one.
                                         existingTouch._previousPosition = existingTouch.Position;
