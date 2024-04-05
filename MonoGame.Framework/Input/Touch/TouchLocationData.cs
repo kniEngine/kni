@@ -71,8 +71,8 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // current position and timestamp as pressed.
             if (state == TouchLocationState.Pressed)
             {
-                _pressPosition = _position;
-                _pressTimestamp = _timestamp;
+                _pressPosition = position;
+                _pressTimestamp = timestamp;
             }
             else
             {
