@@ -50,6 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="Xna.Framework.Input.csproj" />
     <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj" />
     <ProjectReference Include="..\Src\Xna.Framework\Xna.Framework.csproj" />
   </ItemGroup>
