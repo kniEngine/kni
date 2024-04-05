@@ -167,6 +167,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 switch (evt.State)
                 {
                     case TouchLocationState.Pressed:
+                        System.Diagnostics.Debug.Assert(_touchStates.TrueForAll(t=> t.Id != evt.Id));
                         _touchStates.Add(evt);
                         break;
 
