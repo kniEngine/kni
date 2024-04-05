@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 
@@ -9,6 +10,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 {
     public abstract partial class TouchPanelStrategy
     {
+        private readonly Stopwatch _stopwatch;
+
         private IntPtr _windowHandle;
         private int _displayWidth;
         private int _displayHeight;
@@ -58,6 +61,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected TouchPanelStrategy()
         {
+            _stopwatch = Stopwatch.StartNew();
         }
 
         public virtual TouchPanelCapabilities GetCapabilities()

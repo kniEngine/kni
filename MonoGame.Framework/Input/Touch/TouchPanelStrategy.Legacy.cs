@@ -40,9 +40,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             get { return _currentTimestamp; } 
         }
 
-        internal void UpdateCurrentTimestamp(TimeSpan currentTimestamp)
+        internal void UpdateCurrentTimestamp()
         {
-            _currentTimestamp = currentTimestamp;
+            _currentTimestamp = _stopwatch.Elapsed;
             _currentFramestamp++;
         }
 
