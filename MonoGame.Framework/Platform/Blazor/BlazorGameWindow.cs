@@ -133,8 +133,7 @@ namespace Microsoft.Xna.Framework
             //Form.MouseLeave += OnMouseLeave;
 
             // Capture touch events.
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = this;
-            TouchPanel.WindowHandle = new IntPtr(_window.Uid);
+            TouchPanel.WindowHandle = this.Handle;
             _window.OnTouchStart += (object sender, float x, float y, int identifier) =>
             {
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(identifier, TouchLocationState.Pressed, new Vector2(x, y));

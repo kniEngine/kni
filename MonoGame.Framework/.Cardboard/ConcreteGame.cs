@@ -8,7 +8,6 @@ using System;
 using System.Diagnostics;
 using Android.Views;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
@@ -37,7 +36,7 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             if (base.Window == null)
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = _gameWindow;
+                TouchPanel.WindowHandle = _gameWindow.Handle;
             }
             base.Window = _gameWindow;
 
@@ -58,7 +57,7 @@ namespace Microsoft.Xna.Platform
 
             base.Dispose(disposing);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
+            TouchPanel.WindowHandle = IntPtr.Zero;
         }
 
 
