@@ -12,8 +12,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 {
     public sealed class ConcreteTouchPanel : TouchPanelStrategy
     {
-        internal GameWindow PrimaryWindow;
-
         public override IntPtr WindowHandle
         {
             get { return base.WindowHandle; }
@@ -75,9 +73,15 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public override void AddEvent(int id, TouchLocationState state, Vector2 position)
         {
-            Point winSize = new Point(this.PrimaryWindow.ClientBounds.Width, this.PrimaryWindow.ClientBounds.Height);
+            IntPtr wndHandle = this.WindowHandle;
+            if (wndHandle != IntPtr.Zero)
+            {
+                GameWindow gameWindow = WinFormsGameWindow.FromHandle(wndHandle);
+                Rectangle windowsBounds = gameWindow.ClientBounds;
 
-            base.LegacyAddEvent(id, state, position, winSize);
+                Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
+                base.LegacyAddEvent(id, state, position, winSize);
+            }
         }
 
         public override void InvalidateTouches()

@@ -24,6 +24,13 @@ namespace Microsoft.Xna.Framework
 {
     class WinFormsGameWindow : GameWindow, IDisposable
     {
+        private static Dictionary<IntPtr, WinFormsGameWindow> _instances = new Dictionary<IntPtr, WinFormsGameWindow>();
+
+        internal static WinFormsGameWindow FromHandle(IntPtr handle)
+        {
+            return _instances[handle];
+        }
+
         internal WinFormsGameForm Form;
 
         private ConcreteGame _concreteGame;
@@ -126,6 +133,9 @@ namespace Microsoft.Xna.Framework
             _game = concreteGame.Game;
 
             Form = new WinFormsGameForm(this);
+
+            _instances.Add(this.Handle, this);
+
             ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
 
             SetIcon();
@@ -422,6 +432,9 @@ namespace Microsoft.Xna.Framework
 
         void Dispose(bool disposing)
         {
+            if (Form != null)
+                _instances.Remove(this.Handle);
+
             if (disposing)
             {
                 if (Form != null)

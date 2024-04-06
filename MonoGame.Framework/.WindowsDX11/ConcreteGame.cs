@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Platform.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
@@ -26,7 +25,7 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new WinFormsGameWindow(this);
             if (base.Window == null)
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = _gameWindow;
+                TouchPanel.WindowHandle = _gameWindow.Handle;
             }
             base.Window = _gameWindow;
         }
@@ -115,7 +114,7 @@ namespace Microsoft.Xna.Platform
 
             base.Dispose(disposing);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
+            TouchPanel.WindowHandle = IntPtr.Zero;
         }
     }
 }
