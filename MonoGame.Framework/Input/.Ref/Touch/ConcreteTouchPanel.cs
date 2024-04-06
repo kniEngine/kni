@@ -8,7 +8,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 {
     public sealed class ConcreteTouchPanel : TouchPanelStrategy
     {
-        internal GameWindow PrimaryWindow;
 
         public override IntPtr WindowHandle
         {
