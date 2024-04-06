@@ -304,8 +304,10 @@ namespace Microsoft.Xna.Framework
             _instances.Remove(this.Handle);
             _canvas = null;
 
+            if (Mouse.WindowHandle == this.Handle)
+                Mouse.WindowHandle = IntPtr.Zero;
+
             _concreteGame = null;
-            Mouse.WindowHandle = IntPtr.Zero;
         }
 
         public void MouseVisibleToggled()

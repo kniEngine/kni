@@ -101,6 +101,12 @@ namespace Microsoft.Xna.Platform
 
         protected override void Dispose(bool disposing)
         {
+            if (_gameWindow != null)
+            {
+                if (TouchPanel.WindowHandle == _gameWindow.Handle)
+                    TouchPanel.WindowHandle = IntPtr.Zero;
+            }
+
             if (disposing)
             {
                 if (_gameWindow != null)
@@ -113,8 +119,6 @@ namespace Microsoft.Xna.Platform
             }
 
             base.Dispose(disposing);
-
-            TouchPanel.WindowHandle = IntPtr.Zero;
         }
     }
 }

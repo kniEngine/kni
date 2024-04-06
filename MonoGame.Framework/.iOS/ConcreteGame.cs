@@ -130,6 +130,12 @@ namespace Microsoft.Xna.Platform
 
         protected override void Dispose(bool disposing)
         {
+            if (Window != null)
+            {
+                if (TouchPanel.WindowHandle == Window.Handle)
+                    TouchPanel.WindowHandle = IntPtr.Zero;
+            }
+            
             base.Dispose(disposing);
 
             if (disposing)
@@ -148,8 +154,7 @@ namespace Microsoft.Xna.Platform
                     _uiWindow = null;
                 }
             }
-
-            TouchPanel.WindowHandle = IntPtr.Zero;
+            
         }
 
         public override void BeforeInitialize()
