@@ -12,8 +12,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Platform.Input;
-using Microsoft.Xna.Platform.Input.Touch;
 using MonoGame.Framework.Utilities;
 
 
@@ -75,8 +73,8 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new SdlGameWindow(Game);
             if (base.Window == null)
             {
-                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = _gameWindow;
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = _gameWindow;
+                Mouse.WindowHandle = _gameWindow.Handle;
+                TouchPanel.WindowHandle = _gameWindow.Handle;
             }
             base.Window = _gameWindow;
         }
@@ -158,8 +156,8 @@ namespace Microsoft.Xna.Platform
 
             base.Dispose(disposing);
 
-            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = null;
+            Mouse.WindowHandle = IntPtr.Zero;
+            TouchPanel.WindowHandle = IntPtr.Zero;
         }
     }
 }

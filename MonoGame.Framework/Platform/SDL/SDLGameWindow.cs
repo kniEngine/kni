@@ -21,6 +21,14 @@ namespace Microsoft.Xna.Framework
 {
     internal class SdlGameWindow : GameWindow, IDisposable
     {
+        private static Dictionary<IntPtr, SdlGameWindow> _instances = new Dictionary<IntPtr, SdlGameWindow>();
+
+        internal static SdlGameWindow FromHandle(IntPtr handle)
+        {
+            return _instances[handle];
+        }
+
+
         internal Sdl SDL { get { return Sdl.Current; } }
 
         public override bool AllowUserResizing
@@ -125,6 +133,7 @@ namespace Microsoft.Xna.Framework
             _handle = SDL.WINDOW.Create("", 0, 0,
                 GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight,
                 Sdl.Window.State.Hidden | Sdl.Window.State.FullscreenDesktop);
+            _instances.Add(this.Handle, this);
 
             Title = AssemblyHelper.GetDefaultWindowTitle();
         }
@@ -171,6 +180,7 @@ namespace Microsoft.Xna.Framework
 
             if (_handle != IntPtr.Zero)
             {
+                _instances.Remove(this.Handle);
                 SDL.WINDOW.Destroy(_handle);
                 _handle = IntPtr.Zero;
             }
@@ -189,6 +199,7 @@ namespace Microsoft.Xna.Framework
             _height = GraphicsDeviceManager.DefaultBackBufferHeight;
 
             _handle = SDL.WINDOW.Create(Title, winx, winy, _width, _height, initflags);
+            _instances.Add(this.Handle, this);
 
             Id = SDL.WINDOW.GetWindowId(_handle);
 
@@ -540,6 +551,7 @@ namespace Microsoft.Xna.Framework
             if (_disposed)
                 return;
 
+            _instances.Remove(this.Handle);
             SDL.WINDOW.Destroy(_handle);
             _handle = IntPtr.Zero;
 
