@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform
             UAPGameWindow uapGameWindow = UAPGameWindow.Instance;
             if (base.Window == null)
             {
-                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = uapGameWindow;
+                Mouse.WindowHandle = uapGameWindow.Handle;
                 TouchPanel.WindowHandle = uapGameWindow.Handle;
             }
             base.Window = uapGameWindow;
@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Platform
 
             base.Dispose(disposing);
 
-            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow = null;
+            Mouse.WindowHandle = IntPtr.Zero;
             TouchPanel.WindowHandle = IntPtr.Zero;
         }
     }
