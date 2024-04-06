@@ -47,9 +47,9 @@ namespace Microsoft.Xna.Platform
             UAPGameWindow uapGameWindow = UAPGameWindow.Instance;
             base.Window = uapGameWindow;
             uapGameWindow.Game = game;
-            if (Mouse.WindowHandle != IntPtr.Zero)
+            if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = base.Window.Handle;
-            if (TouchPanel.WindowHandle != IntPtr.Zero)
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 
             // Register the CoreWindow with the services registry
