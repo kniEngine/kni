@@ -61,13 +61,6 @@
   <Import Project="MonoGame.Framework.Common.targets" />
 
   <ItemGroup>
-    <Compile Remove="Input\MessageBox.cs" />
-    <Compile Remove="Input\MessageBoxStrategy.cs" />
-    <Compile Remove="Input\KeyboardInput.cs" />
-    <Compile Remove="Input\KeyboardInputStrategy.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="Graphics\.GL.SDL\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL.SDL\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsAdapter.cs" />
@@ -103,6 +96,8 @@
     <Compile Include="Input\.SDL2\ConcreteKeyboard.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouse.cs" />
     <Compile Include="Input\.SDL2\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\.SDL2\ConcreteKeyboardInput.cs" />
+    <Compile Include="Input\.SDL2\ConcreteMessageBox.cs" />
     <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
     <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />

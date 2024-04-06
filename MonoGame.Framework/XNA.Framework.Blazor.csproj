@@ -62,12 +62,6 @@
   <Import Project="MonoGame.Framework.Common.targets" />
 
   <ItemGroup>
-
-    <Compile Remove="Input\MessageBox.cs" />
-    <Compile Remove="Input\MessageBoxStrategy.cs" />
-    <Compile Remove="Input\KeyboardInput.cs" />
-    <Compile Remove="Input\KeyboardInputStrategy.cs" />
-
     <Compile Include=".Blazor\ConcreteGame.cs" />
     <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
 
@@ -81,6 +75,8 @@
     <Compile Include="Input\.Blazor\ConcreteKeyboard.cs" />
     <Compile Include="Input\.Blazor\ConcreteMouse.cs" />
     <Compile Include="Input\.Blazor\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\.Blazor\ConcreteKeyboardInput.cs" />
+    <Compile Include="Input\.Blazor\ConcreteMessageBox.cs" />
     <Compile Include="Media\Blazor\ConcreteAlbum.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaFactory.cs" />
     <Compile Include="Media\Blazor\ConcreteMediaLibrary.cs" />

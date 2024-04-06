@@ -51,14 +51,7 @@
   </ItemGroup>
 
   <Import Project="MonoGame.Framework.Common.targets" />
-  
-  <ItemGroup>
-    <Compile Remove="Input\KeyboardInput.cs" />
-    <Compile Remove="Input\KeyboardInputStrategy.cs" />
-    <Compile Remove="Input\MessageBox.cs" />
-    <Compile Remove="Input\MessageBoxStrategy.cs" />
-  </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="Graphics\.DX11\ConcreteRenderTargetSwapChain.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
@@ -69,6 +62,8 @@
     <Compile Include="Input\.WindowsDX\ConcreteKeyboard.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouse.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\.WindowsDX\ConcreteKeyboardInput.cs" />
+    <Compile Include="Input\.WindowsDX\ConcreteMessageBox.cs" />
     <Compile Include="Input\KeysHelper.cs" />
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />

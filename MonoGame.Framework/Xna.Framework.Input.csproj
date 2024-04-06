@@ -3,10 +3,9 @@
   <Import Project="..\kniPackage.props" />
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Xna.Framework.Input\</BaseOutputPath>
-    
+
     <Version>3.11.9002.0</Version>
     <AssemblyVersion>3.11.9002.0</AssemblyVersion>
-
   </PropertyGroup>
 
   <PropertyGroup>
@@ -25,7 +24,7 @@
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Input</PackageId>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Compile Include="Input\Touch\GestureSample.cs" />
     <Compile Include="Input\Touch\GestureType.cs" />
@@ -38,7 +37,7 @@
     <Compile Include="Input\Touch\TouchPanelStrategy.Legacy.cs" />
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
@@ -62,6 +61,10 @@
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Input\KeyboardStrategy.cs" />
     <Compile Include="Input\KeyboardState.cs" />
+    <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Input\KeyboardInputStrategy.cs" />
+    <Compile Include="Input\MessageBox.cs" />
+    <Compile Include="Input\MessageBoxStrategy.cs" />
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\Mouse.cs" />
