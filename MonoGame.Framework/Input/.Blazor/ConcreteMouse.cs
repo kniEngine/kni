@@ -19,6 +19,8 @@ namespace Microsoft.Xna.Platform.Input
 
         public override void PlatformSetWindowHandle(IntPtr windowHandle)
         {
+            _wndHandle = windowHandle;
+
             // Unregister old window
             if (_domWindow != null)
             {
