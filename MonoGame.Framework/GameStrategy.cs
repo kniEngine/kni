@@ -409,10 +409,6 @@ namespace Microsoft.Xna.Platform
         {
         }
 
-#if UAP || WINUI
-        private readonly object _locker = new object();
-#endif
-
         private TimeSpan _currElapsedTime;
         private TimeSpan _prevElapsedTime;
         private int _updateFrameLag;
