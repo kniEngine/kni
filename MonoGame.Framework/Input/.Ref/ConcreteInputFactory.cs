@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteInputFactory : InputFactory
     {
 
-        internal override GamePadStrategy CreateGamePadStrategy()
+        public override GamePadStrategy CreateGamePadStrategy()
         {
             return new ConcreteGamePad();
         }
@@ -38,17 +38,17 @@ namespace Microsoft.Xna.Platform.Input
             return new ConcreteMouseCursor(data, w, h, originx, originy);
         }
 
-        internal override TouchPanelStrategy CreateTouchPanelStrategy()
+        public override TouchPanelStrategy CreateTouchPanelStrategy()
         {
             return new ConcreteTouchPanel();
         }
 
-        internal override KeyboardInputStrategy CreateKeyboardInputStrategy()
+        public override KeyboardInputStrategy CreateKeyboardInputStrategy()
         {
             return new ConcreteKeyboardInput();
         }
 
-        internal override MessageBoxStrategy CreateMessageBoxStrategy()
+        public override MessageBoxStrategy CreateMessageBoxStrategy()
         {
             return new ConcreteMessageBox();
         }
