@@ -84,6 +84,7 @@
     <Compile Include="Platform\Utilities\TimerHelper.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
     <Compile Include=".WindowsDX11\ConcreteGame.cs" />
+    <Compile Include=".WindowsDX11\ConcreteGameFactory.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
   </ItemGroup> 
 

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class GraphicsDeviceManagerStrategy : IDisposable
+    public class GraphicsDeviceManagerStrategy : IDisposable
     {
         public static readonly int DefaultBackBufferWidth  = 800;
         public static readonly int DefaultBackBufferHeight = 480;

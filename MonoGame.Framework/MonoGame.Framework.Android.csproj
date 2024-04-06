@@ -72,6 +72,7 @@
     <Compile Include="Platform\Android\AndroidCompatibility.cs" />
     <Compile Include="Platform\Android\AndroidGameActivity.cs" />
     <Compile Include=".Android\ConcreteGame.cs" />
+    <Compile Include=".Android\ConcreteGameFactory.cs" />
     <Compile Include="Platform\Android\AndroidGameWindow.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Compass.cs" />

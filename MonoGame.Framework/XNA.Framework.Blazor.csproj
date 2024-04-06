@@ -63,6 +63,7 @@
 
   <ItemGroup>
     <Compile Include=".Blazor\ConcreteGame.cs" />
+    <Compile Include=".Blazor\ConcreteGameFactory.cs" />
     <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
