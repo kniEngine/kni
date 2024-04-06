@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             base.Window = _gameWindow;
-            if (TouchPanel.WindowHandle != IntPtr.Zero)
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 
             Services.AddService(typeof(View), _gameWindow.GameView);

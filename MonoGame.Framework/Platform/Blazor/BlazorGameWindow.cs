@@ -128,13 +128,13 @@ namespace Microsoft.Xna.Framework
             SetIcon();
 
             // Capture mouse events.
-            if (Mouse.WindowHandle != IntPtr.Zero)
+            if (Mouse.WindowHandle == IntPtr.Zero)
                Mouse.WindowHandle = this.Handle;
             //Form.MouseEnter += OnMouseEnter;
             //Form.MouseLeave += OnMouseLeave;
 
             // Capture touch events.
-            if (TouchPanel.WindowHandle != IntPtr.Zero)
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = this.Handle;
             _window.OnTouchStart += (object sender, float x, float y, int identifier) =>
             {

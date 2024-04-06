@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework
             Form.StartPosition = FormStartPosition.Manual;
 
             // Capture mouse events.
-            if (Mouse.WindowHandle != IntPtr.Zero)
+            if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = this.Handle;
             Form.MouseEnter += OnMouseEnter;
             Form.MouseLeave += OnMouseLeave;            

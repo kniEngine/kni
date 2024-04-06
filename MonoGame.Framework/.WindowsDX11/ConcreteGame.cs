@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform
         {
             _gameWindow = new WinFormsGameWindow(this);
             base.Window = _gameWindow;
-            if (TouchPanel.WindowHandle != IntPtr.Zero)
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
         }
 

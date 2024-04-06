@@ -72,9 +72,9 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow = new SdlGameWindow(Game);
             base.Window = _gameWindow;
-            if (Mouse.WindowHandle != IntPtr.Zero)
+            if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = base.Window.Handle;
-            if (TouchPanel.WindowHandle != IntPtr.Zero)
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
         }
 

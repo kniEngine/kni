@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform
 
             GameWindow gameWindow = new iOSGameWindow(_viewController);
             base.Window = gameWindow;
-            if (TouchPanel.WindowHandle != IntPtr.Zero)
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 
             _uiWindow.Add(_viewController.View);
