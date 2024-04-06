@@ -10,7 +10,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Windows;
@@ -21,7 +20,7 @@ using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
 
 
-namespace MonoGame.Framework
+namespace Microsoft.Xna.Framework
 {
     class WinFormsGameWindow : GameWindow, IDisposable
     {
