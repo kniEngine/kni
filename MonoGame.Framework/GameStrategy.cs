@@ -444,7 +444,7 @@ namespace Microsoft.Xna.Platform
             {
                 // When game IsActive use CPU Spin.
                 /*
-                if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
+                if ((TargetElapsedTime - _currElapsedTime).TotalMilliseconds >= 2.0)
                 {
 #if WINDOWSDX || DESKTOPGL || ANDROID || IOS || TVOS || (UAP || WINUI)
                     System.Threading.Thread.Sleep(0);
