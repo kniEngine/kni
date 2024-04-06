@@ -44,6 +44,8 @@ namespace Microsoft.Xna.Framework
             public Keys Key;
         }
 
+        private readonly GameWindow _gameWindow;
+
         public readonly ConcurrentQueue<KeyChar> TextQueue = new ConcurrentQueue<KeyChar>();
         private KeyChar _lastEnqueuedKeyChar;
 
@@ -53,8 +55,10 @@ namespace Microsoft.Xna.Framework
         private CoreIndependentInputSource _coreIndependentInputSource;
 
 
-        public InputEvents(CoreWindow window, UIElement inputElement)
+        public InputEvents(GameWindow gameWindow, CoreWindow window, UIElement inputElement)
         {
+            this._gameWindow = gameWindow;
+
             // The key events are always tied to the window as those will
             // only arrive here if some other control hasn't gotten it.
             window.KeyDown += CoreWindow_KeyDown;
@@ -243,7 +247,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private static void UpdateMouse(PointerPoint point)
+        private void UpdateMouse(PointerPoint point)
         {
             var x = (int)(point.Position.X * _currentDipFactor);
             var y = (int)(point.Position.Y * _currentDipFactor);
@@ -258,9 +262,9 @@ namespace Microsoft.Xna.Framework
             else
                 verticalScrollDelta = state.MouseWheelDelta;
 
-            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow.MouseState = new MouseState(x, y,
-                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow.MouseState.ScrollWheelValue + verticalScrollDelta,
-                ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().PrimaryWindow.MouseState.HorizontalScrollWheelValue + horizontalScrollDelta,
+            _gameWindow.MouseState = new MouseState(x, y,
+                _gameWindow.MouseState.ScrollWheelValue + verticalScrollDelta,
+                _gameWindow.MouseState.HorizontalScrollWheelValue + horizontalScrollDelta,
                 0, 0,
                 state.IsLeftButtonPressed ? ButtonState.Pressed : ButtonState.Released,
                 state.IsMiddleButtonPressed ? ButtonState.Pressed : ButtonState.Released,

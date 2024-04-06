@@ -14,8 +14,6 @@ namespace Microsoft.Xna.Platform.Input
     {
         private IntPtr _wndHandle = IntPtr.Zero;
 
-        internal GameWindow PrimaryWindow;
-
         public override IntPtr PlatformGetWindowHandle()
         {
             return _wndHandle;
@@ -33,9 +31,13 @@ namespace Microsoft.Xna.Platform.Input
 
         public override MouseState PlatformGetState()
         {
-            if (this.PrimaryWindow != null)
+
+            IntPtr wndHandle = this._wndHandle;
+            if (wndHandle != IntPtr.Zero)
             {
-                return this.PrimaryWindow.MouseState;
+                GameWindow gameWindow = UAPGameWindow.FromHandle(wndHandle);
+            
+                return gameWindow.MouseState;
             }
             else
                 return new MouseState();
@@ -43,8 +45,9 @@ namespace Microsoft.Xna.Platform.Input
 
         public override void PlatformSetPosition(int x, int y)
         {
-            PrimaryWindow.MouseState.X = x;
-            PrimaryWindow.MouseState.Y = y;
+            GameWindow gameWindow = UAPGameWindow.FromHandle(this._wndHandle);
+            gameWindow.MouseState.X = x;
+            gameWindow.MouseState.Y = y;
         }
 
         public override void PlatformSetCursor(MouseCursor cursor)

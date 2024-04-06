@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework
             _instances.Add(this.Handle, this);
 
             this.SwapChainPanel = swapChainPanel;
-            _inputEvents = new InputEvents(_coreWindow, this.SwapChainPanel);
+            _inputEvents = new InputEvents(this, _coreWindow, this.SwapChainPanel);
 
             _dinfo = DisplayInformation.GetForCurrentView();
 
