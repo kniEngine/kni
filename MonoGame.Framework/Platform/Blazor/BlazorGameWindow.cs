@@ -128,12 +128,14 @@ namespace Microsoft.Xna.Framework
             SetIcon();
 
             // Capture mouse events.
-            Mouse.WindowHandle = new IntPtr(_window.Uid);
+            if (Mouse.WindowHandle != IntPtr.Zero)
+               Mouse.WindowHandle = this.Handle;
             //Form.MouseEnter += OnMouseEnter;
             //Form.MouseLeave += OnMouseLeave;
 
             // Capture touch events.
-            TouchPanel.WindowHandle = this.Handle;
+            if (TouchPanel.WindowHandle != IntPtr.Zero)
+                TouchPanel.WindowHandle = this.Handle;
             _window.OnTouchStart += (object sender, float x, float y, int identifier) =>
             {
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(identifier, TouchLocationState.Pressed, new Vector2(x, y));
