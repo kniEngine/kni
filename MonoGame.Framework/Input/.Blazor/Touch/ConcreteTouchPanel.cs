@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
             {
-                GameWindow gameWindow = BlazorGameWindow.FromHandle(this.WindowHandle);
+                GameWindow gameWindow = BlazorGameWindow.FromHandle(wndHandle);
                 Rectangle windowsBounds = gameWindow.ClientBounds;
 
                 Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);

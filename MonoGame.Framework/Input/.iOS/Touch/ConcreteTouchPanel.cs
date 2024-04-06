@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
             {
-                GameWindow gameWindow = iOSGameWindow.FromHandle(this.WindowHandle);
+                GameWindow gameWindow = iOSGameWindow.FromHandle(wndHandle);
                 Rectangle windowsBounds = gameWindow.ClientBounds;
 
                 Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
