@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
@@ -180,6 +181,11 @@ namespace Microsoft.Xna.Framework
 
             if (_handle != IntPtr.Zero)
             {
+                if (Mouse.WindowHandle == _handle)
+                    Mouse.WindowHandle = IntPtr.Zero;
+                if (TouchPanel.WindowHandle == _handle)
+                    TouchPanel.WindowHandle = IntPtr.Zero;
+
                 _instances.Remove(this.Handle);
                 SDL.WINDOW.Destroy(_handle);
                 _handle = IntPtr.Zero;
@@ -202,6 +208,11 @@ namespace Microsoft.Xna.Framework
             _instances.Add(this.Handle, this);
 
             Id = SDL.WINDOW.GetWindowId(_handle);
+
+            if (Mouse.WindowHandle == IntPtr.Zero)
+                Mouse.WindowHandle = _handle;
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
+                TouchPanel.WindowHandle = _handle;
 
             if (_pIcon != IntPtr.Zero)
                 SDL.WINDOW.SetIcon(_handle, _pIcon);
