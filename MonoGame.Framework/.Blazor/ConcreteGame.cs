@@ -22,11 +22,9 @@ namespace Microsoft.Xna.Platform
         public ConcreteGame(Game game) : base(game)
         {
             _gameWindow = new BlazorGameWindow(this);
-            if (base.Window == null)
-            {
-                TouchPanel.WindowHandle = _gameWindow.Handle;
-            }
             base.Window = _gameWindow;
+            if (TouchPanel.WindowHandle != IntPtr.Zero)
+                TouchPanel.WindowHandle = base.Window.Handle;
         }
 
         internal override void Run()

@@ -34,11 +34,9 @@ namespace Microsoft.Xna.Platform
             AndroidGameActivity.Resumed += Activity_Resumed;
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
-            if (base.Window == null)
-            {
-                TouchPanel.WindowHandle = _gameWindow.Handle;
-            }
             base.Window = _gameWindow;
+            if (TouchPanel.WindowHandle != IntPtr.Zero)
+                TouchPanel.WindowHandle = base.Window.Handle;
 
             Services.AddService(typeof(View), _gameWindow.GameView);
 

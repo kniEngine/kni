@@ -45,13 +45,12 @@ namespace Microsoft.Xna.Platform
             ConcreteGame._concreteGameInstance = this;
 
             UAPGameWindow uapGameWindow = UAPGameWindow.Instance;
-            if (base.Window == null)
-            {
-                Mouse.WindowHandle = uapGameWindow.Handle;
-                TouchPanel.WindowHandle = uapGameWindow.Handle;
-            }
             base.Window = uapGameWindow;
             uapGameWindow.Game = game;
+            if (Mouse.WindowHandle != IntPtr.Zero)
+                Mouse.WindowHandle = base.Window.Handle;
+            if (TouchPanel.WindowHandle != IntPtr.Zero)
+                TouchPanel.WindowHandle = base.Window.Handle;
 
             // Register the CoreWindow with the services registry
             Services.AddService(typeof(CoreWindow), uapGameWindow.CoreWindow);

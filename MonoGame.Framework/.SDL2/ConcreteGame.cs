@@ -71,12 +71,11 @@ namespace Microsoft.Xna.Platform
             SDL.DisableScreenSaver();
 
             _gameWindow = new SdlGameWindow(Game);
-            if (base.Window == null)
-            {
-                Mouse.WindowHandle = _gameWindow.Handle;
-                TouchPanel.WindowHandle = _gameWindow.Handle;
-            }
             base.Window = _gameWindow;
+            if (Mouse.WindowHandle != IntPtr.Zero)
+                Mouse.WindowHandle = base.Window.Handle;
+            if (TouchPanel.WindowHandle != IntPtr.Zero)
+                TouchPanel.WindowHandle = base.Window.Handle;
         }
 
         public override void BeforeInitialize()

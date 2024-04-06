@@ -57,11 +57,9 @@ namespace Microsoft.Xna.Platform
             game.Services.AddService(typeof(UIViewController), _viewController);
 
             GameWindow gameWindow = new iOSGameWindow(_viewController);
-            if (base.Window == null)
-            {
-                TouchPanel.WindowHandle = gameWindow.Handle;
-            }
             base.Window = gameWindow;
+            if (TouchPanel.WindowHandle != IntPtr.Zero)
+                TouchPanel.WindowHandle = base.Window.Handle;
 
             _uiWindow.Add(_viewController.View);
 
