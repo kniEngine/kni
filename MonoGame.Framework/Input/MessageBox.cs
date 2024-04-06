@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Framework.Input
 
         private MessageBox()
         {
-            _strategy = new ConcreteMessageBox();
+            _strategy = InputFactory.Current.CreateMessageBoxStrategy();
         }
 
         #region IMessageBox

@@ -53,6 +53,8 @@ namespace Microsoft.Xna.Platform.Input
         public abstract MouseStrategy CreateMouseStrategy();
         public abstract MouseCursorStrategy CreateMouseCursorStrategy(MouseCursorStrategy.MouseCursorType cursorType);
         public abstract MouseCursorStrategy CreateMouseCursorStrategy(byte[] data, int w, int h, int originx, int originy);
+        internal abstract KeyboardInputStrategy CreateKeyboardInputStrategy();
+        internal abstract MessageBoxStrategy CreateMessageBoxStrategy();
 
     }
 
