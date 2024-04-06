@@ -148,6 +148,14 @@ namespace Microsoft.Xna.Platform
         {
             if (_gameWindow != null)
             {
+                if (Mouse.WindowHandle == _gameWindow.Handle)
+                    Mouse.WindowHandle = IntPtr.Zero;
+                if (TouchPanel.WindowHandle == _gameWindow.Handle)
+                    TouchPanel.WindowHandle = IntPtr.Zero;
+            }
+
+            if (_gameWindow != null)
+            {
                 _gameWindow.Dispose();
                 _gameWindow = null;
 
@@ -155,9 +163,6 @@ namespace Microsoft.Xna.Platform
             }
 
             base.Dispose(disposing);
-
-            Mouse.WindowHandle = IntPtr.Zero;
-            TouchPanel.WindowHandle = IntPtr.Zero;
         }
     }
 }

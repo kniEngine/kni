@@ -277,12 +277,14 @@ namespace Microsoft.Xna.Platform
             if (gdm != null)
                 gdm.Dispose();
 
+            if (Mouse.WindowHandle == Window.Handle)
+                Mouse.WindowHandle = IntPtr.Zero;
+            if (TouchPanel.WindowHandle == Window.Handle)
+                TouchPanel.WindowHandle = IntPtr.Zero;
+
             ((UAPGameWindow)Window).Dispose();
 
             base.Dispose(disposing);
-
-            Mouse.WindowHandle = IntPtr.Zero;
-            TouchPanel.WindowHandle = IntPtr.Zero;
         }
     }
 }

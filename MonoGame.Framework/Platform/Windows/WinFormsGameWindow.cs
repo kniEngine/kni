@@ -435,6 +435,9 @@ namespace Microsoft.Xna.Framework
             if (Form != null)
                 _instances.Remove(this.Handle);
 
+            if (Mouse.WindowHandle == this.Handle)
+                Mouse.WindowHandle = IntPtr.Zero;
+
             if (disposing)
             {
                 if (Form != null)
@@ -445,7 +448,6 @@ namespace Microsoft.Xna.Framework
             }
             _concreteGame = null;
             _game = null;
-            Mouse.WindowHandle = IntPtr.Zero;
         }
 
         public void MouseVisibleToggled()

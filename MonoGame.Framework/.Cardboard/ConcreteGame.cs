@@ -53,11 +53,12 @@ namespace Microsoft.Xna.Platform
                 AndroidGameActivity.Resumed -= Activity_Resumed;
             }
 
+            if (TouchPanel.WindowHandle == _gameWindow.Handle)
+                TouchPanel.WindowHandle = IntPtr.Zero;
+
             AndroidGameWindow.Activity = null;
 
             base.Dispose(disposing);
-
-            TouchPanel.WindowHandle = IntPtr.Zero;
         }
 
 
