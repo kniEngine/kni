@@ -37,11 +37,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
 	
-  <PropertyGroup>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET40</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET45</DefineConstants>
-  </PropertyGroup>
-	
   <ItemGroup>
     <PackageReference Version="4.0.1" Include="SharpDX" />
     <PackageReference Version="4.0.1" Include="SharpDX.Direct2D1" />
@@ -157,6 +152,8 @@
     <Compile Include="Input\.WindowsDX\ConcreteKeyboard.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouse.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\.WindowsDX\ConcreteKeyboardInput.cs" />
+    <Compile Include="Input\.WindowsDX\ConcreteMessageBox.cs" />
     <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
@@ -180,6 +177,10 @@
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Input\KeyboardStrategy.cs" />
     <Compile Include="Input\KeyboardState.cs" />
+    <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Input\KeyboardInputStrategy.cs" />
+    <Compile Include="Input\MessageBox.cs" />
+    <Compile Include="Input\MessageBoxStrategy.cs" />
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="Input\Mouse.cs" />

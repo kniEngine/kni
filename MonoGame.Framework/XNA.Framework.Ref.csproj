@@ -54,11 +54,6 @@
   <Import Project="MonoGame.Framework.Common.targets" />
 
   <ItemGroup>
-
-    <Compile Remove="Input\MessageBox.cs" />
-    <Compile Remove="Input\MessageBoxStrategy.cs" />
-    <Compile Remove="Input\KeyboardInput.cs" />
-    <Compile Remove="Input\KeyboardInputStrategy.cs" />
     <None Remove="P:\MonoGame\Images\Icon.png" />
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
@@ -72,6 +67,8 @@
     <Compile Include="Input\.Ref\ConcreteKeyboard.cs" />
     <Compile Include="Input\.Ref\ConcreteMouse.cs" />
     <Compile Include="Input\.Ref\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\.Ref\ConcreteKeyboardInput.cs" />
+    <Compile Include="Input\.Ref\ConcreteMessageBox.cs" />
     <Compile Include="Media\Ref\ConcreteAlbum.cs" />
     <Compile Include="Media\Ref\ConcreteMediaFactory.cs" />
     <Compile Include="Media\Ref\ConcreteMediaLibrary.cs" />
@@ -82,7 +79,7 @@
     <Compile Include=".Ref\ConcreteTitleContainer.cs" />
     <Compile Include=".Ref\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.Ref.cs" />

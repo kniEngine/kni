@@ -10,7 +10,9 @@ namespace Microsoft.Xna.Platform.Input
     {
         bool IsVisible { get; }
 
+#if !NET40
         Task<string> Show(string title, string description, string defaultText = "", bool usePasswordMode = false);
+#endif
         void Cancel(string result);
     }
 
@@ -53,6 +55,7 @@ namespace Microsoft.Xna.Framework.Input
             get { return ((IKeyboardInput)KeyboardInput.Current).IsVisible; } 
         }
 
+#if !NET40
         /// <summary>
         /// Displays the keyboard input interface asynchronously.
         /// </summary>
@@ -71,6 +74,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             return await ((IKeyboardInput)KeyboardInput.Current).Show(title, description, defaultText, usePasswordMode);
         }
+#endif
 
         /// <summary>
         /// Hides the keyboard input interface and returns the parameter as the result of <see cref="Show"/>
@@ -111,6 +115,7 @@ namespace Microsoft.Xna.Framework.Input
             get { return _isVisible; }
         }
 
+#if !NET40
         async Task<string> IKeyboardInput.Show(string title, string description, string defaultText = "", bool usePasswordMode = false)
         {
             if (IsVisible)
@@ -124,6 +129,7 @@ namespace Microsoft.Xna.Framework.Input
 
             return result;
         }
+#endif
 
         void IKeyboardInput.Cancel(string result)
         {

@@ -13,8 +13,12 @@ namespace Microsoft.Xna.Platform.Input
     {
         bool IsVisible { get; }
 
+#if !NET40
         Task<int?> Show(string title, string description, IEnumerable<string> buttons);
+#endif
         void Cancel(int? result);
+
+
     }
 
     public interface IPlatformMessageBox
@@ -57,6 +61,7 @@ namespace Microsoft.Xna.Framework.Input
             get { return ((IMessageBox)MessageBox.Current).IsVisible; }
         }
 
+#if !NET40
         /// <summary>
         /// Displays the message box interface asynchronously.
         /// </summary>
@@ -74,6 +79,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             return await ((IMessageBox)MessageBox.Current).Show(title, description, buttons);
         }
+#endif
 
         /// <summary>
         /// Hides the message box interface and returns the parameter as the result of <see cref="Show"/>
@@ -114,6 +120,7 @@ namespace Microsoft.Xna.Framework.Input
             get { return _isVisible; }
         }
 
+#if !NET40
         async Task<int?> IMessageBox.Show(string title, string description, IEnumerable<string> buttons)
         {
             if (IsVisible)
@@ -131,6 +138,7 @@ namespace Microsoft.Xna.Framework.Input
 
             return result;
         }
+#endif
 
         void IMessageBox.Cancel(int? result)
         {
