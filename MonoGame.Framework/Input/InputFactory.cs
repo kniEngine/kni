@@ -46,15 +46,15 @@ namespace Microsoft.Xna.Platform.Input
             }
         }
 
-        internal abstract TouchPanelStrategy CreateTouchPanelStrategy();
-        internal abstract GamePadStrategy CreateGamePadStrategy();
+        public abstract TouchPanelStrategy CreateTouchPanelStrategy();
+        public abstract GamePadStrategy CreateGamePadStrategy();
         public abstract JoystickStrategy CreateJoystickStrategy();
         public abstract KeyboardStrategy CreateKeyboardStrategy();
         public abstract MouseStrategy CreateMouseStrategy();
         public abstract MouseCursorStrategy CreateMouseCursorStrategy(MouseCursorStrategy.MouseCursorType cursorType);
         public abstract MouseCursorStrategy CreateMouseCursorStrategy(byte[] data, int w, int h, int originx, int originy);
-        internal abstract KeyboardInputStrategy CreateKeyboardInputStrategy();
-        internal abstract MessageBoxStrategy CreateMessageBoxStrategy();
+        public abstract KeyboardInputStrategy CreateKeyboardInputStrategy();
+        public abstract MessageBoxStrategy CreateMessageBoxStrategy();
 
     }
 
