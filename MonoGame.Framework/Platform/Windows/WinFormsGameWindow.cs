@@ -329,11 +329,11 @@ namespace Microsoft.Xna.Framework
 
         private void UpdateBackBufferSize()
         {
-            var gdm = _concreteGame.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
             if (gdm.GraphicsDevice == null)
                 return;
 
-            var newSize = Form.ClientSize;
+            SysDrawing.Size newSize = Form.ClientSize;
             if (newSize.Width == gdm.PreferredBackBufferWidth
                 && newSize.Height == gdm.PreferredBackBufferHeight)
                 return;

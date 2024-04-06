@@ -246,15 +246,15 @@ namespace Microsoft.Xna.Framework
         // TODO: move UpdateBackBufferSize() in graphicsDeviceManager
         private void UpdateBackBufferSize()
         {
-            var gdm = _concreteGame.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
             if (gdm.GraphicsDevice == null)
                 return;
 
             _canvas.Width = _window.InnerWidth;
             _canvas.Height = _window.InnerHeight;
             Size newSize = new Size(_canvas.Width, _canvas.Height);
-            if(newSize.Width == gdm.PreferredBackBufferWidth &&
-               newSize.Height == gdm.PreferredBackBufferHeight)
+            if (newSize.Width  == gdm.PreferredBackBufferWidth
+            &&  newSize.Height == gdm.PreferredBackBufferHeight)
                 return;
 
             // Set the default new back buffer size

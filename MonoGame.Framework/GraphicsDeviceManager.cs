@@ -36,6 +36,7 @@ namespace Microsoft.Xna.Framework
         public GraphicsDeviceManager(Game game)
         {
             _strategy = new ConcreteGraphicsDeviceManager(game);
+
             // dispatch events
             _strategy.PreparingDeviceSettings += (sender, e) => { OnPreparingDeviceSettings(e); };
             _strategy.DeviceCreated   += (sender, e) => { OnDeviceCreated(e); };
