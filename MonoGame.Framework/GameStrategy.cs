@@ -430,14 +430,7 @@ namespace Microsoft.Xna.Platform
             // implement InactiveSleepTime to save battery life 
             // and/or release CPU time to other threads and processes.
             if (!IsActive)
-            {
-#if UAP || WINUI
-                lock (_locker)
-                    System.Threading.Monitor.Wait(_locker, (int)InactiveSleepTime.TotalMilliseconds);
-#else
                 System.Threading.Thread.Sleep((int)InactiveSleepTime.TotalMilliseconds);
-#endif
-            }
 
             RetryTick:
 
@@ -453,11 +446,8 @@ namespace Microsoft.Xna.Platform
                 /*
                 if ((TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds >= 2.0)
                 {
-#if WINDOWSDX || DESKTOPGL || ANDROID || IOS || TVOS
+#if WINDOWSDX || DESKTOPGL || ANDROID || IOS || TVOS || (UAP || WINUI)
                     System.Threading.Thread.Sleep(0);
-#elif UAP || WINUI
-                    lock (_locker)
-                        System.Threading.Monitor.Wait(_locker, 0);
 #endif
                 }
                 */
