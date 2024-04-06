@@ -75,6 +75,7 @@
     <Compile Include="GameComponentCollectionEventArgs.cs" />
     <Compile Include="GameComponent.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameFactory.cs" />
     <Compile Include="GameStrategy.cs" />
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameTime.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Platform\iOS\Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Platform\iOS\Devices\Sensors\Compass.cs" />
     <Compile Include=".iOS\ConcreteGame.cs" />
+    <Compile Include=".iOS\ConcreteGameFactory.cs" />
     <Compile Include="Platform\iOS\iOSGameViewController.cs" />
     <Compile Include="Platform\iOS\iOSGameView.cs" />
     <Compile Include="Platform\iOS\iOSGameView_Touch.cs" />

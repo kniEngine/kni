@@ -102,6 +102,7 @@
     <Compile Include="GameComponentCollectionEventArgs.cs" />
     <Compile Include="GameComponent.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameFactory.cs" />
     <Compile Include="GameStrategy.cs" />
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameTime.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Platform\Cardboard\AndroidCompatibility.cs" />
     <Compile Include="Platform\Cardboard\AndroidGameActivity.cs" />
     <Compile Include=".Cardboard\ConcreteGame.cs" />
+    <Compile Include=".Cardboard\ConcreteGameFactory.cs" />
     <Compile Include="Platform\Cardboard\AndroidGameWindow.cs" />
     <Compile Include="Platform\Cardboard\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Cardboard\ISurfaceView.cs" />

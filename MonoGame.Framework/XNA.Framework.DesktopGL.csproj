@@ -86,6 +86,7 @@
     <Compile Include="GameComponentCollectionEventArgs.cs" />
     <Compile Include="GameComponent.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameFactory.cs" />
     <Compile Include="GameStrategy.cs" />
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameTime.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
     <Compile Include=".SDL2\ConcreteGame.cs" />
+    <Compile Include=".SDL2\ConcreteGameFactory.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
 

@@ -30,6 +30,7 @@
     <Compile Include="DrawableGameComponent.cs" />
     <Compile Include="FileDropEventArgs.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameFactory.cs" />
     <Compile Include="GameComponent.cs" />
     <Compile Include="GameComponentCollection.cs" />
     <Compile Include="GameComponentCollectionEventArgs.cs" />

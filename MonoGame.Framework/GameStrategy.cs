@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
-    abstract class GameStrategy : IDisposable
+    public abstract class GameStrategy : IDisposable
     {
         #region Fields
 

@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="game">The game instance to attach.</param>
         public GraphicsDeviceManager(Game game)
         {
-            _strategy = new ConcreteGraphicsDeviceManager(game);
+            _strategy = GameFactory.Current.CreateGraphicsDeviceManagerStrategy(game);
 
             // dispatch events
             _strategy.PreparingDeviceSettings += (sender, e) => { OnPreparingDeviceSettings(e); };
