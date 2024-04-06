@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Framework.Input
 
         private KeyboardInput()
         {
-            _strategy = new ConcreteKeyboardInput();
+            _strategy = InputFactory.Current.CreateKeyboardInputStrategy();
         }
 
 

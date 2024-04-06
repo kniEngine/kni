@@ -43,5 +43,14 @@ namespace Microsoft.Xna.Platform.Input
             return new ConcreteTouchPanel();
         }
 
+        internal override KeyboardInputStrategy CreateKeyboardInputStrategy()
+        {
+            return new ConcreteKeyboardInput();
+        }
+
+        internal override MessageBoxStrategy CreateMessageBoxStrategy()
+        {
+            return new ConcreteMessageBox();
+        }
     }
 }
