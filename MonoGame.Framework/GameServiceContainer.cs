@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Platform.Utilities;
 
 namespace Microsoft.Xna.Framework
 {
@@ -40,7 +39,9 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentNullException("type");
             if (provider == null)
                 throw new ArgumentNullException("provider");
-            if (!ReflectionHelpers.IsAssignableFrom(type, provider))
+
+            Type providerType = provider.GetType();
+            if (!type.IsAssignableFrom(providerType))
                 throw new ArgumentException("The provider does not match the specified service type!");
 
             services.Add(type, provider);
