@@ -22,9 +22,6 @@ namespace MonoGame.Tests.Input
         {
             GameWindow gameWindow = new MockWindow();
 
-#if DESKTOPGL
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().PrimaryWindow = gameWindow;
-#endif
             TouchPanel.WindowHandle = gameWindow.Handle;
             TouchPanel.DisplayWidth = gameWindow.ClientBounds.Width;
             TouchPanel.DisplayHeight = gameWindow.ClientBounds.Height;
