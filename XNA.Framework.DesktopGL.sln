@@ -10,9 +10,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Audio", "src\Xna.Framework.Audio\Xna.Framework.Audio.csproj", "{3F81F76D-F0F3-44FE-A256-40AF153C33F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNA.Framework.DesktopGL", "MonoGame.Framework\XNA.Framework.DesktopGL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.DesktopGL", "MonoGame.Framework\XNA.Framework.DesktopGL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Media", "src\Xna.Framework.Media\XNA.Framework.Media.csproj", "{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}"
 EndProject
@@ -57,6 +57,7 @@ Global
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

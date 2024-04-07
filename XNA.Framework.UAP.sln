@@ -45,6 +45,7 @@ Global
 		{09C41A48-7BF3-4A46-9EB8-CE95B4C27CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C41A48-7BF3-4A46-9EB8-CE95B4C27CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
