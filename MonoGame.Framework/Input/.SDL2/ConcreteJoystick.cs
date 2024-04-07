@@ -44,28 +44,18 @@ namespace Microsoft.Xna.Platform.Input
         {
             IntPtr joystickPtr = IntPtr.Zero;
             if (!Joysticks.TryGetValue(index, out joystickPtr))
-                return new JoystickCapabilities
-                {
-                    IsConnected = false,
-                    DisplayName = string.Empty,
-                    Identifier = "",
-                    IsGamepad = false,
-                    AxisCount = 0,
-                    ButtonCount = 0,
-                    HatCount = 0
-                };
+                return base.CreateJoystickCapabilities(false, string.Empty, string.Empty, false, 0, 0, 0);
 
             IntPtr jdevice = joystickPtr;
-            return new JoystickCapabilities
-            {
-                IsConnected = true,
-                DisplayName = SDL.JOYSTICK.GetJoystickName(jdevice),
-                Identifier = SDL.JOYSTICK.GetGUID(jdevice).ToString(),
-                IsGamepad = (SDL.GAMECONTROLLER.IsGameController(index) == 1),
-                AxisCount = SDL.JOYSTICK.NumAxes(jdevice),
-                ButtonCount = SDL.JOYSTICK.NumButtons(jdevice), 
-                HatCount = SDL.JOYSTICK.NumHats(jdevice)
-            };
+            return base.CreateJoystickCapabilities(
+                isConnected : true,
+                displayName : SDL.JOYSTICK.GetJoystickName(jdevice),
+                identifier :  SDL.JOYSTICK.GetGUID(jdevice).ToString(),
+                isGamepad :   (SDL.GAMECONTROLLER.IsGameController(index) == 1),
+                axisCount :   SDL.JOYSTICK.NumAxes(jdevice),
+                buttonCount : SDL.JOYSTICK.NumButtons(jdevice), 
+                hatCount :    SDL.JOYSTICK.NumHats(jdevice)
+            );
         }
 
         public override JoystickState PlatformGetState(int index)
