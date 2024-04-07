@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override KeyboardState PlatformGetState()
         {
-            return new KeyboardState(_keys);
+            return base.CreateKeyboardState(_keys);
         }
 
         internal void SetKeys(List<Keys> keys)
