@@ -129,5 +129,14 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
+        protected TouchPanelCapabilities CreateTouchPanelCapabilities(int maximumTouchCount, bool isConnected, bool hasPressure)
+        {
+            TouchPanelCapabilities caps = new TouchPanelCapabilities();
+            caps._maximumTouchCount = maximumTouchCount;
+            caps._isConnected = isConnected;
+            caps._hasPressure = hasPressure;
+
+            return caps;
+        }
     }
 }
