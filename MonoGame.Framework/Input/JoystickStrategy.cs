@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Input
         public abstract JoystickState PlatformGetState(int index);
         public abstract void PlatformGetState(int index, ref JoystickState joystickState);
 
-        internal JoystickCapabilities CreateJoystickCapabilities(
+        protected JoystickCapabilities CreateJoystickCapabilities(
             bool isConnected, string displayName, string identifier,
             bool isGamepad, int axisCount, int buttonCount, int hatCount)
         {
