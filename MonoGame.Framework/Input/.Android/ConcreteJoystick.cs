@@ -23,15 +23,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override JoystickCapabilities PlatformGetCapabilities(int index)
         {
-            return new JoystickCapabilities()
-            {
-                IsConnected = false,
-                DisplayName = string.Empty,
-                IsGamepad = false,
-                AxisCount = 0,
-                ButtonCount = 0,
-                HatCount = 0
-            };
+            return base.CreateJoystickCapabilities(false, string.Empty, null, false, 0, 0, 0);
         }
 
         public override JoystickState PlatformGetState(int index)

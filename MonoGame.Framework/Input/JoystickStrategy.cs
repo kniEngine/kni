@@ -14,6 +14,22 @@ namespace Microsoft.Xna.Platform.Input
         public abstract JoystickState PlatformGetState(int index);
         public abstract void PlatformGetState(int index, ref JoystickState joystickState);
 
+        internal JoystickCapabilities CreateJoystickCapabilities(
+            bool isConnected, string displayName, string identifier,
+            bool isGamepad, int axisCount, int buttonCount, int hatCount)
+        {
+            JoystickCapabilities caps = new JoystickCapabilities();
+            caps.IsConnected = isConnected;
+            caps.DisplayName = displayName;
+            caps.Identifier = identifier;
+            caps.IsGamepad = isGamepad;
+            caps.AxisCount = axisCount;
+            caps.ButtonCount = buttonCount;
+            caps.HatCount = hatCount;
+
+            return caps;
+        }
+
 
         /// <summary>
         /// A default <see cref="JoystickState"/>.
