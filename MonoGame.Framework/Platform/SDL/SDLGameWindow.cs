@@ -109,6 +109,7 @@ namespace Microsoft.Xna.Framework
         private int _width, _height;
         private bool _wasMoved, _supressMoved;
 
+        internal MouseState _mouseState;
         private readonly List<Keys> _keys;
         private readonly List<string> _dropList;
 
@@ -254,8 +255,8 @@ namespace Microsoft.Xna.Framework
                     case Sdl.EventType.MouseMotion:
                         unchecked
                         {
-                            this.MouseState.RawX += ev.Motion.Xrel;
-                            this.MouseState.RawY += ev.Motion.Yrel;
+                            this._mouseState.RawX += ev.Motion.Xrel;
+                            this._mouseState.RawY += ev.Motion.Yrel;
                         }
                         break;
                     case Sdl.EventType.MouseWheel:

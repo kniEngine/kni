@@ -98,8 +98,6 @@ namespace Microsoft.Xna.Framework
             set { throw new NotImplementedException(); }
         }
 
-        internal MouseState MouseState;
-
         /// <summary>
         /// Create a <see cref="GameWindow"/>.
         /// </summary>

@@ -113,18 +113,15 @@ namespace Microsoft.Xna.Framework.Windows
         {
             var state = TouchLocationState.Invalid;
            
-            // TNC: handle those messages internally to avoid garbage from EventArgs
             switch (m.Msg)
             {
                 case WM_ERASEBKGND:
                     return; // skip repaint of the control under the swapchain (PaintEventArgs)
+
+                // we handle those messages internally, skip WinForms EventArgs to avoid garbage
                 case WM_MOUSEWHEEL:
-                    var delta = (short)(((ulong)m.WParam >> 16) & 0xffff);
-                    _window.MouseState.ScrollWheelValue += delta;
                     return;
                 case WM_MOUSEHWHEEL:
-                    var deltaH = (short)(((ulong)m.WParam >> 16) & 0xffff);
-                    _window.MouseState.HorizontalScrollWheelValue += deltaH;
                     return;
                 case WM_MOUSEMOVE:
                     return;

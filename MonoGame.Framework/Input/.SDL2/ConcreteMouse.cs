@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Input
             IntPtr wndHandle = _wndHandle;
             if (wndHandle != IntPtr.Zero)
             {
-                GameWindow gameWindow = SdlGameWindow.FromHandle(wndHandle);
+                SdlGameWindow gameWindow = SdlGameWindow.FromHandle(wndHandle);
 
                 int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
@@ -50,19 +50,19 @@ namespace Microsoft.Xna.Platform.Input
                 x = x - wndx;
                 y = y - wndy;
 
-                gameWindow.MouseState.LeftButton = (state & Sdl.Mouse.Button.Left) != 0 ? ButtonState.Pressed : ButtonState.Released;
-                gameWindow.MouseState.MiddleButton = (state & Sdl.Mouse.Button.Middle) != 0 ? ButtonState.Pressed : ButtonState.Released;
-                gameWindow.MouseState.RightButton = (state & Sdl.Mouse.Button.Right) != 0 ? ButtonState.Pressed : ButtonState.Released;
-                gameWindow.MouseState.XButton1 = (state & Sdl.Mouse.Button.X1Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
-                gameWindow.MouseState.XButton2 = (state & Sdl.Mouse.Button.X2Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                gameWindow._mouseState.LeftButton = (state & Sdl.Mouse.Button.Left) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                gameWindow._mouseState.MiddleButton = (state & Sdl.Mouse.Button.Middle) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                gameWindow._mouseState.RightButton = (state & Sdl.Mouse.Button.Right) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                gameWindow._mouseState.XButton1 = (state & Sdl.Mouse.Button.X1Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
+                gameWindow._mouseState.XButton2 = (state & Sdl.Mouse.Button.X2Mask) != 0 ? ButtonState.Pressed : ButtonState.Released;
 
-                gameWindow.MouseState.HorizontalScrollWheelValue = ScrollX;
-                gameWindow.MouseState.ScrollWheelValue = ScrollY;
+                gameWindow._mouseState.HorizontalScrollWheelValue = ScrollX;
+                gameWindow._mouseState.ScrollWheelValue = ScrollY;
 
-                gameWindow.MouseState.X = x;
-                gameWindow.MouseState.Y = y;
+                gameWindow._mouseState.X = x;
+                gameWindow._mouseState.Y = y;
 
-                return gameWindow.MouseState;
+                return gameWindow._mouseState;
             }
             else
                 return new MouseState();
@@ -70,10 +70,10 @@ namespace Microsoft.Xna.Platform.Input
 
         public override void PlatformSetPosition(int x, int y)
         {
-            GameWindow gameWindow = SdlGameWindow.FromHandle(_wndHandle);
+            SdlGameWindow gameWindow = SdlGameWindow.FromHandle(_wndHandle);
 
-            gameWindow.MouseState.X = x;
-            gameWindow.MouseState.Y = y;
+            gameWindow._mouseState.X = x;
+            gameWindow._mouseState.Y = y;
 
             SDL.MOUSE.WarpInWindow(gameWindow.Handle, x, y);
         }
