@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Platform.Utilities;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform.Input
@@ -48,7 +47,7 @@ namespace Microsoft.Xna.Platform.Input
 
         private void InitDatabase()
         {
-            using (Stream stream = ReflectionHelpers.GetAssembly(typeof(GamePad)).GetManifestResourceStream("gamecontrollerdb.txt"))
+            using (Stream stream = typeof(ConcreteGamePad).Assembly.GetManifestResourceStream("gamecontrollerdb.txt"))
             {
                 if (stream != null)
                 {
