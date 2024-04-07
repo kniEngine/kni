@@ -55,17 +55,19 @@ namespace Microsoft.Xna.Platform.Input.Touch
             : base()
         {
             // Initialize Capabilities
-            _capabilities._maximumTouchCount = 0;
-            _capabilities._isConnected = false;
+            int maximumTouchCount = 0;
+            bool isConnected = false;
+            bool hasPressure = false;
             IReadOnlyList<WinInput.PointerDevice> pointerDevices = WinInput.PointerDevice.GetPointerDevices();
             // Iterate through all pointer devices and find the maximum number of concurrent touches possible
             foreach (WinInput.PointerDevice pointerDevice in pointerDevices)
             {
-                _capabilities._maximumTouchCount = Math.Max(_capabilities._maximumTouchCount, (int)pointerDevice.MaxContacts);
+                maximumTouchCount = Math.Max(maximumTouchCount, (int)pointerDevice.MaxContacts);
 
                 if (pointerDevice.PointerDeviceType == WinInput.PointerDeviceType.Touch)
-                    _capabilities._isConnected = true;
+                    isConnected = true;
             }
+            _capabilities = base.CreateTouchPanelCapabilities(maximumTouchCount, isConnected, hasPressure);
         }
 
         public override TouchPanelCapabilities GetCapabilities()

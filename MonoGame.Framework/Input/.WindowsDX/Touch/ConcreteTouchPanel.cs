@@ -52,8 +52,12 @@ namespace Microsoft.Xna.Platform.Input.Touch
             : base()
         {
             // Initialize Capabilities
-            _capabilities._maximumTouchCount = GetSystemMetrics(SM_MAXIMUMTOUCHES);
-            _capabilities._isConnected = (_capabilities._maximumTouchCount > 0);
+            int maximumTouchCount = GetSystemMetrics(SM_MAXIMUMTOUCHES);
+            bool isConnected = (maximumTouchCount > 0);
+            bool hasPressure = false;
+            _capabilities = base.CreateTouchPanelCapabilities(maximumTouchCount, isConnected, hasPressure);
+
+            
         }
 
         public override TouchPanelCapabilities GetCapabilities()

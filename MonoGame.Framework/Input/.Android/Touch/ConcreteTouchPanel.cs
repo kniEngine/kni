@@ -54,15 +54,20 @@ namespace Microsoft.Xna.Platform.Input.Touch
             : base()
         {
             // Initialize Capabilities
+            int maximumTouchCount = 0;
+            bool isConnected = false;
+            bool hasPressure = false;
             // http://developer.android.com/reference/android/content/pm/PackageManager.html#FEATURE_TOUCHSCREEN
             PackageManager pm = AndroidGameWindow.Activity.PackageManager;
-            _capabilities._isConnected = pm.HasSystemFeature(PackageManager.FeatureTouchscreen);
+            isConnected = pm.HasSystemFeature(PackageManager.FeatureTouchscreen);
             if (pm.HasSystemFeature(PackageManager.FeatureTouchscreenMultitouchJazzhand))
-                _capabilities._maximumTouchCount = 5;
+                maximumTouchCount = 5;
             else if (pm.HasSystemFeature(PackageManager.FeatureTouchscreenMultitouchDistinct))
-                _capabilities._maximumTouchCount = 2;
+                maximumTouchCount = 2;
             else
-                _capabilities._maximumTouchCount = 1;
+                maximumTouchCount = 1;
+
+            _capabilities = base.CreateTouchPanelCapabilities(maximumTouchCount, isConnected, hasPressure);
         }
 
         public override TouchPanelCapabilities GetCapabilities()

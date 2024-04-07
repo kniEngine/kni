@@ -53,19 +53,23 @@ namespace Microsoft.Xna.Platform.Input.Touch
             : base()
         {
             // Initialize Capabilities
+            int maximumTouchCount = 0;
+            bool isConnected = false;
+            bool hasPressure = false;
             // iPhone supports 5, iPad 11
-            _capabilities._isConnected = true;
+            isConnected = true;
             switch (UIDevice.CurrentDevice.UserInterfaceIdiom)
             {
                 case UIUserInterfaceIdiom.Phone:
-                    _capabilities._maximumTouchCount = 5;
+                    maximumTouchCount = 5;
                     break;
 
                 default:
-                    _capabilities._maximumTouchCount = 11;
+                    maximumTouchCount = 11;
                     break;
             }
 
+            _capabilities = base.CreateTouchPanelCapabilities(maximumTouchCount, isConnected, hasPressure);
         }
 
         public override TouchPanelCapabilities GetCapabilities()
