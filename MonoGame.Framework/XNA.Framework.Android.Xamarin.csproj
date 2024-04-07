@@ -58,7 +58,6 @@
     <Reference Include="mscorlib" />
     <Reference Include="Mono.Android" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
@@ -83,6 +82,11 @@
     <ProjectReference Include="..\src\Xna.Framework.Media\Xna.Framework.Media.csproj">
       <Project>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</Project>
       <Name>Xna.Framework.Media</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Input\Xna.Framework.Input.csproj">
+      <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
+      <Name>Xna.Framework.Input</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
@@ -117,7 +121,6 @@
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
-    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
     <Compile Include=".Android\ConcreteTitleContainer.cs" />
     <Compile Include=".Android\ConcreteTitleContainerFactory.cs" />
@@ -179,56 +182,6 @@
     <Compile Include="Input\.Android\ConcreteMessageBox.cs" />
     <Compile Include="Input\.Android\ConcreteMouse.cs" />
     <Compile Include="Input\.Android\ConcreteMouseCursor.cs" />
-    <Compile Include="Input\Buttons.cs" />
-    <Compile Include="Input\ButtonState.cs" />
-    <Compile Include="Input\GamePad.cs" />
-    <Compile Include="Input\GamePadStrategy.cs" />
-    <Compile Include="Input\GamePadButtons.cs" />
-    <Compile Include="Input\GamePadCapabilities.cs" />
-    <Compile Include="Input\GamePadDeadZone.cs" />
-    <Compile Include="Input\GamePadDPad.cs" />
-    <Compile Include="Input\GamePadState.cs" />
-    <Compile Include="Input\GamePadThumbSticks.cs" />
-    <Compile Include="Input\GamePadTriggers.cs" />
-    <Compile Include="Input\GamePadType.cs" />
-    <Compile Include="Input\InputFactory.cs" />
-    <Compile Include="Input\InputKeyEventArgs.cs" />
-    <Compile Include="Input\Joystick.cs" />
-    <Compile Include="Input\JoystickStrategy.cs" />
-    <Compile Include="Input\JoystickCapabilities.cs" />
-    <Compile Include="Input\JoystickHat.cs" />
-    <Compile Include="Input\JoystickState.cs" />
-    <Compile Include="Input\Keyboard.cs" />
-    <Compile Include="Input\KeyboardStrategy.cs" />
-    <Compile Include="Input\KeyboardInput.cs" />
-    <Compile Include="Input\KeyboardInputStrategy.cs" />
-    <Compile Include="Input\KeyboardState.cs" />
-    <Compile Include="Input\Keys.cs" />
-    <Compile Include="Input\KeyState.cs" />
-    <Compile Include="Input\MessageBox.cs" />
-    <Compile Include="Input\MessageBoxStrategy.cs" />
-    <Compile Include="Input\Mouse.cs" />
-    <Compile Include="Input\MouseStrategy.cs" />
-    <Compile Include="Input\MouseCursor.cs" />
-    <Compile Include="Input\MouseCursorStrategy.cs" />
-    <Compile Include="Input\MouseState.cs" />
-    <Compile Include="Input\TextInputEventArgs.cs" />
-    <Compile Include="Input\Oculus\IOculusInput.cs" />
-    <Compile Include="Input\Oculus\TouchButtons.cs" />
-    <Compile Include="Input\Oculus\TouchButtonState.cs" />
-    <Compile Include="Input\Oculus\TouchController.cs" />
-    <Compile Include="Input\Oculus\TouchControllerState.cs" />
-    <Compile Include="Input\Oculus\TouchControllerType.cs" />
-    <Compile Include="Input\Touch\GestureSample.cs" />
-    <Compile Include="Input\Touch\GestureType.cs" />
-    <Compile Include="Input\Touch\TouchCollection.cs" />
-    <Compile Include="Input\Touch\TouchLocation.cs" />
-    <Compile Include="Input\Touch\TouchLocationData.cs" />
-    <Compile Include="Input\Touch\TouchLocationState.cs" />
-    <Compile Include="Input\Touch\TouchPanel.cs" />
-    <Compile Include="Input\Touch\TouchPanelStrategy.cs" />
-    <Compile Include="Input\Touch\TouchPanelStrategy.Legacy.cs" />
-    <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
     <Compile Include="Media\Android\ConcreteAlbum.cs" />
     <Compile Include="Media\Android\ConcreteMediaFactory.cs" />
     <Compile Include="Media\Android\ConcreteMediaLibrary.cs" />
