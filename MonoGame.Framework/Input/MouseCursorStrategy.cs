@@ -7,8 +7,8 @@ namespace Microsoft.Xna.Platform.Input
 {
     public class MouseCursorStrategy : IDisposable
     {
-        internal MouseCursorStrategy.MouseCursorType _cursorType;
-        internal IntPtr _handle;
+        protected MouseCursorStrategy.MouseCursorType _cursorType;
+        protected IntPtr _handle;
 
         public bool IsBuildInMouseCursor
         {
