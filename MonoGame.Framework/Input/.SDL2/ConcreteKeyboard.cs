@@ -19,9 +19,10 @@ namespace Microsoft.Xna.Platform.Input
         public override KeyboardState PlatformGetState()
         {
             Sdl.Keyboard.Keymod modifiers = SDL.KEYBOARD.GetModState();
-            return new KeyboardState(_keys,
-                                     (modifiers & Sdl.Keyboard.Keymod.CapsLock) == Sdl.Keyboard.Keymod.CapsLock,
-                                     (modifiers & Sdl.Keyboard.Keymod.NumLock)  == Sdl.Keyboard.Keymod.NumLock);
+
+            return base.CreateKeyboardState(_keys,
+                                            (modifiers & Sdl.Keyboard.Keymod.CapsLock) == Sdl.Keyboard.Keymod.CapsLock,
+                                            (modifiers & Sdl.Keyboard.Keymod.NumLock) == Sdl.Keyboard.Keymod.NumLock);
         }
 
         internal void SetKeys(List<Keys> keys)
