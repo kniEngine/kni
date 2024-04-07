@@ -12,10 +12,10 @@ namespace Microsoft.Xna.Framework.Input
     public struct KeyboardState
     {
         private const byte CapsLockModifier = 1;
-        private const byte NumLockModifier = 2;
+        private const byte NumLockModifier  = 2;
 
         // Used for the common situation where GetPressedKeys will return an empty array
-        private static Keys[] empty = new Keys[0];
+        private static Keys[] _empty = new Keys[0];
 
         #region Key Data
 
@@ -106,8 +106,10 @@ namespace Microsoft.Xna.Framework.Input
             _modifiers = (byte)(0 | (capsLock ? CapsLockModifier : 0) | (numLock ? NumLockModifier : 0));
 
             if (keys != null)
-                foreach (Keys k in keys)
-                    InternalSetKey(k);
+            {
+                for (int i = 0; i < keys.Count; i++)
+                    InternalSetKey(keys[i]);
+            }
         }
 
         /// <summary>
@@ -129,8 +131,10 @@ namespace Microsoft.Xna.Framework.Input
             _modifiers = (byte)(0 | (capsLock ? CapsLockModifier : 0) | (numLock ? NumLockModifier : 0));
 
             if (keys != null)
-                foreach (Keys k in keys)
-                    InternalSetKey(k);
+            {
+                for (int i = 0; i < keys.Length; i++)
+                    InternalSetKey(keys[i]);
+            }
         }
 
         /// <summary>
@@ -150,8 +154,10 @@ namespace Microsoft.Xna.Framework.Input
             _modifiers = 0;
 
             if (keys != null)
-                foreach (Keys k in keys)
-                    InternalSetKey(k);
+            {
+                for (int i = 0; i < keys.Length; i++)
+                    InternalSetKey(keys[i]);
+            }
         }
 
         /// <summary>
@@ -159,10 +165,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public bool CapsLock
         {
-            get
-            {
-                return (_modifiers & CapsLockModifier) > 0;
-            }
+            get { return (_modifiers & CapsLockModifier) > 0; }
         }
 
         /// <summary>
@@ -170,10 +173,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public bool NumLock
         {
-            get
-            {
-                return (_modifiers & NumLockModifier) > 0;
-            }
+            get { return (_modifiers & NumLockModifier) > 0; }
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Microsoft.Xna.Framework.Input
         public int GetPressedKeyCount()
         {
             uint count = CountBits(_keys0) + CountBits(_keys1) + CountBits(_keys2) + CountBits(_keys3)
-                    + CountBits(_keys4) + CountBits(_keys5) + CountBits(_keys6) + CountBits(_keys7);
+                       + CountBits(_keys4) + CountBits(_keys5) + CountBits(_keys6) + CountBits(_keys7);
             return (int)count;
         }
 
@@ -247,9 +247,11 @@ namespace Microsoft.Xna.Framework.Input
         public Keys[] GetPressedKeys()
         {
             uint count = CountBits(_keys0) + CountBits(_keys1) + CountBits(_keys2) + CountBits(_keys3)
-                    + CountBits(_keys4) + CountBits(_keys5) + CountBits(_keys6) + CountBits(_keys7);
+                       + CountBits(_keys4) + CountBits(_keys5) + CountBits(_keys6) + CountBits(_keys7);
+
             if (count == 0)
-                return empty;
+                return _empty;
+
             Keys[] keys = new Keys[count];
 
             int index = 0;
@@ -276,7 +278,7 @@ namespace Microsoft.Xna.Framework.Input
                 throw new System.ArgumentNullException("keys");
 
             uint count = CountBits(_keys0) + CountBits(_keys1) + CountBits(_keys2) + CountBits(_keys3)
-                    + CountBits(_keys4) + CountBits(_keys5) + CountBits(_keys6) + CountBits(_keys7);
+                       + CountBits(_keys4) + CountBits(_keys5) + CountBits(_keys6) + CountBits(_keys7);
             if (count > keys.Length)
             {
                 throw new System.ArgumentOutOfRangeException("keys",
@@ -344,7 +346,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>true if the provided <see cref="KeyboardState"/> instance is same with current; false otherwise.</returns>
         public override bool Equals(object obj)
         {
-            return obj is KeyboardState && this == (KeyboardState)obj;
+            return (obj is KeyboardState && this == (KeyboardState)obj);
         }
 
         #endregion
