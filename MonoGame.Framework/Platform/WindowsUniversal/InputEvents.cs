@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework
             public Keys Key;
         }
 
-        private readonly GameWindow _gameWindow;
+        private readonly UAPGameWindow _gameWindow;
 
         public readonly ConcurrentQueue<KeyChar> TextQueue = new ConcurrentQueue<KeyChar>();
         private KeyChar _lastEnqueuedKeyChar;
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework
         private CoreIndependentInputSource _coreIndependentInputSource;
 
 
-        public InputEvents(GameWindow gameWindow, CoreWindow window, UIElement inputElement)
+        public InputEvents(UAPGameWindow gameWindow, CoreWindow window, UIElement inputElement)
         {
             this._gameWindow = gameWindow;
 
@@ -262,9 +262,9 @@ namespace Microsoft.Xna.Framework
             else
                 verticalScrollDelta = state.MouseWheelDelta;
 
-            _gameWindow.MouseState = new MouseState(x, y,
-                _gameWindow.MouseState.ScrollWheelValue + verticalScrollDelta,
-                _gameWindow.MouseState.HorizontalScrollWheelValue + horizontalScrollDelta,
+            _gameWindow._mouseState = new MouseState(x, y,
+                _gameWindow._mouseState.ScrollWheelValue + verticalScrollDelta,
+                _gameWindow._mouseState.HorizontalScrollWheelValue + horizontalScrollDelta,
                 0, 0,
                 state.IsLeftButtonPressed ? ButtonState.Pressed : ButtonState.Released,
                 state.IsMiddleButtonPressed ? ButtonState.Pressed : ButtonState.Released,

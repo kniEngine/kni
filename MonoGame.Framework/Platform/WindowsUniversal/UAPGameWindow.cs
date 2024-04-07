@@ -49,6 +49,7 @@ namespace Microsoft.Xna.Framework
         private DisplayInformation _dinfo;
         private Rectangle _viewBounds;
 
+        internal MouseState _mouseState;
         private InputEvents _inputEvents;
         private bool _backPressed = false;
 
