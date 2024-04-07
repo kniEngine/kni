@@ -77,53 +77,7 @@ namespace Microsoft.Xna.Platform.Input
             }
 
             GamePadCapabilities ret = new GamePadCapabilities();
-            switch (capabilities.SubType)
-            {
-#if DIRECTX11_1
-                case XInput.DeviceSubType.ArcadePad:
-                    Debug.WriteLine("XInput's DeviceSubType.ArcadePad is not supported in XNA");
-                    ret.GamePadType = Input.GamePadType.Unknown; // TODO: Should this be BigButtonPad?
-                    break;
-                case XInput.DeviceSubType.FlightStick:
-                    ret.GamePadType = Input.GamePadType.FlightStick;
-                    break;
-                case XInput.DeviceSubType.GuitarAlternate:
-                    ret.GamePadType = Input.GamePadType.AlternateGuitar;
-                    break;
-                case XInput.DeviceSubType.GuitarBass:
-                    // Note: XNA doesn't distinguish between Guitar and GuitarBass, but 
-                    // GuitarBass is identical to Guitar in XInput, distinguished only
-                    // to help setup for those controllers. 
-                    ret.GamePadType = Input.GamePadType.Guitar;
-                    break;
-                case XInput.DeviceSubType.Unknown:
-                    ret.GamePadType = Input.GamePadType.Unknown;
-                    break;
-#endif
-                case XInput.DeviceSubType.ArcadeStick:
-                    ret.GamePadType = GamePadType.ArcadeStick;
-                    break;
-                case XInput.DeviceSubType.DancePad:
-                    ret.GamePadType = GamePadType.DancePad;
-                    break;
-                case XInput.DeviceSubType.DrumKit:
-                    ret.GamePadType = GamePadType.DrumKit;
-                    break;
-
-                case XInput.DeviceSubType.Gamepad:
-                    ret.GamePadType = GamePadType.GamePad;
-                    break;
-                case XInput.DeviceSubType.Guitar:
-                    ret.GamePadType = GamePadType.Guitar;
-                    break;
-                case XInput.DeviceSubType.Wheel:
-                    ret.GamePadType = GamePadType.Wheel;
-                    break;
-                default:
-                    Debug.WriteLine("unexpected XInput DeviceSubType: {0}", capabilities.SubType.ToString());
-                    ret.GamePadType = GamePadType.Unknown;
-                    break;
-            }
+            ret.GamePadType = XInputToXnaGamePadType(capabilities.SubType);
 
             XInput.Gamepad gamepad = capabilities.Gamepad;
 
@@ -168,6 +122,47 @@ namespace Microsoft.Xna.Platform.Input
             ret.HasVoiceSupport = (capabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
 
             return ret;
+        }
+
+        private GamePadType XInputToXnaGamePadType(XInput.DeviceSubType subType)
+        {
+            switch (subType)
+            {
+#if DIRECTX11_1
+                case XInput.DeviceSubType.ArcadePad:
+                    Debug.WriteLine("XInput's DeviceSubType.ArcadePad is not supported in XNA");
+                    return GamePadType.Unknown; // TODO: Should this be BigButtonPad?
+                case XInput.DeviceSubType.FlightStick:
+                    return GamePadType.FlightStick;
+                case XInput.DeviceSubType.GuitarAlternate:
+                    return GamePadType.AlternateGuitar;
+                case XInput.DeviceSubType.GuitarBass:
+                    // Note: XNA doesn't distinguish between Guitar and GuitarBass, but 
+                    // GuitarBass is identical to Guitar in XInput, distinguished only
+                    // to help setup for those controllers. 
+                    return GamePadType.Guitar;
+                case XInput.DeviceSubType.Unknown:
+                    return GamePadType.Unknown;
+#endif
+
+                case XInput.DeviceSubType.ArcadeStick:
+                    return GamePadType.ArcadeStick;
+                case XInput.DeviceSubType.DancePad:
+                    return GamePadType.DancePad;
+                case XInput.DeviceSubType.DrumKit:
+                    return GamePadType.DrumKit;
+
+                case XInput.DeviceSubType.Gamepad:
+                    return GamePadType.GamePad;
+                case XInput.DeviceSubType.Guitar:
+                    return GamePadType.Guitar;
+                case XInput.DeviceSubType.Wheel:
+                    return GamePadType.Wheel;
+
+                default:
+                    Debug.WriteLine("unexpected XInput DeviceSubType: {0}", subType.ToString());
+                    return GamePadType.Unknown;
+            }
         }
 
         private GamePadState GetDefaultState()
