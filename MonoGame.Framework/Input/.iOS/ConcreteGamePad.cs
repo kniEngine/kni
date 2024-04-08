@@ -67,7 +67,17 @@ namespace Microsoft.Xna.Platform.Input
                 if ((long)controller.PlayerIndex == (long)ind)
                     return GetCapabilities(controller);
             }
-            return new GamePadCapabilities { IsConnected = false };
+
+            return new GamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: (Buttons)0,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
         }
 
         private GamePadCapabilities GetCapabilities(GCController controller)

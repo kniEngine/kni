@@ -61,7 +61,17 @@ namespace Microsoft.Xna.Platform.Input
                 if (controller.PlayerIndex == (int)ind)
                     return GetCapabilities(controller);
             }
-            return new GamePadCapabilities { IsConnected = false };
+
+            return new GamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: (Buttons)0,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
         }
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)

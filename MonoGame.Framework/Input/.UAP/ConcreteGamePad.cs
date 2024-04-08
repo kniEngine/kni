@@ -71,7 +71,18 @@ namespace Microsoft.Xna.Platform.Input
         {
             WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
-                return new GamePadCapabilities();
+            {
+                return new GamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+            }
 
             // we can't check gamepad capabilities for most stuff with Windows.Gaming.Input.Gamepad
             return new GamePadCapabilities

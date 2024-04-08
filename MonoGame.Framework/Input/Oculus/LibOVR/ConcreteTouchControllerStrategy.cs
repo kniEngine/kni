@@ -18,7 +18,18 @@ namespace Microsoft.Xna.Platform.Input.Oculus
         {
             var session = _ovrDevice.Session;
             if (session == null)
-                return default(GamePadCapabilities);
+            {
+                return new GamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+            }
 
             OvrControllerType ovrControllerType = (OvrControllerType)controllerType;
             OvrControllerType connectedControllerTypes = session.GetConnectedControllerTypes();

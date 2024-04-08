@@ -85,7 +85,18 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             if (device != null)
                 return device.GetCapabilities(type);
             else
-                return default(GamePadCapabilities);
+            {
+                return new GamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+            }
         }
 
         TouchControllerState ITouchController.GetState(TouchControllerType type)

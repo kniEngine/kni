@@ -123,7 +123,18 @@ namespace Microsoft.Xna.Platform.Input
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             if (!Gamepads.ContainsKey(index))
-                return new GamePadCapabilities();
+            {
+                return new GamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+            }
 
             IntPtr gamecontroller = Gamepads[index].Device;
 

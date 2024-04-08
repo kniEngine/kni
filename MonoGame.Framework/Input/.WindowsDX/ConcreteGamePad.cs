@@ -46,7 +46,18 @@ namespace Microsoft.Xna.Platform.Input
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
             if (!_connected[index] && !HasDisconnectedTimeoutElapsed(index))
-                return new GamePadCapabilities();
+            {
+                return new GamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+            }
 
             // Check to see if the device is connected.
             XInput.Controller controller = _controllers[index];
@@ -57,7 +68,16 @@ namespace Microsoft.Xna.Platform.Input
             if (!_connected[index])
             {
                 SetDisconnectedTimeout(index);
-                return new GamePadCapabilities();
+                return new GamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
             }
 
             XInput.Capabilities capabilities;
@@ -71,7 +91,16 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     _connected[index] = false;
                     SetDisconnectedTimeout(index);
-                    return new GamePadCapabilities();
+                    return new GamePadCapabilities(
+                            gamePadType: GamePadType.Unknown,
+                            displayName: null,
+                            identifier: null,
+                            isConnected: false,
+                            buttons: (Buttons)0,
+                            hasLeftVibrationMotor: false,
+                            hasRightVibrationMotor: false,
+                            hasVoiceSupport: false
+                        );
                 }
                 throw;
             }

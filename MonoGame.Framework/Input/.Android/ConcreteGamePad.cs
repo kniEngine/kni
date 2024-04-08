@@ -135,11 +135,16 @@ namespace Microsoft.Xna.Platform.Input
 
             // we need to add the default "no gamepad connected but the user hit back"
             // behaviour here
-            GamePadCapabilities capabilities = new GamePadCapabilities();
-            capabilities.IsConnected = false;
-            capabilities.HasBackButton = true;
-
-            return capabilities;
+            return new GamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: Buttons.Back,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
         }
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)

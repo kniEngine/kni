@@ -240,7 +240,18 @@ namespace Microsoft.Xna.Framework.Input
         GamePadCapabilities IGamePad.GetCapabilities(int index)
         {
             if (index < 0 || index >= _strategy.PlatformGetMaxNumberOfGamePads())
-                return new GamePadCapabilities();
+            {
+                return new GamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: (Buttons)0,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
+            }
 
             return _strategy.PlatformGetCapabilities(index);
         }
