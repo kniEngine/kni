@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        // Set main game thread.
+        /// Set main game thread.
         /// </summary>
         internal static void MakeMainThread()
         {
