@@ -165,8 +165,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             TouchLocationData evt = new TouchLocationData(touchId, state, position, currentTimestamp, currentFramestamp);
 
             {
-                /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
-                /// otherwise we update the existing touch it matches
+                // Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
+                // otherwise we update the existing touch it matches
                 switch (evt.State)
                 {
                     case TouchLocationState.Pressed:
@@ -276,12 +276,12 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         break;
                 }
 
-                //If we have gestures enabled then collect events for those too.
-                //We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
+                // If we have gestures enabled then collect events for those too.
+                // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
                 if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
                 {
-                    /// Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
-                    /// otherwise we update the existing touch it matches
+                    // Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
+                    // otherwise we update the existing touch it matches
                     switch (evt.State)
                     {
                         case TouchLocationState.Pressed:
