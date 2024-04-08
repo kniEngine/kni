@@ -261,8 +261,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
         }
 
-        public abstract void BeforeInitialize();
-
         public virtual void Initialize()
         {
             // According to the information given on MSDN (see link below), all

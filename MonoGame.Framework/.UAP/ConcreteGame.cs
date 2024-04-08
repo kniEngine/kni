@@ -275,7 +275,7 @@ namespace Microsoft.Xna.Platform
                 coreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
         }
 
-        public override void BeforeInitialize()
+        private void BeforeInitialize()
         {
         }
 

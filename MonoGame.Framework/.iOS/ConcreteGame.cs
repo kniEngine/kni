@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Platform
             
         }
 
-        public override void BeforeInitialize()
+        private void BeforeInitialize()
         {
             _viewController.View.LayoutSubviews();
         }

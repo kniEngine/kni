@@ -93,17 +93,23 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override void BeforeInitialize()
+        private void BeforeInitialize()
         {
-            var currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+            DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
 
             switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
             {
                 case Android.Content.Res.Orientation.Portrait:
-                    this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.PortraitDown ? DisplayOrientation.PortraitDown : DisplayOrientation.Portrait, false);
+                    this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                                                    ? DisplayOrientation.PortraitDown 
+                                                    : DisplayOrientation.Portrait,
+                                                    false);
                     break;
                 default:
-                    this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.LandscapeRight ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft, false);
+                    this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                                                    ? DisplayOrientation.LandscapeRight 
+                                                    : DisplayOrientation.LandscapeLeft,
+                                                    false);
                     break;
             }
 

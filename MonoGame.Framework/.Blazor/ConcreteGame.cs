@@ -108,16 +108,18 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override void BeforeInitialize()
+        private void BeforeInitialize()
         {
-            var gdm = this.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
             if (gdm == null)
             {
-                _gameWindow.Initialize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+                _gameWindow.Initialize(
+                    GraphicsDeviceManager.DefaultBackBufferWidth, 
+                    GraphicsDeviceManager.DefaultBackBufferHeight);
             }
             else
             {
-                var pp = this.GraphicsDevice.PresentationParameters;
+                PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
                 _gameWindow.Initialize(pp);
             }
         }

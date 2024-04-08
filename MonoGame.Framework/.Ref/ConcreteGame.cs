@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override void BeforeInitialize()
+        private void BeforeInitialize()
         {
             throw new PlatformNotSupportedException();
         }

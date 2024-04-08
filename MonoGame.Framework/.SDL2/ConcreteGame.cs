@@ -121,7 +121,7 @@ namespace Microsoft.Xna.Platform
                 TouchPanel.WindowHandle = base.Window.Handle;
         }
 
-        public override void BeforeInitialize()
+        private void BeforeInitialize()
         {
             bool isExiting = _gameWindow.SdlRunLoop();
             _isExiting |= isExiting;
