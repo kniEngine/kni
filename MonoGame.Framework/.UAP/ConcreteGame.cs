@@ -135,6 +135,23 @@ namespace Microsoft.Xna.Platform
             }
         }
 
+        public override void RunOneFrame()
+        {
+            if (!_initialized)
+            {
+                Game.DoInitialize();
+                _initialized = true;
+            }
+
+            Game.DoBeginRun();
+            Timer = Stopwatch.StartNew();
+
+            //Not quite right..
+            Game.Tick();
+
+            Game.DoEndRun();
+        }
+
         internal override void Run()
         {
             if (!_initialized)

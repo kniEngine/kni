@@ -252,22 +252,7 @@ namespace Microsoft.Xna.Platform
 
         #region Methods
 
-        public virtual void RunOneFrame()
-        {
-            if (!_initialized)
-            {
-                Game.DoInitialize();
-                _initialized = true;
-            }
-
-            Game.DoBeginRun();
-            Timer = Stopwatch.StartNew();
-
-            //Not quite right..
-            Game.Tick();
-
-            Game.DoEndRun();
-        }
+        public abstract void RunOneFrame();
 
         internal abstract void Run();
 

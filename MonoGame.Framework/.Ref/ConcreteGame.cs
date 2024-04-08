@@ -13,6 +13,11 @@ namespace Microsoft.Xna.Platform
 
         }
 
+        public override void RunOneFrame()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         internal override void Run()
         {
             throw new PlatformNotSupportedException();
