@@ -447,17 +447,6 @@ namespace Microsoft.Xna.Framework
             this.EndRun();
         }
 
-        internal void DoUpdate(GameTime gameTime)
-        {
-            AssertNotDisposed();
-
-            Strategy.Android_BeforeUpdate();
-
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-
-            CallUpdate(gameTime);
-        }
-
         internal void DoDraw(GameTime gameTime)
         {
             AssertNotDisposed();

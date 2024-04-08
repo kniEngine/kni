@@ -452,7 +452,13 @@ namespace Microsoft.Xna.Platform
                     _currElapsedTime -= TargetElapsedTime;
                     stepCount++;
 
-                    Game.DoUpdate(Time);
+                    // DoUpdate
+                    {
+                        this.Game.AssertNotDisposed();
+                        this.Android_BeforeUpdate();
+                        ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                        this.Game.CallUpdate(Time);
+                    }
                 }
 
                 //Every update after the first accumulates lag
@@ -486,7 +492,13 @@ namespace Microsoft.Xna.Platform
                 Time.TotalGameTime += _currElapsedTime;
                 _currElapsedTime = TimeSpan.Zero;
 
-                Game.DoUpdate(Time);
+                // DoUpdate
+                {
+                    this.Game.AssertNotDisposed();
+                    this.Android_BeforeUpdate();
+                    ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                    this.Game.CallUpdate(Time);
+                }
             }
 
             if (!_suppressDraw)

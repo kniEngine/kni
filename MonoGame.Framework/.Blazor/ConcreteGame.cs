@@ -110,8 +110,16 @@ namespace Microsoft.Xna.Platform
 
             Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
+
             // XNA runs one Update even before showing the window
-            Game.DoUpdate(new GameTime());
+            // DoUpdate
+            {
+                this.Game.AssertNotDisposed();
+                this.Android_BeforeUpdate();
+                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                this.Game.CallUpdate(new GameTime());
+            }
+
             IsActive = _gameWindow.wasmWindow.Document.HasFocus();
 
             _gameWindow.RunLoop();
