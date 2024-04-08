@@ -23,28 +23,82 @@ namespace Microsoft.Xna.Platform
 
         private Sdl SDL { get { return Sdl.Current; } }
 
+        public override void RunOneFrame()
+        {
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                // BeforeInitialize
+                {
+                    bool isExiting = _gameWindow.SdlRunLoop();
+                    _isExiting |= isExiting;
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+
+            Game.CallBeginRun();
+            Timer = Stopwatch.StartNew();
+
+            //Not quite right..
+            Game.Tick();
+
+            Game.CallEndRun();
+        }
+
         internal override void Run()
         {
             if (!_initialized)
             {
-                Game.DoInitialize();
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                // BeforeInitialize
+                {
+                    bool isExiting = _gameWindow.SdlRunLoop();
+                    _isExiting |= isExiting;
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
                 _initialized = true;
             }
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
+
             // XNA runs one Update even before showing the window
-            Game.DoUpdate(new GameTime());
+            // DoUpdate
+            {
+                this.Game.AssertNotDisposed();
+                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                this.Game.CallUpdate(new GameTime());
+            }
 
             RunLoop();
 
-            Game.DoEndRun();
+            Game.CallEndRun();
             Game.DoExiting();
-        }
-
-        public override void Tick()
-        {
-            base.Tick();
         }
 
 
@@ -76,12 +130,6 @@ namespace Microsoft.Xna.Platform
                 Mouse.WindowHandle = base.Window.Handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
-        }
-
-        public override void BeforeInitialize()
-        {
-            bool isExiting = _gameWindow.SdlRunLoop();
-            _isExiting |= isExiting;
         }
 
         public override void Initialize()
@@ -137,10 +185,6 @@ namespace Microsoft.Xna.Platform
         public override void TickExiting()
         {
             _isExiting = true;
-        }
-
-        public override void Android_BeforeUpdate()
-        {
         }
 
         protected override void Dispose(bool disposing)

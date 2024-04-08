@@ -97,26 +97,72 @@ namespace Microsoft.Xna.Platform
             _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
         }
 
+        public override void RunOneFrame()
+        {
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                // BeforeInitialize
+                {
+                    _viewController.View.LayoutSubviews();
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+
+            Game.CallBeginRun();
+            Timer = Stopwatch.StartNew();
+
+            //Not quite right..
+            Game.Tick();
+
+            Game.CallEndRun();
+        }
+
         internal override void Run()
         {
             if (!_initialized)
             {
-                Game.DoInitialize();
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                // BeforeInitialize
+                {
+                    _viewController.View.LayoutSubviews();
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
                 _initialized = true;
             }
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
 
             StartRunLoop();
 
-            //Game.DoEndRun();
+            //Game.CallEndRun();
             //Game.DoExiting();
-        }
-
-        public override void Tick()
-        {
-            base.Tick();
         }
 
         // FIXME: VideoPlayer 'needs' this to set up its own movie player view
@@ -153,11 +199,6 @@ namespace Microsoft.Xna.Platform
                 }
             }
             
-        }
-
-        public override void BeforeInitialize()
-        {
-            _viewController.View.LayoutSubviews();
         }
 
         public override void Initialize()
@@ -205,10 +246,6 @@ namespace Microsoft.Xna.Platform
                 this.GraphicsDevice.Present();
 
             _viewController.View.Present();
-        }
-
-        public override void Android_BeforeUpdate()
-        {
         }
 
         public override void Exit()

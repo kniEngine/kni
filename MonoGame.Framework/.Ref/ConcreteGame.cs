@@ -13,27 +13,17 @@ namespace Microsoft.Xna.Platform
 
         }
 
+        public override void RunOneFrame()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         internal override void Run()
         {
             throw new PlatformNotSupportedException();
         }
 
-        public override void Tick()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void BeforeInitialize()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         public override void TickExiting()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void Android_BeforeUpdate()
         {
             throw new PlatformNotSupportedException();
         }

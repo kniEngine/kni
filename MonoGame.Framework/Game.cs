@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Framework
         }
 
         [System.Diagnostics.DebuggerNonUserCode]
-        private void AssertNotDisposed()
+        internal void AssertNotDisposed()
         {
             if (_isDisposed)
             {
@@ -282,16 +282,6 @@ namespace Microsoft.Xna.Framework
 
             Strategy.Run_UAP_XAML();
         }
-
-        internal void DoBeginRun()
-        {
-            BeginRun();
-        }
-
-        internal void DoEndRun()
-        {
-            EndRun();
-        }
         
         /// <summary>
         /// Run one iteration of the game loop.
@@ -437,15 +427,24 @@ namespace Microsoft.Xna.Framework
 
         #region Internal Methods
 
-        internal void DoUpdate(GameTime gameTime)
+        internal void CallInitialize()
         {
-            AssertNotDisposed();
+            this.Initialize();
+        }
 
-            Strategy.Android_BeforeUpdate();
+        internal void CallBeginRun()
+        {
+            this.BeginRun();
+        }
 
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+        internal void CallUpdate(GameTime gameTime)
+        {
+            this.Update(gameTime);
+        }
 
-            Update(gameTime);
+        internal void CallEndRun()
+        {
+            this.EndRun();
         }
 
         internal void DoDraw(GameTime gameTime)
@@ -467,23 +466,6 @@ namespace Microsoft.Xna.Framework
                 Draw(gameTime);
                 EndDraw();
             }
-        }
-
-        internal void DoInitialize()
-        {
-            AssertNotDisposed();
-
-            if (Strategy.GraphicsDevice == null)
-            {
-                GraphicsDeviceManager gdm = Strategy.GraphicsDeviceManager;
-                if (gdm != null)
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-            }
-
-            Strategy.BeforeInitialize();
-            Initialize();
-
-            Strategy.InitializeComponents();
         }
 
         internal void DoExiting()

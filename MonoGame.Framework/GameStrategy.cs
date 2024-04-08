@@ -252,22 +252,7 @@ namespace Microsoft.Xna.Platform
 
         #region Methods
 
-        public virtual void RunOneFrame()
-        {
-            if (!_initialized)
-            {
-                Game.DoInitialize();
-                _initialized = true;
-            }
-
-            Game.DoBeginRun();
-            Timer = Stopwatch.StartNew();
-
-            //Not quite right..
-            Game.Tick();
-
-            Game.DoEndRun();
-        }
+        public abstract void RunOneFrame();
 
         internal abstract void Run();
 
@@ -275,8 +260,6 @@ namespace Microsoft.Xna.Platform
         {
             throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
         }
-
-        public abstract void BeforeInitialize();
 
         public virtual void Initialize()
         {
@@ -348,7 +331,9 @@ namespace Microsoft.Xna.Platform
         /// <summary>
         /// Gives derived classes an opportunity to do work just before Update is called.
         /// </summary>
-        public abstract void Android_BeforeUpdate();
+        public virtual void Android_BeforeUpdate()
+        {
+        }
 
         /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.
@@ -469,7 +454,13 @@ namespace Microsoft.Xna.Platform
                     _currElapsedTime -= TargetElapsedTime;
                     stepCount++;
 
-                    Game.DoUpdate(Time);
+                    // DoUpdate
+                    {
+                        this.Game.AssertNotDisposed();
+                        this.Android_BeforeUpdate();
+                        ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                        this.Game.CallUpdate(Time);
+                    }
                 }
 
                 //Every update after the first accumulates lag
@@ -503,7 +494,13 @@ namespace Microsoft.Xna.Platform
                 Time.TotalGameTime += _currElapsedTime;
                 _currElapsedTime = TimeSpan.Zero;
 
-                Game.DoUpdate(Time);
+                // DoUpdate
+                {
+                    this.Game.AssertNotDisposed();
+                    this.Android_BeforeUpdate();
+                    ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                    this.Game.CallUpdate(Time);
+                }
             }
 
             if (!_suppressDraw)

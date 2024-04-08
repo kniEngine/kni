@@ -75,27 +75,43 @@ namespace Microsoft.Xna.Platform
         {
             if (!_initialized)
             {
-                Game.DoInitialize();
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                // BeforeInitialize
+                {
+                    DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+                    switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
+                    {
+                        case Android.Content.Res.Orientation.Portrait:
+                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                                                            ? DisplayOrientation.PortraitDown
+                                                            : DisplayOrientation.Portrait,
+                                                            false);
+                            break;
+                        default:
+                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                                                            ? DisplayOrientation.LandscapeRight
+                                                            : DisplayOrientation.LandscapeLeft,
+                                                            false);
+                            break;
+                    }
+                    _gameWindow._touchEventListener = new TouchEventListener();
+                    _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
                 _initialized = true;
             }
-        }
-
-        public override void BeforeInitialize()
-        {
-            var currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
-
-            switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
-            {
-                case Android.Content.Res.Orientation.Portrait:
-                    this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.PortraitDown ? DisplayOrientation.PortraitDown : DisplayOrientation.Portrait, false);
-                    break;
-                default:
-                    this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.LandscapeRight ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft, false);
-                    break;
-            }
-
-            _gameWindow._touchEventListener = new TouchEventListener();
-            _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
         }
 
         public override void Initialize()
@@ -168,17 +184,51 @@ namespace Microsoft.Xna.Platform
 
             //if (!_initialized)
             //{
-            //    Game.DoInitialize();
+            //    this.Game.AssertNotDisposed();
+            //
+            //    if (this.GraphicsDevice == null)
+            //    {
+            //        GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+            //        if (gdm != null)
+            //            ((IGraphicsDeviceManager)gdm).CreateDevice();
+            //    }
+            //
+            //    // BeforeInitialize
+            //    {
+            //        DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+            //        switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
+            //        {
+            //            case Android.Content.Res.Orientation.Portrait:
+            //                this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+            //                                                ? DisplayOrientation.PortraitDown
+            //                                                : DisplayOrientation.Portrait,
+            //                                                false);
+            //                break;
+            //            default:
+            //                this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+            //                                                ? DisplayOrientation.LandscapeRight
+            //                                                : DisplayOrientation.LandscapeLeft,
+            //                                                false);
+            //                break;
+            //        }
+            //        _gameWindow._touchEventListener = new TouchEventListener();
+            //        _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
+            //    }
+            //
+            //    this.Game.CallInitialize();
+            //
+            //    this.InitializeComponents();
+            //
             //    _initialized = true;
             //}
 
-            //Game.DoBeginRun();
+            //Game.CallBeginRun();
             //Timer = Stopwatch.StartNew();
 
             //Not quite right..
             //Game.Tick();
 
-            //Game.DoEndRun();
+            //Game.CallEndRun();
         }
 
         internal override void Run()
@@ -187,7 +237,7 @@ namespace Microsoft.Xna.Platform
             // Signal the game loop to initialize the game loop.
             _gameWindow.GameView.BeforeRun();
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
 
             // Prevent the default run loop from starting.
@@ -197,13 +247,8 @@ namespace Microsoft.Xna.Platform
             // StartRunLoop
             //_gameWindow.GameView.Resume();
 
-            //Game.DoEndRun();
+            //Game.CallEndRun();
             //Game.DoExiting();
-        }
-
-        public override void Tick()
-        {
-            base.Tick();
         }
     }
 }
