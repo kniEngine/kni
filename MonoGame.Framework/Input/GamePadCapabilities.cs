@@ -2,6 +2,10 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
+using System.Diagnostics;
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
@@ -9,6 +13,20 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public struct GamePadCapabilities
     {
+        private const Buttons ButtonLeftXThumbStick = (Buttons.LeftThumbstickLeft & Buttons.LeftThumbstickRight);
+        private const Buttons ButtonLeftYThumbStick = (Buttons.LeftThumbstickDown & Buttons.LeftThumbstickUp);
+        private const Buttons ButtonRightXThumbStick = (Buttons.RightThumbstickLeft & Buttons.RightThumbstickRight);
+        private const Buttons ButtonRightYThumbStick = (Buttons.RightThumbstickDown & Buttons.RightThumbstickUp);
+
+        private const uint CapsConnected = (1 << 0);
+        private const uint CapsLeftVibrationMotor = (1 << 1);
+        private const uint CapsRightVibrationMotor = (1 << 2);
+        private const uint CapsVoiceSupport = (1 << 3);
+
+        private Buttons _hasButtons;
+        private uint _hasCaps;
+        private GamePadType _gamePadType;
+
         public GamePadCapabilities(
             GamePadType gamePadType, string displayName, string identifier, bool isConnected, 
             bool hasAButton, bool hasBButton, bool hasXButton, bool hasYButton,            
@@ -22,7 +40,7 @@ namespace Microsoft.Xna.Framework.Input
             bool hasLeftVibrationMotor, bool hasRightVibrationMotor, 
             bool hasVoiceSupport) : this()
         {
-            GamePadType = gamePadType;
+            _gamePadType = gamePadType;
             DisplayName = displayName;
             Identifier = identifier;
             IsConnected = isConnected;
@@ -52,11 +70,49 @@ namespace Microsoft.Xna.Framework.Input
             HasVoiceSupport = hasVoiceSupport;
         }
 
+        public GamePadCapabilities(
+            GamePadType gamePadType, string displayName, string identifier, bool isConnected,
+            Buttons buttons,
+            bool hasLeftVibrationMotor, bool hasRightVibrationMotor,
+            bool hasVoiceSupport) : this()
+        {
+            bool hasLeftThumbstickLeft = (_hasButtons & Buttons.LeftThumbstickLeft) != Buttons.LeftThumbstickLeft;
+            bool hasLeftThumbstickRight = (_hasButtons & Buttons.LeftThumbstickRight) != Buttons.LeftThumbstickRight;
+            bool hasLeftThumbstickDown = (_hasButtons & Buttons.LeftThumbstickDown) != Buttons.LeftThumbstickDown;
+            bool hasLeftThumbstickUp = (_hasButtons & Buttons.LeftThumbstickUp) != Buttons.LeftThumbstickUp;
+            bool hasRightThumbstickLeft = (_hasButtons & Buttons.RightThumbstickLeft) != Buttons.RightThumbstickLeft;
+            bool hasRightThumbstickRight = (_hasButtons & Buttons.RightThumbstickRight) != Buttons.RightThumbstickRight;
+            bool hasRightThumbstickDown = (_hasButtons & Buttons.RightThumbstickDown) != Buttons.RightThumbstickDown;
+            bool hasRightThumbstickUp = (_hasButtons & Buttons.RightThumbstickUp) != Buttons.RightThumbstickUp;
+            Debug.Assert(hasLeftThumbstickLeft == hasLeftThumbstickRight); // ButtonLeftXThumbStick
+            Debug.Assert(hasLeftThumbstickDown == hasLeftThumbstickUp); // ButtonLeftYThumbStick
+            Debug.Assert(hasRightThumbstickLeft == hasRightThumbstickRight); // ButtonRightXThumbStick
+            Debug.Assert(hasRightThumbstickDown == hasRightThumbstickUp); // ButtonRightYThumbStick
+
+            this._gamePadType = gamePadType;
+            this.DisplayName = displayName;
+            this.Identifier = identifier;
+            this.IsConnected = isConnected;
+            this._hasButtons = buttons;
+            this.HasLeftVibrationMotor = hasLeftVibrationMotor;
+            this.HasRightVibrationMotor = hasRightVibrationMotor;
+            this.HasVoiceSupport = hasVoiceSupport;
+        }
+
         /// <summary>
         /// Gets a value indicating if the controller is connected.
         /// </summary>
         /// <value><c>true</c> if it is connected; otherwise, <c>false</c>.</value>
-        public bool IsConnected { get; internal set; }
+        public bool IsConnected
+        {
+            get { return (_hasCaps & CapsConnected) != CapsConnected; }
+            internal set
+            {
+                _hasCaps = (value)
+                         ? (_hasCaps | CapsConnected)
+                         : (_hasCaps & ~CapsConnected);
+            }
+        }
 
         /// <summary>
         /// Gets the gamepad display name.
@@ -78,151 +134,371 @@ namespace Microsoft.Xna.Framework.Input
         /// Gets a value indicating whether the controller has the button A.
         /// </summary>
         /// <value><c>true</c> if it has the button A; otherwise, <c>false</c>.</value>
-        public bool HasAButton { get; internal set; }
+        public bool HasAButton 
+        {
+            get { return (_hasButtons & Buttons.A) != Buttons.A; }
+            internal set 
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons |  Buttons.A)
+                            : (_hasButtons & ~Buttons.A);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the button Back.
         /// </summary>
         /// <value><c>true</c> if it has the button Back; otherwise, <c>false</c>.</value>
-        public bool HasBackButton { get; internal set; }
+        public bool HasBackButton
+        {
+            get { return (_hasButtons & Buttons.Back) != Buttons.Back; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.Back)
+                            : (_hasButtons & ~Buttons.Back);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the button B.
         /// </summary>
         /// <value><c>true</c> if it has the button B; otherwise, <c>false</c>.</value>
-        public bool HasBButton { get; internal set; }
+        public bool HasBButton
+        {
+            get { return (_hasButtons & Buttons.B) != Buttons.B; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.B)
+                            : (_hasButtons & ~Buttons.B);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the directional pad down button.
         /// </summary>
         /// <value><c>true</c> if it has the directional pad down button; otherwise, <c>false</c>.</value>
-        public bool HasDPadDownButton { get; internal set; }
+        public bool HasDPadDownButton
+        {
+            get { return (_hasButtons & Buttons.DPadDown) != Buttons.DPadDown; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.DPadDown)
+                            : (_hasButtons & ~Buttons.DPadDown);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the directional pad left button.
         /// </summary>
         /// <value><c>true</c> if it has the directional pad left button; otherwise, <c>false</c>.</value>
-        public bool HasDPadLeftButton { get; internal set; }
+        public bool HasDPadLeftButton
+        {
+            get { return (_hasButtons & Buttons.DPadLeft) != Buttons.DPadLeft; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.DPadLeft)
+                            : (_hasButtons & ~Buttons.DPadLeft);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the directional pad right button.
         /// </summary>
         /// <value><c>true</c> if it has the directional pad right button; otherwise, <c>false</c>.</value>
-        public bool HasDPadRightButton { get; internal set; }
+        public bool HasDPadRightButton
+        {
+            get { return (_hasButtons & Buttons.DPadRight) != Buttons.DPadRight; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.DPadRight)
+                            : (_hasButtons & ~Buttons.DPadRight);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the directional pad up button.
         /// </summary>
         /// <value><c>true</c> if it has the directional pad up button; otherwise, <c>false</c>.</value>
-        public bool HasDPadUpButton { get; internal set; }
+        public bool HasDPadUpButton
+        {
+            get { return (_hasButtons & Buttons.DPadUp) != Buttons.DPadUp; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.DPadUp)
+                            : (_hasButtons & ~Buttons.DPadUp);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the left shoulder button.
         /// </summary>
         /// <value><c>true</c> if it has the left shoulder button; otherwise, <c>false</c>.</value>
-        public bool HasLeftShoulderButton { get; internal set; }
+        public bool HasLeftShoulderButton
+        {
+            get { return (_hasButtons & Buttons.LeftShoulder) != Buttons.LeftShoulder; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.LeftShoulder)
+                            : (_hasButtons & ~Buttons.LeftShoulder);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the left stick button.
         /// </summary>
         /// <value><c>true</c> if it has the left stick button; otherwise, <c>false</c>.</value>
-        public bool HasLeftStickButton { get; internal set; }
+        public bool HasLeftStickButton
+        {
+            get { return (_hasButtons & Buttons.LeftStick) != Buttons.LeftStick; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.LeftStick)
+                            : (_hasButtons & ~Buttons.LeftStick);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the right shoulder button.
         /// </summary>
         /// <value><c>true</c> if it has the right shoulder button; otherwise, <c>false</c>.</value>
-        public bool HasRightShoulderButton { get; internal set; }
+        public bool HasRightShoulderButton
+        {
+            get { return (_hasButtons & Buttons.RightShoulder) != Buttons.RightShoulder; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.RightShoulder)
+                            : (_hasButtons & ~Buttons.RightShoulder);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the right stick button.
         /// </summary>
         /// <value><c>true</c> if it has the right stick button; otherwise, <c>false</c>.</value>
-        public bool HasRightStickButton { get; internal set; }
+        public bool HasRightStickButton
+        {
+            get { return (_hasButtons & Buttons.RightStick) != Buttons.RightStick; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.RightStick)
+                            : (_hasButtons & ~Buttons.RightStick);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the button Start.
         /// </summary>
         /// <value><c>true</c> if it has the button Start; otherwise, <c>false</c>.</value>
-        public bool HasStartButton { get; internal set; }
+        public bool HasStartButton
+        {
+            get { return (_hasButtons & Buttons.Start) != Buttons.Start; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.Start)
+                            : (_hasButtons & ~Buttons.Start);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the button X.
         /// </summary>
         /// <value><c>true</c> if it has the button X; otherwise, <c>false</c>.</value>
-        public bool HasXButton { get; internal set; }
+        public bool HasXButton
+        {
+            get { return (_hasButtons & Buttons.X) != Buttons.X; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.X)
+                            : (_hasButtons & ~Buttons.X);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the button Y.
         /// </summary>
         /// <value><c>true</c> if it has the button Y; otherwise, <c>false</c>.</value>
-        public bool HasYButton { get; internal set; }
+        public bool HasYButton
+        {
+            get { return (_hasButtons & Buttons.Y) != Buttons.Y; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.Y)
+                            : (_hasButtons & ~Buttons.Y);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the guide button.
         /// </summary>
         /// <value><c>true</c> if it has the guide button; otherwise, <c>false</c>.</value>
-        public bool HasBigButton { get; internal set; }
+        public bool HasBigButton
+        {
+            get { return (_hasButtons & Buttons.BigButton) != Buttons.BigButton; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.BigButton)
+                            : (_hasButtons & ~Buttons.BigButton);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has X axis for the left stick (thumbstick) button.
         /// </summary>
         /// <value><c>true</c> if it has X axis for the left stick (thumbstick) button; otherwise, <c>false</c>.</value>
-        public bool HasLeftXThumbStick { get; internal set; }
+        public bool HasLeftXThumbStick
+        {
+            get { return (_hasButtons & ButtonLeftXThumbStick) != ButtonLeftXThumbStick; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | ButtonLeftXThumbStick)
+                            : (_hasButtons & ~ButtonLeftXThumbStick);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has Y axis for the left stick (thumbstick) button.
         /// </summary>
         /// <value><c>true</c> if it has Y axis for the left stick (thumbstick) button; otherwise, <c>false</c>.</value>
-        public bool HasLeftYThumbStick { get; internal set; }
+        public bool HasLeftYThumbStick
+        {
+            get { return (_hasButtons & ButtonLeftYThumbStick) != ButtonLeftYThumbStick; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | ButtonLeftYThumbStick)
+                            : (_hasButtons & ~ButtonLeftYThumbStick);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has X axis for the right stick (thumbstick) button.
         /// </summary>
         /// <value><c>true</c> if it has X axis for the right stick (thumbstick) button; otherwise, <c>false</c>.</value>
-        public bool HasRightXThumbStick { get; internal set; }
+        public bool HasRightXThumbStick
+        {
+            get { return (_hasButtons & ButtonRightXThumbStick) != ButtonRightXThumbStick; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | ButtonRightXThumbStick)
+                            : (_hasButtons & ~ButtonRightXThumbStick);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has Y axis for the right stick (thumbstick) button.
         /// </summary>
         /// <value><c>true</c> if it has Y axis for the right stick (thumbstick) button; otherwise, <c>false</c>.</value>
-        public bool HasRightYThumbStick { get; internal set; }
+        public bool HasRightYThumbStick
+        {
+            get { return (_hasButtons & ButtonRightYThumbStick) != ButtonRightYThumbStick; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | ButtonRightYThumbStick)
+                            : (_hasButtons & ~ButtonRightYThumbStick);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the left trigger button.
         /// </summary>
         /// <value><c>true</c> if it has the left trigger button; otherwise, <c>false</c>.</value>
-        public bool HasLeftTrigger { get; internal set; }
+        public bool HasLeftTrigger
+        {
+            get { return (_hasButtons & Buttons.LeftTrigger) != Buttons.LeftTrigger; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.LeftTrigger)
+                            : (_hasButtons & ~Buttons.LeftTrigger);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the right trigger button.
         /// </summary>
         /// <value><c>true</c> if it has the right trigger button; otherwise, <c>false</c>.</value>
-        public bool HasRightTrigger { get; internal set; }
+        public bool HasRightTrigger
+        {
+            get { return (_hasButtons & Buttons.RightTrigger) != Buttons.RightTrigger; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.RightTrigger)
+                            : (_hasButtons & ~Buttons.RightTrigger);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the left vibration motor.
         /// </summary>
         /// <value><c>true</c> if it has the left vibration motor; otherwise, <c>false</c>.</value>
-        public bool HasLeftVibrationMotor { get; internal set; }
+        public bool HasLeftVibrationMotor
+        {
+            get { return (_hasCaps & CapsLeftVibrationMotor) != CapsLeftVibrationMotor; }
+            internal set
+            {
+                _hasCaps = (value)
+                         ? (_hasCaps | CapsLeftVibrationMotor)
+                         : (_hasCaps & ~CapsLeftVibrationMotor);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has the right vibration motor.
         /// </summary>
         /// <value><c>true</c> if it has the right vibration motor; otherwise, <c>false</c>.</value>
-        public bool HasRightVibrationMotor { get; internal set; }
+        public bool HasRightVibrationMotor
+        {
+            get { return (_hasCaps & CapsRightVibrationMotor) != CapsRightVibrationMotor; }
+            internal set
+            {
+                _hasCaps = (value)
+                         ? (_hasCaps | CapsRightVibrationMotor)
+                         : (_hasCaps & ~CapsRightVibrationMotor);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the controller has a microphone.
         /// </summary>
         /// <value><c>true</c> if it has a microphone; otherwise, <c>false</c>.</value>
-        public bool HasVoiceSupport { get; internal set; }
+        public bool HasVoiceSupport
+        {
+            get { return (_hasCaps & CapsVoiceSupport) != CapsVoiceSupport; }
+            internal set
+            {
+                _hasCaps = (value)
+                         ? (_hasCaps | CapsVoiceSupport)
+                         : (_hasCaps & ~CapsVoiceSupport);
+            }
+        }
 
         /// <summary>
         /// Gets the type of the controller.
         /// </summary>
         /// <value>A <see cref="GamePadType"/> representing the controller type..</value>
-        public GamePadType GamePadType { get; internal set; }
+        public GamePadType GamePadType
+        {
+            get { return _gamePadType; }
+            internal set { _gamePadType = value; }
+        }
 
         /// <summary>
         /// Determines whether a specified instance of <see cref="Microsoft.Xna.Framework.Input.GamePadCapabilities"/>
@@ -233,36 +509,13 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
         public static bool operator ==(GamePadCapabilities left, GamePadCapabilities right)
         {
-            var eq = true;
+            bool eq = true;
 
             eq &= (left.DisplayName == right.DisplayName);
             eq &= (left.Identifier == right.Identifier);
-            eq &= (left.IsConnected == right.IsConnected);
-            eq &= (left.HasAButton == right.HasAButton);
-            eq &= (left.HasBackButton == right.HasBackButton);
-            eq &= (left.HasBButton == right.HasBButton);
-            eq &= (left.HasDPadDownButton == right.HasDPadDownButton);
-            eq &= (left.HasDPadLeftButton == right.HasDPadLeftButton);
-            eq &= (left.HasDPadRightButton == right.HasDPadRightButton);
-            eq &= (left.HasDPadUpButton == right.HasDPadUpButton);
-            eq &= (left.HasLeftShoulderButton == right.HasLeftShoulderButton);
-            eq &= (left.HasLeftStickButton == right.HasLeftStickButton);
-            eq &= (left.HasRightShoulderButton == right.HasRightShoulderButton);
-            eq &= (left.HasRightStickButton == right.HasRightStickButton);
-            eq &= (left.HasStartButton == right.HasStartButton);
-            eq &= (left.HasXButton == right.HasXButton);
-            eq &= (left.HasYButton == right.HasYButton);
-            eq &= (left.HasBigButton == right.HasBigButton);
-            eq &= (left.HasLeftXThumbStick == right.HasLeftXThumbStick);
-            eq &= (left.HasLeftYThumbStick == right.HasLeftYThumbStick);
-            eq &= (left.HasRightXThumbStick == right.HasRightXThumbStick);
-            eq &= (left.HasRightYThumbStick == right.HasRightYThumbStick);
-            eq &= (left.HasLeftTrigger == right.HasLeftTrigger);
-            eq &= (left.HasRightTrigger == right.HasRightTrigger);
-            eq &= (left.HasLeftVibrationMotor == right.HasLeftVibrationMotor);
-            eq &= (left.HasRightVibrationMotor == right.HasRightVibrationMotor);
-            eq &= (left.HasVoiceSupport == right.HasVoiceSupport);
-            eq &= (left.GamePadType == right.GamePadType);
+            eq &= (left._hasButtons == right._hasButtons);
+            eq &= (left._hasCaps == right._hasCaps);
+            eq &= (left._gamePadType == right._gamePadType);
 
             return eq;
         }

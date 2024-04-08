@@ -28,27 +28,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             string displayName = String.Empty;
             string identifier = String.Empty;
             bool isConnected;
-            bool hasAButton = false;
-            bool hasBButton = false;
-            bool hasXButton = false;
-            bool hasYButton = false;
-            bool hasStartButton = false;
-            bool hasBackButton = false;
-            bool hasBigButton = false;
-            bool hasDPadDownButton = false;
-            bool hasDPadLeftButton = false;
-            bool hasDPadRightButton = false;
-            bool hasDPadUpButton = false;
-            bool hasLeftShoulderButton = false;
-            bool hasLeftStickButton = false;
-            bool hasRightShoulderButton = false;
-            bool hasRightStickButton = false;
-            bool hasLeftXThumbStick = false;
-            bool hasLeftYThumbStick = false;
-            bool hasRightXThumbStick = false;
-            bool hasRightYThumbStick = false;
-            bool hasLeftTrigger = false;
-            bool hasRightTrigger = false;
+            Buttons buttons = (Buttons)0;
             bool hasLeftVibrationMotor = false;
             bool hasRightVibrationMotor = false;
             bool hasVoiceSupport = false;
@@ -60,22 +40,22 @@ namespace Microsoft.Xna.Platform.Input.Oculus
 
             if (((int)connectedControllerTypes & (int)OvrControllerType.LTouch) == (int)OvrControllerType.LTouch)
             {
-                hasXButton = true;
-                hasYButton = true;
-                hasLeftXThumbStick = true;
-                hasLeftYThumbStick = true;
-                //capabilities.HasLeftStickButton = true;
-                //capabilities.HasStartButton = true;
+                buttons |= Buttons.X;
+                buttons |= Buttons.Y;
+                buttons |= Buttons.LeftThumbstickLeft & Buttons.LeftThumbstickRight;
+                buttons |= Buttons.LeftThumbstickDown & Buttons.LeftThumbstickUp;
+                //buttons |= Buttons.LeftStick;
+                //buttons |= Buttons.Start;
             }
 
             if (((int)connectedControllerTypes & (int)OvrControllerType.RTouch) == (int)OvrControllerType.RTouch)
             {
-                hasAButton = true;
-                hasBButton = true;
-                hasRightXThumbStick = true;
-                hasRightYThumbStick = true;
-                //capabilities.HasRightStickButton = true;
-                //capabilities.HasBackButton = true;
+                buttons |= Buttons.A;
+                buttons |= Buttons.B;
+                buttons |= Buttons.RightThumbstickLeft & Buttons.RightThumbstickRight;
+                buttons |= Buttons.RightThumbstickDown & Buttons.RightThumbstickUp;
+                //buttons |= Buttons.RightStick;
+                //buttons |= Buttons.Back;
             }
 
             return new GamePadCapabilities(
@@ -83,27 +63,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
                     displayName:displayName,
                     identifier:identifier,
                     isConnected:isConnected,
-                    hasAButton: hasAButton,
-                    hasBButton: hasBButton,
-                    hasXButton:hasXButton,
-                    hasYButton:hasYButton,
-                    hasStartButton:hasStartButton,
-                    hasBackButton: hasBackButton,
-                    hasBigButton:hasBigButton,
-                    hasDPadDownButton: hasDPadDownButton,
-                    hasDPadLeftButton: hasDPadLeftButton,
-                    hasDPadRightButton: hasDPadRightButton,
-                    hasDPadUpButton: hasDPadUpButton,
-                    hasLeftShoulderButton: hasLeftShoulderButton,
-                    hasLeftStickButton: hasLeftStickButton,
-                    hasRightShoulderButton:hasRightShoulderButton,
-                    hasRightStickButton:hasRightStickButton,
-                    hasLeftXThumbStick:hasLeftXThumbStick,
-                    hasLeftYThumbStick:hasLeftYThumbStick,
-                    hasRightXThumbStick:hasRightXThumbStick,
-                    hasRightYThumbStick:hasRightYThumbStick,
-                    hasLeftTrigger:hasLeftTrigger,
-                    hasRightTrigger:hasRightTrigger,
+                    buttons: buttons,
                     hasLeftVibrationMotor:hasLeftVibrationMotor,
                     hasRightVibrationMotor:hasRightVibrationMotor,
                     hasVoiceSupport:hasVoiceSupport
