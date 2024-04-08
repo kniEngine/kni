@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Input
                     return state;
                 }
 
-                GamePadThumbSticks thumbSticks = new GamePadThumbSticks(gamePad._leftStick, gamePad._rightStick, leftDeadZoneMode, rightDeadZoneMode);
+                GamePadThumbSticks thumbSticks = base.CreateGamePadThumbSticks(gamePad._leftStick, gamePad._rightStick, leftDeadZoneMode, rightDeadZoneMode);
 
                 state = base.CreateGamePadState(
                     thumbSticks,

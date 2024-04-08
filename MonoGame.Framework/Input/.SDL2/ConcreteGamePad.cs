@@ -308,7 +308,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // Y gamepad axis is rotate between SDL and XNA
             GamePadThumbSticks thumbSticks =
-                new GamePadThumbSticks(
+                base.CreateGamePadThumbSticks(
                     new Vector2(
                         GetFromSdlAxis(SDL.GAMECONTROLLER.GetAxis(gdevice, Sdl.GameController.Axis.LeftX)),
                         GetFromSdlAxis(SDL.GAMECONTROLLER.GetAxis(gdevice, Sdl.GameController.Axis.LeftY)) * -1f

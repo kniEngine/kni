@@ -264,7 +264,7 @@ namespace Microsoft.Xna.Platform.Input
                 }
             }
             GamePadState state = base.CreateGamePadState(
-                new GamePadThumbSticks(leftThumbStickPosition, rightThumbStickPosition, leftDeadZoneMode, rightDeadZoneMode),
+                base.CreateGamePadThumbSticks(leftThumbStickPosition, rightThumbStickPosition, leftDeadZoneMode, rightDeadZoneMode),
                 new GamePadTriggers(leftTriggerValue, rightTriggerValue),
                 new GamePadButtons(buttons),
                 new GamePadDPad(Up, Down, Left, Right),

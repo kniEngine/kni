@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Platform.Input
             
             WGI.GamepadReading state = gamepad.GetCurrentReading();
 
-            GamePadThumbSticks sticks = new GamePadThumbSticks(
+            GamePadThumbSticks sticks = base.CreateGamePadThumbSticks(
                     new Vector2((float)state.LeftThumbstickX, (float)state.LeftThumbstickY),
                     new Vector2((float)state.RightThumbstickX, (float)state.RightThumbstickY),
                     leftDeadZoneMode,
