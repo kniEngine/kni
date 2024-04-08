@@ -123,23 +123,53 @@ namespace Microsoft.Xna.Platform.Input
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             if (!Gamepads.ContainsKey(index))
-                return new GamePadCapabilities();
+            {
+                return base.CreateGamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+            }
 
             IntPtr gamecontroller = Gamepads[index].Device;
 
-            GamePadCapabilities caps = new GamePadCapabilities();
-            caps.IsConnected = true;
-            caps.DisplayName = SDL.GAMECONTROLLER.GetName(gamecontroller);
-            caps.Identifier = SDL.JOYSTICK.GetGUID(SDL.GAMECONTROLLER.GetJoystick(gamecontroller)).ToString();
-            caps.HasLeftVibrationMotor = caps.HasRightVibrationMotor = SDL.GAMECONTROLLER.HasRumble(gamecontroller) != 0;
-            caps.GamePadType = GamePadType.GamePad;
+            //--
+            GamePadType gamePadType = GamePadType.Unknown;
+            string displayName = String.Empty;
+            string identifier = String.Empty;
+            bool isConnected;
+            Buttons buttons = (Buttons)0;
+            bool hasLeftVibrationMotor = false;
+            bool hasRightVibrationMotor = false;
+            bool hasVoiceSupport = false;
+            //--
 
-            ParseCapabilities(gamecontroller, ref caps);
+            isConnected = true;
+            displayName = SDL.GAMECONTROLLER.GetName(gamecontroller);
+            identifier = SDL.JOYSTICK.GetGUID(SDL.GAMECONTROLLER.GetJoystick(gamecontroller)).ToString();
+            hasLeftVibrationMotor = hasRightVibrationMotor = SDL.GAMECONTROLLER.HasRumble(gamecontroller) != 0;
+            gamePadType = GamePadType.GamePad;
 
-            return caps;
+            ParseCapabilities(gamecontroller, ref buttons);
+
+            return base.CreateGamePadCapabilities(
+                    gamePadType: gamePadType,
+                    displayName: displayName,
+                    identifier: identifier,
+                    isConnected: isConnected,
+                    buttons: buttons,
+                    hasLeftVibrationMotor: hasLeftVibrationMotor,
+                    hasRightVibrationMotor: hasRightVibrationMotor,
+                    hasVoiceSupport: hasVoiceSupport
+                );
         }
 
-        private void ParseCapabilities(IntPtr gamecontroller, ref GamePadCapabilities caps)
+        private void ParseCapabilities(IntPtr gamecontroller, ref Buttons buttons)
         {
             IntPtr pStrMappings = IntPtr.Zero;
             try
@@ -153,67 +183,67 @@ namespace Microsoft.Xna.Platform.Input
                 for (int idx = 0; idx < mappings.Length;)
                 {
                     if (MatchKey("a", mappings, ref idx))
-                        caps.HasAButton = true;
+                        buttons |= Buttons.A;
                     else
                     if (MatchKey("b", mappings, ref idx))
-                        caps.HasBButton = true;
+                        buttons |= Buttons.B;
                     else
                     if (MatchKey("x", mappings, ref idx))
-                        caps.HasXButton = true;
+                        buttons |= Buttons.X;
                     else
                     if (MatchKey("y", mappings, ref idx))
-                        caps.HasYButton = true;
+                        buttons |= Buttons.Y;
                     else
                     if (MatchKey("back", mappings, ref idx))
-                        caps.HasBackButton = true;
+                        buttons |= Buttons.Back;
                     else
                     if (MatchKey("guide", mappings, ref idx))
-                        caps.HasBigButton = true;
+                        buttons |= Buttons.BigButton;
                     else
                     if (MatchKey("start", mappings, ref idx))
-                        caps.HasStartButton = true;
+                        buttons |= Buttons.Start;
                     else
                     if (MatchKey("dpleft", mappings, ref idx))
-                        caps.HasDPadLeftButton = true;
+                        buttons |= Buttons.DPadLeft;
                     else
                     if (MatchKey("dpdown", mappings, ref idx))
-                        caps.HasDPadDownButton = true;
+                        buttons |= Buttons.DPadDown;
                     else
                     if (MatchKey("dpright", mappings, ref idx))
-                        caps.HasDPadRightButton = true;
+                        buttons |= Buttons.DPadRight;
                     else
                     if (MatchKey("dpup", mappings, ref idx))
-                        caps.HasDPadUpButton = true;
+                        buttons |= Buttons.DPadUp;
                     else
                     if (MatchKey("leftshoulder", mappings, ref idx))
-                        caps.HasLeftShoulderButton = true;
+                        buttons |= Buttons.LeftShoulder;
                     else
                     if (MatchKey("lefttrigger", mappings, ref idx))
-                        caps.HasLeftTrigger = true;
+                        buttons |= Buttons.LeftTrigger;
                     else
                     if (MatchKey("rightshoulder", mappings, ref idx))
-                        caps.HasRightShoulderButton = true;
+                        buttons |= Buttons.RightShoulder;
                     else
                     if (MatchKey("righttrigger", mappings, ref idx))
-                        caps.HasRightTrigger = true;
+                        buttons |= Buttons.RightTrigger;
                     else
                     if (MatchKey("leftstick", mappings, ref idx))
-                        caps.HasLeftStickButton = true;
+                        buttons |= Buttons.LeftStick;
                     else
                     if (MatchKey("rightstick", mappings, ref idx))
-                        caps.HasRightStickButton = true;
+                        buttons |= Buttons.RightStick;
                     else
                     if (MatchKey("leftx", mappings, ref idx))
-                        caps.HasLeftXThumbStick = true;
+                        buttons |= Buttons.LeftThumbstickLeft | Buttons.LeftThumbstickRight;
                     else
                     if (MatchKey("lefty", mappings, ref idx))
-                        caps.HasLeftYThumbStick = true;
+                        buttons |= Buttons.LeftThumbstickDown | Buttons.LeftThumbstickUp;
                     else
                     if (MatchKey("rightx", mappings, ref idx))
-                        caps.HasRightXThumbStick = true;
+                        buttons |= Buttons.RightThumbstickLeft | Buttons.RightThumbstickRight;
                     else
                     if (MatchKey("righty", mappings, ref idx))
-                        caps.HasRightYThumbStick = true;
+                        buttons |= Buttons.RightThumbstickDown | Buttons.RightThumbstickUp;
 
                     if (idx < mappings.Length)
                     {

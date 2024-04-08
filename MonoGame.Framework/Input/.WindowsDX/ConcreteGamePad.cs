@@ -46,7 +46,18 @@ namespace Microsoft.Xna.Platform.Input
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
             if (!_connected[index] && !HasDisconnectedTimeoutElapsed(index))
-                return new GamePadCapabilities();
+            {
+                return base.CreateGamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+            }
 
             // Check to see if the device is connected.
             XInput.Controller controller = _controllers[index];
@@ -57,7 +68,16 @@ namespace Microsoft.Xna.Platform.Input
             if (!_connected[index])
             {
                 SetDisconnectedTimeout(index);
-                return new GamePadCapabilities();
+                return base.CreateGamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
             }
 
             XInput.Capabilities capabilities;
@@ -71,57 +91,85 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     _connected[index] = false;
                     SetDisconnectedTimeout(index);
-                    return new GamePadCapabilities();
+                    return base.CreateGamePadCapabilities(
+                            gamePadType: GamePadType.Unknown,
+                            displayName: null,
+                            identifier: null,
+                            isConnected: false,
+                            buttons: (Buttons)0,
+                            hasLeftVibrationMotor: false,
+                            hasRightVibrationMotor: false,
+                            hasVoiceSupport: false
+                        );
                 }
                 throw;
             }
 
-            GamePadCapabilities ret = new GamePadCapabilities();
-            ret.GamePadType = XInputToXnaGamePadType(capabilities.SubType);
+            //--
+            GamePadType gamePadType = GamePadType.Unknown;
+            string displayName = String.Empty;
+            string identifier = String.Empty;
+            bool isConnected;
+            Buttons buttons = (Buttons)0;
+            bool hasLeftVibrationMotor = false;
+            bool hasRightVibrationMotor = false;
+            bool hasVoiceSupport = false;
+            //--
 
-            XInput.Gamepad gamepad = capabilities.Gamepad;
+            gamePadType = XInputToXnaGamePadType(capabilities.SubType);
+
+            XInput.Gamepad xgamepad = capabilities.Gamepad;
 
             // digital buttons
-            XInput.GamepadButtonFlags buttons = gamepad.Buttons;
-            ret.HasAButton = (buttons & GPBF.A) == GPBF.A;
-            ret.HasBackButton = (buttons & GPBF.Back) == GPBF.Back;
-            ret.HasBButton = (buttons & GPBF.B) == GPBF.B;
-            ret.HasBigButton = false; // TODO: what IS this? Is it related to GamePadType.BigGamePad?
-            ret.HasDPadDownButton = (buttons & GPBF.DPadDown) == GPBF.DPadDown;
-            ret.HasDPadLeftButton = (buttons & GPBF.DPadLeft) == GPBF.DPadLeft;
-            ret.HasDPadRightButton = (buttons & GPBF.DPadRight) == GPBF.DPadRight;
-            ret.HasDPadUpButton = (buttons & GPBF.DPadUp) == GPBF.DPadUp;
-            ret.HasLeftShoulderButton = (buttons & GPBF.LeftShoulder) == GPBF.LeftShoulder;
-            ret.HasLeftStickButton = (buttons & GPBF.LeftThumb) == GPBF.LeftThumb;
-            ret.HasRightShoulderButton = (buttons & GPBF.RightShoulder) == GPBF.RightShoulder;
-            ret.HasRightStickButton = (buttons & GPBF.RightThumb) == GPBF.RightThumb;
-            ret.HasStartButton = (buttons & GPBF.Start) == GPBF.Start;
-            ret.HasXButton = (buttons & GPBF.X) == GPBF.X;
-            ret.HasYButton = (buttons & GPBF.Y) == GPBF.Y;
+            XInput.GamepadButtonFlags xbuttons = xgamepad.Buttons;
+            buttons |= ((xbuttons & GPBF.A) == GPBF.A) ? Buttons.A : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.Back) == GPBF.Back) ? Buttons.Back : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.B) == GPBF.B) ? Buttons.B : (Buttons)0;
+            buttons |= (false) ? Buttons.BigButton : (Buttons)0; // TODO: what IS this? Is it related to GamePadType.BigGamePad?
+            buttons |= ((xbuttons & GPBF.DPadDown) == GPBF.DPadDown) ? Buttons.DPadDown : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.DPadLeft) == GPBF.DPadLeft) ? Buttons.DPadLeft : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.DPadRight) == GPBF.DPadRight) ? Buttons.DPadRight : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.DPadUp) == GPBF.DPadUp) ? Buttons.DPadUp : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.LeftShoulder) == GPBF.LeftShoulder) ? Buttons.LeftShoulder : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.LeftThumb) == GPBF.LeftThumb) ? Buttons.LeftStick : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.RightShoulder) == GPBF.RightShoulder) ? Buttons.RightShoulder : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.RightThumb) == GPBF.RightThumb) ? Buttons.RightStick : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.Start) == GPBF.Start) ? Buttons.Start : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.X) == GPBF.X) ? Buttons.X : (Buttons)0;
+            buttons |= ((xbuttons & GPBF.Y) == GPBF.Y) ? Buttons.Y : (Buttons)0;
 
             // analog controls
-            ret.HasRightTrigger = gamepad.RightTrigger > 0;
-            ret.HasRightXThumbStick = gamepad.RightThumbX != 0;
-            ret.HasRightYThumbStick = gamepad.RightThumbY != 0;
-            ret.HasLeftTrigger = gamepad.LeftTrigger > 0;
-            ret.HasLeftXThumbStick = gamepad.LeftThumbX != 0;
-            ret.HasLeftYThumbStick = gamepad.LeftThumbY != 0;
+            buttons |= (xgamepad.LeftTrigger > 0) ? Buttons.LeftTrigger : (Buttons)0;
+            buttons |= (xgamepad.LeftThumbX != 0) ? Buttons.LeftThumbstickLeft | Buttons.LeftThumbstickRight : (Buttons)0;
+            buttons |= (xgamepad.LeftThumbY != 0) ? Buttons.LeftThumbstickDown | Buttons.LeftThumbstickUp : (Buttons)0;
+            buttons |= (xgamepad.RightTrigger > 0) ? Buttons.RightTrigger : (Buttons)0;
+            buttons |= (xgamepad.RightThumbX != 0) ? Buttons.RightThumbstickLeft | Buttons.RightThumbstickRight : (Buttons)0;
+            buttons |= (xgamepad.RightThumbY != 0) ? Buttons.RightThumbstickDown | Buttons.RightThumbstickUp : (Buttons)0;
 
             // vibration
 #if DIRECTX11_1
             bool hasForceFeedback = (capabilities.Flags & XInput.CapabilityFlags.FfbSupported) == XInput.CapabilityFlags.FfbSupported;
-            ret.HasLeftVibrationMotor = hasForceFeedback && capabilities.Vibration.LeftMotorSpeed > 0;
-            ret.HasRightVibrationMotor = hasForceFeedback && capabilities.Vibration.RightMotorSpeed > 0;
+            hasLeftVibrationMotor = hasForceFeedback && capabilities.Vibration.LeftMotorSpeed > 0;
+            hasRightVibrationMotor = hasForceFeedback && capabilities.Vibration.RightMotorSpeed > 0;
 #else
-            ret.HasLeftVibrationMotor = (capabilities.Vibration.LeftMotorSpeed > 0);
-            ret.HasRightVibrationMotor = (capabilities.Vibration.RightMotorSpeed > 0);
+            hasLeftVibrationMotor = (capabilities.Vibration.LeftMotorSpeed > 0);
+            hasRightVibrationMotor = (capabilities.Vibration.RightMotorSpeed > 0);
 #endif
 
             // other
-            ret.IsConnected = controller.IsConnected;
-            ret.HasVoiceSupport = (capabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
-
-            return ret;
+            isConnected = controller.IsConnected;
+            hasVoiceSupport = (capabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
+            
+            return base.CreateGamePadCapabilities(
+                    gamePadType: gamePadType,
+                    displayName: displayName,
+                    identifier: identifier,
+                    isConnected: isConnected,
+                    buttons: buttons,
+                    hasLeftVibrationMotor: hasLeftVibrationMotor,
+                    hasRightVibrationMotor: hasRightVibrationMotor,
+                    hasVoiceSupport: hasVoiceSupport
+                );
         }
 
         private GamePadType XInputToXnaGamePadType(XInput.DeviceSubType subType)

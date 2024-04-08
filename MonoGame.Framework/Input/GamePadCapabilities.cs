@@ -4,6 +4,7 @@
 
 // Copyright (C)2024 Nick Kastellanos
 
+using System;
 using System.Diagnostics;
 
 namespace Microsoft.Xna.Framework.Input
@@ -27,6 +28,7 @@ namespace Microsoft.Xna.Framework.Input
         private uint _hasCaps;
         private GamePadType _gamePadType;
 
+        [Obsolete]
         public GamePadCapabilities(
             GamePadType gamePadType, string displayName, string identifier, bool isConnected, 
             bool hasAButton, bool hasBButton, bool hasXButton, bool hasYButton,            
@@ -70,7 +72,7 @@ namespace Microsoft.Xna.Framework.Input
             HasVoiceSupport = hasVoiceSupport;
         }
 
-        public GamePadCapabilities(
+        internal GamePadCapabilities(
             GamePadType gamePadType, string displayName, string identifier, bool isConnected,
             Buttons buttons,
             bool hasLeftVibrationMotor, bool hasRightVibrationMotor,

@@ -14,25 +14,28 @@ namespace Microsoft.Xna.Platform.Input.Oculus
     {
         private OvrDevice _ovrDevice;
 
-        GamePadCapabilities IOculusInput.GetCapabilities(TouchControllerType controllerType)
+        void IOculusInput.GetCapabilities(TouchControllerType controllerType,
+            ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,
+            ref Buttons buttons,
+            ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor,
+            ref bool hasVoiceSupport
+            )
         {
             var session = _ovrDevice.Session;
             if (session == null)
-                return default(GamePadCapabilities);
+            {
+                gamePadType = GamePadType.Unknown;
+                displayName = String.Empty;
+                identifier = String.Empty;
+                isConnected = false;
+                buttons = (Buttons)0;
+                hasLeftVibrationMotor = false;
+                hasRightVibrationMotor = false;
+                hasVoiceSupport = false;
+            }
 
             OvrControllerType ovrControllerType = (OvrControllerType)controllerType;
             OvrControllerType connectedControllerTypes = session.GetConnectedControllerTypes();
-
-            //--
-            GamePadType gamePadType = GamePadType.Unknown;
-            string displayName = String.Empty;
-            string identifier = String.Empty;
-            bool isConnected;
-            Buttons buttons = (Buttons)0;
-            bool hasLeftVibrationMotor = false;
-            bool hasRightVibrationMotor = false;
-            bool hasVoiceSupport = false;
-            //--
 
             isConnected = ((int)connectedControllerTypes & (int)ovrControllerType) != 0;
 
@@ -58,16 +61,6 @@ namespace Microsoft.Xna.Platform.Input.Oculus
                 //buttons |= Buttons.Back;
             }
 
-            return new GamePadCapabilities(
-                    gamePadType:gamePadType,
-                    displayName:displayName,
-                    identifier:identifier,
-                    isConnected:isConnected,
-                    buttons: buttons,
-                    hasLeftVibrationMotor:hasLeftVibrationMotor,
-                    hasRightVibrationMotor:hasRightVibrationMotor,
-                    hasVoiceSupport:hasVoiceSupport
-                );
         }
 
         Buttons _virtualButtons;

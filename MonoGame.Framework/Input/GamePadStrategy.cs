@@ -13,5 +13,23 @@ namespace Microsoft.Xna.Platform.Input
         public abstract GamePadCapabilities PlatformGetCapabilities(int index);
         public abstract GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode);
         public abstract bool PlatformSetVibration(int index, float v1, float v2, float v3, float v4);
+
+        protected GamePadCapabilities CreateGamePadCapabilities(
+            GamePadType gamePadType, string displayName, string identifier, bool isConnected,
+            Buttons buttons,
+            bool hasLeftVibrationMotor, bool hasRightVibrationMotor,
+            bool hasVoiceSupport)
+        {
+            return new GamePadCapabilities(
+                        gamePadType: GamePadType.Unknown,
+                        displayName: null,
+                        identifier: null,
+                        isConnected: false,
+                        buttons: (Buttons)0,
+                        hasLeftVibrationMotor: false,
+                        hasRightVibrationMotor: false,
+                        hasVoiceSupport: false
+                    );
+        }
     }
 }
