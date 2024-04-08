@@ -10,7 +10,12 @@ namespace Microsoft.Xna.Platform.Input.Oculus
 {
     public interface IOculusInput
     {
-        GamePadCapabilities GetCapabilities(TouchControllerType type);
+        void GetCapabilities(TouchControllerType type,
+            ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,
+            ref Buttons buttons,
+            ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor,
+            ref bool hasVoiceSupport
+            );
         TouchControllerState GetState(TouchControllerType type);
         bool SetVibration(TouchControllerType type, float amplitude);
     }

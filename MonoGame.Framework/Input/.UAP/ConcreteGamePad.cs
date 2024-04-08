@@ -84,36 +84,56 @@ namespace Microsoft.Xna.Platform.Input
                     );
             }
 
+            //--
+            GamePadType gamePadType = GamePadType.Unknown;
+            string displayName = String.Empty;
+            string identifier = String.Empty;
+            bool isConnected;
+            Buttons buttons = (Buttons)0;
+            bool hasLeftVibrationMotor = false;
+            bool hasRightVibrationMotor = false;
+            bool hasVoiceSupport = false;
+            //--
+
             // we can't check gamepad capabilities for most stuff with Windows.Gaming.Input.Gamepad
-            return new GamePadCapabilities
             {
-                IsConnected = true,
-                GamePadType = GamePadType.GamePad,
-                HasAButton = true,
-                HasBButton = true,
-                HasXButton = true,
-                HasYButton = true,
-                HasBackButton = true,
-                HasStartButton = true,
-                HasDPadDownButton = true,
-                HasDPadLeftButton = true,
-                HasDPadRightButton = true,
-                HasDPadUpButton = true,
-                HasLeftShoulderButton = true,
-                HasRightShoulderButton = true,
-                HasLeftStickButton = true,
-                HasRightStickButton = true,
-                HasLeftTrigger = true,
-                HasRightTrigger = true,
-                HasLeftXThumbStick = true,
-                HasLeftYThumbStick = true,
-                HasRightXThumbStick = true,
-                HasRightYThumbStick = true,
-                HasLeftVibrationMotor = true,
-                HasRightVibrationMotor = true,
-                HasVoiceSupport = (gamepad.Headset != null && !string.IsNullOrEmpty(gamepad.Headset.CaptureDeviceId)),
-                HasBigButton = false //we can't detect the big button from Windows.Gaming.Input.Gamepad, so it's always false
+                isConnected = true;
+                gamePadType = GamePadType.GamePad;
+                buttons |= Buttons.A;
+                buttons |= Buttons.B;
+                buttons |= Buttons.X;
+                buttons |= Buttons.Y;
+                buttons |= Buttons.Back;
+                buttons |= Buttons.Start;
+                buttons |= Buttons.DPadDown;
+                buttons |= Buttons.DPadLeft;
+                buttons |= Buttons.DPadRight;
+                buttons |= Buttons.DPadUp;
+                buttons |= Buttons.LeftShoulder;
+                buttons |= Buttons.RightShoulder;
+                buttons |= Buttons.LeftStick;
+                buttons |= Buttons.RightStick;
+                buttons |= Buttons.LeftTrigger;
+                buttons |= Buttons.RightTrigger;
+                buttons |= Buttons.LeftThumbstickLeft | Buttons.LeftThumbstickRight;
+                buttons |= Buttons.LeftThumbstickDown | Buttons.LeftThumbstickUp;
+                buttons |= Buttons.RightThumbstickLeft | Buttons.RightThumbstickRight;
+                buttons |= Buttons.RightThumbstickDown | Buttons.RightThumbstickUp;
+                hasLeftVibrationMotor = true;
+                hasRightVibrationMotor = true;
+                hasVoiceSupport = (gamepad.Headset != null && !string.IsNullOrEmpty(gamepad.Headset.CaptureDeviceId));
             };
+
+            return new GamePadCapabilities(
+                    gamePadType: gamePadType,
+                    displayName: displayName,
+                    identifier: identifier,
+                    isConnected: isConnected,
+                    buttons: buttons,
+                    hasLeftVibrationMotor: hasLeftVibrationMotor,
+                    hasRightVibrationMotor: hasRightVibrationMotor,
+                    hasVoiceSupport: hasVoiceSupport
+                );
         }
 
         private GamePadState GetDefaultState()

@@ -74,6 +74,80 @@ namespace Microsoft.Xna.Platform.Input
                 );
         }
 
+        private GamePadCapabilities GetCapabilities(GCController controller)
+        {
+            //--
+            GamePadType gamePadType = GamePadType.Unknown;
+            string displayName = String.Empty;
+            string identifier = String.Empty;
+            bool isConnected;
+            Buttons buttons = (Buttons)0;
+            bool hasLeftVibrationMotor = false;
+            bool hasRightVibrationMotor = false;
+            bool hasVoiceSupport = false;
+            //--
+
+            //All iOS controllers have these basics
+            isConnected = false;
+            gamePadType = GamePadType.GamePad;
+
+            if (controller.ExtendedGamepad != null)
+            {
+                buttons |= Buttons.A;
+                buttons |= Buttons.B;
+                buttons |= Buttons.X;
+                buttons |= Buttons.Y;
+                buttons |= Buttons.Back;
+                buttons |= Buttons.DPadUp;
+                buttons |= Buttons.DPadDown;
+                buttons |= Buttons.DPadLeft;
+                buttons |= Buttons.DPadRight;
+                buttons |= Buttons.LeftShoulder;
+                buttons |= Buttons.RightShoulder;
+                buttons |= Buttons.LeftTrigger;
+                buttons |= Buttons.RightTrigger;
+                buttons |= Buttons.LeftThumbstickLeft | Buttons.LeftThumbstickRight;       
+                buttons |= Buttons.LeftThumbstickDown | Buttons.LeftThumbstickUp;
+                buttons |= Buttons.RightThumbstickLeft | Buttons.RightThumbstickRight;
+                buttons |= Buttons.RightThumbstickDown | Buttons.RightThumbstickUp;
+            }
+            else if (controller.Gamepad != null)
+            {
+                buttons |= Buttons.A;
+                buttons |= Buttons.B;
+                buttons |= Buttons.X;
+                buttons |= Buttons.Y;
+                capabilities.HasBackButton = true;
+                buttons |= Buttons.DPadUp;
+                buttons |= Buttons.DPadDown;
+                buttons |= Buttons.DPadLeft;
+                buttons |= Buttons.DPadRight;
+                buttons |= Buttons.LeftShoulder;
+                buttons |= Buttons.RightShoulder;
+            }
+            else if (controller.MicroGamepad != null)
+            {
+                buttons |= Buttons.A;
+                buttons |= Buttons.X;
+                capabilities.HasBackButton = true;
+                buttons |= Buttons.DPadUp;
+                buttons |= Buttons.DPadDown;
+                buttons |= Buttons.DPadLeft;
+                buttons |= Buttons.DPadRight;
+            }
+
+            return new GamePadCapabilities(
+                    gamePadType: gamePadType,
+                    displayName: displayName,
+                    identifier: identifier,
+                    isConnected: isConnected,
+                    buttons: buttons,
+                    hasLeftVibrationMotor: hasLeftVibrationMotor,
+                    hasRightVibrationMotor: hasRightVibrationMotor,
+                    hasVoiceSupport: hasVoiceSupport
+                );
+        }
+
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
@@ -94,7 +168,7 @@ namespace Microsoft.Xna.Platform.Input
 
             AssingIndex(ind);
 
-            foreach  (var controller in GCController.Controllers)
+            foreach (var controller in GCController.Controllers)
             {
                 if (controller == null)
                     continue;
@@ -132,10 +206,8 @@ namespace Microsoft.Xna.Platform.Input
 
                     leftThumbStickPosition.X = controller.ExtendedGamepad.LeftThumbstick.XAxis.Value;
                     leftThumbStickPosition.Y = controller.ExtendedGamepad.LeftThumbstick.YAxis.Value;
-
                     rightThumbStickPosition.X = controller.ExtendedGamepad.RightThumbstick.XAxis.Value;
                     rightThumbStickPosition.Y = controller.ExtendedGamepad.RightThumbstick.YAxis.Value;
-
                     leftTriggerValue = controller.ExtendedGamepad.LeftTrigger.Value;
                     rightTriggerValue = controller.ExtendedGamepad.RightTrigger.Value;
                 }
@@ -180,61 +252,5 @@ namespace Microsoft.Xna.Platform.Input
         {
             return false;
         }
-
-        private GamePadCapabilities GetCapabilities(GCController controller)
-        {
-            //All iOS controllers have these basics
-            var capabilities = new GamePadCapabilities()
-                {
-                    IsConnected = false,
-                    GamePadType = GamePadType.GamePad,
-                };
-            if (controller.ExtendedGamepad != null)
-            {
-                capabilities.HasAButton = true;
-                capabilities.HasBButton = true;
-                capabilities.HasXButton = true;
-                capabilities.HasYButton = true;
-                capabilities.HasBackButton = true;
-                capabilities.HasDPadUpButton = true;
-                capabilities.HasDPadDownButton = true;
-                capabilities.HasDPadLeftButton = true;
-                capabilities.HasDPadRightButton = true;
-                capabilities.HasLeftShoulderButton = true;
-                capabilities.HasRightShoulderButton = true;
-                capabilities.HasLeftTrigger = true;
-                capabilities.HasRightTrigger = true;
-                capabilities.HasLeftXThumbStick = true;
-                capabilities.HasLeftYThumbStick = true;
-                capabilities.HasRightXThumbStick = true;
-                capabilities.HasRightYThumbStick = true;
-            }
-            else if (controller.Gamepad != null)
-            {
-                capabilities.HasAButton = true;
-                capabilities.HasBButton = true;
-                capabilities.HasXButton = true;
-                capabilities.HasYButton = true;
-                capabilities.HasBackButton = true;
-                capabilities.HasDPadUpButton = true;
-                capabilities.HasDPadDownButton = true;
-                capabilities.HasDPadLeftButton = true;
-                capabilities.HasDPadRightButton = true;
-                capabilities.HasLeftShoulderButton = true;
-                capabilities.HasRightShoulderButton = true;
-            }
-            else if (controller.MicroGamepad != null)
-            {
-                capabilities.HasAButton = true;
-                capabilities.HasXButton = true;
-                capabilities.HasBackButton = true;
-                capabilities.HasDPadUpButton = true;
-                capabilities.HasDPadDownButton = true;
-                capabilities.HasDPadLeftButton = true;
-                capabilities.HasDPadRightButton = true;
-            }
-            return capabilities;
-        }
-
     }
 }

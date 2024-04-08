@@ -37,10 +37,20 @@ namespace Microsoft.Xna.Platform.Input
 
         private static GamePadCapabilities CapabilitiesOfDevice(InputDevice device)
         {
-            GamePadCapabilities capabilities = new GamePadCapabilities();
-            capabilities.IsConnected = true;
-            capabilities.GamePadType = GamePadType.GamePad;
-            capabilities.HasLeftVibrationMotor = capabilities.HasRightVibrationMotor = device.Vibrator.HasVibrator;
+            //--
+            GamePadType gamePadType = GamePadType.Unknown;
+            string displayName = String.Empty;
+            string identifier = String.Empty;
+            bool isConnected;
+            Buttons buttons = (Buttons)0;
+            bool hasLeftVibrationMotor = false;
+            bool hasRightVibrationMotor = false;
+            bool hasVoiceSupport = false;
+            //--
+
+            isConnected = true;
+            gamePadType = GamePadType.GamePad;
+            hasLeftVibrationMotor = hasRightVibrationMotor = device.Vibrator.HasVibrator;
 
             // build out supported inputs from what the gamepad exposes
             int[] keyMap = new int[16];
@@ -80,33 +90,42 @@ namespace Microsoft.Xna.Platform.Input
                 hasMap = device.HasKeys(keyMap);
             }
 
-            capabilities.HasAButton = hasMap[0];
-            capabilities.HasBButton = hasMap[1];
-            capabilities.HasXButton = hasMap[2];
-            capabilities.HasYButton = hasMap[3];
+            buttons |= hasMap[0] ? Buttons.A : (Buttons)0;
+            buttons |= hasMap[1] ? Buttons.B : (Buttons)0;
+            buttons |= hasMap[2] ? Buttons.X : (Buttons)0;
+            buttons |= hasMap[3] ? Buttons.Y : (Buttons)0;
 
             // we only check for the thumb button to see if we have 2 thumbsticks
             // if ever a controller doesn't support buttons on the thumbsticks,
             // this will need fixing
-            capabilities.HasLeftXThumbStick = hasMap[4];
-            capabilities.HasLeftYThumbStick = hasMap[4];
-            capabilities.HasRightXThumbStick = hasMap[5];
-            capabilities.HasRightYThumbStick = hasMap[5];
+            buttons |= hasMap[4] ? Buttons.LeftThumbstickLeft| Buttons.LeftThumbstickRight : (Buttons)0;
+            buttons |= hasMap[4] ? Buttons.LeftThumbstickDown| Buttons.LeftThumbstickUp : (Buttons)0;
+            buttons |= hasMap[5] ? Buttons.RightThumbstickLeft | Buttons.RightThumbstickRight : (Buttons)0;
+            buttons |= hasMap[5] ? Buttons.RightThumbstickDown | Buttons.RightThumbstickUp : (Buttons)0;
 
-            capabilities.HasLeftShoulderButton = hasMap[6];
-            capabilities.HasRightShoulderButton = hasMap[7];
-            capabilities.HasLeftTrigger = hasMap[8];
-            capabilities.HasRightTrigger = hasMap[9];
+            buttons |= hasMap[6] ? Buttons.LeftShoulder : (Buttons)0;
+            buttons |= hasMap[7] ? Buttons.RightShoulder : (Buttons)0;
+            buttons |= hasMap[8] ? Buttons.LeftTrigger : (Buttons)0;
+            buttons |= hasMap[9] ? Buttons.RightTrigger : (Buttons)0;
 
-            capabilities.HasDPadDownButton = hasMap[10];
-            capabilities.HasDPadLeftButton = hasMap[11];
-            capabilities.HasDPadRightButton = hasMap[12];
-            capabilities.HasDPadUpButton = hasMap[13];
+            buttons |= hasMap[10] ? Buttons.DPadDown : (Buttons)0;
+            buttons |= hasMap[11] ? Buttons.DPadLeft : (Buttons)0;
+            buttons |= hasMap[12] ? Buttons.DPadRight : (Buttons)0;
+            buttons |= hasMap[13] ? Buttons.DPadUp : (Buttons)0;
 
-            capabilities.HasStartButton = hasMap[14];
-            capabilities.HasBackButton = hasMap[15];
+            buttons |= hasMap[14] ? Buttons.Start : (Buttons)0;
+            buttons |= hasMap[15] ? Buttons.Back : (Buttons)0;
 
-            return capabilities;
+            return new GamePadCapabilities(
+                    gamePadType: gamePadType,
+                    displayName: displayName,
+                    identifier: identifier,
+                    isConnected: isConnected,
+                    buttons: buttons,
+                    hasLeftVibrationMotor: hasLeftVibrationMotor,
+                    hasRightVibrationMotor: hasRightVibrationMotor,
+                    hasVoiceSupport: hasVoiceSupport
+                );
         }
     }
 

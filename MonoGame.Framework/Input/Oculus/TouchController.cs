@@ -83,7 +83,36 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         {
             IOculusInput device = ((ITouchController)this).DeviceHandle;
             if (device != null)
-                return device.GetCapabilities(type);
+            {
+                //--
+                GamePadType gamePadType = GamePadType.Unknown;
+                string displayName = String.Empty;
+                string identifier = String.Empty;
+                bool isConnected = false;
+                Buttons buttons = (Buttons)0;
+                bool hasLeftVibrationMotor = false;
+                bool hasRightVibrationMotor = false;
+                bool hasVoiceSupport = false;
+                //--
+
+                device.GetCapabilities(type,
+                    ref gamePadType, ref displayName, ref identifier, ref isConnected,
+                    ref buttons,
+                    ref hasLeftVibrationMotor, ref hasRightVibrationMotor,
+                    ref hasVoiceSupport
+                    );
+
+                return new GamePadCapabilities(
+                        gamePadType: gamePadType,
+                        displayName: displayName,
+                        identifier: identifier,
+                        isConnected: isConnected,
+                        buttons: buttons,
+                        hasLeftVibrationMotor: hasLeftVibrationMotor,
+                        hasRightVibrationMotor: hasRightVibrationMotor,
+                        hasVoiceSupport: hasVoiceSupport
+                    );
+            }
             else
             {
                 return new GamePadCapabilities(
