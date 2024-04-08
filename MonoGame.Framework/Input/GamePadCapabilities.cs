@@ -4,6 +4,8 @@
 
 // Copyright (C)2024 Nick Kastellanos
 
+using System.Diagnostics;
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
@@ -66,6 +68,35 @@ namespace Microsoft.Xna.Framework.Input
             HasLeftVibrationMotor = hasLeftVibrationMotor;
             HasRightVibrationMotor=hasRightVibrationMotor;
             HasVoiceSupport = hasVoiceSupport;
+        }
+
+        public GamePadCapabilities(
+            GamePadType gamePadType, string displayName, string identifier, bool isConnected,
+            Buttons buttons,
+            bool hasLeftVibrationMotor, bool hasRightVibrationMotor,
+            bool hasVoiceSupport) : this()
+        {
+            bool hasLeftThumbstickLeft = (_hasButtons & Buttons.LeftThumbstickLeft) != Buttons.LeftThumbstickLeft;
+            bool hasLeftThumbstickRight = (_hasButtons & Buttons.LeftThumbstickRight) != Buttons.LeftThumbstickRight;
+            bool hasLeftThumbstickDown = (_hasButtons & Buttons.LeftThumbstickDown) != Buttons.LeftThumbstickDown;
+            bool hasLeftThumbstickUp = (_hasButtons & Buttons.LeftThumbstickUp) != Buttons.LeftThumbstickUp;
+            bool hasRightThumbstickLeft = (_hasButtons & Buttons.RightThumbstickLeft) != Buttons.RightThumbstickLeft;
+            bool hasRightThumbstickRight = (_hasButtons & Buttons.RightThumbstickRight) != Buttons.RightThumbstickRight;
+            bool hasRightThumbstickDown = (_hasButtons & Buttons.RightThumbstickDown) != Buttons.RightThumbstickDown;
+            bool hasRightThumbstickUp = (_hasButtons & Buttons.RightThumbstickUp) != Buttons.RightThumbstickUp;
+            Debug.Assert(hasLeftThumbstickLeft == hasLeftThumbstickRight); // ButtonLeftXThumbStick
+            Debug.Assert(hasLeftThumbstickDown == hasLeftThumbstickUp); // ButtonLeftYThumbStick
+            Debug.Assert(hasRightThumbstickLeft == hasRightThumbstickRight); // ButtonRightXThumbStick
+            Debug.Assert(hasRightThumbstickDown == hasRightThumbstickUp); // ButtonRightYThumbStick
+
+            this._gamePadType = gamePadType;
+            this.DisplayName = displayName;
+            this.Identifier = identifier;
+            this.IsConnected = isConnected;
+            this._hasButtons = buttons;
+            this.HasLeftVibrationMotor = hasLeftVibrationMotor;
+            this.HasRightVibrationMotor = hasRightVibrationMotor;
+            this.HasVoiceSupport = hasVoiceSupport;
         }
 
         /// <summary>
