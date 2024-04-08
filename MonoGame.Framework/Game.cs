@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Framework
         }
 
         [System.Diagnostics.DebuggerNonUserCode]
-        private void AssertNotDisposed()
+        internal void AssertNotDisposed()
         {
             if (_isDisposed)
             {
@@ -477,23 +477,6 @@ namespace Microsoft.Xna.Framework
                 Draw(gameTime);
                 EndDraw();
             }
-        }
-
-        internal void DoInitialize()
-        {
-            AssertNotDisposed();
-
-            if (Strategy.GraphicsDevice == null)
-            {
-                GraphicsDeviceManager gdm = Strategy.GraphicsDeviceManager;
-                if (gdm != null)
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-            }
-
-            Strategy.BeforeInitialize();
-            CallInitialize();
-
-            Strategy.InitializeComponents();
         }
 
         internal void DoExiting()

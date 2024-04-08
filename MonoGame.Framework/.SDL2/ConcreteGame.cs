@@ -27,7 +27,20 @@ namespace Microsoft.Xna.Platform
         {
             if (!_initialized)
             {
-                Game.DoInitialize();
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                this.BeforeInitialize();
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
                 _initialized = true;
             }
 
@@ -44,7 +57,20 @@ namespace Microsoft.Xna.Platform
         {
             if (!_initialized)
             {
-                Game.DoInitialize();
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                this.BeforeInitialize();
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
                 _initialized = true;
             }
 
