@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Windows.ApplicationModel;
 using WGI = Windows.Gaming.Input;
 
 namespace Microsoft.Xna.Platform.Input
@@ -138,9 +139,8 @@ namespace Microsoft.Xna.Platform.Input
 
         private GamePadState GetDefaultState()
         {
-            GamePadState state = new GamePadState();
-            state.Buttons = new GamePadButtons(Back ? Buttons.Back : 0);
-            return state;
+            GamePadButtons buttons = new GamePadButtons((Back) ? Buttons.Back : 0);
+            return base.CreateGamePadState(default(GamePadThumbSticks), default(GamePadTriggers), buttons, default(GamePadDPad));
         }
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
@@ -192,9 +192,8 @@ namespace Microsoft.Xna.Platform.Input
                     state.Buttons.HasFlag(WGI.GamepadButtons.DPadRight) ? ButtonState.Pressed : ButtonState.Released
                 );
 
-            GamePadState result = new GamePadState(sticks, triggers, buttons, dpad);
-            result.PacketNumber = (int)state.Timestamp;
-            return result;
+            return base.CreateGamePadState(sticks, triggers, buttons, dpad,
+                                           packetNumber: (int)state.Timestamp);
         }
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)

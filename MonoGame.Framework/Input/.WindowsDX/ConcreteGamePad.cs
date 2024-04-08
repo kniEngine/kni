@@ -215,9 +215,8 @@ namespace Microsoft.Xna.Platform.Input
 
         private GamePadState GetDefaultState()
         {
-            GamePadState state = new GamePadState();
-            state.Buttons = new GamePadButtons(Back ? Buttons.Back : 0);
-            return state;
+            GamePadButtons buttons = new GamePadButtons((Back) ? Buttons.Back : 0);
+            return base.CreateGamePadState(default(GamePadThumbSticks), default(GamePadTriggers), buttons, default(GamePadDPad));
         }
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
@@ -272,15 +271,12 @@ namespace Microsoft.Xna.Platform.Input
                 leftTrigger: gamepad.LeftTrigger,
                 rightTrigger: gamepad.RightTrigger);
 
-            GamePadState state = new GamePadState(
+            return base.CreateGamePadState(
                 thumbSticks: thumbSticks,
                 triggers: triggers,
                 buttons: buttons,
-                dPad: dpadState);
-
-            state.PacketNumber = packetNumber;
-
-            return state;
+                dPad: dpadState,
+                packetNumber: packetNumber);
         }
 
         private ButtonState ConvertToButtonState(

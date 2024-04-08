@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform.Input
 
                 GamePadThumbSticks thumbSticks = new GamePadThumbSticks(gamePad._leftStick, gamePad._rightStick, leftDeadZoneMode, rightDeadZoneMode);
 
-                state = new GamePadState(
+                state = base.CreateGamePadState(
                     thumbSticks,
                     new GamePadTriggers(gamePad._leftTrigger, gamePad._rightTrigger),
                     new GamePadButtons(gamePad._buttons),
@@ -103,8 +103,8 @@ namespace Microsoft.Xna.Platform.Input
                 if (index == 0 && Back)
                 {
                     // Consume state
-                    state = new GamePadState(new GamePadThumbSticks(), new GamePadTriggers(), new GamePadButtons(Buttons.Back), new GamePadDPad());
-                    state.IsConnected = false;
+                    state = base.CreateGamePadState(new GamePadThumbSticks(), new GamePadTriggers(), new GamePadButtons(Buttons.Back), new GamePadDPad(),
+                        isConnected: false);
                 }
                 else
                     state = new GamePadState();
