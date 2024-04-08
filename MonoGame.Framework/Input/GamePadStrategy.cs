@@ -32,18 +32,18 @@ namespace Microsoft.Xna.Platform.Input
                     );
         }
 
-        public GamePadState CreateGamePadState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadButtons buttons, GamePadDPad dPad)
+        protected GamePadState CreateGamePadState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadButtons buttons, GamePadDPad dPad)
         {
             return new GamePadState(thumbSticks, triggers, buttons, dPad);
         }
-        public GamePadState CreateGamePadState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadButtons buttons, GamePadDPad dPad,
+        protected GamePadState CreateGamePadState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadButtons buttons, GamePadDPad dPad,
             int packetNumber)
         {
             GamePadState state = new GamePadState(thumbSticks, triggers, buttons, dPad);
             state.PacketNumber = packetNumber;
             return state;
         }
-        public GamePadState CreateGamePadState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadButtons buttons, GamePadDPad dPad,
+        protected GamePadState CreateGamePadState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadButtons buttons, GamePadDPad dPad,
             bool isConnected)
         {
             GamePadState state = new GamePadState(thumbSticks, triggers, buttons, dPad);
