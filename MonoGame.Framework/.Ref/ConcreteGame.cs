@@ -28,11 +28,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override void Android_BeforeUpdate()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         internal override void OnPresentationChanged(PresentationParameters pp)
         {
             throw new PlatformNotSupportedException();

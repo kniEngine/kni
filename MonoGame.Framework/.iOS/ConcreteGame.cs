@@ -248,10 +248,6 @@ namespace Microsoft.Xna.Platform
             _viewController.View.Present();
         }
 
-        public override void Android_BeforeUpdate()
-        {
-        }
-
         public override void Exit()
         {
             throw new PlatformNotSupportedException("iOS platform does not allow programmatically closing.");

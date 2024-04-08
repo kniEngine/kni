@@ -115,7 +115,6 @@ namespace Microsoft.Xna.Platform
             // DoUpdate
             {
                 this.Game.AssertNotDisposed();
-                this.Android_BeforeUpdate();
                 ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
                 this.Game.CallUpdate(new GameTime());
             }
@@ -150,10 +149,6 @@ namespace Microsoft.Xna.Platform
         {
             // BlazorGL games do not "exit" or shut down.
             throw new PlatformNotSupportedException();
-        }
-
-        public override void Android_BeforeUpdate()
-        {
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
