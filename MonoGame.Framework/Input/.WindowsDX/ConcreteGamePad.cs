@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Platform.Input
             // the timeout to elapsed before we test it again.
             if (!_connected[index] && !HasDisconnectedTimeoutElapsed(index))
             {
-                return new GamePadCapabilities(
+                return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
                         displayName: null,
                         identifier: null,
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Input
             if (!_connected[index])
             {
                 SetDisconnectedTimeout(index);
-                return new GamePadCapabilities(
+                return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
                         displayName: null,
                         identifier: null,
@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     _connected[index] = false;
                     SetDisconnectedTimeout(index);
-                    return new GamePadCapabilities(
+                    return base.CreateGamePadCapabilities(
                             gamePadType: GamePadType.Unknown,
                             displayName: null,
                             identifier: null,
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Platform.Input
             isConnected = controller.IsConnected;
             hasVoiceSupport = (capabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
             
-            return new GamePadCapabilities(
+            return base.CreateGamePadCapabilities(
                     gamePadType: gamePadType,
                     displayName: displayName,
                     identifier: identifier,

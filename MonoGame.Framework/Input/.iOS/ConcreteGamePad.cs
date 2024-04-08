@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Input
                     return GetCapabilities(controller);
             }
 
-            return new GamePadCapabilities(
+            return base.CreateGamePadCapabilities(
                     gamePadType: GamePadType.Unknown,
                     displayName: null,
                     identifier: null,
@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Input
                 buttons |= Buttons.RightShoulder;
             }
 
-            return new GamePadCapabilities(
+            return base.CreateGamePadCapabilities(
                     gamePadType: gamePadType,
                     displayName: displayName,
                     identifier: identifier,

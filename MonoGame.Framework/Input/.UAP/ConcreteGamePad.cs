@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Input
             WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
             {
-                return new GamePadCapabilities(
+                return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
                         displayName: null,
                         identifier: null,
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Platform.Input
                 hasVoiceSupport = (gamepad.Headset != null && !string.IsNullOrEmpty(gamepad.Headset.CaptureDeviceId));
             };
 
-            return new GamePadCapabilities(
+            return base.CreateGamePadCapabilities(
                     gamePadType: gamePadType,
                     displayName: displayName,
                     identifier: identifier,

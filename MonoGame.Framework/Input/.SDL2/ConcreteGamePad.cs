@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (!Gamepads.ContainsKey(index))
             {
-                return new GamePadCapabilities(
+                return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
                         displayName: null,
                         identifier: null,
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Input
 
             ParseCapabilities(gamecontroller, ref buttons);
 
-            return new GamePadCapabilities(
+            return base.CreateGamePadCapabilities(
                     gamePadType: gamePadType,
                     displayName: displayName,
                     identifier: identifier,

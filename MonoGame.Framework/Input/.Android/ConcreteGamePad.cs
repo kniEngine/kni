@@ -25,108 +25,15 @@ namespace Microsoft.Xna.Platform.Input
 
         public readonly GamePadCapabilities _capabilities;
 
-        public AndroidGamePad(InputDevice device)
+        public AndroidGamePad(InputDevice device, GamePadCapabilities caps)
         {
             _device = device;
             _deviceId = device.Id;
             _descriptor = device.Descriptor;
             _isConnected = true;
-
-            _capabilities = CapabilitiesOfDevice(device);
+            _capabilities = caps;
         }
 
-        private static GamePadCapabilities CapabilitiesOfDevice(InputDevice device)
-        {
-            //--
-            GamePadType gamePadType = GamePadType.Unknown;
-            string displayName = String.Empty;
-            string identifier = String.Empty;
-            bool isConnected;
-            Buttons buttons = (Buttons)0;
-            bool hasLeftVibrationMotor = false;
-            bool hasRightVibrationMotor = false;
-            bool hasVoiceSupport = false;
-            //--
-
-            isConnected = true;
-            gamePadType = GamePadType.GamePad;
-            hasLeftVibrationMotor = hasRightVibrationMotor = device.Vibrator.HasVibrator;
-
-            // build out supported inputs from what the gamepad exposes
-            int[] keyMap = new int[16];
-            keyMap[0] = (int)Keycode.ButtonA;
-            keyMap[1] = (int)Keycode.ButtonB;
-            keyMap[2] = (int)Keycode.ButtonX;
-            keyMap[3] = (int)Keycode.ButtonY;
-
-            keyMap[4] = (int)Keycode.ButtonThumbl;
-            keyMap[5] = (int)Keycode.ButtonThumbr;
-
-            keyMap[6] = (int)Keycode.ButtonL1;
-            keyMap[7] = (int)Keycode.ButtonR1;
-            keyMap[8] = (int)Keycode.ButtonL2;
-            keyMap[9] = (int)Keycode.ButtonR2;
-
-            keyMap[10] = (int)Keycode.DpadDown;
-            keyMap[11] = (int)Keycode.DpadLeft;
-            keyMap[12] = (int)Keycode.DpadRight;
-            keyMap[13] = (int)Keycode.DpadUp;
-
-            keyMap[14] = (int)Keycode.ButtonStart;
-            keyMap[15] = (int)Keycode.Back;
-
-            // get a bool[] with indices matching the keyMap
-            bool[] hasMap = new bool[16];
-            // HasKeys() was defined in Kitkat / API19 / Android 4.4
-            if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Kitkat)
-            {
-                Keycode[] keyMap2 = new Keycode[keyMap.Length];
-                for(int i=0; i<keyMap.Length;i++)
-                    keyMap2[i] = (Keycode)keyMap[i];
-                hasMap = KeyCharacterMap.DeviceHasKeys(keyMap2);
-            }
-            else
-            {
-                hasMap = device.HasKeys(keyMap);
-            }
-
-            buttons |= hasMap[0] ? Buttons.A : (Buttons)0;
-            buttons |= hasMap[1] ? Buttons.B : (Buttons)0;
-            buttons |= hasMap[2] ? Buttons.X : (Buttons)0;
-            buttons |= hasMap[3] ? Buttons.Y : (Buttons)0;
-
-            // we only check for the thumb button to see if we have 2 thumbsticks
-            // if ever a controller doesn't support buttons on the thumbsticks,
-            // this will need fixing
-            buttons |= hasMap[4] ? Buttons.LeftThumbstickLeft| Buttons.LeftThumbstickRight : (Buttons)0;
-            buttons |= hasMap[4] ? Buttons.LeftThumbstickDown| Buttons.LeftThumbstickUp : (Buttons)0;
-            buttons |= hasMap[5] ? Buttons.RightThumbstickLeft | Buttons.RightThumbstickRight : (Buttons)0;
-            buttons |= hasMap[5] ? Buttons.RightThumbstickDown | Buttons.RightThumbstickUp : (Buttons)0;
-
-            buttons |= hasMap[6] ? Buttons.LeftShoulder : (Buttons)0;
-            buttons |= hasMap[7] ? Buttons.RightShoulder : (Buttons)0;
-            buttons |= hasMap[8] ? Buttons.LeftTrigger : (Buttons)0;
-            buttons |= hasMap[9] ? Buttons.RightTrigger : (Buttons)0;
-
-            buttons |= hasMap[10] ? Buttons.DPadDown : (Buttons)0;
-            buttons |= hasMap[11] ? Buttons.DPadLeft : (Buttons)0;
-            buttons |= hasMap[12] ? Buttons.DPadRight : (Buttons)0;
-            buttons |= hasMap[13] ? Buttons.DPadUp : (Buttons)0;
-
-            buttons |= hasMap[14] ? Buttons.Start : (Buttons)0;
-            buttons |= hasMap[15] ? Buttons.Back : (Buttons)0;
-
-            return new GamePadCapabilities(
-                    gamePadType: gamePadType,
-                    displayName: displayName,
-                    identifier: identifier,
-                    isConnected: isConnected,
-                    buttons: buttons,
-                    hasLeftVibrationMotor: hasLeftVibrationMotor,
-                    hasRightVibrationMotor: hasRightVibrationMotor,
-                    hasVoiceSupport: hasVoiceSupport
-                );
-        }
     }
 
     public sealed class ConcreteGamePad : GamePadStrategy
@@ -154,7 +61,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // we need to add the default "no gamepad connected but the user hit back"
             // behaviour here
-            return new GamePadCapabilities(
+            return base.CreateGamePadCapabilities(
                     gamePadType: GamePadType.Unknown,
                     displayName: null,
                     identifier: null,
@@ -242,7 +149,8 @@ namespace Microsoft.Xna.Platform.Input
                 else if (pad == null)
                 {
                     Android.Util.Log.Debug("MonoGame", "Found new controller [" + i + "] " + device.Name);
-                    pad = new AndroidGamePad(device);
+                    GamePadCapabilities caps = CapabilitiesOfDevice(device);
+                    pad = new AndroidGamePad(device, caps);
                     GamePads[i] = pad;
                     return pad;
                 }
@@ -257,7 +165,8 @@ namespace Microsoft.Xna.Platform.Input
             if (firstDisconnectedPadId >= 0)
             {
                 Android.Util.Log.Debug("MonoGame", "Found new controller in place of disconnected controller [" + firstDisconnectedPadId + "] " + device.Name);
-                AndroidGamePad pad = new AndroidGamePad(device);
+                GamePadCapabilities caps = CapabilitiesOfDevice(device);
+                AndroidGamePad pad = new AndroidGamePad(device, caps);
                 GamePads[firstDisconnectedPadId] = pad;
                 return pad;
             }
@@ -400,6 +309,99 @@ namespace Microsoft.Xna.Platform.Input
             {
                 GetGamePad(InputDevice.GetDevice(deviceId));
             }
+        }
+
+        private GamePadCapabilities CapabilitiesOfDevice(InputDevice device)
+        {
+            //--
+            GamePadType gamePadType = GamePadType.Unknown;
+            string displayName = String.Empty;
+            string identifier = String.Empty;
+            bool isConnected;
+            Buttons buttons = (Buttons)0;
+            bool hasLeftVibrationMotor = false;
+            bool hasRightVibrationMotor = false;
+            bool hasVoiceSupport = false;
+            //--
+
+            isConnected = true;
+            gamePadType = GamePadType.GamePad;
+            hasLeftVibrationMotor = hasRightVibrationMotor = device.Vibrator.HasVibrator;
+
+            // build out supported inputs from what the gamepad exposes
+            int[] keyMap = new int[16];
+            keyMap[0] = (int)Keycode.ButtonA;
+            keyMap[1] = (int)Keycode.ButtonB;
+            keyMap[2] = (int)Keycode.ButtonX;
+            keyMap[3] = (int)Keycode.ButtonY;
+
+            keyMap[4] = (int)Keycode.ButtonThumbl;
+            keyMap[5] = (int)Keycode.ButtonThumbr;
+
+            keyMap[6] = (int)Keycode.ButtonL1;
+            keyMap[7] = (int)Keycode.ButtonR1;
+            keyMap[8] = (int)Keycode.ButtonL2;
+            keyMap[9] = (int)Keycode.ButtonR2;
+
+            keyMap[10] = (int)Keycode.DpadDown;
+            keyMap[11] = (int)Keycode.DpadLeft;
+            keyMap[12] = (int)Keycode.DpadRight;
+            keyMap[13] = (int)Keycode.DpadUp;
+
+            keyMap[14] = (int)Keycode.ButtonStart;
+            keyMap[15] = (int)Keycode.Back;
+
+            // get a bool[] with indices matching the keyMap
+            bool[] hasMap = new bool[16];
+            // HasKeys() was defined in Kitkat / API19 / Android 4.4
+            if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Kitkat)
+            {
+                Keycode[] keyMap2 = new Keycode[keyMap.Length];
+                for (int i = 0; i < keyMap.Length; i++)
+                    keyMap2[i] = (Keycode)keyMap[i];
+                hasMap = KeyCharacterMap.DeviceHasKeys(keyMap2);
+            }
+            else
+            {
+                hasMap = device.HasKeys(keyMap);
+            }
+
+            buttons |= hasMap[0] ? Buttons.A : (Buttons)0;
+            buttons |= hasMap[1] ? Buttons.B : (Buttons)0;
+            buttons |= hasMap[2] ? Buttons.X : (Buttons)0;
+            buttons |= hasMap[3] ? Buttons.Y : (Buttons)0;
+
+            // we only check for the thumb button to see if we have 2 thumbsticks
+            // if ever a controller doesn't support buttons on the thumbsticks,
+            // this will need fixing
+            buttons |= hasMap[4] ? Buttons.LeftThumbstickLeft | Buttons.LeftThumbstickRight : (Buttons)0;
+            buttons |= hasMap[4] ? Buttons.LeftThumbstickDown | Buttons.LeftThumbstickUp : (Buttons)0;
+            buttons |= hasMap[5] ? Buttons.RightThumbstickLeft | Buttons.RightThumbstickRight : (Buttons)0;
+            buttons |= hasMap[5] ? Buttons.RightThumbstickDown | Buttons.RightThumbstickUp : (Buttons)0;
+
+            buttons |= hasMap[6] ? Buttons.LeftShoulder : (Buttons)0;
+            buttons |= hasMap[7] ? Buttons.RightShoulder : (Buttons)0;
+            buttons |= hasMap[8] ? Buttons.LeftTrigger : (Buttons)0;
+            buttons |= hasMap[9] ? Buttons.RightTrigger : (Buttons)0;
+
+            buttons |= hasMap[10] ? Buttons.DPadDown : (Buttons)0;
+            buttons |= hasMap[11] ? Buttons.DPadLeft : (Buttons)0;
+            buttons |= hasMap[12] ? Buttons.DPadRight : (Buttons)0;
+            buttons |= hasMap[13] ? Buttons.DPadUp : (Buttons)0;
+
+            buttons |= hasMap[14] ? Buttons.Start : (Buttons)0;
+            buttons |= hasMap[15] ? Buttons.Back : (Buttons)0;
+
+            return base.CreateGamePadCapabilities(
+                    gamePadType: gamePadType,
+                    displayName: displayName,
+                    identifier: identifier,
+                    isConnected: isConnected,
+                    buttons: buttons,
+                    hasLeftVibrationMotor: hasLeftVibrationMotor,
+                    hasRightVibrationMotor: hasRightVibrationMotor,
+                    hasVoiceSupport: hasVoiceSupport
+                );
         }
     }
 }
