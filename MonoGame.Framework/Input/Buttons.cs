@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 
@@ -18,136 +18,136 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Directional pad up.
         /// </summary>
-        DPadUp = 1,
+        DPadUp = 1 << 0,
 
         /// <summary>
         /// Directional pad down.
         /// </summary>
-        DPadDown = 2,
+        DPadDown = 1 << 1,
 
         /// <summary>
         /// Directional pad left.
         /// </summary>
-        DPadLeft = 4,
+        DPadLeft = 1 << 2,
 
         /// <summary>
         /// Directional pad right.
         /// </summary>
-        DPadRight = 8,
+        DPadRight = 1 << 3,
 
         /// <summary>
         /// START button.
         /// </summary>
-        Start = 16,
+        Start = 1 << 4,
       
         /// <summary>
         /// BACK button.
         /// </summary>
-        Back = 32,
+        Back = 1 << 5,
 
         /// <summary>
         /// Left stick button (pressing the left stick).
         /// </summary>
-        LeftStick = 64,
+        LeftStick = 1 << 6,
 
         /// <summary>
         /// Right stick button (pressing the right stick).
         /// </summary>
-        RightStick = 128,
+        RightStick = 1 << 7,
 
         /// <summary>
         /// Left bumper (shoulder) button.
         /// </summary>
-        LeftShoulder = 256,
+        LeftShoulder = 1 << 8,
 
         /// <summary>
         /// Right bumper (shoulder) button.
         /// </summary>
-        RightShoulder = 512,
+        RightShoulder = 1 << 9,
 
         /// <summary>
         /// Big button.
         /// </summary>    
-        BigButton = 2048,
+        BigButton = 1 << 11,
        
         /// <summary>
         /// A button.
         /// </summary>
-        A = 4096,
+        A = 1 << 12,
 
         /// <summary>
         /// B button.
         /// </summary>
-        B = 8192,
+        B = 1 << 13,
 
         /// <summary>
         /// X button.
         /// </summary>
-        X = 16384,
+        X = 1 << 14,
 
         /// <summary>
         /// Y button.
         /// </summary>
-        Y = 32768,    
+        Y = 1 << 15,    
 
         /// <summary>
         /// Left grip.
         /// </summary>
-        LeftGrip = 524288,
+        LeftGrip = 1 << 19,
 
         /// <summary>
         /// Right grip.
         /// </summary>
-        RightGrip = 1048576,
+        RightGrip = 1 << 20,
 
         /// <summary>
         /// Left stick is towards the left.
         /// </summary>
-        LeftThumbstickLeft = 2097152,
+        LeftThumbstickLeft = 1 << 21,
 
         /// <summary>
         /// Right trigger.
         /// </summary>
-        RightTrigger = 4194304,
+        RightTrigger = 1 << 22,
 
         /// <summary>
         /// Left trigger.
         /// </summary>
-        LeftTrigger = 8388608,
+        LeftTrigger = 1 << 23,
 
         /// <summary>
         /// Right stick is towards up.
         /// </summary>   
-        RightThumbstickUp = 16777216,
+        RightThumbstickUp = 1 << 24,
 
         /// <summary>
         /// Right stick is towards down.
         /// </summary>   
-        RightThumbstickDown = 33554432,
+        RightThumbstickDown = 1 << 25,
 
         /// <summary>
         /// Right stick is towards the right.
         /// </summary>
-        RightThumbstickRight = 67108864,
+        RightThumbstickRight = 1 << 26,
 
         /// <summary>
         /// Right stick is towards the left.
         /// </summary>
-        RightThumbstickLeft = 134217728,
+        RightThumbstickLeft = 1 << 27,
 
         /// <summary>
         /// Left stick is towards up.
         /// </summary>  
-        LeftThumbstickUp = 268435456,
+        LeftThumbstickUp = 1 << 28,
 
         /// <summary>
         /// Left stick is towards down.
         /// </summary>  
-        LeftThumbstickDown = 536870912,
+        LeftThumbstickDown = 1 << 29,
 
         /// <summary>
         /// Left stick is towards the right.
         /// </summary>
-        LeftThumbstickRight = 1073741824
+        LeftThumbstickRight = 1 << 30
     }
 }
