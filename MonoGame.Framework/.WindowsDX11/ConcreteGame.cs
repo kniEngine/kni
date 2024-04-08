@@ -36,13 +36,13 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
 
             //Not quite right..
             Game.Tick();
 
-            Game.DoEndRun();
+            Game.CallEndRun();
         }
 
         internal override void Run()
@@ -53,14 +53,14 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
             // XNA runs one Update even before showing the window
             Game.DoUpdate(new GameTime());
 
             _gameWindow.RunLoop();
 
-            Game.DoEndRun();
+            Game.CallEndRun();
             Game.DoExiting();
         }
 

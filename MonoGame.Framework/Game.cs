@@ -282,16 +282,6 @@ namespace Microsoft.Xna.Framework
 
             Strategy.Run_UAP_XAML();
         }
-
-        internal void DoBeginRun()
-        {
-            BeginRun();
-        }
-
-        internal void DoEndRun()
-        {
-            EndRun();
-        }
         
         /// <summary>
         /// Run one iteration of the game loop.
@@ -437,6 +427,26 @@ namespace Microsoft.Xna.Framework
 
         #region Internal Methods
 
+        internal void CallInitialize()
+        {
+            this.Initialize();
+        }
+
+        internal void CallBeginRun()
+        {
+            this.BeginRun();
+        }
+
+        internal void CallUpdate(GameTime gameTime)
+        {
+            this.Update(gameTime);
+        }
+
+        internal void CallEndRun()
+        {
+            this.EndRun();
+        }
+
         internal void DoUpdate(GameTime gameTime)
         {
             AssertNotDisposed();
@@ -445,7 +455,7 @@ namespace Microsoft.Xna.Framework
 
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
 
-            Update(gameTime);
+            CallUpdate(gameTime);
         }
 
         internal void DoDraw(GameTime gameTime)
@@ -481,7 +491,7 @@ namespace Microsoft.Xna.Framework
             }
 
             Strategy.BeforeInitialize();
-            Initialize();
+            CallInitialize();
 
             Strategy.InitializeComponents();
         }

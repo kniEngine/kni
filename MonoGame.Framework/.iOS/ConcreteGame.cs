@@ -105,13 +105,13 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
 
             //Not quite right..
             Game.Tick();
 
-            Game.DoEndRun();
+            Game.CallEndRun();
         }
 
         internal override void Run()
@@ -122,12 +122,12 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
 
             StartRunLoop();
 
-            //Game.DoEndRun();
+            //Game.CallEndRun();
             //Game.DoExiting();
         }
 

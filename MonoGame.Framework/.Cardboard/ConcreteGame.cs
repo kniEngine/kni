@@ -172,13 +172,13 @@ namespace Microsoft.Xna.Platform
             //    _initialized = true;
             //}
 
-            //Game.DoBeginRun();
+            //Game.CallBeginRun();
             //Timer = Stopwatch.StartNew();
 
             //Not quite right..
             //Game.Tick();
 
-            //Game.DoEndRun();
+            //Game.CallEndRun();
         }
 
         internal override void Run()
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform
             // Signal the game loop to initialize the game loop.
             _gameWindow.GameView.BeforeRun();
 
-            Game.DoBeginRun();
+            Game.CallBeginRun();
             Timer = Stopwatch.StartNew();
 
             // Prevent the default run loop from starting.
@@ -197,7 +197,7 @@ namespace Microsoft.Xna.Platform
             // StartRunLoop
             //_gameWindow.GameView.Resume();
 
-            //Game.DoEndRun();
+            //Game.CallEndRun();
             //Game.DoExiting();
         }
 
