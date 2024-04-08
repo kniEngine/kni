@@ -44,16 +44,16 @@ namespace Microsoft.Xna.Platform
                 // BeforeInitialize
                 {
                     GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                    if (gdm == null)
+                    if (gdm != null)
+                    {
+                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+                        _gameWindow.Initialize(pp);
+                    }
+                    else
                     {
                         _gameWindow.Initialize(
                             GraphicsDeviceManager.DefaultBackBufferWidth,
                             GraphicsDeviceManager.DefaultBackBufferHeight);
-                    }
-                    else
-                    {
-                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
-                        _gameWindow.Initialize(pp);
                     }
                 }
 
@@ -89,16 +89,16 @@ namespace Microsoft.Xna.Platform
                 // BeforeInitialize
                 {
                     GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                    if (gdm == null)
+                    if (gdm != null)
+                    {
+                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+                        _gameWindow.Initialize(pp);
+                    }
+                    else
                     {
                         _gameWindow.Initialize(
                             GraphicsDeviceManager.DefaultBackBufferWidth,
                             GraphicsDeviceManager.DefaultBackBufferHeight);
-                    }
-                    else
-                    {
-                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
-                        _gameWindow.Initialize(pp);
                     }
                 }
 
