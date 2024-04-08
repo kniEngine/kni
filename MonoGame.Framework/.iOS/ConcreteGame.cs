@@ -165,11 +165,6 @@ namespace Microsoft.Xna.Platform
             //Game.DoExiting();
         }
 
-        public override void Tick()
-        {
-            base.Tick();
-        }
-
         // FIXME: VideoPlayer 'needs' this to set up its own movie player view
         //        controller.
         public iOSGameViewController ViewController

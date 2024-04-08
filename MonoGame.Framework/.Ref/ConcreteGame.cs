@@ -23,11 +23,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override void Tick()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         public override void TickExiting()
         {
             throw new PlatformNotSupportedException();

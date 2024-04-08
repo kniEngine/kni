@@ -250,10 +250,5 @@ namespace Microsoft.Xna.Platform
             //Game.CallEndRun();
             //Game.DoExiting();
         }
-
-        public override void Tick()
-        {
-            base.Tick();
-        }
     }
 }

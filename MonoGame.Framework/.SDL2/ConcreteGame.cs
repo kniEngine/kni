@@ -95,11 +95,6 @@ namespace Microsoft.Xna.Platform
             Game.DoExiting();
         }
 
-        public override void Tick()
-        {
-            base.Tick();
-        }
-
 
         private bool _isExiting;
 
