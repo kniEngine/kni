@@ -1,6 +1,7 @@
 ﻿// Copyright (C)2024 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace Microsoft.Xna.Platform.Input
@@ -49,6 +50,11 @@ namespace Microsoft.Xna.Platform.Input
             GamePadState state = new GamePadState(thumbSticks, triggers, buttons, dPad);
             state.IsConnected = isConnected;
             return state;
+        }
+
+        protected GamePadThumbSticks CreateGamePadThumbSticks(Vector2 leftPosition, Vector2 rightPosition, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
+        {
+            return new GamePadThumbSticks(leftPosition, rightPosition, leftDeadZoneMode, rightDeadZoneMode);
         }
     }
 }

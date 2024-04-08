@@ -250,7 +250,7 @@ namespace Microsoft.Xna.Platform.Input
                 return GetDefaultState();
             }
 
-            GamePadThumbSticks thumbSticks = new GamePadThumbSticks(
+            GamePadThumbSticks thumbSticks = base.CreateGamePadThumbSticks(
                 leftPosition: new Vector2(gamepad.LeftThumbX, gamepad.LeftThumbY) / (float)short.MaxValue,
                 rightPosition: new Vector2(gamepad.RightThumbX, gamepad.RightThumbY) / (float)short.MaxValue,
                     leftDeadZoneMode: leftDeadZoneMode,
