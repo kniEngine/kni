@@ -84,37 +84,34 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
+                // BeforeInitialize
+                {
+                    DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+                    switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
+                    {
+                        case Android.Content.Res.Orientation.Portrait:
+                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                                                            ? DisplayOrientation.PortraitDown
+                                                            : DisplayOrientation.Portrait,
+                                                            false);
+                            break;
+                        default:
+                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                                                            ? DisplayOrientation.LandscapeRight
+                                                            : DisplayOrientation.LandscapeLeft,
+                                                            false);
+                            break;
+                    }
+                    _gameWindow._touchEventListener = new TouchEventListener();
+                    _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
+                }
+
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
 
                 _initialized = true;
             }
-        }
-
-        private void BeforeInitialize()
-        {
-            DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
-
-            switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
-            {
-                case Android.Content.Res.Orientation.Portrait:
-                    this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
-                                                    ? DisplayOrientation.PortraitDown 
-                                                    : DisplayOrientation.Portrait,
-                                                    false);
-                    break;
-                default:
-                    this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
-                                                    ? DisplayOrientation.LandscapeRight 
-                                                    : DisplayOrientation.LandscapeLeft,
-                                                    false);
-                    break;
-            }
-
-            _gameWindow._touchEventListener = new TouchEventListener();
-            _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
         }
 
         public override void Initialize()
@@ -196,7 +193,28 @@ namespace Microsoft.Xna.Platform
             //            ((IGraphicsDeviceManager)gdm).CreateDevice();
             //    }
             //
-            //    this.BeforeInitialize();
+            //    // BeforeInitialize
+            //    {
+            //        DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+            //        switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
+            //        {
+            //            case Android.Content.Res.Orientation.Portrait:
+            //                this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+            //                                                ? DisplayOrientation.PortraitDown
+            //                                                : DisplayOrientation.Portrait,
+            //                                                false);
+            //                break;
+            //            default:
+            //                this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+            //                                                ? DisplayOrientation.LandscapeRight
+            //                                                : DisplayOrientation.LandscapeLeft,
+            //                                                false);
+            //                break;
+            //        }
+            //        _gameWindow._touchEventListener = new TouchEventListener();
+            //        _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
+            //    }
+            //
             //    this.Game.CallInitialize();
             //
             //    this.InitializeComponents();

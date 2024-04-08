@@ -148,7 +148,6 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -178,7 +177,6 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -216,7 +214,6 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -273,10 +270,6 @@ namespace Microsoft.Xna.Platform
                 coreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Low, OnRenderFrame);
             else
                 coreWindow.Dispatcher.RunIdleAsync(OnRenderFrame);
-        }
-
-        private void BeforeInitialize()
-        {
         }
 
         public override void TickExiting()

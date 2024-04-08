@@ -36,7 +36,12 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
+                // BeforeInitialize
+                {
+                    bool isExiting = _gameWindow.SdlRunLoop();
+                    _isExiting |= isExiting;
+                }
+
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -66,7 +71,12 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
+                // BeforeInitialize
+                {
+                    bool isExiting = _gameWindow.SdlRunLoop();
+                    _isExiting |= isExiting;
+                }
+
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -119,12 +129,6 @@ namespace Microsoft.Xna.Platform
                 Mouse.WindowHandle = base.Window.Handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
-        }
-
-        private void BeforeInitialize()
-        {
-            bool isExiting = _gameWindow.SdlRunLoop();
-            _isExiting |= isExiting;
         }
 
         public override void Initialize()

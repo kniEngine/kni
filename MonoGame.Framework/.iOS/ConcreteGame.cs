@@ -110,7 +110,11 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
+                // BeforeInitialize
+                {
+                    _viewController.View.LayoutSubviews();
+                }
+
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -140,7 +144,11 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
+                // BeforeInitialize
+                {
+                    _viewController.View.LayoutSubviews();
+                }
+
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -196,11 +204,6 @@ namespace Microsoft.Xna.Platform
                 }
             }
             
-        }
-
-        private void BeforeInitialize()
-        {
-            _viewController.View.LayoutSubviews();
         }
 
         public override void Initialize()

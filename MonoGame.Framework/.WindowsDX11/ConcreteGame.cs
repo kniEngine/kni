@@ -41,7 +41,22 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
+                // BeforeInitialize
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm == null)
+                    {
+                        _gameWindow.Initialize(
+                            GraphicsDeviceManager.DefaultBackBufferWidth,
+                            GraphicsDeviceManager.DefaultBackBufferHeight);
+                    }
+                    else
+                    {
+                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+                        _gameWindow.Initialize(pp);
+                    }
+                }
+
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -71,7 +86,22 @@ namespace Microsoft.Xna.Platform
                         ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                this.BeforeInitialize();
+                // BeforeInitialize
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm == null)
+                    {
+                        _gameWindow.Initialize(
+                            GraphicsDeviceManager.DefaultBackBufferWidth,
+                            GraphicsDeviceManager.DefaultBackBufferHeight);
+                    }
+                    else
+                    {
+                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+                        _gameWindow.Initialize(pp);
+                    }
+                }
+
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -107,23 +137,7 @@ namespace Microsoft.Xna.Platform
                 }
             }
         }
-
-        private void BeforeInitialize()
-        {
-            GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-            if (gdm == null)
-            {
-                _gameWindow.Initialize(
-                    GraphicsDeviceManager.DefaultBackBufferWidth,
-                    GraphicsDeviceManager.DefaultBackBufferHeight);
-            }
-            else
-            {
-                PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
-                _gameWindow.Initialize(pp);
-            }
-        }
-        
+                
         public override void TickExiting()
         {
             if (_gameWindow != null)
