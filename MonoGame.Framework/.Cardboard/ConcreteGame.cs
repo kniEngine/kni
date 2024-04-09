@@ -248,5 +248,13 @@ namespace Microsoft.Xna.Platform
             //Game.CallEndRun();
             //Game.DoExiting();
         }
+
+        internal void OnFrameTick()
+        {
+            if (this.IsActivityActive)
+            {
+                this.Game.Tick();
+            }
+        }
     }
 }

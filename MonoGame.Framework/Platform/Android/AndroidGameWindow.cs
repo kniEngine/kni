@@ -82,10 +82,7 @@ namespace Microsoft.Xna.Framework
 
             if (_game != null && !ScreenReceiver.ScreenLocked)
             {
-                if (((ConcreteGame)_game.Strategy).IsActivityActive)
-                {
-                    _game.Tick();
-                }
+                ((ConcreteGame)_game.Strategy).OnFrameTick();
             }
         }
 
