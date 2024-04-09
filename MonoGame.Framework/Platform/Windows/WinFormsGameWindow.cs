@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Windows;
 using Microsoft.Xna.Platform;
 using SysDrawing = System.Drawing;
@@ -31,7 +32,8 @@ namespace Microsoft.Xna.Framework
             return _instances[handle];
         }
 
-        internal WinFormsGameForm Form;
+        private IntPtr _handle;
+        private WinFormsGameForm Form;
 
         private ConcreteGame _concreteGame;
         private Game _game;
@@ -55,7 +57,7 @@ namespace Microsoft.Xna.Framework
 
         #region Public Properties
 
-        public override IntPtr Handle { get { return Form.Handle; } }
+        public override IntPtr Handle { get { return _handle; } }
 
         public override string ScreenDeviceName { get { return String.Empty; } }
 
@@ -133,7 +135,7 @@ namespace Microsoft.Xna.Framework
             _game = concreteGame.Game;
 
             Form = new WinFormsGameForm(this);
-
+            _handle = Form.Handle;
             _instances.Add(this.Handle, this);
 
             ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
@@ -428,11 +430,13 @@ namespace Microsoft.Xna.Framework
 
         void Dispose(bool disposing)
         {
-            if (Form != null)
-                _instances.Remove(this.Handle);
-
             if (Mouse.WindowHandle == this.Handle)
                 Mouse.WindowHandle = IntPtr.Zero;
+            if (TouchPanel.WindowHandle == this.Handle)
+                TouchPanel.WindowHandle = IntPtr.Zero;
+
+            _instances.Remove(this.Handle);
+            _handle = IntPtr.Zero;
 
             if (disposing)
             {
