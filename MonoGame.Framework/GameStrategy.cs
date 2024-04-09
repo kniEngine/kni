@@ -256,11 +256,6 @@ namespace Microsoft.Xna.Platform
 
         internal abstract void Run();
 
-        internal virtual void Run_UAP_XAML()
-        {
-            throw new PlatformNotSupportedException("This method is valid only for the UAP/XAML template.");
-        }
-
         public virtual void Initialize()
         {
             // According to the information given on MSDN (see link below), all

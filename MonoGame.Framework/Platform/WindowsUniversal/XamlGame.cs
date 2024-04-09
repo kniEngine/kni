@@ -59,7 +59,7 @@ namespace MonoGame.Framework
             gdm.GetStrategy<ConcreteGraphicsDeviceManager>().SwapChainPanel = swapChainPanel;
          
             // Start running the game.
-            game.Run_UAP_XAML();
+            game.Run();
 
             // Return the created game object.
             return game;

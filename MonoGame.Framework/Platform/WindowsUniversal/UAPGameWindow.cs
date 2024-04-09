@@ -369,23 +369,6 @@ namespace Microsoft.Xna.Framework
             });
         }
 
-        internal void RunLoop()
-        {
-            SetCursor(Game.IsMouseVisible);
-            _coreWindow.Activate();
-
-            while (true)
-            {
-                // Process events incoming to the window.
-                _coreWindow.Dispatcher.ProcessEvents(CoreProcessEventsOption.ProcessAllIfPresent);
-
-                Tick();
-
-                if (IsExiting)
-                    break;
-            }
-        }
-
         internal void Tick()
         {
             // Update input
