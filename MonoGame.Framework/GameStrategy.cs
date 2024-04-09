@@ -340,7 +340,7 @@ namespace Microsoft.Xna.Platform
         /// Frame timing is generally handled by the Game class, but some platforms still handle it elsewhere. Once all platforms
         /// rely on the Game class's functionality, this method and any overrides should be removed.
         /// </summary>
-        public virtual void ResetElapsedTime()
+        public void ResetElapsedTime()
         {
             Timer.Reset();
             Timer.Start();
