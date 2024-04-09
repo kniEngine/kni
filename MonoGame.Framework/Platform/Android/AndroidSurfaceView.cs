@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void BeforeRun()
+        internal void BeginFrameTicks()
         {
             _isCancellationRequested = false;
 
