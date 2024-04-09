@@ -51,7 +51,6 @@ namespace Microsoft.Xna.Framework
         bool _glContextAvailable;
         bool _lostglContext;
 
-        System.Diagnostics.Stopwatch _stopWatch;
         DateTime _prevTickTime;
 
         bool? _isCancellationRequested = null;
@@ -131,15 +130,15 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void BeforeRun()
+        internal void BeginFrameTicks()
         {
             _isCancellationRequested = false;
 
             // prepare gameLoop
             Threading.MakeMainThread();
-            _stopWatch = System.Diagnostics.Stopwatch.StartNew();
+
             _prevTickTime = DateTime.Now;
-            var looper = Android.OS.Looper.MainLooper;
+            Android.OS.Looper looper = Android.OS.Looper.MainLooper;
             _handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
 
             // request first tick.
@@ -371,7 +370,7 @@ namespace Microsoft.Xna.Framework
 
             try
             {
-                var currTickTime = DateTime.Now;
+                DateTime currTickTime = DateTime.Now;
                 TimeSpan dt = TimeSpan.Zero;
                 if (_prevTickTime.Ticks != 0)
                 {
@@ -594,7 +593,7 @@ namespace Microsoft.Xna.Framework
             if (!_egl.EglInitialize(_eglDisplay, version))
                 throw new Exception("Could not initialize EGL display" + GetErrorAsString());
 
-            var gdm = _game.Strategy.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
 
             int depth = 0;
             int stencil = 0;
@@ -622,29 +621,29 @@ namespace Microsoft.Xna.Framework
                 samples = 4;
             }
 
-            List<SurfaceConfig> configs = new List<SurfaceConfig>();
+            List<SurfaceConfig> surfaceConfigs = new List<SurfaceConfig>();
             if (depth > 0)
             {
-                configs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = depth, Stencil = stencil, SampleBuffers = sampleBuffers, Samples = samples });
-                configs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = depth, Stencil = stencil });
-                configs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5, Depth = depth, Stencil = stencil });
-                configs.Add(new SurfaceConfig() { Depth = depth, Stencil = stencil });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = depth, Stencil = stencil, SampleBuffers = sampleBuffers, Samples = samples });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = depth, Stencil = stencil });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5, Depth = depth, Stencil = stencil });
+                surfaceConfigs.Add(new SurfaceConfig() { Depth = depth, Stencil = stencil });
                 if (depth > 16)
                 {
-                    configs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = 16 });
-                    configs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5, Depth = 16 });
-                    configs.Add(new SurfaceConfig() { Depth = 16 });
+                    surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = 16 });
+                    surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5, Depth = 16 });
+                    surfaceConfigs.Add(new SurfaceConfig() { Depth = 16 });
                 }
-                configs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8 });
-                configs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5 });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8 });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5 });
             }
             else
             {
-                configs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, SampleBuffers = sampleBuffers, Samples = samples });
-                configs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8 });
-                configs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5 });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, SampleBuffers = sampleBuffers, Samples = samples });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8 });
+                surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5 });
             }
-            configs.Add(new SurfaceConfig() { Red = 4, Green = 4, Blue = 4 });
+            surfaceConfigs.Add(new SurfaceConfig() { Red = 4, Green = 4, Blue = 4 });
             int[] numConfigs = new int[1];
             EGLConfig[] results = new EGLConfig[1];
 
@@ -653,27 +652,27 @@ namespace Microsoft.Xna.Framework
                 throw new Exception("Could not get config count. " + GetErrorAsString());
             }
 
-            EGLConfig[] cfgs = new EGLConfig[numConfigs[0]];
-            _egl.EglGetConfigs(_eglDisplay, cfgs, numConfigs[0], numConfigs);
+            EGLConfig[] eglConfigs = new EGLConfig[numConfigs[0]];
+            _egl.EglGetConfigs(_eglDisplay, eglConfigs, numConfigs[0], numConfigs);
             Log.Verbose("AndroidGameView", "Device Supports");
-            foreach (var c in cfgs)
+            foreach (EGLConfig eglConfig in eglConfigs)
             {
-                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(c, _egl, _eglDisplay)));
+                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(eglConfig, _egl, _eglDisplay)));
             }
 
             bool found = false;
             numConfigs[0] = 0;
-            foreach (var config in configs)
+            foreach (SurfaceConfig surfaceConfig in surfaceConfigs)
             {
-                Log.Verbose("AndroidGameView", string.Format("Checking Config : {0}", config));
-                found = _egl.EglChooseConfig(_eglDisplay, config.ToConfigAttribs(), results, 1, numConfigs);
+                Log.Verbose("AndroidGameView", string.Format("Checking Config : {0}", surfaceConfig));
+                found = _egl.EglChooseConfig(_eglDisplay, surfaceConfig.ToConfigAttribs(), results, 1, numConfigs);
                 Log.Verbose("AndroidGameView", "EglChooseConfig returned {0} and {1}", found, numConfigs[0]);
                 if (!found || numConfigs[0] <= 0)
                 {
                     Log.Verbose("AndroidGameView", "Config not supported");
                     continue;
                 }
-                Log.Verbose("AndroidGameView", string.Format("Selected Config : {0}", config));
+                Log.Verbose("AndroidGameView", string.Format("Selected Config : {0}", surfaceConfig));
                 break;
             }
 
@@ -772,7 +771,7 @@ namespace Microsoft.Xna.Framework
                 // the surface is created after the correct viewport is already applied so we must do it again.
                 if (_game.Strategy.GraphicsDevice != null)
                 {
-                    var gdm = _game.Strategy.GraphicsDeviceManager;
+                    GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
                     gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
                 }
 

@@ -80,12 +80,9 @@ namespace Microsoft.Xna.Framework
         {
             GameView.MakeCurrentContext();
 
-            if (_game != null)
+            if (_game != null && !ScreenReceiver.ScreenLocked)
             {
-                if (((ConcreteGame)_game.Strategy).IsActivityActive && !ScreenReceiver.ScreenLocked)
-                {
-                    _game.Tick();
-                }
+                ((ConcreteGame)_game.Strategy).OnFrameTick();
             }
         }
 

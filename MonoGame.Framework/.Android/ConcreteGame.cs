@@ -174,12 +174,11 @@ namespace Microsoft.Xna.Platform
 
         public override void RunOneFrame()
         {
-            // User called Game.Run().
-            // Signal the game loop to initialize the game loop.
-            _gameWindow.GameView.BeforeRun();
+            // Signal the GameView to initialize the game loop events.
+            _gameWindow.GameView.BeginFrameTicks();
 
             // Prevent the default run loop from starting.
-            // We will run the loop from the view's IRunnable.Run().
+            // We will run the loop from the GameView's IRunnable.Run().
             return;
 
             //if (!_initialized)
@@ -233,15 +232,14 @@ namespace Microsoft.Xna.Platform
 
         internal override void Run()
         {
-            // User called Game.Run().
-            // Signal the game loop to initialize the game loop.
-            _gameWindow.GameView.BeforeRun();
+            // Signal the GameView to initialize the game loop events.
+            _gameWindow.GameView.BeginFrameTicks();
 
             Game.CallBeginRun();
             base.Timer.Restart();
 
             // Prevent the default run loop from starting.
-            // We will run the loop from the view's IRunnable.Run().
+            // We will run the loop from the GameView's IRunnable.Run().
             return;
 
             // StartRunLoop
@@ -249,6 +247,14 @@ namespace Microsoft.Xna.Platform
 
             //Game.CallEndRun();
             //Game.DoExiting();
+        }
+
+        internal void OnFrameTick()
+        {
+            if (this.IsActivityActive)
+            {
+                this.Game.Tick();
+            }
         }
     }
 }
