@@ -225,6 +225,14 @@ namespace Microsoft.Xna.Platform
             Game.CallBeginRun();
             base.Timer.Restart();
 
+            // XNA runs one Update even before showing the window
+            // DoUpdate
+            {
+                this.Game.AssertNotDisposed();
+                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                this.Game.CallUpdate(new GameTime());
+            }
+
             StartRunLoop();
 
             //Game.CallEndRun();
