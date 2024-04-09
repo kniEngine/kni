@@ -71,49 +71,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        private void Android_BeforeUpdate()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                if (this.GraphicsDevice == null)
-                {
-                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                    if (gdm != null)
-                        ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                // BeforeInitialize
-                {
-                    DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
-                    switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
-                    {
-                        case Android.Content.Res.Orientation.Portrait:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
-                                                            ? DisplayOrientation.PortraitDown
-                                                            : DisplayOrientation.Portrait,
-                                                            false);
-                            break;
-                        default:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
-                                                            ? DisplayOrientation.LandscapeRight
-                                                            : DisplayOrientation.LandscapeLeft,
-                                                            false);
-                            break;
-                    }
-                    _gameWindow._touchEventListener = new TouchEventListener();
-                    _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-        }
-
         public override void Initialize()
         {
             // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
@@ -174,69 +131,60 @@ namespace Microsoft.Xna.Platform
 
         public override void RunOneFrame()
         {
-            // Signal the GameView to initialize the game loop events.
-            _gameWindow.GameView.BeginFrameTicks();
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
 
-            // Prevent the default run loop from starting.
-            // We will run the loop from the GameView's IRunnable.Run().
-            return;
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
 
-            //if (!_initialized)
-            //{
-            //    this.Game.AssertNotDisposed();
-            //
-            //    if (this.GraphicsDevice == null)
-            //    {
-            //        GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-            //        if (gdm != null)
-            //            ((IGraphicsDeviceManager)gdm).CreateDevice();
-            //    }
-            //
-            //    // BeforeInitialize
-            //    {
-            //        DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
-            //        switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
-            //        {
-            //            case Android.Content.Res.Orientation.Portrait:
-            //                this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
-            //                                                ? DisplayOrientation.PortraitDown
-            //                                                : DisplayOrientation.Portrait,
-            //                                                false);
-            //                break;
-            //            default:
-            //                this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
-            //                                                ? DisplayOrientation.LandscapeRight
-            //                                                : DisplayOrientation.LandscapeLeft,
-            //                                                false);
-            //                break;
-            //        }
-            //        _gameWindow._touchEventListener = new TouchEventListener();
-            //        _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
-            //    }
-            //
-            //    this.Game.CallInitialize();
-            //
-            //    this.InitializeComponents();
-            //
-            //    _initialized = true;
-            //}
+                // BeforeInitialize
+                {
+                    DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+                    switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
+                    {
+                        case Android.Content.Res.Orientation.Portrait:
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                                                            ? DisplayOrientation.PortraitDown
+                                                            : DisplayOrientation.Portrait,
+                                                            false);
+                            break;
+                        default:
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                                                            ? DisplayOrientation.LandscapeRight
+                                                            : DisplayOrientation.LandscapeLeft,
+                                                            false);
+                            break;
+                    }
 
-            //Game.CallBeginRun();
-            //base.Timer.Restart();
+                    _gameWindow._touchEventListener = new TouchEventListener();
+                    _gameWindow._touchEventListener.SetTouchListener(_gameWindow);
+                }
 
-            //Not quite right..
-            //Game.Tick();
+                this.Game.CallInitialize();
 
-            //Game.CallEndRun();
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+
+            Game.CallBeginRun();
+            base.Timer.Restart();
+
+            //Not quite right
+            this.Game.Tick();
+
+            Game.CallEndRun();
         }
 
         internal override void Run()
         {
             // Signal the GameView to initialize the game loop events.
             _gameWindow.GameView.BeginFrameTicks();
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
 
             // Prevent the default run loop from starting.
             // We will run the loop from the GameView's IRunnable.Run().
@@ -249,12 +197,72 @@ namespace Microsoft.Xna.Platform
             //Game.DoExiting();
         }
 
+        private void OnFrameTickBegin()
+        {
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                // BeforeInitialize
+                {
+                    DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+                    switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
+                    {
+                        case Android.Content.Res.Orientation.Portrait:
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                                                            ? DisplayOrientation.PortraitDown
+                                                            : DisplayOrientation.Portrait,
+                                                            false);
+                            break;
+                        default:
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                                                            ? DisplayOrientation.LandscapeRight
+                                                            : DisplayOrientation.LandscapeLeft,
+                                                            false);
+                            break;
+                    }
+
+                    _gameWindow._touchEventListener = new TouchEventListener();
+                    _gameWindow._touchEventListener.SetTouchListener(_gameWindow);
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+
+            Game.CallBeginRun();
+            base.Timer.Restart();
+
+            // XNA runs one Update even before showing the window
+            // DoUpdate
+            {
+                this.Game.AssertNotDisposed();
+                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                this.Game.CallUpdate(new GameTime());
+            }
+        }
+
+        bool _isReadyToRun = false;
         internal void OnFrameTick()
         {
+            if (_isReadyToRun == false)
+            {
+                OnFrameTickBegin();
+                _isReadyToRun = true;
+            }
+
             if (this.IsActivityActive)
             {
-                this.Android_BeforeUpdate();
-
                 this.Game.Tick();
             }
         }
