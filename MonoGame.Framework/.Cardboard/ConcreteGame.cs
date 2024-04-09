@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        private void Android_BeforeUpdate()
+        private void Android_Initialize()
         {
             if (!_initialized)
             {
@@ -235,9 +235,6 @@ namespace Microsoft.Xna.Platform
             // Signal the GameView to initialize the game loop events.
             _gameWindow.GameView.BeginFrameTicks();
 
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
             // Prevent the default run loop from starting.
             // We will run the loop from the GameView's IRunnable.Run().
             return;
@@ -249,12 +246,25 @@ namespace Microsoft.Xna.Platform
             //Game.DoExiting();
         }
 
+        private void OnFrameTickBegin()
+        {
+            this.Android_Initialize();
+
+            Game.CallBeginRun();
+            base.Timer.Restart();
+        }
+
+        bool _isReadyToRun = false;
         internal void OnFrameTick()
         {
+            if (_isReadyToRun == false)
+            {
+                OnFrameTickBegin();
+                _isReadyToRun = true;
+            }
+
             if (this.IsActivityActive)
             {
-                this.Android_BeforeUpdate();
-
                 this.Game.Tick();
             }
         }
