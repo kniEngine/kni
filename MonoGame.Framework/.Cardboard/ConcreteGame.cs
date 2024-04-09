@@ -148,20 +148,21 @@ namespace Microsoft.Xna.Platform
                     switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
                     {
                         case Android.Content.Res.Orientation.Portrait:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
                                                             ? DisplayOrientation.PortraitDown
                                                             : DisplayOrientation.Portrait,
                                                             false);
                             break;
                         default:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
                                                             ? DisplayOrientation.LandscapeRight
                                                             : DisplayOrientation.LandscapeLeft,
                                                             false);
                             break;
                     }
+
                     _gameWindow._touchEventListener = new TouchEventListener();
-                    _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
+                    _gameWindow._touchEventListener.SetTouchListener(_gameWindow);
                 }
 
                 this.Game.CallInitialize();
@@ -215,20 +216,21 @@ namespace Microsoft.Xna.Platform
                     switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
                     {
                         case Android.Content.Res.Orientation.Portrait:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
                                                             ? DisplayOrientation.PortraitDown
                                                             : DisplayOrientation.Portrait,
                                                             false);
                             break;
                         default:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                            _gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
                                                             ? DisplayOrientation.LandscapeRight
                                                             : DisplayOrientation.LandscapeLeft,
                                                             false);
                             break;
                     }
+
                     _gameWindow._touchEventListener = new TouchEventListener();
-                    _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
+                    _gameWindow._touchEventListener.SetTouchListener(_gameWindow);
                 }
 
                 this.Game.CallInitialize();
