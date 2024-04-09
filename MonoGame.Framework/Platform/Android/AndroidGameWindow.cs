@@ -58,14 +58,9 @@ namespace Microsoft.Xna.Framework
                 size.Y = p.Y;
             }
 
-            Initialize(activity, size);
-        }
-
-        private void Initialize(Context context, Point size)
-        {
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
             
-            GameView = new AndroidSurfaceView(context, this, _game);
+            GameView = new AndroidSurfaceView(activity, this, _game);
             GameView.Tick += OnTick;
 
             GameView.RequestFocus();
