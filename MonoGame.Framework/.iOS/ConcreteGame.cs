@@ -103,11 +103,10 @@ namespace Microsoft.Xna.Platform
             {
                 this.Game.AssertNotDisposed();
 
-                if (this.GraphicsDevice == null)
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                if (gdm != null)
                 {
-                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                    if (gdm != null)
-                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                    ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
                 // BeforeInitialize
@@ -137,11 +136,10 @@ namespace Microsoft.Xna.Platform
             {
                 this.Game.AssertNotDisposed();
 
-                if (this.GraphicsDevice == null)
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                if (gdm != null)
                 {
-                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                    if (gdm != null)
-                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                    ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
                 // BeforeInitialize
