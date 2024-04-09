@@ -16,11 +16,11 @@
 <!-- System stats -->
 
 #### What version of KNI does the bug occur on:
-- KNI 3.11.9002
+- KNI x.xx.xxxx
 
 #### What operating system are you using:
-- Windows
+- Windows10
 
 #### What KNI platform are you using:
 <!-- e.g. DesktopGL, Android, BlazorGL, WindowsDX, WindowsUWP, Android -->
-- Android
+- KniPlatform
