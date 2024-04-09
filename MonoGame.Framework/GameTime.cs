@@ -14,12 +14,12 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Time since the start of the <see cref="Game"/>.
         /// </summary>
-        public TimeSpan TotalGameTime { get; set; }
+        public TimeSpan TotalGameTime { get; protected internal set; }
 
         /// <summary>
         /// Time since the last call to <see cref="Game.Update"/>.
         /// </summary>
-        public TimeSpan ElapsedGameTime { get; set; }
+        public TimeSpan ElapsedGameTime { get; protected internal set; }
 
         /// <summary>
         /// Indicates whether the <see cref="Game"/> is running slowly.
@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework
         /// and a tick of the game loop takes longer than <see cref="Game.TargetElapsedTime"/> for
         /// a few frames in a row.
         /// </summary>
-        public bool IsRunningSlowly { get; set; }
+        public bool IsRunningSlowly { get; protected internal set; }
 
         /// <summary>
         /// Create a <see cref="GameTime"/> instance with a <see cref="TotalGameTime"/> and
