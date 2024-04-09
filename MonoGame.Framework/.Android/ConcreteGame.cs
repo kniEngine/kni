@@ -174,7 +174,6 @@ namespace Microsoft.Xna.Platform
 
         public override void RunOneFrame()
         {
-            // User called Game.Run().
             // Signal the game loop to initialize the game loop.
             _gameWindow.GameView.BeforeRun();
 
@@ -233,7 +232,6 @@ namespace Microsoft.Xna.Platform
 
         internal override void Run()
         {
-            // User called Game.Run().
             // Signal the game loop to initialize the game loop.
             _gameWindow.GameView.BeforeRun();
 
