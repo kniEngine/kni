@@ -195,36 +195,6 @@ namespace Microsoft.Xna.Platform
                 this.Game.CallUpdate(new GameTime());
             }
 
-            ((UAPGameWindow)Window).RunLoop();
-
-            Game.CallEndRun();
-            Game.DoExiting();
-        }
-
-        //TODO: merge Run_UAP_XAML() with Run()
-        internal override void Run_UAP_XAML()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                if (this.GraphicsDevice == null)
-                {
-                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                    if (gdm != null)
-                        ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
             StartRunLoop();
 
             //Game.CallEndRun();

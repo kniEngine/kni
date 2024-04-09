@@ -272,16 +272,6 @@ namespace Microsoft.Xna.Framework
 
             Strategy.Run();
         }
-
-        /// <summary>
-        /// Run the game. This method is valid only for the UAP/XAML template.
-        /// </summary>
-        internal void Run_UAP_XAML()
-        {
-            AssertNotDisposed();
-
-            Strategy.Run_UAP_XAML();
-        }
         
         /// <summary>
         /// Run one iteration of the game loop.
