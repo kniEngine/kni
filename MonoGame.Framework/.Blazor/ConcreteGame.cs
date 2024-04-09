@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform
             }
 
             Game.CallBeginRun();
-            this.ResetElapsedTime();
+            base.Timer.Restart();
 
             //Not quite right..
             Game.Tick();
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform
             }
 
             Game.CallBeginRun();
-            this.ResetElapsedTime();
+            base.Timer.Restart();
 
             // XNA runs one Update even before showing the window
             // DoUpdate
