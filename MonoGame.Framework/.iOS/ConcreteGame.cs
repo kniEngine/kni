@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Platform
             }
 
             Game.CallBeginRun();
-            Timer = Stopwatch.StartNew();
+            this.ResetElapsedTime();
 
             //Not quite right..
             Game.Tick();
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform
             }
 
             Game.CallBeginRun();
-            Timer = Stopwatch.StartNew();
+            this.ResetElapsedTime();
 
             StartRunLoop();
 

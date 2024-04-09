@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform
         public readonly Game Game;
 
         private readonly GameTime Time = new GameTime();
-        protected Stopwatch Timer;
+        protected Stopwatch Timer = new Stopwatch();
 
         private bool _isActive;
         public bool IsActive
@@ -342,11 +342,8 @@ namespace Microsoft.Xna.Platform
         /// </summary>
         public virtual void ResetElapsedTime()
         {
-            if (Timer != null)
-            {
-                Timer.Reset();
-                Timer.Start();
-            }
+            Timer.Reset();
+            Timer.Start();
 
             Time.ElapsedGameTime = TimeSpan.Zero;
 
