@@ -220,11 +220,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void Initialize(int width, int height)
-        {
-            ChangeClientSize(new Size(width, height));
-        }
-
         internal void Initialize(PresentationParameters pp)
         {
             ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
