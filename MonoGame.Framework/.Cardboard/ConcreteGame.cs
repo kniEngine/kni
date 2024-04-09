@@ -223,7 +223,7 @@ namespace Microsoft.Xna.Platform
             //}
 
             //Game.CallBeginRun();
-            //Timer = Stopwatch.StartNew();
+            //this.ResetElapsedTime();
 
             //Not quite right..
             //Game.Tick();
@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Platform
             _gameWindow.GameView.BeforeRun();
 
             Game.CallBeginRun();
-            Timer = Stopwatch.StartNew();
+            this.ResetElapsedTime();
 
             // Prevent the default run loop from starting.
             // We will run the loop from the view's IRunnable.Run().
