@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        public override void Android_BeforeUpdate()
+        private void Android_BeforeUpdate()
         {
             if (!_initialized)
             {
@@ -253,6 +253,8 @@ namespace Microsoft.Xna.Platform
         {
             if (this.IsActivityActive)
             {
+                this.Android_BeforeUpdate();
+
                 this.Game.Tick();
             }
         }

@@ -329,13 +329,6 @@ namespace Microsoft.Xna.Platform
         public abstract void TickExiting();
 
         /// <summary>
-        /// Gives derived classes an opportunity to do work just before Update is called.
-        /// </summary>
-        public virtual void Android_BeforeUpdate()
-        {
-        }
-
-        /// <summary>
         /// MSDN: Use this method if your game is recovering from a slow-running state, and ElapsedGameTime is too large to be useful.
         /// Frame timing is generally handled by the Game class, but some platforms still handle it elsewhere. Once all platforms
         /// rely on the Game class's functionality, this method and any overrides should be removed.
@@ -454,7 +447,6 @@ namespace Microsoft.Xna.Platform
                     // DoUpdate
                     {
                         this.Game.AssertNotDisposed();
-                        this.Android_BeforeUpdate();
                         ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
                         this.Game.CallUpdate(Time);
                     }
@@ -494,7 +486,6 @@ namespace Microsoft.Xna.Platform
                 // DoUpdate
                 {
                     this.Game.AssertNotDisposed();
-                    this.Android_BeforeUpdate();
                     ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
                     this.Game.CallUpdate(Time);
                 }
