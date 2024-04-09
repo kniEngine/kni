@@ -51,7 +51,6 @@ namespace Microsoft.Xna.Framework
         bool _glContextAvailable;
         bool _lostglContext;
 
-        System.Diagnostics.Stopwatch _stopWatch;
         DateTime _prevTickTime;
 
         bool? _isCancellationRequested = null;
@@ -137,7 +136,7 @@ namespace Microsoft.Xna.Framework
 
             // prepare gameLoop
             Threading.MakeMainThread();
-            _stopWatch = System.Diagnostics.Stopwatch.StartNew();
+
             _prevTickTime = DateTime.Now;
             var looper = Android.OS.Looper.MainLooper;
             _handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
