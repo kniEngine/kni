@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouse : MouseStrategy
     {
+        private IntPtr _wndHandle = IntPtr.Zero;
+
         [DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
         [return: MarshalAsAttribute(UnmanagedType.Bool)]
         private static extern bool SetCursorPos(int X, int Y);
@@ -37,7 +39,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override IntPtr PlatformGetWindowHandle()
         {
-            return (_window == null) ? IntPtr.Zero : _window.Handle;
+            return _wndHandle;
         }
 
         public override void PlatformSetWindowHandle(IntPtr windowHandle)
@@ -46,6 +48,7 @@ namespace Microsoft.Xna.Platform.Input
             if (_mouseInputWnd.Handle != IntPtr.Zero)
                 _mouseInputWnd.ReleaseHandle();
 
+            _wndHandle = windowHandle;
             _window = WinForms.Control.FromHandle(windowHandle);
             _mouseInputWnd.AssignHandle(windowHandle);
         }
