@@ -246,11 +246,6 @@ namespace Microsoft.Xna.Framework
             Platform_OnTextInput(e.KeyChar, key);
         }
 
-        internal void Initialize(int width, int height)
-        {
-            ChangeClientSize(width, height);
-        }
-
         internal void Initialize(PresentationParameters pp)
         {
             ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);

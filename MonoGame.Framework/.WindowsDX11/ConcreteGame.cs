@@ -49,12 +49,6 @@ namespace Microsoft.Xna.Platform
                         PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
                         _gameWindow.Initialize(pp);
                     }
-                    else
-                    {
-                        _gameWindow.Initialize(
-                            GraphicsDeviceManager.DefaultBackBufferWidth,
-                            GraphicsDeviceManager.DefaultBackBufferHeight);
-                    }
                 }
 
                 this.Game.CallInitialize();
@@ -93,12 +87,6 @@ namespace Microsoft.Xna.Platform
                     {
                         PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
                         _gameWindow.Initialize(pp);
-                    }
-                    else
-                    {
-                        _gameWindow.Initialize(
-                            GraphicsDeviceManager.DefaultBackBufferWidth,
-                            GraphicsDeviceManager.DefaultBackBufferHeight);
                     }
                 }
 
