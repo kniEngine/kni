@@ -71,49 +71,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        private void Android_Initialize()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                if (this.GraphicsDevice == null)
-                {
-                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                    if (gdm != null)
-                        ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                // BeforeInitialize
-                {
-                    DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
-                    switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
-                    {
-                        case Android.Content.Res.Orientation.Portrait:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
-                                                            ? DisplayOrientation.PortraitDown
-                                                            : DisplayOrientation.Portrait,
-                                                            false);
-                            break;
-                        default:
-                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
-                                                            ? DisplayOrientation.LandscapeRight
-                                                            : DisplayOrientation.LandscapeLeft,
-                                                            false);
-                            break;
-                    }
-                    _gameWindow._touchEventListener = new TouchEventListener();
-                    _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-        }
-
         public override void Initialize()
         {
             // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
@@ -248,7 +205,45 @@ namespace Microsoft.Xna.Platform
 
         private void OnFrameTickBegin()
         {
-            this.Android_Initialize();
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
+
+                if (this.GraphicsDevice == null)
+                {
+                    GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                    if (gdm != null)
+                        ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                // BeforeInitialize
+                {
+                    DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(AndroidGameWindow.Activity);
+                    switch (AndroidGameWindow.Activity.Resources.Configuration.Orientation)
+                    {
+                        case Android.Content.Res.Orientation.Portrait:
+                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                                                            ? DisplayOrientation.PortraitDown
+                                                            : DisplayOrientation.Portrait,
+                                                            false);
+                            break;
+                        default:
+                            this._gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                                                            ? DisplayOrientation.LandscapeRight
+                                                            : DisplayOrientation.LandscapeLeft,
+                                                            false);
+                            break;
+                    }
+                    _gameWindow._touchEventListener = new TouchEventListener();
+                    _gameWindow._touchEventListener.SetTouchListener(this._gameWindow);
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
 
             Game.CallBeginRun();
             base.Timer.Restart();
