@@ -5,7 +5,6 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -93,13 +92,6 @@ namespace Microsoft.Xna.Platform
                     _gameWindow.SetCursorVisible(Game.IsMouseVisible);
                 }
             }
-        }
-
-        internal override void OnPresentationChanged(PresentationParameters pp)
-        {
-            int displayIndex = SDL.WINDOW.GetDisplayIndex(Window.Handle);
-            string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
-            _gameWindow.EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
         }
 
         public override void TickExiting()

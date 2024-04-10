@@ -10,9 +10,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
@@ -219,25 +217,6 @@ namespace Microsoft.Xna.Platform
             {
                 ((UAPGameWindow)Window).IsExiting = true;
                 Application.Current.Exit();
-            }
-        }
-
-        internal override void OnPresentationChanged(PresentationParameters pp)
-        {
-            if (pp.IsFullScreen)
-            {
-                // Enter FullScreen
-                if (((UAPGameWindow)Window).AppView.TryEnterFullScreenMode())
-                {
-                    ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
-                }
-            }
-            else
-            {
-                // Exit FullScreen
-                ((UAPGameWindow)Window).AppView.ExitFullScreenMode();
-
-                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.Auto;
             }
         }
 

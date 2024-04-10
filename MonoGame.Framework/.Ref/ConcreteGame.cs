@@ -2,7 +2,6 @@
 
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
@@ -19,11 +18,6 @@ namespace Microsoft.Xna.Platform
         }
 
         public override void TickExiting()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal override void OnPresentationChanged(PresentationParameters pp)
         {
             throw new PlatformNotSupportedException();
         }

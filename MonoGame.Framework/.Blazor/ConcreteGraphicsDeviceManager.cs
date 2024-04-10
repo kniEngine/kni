@@ -184,7 +184,9 @@ namespace Microsoft.Xna.Platform
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
         {
-            base.Game.Strategy.OnPresentationChanged(args.PresentationParameters);
+            PresentationParameters pp = args.PresentationParameters;
+
+            ((BlazorGameWindow)this.Game.Window).OnPresentationChanged(pp);
         }
 
 
