@@ -151,7 +151,16 @@ namespace Microsoft.Xna.Platform
             PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
             
             WinFormsGameWindow gameWindow = (WinFormsGameWindow)Game.Window;
-            gameWindow.Initialize(pp);
+
+            gameWindow.ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
+
+            if (pp.IsFullScreen)
+            {
+                gameWindow.EnterFullScreen(pp);
+
+                if (!pp.HardwareModeSwitch)
+                    ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
+            }
         }
 
         internal void CreateDevice(GraphicsDeviceInformation gdi)
