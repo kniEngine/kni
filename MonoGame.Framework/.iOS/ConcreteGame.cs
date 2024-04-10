@@ -121,11 +121,29 @@ namespace Microsoft.Xna.Platform
             Game.CallBeginRun();
             base.Timer.Restart();
 
-            StartRunLoop();
+            StartGameLoop();
+            return;
 
             //Game.CallEndRun();
             //Game.DoExiting();
         }
+
+        private void StartGameLoop()
+        {
+            // Show the window
+            _uiWindow.MakeKeyAndVisible();
+
+            // In iOS 8+ we need to set the root view controller *after* Window MakeKey
+            // This ensures that the viewController's supported interface orientations
+            // will be respected at launch
+            _uiWindow.RootViewController = _viewController;
+
+            BeginObservingUIApplication();
+
+            _viewController.View.BecomeFirstResponder();
+            CreateDisplayLink();
+        }
+
 
         // FIXME: VideoPlayer 'needs' this to set up its own movie player view
         //        controller.
@@ -173,22 +191,6 @@ namespace Microsoft.Xna.Platform
             }
 
             base.Initialize();
-        }
-
-        private void StartRunLoop()
-        {
-            // Show the window
-            _uiWindow.MakeKeyAndVisible();
-
-            // In iOS 8+ we need to set the root view controller *after* Window MakeKey
-            // This ensures that the viewController's supported interface orientations
-            // will be respected at launch
-            _uiWindow.RootViewController = _viewController;
-
-            BeginObservingUIApplication();
-
-            _viewController.View.BecomeFirstResponder();
-            CreateDisplayLink();
         }
 
         internal void iOSTick()

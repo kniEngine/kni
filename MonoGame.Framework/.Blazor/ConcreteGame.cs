@@ -59,10 +59,16 @@ namespace Microsoft.Xna.Platform
 
             IsActive = _gameWindow.wasmWindow.Document.HasFocus();
 
-            _gameWindow.RunLoop();
+            StartGameLoop();
+            return;
 
             //Game.CallEndRun();
             //Game.DoExiting();
+        }
+
+        private void StartGameLoop()
+        {
+            // request next frame
         }
 
         public override bool IsMouseVisible

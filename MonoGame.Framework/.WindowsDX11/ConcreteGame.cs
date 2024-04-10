@@ -26,40 +26,9 @@ namespace Microsoft.Xna.Platform
                 TouchPanel.WindowHandle = base.Window.Handle;
         }
 
-        internal override void Run()
+        protected override void RunGameLoop()
         {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
-            // XNA runs one Update even before showing the window
-            // DoUpdate
-            {
-                this.Game.AssertNotDisposed();
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                this.Game.CallUpdate(new GameTime());
-            }
-
-            _gameWindow.RunLoop();
-
-            Game.CallEndRun();
-            Game.DoExiting();
+            _gameWindow.RunGameLoop();
         }
 
         public override bool IsMouseVisible

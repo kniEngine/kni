@@ -164,14 +164,15 @@ namespace Microsoft.Xna.Platform
                 this.Game.CallUpdate(new GameTime());
             }
 
-            StartRunLoop();
+            StartGameLoop();
+            return;
 
             //Game.CallEndRun();
             //Game.DoExiting();
         }
 
         bool _enableRunLoop = false;
-        private void StartRunLoop()
+        private void StartGameLoop()
         {
             if (!_enableRunLoop)
             {
