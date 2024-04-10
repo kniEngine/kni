@@ -118,14 +118,14 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.CallBeginRun();
+            this.Game.CallBeginRun();
             base.Timer.Restart();
 
             StartGameLoop();
             return;
 
-            //Game.CallEndRun();
-            //Game.DoExiting();
+            //this.Game.CallEndRun();
+            //this.Game.DoExiting();
         }
 
         private void StartGameLoop()

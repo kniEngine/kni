@@ -46,16 +46,13 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.CallBeginRun();
+            this.Game.CallBeginRun();
             base.Timer.Restart();
 
             // XNA runs one Update even before showing the window
-            // DoUpdate
-            {
-                this.Game.AssertNotDisposed();
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                this.Game.CallUpdate(new GameTime());
-            }
+            this.Game.AssertNotDisposed();
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+            this.Game.CallUpdate(new GameTime());
 
             IsActive = _gameWindow.wasmWindow.Document.HasFocus();
 

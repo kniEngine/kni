@@ -271,7 +271,7 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.CallBeginRun();
+            this.Game.CallBeginRun();
             this.Timer.Restart();
 
             //Not quite right..
@@ -299,21 +299,18 @@ namespace Microsoft.Xna.Platform
                 _initialized = true;
             }
 
-            Game.CallBeginRun();
+            this.Game.CallBeginRun();
             this.Timer.Restart();
 
             // XNA runs one Update even before showing the window
-            // DoUpdate
-            {
-                this.Game.AssertNotDisposed();
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                this.Game.CallUpdate(new GameTime());
-            }
+            this.Game.AssertNotDisposed();
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+            this.Game.CallUpdate(new GameTime());
 
             RunGameLoop();
 
-            Game.CallEndRun();
-            Game.DoExiting();
+            this.Game.CallEndRun();
+            this.Game.DoExiting();
         }
 
         protected virtual void RunGameLoop()
@@ -504,12 +501,9 @@ namespace Microsoft.Xna.Platform
                     _currElapsedTime -= TargetElapsedTime;
                     stepCount++;
 
-                    // DoUpdate
-                    {
-                        this.Game.AssertNotDisposed();
-                        ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                        this.Game.CallUpdate(Time);
-                    }
+                    this.Game.AssertNotDisposed();
+                    ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                    this.Game.CallUpdate(Time);
                 }
 
                 //Every update after the first accumulates lag
@@ -543,12 +537,9 @@ namespace Microsoft.Xna.Platform
                 Time.TotalGameTime += _currElapsedTime;
                 _currElapsedTime = TimeSpan.Zero;
 
-                // DoUpdate
-                {
-                    this.Game.AssertNotDisposed();
-                    ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                    this.Game.CallUpdate(Time);
-                }
+                this.Game.AssertNotDisposed();
+                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                this.Game.CallUpdate(Time);
             }
 
             if (!_suppressDraw)
