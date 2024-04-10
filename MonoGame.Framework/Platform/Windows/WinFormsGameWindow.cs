@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (_isBorderless == value)
                     return;
-                                
+
                 _isBorderless = value;
 
                 if (!_isBorderless)
@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework
             if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = this.Handle;
             Form.MouseEnter += OnMouseEnter;
-            Form.MouseLeave += OnMouseLeave;            
+            Form.MouseLeave += OnMouseLeave;
 
             Form.Activated += OnActivated;
             Form.Deactivate += OnDeactivate;
@@ -262,13 +262,17 @@ namespace Microsoft.Xna.Framework
                 // gameloop is paused during windows resize.
                 try 
                 {
-                    if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
-                    {   
-                        ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.Present();
-                    }
-                    else
+                    GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
+                    if (gdm != null)
                     {
-                        // We cannot present with a RT set on the device.
+                        if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
+                        {
+                            ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.Present();
+                        }
+                        else
+                        {
+                            // We cannot present with a RT set on the device.
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -289,7 +293,13 @@ namespace Microsoft.Xna.Framework
             {
                 // we may need to restore full screen when coming back from a minimized window
                 if (_lastFormState == FormWindowState.Minimized)
-                    ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
+                {
+                    GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
+                    if (gdm != null)
+                    {
+                        ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
+                    }
+                }
                 UpdateBackBufferSize();
             }
 
@@ -306,8 +316,12 @@ namespace Microsoft.Xna.Framework
 
                 // the display that the window is on might have changed, so we need to
                 // check and possibly update the Adapter of the GraphicsDevice
-                if (_concreteGame.GraphicsDevice != null)
-                    ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().RefreshAdapter();
+                GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
+                if (gdm != null)
+                {
+                    if (_concreteGame.GraphicsDevice != null)
+                        ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().RefreshAdapter();
+                }
             }
 
             OnClientSizeChanged();
@@ -316,19 +330,22 @@ namespace Microsoft.Xna.Framework
         private void UpdateBackBufferSize()
         {
             GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
-            if (gdm.GraphicsDevice == null)
-                return;
-
-            SysDrawing.Size newSize = Form.ClientSize;
-            int newWidth  = newSize.Width;
-            int newHeight = newSize.Height;
-            if (newWidth  != gdm.PreferredBackBufferWidth
-            ||  newHeight != gdm.PreferredBackBufferHeight)
+            if (gdm != null)
             {
-                // Set the default new back buffer size
-                gdm.PreferredBackBufferWidth = newWidth;
-                gdm.PreferredBackBufferHeight = newHeight;
-                gdm.ApplyChanges();
+                if (gdm.GraphicsDevice == null)
+                    return;
+
+                SysDrawing.Size newSize = Form.ClientSize;
+                int newWidth  = newSize.Width;
+                int newHeight = newSize.Height;
+                if (newWidth  != gdm.PreferredBackBufferWidth
+                ||  newHeight != gdm.PreferredBackBufferHeight)
+                {
+                    // Set the default new back buffer size
+                    gdm.PreferredBackBufferWidth = newWidth;
+                    gdm.PreferredBackBufferHeight = newHeight;
+                    gdm.ApplyChanges();
+                }
             }
         }
 
@@ -462,7 +479,7 @@ namespace Microsoft.Xna.Framework
             var raiseClientSizeChanged = false;
             if (pp.IsFullScreen && pp.HardwareModeSwitch && IsFullScreen && HardwareModeSwitch)
             {
-                if( _concreteGame.IsActive )
+                if(_concreteGame.IsActive)
                 {
                     // stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
                     ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ResizeTargets();

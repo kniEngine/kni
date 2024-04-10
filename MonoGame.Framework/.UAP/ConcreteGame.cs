@@ -119,8 +119,11 @@ namespace Microsoft.Xna.Platform
         {
             _enableRunLoop = false;
 
-            if (this.GraphicsDevice != null)
-                ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Trim();
+            GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+            {
+                if (gdm.GraphicsDevice != null)
+                    ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Trim();
+            }
         }
 
         private void CoreApplication_Resuming(object sender, Object e)

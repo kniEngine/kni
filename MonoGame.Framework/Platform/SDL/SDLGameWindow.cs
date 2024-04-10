@@ -524,22 +524,22 @@ namespace Microsoft.Xna.Framework
 
             // SDL reports many resize events even if the Size didn't change.
             // Only call the code below if it actually changed.
-            if (device.PresentationParameters.BackBufferWidth == width &&
-                device.PresentationParameters.BackBufferHeight == height)
-                return;
-
-            device.PresentationParameters.BackBufferWidth = width;
-            device.PresentationParameters.BackBufferHeight = height;
-
-            if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)device).Strategy.MainContext).Strategy.IsRenderTargetBound)
+            if (device.PresentationParameters.BackBufferWidth  != width
+            ||  device.PresentationParameters.BackBufferHeight != height)
             {
-                device.Viewport = new Viewport(0, 0, width, height);
-                device.ScissorRectangle = new Rectangle(0, 0, width, height);
-            }
-            
-            SDL.WINDOW.GetSize(Handle, out _width, out _height);
+                device.PresentationParameters.BackBufferWidth = width;
+                device.PresentationParameters.BackBufferHeight = height;
 
-            OnClientSizeChanged();
+                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)device).Strategy.MainContext).Strategy.IsRenderTargetBound)
+                {
+                    device.Viewport = new Viewport(0, 0, width, height);
+                    device.ScissorRectangle = new Rectangle(0, 0, width, height);
+                }
+
+                SDL.WINDOW.GetSize(Handle, out _width, out _height);
+
+                OnClientSizeChanged();
+            }
         }
 
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)

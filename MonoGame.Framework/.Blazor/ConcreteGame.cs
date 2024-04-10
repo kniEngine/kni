@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform
             // BlazorGL games do not "exit" or shut down.
             throw new PlatformNotSupportedException();
         }
-        
+
         protected override void Dispose(bool disposing)
         {
             if (_gameWindow != null)
@@ -110,7 +110,6 @@ namespace Microsoft.Xna.Platform
             }
 
             base.Dispose(disposing);
-
         }
     }
 }

@@ -198,7 +198,6 @@ namespace Microsoft.Xna.Framework
             _concreteGame.IsActive = false;
         }
 
-
         private void OnMouseEnter(object sender, EventArgs e)
         {
             _isMouseInBounds = true;
@@ -231,21 +230,24 @@ namespace Microsoft.Xna.Framework
         private void UpdateBackBufferSize()
         {
             GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
-            if (gdm.GraphicsDevice == null)
-                return;
-
-            _canvas.Width = _window.InnerWidth;
-            _canvas.Height = _window.InnerHeight;
-
-            int newWidth  = _canvas.Width;
-            int newHeight = _canvas.Height;
-            if (newWidth  != gdm.PreferredBackBufferWidth
-            ||  newHeight != gdm.PreferredBackBufferHeight)
+            if (gdm != null)
             {
-                // Set the default new back buffer size
-                gdm.PreferredBackBufferWidth = newWidth;
-                gdm.PreferredBackBufferHeight = newHeight;
-                gdm.ApplyChanges();
+                if (gdm.GraphicsDevice == null)
+                    return;
+
+                _canvas.Width = _window.InnerWidth;
+                _canvas.Height = _window.InnerHeight;
+
+                int newWidth  = _canvas.Width;
+                int newHeight = _canvas.Height;
+                if (newWidth  != gdm.PreferredBackBufferWidth
+                ||  newHeight != gdm.PreferredBackBufferHeight)
+                {
+                    // Set the default new back buffer size
+                    gdm.PreferredBackBufferWidth = newWidth;
+                    gdm.PreferredBackBufferHeight = newHeight;
+                    gdm.ApplyChanges();
+                }
             }
         }
 
@@ -350,12 +352,12 @@ namespace Microsoft.Xna.Framework
 
         private void ExitFullScreen()
         {
-           
+
         }
 
         private void MinimizeFullScreen()
         {
-         
+
         }
     }
 }

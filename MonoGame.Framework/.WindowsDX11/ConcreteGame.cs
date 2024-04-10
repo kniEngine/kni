@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform
                 }
             }
         }
-                
+        
         public override void TickExiting()
         {
             if (_gameWindow != null)

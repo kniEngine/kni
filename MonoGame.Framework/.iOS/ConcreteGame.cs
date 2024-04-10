@@ -193,8 +193,11 @@ namespace Microsoft.Xna.Platform
             _viewController.View.MakeCurrent();
             Game.Tick();
 
-            if (this.GraphicsDevice != null)
-                this.GraphicsDevice.Present();
+            GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+            {
+                if (gdm.GraphicsDevice != null)
+                    gdm.GraphicsDevice.Present();
+            }
 
             _viewController.View.Present();
         }
