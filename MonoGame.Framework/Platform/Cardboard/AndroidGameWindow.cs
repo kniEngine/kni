@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework
         private DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
 
-        internal TouchEventListener _touchEventListener;
+        private TouchEventListener _touchEventListener;
 
         public override IntPtr Handle { get { return GameView.Handle; } }
 
@@ -67,6 +67,9 @@ namespace Microsoft.Xna.Framework
             GameView.FocusableInTouchMode = true;
 
             _instances.Add(this.Handle, this);
+
+            _touchEventListener = new TouchEventListener();
+            _touchEventListener.SetTouchListener(this);
         }
 
         #region AndroidGameView Methods

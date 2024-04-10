@@ -141,12 +141,6 @@ namespace Microsoft.Xna.Platform
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                // BeforeInitialize
-                {
-                    _gameWindow._touchEventListener = new TouchEventListener();
-                    _gameWindow._touchEventListener.SetTouchListener(_gameWindow);
-                }
-
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -189,12 +183,6 @@ namespace Microsoft.Xna.Platform
                 if (gdm != null)
                 {
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                // BeforeInitialize
-                {
-                    _gameWindow._touchEventListener = new TouchEventListener();
-                    _gameWindow._touchEventListener.SetTouchListener(_gameWindow);
                 }
 
                 this.Game.CallInitialize();
