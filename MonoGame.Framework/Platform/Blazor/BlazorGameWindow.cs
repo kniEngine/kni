@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework
             _canvas = _window.Document.GetElementById<Canvas>("theCanvas");
             _instances.Add(this.Handle, this);
 
-            ChangeClientSize(new Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight));
+            ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
 
             SetIcon();
 
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework
 
         internal void Initialize(PresentationParameters pp)
         {
-            ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
+            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
 
             if (pp.IsFullScreen)
             {
@@ -278,7 +278,7 @@ namespace Microsoft.Xna.Framework
         }
 
 
-        internal void ChangeClientSize(Size clientBounds)
+        internal void ChangeClientSize(int width, int height)
         {
 
         }
@@ -352,7 +352,7 @@ namespace Microsoft.Xna.Framework
                 raiseClientSizeChanged = true;
             }
 
-            ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
+            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
 
             if (raiseClientSizeChanged)
                 OnClientSizeChanged();
