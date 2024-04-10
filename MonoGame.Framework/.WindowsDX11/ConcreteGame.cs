@@ -76,12 +76,9 @@ namespace Microsoft.Xna.Platform
 
                     // BeforeInitialize
                     {
-                        if (gdm != null)
-                        {
-                            PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
 
-                            _gameWindow.Initialize(pp);
-                        }
+                        _gameWindow.Initialize(pp);
                     }
                 }
 
