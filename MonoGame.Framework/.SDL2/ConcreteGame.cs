@@ -35,12 +35,6 @@ namespace Microsoft.Xna.Platform
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                // BeforeInitialize
-                {
-                    bool isExiting = _gameWindow.SdlRunLoop();
-                    _isExiting |= isExiting;
-                }
-
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -67,12 +61,6 @@ namespace Microsoft.Xna.Platform
                 if (gdm != null)
                 {
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                // BeforeInitialize
-                {
-                    bool isExiting = _gameWindow.SdlRunLoop();
-                    _isExiting |= isExiting;
                 }
 
                 this.Game.CallInitialize();
