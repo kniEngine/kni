@@ -32,6 +32,8 @@ namespace Microsoft.Xna.Platform
         private static ConcreteGame _concreteGameInstance = null;
         internal static ConcreteGame ConcreteGameInstance { get { return ConcreteGame._concreteGameInstance; } }
 
+
+
         public ConcreteGame(Game game) : base(game)
         {
             ConcreteGame._concreteGameInstance = this;
@@ -109,11 +111,6 @@ namespace Microsoft.Xna.Platform
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
                 }
 
-                // BeforeInitialize
-                {
-                    _viewController.View.LayoutSubviews();
-                }
-
                 this.Game.CallInitialize();
 
                 this.InitializeComponents();
@@ -140,11 +137,6 @@ namespace Microsoft.Xna.Platform
                 if (gdm != null)
                 {
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
-
-                    // BeforeInitialize
-                    {
-                        _viewController.View.LayoutSubviews();
-                    }
                 }
 
                 this.Game.CallInitialize();
