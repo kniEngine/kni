@@ -126,6 +126,8 @@ namespace Microsoft.Xna.Platform
             TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
 
             this.OnDeviceCreated(EventArgs.Empty);
+
+            ((ConcreteGame)this.Game.Strategy).ViewController.View.LayoutSubviews();
         }
 
         public override void ApplyChanges()
