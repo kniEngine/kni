@@ -121,7 +121,6 @@ namespace Microsoft.Xna.Platform
             }
             pp.MultiSampleCount = maxMultiSampleCount;
 
-
             gdi.PresentationParameters = pp;
             var args = new PreparingDeviceSettingsEventArgs(gdi);
             this.OnPreparingDeviceSettings(args);
@@ -203,7 +202,7 @@ namespace Microsoft.Xna.Platform
         {
             //base.EndDraw();
 
-            GraphicsDevice device = Game.GraphicsDevice;
+            GraphicsDevice device = this.GraphicsDevice;
             if (device != null)
             {
                 device.Present();

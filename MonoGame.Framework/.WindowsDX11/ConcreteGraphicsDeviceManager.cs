@@ -94,8 +94,8 @@ namespace Microsoft.Xna.Platform
             gdi.GraphicsProfile = GraphicsProfile;
 
             PresentationParameters pp = new PresentationParameters();
-            pp.BackBufferFormat = this.PreferredBackBufferFormat;
             pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
+            pp.BackBufferFormat = this.PreferredBackBufferFormat;
             pp.BackBufferWidth = this.PreferredBackBufferWidth;
             pp.BackBufferHeight = this.PreferredBackBufferHeight;
             pp.IsFullScreen = this.IsFullScreen;
@@ -149,7 +149,7 @@ namespace Microsoft.Xna.Platform
             this.CreateDevice(gdi);
 
             PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
-            
+
             WinFormsGameWindow gameWindow = (WinFormsGameWindow)Game.Window;
 
             gameWindow.ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
