@@ -13,12 +13,7 @@ namespace Microsoft.Xna.Platform
 
         }
 
-        public override void RunOneFrame()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal override void Run()
+        protected override void RunGameLoop()
         {
             throw new PlatformNotSupportedException();
         }

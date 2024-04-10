@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void BeginFrameTicks()
+        internal void StartGameLoop()
         {
             _isCancellationRequested = false;
 

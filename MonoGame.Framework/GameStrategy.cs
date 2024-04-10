@@ -252,9 +252,74 @@ namespace Microsoft.Xna.Platform
 
         #region Methods
 
-        public abstract void RunOneFrame();
+        public void RunOneFrame()
+        {
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
 
-        internal abstract void Run();
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                if (gdm != null)
+                {
+                    ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+
+            Game.CallBeginRun();
+            this.Timer.Restart();
+
+            //Not quite right..
+            Game.Tick();
+
+            Game.CallEndRun();
+        }
+
+        internal virtual void Run()
+        {
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
+
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                if (gdm != null)
+                {
+                    ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+
+            Game.CallBeginRun();
+            this.Timer.Restart();
+
+            // XNA runs one Update even before showing the window
+            // DoUpdate
+            {
+                this.Game.AssertNotDisposed();
+                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+                this.Game.CallUpdate(new GameTime());
+            }
+
+            RunGameLoop();
+
+            Game.CallEndRun();
+            Game.DoExiting();
+        }
+
+        protected virtual void RunGameLoop()
+        {
+            throw new NotImplementedException("Blocking Run() is not implemented.");
+        }
 
         public virtual void Initialize()
         {

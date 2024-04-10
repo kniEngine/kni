@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Media;
 
 
@@ -129,39 +128,9 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override void RunOneFrame()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
-            //Not quite right
-            this.Game.Tick();
-
-            Game.CallEndRun();
-        }
-
         internal override void Run()
         {
-            // Signal the GameView to initialize the game loop events.
-            _gameWindow.GameView.BeginFrameTicks();
-
+            StartGameLoop();
             // Prevent the default run loop from starting.
             // We will run the loop from the GameView's IRunnable.Run().
             return;
@@ -171,6 +140,11 @@ namespace Microsoft.Xna.Platform
 
             //Game.CallEndRun();
             //Game.DoExiting();
+        }
+
+        private void StartGameLoop()
+        {
+            _gameWindow.GameView.StartGameLoop();
         }
 
         private void OnFrameTickBegin()

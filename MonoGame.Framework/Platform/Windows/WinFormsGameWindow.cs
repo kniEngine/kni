@@ -337,7 +337,7 @@ namespace Microsoft.Xna.Framework
             Form.Text = title;
         }
 
-        internal void RunLoop()
+        internal void RunGameLoop()
         {
             Application.Idle += Application_Idle;
             Application.Run(Form);

@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -23,70 +22,21 @@ namespace Microsoft.Xna.Platform
 
         private Sdl SDL { get { return Sdl.Current; } }
 
-        public override void RunOneFrame()
+        protected override void RunGameLoop()
         {
-            if (!_initialized)
+            SDL.WINDOW.Show(Window.Handle);
+
+            while (true)
             {
-                this.Game.AssertNotDisposed();
+                bool isExiting = _gameWindow.SdlRunLoop();
+                _isExiting |= isExiting;
 
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
+                if (!_isExiting)
+                    Game.Tick();
+                else
+                    break;
             }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
-            //Not quite right..
-            Game.Tick();
-
-            Game.CallEndRun();
         }
-
-        internal override void Run()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
-            // XNA runs one Update even before showing the window
-            // DoUpdate
-            {
-                this.Game.AssertNotDisposed();
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                this.Game.CallUpdate(new GameTime());
-            }
-
-            RunLoop();
-
-            Game.CallEndRun();
-            Game.DoExiting();
-        }
-
 
         private bool _isExiting;
 
@@ -150,22 +100,6 @@ namespace Microsoft.Xna.Platform
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Window.Handle);
             string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
             _gameWindow.EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
-        }
-
-        private void RunLoop()
-        {
-            SDL.WINDOW.Show(Window.Handle);
-
-            while (true)
-            {
-                bool isExiting  = _gameWindow.SdlRunLoop();
-                _isExiting |= isExiting;
-
-                if (!_isExiting)
-                    Game.Tick();
-                else
-                    break;
-            }
         }
 
         public override void TickExiting()

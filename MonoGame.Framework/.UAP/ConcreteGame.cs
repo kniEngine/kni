@@ -5,7 +5,6 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -135,34 +134,6 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        public override void RunOneFrame()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
-            //Not quite right..
-            Game.Tick();
-
-            Game.CallEndRun();
-        }
-
         internal override void Run()
         {
             if (!_initialized)
@@ -193,14 +164,15 @@ namespace Microsoft.Xna.Platform
                 this.Game.CallUpdate(new GameTime());
             }
 
-            StartRunLoop();
+            StartGameLoop();
+            return;
 
             //Game.CallEndRun();
             //Game.DoExiting();
         }
 
         bool _enableRunLoop = false;
-        private void StartRunLoop()
+        private void StartGameLoop()
         {
             if (!_enableRunLoop)
             {

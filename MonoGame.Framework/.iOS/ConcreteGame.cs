@@ -99,34 +99,6 @@ namespace Microsoft.Xna.Platform
             _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
         }
 
-        public override void RunOneFrame()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
-            //Not quite right..
-            Game.Tick();
-
-            Game.CallEndRun();
-        }
-
         internal override void Run()
         {
             if (!_initialized)
@@ -149,11 +121,29 @@ namespace Microsoft.Xna.Platform
             Game.CallBeginRun();
             base.Timer.Restart();
 
-            StartRunLoop();
+            StartGameLoop();
+            return;
 
             //Game.CallEndRun();
             //Game.DoExiting();
         }
+
+        private void StartGameLoop()
+        {
+            // Show the window
+            _uiWindow.MakeKeyAndVisible();
+
+            // In iOS 8+ we need to set the root view controller *after* Window MakeKey
+            // This ensures that the viewController's supported interface orientations
+            // will be respected at launch
+            _uiWindow.RootViewController = _viewController;
+
+            BeginObservingUIApplication();
+
+            _viewController.View.BecomeFirstResponder();
+            CreateDisplayLink();
+        }
+
 
         // FIXME: VideoPlayer 'needs' this to set up its own movie player view
         //        controller.
@@ -201,22 +191,6 @@ namespace Microsoft.Xna.Platform
             }
 
             base.Initialize();
-        }
-
-        private void StartRunLoop()
-        {
-            // Show the window
-            _uiWindow.MakeKeyAndVisible();
-
-            // In iOS 8+ we need to set the root view controller *after* Window MakeKey
-            // This ensures that the viewController's supported interface orientations
-            // will be respected at launch
-            _uiWindow.RootViewController = _viewController;
-
-            BeginObservingUIApplication();
-
-            _viewController.View.BecomeFirstResponder();
-            CreateDisplayLink();
         }
 
         internal void iOSTick()
