@@ -38,13 +38,11 @@ namespace Microsoft.Xna.Platform
                 if (gdm != null)
                 {
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
 
-                // BeforeInitialize
-                {
-                    if (gdm != null)
+                    // BeforeInitialize
                     {
-                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+                        PresentationParameters pp = gdm.GraphicsDevice.PresentationParameters;
+
                         _gameWindow.Initialize(pp);
                     }
                 }
@@ -75,14 +73,15 @@ namespace Microsoft.Xna.Platform
                 if (gdm != null)
                 {
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
 
-                // BeforeInitialize
-                {
-                    if (gdm != null)
+                    // BeforeInitialize
                     {
-                        PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
-                        _gameWindow.Initialize(pp);
+                        if (gdm != null)
+                        {
+                            PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+
+                            _gameWindow.Initialize(pp);
+                        }
                     }
                 }
 
