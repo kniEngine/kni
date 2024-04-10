@@ -7,7 +7,6 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Framework.Utilities;
@@ -65,20 +64,6 @@ namespace Microsoft.Xna.Platform
                 Mouse.WindowHandle = base.Window.Handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
-        }
-
-        public override void Initialize()
-        {
-            // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
-            {
-                GraphicsDevice graphicsDevice = this.GraphicsDevice;
-                PresentationParameters pp = graphicsDevice.PresentationParameters;
-                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-
-                _gameWindow.EndScreenDeviceChange(string.Empty, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
-            }
-
-            base.Initialize();
         }
 
         public override bool IsMouseVisible

@@ -128,6 +128,9 @@ namespace Microsoft.Xna.Platform
             this.OnDeviceCreated(EventArgs.Empty);
 
             ((ConcreteGame)this.Game.Strategy).ViewController.View.LayoutSubviews();
+
+            PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
+            this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
         }
 
         public override void ApplyChanges()

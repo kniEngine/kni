@@ -180,18 +180,6 @@ namespace Microsoft.Xna.Platform
             
         }
 
-        public override void Initialize()
-        {
-            // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
-            {
-                GraphicsDevice graphicsDevice = this.GraphicsDevice;
-                PresentationParameters pp = graphicsDevice.PresentationParameters;
-                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-            }
-
-            base.Initialize();
-        }
-
         internal void iOSTick()
         {
             if (!Game.IsActive)
