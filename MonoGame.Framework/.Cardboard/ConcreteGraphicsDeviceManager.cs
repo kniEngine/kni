@@ -114,6 +114,26 @@ namespace Microsoft.Xna.Platform
             TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
 
             this.OnDeviceCreated(EventArgs.Empty);
+
+            AndroidGameWindow gameWindow = (AndroidGameWindow)Game.Window;
+
+            Android.App.Activity activity = AndroidGameWindow.Activity;
+            DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
+            switch (activity.Resources.Configuration.Orientation)
+            {
+                case Android.Content.Res.Orientation.Portrait:
+                    gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
+                                                    ? DisplayOrientation.PortraitDown
+                                                    : DisplayOrientation.Portrait,
+                                                    false);
+                    break;
+                default:
+                    gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
+                                                    ? DisplayOrientation.LandscapeRight
+                                                    : DisplayOrientation.LandscapeLeft,
+                                                    false);
+                    break;
+            }
         }
 
         public override void ApplyChanges()
