@@ -219,18 +219,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void Initialize(PresentationParameters pp)
-        {
-            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
-
-            if (pp.IsFullScreen)
-            {
-                EnterFullScreen(pp);
-                if (!pp.HardwareModeSwitch)
-                    ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
-            }
-        }
-
         internal void OnResize(object sender)
         {
 
@@ -361,7 +349,7 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-        private void EnterFullScreen(PresentationParameters pp)
+        internal void EnterFullScreen(PresentationParameters pp)
         {
 
         }

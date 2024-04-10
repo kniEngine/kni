@@ -148,6 +148,20 @@ namespace Microsoft.Xna.Platform
 
             var gdi = this.DoPreparingDeviceSettings();
             this.CreateDevice(gdi);
+
+            PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+
+            BlazorGameWindow gameWindow = (BlazorGameWindow)Game.Window;
+
+            gameWindow.ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
+
+            if (pp.IsFullScreen)
+            {
+                gameWindow.EnterFullScreen(pp);
+
+                if (!pp.HardwareModeSwitch)
+                    ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
+            }
         }
 
         internal void CreateDevice(GraphicsDeviceInformation gdi)
