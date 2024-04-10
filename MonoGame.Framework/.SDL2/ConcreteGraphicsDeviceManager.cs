@@ -226,6 +226,11 @@ namespace Microsoft.Xna.Platform
             }
 
             this.CreateDevice(gdi);
+
+            PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
+            this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
+
+            ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(string.Empty, gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen);
         }
 
         internal void CreateDevice(GraphicsDeviceInformation gdi)

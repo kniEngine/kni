@@ -69,22 +69,6 @@ namespace Microsoft.Xna.Platform
             // Android games do not "exit" or shut down.
             throw new PlatformNotSupportedException();
         }
-
-        public override void Initialize()
-        {
-            // TODO: This should be moved to GraphicsDeviceManager or GraphicsDevice
-            {
-                GraphicsDevice graphicsDevice = this.GraphicsDevice;
-                PresentationParameters pp = graphicsDevice.PresentationParameters;
-                graphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-
-                // Force the Viewport to be correctly set
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                gdm.GetStrategy<ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
-            }
-
-            base.Initialize();
-        }
         
         private bool _hasWindowFocus = true;
         private bool _isActivityActive = false;

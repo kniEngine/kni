@@ -134,6 +134,12 @@ namespace Microsoft.Xna.Platform
                                                     false);
                     break;
             }
+
+            PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
+            this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
+
+            // Force the Viewport to be correctly set
+            this.ResetClientBounds();
         }
 
         public override void ApplyChanges()

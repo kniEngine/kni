@@ -769,12 +769,14 @@ namespace Microsoft.Xna.Framework
 
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                 // the surface is created after the correct viewport is already applied so we must do it again.
-                if (_game.Strategy.GraphicsDevice != null)
+                GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
+                if (gdm != null)
                 {
-                    GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
-                    gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+                    if (_game.Strategy.GraphicsDevice != null)
+                    {
+                        gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+                    }
                 }
-
             }
             catch (Exception ex)
             {

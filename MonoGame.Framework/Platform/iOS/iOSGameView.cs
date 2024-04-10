@@ -295,12 +295,10 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                pp.BackBufferHeight = height;
                 pp.BackBufferWidth = width;
+                pp.BackBufferHeight = height;
 
-                gds.GraphicsDevice.Viewport = new Viewport(
-                    0, 0,
-                    pp.BackBufferWidth, pp.BackBufferHeight);
+                gds.GraphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
                 
                 ((IPlatformGraphicsDevice)gds.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer = _framebuffer;
             }
