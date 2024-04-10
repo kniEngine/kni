@@ -148,6 +148,11 @@ namespace Microsoft.Xna.Platform
 
             var gdi = this.DoPreparingDeviceSettings();
             this.CreateDevice(gdi);
+
+            PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+
+            BlazorGameWindow gameWindow = (BlazorGameWindow)Game.Window;
+            gameWindow.Initialize(pp);
         }
 
         internal void CreateDevice(GraphicsDeviceInformation gdi)
