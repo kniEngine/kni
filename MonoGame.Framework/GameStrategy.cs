@@ -432,15 +432,6 @@ namespace Microsoft.Xna.Platform
 
         }
 
-        /// <summary>
-        /// Called by the GraphicsDeviceManager to notify the platform
-        /// that the presentation parameters have changed.
-        /// </summary>
-        /// <param name="pp">The new presentation parameters.</param>
-        internal virtual void OnPresentationChanged(PresentationParameters pp)
-        {
-        }
-
         private TimeSpan _currElapsedTime;
         private TimeSpan _prevElapsedTime;
         private int _updateFrameLag;

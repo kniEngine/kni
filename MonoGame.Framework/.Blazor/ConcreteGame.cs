@@ -7,7 +7,6 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 
 
@@ -90,11 +89,6 @@ namespace Microsoft.Xna.Platform
         {
             // BlazorGL games do not "exit" or shut down.
             throw new PlatformNotSupportedException();
-        }
-
-        internal override void OnPresentationChanged(PresentationParameters pp)
-        {
-            _gameWindow.OnPresentationChanged(pp);
         }
         
         protected override void Dispose(bool disposing)

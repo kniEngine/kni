@@ -248,7 +248,11 @@ namespace Microsoft.Xna.Platform
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
         {
-            base.Game.Strategy.OnPresentationChanged(args.PresentationParameters);
+            PresentationParameters pp = args.PresentationParameters;
+
+            int displayIndex = SDL.WINDOW.GetDisplayIndex(Game.Window.Handle);
+            string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
+            ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
         }
 
 

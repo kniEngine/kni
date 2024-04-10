@@ -7,7 +7,6 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
@@ -51,11 +50,6 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow = null;
             Window = null;
-        }
-
-        internal override void OnPresentationChanged(PresentationParameters pp)
-        {
-            _gameWindow.OnPresentationChanged(pp);
         }
 
         protected override void Dispose(bool disposing)

@@ -183,7 +183,23 @@ namespace Microsoft.Xna.Platform
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
         {
-            base.Game.Strategy.OnPresentationChanged(args.PresentationParameters);
+            PresentationParameters pp = args.PresentationParameters;
+
+            if (pp.IsFullScreen)
+            {
+                // Enter FullScreen
+                if (((UAPGameWindow)Game.Window).AppView.TryEnterFullScreenMode())
+                {
+                    Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.FullScreen;
+                }
+            }
+            else
+            {
+                // Exit FullScreen
+                ((UAPGameWindow)Game.Window).AppView.ExitFullScreenMode();
+
+                Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.Auto;
+            }
         }
 
 
