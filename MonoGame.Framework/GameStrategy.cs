@@ -252,7 +252,33 @@ namespace Microsoft.Xna.Platform
 
         #region Methods
 
-        public abstract void RunOneFrame();
+        public void RunOneFrame()
+        {
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
+
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                if (gdm != null)
+                {
+                    ((IGraphicsDeviceManager)gdm).CreateDevice();
+                }
+
+                this.Game.CallInitialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+
+            Game.CallBeginRun();
+            this.Timer.Restart();
+
+            //Not quite right..
+            Game.Tick();
+
+            Game.CallEndRun();
+        }
 
         internal abstract void Run();
 

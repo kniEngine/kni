@@ -28,34 +28,6 @@ namespace Microsoft.Xna.Platform
                 TouchPanel.WindowHandle = base.Window.Handle;
         }
 
-        public override void RunOneFrame()
-        {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            Game.CallBeginRun();
-            base.Timer.Restart();
-
-            //Not quite right..
-            Game.Tick();
-
-            Game.CallEndRun();
-        }
-
         internal override void Run()
         {
             if (!_initialized)
