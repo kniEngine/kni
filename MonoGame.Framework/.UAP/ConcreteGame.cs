@@ -5,7 +5,6 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;

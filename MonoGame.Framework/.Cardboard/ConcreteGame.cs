@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Media;
 
 
