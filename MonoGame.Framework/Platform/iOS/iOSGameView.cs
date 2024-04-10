@@ -366,16 +366,17 @@ namespace Microsoft.Xna.Framework
         {
             base.LayoutSubviews();
 
-            var gds = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+            IGraphicsDeviceService gds = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
-            if (gds == null || gds.GraphicsDevice == null)
-                return;
+            if (gds != null && gds.GraphicsDevice != null)
+            {
+                if (_framebuffer != 0)
+                    DestroyFramebuffer();
+                if (_glContext == null)
+                    CreateGLContext();
 
-            if (_framebuffer != 0)
-                DestroyFramebuffer();
-            if (_glContext == null)
-                CreateGLContext();
-            CreateFramebuffer();
+                CreateFramebuffer();
+            }
         }
 
         #region UIWindow Notifications

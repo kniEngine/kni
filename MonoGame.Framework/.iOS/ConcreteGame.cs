@@ -140,11 +140,11 @@ namespace Microsoft.Xna.Platform
                 if (gdm != null)
                 {
                     ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
 
-                // BeforeInitialize
-                {
-                    _viewController.View.LayoutSubviews();
+                    // BeforeInitialize
+                    {
+                        _viewController.View.LayoutSubviews();
+                    }
                 }
 
                 this.Game.CallInitialize();
@@ -330,10 +330,9 @@ namespace Microsoft.Xna.Platform
             TouchPanel.DisplayOrientation = orientation;
 
             if (gdm != null)
-            {	
-
-                var presentParams = gdm.GraphicsDevice.PresentationParameters;
-                presentParams.BackBufferWidth = gdm.PreferredBackBufferWidth;
+            {
+                PresentationParameters presentParams = gdm.GraphicsDevice.PresentationParameters;
+                presentParams.BackBufferWidth  = gdm.PreferredBackBufferWidth;
                 presentParams.BackBufferHeight = gdm.PreferredBackBufferHeight;
 
                 presentParams.DisplayOrientation = orientation;
