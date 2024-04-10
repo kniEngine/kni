@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
-using Size = System.Drawing.Size;
 using nkast.Wasm.Canvas;
 using nkast.Wasm.Dom;
 using Microsoft.Xna.Platform.Graphics;
@@ -123,7 +122,7 @@ namespace Microsoft.Xna.Framework
             _canvas = _window.Document.GetElementById<Canvas>("theCanvas");
             _instances.Add(this.Handle, this);
 
-            ChangeClientSize(new Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight));
+            ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
 
             SetIcon();
 
@@ -222,7 +221,7 @@ namespace Microsoft.Xna.Framework
 
         internal void Initialize(PresentationParameters pp)
         {
-            ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
+            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
 
             if (pp.IsFullScreen)
             {
@@ -249,15 +248,17 @@ namespace Microsoft.Xna.Framework
 
             _canvas.Width = _window.InnerWidth;
             _canvas.Height = _window.InnerHeight;
-            Size newSize = new Size(_canvas.Width, _canvas.Height);
-            if (newSize.Width  == gdm.PreferredBackBufferWidth
-            &&  newSize.Height == gdm.PreferredBackBufferHeight)
-                return;
 
-            // Set the default new back buffer size
-            gdm.PreferredBackBufferWidth = newSize.Width;
-            gdm.PreferredBackBufferHeight = newSize.Height;
-            gdm.ApplyChanges();
+            int newWidth  = _canvas.Width;
+            int newHeight = _canvas.Height;
+            if (newWidth  != gdm.PreferredBackBufferWidth
+            ||  newHeight != gdm.PreferredBackBufferHeight)
+            {
+                // Set the default new back buffer size
+                gdm.PreferredBackBufferWidth = newWidth;
+                gdm.PreferredBackBufferHeight = newHeight;
+                gdm.ApplyChanges();
+            }
         }
 
         protected override void SetTitle(string title)
@@ -278,7 +279,7 @@ namespace Microsoft.Xna.Framework
         }
 
 
-        internal void ChangeClientSize(Size clientBounds)
+        internal void ChangeClientSize(int width, int height)
         {
 
         }
@@ -352,7 +353,7 @@ namespace Microsoft.Xna.Framework
                 raiseClientSizeChanged = true;
             }
 
-            ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
+            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
 
             if (raiseClientSizeChanged)
                 OnClientSizeChanged();

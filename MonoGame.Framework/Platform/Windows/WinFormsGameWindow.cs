@@ -332,14 +332,16 @@ namespace Microsoft.Xna.Framework
                 return;
 
             SysDrawing.Size newSize = Form.ClientSize;
-            if (newSize.Width == gdm.PreferredBackBufferWidth
-                && newSize.Height == gdm.PreferredBackBufferHeight)
-                return;
-
-            // Set the default new back buffer size
-            gdm.PreferredBackBufferWidth = newSize.Width;
-            gdm.PreferredBackBufferHeight = newSize.Height;
-            gdm.ApplyChanges();
+            int newWidth  = newSize.Width;
+            int newHeight = newSize.Height;
+            if (newWidth  != gdm.PreferredBackBufferWidth
+            ||  newHeight != gdm.PreferredBackBufferHeight)
+            {
+                // Set the default new back buffer size
+                gdm.PreferredBackBufferWidth = newWidth;
+                gdm.PreferredBackBufferHeight = newHeight;
+                gdm.ApplyChanges();
+            }
         }
 
         protected override void SetTitle(string title)
