@@ -30,6 +30,21 @@ namespace Microsoft.Xna.Platform.Input
             return caps;
         }
 
+        protected JoystickState CreateJoystickState(bool isConnected, int[] axes, ButtonState[] buttons, JoystickHat[] hats)
+        {
+            JoystickState state = new JoystickState();
+            state.IsConnected = isConnected;
+            state.Axes = axes;
+            state.Buttons = buttons;
+            state.Hats = hats;
+
+            return state;
+        }
+
+        protected JoystickHat CreateJoystickHat(Buttons dPadButtons)
+        {
+            return new JoystickHat(dPadButtons);
+        }
 
         /// <summary>
         /// A default <see cref="JoystickState"/>.
