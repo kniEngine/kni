@@ -14,5 +14,20 @@ namespace Microsoft.Xna.Platform.Input
         {
             return new KeyboardState(keys, capsLock, numLock);
         }
+
+        protected void InternalSetKey(ref KeyboardState keyboardState, Keys key)
+        {
+            keyboardState.InternalSetKey(key);
+        }
+
+        protected void InternalResetKey(ref KeyboardState keyboardState, Keys key)
+        {
+            keyboardState.InternalResetKey(key);
+        }
+
+        protected void InternalResetKeys(ref KeyboardState keyboardState)
+        {
+            keyboardState.InternalResetKeys();
+        }
     }
 }
