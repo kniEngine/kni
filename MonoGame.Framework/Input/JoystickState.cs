@@ -45,10 +45,10 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
         public static bool operator ==(JoystickState left, JoystickState right)
         {
-            return left.IsConnected == right.IsConnected &&
-               left.Axes.SequenceEqual(right.Axes) &&
-               left.Buttons.SequenceEqual(right.Buttons) &&
-               left.Hats.SequenceEqual(right.Hats);
+            return left.IsConnected == right.IsConnected
+                && left.Axes.SequenceEqual(right.Axes)
+                && left.Buttons.SequenceEqual(right.Buttons)
+                && left.Hats.SequenceEqual(right.Hats);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework.Input
         /// hash table.</returns>
         public override int GetHashCode()
         {
-            var hash = 0;
+            int hash = 0;
 
             if (IsConnected)
             {
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:Microsoft.Xna.Framework.Input.JoystickState"/>.</returns>
         public override string ToString()
         {
-            var ret = new StringBuilder(54 - 2 + Axes.Length * 7 + Buttons.Length + Hats.Length * 5);
+            StringBuilder ret = new StringBuilder(54 - 2 + Axes.Length * 7 + Buttons.Length + Hats.Length * 5);
             ret.Append("[JoystickState: IsConnected=" + (IsConnected ? 1 : 0));
 
             if (IsConnected)
