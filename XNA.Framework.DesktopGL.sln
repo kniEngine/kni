@@ -1,7 +1,14 @@
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.3.32929.385
-MinimumVisualStudioVersion = 17.1.32210.238
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 17.9.34723.18
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{9E8F9D1A-DEF1-4FA1-8DE9-0A82B7BC99D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{94670BA5-3B36-4EBA-A3E0-27912F6BD11A}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework", "src\Xna.Framework\Xna.Framework.csproj", "{741B4B1E-89E4-434C-8867-6129838AFD51}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content", "src\Xna.Framework.Content\Xna.Framework.Content.csproj", "{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}"
@@ -10,13 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Graphics", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Audio", "src\Xna.Framework.Audio\Xna.Framework.Audio.csproj", "{3F81F76D-F0F3-44FE-A256-40AF153C33F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.DesktopGL", "MonoGame.Framework\XNA.Framework.DesktopGL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XNA.Framework.Media", "src\Xna.Framework.Media\XNA.Framework.Media.csproj", "{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Media", "src\Xna.Framework.Media\Xna.Framework.Media.csproj", "{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Design", "src\Xna.Framework.Design\Xna.Framework.Design.csproj", "{E37F98D7-C4E8-4556-B322-AEF99638ECE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.DesktopGL", "MonoGame.Framework\Xna.Framework.DesktopGL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,14 +47,6 @@ Global
 		{3F81F76D-F0F3-44FE-A256-40AF153C33F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F81F76D-F0F3-44FE-A256-40AF153C33F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F81F76D-F0F3-44FE-A256-40AF153C33F7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,8 +55,26 @@ Global
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E37F98D7-C4E8-4556-B322-AEF99638ECE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D75E618-19CA-4C51-9546-F10965FBC0B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DED2DDB6-D4BE-B1B4-2E54-657374732E57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{741B4B1E-89E4-434C-8867-6129838AFD51} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
+		{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
+		{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
+		{3F81F76D-F0F3-44FE-A256-40AF153C33F7} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
+		{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
+		{E37F98D7-C4E8-4556-B322-AEF99638ECE1} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
+		{6D75E618-19CA-4C51-9546-F10965FBC0B8} = {9E8F9D1A-DEF1-4FA1-8DE9-0A82B7BC99D9}
+		{DED2DDB6-D4BE-B1B4-2E54-657374732E57} = {94670BA5-3B36-4EBA-A3E0-27912F6BD11A}
 	EndGlobalSection
 EndGlobal
