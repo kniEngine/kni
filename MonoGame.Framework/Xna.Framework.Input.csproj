@@ -6,6 +6,7 @@
 
     <Version>3.11.9002.0</Version>
     <AssemblyVersion>3.11.9002.0</AssemblyVersion>
+
   </PropertyGroup>
 
   <PropertyGroup>
@@ -24,6 +25,16 @@
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Input</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="Input\Touch\GestureSample.cs" />
@@ -82,12 +93,6 @@
     <Compile Include="Input\MouseCursorStrategy.cs" />
     <Compile Include="Input\MouseState.cs" />
     <Compile Include="Input\TextInputEventArgs.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="ILLink.Descriptors.xml">
-      <LogicalName>ILLink.Descriptors.xml</LogicalName>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
