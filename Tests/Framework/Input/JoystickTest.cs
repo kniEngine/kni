@@ -13,31 +13,17 @@ namespace MonoGame.Tests.Input
         [TestCase(new [] { -7324, -32000 }, new [] { ButtonState.Pressed, ButtonState.Pressed }, false)]
         public void TestState(int[] axes, ButtonState[] buttons, bool isConnected)
         {
-            var hats = new[]
+            JoystickHat[] hats = new[]
             {
-                new JoystickHat
-                {
-                    Left = ButtonState.Pressed,
-                    Up = ButtonState.Released,
-                    Right = ButtonState.Released,
-                    Down = ButtonState.Pressed
-                },
-                new JoystickHat
-                {
-                    Left = ButtonState.Pressed,
-                    Up = ButtonState.Pressed,
-                    Right = ButtonState.Pressed,
-                    Down = ButtonState.Released
-                }
+                new JoystickHat(Buttons.DPadLeft | Buttons.DPadDown),
+                new JoystickHat(Buttons.DPadLeft | Buttons.DPadUp | Buttons.DPadRight)
             };
 
-            var state = new JoystickState
-            {
-                Axes = axes,
-                Buttons = buttons,
-                Hats = hats,
-                IsConnected = isConnected
-            };
+            JoystickState state = new JoystickState();
+            state.Axes = axes;
+            state.Buttons = buttons;
+            state.Hats = hats;
+            state.IsConnected = isConnected;
 
             Assert.AreEqual(axes, state.Axes);
             Assert.AreEqual(buttons, state.Buttons);
@@ -46,18 +32,19 @@ namespace MonoGame.Tests.Input
         }
 
         [Test]
-        public void JoyStickHatTest([Values(ButtonState.Pressed, ButtonState.Released)] ButtonState left, 
+        public void JoyStickHatTest(
+            [Values(ButtonState.Pressed, ButtonState.Released)] ButtonState left, 
             [Values(ButtonState.Pressed, ButtonState.Released)] ButtonState right, 
             [Values(ButtonState.Pressed, ButtonState.Released)] ButtonState up, 
             [Values(ButtonState.Pressed, ButtonState.Released)] ButtonState down)
         {
-            var hat = new JoystickHat
-            {
-                Left = left,
-                Right = right,
-                Up = up,
-                Down = down,
-            };
+            Buttons dPadButtons = (Buttons)0;
+            dPadButtons |= (left  == ButtonState.Pressed) ? Buttons.DPadLeft : (Buttons)0;
+            dPadButtons |= (right == ButtonState.Pressed) ? Buttons.DPadRight: (Buttons)0;
+            dPadButtons |= (up    == ButtonState.Pressed) ? Buttons.DPadUp   : (Buttons)0;
+            dPadButtons |= (down  == ButtonState.Pressed) ? Buttons.DPadDown : (Buttons)0;
+
+            JoystickHat hat = new JoystickHat(dPadButtons);
 
             Assert.AreEqual(left, hat.Left);
             Assert.AreEqual(right, hat.Right);

@@ -79,14 +79,9 @@ namespace Microsoft.Xna.Platform.Input
             for (int i = 0; i < hats.Length; i++)
             {
                 Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(jdevice, i);
+                Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
 
-                hats[i] = new JoystickHat
-                {
-                    Up   = ((hatstate & Sdl.Joystick.Hat.Up) != 0) ? ButtonState.Pressed : ButtonState.Released,
-                    Down = ((hatstate & Sdl.Joystick.Hat.Down) != 0) ? ButtonState.Pressed : ButtonState.Released,
-                    Left  = ((hatstate & Sdl.Joystick.Hat.Left) != 0) ? ButtonState.Pressed : ButtonState.Released,
-                    Right = ((hatstate & Sdl.Joystick.Hat.Right) != 0) ? ButtonState.Pressed : ButtonState.Released
-                };
+                hats[i] = new JoystickHat(dPadButtons);
             }
 
             return new JoystickState
@@ -135,14 +130,9 @@ namespace Microsoft.Xna.Platform.Input
             for (int i = 0; i < jcap.HatCount; i++)
             {
                 Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(jdevice, i);
+                Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
 
-                joystickState.Hats[i] = new JoystickHat
-                {
-                    Up   = ((hatstate & Sdl.Joystick.Hat.Up) != 0) ? ButtonState.Pressed : ButtonState.Released,
-                    Down = ((hatstate & Sdl.Joystick.Hat.Down) != 0) ? ButtonState.Pressed : ButtonState.Released,
-                    Left  = ((hatstate & Sdl.Joystick.Hat.Left) != 0) ? ButtonState.Pressed : ButtonState.Released,
-                    Right = ((hatstate & Sdl.Joystick.Hat.Right) != 0) ? ButtonState.Pressed : ButtonState.Released
-                };
+                joystickState.Hats[i] = new JoystickHat(dPadButtons);
             }
 
             joystickState.IsConnected = true;
@@ -204,6 +194,16 @@ namespace Microsoft.Xna.Platform.Input
             }
         }
 
+        private Buttons SDLToXnaDPadButtons(Sdl.Joystick.Hat hatstate)
+        {
+            Buttons dPadButtons = (Buttons)0;
+            dPadButtons |= (Buttons)((int)(hatstate & Sdl.Joystick.Hat.Up));
+            dPadButtons |= (Buttons)((int)(hatstate & Sdl.Joystick.Hat.Down) >> 1);
+            dPadButtons |= (Buttons)((int)(hatstate & Sdl.Joystick.Hat.Left) >> 1);
+            dPadButtons |= (Buttons)((int)(hatstate & Sdl.Joystick.Hat.Right) << 2);
+
+            return dPadButtons;
+        }
 
     }
 }
