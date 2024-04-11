@@ -27,17 +27,17 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void SetKey(Keys key)
         {
-            _nextKeyboardState.InternalSetKey(key);
+            base.InternalSetKey(ref _nextKeyboardState, key);
         }
 
-        internal void ClearKey(Keys key)
+        internal void ResetKey(Keys key)
         {
-            _nextKeyboardState.InternalClearKey(key);
+            base.InternalResetKey(ref _nextKeyboardState, key);
         }
                 
-        internal void Clear()
+        internal void ResetKeys()
         {
-            _nextKeyboardState.InternalClearAllKeys();
+            base.InternalResetKeys(ref _nextKeyboardState);
         }
 
     }

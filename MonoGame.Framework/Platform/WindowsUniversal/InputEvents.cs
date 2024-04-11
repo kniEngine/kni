@@ -307,7 +307,7 @@ namespace Microsoft.Xna.Framework
         {
             var xnaKey = KeyTranslate(args.VirtualKey, args.KeyStatus);
 
-            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().ClearKey(xnaKey);
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().ResetKey(xnaKey);
         }
 
         private void CoreWindow_KeyDown(object sender, KeyEventArgs args)
@@ -330,7 +330,7 @@ namespace Microsoft.Xna.Framework
         {
             // If the window is resized then also 
             // drop any current key states.
-            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().Clear();
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().ResetKeys();
 
             // required of input can stop working if we change focus
             WakeupKeyboardInput();
@@ -341,7 +341,7 @@ namespace Microsoft.Xna.Framework
             // Forget about the held keys when we lose focus as we don't
             // receive key events for them while we are in the background
             if (args.WindowActivationState == CoreWindowActivationState.Deactivated)
-                ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().Clear();
+                ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().ResetKeys();
 
             // required of input can stop working if we change focus
             WakeupKeyboardInput();
@@ -352,7 +352,7 @@ namespace Microsoft.Xna.Framework
             // Forget about the held keys when we disappear as we don't
             // receive key events for them while we are in the background
             if (!args.Visible)
-                ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().Clear();
+                ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().ResetKeys();
 
             // required of input can stop working if we change focus
             WakeupKeyboardInput();
