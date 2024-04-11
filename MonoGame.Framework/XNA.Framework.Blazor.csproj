@@ -44,18 +44,22 @@
     <ProjectReference Include="..\src\Xna.Framework.Content\Xna.Framework.Content.csproj">
       <Project>{1DC4C439-A8A6-4A11-AB3B-A88DCBA05449}</Project>
       <Name>Xna.Framework.Content</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
       <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
       <Name>Xna.Framework.Graphics</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Audio\Xna.Framework.Audio.csproj">
       <Project>{3F81F76D-F0F3-44FE-A256-40AF153C33F7}</Project>
       <Name>Xna.Framework.Audio</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Media\Xna.Framework.Media.csproj">
       <Project>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</Project>
       <Name>Xna.Framework.Media</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
 
