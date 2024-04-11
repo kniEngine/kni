@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
@@ -9,29 +11,37 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public struct JoystickHat
     {
+        private readonly Buttons _dPadButtons;
+
+        internal JoystickHat(Buttons dPadButtons)
+        {
+            this._dPadButtons = dPadButtons;
+        }
+
+
         /// <summary>
         /// Gets if joysticks hat "down" is pressed.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the button is pressed otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Down { get; internal set; }
+        public ButtonState Down { get { return (ButtonState)((int)(_dPadButtons & Buttons.DPadDown) >> 1); } }
 
         /// <summary>
         /// Gets if joysticks hat "left" is pressed.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the button is pressed otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Left { get; internal set; }
+        public ButtonState Left { get { return (ButtonState)((int)(_dPadButtons & Buttons.DPadLeft) >> 2); } }
 
         /// <summary>
         /// Gets if joysticks hat "right" is pressed.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the button is pressed otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Right { get; internal set; }
+        public ButtonState Right { get { return (ButtonState)((int)(_dPadButtons & Buttons.DPadRight) >> 3); } }
 
         /// <summary>
         /// Gets if joysticks hat "up" is pressed.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the button is pressed otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Up { get; internal set; }
+        public ButtonState Up { get { return (ButtonState)((int)(_dPadButtons & Buttons.DPadUp) >> 0); } }
 
         /// <summary>
         /// Determines whether a specified instance of <see cref="Microsoft.Xna.Framework.Input.JoystickHat"/> is equal
@@ -42,10 +52,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
         public static bool operator ==(JoystickHat left, JoystickHat right)
         {
-            return (left.Down == right.Down) &&
-                (left.Left == right.Left) &&
-                (left.Right == right.Right) &&
-                (left.Up == right.Up);
+            return (left._dPadButtons == right._dPadButtons);
         }
 
         /// <summary>
@@ -78,16 +85,9 @@ namespace Microsoft.Xna.Framework.Input
         /// hash table.</returns>
         public override int GetHashCode()
         {
-            var hash = 0;
+            int hash = 0;
 
-            if (Left == ButtonState.Pressed)
-                hash |= (1 << 3);
-            if (Up == ButtonState.Pressed)
-                hash |= (1 << 2);
-            if (Right == ButtonState.Pressed)
-                hash |= (1 << 1);
-            if (Down == ButtonState.Pressed)
-                hash |= (1 << 0);
+            hash |= (int)_dPadButtons;
 
             return hash;
         }
@@ -98,7 +98,8 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:Microsoft.Xna.Framework.Input.JoystickHat"/>.</returns>
         public override string ToString()
         {
-            return "" + (int)Left + (int)Up + (int)Right + (int)Down;
+            return string.Format("{{ Left: {0}, Up: {1}, Right: {2}, Down: {3} }}",
+                (int)Left, (int)Up, (int)Right, (int)Down);
         }
     }
 }
