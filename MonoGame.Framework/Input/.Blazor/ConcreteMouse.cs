@@ -9,8 +9,13 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteMouse : MouseStrategy
     {
         private IntPtr _wndHandle = IntPtr.Zero;
-        private MouseState _mouseState;
         private nkast.Wasm.Dom.Window _domWindow;
+
+        private Point _pos;
+        private int _scrollX, _scrollY;
+        private int _rawX, _rawY;
+        private ButtonState _leftButton, _rightButton, _middleButton;
+
 
         public override IntPtr PlatformGetWindowHandle()
         {
@@ -24,7 +29,13 @@ namespace Microsoft.Xna.Platform.Input
             // Unregister old window
             if (_domWindow != null)
             {
-                _mouseState = default(MouseState);
+                _pos = default(Point);
+                _scrollX = 0;
+                _scrollY = 0;
+                _leftButton = default(ButtonState);
+                _rightButton = default(ButtonState);
+                _middleButton = default(ButtonState);
+
                 _domWindow.OnMouseMove -= OnMouseMove;
                 _domWindow.OnMouseDown -= OnMouseDown;
                 _domWindow.OnMouseUp -= OnMouseUp;
@@ -47,7 +58,18 @@ namespace Microsoft.Xna.Platform.Input
 
         public override MouseState PlatformGetState()
         {
-            return _mouseState;
+            MouseState mouseState = new MouseState(
+                    x: _pos.X, y: _pos.Y,
+                    scrollWheel: _scrollY, horizontalScrollWheel: _scrollX,
+                    rawX: _rawX, rawY: _rawY,
+                    leftButton: _leftButton,
+                    middleButton: _middleButton,
+                    rightButton: _rightButton,
+                    xButton1: ButtonState.Released,
+                    xButton2: ButtonState.Released
+                    );
+
+            return mouseState;
         }
 
         public override void PlatformSetPosition(int x, int y)
@@ -63,32 +85,32 @@ namespace Microsoft.Xna.Platform.Input
 
         private void OnMouseMove(object sender, int x, int y)
         {
-            _mouseState.X = x;
-            _mouseState.Y = y;
+            _pos.X = x;
+            _pos.Y = y;
         }
 
         private void OnMouseDown(object sender, int x, int y, int buttons)
         {
-            _mouseState.X = x;
-            _mouseState.Y = y;
-            _mouseState.LeftButton = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _mouseState.RightButton = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _mouseState.MiddleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _pos.X = x;
+            _pos.Y = y;
+            ButtonState _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            ButtonState _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            ButtonState _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
         }
 
         private void OnMouseUp(object sender, int x, int y, int buttons)
         {
-            _mouseState.X = x;
-            _mouseState.Y = y;
-            _mouseState.LeftButton = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _mouseState.RightButton = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _mouseState.MiddleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _pos.X = x;
+            _pos.Y = y;
+            ButtonState _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            ButtonState _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            ButtonState _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
         }
 
         public void OnMouseWheel(object sender, int deltaX, int deltaY, int deltaZ, int deltaMode)
         {
-            _mouseState.HorizontalScrollWheelValue -= deltaX;
-            _mouseState.ScrollWheelValue -= deltaY;
+            _scrollX -= deltaX;
+            _scrollY -= deltaY;
         }
 
     }
