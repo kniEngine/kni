@@ -109,7 +109,6 @@ namespace Microsoft.Xna.Framework
         private int _width, _height;
         private bool _wasMoved, _supressMoved;
 
-        internal MouseState _mouseState;
         private readonly List<Keys> _keys;
         private readonly List<string> _dropList;
 
@@ -255,14 +254,17 @@ namespace Microsoft.Xna.Framework
                     case Sdl.EventType.MouseMotion:
                         unchecked
                         {
-                            this._mouseState.RawX += ev.Motion.Xrel;
-                            this._mouseState.RawY += ev.Motion.Yrel;
+                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawX += ev.Motion.Xrel;
+                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawY += ev.Motion.Yrel;
                         }
                         break;
                     case Sdl.EventType.MouseWheel:
-                        const int wheelDelta = 120;
-                        ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollY += ev.Wheel.Y * wheelDelta;
-                        ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollX += ev.Wheel.X * wheelDelta;
+                        unchecked
+                        {
+                            const int wheelDelta = 120;
+                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollY += ev.Wheel.Y * wheelDelta;
+                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollX += ev.Wheel.X * wheelDelta;
+                        }
                         break;
                     case Sdl.EventType.KeyDown:
                     {
