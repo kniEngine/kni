@@ -56,5 +56,10 @@ namespace Microsoft.Xna.Platform.Input
         {
             return new GamePadThumbSticks(leftPosition, rightPosition, leftDeadZoneMode, rightDeadZoneMode);
         }
+
+        protected GamePadDPad CreateGamePadDPad(Buttons buttons)
+        {
+            return new GamePadDPad(buttons);
+        }
     }
 }

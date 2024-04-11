@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Input
                     thumbSticks,
                     new GamePadTriggers(gamePad._leftTrigger, gamePad._rightTrigger),
                     new GamePadButtons(gamePad._buttons),
-                    new GamePadDPad(gamePad._buttons));
+                     base.CreateGamePadDPad(gamePad._buttons));
             }
             // we need to add the default "no gamepad connected but the user hit back"
             // behaviour here
