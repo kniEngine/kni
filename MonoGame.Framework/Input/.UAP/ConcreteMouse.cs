@@ -46,8 +46,22 @@ namespace Microsoft.Xna.Platform.Input
         public override void PlatformSetPosition(int x, int y)
         {
             UAPGameWindow gameWindow = UAPGameWindow.FromHandle(this._wndHandle);
-            gameWindow._mouseState.X = x;
-            gameWindow._mouseState.Y = y;
+
+            MouseState mouseState = gameWindow._mouseState;
+
+            gameWindow._mouseState = new MouseState(
+                    x: x,
+                    y: y,
+                    scrollWheel: mouseState.ScrollWheelValue,
+                    horizontalScrollWheel: mouseState.HorizontalScrollWheelValue,
+                    rawX: mouseState.RawX,
+                    rawY: mouseState.RawY,
+                    leftButton: mouseState.LeftButton,
+                    middleButton: mouseState.MiddleButton,
+                    rightButton: mouseState.RightButton,
+                    xButton1: mouseState.XButton1,
+                    xButton2: mouseState.XButton2 
+                );
         }
 
         public override void PlatformSetCursor(MouseCursor cursor)
