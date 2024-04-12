@@ -68,7 +68,6 @@
     <Compile Include="Input\.WindowsDX\ConcreteMouseCursor.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMessageBox.cs" />
-    <Compile Include="Input\KeysHelper.cs" />
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
@@ -89,6 +88,7 @@
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
     <Compile Include=".WindowsDX11\ConcreteGame.cs" />
     <Compile Include=".WindowsDX11\ConcreteGameFactory.cs" />
+    <Compile Include=".WindowsDX11\KeysHelper.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
   </ItemGroup> 
 

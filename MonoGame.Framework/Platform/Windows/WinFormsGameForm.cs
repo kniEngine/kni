@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Framework.Windows
                 (System.Windows.Forms.Keys)virtualKeyCode,
                 extended,
                 scancode);
-            if (Microsoft.Xna.Platform.Input.KeysHelper.IsKey((int)key))
+            if (Microsoft.Xna.Platform.KeysHelper.IsKey((int)key))
             {
                 switch (m.Msg)
                 {

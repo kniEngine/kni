@@ -177,7 +177,6 @@
     <Compile Include="Input\.UAP\ConcreteMessageBox.cs" />
     <Compile Include="Input\.UAP\ConcreteMouse.cs" />
     <Compile Include="Input\.UAP\ConcreteMouseCursor.cs" />
-    <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />

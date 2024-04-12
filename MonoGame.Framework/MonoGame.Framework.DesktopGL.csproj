@@ -104,7 +104,6 @@
     <Compile Include="Input\.SDL2\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.SDL2\ConcreteMessageBox.cs" />
     <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
-    <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include=".SDL2\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
