@@ -6,20 +6,17 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Platform.Input
+namespace Microsoft.Xna.Platform
 {
     internal static class KeysHelper
     {
-        static HashSet<int> _map;
+        static HashSet<int> _keyMaps = new HashSet<int>();
 
         static KeysHelper()
         {
-            _map = new HashSet<int>();
-            var allKeys = (Keys[])Enum.GetValues(typeof(Keys));
-            foreach (var key in allKeys)
-            {
-                _map.Add((int)key);
-            }
+            Keys[] allKeys = (Keys[])Enum.GetValues(typeof(Keys));
+            foreach (Keys key in allKeys)
+                _keyMaps.Add((int)key);
         }
 
         /// <summary>
@@ -29,7 +26,7 @@ namespace Microsoft.Xna.Platform.Input
         /// <returns>Returns true if value is valid Key, false otherwise</returns>
         public static bool IsKey(int value)
         {
-            return _map.Contains(value);
+            return _keyMaps.Contains(value);
         }
     }
 }

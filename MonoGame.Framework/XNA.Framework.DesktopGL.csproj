@@ -164,7 +164,6 @@
     <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
     <Compile Include="Input\.SDL2\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.SDL2\ConcreteMessageBox.cs" />
-    <Compile Include="Input\KeysHelper.cs" />
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
