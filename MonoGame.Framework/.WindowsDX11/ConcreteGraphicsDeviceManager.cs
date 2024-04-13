@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform
                 this.CreateDevice();
             }
 
-            this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
+            ((WinFormsGameWindow)base.Game.Window).SetSupportedOrientations(this.SupportedOrientations);
 
             // populates a gdi with settings in this gdm and allows users to override them with
             // PrepareDeviceSettings event this information should be applied to the GraphicsDevice
@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Platform
 
             if (!this._initialized)
             {
-                this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
+                ((WinFormsGameWindow)this.Game.Window).SetSupportedOrientations(this.SupportedOrientations);
 
                 this._initialized = true;
             }

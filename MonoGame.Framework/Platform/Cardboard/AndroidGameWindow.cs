@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Framework
         #endregion
 
 
-        protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
+        internal void SetSupportedOrientations(DisplayOrientation orientations)
         {
             _supportedOrientations = orientations;
         }

@@ -181,7 +181,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal protected override void SetSupportedOrientations(DisplayOrientation orientations)
+        internal void SetSupportedOrientations(DisplayOrientation orientations)
         {
             _viewController.SupportedOrientations = orientations;
         }

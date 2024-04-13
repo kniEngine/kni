@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Framework
 
         private GameStrategy GameStrategy { get { return ConcreteGame.ConcreteGameInstance; } }
 
-        protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
+        internal void SetSupportedOrientations(DisplayOrientation orientations)
         {
             // We don't want to trigger orientation changes 
             // when no preference is being changed.

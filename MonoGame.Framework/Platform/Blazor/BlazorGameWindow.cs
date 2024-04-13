@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Framework
             get { return DisplayOrientation.Default; }
         }
 
-        protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
+        internal void SetSupportedOrientations(DisplayOrientation orientations)
         {
         }
 

@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform
                 return;
             }
 
-            this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
+            ((UAPGameWindow)base.Game.Window).SetSupportedOrientations(this.SupportedOrientations);
 
             // UAP PlatformApplyChanges
             ((UAPGameWindow)base.Game.Window).SetClientSize(base.PreferredBackBufferWidth, base.PreferredBackBufferHeight);
@@ -154,7 +154,7 @@ namespace Microsoft.Xna.Platform
 
             if (!this._initialized)
             {
-                this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
+                ((UAPGameWindow)base.Game.Window).SetSupportedOrientations(this.SupportedOrientations);
 
                 this._initialized = true;
             }
