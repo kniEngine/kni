@@ -19,7 +19,7 @@ using NativeDisplayInformation = Microsoft.Graphics.Display.DisplayInformation;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
+    internal sealed class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
     {
         public SwapChainPanel SwapChainPanel { get; set; }
 
@@ -61,18 +61,15 @@ namespace Microsoft.Xna.Platform
 
         public override void ToggleFullScreen()
         {
-            //base.ApplyChanges();
-
             base.IsFullScreen = !base.IsFullScreen;
             ApplyChanges();
         }
 
         public override void ApplyChanges()
         {
-            //base.ApplyChanges();
-
             if (this.GraphicsDevice == null)
             {
+                // TODO: Calling ApplyChanges() before Game Initialize should create the device.
                 //this.CreateDevice();
                 return;
             }
@@ -191,8 +188,6 @@ namespace Microsoft.Xna.Platform
 
         public override void CreateDevice()
         {
-            //base.CreateDevice();
-
             if (this.GraphicsDevice != null)
                 return;
 

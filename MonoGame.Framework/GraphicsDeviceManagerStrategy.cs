@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
-    public class GraphicsDeviceManagerStrategy : IDisposable
+    public abstract class GraphicsDeviceManagerStrategy : IDisposable
     {
         public static readonly int DefaultBackBufferWidth  = 800;
         public static readonly int DefaultBackBufferHeight = 480;
@@ -65,9 +65,7 @@ namespace Microsoft.Xna.Platform
             set { _isDrawing = value; }
         }
 
-        public virtual void CreateDevice()
-        {
-        }
+        public abstract void CreateDevice();
 
         public virtual bool BeginDraw()
         {
@@ -270,10 +268,7 @@ namespace Microsoft.Xna.Platform
         /// <summary>
         /// Applies any pending property changes to the graphics device.
         /// </summary>
-        public virtual void ApplyChanges()
-        {
-
-        }
+        public abstract void ApplyChanges();
 
         public T ToConcrete<T>() where T : GraphicsDeviceManagerStrategy
         {

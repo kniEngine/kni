@@ -7,7 +7,7 @@ using Microsoft.Xna.Platform.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
+    internal sealed class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
     {
 
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
@@ -45,16 +45,12 @@ namespace Microsoft.Xna.Platform
 
         public override void ToggleFullScreen()
         {
-            //base.ApplyChanges();
-
             base.IsFullScreen = !base.IsFullScreen;
             ApplyChanges();
         }
 
         public override void ApplyChanges()
         {
-            //base.ApplyChanges();
-
             if (this.GraphicsDevice == null)
             {
                 this.CreateDevice();
@@ -135,8 +131,6 @@ namespace Microsoft.Xna.Platform
 
         public override void CreateDevice()
         {
-            //base.CreateDevice();
-
             if (this.GraphicsDevice != null)
                 return;
 

@@ -3,12 +3,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
+    internal sealed class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
     {
 
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
@@ -41,7 +39,7 @@ namespace Microsoft.Xna.Platform
 
         public override void ApplyChanges()
         {
-            base.ApplyChanges();
+            throw new PlatformNotSupportedException();
         }
 
 
@@ -49,7 +47,7 @@ namespace Microsoft.Xna.Platform
 
         public override void CreateDevice()
         {
-            base.CreateDevice();
+            throw new PlatformNotSupportedException();
         }
 
         public override bool BeginDraw()
