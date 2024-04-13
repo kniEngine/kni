@@ -544,10 +544,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void SetSupportedOrientations(DisplayOrientation orientations)
-        {
-        }
-
         protected override void SetTitle(string title)
         {
             SDL.WINDOW.SetTitle(_handle, title);

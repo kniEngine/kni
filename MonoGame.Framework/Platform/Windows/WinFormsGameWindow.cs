@@ -119,11 +119,6 @@ namespace Microsoft.Xna.Framework
             get { return DisplayOrientation.Default; }
         }
 
-        internal void SetSupportedOrientations(DisplayOrientation orientations)
-        {
-        }
-
-
         public bool IsFullScreen { get; private set; }
         public bool HardwareModeSwitch { get; private set; }
 

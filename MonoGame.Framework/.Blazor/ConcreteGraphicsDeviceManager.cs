@@ -9,8 +9,6 @@ namespace Microsoft.Xna.Platform
 {
     internal class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
     {
-        internal bool _initialized = false;
-
 
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
         {
@@ -61,8 +59,6 @@ namespace Microsoft.Xna.Platform
             {
                 this.CreateDevice();
             }
-
-            ((BlazorGameWindow)base.Game.Window).SetSupportedOrientations(this.SupportedOrientations);
 
             // populates a gdi with settings in this gdm and allows users to override them with
             // PrepareDeviceSettings event this information should be applied to the GraphicsDevice
@@ -137,13 +133,6 @@ namespace Microsoft.Xna.Platform
 
             if (this.GraphicsDevice != null)
                 return;
-
-            if (!this._initialized)
-            {
-                ((BlazorGameWindow)base.Game.Window).SetSupportedOrientations(this.SupportedOrientations);
-
-                this._initialized = true;
-            }
 
             var gdi = this.DoPreparingDeviceSettings();
             this.CreateDevice(gdi);
