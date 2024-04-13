@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework
 
         private readonly Game _game;
         private Rectangle _clientBounds;
-        private DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
+        internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
 
         private TouchEventListener _touchEventListener;
@@ -87,11 +87,6 @@ namespace Microsoft.Xna.Framework
         #endregion
 
 
-        internal void SetSupportedOrientations(DisplayOrientation orientations)
-        {
-            _supportedOrientations = orientations;
-        }
-
         /// <summary>
         /// In Xna, setting SupportedOrientations = DisplayOrientation.Default (which is the default value)
         /// has the effect of setting SupportedOrientations to landscape only or portrait only, based on the
@@ -102,7 +97,7 @@ namespace Microsoft.Xna.Framework
         {
             if (_supportedOrientations == DisplayOrientation.Default)
             {
-                var deviceManager = (_game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
+                GraphicsDeviceManager deviceManager = (_game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
                 if (deviceManager == null)
                     return DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
@@ -148,7 +143,7 @@ namespace Microsoft.Xna.Framework
 
             if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
             {
-                var gdm = _game.Strategy.GraphicsDeviceManager;
+                GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
                 if (gdm != null)
                     gdm.ApplyChanges();
             }

@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Platform
                 base.SupportedOrientations = value;
 
                 if (base.Game.Window != null)
-                    ((AndroidGameWindow)base.Game.Window).SetSupportedOrientations(base.SupportedOrientations);
+                    ((AndroidGameWindow)base.Game.Window)._supportedOrientations = base.SupportedOrientations;
             }
         }
 
