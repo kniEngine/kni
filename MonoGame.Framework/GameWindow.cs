@@ -208,8 +208,6 @@ namespace Microsoft.Xna.Framework
                 handler(this, e);
         }
 
-        protected internal abstract void SetSupportedOrientations(DisplayOrientation orientations);
-
         /// <summary>
         /// Set the title of this window to the given string.
         /// </summary>

@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform
                 base.SupportedOrientations = value;
 
                 if (base.Game.Window != null)
-                    base.Game.Window.SetSupportedOrientations(base.SupportedOrientations);
+                    ((iOSGameWindow)base.Game.Window).ViewController.SupportedOrientations = value;
             }
         }
 

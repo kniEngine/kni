@@ -43,7 +43,6 @@ namespace Microsoft.Xna.Framework
             return _instances[handle];
         }
 
-        private DisplayOrientation _supportedOrientations;
         private DisplayOrientation _orientation;
         private CoreWindow _coreWindow;
         private DisplayInformation _dinfo;
@@ -90,31 +89,6 @@ namespace Microsoft.Xna.Framework
         }
 
         private GameStrategy GameStrategy { get { return ConcreteGame.ConcreteGameInstance; } }
-
-        protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
-        {
-            // We don't want to trigger orientation changes 
-            // when no preference is being changed.
-            if (_supportedOrientations == orientations)
-                return;
-
-            _supportedOrientations = orientations;
-
-            DisplayOrientations supported;
-            if (orientations == DisplayOrientation.Default)
-            {
-                // Make the decision based on the preferred backbuffer dimensions.
-                var gdm = Game.Strategy.GraphicsDeviceManager;
-                if (gdm.PreferredBackBufferWidth > gdm.PreferredBackBufferHeight)
-                    supported = FromOrientation(DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-                else
-                    supported = FromOrientation(DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
-            }
-            else
-                supported = FromOrientation(orientations);
-
-            DisplayInformation.AutoRotationPreferences = supported;
-        }
 
         #endregion
 
@@ -260,21 +234,6 @@ namespace Microsoft.Xna.Framework
                 result |= DisplayOrientation.Portrait;
             if ((orientations & DisplayOrientations.PortraitFlipped) != 0)
                 result |= DisplayOrientation.PortraitDown;
-
-            return result;
-        }
-
-        private static DisplayOrientations FromOrientation(DisplayOrientation orientation)
-        {
-            var result = DisplayOrientations.None;
-            if ((orientation & DisplayOrientation.LandscapeLeft) != 0)
-                result |= DisplayOrientations.Landscape;
-            if ((orientation & DisplayOrientation.LandscapeRight) != 0)
-                result |= DisplayOrientations.LandscapeFlipped;
-            if ((orientation & DisplayOrientation.Portrait) != 0)
-                result |= DisplayOrientations.Portrait;
-            if ((orientation & DisplayOrientation.PortraitDown) != 0)
-                result |= DisplayOrientations.PortraitFlipped;
 
             return result;
         }

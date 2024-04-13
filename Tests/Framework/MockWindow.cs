@@ -27,11 +27,6 @@ namespace MonoGame.Tests.Framework
             get { throw new NotImplementedException(); }
         }
 
-        protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void SetTitle(string title)
         {
             throw new NotImplementedException();

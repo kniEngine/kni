@@ -7,10 +7,14 @@ using Microsoft.Xna.Platform.Graphics;
 
 #if UAP
 using Windows.UI.Xaml.Controls;
+using NativeDisplayOrientation = Windows.Graphics.Display.DisplayOrientations;
+using NativeDisplayInformation = Windows.Graphics.Display.DisplayInformation;
 #endif
 
 #if WINUI
 using Microsoft.UI.Xaml.Controls;
+using NativeDisplayOrientation = Microsoft.Graphics.Display.DisplayOrientations;
+using NativeDisplayInformation = Microsoft.Graphics.Display.DisplayInformation;
 #endif
 
 namespace Microsoft.Xna.Platform
@@ -20,6 +24,7 @@ namespace Microsoft.Xna.Platform
         internal bool _initialized = false;
         public SwapChainPanel SwapChainPanel { get; set; }
 
+        private DisplayOrientation _uapGameSupportedOrientations;
 
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
         {
@@ -73,7 +78,25 @@ namespace Microsoft.Xna.Platform
                 return;
             }
 
-            this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
+            // We don't want to trigger orientation changes 
+            // when no preference is being changed.
+            if (_uapGameSupportedOrientations != this.SupportedOrientations)
+            {
+                _uapGameSupportedOrientations = this.SupportedOrientations;
+
+                DisplayOrientation supported =this.SupportedOrientations;
+                if (this.SupportedOrientations == DisplayOrientation.Default)
+                {
+                    // Make the decision based on the preferred backbuffer dimensions.
+                    if (this.PreferredBackBufferWidth > this.PreferredBackBufferHeight)
+                        supported = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+                    else
+                        supported = DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
+                }
+
+                NativeDisplayInformation.AutoRotationPreferences = FromOrientation(supported);
+            }
+
 
             // UAP PlatformApplyChanges
             ((UAPGameWindow)base.Game.Window).SetClientSize(base.PreferredBackBufferWidth, base.PreferredBackBufferHeight);
@@ -94,6 +117,22 @@ namespace Microsoft.Xna.Platform
             {
                 GraphicsDevice.Reset(gdi.PresentationParameters);
             }
+        }
+
+        private static NativeDisplayOrientation FromOrientation(DisplayOrientation orientation)
+        {
+            NativeDisplayOrientation result = NativeDisplayOrientation.None;
+
+            if ((orientation & DisplayOrientation.LandscapeLeft) != 0)
+                result |= NativeDisplayOrientation.Landscape;
+            if ((orientation & DisplayOrientation.LandscapeRight) != 0)
+                result |= NativeDisplayOrientation.LandscapeFlipped;
+            if ((orientation & DisplayOrientation.Portrait) != 0)
+                result |= NativeDisplayOrientation.Portrait;
+            if ((orientation & DisplayOrientation.PortraitDown) != 0)
+                result |= NativeDisplayOrientation.PortraitFlipped;
+
+            return result;
         }
 
         /// <summary>
@@ -154,7 +193,24 @@ namespace Microsoft.Xna.Platform
 
             if (!this._initialized)
             {
-                this.Game.Window.SetSupportedOrientations(this.SupportedOrientations);
+                // We don't want to trigger orientation changes 
+                // when no preference is being changed.
+                if (_uapGameSupportedOrientations != this.SupportedOrientations)
+                {
+                    _uapGameSupportedOrientations = this.SupportedOrientations;
+
+                    DisplayOrientation supported = this.SupportedOrientations;
+                    if (supported == DisplayOrientation.Default)
+                    {
+                        // Make the decision based on the preferred backbuffer dimensions.
+                        if (this.PreferredBackBufferWidth > this.PreferredBackBufferHeight)
+                            supported = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+                        else
+                            supported = DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
+                    }
+
+                    NativeDisplayInformation.AutoRotationPreferences = FromOrientation(supported);
+                }
 
                 this._initialized = true;
             }
