@@ -83,10 +83,13 @@ namespace Microsoft.Xna.Framework
 
         private readonly iOSGameViewController _viewController;
 
+        internal iOSGameViewController ViewController { get { return _viewController; } }
+
         public iOSGameWindow(iOSGameViewController viewController)
         {
             if (viewController == null)
                 throw new ArgumentNullException("viewController");
+
             _viewController = viewController;
             _viewController.InterfaceOrientationChanged += HandleInterfaceOrientationChanged;
 
@@ -179,11 +182,6 @@ namespace Microsoft.Xna.Framework
                 else
                     return "External Display";
             }
-        }
-
-        internal void SetSupportedOrientations(DisplayOrientation orientations)
-        {
-            _viewController.SupportedOrientations = orientations;
         }
 
         protected override void SetTitle(string title)
