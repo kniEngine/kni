@@ -70,7 +70,13 @@ namespace Microsoft.Xna.Platform
                 this.GraphicsDevice.Dispose();
                 this.GraphicsDevice = null;
 
-                this.ToConcrete<ConcreteGraphicsDeviceManager>().CreateDevice(gdi);
+                this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
+
+                // update the touchpanel display size when the graphicsdevice is reset
+                this.GraphicsDevice.DeviceReset += GraphicsDevice_DeviceReset_UpdateTouchPanel;
+                ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
+
+                this.OnDeviceCreated(EventArgs.Empty);
             }
             else
             {
@@ -135,7 +141,14 @@ namespace Microsoft.Xna.Platform
                 return;
 
             var gdi = this.DoPreparingDeviceSettings();
-            this.CreateDevice(gdi);
+
+            this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
+
+            // update the touchpanel display size when the graphicsdevice is reset
+            this.GraphicsDevice.DeviceReset += GraphicsDevice_DeviceReset_UpdateTouchPanel;
+            ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
+
+            this.OnDeviceCreated(EventArgs.Empty);
 
             PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
 
@@ -150,17 +163,6 @@ namespace Microsoft.Xna.Platform
                 if (!pp.HardwareModeSwitch)
                     ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
             }
-        }
-
-        internal void CreateDevice(GraphicsDeviceInformation gdi)
-        {
-            this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
-
-            // update the touchpanel display size when the graphicsdevice is reset
-            this.GraphicsDevice.DeviceReset += GraphicsDevice_DeviceReset_UpdateTouchPanel;
-            ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
-
-            this.OnDeviceCreated(EventArgs.Empty);
         }
 
         private void GraphicsDevice_DeviceReset_UpdateTouchPanel(object sender, EventArgs eventArgs)
