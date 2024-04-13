@@ -8,7 +8,7 @@ using ColorFormat = Microsoft.Xna.Platform.Graphics.OpenGL.ColorFormat;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
+    internal sealed class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
@@ -47,16 +47,12 @@ namespace Microsoft.Xna.Platform
 
         public override void ToggleFullScreen()
         {
-            //base.ApplyChanges();
-
             base.IsFullScreen = !base.IsFullScreen;
             ApplyChanges();
         }
 
         public override void ApplyChanges()
         {
-            //base.ApplyChanges();
-
             if (this.GraphicsDevice == null)
             {
                 this.CreateDevice();
@@ -210,8 +206,6 @@ namespace Microsoft.Xna.Platform
 
         public override void CreateDevice()
         {
-            //base.CreateDevice();
-
             if (this.GraphicsDevice != null)
                 return;
 

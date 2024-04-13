@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
-    internal class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
+    internal sealed class ConcreteGraphicsDeviceManager : GraphicsDeviceManagerStrategy
     {
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
         {
@@ -67,16 +67,12 @@ namespace Microsoft.Xna.Platform
 
         public override void ToggleFullScreen()
         {
-            //base.ApplyChanges();
-
             this.IsFullScreen = !this.IsFullScreen;
             //ApplyChanges();
         }
 
         public override void CreateDevice()
-        {
-            //base.CreateDevice();
-            
+        {            
             PresentationParameters pp = new PresentationParameters();
             pp.DepthStencilFormat = DepthFormat.Depth24;
 
@@ -135,11 +131,10 @@ namespace Microsoft.Xna.Platform
 
         public override void ApplyChanges()
         {
-            //base.ApplyChanges();
-
             if (base.GraphicsDevice == null)
             {
                 // TODO: Calling ApplyChanges() before Game Initialize should create the device.
+                //this.CreateDevice();
                 return;
             }
 
