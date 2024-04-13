@@ -12,9 +12,6 @@ namespace Microsoft.Xna.Platform
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        internal bool _initialized = false;
-
-
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
         {
             var clientBounds = base.Game.Window.ClientBounds;
@@ -214,12 +211,7 @@ namespace Microsoft.Xna.Platform
 
             var gdi = this.DoPreparingDeviceSettings();
 
-            if (!this._initialized)
-            {
-                this.PlatformInitialize(gdi.PresentationParameters);
-
-                this._initialized = true;
-            }
+            this.PlatformInitialize(gdi.PresentationParameters);
 
             this.CreateDevice(gdi);
 
