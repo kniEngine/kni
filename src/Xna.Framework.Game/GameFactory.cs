@@ -19,6 +19,9 @@ namespace Microsoft.Xna.Platform
                 if (current != null)
                     return current;
 
+                Console.WriteLine("GameFactory not found.");
+                Console.WriteLine("Initialize input with 'GameFactory.RegisterGameFactory(new ConcreteGameFactory());'.");
+
                 GameFactory gameFactory = CreateGameFactory();
                 GameFactory.RegisterGameFactory(gameFactory);
 
@@ -28,7 +31,14 @@ namespace Microsoft.Xna.Platform
 
         private static GameFactory CreateGameFactory()
         {
-            return new ConcreteGameFactory();
+            Console.WriteLine("Registering ConcreteGameFactoryStrategy through reflection.");
+
+            Type type = Type.GetType("Microsoft.Xna.Platform.ConcreteGameFactory, MonoGame.Framework", false);
+            if (type != null)
+                if (type.IsSubclassOf(typeof(GameFactory)) && !type.IsAbstract)
+                    return (GameFactory)Activator.CreateInstance(type);
+
+            return null;
         }
 
         public static void RegisterGameFactory(GameFactory gameFactory)

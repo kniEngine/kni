@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Platform
             _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
         }
 
-        protected internal override void Run()
+        protected override void Run()
         {
             this.CallInitialize();
             this.CallBeginRun();

@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\kniPackage.props" />
+  <Import Project="..\..\kniPackage.props" />
   <PropertyGroup>
-    <BaseOutputPath>..\Artifacts\Xna.Framework.Game\</BaseOutputPath>
-
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Game\</BaseOutputPath>
+    
     <Version>3.11.9002.0</Version>
     <AssemblyVersion>3.11.9002.0</AssemblyVersion>
 
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,17 +58,17 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Src\Xna.Framework\Xna.Framework.csproj">
+    <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+    <ProjectReference Include="..\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
       <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
       <Name>Xna.Framework.Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\src\Xna.Framework.Input\Xna.Framework.Input.csproj">
+    <ProjectReference Include="..\Xna.Framework.Input\Xna.Framework.Input.csproj">
       <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
       <Name>Xna.Framework.Input</Name>
       <Private>False</Private>

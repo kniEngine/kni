@@ -17,24 +17,4 @@
     <Compile Include="Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="DrawableGameComponent.cs" />
-    <Compile Include="FileDropEventArgs.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameFactory.cs" />
-    <Compile Include="GameComponent.cs" />
-    <Compile Include="GameComponentCollection.cs" />
-    <Compile Include="GameComponentCollectionEventArgs.cs" />
-    <Compile Include="GameStrategy.cs" />
-    <Compile Include="GameServiceContainer.cs" />
-    <Compile Include="GameTime.cs" />
-    <Compile Include="GameWindow.cs" />
-    <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="IDrawable.cs" />
-    <Compile Include="IGameComponent.cs" />
-    <Compile Include="IUpdateable.cs" />
-    <Compile Include="LaunchParameters.cs" />
-  </ItemGroup>
-
 </Project>

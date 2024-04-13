@@ -1033,6 +1033,11 @@
       <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
       <Name>Xna.Framework.Input</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Game\Xna.Framework.Game.csproj">
+      <Project>{90BBD6EF-F386-4F47-88CD-BF386C7D1705}</Project>
+      <Name>Xna.Framework.Game</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
       <Name>Xna.Framework.Design</Name>
