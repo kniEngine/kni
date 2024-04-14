@@ -101,11 +101,13 @@ namespace Microsoft.Xna.Framework
         {
             if (concreteGame == null)
                 throw new ArgumentNullException("concreteGame");
+
             _concreteGame = concreteGame;
 
             #if !TVOS
             MultipleTouchEnabled = true;
             #endif
+
             Opaque = true;
         }
 
@@ -260,7 +262,7 @@ namespace Microsoft.Xna.Framework
             _glContext.Context.RenderBufferStorage((uint)RenderbufferTarget.Renderbuffer, Layer);
             
             _glapi.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, RenderbufferTarget.Renderbuffer, _colorbuffer);
-            
+
             FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
             if (status != FramebufferErrorCode.FramebufferComplete)
                 throw new InvalidOperationException("Framebuffer was not created correctly: " + status);
@@ -269,7 +271,6 @@ namespace Microsoft.Xna.Framework
             _glapi.Scissor(0, 0, viewportWidth, viewportHeight);
 
             IGraphicsDeviceService gds = _concreteGame.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
-
             if (gds != null && gds.GraphicsDevice != null)
             {
                 PresentationParameters pp = gds.GraphicsDevice.PresentationParameters;
@@ -361,7 +362,6 @@ namespace Microsoft.Xna.Framework
             base.LayoutSubviews();
 
             IGraphicsDeviceService gds = _concreteGame.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
-
             if (gds != null && gds.GraphicsDevice != null)
             {
                 if (_framebuffer != 0)
