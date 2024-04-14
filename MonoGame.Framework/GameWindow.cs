@@ -163,7 +163,7 @@ namespace Microsoft.Xna.Framework
         {
         }
 
-        internal void OnClientSizeChanged()
+        protected void OnClientSizeChanged()
         {
             var handler = ClientSizeChanged;
             if (handler != null)
