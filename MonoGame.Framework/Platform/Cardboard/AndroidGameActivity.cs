@@ -58,7 +58,11 @@ namespace Microsoft.Xna.Framework
             AndroidGameWindow.Activity = this;
         }
 
+        private bool _isActivityActive = false;
+        internal bool IsActivityActive { get { return _isActivityActive; } }
+
         public static event EventHandler Paused;
+        public static event EventHandler Resumed;
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
         {
@@ -70,22 +74,31 @@ namespace Microsoft.Xna.Framework
         {
             base.OnPause();
 
-            var handler = Paused;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            if (_isActivityActive)
+            {
+                _isActivityActive = false;
+
+                var handler = Paused;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
+            }
 
             if (_orientationListener.CanDetectOrientation())
                 _orientationListener.Disable();
         }
 
-        public static event EventHandler Resumed;
         protected override void OnResume()
         {
             base.OnResume();
 
-            var handler = Resumed;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            if (!_isActivityActive)
+            {
+                _isActivityActive = true;
+
+                var handler = Resumed;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
+            }
 
             if (Game != null)
             {
@@ -106,7 +119,7 @@ namespace Microsoft.Xna.Framework
             base.OnWindowFocusChanged(hasFocus);
 
             ((ConcreteGame)Game.Strategy)._hasWindowFocus = hasFocus;
-            bool isActive = ((ConcreteGame)Game.Strategy).IsActivityActive && hasFocus;
+            bool isActive = _isActivityActive && hasFocus;
             ((ConcreteGame)Game.Strategy).IsActive = isActive;
         }
 

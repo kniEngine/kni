@@ -70,39 +70,29 @@ namespace Microsoft.Xna.Platform
         }
         
         internal bool _hasWindowFocus = true;
-        private bool _isActivityActive = false;
-        internal bool IsActivityActive { get { return _isActivityActive; } }
         
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         // EnterForeground
         void Activity_Resumed(object sender, EventArgs e)
         {
-            if (!_isActivityActive)
-            {
-                _isActivityActive = true;
-                IsActive = _isActivityActive && _hasWindowFocus;
-                _gameWindow.GameView.Resume();
-                if (_mediaPlayer_PrevState == MediaState.Playing && AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
-                    MediaPlayer.Resume();
-                if (!_gameWindow.GameView.IsFocused)
-                    _gameWindow.GameView.RequestFocus();
-            }
+            IsActive = _hasWindowFocus;
+            _gameWindow.GameView.Resume();
+            if (_mediaPlayer_PrevState == MediaState.Playing && AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Resume();
+            if (!_gameWindow.GameView.IsFocused)
+                _gameWindow.GameView.RequestFocus();
         }
 
         // EnterBackground
         void Activity_Paused(object sender, EventArgs e)
         {
-            if (_isActivityActive)
-            {
-                _isActivityActive = false;
-                IsActive = _isActivityActive && _hasWindowFocus;
-                _mediaPlayer_PrevState = MediaPlayer.State;
-                _gameWindow.GameView.Pause();
-                _gameWindow.GameView.ClearFocus();
-                if (AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
-                    MediaPlayer.Pause();
-            }
+            IsActive = false;
+            _mediaPlayer_PrevState = MediaPlayer.State;
+            _gameWindow.GameView.Pause();
+            _gameWindow.GameView.ClearFocus();
+            if (AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Pause();
         }
 
         protected internal override void Run()
@@ -141,7 +131,7 @@ namespace Microsoft.Xna.Platform
                 _isReadyToRun = true;
             }
 
-            if (this.IsActivityActive)
+            if (AndroidGameWindow.Activity.IsActivityActive)
             {
                 this.Game.Tick();
             }
