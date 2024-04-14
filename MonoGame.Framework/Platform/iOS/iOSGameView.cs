@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Framework
             _glapi.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 
             // Create our Depth buffer. Color buffer must be the last one bound
-            GraphicsDeviceManager gdm = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = _concreteGame.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager;
             if (gdm != null)
             {
                 DepthFormat preferredDepthFormat = gdm.PreferredDepthStencilFormat;
@@ -272,7 +272,7 @@ namespace Microsoft.Xna.Framework
             _glapi.Viewport(0, 0, viewportWidth, viewportHeight);
             _glapi.Scissor(0, 0, viewportWidth, viewportHeight);
 
-            IGraphicsDeviceService gds = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+            IGraphicsDeviceService gds = _concreteGame.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
             if (gds != null && gds.GraphicsDevice != null)
             {
@@ -364,7 +364,7 @@ namespace Microsoft.Xna.Framework
         {
             base.LayoutSubviews();
 
-            IGraphicsDeviceService gds = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+            IGraphicsDeviceService gds = _concreteGame.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
             if (gds != null && gds.GraphicsDevice != null)
             {
