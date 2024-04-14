@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform
         }
 
         public override void CreateDevice()
-        {            
+        {
             PresentationParameters pp = new PresentationParameters();
             pp.DepthStencilFormat = DepthFormat.Depth24;
 

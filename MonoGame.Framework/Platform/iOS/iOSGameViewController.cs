@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Framework
                 if (press.Type == UIPressType.Menu)
                 {
                     if (platformBackButton == null)
-                        platformBackButton = _concreteGame.Game.Services.GetService<IPlatformBackButton>();
+                        platformBackButton = _concreteGame.Services.GetService<IPlatformBackButton>();
                     if (platformBackButton != null)
                     {
                         if (!platformBackButton.Handled())
