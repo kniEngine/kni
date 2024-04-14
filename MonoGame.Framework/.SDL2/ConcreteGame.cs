@@ -60,6 +60,7 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow = new SdlGameWindow(Game);
             base.Window = _gameWindow;
+            base.SetWindowListeners();
             if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = base.Window.Handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)

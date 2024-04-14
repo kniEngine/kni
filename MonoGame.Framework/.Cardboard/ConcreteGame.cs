@@ -33,6 +33,7 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             base.Window = _gameWindow;
+            base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 
@@ -69,46 +70,30 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
         
-        private bool _hasWindowFocus = true;
-        private bool _isActivityActive = false;
-        internal bool IsActivityActive { get { return _isActivityActive; } }
- 
-        internal void OnWindowFocusChanged(bool hasFocus)
-        {
-            _hasWindowFocus = hasFocus;
-            IsActive = _isActivityActive && _hasWindowFocus;
-        }
+        internal bool _hasWindowFocus = true;
         
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         // EnterForeground
         void Activity_Resumed(object sender, EventArgs e)
         {
-            if (!_isActivityActive)
-            {
-                _isActivityActive = true;
-                IsActive = _isActivityActive && _hasWindowFocus;
-                _gameWindow.GameView.Resume();
-                if (_mediaPlayer_PrevState == MediaState.Playing && AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
-                    MediaPlayer.Resume();
-                if (!_gameWindow.GameView.IsFocused)
-                    _gameWindow.GameView.RequestFocus();
-            }
+            IsActive = _hasWindowFocus;
+            _gameWindow.GameView.Resume();
+            if (_mediaPlayer_PrevState == MediaState.Playing && AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Resume();
+            if (!_gameWindow.GameView.IsFocused)
+                _gameWindow.GameView.RequestFocus();
         }
 
         // EnterBackground
         void Activity_Paused(object sender, EventArgs e)
         {
-            if (_isActivityActive)
-            {
-                _isActivityActive = false;
-                IsActive = _isActivityActive && _hasWindowFocus;
-                _mediaPlayer_PrevState = MediaPlayer.State;
-                _gameWindow.GameView.Pause();
-                _gameWindow.GameView.ClearFocus();
-                if (AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
-                    MediaPlayer.Pause();
-            }
+            IsActive = false;
+            _mediaPlayer_PrevState = MediaPlayer.State;
+            _gameWindow.GameView.Pause();
+            _gameWindow.GameView.ClearFocus();
+            if (AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Pause();
         }
 
         protected internal override void Run()
@@ -147,7 +132,7 @@ namespace Microsoft.Xna.Platform
                 _isReadyToRun = true;
             }
 
-            if (this.IsActivityActive)
+            if (AndroidGameWindow.Activity.IsActivityActive)
             {
                 this.Game.Tick();
             }

@@ -354,10 +354,10 @@ namespace Microsoft.Xna.Framework
                                 ClientResize(ev.Window.Data1, ev.Window.Data2);
                                 break;
                             case Sdl.Window.EventId.FocusGained:
-                                _game.Strategy.IsActive = true;
+                                base.OnActivated();
                                 break;
                             case Sdl.Window.EventId.FocusLost:
-                                _game.Strategy.IsActive = false;
+                                base.OnDeactivated();
                                 break;
                             case Sdl.Window.EventId.Moved:
                                 if (!_supressMoved)

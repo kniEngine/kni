@@ -152,12 +152,12 @@ namespace Microsoft.Xna.Framework
             switch (args.WindowActivationState)
             {
                 case CoreWindowActivationState.Deactivated:
-                    GameStrategy.IsActive = false;
+                    base.OnDeactivated();
                     break;
 
                 case CoreWindowActivationState.PointerActivated:
                 case CoreWindowActivationState.CodeActivated:
-                    GameStrategy.IsActive = true;
+                    base.OnActivated();
                     break;
 
                 default:
