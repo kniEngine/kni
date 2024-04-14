@@ -125,6 +125,9 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public event EventHandler<EventArgs> ScreenDeviceNameChanged;
 
+        internal event EventHandler<EventArgs> Deactivated;
+        internal event EventHandler<EventArgs> Activated;
+
         /// <summary>
         /// Use this event to user text input.
         /// 
@@ -161,6 +164,9 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         protected void OnActivated()
         {
+            var handler = Activated;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -168,6 +174,9 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         protected void OnDeactivated()
         {
+            var handler = Deactivated;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         protected void OnClientSizeChanged()
