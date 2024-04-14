@@ -44,6 +44,7 @@ namespace Microsoft.Xna.Platform
             UAPGameWindow uapGameWindow = UAPGameWindow.Instance;
             base.Window = uapGameWindow;
             uapGameWindow.Game = game;
+            base.SetWindowListeners();
             if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = base.Window.Handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)

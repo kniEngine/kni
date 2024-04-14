@@ -195,7 +195,7 @@ namespace Microsoft.Xna.Framework
 
         private void OnActivated(object sender, EventArgs eventArgs)
         {
-            _concreteGame.IsActive = true;
+            base.OnActivated();
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(true);
 
             DragAcceptFiles(Handle, true); //allows drag and dropping
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework
                 if( Form.WindowState == FormWindowState.Minimized)
                     MinimizeFullScreen();				
             }
-            _concreteGame.IsActive = false;
+            base.OnDeactivated();
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(false);
         }
 

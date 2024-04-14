@@ -33,6 +33,7 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             base.Window = _gameWindow;
+            base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 

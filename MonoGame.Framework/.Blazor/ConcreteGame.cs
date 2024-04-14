@@ -22,6 +22,7 @@ namespace Microsoft.Xna.Platform
         {
             _gameWindow = new BlazorGameWindow(this);
             base.Window = _gameWindow;
+            base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
         }

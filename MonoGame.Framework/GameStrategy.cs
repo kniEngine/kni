@@ -149,6 +149,8 @@ namespace Microsoft.Xna.Platform
         public bool IsActive
         {
             get { return _isActive; }
+
+            // TODO: replace by calling GameWindow.Activated/Deactivated
             internal set
             {
                 if (_isActive != value)
@@ -266,6 +268,30 @@ namespace Microsoft.Xna.Platform
         #endregion Events
 
         #region Methods
+
+        protected void SetWindowListeners()
+        {
+            _window.Activated += GameWindow_Activated;
+            _window.Deactivated += GameWindow_Deactivated;
+        }
+
+        private void GameWindow_Activated(object sender, EventArgs e)
+        {
+            _isActive = true;
+
+            var handler = Activated;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
+        private void GameWindow_Deactivated(object sender, EventArgs e)
+        {
+            _isActive = false;
+
+            var handler = Deactivated;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
 
         public void RunOneFrame()
         {
@@ -621,6 +647,12 @@ namespace Microsoft.Xna.Platform
                     {
                         ((IDisposable)_graphicsDeviceManager).Dispose();
                         _graphicsDeviceManager = null;
+                    }
+
+                    if (_window != null)
+                    {
+                        _window.Deactivated -= GameWindow_Deactivated;
+                        _window.Activated -= GameWindow_Activated;
                     }
                 }
 

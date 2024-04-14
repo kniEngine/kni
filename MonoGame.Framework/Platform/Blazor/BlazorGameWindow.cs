@@ -185,13 +185,13 @@ namespace Microsoft.Xna.Framework
 
         private void OnActivated(object sender)
         {
-            _concreteGame.IsActive = true;
+            base.OnActivated();
             //Keyboard.SetActive(true);
         }
 
         private void OnDeactivated(object sender)
         {
-            _concreteGame.IsActive = false;
+            base.OnDeactivated();
         }
 
         private void OnMouseEnter(object sender, EventArgs e)
