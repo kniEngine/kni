@@ -102,11 +102,7 @@ namespace Microsoft.Xna.Framework
             if (concreteGame == null)
                 throw new ArgumentNullException("concreteGame");
             _concreteGame = concreteGame;
-            Initialize();
-        }
 
-        private void Initialize()
-        {
             #if !TVOS
             MultipleTouchEnabled = true;
             #endif
