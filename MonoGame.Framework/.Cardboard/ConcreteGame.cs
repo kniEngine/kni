@@ -69,15 +69,9 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
         
-        private bool _hasWindowFocus = true;
+        internal bool _hasWindowFocus = true;
         private bool _isActivityActive = false;
         internal bool IsActivityActive { get { return _isActivityActive; } }
- 
-        internal void OnWindowFocusChanged(bool hasFocus)
-        {
-            _hasWindowFocus = hasFocus;
-            IsActive = _isActivityActive && _hasWindowFocus;
-        }
         
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 

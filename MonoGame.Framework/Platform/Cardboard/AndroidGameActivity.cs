@@ -104,7 +104,10 @@ namespace Microsoft.Xna.Framework
         public override void OnWindowFocusChanged(bool hasFocus)
         {
             base.OnWindowFocusChanged(hasFocus);
-            ((ConcreteGame)Game.Strategy).OnWindowFocusChanged(hasFocus);
+
+            ((ConcreteGame)Game.Strategy)._hasWindowFocus = hasFocus;
+            bool isActive = ((ConcreteGame)Game.Strategy).IsActivityActive && hasFocus;
+            ((ConcreteGame)Game.Strategy).IsActive = isActive;
         }
 
         protected override void OnDestroy()
