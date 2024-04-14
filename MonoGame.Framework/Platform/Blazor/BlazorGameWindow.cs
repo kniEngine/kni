@@ -164,7 +164,7 @@ namespace Microsoft.Xna.Framework
             };
 
             _window.OnFocus += OnActivated;
-            _window.OnBlur += OnDeactivate;
+            _window.OnBlur += OnDeactivated;
             // Form.Resize += OnResize;
             //  Form.ResizeBegin += OnResizeBegin;
             //  Form.ResizeEnd += OnResizeEnd;
@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Framework
             //Keyboard.SetActive(true);
         }
 
-        private void OnDeactivate(object sender)
+        private void OnDeactivated(object sender)
         {
             _concreteGame.IsActive = false;
         }
