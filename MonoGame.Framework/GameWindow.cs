@@ -163,18 +163,18 @@ namespace Microsoft.Xna.Framework
         {
         }
 
-        protected void OnClientSizeChanged()
-        {
-            var handler = ClientSizeChanged;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-        }
-
         /// <summary>
         /// Called when the window loses focus.
         /// </summary>
         protected void OnDeactivated()
         {
+        }
+
+        protected void OnClientSizeChanged()
+        {
+            var handler = ClientSizeChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
          
         /// <summary>
