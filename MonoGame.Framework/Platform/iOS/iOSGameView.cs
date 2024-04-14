@@ -234,15 +234,15 @@ namespace Microsoft.Xna.Framework
             _glapi.BindFramebuffer(FramebufferTarget.Framebuffer, _framebuffer);
 
             // Create our Depth buffer. Color buffer must be the last one bound
-            var gdm = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager;
             if (gdm != null)
             {
-                var preferredDepthFormat = gdm.PreferredDepthStencilFormat;
+                DepthFormat preferredDepthFormat = gdm.PreferredDepthStencilFormat;
                 if (preferredDepthFormat != DepthFormat.None)
                 {
                     _depthbuffer = GL.GenRenderbuffer();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _depthbuffer);
-                    var internalFormat = RenderbufferStorage.DepthComponent16;
+                    RenderbufferStorage internalFormat = RenderbufferStorage.DepthComponent16;
                     if (preferredDepthFormat == DepthFormat.Depth24)
                         internalFormat = RenderbufferStorage.DepthComponent24Oes;
                     else if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
@@ -265,24 +265,24 @@ namespace Microsoft.Xna.Framework
             
             _glapi.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, RenderbufferTarget.Renderbuffer, _colorbuffer);
             
-            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
             if (status != FramebufferErrorCode.FramebufferComplete)
                 throw new InvalidOperationException("Framebuffer was not created correctly: " + status);
 
             _glapi.Viewport(0, 0, viewportWidth, viewportHeight);
             _glapi.Scissor(0, 0, viewportWidth, viewportHeight);
 
-            var gds = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+            IGraphicsDeviceService gds = _concreteGame.Game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
             if (gds != null && gds.GraphicsDevice != null)
             {
-                var pp = gds.GraphicsDevice.PresentationParameters;
+                PresentationParameters pp = gds.GraphicsDevice.PresentationParameters;
                 int height = viewportHeight;
                 int width = viewportWidth;
 
                 if (this.NextResponder is iOSGameViewController)
                 {
-                    var displayOrientation = _concreteGame.Game.Window.CurrentOrientation;
+                    DisplayOrientation displayOrientation = _concreteGame.Game.Window.CurrentOrientation;
                     if (displayOrientation == DisplayOrientation.LandscapeLeft || displayOrientation == DisplayOrientation.LandscapeRight)
                     {
                         height = Math.Min(viewportHeight, viewportWidth);
