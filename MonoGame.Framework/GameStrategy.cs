@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform
         protected bool InFullScreenMode = false;
         protected bool IsDisposed { get { return _isDisposed; } }
 
-        protected bool _initialized = false;
+        private bool _initialized = false;
 
         #endregion
 
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        internal GraphicsDeviceManager GraphicsDeviceManager
+        public GraphicsDeviceManager GraphicsDeviceManager
         {
             get
             {
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform
         public readonly Game Game;
 
         private readonly GameTime Time = new GameTime();
-        protected Stopwatch Timer = new Stopwatch();
+        private Stopwatch Timer = new Stopwatch();
 
         private bool _isActive;
         public bool IsActive
@@ -254,69 +254,101 @@ namespace Microsoft.Xna.Platform
 
         public void RunOneFrame()
         {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            this.Game.CallBeginRun();
-            this.Timer.Restart();
+            this.CallInitialize();
+            this.CallBeginRun();
 
             //Not quite right..
             Game.Tick();
 
-            Game.CallEndRun();
+            this.CallEndRun();
         }
 
-        internal virtual void Run()
+
+        protected internal virtual void Run()
         {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            this.Game.CallBeginRun();
-            this.Timer.Restart();
-
+            this.CallInitialize();
+            this.CallBeginRun();
             // XNA runs one Update even before showing the window
-            this.Game.AssertNotDisposed();
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-            this.Game.CallUpdate(new GameTime());
+            this.CallUpdate(new GameTime());
 
-            RunGameLoop();
+            this.RunGameLoop();
 
-            this.Game.CallEndRun();
-            this.Game.DoExiting();
+            this.CallEndRun();
+            this.CallExiting();
         }
 
         protected virtual void RunGameLoop()
         {
             throw new NotImplementedException("Blocking Run() is not implemented.");
         }
+
+        #region Internal Methods
+
+        protected void CallInitialize()
+        {
+            if (!_initialized)
+            {
+                this.Game.AssertNotDisposed();
+
+                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
+                if (gdm != null)
+                    ((IGraphicsDeviceManager)gdm).CreateDevice();
+
+                this.Game.Initialize();
+
+                this.InitializeComponents();
+
+                _initialized = true;
+            }
+        }
+
+        protected void CallBeginRun()
+        {
+            this.Game.BeginRun();
+            this.Timer.Restart();
+        }
+
+        protected void CallUpdate(GameTime gameTime)
+        {
+            this.Game.AssertNotDisposed();
+
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
+            this.Game.Update(gameTime);
+        }
+
+        protected void CallDraw(GameTime gameTime)
+        {
+            this.Game.AssertNotDisposed();
+
+            bool gdmBeginDraw;
+            IGraphicsDeviceManager gdm = (IGraphicsDeviceManager)this.Services.GetService(typeof(IGraphicsDeviceManager));
+            if (gdm != null)
+                gdmBeginDraw = gdm.BeginDraw();
+            else // (gdm == null)
+                gdmBeginDraw = true;
+
+            // Draw and EndDraw should not be called if BeginDraw returns false.
+            // http://stackoverflow.com/questions/4054936/manual-control-over-when-to-redraw-the-screen/4057180#4057180
+            // http://stackoverflow.com/questions/4235439/xna-3-1-to-4-0-requires-constant-redraw-or-will-display-a-purple-screen
+            if (gdmBeginDraw && this.Game.BeginDraw())
+            {
+                this.Game.Draw(gameTime);
+                this.Game.EndDraw();
+            }
+        }
+
+        protected void CallEndRun()
+        {
+            this.Game.EndRun();
+        }
+
+        protected void CallExiting()
+        {
+            this.Game.OnExiting(EventArgs.Empty);
+            this.Game.UnloadContent();
+        }
+
+        #endregion Internal Methods
 
         public virtual void Initialize()
         {
@@ -492,9 +524,7 @@ namespace Microsoft.Xna.Platform
                     _currElapsedTime -= TargetElapsedTime;
                     stepCount++;
 
-                    this.Game.AssertNotDisposed();
-                    ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                    this.Game.CallUpdate(Time);
+                    this.CallUpdate(Time);
                 }
 
                 //Every update after the first accumulates lag
@@ -528,16 +558,15 @@ namespace Microsoft.Xna.Platform
                 Time.TotalGameTime += _currElapsedTime;
                 _currElapsedTime = TimeSpan.Zero;
 
-                this.Game.AssertNotDisposed();
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-                this.Game.CallUpdate(Time);
+                this.CallUpdate(Time);
             }
 
             if (!_suppressDraw)
-                Game.DoDraw(Time);
+                this.CallDraw(Time);
             else
                 _suppressDraw = false;
         }
+
 
         #endregion Methods
 

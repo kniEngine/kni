@@ -85,7 +85,7 @@ namespace MonoGame.Tests.Visual {
 			Services.AddService<IFrameCaptureSource> (this);
 		}
 
-		protected override void Draw (GameTime gameTime)
+		protected internal override void Draw (GameTime gameTime)
 		{
 			if (_shouldCaptureFrame)
 				StartRenderingToTexture ();

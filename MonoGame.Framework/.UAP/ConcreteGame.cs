@@ -135,38 +135,18 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        internal override void Run()
+        protected internal override void Run()
         {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            this.Game.CallBeginRun();
-            base.Timer.Restart();
-
+            this.CallInitialize();
+            this.CallBeginRun();
             // XNA runs one Update even before showing the window
-            this.Game.AssertNotDisposed();
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-            this.Game.CallUpdate(new GameTime());
+            this.CallUpdate(new GameTime());
 
             StartGameLoop();
             return;
 
-            //this.Game.CallEndRun();
-            //this.Game.DoExiting();
+            //this.CallEndRun();
+            //this.DoExiting();
         }
 
         bool _enableRunLoop = false;

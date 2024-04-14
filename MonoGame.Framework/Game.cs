@@ -300,7 +300,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>
         ///   <code>true</code> if <see cref="Draw"/> should be called, <code>false</code> if it should not.
         /// </returns>
-        protected virtual bool BeginDraw()
+        protected internal virtual bool BeginDraw()
         {
             return Strategy.BeginDraw();
         }
@@ -309,7 +309,7 @@ namespace Microsoft.Xna.Framework
         /// Called right after <see cref="Draw"/>. Presents the
         /// rendered frame in the <see cref="GameWindow"/>.
         /// </summary>
-        protected virtual void EndDraw()
+        protected internal virtual void EndDraw()
         {
             Strategy.EndDraw();
         }
@@ -317,12 +317,12 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Called after <see cref="Initialize"/>, but before the first call to <see cref="Update"/>.
         /// </summary>
-        protected virtual void BeginRun() { }
+        protected internal virtual void BeginRun() { }
 
         /// <summary>
         /// Called when the game loop has been terminated before exiting.
         /// </summary>
-        protected virtual void EndRun() { }
+        protected internal virtual void EndRun() { }
 
         /// <summary>
         /// Override this to load graphical resources required by the game.
@@ -332,14 +332,14 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Override this to unload graphical resources loaded by the game.
         /// </summary>
-        protected virtual void UnloadContent() { }
+        protected internal virtual void UnloadContent() { }
 
         /// <summary>
         /// Override this to initialize the game and load any needed non-graphical resources.
         ///
         /// Initializes attached <see cref="GameComponent"/> instances and calls <see cref="LoadContent"/>.
         /// </summary>
-        protected virtual void Initialize()
+        protected internal virtual void Initialize()
         {
             Strategy.Initialize();
 
@@ -358,7 +358,7 @@ namespace Microsoft.Xna.Framework
         /// Override this to update your game.
         /// </summary>
         /// <param name="gameTime">The elapsed time since the last call to <see cref="Update"/>.</param>
-        protected virtual void Update(GameTime gameTime)
+        protected internal virtual void Update(GameTime gameTime)
         {
             Strategy.Update(gameTime);
         }
@@ -370,7 +370,7 @@ namespace Microsoft.Xna.Framework
         /// Override this to render your game.
         /// </summary>
         /// <param name="gameTime">A <see cref="GameTime"/> instance containing the elapsed time since the last call to <see cref="Draw"/> and the total time elapsed since the game started.</param>
-        protected virtual void Draw(GameTime gameTime)
+        protected internal virtual void Draw(GameTime gameTime)
         {
             Strategy.Draw(gameTime);
         }
@@ -379,7 +379,7 @@ namespace Microsoft.Xna.Framework
         /// Called when the game is exiting. Raises the <see cref="Exiting"/> event.
         /// </summary>
         /// <param name="args">The arguments to the <see cref="Exiting"/> event.</param>
-        protected virtual void OnExiting(EventArgs args)
+        protected internal virtual void OnExiting(EventArgs args)
         {
             var handler = Exiting;
             if (handler != null)
@@ -414,57 +414,6 @@ namespace Microsoft.Xna.Framework
 
         #endregion Protected Methods
 
-
-        #region Internal Methods
-
-        internal void CallInitialize()
-        {
-            this.Initialize();
-        }
-
-        internal void CallBeginRun()
-        {
-            this.BeginRun();
-        }
-
-        internal void CallUpdate(GameTime gameTime)
-        {
-            this.Update(gameTime);
-        }
-
-        internal void CallEndRun()
-        {
-            this.EndRun();
-        }
-
-        internal void DoDraw(GameTime gameTime)
-        {
-            AssertNotDisposed();
-
-            bool gdmBeginDraw;
-            IGraphicsDeviceManager gdm = (IGraphicsDeviceManager)Strategy.Services.GetService(typeof(IGraphicsDeviceManager));
-            if (gdm != null)
-                gdmBeginDraw = gdm.BeginDraw();
-            else // (gdm == null)
-                gdmBeginDraw = true;
-
-            // Draw and EndDraw should not be called if BeginDraw returns false.
-            // http://stackoverflow.com/questions/4054936/manual-control-over-when-to-redraw-the-screen/4057180#4057180
-            // http://stackoverflow.com/questions/4235439/xna-3-1-to-4-0-requires-constant-redraw-or-will-display-a-purple-screen
-            if (gdmBeginDraw && BeginDraw())
-            {
-                Draw(gameTime);
-                EndDraw();
-            }
-        }
-
-        internal void DoExiting()
-        {
-            OnExiting(EventArgs.Empty);
-            UnloadContent();
-        }
-
-        #endregion Internal Methods
     }
 
 }
