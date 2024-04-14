@@ -96,7 +96,7 @@ namespace MonoGame.Tests {
             Initialize();
 	    }
 
-		protected override void Initialize ()
+		protected internal override void Initialize ()
 		{
 			SafeRaise (PreInitializeWith);
 			base.Initialize ();
@@ -110,7 +110,7 @@ namespace MonoGame.Tests {
 			SafeRaise (LoadContentWith);
 		}
 
-		protected override void UnloadContent ()
+		protected internal override void UnloadContent ()
 		{
 			SafeRaise (PreUnloadContentWith);
 			base.UnloadContent ();
@@ -189,7 +189,7 @@ namespace MonoGame.Tests {
 #endif
 
 		private readonly UpdateGuard _updateGuard = new UpdateGuard ();
-		protected override void Update (GameTime gameTime)
+		protected internal override void Update (GameTime gameTime)
 		{
 			_frameInfo.AdvanceUpdate (gameTime);
 			EvaluateExitCondition ();
@@ -212,7 +212,7 @@ namespace MonoGame.Tests {
 			SafeRaise (UpdateOncePerDrawWith);
 		}
 
-		protected override void Draw (GameTime gameTime)
+		protected internal override void Draw (GameTime gameTime)
 		{
 			_frameInfo.AdvanceDraw (gameTime);
 			EvaluateExitCondition ();

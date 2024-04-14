@@ -8,7 +8,6 @@ using System;
 using System.Diagnostics;
 using Android.Views;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Media;
@@ -112,7 +111,7 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        internal override void Run()
+        protected internal override void Run()
         {
             StartGameLoop();
             // Prevent the default run loop from starting.
@@ -122,8 +121,8 @@ namespace Microsoft.Xna.Platform
             // StartRunLoop
             //_gameWindow.GameView.Resume();
 
-            //Game.CallEndRun();
-            //Game.DoExiting();
+            //this.CallEndRun();
+            //this.DoExiting();
         }
 
         private void StartGameLoop()
@@ -133,30 +132,10 @@ namespace Microsoft.Xna.Platform
 
         private void OnFrameTickBegin()
         {
-            if (!_initialized)
-            {
-                this.Game.AssertNotDisposed();
-
-                GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    ((IGraphicsDeviceManager)gdm).CreateDevice();
-                }
-
-                this.Game.CallInitialize();
-
-                this.InitializeComponents();
-
-                _initialized = true;
-            }
-
-            this.Game.CallBeginRun();
-            base.Timer.Restart();
-
+            this.CallInitialize();
+            this.CallBeginRun();
             // XNA runs one Update even before showing the window
-            this.Game.AssertNotDisposed();
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).Update();
-            this.Game.CallUpdate(new GameTime());
+            this.CallUpdate(new GameTime());
         }
 
         bool _isReadyToRun = false;
