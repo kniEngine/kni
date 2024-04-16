@@ -125,10 +125,6 @@ namespace Microsoft.Xna.Framework
             var handler = (hasFocus) ? WindowFocused : WindowUnfocused;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-
-            ((ConcreteGame)Game.Strategy)._hasWindowFocus = hasFocus;
-            bool isActive = _isActivityActive && hasFocus;
-            ((ConcreteGame)Game.Strategy).IsActive = isActive;
         }
 
         protected override void OnDestroy()

@@ -79,10 +79,18 @@ namespace Microsoft.Xna.Framework
 
         private void _activity_WindowFocused(object sender, EventArgs e)
         {
+            ((ConcreteGame)_game.Strategy)._hasWindowFocus = true;
+            bool isActive = _activity.IsActivityActive && ((ConcreteGame)_game.Strategy)._hasWindowFocus;
+
+            ((ConcreteGame)_game.Strategy).IsActive = isActive;
         }
 
         private void _activity_WindowUnfocused(object sender, EventArgs e)
         {
+            ((ConcreteGame)_game.Strategy)._hasWindowFocus = false;
+            bool isActive = _activity.IsActivityActive && ((ConcreteGame)_game.Strategy)._hasWindowFocus;
+
+            ((ConcreteGame)_game.Strategy).IsActive = isActive;
         }
 
         #region AndroidGameView Methods
