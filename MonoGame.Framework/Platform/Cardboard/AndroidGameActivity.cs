@@ -65,8 +65,8 @@ namespace Microsoft.Xna.Framework
         private bool _isActivityActive = false;
         internal bool IsActivityActive { get { return _isActivityActive; } }
 
-        public static event EventHandler Paused;
-        public static event EventHandler Resumed;
+        public event EventHandler Paused;
+        public event EventHandler Resumed;
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
         {

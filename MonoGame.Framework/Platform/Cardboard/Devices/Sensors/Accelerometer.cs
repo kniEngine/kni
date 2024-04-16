@@ -75,12 +75,12 @@ namespace Microsoft.Devices.Sensors
             sensor = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }
 
-        void ActivityPaused(object sender, EventArgs eventArgs)
+        void _activity_Paused(object sender, EventArgs eventArgs)
         {
             sensorManager.UnregisterListener(listener, sensor);
         }
 
-        void ActivityResumed(object sender, EventArgs eventArgs)
+        void _activity_Resumed(object sender, EventArgs eventArgs)
         {
             sensorManager.RegisterListener(listener, sensor, SensorDelay.Game);
         }
@@ -101,8 +101,8 @@ namespace Microsoft.Devices.Sensors
                     listener.accelerometer = this;
                     sensorManager.RegisterListener(listener, sensor, SensorDelay.Game);
                     // So the system can pause and resume the sensor when the activity is paused
-                    AndroidGameActivity.Paused += ActivityPaused;
-                    AndroidGameActivity.Resumed += ActivityResumed;
+                    AndroidGameWindow.Activity.Paused += _activity_Paused;
+                    AndroidGameWindow.Activity.Resumed += _activity_Resumed;
                 }
                 else
                 {
@@ -129,8 +129,8 @@ namespace Microsoft.Devices.Sensors
             {
                 if (sensorManager != null && sensor != null)
                 {
-                    AndroidGameActivity.Paused -= ActivityPaused;
-                    AndroidGameActivity.Resumed -= ActivityResumed;
+                    AndroidGameWindow.Activity.Paused -= _activity_Paused;
+                    AndroidGameWindow.Activity.Resumed -= _activity_Resumed;
                     sensorManager.UnregisterListener(listener, sensor);
                     listener.accelerometer = null;
                 }

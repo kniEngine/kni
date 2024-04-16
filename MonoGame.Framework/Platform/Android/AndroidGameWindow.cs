@@ -49,8 +49,8 @@ namespace Microsoft.Xna.Framework
             _activity = activity;
             _game = game;
 
-            AndroidGameActivity.Paused += _activity_Paused;
-            AndroidGameActivity.Resumed += _activity_Resumed;
+            _activity.Paused += _activity_Paused;
+            _activity.Resumed += _activity_Resumed;
 
             _activity.WindowFocused += _activity_WindowFocused;
             _activity.WindowUnfocused += _activity_WindowUnfocused;
@@ -342,8 +342,8 @@ namespace Microsoft.Xna.Framework
         {
             if (_activity != null)
             {
-                AndroidGameActivity.Paused -= _activity_Paused;
-                AndroidGameActivity.Resumed -= _activity_Resumed;
+                _activity.Paused -= _activity_Paused;
+                _activity.Resumed -= _activity_Resumed;
 
                 _activity.WindowFocused += _activity_WindowFocused;
                 _activity.WindowUnfocused += _activity_WindowUnfocused;
