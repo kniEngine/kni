@@ -9,7 +9,6 @@ using System.Diagnostics;
 using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform.Media;
 
 
@@ -28,8 +27,6 @@ namespace Microsoft.Xna.Platform
 
             System.Diagnostics.Debug.Assert(AndroidGameWindow.Activity != null, "Must set Game.Activity before creating the Game instance");
             AndroidGameWindow.Activity.Game = Game;
-            AndroidGameActivity.Paused += Activity_Paused;
-            AndroidGameActivity.Resumed += Activity_Resumed;
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             base.Window = _gameWindow;
@@ -46,8 +43,6 @@ namespace Microsoft.Xna.Platform
         {
             if (disposing)
             {
-                AndroidGameActivity.Paused -= Activity_Paused;
-                AndroidGameActivity.Resumed -= Activity_Resumed;
             }
 
             if (TouchPanel.WindowHandle == _gameWindow.Handle)
@@ -70,30 +65,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
         
-        MediaState _mediaPlayer_PrevState = MediaState.Stopped;
-
-        // EnterForeground
-        void Activity_Resumed(object sender, EventArgs e)
-        {
-            IsActive = _gameWindow._hasWindowFocus;
-            _gameWindow.GameView.Resume();
-            if (_mediaPlayer_PrevState == MediaState.Playing && AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
-                MediaPlayer.Resume();
-            if (!_gameWindow.GameView.IsFocused)
-                _gameWindow.GameView.RequestFocus();
-        }
-
-        // EnterBackground
-        void Activity_Paused(object sender, EventArgs e)
-        {
-            IsActive = false;
-            _mediaPlayer_PrevState = MediaPlayer.State;
-            _gameWindow.GameView.Pause();
-            _gameWindow.GameView.ClearFocus();
-            if (AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
-                MediaPlayer.Pause();
-        }
-
         protected internal override void Run()
         {
             StartGameLoop();

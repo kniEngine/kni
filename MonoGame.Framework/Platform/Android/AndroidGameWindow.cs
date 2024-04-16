@@ -8,6 +8,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
@@ -33,6 +34,8 @@ namespace Microsoft.Xna.Framework
         private AndroidGameActivity _activity;
         private readonly Game _game;
         internal bool _hasWindowFocus = true;
+        MediaState _mediaPlayer_PrevState = MediaState.Stopped;
+
         private Rectangle _clientBounds;
         internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
@@ -45,6 +48,9 @@ namespace Microsoft.Xna.Framework
         {
             _activity = activity;
             _game = game;
+
+            AndroidGameActivity.Paused += _activity_Paused;
+            AndroidGameActivity.Resumed += _activity_Resumed;
 
             _activity.WindowFocused += _activity_WindowFocused;
             _activity.WindowUnfocused += _activity_WindowUnfocused;
@@ -76,6 +82,28 @@ namespace Microsoft.Xna.Framework
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
+        }
+
+        void _activity_Resumed(object sender, EventArgs e)
+        {
+            _game.Strategy.IsActive = _hasWindowFocus;
+
+            GameView.Resume();
+            if (_mediaPlayer_PrevState == MediaState.Playing && _activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Resume();
+            if (!this.GameView.IsFocused)
+                this.GameView.RequestFocus();
+        }
+
+        void _activity_Paused(object sender, EventArgs e)
+        {
+            _game.Strategy.IsActive = false;
+
+            _mediaPlayer_PrevState = MediaPlayer.State;
+            this.GameView.Pause();
+            this.GameView.ClearFocus();
+            if (_activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Pause();
         }
 
         private void _activity_WindowFocused(object sender, EventArgs e)
@@ -314,6 +342,9 @@ namespace Microsoft.Xna.Framework
         {
             if (_activity != null)
             {
+                AndroidGameActivity.Paused -= _activity_Paused;
+                AndroidGameActivity.Resumed -= _activity_Resumed;
+
                 _activity.WindowFocused += _activity_WindowFocused;
                 _activity.WindowUnfocused += _activity_WindowUnfocused;
 
