@@ -22,6 +22,10 @@ namespace Microsoft.Xna.Framework
 
         public bool AutoPauseAndResumeMediaPlayer = true;
 
+
+        internal event EventHandler WindowFocused;
+        internal event EventHandler WindowUnfocused;
+
         /// <summary>
         /// OnCreate called when the activity is launched from cold or after the app
         /// has been killed due to a higher priority app needing the memory
@@ -117,6 +121,10 @@ namespace Microsoft.Xna.Framework
         public override void OnWindowFocusChanged(bool hasFocus)
         {
             base.OnWindowFocusChanged(hasFocus);
+
+            var handler = (hasFocus) ? WindowFocused : WindowUnfocused;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 
             ((ConcreteGame)Game.Strategy)._hasWindowFocus = hasFocus;
             bool isActive = _isActivityActive && hasFocus;

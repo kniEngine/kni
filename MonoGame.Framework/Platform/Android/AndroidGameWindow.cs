@@ -45,6 +45,9 @@ namespace Microsoft.Xna.Framework
             _activity = activity;
             _game = game;
 
+            _activity.WindowFocused += _activity_WindowFocused;
+            _activity.WindowUnfocused += _activity_WindowUnfocused;
+
             Point size;
             // GetRealSize() was defined in JellyBeanMr1 / API 17 / Android 4.2
             if (Build.VERSION.SdkInt < BuildVersionCodes.JellyBeanMr1)
@@ -72,6 +75,14 @@ namespace Microsoft.Xna.Framework
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
+        }
+
+        private void _activity_WindowFocused(object sender, EventArgs e)
+        {
+        }
+
+        private void _activity_WindowUnfocused(object sender, EventArgs e)
+        {
         }
 
         #region AndroidGameView Methods
@@ -294,6 +305,9 @@ namespace Microsoft.Xna.Framework
         {
             if (_activity != null)
             {
+                _activity.WindowFocused += _activity_WindowFocused;
+                _activity.WindowUnfocused += _activity_WindowUnfocused;
+
                 _activity = null;
             }
 
