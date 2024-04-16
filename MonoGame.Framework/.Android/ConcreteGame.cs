@@ -70,14 +70,12 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
         
-        internal bool _hasWindowFocus = true;
-        
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         // EnterForeground
         void Activity_Resumed(object sender, EventArgs e)
         {
-            IsActive = _hasWindowFocus;
+            IsActive = _gameWindow._hasWindowFocus;
             _gameWindow.GameView.Resume();
             if (_mediaPlayer_PrevState == MediaState.Playing && AndroidGameWindow.Activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Resume();

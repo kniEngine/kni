@@ -32,6 +32,7 @@ namespace Microsoft.Xna.Framework
 
         private AndroidGameActivity _activity;
         private readonly Game _game;
+        internal bool _hasWindowFocus = true;
         private Rectangle _clientBounds;
         internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
@@ -79,16 +80,16 @@ namespace Microsoft.Xna.Framework
 
         private void _activity_WindowFocused(object sender, EventArgs e)
         {
-            ((ConcreteGame)_game.Strategy)._hasWindowFocus = true;
-            bool isActive = _activity.IsActivityActive && ((ConcreteGame)_game.Strategy)._hasWindowFocus;
+            _hasWindowFocus = true;
+            bool isActive = _activity.IsActivityActive && _hasWindowFocus;
 
             ((ConcreteGame)_game.Strategy).IsActive = isActive;
         }
 
         private void _activity_WindowUnfocused(object sender, EventArgs e)
         {
-            ((ConcreteGame)_game.Strategy)._hasWindowFocus = false;
-            bool isActive = _activity.IsActivityActive && ((ConcreteGame)_game.Strategy)._hasWindowFocus;
+            _hasWindowFocus = false;
+            bool isActive = _activity.IsActivityActive && _hasWindowFocus;
 
             ((ConcreteGame)_game.Strategy).IsActive = isActive;
         }
