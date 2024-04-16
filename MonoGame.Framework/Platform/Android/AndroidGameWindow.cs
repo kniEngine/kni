@@ -30,6 +30,7 @@ namespace Microsoft.Xna.Framework
 
         internal AndroidSurfaceView GameView { get; private set; }
 
+        private AndroidGameActivity _activity;
         private readonly Game _game;
         private Rectangle _clientBounds;
         internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
@@ -41,6 +42,7 @@ namespace Microsoft.Xna.Framework
 
         public AndroidGameWindow(AndroidGameActivity activity, Game game)
         {
+            _activity = activity;
             _game = game;
 
             Point size;
@@ -290,6 +292,11 @@ namespace Microsoft.Xna.Framework
 
         public void Dispose()
         {
+            if (_activity != null)
+            {
+                _activity = null;
+            }
+
             if (GameView != null)
             {
                 GameView.Dispose();
