@@ -201,9 +201,9 @@ namespace Microsoft.Xna.Framework
 
                     _glContextAvailable = false;
 
-                    if (_game.Strategy.GraphicsDevice != null)
+                    if (_game.GraphicsDevice != null)
                     {
-                        ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
+                        ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
                     }
                 }
                 
@@ -292,9 +292,9 @@ namespace Microsoft.Xna.Framework
                     _glContextAvailable = false;
                     contextLost = true;
 
-                    if (_game.Strategy.GraphicsDevice != null)
+                    if (_game.GraphicsDevice != null)
                     {
-                        ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
+                        ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
                     }
                 }
 
@@ -593,7 +593,7 @@ namespace Microsoft.Xna.Framework
             if (!_egl.EglInitialize(_eglDisplay, version))
                 throw new Exception("Could not initialize EGL display" + GetErrorAsString());
 
-            GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
 
             int depth = 0;
             int stencil = 0;
@@ -769,10 +769,10 @@ namespace Microsoft.Xna.Framework
 
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                 // the surface is created after the correct viewport is already applied so we must do it again.
-                GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
+                GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
                 if (gdm != null)
                 {
-                    if (_game.Strategy.GraphicsDevice != null)
+                    if (gdm.GraphicsDevice != null)
                     {
                         gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
                     }
@@ -798,10 +798,10 @@ namespace Microsoft.Xna.Framework
         {
             System.Diagnostics.Debug.Assert(_lostglContext == true);
 
-            if (_game.Strategy.GraphicsDevice != null)
+            if (_game.GraphicsDevice != null)
             {
                 // DeviceReset events
-                ((IPlatformGraphicsDevice)_game.Strategy.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
+                ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
             }
         }
 

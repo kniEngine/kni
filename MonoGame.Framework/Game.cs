@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework
     {
         private GameStrategy _strategy;
 
-        internal GameStrategy Strategy { get { return _strategy; } }
+        GameStrategy Strategy { get { return _strategy; } }
 
         /// <summary>
         /// Create a <see cref="Game"/>.

@@ -51,7 +51,7 @@ namespace MonoGame.Framework
             T game = new T();
 
             // Set the swap chain panel on the graphics mananger.
-            GraphicsDeviceManager gdm = game.Strategy.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = ((IPlatformGame)game).GetStrategy<GameStrategy>().GraphicsDeviceManager;
             if (gdm == null)
                 throw new NullReferenceException("You must create the GraphicsDeviceManager in the Game constructor!");
 

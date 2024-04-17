@@ -461,7 +461,7 @@ namespace Microsoft.Xna.Framework
             Sdl.Rectangle displayRect;
             SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
 
-            var gdm = _game.Strategy.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<GameStrategy>().GraphicsDeviceManager;
             if (willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
             {
                 Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
@@ -522,7 +522,7 @@ namespace Microsoft.Xna.Framework
 
         public void ClientResize(int width, int height)
         {
-            GraphicsDevice device = _game.Strategy.GraphicsDevice;
+            GraphicsDevice device = _game.GraphicsDevice;
 
             // SDL reports many resize events even if the Size didn't change.
             // Only call the code below if it actually changed.

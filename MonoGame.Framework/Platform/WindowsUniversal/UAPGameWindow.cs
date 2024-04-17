@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Framework
         private void Window_Closed(CoreWindow sender, CoreWindowEventArgs args)
         {
             Game.SuppressDraw();
-            Game.Strategy.TickExiting();
+            ((IPlatformGame)Game).GetStrategy<GameStrategy>().TickExiting();
         }
 
         private void SetViewBounds(double width, double height)
@@ -192,7 +192,7 @@ namespace Microsoft.Xna.Framework
             // Set the default new back buffer size and viewport, but this
             // can be overloaded by the two events below.
 
-            var gdm = Game.Strategy.GraphicsDeviceManager;
+            GraphicsDeviceManager gdm = ((IPlatformGame)Game).GetStrategy<GameStrategy>().GraphicsDeviceManager;
             gdm.IsFullScreen = _appView.IsFullScreenMode;
             gdm.PreferredBackBufferWidth = _viewBounds.Width;
             gdm.PreferredBackBufferHeight = _viewBounds.Height;
@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Framework
             // If we have a valid client bounds then update the graphics device.
             if (_viewBounds.Width > 0 && _viewBounds.Height > 0)
             {
-                var gdm = Game.Strategy.GraphicsDeviceManager;
+                GraphicsDeviceManager gdm = ((IPlatformGame)Game).GetStrategy<GameStrategy>().GraphicsDeviceManager;
                 gdm.ApplyChanges();
             }
         }

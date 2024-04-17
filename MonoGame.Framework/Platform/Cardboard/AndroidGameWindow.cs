@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework
 
             if (_game != null && !ScreenReceiver.ScreenLocked)
             {
-                ((ConcreteGame)_game.Strategy).OnFrameTick();
+                ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
             }
         }
 
@@ -214,7 +214,7 @@ namespace Microsoft.Xna.Framework
 
             if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
             {
-                GraphicsDeviceManager gdm = _game.Strategy.GraphicsDeviceManager;
+                GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
                 if (gdm != null)
                     gdm.ApplyChanges();
             }
