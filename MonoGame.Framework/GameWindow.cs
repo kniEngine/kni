@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework
                 handler(this, EventArgs.Empty);
         }
 
-        internal void OnFileDrop(FileDropEventArgs e)
+        protected void OnFileDrop(FileDropEventArgs e)
         {
             var handler = FileDrop;
             if (handler != null)
@@ -229,27 +229,27 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Called when the window receives text input. Raises the <see cref="TextInput"/> event.
         /// </summary>
-        internal void Platform_OnTextInput(char character, Keys key)
+        protected void OnTextInput(char character, Keys key)
         {
             var handler = TextInput;
             if (handler != null)
                 handler(this, new TextInputEventArgs(key, character));
         }
-        internal void Platform_OnKeyDown(Keys key)
+        protected void OnKeyDown(Keys key)
         {
             var handler = KeyDown;
             if (handler != null)
                 handler(this, new InputKeyEventArgs(key));
         }
-        internal void Platform_OnKeyUp(Keys key)
+        protected void OnKeyUp(Keys key)
         {
             var handler = KeyUp;
             if (handler != null)
                 handler(this, new InputKeyEventArgs(key));
         }
 
-        internal bool Platform_IsTextInputAttached() { return (TextInput != null); }
-        internal bool Platform_IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
+        protected bool IsTextInputAttached() { return (TextInput != null); }
+        protected bool IsKeyUpDownAttached() { return (KeyDown != null || KeyUp != null); }
 
         #endregion Keyboard events
 

@@ -240,7 +240,7 @@ namespace Microsoft.Xna.Framework
         private void OnKeyPress(object sender, KeyPressEventArgs e)
         {
             var key = (Keys) (VkKeyScanEx(e.KeyChar, InputLanguage.CurrentInputLanguage.Handle) & 0xff);
-            Platform_OnTextInput(e.KeyChar, key);
+            this.OnTextInput(e.KeyChar, key);
         }
 
         private FormWindowState _lastFormState;
@@ -572,6 +572,31 @@ namespace Microsoft.Xna.Framework
                 RedrawWindow(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 1);
 
             _switchingFullScreen = false;
+        }
+
+        internal void Platform_OnFileDrop(FileDropEventArgs e)
+        {
+            this.OnFileDrop(e);
+        }
+
+        internal void Platform_OnKeyDown(Keys key)
+        {
+            this.OnKeyDown(key);
+        }
+
+        internal void Platform_OnKeyUp(Keys key)
+        {
+            this.OnKeyUp(key);
+        }
+
+        internal bool Platform_IsTextInputAttached()
+        {
+            return this.IsTextInputAttached();
+        }
+
+        internal bool Platform_IsKeyUpDownAttached()
+        {
+            return this.IsKeyUpDownAttached();
         }
     }
 }

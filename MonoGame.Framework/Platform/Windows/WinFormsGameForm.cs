@@ -244,6 +244,7 @@ namespace Microsoft.Xna.Framework.Windows
                         break;
                     case WM_KEYUP:
                     case WM_SYSKEYUP:
+
                         _window.Platform_OnKeyUp(key);
                         break;
                     default:
@@ -272,7 +273,7 @@ namespace Microsoft.Xna.Framework.Windows
                 files[i] = builder.ToString();
             }
 
-            _window.OnFileDrop(new FileDropEventArgs(files));
+            _window.Platform_OnFileDrop(new FileDropEventArgs(files));
             m.Result = IntPtr.Zero;
         }
 
