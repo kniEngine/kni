@@ -25,14 +25,13 @@ namespace Microsoft.Xna.Platform
     {
         private iOSGameViewController _viewController;
         private UIWindow _uiWindow;
-        private NSObject DidBecomeActiveHolder;
-        private NSObject WillResignActiveHolder;
         private NSObject WillTerminateHolder;
         private CADisplayLink _displayLink;
 
         private static ConcreteGame _concreteGameInstance = null;
         internal static ConcreteGame ConcreteGameInstance { get { return ConcreteGame._concreteGameInstance; } }
 
+        private iOSGameWindow _gameWindow;
 
 
         public ConcreteGame(Game game) : base(game)
@@ -57,8 +56,8 @@ namespace Microsoft.Xna.Platform
             _viewController = new iOSGameViewController(this);
             game.Services.AddService(typeof(UIViewController), _viewController);
 
-            GameWindow gameWindow = new iOSGameWindow(_viewController);
-            base.Window = gameWindow;
+            _gameWindow = new iOSGameWindow(_viewController);
+            base.Window = _gameWindow;
             base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
@@ -123,7 +122,7 @@ namespace Microsoft.Xna.Platform
             // will be respected at launch
             _uiWindow.RootViewController = _viewController;
 
-            BeginObservingUIApplication();
+            _gameWindow.BeginObservingUIApplication();
             BeginObservingUIApplicationExit();
 
             _viewController.View.BecomeFirstResponder();
@@ -200,16 +199,6 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        private void BeginObservingUIApplication()
-        {
-            DidBecomeActiveHolder = NSNotificationCenter.DefaultCenter.AddObserver(
-                    UIApplication.DidBecomeActiveNotification,
-                    new Action<NSNotification>(Application_DidBecomeActive));
-            WillResignActiveHolder = NSNotificationCenter.DefaultCenter.AddObserver(
-                    UIApplication.WillResignActiveNotification,
-                    new Action<NSNotification>(Application_WillResignActive));
-        }
-
         private void BeginObservingUIApplicationExit()
         {
             WillTerminateHolder = NSNotificationCenter.DefaultCenter.AddObserver(
@@ -218,20 +207,6 @@ namespace Microsoft.Xna.Platform
         }
 
         #region Notification Handling
-
-        private void Application_DidBecomeActive(NSNotification notification)
-        {
-            IsActive = true;
-            #if TVOS
-            _viewController.ControllerUserInteractionEnabled = false;
-            #endif
-            //TouchPanel.Reset();
-        }
-
-        private void Application_WillResignActive(NSNotification notification)
-        {
-            IsActive = false;
-        }
 
         private void Application_WillTerminate(NSNotification notification)
         {
