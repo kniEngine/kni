@@ -272,20 +272,20 @@ namespace Microsoft.Xna.Framework
                         if (!_keys.Contains(key))
                                 _keys.Add(key);
                         char character = (char)ev.Key.Keysym.Sym;
-                        this.Platform_OnKeyDown(key);
+                        this.OnKeyDown(key);
                         if (char.IsControl(character))
-                                this.Platform_OnTextInput(character, key);
+                                this.OnTextInput(character, key);
                         break;
                     }
                     case Sdl.EventType.KeyUp:
                     {
                             Keys key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
                         _keys.Remove(key);
-                        this.Platform_OnKeyUp(key);
+                        this.OnKeyUp(key);
                         break;
                     }
                     case Sdl.EventType.TextInput:
-                        if (this.Platform_IsTextInputAttached())
+                        if (this.IsTextInputAttached())
                         {
                             int len = 0;
                             int utf8character = 0; // using an int to encode multibyte characters longer than 2 bytes
@@ -329,7 +329,7 @@ namespace Microsoft.Xna.Framework
 
                                         if (codepoint >= 0 && codepoint < 0xFFFF)
                                         {
-                                            this.Platform_OnTextInput((char)codepoint, KeyboardUtil.ToXna(codepoint));
+                                            this.OnTextInput((char)codepoint, KeyboardUtil.ToXna(codepoint));
                                             // UTF16 characters beyond 0xFFFF are not supported (and would require a surrogate encoding that is not supported by the char type)
                                         }
                                     }
