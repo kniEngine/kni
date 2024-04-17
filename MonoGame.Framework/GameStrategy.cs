@@ -149,20 +149,6 @@ namespace Microsoft.Xna.Platform
         public bool IsActive
         {
             get { return _isActive; }
-
-            // TODO: replace by calling GameWindow.Activated/Deactivated
-            internal set
-            {
-                if (_isActive != value)
-                {
-                    _isActive = value;
-
-                    if (_isActive)
-                        OnActivated(EventArgs.Empty);
-                    else
-                        OnDeactivated(EventArgs.Empty);
-                }
-            }
         }
 
         private bool _isVisible = true;
