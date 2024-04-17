@@ -355,6 +355,12 @@ namespace Microsoft.Xna.Framework
         {
 
         }
+
+        internal void InitFocus()
+        {
+            if (this.wasmWindow.Document.HasFocus())
+                OnActivated();
+        }
     }
 }
 

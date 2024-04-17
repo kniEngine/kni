@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform
             // XNA runs one Update even before showing the window
             this.CallUpdate(new GameTime());
 
-            IsActive = _gameWindow.wasmWindow.Document.HasFocus();
+            _gameWindow.InitFocus();
 
             StartGameLoop();
             return;
