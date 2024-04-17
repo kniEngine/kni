@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework
 
         private AndroidGameActivity _activity;
         private readonly Game _game;
-        internal bool _hasWindowFocus = true;
+        private bool _hasWindowFocus = true;
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         private Rectangle _clientBounds;
@@ -86,21 +86,37 @@ namespace Microsoft.Xna.Framework
 
         void _activity_Resumed(object sender, EventArgs e)
         {
-            if (_hasWindowFocus)
+            if (!_hasWindowFocus)
+            {
+                _hasWindowFocus = true;
                 OnActivated();
-            else
-                OnDeactivated();
+            }
 
             GameView.Resume();
             if (_mediaPlayer_PrevState == MediaState.Playing && _activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Resume();
             if (!this.GameView.IsFocused)
                 this.GameView.RequestFocus();
+
+            if (_game != null)
+            {
+                IGraphicsDeviceManager deviceManager = (IGraphicsDeviceManager)_game.Services.GetService(typeof(IGraphicsDeviceManager));
+                if (deviceManager != null)
+                {
+                    ((GraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
+
+                    this.GameView.RequestFocus();
+                }
+            }
         }
 
         void _activity_Paused(object sender, EventArgs e)
         {
-            OnDeactivated();
+            if (!_hasWindowFocus)
+            {
+                _hasWindowFocus = true;
+                OnActivated();
+            }
 
             _mediaPlayer_PrevState = MediaPlayer.State;
             this.GameView.Pause();
@@ -111,15 +127,20 @@ namespace Microsoft.Xna.Framework
 
         private void _activity_WindowFocused(object sender, EventArgs e)
         {
-            if (_activity.IsActivityActive)
+            if (!_hasWindowFocus)
+            {
+                _hasWindowFocus = true;
                 OnActivated();
-            else
-                OnDeactivated();
+            }
         }
 
         private void _activity_WindowUnfocused(object sender, EventArgs e)
         {
-            OnDeactivated();
+            if (_hasWindowFocus)
+            {
+                _hasWindowFocus = false;
+                OnDeactivated();
+            }
         }
 
         #region AndroidGameView Methods
