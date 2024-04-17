@@ -25,12 +25,13 @@ namespace Microsoft.Xna.Platform
     {
         private iOSGameViewController _viewController;
         private UIWindow _uiWindow;
-        private List<NSObject> _applicationObservers;
+        private NSObject WillTerminateHolder;
         private CADisplayLink _displayLink;
 
         private static ConcreteGame _concreteGameInstance = null;
         internal static ConcreteGame ConcreteGameInstance { get { return ConcreteGame._concreteGameInstance; } }
 
+        private iOSGameWindow _gameWindow;
 
 
         public ConcreteGame(Game game) : base(game)
@@ -41,8 +42,6 @@ namespace Microsoft.Xna.Platform
 
             string appLocation = ((ITitleContainer)TitleContainer.Current).Location;
             Directory.SetCurrentDirectory(appLocation);
-
-            _applicationObservers = new List<NSObject>();
 
             #if !TVOS
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
@@ -57,8 +56,8 @@ namespace Microsoft.Xna.Platform
             _viewController = new iOSGameViewController(this);
             game.Services.AddService(typeof(UIViewController), _viewController);
 
-            GameWindow gameWindow = new iOSGameWindow(_viewController);
-            base.Window = gameWindow;
+            _gameWindow = new iOSGameWindow(_viewController);
+            base.Window = _gameWindow;
             base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
@@ -123,7 +122,8 @@ namespace Microsoft.Xna.Platform
             // will be respected at launch
             _uiWindow.RootViewController = _viewController;
 
-            BeginObservingUIApplication();
+            _gameWindow.BeginObservingUIApplication();
+            BeginObservingUIApplicationExit();
 
             _viewController.View.BecomeFirstResponder();
             CreateDisplayLink();
@@ -199,40 +199,14 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
 
-        private void BeginObservingUIApplication()
+        private void BeginObservingUIApplicationExit()
         {
-            var events = new Tuple<NSString, Action<NSNotification>>[]
-            {
-                Tuple.Create(
-                    UIApplication.DidBecomeActiveNotification,
-                    new Action<NSNotification>(Application_DidBecomeActive)),
-                Tuple.Create(
-                    UIApplication.WillResignActiveNotification,
-                    new Action<NSNotification>(Application_WillResignActive)),
-                Tuple.Create(
+            WillTerminateHolder = NSNotificationCenter.DefaultCenter.AddObserver(
                     UIApplication.WillTerminateNotification,
-                    new Action<NSNotification>(Application_WillTerminate)),
-             };
-
-            foreach (var entry in events)
-                _applicationObservers.Add(NSNotificationCenter.DefaultCenter.AddObserver(entry.Item1, entry.Item2));
+                    new Action<NSNotification>(Application_WillTerminate));
         }
 
         #region Notification Handling
-
-        private void Application_DidBecomeActive(NSNotification notification)
-        {
-            IsActive = true;
-            #if TVOS
-            _viewController.ControllerUserInteractionEnabled = false;
-            #endif
-            //TouchPanel.Reset();
-        }
-
-        private void Application_WillResignActive(NSNotification notification)
-        {
-            IsActive = false;
-        }
 
         private void Application_WillTerminate(NSNotification notification)
         {

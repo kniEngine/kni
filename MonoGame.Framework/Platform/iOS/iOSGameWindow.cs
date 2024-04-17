@@ -68,6 +68,8 @@ non-infringement.
 
 using System;
 using System.Collections.Generic;
+
+using Foundation;
 using UIKit;
 
 namespace Microsoft.Xna.Framework
@@ -84,6 +86,10 @@ namespace Microsoft.Xna.Framework
         private readonly iOSGameViewController _viewController;
 
         internal iOSGameViewController ViewController { get { return _viewController; } }
+
+        private NSObject DidBecomeActiveHolder;
+        private NSObject WillResignActiveHolder;
+
 
         public iOSGameWindow(iOSGameViewController viewController)
         {
@@ -190,5 +196,36 @@ namespace Microsoft.Xna.Framework
         }
 
         #endregion GameWindow Members
+
+
+        internal void BeginObservingUIApplication()
+        {
+            DidBecomeActiveHolder = NSNotificationCenter.DefaultCenter.AddObserver(
+                    UIApplication.DidBecomeActiveNotification,
+                    new Action<NSNotification>(Application_DidBecomeActive));
+            WillResignActiveHolder = NSNotificationCenter.DefaultCenter.AddObserver(
+                    UIApplication.WillResignActiveNotification,
+                    new Action<NSNotification>(Application_WillResignActive));
+        }
+
+
+        #region Notification Handling
+
+        private void Application_DidBecomeActive(NSNotification notification)
+        {
+            OnActivated();
+
+#if TVOS
+            _viewController.ControllerUserInteractionEnabled = false;
+#endif
+            //TouchPanel.Reset();
+        }
+
+        private void Application_WillResignActive(NSNotification notification)
+        {
+            OnDeactivated();
+        }
+
+        #endregion Notification Handling
     }
 }
