@@ -86,7 +86,10 @@ namespace Microsoft.Xna.Framework
 
         void _activity_Resumed(object sender, EventArgs e)
         {
-            _game.Strategy.IsActive = _hasWindowFocus;
+            if (_hasWindowFocus)
+                OnActivated();
+            else
+                OnDeactivated();
 
             GameView.Resume();
             if (_mediaPlayer_PrevState == MediaState.Playing && _activity.AutoPauseAndResumeMediaPlayer)
@@ -97,7 +100,7 @@ namespace Microsoft.Xna.Framework
 
         void _activity_Paused(object sender, EventArgs e)
         {
-            _game.Strategy.IsActive = false;
+            OnDeactivated();
 
             _mediaPlayer_PrevState = MediaPlayer.State;
             this.GameView.Pause();
@@ -108,18 +111,15 @@ namespace Microsoft.Xna.Framework
 
         private void _activity_WindowFocused(object sender, EventArgs e)
         {
-            _hasWindowFocus = true;
-            bool isActive = _activity.IsActivityActive && _hasWindowFocus;
-
-            ((ConcreteGame)_game.Strategy).IsActive = isActive;
+            if (_activity.IsActivityActive)
+                OnActivated();
+            else
+                OnDeactivated();
         }
 
         private void _activity_WindowUnfocused(object sender, EventArgs e)
         {
-            _hasWindowFocus = false;
-            bool isActive = _activity.IsActivityActive && _hasWindowFocus;
-
-            ((ConcreteGame)_game.Strategy).IsActive = isActive;
+            OnDeactivated();
         }
 
         #region AndroidGameView Methods
