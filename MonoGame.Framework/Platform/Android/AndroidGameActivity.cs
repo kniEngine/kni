@@ -22,6 +22,10 @@ namespace Microsoft.Xna.Framework
 
         public bool AutoPauseAndResumeMediaPlayer = true;
 
+
+        internal event EventHandler WindowFocused;
+        internal event EventHandler WindowUnfocused;
+
         /// <summary>
         /// OnCreate called when the activity is launched from cold or after the app
         /// has been killed due to a higher priority app needing the memory
@@ -54,8 +58,8 @@ namespace Microsoft.Xna.Framework
         private bool _isActivityActive = false;
         internal bool IsActivityActive { get { return _isActivityActive; } }
 
-        public static event EventHandler Paused;
-        public static event EventHandler Resumed;
+        public event EventHandler Paused;
+        public event EventHandler Resumed;
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
         {
@@ -111,9 +115,9 @@ namespace Microsoft.Xna.Framework
         {
             base.OnWindowFocusChanged(hasFocus);
 
-            ((ConcreteGame)Game.Strategy)._hasWindowFocus = hasFocus;
-            bool isActive = _isActivityActive && hasFocus;
-            ((ConcreteGame)Game.Strategy).IsActive = isActive;
+            var handler = (hasFocus) ? WindowFocused : WindowUnfocused;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         protected override void OnDestroy()

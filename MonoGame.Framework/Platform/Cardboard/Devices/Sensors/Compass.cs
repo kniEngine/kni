@@ -74,13 +74,13 @@ namespace Microsoft.Devices.Sensors
             sensorAccelerometer = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }
 
-        void ActivityPaused(object sender, EventArgs eventArgs)
+        void _activity_Paused(object sender, EventArgs eventArgs)
         {
             sensorManager.UnregisterListener(listener, sensorMagneticField);
             sensorManager.UnregisterListener(listener, sensorAccelerometer);
         }
 
-        void ActivityResumed(object sender, EventArgs eventArgs)
+        void _activity_Resumed(object sender, EventArgs eventArgs)
         {
             sensorManager.RegisterListener(listener, sensorAccelerometer, SensorDelay.Game);
             sensorManager.RegisterListener(listener, sensorMagneticField, SensorDelay.Game);

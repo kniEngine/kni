@@ -8,6 +8,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
@@ -30,7 +31,11 @@ namespace Microsoft.Xna.Framework
 
         internal AndroidSurfaceView GameView { get; private set; }
 
+        private AndroidGameActivity _activity;
         private readonly Game _game;
+        internal bool _hasWindowFocus = true;
+        MediaState _mediaPlayer_PrevState = MediaState.Stopped;
+
         private Rectangle _clientBounds;
         internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
@@ -41,7 +46,14 @@ namespace Microsoft.Xna.Framework
 
         public AndroidGameWindow(AndroidGameActivity activity, Game game)
         {
+            _activity = activity;
             _game = game;
+
+            _activity.Paused += _activity_Paused;
+            _activity.Resumed += _activity_Resumed;
+
+            _activity.WindowFocused += _activity_WindowFocused;
+            _activity.WindowUnfocused += _activity_WindowUnfocused;
 
             Point size;
             // GetRealSize() was defined in JellyBeanMr1 / API 17 / Android 4.2
@@ -70,6 +82,44 @@ namespace Microsoft.Xna.Framework
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
+        }
+
+        void _activity_Resumed(object sender, EventArgs e)
+        {
+            if (_hasWindowFocus)
+                OnActivated();
+            else
+                OnDeactivated();
+
+            GameView.Resume();
+            if (_mediaPlayer_PrevState == MediaState.Playing && _activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Resume();
+            if (!this.GameView.IsFocused)
+                this.GameView.RequestFocus();
+        }
+
+        void _activity_Paused(object sender, EventArgs e)
+        {
+            OnDeactivated();
+
+            _mediaPlayer_PrevState = MediaPlayer.State;
+            this.GameView.Pause();
+            this.GameView.ClearFocus();
+            if (_activity.AutoPauseAndResumeMediaPlayer)
+                MediaPlayer.Pause();
+        }
+
+        private void _activity_WindowFocused(object sender, EventArgs e)
+        {
+            if (_activity.IsActivityActive)
+                OnActivated();
+            else
+                OnDeactivated();
+        }
+
+        private void _activity_WindowUnfocused(object sender, EventArgs e)
+        {
+            OnDeactivated();
         }
 
         #region AndroidGameView Methods
@@ -290,6 +340,17 @@ namespace Microsoft.Xna.Framework
 
         public void Dispose()
         {
+            if (_activity != null)
+            {
+                _activity.Paused -= _activity_Paused;
+                _activity.Resumed -= _activity_Resumed;
+
+                _activity.WindowFocused += _activity_WindowFocused;
+                _activity.WindowUnfocused += _activity_WindowUnfocused;
+
+                _activity = null;
+            }
+
             if (GameView != null)
             {
                 GameView.Dispose();
