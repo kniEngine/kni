@@ -19,8 +19,11 @@ namespace Microsoft.Xna.Framework
     /// a window and graphics and runs a game loop that calls <see cref="Update"/> and <see cref="Draw"/>.
     /// </summary>
     public class Game : IDisposable
+        , IPlatformGame
     {
-        internal GameStrategy Strategy { get; private set; }
+        private GameStrategy _strategy;
+
+        internal GameStrategy Strategy { get { return _strategy; } }
 
         /// <summary>
         /// Create a <see cref="Game"/>.
@@ -29,7 +32,7 @@ namespace Microsoft.Xna.Framework
         {
             LaunchParameters = new LaunchParameters();
 
-            Strategy = GameFactory.Current.CreateGameStrategy(this);
+            _strategy = GameFactory.Current.CreateGameStrategy(this);
 
             Strategy.Activated += Platform_Activated;
             Strategy.Deactivated += Platform_Deactivated;
@@ -38,6 +41,11 @@ namespace Microsoft.Xna.Framework
         ~Game()
         {
             Dispose(false);
+        }
+
+        T IPlatformGame.GetStrategy<T>()
+        {
+            return (T)_strategy;
         }
 
         void Platform_Activated(object sender, EventArgs e) { OnActivated(e); }
@@ -62,13 +70,13 @@ namespace Microsoft.Xna.Framework
             {
                 if (disposing)
                 {
-                    if (Strategy != null)
+                    if (_strategy != null)
                     {
-                        Strategy.Activated -= Platform_Activated;
-                        Strategy.Deactivated -= Platform_Deactivated;
+                        _strategy.Activated -= Platform_Activated;
+                        _strategy.Deactivated -= Platform_Deactivated;
 
-                        Strategy.Dispose();
-                        Strategy = null;
+                        _strategy.Dispose();
+                        _strategy = null;
                     }
                 }
 
