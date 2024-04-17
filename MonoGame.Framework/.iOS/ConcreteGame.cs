@@ -25,7 +25,9 @@ namespace Microsoft.Xna.Platform
     {
         private iOSGameViewController _viewController;
         private UIWindow _uiWindow;
-        private List<NSObject> _applicationObservers;
+        private NSObject DidBecomeActiveHolder;
+        private NSObject WillResignActiveHolder;
+        private NSObject WillTerminateHolder;
         private CADisplayLink _displayLink;
 
         private static ConcreteGame _concreteGameInstance = null;
@@ -41,8 +43,6 @@ namespace Microsoft.Xna.Platform
 
             string appLocation = ((ITitleContainer)TitleContainer.Current).Location;
             Directory.SetCurrentDirectory(appLocation);
-
-            _applicationObservers = new List<NSObject>();
 
             #if !TVOS
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
@@ -124,6 +124,7 @@ namespace Microsoft.Xna.Platform
             _uiWindow.RootViewController = _viewController;
 
             BeginObservingUIApplication();
+            BeginObservingUIApplicationExit();
 
             _viewController.View.BecomeFirstResponder();
             CreateDisplayLink();
@@ -201,21 +202,19 @@ namespace Microsoft.Xna.Platform
 
         private void BeginObservingUIApplication()
         {
-            var events = new Tuple<NSString, Action<NSNotification>>[]
-            {
-                Tuple.Create(
+            DidBecomeActiveHolder = NSNotificationCenter.DefaultCenter.AddObserver(
                     UIApplication.DidBecomeActiveNotification,
-                    new Action<NSNotification>(Application_DidBecomeActive)),
-                Tuple.Create(
+                    new Action<NSNotification>(Application_DidBecomeActive));
+            WillResignActiveHolder = NSNotificationCenter.DefaultCenter.AddObserver(
                     UIApplication.WillResignActiveNotification,
-                    new Action<NSNotification>(Application_WillResignActive)),
-                Tuple.Create(
-                    UIApplication.WillTerminateNotification,
-                    new Action<NSNotification>(Application_WillTerminate)),
-             };
+                    new Action<NSNotification>(Application_WillResignActive));
+        }
 
-            foreach (var entry in events)
-                _applicationObservers.Add(NSNotificationCenter.DefaultCenter.AddObserver(entry.Item1, entry.Item2));
+        private void BeginObservingUIApplicationExit()
+        {
+            WillTerminateHolder = NSNotificationCenter.DefaultCenter.AddObserver(
+                    UIApplication.WillTerminateNotification,
+                    new Action<NSNotification>(Application_WillTerminate));
         }
 
         #region Notification Handling
