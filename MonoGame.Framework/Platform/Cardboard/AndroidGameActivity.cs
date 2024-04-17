@@ -106,16 +106,6 @@ namespace Microsoft.Xna.Framework
 
             if (Game != null)
             {
-                IGraphicsDeviceManager deviceManager = (IGraphicsDeviceManager)Game.Services.GetService(typeof(IGraphicsDeviceManager));
-                if (deviceManager != null)
-                {
-                    ((GraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
-                    ((AndroidGameWindow)Game.Window).GameView.RequestFocus();
-                }
-            }
-
-            if (Game != null)
-            {
                 if (_orientationListener.CanDetectOrientation())
                     _orientationListener.Enable();
             }

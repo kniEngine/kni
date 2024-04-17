@@ -97,6 +97,17 @@ namespace Microsoft.Xna.Framework
                 MediaPlayer.Resume();
             if (!this.GameView.IsFocused)
                 this.GameView.RequestFocus();
+
+            if (_game != null)
+            {
+                IGraphicsDeviceManager deviceManager = (IGraphicsDeviceManager)_game.Services.GetService(typeof(IGraphicsDeviceManager));
+                if (deviceManager != null)
+                {
+                    ((GraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
+
+                    this.GameView.RequestFocus();
+                }
+            }
         }
 
         void _activity_Paused(object sender, EventArgs e)
