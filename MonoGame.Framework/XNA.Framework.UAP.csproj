@@ -123,7 +123,7 @@
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
-    <Compile Include="NamespaceDocs.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include=".UAP\ConcreteTitleContainer.cs" />
     <Compile Include=".UAP\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
