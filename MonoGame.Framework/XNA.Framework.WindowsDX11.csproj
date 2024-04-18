@@ -96,6 +96,8 @@
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="GameWindow.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IUpdateable.cs" />
@@ -145,9 +147,6 @@
     <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
 
-    <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include=".WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
 
     <Compile Include="Input\.WindowsDX\Touch\ConcreteTouchPanel.cs" />
@@ -228,11 +227,12 @@
     <Compile Include="Utilities\Png\PngReader.cs" />
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
+    <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
     <Compile Include=".WindowsDX11\ConcreteGame.cs" />
     <Compile Include=".WindowsDX11\ConcreteGameFactory.cs" />
+    <Compile Include=".WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include=".WindowsDX11\KeysHelper.cs" />
-    <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />

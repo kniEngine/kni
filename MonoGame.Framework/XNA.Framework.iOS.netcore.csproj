@@ -69,6 +69,7 @@
     <Compile Include="Platform\iOS\Devices\Sensors\Compass.cs" />
     <Compile Include=".iOS\ConcreteGame.cs" />
     <Compile Include=".iOS\ConcreteGameFactory.cs" />
+    <Compile Include=".iOS\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\iOS\iOSGameView.cs" />
     <Compile Include="Platform\iOS\iOSGameViewController.cs" />
     <Compile Include="Platform\iOS\iOSGameView_Touch.cs" />
@@ -84,9 +85,6 @@
     <Compile Include="Graphics\.GL.iOS\OpenGL.iOS.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
       
-    <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include=".iOS\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Input\.iOS\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.iOS\ConcreteGamePad.cs" />
     <Compile Include="Input\.iOS\ConcreteInputFactory.cs" />

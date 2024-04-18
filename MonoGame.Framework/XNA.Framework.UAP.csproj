@@ -117,6 +117,8 @@
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="GameWindow.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IUpdateable.cs" />
@@ -164,9 +166,6 @@
     <Compile Include="Graphics\.DX11\IRenderTargetStrategyDX11.cs" />
     <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
-    <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include=".UAP\ConcreteGraphicsDeviceManager.cs" />
 
     <Compile Include="Input\.UAP\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.UAP\ConcreteGamePad.cs" />
@@ -247,6 +246,7 @@
     <Compile Include="Platform\WindowsUniversal\UAPFrameworkView.cs" />
     <Compile Include=".UAP\ConcreteGame.cs" />
     <Compile Include=".UAP\ConcreteGameFactory.cs" />
+    <Compile Include=".UAP\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\WindowsUniversal\UAPGameWindow.cs" />
     <Compile Include="Platform\WindowsUniversal\XamlGame.cs" />
     <Compile Include="Platform\WindowsUniversal\InputEvents.cs" />
@@ -332,24 +332,24 @@
     <Compile Include="Properties\AssemblyInfo.UWP.cs" />
   </ItemGroup>
   <ItemGroup>
-	<EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.fxo">
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.fxo">
       <LogicalName>Resources.AlphaTestEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.dx11.fxo">
       <LogicalName>Resources.BasicEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.dx11.fxo">
       <LogicalName>Resources.DualTextureEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.dx11.fxo">
       <LogicalName>Resources.EnvironmentMapEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.dx11.fxo">
       <LogicalName>Resources.SkinnedEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.dx11.fxo">
       <LogicalName>Resources.SpriteEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">

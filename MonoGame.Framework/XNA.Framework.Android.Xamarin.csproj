@@ -111,6 +111,8 @@
     <Compile Include="GameServiceContainer.cs" />
     <Compile Include="GameTime.cs" />
     <Compile Include="GameWindow.cs" />
+    <Compile Include="GraphicsDeviceManager.cs" />
+    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IUpdateable.cs" />
@@ -167,10 +169,6 @@
     <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
-
-    <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include=".Android\ConcreteGraphicsDeviceManager.cs" />
 
     <Compile Include="Input\.Android\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Android\ConcreteGamePad.cs" />
@@ -260,6 +258,7 @@
     <Compile Include="Platform\Android\AndroidGameActivity.cs" />
     <Compile Include=".Android\ConcreteGame.cs" />
     <Compile Include=".Android\ConcreteGameFactory.cs" />
+    <Compile Include=".Android\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\Android\AndroidGameWindow.cs" />
     <Compile Include="Platform\Android\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />
@@ -351,24 +350,24 @@
     <Compile Include="Properties\AssemblyInfo.Android.cs" />
   </ItemGroup>
   <ItemGroup>
-	<EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo">
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo">
       <LogicalName>Resources.AlphaTestEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo">
       <LogicalName>Resources.BasicEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo">
       <LogicalName>Resources.DualTextureEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.fxo">
       <LogicalName>Resources.EnvironmentMapEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo">
       <LogicalName>Resources.SkinnedEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo">
       <LogicalName>Resources.SpriteEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\armeabi-v7a\libopenal32.so">

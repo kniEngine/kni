@@ -60,11 +60,9 @@
   <ItemGroup>
     <None Remove="P:\MonoGame\Images\Icon.png" />
 
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include=".Ref\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include=".Ref\ConcreteGame.cs" />
     <Compile Include=".Ref\ConcreteGameFactory.cs" />
+    <Compile Include=".Ref\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Input\.Ref\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Ref\ConcreteGamePad.cs" />
     <Compile Include="Input\.Ref\ConcreteInputFactory.cs" />
