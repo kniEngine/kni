@@ -117,7 +117,7 @@
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
-    <Compile Include="NamespaceDocs.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Platform\PrimaryThreadLoader.cs" />
     <Compile Include=".Android\ConcreteTitleContainer.cs" />
     <Compile Include=".Android\ConcreteTitleContainerFactory.cs" />
