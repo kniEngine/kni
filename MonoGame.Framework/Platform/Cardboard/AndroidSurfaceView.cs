@@ -774,7 +774,7 @@ namespace Microsoft.Xna.Framework
                 {
                     if (gdm.GraphicsDevice != null)
                     {
-                        gdm.GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
+                        ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalResetClientBounds();
                     }
                 }
             }

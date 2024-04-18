@@ -5,6 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
+    public interface IPlatformGraphicsDeviceManager
+    {
+        T GetStrategy<T>() where T : GraphicsDeviceManagerStrategy;
+    }
+
     public abstract class GraphicsDeviceManagerStrategy : IDisposable
     {
         public static readonly int DefaultBackBufferWidth  = 800;

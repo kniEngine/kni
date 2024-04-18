@@ -56,7 +56,7 @@ namespace MonoGame.Framework
                 throw new NullReferenceException("You must create the GraphicsDeviceManager in the Game constructor!");
 
             // set swapChainPanel
-            gdm.GetStrategy<ConcreteGraphicsDeviceManager>().SwapChainPanel = swapChainPanel;
+            ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<ConcreteGraphicsDeviceManager>().SwapChainPanel = swapChainPanel;
          
             // Start running the game.
             game.Run();

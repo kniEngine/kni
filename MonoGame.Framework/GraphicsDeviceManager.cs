@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Framework
     /// Used to initialize and control the presentation of the graphics device.
     /// </summary>
     public class GraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager, IDisposable
+        , IPlatformGraphicsDeviceManager
     {
         GraphicsDeviceManagerStrategy _strategy;
 
@@ -50,7 +51,7 @@ namespace Microsoft.Xna.Framework
             game.Services.AddService(typeof(IGraphicsDeviceService), this);
         }
 
-        internal T GetStrategy<T>() where T : GraphicsDeviceManagerStrategy
+        T IPlatformGraphicsDeviceManager.GetStrategy<T>()
         {
             return (T)_strategy;
         }
