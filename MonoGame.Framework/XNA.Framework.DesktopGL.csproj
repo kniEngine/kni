@@ -152,7 +152,6 @@
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include=".SDL2\ConcreteGraphicsDeviceManager.cs" />
 
     <Compile Include="Input\.SDL2\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.SDL2\ConcreteGamePad.cs" />
@@ -235,6 +234,7 @@
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
     <Compile Include=".SDL2\ConcreteGame.cs" />
     <Compile Include=".SDL2\ConcreteGameFactory.cs" />
+    <Compile Include=".SDL2\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\SDL\SDLGameWindow.cs" />
     <Compile Include="Platform\SDL\SDL2.cs" />
 

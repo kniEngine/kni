@@ -71,7 +71,6 @@
 
     <Compile Include="GraphicsDeviceManagerStrategy.cs" />
     <Compile Include="GraphicsDeviceManager.cs" />
-    <Compile Include=".WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Media\WMS\ConcreteAlbum.cs" />
     <Compile Include="Media\WMS\ConcreteMediaFactory.cs" />
     <Compile Include="Media\WMS\ConcreteMediaLibrary.cs" />
@@ -85,11 +84,12 @@
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Platform\Utilities\TimerHelper.cs" />
+    <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
     <Compile Include=".WindowsDX11\ConcreteGame.cs" />
     <Compile Include=".WindowsDX11\ConcreteGameFactory.cs" />
+    <Compile Include=".WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include=".WindowsDX11\KeysHelper.cs" />
-    <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
   </ItemGroup> 
 
   <ItemGroup>
