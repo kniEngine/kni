@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Framework
 
         void Window_VisibilityChanged(CoreWindow sender, VisibilityChangedEventArgs args)
         {
-            GameStrategy.IsVisible = args.Visible;
+            ((ConcreteGame)this.GameStrategy).Internal_SetIsVisible(args.Visible);
         }
 
         private void Window_FocusChanged(CoreWindow sender, WindowActivatedEventArgs args)
