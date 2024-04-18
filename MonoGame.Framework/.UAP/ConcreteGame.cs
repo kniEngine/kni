@@ -136,6 +136,11 @@ namespace Microsoft.Xna.Platform
             }
         }
 
+        internal void Internal_SetIsVisible(bool isVisible)
+        {
+            base.IsVisible = isVisible;
+        }
+
         protected internal override void Run()
         {
             this.CallInitialize();
