@@ -234,7 +234,7 @@ namespace MonoGame.Tests {
                 // exit after we complete running all the unit tests.
                 // So we do the next best thing can call the internal
                 // platform code directly which produces the same result.
-                Strategy.Exit();
+                Exit();
                 SuppressDraw();
             }
         }

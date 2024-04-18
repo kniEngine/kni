@@ -14,6 +14,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Platform
 {
+    public interface IPlatformGame
+    {
+        T GetStrategy<T>() where T : GameStrategy;
+    }
+
     public abstract class GameStrategy : IDisposable
     {
         #region Fields
