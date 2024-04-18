@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Platform
         public bool IsVisible
         {
             get { return _isVisible; }
-            internal set { _isVisible = value; }
+            protected set { _isVisible = value; }
         }
 
         private bool _isMouseVisible;
