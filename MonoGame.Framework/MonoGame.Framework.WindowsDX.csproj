@@ -69,8 +69,6 @@
     <Compile Include="Input\.WindowsDX\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteMessageBox.cs" />
 
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="GraphicsDeviceManager.cs" />
     <Compile Include="Media\WMS\ConcreteAlbum.cs" />
     <Compile Include="Media\WMS\ConcreteMediaFactory.cs" />
     <Compile Include="Media\WMS\ConcreteMediaLibrary.cs" />

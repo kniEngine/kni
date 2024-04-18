@@ -105,8 +105,6 @@
     <Compile Include="Input\.SDL2\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.SDL2\ConcreteMessageBox.cs" />
     <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
-    <Compile Include="GraphicsDeviceManagerStrategy.cs" />
-    <Compile Include="GraphicsDeviceManager.cs" />
     
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
