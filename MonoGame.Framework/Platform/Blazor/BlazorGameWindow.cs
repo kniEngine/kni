@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework
 
             // Capture mouse events.
             if (Mouse.WindowHandle == IntPtr.Zero)
-               Mouse.WindowHandle = this.Handle;
+                Mouse.WindowHandle = this.Handle;
             //Form.MouseEnter += OnMouseEnter;
             //Form.MouseLeave += OnMouseLeave;
 
@@ -278,11 +278,13 @@ namespace Microsoft.Xna.Framework
                
             }
 
-            _instances.Remove(this.Handle);
-            _canvas = null;
-
             if (Mouse.WindowHandle == this.Handle)
                 Mouse.WindowHandle = IntPtr.Zero;
+            if (TouchPanel.WindowHandle == this.Handle)
+                TouchPanel.WindowHandle = IntPtr.Zero;
+
+            _instances.Remove(this.Handle);
+            _canvas = null;
 
             _concreteGame = null;
         }

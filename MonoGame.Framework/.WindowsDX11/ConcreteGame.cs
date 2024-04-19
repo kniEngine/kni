@@ -7,7 +7,6 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Platform
 {
@@ -22,8 +21,6 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new WinFormsGameWindow(this);
             base.Window = _gameWindow;
             base.SetWindowListeners();
-            if (TouchPanel.WindowHandle == IntPtr.Zero)
-                TouchPanel.WindowHandle = base.Window.Handle;
         }
 
         protected override void RunGameLoop()

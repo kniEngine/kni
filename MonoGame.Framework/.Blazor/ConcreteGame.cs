@@ -7,7 +7,6 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input.Touch;
 
 
 namespace Microsoft.Xna.Platform
@@ -23,8 +22,6 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new BlazorGameWindow(this);
             base.Window = _gameWindow;
             base.SetWindowListeners();
-            if (TouchPanel.WindowHandle == IntPtr.Zero)
-                TouchPanel.WindowHandle = base.Window.Handle;
         }
 
         protected internal override void Run()
@@ -74,12 +71,6 @@ namespace Microsoft.Xna.Platform
 
         protected override void Dispose(bool disposing)
         {
-            if (_gameWindow != null)
-            {
-                if (TouchPanel.WindowHandle == _gameWindow.Handle)
-                    TouchPanel.WindowHandle = IntPtr.Zero;
-            }
-
             if (disposing)
             {
                 if (_gameWindow != null)

@@ -82,6 +82,9 @@ namespace Microsoft.Xna.Framework
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
+
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
+                TouchPanel.WindowHandle = this.Handle;
         }
 
         void _activity_Resumed(object sender, EventArgs e)
@@ -374,6 +377,9 @@ namespace Microsoft.Xna.Framework
 
             if (GameView != null)
             {
+                if (TouchPanel.WindowHandle == this.Handle)
+                    TouchPanel.WindowHandle = IntPtr.Zero;
+
                 GameView.Dispose();
                 GameView = null;
             }
