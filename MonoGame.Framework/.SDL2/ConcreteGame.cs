@@ -7,8 +7,6 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Framework.Utilities;
 
 
@@ -61,10 +59,6 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new SdlGameWindow(Game);
             base.Window = _gameWindow;
             base.SetWindowListeners();
-            if (Mouse.WindowHandle == IntPtr.Zero)
-                Mouse.WindowHandle = base.Window.Handle;
-            if (TouchPanel.WindowHandle == IntPtr.Zero)
-                TouchPanel.WindowHandle = base.Window.Handle;
         }
 
         public override bool IsMouseVisible
@@ -87,14 +81,6 @@ namespace Microsoft.Xna.Platform
 
         protected override void Dispose(bool disposing)
         {
-            if (_gameWindow != null)
-            {
-                if (Mouse.WindowHandle == _gameWindow.Handle)
-                    Mouse.WindowHandle = IntPtr.Zero;
-                if (TouchPanel.WindowHandle == _gameWindow.Handle)
-                    TouchPanel.WindowHandle = IntPtr.Zero;
-            }
-
             if (_gameWindow != null)
             {
                 _gameWindow.Dispose();

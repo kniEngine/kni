@@ -137,6 +137,11 @@ namespace Microsoft.Xna.Framework
             _instances.Add(this.Handle, this);
 
             Title = AssemblyHelper.GetDefaultWindowTitle();
+
+            if (Mouse.WindowHandle == IntPtr.Zero)
+                Mouse.WindowHandle = this.Handle;
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
+                TouchPanel.WindowHandle = this.Handle;
         }
 
         private IntPtr LoadAppIcon()
@@ -559,6 +564,11 @@ namespace Microsoft.Xna.Framework
         {
             if (_disposed)
                 return;
+
+            if (Mouse.WindowHandle == this.Handle)
+                Mouse.WindowHandle = IntPtr.Zero;
+            if (TouchPanel.WindowHandle == this.Handle)
+                TouchPanel.WindowHandle = IntPtr.Zero;
 
             _instances.Remove(this.Handle);
             SDL.WINDOW.Destroy(_handle);

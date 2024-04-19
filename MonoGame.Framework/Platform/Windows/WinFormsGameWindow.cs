@@ -148,6 +148,10 @@ namespace Microsoft.Xna.Framework
             Form.MouseEnter += OnMouseEnter;
             Form.MouseLeave += OnMouseLeave;
 
+            // Capture touch events.
+            if (TouchPanel.WindowHandle == IntPtr.Zero)
+                TouchPanel.WindowHandle = this.Handle;
+
             Form.Activated += OnActivated;
             Form.Deactivate += OnDeactivate;
             Form.ResizeBegin += OnResizeBegin;

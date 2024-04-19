@@ -8,7 +8,6 @@ using System;
 using System.Diagnostics;
 using Android.Views;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Media;
 
 
@@ -31,8 +30,6 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             base.Window = _gameWindow;
             base.SetWindowListeners();
-            if (TouchPanel.WindowHandle == IntPtr.Zero)
-                TouchPanel.WindowHandle = base.Window.Handle;
 
             Services.AddService(typeof(View), _gameWindow.GameView);
 
@@ -44,9 +41,6 @@ namespace Microsoft.Xna.Platform
             if (disposing)
             {
             }
-
-            if (TouchPanel.WindowHandle == _gameWindow.Handle)
-                TouchPanel.WindowHandle = IntPtr.Zero;
 
             AndroidGameWindow.Activity = null;
 
