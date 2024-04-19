@@ -368,7 +368,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectAnnotationCollection ReadAnnotations()
             {
-                int count = (int)ReadInt32();
+                int count = (int)ReadByte();
                 if (count == 0)
                     return EffectAnnotationCollection.Empty;
 
