@@ -159,6 +159,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // For whatever reason the register indexing is 
             // incorrect from MojoShader.
+            // TODO: use reflection to map HLSL parameter indices to GLSL
             {
                 uint bool_index = 0;
                 uint float4_index = 0;
@@ -233,6 +234,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                 // Store the sampler.
                 dxshader._samplers[i] = samplerInfo;
+            }
+
+            // For whatever reason the register indexing is 
+            // incorrect from MojoShader.
+            // TODO: use reflection to map HLSL sampler & texture indices to GLSL
+            {
+                uint sampler_index = 0;
+
+                for (int i = 0; i < dxshader._samplers.Length; i++)
+                {
+                    dxshader._samplers[i].samplerSlot = i;
+                    dxshader._samplers[i].textureSlot = i;
+                }
             }
 
             // Gather all the parameters used by this shader.
