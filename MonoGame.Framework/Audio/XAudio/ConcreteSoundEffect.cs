@@ -82,9 +82,9 @@ namespace Microsoft.Xna.Platform.Audio
                         index = 0;
                         count = buffer.Length;
 
-                        waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
                         format = 1;
                         bitsPerSample = 16;
+                        waveFormat = new WaveFormat(sampleRate, bitsPerSample, channels);
                     }
                     else
                     {
