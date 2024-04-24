@@ -1,5 +1,0 @@
-﻿<metadata>
-	<attr path="/api/package[@name='com.google.vrtoolkit.cardboard']" name="managedName">Com.Google.Vrtoolkit.Cardboard</attr>
-	<attr path="/api/package[@name='com.google.vrtoolkit.cardboard.sensors']" name="managedName">Com.Google.Vrtoolkit.Cardboard.Sensors</attr>
-	<remove-node path="/api/package[@name='com.google.vrtoolkit.cardboard.sensors.internal']" />
-</metadata>
