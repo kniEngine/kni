@@ -41,8 +41,6 @@
     <exec program="dotnet" commandline="build XNA.Framework.iOS.netcore.sln /t:Clean /p:Configuration=Release" />
     
     <exec program="${msbuild17}" commandline="XNA.Framework.Android.Xamarin.sln /t:Clean /p:Configuration=Release" />
-    <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.Xamarin.sln /t:Clean /p:Configuration=Release" />
-    
     <exec program="${msbuild17}" commandline="XNA.Framework.iOS.Xamarin.sln /t:Clean /p:Configuration=Release" />
     
   </target>
@@ -172,10 +170,6 @@
   </target>
   
   <target name="build_cardboard" description="Build Cardboard">
-      <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild17}" commandline="XNA.Framework.Cardboard.Xamarin.sln /t:Build /p:Configuration=Release" />
-      </if>
-            
       <exec program="dotnet" commandline='build XNA.Framework.Cardboard.sln /t:Restore /p:Configuration=Release' />
       <exec program="dotnet" commandline='build XNA.Framework.Cardboard.sln /t:Build /p:Configuration=Release' />
   </target>
