@@ -1153,6 +1153,60 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new InvalidOperationException("Framebuffer Incomplete.");
             }
         }
+
+        internal void Cardboard_ResetContext()
+        {
+            // invalidate clearColor
+            _lastClearColor.X = float.MaxValue;
+            _lastClearDepth = float.MaxValue;
+            _lastClearStencil = int.MaxValue;
+
+            // clear states
+            _depthStencilStateDirty = true;
+            _rasterizerStateDirty = true;
+
+            // clear states (GL)
+            _lastRasterizerState = new RasterizerState();
+            _lastDepthStencilState = new DepthStencilState();
+            _lastBlendState = new BlendState();
+            _lastBlendEnable = false;
+
+            //invalidate scissor
+            _scissorRectangleDirty = true;
+
+            //invalidate index buffer
+            _attribsDirty = true;
+            _indexBufferDirty = true;
+
+            //invalidate shaders
+            _vertexShaderDirty = true;
+            _pixelShaderDirty = true;
+            _shaderProgram = null;
+
+            //invalidate VertexAttributes
+            _enabledVertexAttributes.Clear();
+
+            //invalidate textures
+            ((IPlatformTextureCollection)this.Textures).Strategy.Clear();
+
+            //_blendStateDirty = true; 
+            //_blendFactorDirty = true;
+
+            //_vertexBuffersDirty = true;
+
+            //_vertexShader = null;
+            //_pixelShader = null;
+
+            //((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.Dirty();
+            //((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.Dirty();
+
+            //ConcreteConstantBuffer._lastConstantBufferApplied = null;
+
+            //((IPlatformTextureCollection)this.Textures).Strategy.Dirty();
+            //((IPlatformTextureCollection)this.VertexTextures).Strategy.Dirty();
+            //((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.Dirty();
+            //((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.Dirty();
+        }
     }
 
 
