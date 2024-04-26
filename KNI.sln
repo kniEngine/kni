@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleCardboard.Xamarin", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.DesktopGL", "MonoGame.Framework\Xna.Framework.DesktopGL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS.netcore", "MonoGame.Framework\Xna.Framework.iOS.netcore.csproj", "{D93291EF-3419-412E-BC56-376BD6A02224}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS", "MonoGame.Framework\Xna.Framework.iOS.csproj", "{D93291EF-3419-412E-BC56-376BD6A02224}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS.Xamarin", "MonoGame.Framework\Xna.Framework.iOS.Xamarin.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
 EndProject
