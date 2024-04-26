@@ -35,10 +35,10 @@
     
     <exec program="dotnet" commandline="build XNA.Framework.DesktopGL.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="dotnet" commandline="build XNA.Framework.Android.netcore.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build XNA.Framework.Android.sln /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build XNA.Framework.Cardboard.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="dotnet" commandline="build XNA.Framework.iOS.netcore.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build XNA.Framework.iOS.sln /t:Clean /p:Configuration=Release" />
     
     <exec program="${msbuild17}" commandline="XNA.Framework.Android.Xamarin.sln /t:Clean /p:Configuration=Release" />
     <exec program="${msbuild17}" commandline="XNA.Framework.iOS.Xamarin.sln /t:Clean /p:Configuration=Release" />
@@ -153,8 +153,8 @@
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.Xamarin.sln /t:restore" />
       <exec program="${msbuild17}" commandline="XNA.Framework.iOS.Xamarin.sln /t:Build /p:Configuration=Release" />
 
-      <exec program="dotnet" commandline='build XNA.Framework.iOS.netcore.sln /t:Restore /p:Configuration=Release' />
-      <exec program="dotnet" commandline='build XNA.Framework.iOS.netcore.sln /t:Build /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build XNA.Framework.iOS.sln /t:Restore /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build XNA.Framework.iOS.sln /t:Build /p:Configuration=Release' />
 
   </target>
 
@@ -164,8 +164,8 @@
         <exec program="${msbuild17}" commandline="XNA.Framework.Android.Xamarin.sln /t:Build /p:Configuration=Release" />
       </if>
 
-      <exec program="dotnet" commandline='build XNA.Framework.Android.netcore.sln /t:Restore /p:Configuration=Release' />
-      <exec program="dotnet" commandline='build XNA.Framework.Android.netcore.sln /t:Build /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build XNA.Framework.Android.sln /t:Restore /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build XNA.Framework.Android.sln /t:Build /p:Configuration=Release' />
 
   </target>
   
