@@ -32,22 +32,10 @@ namespace Microsoft.Xna.Platform
         {
             Console.WriteLine("Registering Concrete TitleContainerFactoryStrategy through reflection.");
 
-            // find and create Concrete TitleContainerStrategy through reflection.
-            Assembly currentAsm = typeof(TitleContainerStrategy).Assembly;
-
-            // search in loaded Assemblies
-            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                foreach (AssemblyName refAsm in asm.GetReferencedAssemblies())
-                {
-                    if (refAsm.FullName == currentAsm.FullName)
-                    {
-                        foreach (Type type in asm.GetExportedTypes())
-                            if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
-                                return (TitleContainerFactory)Activator.CreateInstance(type);
-                    }
-                }
-            }
+            Type type = Type.GetType("Microsoft.Xna.Platform.ConcreteTitleContainerFactory, MonoGame.Framework", false);
+            if (type != null)
+                if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
+                    return (TitleContainerFactory)Activator.CreateInstance(type);
 
             return null;
         }

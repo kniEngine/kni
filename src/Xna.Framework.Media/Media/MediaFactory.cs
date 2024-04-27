@@ -33,22 +33,10 @@ namespace Microsoft.Xna.Platform.Media
         {
             Console.WriteLine("Registering Concrete MediaFactoryStrategy through reflection.");
 
-            // find and create Concrete MediaFactoryStrategy through reflection.
-            Assembly currentAsm = typeof(MediaFactory).Assembly;
-
-            // search in loaded Assemblies
-            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                foreach (AssemblyName refAsm in asm.GetReferencedAssemblies())
-                {
-                    if (refAsm.FullName == currentAsm.FullName)
-                    {
-                        foreach (Type type in asm.GetExportedTypes())
-                            if (type.IsSubclassOf(typeof(MediaFactory)) && !type.IsAbstract)
-                                return (MediaFactory)Activator.CreateInstance(type);
-                    }
-                }
-            }
+            Type type = Type.GetType("Microsoft.Xna.Platform.Media.ConcreteMediaFactory, MonoGame.Framework", false);
+            if (type != null)
+                if (type.IsSubclassOf(typeof(MediaFactory)) && !type.IsAbstract)
+                    return (MediaFactory)Activator.CreateInstance(type);
 
             return null;
         }

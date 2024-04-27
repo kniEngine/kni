@@ -33,22 +33,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Console.WriteLine("Registering Concrete GraphicsFactoryStrategy through reflection.");
 
-            // find and create Concrete GraphicsFactoryStrategy through reflection.
-            Assembly currentAsm = typeof(GraphicsFactory).Assembly;
-
-            // search in loaded Assemblies
-            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                foreach (AssemblyName refAsm in asm.GetReferencedAssemblies())
-                {
-                    if (refAsm.FullName == currentAsm.FullName)
-                    {
-                        foreach (Type type in asm.GetExportedTypes())
-                            if (type.IsSubclassOf(typeof(GraphicsFactory)) && !type.IsAbstract)
-                                return (GraphicsFactory)Activator.CreateInstance(type);
-                    }
-                }
-            }
+            Type type = Type.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsFactory, MonoGame.Framework", false);
+            if (type != null)
+                if (type.IsSubclassOf(typeof(GraphicsFactory)) && !type.IsAbstract)
+                    return (GraphicsFactory)Activator.CreateInstance(type);
 
             return null;
         }

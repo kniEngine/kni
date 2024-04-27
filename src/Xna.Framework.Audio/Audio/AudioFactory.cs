@@ -32,22 +32,10 @@ namespace Microsoft.Xna.Platform.Audio
         {
             Console.WriteLine("Registering Concrete AudioFactoryStrategy through reflection.");
 
-            // find and create Concrete AudioFactoryStrategy through reflection.
-            Assembly currentAsm = typeof(AudioFactory).Assembly;
-
-            // seach in loaded Assemblies
-            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                foreach (AssemblyName refAsm in asm.GetReferencedAssemblies())
-                {
-                    if (refAsm.FullName == currentAsm.FullName)
-                    {
-                        foreach (Type type in asm.GetExportedTypes())
-                            if (type.IsSubclassOf(typeof(AudioFactory)) && !type.IsAbstract)
-                                return (AudioFactory)Activator.CreateInstance(type);
-                    }
-                }
-            }
+            Type type = Type.GetType("Microsoft.Xna.Platform.Audio.ConcreteAudioFactory, MonoGame.Framework", false);
+            if (type != null)
+                if (type.IsSubclassOf(typeof(AudioFactory)) && !type.IsAbstract)
+                    return (AudioFactory)Activator.CreateInstance(type);
 
             return null;
         }
