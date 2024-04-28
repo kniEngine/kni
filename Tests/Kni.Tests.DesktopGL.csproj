@@ -1029,6 +1029,10 @@
       <Project>{3f81f76d-f0f3-44fe-a256-40af153c33f7}</Project>
       <Name>Xna.Framework.Audio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Input\Xna.Framework.Input.csproj" >
+      <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
+      <Name>Xna.Framework.Input</Name>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
       <Name>Xna.Framework.Design</Name>

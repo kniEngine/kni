@@ -20,6 +20,9 @@ namespace Microsoft.Xna.Platform.Input
                 if (current != null)
                     return current;
 
+                Console.WriteLine("InputFactory not found.");
+                Console.WriteLine("Initialize input with 'InputFactory.RegisterInputFactory(new ConcreteInputFactory());'.");
+
                 InputFactory inputFactory = CreateInputFactory();
                 InputFactory.RegisterInputFactory(inputFactory);
 
@@ -29,7 +32,14 @@ namespace Microsoft.Xna.Platform.Input
 
         private static InputFactory CreateInputFactory()
         {
-            return new ConcreteInputFactory();
+            Console.WriteLine("Registering ConcreteInputFactoryStrategy through reflection.");
+
+            Type type = Type.GetType("Microsoft.Xna.Platform.Input.ConcreteInputFactory, MonoGame.Framework", false);
+            if (type != null)
+                if (type.IsSubclassOf(typeof(InputFactory)) && !type.IsAbstract)
+                    return (InputFactory)Activator.CreateInstance(type);
+
+            return null;
         }
 
         public static void RegisterInputFactory(InputFactory inputFactory)

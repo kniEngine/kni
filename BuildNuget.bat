@@ -3,6 +3,7 @@ dotnet pack src\Xna.Framework.Content\Xna.Framework.Content.csproj --output NuGe
 dotnet pack src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack src\Xna.Framework.Audio\Xna.Framework.Audio.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack src\Xna.Framework.Media\Xna.Framework.Media.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
+dotnet pack src\Xna.Framework.Input\Xna.Framework.Input.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 
 dotnet pack src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release

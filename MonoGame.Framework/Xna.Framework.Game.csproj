@@ -68,7 +68,7 @@
       <Name>Xna.Framework.Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="Xna.Framework.Input.csproj">
+    <ProjectReference Include="..\src\Xna.Framework.Input\Xna.Framework.Input.csproj">
       <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
       <Name>Xna.Framework.Input</Name>
       <Private>False</Private>
