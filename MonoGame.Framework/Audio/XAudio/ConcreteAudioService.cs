@@ -64,6 +64,10 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 if (Device == null)
                 {
+#if WINDOWSDX
+                    AppDomain.CurrentDomain.ProcessExit += (sender, e) => { AudioService.Shutdown(); };
+#endif
+
 #if DEBUG && !(UAP || WINUI)
                     try
                     {
