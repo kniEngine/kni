@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform
             base.SetWindowListeners();
         }
 
-        protected internal override void Run()
+        protected override void Run()
         {
             this.CallInitialize();
             this.CallBeginRun();

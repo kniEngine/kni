@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform
             throw new PlatformNotSupportedException();
         }
         
-        protected internal override void Run()
+        protected override void Run()
         {
             StartGameLoop();
             // Prevent the default run loop from starting.
