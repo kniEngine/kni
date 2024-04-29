@@ -248,9 +248,6 @@
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\StbImageWrite.Generated.cs">
       <Link>Utilities\StbImageWriteSharp\StbImageWrite.Generated.cs</Link>
     </Compile>
-    <Compile Include="Utilities\PlatformInfo.cs" />
-    <Compile Include="Utilities\MonoGamePlatform.cs" />
-    <Compile Include="Utilities\GraphicsBackend.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

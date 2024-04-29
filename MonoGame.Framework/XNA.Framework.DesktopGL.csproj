@@ -327,9 +327,6 @@
     <Compile Include="..\ThirdParty\NVorbis\NVorbis\Ogg\OggPageFlags.cs">
       <Link>Platform\Utilities\NVorbis\Ogg\OggPageFlags.cs</Link>
     </Compile>
-    <Compile Include="Utilities\PlatformInfo.cs" />
-    <Compile Include="Utilities\MonoGamePlatform.cs" />
-    <Compile Include="Utilities\GraphicsBackend.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
