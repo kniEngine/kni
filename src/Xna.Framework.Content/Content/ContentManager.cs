@@ -61,55 +61,46 @@ namespace Microsoft.Xna.Framework.Content
             'G', // Google Stadia
         };
 
+        public string RootDirectory
+        {
+            get { return _rootDirectory; }
+            set { _rootDirectory = value; }
+        }
+
+        public IServiceProvider ServiceProvider
+        {
+            get { return this._serviceProvider; }
+        }
+
+        /// <summary>
+        /// Virtual property to allow a derived ContentManager to have it's assets reloaded
+        /// </summary>
+        protected virtual Dictionary<string, object> LoadedAssets
+        {
+            get { return _loadedAssets; }
+        }
+
+
         public ContentManager(IServiceProvider serviceProvider)
         {
             if (serviceProvider == null)
-            {
                 throw new ArgumentNullException("serviceProvider");
-            }
+
             this._serviceProvider = serviceProvider;
         }
 
         public ContentManager(IServiceProvider serviceProvider, string rootDirectory)
         {
             if (serviceProvider == null)
-            {
                 throw new ArgumentNullException("serviceProvider");
-            }
             if (rootDirectory == null)
-            {
                 throw new ArgumentNullException("rootDirectory");
-            }
+
             this.RootDirectory = rootDirectory;
             this._serviceProvider = serviceProvider;
         }
 
 
-        #region IDisposable Implementation
-        ~ContentManager()
-        {
-            Dispose(false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_isDisposed)
-            {
-                if (disposing)
-                {
-                    Unload();
-                }
-
-                _isDisposed = true;
-            }
-        }
-        #endregion IDisposable Implementation
 
         public virtual T LoadLocalized<T> (string assetName)
         {
@@ -140,13 +131,9 @@ namespace Microsoft.Xna.Framework.Content
         public virtual T Load<T>(string assetName)
         {
             if (string.IsNullOrEmpty(assetName))
-            {
                 throw new ArgumentNullException("assetName");
-            }
             if (_isDisposed)
-            {
                 throw new ObjectDisposedException("ContentManager");
-            }
 
             T result = default(T);
             
@@ -163,9 +150,7 @@ namespace Microsoft.Xna.Framework.Content
             if (_loadedAssets.TryGetValue(key, out asset))
             {
                 if (asset is T)
-                {
                     return (T)asset;
-                }
             }
 
             // Load the asset.
@@ -184,7 +169,7 @@ namespace Microsoft.Xna.Framework.Content
                 // This is primarily for editor support. 
                 // Setting the RootDirectory to an absolute path is useful in editor
                 // situations, but TitleContainer can ONLY be passed relative paths.                
-                if (Path.IsPathRooted(assetPath))                
+                if (Path.IsPathRooted(assetPath))
                     return File.OpenRead(assetPath);
                 
                 return TitleContainer.OpenStream(assetPath);
@@ -206,13 +191,9 @@ namespace Microsoft.Xna.Framework.Content
         protected T ReadAsset<T>(string assetName, Action<IDisposable> recordDisposableObject)
         {
             if (string.IsNullOrEmpty(assetName))
-            {
                 throw new ArgumentNullException("assetName");
-            }
             if (_isDisposed)
-            {
                 throw new ObjectDisposedException("ContentManager");
-            }
                         
             string originalAssetName = assetName;
             object result = null;
@@ -309,14 +290,6 @@ namespace Microsoft.Xna.Framework.Content
                 _disposableAssets.Add(disposable);
         }
 
-        /// <summary>
-        /// Virtual property to allow a derived ContentManager to have it's assets reloaded
-        /// </summary>
-        protected virtual Dictionary<string, object> LoadedAssets
-        {
-            get { return _loadedAssets; }
-        }
-
         public virtual void Unload()
         {
             // Look for disposable assets.
@@ -331,16 +304,31 @@ namespace Microsoft.Xna.Framework.Content
             _loadedSharedResources.Clear();
         }
 
-        public string RootDirectory
+
+        #region IDisposable Implementation
+        ~ContentManager()
         {
-            get { return _rootDirectory; }
-            set { _rootDirectory = value; }
-        }
-        
-        public IServiceProvider ServiceProvider
-        {
-            get { return this._serviceProvider; }
+            Dispose(false);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_isDisposed)
+            {
+                if (disposing)
+                {
+                    Unload();
+                }
+
+                _isDisposed = true;
+            }
+        }
+        #endregion IDisposable Implementation
     }
 }
