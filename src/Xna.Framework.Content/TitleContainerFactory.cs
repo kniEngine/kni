@@ -18,10 +18,16 @@ namespace Microsoft.Xna.Platform
                 if (current != null)
                     return current;
 
-                Console.WriteLine("TitleContainerFactory not found.");
-                Console.WriteLine("Initialize title with 'TitleContainerFactory.RegisterTitleContainerFactory(new ConcreteTitleContainerFactory());'.");
-                TitleContainerFactory titleContainerFactory = CreateTitleContainerFactory();
-                TitleContainerFactory.RegisterTitleContainerFactory(titleContainerFactory);
+                lock (typeof(TitleContainerFactory))
+                {
+                    if (_current != null)
+                        return _current;
+
+                    Console.WriteLine("TitleContainerFactory not found.");
+                    Console.WriteLine("Initialize title with 'TitleContainerFactory.RegisterTitleContainerFactory(new ConcreteTitleContainerFactory());'.");
+                    TitleContainerFactory titleContainerFactory = CreateTitleContainerFactory();
+                    TitleContainerFactory.RegisterTitleContainerFactory(titleContainerFactory);
+                }
 
                 return _current;
             }

@@ -19,11 +19,16 @@ namespace Microsoft.Xna.Platform.Input
                 if (current != null)
                     return current;
 
-                Console.WriteLine("InputFactory not found.");
-                Console.WriteLine("Initialize input with 'InputFactory.RegisterInputFactory(new ConcreteInputFactory());'.");
+                lock (typeof(InputFactory))
+                {
+                    if (_current != null)
+                        return _current;
 
-                InputFactory inputFactory = CreateInputFactory();
-                InputFactory.RegisterInputFactory(inputFactory);
+                    Console.WriteLine("InputFactory not found.");
+                    Console.WriteLine("Initialize input with 'InputFactory.RegisterInputFactory(new ConcreteInputFactory());'.");
+                    InputFactory inputFactory = CreateInputFactory();
+                    InputFactory.RegisterInputFactory(inputFactory);
+                }
 
                 return _current;
             }

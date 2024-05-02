@@ -18,11 +18,16 @@ namespace Microsoft.Xna.Platform
                 if (current != null)
                     return current;
 
-                Console.WriteLine("GameFactory not found.");
-                Console.WriteLine("Initialize input with 'GameFactory.RegisterGameFactory(new ConcreteGameFactory());'.");
+                lock (typeof(GameFactory))
+                {
+                    if (_current != null)
+                        return _current;
 
-                GameFactory gameFactory = CreateGameFactory();
-                GameFactory.RegisterGameFactory(gameFactory);
+                    Console.WriteLine("GameFactory not found.");
+                    Console.WriteLine("Initialize input with 'GameFactory.RegisterGameFactory(new ConcreteGameFactory());'.");
+                    GameFactory gameFactory = CreateGameFactory();
+                    GameFactory.RegisterGameFactory(gameFactory);
+                }
 
                 return _current;
             }
