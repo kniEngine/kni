@@ -17,6 +17,8 @@ namespace Microsoft.Xna.Framework.Content
         const byte ContentFlagCompressedLz4 = 0x40;
         const byte ContentFlagHiDef = 0x01;
 
+        private readonly object SyncHandle = new object();
+
         private string _rootDirectory = string.Empty;
         private IServiceProvider _serviceProvider;
         private Dictionary<string, object> _loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -136,18 +138,29 @@ namespace Microsoft.Xna.Framework.Content
             // The dictionary will ignore case differences
             string key = assetName.Replace('\\', '/');
 
-            // Check for a previously loaded asset first
-            object asset = null;
-            if (_loadedAssets.TryGetValue(key, out asset))
+            lock (this.SyncHandle)
             {
-                if (asset is T)
-                    return (T)asset;
+                // Check for a previously loaded asset first
+                object asset = null;
+                if (_loadedAssets.TryGetValue(key, out asset))
+                {
+                    if (asset is T)
+                        return (T)asset;
+                }
+                else
+                {
+                    _loadedAssets[key] = null;
+                }
             }
 
             // Load the asset.
             result = ReadAsset<T>(assetName, this.RecordDisposable);
 
-            _loadedAssets[key] = result;
+            lock (this.SyncHandle)
+            {
+                _loadedAssets[key] = result;
+            }
+
             return result;
         }
         
@@ -275,23 +288,28 @@ namespace Microsoft.Xna.Framework.Content
         {
             Debug.Assert(disposable != null, "The disposable is null.");
 
-            // Avoid recording disposable objects twice.
-            // We don't know which asset recorded which disposable so just guard against storing multiple of the same instance.
-            if (!_disposableAssets.Contains(disposable))
-                _disposableAssets.Add(disposable);
+            lock (this.SyncHandle)
+            {
+                // Avoid recording disposable objects twice.
+                // We don't know which asset recorded which disposable so just guard against storing multiple of the same instance.
+                if (!_disposableAssets.Contains(disposable))
+                    _disposableAssets.Add(disposable);
+            }
         }
 
         public virtual void Unload()
         {
-            // Look for disposable assets.
-            foreach (IDisposable disposable in _disposableAssets)
+            lock (this.SyncHandle)
             {
-                if (disposable != null)
-                    disposable.Dispose();
-            }
+                foreach (IDisposable disposable in _disposableAssets)
+                {
+                    if (disposable != null)
+                        disposable.Dispose();
+                }
 
-            _disposableAssets.Clear();
-            _loadedAssets.Clear();
+                _disposableAssets.Clear();
+                _loadedAssets.Clear();
+            }
         }
 
 
