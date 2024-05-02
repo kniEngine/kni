@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Load the asset.
-            result = ReadAsset<T>(assetName, null);
+            result = ReadAsset<T>(assetName, this.RecordDisposable);
 
             _loadedAssets[key] = result;
             return result;
