@@ -40,7 +40,12 @@ namespace Microsoft.Xna.Framework.Content
                     _bufferSet.Remove(_bufferSet.Max);
 
                 int dataSize = Math.Max(MinimumBufferSize, size);
+
+#if NET8_0_OR_GREATER
+                return GC.AllocateUninitializedArray<byte>(dataSize);
+#else
                 return new byte[dataSize];
+#endif
             }
         }
 
