@@ -111,13 +111,13 @@ namespace Microsoft.Xna.Framework.Content
 
                 try
                 {
-                    return Load<T> (localizedAssetName);
+                    return Load<T>(localizedAssetName);
                 }
-                catch (ContentLoadException) { }
+                catch (ContentLoadException) { /* ignore */ }
             }
 
             // If we didn't find any localized asset, fall back to the default name.
-            return Load<T> (assetName);
+            return Load<T>(assetName);
         }
 
         public virtual T Load<T>(string assetName)
