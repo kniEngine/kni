@@ -117,13 +117,13 @@ namespace Microsoft.Xna.Framework.Content
         private void RecordDisposable<T>(T result)
         {
             IDisposable disposable = result as IDisposable;
-            if (disposable == null)
-                return;
-
-            if (recordDisposableObject != null)
-                recordDisposableObject(disposable);
-            else
-                contentManager.RecordDisposable(disposable);
+            if (disposable != null)
+            {
+                if (recordDisposableObject != null)
+                    recordDisposableObject(disposable);
+                else
+                    contentManager.RecordDisposable(disposable);
+            }
         }
 
         public T ReadObject<T>()
