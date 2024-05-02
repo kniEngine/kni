@@ -101,31 +101,6 @@ namespace Microsoft.Xna.Framework.Content
         }
 
 
-        #region IDisposable Implementation
-        ~ContentManager()
-        {
-            Dispose(false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_isDisposed)
-            {
-                if (disposing)
-                {
-                    Unload();
-                }
-
-                _isDisposed = true;
-            }
-        }
-        #endregion IDisposable Implementation
 
         public virtual T LoadLocalized<T> (string assetName)
         {
@@ -329,5 +304,31 @@ namespace Microsoft.Xna.Framework.Content
             _loadedSharedResources.Clear();
         }
 
+
+        #region IDisposable Implementation
+        ~ContentManager()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_isDisposed)
+            {
+                if (disposing)
+                {
+                    Unload();
+                }
+
+                _isDisposed = true;
+            }
+        }
+        #endregion IDisposable Implementation
     }
 }
