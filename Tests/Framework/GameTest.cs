@@ -229,7 +229,7 @@ namespace MonoGame.Tests {
             {
                 private int count = 0;
 
-                protected internal override void Update(GameTime gameTime)
+                protected override void Update(GameTime gameTime)
                 {
                     if (count > 0)
                         Exit();
@@ -259,23 +259,23 @@ namespace MonoGame.Tests {
                 public int DisposeCount { get; set; }
 
                 public void PublicBeginRun() { BeginRun(); }
-                protected internal override void BeginRun() { BeginRunCount++; base.BeginRun(); }
+                protected override void BeginRun() { BeginRunCount++; base.BeginRun(); }
                 public void PublicInitialize() { Initialize(); }
-                protected internal override void Initialize() { InitializeCount++; base.Initialize(); }
+                protected override void Initialize() { InitializeCount++; base.Initialize(); }
                 public void PublicLoadContent() { LoadContent(); }
                 protected override void LoadContent() { LoadContentCount++; base.LoadContent(); }
                 public void PublicUnloadContent() { UnloadContent(); }
-                protected internal override void UnloadContent() { UnloadContentCount++; base.UnloadContent(); }
+                protected override void UnloadContent() { UnloadContentCount++; base.UnloadContent(); }
                 public void PublicUpdate(GameTime gt = null) { Update(gt ?? new GameTime()); }
-                protected internal override void Update(GameTime gameTime) { UpdateCount++; base.Update(gameTime); }
+                protected override void Update(GameTime gameTime) { UpdateCount++; base.Update(gameTime); }
                 public bool PublicBeginDraw() { return BeginDraw(); }
-                protected internal override bool BeginDraw() { BeginDrawCount++; return base.BeginDraw(); }
+                protected override bool BeginDraw() { BeginDrawCount++; return base.BeginDraw(); }
                 public void PublicDraw(GameTime gt) { Draw(gt ?? new GameTime()); }
-                protected internal override void Draw(GameTime gameTime) { DrawCount++; base.Draw(gameTime); }
+                protected override void Draw(GameTime gameTime) { DrawCount++; base.Draw(gameTime); }
                 public bool PublicEndDraw() { return BeginDraw(); }
-                protected internal override void EndDraw() { EndDrawCount++; base.EndDraw(); }
+                protected override void EndDraw() { EndDrawCount++; base.EndDraw(); }
                 public void PublicEndRun() { EndRun(); }
-                protected internal override void EndRun() { EndRunCount++; base.EndRun(); }
+                protected override void EndRun() { EndRunCount++; base.EndRun(); }
 
 #if XNA
                 protected override void OnActivated(object sender, EventArgs args) { ActivatedCount++; base.OnActivated(sender, args); }
@@ -284,7 +284,7 @@ namespace MonoGame.Tests {
 #else
                 protected override void OnActivated(EventArgs args) { ActivatedCount++; base.OnActivated(args); }
                 protected override void OnDeactivated(EventArgs args) { DeactivatedCount++; base.OnDeactivated(args); }
-                protected internal override void OnExiting(EventArgs args) { ExitingCount++; base.OnExiting(args); }
+                protected override void OnExiting(EventArgs args) { ExitingCount++; base.OnExiting(args); }
 #endif
                 protected override void Dispose(bool disposing) { DisposeCount++; base.Dispose(disposing); }
             }
@@ -354,14 +354,14 @@ namespace MonoGame.Tests {
 				}
 			}
 
-			protected internal override void BeginRun ()
+			protected override void BeginRun ()
 			{
 				base.BeginRun ();
 				UpdateCount = 0;
 				DrawCount = 0;
 			}
 
-            protected internal override void EndRun()
+            protected override void EndRun()
             {
                 base.EndRun();
 #if XNA
@@ -369,14 +369,14 @@ namespace MonoGame.Tests {
 #endif
             }
 
-			protected internal override void Update (GameTime gameTime)
+			protected override void Update (GameTime gameTime)
 			{
 				base.Update (gameTime);
 				UpdateCount++;
 				EvaluateExitCriteria ();
 			}
 
-			protected internal override void Draw (GameTime gameTime)
+			protected override void Draw (GameTime gameTime)
 			{
 				base.Draw (gameTime);
 				DrawCount++;
