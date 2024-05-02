@@ -292,7 +292,6 @@ namespace Microsoft.Xna.Framework.Content
 
             _disposableAssets.Clear();
             _loadedAssets.Clear();
-            _loadedSharedResources.Clear();
         }
 
 
