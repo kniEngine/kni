@@ -274,9 +274,9 @@ namespace Microsoft.Xna.Framework.Content
 
         internal void RecordDisposable(IDisposable disposable)
         {
-            Debug.Assert(disposable != null, "The disposable is null!");
+            Debug.Assert(disposable != null, "The disposable is null.");
 
-            // Avoid recording disposable objects twice. ReloadAsset will try to record the disposables again.
+            // Avoid recording disposable objects twice.
             // We don't know which asset recorded which disposable so just guard against storing multiple of the same instance.
             if (!_disposableAssets.Contains(disposable))
                 _disposableAssets.Add(disposable);
@@ -311,15 +311,15 @@ namespace Microsoft.Xna.Framework.Content
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_isDisposed)
-            {
-                if (disposing)
-                {
-                    Unload();
-                }
+            if (_isDisposed)
+                return;
 
-                _isDisposed = true;
+            if (disposing)
+            {
+                Unload();
             }
+
+            _isDisposed = true;
         }
         #endregion IDisposable Implementation
     }
