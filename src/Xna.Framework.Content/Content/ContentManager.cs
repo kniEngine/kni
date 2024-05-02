@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Framework.Content
         private string _rootDirectory = string.Empty;
         private IServiceProvider _serviceProvider;
         private Dictionary<string, object> _loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        internal Dictionary<string, object> _loadedSharedResources = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private List<IDisposable> _disposableAssets = new List<IDisposable>();
         private bool _isDisposed;
 
