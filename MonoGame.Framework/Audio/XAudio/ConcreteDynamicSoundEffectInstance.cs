@@ -197,7 +197,12 @@ namespace Microsoft.Xna.Platform.Audio
                     {
                         if (_bufferPool.Count > 0)
                             _bufferPool.RemoveAt(_bufferPool.Count - 1);
+
+#if NET8_0_OR_GREATER
+                        return GC.AllocateUninitializedArray<byte>(size);
+#else
                         return new byte[size];
+#endif
                     }
                     else
                     {
