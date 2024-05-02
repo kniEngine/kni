@@ -72,14 +72,6 @@ namespace Microsoft.Xna.Framework.Content
             get { return this._serviceProvider; }
         }
 
-        /// <summary>
-        /// Virtual property to allow a derived ContentManager to have it's assets reloaded
-        /// </summary>
-        protected virtual Dictionary<string, object> LoadedAssets
-        {
-            get { return _loadedAssets; }
-        }
-
 
         public ContentManager(IServiceProvider serviceProvider)
         {
