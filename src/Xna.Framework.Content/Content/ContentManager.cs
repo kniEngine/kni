@@ -64,22 +64,18 @@ namespace Microsoft.Xna.Framework.Content
         public ContentManager(IServiceProvider serviceProvider)
         {
             if (serviceProvider == null)
-            {
                 throw new ArgumentNullException("serviceProvider");
-            }
+
             this._serviceProvider = serviceProvider;
         }
 
         public ContentManager(IServiceProvider serviceProvider, string rootDirectory)
         {
             if (serviceProvider == null)
-            {
                 throw new ArgumentNullException("serviceProvider");
-            }
             if (rootDirectory == null)
-            {
                 throw new ArgumentNullException("rootDirectory");
-            }
+
             this.RootDirectory = rootDirectory;
             this._serviceProvider = serviceProvider;
         }
@@ -140,13 +136,9 @@ namespace Microsoft.Xna.Framework.Content
         public virtual T Load<T>(string assetName)
         {
             if (string.IsNullOrEmpty(assetName))
-            {
                 throw new ArgumentNullException("assetName");
-            }
             if (_isDisposed)
-            {
                 throw new ObjectDisposedException("ContentManager");
-            }
 
             T result = default(T);
             
@@ -163,9 +155,7 @@ namespace Microsoft.Xna.Framework.Content
             if (_loadedAssets.TryGetValue(key, out asset))
             {
                 if (asset is T)
-                {
                     return (T)asset;
-                }
             }
 
             // Load the asset.
@@ -184,7 +174,7 @@ namespace Microsoft.Xna.Framework.Content
                 // This is primarily for editor support. 
                 // Setting the RootDirectory to an absolute path is useful in editor
                 // situations, but TitleContainer can ONLY be passed relative paths.                
-                if (Path.IsPathRooted(assetPath))                
+                if (Path.IsPathRooted(assetPath))
                     return File.OpenRead(assetPath);
                 
                 return TitleContainer.OpenStream(assetPath);
@@ -206,13 +196,9 @@ namespace Microsoft.Xna.Framework.Content
         protected T ReadAsset<T>(string assetName, Action<IDisposable> recordDisposableObject)
         {
             if (string.IsNullOrEmpty(assetName))
-            {
                 throw new ArgumentNullException("assetName");
-            }
             if (_isDisposed)
-            {
                 throw new ObjectDisposedException("ContentManager");
-            }
                         
             string originalAssetName = assetName;
             object result = null;
