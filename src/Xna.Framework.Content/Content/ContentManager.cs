@@ -61,6 +61,26 @@ namespace Microsoft.Xna.Framework.Content
             'G', // Google Stadia
         };
 
+        public string RootDirectory
+        {
+            get { return _rootDirectory; }
+            set { _rootDirectory = value; }
+        }
+
+        public IServiceProvider ServiceProvider
+        {
+            get { return this._serviceProvider; }
+        }
+
+        /// <summary>
+        /// Virtual property to allow a derived ContentManager to have it's assets reloaded
+        /// </summary>
+        protected virtual Dictionary<string, object> LoadedAssets
+        {
+            get { return _loadedAssets; }
+        }
+
+
         public ContentManager(IServiceProvider serviceProvider)
         {
             if (serviceProvider == null)
@@ -295,14 +315,6 @@ namespace Microsoft.Xna.Framework.Content
                 _disposableAssets.Add(disposable);
         }
 
-        /// <summary>
-        /// Virtual property to allow a derived ContentManager to have it's assets reloaded
-        /// </summary>
-        protected virtual Dictionary<string, object> LoadedAssets
-        {
-            get { return _loadedAssets; }
-        }
-
         public virtual void Unload()
         {
             // Look for disposable assets.
@@ -315,17 +327,6 @@ namespace Microsoft.Xna.Framework.Content
             _disposableAssets.Clear();
             _loadedAssets.Clear();
             _loadedSharedResources.Clear();
-        }
-
-        public string RootDirectory
-        {
-            get { return _rootDirectory; }
-            set { _rootDirectory = value; }
-        }
-        
-        public IServiceProvider ServiceProvider
-        {
-            get { return this._serviceProvider; }
         }
 
     }
