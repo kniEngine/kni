@@ -18,10 +18,16 @@ namespace Microsoft.Xna.Platform.Audio
                 if (current != null)
                     return current;
 
-                Console.WriteLine("AudioFactory not found.");
-                Console.WriteLine("Initialize audio with 'AudioFactory.RegisterAudioFactory(new ConcreteAudioFactory());'.");
-                AudioFactory audioFactory = CreateAudioFactory();
-                AudioFactory.RegisterAudioFactory(audioFactory);
+                lock (AudioService.SyncHandle)
+                {
+                    if (_current != null)
+                        return _current;
+
+                    Console.WriteLine("AudioFactory not found.");
+                    Console.WriteLine("Initialize audio with 'AudioFactory.RegisterAudioFactory(new ConcreteAudioFactory());'.");
+                    AudioFactory audioFactory = CreateAudioFactory();
+                    AudioFactory.RegisterAudioFactory(audioFactory);
+                }
 
                 return _current;
             }

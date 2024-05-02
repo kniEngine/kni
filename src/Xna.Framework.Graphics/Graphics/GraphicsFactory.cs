@@ -18,11 +18,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (current != null)
                     return current;
 
-                Console.WriteLine("GraphicsFactory not found.");
-                Console.WriteLine("Initialize graphics with 'GraphicsFactory.RegisterGraphicsFactory(new ConcreteGraphicsFactory());'.");
+                lock (typeof(GraphicsFactory))
+                {
+                    if (_current != null)
+                        return _current;
 
-                GraphicsFactory graphicsFactory = CreateGraphicsFactory();
-                GraphicsFactory.RegisterGraphicsFactory(graphicsFactory);
+                    Console.WriteLine("GraphicsFactory not found.");
+                    Console.WriteLine("Initialize graphics with 'GraphicsFactory.RegisterGraphicsFactory(new ConcreteGraphicsFactory());'.");
+                    GraphicsFactory graphicsFactory = CreateGraphicsFactory();
+                    GraphicsFactory.RegisterGraphicsFactory(graphicsFactory);
+                }
 
                 return _current;
             }
