@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private ModelMeshContent ProcessMesh(MeshContent mesh, ModelBoneContent parent, ContentProcessorContext context)
         {
             List<ModelMeshPartContent> parts = new List<ModelMeshPartContent>();
-            VertexBufferContent vertexBuffer = new VertexBufferContent();
+            VertexBufferContent vertexBuffer = null;
             IndexCollection indexBuffer = new IndexCollection();
             
             if (GenerateTangentFrames)
@@ -185,21 +185,31 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
                 else
                 {
-                    VertexBufferContent geomBuffer = geometry.Vertices.CreateVertexBuffer();
-
-                    // geometries are supposed to all have the same declaration, so just steal one of these
-                    if (vertexBuffer.VertexDeclaration.VertexStride == null 
-                    &&  vertexBuffer.VertexDeclaration.VertexElements.Count == 0)
+                    if (vertexBuffer == null)
                     {
-                        vertexBuffer.VertexDeclaration = geomBuffer.VertexDeclaration;
+                        vertexBuffer = geometry.Vertices.CreateVertexBuffer();
                     }
-                    
-                    if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
-                    ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
-                        throw new InvalidOperationException("Invalid geometry");
+                    else
+                    {
+                        VertexDeclarationContent vertexDeclaration = new VertexDeclarationContent();
+                        geometry.Vertices.SetupVertexDeclaration(vertexDeclaration);
+                        int stride = vertexDeclaration.VertexStride.Value;
 
-                    int bufferOffset = vertexBuffer.VertexData.Length;
-                    vertexBuffer.Write(bufferOffset, 1, geomBuffer.VertexData);
+                        if (vertexBuffer.VertexDeclaration.VertexStride != vertexDeclaration.VertexStride
+                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != vertexDeclaration.VertexElements.Count)
+                            throw new InvalidOperationException("Invalid geometry");
+
+                        int bufferOffset0 = vertexBuffer.VertexData.Length;
+                        vertexBuffer.Write(bufferOffset0, stride, geometry.Vertices.Positions);
+
+                        int channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
+                        foreach (VertexChannel channel in geometry.Vertices.Channels)
+                        {
+                            Type channelType = channel.ElementType;
+                            vertexBuffer.Write(bufferOffset0 + channelOffset, stride, channelType, channel);
+                            channelOffset += VertexBufferContent.SizeOf(channelType);
+                        }
+                    }
 
                     int startIndex = indexBuffer.Count;
                     indexBuffer.AddRange(geometry.Indices);

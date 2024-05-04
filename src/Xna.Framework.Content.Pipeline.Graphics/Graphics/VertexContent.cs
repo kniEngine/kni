@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             return vertexBuffer;
         }
 
-        private void SetupVertexDeclaration(VertexDeclarationContent vertexDeclaration)
+        internal void SetupVertexDeclaration(VertexDeclarationContent vertexDeclaration)
         {
             int offset = 0;
 
