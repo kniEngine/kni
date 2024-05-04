@@ -193,12 +193,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         vertexBuffer.VertexDeclaration = geomBuffer.VertexDeclaration;
                     }
-                    else
-                    {
-                        if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
-                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
-                            throw new InvalidOperationException("Invalid geometry");
-                    }
+                    
+                    if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
+                    ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
+                        throw new InvalidOperationException("Invalid geometry");
 
                     int bufferOffset = vertexBuffer.VertexData.Length;
                     vertexBuffer.Write(bufferOffset, 1, geomBuffer.VertexData);
