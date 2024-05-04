@@ -191,28 +191,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     }
                     else
                     {
-                        VertexBufferContent geomBuffer = new VertexBufferContent(geometry.Vertices.Positions.Count);
-                        geometry.Vertices.SetupVertexDeclaration(geomBuffer.VertexDeclaration);
-                        int stride = geomBuffer.VertexDeclaration.VertexStride.Value;
+                        VertexDeclarationContent vertexDeclaration = new VertexDeclarationContent();
+                        geometry.Vertices.SetupVertexDeclaration(vertexDeclaration);
+                        int stride = vertexDeclaration.VertexStride.Value;
 
-                        if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
-                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
+                        if (vertexBuffer.VertexDeclaration.VertexStride != vertexDeclaration.VertexStride
+                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != vertexDeclaration.VertexElements.Count)
                             throw new InvalidOperationException("Invalid geometry");
 
-                        int bufferOffset0 = 0;
-                        geomBuffer.Write(bufferOffset0, stride, geometry.Vertices.Positions);
+                        int bufferOffset0 = vertexBuffer.VertexData.Length;
+                        vertexBuffer.Write(bufferOffset0, stride, geometry.Vertices.Positions);
 
                         int channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
                         foreach (VertexChannel channel in geometry.Vertices.Channels)
                         {
                             Type channelType = channel.ElementType;
-                            geomBuffer.Write(bufferOffset0 + channelOffset, stride, channelType, channel);
+                            vertexBuffer.Write(bufferOffset0 + channelOffset, stride, channelType, channel);
                             channelOffset += VertexBufferContent.SizeOf(channelType);
                         }
-                        
-
-                        int bufferOffset = vertexBuffer.VertexData.Length;
-                        vertexBuffer.Write(bufferOffset, 1, geomBuffer.VertexData);
                     }
 
                     int startIndex = indexBuffer.Count;
