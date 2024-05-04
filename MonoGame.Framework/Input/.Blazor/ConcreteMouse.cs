@@ -93,18 +93,18 @@ namespace Microsoft.Xna.Platform.Input
         {
             _pos.X = x;
             _pos.Y = y;
-            ButtonState _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            ButtonState _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            ButtonState _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
         }
 
         private void OnMouseUp(object sender, int x, int y, int buttons)
         {
             _pos.X = x;
             _pos.Y = y;
-            ButtonState _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            ButtonState _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            ButtonState _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
         }
 
         public void OnMouseWheel(object sender, int deltaX, int deltaY, int deltaZ, int deltaMode)
