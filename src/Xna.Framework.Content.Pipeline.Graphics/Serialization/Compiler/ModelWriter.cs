@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             WriteBones(output, value.Bones);
 
             output.Write((uint)value.Meshes.Count);
-            foreach (var mesh in value.Meshes)
+            foreach (ModelMeshContent mesh in value.Meshes)
             {
                 output.WriteObject(mesh.Name);
                 WriteBoneReference(output, mesh.ParentBone, value.Bones);
@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 output.WriteObject(mesh.Tag);
 
                 output.Write((uint)mesh.MeshParts.Count);
-                foreach (var part in mesh.MeshParts)
+                foreach (ModelMeshPartContent part in mesh.MeshParts)
                 {
                     output.Write((uint)part.VertexOffset);
                     output.Write((uint)part.NumVertices);
@@ -45,27 +45,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             output.Write((uint)bones.Count);
 
             // Bone properties
-            foreach (var bone in bones)
+            foreach (ModelBoneContent bone in bones)
             {
                 output.WriteObject(bone.Name);
                 output.Write(bone.Transform);
             }
 
             // Hierarchy
-            foreach (var bone in bones)
+            foreach (ModelBoneContent bone in bones)
             {
                 WriteBoneReference(output, bone.Parent, bones);
 
                 output.Write((uint)bone.Children.Count);
-                foreach (var child in bone.Children)
+                foreach (ModelBoneContent child in bone.Children)
                     WriteBoneReference(output, child, bones);
             }
         }
 
         private void WriteBoneReference(ContentWriter output, ModelBoneContent bone, ModelBoneContentCollection bones)
         {
-            var boneCount = bones != null ? bones.Count : 0;
-            var boneId = bone != null
+            int boneCount = bones != null ? bones.Count : 0;
+            int boneId = bone != null
                              ? bone.Index + 1
                              : 0;
 
