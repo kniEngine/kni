@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private ModelMeshContent ProcessMesh(MeshContent mesh, ModelBoneContent parent, ContentProcessorContext context)
         {
             List<ModelMeshPartContent> parts = new List<ModelMeshPartContent>();
-            VertexBufferContent vertexBuffer = new VertexBufferContent();
+            VertexBufferContent vertexBuffer = null;
             IndexCollection indexBuffer = new IndexCollection();
             
             if (GenerateTangentFrames)
@@ -185,21 +185,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
                 else
                 {
-                    VertexBufferContent geomBuffer = geometry.Vertices.CreateVertexBuffer();
-
-                    // geometries are supposed to all have the same declaration, so just steal one of these
-                    if (vertexBuffer.VertexDeclaration.VertexStride == null 
-                    &&  vertexBuffer.VertexDeclaration.VertexElements.Count == 0)
+                    if (vertexBuffer == null)
                     {
-                        vertexBuffer.VertexDeclaration = geomBuffer.VertexDeclaration;
+                        vertexBuffer = geometry.Vertices.CreateVertexBuffer();
                     }
-                    
-                    if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
-                    ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
-                        throw new InvalidOperationException("Invalid geometry");
+                    else
+                    {
+                        VertexBufferContent geomBuffer = geometry.Vertices.CreateVertexBuffer();
+                        
+                        if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
+                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
+                            throw new InvalidOperationException("Invalid geometry");
 
-                    int bufferOffset = vertexBuffer.VertexData.Length;
-                    vertexBuffer.Write(bufferOffset, 1, geomBuffer.VertexData);
+                        int bufferOffset = vertexBuffer.VertexData.Length;
+                        vertexBuffer.Write(bufferOffset, 1, geomBuffer.VertexData);
+                    }
 
                     int startIndex = indexBuffer.Count;
                     indexBuffer.AddRange(geometry.Indices);
