@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
@@ -193,21 +194,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         VertexDeclarationContent vertexDeclaration = new VertexDeclarationContent();
                         geometry.Vertices.SetupVertexDeclaration(vertexDeclaration);
-                        int stride = vertexDeclaration.VertexStride.Value;
 
                         if (vertexBuffer.VertexDeclaration.VertexStride != vertexDeclaration.VertexStride
                         ||  vertexBuffer.VertexDeclaration.VertexElements.Count != vertexDeclaration.VertexElements.Count)
                             throw new InvalidOperationException("Invalid geometry");
 
+                        int stride = vertexDeclaration.VertexStride.Value;
                         int bufferOffset0 = vertexBuffer.VertexData.Length;
                         vertexBuffer.Write(bufferOffset0, stride, geometry.Vertices.Positions);
 
-                        int channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
-                        foreach (VertexChannel channel in geometry.Vertices.Channels)
+                        Collection<VertexElement> vertexElements = vertexBuffer.VertexDeclaration.VertexElements;
+                        for (int ve = 0; ve < vertexElements.Count; ve++)
                         {
+                            VertexElement vertexElement = vertexElements[ve];
+
+                            // find channel
+                            string channelName = vertexElement.VertexElementUsage.ToString() + vertexElement.UsageIndex.ToString();
+                            if (channelName == "Position0")
+                                continue;
+                            VertexChannel channel = geometry.Vertices.Channels.First(ch => ch.Name == channelName);
+
+                            int channelOffset = vertexElement.Offset;
                             Type channelType = channel.ElementType;
                             vertexBuffer.Write(bufferOffset0 + channelOffset, stride, channelType, channel);
-                            channelOffset += VertexBufferContent.SizeOf(channelType);
                         }
                     }
 
