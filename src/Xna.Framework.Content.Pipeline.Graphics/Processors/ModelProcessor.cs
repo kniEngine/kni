@@ -195,6 +195,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         geometry.Vertices.SetupVertexDeclaration(geomBuffer.VertexDeclaration);
                         int stride = geomBuffer.VertexDeclaration.VertexStride.Value;
 
+                        if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
+                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
+                            throw new InvalidOperationException("Invalid geometry");
+
                         int bufferOffset0 = 0;
                         geomBuffer.Write(bufferOffset0, stride, geometry.Vertices.Positions);
 
@@ -206,9 +210,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             channelOffset += VertexBufferContent.SizeOf(channelType);
                         }
                         
-                        if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
-                        ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
-                            throw new InvalidOperationException("Invalid geometry");
 
                         int bufferOffset = vertexBuffer.VertexData.Length;
                         vertexBuffer.Write(bufferOffset, 1, geomBuffer.VertexData);
