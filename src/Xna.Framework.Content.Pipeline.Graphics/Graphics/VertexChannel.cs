@@ -201,5 +201,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="index">The zero-based starting index of the range of elements to remove.</param>
         /// <param name="count"> The number of elements to remove.</param>
         internal abstract void RemoveRange(int index, int count);
+
+
+        public override string ToString()
+        {
+            return String.Format("{{Name:{0}, ElementType: {1}, Count: {2} }}",
+                this.Name, this.ElementType, this.Count);
+        }
     }
 }
