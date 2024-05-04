@@ -64,10 +64,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
         private void WriteBoneReference(ContentWriter output, ModelBoneContent bone, ModelBoneContentCollection bones)
         {
-            int boneCount = bones != null ? bones.Count : 0;
-            int boneId = bone != null
-                             ? bone.Index + 1
-                             : 0;
+            int boneCount = (bones != null)
+                          ? bones.Count
+                          : 0;
+            int boneId = (bone != null)
+                       ? bone.Index + 1
+                       : 0;
 
             if (boneCount < 255)
                 output.Write((byte)boneId);
