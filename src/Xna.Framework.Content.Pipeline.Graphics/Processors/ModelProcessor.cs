@@ -191,7 +191,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     }
                     else
                     {
-                        VertexBufferContent geomBuffer = geometry.Vertices.CreateVertexBuffer();
+                        VertexBufferContent geomBuffer = new VertexBufferContent(geometry.Vertices.Positions.Count);
+                        geometry.Vertices.SetupVertexDeclaration(geomBuffer.VertexDeclaration);
+                        int stride = geomBuffer.VertexDeclaration.VertexStride.Value;
+
+                        int bufferOffset0 = 0;
+                        geomBuffer.Write(bufferOffset0, stride, geometry.Vertices.Positions);
+
+                        int channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
+                        foreach (VertexChannel channel in geometry.Vertices.Channels)
+                        {
+                            Type channelType = channel.ElementType;
+                            geomBuffer.Write(bufferOffset0 + channelOffset, stride, channelType, channel);
+                            channelOffset += VertexBufferContent.SizeOf(channelType);
+                        }
                         
                         if (vertexBuffer.VertexDeclaration.VertexStride != geomBuffer.VertexDeclaration.VertexStride
                         ||  vertexBuffer.VertexDeclaration.VertexElements.Count != geomBuffer.VertexDeclaration.VertexElements.Count)
