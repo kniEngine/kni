@@ -200,7 +200,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             throw new InvalidOperationException("Invalid geometry");
                     }
 
-                    vertexBuffer.Write(vertexBuffer.VertexData.Length, 1, geomBuffer.VertexData);
+                    int bufferOffset = vertexBuffer.VertexData.Length;
+                    vertexBuffer.Write(bufferOffset, 1, geomBuffer.VertexData);
 
                     int startIndex = indexBuffer.Count;
                     indexBuffer.AddRange(geometry.Indices);

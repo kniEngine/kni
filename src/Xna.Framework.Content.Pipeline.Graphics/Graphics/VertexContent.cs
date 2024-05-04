@@ -101,14 +101,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // #2 |111111111111|111111111111|11111111|111111111111|111111111111|
 
             // #0: Write position vertices using stride to skip over the other channels:
-            vertexBuffer.Write(0, stride, _positions);
+            int bufferOffset = 0;
+            vertexBuffer.Write(bufferOffset, stride, _positions);
 
             int channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
             foreach (VertexChannel channel in Channels)
             {
                 // #N: Fill in the channel within each vertex
                 Type channelType = channel.ElementType;
-                vertexBuffer.Write(channelOffset, stride, channelType, channel);
+                vertexBuffer.Write(bufferOffset + channelOffset, stride, channelType, channel);
                 channelOffset += VertexBufferContent.SizeOf(channelType);
             }
 
