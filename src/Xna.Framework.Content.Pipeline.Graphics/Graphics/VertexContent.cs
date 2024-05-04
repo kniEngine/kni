@@ -87,7 +87,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public VertexBufferContent CreateVertexBuffer()
         {
             VertexBufferContent vertexBuffer = new VertexBufferContent(_positions.Count);
-            int stride = SetupVertexDeclaration(vertexBuffer);
+            SetupVertexDeclaration(vertexBuffer.VertexDeclaration);
+            int stride = vertexBuffer.VertexDeclaration.VertexStride.Value;
 
             // TODO: Verify enough elements in channels to match positions?
 
@@ -114,12 +115,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             return vertexBuffer;
         }
 
-        private int SetupVertexDeclaration(VertexBufferContent result)
+        private void SetupVertexDeclaration(VertexDeclarationContent vertexDeclaration)
         {
             int offset = 0;
 
             // We always have a position channel
-            result.VertexDeclaration.VertexElements.Add(
+            vertexDeclaration.VertexElements.Add(
                     new VertexElement(offset, VertexElementFormat.Vector3, VertexElementUsage.Position, 0));
             offset += VertexElementFormat.Vector3.GetSize();
 
@@ -164,12 +165,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // Try getting the usage index
                 int usageIndex = VertexChannelNames.DecodeUsageIndex(channel.Name);
 
-                result.VertexDeclaration.VertexElements.Add(new VertexElement(offset, format, usage, usageIndex));
+                vertexDeclaration.VertexElements.Add(new VertexElement(offset, format, usage, usageIndex));
                 offset += format.GetSize();
             }
 
-            result.VertexDeclaration.VertexStride = offset;
-            return offset;
+            vertexDeclaration.VertexStride = offset;
         }
 
         /// <summary>
