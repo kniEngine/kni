@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
     /// <summary>
@@ -55,6 +57,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         {
             _indices = new IndexCollection();
             _vertices = new VertexContent(this);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{{Name:{0}, Vertices: {1}, Indices: {2} }}",
+                base.Name, this.Vertices.VertexCount, this.Indices.Count);
         }
     }
 }

@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
@@ -15,7 +16,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             // cause problems after reading it in, so better to fail early here.
             output.Write((uint)value.VertexStride.Value);
             output.Write((uint)value.VertexElements.Count);
-            foreach (var element in value.VertexElements)
+            foreach (VertexElement element in value.VertexElements)
             {
                 output.Write((uint)element.Offset);
                 output.Write((int)element.VertexElementFormat);

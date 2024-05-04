@@ -87,7 +87,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public VertexBufferContent CreateVertexBuffer()
         {
             VertexBufferContent vertexBuffer = new VertexBufferContent(_positions.Count);
-            int stride = SetupVertexDeclaration(vertexBuffer);
+            SetupVertexDeclaration(vertexBuffer.VertexDeclaration);
+            int stride = vertexBuffer.VertexDeclaration.VertexStride.Value;
 
             // TODO: Verify enough elements in channels to match positions?
 
@@ -100,26 +101,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             // #2 |111111111111|111111111111|11111111|111111111111|111111111111|
 
             // #0: Write position vertices using stride to skip over the other channels:
-            vertexBuffer.Write(0, stride, _positions);
+            int bufferOffset = 0;
+            vertexBuffer.Write(bufferOffset, stride, _positions);
 
             int channelOffset = VertexBufferContent.SizeOf(typeof(Vector3));
             foreach (VertexChannel channel in Channels)
             {
                 // #N: Fill in the channel within each vertex
                 Type channelType = channel.ElementType;
-                vertexBuffer.Write(channelOffset, stride, channelType, channel);
+                vertexBuffer.Write(bufferOffset + channelOffset, stride, channelType, channel);
                 channelOffset += VertexBufferContent.SizeOf(channelType);
             }
 
             return vertexBuffer;
         }
 
-        private int SetupVertexDeclaration(VertexBufferContent result)
+        private void SetupVertexDeclaration(VertexDeclarationContent vertexDeclaration)
         {
             int offset = 0;
 
             // We always have a position channel
-            result.VertexDeclaration.VertexElements.Add(
+            vertexDeclaration.VertexElements.Add(
                     new VertexElement(offset, VertexElementFormat.Vector3, VertexElementUsage.Position, 0));
             offset += VertexElementFormat.Vector3.GetSize();
 
@@ -164,12 +166,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // Try getting the usage index
                 int usageIndex = VertexChannelNames.DecodeUsageIndex(channel.Name);
 
-                result.VertexDeclaration.VertexElements.Add(new VertexElement(offset, format, usage, usageIndex));
+                vertexDeclaration.VertexElements.Add(new VertexElement(offset, format, usage, usageIndex));
                 offset += format.GetSize();
             }
 
-            result.VertexDeclaration.VertexStride = offset;
-            return offset;
+            vertexDeclaration.VertexStride = offset;
         }
 
         /// <summary>
