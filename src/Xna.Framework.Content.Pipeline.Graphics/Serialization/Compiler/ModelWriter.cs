@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             {
                 output.WriteObject(mesh.Name);
                 WriteBoneReference(output, mesh.ParentBone, value.Bones);
-                output.WriteRawObject(mesh.BoundingSphere);
+                WriteBoundingSphere(output, mesh.BoundingSphere);
                 output.WriteObject(mesh.Tag);
 
                 output.Write((uint)mesh.MeshParts.Count);
@@ -75,6 +75,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 output.Write((byte)boneId);
             else
                 output.Write((uint)boneId);
+        }
+
+        private static void WriteBoundingSphere(ContentWriter output, BoundingSphere value)
+        {
+            //output.WriteRawObject(boundingSphere);
+            output.Write(value.Center);
+            output.Write(value.Radius);
         }
     }
 }
