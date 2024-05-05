@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         {
             string readerNamespace = "Microsoft.Xna.Framework.Content";
             string readerName = ".ExternalReferenceReader";
-            string readerAssembly = ", " + typeof(ContentReader).Assembly.FullName;
+            string readerAssembly = String.Empty;
 
             string runtimeReader = readerNamespace + readerName + readerAssembly;
             return runtimeReader;
