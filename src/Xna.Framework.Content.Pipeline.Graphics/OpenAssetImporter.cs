@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2023 Nick Kastellanos
+// Copyright (C)2023-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -1159,9 +1159,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             switch (axis)
             {
-                case 0: return Vector3.UnitX;
-                case 1: return Vector3.UnitY;
-                case 2: return Vector3.UnitZ;
+                case 0: return Vector3.Right;
+                case 1: return Vector3.Up;
+                case 2: return Vector3.Forward;
                 default: throw new InvalidOperationException("axis");
             }
         }
@@ -1171,7 +1171,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Matrix metaTransform = Matrix.Identity;
 
             int metaCoordAxis = rootNode.OpaqueData.GetValue<int>("metadata:CoordAxis", 0);
-            int metaCoordAxisSign = rootNode.OpaqueData.GetValue<int>("metadata:UpAxisSign", 1);
+            int metaCoordAxisSign = rootNode.OpaqueData.GetValue<int>("metadata:CoordAxisSign", 1);
             metaTransform.Right = GetAxis(metaCoordAxis) * metaCoordAxisSign;
 
             int metaUpAxis = rootNode.OpaqueData.GetValue<int>("metadata:UpAxis", 1);
@@ -1183,9 +1183,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             metaTransform.Forward = GetAxis(metaFrontAxis) * metaFrontAxisSign;
 
             float metaUnitScaleFactor = rootNode.OpaqueData.GetValue<float>("metadata:UnitScaleFactor", 1f);
-                metaTransform *= Matrix.CreateScale(metaUnitScaleFactor);
+            metaTransform *= Matrix.CreateScale(metaUnitScaleFactor);
 
-                MeshHelper.TransformScene(rootNode, metaTransform);
+            MeshHelper.TransformScene(rootNode, metaTransform);
         }
 
         #region Conversion Helpers
