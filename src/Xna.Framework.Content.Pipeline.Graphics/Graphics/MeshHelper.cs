@@ -169,7 +169,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             IndexCollection indices = geometry.Indices;
             VertexChannelCollection channels = geometry.Vertices.Channels;
 
-            VertexChannel<Vector3> normals = channels.Get<Vector3>(VertexChannelNames.Normal(0));
+            string normalChannelName = VertexChannelNames.Normal(0);
+
+            if (!channels.Contains(normalChannelName))
+                throw new InvalidContentException("geometry doesn't contain 'Normal0' channel.");
+            if (!channels.Contains(textureCoordinateChannelName))
+                throw new InvalidContentException("geometry doesn't contain '"+ textureCoordinateChannelName + "' channel.");
+
+            VertexChannel <Vector3> normals = channels.Get<Vector3>(normalChannelName);
             VertexChannel<Vector2> uvs = channels.Get<Vector2>(textureCoordinateChannelName);
 
             Vector3[] tangents, bitangents;
