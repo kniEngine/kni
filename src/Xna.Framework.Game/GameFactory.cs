@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform
                 if (_current == null)
                     _current = gameFactory;
                 else
-                    throw new InvalidOperationException("inputFactory allready registered.");
+                    throw new InvalidOperationException("gameFactory allready registered.");
             }
         }
 
