@@ -31,10 +31,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         public ModelProcessor()
         {
+            ColorKeyColor = new Color(255, 0, 255, 255);
         }
 
         #region Properties
 
+        [DefaultValue(typeof(Color), "255,0,255,255")]
         public virtual Color ColorKeyColor { get; set; }
 
         [DefaultValue(true)]
