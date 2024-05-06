@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             // Make sure the channel type is as expected
             if (channel.ElementType != typeof(T))
-                throw new InvalidOperationException("Mismatched channel type");
+                throw new InvalidOperationException("Mismatched channel type '"+typeof(T).Name+"' for channel["+index+"] " + channel);
 
             return (VertexChannel<T>)channel;
         }
