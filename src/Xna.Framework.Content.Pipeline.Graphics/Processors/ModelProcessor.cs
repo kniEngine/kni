@@ -55,6 +55,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             set { _generateMipmaps = value; }
         }
 
+        public virtual bool GenerateNormals { get; set; }
+
         public virtual bool GenerateTangentFrames { get; set; }
 
         [DefaultValue(true)]
@@ -157,6 +159,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             VertexBufferContent vertexBuffer = null;
             IndexCollection indexBuffer = new IndexCollection();
             
+            if (GenerateNormals)
+            {
+                context.Logger.LogMessage("Generating normals.");
+                MeshHelper.CalculateNormals(mesh, false);
+            }
+
             if (GenerateTangentFrames)
             {
                 context.Logger.LogMessage("Generating tangent frames.");
