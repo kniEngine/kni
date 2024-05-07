@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// Specifies whether resizing of a material is enabled. Typically used to maximize compatability with a graphics card because many graphics cards do not support a material size that is not a power of two. If ResizeTexturesToPowerOfTwo is enabled, the material is resized to the next largest power of two.
         /// </summary>
         /// <value>true if resizing is enabled; false otherwise.</value>
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [DisplayName("Resize to Power of Two")]
         [Description("If enabled, the texture is resized to the next largest power of two, maximizing compatibility. Many graphics cards do not support texture sizes that are not a power of two.")]
         public virtual bool ResizeTexturesToPowerOfTwo { get { return resizeTexturesToPowerOfTwo; } set { resizeTexturesToPowerOfTwo = value; } }
@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             defaultEffect = MaterialProcessorDefaultEffect.BasicEffect;
             generateMipmaps = true;
             premultiplyTextureAlpha = true;
-            resizeTexturesToPowerOfTwo = true;
+            resizeTexturesToPowerOfTwo = false;
             textureFormat = TextureProcessorOutputFormat.Compressed;
         }
 
