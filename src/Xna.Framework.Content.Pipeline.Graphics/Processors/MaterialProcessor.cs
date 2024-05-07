@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// Specifies if a full chain of mipmaps are generated from the source material. Existing mipmaps of the material are not replaced.
         /// </summary>
         /// <value>true if mipmap generation is enabled; false otherwise.</value>
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [DisplayName("Generate Mipmaps")]
         [Description("If enabled, a full chain of mipmaps are generated from the source material. Existing mipmaps of the material are not replaced.")]
         public virtual bool GenerateMipmaps { get { return generateMipmaps; } set { generateMipmaps = value; } }
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 		/// Specifies the texture format of output materials. Materials can either be left unchanged from the source asset, converted to a corresponding Color, or compressed using the appropriate DxtCompressed format.
         /// </summary>
         /// <value>The texture format of the output.</value>
-        [DefaultValue(typeof(TextureProcessorOutputFormat), "Color")]
+        [DefaultValue(typeof(TextureProcessorOutputFormat), "Compressed")]
         [DisplayName("Texture Format")]
         [Description("Specifies the SurfaceFormat type of processed textures. Textures can either remain unchanged from the source asset, converted to the Color format, or DXT compressed.")]
         public virtual TextureProcessorOutputFormat TextureFormat { get { return textureFormat; } set { textureFormat = value; } }
@@ -93,13 +93,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// </summary>
         public MaterialProcessor()
         {
-            colorKeyColor = Color.Magenta;
+            colorKeyColor = new Color(255, 0, 255, 255);
             colorKeyEnabled = true;
             defaultEffect = MaterialProcessorDefaultEffect.BasicEffect;
-            generateMipmaps = false;
+            generateMipmaps = true;
             premultiplyTextureAlpha = true;
             resizeTexturesToPowerOfTwo = true;
-            textureFormat = TextureProcessorOutputFormat.Color;
+            textureFormat = TextureProcessorOutputFormat.Compressed;
         }
 
         /// <summary>
