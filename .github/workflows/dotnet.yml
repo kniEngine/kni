@@ -22,10 +22,10 @@ jobs:
         dotnet-version: 8.0.x
         
     - name: Restore dependencies
-      run: dotnet KNI.sln restore
+      run: dotnet restore KNI.sln
       
     - name: Build
-      run: dotnet KNI.sln build --no-restore
+      run: dotnet build KNI.sln --no-restore
       
    # - name: Test
    #   run: dotnet test --no-build --verbosity normal
