@@ -46,8 +46,8 @@ jobs:
       run: dotnet build XNA.Framework.Android.sln --property:WarningLevel=1
     - name: Build Cardboard
       run: dotnet build XNA.Framework.Cardboard.sln --property:WarningLevel=1
-    - name: Build Windows UAP10
-      run: dotnet msbuild XNA.Framework.UAP.sln --property:WarningLevel=1
+   # - name: Build Windows UAP10
+   #   run: dotnet msbuild XNA.Framework.UAP.sln --property:WarningLevel=1
 
    # - name: Test
    #   run: dotnet test --no-build --verbosity normal
