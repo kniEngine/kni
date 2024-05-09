@@ -63,6 +63,10 @@
       <Name>Xna.Framework</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Content\Xna.Framework.Content.csproj">
+      <Name>Xna.Framework.Content</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
       <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
       <Name>Xna.Framework.Graphics</Name>
