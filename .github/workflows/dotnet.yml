@@ -15,13 +15,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4    
+      with:
+          submodules: recursive
+          
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
-    - name: Restore dependencies
+    - name: Install workloads
       run: dotnet workload install android ios
         
     - name: Restore dependencies
