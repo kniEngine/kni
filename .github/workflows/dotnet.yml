@@ -30,8 +30,24 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore KNI.sln
       
-    - name: Build
-      run: dotnet msbuild KNI.sln --no-restore --property:WarningLevel=1
-      
+   # - name: Build
+   #   run: dotnet build KNI.sln --no-restore --property:WarningLevel=1
+    - name: Build Ref
+      run: dotnet build MonoGame.Framework\Xna.Framework.Ref.csproj --property:WarningLevel=1     
+    - name: Build BlazorGL
+      run: dotnet build XNA.Framework.Blazor.sln --property:WarningLevel=1
+    - name: Build WindowsDX11
+      run: dotnet build XNA.Framework.WindowsDX11.sln --property:WarningLevel=1     
+    - name: Build DesktopGL
+      run: dotnet build XNA.Framework.DesktopGL.sln --property:WarningLevel=1  
+    - name: Build iOS
+      run: dotnet build XNA.Framework.iOS.sln --property:WarningLevel=1
+    - name: Build Android
+      run: dotnet build XNA.Framework.Android.sln --property:WarningLevel=1
+    - name: Build Cardboard
+      run: dotnet build XNA.Framework.Cardboard.sln --property:WarningLevel=1
+    - name: Build Windows UAP10
+      run: dotnet build XNA.Framework.UAP.sln --property:WarningLevel=1
+
    # - name: Test
    #   run: dotnet test --no-build --verbosity normal
