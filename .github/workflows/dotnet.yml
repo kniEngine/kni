@@ -31,7 +31,7 @@ jobs:
       run: dotnet restore KNI.sln
       
     - name: Build
-      run: dotnet build KNI.sln --no-restore
+      run: dotnet build KNI.sln --no-restore --property:WarningLevel=2
       
    # - name: Test
    #   run: dotnet test --no-build --verbosity normal
