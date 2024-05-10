@@ -108,22 +108,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         VirtualFile VirtualFileSystem.getFile(string path)
         {
-            return new MGFile(path, _dependencies);
+            return new PPVirtualFile(path, _dependencies);
         }
 
         VirtualFile VirtualFileSystem.getFile(string dir, string name)
         {
-            return new MGFile(Path.Combine(dir, name), _dependencies);
+            return new PPVirtualFile(Path.Combine(dir, name), _dependencies);
         }
 
         #endregion VirtualFileSystem
 
-        private class MGFile : VirtualFile
+        private class PPVirtualFile : VirtualFile
         {
             private readonly List<string> _dependencies;
             private readonly string _path;
 
-            public MGFile(string path, List<string> dependencies)
+            public PPVirtualFile(string path, List<string> dependencies)
             {
                 _dependencies = dependencies;
                 _path = Path.GetFullPath(path);
@@ -146,12 +146,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             public VirtualFile getParentFile()
             {
-                return new MGFile(Path.GetDirectoryName(_path), _dependencies);
+                return new PPVirtualFile(Path.GetDirectoryName(_path), _dependencies);
             }
 
             public VirtualFile getChildFile(string name)
             {
-                return new MGFile(Path.Combine(_path, name), _dependencies);
+                return new PPVirtualFile(Path.Combine(_path, name), _dependencies);
             }
 
             public Source getSource()
