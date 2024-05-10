@@ -102,18 +102,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return result.ToString();
         }
 
+        private void AddDependency(string filename)
+        {
+            if (!_dependencies.Contains(filename))
+                _dependencies.Add(filename);
+        }
+
         #region VirtualFileSystem
 
         private readonly List<string> _dependencies = new List<string>();
 
         VirtualFile VirtualFileSystem.getFile(string path)
         {
-            return new PPVirtualFile((VirtualFileSystem)this, path, _dependencies);
+            return new PPVirtualFile((VirtualFileSystem)this, path);
         }
 
         VirtualFile VirtualFileSystem.getFile(string dir, string name)
         {
-            return new PPVirtualFile((VirtualFileSystem)this, Path.Combine(dir, name), _dependencies);
+            return new PPVirtualFile((VirtualFileSystem)this, Path.Combine(dir, name));
         }
 
         #endregion VirtualFileSystem
@@ -121,13 +127,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private class PPVirtualFile : VirtualFile
         {
             VirtualFileSystem _virtualFileSystem;
-            private readonly List<string> _dependencies;
             private readonly string _path;
 
-            public PPVirtualFile(VirtualFileSystem virtualFileSystem, string path, List<string> dependencies)
+            public PPVirtualFile(VirtualFileSystem virtualFileSystem, string path)
             {
                 this._virtualFileSystem = virtualFileSystem;
-                this._dependencies = dependencies;
                 this._path = Path.GetFullPath(path);
             }
 
@@ -148,18 +152,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             public VirtualFile getParentFile()
             {
-                return new PPVirtualFile(_virtualFileSystem, Path.GetDirectoryName(_path), _dependencies);
+                return new PPVirtualFile(_virtualFileSystem, Path.GetDirectoryName(_path));
             }
 
             public VirtualFile getChildFile(string name)
             {
-                return new PPVirtualFile(_virtualFileSystem, Path.Combine(_path, name), _dependencies);
+                return new PPVirtualFile(_virtualFileSystem, Path.Combine(_path, name));
             }
 
             public Source getSource()
             {
-                if (!_dependencies.Contains(_path))
-                    _dependencies.Add(_path);
+                ((Preprocessor)_virtualFileSystem).AddDependency(_path);
+
                 return new PPStringLexerSource(AppendNewlineIfNonePresent(File.ReadAllText(_path)), true, _path);
             }
 
