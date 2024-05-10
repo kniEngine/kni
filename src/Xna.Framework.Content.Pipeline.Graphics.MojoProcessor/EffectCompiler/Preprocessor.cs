@@ -146,32 +146,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 this._path = Path.GetFullPath(path);
             }
 
-            public bool isFile()
+            bool VirtualFile.isFile()
             {
                 return File.Exists(_path) && !File.GetAttributes(_path).HasFlag(FileAttributes.Directory);
             }
 
-            public string getPath()
+            string VirtualFile.getPath()
             {
                 return _path;
             }
 
-            public string getName()
+            string VirtualFile.getName()
             {
                 return Path.GetFileName(_path);
             }
 
-            public VirtualFile getParentFile()
+            VirtualFile VirtualFile.getParentFile()
             {
                 return new PPVirtualFile(_virtualFileSystem, Path.GetDirectoryName(_path));
             }
 
-            public VirtualFile getChildFile(string name)
+            VirtualFile VirtualFile.getChildFile(string name)
             {
                 return new PPVirtualFile(_virtualFileSystem, Path.Combine(_path, name));
             }
 
-            public Source getSource()
+            Source VirtualFile.getSource()
             {
                 // Add the include dependencies so that if they change
                 // it will trigger a rebuild of this effect.
