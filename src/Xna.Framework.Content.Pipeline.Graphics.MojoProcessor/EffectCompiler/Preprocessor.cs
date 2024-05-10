@@ -108,25 +108,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         VirtualFile VirtualFileSystem.getFile(string path)
         {
-            return new PPVirtualFile(path, _dependencies);
+            return new PPVirtualFile((VirtualFileSystem)this, path, _dependencies);
         }
 
         VirtualFile VirtualFileSystem.getFile(string dir, string name)
         {
-            return new PPVirtualFile(Path.Combine(dir, name), _dependencies);
+            return new PPVirtualFile((VirtualFileSystem)this, Path.Combine(dir, name), _dependencies);
         }
 
         #endregion VirtualFileSystem
 
         private class PPVirtualFile : VirtualFile
         {
+            VirtualFileSystem _virtualFileSystem;
             private readonly List<string> _dependencies;
             private readonly string _path;
 
-            public PPVirtualFile(string path, List<string> dependencies)
+            public PPVirtualFile(VirtualFileSystem virtualFileSystem, string path, List<string> dependencies)
             {
-                _dependencies = dependencies;
-                _path = Path.GetFullPath(path);
+                this._virtualFileSystem = virtualFileSystem;
+                this._dependencies = dependencies;
+                this._path = Path.GetFullPath(path);
             }
 
             public bool isFile()
@@ -146,12 +148,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             public VirtualFile getParentFile()
             {
-                return new PPVirtualFile(Path.GetDirectoryName(_path), _dependencies);
+                return new PPVirtualFile(_virtualFileSystem, Path.GetDirectoryName(_path), _dependencies);
             }
 
             public VirtualFile getChildFile(string name)
             {
-                return new PPVirtualFile(Path.Combine(_path, name), _dependencies);
+                return new PPVirtualFile(_virtualFileSystem, Path.Combine(_path, name), _dependencies);
             }
 
             public Source getSource()
