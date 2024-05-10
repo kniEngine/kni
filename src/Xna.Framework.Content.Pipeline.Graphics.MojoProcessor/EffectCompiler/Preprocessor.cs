@@ -45,7 +45,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             string effectCode = _input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
-            _pp.addInput(new PPStringLexerSource(effectCode, true, _fullFilePath));
+            Source inputSource = new PPStringLexerSource(effectCode, true, _fullFilePath);
+            _pp.addInput(inputSource);
 
             StringBuilder result = new StringBuilder();
 
@@ -178,14 +179,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 // it will trigger a rebuild of this effect.
                 ((Preprocessor)_virtualFileSystem)._context.AddDependency(_path);
 
-                return new PPStringLexerSource(AppendNewlineIfNonePresent(File.ReadAllText(_path)), true, _path);
+                string effectCode = File.ReadAllText(_path);
+                effectCode = AppendNewlineIfNonePresent(effectCode);
+                return new PPStringLexerSource(effectCode, true, _path);
             }
 
             private static string AppendNewlineIfNonePresent(string text)
             {
                 if (!text.EndsWith("\n"))
                     return text + "\n";
-                return text;
+                else
+                    return text;
             }
         }
 
