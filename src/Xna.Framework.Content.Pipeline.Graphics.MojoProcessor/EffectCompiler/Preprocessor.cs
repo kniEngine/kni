@@ -26,13 +26,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public string Preprocess(EffectContent input, ContentProcessorContext context, string fullFilePath)
         {
             List<string> dependencies = new List<string>();
-            
+
             _pp.EmitExtraLineInfo = false;
             _pp.addFeature(Feature.LINEMARKERS);
             _pp.setListener(new MGErrorListener(context.Logger));
             _pp.setFileSystem(new MGFileSystem(dependencies));
             _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullFilePath) });
-            
+
             string effectCode = input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
@@ -56,24 +56,24 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         }
                         break;
                     case CppNet.Token.CCOMMENT:
-                    {
-                        string tokenText = token.getText();
-                        if (tokenText != null)
                         {
-                            // Need to preserve line breaks so that line numbers are correct.
-                            foreach (char c in tokenText)
-                                if (c == '\n')
-                                    result.Append(c);
-                        }
-                        break;
-                    }
-                    default:
-                    {
                             string tokenText = token.getText();
-                        if (tokenText != null)
-                            result.Append(tokenText);
-                        break;
-                    }
+                            if (tokenText != null)
+                            {
+                                // Need to preserve line breaks so that line numbers are correct.
+                                foreach (char c in tokenText)
+                                    if (c == '\n')
+                                        result.Append(c);
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            string tokenText = token.getText();
+                            if (tokenText != null)
+                                result.Append(tokenText);
+                            break;
+                        }
                 }
             }
 
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             public void handleSourceChange(Source source, string ev)
             {
-                
+
             }
         }
     }
