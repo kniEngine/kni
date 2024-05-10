@@ -47,14 +47,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 switch (token.getType())
                 {
                     case CppNet.Token.EOF:
-                        endOfStream = true;
-                        break;
-                    case CppNet.Token.CPPCOMMENT:
-                        if (token.getText().StartsWith("//--WORKAROUND#line"))
                         {
-                            result.Append(token.getText().Replace("//--WORKAROUND#line", "#line"));
+                            endOfStream = true;
                         }
                         break;
+
+                    case CppNet.Token.CPPCOMMENT:
+                        {
+                            string tokenText = token.getText();
+                            if (tokenText.StartsWith("//--WORKAROUND#line"))
+                            {
+                                result.Append(tokenText.Replace("//--WORKAROUND#line", "#line"));
+                            }
+                        }
+                        break;
+
                     case CppNet.Token.CCOMMENT:
                         {
                             string tokenText = token.getText();
@@ -65,15 +72,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                     if (c == '\n')
                                         result.Append(c);
                             }
-                            break;
                         }
+                        break;
+
                     default:
                         {
                             string tokenText = token.getText();
                             if (tokenText != null)
                                 result.Append(tokenText);
-                            break;
                         }
+                        break;
                 }
             }
 
