@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             string effectCode = _input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
-            _pp.addInput(new MGStringLexerSource(effectCode, true, _fullFilePath));
+            _pp.addInput(new PPStringLexerSource(effectCode, true, _fullFilePath));
 
             StringBuilder result = new StringBuilder();
 
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 if (!_dependencies.Contains(_path))
                     _dependencies.Add(_path);
-                return new MGStringLexerSource(AppendNewlineIfNonePresent(File.ReadAllText(_path)), true, _path);
+                return new PPStringLexerSource(AppendNewlineIfNonePresent(File.ReadAllText(_path)), true, _path);
             }
 
             private static string AppendNewlineIfNonePresent(string text)
@@ -169,11 +169,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        private class MGStringLexerSource : StringLexerSource
+        private class PPStringLexerSource : StringLexerSource
         {
             public string Path { get; private set; }
 
-            public MGStringLexerSource(string str, bool ppvalid, string fileName)
+            public PPStringLexerSource(string str, bool ppvalid, string fileName)
                 : base(str.Replace("\r\n", "\n"), ppvalid, fileName)
             {
                 Path = fileName;
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
         {
-            string file = ((MGStringLexerSource)source).Path;
+            string file = ((PPStringLexerSource)source).Path;
             return new ContentIdentity(file, null, line + "," + column);
         }
 
