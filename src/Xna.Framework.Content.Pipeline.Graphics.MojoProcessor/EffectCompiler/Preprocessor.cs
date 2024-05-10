@@ -15,28 +15,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     public class Preprocessor
     {
-        private CppNet.Preprocessor _pp = new CppNet.Preprocessor();
+        private EffectContent _input;
+        private ContentProcessorContext _context;
+        private string _fullFilePath;
+        private CppNet.Preprocessor _pp;
 
+        public Preprocessor(EffectContent input, ContentProcessorContext context, string fullFilePath)
+        {
+            this._input = input;
+            this._context = context;
+            this._fullFilePath = fullFilePath;
+
+            _pp = new CppNet.Preprocessor();
+            _pp.EmitExtraLineInfo = false;
+            _pp.addFeature(Feature.LINEMARKERS);
+        }
 
         internal void AddMacro(string name, string value)
         {
             _pp.addMacro(name, value);
         }
 
-        public string Preprocess(EffectContent input, ContentProcessorContext context, string fullFilePath)
+        public string Preprocess()
         {
             List<string> dependencies = new List<string>();
 
-            _pp.EmitExtraLineInfo = false;
-            _pp.addFeature(Feature.LINEMARKERS);
-            _pp.setListener(new MGErrorListener(context.Logger));
+            _pp.setListener(new MGErrorListener(_context.Logger));
             _pp.setFileSystem(new MGFileSystem(dependencies));
-            _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(fullFilePath) });
+            _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(_fullFilePath) });
 
-            string effectCode = input.EffectCode;
+            string effectCode = _input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
-            _pp.addInput(new MGStringLexerSource(effectCode, true, fullFilePath));
+            _pp.addInput(new MGStringLexerSource(effectCode, true, _fullFilePath));
 
             StringBuilder result = new StringBuilder();
 
@@ -88,7 +99,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Add the include dependencies so that if they change
             // it will trigger a rebuild of this effect.
             foreach (string dep in dependencies)
-                context.AddDependency(dep);
+                _context.AddDependency(dep);
 
             return result.ToString();
         }
