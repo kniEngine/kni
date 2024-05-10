@@ -166,8 +166,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 pp.AddMacro("DEBUG", "1");
             }
 
-            foreach (KeyValuePair<string,string> macro in shaderProfile.GetMacros())
-                pp.AddMacro(macro.Key, macro.Value);
+            pp.AddMacros(shaderProfile.GetMacros());
 
             if (!string.IsNullOrEmpty(Defines))
             {

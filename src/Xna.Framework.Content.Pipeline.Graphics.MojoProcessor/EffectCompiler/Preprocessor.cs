@@ -38,6 +38,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             _pp.addMacro(name, value);
         }
 
+        internal void AddMacros(IEnumerable<KeyValuePair<string, string>> macros)
+        {
+            foreach (KeyValuePair<string, string> macro in macros)
+                _pp.addMacro(macro.Key, macro.Value);
+        }
+
         public string Preprocess()
         {
             _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(_fullFilePath) });
