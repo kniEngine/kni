@@ -100,18 +100,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
     
         void PreprocessorListener.handleWarning(Source source, int line, int column, string msg)
         {
-            _context.Logger.LogWarning(null, CreateContentIdentity(source, line, column), msg);
+            string file = ((PPStringLexerSource)source).Path;
+            ContentIdentity contentIdentity = new ContentIdentity(file, null, line + "," + column);
+            _context.Logger.LogWarning(null, contentIdentity, msg);
         }
 
         void PreprocessorListener.handleError(Source source, int line, int column, string msg)
         {
-            throw new InvalidContentException(msg, CreateContentIdentity(source, line, column));
-        }
-
-        private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
-        {
             string file = ((PPStringLexerSource)source).Path;
-            return new ContentIdentity(file, null, line + "," + column);
+            ContentIdentity contentIdentity = new ContentIdentity(file, null, line + "," + column);
+            throw new InvalidContentException(msg, contentIdentity);
         }
 
         void PreprocessorListener.handleSourceChange(Source source, string ev)
