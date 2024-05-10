@@ -178,17 +178,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 ((Preprocessor)_virtualFileSystem)._context.AddDependency(_path);
 
                 string effectCode = File.ReadAllText(_path);
-                effectCode = AppendNewlineIfNonePresent(effectCode);
+                // Append new line if none present.
+                if (!effectCode.EndsWith("\n"))
+                    effectCode += "\n";
+
                 return new PPStringLexerSource(effectCode, true, _path);
             }
 
-            private static string AppendNewlineIfNonePresent(string text)
-            {
-                if (!text.EndsWith("\n"))
-                    return text + "\n";
-                else
-                    return text;
-            }
         }
 
         private class PPStringLexerSource : StringLexerSource
