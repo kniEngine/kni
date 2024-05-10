@@ -13,7 +13,7 @@ using CppNet;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    public class Preprocessor
+    public class Preprocessor : PreprocessorListener
     {
         private EffectContent _input;
         private ContentProcessorContext _context;
@@ -29,6 +29,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             _pp = new CppNet.Preprocessor();
             _pp.EmitExtraLineInfo = false;
             _pp.addFeature(Feature.LINEMARKERS);
+            _pp.setListener(this);
         }
 
         internal void AddMacro(string name, string value)
@@ -40,7 +41,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             List<string> dependencies = new List<string>();
 
-            _pp.setListener(new MGErrorListener(_context.Logger));
             _pp.setFileSystem(new MGFileSystem(dependencies));
             _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(_fullFilePath) });
 
@@ -186,35 +186,30 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        private class MGErrorListener : PreprocessorListener
+        #region PreprocessorListener
+    
+        void PreprocessorListener.handleWarning(Source source, int line, int column, string msg)
         {
-            private readonly ContentBuildLogger _logger;
-
-            public MGErrorListener(ContentBuildLogger logger)
-            {
-                _logger = logger;
-            }
-
-            public void handleWarning(Source source, int line, int column, string msg)
-            {
-                _logger.LogWarning(null, CreateContentIdentity(source, line, column), msg);
-            }
-
-            public void handleError(Source source, int line, int column, string msg)
-            {
-                throw new InvalidContentException(msg, CreateContentIdentity(source, line, column));
-            }
-
-            private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
-            {
-                string file = ((MGStringLexerSource)source).Path;
-                return new ContentIdentity(file, null, line + "," + column);
-            }
-
-            public void handleSourceChange(Source source, string ev)
-            {
-
-            }
+            _context.Logger.LogWarning(null, CreateContentIdentity(source, line, column), msg);
         }
+
+        void PreprocessorListener.handleError(Source source, int line, int column, string msg)
+        {
+            throw new InvalidContentException(msg, CreateContentIdentity(source, line, column));
+        }
+
+        private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
+        {
+            string file = ((MGStringLexerSource)source).Path;
+            return new ContentIdentity(file, null, line + "," + column);
+        }
+
+        void PreprocessorListener.handleSourceChange(Source source, string ev)
+        {
+
+        }
+
+        #endregion PreprocessorListener
+
     }
 }
