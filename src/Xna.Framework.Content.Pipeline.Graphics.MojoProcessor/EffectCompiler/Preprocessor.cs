@@ -94,19 +94,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 }
             }
 
-            // Add the include dependencies so that if they change
-            // it will trigger a rebuild of this effect.
-            foreach (string dep in _dependencies)
-                _context.AddDependency(dep);
-
             return result.ToString();
         }
 
-        private void AddDependency(string filename)
-        {
-            if (!_dependencies.Contains(filename))
-                _dependencies.Add(filename);
-        }
 
         #region PreprocessorListener
     
@@ -135,8 +125,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 
         #region VirtualFileSystem
-
-        private readonly List<string> _dependencies = new List<string>();
 
         VirtualFile VirtualFileSystem.getFile(string path)
         {
@@ -189,7 +177,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             public Source getSource()
             {
-                ((Preprocessor)_virtualFileSystem).AddDependency(_path);
+                // Add the include dependencies so that if they change
+                // it will trigger a rebuild of this effect.
+                ((Preprocessor)_virtualFileSystem)._context.AddDependency(_path);
 
                 return new PPStringLexerSource(AppendNewlineIfNonePresent(File.ReadAllText(_path)), true, _path);
             }
