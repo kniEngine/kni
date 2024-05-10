@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             string effectCode = _input.EffectCode;
             effectCode = effectCode.Replace("#line", "//--WORKAROUND#line");
 
-            Source inputSource = new PPStringLexerSource(effectCode, true, _fullFilePath);
+            StringLexerSource inputSource = new PPStringLexerSource(effectCode, true, _fullFilePath);
             _pp.addInput(inputSource);
 
             StringBuilder result = new StringBuilder();
@@ -182,7 +182,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 if (!effectCode.EndsWith("\n"))
                     effectCode += "\n";
 
-                return new PPStringLexerSource(effectCode, true, _path);
+                StringLexerSource source = new PPStringLexerSource(effectCode, true, _path);
+                return source;
             }
 
         }
