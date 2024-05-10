@@ -13,7 +13,7 @@ using CppNet;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    public class Preprocessor : PreprocessorListener
+    public class Preprocessor : PreprocessorListener, VirtualFileSystem
     {
         private EffectContent _input;
         private ContentProcessorContext _context;
@@ -30,6 +30,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             _pp.EmitExtraLineInfo = false;
             _pp.addFeature(Feature.LINEMARKERS);
             _pp.setListener(this);
+            _pp.setFileSystem(this);
         }
 
         internal void AddMacro(string name, string value)
@@ -39,9 +40,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         public string Preprocess()
         {
-            List<string> dependencies = new List<string>();
-
-            _pp.setFileSystem(new MGFileSystem(dependencies));
             _pp.setQuoteIncludePath(new List<string> { Path.GetDirectoryName(_fullFilePath) });
 
             string effectCode = _input.EffectCode;
@@ -98,31 +96,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             // Add the include dependencies so that if they change
             // it will trigger a rebuild of this effect.
-            foreach (string dep in dependencies)
+            foreach (string dep in _dependencies)
                 _context.AddDependency(dep);
 
             return result.ToString();
         }
 
-        private class MGFileSystem : VirtualFileSystem
+        #region VirtualFileSystem
+
+        private readonly List<string> _dependencies = new List<string>();
+
+        VirtualFile VirtualFileSystem.getFile(string path)
         {
-            private readonly List<string> _dependencies;
-
-            public MGFileSystem(List<string> dependencies)
-            {
-                _dependencies = dependencies;
-            }
-
-            public VirtualFile getFile(string path)
-            {
-                return new MGFile(path, _dependencies);
-            }
-
-            public VirtualFile getFile(string dir, string name)
-            {
-                return new MGFile(Path.Combine(dir, name), _dependencies);
-            }
+            return new MGFile(path, _dependencies);
         }
+
+        VirtualFile VirtualFileSystem.getFile(string dir, string name)
+        {
+            return new MGFile(Path.Combine(dir, name), _dependencies);
+        }
+
+        #endregion VirtualFileSystem
 
         private class MGFile : VirtualFile
         {
