@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         // resolving all #includes and macros.
         private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath)
         {
-            Preprocessor pp = new Preprocessor();
+            Preprocessor pp = new Preprocessor(input, context, fullFilePath);
 
             pp.AddMacro("__KNIFX__", "1");
 
@@ -166,8 +166,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 pp.AddMacro("DEBUG", "1");
             }
 
-            foreach (KeyValuePair<string,string> macro in shaderProfile.GetMacros())
-                pp.AddMacro(macro.Key, macro.Value);
+            pp.AddMacros(shaderProfile.GetMacros());
 
             if (!string.IsNullOrEmpty(Defines))
             {
@@ -191,7 +190,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
-            string effectCode = pp.Preprocess(input, context, fullFilePath);
+            string effectCode = pp.Preprocess();
 
             return effectCode;
         }
