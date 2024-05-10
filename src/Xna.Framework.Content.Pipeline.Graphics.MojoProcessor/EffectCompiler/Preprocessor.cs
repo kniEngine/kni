@@ -108,6 +108,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 _dependencies.Add(filename);
         }
 
+        #region PreprocessorListener
+    
+        void PreprocessorListener.handleWarning(Source source, int line, int column, string msg)
+        {
+            _context.Logger.LogWarning(null, CreateContentIdentity(source, line, column), msg);
+        }
+
+        void PreprocessorListener.handleError(Source source, int line, int column, string msg)
+        {
+            throw new InvalidContentException(msg, CreateContentIdentity(source, line, column));
+        }
+
+        private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
+        {
+            string file = ((PPStringLexerSource)source).Path;
+            return new ContentIdentity(file, null, line + "," + column);
+        }
+
+        void PreprocessorListener.handleSourceChange(Source source, string ev)
+        {
+
+        }
+
+        #endregion PreprocessorListener
+
+
         #region VirtualFileSystem
 
         private readonly List<string> _dependencies = new List<string>();
@@ -123,6 +149,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         }
 
         #endregion VirtualFileSystem
+
 
         private class PPVirtualFile : VirtualFile
         {
@@ -185,31 +212,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 Path = fileName;
             }
         }
-
-        #region PreprocessorListener
-    
-        void PreprocessorListener.handleWarning(Source source, int line, int column, string msg)
-        {
-            _context.Logger.LogWarning(null, CreateContentIdentity(source, line, column), msg);
-        }
-
-        void PreprocessorListener.handleError(Source source, int line, int column, string msg)
-        {
-            throw new InvalidContentException(msg, CreateContentIdentity(source, line, column));
-        }
-
-        private static ContentIdentity CreateContentIdentity(Source source, int line, int column)
-        {
-            string file = ((PPStringLexerSource)source).Path;
-            return new ContentIdentity(file, null, line + "," + column);
-        }
-
-        void PreprocessorListener.handleSourceChange(Source source, string ev)
-        {
-
-        }
-
-        #endregion PreprocessorListener
 
     }
 }
