@@ -49,17 +49,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             StringBuilder result = new StringBuilder();
 
-            bool endOfStream = false;
-            while (!endOfStream)
+            while (true)
             {
                 Token token = _pp.token();
-                switch (token.getType())
+                int tokenType = token.getType();
+
+                switch (tokenType)
                 {
                     case CppNet.Token.EOF:
-                        {
-                            endOfStream = true;
-                        }
-                        break;
+                        return result.ToString();
 
                     case CppNet.Token.CPPCOMMENT:
                         {
@@ -94,7 +92,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 }
             }
 
-            return result.ToString();
         }
 
 
