@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework
 
         private AndroidGameActivity _activity;
         private readonly Game _game;
-        private bool _hasWindowFocus = true;
+        private bool _isActivated = false;
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         private Rectangle _clientBounds;
@@ -89,9 +89,9 @@ namespace Microsoft.Xna.Framework
 
         void _activity_Resumed(object sender, EventArgs e)
         {
-            if (!_hasWindowFocus)
+            if (!_isActivated)
             {
-                _hasWindowFocus = true;
+                _isActivated = true;
                 OnActivated();
             }
 
@@ -107,18 +107,16 @@ namespace Microsoft.Xna.Framework
                 if (deviceManager != null)
                 {
                     ((IPlatformGraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
-
-                    this.GameView.RequestFocus();
                 }
             }
         }
 
         void _activity_Paused(object sender, EventArgs e)
         {
-            if (!_hasWindowFocus)
+            if (_isActivated)
             {
-                _hasWindowFocus = true;
-                OnActivated();
+                _isActivated = false;
+                OnDeactivated();
             }
 
             _mediaPlayer_PrevState = MediaPlayer.State;
@@ -130,18 +128,18 @@ namespace Microsoft.Xna.Framework
 
         private void _activity_WindowFocused(object sender, EventArgs e)
         {
-            if (!_hasWindowFocus)
+            if (!_isActivated)
             {
-                _hasWindowFocus = true;
+                _isActivated = true;
                 OnActivated();
             }
         }
 
         private void _activity_WindowUnfocused(object sender, EventArgs e)
         {
-            if (_hasWindowFocus)
+            if (_isActivated)
             {
-                _hasWindowFocus = false;
+                _isActivated = false;
                 OnDeactivated();
             }
         }

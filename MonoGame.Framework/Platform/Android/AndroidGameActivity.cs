@@ -71,14 +71,11 @@ namespace Microsoft.Xna.Framework
         {
             base.OnPause();
 
-            if (_isActivityActive)
-            {
-                _isActivityActive = false;
+            _isActivityActive = false;
 
-                var handler = Paused;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
-            }
+            var handler = Paused;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 
             if (_orientationListener.CanDetectOrientation())
                 _orientationListener.Disable();
@@ -88,14 +85,11 @@ namespace Microsoft.Xna.Framework
         {
             base.OnResume();
 
-            if (!_isActivityActive)
-            {
-                _isActivityActive = true;
+            _isActivityActive = true;
 
-                var handler = Resumed;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
-            }
+            var handler = Resumed;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 
             if (Game != null)
             {
