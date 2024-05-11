@@ -107,8 +107,6 @@ namespace Microsoft.Xna.Framework
                 if (deviceManager != null)
                 {
                     ((IPlatformGraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
-
-                    this.GameView.RequestFocus();
                 }
             }
         }
