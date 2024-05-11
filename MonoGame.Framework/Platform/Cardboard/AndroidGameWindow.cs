@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework
 
         private AndroidGameActivity _activity;
         private readonly Game _game;
-        private bool _isActivated = true;
+        private bool _isActivated = false;
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         private Rectangle _clientBounds;
@@ -115,10 +115,10 @@ namespace Microsoft.Xna.Framework
 
         void _activity_Paused(object sender, EventArgs e)
         {
-            if (!_isActivated)
+            if (_isActivated)
             {
-                _isActivated = true;
-                OnActivated();
+                _isActivated = false;
+                OnDeactivated();
             }
 
             _mediaPlayer_PrevState = MediaPlayer.State;
