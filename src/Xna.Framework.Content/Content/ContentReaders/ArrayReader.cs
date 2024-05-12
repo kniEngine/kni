@@ -9,12 +9,12 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class ArrayReader<T> : ContentTypeReader<T[]>
     {
-        ContentTypeReader elementReader;
+        ContentTypeReader _elementReader;
 
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
             Type readerType = typeof(T);
-            elementReader = manager.GetTypeReader(readerType);
+            _elementReader = manager.GetTypeReader(readerType);
         }
 
         protected internal override T[] Read(ContentReader input, T[] existingInstance)
@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 for (uint i = 0; i < count; i++)
                 {
-                    array[i] = input.ReadObject<T>(elementReader);
+                    array[i] = input.ReadObject<T>(_elementReader);
                 }
             }
             else

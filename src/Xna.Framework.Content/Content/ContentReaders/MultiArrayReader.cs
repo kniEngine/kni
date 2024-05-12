@@ -9,12 +9,12 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class MultiArrayReader<T> : ContentTypeReader<Array>
     {
-        ContentTypeReader elementReader;
+        ContentTypeReader _elementReader;
 
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
             Type readerType = typeof(T);
-            elementReader = manager.GetTypeReader(readerType);
+            _elementReader = manager.GetTypeReader(readerType);
         }
 
         protected internal override Array Read(ContentReader input, Array existingInstance)
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 T value;
                 if (ReflectionHelpers.IsValueType(typeof(T)))
-                    value = input.ReadObject<T>(elementReader);
+                    value = input.ReadObject<T>(_elementReader);
                 else
                 {
                     int readerType = input.Read7BitEncodedInt();

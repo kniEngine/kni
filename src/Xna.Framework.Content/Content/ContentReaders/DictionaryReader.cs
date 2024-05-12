@@ -11,19 +11,19 @@ namespace Microsoft.Xna.Framework.Content
 
     internal class DictionaryReader<TKey, TValue> : ContentTypeReader<Dictionary<TKey, TValue>>
     {
-        ContentTypeReader keyReader;
-        ContentTypeReader valueReader;
+        ContentTypeReader _keyReader;
+        ContentTypeReader _valueReader;
         
-        Type keyType;
-        Type valueType;
+        Type _keyType;
+        Type _valueType;
         
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
-            keyType = typeof(TKey);
-            valueType = typeof(TValue);
+            _keyType = typeof(TKey);
+            _valueType = typeof(TValue);
             
-            keyReader = manager.GetTypeReader(keyType);
-            valueReader = manager.GetTypeReader(valueType);
+            _keyReader = manager.GetTypeReader(_keyType);
+            _valueReader = manager.GetTypeReader(_valueType);
         }
 
         public override bool CanDeserializeIntoExistingObject
@@ -41,16 +41,16 @@ namespace Microsoft.Xna.Framework.Content
             else
                 dictionary.Clear();
 
-            if (ReflectionHelpers.IsValueType(keyType))
+            if (ReflectionHelpers.IsValueType(_keyType))
             {
                 for (int i = 0; i < count; i++)
                 {
-                    TKey key = input.ReadObject<TKey>(keyReader);
+                    TKey key = input.ReadObject<TKey>(_keyReader);
 
                     TValue value;
-                    if (ReflectionHelpers.IsValueType(valueType))
+                    if (ReflectionHelpers.IsValueType(_valueType))
                     {
-                        value = input.ReadObject<TValue>(valueReader);
+                        value = input.ReadObject<TValue>(_valueReader);
                     }
                     else
                     {
@@ -73,9 +73,9 @@ namespace Microsoft.Xna.Framework.Content
                              : default(TKey);
 
                     TValue value;
-                    if (ReflectionHelpers.IsValueType(valueType))
+                    if (ReflectionHelpers.IsValueType(_valueType))
                     {
-                        value = input.ReadObject<TValue>(valueReader);
+                        value = input.ReadObject<TValue>(_valueReader);
                     }
                     else
                     {
