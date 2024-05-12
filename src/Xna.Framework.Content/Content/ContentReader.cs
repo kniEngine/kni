@@ -54,7 +54,10 @@ namespace Microsoft.Xna.Framework.Content
 
         internal object ReadAsset<T>()
         {
-            InitializeTypeReaders();
+            typeReaderManager = new ContentTypeReaderManager();
+            typeReaders = typeReaderManager.LoadAssetReaders(this);
+            sharedResourceCount = Read7BitEncodedInt();
+            sharedResourceFixups = new List<KeyValuePair<int, Action<object>>>();
 
             // Read primary object
             T result = ReadObject<T>();
@@ -63,14 +66,6 @@ namespace Microsoft.Xna.Framework.Content
             ReadSharedResources();
             
             return result;
-        }
-
-        internal void InitializeTypeReaders()
-        {
-            typeReaderManager = new ContentTypeReaderManager();
-            typeReaders = typeReaderManager.LoadAssetReaders(this);
-            sharedResourceCount = Read7BitEncodedInt();
-            sharedResourceFixups = new List<KeyValuePair<int, Action<object>>>();
         }
 
         internal void ReadSharedResources()
