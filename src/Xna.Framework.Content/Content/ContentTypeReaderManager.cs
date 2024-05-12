@@ -74,31 +74,33 @@ namespace Microsoft.Xna.Framework.Content
                     int readerTypeVersion = reader.ReadInt32();
 
                     ContentTypeReader typeReader;
+                    Type typeReaderType;
                     if (!_contentTypeReadersCache.ContainsKey(readerTypeName))
                     {
-                        Type typeReaderType = ResolveReaderType(readerTypeName);
+                        typeReaderType = ResolveReaderType(readerTypeName);
                         _contentTypeReadersCache.Add(readerTypeName, typeReaderType);
-
-                        System.Diagnostics.Debug.Assert(!_contentReadersCache.ContainsKey(typeReaderType));
-
-                        typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
-                        needsInitialize[i] = true;
-                        _contentReadersCache.Add(typeReaderType, typeReader);
-
-                        if (readerTypeVersion != typeReader.TypeVersion)
-                        {
-                            throw new ContentLoadException(
-                                String.Format("{0} of TypeVersion {1} does not match reader of TypeVersion {2}.",
-                                    typeReader.TargetType.Name, readerTypeVersion, typeReader.TypeVersion));
-                        }
                     }
                     else
                     {
-                        Type typeReaderType = _contentTypeReadersCache[readerTypeName];
+                        typeReaderType = _contentTypeReadersCache[readerTypeName];
+                    }
 
-                        System.Diagnostics.Debug.Assert(_contentReadersCache.ContainsKey(typeReaderType));
-
+                    if (!_contentReadersCache.ContainsKey(typeReaderType))
+                    {
+                        typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
+                        needsInitialize[i] = true;
+                        _contentReadersCache.Add(typeReaderType, typeReader);
+                    }
+                    else
+                    {
                         typeReader = _contentReadersCache[typeReaderType];
+                    }
+
+                    if (readerTypeVersion != typeReader.TypeVersion)
+                    {
+                        throw new ContentLoadException(
+                            String.Format("{0} of TypeVersion {1} does not match reader of TypeVersion {2}.",
+                                typeReader.TargetType.Name, readerTypeVersion, typeReader.TypeVersion));
                     }
 
                     contentReaders[i] = typeReader;
