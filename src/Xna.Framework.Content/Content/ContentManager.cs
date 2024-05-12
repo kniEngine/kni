@@ -200,7 +200,6 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ObjectDisposedException("ContentManager");
                         
             string originalAssetName = assetName;
-            object result = null;
 
             // Try to load as XNB file
             Stream stream = OpenStream(assetName);
@@ -208,14 +207,14 @@ namespace Microsoft.Xna.Framework.Content
             {
                 using (ContentReader reader = GetContentReaderFromXnb(assetName, stream, xnbReader, recordDisposableObject))
                 {
-                    result = reader.ReadAsset<T>();
+                    object result = reader.ReadAsset<T>();
+
+                    if (result == null)
+                        throw new ContentLoadException("Could not load " + originalAssetName + " asset!");
+
+                    return (T)result;
                 }
             }
-            
-            if (result == null)
-                throw new ContentLoadException("Could not load " + originalAssetName + " asset!");
-
-            return (T)result;
         }
 
         private ContentReader GetContentReaderFromXnb(string originalAssetName, Stream stream, BinaryReader xnbReader, Action<IDisposable> recordDisposableObject)
