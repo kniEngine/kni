@@ -21,6 +21,7 @@ namespace Microsoft.Xna.Framework.Content
 
         private static readonly string _contentAssemblyName;
         private static readonly string _contentGraphicsAssemblyName;
+        private static readonly string _contentAudioAssemblyName;
         private static readonly string _contentMediaAssemblyName;
 
         private static readonly bool _isRunningOnNetCore;
@@ -32,6 +33,7 @@ namespace Microsoft.Xna.Framework.Content
             _contentReadersCache = new Dictionary<Type, ContentTypeReader>(255);
             _contentAssemblyName = ReflectionHelpers.GetAssembly(typeof(ContentTypeReaderManager)).FullName;
             _contentGraphicsAssemblyName = "Xna.Framework.Graphics";
+            _contentAudioAssemblyName = "Xna.Framework.Audio";
             _contentMediaAssemblyName = "Xna.Framework.Media";
 
             _isRunningOnNetCore = ReflectionHelpers.GetAssembly(typeof(System.Object)).GetName().Name == "System.Private.CoreLib";
@@ -237,7 +239,7 @@ namespace Microsoft.Xna.Framework.Content
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName + string.Format(", {0}", "Xna.Framework.Audio");
+            resolvedReaderTypeName = readerTypeName + string.Format(", {0}", _contentAudioAssemblyName);
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
@@ -258,7 +260,7 @@ namespace Microsoft.Xna.Framework.Content
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Audio"));
+            resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", _contentAudioAssemblyName));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
