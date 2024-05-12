@@ -232,22 +232,22 @@ namespace Microsoft.Xna.Framework.Content
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName + ", MonoGame.Framework";
+            resolvedReaderTypeName = readerTypeName + ", " + "MonoGame.Framework";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Audio";
+            resolvedReaderTypeName = readerTypeName + ", " + "Xna.Framework.Audio";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Media";
+            resolvedReaderTypeName = readerTypeName + ", " + "Xna.Framework.Media";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Graphics";
+            resolvedReaderTypeName = readerTypeName + ", " + "Xna.Framework.Graphics";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
