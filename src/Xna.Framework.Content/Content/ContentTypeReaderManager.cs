@@ -237,7 +237,7 @@ namespace Microsoft.Xna.Framework.Content
                 return readerType;
 
             resolvedReaderTypeName = readerTypeName;
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", ", Xna.Framework.Audio"));
+            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Audio"));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
