@@ -73,19 +73,27 @@ namespace Microsoft.Xna.Framework.Content
                     string readerTypeName = reader.ReadString();
                     int readerTypeVersion = reader.ReadInt32();
 
+                    ContentTypeReader typeReader;
                     Type typeReaderType;
-                    if (!_contentTypeReadersCache.TryGetValue(readerTypeName, out typeReaderType))
+                    if (!_contentTypeReadersCache.ContainsKey(readerTypeName))
                     {
                         typeReaderType = ResolveReaderType(readerTypeName);
                         _contentTypeReadersCache.Add(readerTypeName, typeReaderType);
                     }
+                    else
+                    {
+                        typeReaderType = _contentTypeReadersCache[readerTypeName];
+                    }
 
-                    ContentTypeReader typeReader;
-                    if (!_contentReadersCache.TryGetValue(typeReaderType, out typeReader))
+                    if (!_contentReadersCache.ContainsKey(typeReaderType))
                     {
                         typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
                         needsInitialize[i] = true;
                         _contentReadersCache.Add(typeReaderType, typeReader);
+                    }
+                    else
+                    {
+                        typeReader = _contentReadersCache[typeReaderType];
                     }
 
                     if (readerTypeVersion != typeReader.TypeVersion)
