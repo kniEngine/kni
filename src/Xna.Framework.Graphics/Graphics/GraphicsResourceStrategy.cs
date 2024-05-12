@@ -166,7 +166,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 _deviceStrategy.ContextLost -= this.GraphicsDeviceStrategy_ContextLost;
                 _deviceStrategy.Disposing -= this.GraphicsDeviceStrategy_Disposing;
 
-                _resourceStrategyRef.Target = null;
+                if (_resourceStrategyRef.Target != null)
+                    _resourceStrategyRef.Target = null;
                 _deviceStrategy = null;
             }
         }
