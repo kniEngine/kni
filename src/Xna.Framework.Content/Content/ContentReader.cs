@@ -53,11 +53,11 @@ namespace Microsoft.Xna.Framework.Content
 
         internal T ReadAsset<T>()
         {
-            int typeReaderCount = this.Read7BitEncodedInt();
+            int typeReaderCount = base.Read7BitEncodedInt();
             _typeReaderManager = new ContentTypeReaderManager();
             _typeReaders = _typeReaderManager.LoadAssetReaders(this, typeReaderCount);
 
-            int sharedResourceCount = this.Read7BitEncodedInt();
+            int sharedResourceCount = base.Read7BitEncodedInt();
             _sharedResourceFixups = new List<KeyValuePair<int, Action<object>>>();
 
             // Read primary object
@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadObject<T>(T existingInstance)
         {
-            int typeReaderIndex = Read7BitEncodedInt();
+            int typeReaderIndex = base.Read7BitEncodedInt();
             if (typeReaderIndex == 0)
                 return existingInstance;
 
@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Framework.Content
 
         public void ReadSharedResource<T>(Action<T> fixup)
         {
-            int index = Read7BitEncodedInt();
+            int index = base.Read7BitEncodedInt();
             if (index > 0)
             {
                 _sharedResourceFixups.Add(new KeyValuePair<int, Action<object>>(index - 1, delegate(object v)
