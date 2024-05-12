@@ -24,6 +24,8 @@
         <dependency id="nkast.Xna.Framework.Graphics" version="$version$" />
         <dependency id="nkast.Xna.Framework.Audio" version="$version$" />
         <dependency id="nkast.Xna.Framework.Media" version="$version$" />
+        <dependency id="nkast.Xna.Framework.Input" version="$version$" />
+        <dependency id="nkast.Xna.Framework.Game" version="$version$" />
     </dependencies>
     
   </metadata>
