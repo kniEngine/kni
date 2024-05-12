@@ -57,10 +57,10 @@ namespace Microsoft.Xna.Framework.Content
             PreserveContentTypeReaders();
 
             // The first content byte i read tells me the number of content readers in this XNB file
-            int numberOfReaders = reader.Read7BitEncodedInt();
-            ContentTypeReader[] contentReaders = new ContentTypeReader[numberOfReaders];
-            BitArray needsInitialize = new BitArray(numberOfReaders);
-            _contentReaders = new Dictionary<Type, ContentTypeReader>(numberOfReaders);
+            int typeReaderCount = reader.Read7BitEncodedInt();
+            ContentTypeReader[] contentReaders = new ContentTypeReader[typeReaderCount];
+            BitArray needsInitialize = new BitArray(typeReaderCount);
+            _contentReaders = new Dictionary<Type, ContentTypeReader>(typeReaderCount);
 
             // Lock until we're done allocating and initializing any new
             // content type readers...  this ensures we can load content
@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 // For each reader in the file, we read out the length of the string which contains the type of the reader,
                 // then we read out the string. Finally we instantiate an instance of that reader using reflection
-                for (int i = 0; i < numberOfReaders; i++)
+                for (int i = 0; i < typeReaderCount; i++)
                 {
                     // This string tells us what reader we need to decode the following data
                     string readerTypeName = reader.ReadString();
