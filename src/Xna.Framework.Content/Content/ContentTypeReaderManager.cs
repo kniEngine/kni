@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Content
 
         private static readonly string _contentAssemblyName;
         private static readonly string _contentGraphicsAssemblyName;
-        private static readonly string _contentVideoAssemblyName;
+        private static readonly string _contentMediaAssemblyName;
 
         private static readonly bool _isRunningOnNetCore;
 
@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Content
             _contentReadersCache = new Dictionary<Type, ContentTypeReader>(255);
             _contentAssemblyName = ReflectionHelpers.GetAssembly(typeof(ContentTypeReaderManager)).FullName;
             _contentGraphicsAssemblyName = "Xna.Framework.Graphics";
-            _contentVideoAssemblyName = "Xna.Framework.Media";
+            _contentMediaAssemblyName = "Xna.Framework.Media";
 
             _isRunningOnNetCore = ReflectionHelpers.GetAssembly(typeof(System.Object)).GetName().Name == "System.Private.CoreLib";
 
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework.Content
             // map XNA build-in TypeReaders
             resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Graphics", string.Format(", {0}", _contentGraphicsAssemblyName));
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Video", string.Format(", {0}", _contentVideoAssemblyName));
+            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Video", string.Format(", {0}", _contentMediaAssemblyName));
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", _contentAssemblyName));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
