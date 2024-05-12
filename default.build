@@ -73,8 +73,8 @@
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Graphics\Xna.Framework.Content.Pipeline.Graphics.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/Content.Pipeline.Builder.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\          -BasePath .  -Version ${nugetPackageVersion}-rc  -Properties Configuration=Release" />
-    <exec program="${nugetPath}" commandline="pack NuGetPackages/Content.Pipeline.Builder.Windows.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}-rc  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/Content.Pipeline.Builder.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\          -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
+    <exec program="${nugetPath}" commandline="pack NuGetPackages/Content.Pipeline.Builder.Windows.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
 
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.Android.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
