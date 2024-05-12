@@ -52,12 +52,10 @@ namespace Microsoft.Xna.Framework.Content
             return null;
         }
 
-        internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
+        internal ContentTypeReader[] LoadAssetReaders(ContentReader reader, int typeReaderCount)
         {
             PreserveContentTypeReaders();
 
-            // The first content byte i read tells me the number of content readers in this XNB file
-            int typeReaderCount = reader.Read7BitEncodedInt();
             ContentTypeReader[] contentReaders = new ContentTypeReader[typeReaderCount];
             BitArray needsInitialize = new BitArray(typeReaderCount);
             _contentReaders = new Dictionary<Type, ContentTypeReader>(typeReaderCount);

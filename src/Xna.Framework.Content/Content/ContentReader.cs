@@ -53,8 +53,9 @@ namespace Microsoft.Xna.Framework.Content
 
         internal object ReadAsset<T>()
         {
+            int typeReaderCount = this.Read7BitEncodedInt();
             typeReaderManager = new ContentTypeReaderManager();
-            typeReaders = typeReaderManager.LoadAssetReaders(this);
+            typeReaders = typeReaderManager.LoadAssetReaders(this, typeReaderCount);
 
             int sharedResourceCount = this.Read7BitEncodedInt();
             sharedResourceFixups = new List<KeyValuePair<int, Action<object>>>();
