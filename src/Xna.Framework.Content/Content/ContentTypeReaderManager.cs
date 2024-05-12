@@ -79,31 +79,19 @@ namespace Microsoft.Xna.Framework.Content
                         Type typeReaderType = ResolveReaderType(readerTypeName);
                         _contentTypeReadersCache.Add(readerTypeName, typeReaderType);
 
-                        if (!_contentReadersCache.ContainsKey(typeReaderType))
-                        {
-                            typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
-                            needsInitialize[i] = true;
-                            _contentReadersCache.Add(typeReaderType, typeReader);
-                        }
-                        else
-                        {
-                            typeReader = _contentReadersCache[typeReaderType];
-                        }
+                        System.Diagnostics.Debug.Assert(!_contentReadersCache.ContainsKey(typeReaderType));
+
+                        typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
+                        needsInitialize[i] = true;
+                        _contentReadersCache.Add(typeReaderType, typeReader);
                     }
                     else
                     {
                         Type typeReaderType = _contentTypeReadersCache[readerTypeName];
 
-                        if (!_contentReadersCache.ContainsKey(typeReaderType))
-                        {
-                            typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
-                            needsInitialize[i] = true;
-                            _contentReadersCache.Add(typeReaderType, typeReader);
-                        }
-                        else
-                        {
-                            typeReader = _contentReadersCache[typeReaderType];
-                        }
+                        System.Diagnostics.Debug.Assert(_contentReadersCache.ContainsKey(typeReaderType));
+
+                        typeReader = _contentReadersCache[typeReaderType];
                     }
 
                     if (readerTypeVersion != typeReader.TypeVersion)
