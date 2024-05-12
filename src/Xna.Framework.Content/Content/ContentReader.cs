@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Framework.Content
         private ContentTypeReader[] typeReaders;
         internal int version;
         internal int xnbLength;
-        internal int sharedResourceCount;
 
         internal ContentTypeReader[] TypeReaders
         {
@@ -56,24 +55,24 @@ namespace Microsoft.Xna.Framework.Content
         {
             typeReaderManager = new ContentTypeReaderManager();
             typeReaders = typeReaderManager.LoadAssetReaders(this);
-            sharedResourceCount = Read7BitEncodedInt();
+
+            int sharedResourceCount = this.Read7BitEncodedInt();
             sharedResourceFixups = new List<KeyValuePair<int, Action<object>>>();
 
             // Read primary object
             T result = ReadObject<T>();
 
             // Read shared resources
-            ReadSharedResources();
+            if (sharedResourceCount > 0)
+                ReadSharedResources(sharedResourceCount);
             
             return result;
         }
 
-        internal void ReadSharedResources()
+        internal void ReadSharedResources(int sharedResourceCount)
         {
-            if (sharedResourceCount <= 0)
-                return;
-
             object[] sharedResources = new object[sharedResourceCount];
+
             for (int i = 0; i < sharedResourceCount; ++i)
             {
                 object existingInstance = null;
