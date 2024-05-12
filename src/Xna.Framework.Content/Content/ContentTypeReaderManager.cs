@@ -241,6 +241,10 @@ namespace Microsoft.Xna.Framework.Content
                 return readerType;
 
             // map XNA build-in TypeReaders
+            resolvedReaderTypeName = readerTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", "Xna.Framework")); // e.g. "Microsoft.Xna.Framework.Content.ListReader`1[[Microsoft.Xna.Framework.Rectangle, Microsoft.Xna.Framework]]
+            readerType = Type.GetType(resolvedReaderTypeName);
+            if (readerType != null)
+                return readerType;
             resolvedReaderTypeName = readerTypeName + string.Format(", {0}", _contentGraphicsAssemblyName);
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
@@ -255,6 +259,10 @@ namespace Microsoft.Xna.Framework.Content
                 return readerType;
 
             // map MonoGame build-in TypeReaders
+            resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework")); // e.g. "Microsoft.Xna.Framework.Content.ListReader`1[[Microsoft.Xna.Framework.Rectangle, MonoGame.Framework]]
+            readerType = Type.GetType(resolvedReaderTypeName);
+            if (readerType != null)
+                return readerType;
             resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", _contentAssemblyName));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
