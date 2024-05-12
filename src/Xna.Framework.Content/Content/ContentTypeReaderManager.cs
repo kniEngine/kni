@@ -74,26 +74,36 @@ namespace Microsoft.Xna.Framework.Content
                     int readerTypeVersion = reader.ReadInt32();
 
                     ContentTypeReader typeReader;
-                    Type typeReaderType;
                     if (!_contentTypeReadersCache.ContainsKey(readerTypeName))
                     {
-                        typeReaderType = ResolveReaderType(readerTypeName);
+                        Type typeReaderType = ResolveReaderType(readerTypeName);
                         _contentTypeReadersCache.Add(readerTypeName, typeReaderType);
-                    }
-                    else
-                    {
-                        typeReaderType = _contentTypeReadersCache[readerTypeName];
-                    }
 
-                    if (!_contentReadersCache.ContainsKey(typeReaderType))
-                    {
-                        typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
-                        needsInitialize[i] = true;
-                        _contentReadersCache.Add(typeReaderType, typeReader);
+                        if (!_contentReadersCache.ContainsKey(typeReaderType))
+                        {
+                            typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
+                            needsInitialize[i] = true;
+                            _contentReadersCache.Add(typeReaderType, typeReader);
+                        }
+                        else
+                        {
+                            typeReader = _contentReadersCache[typeReaderType];
+                        }
                     }
                     else
                     {
-                        typeReader = _contentReadersCache[typeReaderType];
+                        Type typeReaderType = _contentTypeReadersCache[readerTypeName];
+
+                        if (!_contentReadersCache.ContainsKey(typeReaderType))
+                        {
+                            typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
+                            needsInitialize[i] = true;
+                            _contentReadersCache.Add(typeReaderType, typeReader);
+                        }
+                        else
+                        {
+                            typeReader = _contentReadersCache[typeReaderType];
+                        }
                     }
 
                     if (readerTypeVersion != typeReader.TypeVersion)
