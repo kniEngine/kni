@@ -8,18 +8,18 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class NullableReader<T> : ContentTypeReader<T?> where T : struct
     {
-        ContentTypeReader elementReader;
+        ContentTypeReader _elementReader;
 
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {			
             Type readerType = typeof(T);
-            elementReader = manager.GetTypeReader(readerType);
+            _elementReader = manager.GetTypeReader(readerType);
         }
         
         protected internal override T? Read(ContentReader input, T? existingInstance)
         {
             if(input.ReadBoolean())
-                return input.ReadObject<T>(elementReader);
+                return input.ReadObject<T>(_elementReader);
             
             return null;
         }

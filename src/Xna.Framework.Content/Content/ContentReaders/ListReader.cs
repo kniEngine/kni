@@ -10,12 +10,12 @@ namespace Microsoft.Xna.Framework.Content
 {
     internal class ListReader<T> : ContentTypeReader<List<T>>
     {
-        ContentTypeReader elementReader;
+        ContentTypeReader _elementReader;
 
         protected internal override void Initialize(ContentTypeReaderManager manager)
         {
             Type readerType = typeof(T);
-            elementReader = manager.GetTypeReader(readerType);
+            _elementReader = manager.GetTypeReader(readerType);
         }
 
         public override bool CanDeserializeIntoExistingObject
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 for (int i = 0; i < count; i++)
                 {
-                    list.Add(input.ReadObject<T>(elementReader));
+                    list.Add(input.ReadObject<T>(_elementReader));
                 }
             }
             else

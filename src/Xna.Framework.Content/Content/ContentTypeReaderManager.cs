@@ -52,15 +52,13 @@ namespace Microsoft.Xna.Framework.Content
             return null;
         }
 
-        internal ContentTypeReader[] LoadAssetReaders(ContentReader reader)
+        internal ContentTypeReader[] LoadAssetReaders(ContentReader reader, int typeReaderCount)
         {
             PreserveContentTypeReaders();
 
-            // The first content byte i read tells me the number of content readers in this XNB file
-            int numberOfReaders = reader.Read7BitEncodedInt();
-            ContentTypeReader[] contentReaders = new ContentTypeReader[numberOfReaders];
-            BitArray needsInitialize = new BitArray(numberOfReaders);
-            _contentReaders = new Dictionary<Type, ContentTypeReader>(numberOfReaders);
+            ContentTypeReader[] contentReaders = new ContentTypeReader[typeReaderCount];
+            BitArray needsInitialize = new BitArray(typeReaderCount);
+            _contentReaders = new Dictionary<Type, ContentTypeReader>(typeReaderCount);
 
             // Lock until we're done allocating and initializing any new
             // content type readers...  this ensures we can load content
@@ -69,32 +67,38 @@ namespace Microsoft.Xna.Framework.Content
             {
                 // For each reader in the file, we read out the length of the string which contains the type of the reader,
                 // then we read out the string. Finally we instantiate an instance of that reader using reflection
-                for (int i = 0; i < numberOfReaders; i++)
+                for (int i = 0; i < typeReaderCount; i++)
                 {
                     // This string tells us what reader we need to decode the following data
                     string readerTypeName = reader.ReadString();
                     int readerTypeVersion = reader.ReadInt32();
 
-                    Type typeReaderType;
-                    if (!_contentTypeReadersCache.TryGetValue(readerTypeName, out typeReaderType))
-                    {
-                        typeReaderType = ResolveReaderType(readerTypeName);
-                        _contentTypeReadersCache.Add(readerTypeName, typeReaderType);
-                    }
-
                     ContentTypeReader typeReader;
-                    if (!_contentReadersCache.TryGetValue(typeReaderType, out typeReader))
+                    if (!_contentTypeReadersCache.ContainsKey(readerTypeName))
                     {
+                        Type typeReaderType = ResolveReaderType(readerTypeName);
+                        _contentTypeReadersCache.Add(readerTypeName, typeReaderType);
+
+                        System.Diagnostics.Debug.Assert(!_contentReadersCache.ContainsKey(typeReaderType));
+
                         typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
                         needsInitialize[i] = true;
                         _contentReadersCache.Add(typeReaderType, typeReader);
-                    }
 
-                    if (readerTypeVersion != typeReader.TypeVersion)
+                        if (readerTypeVersion != typeReader.TypeVersion)
+                        {
+                            throw new ContentLoadException(
+                                String.Format("{0} of TypeVersion {1} does not match reader of TypeVersion {2}.",
+                                    typeReader.TargetType.Name, readerTypeVersion, typeReader.TypeVersion));
+                        }
+                    }
+                    else
                     {
-                        throw new ContentLoadException(
-                            String.Format("{0} of TypeVersion {1} does not match reader of TypeVersion {2}.",
-                                typeReader.TargetType.Name, readerTypeVersion, typeReader.TypeVersion));
+                        Type typeReaderType = _contentTypeReadersCache[readerTypeName];
+
+                        System.Diagnostics.Debug.Assert(_contentReadersCache.ContainsKey(typeReaderType));
+
+                        typeReader = _contentReadersCache[typeReaderType];
                     }
 
                     contentReaders[i] = typeReader;
@@ -202,21 +206,27 @@ namespace Microsoft.Xna.Framework.Content
             string resolvedReaderTypeName;
             Type readerType;
 
-            // map net.framework (.net4) to core.net (.net5 or later)
-            if (readerTypeName.Contains(", mscorlib") && _isRunningOnNetCore)
+            if (_isRunningOnNetCore)
             {
-                resolvedReaderTypeName = readerTypeName.Replace(", mscorlib", ", System.Private.CoreLib");
-                readerType = Type.GetType(resolvedReaderTypeName);
-                if (readerType != null)
-                    return readerType;
+                // map net.framework (.net4.x) to core.net (.net5 or later)
+                if (readerTypeName.Contains(", mscorlib"))
+                {
+                    resolvedReaderTypeName = readerTypeName.Replace(", mscorlib", ", System.Private.CoreLib");
+                    readerType = Type.GetType(resolvedReaderTypeName);
+                    if (readerType != null)
+                        return readerType;
+                }
             }
-            // map core.net (.net5 or later) to net.framework (.net4) 
-            if (readerTypeName.Contains(", System.Private.CoreLib") && !_isRunningOnNetCore)
+            else // (!_isRunningOnNetCore)
             {
-                resolvedReaderTypeName = readerTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
-                readerType = Type.GetType(resolvedReaderTypeName);
-                if (readerType != null)
-                    return readerType;
+                // map core.net (.net5 or later) to net.framework (.net4)
+                if (readerTypeName.Contains(", System.Private.CoreLib"))
+                {
+                    resolvedReaderTypeName = readerTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
+                    readerType = Type.GetType(resolvedReaderTypeName);
+                    if (readerType != null)
+                        return readerType;
+                }
             }
 
             // map XNA build-in TypeReaders
