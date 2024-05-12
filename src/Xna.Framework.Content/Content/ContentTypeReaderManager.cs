@@ -203,7 +203,6 @@ namespace Microsoft.Xna.Framework.Content
             // map net.framework (.net4) to core.net (.net5 or later)
             if (readerTypeName.Contains(", mscorlib") && _isRunningOnNetCore)
             {
-                resolvedReaderTypeName = readerTypeName;
                 resolvedReaderTypeName = readerTypeName.Replace(", mscorlib", ", System.Private.CoreLib");
                 readerType = Type.GetType(resolvedReaderTypeName);
                 if (readerType != null)
@@ -212,8 +211,7 @@ namespace Microsoft.Xna.Framework.Content
             // map core.net (.net5 or later) to net.framework (.net4) 
             if (readerTypeName.Contains(", System.Private.CoreLib") && !_isRunningOnNetCore)
             {
-                resolvedReaderTypeName = readerTypeName;
-                resolvedReaderTypeName = resolvedReaderTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
+                resolvedReaderTypeName = readerTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
                 readerType = Type.GetType(resolvedReaderTypeName);
                 if (readerType != null)
                     return readerType;
@@ -229,57 +227,48 @@ namespace Microsoft.Xna.Framework.Content
                 return readerType;
 
             // map XNA build-in TypeReaders
-            resolvedReaderTypeName = readerTypeName;
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", "Xna.Framework"));
+            resolvedReaderTypeName = readerTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", "Xna.Framework"));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = readerTypeName + ", MonoGame.Framework";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Audio";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Media";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = readerTypeName + ", Xna.Framework.Graphics";
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
             // map MonoGame build-in TypeReaders
-            resolvedReaderTypeName = readerTypeName;
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework"));
+            resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework"));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName;
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Audio"));
+            resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Audio"));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName;
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Media"));
+            resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Media"));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
 
-            resolvedReaderTypeName = readerTypeName;
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Graphics"));
+            resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", "Xna.Framework.Graphics"));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
