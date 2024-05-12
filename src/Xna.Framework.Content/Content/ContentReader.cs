@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.Content
             get { return ContentBufferPool.Current; }
         }
 
-        internal object ReadAsset<T>()
+        internal T ReadAsset<T>()
         {
             int typeReaderCount = this.Read7BitEncodedInt();
             _typeReaderManager = new ContentTypeReaderManager();

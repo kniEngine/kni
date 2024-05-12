@@ -207,12 +207,12 @@ namespace Microsoft.Xna.Framework.Content
             {
                 using (ContentReader reader = GetContentReaderFromXnb(assetName, stream, xnbReader, recordDisposableObject))
                 {
-                    object result = reader.ReadAsset<T>();
+                    T result = reader.ReadAsset<T>();
 
                     if (result == null)
                         throw new ContentLoadException("Could not load " + originalAssetName + " asset!");
 
-                    return (T)result;
+                    return result;
                 }
             }
         }
