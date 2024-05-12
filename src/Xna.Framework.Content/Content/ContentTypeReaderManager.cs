@@ -206,21 +206,27 @@ namespace Microsoft.Xna.Framework.Content
             string resolvedReaderTypeName;
             Type readerType;
 
-            // map net.framework (.net4) to core.net (.net5 or later)
-            if (readerTypeName.Contains(", mscorlib") && _isRunningOnNetCore)
+            if (_isRunningOnNetCore)
             {
-                resolvedReaderTypeName = readerTypeName.Replace(", mscorlib", ", System.Private.CoreLib");
-                readerType = Type.GetType(resolvedReaderTypeName);
-                if (readerType != null)
-                    return readerType;
+                // map net.framework (.net4.x) to core.net (.net5 or later)
+                if (readerTypeName.Contains(", mscorlib"))
+                {
+                    resolvedReaderTypeName = readerTypeName.Replace(", mscorlib", ", System.Private.CoreLib");
+                    readerType = Type.GetType(resolvedReaderTypeName);
+                    if (readerType != null)
+                        return readerType;
+                }
             }
-            // map core.net (.net5 or later) to net.framework (.net4) 
-            if (readerTypeName.Contains(", System.Private.CoreLib") && !_isRunningOnNetCore)
+            else // (!_isRunningOnNetCore)
             {
-                resolvedReaderTypeName = readerTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
-                readerType = Type.GetType(resolvedReaderTypeName);
-                if (readerType != null)
-                    return readerType;
+                // map core.net (.net5 or later) to net.framework (.net4)
+                if (readerTypeName.Contains(", System.Private.CoreLib"))
+                {
+                    resolvedReaderTypeName = readerTypeName.Replace(", System.Private.CoreLib", ", mscorlib");
+                    readerType = Type.GetType(resolvedReaderTypeName);
+                    if (readerType != null)
+                        return readerType;
+                }
             }
 
             // map XNA build-in TypeReaders
