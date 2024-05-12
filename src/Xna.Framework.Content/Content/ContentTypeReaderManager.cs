@@ -222,8 +222,8 @@ namespace Microsoft.Xna.Framework.Content
             // map XNA build-in TypeReaders
             resolvedReaderTypeName = readerTypeName;
             resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Graphics", string.Format(", {0}", _contentGraphicsAssemblyName));
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Video", string.Format(", {0}", _contentMediaAssemblyName));
-            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework", string.Format(", {0}", _contentAssemblyName));
+            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework.Video",    string.Format(", {0}", _contentMediaAssemblyName));
+            resolvedReaderTypeName = resolvedReaderTypeName.Replace(", Microsoft.Xna.Framework",          string.Format(", {0}", _contentAssemblyName));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
@@ -243,12 +243,10 @@ namespace Microsoft.Xna.Framework.Content
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
-
             resolvedReaderTypeName = readerTypeName + string.Format(", {0}", _contentMediaAssemblyName);
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
-
             resolvedReaderTypeName = readerTypeName + string.Format(", {0}", _contentGraphicsAssemblyName);
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
@@ -259,17 +257,14 @@ namespace Microsoft.Xna.Framework.Content
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
-
             resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", _contentAudioAssemblyName));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
-
             resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", _contentMediaAssemblyName));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
                 return readerType;
-
             resolvedReaderTypeName = readerTypeName.Replace(", MonoGame.Framework", string.Format(", {0}", _contentGraphicsAssemblyName));
             readerType = Type.GetType(resolvedReaderTypeName);
             if (readerType != null)
