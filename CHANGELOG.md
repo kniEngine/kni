@@ -1,5 +1,51 @@
 ﻿# Changelog
 
+## 3.12.9001 Release - May 12, 2024
+
+### Fixed
+ - fix FBX GlobalSettings transforms #1310, #1545.
+ - fix ContentCompiler.Compile(...) #1320.
+ - fix psShader error message #1333.
+ - fix TitleContainer.Current comments #1339.
+ - [Android] fix Android Game Initialization #1446, #1551.
+ - [UAP] fix UAP Game Initialization #1452.
+ - [iOS] fix iOS Game Initialization #1487.
+ - allow the Game loop to run without a GraphicsDeviceManager #1453, #1467.
+ - fix XAudio ADPCM fallback #1508.
+ - fix ProcessMesh() channel mapping to VertexElement #1538.
+ - fix ExternalReferenceWriter GetRuntimeReader(...) #1540.
+ - ModelProcessor default ColorKeyColor #1542.
+ - set MaterialProcessor Parameter default values #1546, #1547.
+ - Fixed resolve Type bug due to splitting out to different assemblies #1534, #1552.
+
+### Performance
+ - skip XNB compression for uncompressed files #1321, #1334.
+ - compact sizeof GamePadCapabilities #1430.
+ - compact sizeof JoystickHat #1471.
+ - optimize BufferPool array allocation #1526, #1527.
+ - optimize ProcessMesh #1537.
+
+### Changed
+ - [Content.Pipeline] upgrade Assimp to v5.2.4 #1305.
+ - renamed HandState.GetHandTransform(int handIndex) parameter #1312. 
+ - allow Shader Model 2_0 and 3_0 on DirectX targets #1333.
+ - Game.ResetElapsedTime() is no longer virtual #1439.
+ - GameTime properties are now readonly/protected. #1443.
+ - The library MonoGame.Framework is split into Xna.Framework.Input, and Xna.Framework.Game #1517, #1518. 
+
+### Added
+ - GameWindow keyboard events are now visible in all platforms #1317, #1323.
+ - fx macro __KNIFX__.
+ - protected GameWindow.OnClientSizeChanged() (XNA API compatibility) #1486.
+ - ModelProcessor.GenerateNormals #1543.
+
+### Removed
+ - TouchPanelState class #1337.
+ - TouchPanel.GetState(GameWindow) #1337.
+ - Removed Cardboard Xamarin target #1507, #1548.
+ - Removed obsolete PlatformInfo, GraphicsBackend, PlatformInfo #1519.
+ - protected ContentManager.LoadedAssets property #1523.
+
 ## 3.11.9002 Release - March 09, 2024
 
 ### Fixed
