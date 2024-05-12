@@ -84,13 +84,6 @@ namespace Microsoft.Xna.Framework.Content
                         typeReader = typeReaderType.GetDefaultConstructor().Invoke(null) as ContentTypeReader;
                         needsInitialize[i] = true;
                         _contentReadersCache.Add(typeReaderType, typeReader);
-
-                        if (readerTypeVersion != typeReader.TypeVersion)
-                        {
-                            throw new ContentLoadException(
-                                String.Format("{0} of TypeVersion {1} does not match reader of TypeVersion {2}.",
-                                    typeReader.TargetType.Name, readerTypeVersion, typeReader.TypeVersion));
-                        }
                     }
                     else
                     {
@@ -99,6 +92,13 @@ namespace Microsoft.Xna.Framework.Content
                         System.Diagnostics.Debug.Assert(_contentReadersCache.ContainsKey(typeReaderType));
 
                         typeReader = _contentReadersCache[typeReaderType];
+                    }
+
+                    if (readerTypeVersion != typeReader.TypeVersion)
+                    {
+                        throw new ContentLoadException(
+                            String.Format("{0} of TypeVersion {1} does not match reader of TypeVersion {2}.",
+                                typeReader.TargetType.Name, readerTypeVersion, typeReader.TypeVersion));
                     }
 
                     contentReaders[i] = typeReader;
