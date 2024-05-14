@@ -78,14 +78,14 @@ namespace Microsoft.Xna.Framework.Input
             bool hasLeftVibrationMotor, bool hasRightVibrationMotor,
             bool hasVoiceSupport) : this()
         {
-            bool hasLeftThumbstickLeft = (_hasButtons & Buttons.LeftThumbstickLeft) != Buttons.LeftThumbstickLeft;
-            bool hasLeftThumbstickRight = (_hasButtons & Buttons.LeftThumbstickRight) != Buttons.LeftThumbstickRight;
-            bool hasLeftThumbstickDown = (_hasButtons & Buttons.LeftThumbstickDown) != Buttons.LeftThumbstickDown;
-            bool hasLeftThumbstickUp = (_hasButtons & Buttons.LeftThumbstickUp) != Buttons.LeftThumbstickUp;
-            bool hasRightThumbstickLeft = (_hasButtons & Buttons.RightThumbstickLeft) != Buttons.RightThumbstickLeft;
-            bool hasRightThumbstickRight = (_hasButtons & Buttons.RightThumbstickRight) != Buttons.RightThumbstickRight;
-            bool hasRightThumbstickDown = (_hasButtons & Buttons.RightThumbstickDown) != Buttons.RightThumbstickDown;
-            bool hasRightThumbstickUp = (_hasButtons & Buttons.RightThumbstickUp) != Buttons.RightThumbstickUp;
+            bool hasLeftThumbstickLeft = (_hasButtons & Buttons.LeftThumbstickLeft) == Buttons.LeftThumbstickLeft;
+            bool hasLeftThumbstickRight = (_hasButtons & Buttons.LeftThumbstickRight) == Buttons.LeftThumbstickRight;
+            bool hasLeftThumbstickDown = (_hasButtons & Buttons.LeftThumbstickDown) == Buttons.LeftThumbstickDown;
+            bool hasLeftThumbstickUp = (_hasButtons & Buttons.LeftThumbstickUp) == Buttons.LeftThumbstickUp;
+            bool hasRightThumbstickLeft = (_hasButtons & Buttons.RightThumbstickLeft) == Buttons.RightThumbstickLeft;
+            bool hasRightThumbstickRight = (_hasButtons & Buttons.RightThumbstickRight) == Buttons.RightThumbstickRight;
+            bool hasRightThumbstickDown = (_hasButtons & Buttons.RightThumbstickDown) == Buttons.RightThumbstickDown;
+            bool hasRightThumbstickUp = (_hasButtons & Buttons.RightThumbstickUp) == Buttons.RightThumbstickUp;
             Debug.Assert(hasLeftThumbstickLeft == hasLeftThumbstickRight); // ButtonLeftXThumbStick
             Debug.Assert(hasLeftThumbstickDown == hasLeftThumbstickUp); // ButtonLeftYThumbStick
             Debug.Assert(hasRightThumbstickLeft == hasRightThumbstickRight); // ButtonRightXThumbStick
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it is connected; otherwise, <c>false</c>.</value>
         public bool IsConnected
         {
-            get { return (_hasCaps & CapsConnected) != CapsConnected; }
+            get { return (_hasCaps & CapsConnected) == CapsConnected; }
             internal set
             {
                 _hasCaps = (value)
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the button A; otherwise, <c>false</c>.</value>
         public bool HasAButton 
         {
-            get { return (_hasButtons & Buttons.A) != Buttons.A; }
+            get { return (_hasButtons & Buttons.A) == Buttons.A; }
             internal set 
             {
                 _hasButtons = (value)
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the button Back; otherwise, <c>false</c>.</value>
         public bool HasBackButton
         {
-            get { return (_hasButtons & Buttons.Back) != Buttons.Back; }
+            get { return (_hasButtons & Buttons.Back) == Buttons.Back; }
             internal set
             {
                 _hasButtons = (value)
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the button B; otherwise, <c>false</c>.</value>
         public bool HasBButton
         {
-            get { return (_hasButtons & Buttons.B) != Buttons.B; }
+            get { return (_hasButtons & Buttons.B) == Buttons.B; }
             internal set
             {
                 _hasButtons = (value)
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the directional pad down button; otherwise, <c>false</c>.</value>
         public bool HasDPadDownButton
         {
-            get { return (_hasButtons & Buttons.DPadDown) != Buttons.DPadDown; }
+            get { return (_hasButtons & Buttons.DPadDown) == Buttons.DPadDown; }
             internal set
             {
                 _hasButtons = (value)
@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the directional pad left button; otherwise, <c>false</c>.</value>
         public bool HasDPadLeftButton
         {
-            get { return (_hasButtons & Buttons.DPadLeft) != Buttons.DPadLeft; }
+            get { return (_hasButtons & Buttons.DPadLeft) == Buttons.DPadLeft; }
             internal set
             {
                 _hasButtons = (value)
@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the directional pad right button; otherwise, <c>false</c>.</value>
         public bool HasDPadRightButton
         {
-            get { return (_hasButtons & Buttons.DPadRight) != Buttons.DPadRight; }
+            get { return (_hasButtons & Buttons.DPadRight) == Buttons.DPadRight; }
             internal set
             {
                 _hasButtons = (value)
@@ -228,7 +228,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the directional pad up button; otherwise, <c>false</c>.</value>
         public bool HasDPadUpButton
         {
-            get { return (_hasButtons & Buttons.DPadUp) != Buttons.DPadUp; }
+            get { return (_hasButtons & Buttons.DPadUp) == Buttons.DPadUp; }
             internal set
             {
                 _hasButtons = (value)
@@ -243,7 +243,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the left shoulder button; otherwise, <c>false</c>.</value>
         public bool HasLeftShoulderButton
         {
-            get { return (_hasButtons & Buttons.LeftShoulder) != Buttons.LeftShoulder; }
+            get { return (_hasButtons & Buttons.LeftShoulder) == Buttons.LeftShoulder; }
             internal set
             {
                 _hasButtons = (value)
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the left stick button; otherwise, <c>false</c>.</value>
         public bool HasLeftStickButton
         {
-            get { return (_hasButtons & Buttons.LeftStick) != Buttons.LeftStick; }
+            get { return (_hasButtons & Buttons.LeftStick) == Buttons.LeftStick; }
             internal set
             {
                 _hasButtons = (value)
@@ -273,7 +273,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the right shoulder button; otherwise, <c>false</c>.</value>
         public bool HasRightShoulderButton
         {
-            get { return (_hasButtons & Buttons.RightShoulder) != Buttons.RightShoulder; }
+            get { return (_hasButtons & Buttons.RightShoulder) == Buttons.RightShoulder; }
             internal set
             {
                 _hasButtons = (value)
@@ -288,7 +288,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the right stick button; otherwise, <c>false</c>.</value>
         public bool HasRightStickButton
         {
-            get { return (_hasButtons & Buttons.RightStick) != Buttons.RightStick; }
+            get { return (_hasButtons & Buttons.RightStick) == Buttons.RightStick; }
             internal set
             {
                 _hasButtons = (value)
@@ -303,7 +303,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the button Start; otherwise, <c>false</c>.</value>
         public bool HasStartButton
         {
-            get { return (_hasButtons & Buttons.Start) != Buttons.Start; }
+            get { return (_hasButtons & Buttons.Start) == Buttons.Start; }
             internal set
             {
                 _hasButtons = (value)
@@ -318,7 +318,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the button X; otherwise, <c>false</c>.</value>
         public bool HasXButton
         {
-            get { return (_hasButtons & Buttons.X) != Buttons.X; }
+            get { return (_hasButtons & Buttons.X) == Buttons.X; }
             internal set
             {
                 _hasButtons = (value)
@@ -333,7 +333,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the button Y; otherwise, <c>false</c>.</value>
         public bool HasYButton
         {
-            get { return (_hasButtons & Buttons.Y) != Buttons.Y; }
+            get { return (_hasButtons & Buttons.Y) == Buttons.Y; }
             internal set
             {
                 _hasButtons = (value)
@@ -348,7 +348,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the guide button; otherwise, <c>false</c>.</value>
         public bool HasBigButton
         {
-            get { return (_hasButtons & Buttons.BigButton) != Buttons.BigButton; }
+            get { return (_hasButtons & Buttons.BigButton) == Buttons.BigButton; }
             internal set
             {
                 _hasButtons = (value)
@@ -363,7 +363,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has X axis for the left stick (thumbstick) button; otherwise, <c>false</c>.</value>
         public bool HasLeftXThumbStick
         {
-            get { return (_hasButtons & ButtonLeftXThumbStick) != ButtonLeftXThumbStick; }
+            get { return (_hasButtons & ButtonLeftXThumbStick) == ButtonLeftXThumbStick; }
             internal set
             {
                 _hasButtons = (value)
@@ -378,7 +378,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has Y axis for the left stick (thumbstick) button; otherwise, <c>false</c>.</value>
         public bool HasLeftYThumbStick
         {
-            get { return (_hasButtons & ButtonLeftYThumbStick) != ButtonLeftYThumbStick; }
+            get { return (_hasButtons & ButtonLeftYThumbStick) == ButtonLeftYThumbStick; }
             internal set
             {
                 _hasButtons = (value)
@@ -393,7 +393,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has X axis for the right stick (thumbstick) button; otherwise, <c>false</c>.</value>
         public bool HasRightXThumbStick
         {
-            get { return (_hasButtons & ButtonRightXThumbStick) != ButtonRightXThumbStick; }
+            get { return (_hasButtons & ButtonRightXThumbStick) == ButtonRightXThumbStick; }
             internal set
             {
                 _hasButtons = (value)
@@ -408,7 +408,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has Y axis for the right stick (thumbstick) button; otherwise, <c>false</c>.</value>
         public bool HasRightYThumbStick
         {
-            get { return (_hasButtons & ButtonRightYThumbStick) != ButtonRightYThumbStick; }
+            get { return (_hasButtons & ButtonRightYThumbStick) == ButtonRightYThumbStick; }
             internal set
             {
                 _hasButtons = (value)
@@ -423,7 +423,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the left trigger button; otherwise, <c>false</c>.</value>
         public bool HasLeftTrigger
         {
-            get { return (_hasButtons & Buttons.LeftTrigger) != Buttons.LeftTrigger; }
+            get { return (_hasButtons & Buttons.LeftTrigger) == Buttons.LeftTrigger; }
             internal set
             {
                 _hasButtons = (value)
@@ -438,7 +438,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the right trigger button; otherwise, <c>false</c>.</value>
         public bool HasRightTrigger
         {
-            get { return (_hasButtons & Buttons.RightTrigger) != Buttons.RightTrigger; }
+            get { return (_hasButtons & Buttons.RightTrigger) == Buttons.RightTrigger; }
             internal set
             {
                 _hasButtons = (value)
@@ -453,7 +453,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the left vibration motor; otherwise, <c>false</c>.</value>
         public bool HasLeftVibrationMotor
         {
-            get { return (_hasCaps & CapsLeftVibrationMotor) != CapsLeftVibrationMotor; }
+            get { return (_hasCaps & CapsLeftVibrationMotor) == CapsLeftVibrationMotor; }
             internal set
             {
                 _hasCaps = (value)
@@ -468,7 +468,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has the right vibration motor; otherwise, <c>false</c>.</value>
         public bool HasRightVibrationMotor
         {
-            get { return (_hasCaps & CapsRightVibrationMotor) != CapsRightVibrationMotor; }
+            get { return (_hasCaps & CapsRightVibrationMotor) == CapsRightVibrationMotor; }
             internal set
             {
                 _hasCaps = (value)
@@ -483,7 +483,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><c>true</c> if it has a microphone; otherwise, <c>false</c>.</value>
         public bool HasVoiceSupport
         {
-            get { return (_hasCaps & CapsVoiceSupport) != CapsVoiceSupport; }
+            get { return (_hasCaps & CapsVoiceSupport) == CapsVoiceSupport; }
             internal set
             {
                 _hasCaps = (value)
