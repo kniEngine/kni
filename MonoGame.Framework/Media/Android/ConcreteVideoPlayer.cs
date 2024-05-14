@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -172,8 +173,16 @@ namespace Microsoft.Xna.Platform.Media
                 GL.CheckGLError();
 
                 // Read the pixel data from the framebuffer
-                GL.ReadPixels(0, 0, this.Video.Width, this.Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, _frameData);
-                GL.CheckGLError();
+                GCHandle dataPtr = GCHandle.Alloc(_frameData, GCHandleType.Pinned);
+                try
+                {
+                    GL.ReadPixels(0, 0, this.Video.Width, this.Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, dataPtr.AddrOfPinnedObject());
+                    GL.CheckGLError();
+                }
+                finally
+                {
+                    dataPtr.Free();
+                }
 
                 // Dettach framebuffer
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

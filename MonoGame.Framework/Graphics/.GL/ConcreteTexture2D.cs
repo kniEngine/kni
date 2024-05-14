@@ -181,8 +181,16 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, 0);
             GL.CheckGLError();
 
-            GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
-            GL.CheckGLError();
+            GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
+            {
+                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr.AddrOfPinnedObject());
+                GL.CheckGLError();
+            }
+            finally
+            {
+                dataPtr.Free();
+            }
             GL.DeleteFramebuffer(framebufferId);
 #else
             int tSizeInByte = ReflectionHelpers.SizeOf<T>();
@@ -199,8 +207,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 int pixelToT = Format.GetSize() / tSizeInByte;
                 int tFullWidth = Math.Max(this.Width >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) / 4 * tFullWidth];
-                GL.GetCompressedTexImage(TextureTarget.Texture2D, level, temp);
-                GL.CheckGLError();
+                GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
+                try
+                {
+                    GL.GetCompressedTexImage(TextureTarget.Texture2D, level, pixelsPtr.AddrOfPinnedObject());
+                    GL.CheckGLError();
+                }
+                finally
+                {
+                    pixelsPtr.Free();
+                }
 
                 int rowCount = checkedRect.Height / 4;
                 int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / tSizeInByte;
@@ -216,8 +232,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 // we need to convert from our format size to the size of T here
                 int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / tSizeInByte;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
-                GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, temp);
-                GL.CheckGLError();
+                GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
+                try
+                {
+                    GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, pixelsPtr.AddrOfPinnedObject());
+                    GL.CheckGLError();
+                }
+                finally
+                {
+                    pixelsPtr.Free();
+                }
 
                 int pixelToT = Format.GetSize() / tSizeInByte;
                 int rowCount = checkedRect.Height;
