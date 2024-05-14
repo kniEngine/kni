@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
@@ -59,7 +60,15 @@ namespace Microsoft.Xna.Platform.Graphics
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
             int tSize = ReflectionHelpers.SizeOf<T>();
             int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
-            GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, data);
+            GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
+            {
+                GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, dataPtr.AddrOfPinnedObject());
+            }
+            finally
+            {
+                dataPtr.Free();
+            }
 
             // buffer is returned upside down, so we swap the rows around when copying over
             int rowSize = srcRect.Width * PresentationParameters.BackBufferFormat.GetSize() / tSize;

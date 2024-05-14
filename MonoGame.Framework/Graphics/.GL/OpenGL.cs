@@ -749,7 +749,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
         internal delegate void ReadPixelsDelegate(int x, int y, int width, int height, PixelFormat format, PixelType type, IntPtr data);
-        internal ReadPixelsDelegate ReadPixelsInternal;
+        internal ReadPixelsDelegate ReadPixels;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1401,7 +1401,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             UniformMatrix2fv = LoadFunctionOrNull<UniformMatrix2fvDelegate>("glUniformMatrix2fv");
             UniformMatrix3fv = LoadFunctionOrNull<UniformMatrix3fvDelegate>("glUniformMatrix3fv");
             UniformMatrix4fv = LoadFunctionOrNull<UniformMatrix4fvDelegate>("glUniformMatrix4fv");
-            ReadPixelsInternal = LoadFunctionOrNull<ReadPixelsDelegate>("glReadPixels");
+            ReadPixels = LoadFunctionOrNull<ReadPixelsDelegate>("glReadPixels");
             // uniforms OpenGL Version >= 2.1
             // ... UniformMatrix 2x3,2x4, 3x2, 3x4, 4x2, 4x3
             // uniforms OpenGL Version >= 3.0
@@ -1759,19 +1759,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         internal void TexParameter(TextureTarget target, TextureParameterName name, int value)
         {
             TexParameteri(target, name, value);
-        }
-
-        public void ReadPixels<T>(int x, int y, int width, int height, PixelFormat format, PixelType type, T[] data)
-        {
-            GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
-            {
-                ReadPixelsInternal(x, y, width, height, format, type, dataPtr.AddrOfPinnedObject());
-            }
-            finally
-            {
-                dataPtr.Free();
-            }
         }
 
 
