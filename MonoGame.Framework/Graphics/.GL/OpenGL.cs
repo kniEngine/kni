@@ -1212,7 +1212,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
         internal delegate void GetCompressedTexImageDelegate(TextureTarget target, int level, [Out] IntPtr pixels);
-        internal GetCompressedTexImageDelegate GetCompressedTexImageInternal;
+        internal GetCompressedTexImageDelegate GetCompressedTexImage;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1477,7 +1477,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             PixelStore = LoadFunctionOrNull<PixelStoreDelegate>("glPixelStorei");
             Finish = LoadFunctionOrNull<FinishDelegate>("glFinish");
             GetTexImage = LoadFunctionOrNull<GetTexImageDelegate>("glGetTexImage");
-            GetCompressedTexImageInternal = LoadFunctionOrNull<GetCompressedTexImageDelegate>("glGetCompressedTexImage");
+            GetCompressedTexImage = LoadFunctionOrNull<GetCompressedTexImageDelegate>("glGetCompressedTexImage");
             TexImage3D = LoadFunctionOrNull<TexImage3DDelegate>("glTexImage3D");
             TexSubImage3D = LoadFunctionOrNull<TexSubImage3DDelegate>("glTexSubImage3D");
             DeleteTextures = LoadFunctionOrNull<DeleteTexturesDelegate>("glDeleteTextures");
@@ -1759,19 +1759,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         internal void TexParameter(TextureTarget target, TextureParameterName name, int value)
         {
             TexParameteri(target, name, value);
-        }
-
-        internal void GetCompressedTexImage<T>(TextureTarget target, int level, T[] pixels) where T : struct
-        {
-            GCHandle pixelsPtr = GCHandle.Alloc(pixels, GCHandleType.Pinned);
-            try
-            {
-                GetCompressedTexImageInternal(target, level, pixelsPtr.AddrOfPinnedObject());
-            }
-            finally
-            {
-                pixelsPtr.Free();
-            }
         }
 
         public void ReadPixels<T>(int x, int y, int width, int height, PixelFormat format, PixelType type, T[] data)

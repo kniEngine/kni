@@ -109,8 +109,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 int pixelToT = Format.GetSize() / tSizeInByte;
                 int tFullWidth = Math.Max(this.Size >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Size >> level, 1) / 4 * tFullWidth];
-                GL.GetCompressedTexImage(target, level, temp);
-                GL.CheckGLError();
+                GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
+                try
+                {
+                    GL.GetCompressedTexImage(target, level, pixelsPtr.AddrOfPinnedObject());
+                    GL.CheckGLError();
+                }
+                finally
+                {
+                    pixelsPtr.Free();
+                }
 
                 int rowCount = checkedRect.Height / 4;
                 int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / tSizeInByte;
