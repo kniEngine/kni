@@ -1206,7 +1206,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
         internal delegate void GetTexImageDelegate(TextureTarget target, int level, PixelFormat format, PixelType type, [Out] IntPtr pixels);
-        internal GetTexImageDelegate GetTexImageInternal;
+        internal GetTexImageDelegate GetTexImage;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1476,7 +1476,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             TexSubImage2D = LoadFunctionOrNull<TexSubImage2DDelegate>("glTexSubImage2D");
             PixelStore = LoadFunctionOrNull<PixelStoreDelegate>("glPixelStorei");
             Finish = LoadFunctionOrNull<FinishDelegate>("glFinish");
-            GetTexImageInternal = LoadFunctionOrNull<GetTexImageDelegate>("glGetTexImage");
+            GetTexImage = LoadFunctionOrNull<GetTexImageDelegate>("glGetTexImage");
             GetCompressedTexImageInternal = LoadFunctionOrNull<GetCompressedTexImageDelegate>("glGetCompressedTexImage");
             TexImage3D = LoadFunctionOrNull<TexImage3DDelegate>("glTexImage3D");
             TexSubImage3D = LoadFunctionOrNull<TexSubImage3DDelegate>("glTexSubImage3D");
@@ -1759,19 +1759,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         internal void TexParameter(TextureTarget target, TextureParameterName name, int value)
         {
             TexParameteri(target, name, value);
-        }
-
-        internal void GetTexImage<T>(TextureTarget target, int level, PixelFormat format, PixelType type, T[] pixels) where T : struct
-        {
-            GCHandle pixelsPtr = GCHandle.Alloc(pixels, GCHandleType.Pinned);
-            try
-            {
-                GetTexImageInternal(target, level, format, type, pixelsPtr.AddrOfPinnedObject());
-            }
-            finally
-            {
-                pixelsPtr.Free();
-            }
         }
 
         internal void GetCompressedTexImage<T>(TextureTarget target, int level, T[] pixels) where T : struct

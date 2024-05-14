@@ -126,8 +126,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 // we need to convert from our format size to the size of T here
                 int tFullWidth = Math.Max(this.Size >> level, 1) * Format.GetSize() / tSizeInByte;
                 T[] temp = new T[Math.Max(this.Size >> level, 1) * tFullWidth];
-                GL.GetTexImage(target, level, _glFormat, _glType, temp);
-                GL.CheckGLError();
+                GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
+                try
+                {
+                    GL.GetTexImage(target, level, _glFormat, _glType, pixelsPtr.AddrOfPinnedObject());
+                    GL.CheckGLError();
+                }
+                finally
+                {
+                    pixelsPtr.Free();
+                }
 
                 int pixelToT = Format.GetSize() / tSizeInByte;
                 int rowCount = checkedRect.Height;
