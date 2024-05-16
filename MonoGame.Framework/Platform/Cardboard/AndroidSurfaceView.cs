@@ -789,6 +789,8 @@ namespace Microsoft.Xna.Framework
                 _egl = EGLContext.EGL.JavaCast<IEGL10>();
                 _eglDisplay = _egl.EglGetCurrentDisplay();
                 _eglContext = _egl.EglGetCurrentContext();
+                if (_eglContext == EGL10.EglNoContext)
+                    _eglContext = null;
             }
 
             if (!_isStarted)

@@ -687,18 +687,20 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
-                    _eglContext = EGL10.EglNoContext;
+                    _eglContext = null;
                     Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", ver, GetErrorAsString()));
                     continue;
                 }
                 _glesVersion = ver;
                 break;
             }
-            if (_eglContext == null || _eglContext == EGL10.EglNoContext)
-            {
+
+            if (_eglContext == EGL10.EglNoContext)
                 _eglContext = null;
+
+            if (_eglContext == null)
                 throw new Exception("Could not create EGL context" + GetErrorAsString());
-            }
+
             Log.Verbose("AndroidGameView", "Created GLES {0} Context", _glesVersion);
             _eglConfig = results[0];
         }
