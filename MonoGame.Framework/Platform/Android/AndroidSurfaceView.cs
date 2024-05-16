@@ -179,11 +179,8 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglSurface != null)
                 {
-                    if (_eglSurface != null)
-                    {
-                        ClearCurrentContext();
-                        DestroyGLSurface();
-                    }
+                    ClearCurrentContext();
+                    DestroyGLSurface();
                     _eglSurface = null;
                 }
 
@@ -332,11 +329,8 @@ namespace Microsoft.Xna.Framework
             // needed at app start
             if (_eglContext != null && _androidSurfaceAvailable)
             {
-                if (_eglSurface != null)
-                {
-                    ClearCurrentContext();
-                    DestroyGLSurface();
-                }
+                ClearCurrentContext();
+                DestroyGLSurface();
                 _eglSurface = null;
 
                 CreateGLSurface();
@@ -387,14 +381,11 @@ namespace Microsoft.Xna.Framework
 
         void processStatePausing()
         {
+            // Surface we are using needs to go away
             if (_eglSurface != null)
             {
-                // Surface we are using needs to go away
-                if (_eglSurface != null)
-                {
-                    ClearCurrentContext();
-                    DestroyGLSurface();
-                }
+                ClearCurrentContext();
+                DestroyGLSurface();
                 _eglSurface = null;
             }
 
