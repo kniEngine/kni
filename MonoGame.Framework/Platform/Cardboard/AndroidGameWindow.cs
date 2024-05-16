@@ -96,6 +96,7 @@ namespace Microsoft.Xna.Framework
             }
 
             GameView.Resume();
+            Microsoft.Xna.Platform.Audio.AudioService.Resume();
             if (_mediaPlayer_PrevState == MediaState.Playing && _activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Resume();
             if (!this.GameView.IsFocused)
@@ -122,6 +123,7 @@ namespace Microsoft.Xna.Framework
             _mediaPlayer_PrevState = MediaPlayer.State;
             this.GameView.Pause();
             this.GameView.ClearFocus();
+            Microsoft.Xna.Platform.Audio.AudioService.Suspend();
             if (_activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Pause();
         }
