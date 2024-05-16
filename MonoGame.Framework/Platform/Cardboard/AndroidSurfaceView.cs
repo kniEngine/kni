@@ -287,21 +287,21 @@ namespace Microsoft.Xna.Framework
         void ForceSurfaceRecreation()
         {
             // needed at app start
-            if (!_glContextAvailable || !_androidSurfaceAvailable)
-                return;
-
-            if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+            if (_glContextAvailable && _androidSurfaceAvailable)
             {
-                ClearCurrentContext();
-                DestroyGLSurface();
+                if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+                {
+                    ClearCurrentContext();
+                    DestroyGLSurface();
+                }
+                _eglSurface = null;
+                _glSurfaceAvailable = false;
+
+                CreateGLSurface();
+
+                // go to next state
+                _forceRecreateSurface = false;
             }
-            _eglSurface = null;
-            _glSurfaceAvailable = false;
-
-            CreateGLSurface();
-
-            // go to next state
-            _forceRecreateSurface = false;
         }
 
         void processStateRunning()
