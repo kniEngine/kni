@@ -180,7 +180,7 @@ namespace Microsoft.Xna.Framework
 
                 if (_glSurfaceAvailable)
                 {
-                    if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+                    if (_eglSurface != null)
                     {
                         ClearCurrentContext();
                         DestroyGLSurface();
@@ -334,7 +334,7 @@ namespace Microsoft.Xna.Framework
             // needed at app start
             if (_eglContext != null && _androidSurfaceAvailable)
             {
-                if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+                if (_eglSurface != null)
                 {
                     ClearCurrentContext();
                     DestroyGLSurface();
@@ -393,7 +393,7 @@ namespace Microsoft.Xna.Framework
             if (_glSurfaceAvailable)
             {
                 // Surface we are using needs to go away
-                if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+                if (_eglSurface != null)
                 {
                     ClearCurrentContext();
                     DestroyGLSurface();
@@ -479,7 +479,7 @@ namespace Microsoft.Xna.Framework
 
         protected void DestroyGLSurface()
         {
-            System.Diagnostics.Debug.Assert(_eglSurface != null && _eglSurface != EGL10.EglNoSurface);
+            System.Diagnostics.Debug.Assert(_eglSurface != null);
 
             if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                 Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
@@ -747,7 +747,7 @@ namespace Microsoft.Xna.Framework
             try
             {
                 // If there is an existing surface, destroy the old one
-                if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+                if (_eglSurface != null)
                 {
                     ClearCurrentContext();
                     DestroyGLSurface();
@@ -756,7 +756,11 @@ namespace Microsoft.Xna.Framework
                 _glSurfaceAvailable = false;
 
                 _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
-                if (_eglSurface == null || _eglSurface == EGL10.EglNoSurface)
+                
+                if (_eglSurface == EGL10.EglNoSurface)
+                    _eglSurface = null;
+
+                if (_eglSurface == null)
                     throw new Exception("Could not create EGL window surface" + GetErrorAsString());
 
                 if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
