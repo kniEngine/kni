@@ -273,7 +273,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // create context if not available
-            if (_lostglContext || !_glContextAvailable)
+            if (!_glContextAvailable || _lostglContext)
             {
                 // Start or Restart due to context loss
                 bool contextLost = false;
@@ -311,7 +311,7 @@ namespace Microsoft.Xna.Framework
                 if (OGL_DROID.Current.Extensions == null)
                     OGL_DROID.Current.InitExtensions();
 
-                if (contextLost && _glContextAvailable)
+                if (_glContextAvailable && contextLost)
                 {
                     // we lost the gl context, we need to let the programmer
                     // know so they can re-create textures etc.
@@ -337,7 +337,7 @@ namespace Microsoft.Xna.Framework
         void ForceSurfaceRecreation()
         {
             // needed at app start
-            if (!_androidSurfaceAvailable || !_glContextAvailable)
+            if (!_glContextAvailable || !_androidSurfaceAvailable)
                 return;
 
             if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
