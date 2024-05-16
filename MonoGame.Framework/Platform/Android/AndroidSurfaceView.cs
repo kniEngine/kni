@@ -47,7 +47,6 @@ namespace Microsoft.Xna.Framework
         volatile bool _forceRecreateSurface = false;
         bool _androidSurfaceAvailable = false;
 
-        bool _glSurfaceAvailable;
         bool _lostglContext;
 
         DateTime _prevTickTime;
@@ -178,7 +177,7 @@ namespace Microsoft.Xna.Framework
             {
                 _isCancellationRequested = null;
 
-                if (_glSurfaceAvailable)
+                if (_eglSurface != null)
                 {
                     if (_eglSurface != null)
                     {
@@ -186,7 +185,6 @@ namespace Microsoft.Xna.Framework
                         DestroyGLSurface();
                     }
                     _eglSurface = null;
-                    _glSurfaceAvailable = false;
                 }
 
                 if (_eglContext != null)
@@ -258,7 +256,7 @@ namespace Microsoft.Xna.Framework
                 {
                     try
                     {
-                        if (!_glSurfaceAvailable)
+                        if (_eglSurface == null)
                             CreateGLSurface();
                     }
                     catch (Exception ex)
@@ -298,7 +296,7 @@ namespace Microsoft.Xna.Framework
 
                     CreateGLContext();
 
-                    if (!_glSurfaceAvailable)
+                    if (_eglSurface == null)
                         CreateGLSurface();
 
                     // OGL.InitExtensions() must be called while we have a gl context.
@@ -317,7 +315,7 @@ namespace Microsoft.Xna.Framework
                 }
 
                 // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
-                if (_glSurfaceAvailable)
+                if (_eglSurface != null)
                 {
                     // must resume openAL device here
                     Microsoft.Xna.Platform.Audio.AudioService.Resume();
@@ -340,7 +338,6 @@ namespace Microsoft.Xna.Framework
                     DestroyGLSurface();
                 }
                 _eglSurface = null;
-                _glSurfaceAvailable = false;
 
                 CreateGLSurface();
 
@@ -390,7 +387,7 @@ namespace Microsoft.Xna.Framework
 
         void processStatePausing()
         {
-            if (_glSurfaceAvailable)
+            if (_eglSurface != null)
             {
                 // Surface we are using needs to go away
                 if (_eglSurface != null)
@@ -399,7 +396,6 @@ namespace Microsoft.Xna.Framework
                     DestroyGLSurface();
                 }
                 _eglSurface = null;
-                _glSurfaceAvailable = false;
             }
 
             // must pause openAL device here
@@ -742,8 +738,6 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLSurface()
         {
-            System.Diagnostics.Debug.Assert(_glSurfaceAvailable == false);
-
             try
             {
                 // If there is an existing surface, destroy the old one
@@ -753,7 +747,6 @@ namespace Microsoft.Xna.Framework
                     DestroyGLSurface();
                 }
                 _eglSurface = null;
-                _glSurfaceAvailable = false;
 
                 _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
                 
@@ -765,8 +758,6 @@ namespace Microsoft.Xna.Framework
 
                 if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                     throw new Exception("Could not make EGL current" + GetErrorAsString());
-
-                _glSurfaceAvailable = true;
 
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                 // the surface is created after the correct viewport is already applied so we must do it again.
@@ -781,7 +772,7 @@ namespace Microsoft.Xna.Framework
             }
             catch (Exception ex)
             {
-                _glSurfaceAvailable = false;
+                _eglSurface = null;
                 Log.Error("AndroidGameView", ex.ToString());
             }
         }
