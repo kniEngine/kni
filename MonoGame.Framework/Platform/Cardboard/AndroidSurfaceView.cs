@@ -270,9 +270,6 @@ namespace Microsoft.Xna.Framework
                 // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
                 if (_eglSurface != null)
                 {
-                    // must resume openAL device here
-                    Microsoft.Xna.Platform.Audio.AudioService.Resume();
-
                     // go to next state
                     _appState = AppState.Running;
                     _forceRecreateSurface = false;
@@ -345,8 +342,6 @@ namespace Microsoft.Xna.Framework
                 _eglSurface = null;
             }
 
-            // must pause openAL device here
-            Microsoft.Xna.Platform.Audio.AudioService.Suspend();
 
             // go to next state
             _appState = AppState.Paused;
