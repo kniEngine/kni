@@ -48,7 +48,6 @@ namespace Microsoft.Xna.Framework
         bool _androidSurfaceAvailable = false;
 
         bool _glSurfaceAvailable;
-        bool _glContextAvailable;
         bool _lostglContext;
 
         DateTime _prevTickTime;
@@ -190,7 +189,7 @@ namespace Microsoft.Xna.Framework
                     _glSurfaceAvailable = false;
                 }
 
-                if (_glContextAvailable)
+                if (_eglContext != null)
                 {
                     if (_eglContext != null)
                         DestroyGLContext();
@@ -198,8 +197,6 @@ namespace Microsoft.Xna.Framework
                     if (_eglDisplay != null)
                         DestroyGLDisplay();
                     _eglDisplay = null;
-
-                    _glContextAvailable = false;
 
                     if (_game.GraphicsDevice != null)
                     {
@@ -254,104 +251,102 @@ namespace Microsoft.Xna.Framework
         {
             // this can happen if pause is triggered immediately after resume so that SurfaceCreated callback doesn't get called yet,
             // in this case we skip the resume process and pause sets a new state.
-            if (!_androidSurfaceAvailable)
-                return;
-
-            // create surface if context is available
-            if (_glContextAvailable && !_lostglContext)
+            if (_androidSurfaceAvailable)
             {
-                try
+                // create surface if context is available
+                if (_eglContext != null && !_lostglContext)
                 {
-                    if (!_glSurfaceAvailable)
-                        CreateGLSurface();
-                }
-                catch (Exception ex)
-                {
-                    // We failed to create the surface for some reason
-                    Log.Verbose("AndroidGameView", ex.ToString());
-                }
-            }
-
-            // create context if not available
-            if (_lostglContext || !_glContextAvailable)
-            {
-                // Start or Restart due to context loss
-                bool contextLost = false;
-                if (_lostglContext)
-                {
-                    // we actually lost the context
-                    // so we need to free up our existing 
-                    // objects and re-create one.
-                    if (_eglContext != null)
-                        DestroyGLContext();
-                    _eglContext = null;
-                    if (_eglDisplay != null)
-                        DestroyGLDisplay();
-                    _eglDisplay = null;
-
-                    _glContextAvailable = false;
-                    contextLost = true;
-
-                    if (_game.GraphicsDevice != null)
+                    try
                     {
-                        ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
+                        if (!_glSurfaceAvailable)
+                            CreateGLSurface();
+                    }
+                    catch (Exception ex)
+                    {
+                        // We failed to create the surface for some reason
+                        Log.Verbose("AndroidGameView", ex.ToString());
                     }
                 }
 
-                if (OGL_DROID.Current == null)
-                    OGL_DROID.Initialize();
-
-                CreateGLContext();
-                _glContextAvailable = true;
-
-                if (!_glSurfaceAvailable)
-                    CreateGLSurface();
-
-                // OGL.InitExtensions() must be called while we have a gl context.
-                if (OGL_DROID.Current.Extensions == null)
-                    OGL_DROID.Current.InitExtensions();
-
-                if (contextLost && _glContextAvailable)
+                // create context if not available
+                if (_eglContext == null || _lostglContext)
                 {
-                    // we lost the gl context, we need to let the programmer
-                    // know so they can re-create textures etc.
+                    // Start or Restart due to context loss
+                    bool contextLost = false;
                     if (_lostglContext)
-                        ContextSetInternal();
+                    {
+                        // we actually lost the context
+                        // so we need to free up our existing 
+                        // objects and re-create one.
+                        if (_eglContext != null)
+                            DestroyGLContext();
+                        _eglContext = null;
+                        if (_eglDisplay != null)
+                            DestroyGLDisplay();
+                        _eglDisplay = null;
+
+                        contextLost = true;
+
+                        if (_game.GraphicsDevice != null)
+                        {
+                            ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
+                        }
+                    }
+
+                    if (OGL_DROID.Current == null)
+                        OGL_DROID.Initialize();
+
+                    CreateGLContext();
+
+                    if (!_glSurfaceAvailable)
+                        CreateGLSurface();
+
+                    // OGL.InitExtensions() must be called while we have a gl context.
+                    if (OGL_DROID.Current.Extensions == null)
+                        OGL_DROID.Current.InitExtensions();
+
+                    if (_eglContext != null && contextLost)
+                    {
+                        // we lost the gl context, we need to let the programmer
+                        // know so they can re-create textures etc.
+                        if (_lostglContext)
+                            ContextSetInternal();
+                    }
+
+                    return;
                 }
 
-                return;
-            }
+                // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
+                if (_glSurfaceAvailable)
+                {
+                    // must resume openAL device here
+                    Microsoft.Xna.Platform.Audio.AudioService.Resume();
 
-            // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
-            if (_glSurfaceAvailable) 
-            {
-                // must resume openAL device here
-                Microsoft.Xna.Platform.Audio.AudioService.Resume();
-
-                // go to next state
-                _appState = AppState.Running;
-                _forceRecreateSurface = false;
+                    // go to next state
+                    _appState = AppState.Running;
+                    _forceRecreateSurface = false;
+                }
             }
         }
 
         void ForceSurfaceRecreation()
         {
             // needed at app start
-            if (!_androidSurfaceAvailable || !_glContextAvailable)
-                return;
-
-            if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+            if (_eglContext != null && _androidSurfaceAvailable)
             {
-                ClearCurrentContext();
-                DestroyGLSurface();
+                if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
+                {
+                    ClearCurrentContext();
+                    DestroyGLSurface();
+                }
+                _eglSurface = null;
+                _glSurfaceAvailable = false;
+
+                CreateGLSurface();
+
+                // go to next state
+                _forceRecreateSurface = false;
             }
-            _eglSurface = null;
-            _glSurfaceAvailable = false;
-
-            CreateGLSurface();
-
-            // go to next state
-            _forceRecreateSurface = false;
         }
 
         void processStateRunning()
@@ -687,18 +682,20 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
-                    _eglContext = EGL10.EglNoContext;
+                    _eglContext = null;
                     Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", ver, GetErrorAsString()));
                     continue;
                 }
                 _glesVersion = ver;
                 break;
             }
-            if (_eglContext == null || _eglContext == EGL10.EglNoContext)
-            {
+
+            if (_eglContext == EGL10.EglNoContext)
                 _eglContext = null;
+
+            if (_eglContext == null)
                 throw new Exception("Could not create EGL context" + GetErrorAsString());
-            }
+
             Log.Verbose("AndroidGameView", "Created GLES {0} Context", _glesVersion);
             _eglConfig = results[0];
         }
