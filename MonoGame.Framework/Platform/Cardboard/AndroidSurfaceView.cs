@@ -47,7 +47,6 @@ namespace Microsoft.Xna.Framework
         bool _androidSurfaceAvailable = false;
 
         bool _glSurfaceAvailable;
-        bool _glContextAvailable;
         bool _lostglContext;
 
         DateTime _prevTickTime;
@@ -207,7 +206,7 @@ namespace Microsoft.Xna.Framework
             if (_androidSurfaceAvailable)
             {
                 // create surface if context is available
-                if (_glContextAvailable && !_lostglContext)
+                if (_eglContext != null && !_lostglContext)
                 {
                     try
                     {
@@ -222,7 +221,7 @@ namespace Microsoft.Xna.Framework
                 }
 
                 // create context if not available
-                if (!_glContextAvailable || _lostglContext)
+                if (_eglContext == null || _lostglContext)
                 {
                     // Start or Restart due to context loss
                     bool contextLost = false;
@@ -238,7 +237,6 @@ namespace Microsoft.Xna.Framework
                             DestroyGLDisplay();
                         _eglDisplay = null;
 
-                        _glContextAvailable = false;
                         contextLost = true;
 
                         if (_game.GraphicsDevice != null)
@@ -251,7 +249,6 @@ namespace Microsoft.Xna.Framework
                         OGL_DROID.Initialize();
 
                     //CreateGLContext();
-                    _glContextAvailable = true;
 
                     if (!_glSurfaceAvailable)
                         CreateGLSurface();
@@ -260,7 +257,7 @@ namespace Microsoft.Xna.Framework
                     if (OGL_DROID.Current.Extensions == null)
                         OGL_DROID.Current.InitExtensions();
 
-                    if (_glContextAvailable && contextLost)
+                    if (_eglContext != null && contextLost)
                     {
                         // we lost the gl context, we need to let the programmer
                         // know so they can re-create textures etc.
@@ -287,7 +284,7 @@ namespace Microsoft.Xna.Framework
         void ForceSurfaceRecreation()
         {
             // needed at app start
-            if (_glContextAvailable && _androidSurfaceAvailable)
+            if (_eglContext != null && _androidSurfaceAvailable)
             {
                 if (_eglSurface != null && _eglSurface != EGL10.EglNoSurface)
                 {
