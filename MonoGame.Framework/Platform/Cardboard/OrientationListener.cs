@@ -16,6 +16,7 @@ namespace Microsoft.Xna.Framework
     internal class OrientationListener : OrientationEventListener
     {
         internal DisplayOrientation targetOrientation = DisplayOrientation.Unknown;
+        DateTime prevTickTime = DateTime.Now;
         TimeSpan elapsed = TimeSpan.Zero;
 
         /// <summary>
@@ -62,8 +63,18 @@ namespace Microsoft.Xna.Framework
             return;
         }
         
-        internal void Update(TimeSpan elapsedTime)
+        internal void Update()
         {
+            DateTime currTickTime = DateTime.Now;
+            TimeSpan elapsedTime = TimeSpan.Zero;
+            if (prevTickTime.Ticks != 0)
+            {
+                elapsedTime = (currTickTime - prevTickTime);
+                if (elapsedTime.TotalMilliseconds < 0)
+                    elapsedTime = TimeSpan.Zero;
+            }
+            prevTickTime = currTickTime;
+
             try
             {
                 if (targetOrientation != DisplayOrientation.Unknown)

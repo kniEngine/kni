@@ -49,8 +49,6 @@ namespace Microsoft.Xna.Framework
 
         bool _lostglContext;
 
-        DateTime prevTickTime;
-
         bool? _isCancellationRequested = null;
         private int _frameRequests = 0;
 
@@ -135,7 +133,6 @@ namespace Microsoft.Xna.Framework
             // prepare gameLoop
             Threading.MakeMainThread();
 
-            prevTickTime = DateTime.Now;
             Android.OS.Looper looper = Android.OS.Looper.MainLooper;
             _handler = new Android.OS.Handler(looper); // why this.Handler is null? Do we initialize the game too soon?
 
@@ -353,17 +350,7 @@ namespace Microsoft.Xna.Framework
 
             try
             {
-                DateTime currTickTime = DateTime.Now;
-                TimeSpan elapsedTime = TimeSpan.Zero;
-                if (prevTickTime.Ticks != 0)
-                {
-                    elapsedTime = (currTickTime - prevTickTime);
-                    if (elapsedTime.TotalMilliseconds < 0)
-                        elapsedTime = TimeSpan.Zero;
-                }
-                prevTickTime = currTickTime;
-
-                AndroidGameWindow.Activity._orientationListener.Update(elapsedTime);
+                AndroidGameWindow.Activity._orientationListener.Update();
 
                 var handler = Tick;
                 if (handler != null)
