@@ -205,10 +205,7 @@ namespace Microsoft.Xna.Framework
                     break;
 
                 case AppState.Running: // when we are running game 
-                    if (_forceRecreateSurface == true)
-                        ForceSurfaceRecreation();
-                    else
-                        processStateRunning();
+                    processStateRunning();
                     break;
 
                 case AppState.Pausing: // when ui thread wants to pause              
@@ -335,6 +332,12 @@ namespace Microsoft.Xna.Framework
 
         void processStateRunning()
         {
+            if (_forceRecreateSurface)
+            {
+                ForceSurfaceRecreation();
+                return;
+            }
+
             // do not run game if surface is not available
             if (!_androidSurfaceAvailable)
                 return;
