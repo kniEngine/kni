@@ -319,8 +319,7 @@ namespace Microsoft.Xna.Framework
                 }
                 prevTickTime = currTickTime;
 
-                try { AndroidGameWindow.Activity._orientationListener.Update(elapsedTime); }
-                catch (Exception) { }
+                AndroidGameWindow.Activity._orientationListener.Update(elapsedTime);
 
                 var handler = Tick;
                 if (handler != null)

@@ -63,19 +63,23 @@ namespace Microsoft.Xna.Framework
         }
         
         internal void Update(TimeSpan elapsedTime)
-        {            
-            if (targetOrientation != DisplayOrientation.Unknown)
+        {
+            try
             {
-                elapsed += elapsedTime;
-                // orientation must be stable for 0.5 seconds before changing.
-                if (elapsed.TotalSeconds > 0.5)
+                if (targetOrientation != DisplayOrientation.Unknown)
                 {
-                    AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
-                    gameWindow.SetOrientation(targetOrientation, true);
-                    targetOrientation = DisplayOrientation.Unknown;
-                    elapsed = TimeSpan.Zero;
+                    elapsed += elapsedTime;
+                    // orientation must be stable for 0.5 seconds before changing.
+                    if (elapsed.TotalSeconds > 0.5)
+                    {
+                        AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
+                        gameWindow.SetOrientation(targetOrientation, true);
+                        targetOrientation = DisplayOrientation.Unknown;
+                        elapsed = TimeSpan.Zero;
+                    }
                 }
             }
+            catch (Exception) { /* ignore */ }
         }
     }
 }
