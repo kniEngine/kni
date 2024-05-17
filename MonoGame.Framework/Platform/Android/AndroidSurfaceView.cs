@@ -173,7 +173,10 @@ namespace Microsoft.Xna.Framework
                 if (_eglContext != null)
                 {
                     if (_eglContext != null)
-                        DestroyGLContext();
+                    {
+                        if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
+                            throw new Exception("Could not destroy EGL context" + GetErrorAsString());
+                    }
                     _eglContext = null;
                     if (_eglDisplay != null)
                     {
@@ -251,7 +254,10 @@ namespace Microsoft.Xna.Framework
                         // so we need to free up our existing 
                         // objects and re-create one.
                         if (_eglContext != null)
-                            DestroyGLContext();
+                        {
+                            if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
+                                throw new Exception("Could not destroy EGL context" + GetErrorAsString());
+                        }
                         _eglContext = null;
                         if (_eglDisplay != null)
                         {
@@ -421,14 +427,6 @@ namespace Microsoft.Xna.Framework
             }
 
             base.Dispose(disposing);
-        }
-
-        protected void DestroyGLContext()
-        {
-            System.Diagnostics.Debug.Assert(_eglContext != null);
-
-            if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
-                throw new Exception("Could not destroy EGL context" + GetErrorAsString());
         }
 
         internal struct SurfaceConfig
