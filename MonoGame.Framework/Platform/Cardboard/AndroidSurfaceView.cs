@@ -286,28 +286,28 @@ namespace Microsoft.Xna.Framework
             }
 
             // do not run game if surface is not available
-            if (!_isAndroidSurfaceAvailable)
-                return;
-
-            // check if app wants to exit
-            if (_isCancellationRequested.Value == true)
+            if (_isAndroidSurfaceAvailable)
             {
-                // change state to exit and skip game loop
-                _appState = AppState.Exited;
-                return;
-            }
+                // check if app wants to exit
+                if (_isCancellationRequested.Value == true)
+                {
+                    // change state to exit and skip game loop
+                    _appState = AppState.Exited;
+                    return;
+                }
 
-            AndroidGameWindow.Activity._orientationListener.Update();
+                AndroidGameWindow.Activity._orientationListener.Update();
 
-            try
-            {
-                var handler = Tick;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
-            }
-            catch (OpenGLException ex)
-            {
-                Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
+                try
+                {
+                    var handler = Tick;
+                    if (handler != null)
+                        handler(this, EventArgs.Empty);
+                }
+                catch (OpenGLException ex)
+                {
+                    Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
+                }
             }
         }
 
