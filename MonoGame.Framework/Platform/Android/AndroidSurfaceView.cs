@@ -314,25 +314,11 @@ namespace Microsoft.Xna.Framework
                     // unbind Context and Surface
                     if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                         Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                    // destroy the old _eglSurface
                     if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                         Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                     _eglSurface = null;
-
-                    try
-                    {
-                        // If there is an existing surface, destroy the old one
-                        if (_eglSurface != null)
-                        {
-                            if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                                Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
-                        }
-                        _eglSurface = null;
-                    }
-                    catch (Exception ex)
-                    {
-                        _eglSurface = null;
-                        Log.Error("AndroidGameView", ex.ToString());
-                    }
+                   
                     CreateGLSurface();
 
                     // go to next state
