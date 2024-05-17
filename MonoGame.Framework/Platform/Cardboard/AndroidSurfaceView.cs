@@ -230,7 +230,10 @@ namespace Microsoft.Xna.Framework
                             DestroyGLContext();
                         _eglContext = null;
                         if (_eglDisplay != null)
-                            DestroyGLDisplay();
+                        {
+                            if (!_egl.EglTerminate(_eglDisplay))
+                                throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
+                        }
                         _eglDisplay = null;
 
                         contextLost = true;
@@ -390,14 +393,6 @@ namespace Microsoft.Xna.Framework
 
             if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
                 throw new Exception("Could not destroy EGL context" + GetErrorAsString());
-        }
-
-        private void DestroyGLDisplay()
-        {
-            System.Diagnostics.Debug.Assert(_eglDisplay != null);
-
-            if (!_egl.EglTerminate(_eglDisplay))
-                throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
         }
 
         protected void DestroyGLSurface()
