@@ -16,6 +16,7 @@ namespace Microsoft.Xna.Framework
     internal class OrientationListener : OrientationEventListener
     {
         internal DisplayOrientation targetOrientation = DisplayOrientation.Unknown;
+        DateTime prevTickTime = DateTime.Now;
         TimeSpan elapsed = TimeSpan.Zero;
 
         /// <summary>
@@ -62,20 +63,34 @@ namespace Microsoft.Xna.Framework
             return;
         }
         
-        internal void Update(TimeSpan elapsedTime)
-        {            
-            if (targetOrientation != DisplayOrientation.Unknown)
+        internal void Update()
+        {
+            DateTime currTickTime = DateTime.Now;
+            TimeSpan elapsedTime = TimeSpan.Zero;
+            if (prevTickTime.Ticks != 0)
             {
-                elapsed += elapsedTime;
-                // orientation must be stable for 0.5 seconds before changing.
-                if (elapsed.TotalSeconds > 0.5)
+                elapsedTime = (currTickTime - prevTickTime);
+                if (elapsedTime.TotalMilliseconds < 0)
+                    elapsedTime = TimeSpan.Zero;
+            }
+            prevTickTime = currTickTime;
+
+            try
+            {
+                if (targetOrientation != DisplayOrientation.Unknown)
                 {
-                    AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
-                    gameWindow.SetOrientation(targetOrientation, true);
-                    targetOrientation = DisplayOrientation.Unknown;
-                    elapsed = TimeSpan.Zero;
+                    elapsed += elapsedTime;
+                    // orientation must be stable for 0.5 seconds before changing.
+                    if (elapsed.TotalSeconds > 0.5)
+                    {
+                        AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
+                        gameWindow.SetOrientation(targetOrientation, true);
+                        targetOrientation = DisplayOrientation.Unknown;
+                        elapsed = TimeSpan.Zero;
+                    }
                 }
             }
+            catch (Exception) { /* ignore */ }
         }
     }
 }

@@ -48,8 +48,6 @@ namespace Microsoft.Xna.Framework
 
         bool _lostglContext;
 
-        DateTime _prevTickTime;
-
         bool? _isCancellationRequested = null;
 
         private readonly AndroidGameWindow _gameWindow;
@@ -144,7 +142,6 @@ namespace Microsoft.Xna.Framework
 
             // prepare gameLoop
             Threading.MakeMainThread();
-            _prevTickTime = DateTime.Now;
         }
 
         volatile bool _isStarted = false;
@@ -307,21 +304,10 @@ namespace Microsoft.Xna.Framework
                 return;
             }
 
+            AndroidGameWindow.Activity._orientationListener.Update();
+
             try
             {
-                DateTime currTickTime = DateTime.Now;
-                TimeSpan dt = TimeSpan.Zero;
-                if (_prevTickTime.Ticks != 0)
-                {
-                    dt = (currTickTime - _prevTickTime);
-                    if (dt.TotalMilliseconds < 0)
-                        dt = TimeSpan.Zero;
-                }
-                _prevTickTime = currTickTime;
-
-                try { AndroidGameWindow.Activity._orientationListener.Update(dt); }
-                catch (Exception) { }
-
                 var handler = Tick;
                 if (handler != null)
                     handler(this, EventArgs.Empty);
