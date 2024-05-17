@@ -252,7 +252,10 @@ namespace Microsoft.Xna.Framework
                         // we lost the gl context, we need to let the programmer
                         // know so they can re-create textures etc.
                         if (_lostglContext)
-                            ContextSetInternal();
+                        {
+                            if (_game.GraphicsDevice != null)
+                                ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
+                        }
                     }
 
                     return;
@@ -571,17 +574,6 @@ namespace Microsoft.Xna.Framework
             if (result == null || result == EGL10.EglNoSurface)
                 throw new Exception("EglCreatePBufferSurface");
             return result;
-        }
-
-        protected void ContextSetInternal()
-        {
-            System.Diagnostics.Debug.Assert(_lostglContext == true);
-
-            if (_game.GraphicsDevice != null)
-            {
-                // DeviceReset events
-                ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
-            }
         }
 
         #region Key and Motion
