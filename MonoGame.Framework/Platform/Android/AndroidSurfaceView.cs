@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework
 
         volatile AppState _appState = AppState.Exited;
 
-        volatile bool _forceRecreateSurface = false;
+        volatile bool _isAndroidSurfaceChanged = false;
         bool _androidSurfaceAvailable = false;
 
         bool _lostglContext;
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework
 
             // can only be triggered when main loop is running, is unsafe to overwrite other states
             if (_appState == AppState.Running)
-                _forceRecreateSurface = true;
+                _isAndroidSurfaceChanged = true;
         }
 
         void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
@@ -307,14 +307,14 @@ namespace Microsoft.Xna.Framework
                 {
                     // go to next state
                     _appState = AppState.Running;
-                    _forceRecreateSurface = false;
+                    _isAndroidSurfaceChanged = false;
                 }
             }
         }
 
         void processStateRunning()
         {
-            if (_forceRecreateSurface)
+            if (_isAndroidSurfaceChanged)
             {
                 // needed at app start
                 if (_eglContext != null && _androidSurfaceAvailable)
@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Framework
                     CreateGLSurface();
 
                     // go to next state
-                    _forceRecreateSurface = false;
+                    _isAndroidSurfaceChanged = false;
                 }
 
                 return;
@@ -399,7 +399,7 @@ namespace Microsoft.Xna.Framework
             // pause can be triggered twice, without resume in between on some phones.
             if (_appState != AppState.Running)
             {
-                if (_forceRecreateSurface == false)
+                if (_isAndroidSurfaceChanged == false)
                     return;
             }
 
