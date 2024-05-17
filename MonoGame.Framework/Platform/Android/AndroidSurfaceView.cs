@@ -405,15 +405,15 @@ namespace Microsoft.Xna.Framework
                     return;
             }
 
-            if (!_androidSurfaceAvailable)
-            {
-                // happens if pause is called immediately after resume so that the surfaceCreated callback was not called yet.
-                _appState = AppState.Paused; // prepare for next game loop iteration
-            }
-            else
+            if (_androidSurfaceAvailable)
             {
                 // processing the pausing state only if the surface was created already
                 _appState = AppState.Pausing;
+            }
+            else
+            {
+                // happens if pause is called immediately after resume so that the surfaceCreated callback was not called yet.
+                _appState = AppState.Paused; // prepare for next game loop iteration
             }
         }
 
