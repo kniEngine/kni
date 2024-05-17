@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework
 
         bool _lostglContext;
 
-        DateTime _prevTickTime;
+        DateTime prevTickTime;
 
         bool? _isCancellationRequested = null;
 
@@ -144,7 +144,7 @@ namespace Microsoft.Xna.Framework
 
             // prepare gameLoop
             Threading.MakeMainThread();
-            _prevTickTime = DateTime.Now;
+            prevTickTime = DateTime.Now;
         }
 
         volatile bool _isStarted = false;
@@ -310,16 +310,16 @@ namespace Microsoft.Xna.Framework
             try
             {
                 DateTime currTickTime = DateTime.Now;
-                TimeSpan dt = TimeSpan.Zero;
-                if (_prevTickTime.Ticks != 0)
+                TimeSpan elapsedTime = TimeSpan.Zero;
+                if (prevTickTime.Ticks != 0)
                 {
-                    dt = (currTickTime - _prevTickTime);
-                    if (dt.TotalMilliseconds < 0)
-                        dt = TimeSpan.Zero;
+                    elapsedTime = (currTickTime - prevTickTime);
+                    if (elapsedTime.TotalMilliseconds < 0)
+                        elapsedTime = TimeSpan.Zero;
                 }
-                _prevTickTime = currTickTime;
+                prevTickTime = currTickTime;
 
-                try { AndroidGameWindow.Activity._orientationListener.Update(dt); }
+                try { AndroidGameWindow.Activity._orientationListener.Update(elapsedTime); }
                 catch (Exception) { }
 
                 var handler = Tick;
