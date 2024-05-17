@@ -283,7 +283,8 @@ namespace Microsoft.Xna.Framework
             if (_eglContext != null && _androidSurfaceAvailable)
             {
                 ClearCurrentContext();
-                DestroyGLSurface();
+                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 _eglSurface = null;
 
                 CreateGLSurface();
@@ -327,7 +328,8 @@ namespace Microsoft.Xna.Framework
             if (_eglSurface != null)
             {
                 ClearCurrentContext();
-                DestroyGLSurface();
+                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 _eglSurface = null;
             }
 
@@ -393,14 +395,6 @@ namespace Microsoft.Xna.Framework
 
             if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
                 throw new Exception("Could not destroy EGL context" + GetErrorAsString());
-        }
-
-        protected void DestroyGLSurface()
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface != null);
-
-            if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
         }
 
         internal struct SurfaceConfig
@@ -540,7 +534,8 @@ namespace Microsoft.Xna.Framework
                 if (_eglSurface != null)
                 {
                     ClearCurrentContext();
-                    DestroyGLSurface();
+                    if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                        Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 }
                 _eglSurface = null;
 
