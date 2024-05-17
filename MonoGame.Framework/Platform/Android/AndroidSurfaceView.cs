@@ -296,8 +296,6 @@ namespace Microsoft.Xna.Framework
                                 ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
                         }
                     }
-
-                    return;
                 }
 
                 // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
