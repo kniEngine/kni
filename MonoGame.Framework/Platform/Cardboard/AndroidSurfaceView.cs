@@ -43,10 +43,10 @@ namespace Microsoft.Xna.Framework
 
         volatile AppState _appState = AppState.Exited;
 
-        volatile bool _forceRecreateSurface = false;
-        bool _androidSurfaceAvailable = false;
+        volatile bool _isAndroidSurfaceChanged = false;
+        bool _isAndroidSurfaceAvailable = false;
 
-        bool _lostglContext;
+        bool _isGLContextLost;
 
         bool? _isCancellationRequested = null;
 
@@ -61,11 +61,7 @@ namespace Microsoft.Xna.Framework
         {
             _gameWindow = gameWindow;
             _game = game;
-            Init(context);
-        }
 
-        private void Init(Context context)
-        {
             // Holder.SetType is deprecated. The SurfaceType value is ignored.
             if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
                 Holder.SetType(SurfaceType.Gpu);
@@ -89,21 +85,21 @@ namespace Microsoft.Xna.Framework
 
             // can only be triggered when main loop is running, is unsafe to overwrite other states
             if (_appState == AppState.Running)
-                _forceRecreateSurface = true;
+                _isAndroidSurfaceChanged = true;
 
             base.SurfaceChanged(holder, format, width, height);
         }
 
         public override void SurfaceCreated(ISurfaceHolder holder)
         {
-            _androidSurfaceAvailable = true;
+            _isAndroidSurfaceAvailable = true;
 
             base.SurfaceCreated(holder);
         }
 
         public override void SurfaceDestroyed(ISurfaceHolder holder)
         {
-            _androidSurfaceAvailable = false;
+            _isAndroidSurfaceAvailable = false;
 
             base.SurfaceDestroyed(holder);
         }
@@ -121,15 +117,6 @@ namespace Microsoft.Xna.Framework
 
             if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                 System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
-        }
-
-        internal void ClearCurrentContext()
-        {
-            if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-            {
-                Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
-                //System.Diagnostics.Debug.WriteLine("Error Clearing Current" + GetErrorAsString());
-            }
         }
 
         internal void StartGameLoop()
@@ -169,10 +156,7 @@ namespace Microsoft.Xna.Framework
                     break;
 
                 case AppState.Running: // when we are running game 
-                    if (_forceRecreateSurface == true)
-                        ForceSurfaceRecreation();
-                    else
-                        processStateRunning();
+                    processStateRunning();
                     break;
 
                 case AppState.Pausing: // when ui thread wants to pause              
@@ -189,7 +173,6 @@ namespace Microsoft.Xna.Framework
                 
                 default:
                     throw new InvalidOperationException("currentState");
-                    break;
             }
 
             return;
@@ -199,38 +182,36 @@ namespace Microsoft.Xna.Framework
         {
             // this can happen if pause is triggered immediately after resume so that SurfaceCreated callback doesn't get called yet,
             // in this case we skip the resume process and pause sets a new state.
-            if (_androidSurfaceAvailable)
+            if (_isAndroidSurfaceAvailable)
             {
                 // create surface if context is available
-                if (_eglContext != null && !_lostglContext)
+                if (_eglContext != null && !_isGLContextLost)
                 {
-                    try
-                    {
-                        if (_eglSurface == null)
-                            CreateGLSurface();
-                    }
-                    catch (Exception ex)
-                    {
-                        // We failed to create the surface for some reason
-                        Log.Verbose("AndroidGameView", ex.ToString());
-                    }
+                    if (_eglSurface == null)
+                        CreateGLSurface();
                 }
 
                 // create context if not available
-                if (_eglContext == null || _lostglContext)
+                if (_eglContext == null || _isGLContextLost)
                 {
                     // Start or Restart due to context loss
                     bool contextLost = false;
-                    if (_lostglContext)
+                    if (_isGLContextLost)
                     {
                         // we actually lost the context
                         // so we need to free up our existing 
                         // objects and re-create one.
                         if (_eglContext != null)
-                            DestroyGLContext();
+                        {
+                            if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
+                                throw new Exception("Could not destroy EGL context" + GetErrorAsString());
+                        }
                         _eglContext = null;
                         if (_eglDisplay != null)
-                            DestroyGLDisplay();
+                        {
+                            if (!_egl.EglTerminate(_eglDisplay))
+                                throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
+                        }
                         _eglDisplay = null;
 
                         contextLost = true;
@@ -257,8 +238,11 @@ namespace Microsoft.Xna.Framework
                     {
                         // we lost the gl context, we need to let the programmer
                         // know so they can re-create textures etc.
-                        if (_lostglContext)
-                            ContextSetInternal();
+                        if (_isGLContextLost)
+                        {
+                            if (_game.GraphicsDevice != null)
+                                ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
+                        }
                     }
 
                     return;
@@ -269,52 +253,58 @@ namespace Microsoft.Xna.Framework
                 {
                     // go to next state
                     _appState = AppState.Running;
-                    _forceRecreateSurface = false;
+                    _isAndroidSurfaceChanged = false;
                 }
-            }
-        }
-
-        void ForceSurfaceRecreation()
-        {
-            // needed at app start
-            if (_eglContext != null && _androidSurfaceAvailable)
-            {
-                ClearCurrentContext();
-                DestroyGLSurface();
-                _eglSurface = null;
-
-                CreateGLSurface();
-
-                // go to next state
-                _forceRecreateSurface = false;
             }
         }
 
         void processStateRunning()
         {
+            if (_isAndroidSurfaceChanged)
+            {
+                // needed at app start
+                if (_eglContext != null && _isAndroidSurfaceAvailable)
+                {
+                    // unbind Context and Surface
+                    if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                        Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                    // destroy the old _eglSurface
+                    if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                        Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
+                    _eglSurface = null;
+
+                    CreateGLSurface();
+
+                    // go to next state
+                    _isAndroidSurfaceChanged = false;
+                }
+
+                return;
+            }
+
             // do not run game if surface is not available
-            if (!_androidSurfaceAvailable)
-                return;
-
-            // check if app wants to exit
-            if (_isCancellationRequested.Value == true)
+            if (_isAndroidSurfaceAvailable)
             {
-                // change state to exit and skip game loop
-                _appState = AppState.Exited;
-                return;
-            }
+                // check if app wants to exit
+                if (_isCancellationRequested.Value == true)
+                {
+                    // change state to exit and skip game loop
+                    _appState = AppState.Exited;
+                    return;
+                }
 
-            AndroidGameWindow.Activity._orientationListener.Update();
+                AndroidGameWindow.Activity._orientationListener.Update();
 
-            try
-            {
-                var handler = Tick;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
-            }
-            catch (OpenGLException ex)
-            {
-                Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
+                try
+                {
+                    var handler = Tick;
+                    if (handler != null)
+                        handler(this, EventArgs.Empty);
+                }
+                catch (OpenGLException ex)
+                {
+                    Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
+                }
             }
         }
 
@@ -323,8 +313,10 @@ namespace Microsoft.Xna.Framework
             // Surface we are using needs to go away
             if (_eglSurface != null)
             {
-                ClearCurrentContext();
-                DestroyGLSurface();
+                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 _eglSurface = null;
             }
 
@@ -354,19 +346,19 @@ namespace Microsoft.Xna.Framework
             // pause can be triggered twice, without resume in between on some phones.
             if (_appState != AppState.Running)
             {
-                if (_forceRecreateSurface == false)
+                if (_isAndroidSurfaceChanged == false)
                     return;
             }
 
-            if (!_androidSurfaceAvailable)
-            {
-                // happens if pause is called immediately after resume so that the surfaceCreated callback was not called yet.
-                _appState = AppState.Paused; // prepare for next game loop iteration
-            }
-            else
+            if (_isAndroidSurfaceAvailable)
             {
                 // processing the pausing state only if the surface was created already
                 _appState = AppState.Pausing;
+            }
+            else
+            {
+                // happens if pause is called immediately after resume so that the surfaceCreated callback was not called yet.
+                _appState = AppState.Paused; // prepare for next game loop iteration
             }
         }
 
@@ -382,30 +374,6 @@ namespace Microsoft.Xna.Framework
             }
 
             base.Dispose(disposing);
-        }
-
-        protected void DestroyGLContext()
-        {
-            System.Diagnostics.Debug.Assert(_eglContext != null);
-
-            if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
-                throw new Exception("Could not destroy EGL context" + GetErrorAsString());
-        }
-
-        private void DestroyGLDisplay()
-        {
-            System.Diagnostics.Debug.Assert(_eglDisplay != null);
-
-            if (!_egl.EglTerminate(_eglDisplay))
-                throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
-        }
-
-        protected void DestroyGLSurface()
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface != null);
-
-            if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
         }
 
         internal struct SurfaceConfig
@@ -541,14 +509,6 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                // If there is an existing surface, destroy the old one
-                if (_eglSurface != null)
-                {
-                    ClearCurrentContext();
-                    DestroyGLSurface();
-                }
-                _eglSurface = null;
-
                 /* Cardboard: Surface was created by GLSurfaceView.
                 _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
                 
@@ -582,22 +542,15 @@ namespace Microsoft.Xna.Framework
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
         {
-            IEGL10 egl = EGLContext.EGL.JavaCast<IEGL10>();
-            EGLSurface result = egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
-            if (result == null || result == EGL10.EglNoSurface)
+            EGLSurface result = _egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
+
+            if (result == EGL10.EglNoSurface)
+                result = null;
+
+            if (result == null)
                 throw new Exception("EglCreatePBufferSurface");
+
             return result;
-        }
-
-        protected void ContextSetInternal()
-        {
-            System.Diagnostics.Debug.Assert(_lostglContext == true);
-
-            if (_game.GraphicsDevice != null)
-            {
-                // DeviceReset events
-                ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
-            }
         }
 
         #region Key and Motion
@@ -753,7 +706,7 @@ namespace Microsoft.Xna.Framework
                 if (OGL_DROID.Current.Extensions == null)
                     OGL_DROID.Current.InitExtensions();
 
-                _lostglContext = false;
+                _isGLContextLost = false;
                 _egl = EGLContext.EGL.JavaCast<IEGL10>();
                 _eglDisplay = _egl.EglGetCurrentDisplay();
                 _eglContext = _egl.EglGetCurrentContext();
