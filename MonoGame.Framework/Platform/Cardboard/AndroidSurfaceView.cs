@@ -263,29 +263,25 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        void ForceSurfaceRecreation()
-        {
-            // needed at app start
-            if (_eglContext != null && _androidSurfaceAvailable)
-            {
-                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
-                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
-                _eglSurface = null;
-
-                CreateGLSurface();
-
-                // go to next state
-                _forceRecreateSurface = false;
-            }
-        }
-
         void processStateRunning()
         {
             if (_forceRecreateSurface)
             {
-                ForceSurfaceRecreation();
+                // needed at app start
+                if (_eglContext != null && _androidSurfaceAvailable)
+                {
+                    if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                        Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                    if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                        Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
+                    _eglSurface = null;
+
+                    CreateGLSurface();
+
+                    // go to next state
+                    _forceRecreateSurface = false;
+                }
+
                 return;
             }
 
