@@ -32,7 +32,6 @@ namespace Microsoft.Xna.Framework
         // What is the state of the app, for tracking surface recreation inside this class.
         enum AppState
         {
-            Pausing,  // set by android UI thread process it and transitions into 'Paused' state
             Resuming, // set by android UI thread process it and transitions into 'Running' state
 
             Paused,  // set by game thread after processing 'Pausing' state
@@ -99,6 +98,15 @@ namespace Microsoft.Xna.Framework
 
         public override void SurfaceDestroyed(ISurfaceHolder holder)
         {
+            if (_eglSurface != null)
+            {
+                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
+                _eglSurface = null;
+            }
+
             _isAndroidSurfaceAvailable = false;
 
             base.SurfaceDestroyed(holder);
@@ -157,10 +165,6 @@ namespace Microsoft.Xna.Framework
 
                 case AppState.Running: // when we are running game 
                     processStateRunning();
-                    break;
-
-                case AppState.Pausing: // when ui thread wants to pause              
-                    processStatePausing();
                     break;
 
                 case AppState.Paused: // when game thread processed pausing event
@@ -297,23 +301,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        void processStatePausing()
-        {
-            // Surface we are using needs to go away
-            if (_eglSurface != null)
-            {
-                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
-                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
-                _eglSurface = null;
-            }
-
-
-            // go to next state
-            _appState = AppState.Paused;
-        }
-
         internal void Resume()
         {
             _appState = AppState.Resuming;
@@ -331,24 +318,8 @@ namespace Microsoft.Xna.Framework
 
         internal void Pause()
         {
-            // if triggered in quick succession and blocked by graphics device creation, 
-            // pause can be triggered twice, without resume in between on some phones.
-            if (_appState != AppState.Running)
-            {
-                if (_isAndroidSurfaceChanged == false)
-                    return;
-            }
-
-            if (_isAndroidSurfaceAvailable)
-            {
-                // processing the pausing state only if the surface was created already
-                _appState = AppState.Pausing;
-            }
-            else
-            {
-                // happens if pause is called immediately after resume so that the surfaceCreated callback was not called yet.
-                _appState = AppState.Paused; // prepare for next game loop iteration
-            }
+            // prepare for next game loop iteration
+            _appState = AppState.Paused;
         }
 
         protected override void Dispose(bool disposing)
