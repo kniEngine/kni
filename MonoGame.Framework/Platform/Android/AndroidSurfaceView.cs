@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework
         volatile AppState _appState = AppState.Exited;
 
         volatile bool _isAndroidSurfaceChanged = false;
-        bool _androidSurfaceAvailable = false;
+        bool _isAndroidSurfaceAvailable = false;
 
         bool _lostglContext;
 
@@ -86,12 +86,12 @@ namespace Microsoft.Xna.Framework
 
         void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
         {
-            _androidSurfaceAvailable = true;
+            _isAndroidSurfaceAvailable = true;
         }
 
         void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
         {
-            _androidSurfaceAvailable = false;
+            _isAndroidSurfaceAvailable = false;
         }
 
         internal void SwapBuffers()
@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Framework
         {
             // this can happen if pause is triggered immediately after resume so that SurfaceCreated callback doesn't get called yet,
             // in this case we skip the resume process and pause sets a new state.
-            if (_androidSurfaceAvailable)
+            if (_isAndroidSurfaceAvailable)
             {
                 // create surface if context is available
                 if (_eglContext != null && !_lostglContext)
@@ -317,7 +317,7 @@ namespace Microsoft.Xna.Framework
             if (_isAndroidSurfaceChanged)
             {
                 // needed at app start
-                if (_eglContext != null && _androidSurfaceAvailable)
+                if (_eglContext != null && _isAndroidSurfaceAvailable)
                 {
                     if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                         Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
@@ -335,7 +335,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // do not run game if surface is not available
-            if (!_androidSurfaceAvailable)
+            if (!_isAndroidSurfaceAvailable)
                 return;
 
             // check if app wants to exit
@@ -403,7 +403,7 @@ namespace Microsoft.Xna.Framework
                     return;
             }
 
-            if (_androidSurfaceAvailable)
+            if (_isAndroidSurfaceAvailable)
             {
                 // processing the pausing state only if the surface was created already
                 _appState = AppState.Pausing;
