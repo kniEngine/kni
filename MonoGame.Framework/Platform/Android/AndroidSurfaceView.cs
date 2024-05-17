@@ -236,16 +236,8 @@ namespace Microsoft.Xna.Framework
                 // create surface if context is available
                 if (_eglContext != null && !_isGLContextLost)
                 {
-                    try
-                    {
-                        if (_eglSurface == null)
-                            CreateGLSurface();
-                    }
-                    catch (Exception ex)
-                    {
-                        // We failed to create the surface for some reason
-                        Log.Verbose("AndroidGameView", ex.ToString());
-                    }
+                    if (_eglSurface == null)
+                        CreateGLSurface();
                 }
 
                 // create context if not available
