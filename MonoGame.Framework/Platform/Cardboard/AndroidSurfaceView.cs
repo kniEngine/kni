@@ -61,11 +61,7 @@ namespace Microsoft.Xna.Framework
         {
             _gameWindow = gameWindow;
             _game = game;
-            Init(context);
-        }
 
-        private void Init(Context context)
-        {
             // Holder.SetType is deprecated. The SurfaceType value is ignored.
             if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
                 Holder.SetType(SurfaceType.Gpu);

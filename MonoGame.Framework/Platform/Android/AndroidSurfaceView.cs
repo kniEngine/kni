@@ -63,11 +63,7 @@ namespace Microsoft.Xna.Framework
         {
             _gameWindow = gameWindow;
             _game = game;
-            Init();
-        }
 
-        private void Init()
-        {
             // default
             _surfaceHolder = Holder;
             // Add callback to get the SurfaceCreated etc events
