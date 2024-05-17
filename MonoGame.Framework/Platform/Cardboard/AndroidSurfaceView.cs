@@ -304,10 +304,10 @@ namespace Microsoft.Xna.Framework
                 return;
             }
 
+            AndroidGameWindow.Activity._orientationListener.Update();
+
             try
             {
-                AndroidGameWindow.Activity._orientationListener.Update();
-
                 var handler = Tick;
                 if (handler != null)
                     handler(this, EventArgs.Empty);
