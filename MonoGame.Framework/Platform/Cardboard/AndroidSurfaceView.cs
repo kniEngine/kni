@@ -123,15 +123,6 @@ namespace Microsoft.Xna.Framework
                 System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
         }
 
-        internal void ClearCurrentContext()
-        {
-            if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-            {
-                Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
-                //System.Diagnostics.Debug.WriteLine("Error Clearing Current" + GetErrorAsString());
-            }
-        }
-
         internal void StartGameLoop()
         {
             // Cardboard: 
@@ -282,7 +273,8 @@ namespace Microsoft.Xna.Framework
             // needed at app start
             if (_eglContext != null && _androidSurfaceAvailable)
             {
-                ClearCurrentContext();
+                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
                 if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                     Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 _eglSurface = null;
@@ -327,7 +319,8 @@ namespace Microsoft.Xna.Framework
             // Surface we are using needs to go away
             if (_eglSurface != null)
             {
-                ClearCurrentContext();
+                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
                 if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                     Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 _eglSurface = null;
@@ -533,7 +526,8 @@ namespace Microsoft.Xna.Framework
                 // If there is an existing surface, destroy the old one
                 if (_eglSurface != null)
                 {
-                    ClearCurrentContext();
+                    if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                        Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
                     if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                         Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 }
