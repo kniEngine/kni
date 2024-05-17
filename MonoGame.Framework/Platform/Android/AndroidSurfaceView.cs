@@ -243,37 +243,37 @@ namespace Microsoft.Xna.Framework
                         CreateGLSurface();
                 }
 
-                // create context if not available
-                if (_eglContext == null || _isGLContextLost)
+                // Restart due to context loss
+                bool contextLost = false;
+                if (_isGLContextLost)
                 {
-                    // Start or Restart due to context loss
-                    bool contextLost = false;
-                    if (_isGLContextLost)
+                    // we actually lost the context so we need to free up our existing 
+                    // objects and re-create one.
+                    if (_eglContext != null)
                     {
-                        // we actually lost the context
-                        // so we need to free up our existing 
-                        // objects and re-create one.
-                        if (_eglContext != null)
-                        {
-                            if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
-                                throw new Exception("Could not destroy EGL context" + GetErrorAsString());
-                        }
-                        _eglContext = null;
-                        if (_eglDisplay != null)
-                        {
-                            if (!_egl.EglTerminate(_eglDisplay))
-                                throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
-                        }
-                        _eglDisplay = null;
+                        if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
+                            throw new Exception("Could not destroy EGL context" + GetErrorAsString());
+                    }
+                    _eglContext = null;
+                    if (_eglDisplay != null)
+                    {
+                        if (!_egl.EglTerminate(_eglDisplay))
+                            throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
+                    }
+                    _eglDisplay = null;
 
-                        contextLost = true;
-
-                        if (_game.GraphicsDevice != null)
-                        {
-                            ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
-                        }
+                    if (_game.GraphicsDevice != null)
+                    {
+                        ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
                     }
 
+                    contextLost = true;
+                    _isGLContextLost = false;
+                }
+
+                // create context if not available
+                if (_eglContext == null)
+                {
                     if (OGL_DROID.Current == null)
                         OGL_DROID.Initialize();
 
@@ -286,25 +286,18 @@ namespace Microsoft.Xna.Framework
                     if (OGL_DROID.Current.Extensions == null)
                         OGL_DROID.Current.InitExtensions();
 
-                    if (_eglContext != null && contextLost)
+                    if (_isGLContextLost)
                     {
                         // we lost the gl context, we need to let the programmer
                         // know so they can re-create textures etc.
-                        if (_isGLContextLost)
-                        {
-                            if (_game.GraphicsDevice != null)
-                                ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
-                        }
+                        if (_game.GraphicsDevice != null)
+                            ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
                     }
                 }
 
-                // finish state if surface created, may take a frame or two until the android UI thread callbacks fire
-                if (_eglSurface != null)
-                {
-                    // go to next state
-                    _appState = AppState.Running;
-                    _isAndroidSurfaceChanged = false;
-                }
+                // go to next state
+                _appState = AppState.Running;
+                _isAndroidSurfaceChanged = false;
             }
         }
 
@@ -516,8 +509,6 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLContext()
         {
-            _isGLContextLost = false;
-
             _egl = EGLContext.EGL.JavaCast<IEGL10>();
 
             _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
