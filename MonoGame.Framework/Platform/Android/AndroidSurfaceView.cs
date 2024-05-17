@@ -719,10 +719,14 @@ namespace Microsoft.Xna.Framework
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
         {
-            IEGL10 egl = EGLContext.EGL.JavaCast<IEGL10>();
-            EGLSurface result = egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
-            if (result == null || result == EGL10.EglNoSurface)
+            EGLSurface result = _egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
+
+            if (result == EGL10.EglNoSurface)
+                result = null;
+
+            if (result == null)
                 throw new Exception("EglCreatePBufferSurface");
+
             return result;
         }
 
