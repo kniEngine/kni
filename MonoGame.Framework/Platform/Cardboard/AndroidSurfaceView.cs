@@ -176,7 +176,6 @@ namespace Microsoft.Xna.Framework
                 
                 default:
                     throw new InvalidOperationException("currentState");
-                    break;
             }
 
             return;
