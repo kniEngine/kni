@@ -330,8 +330,6 @@ namespace Microsoft.Xna.Framework
                     // go to next state
                     _isAndroidSurfaceChanged = false;
                 }
-
-                return;
             }
 
             // do not run game if surface is not available
