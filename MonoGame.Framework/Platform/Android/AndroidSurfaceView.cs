@@ -705,7 +705,15 @@ namespace Microsoft.Xna.Framework
                         Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 }
                 _eglSurface = null;
+            }
+            catch (Exception ex)
+            {
+                _eglSurface = null;
+                Log.Error("AndroidGameView", ex.ToString());
+            }
 
+            try
+            {
                 _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
                 
                 if (_eglSurface == EGL10.EglNoSurface)
