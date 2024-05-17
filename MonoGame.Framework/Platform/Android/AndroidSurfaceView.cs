@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework
         volatile bool _isAndroidSurfaceChanged = false;
         bool _isAndroidSurfaceAvailable = false;
 
-        bool _lostglContext;
+        bool _isGLContextLost;
 
         bool? _isCancellationRequested = null;
         private int _frameRequests = 0;
@@ -100,9 +100,9 @@ namespace Microsoft.Xna.Framework
             {
                 if (_egl.EglGetError() == 0)
                 {
-                    if (_lostglContext)
+                    if (_isGLContextLost)
                         System.Diagnostics.Debug.WriteLine("Lost EGL context" + GetErrorAsString());
-                    _lostglContext = true;
+                    _isGLContextLost = true;
                 }
             }
         }
@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Framework
             if (_isAndroidSurfaceAvailable)
             {
                 // create surface if context is available
-                if (_eglContext != null && !_lostglContext)
+                if (_eglContext != null && !_isGLContextLost)
                 {
                     try
                     {
@@ -249,11 +249,11 @@ namespace Microsoft.Xna.Framework
                 }
 
                 // create context if not available
-                if (_eglContext == null || _lostglContext)
+                if (_eglContext == null || _isGLContextLost)
                 {
                     // Start or Restart due to context loss
                     bool contextLost = false;
-                    if (_lostglContext)
+                    if (_isGLContextLost)
                     {
                         // we actually lost the context
                         // so we need to free up our existing 
@@ -292,7 +292,7 @@ namespace Microsoft.Xna.Framework
                     {
                         // we lost the gl context, we need to let the programmer
                         // know so they can re-create textures etc.
-                        if (_lostglContext)
+                        if (_isGLContextLost)
                         {
                             if (_game.GraphicsDevice != null)
                                 ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
@@ -528,7 +528,7 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLContext()
         {
-            _lostglContext = false;
+            _isGLContextLost = false;
 
             _egl = EGLContext.EGL.JavaCast<IEGL10>();
 
