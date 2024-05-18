@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void MakeCurrentContext()
+        private void MakeCurrentContext()
         {
             if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                 System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
@@ -348,6 +348,8 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
+                    this.MakeCurrentContext();
+
                     var handler = Tick;
                     if (handler != null)
                         handler(this, EventArgs.Empty);

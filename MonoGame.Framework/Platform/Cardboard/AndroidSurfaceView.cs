@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Framework
             // see: OnFinishFrame.
         }
 
-        internal void MakeCurrentContext()
+        private void MakeCurrentContext()
         {
             // Surface & GL Context was created by GLSurfaceView.
             return;
@@ -297,6 +297,8 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
+                    this.MakeCurrentContext();
+
                     var handler = Tick;
                     if (handler != null)
                         handler(this, EventArgs.Empty);
