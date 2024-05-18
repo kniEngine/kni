@@ -247,18 +247,20 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
+                _isAndroidSurfaceChanged = false;
+
                 // go to next state
                 _appState = AppState.Running;
-                _isAndroidSurfaceChanged = false;
             }
         }
 
         void processStateRunning()
         {
-            if (_isAndroidSurfaceChanged)
+            // do not run game if surface is not available
+            if (_isAndroidSurfaceAvailable)
             {
                 // needed at app start
-                if (_eglContext != null && _isAndroidSurfaceAvailable)
+                if (_eglContext != null && _isAndroidSurfaceChanged)
                 {
                     // unbind Context and Surface
                     if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
@@ -270,14 +272,9 @@ namespace Microsoft.Xna.Framework
 
                     CreateGLSurface();
 
-                    // go to next state
                     _isAndroidSurfaceChanged = false;
                 }
-            }
 
-            // do not run game if surface is not available
-            if (_isAndroidSurfaceAvailable)
-            {
                 // check if app wants to exit
                 if (_isCancellationRequested.Value == true)
                 {
