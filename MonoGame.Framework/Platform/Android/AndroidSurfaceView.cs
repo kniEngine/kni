@@ -318,7 +318,7 @@ namespace Microsoft.Xna.Framework
                     if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                         Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                     _eglSurface = null;
-                   
+
                     CreateGLSurface();
 
                     // go to next state
