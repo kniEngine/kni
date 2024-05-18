@@ -306,6 +306,7 @@ namespace Microsoft.Xna.Framework
 
         void processStateRunning()
         {
+            // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
                 // needed at app start
@@ -324,11 +325,7 @@ namespace Microsoft.Xna.Framework
                     // go to next state
                     _isAndroidSurfaceChanged = false;
                 }
-            }
 
-            // do not run game if surface is not available
-            if (_isAndroidSurfaceAvailable)
-            {
                 // check if app wants to exit
                 if (_isCancellationRequested.Value == true)
                 {
