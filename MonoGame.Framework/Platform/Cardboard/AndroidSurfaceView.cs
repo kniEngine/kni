@@ -40,7 +40,6 @@ namespace Microsoft.Xna.Framework
 
         volatile AppState _appState = AppState.Exited;
 
-        volatile bool _isAndroidSurfaceChanged = false;
         bool _isAndroidSurfaceAvailable = false;
 
         bool _isGLContextLost;
@@ -77,12 +76,16 @@ namespace Microsoft.Xna.Framework
 
         public override void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
-            // Set flag to recreate gl surface or rendering can be bad on orientation change
-            // or if app is closed in one orientation and re-opened in another.
-
-            // can only be triggered when main loop is running, is unsafe to overwrite other states
-            if (_appState == AppState.Resumed)
-                _isAndroidSurfaceChanged = true;
+            if (_eglSurface != null)
+            {
+                // unbind Context and Surface
+                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                // destroy the old _eglSurface
+                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
+                _eglSurface = null;
+            }
 
             base.SurfaceChanged(holder, format, width, height);
         }
@@ -98,8 +101,10 @@ namespace Microsoft.Xna.Framework
         {
             if (_eglSurface != null)
             {
+                // unbind Context and Surface
                 if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                     Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                // destroy the old _eglSurface
                 if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
                     Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
                 _eglSurface = null;
@@ -188,7 +193,6 @@ namespace Microsoft.Xna.Framework
                     if (_eglSurface == null)
                     {
                         CreateGLSurface();
-                        _isAndroidSurfaceChanged = false;
                         BindGLSurfaceGLContext();
                         GdmResetClientBounds();
                     }
@@ -233,7 +237,6 @@ namespace Microsoft.Xna.Framework
                     if (_eglSurface == null)
                     {
                         CreateGLSurface();
-                        _isAndroidSurfaceChanged = false;
                         BindGLSurfaceGLContext();
                         GdmResetClientBounds();
                     }
@@ -251,19 +254,9 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                // needed at app start
-                if (_eglContext != null && _isAndroidSurfaceChanged)
+                if (_eglContext != null && _eglSurface == null)
                 {
-                    // unbind Context and Surface
-                    if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                        Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
-                    // destroy the old _eglSurface
-                    if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                        Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
-                    _eglSurface = null;
-
                     CreateGLSurface();
-                    _isAndroidSurfaceChanged = false;
                     BindGLSurfaceGLContext();
                     GdmResetClientBounds();
                 }
