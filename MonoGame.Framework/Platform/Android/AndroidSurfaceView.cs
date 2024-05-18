@@ -306,10 +306,10 @@ namespace Microsoft.Xna.Framework
 
         void processStateRunning()
         {
-            if (_isAndroidSurfaceChanged)
+            if (_isAndroidSurfaceAvailable)
             {
                 // needed at app start
-                if (_eglContext != null && _isAndroidSurfaceAvailable)
+                if (_eglContext != null && _isAndroidSurfaceChanged)
                 {
                     // unbind Context and Surface
                     if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
