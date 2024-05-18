@@ -212,6 +212,17 @@ namespace Microsoft.Xna.Framework
                     if (OGL_DROID.Current == null)
                         OGL_DROID.Initialize();
 
+                    _egl = EGLContext.EGL.JavaCast<IEGL10>();
+
+                    /*
+                    _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+                    if (_eglDisplay == EGL10.EglNoDisplay)
+                        throw new Exception("Could not get EGL display" + GetErrorAsString());
+
+                    int[] version = new int[2];
+                    if (!_egl.EglInitialize(_eglDisplay, version))
+                        throw new Exception("Could not initialize EGL display" + GetErrorAsString());
+                    */
                     //CreateGLContext();
 
                     if (_eglSurface == null)
@@ -643,19 +654,21 @@ namespace Microsoft.Xna.Framework
 
         void IRenderer.OnDrawFrame(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
         {
+            if (OGL_DROID.Current == null)
+                OGL_DROID.Initialize();
+
             if (_eglContext == null)
             {
-                if (OGL_DROID.Current == null)
-                    OGL_DROID.Initialize();
-                if (OGL_DROID.Current.Extensions == null)
-                    OGL_DROID.Current.InitExtensions();
-
                 _egl = EGLContext.EGL.JavaCast<IEGL10>();
                 _eglDisplay = _egl.EglGetCurrentDisplay();
+
                 _eglContext = _egl.EglGetCurrentContext();
                 if (_eglContext == EGL10.EglNoContext)
                     _eglContext = null;
             }
+
+            if (OGL_DROID.Current.Extensions == null)
+                OGL_DROID.Current.InitExtensions();
 
             if (!_isStarted)
                 return;

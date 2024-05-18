@@ -264,6 +264,16 @@ namespace Microsoft.Xna.Framework
                     if (OGL_DROID.Current == null)
                         OGL_DROID.Initialize();
 
+                    _egl = EGLContext.EGL.JavaCast<IEGL10>();
+
+                    _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+                    if (_eglDisplay == EGL10.EglNoDisplay)
+                        throw new Exception("Could not get EGL display" + GetErrorAsString());
+
+                    int[] version = new int[2];
+                    if (!_egl.EglInitialize(_eglDisplay, version))
+                        throw new Exception("Could not initialize EGL display" + GetErrorAsString());
+
                     CreateGLContext();
 
                     if (_eglSurface == null)
@@ -444,16 +454,6 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLContext()
         {
-            _egl = EGLContext.EGL.JavaCast<IEGL10>();
-
-            _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
-            if (_eglDisplay == EGL10.EglNoDisplay)
-                throw new Exception("Could not get EGL display" + GetErrorAsString());
-
-            int[] version = new int[2];
-            if (!_egl.EglInitialize(_eglDisplay, version))
-                throw new Exception("Could not initialize EGL display" + GetErrorAsString());
-
             GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
 
             int depth = 0;
