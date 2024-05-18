@@ -298,9 +298,10 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
+                _isAndroidSurfaceChanged = false;
+
                 // go to next state
                 _appState = AppState.Running;
-                _isAndroidSurfaceChanged = false;
             }
         }
 
@@ -322,7 +323,6 @@ namespace Microsoft.Xna.Framework
 
                     CreateGLSurface();
 
-                    // go to next state
                     _isAndroidSurfaceChanged = false;
                 }
 
