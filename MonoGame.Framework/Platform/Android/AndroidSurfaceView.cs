@@ -643,10 +643,8 @@ namespace Microsoft.Xna.Framework
             try
             {
                 _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
-                
                 if (_eglSurface == EGL10.EglNoSurface)
                     _eglSurface = null;
-
                 if (_eglSurface == null)
                     throw new Exception("Could not create EGL window surface" + GetErrorAsString());
             }
