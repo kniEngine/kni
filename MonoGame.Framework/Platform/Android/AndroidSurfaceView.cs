@@ -119,12 +119,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private void MakeCurrentContext()
-        {
-            if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
-                System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
-        }
-
         internal void StartGameLoop()
         {
             _isCancellationRequested = false;
@@ -214,7 +208,7 @@ namespace Microsoft.Xna.Framework
             switch (_appState)
             {
                 case AppState.Resumed:
-                    processStateResumed();
+                    ProcessStateResumed();
                     break;
 
                 case AppState.Paused:
@@ -231,22 +225,11 @@ namespace Microsoft.Xna.Framework
             return;
         }
 
-        void processStateResumed()
+        void ProcessStateResumed()
         {
             // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
-                // create surface if context is available
-                if (_eglContext != null && !_isGLContextLost)
-                {
-                    if (_eglSurface == null)
-                    {
-                        CreateGLSurface();
-                        BindGLSurfaceGLContext();
-                        GdmResetClientBounds();
-                    }
-                }
-
                 // Restart due to context loss
                 bool contextLost = false;
                 if (_isGLContextLost)
@@ -286,7 +269,8 @@ namespace Microsoft.Xna.Framework
                     if (_eglSurface == null)
                     {
                         CreateGLSurface();
-                        BindGLSurfaceGLContext();
+                        System.Diagnostics.Debug.Assert(_eglContext != null);
+                        MakeCurrentGLContext();
                         GdmResetClientBounds();
                     }
 
@@ -303,10 +287,11 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                if (_eglContext != null && _eglSurface == null)
+                if (_eglSurface == null)
                 {
                     CreateGLSurface();
-                    BindGLSurfaceGLContext();
+                    System.Diagnostics.Debug.Assert(_eglContext != null);
+                    MakeCurrentGLContext();
                     GdmResetClientBounds();
                 }
 
@@ -322,8 +307,6 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
-                    this.MakeCurrentContext();
-
                     var handler = Tick;
                     if (handler != null)
                         handler(this, EventArgs.Empty);
@@ -640,7 +623,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private void BindGLSurfaceGLContext()
+        private void MakeCurrentGLContext()
         {
             try
             {
@@ -743,9 +726,9 @@ namespace Microsoft.Xna.Framework
         #region Properties
 
         private IEGL10 _egl;
+        private EGLDisplay _eglDisplay;
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
-        private EGLDisplay _eglDisplay;
         private EGLContext _eglContext;
         private EGLSurface _eglSurface;
 
@@ -754,9 +737,9 @@ namespace Microsoft.Xna.Framework
         #region ISurfaceView
         
         IEGL10 ISurfaceView.Egl { get { return _egl; } }
+        EGLDisplay ISurfaceView.EglDisplay { get { return _eglDisplay; } }
         GLESVersion ISurfaceView.GLesVersion { get { return _glesVersion; } }
         EGLConfig ISurfaceView.EglConfig { get { return _eglConfig; } }
-        EGLDisplay ISurfaceView.EglDisplay { get { return _eglDisplay; } }
         EGLContext ISurfaceView.EglContext { get { return _eglContext; } }
         
         #endregion
