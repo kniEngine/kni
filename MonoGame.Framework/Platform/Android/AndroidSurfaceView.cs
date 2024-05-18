@@ -243,7 +243,11 @@ namespace Microsoft.Xna.Framework
                 if (_eglContext != null && !_isGLContextLost)
                 {
                     if (_eglSurface == null)
+                    {
                         CreateGLSurface();
+                        BindGLSurfaceGLContext();
+                        GdmResetClientBounds();
+                    }
                 }
 
                 // Restart due to context loss
@@ -283,7 +287,11 @@ namespace Microsoft.Xna.Framework
                     CreateGLContext();
 
                     if (_eglSurface == null)
+                    {
                         CreateGLSurface();
+                        BindGLSurfaceGLContext();
+                        GdmResetClientBounds();
+                    }
 
                     // OGL.InitExtensions() must be called while we have a gl context.
                     if (OGL_DROID.Current.Extensions == null)
@@ -322,6 +330,8 @@ namespace Microsoft.Xna.Framework
                     _eglSurface = null;
 
                     CreateGLSurface();
+                    BindGLSurfaceGLContext();
+                    GdmResetClientBounds();
 
                     _isAndroidSurfaceChanged = false;
                 }
@@ -653,10 +663,6 @@ namespace Microsoft.Xna.Framework
                 _eglSurface = null;
                 Log.Error("AndroidGameView", ex.ToString());
             }
-
-            BindGLSurfaceGLContext();
-
-            GdmResetClientBounds();
         }
 
         private void BindGLSurfaceGLContext()
