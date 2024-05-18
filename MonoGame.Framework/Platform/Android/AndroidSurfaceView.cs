@@ -236,17 +236,6 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
-                // create surface if context is available
-                if (_eglContext != null && !_isGLContextLost)
-                {
-                    if (_eglSurface == null)
-                    {
-                        CreateGLSurface();
-                        BindGLSurfaceGLContext();
-                        GdmResetClientBounds();
-                    }
-                }
-
                 // Restart due to context loss
                 bool contextLost = false;
                 if (_isGLContextLost)
