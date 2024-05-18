@@ -275,6 +275,7 @@ namespace Microsoft.Xna.Framework
                     if (_eglSurface == null)
                     {
                         CreateGLSurface();
+                        System.Diagnostics.Debug.Assert(_eglContext != null);
                         BindGLSurfaceGLContext();
                         GdmResetClientBounds();
                     }
@@ -292,9 +293,10 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                if (_eglContext != null && _eglSurface == null)
+                if (_eglSurface == null)
                 {
                     CreateGLSurface();
+                    System.Diagnostics.Debug.Assert(_eglContext != null);
                     BindGLSurfaceGLContext();
                     GdmResetClientBounds();
                 }
