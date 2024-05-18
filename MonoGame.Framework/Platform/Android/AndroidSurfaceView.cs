@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void MakeCurrentContext()
+        private void MakeCurrentContext()
         {
             if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                 System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
@@ -243,7 +243,11 @@ namespace Microsoft.Xna.Framework
                 if (_eglContext != null && !_isGLContextLost)
                 {
                     if (_eglSurface == null)
+                    {
                         CreateGLSurface();
+                        BindGLSurfaceGLContext();
+                        GdmResetClientBounds();
+                    }
                 }
 
                 // Restart due to context loss
@@ -283,7 +287,11 @@ namespace Microsoft.Xna.Framework
                     CreateGLContext();
 
                     if (_eglSurface == null)
+                    {
                         CreateGLSurface();
+                        BindGLSurfaceGLContext();
+                        GdmResetClientBounds();
+                    }
 
                     // OGL.InitExtensions() must be called while we have a gl context.
                     if (OGL_DROID.Current.Extensions == null)
@@ -322,6 +330,8 @@ namespace Microsoft.Xna.Framework
                     _eglSurface = null;
 
                     CreateGLSurface();
+                    BindGLSurfaceGLContext();
+                    GdmResetClientBounds();
 
                     _isAndroidSurfaceChanged = false;
                 }
@@ -338,6 +348,8 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
+                    this.MakeCurrentContext();
+
                     var handler = Tick;
                     if (handler != null)
                         handler(this, EventArgs.Empty);
@@ -643,16 +655,35 @@ namespace Microsoft.Xna.Framework
             try
             {
                 _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
-                
                 if (_eglSurface == EGL10.EglNoSurface)
                     _eglSurface = null;
-
                 if (_eglSurface == null)
                     throw new Exception("Could not create EGL window surface" + GetErrorAsString());
+            }
+            catch (Exception ex)
+            {
+                _eglSurface = null;
+                Log.Error("AndroidGameView", ex.ToString());
+            }
+        }
 
+        private void BindGLSurfaceGLContext()
+        {
+            try
+            {
                 if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                     throw new Exception("Could not make EGL current" + GetErrorAsString());
+            }
+            catch (Exception ex)
+            {
+                Log.Error("AndroidGameView", ex.ToString());
+            }
+        }
 
+        private void GdmResetClientBounds()
+        {
+            try
+            {
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                 // the surface is created after the correct viewport is already applied so we must do it again.
                 GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
@@ -666,7 +697,6 @@ namespace Microsoft.Xna.Framework
             }
             catch (Exception ex)
             {
-                _eglSurface = null;
                 Log.Error("AndroidGameView", ex.ToString());
             }
         }

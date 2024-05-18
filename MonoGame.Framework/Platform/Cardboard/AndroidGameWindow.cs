@@ -150,8 +150,6 @@ namespace Microsoft.Xna.Framework
 
         private void OnTick(object sender, EventArgs args)
         {
-            GameView.MakeCurrentContext();
-
             if (_game != null && !ScreenReceiver.ScreenLocked)
             {
                 ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
