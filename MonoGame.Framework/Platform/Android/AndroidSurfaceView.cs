@@ -664,6 +664,11 @@ namespace Microsoft.Xna.Framework
                 Log.Error("AndroidGameView", ex.ToString());
             }
 
+            GdmResetClientBounds();
+        }
+
+        private void GdmResetClientBounds()
+        {
             try
             {
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
