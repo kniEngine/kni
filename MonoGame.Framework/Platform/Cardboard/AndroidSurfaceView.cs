@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Framework
             switch (_appState)
             {
                 case AppState.Resumed:
-                    processStateResumed();
+                    ProcessStateResumed();
                     break;
 
                 case AppState.Paused:
@@ -182,7 +182,7 @@ namespace Microsoft.Xna.Framework
             return;
         }
 
-        void processStateResumed()
+        void ProcessStateResumed()
         {
             // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
