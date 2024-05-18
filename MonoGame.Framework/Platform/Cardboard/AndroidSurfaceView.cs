@@ -474,11 +474,28 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglSurface == null)
                     throw new Exception("Could not create EGL window surface" + GetErrorAsString());
+                */
+            }
+            catch (Exception ex)
+            {
+                _eglSurface = null;
+                Log.Error("AndroidGameView", ex.ToString());
+            }
 
+            try
+            {
+                /* Cardboard: Surface was created by GLSurfaceView.
                 if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                     throw new Exception("Could not make EGL current" + GetErrorAsString());
                 */
+            }
+            catch (Exception ex)
+            {
+                Log.Error("AndroidGameView", ex.ToString());
+            }
 
+            try
+            {
                 // Must set viewport after creation, the viewport has correct values in it already as we call it, but
                 // the surface is created after the correct viewport is already applied so we must do it again.
                 GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
@@ -492,7 +509,6 @@ namespace Microsoft.Xna.Framework
             }
             catch (Exception ex)
             {
-                _eglSurface = null;
                 Log.Error("AndroidGameView", ex.ToString());
             }
         }
