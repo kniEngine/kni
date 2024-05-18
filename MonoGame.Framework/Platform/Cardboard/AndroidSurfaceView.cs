@@ -121,15 +121,6 @@ namespace Microsoft.Xna.Framework
             // see: OnFinishFrame.
         }
 
-        private void MakeCurrentContext()
-        {
-            // Surface & GL Context was created by GLSurfaceView.
-            return;
-
-            if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
-                System.Diagnostics.Debug.WriteLine("Error Make Current" + GetErrorAsString());
-        }
-
         internal void StartGameLoop()
         {
             // Cardboard: 
@@ -227,7 +218,7 @@ namespace Microsoft.Xna.Framework
                     {
                         CreateGLSurface();
                         System.Diagnostics.Debug.Assert(_eglContext != null);
-                        BindGLSurfaceGLContext();
+                        MakeCurrentGLContext();
                         GdmResetClientBounds();
                     }
 
@@ -248,7 +239,7 @@ namespace Microsoft.Xna.Framework
                 {
                     CreateGLSurface();
                     System.Diagnostics.Debug.Assert(_eglContext != null);
-                    BindGLSurfaceGLContext();
+                    MakeCurrentGLContext();
                     GdmResetClientBounds();
                 }
 
@@ -264,8 +255,6 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
-                    this.MakeCurrentContext();
-
                     var handler = Tick;
                     if (handler != null)
                         handler(this, EventArgs.Empty);
@@ -459,7 +448,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private void BindGLSurfaceGLContext()
+        private void MakeCurrentGLContext()
         {
             try
             {
