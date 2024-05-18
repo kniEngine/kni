@@ -553,9 +553,9 @@ namespace Microsoft.Xna.Framework
         #region Properties
 
         private IEGL10 _egl;
+        private EGLDisplay _eglDisplay;
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
-        private EGLDisplay _eglDisplay;
         private EGLContext _eglContext;
         private EGLSurface _eglSurface;
 
@@ -564,9 +564,9 @@ namespace Microsoft.Xna.Framework
         #region ISurfaceView
         
         IEGL10 ISurfaceView.Egl { get { return _egl; } }
+        EGLDisplay ISurfaceView.EglDisplay { get { return _eglDisplay; } }
         GLESVersion ISurfaceView.GLesVersion { get { return _glesVersion; } }
         EGLConfig ISurfaceView.EglConfig { get { return _eglConfig; } }
-        EGLDisplay ISurfaceView.EglDisplay { get { return _eglDisplay; } }
         EGLContext ISurfaceView.EglContext { get { return _eglContext; } }
         
         #endregion
