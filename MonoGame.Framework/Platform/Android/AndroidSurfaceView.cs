@@ -654,6 +654,13 @@ namespace Microsoft.Xna.Framework
                 Log.Error("AndroidGameView", ex.ToString());
             }
 
+            BindGLSurfaceGLContext();
+
+            GdmResetClientBounds();
+        }
+
+        private void BindGLSurfaceGLContext()
+        {
             try
             {
                 if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
@@ -663,8 +670,6 @@ namespace Microsoft.Xna.Framework
             {
                 Log.Error("AndroidGameView", ex.ToString());
             }
-
-            GdmResetClientBounds();
         }
 
         private void GdmResetClientBounds()

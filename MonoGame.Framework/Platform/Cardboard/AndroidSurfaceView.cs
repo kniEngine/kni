@@ -480,6 +480,13 @@ namespace Microsoft.Xna.Framework
                 Log.Error("AndroidGameView", ex.ToString());
             }
 
+            BindGLSurfaceGLContext();
+
+            GdmResetClientBounds();
+        }
+
+        private void BindGLSurfaceGLContext()
+        {
             try
             {
                 /* Cardboard: Surface was created by GLSurfaceView.
@@ -491,8 +498,6 @@ namespace Microsoft.Xna.Framework
             {
                 Log.Error("AndroidGameView", ex.ToString());
             }
-
-            GdmResetClientBounds();
         }
 
         private void GdmResetClientBounds()
