@@ -29,14 +29,12 @@ namespace Microsoft.Xna.Framework
         , ISurfaceView
         , VRCardboard.CardboardView.IRenderer
     {
-        // What is the state of the app, for tracking surface recreation inside this class.
+        // What is the state of the app.
         enum AppState
         {
-            Resuming, // set by android UI thread process it and transitions into 'Running' state
-
-            Paused,  // set by game thread after processing 'Pausing' state
-            Running, // set by game thread after processing 'Resuming' state
-            Exited,  // set by game thread after processing 'Exiting' state
+            Paused,
+            Resumed,
+            Exited,
         }
 
 
@@ -79,11 +77,11 @@ namespace Microsoft.Xna.Framework
 
         public override void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
-            // Set flag to recreate gl surface or rendering can be bad on orientation change or if app 
-            // is closed in one orientation and re-opened in another.
+            // Set flag to recreate gl surface or rendering can be bad on orientation change
+            // or if app is closed in one orientation and re-opened in another.
 
             // can only be triggered when main loop is running, is unsafe to overwrite other states
-            if (_appState == AppState.Running)
+            if (_appState == AppState.Resumed)
                 _isAndroidSurfaceChanged = true;
 
             base.SurfaceChanged(holder, format, width, height);
@@ -151,6 +149,8 @@ namespace Microsoft.Xna.Framework
                 try { RunStep(); } // tick
                 catch (Exception ex) { /* ignore */ }
             }
+            
+            return;
         }
 
         void RunStep()
@@ -159,16 +159,11 @@ namespace Microsoft.Xna.Framework
 
             switch (_appState)
             {
-                case AppState.Resuming: // when ui thread wants to resume
-                    processStateResuming();
+                case AppState.Resumed:
+                    processStateResumed();
                     break;
 
-                case AppState.Running: // when we are running game 
-                    processStateRunning();
-                    break;
-
-                case AppState.Paused: // when game thread processed pausing event
-                    // this must be processed outside of this loop, in the new task thread!
+                case AppState.Paused:
                     break;
 
                 case AppState.Exited:
@@ -182,10 +177,9 @@ namespace Microsoft.Xna.Framework
             return;
         }
 
-        void processStateResuming()
+        void processStateResumed()
         {
-            // this can happen if pause is triggered immediately after resume so that SurfaceCreated callback doesn't get called yet,
-            // in this case we skip the resume process and pause sets a new state.
+            // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
                 // create surface if context is available
@@ -194,6 +188,7 @@ namespace Microsoft.Xna.Framework
                     if (_eglSurface == null)
                     {
                         CreateGLSurface();
+                        _isAndroidSurfaceChanged = false;
                         BindGLSurfaceGLContext();
                         GdmResetClientBounds();
                     }
@@ -238,6 +233,7 @@ namespace Microsoft.Xna.Framework
                     if (_eglSurface == null)
                     {
                         CreateGLSurface();
+                        _isAndroidSurfaceChanged = false;
                         BindGLSurfaceGLContext();
                         GdmResetClientBounds();
                     }
@@ -255,18 +251,6 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                _isAndroidSurfaceChanged = false;
-
-                // go to next state
-                _appState = AppState.Running;
-            }
-        }
-
-        void processStateRunning()
-        {
-            // do not run game if surface is not available
-            if (_isAndroidSurfaceAvailable)
-            {
                 // needed at app start
                 if (_eglContext != null && _isAndroidSurfaceChanged)
                 {
@@ -279,10 +263,9 @@ namespace Microsoft.Xna.Framework
                     _eglSurface = null;
 
                     CreateGLSurface();
+                    _isAndroidSurfaceChanged = false;
                     BindGLSurfaceGLContext();
                     GdmResetClientBounds();
-
-                    _isAndroidSurfaceChanged = false;
                 }
 
                 // check if app wants to exit
@@ -312,7 +295,7 @@ namespace Microsoft.Xna.Framework
 
         internal void Resume()
         {
-            _appState = AppState.Resuming;
+            _appState = AppState.Resumed;
 
             try
             {
@@ -327,7 +310,6 @@ namespace Microsoft.Xna.Framework
 
         internal void Pause()
         {
-            // prepare for next game loop iteration
             _appState = AppState.Paused;
         }
 
