@@ -12,6 +12,8 @@ using Android.Views;
 using Android.Runtime;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
+using Javax.Microedition.Khronos.Egl;
+using Android.Util;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -112,8 +114,66 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return GraphicsBackend.GLES; }
         }
 
+        OGL_DROID _ogl;
+        EGLDisplay _eglDisplay;
+        EGLConfig[] _eglConfigs;
+
+        internal OGL_DROID Ogl { get { return _ogl; } }
+        internal EGLDisplay EglDisplay { get { return _eglDisplay; } }
+        internal EGLConfig[] EglConfig { get { return _eglConfigs; } }
+
+
         internal ConcreteGraphicsAdapter()
         {
+            if (OGL_DROID.Current == null)
+                OGL_DROID.Initialize();
+
+            _ogl = (OGL_DROID)OGL.Current;
+
+#if CARDBOARD
+            _eglDisplay = _ogl.Egl.EglGetCurrentDisplay();
+#else
+            _eglDisplay = _ogl.Egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+            if (_eglDisplay == EGL10.EglNoDisplay)
+                throw new Exception("Could not get EGL display" + _ogl.GetEglErrorAsString());
+
+            int[] version = new int[2];
+            if (!_ogl.Egl.EglInitialize(_eglDisplay, version))
+                throw new Exception("Could not initialize EGL display" + _ogl.GetEglErrorAsString());
+#endif
+
+            InitConfigs();
+
+        }
+
+        ~ConcreteGraphicsAdapter()
+        {
+#if CARDBOARD
+#else
+            if (_eglDisplay != null)
+            {
+                if (!_ogl.Egl.EglTerminate(_eglDisplay))
+                    throw new Exception("Could not terminate EGL connection" + _ogl.GetEglErrorAsString());
+            }
+            _eglDisplay = null;
+#endif
+        }
+
+        private void InitConfigs()
+        {
+            int[] numConfigs = new int[1];
+            if (!_ogl.Egl.EglGetConfigs(_eglDisplay, null, 0, numConfigs))
+                throw new Exception("Could not get config count. " + _ogl.GetEglErrorAsString());
+
+            _eglConfigs = new EGLConfig[numConfigs[0]];
+            _ogl.Egl.EglGetConfigs(_eglDisplay, _eglConfigs, numConfigs[0], numConfigs);
+
+            Log.Verbose("AndroidGameView", "Device Supports");
+            foreach (EGLConfig eglConfig in _eglConfigs)
+            {
+                Log.Verbose("AndroidGameView", string.Format(" {0}", AndroidSurfaceView.SurfaceConfig.FromEGLConfig(eglConfig, _ogl.Egl, _eglDisplay)));
+            }
+
         }
 
         public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
@@ -121,30 +181,28 @@ namespace Microsoft.Xna.Platform.Graphics
             if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
-            var GL = OGL.Current;
-
             switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
                     int maxTextureSize;
-                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize);                    
+                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize);                    
                     if (maxTextureSize >= 4096) return true;
                     return false;
                 case GraphicsProfile.FL10_0:
                     int maxTextureSize2;
-                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize2);                    
+                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize2);                    
                     if (maxTextureSize2 >= 8192) return true;
                     return false;
                 case GraphicsProfile.FL10_1:
                     int maxVertexBufferSlots;
-                    GL.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexBufferSlots);
+                    _ogl.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexBufferSlots);
                     if (maxVertexBufferSlots >= 32) return true;
                     return false;
                 case GraphicsProfile.FL11_0:
                     int maxTextureSize3;
-                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize3);                    
+                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize3);                    
                     if (maxTextureSize3 >= 16384) return true;
                     return false;
                 case GraphicsProfile.FL11_1:
