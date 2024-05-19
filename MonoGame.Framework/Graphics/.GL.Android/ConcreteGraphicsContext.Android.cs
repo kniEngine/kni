@@ -23,7 +23,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
 
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
@@ -38,7 +40,9 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
                 return;
 
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
@@ -51,7 +55,9 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
                 return;
 
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 

@@ -77,7 +77,8 @@ namespace Microsoft.Xna.Framework
         {
             if (_eglSurface != null)
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 // unbind Context and Surface
                 if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
@@ -102,7 +103,8 @@ namespace Microsoft.Xna.Framework
         {
             if (_eglSurface != null)
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 // unbind Context and Surface
                 if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
@@ -184,7 +186,8 @@ namespace Microsoft.Xna.Framework
                 if (OGL_DROID.Current == null)
                     OGL_DROID.Initialize();
 
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 if (_eglDisplay == null)
                 {
@@ -405,7 +408,8 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 /* Cardboard: Surface was created by GLSurfaceView.
                 _eglSurface = GL.Egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
@@ -426,7 +430,8 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 /* Cardboard: Surface was created by GLSurfaceView.
                 if (!GL.Egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
@@ -462,7 +467,8 @@ namespace Microsoft.Xna.Framework
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
         {
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
 
             EGLSurface result = GL.Egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
 
@@ -619,10 +625,8 @@ namespace Microsoft.Xna.Framework
 
         void IRenderer.OnDrawFrame(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
         {
-            if (OGL_DROID.Current == null)
-                OGL_DROID.Initialize();
-
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
 
             if (_eglDisplay == null)
             {

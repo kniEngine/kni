@@ -73,7 +73,8 @@ namespace Microsoft.Xna.Framework
         {
             if (_eglSurface != null)
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 // unbind Context and Surface
                 if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
@@ -95,7 +96,8 @@ namespace Microsoft.Xna.Framework
         {
             if (_eglSurface != null)
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 // unbind Context and Surface
                 if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
@@ -111,7 +113,8 @@ namespace Microsoft.Xna.Framework
 
         internal void SwapBuffers()
         {
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
 
             if (!GL.Egl.EglSwapBuffers(_eglDisplay, _eglSurface))
             {
@@ -172,7 +175,8 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglSurface != null)
                 {
-                    var GL = ((OGL_DROID)OGL_DROID.Current);
+                    var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                    var GL = adapter.Ogl;
 
                     if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                         Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
@@ -183,7 +187,8 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglContext != null)
                 {
-                    var GL = ((OGL_DROID)OGL_DROID.Current);
+                    var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                    var GL = adapter.Ogl;
 
                     if (_eglContext != null)
                     {
@@ -239,10 +244,8 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
-                if (OGL_DROID.Current == null)
-                    OGL_DROID.Initialize();
-
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 if (_eglDisplay == null)
                 {
@@ -460,7 +463,8 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLContext()
         {
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
 
             GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
 
@@ -578,7 +582,8 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 _eglSurface = GL.Egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
                 if (_eglSurface == EGL10.EglNoSurface)
@@ -597,7 +602,8 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                var GL = ((OGL_DROID)OGL_DROID.Current);
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
 
                 if (!GL.Egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
                     throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
@@ -631,7 +637,8 @@ namespace Microsoft.Xna.Framework
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
         {
-            var GL = ((OGL_DROID)OGL_DROID.Current);
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
 
             EGLSurface result = GL.Egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
 

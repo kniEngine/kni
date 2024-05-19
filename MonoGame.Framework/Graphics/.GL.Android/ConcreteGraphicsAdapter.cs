@@ -112,8 +112,17 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return GraphicsBackend.GLES; }
         }
 
+        OGL_DROID _ogl;
+
+        internal OGL_DROID Ogl { get { return _ogl; } }
+
         internal ConcreteGraphicsAdapter()
         {
+            if (OGL_DROID.Current == null)
+                OGL_DROID.Initialize();
+
+            _ogl = (OGL_DROID)OGL.Current;
+
         }
 
         public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)
@@ -121,30 +130,28 @@ namespace Microsoft.Xna.Platform.Graphics
             if (GraphicsAdapter.UseReferenceDevice)
                 return true;
 
-            var GL = OGL.Current;
-
             switch (graphicsProfile)
             {
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
                     int maxTextureSize;
-                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize);                    
+                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize);                    
                     if (maxTextureSize >= 4096) return true;
                     return false;
                 case GraphicsProfile.FL10_0:
                     int maxTextureSize2;
-                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize2);                    
+                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize2);                    
                     if (maxTextureSize2 >= 8192) return true;
                     return false;
                 case GraphicsProfile.FL10_1:
                     int maxVertexBufferSlots;
-                    GL.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexBufferSlots);
+                    _ogl.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexBufferSlots);
                     if (maxVertexBufferSlots >= 32) return true;
                     return false;
                 case GraphicsProfile.FL11_0:
                     int maxTextureSize3;
-                    GL.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize3);                    
+                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize3);                    
                     if (maxTextureSize3 >= 16384) return true;
                     return false;
                 case GraphicsProfile.FL11_1:
