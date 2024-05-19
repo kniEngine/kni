@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Android.Opengl;
+using Android.Runtime;
 using Javax.Microedition.Khronos.Egl;
 using MonoGame.Framework.Utilities;
 
@@ -23,6 +24,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         public IntPtr libES3 = FuncLoader.LoadLibrary("libGLESv3.so");
         public IntPtr libGL = FuncLoader.LoadLibrary("libGL.so");
 
+        private IEGL10 _egl;
+
+        public IEGL10 Egl { get { return _egl; } }
 
         public static void Initialize()
         {
@@ -33,6 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         private OGL_DROID() : base()
         {
+            _egl = Javax.Microedition.Khronos.Egl.EGLContext.EGL.JavaCast<IEGL10>();
         }
 
 

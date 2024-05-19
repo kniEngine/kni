@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Threading;
 using Android.Content;
 using Android.Media;
-using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Javax.Microedition.Khronos.Egl;
@@ -264,7 +263,7 @@ namespace Microsoft.Xna.Framework
                     if (OGL_DROID.Current == null)
                         OGL_DROID.Initialize();
 
-                    _egl = EGLContext.EGL.JavaCast<IEGL10>();
+                    _egl = ((OGL_DROID)OGL_DROID.Current).Egl;
 
                     _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
                     if (_eglDisplay == EGL10.EglNoDisplay)
