@@ -12,7 +12,6 @@ namespace Microsoft.Xna.Platform
     {
         GLESVersion GLesVersion { get; }
         EGLConfig EglConfig { get; }
-        EGLDisplay EglDisplay { get; }
         EGLContext EglContext { get; }
     }
 }

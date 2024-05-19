@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Runtime;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
+using Javax.Microedition.Khronos.Egl;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -113,8 +114,10 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         OGL_DROID _ogl;
+        EGLDisplay _eglDisplay;
 
         internal OGL_DROID Ogl { get { return _ogl; } }
+        internal EGLDisplay EglDisplay { get { return _eglDisplay; } }
 
         internal ConcreteGraphicsAdapter()
         {
@@ -123,6 +126,30 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _ogl = (OGL_DROID)OGL.Current;
 
+#if CARDBOARD
+            _eglDisplay = _ogl.Egl.EglGetCurrentDisplay();
+#else
+            _eglDisplay = _ogl.Egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+            if (_eglDisplay == EGL10.EglNoDisplay)
+                throw new Exception("Could not get EGL display" + _ogl.GetEglErrorAsString());
+
+            int[] version = new int[2];
+            if (!_ogl.Egl.EglInitialize(_eglDisplay, version))
+                throw new Exception("Could not initialize EGL display" + _ogl.GetEglErrorAsString());
+#endif
+        }
+
+        ~ConcreteGraphicsAdapter()
+        {
+#if CARDBOARD
+#else
+            if (_eglDisplay != null)
+            {
+                if (!_ogl.Egl.EglTerminate(_eglDisplay))
+                    throw new Exception("Could not terminate EGL connection" + _ogl.GetEglErrorAsString());
+            }
+            _eglDisplay = null;
+#endif
         }
 
         public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)

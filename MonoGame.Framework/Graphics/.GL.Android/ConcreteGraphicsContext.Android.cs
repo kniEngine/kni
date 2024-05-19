@@ -43,10 +43,8 @@ namespace Microsoft.Xna.Platform.Graphics
             var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
             var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
-            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
-            ISurfaceView view = gameWindow.GameView;
 
-            if (!GL.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
                 throw new Exception("Could not Bind DisposeContext" + GL.GetEglErrorAsString());
         }
 
@@ -58,10 +56,8 @@ namespace Microsoft.Xna.Platform.Graphics
             var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
             var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
-            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
-            ISurfaceView view = gameWindow.GameView;
 
-            if (!GL.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                 throw new Exception("Could not Unbind DisposeContext" + GL.GetEglErrorAsString());
         }
 

@@ -77,10 +77,10 @@ namespace Microsoft.Xna.Framework
                 var GL = adapter.Ogl;
 
                 // unbind Context and Surface
-                if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                     Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
                 // destroy the old _eglSurface
-                if (!GL.Egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
                     Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
                 _eglSurface = null;
             }
@@ -100,10 +100,10 @@ namespace Microsoft.Xna.Framework
                 var GL = adapter.Ogl;
 
                 // unbind Context and Surface
-                if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                     Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
                 // destroy the old _eglSurface
-                if (!GL.Egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
                     Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
                 _eglSurface = null;
             }
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework
             var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
 
-            if (!GL.Egl.EglSwapBuffers(_eglDisplay, _eglSurface))
+            if (!GL.Egl.EglSwapBuffers(adapter.EglDisplay, _eglSurface))
             {
                 if (GL.Egl.EglGetError() == 0)
                 {
@@ -178,9 +178,9 @@ namespace Microsoft.Xna.Framework
                     var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                     var GL = adapter.Ogl;
 
-                    if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                         Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
-                    if (!GL.Egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
                         Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
                     _eglSurface = null;
                 }
@@ -192,16 +192,10 @@ namespace Microsoft.Xna.Framework
 
                     if (_eglContext != null)
                     {
-                        if (!GL.Egl.EglDestroyContext(_eglDisplay, _eglContext))
+                        if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, _eglContext))
                             throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
                     }
                     _eglContext = null;
-                    if (_eglDisplay != null)
-                    {
-                        if (!GL.Egl.EglTerminate(_eglDisplay))
-                            throw new Exception("Could not terminate EGL connection" + GL.GetEglErrorAsString());
-                    }
-                    _eglDisplay = null;
 
                     if (_game.GraphicsDevice != null)
                     {
@@ -247,17 +241,6 @@ namespace Microsoft.Xna.Framework
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
 
-                if (_eglDisplay == null)
-                {
-                    _eglDisplay = GL.Egl.EglGetDisplay(EGL10.EglDefaultDisplay);
-                    if (_eglDisplay == EGL10.EglNoDisplay)
-                        throw new Exception("Could not get EGL display" + GL.GetEglErrorAsString());
-
-                    int[] version = new int[2];
-                    if (!GL.Egl.EglInitialize(_eglDisplay, version))
-                        throw new Exception("Could not initialize EGL display" + GL.GetEglErrorAsString());
-                }
-
                 // Restart due to context loss
                 bool contextLost = false;
                 if (_isGLContextLost)
@@ -266,7 +249,7 @@ namespace Microsoft.Xna.Framework
                     // objects and re-create one.
                     if (_eglContext != null)
                     {
-                        if (!GL.Egl.EglDestroyContext(_eglDisplay, _eglContext))
+                        if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, _eglContext))
                             throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
                     }
                     _eglContext = null;
@@ -520,17 +503,17 @@ namespace Microsoft.Xna.Framework
             int[] numConfigs = new int[1];
             EGLConfig[] results = new EGLConfig[1];
 
-            if (!GL.Egl.EglGetConfigs(_eglDisplay, null, 0, numConfigs))
+            if (!GL.Egl.EglGetConfigs(adapter.EglDisplay, null, 0, numConfigs))
             {
                 throw new Exception("Could not get config count. " + GL.GetEglErrorAsString());
             }
 
             EGLConfig[] eglConfigs = new EGLConfig[numConfigs[0]];
-            GL.Egl.EglGetConfigs(_eglDisplay, eglConfigs, numConfigs[0], numConfigs);
+            GL.Egl.EglGetConfigs(adapter.EglDisplay, eglConfigs, numConfigs[0], numConfigs);
             Log.Verbose("AndroidGameView", "Device Supports");
             foreach (EGLConfig eglConfig in eglConfigs)
             {
-                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(eglConfig, GL.Egl, _eglDisplay)));
+                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(eglConfig, GL.Egl, adapter.EglDisplay)));
             }
 
             bool found = false;
@@ -538,7 +521,7 @@ namespace Microsoft.Xna.Framework
             foreach (SurfaceConfig surfaceConfig in surfaceConfigs)
             {
                 Log.Verbose("AndroidGameView", string.Format("Checking Config : {0}", surfaceConfig));
-                found = GL.Egl.EglChooseConfig(_eglDisplay, surfaceConfig.ToConfigAttribs(), results, 1, numConfigs);
+                found = GL.Egl.EglChooseConfig(adapter.EglDisplay, surfaceConfig.ToConfigAttribs(), results, 1, numConfigs);
                 Log.Verbose("AndroidGameView", "EglChooseConfig returned {0} and {1}", found, numConfigs[0]);
                 if (!found || numConfigs[0] <= 0)
                 {
@@ -556,7 +539,7 @@ namespace Microsoft.Xna.Framework
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", ver);
 
-                _eglContext = GL.Egl.EglCreateContext(_eglDisplay, results[0], EGL10.EglNoContext, ver.GetAttributes());
+                _eglContext = GL.Egl.EglCreateContext(adapter.EglDisplay, results[0], EGL10.EglNoContext, ver.GetAttributes());
 
                 if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
@@ -585,7 +568,7 @@ namespace Microsoft.Xna.Framework
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
 
-                _eglSurface = GL.Egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
                 if (_eglSurface == EGL10.EglNoSurface)
                     _eglSurface = null;
                 if (_eglSurface == null)
@@ -605,7 +588,7 @@ namespace Microsoft.Xna.Framework
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
 
-                if (!GL.Egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                     throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
             }
             catch (Exception ex)
@@ -640,7 +623,7 @@ namespace Microsoft.Xna.Framework
             var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
 
-            EGLSurface result = GL.Egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
+            EGLSurface result = GL.Egl.EglCreatePbufferSurface(adapter.EglDisplay, config, attribList);
 
             if (result == EGL10.EglNoSurface)
                 result = null;
@@ -706,7 +689,6 @@ namespace Microsoft.Xna.Framework
 
         #region Properties
 
-        private EGLDisplay _eglDisplay;
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
         private EGLContext _eglContext;
@@ -716,7 +698,6 @@ namespace Microsoft.Xna.Framework
 
         #region ISurfaceView
         
-        EGLDisplay ISurfaceView.EglDisplay { get { return _eglDisplay; } }
         GLESVersion ISurfaceView.GLesVersion { get { return _glesVersion; } }
         EGLConfig ISurfaceView.EglConfig { get { return _eglConfig; } }
         EGLContext ISurfaceView.EglContext { get { return _eglContext; } }

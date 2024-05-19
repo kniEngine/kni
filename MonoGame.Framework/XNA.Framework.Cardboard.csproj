@@ -18,7 +18,7 @@
     <ProjectGuid>{BF257928-8B5D-4371-BD03-C18DA71918C3}</ProjectGuid>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>ANDROID;GLES;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>ANDROID;CARDBOARD;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
