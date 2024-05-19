@@ -177,6 +177,24 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
+                if (OGL_DROID.Current == null)
+                    OGL_DROID.Initialize();
+
+                _egl = ((OGL_DROID)OGL_DROID.Current).Egl;
+
+                if (_eglDisplay == null)
+                {
+                    /*
+                    _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+                    if (_eglDisplay == EGL10.EglNoDisplay)
+                        throw new Exception("Could not get EGL display" + GetErrorAsString());
+
+                    int[] version = new int[2];
+                    if (!_egl.EglInitialize(_eglDisplay, version))
+                        throw new Exception("Could not initialize EGL display" + GetErrorAsString());
+                    */
+                }
+
                 // Restart due to context loss
                 bool contextLost = false;
                 if (_isGLContextLost)
@@ -208,20 +226,6 @@ namespace Microsoft.Xna.Framework
                 // create context if not available
                 if (_eglContext == null)
                 {
-                    if (OGL_DROID.Current == null)
-                        OGL_DROID.Initialize();
-
-                    _egl = ((OGL_DROID)OGL_DROID.Current).Egl;
-
-                    /*
-                    _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
-                    if (_eglDisplay == EGL10.EglNoDisplay)
-                        throw new Exception("Could not get EGL display" + GetErrorAsString());
-
-                    int[] version = new int[2];
-                    if (!_egl.EglInitialize(_eglDisplay, version))
-                        throw new Exception("Could not initialize EGL display" + GetErrorAsString());
-                    */
                     //CreateGLContext();
 
                     if (_eglSurface == null)
@@ -656,11 +660,15 @@ namespace Microsoft.Xna.Framework
             if (OGL_DROID.Current == null)
                 OGL_DROID.Initialize();
 
+            _egl = ((OGL_DROID)OGL_DROID.Current).Egl;
+
+            if (_eglDisplay == null)
+            {
+                _eglDisplay = _egl.EglGetCurrentDisplay();
+            }
+
             if (_eglContext == null)
             {
-                _egl = ((OGL_DROID)OGL_DROID.Current).Egl;
-                _eglDisplay = _egl.EglGetCurrentDisplay();
-
                 _eglContext = _egl.EglGetCurrentContext();
                 if (_eglContext == EGL10.EglNoContext)
                     _eglContext = null;
