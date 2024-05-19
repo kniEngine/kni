@@ -73,12 +73,14 @@ namespace Microsoft.Xna.Framework
         {
             if (_eglSurface != null)
             {
+                var GL = ((OGL_DROID)OGL_DROID.Current);
+
                 // unbind Context and Surface
-                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
                 // destroy the old _eglSurface
-                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
+                if (!GL.Egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
                 _eglSurface = null;
             }
 
@@ -93,12 +95,14 @@ namespace Microsoft.Xna.Framework
         {
             if (_eglSurface != null)
             {
+                var GL = ((OGL_DROID)OGL_DROID.Current);
+
                 // unbind Context and Surface
-                if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
+                if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
                 // destroy the old _eglSurface
-                if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
+                if (!GL.Egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                    Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
                 _eglSurface = null;
             }
 
@@ -107,12 +111,14 @@ namespace Microsoft.Xna.Framework
 
         internal void SwapBuffers()
         {
-            if (!_egl.EglSwapBuffers(_eglDisplay, _eglSurface))
+            var GL = ((OGL_DROID)OGL_DROID.Current);
+
+            if (!GL.Egl.EglSwapBuffers(_eglDisplay, _eglSurface))
             {
-                if (_egl.EglGetError() == 0)
+                if (GL.Egl.EglGetError() == 0)
                 {
                     if (_isGLContextLost)
-                        System.Diagnostics.Debug.WriteLine("Lost EGL context" + GetErrorAsString());
+                        System.Diagnostics.Debug.WriteLine("Lost EGL context" + GL.GetEglErrorAsString());
                     _isGLContextLost = true;
                 }
             }
@@ -166,25 +172,29 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglSurface != null)
                 {
-                    if (!_egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                        Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GetErrorAsString());
-                    if (!_egl.EglDestroySurface(_eglDisplay, _eglSurface))
-                        Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GetErrorAsString());
+                    var GL = ((OGL_DROID)OGL_DROID.Current);
+
+                    if (!GL.Egl.EglMakeCurrent(_eglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                        Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
+                    if (!GL.Egl.EglDestroySurface(_eglDisplay, _eglSurface))
+                        Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
                     _eglSurface = null;
                 }
 
                 if (_eglContext != null)
                 {
+                    var GL = ((OGL_DROID)OGL_DROID.Current);
+
                     if (_eglContext != null)
                     {
-                        if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
-                            throw new Exception("Could not destroy EGL context" + GetErrorAsString());
+                        if (!GL.Egl.EglDestroyContext(_eglDisplay, _eglContext))
+                            throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
                     }
                     _eglContext = null;
                     if (_eglDisplay != null)
                     {
-                        if (!_egl.EglTerminate(_eglDisplay))
-                            throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
+                        if (!GL.Egl.EglTerminate(_eglDisplay))
+                            throw new Exception("Could not terminate EGL connection" + GL.GetEglErrorAsString());
                     }
                     _eglDisplay = null;
 
@@ -232,17 +242,17 @@ namespace Microsoft.Xna.Framework
                 if (OGL_DROID.Current == null)
                     OGL_DROID.Initialize();
 
-                _egl = ((OGL_DROID)OGL_DROID.Current).Egl;
+                var GL = ((OGL_DROID)OGL_DROID.Current);
 
                 if (_eglDisplay == null)
                 {
-                    _eglDisplay = _egl.EglGetDisplay(EGL10.EglDefaultDisplay);
+                    _eglDisplay = GL.Egl.EglGetDisplay(EGL10.EglDefaultDisplay);
                     if (_eglDisplay == EGL10.EglNoDisplay)
-                        throw new Exception("Could not get EGL display" + GetErrorAsString());
+                        throw new Exception("Could not get EGL display" + GL.GetEglErrorAsString());
 
                     int[] version = new int[2];
-                    if (!_egl.EglInitialize(_eglDisplay, version))
-                        throw new Exception("Could not initialize EGL display" + GetErrorAsString());
+                    if (!GL.Egl.EglInitialize(_eglDisplay, version))
+                        throw new Exception("Could not initialize EGL display" + GL.GetEglErrorAsString());
                 }
 
                 // Restart due to context loss
@@ -253,14 +263,14 @@ namespace Microsoft.Xna.Framework
                     // objects and re-create one.
                     if (_eglContext != null)
                     {
-                        if (!_egl.EglDestroyContext(_eglDisplay, _eglContext))
-                            throw new Exception("Could not destroy EGL context" + GetErrorAsString());
+                        if (!GL.Egl.EglDestroyContext(_eglDisplay, _eglContext))
+                            throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
                     }
                     _eglContext = null;
                     if (_eglDisplay != null)
                     {
-                        if (!_egl.EglTerminate(_eglDisplay))
-                            throw new Exception("Could not terminate EGL connection" + GetErrorAsString());
+                        if (!GL.Egl.EglTerminate(_eglDisplay))
+                            throw new Exception("Could not terminate EGL connection" + GL.GetEglErrorAsString());
                     }
                     _eglDisplay = null;
 
@@ -456,6 +466,8 @@ namespace Microsoft.Xna.Framework
 
         protected void CreateGLContext()
         {
+            var GL = ((OGL_DROID)OGL_DROID.Current);
+
             GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
 
             int depth = 0;
@@ -510,17 +522,17 @@ namespace Microsoft.Xna.Framework
             int[] numConfigs = new int[1];
             EGLConfig[] results = new EGLConfig[1];
 
-            if (!_egl.EglGetConfigs(_eglDisplay, null, 0, numConfigs))
+            if (!GL.Egl.EglGetConfigs(_eglDisplay, null, 0, numConfigs))
             {
-                throw new Exception("Could not get config count. " + GetErrorAsString());
+                throw new Exception("Could not get config count. " + GL.GetEglErrorAsString());
             }
 
             EGLConfig[] eglConfigs = new EGLConfig[numConfigs[0]];
-            _egl.EglGetConfigs(_eglDisplay, eglConfigs, numConfigs[0], numConfigs);
+            GL.Egl.EglGetConfigs(_eglDisplay, eglConfigs, numConfigs[0], numConfigs);
             Log.Verbose("AndroidGameView", "Device Supports");
             foreach (EGLConfig eglConfig in eglConfigs)
             {
-                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(eglConfig, _egl, _eglDisplay)));
+                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(eglConfig, GL.Egl, _eglDisplay)));
             }
 
             bool found = false;
@@ -528,7 +540,7 @@ namespace Microsoft.Xna.Framework
             foreach (SurfaceConfig surfaceConfig in surfaceConfigs)
             {
                 Log.Verbose("AndroidGameView", string.Format("Checking Config : {0}", surfaceConfig));
-                found = _egl.EglChooseConfig(_eglDisplay, surfaceConfig.ToConfigAttribs(), results, 1, numConfigs);
+                found = GL.Egl.EglChooseConfig(_eglDisplay, surfaceConfig.ToConfigAttribs(), results, 1, numConfigs);
                 Log.Verbose("AndroidGameView", "EglChooseConfig returned {0} and {1}", found, numConfigs[0]);
                 if (!found || numConfigs[0] <= 0)
                 {
@@ -540,18 +552,18 @@ namespace Microsoft.Xna.Framework
             }
 
             if (!found || numConfigs[0] <= 0)
-                throw new Exception("No valid EGL configs found" + GetErrorAsString());
+                throw new Exception("No valid EGL configs found" + GL.GetEglErrorAsString());
 
             foreach (GLESVersion ver in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", ver);
 
-                _eglContext = _egl.EglCreateContext(_eglDisplay, results[0], EGL10.EglNoContext, ver.GetAttributes());
+                _eglContext = GL.Egl.EglCreateContext(_eglDisplay, results[0], EGL10.EglNoContext, ver.GetAttributes());
 
                 if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
                     _eglContext = null;
-                    Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", ver, GetErrorAsString()));
+                    Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", ver, GL.GetEglErrorAsString()));
                     continue;
                 }
                 _glesVersion = ver;
@@ -562,61 +574,23 @@ namespace Microsoft.Xna.Framework
                 _eglContext = null;
 
             if (_eglContext == null)
-                throw new Exception("Could not create EGL context" + GetErrorAsString());
+                throw new Exception("Could not create EGL context" + GL.GetEglErrorAsString());
 
             Log.Verbose("AndroidGameView", "Created GLES {0} Context", _glesVersion);
             _eglConfig = results[0];
-        }
-
-        private string GetErrorAsString()
-        {
-            switch (_egl.EglGetError())
-            {
-                case EGL10.EglSuccess:
-                    return "Success";
-
-                case EGL10.EglNotInitialized:
-                    return "Not Initialized";
-
-                case EGL10.EglBadAccess:
-                    return "Bad Access";
-                case EGL10.EglBadAlloc:
-                    return "Bad Allocation";
-                case EGL10.EglBadAttribute:
-                    return "Bad Attribute";
-                case EGL10.EglBadConfig:
-                    return "Bad Config";
-                case EGL10.EglBadContext:
-                    return "Bad Context";
-                case EGL10.EglBadCurrentSurface:
-                    return "Bad Current Surface";
-                case EGL10.EglBadDisplay:
-                    return "Bad Display";
-                case EGL10.EglBadMatch:
-                    return "Bad Match";
-                case EGL10.EglBadNativePixmap:
-                    return "Bad Native Pixmap";
-                case EGL10.EglBadNativeWindow:
-                    return "Bad Native Window";
-                case EGL10.EglBadParameter:
-                    return "Bad Parameter";
-                case EGL10.EglBadSurface:
-                    return "Bad Surface";
-
-                default:
-                    return "Unknown Error";
-            }
         }
 
         protected void CreateGLSurface()
         {
             try
             {
-                _eglSurface = _egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                var GL = ((OGL_DROID)OGL_DROID.Current);
+
+                _eglSurface = GL.Egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
                 if (_eglSurface == EGL10.EglNoSurface)
                     _eglSurface = null;
                 if (_eglSurface == null)
-                    throw new Exception("Could not create EGL window surface" + GetErrorAsString());
+                    throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
             }
             catch (Exception ex)
             {
@@ -629,8 +603,10 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                if (!_egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
-                    throw new Exception("Could not make EGL current" + GetErrorAsString());
+                var GL = ((OGL_DROID)OGL_DROID.Current);
+
+                if (!GL.Egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
+                    throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
             }
             catch (Exception ex)
             {
@@ -661,7 +637,9 @@ namespace Microsoft.Xna.Framework
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
         {
-            EGLSurface result = _egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
+            var GL = ((OGL_DROID)OGL_DROID.Current);
+
+            EGLSurface result = GL.Egl.EglCreatePbufferSurface(_eglDisplay, config, attribList);
 
             if (result == EGL10.EglNoSurface)
                 result = null;
@@ -727,7 +705,6 @@ namespace Microsoft.Xna.Framework
 
         #region Properties
 
-        private IEGL10 _egl;
         private EGLDisplay _eglDisplay;
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;

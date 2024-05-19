@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int[] attribs = view.GLesVersion.GetAttributes();
             _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, view.EglConfig, view.EglContext, attribs);
             if (_glSharedContext != null && _glSharedContext != EGL10.EglNoContext)
-                    throw new Exception("Could not create _glSharedContext");
+                    throw new Exception("Could not create _glSharedContext" + GL.GetEglErrorAsString());
         }
 
         public override void BindDisposeContext()
@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
             ISurfaceView view = gameWindow.GameView;
 
             if (!GL.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
-                throw new Exception("Could not Bind DisposeContext");
+                throw new Exception("Could not Bind DisposeContext" + GL.GetEglErrorAsString());
         }
 
         public override void UnbindDisposeContext()
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
             ISurfaceView view = gameWindow.GameView;
 
             if (!GL.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                throw new Exception("Could not Unbind DisposeContext");
+                throw new Exception("Could not Unbind DisposeContext" + GL.GetEglErrorAsString());
         }
 
 
