@@ -13,6 +13,7 @@ using Android.Runtime;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
 using Javax.Microedition.Khronos.Egl;
+using Android.Util;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -115,9 +116,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         OGL_DROID _ogl;
         EGLDisplay _eglDisplay;
+        EGLConfig[] _eglConfigs;
 
         internal OGL_DROID Ogl { get { return _ogl; } }
         internal EGLDisplay EglDisplay { get { return _eglDisplay; } }
+        internal EGLConfig[] EglConfig { get { return _eglConfigs; } }
+
 
         internal ConcreteGraphicsAdapter()
         {
@@ -137,6 +141,9 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!_ogl.Egl.EglInitialize(_eglDisplay, version))
                 throw new Exception("Could not initialize EGL display" + _ogl.GetEglErrorAsString());
 #endif
+
+            InitConfigs();
+
         }
 
         ~ConcreteGraphicsAdapter()
@@ -150,6 +157,23 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             _eglDisplay = null;
 #endif
+        }
+
+        private void InitConfigs()
+        {
+            int[] numConfigs = new int[1];
+            if (!_ogl.Egl.EglGetConfigs(_eglDisplay, null, 0, numConfigs))
+                throw new Exception("Could not get config count. " + _ogl.GetEglErrorAsString());
+
+            _eglConfigs = new EGLConfig[numConfigs[0]];
+            _ogl.Egl.EglGetConfigs(_eglDisplay, _eglConfigs, numConfigs[0], numConfigs);
+
+            Log.Verbose("AndroidGameView", "Device Supports");
+            foreach (EGLConfig eglConfig in _eglConfigs)
+            {
+                Log.Verbose("AndroidGameView", string.Format(" {0}", AndroidSurfaceView.SurfaceConfig.FromEGLConfig(eglConfig, _ogl.Egl, _eglDisplay)));
+            }
+
         }
 
         public override bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile)

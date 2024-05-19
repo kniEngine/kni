@@ -500,24 +500,10 @@ namespace Microsoft.Xna.Framework
                 surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5 });
             }
             surfaceConfigs.Add(new SurfaceConfig() { Red = 4, Green = 4, Blue = 4 });
-            int[] numConfigs = new int[1];
             EGLConfig[] results = new EGLConfig[1];
 
-            if (!GL.Egl.EglGetConfigs(adapter.EglDisplay, null, 0, numConfigs))
-            {
-                throw new Exception("Could not get config count. " + GL.GetEglErrorAsString());
-            }
-
-            EGLConfig[] eglConfigs = new EGLConfig[numConfigs[0]];
-            GL.Egl.EglGetConfigs(adapter.EglDisplay, eglConfigs, numConfigs[0], numConfigs);
-            Log.Verbose("AndroidGameView", "Device Supports");
-            foreach (EGLConfig eglConfig in eglConfigs)
-            {
-                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(eglConfig, GL.Egl, adapter.EglDisplay)));
-            }
-
             bool found = false;
-            numConfigs[0] = 0;
+            int[] numConfigs = new int[] { 0 };
             foreach (SurfaceConfig surfaceConfig in surfaceConfigs)
             {
                 Log.Verbose("AndroidGameView", string.Format("Checking Config : {0}", surfaceConfig));
