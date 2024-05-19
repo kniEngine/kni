@@ -267,12 +267,6 @@ namespace Microsoft.Xna.Framework
                             throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
                     }
                     _eglContext = null;
-                    if (_eglDisplay != null)
-                    {
-                        if (!GL.Egl.EglTerminate(_eglDisplay))
-                            throw new Exception("Could not terminate EGL connection" + GL.GetEglErrorAsString());
-                    }
-                    _eglDisplay = null;
 
                     if (_game.GraphicsDevice != null)
                     {
