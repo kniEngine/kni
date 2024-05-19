@@ -8,6 +8,7 @@ using Android.Runtime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -22,11 +23,12 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
 
+            var GL = ((OGL_DROID)OGL_DROID.Current);
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
             int[] attribs = view.GLesVersion.GetAttributes();
-            _glSharedContext = view.Egl.EglCreateContext(EGL10.EglNoDisplay, view.EglConfig, view.EglContext, attribs);
+            _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, view.EglConfig, view.EglContext, attribs);
             if (_glSharedContext != null && _glSharedContext != EGL10.EglNoContext)
                     throw new Exception("Could not create _glSharedContext");
         }
@@ -36,10 +38,11 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
                 return;
 
+            var GL = ((OGL_DROID)OGL_DROID.Current);
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
-            if (!view.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
+            if (!GL.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
                 throw new Exception("Could not Bind DisposeContext");
         }
 
@@ -48,10 +51,11 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
                 return;
 
+            var GL = ((OGL_DROID)OGL_DROID.Current);
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             ISurfaceView view = gameWindow.GameView;
 
-            if (!view.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+            if (!GL.Egl.EglMakeCurrent(view.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                 throw new Exception("Could not Unbind DisposeContext");
         }
 

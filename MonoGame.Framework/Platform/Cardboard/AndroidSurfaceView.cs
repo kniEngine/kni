@@ -577,7 +577,6 @@ namespace Microsoft.Xna.Framework
 
         #region ISurfaceView
         
-        IEGL10 ISurfaceView.Egl { get { return _egl; } }
         EGLDisplay ISurfaceView.EglDisplay { get { return _eglDisplay; } }
         GLESVersion ISurfaceView.GLesVersion { get { return _glesVersion; } }
         EGLConfig ISurfaceView.EglConfig { get { return _eglConfig; } }
