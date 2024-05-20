@@ -197,11 +197,12 @@ namespace Microsoft.Xna.Platform
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
 
-            // Set the viewport from client bounds
+            // Set the viewport from PresentationParameters
             if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
-                base.GraphicsDevice.Viewport = new Viewport(0, 0, viewWidth, viewHeight);
-                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, viewWidth, viewHeight);
+                PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
+                base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
             }
 
             ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
