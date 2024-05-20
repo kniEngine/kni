@@ -270,28 +270,15 @@ namespace Microsoft.Xna.Framework
 
                     if (_eglSurface == null)
                     {
-                        try
-                        {
-                            _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
-                            if (_eglSurface == EGL10.EglNoSurface) _eglSurface = null;
-                            if (_eglSurface == null)
-                                throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
-                        }
-                        catch (Exception ex)
-                        {
-                            _eglSurface = null;
-                            Log.Error("AndroidGameView", ex.ToString());
-                        }
+                        _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                        if (_eglSurface == EGL10.EglNoSurface) _eglSurface = null;
+                        if (_eglSurface == null)
+                            throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
+
                         System.Diagnostics.Debug.Assert(_eglContext != null);
-                        try
-                        {
-                            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
-                                throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error("AndroidGameView", ex.ToString());
-                        }
+                        if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
+                            throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+
                         GdmResetClientBounds();
                     }
 
@@ -310,28 +297,15 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglSurface == null)
                 {
-                    try
-                    {
-                        _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
-                        if (_eglSurface == EGL10.EglNoSurface) _eglSurface = null;
-                        if (_eglSurface == null)
-                            throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
-                    }
-                    catch (Exception ex)
-                    {
-                        _eglSurface = null;
-                        Log.Error("AndroidGameView", ex.ToString());
-                    }
+                    _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                    if (_eglSurface == EGL10.EglNoSurface) _eglSurface = null;
+                    if (_eglSurface == null)
+                        throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
+
                     System.Diagnostics.Debug.Assert(_eglContext != null);
-                    try
-                    {
-                        if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
-                            throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error("AndroidGameView", ex.ToString());
-                    }
+                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
+                        throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+
                     GdmResetClientBounds();
                 }
 
