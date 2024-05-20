@@ -229,11 +229,6 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        internal void InternalUpcateWindowBounds(int viewWidth, int viewHeight)
-        {
-            ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
-        }
-
 
         #region IGraphicsDeviceManager strategy
 

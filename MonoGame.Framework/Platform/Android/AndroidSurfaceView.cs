@@ -507,7 +507,8 @@ namespace Microsoft.Xna.Framework
                     {
                         ConcreteGraphicsDeviceManager cgdm = ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<Platform.ConcreteGraphicsDeviceManager>();
                         cgdm.InternalUpdateBackBufferBounds(this.Width, this.Height);
-                        cgdm.InternalUpcateWindowBounds(this.Width, this.Height);
+
+                        _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                     }
                 }
             }
