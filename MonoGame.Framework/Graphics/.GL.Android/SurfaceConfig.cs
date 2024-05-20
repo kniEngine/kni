@@ -73,26 +73,30 @@ namespace Microsoft.Xna.Platform.Graphics
             return attribs.ToArray();
         }
 
+        static int[] data = new int[1];
+
         static int GetAttribute(EGLConfig config, IEGL10 egl, EGLDisplay eglDisplay,int attribute)
         {
-            int[] data = new int[1];
             egl.EglGetConfigAttrib(eglDisplay, config, attribute, data);
             return data[0];
         }
 
         public static SurfaceConfig FromEGLConfig(EGLConfig config, IEGL10 egl, EGLDisplay eglDisplay)
         {
-            return new SurfaceConfig()
+            lock (data)
             {
-                Red = GetAttribute(config, egl, eglDisplay, EGL11.EglRedSize),
-                Green = GetAttribute(config, egl, eglDisplay, EGL11.EglGreenSize),
-                Blue = GetAttribute(config, egl, eglDisplay, EGL11.EglBlueSize),
-                Alpha = GetAttribute(config, egl, eglDisplay, EGL11.EglAlphaSize),
-                Depth = GetAttribute(config, egl, eglDisplay, EGL11.EglDepthSize),
-                Stencil = GetAttribute(config, egl, eglDisplay, EGL11.EglStencilSize),
-                SampleBuffers = GetAttribute(config, egl, eglDisplay, EGL11.EglSampleBuffers),
-                Samples = GetAttribute(config, egl, eglDisplay, EGL11.EglSamples)
-            };
+                return new SurfaceConfig()
+                {
+                    Red = GetAttribute(config, egl, eglDisplay, EGL11.EglRedSize),
+                    Green = GetAttribute(config, egl, eglDisplay, EGL11.EglGreenSize),
+                    Blue = GetAttribute(config, egl, eglDisplay, EGL11.EglBlueSize),
+                    Alpha = GetAttribute(config, egl, eglDisplay, EGL11.EglAlphaSize),
+                    Depth = GetAttribute(config, egl, eglDisplay, EGL11.EglDepthSize),
+                    Stencil = GetAttribute(config, egl, eglDisplay, EGL11.EglStencilSize),
+                    SampleBuffers = GetAttribute(config, egl, eglDisplay, EGL11.EglSampleBuffers),
+                    Samples = GetAttribute(config, egl, eglDisplay, EGL11.EglSamples)
+                };
+            }
         }
 
         public override string ToString()
