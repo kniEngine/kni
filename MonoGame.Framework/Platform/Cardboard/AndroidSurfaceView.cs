@@ -351,7 +351,8 @@ namespace Microsoft.Xna.Framework
                     if (gdm.GraphicsDevice != null)
                     {
                         ConcreteGraphicsDeviceManager cgdm = ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<Platform.ConcreteGraphicsDeviceManager>();
-                        cgdm.InternalResetClientBounds(this.Width, this.Height);
+                        cgdm.InternalUpdateBackBufferBounds(this.Width, this.Height);
+                        cgdm.InternalUpcateWindowBounds(this.Width, this.Height);
                     }
                 }
             }

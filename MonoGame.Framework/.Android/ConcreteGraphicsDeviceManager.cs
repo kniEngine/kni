@@ -235,12 +235,6 @@ namespace Microsoft.Xna.Platform
             this.ForceSetFullScreen(IsFullScreen);
         }
 
-        internal void InternalResetClientBounds(int viewWidth, int viewHeight)
-        {
-            InternalUpdateBackBufferBounds(viewWidth, viewHeight);
-            InternalUpcateWindowBounds(viewWidth, viewHeight);
-        }
-
         internal void InternalUpdateBackBufferBounds(int viewWidth, int viewHeight)
         {
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
