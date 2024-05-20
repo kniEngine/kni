@@ -215,20 +215,6 @@ namespace Microsoft.Xna.Platform
             this.ForceSetFullScreen(IsFullScreen);
         }
 
-        internal void InternalUpdateBackBufferBounds(int viewWidth, int viewHeight)
-        {
-            base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
-            base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
-
-            // Set the viewport from PresentationParameters
-            if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
-            {
-                PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
-                base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-            }
-        }
-
 
         #region IGraphicsDeviceManager strategy
 

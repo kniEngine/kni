@@ -89,6 +89,20 @@ namespace Microsoft.Xna.Platform.Graphics
             this.OnDeviceReset(EventArgs.Empty);
         }
 
+        internal void Android_UpdateBackBufferBounds(int viewWidth, int viewHeight)
+        {
+            this.PresentationParameters.BackBufferWidth = viewWidth;
+            this.PresentationParameters.BackBufferHeight = viewHeight;
+
+            // Set the viewport from PresentationParameters
+            if (!((IPlatformGraphicsContext)this.MainContext).Strategy.IsRenderTargetBound)
+            {
+                PresentationParameters pp2 = this.PresentationParameters;
+                this.MainContext.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                this.MainContext.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+            }
+        }
+
 
         protected override void Dispose(bool disposing)
         {

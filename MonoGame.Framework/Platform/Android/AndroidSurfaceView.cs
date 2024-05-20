@@ -505,8 +505,8 @@ namespace Microsoft.Xna.Framework
                 {
                     if (gdm.GraphicsDevice != null)
                     {
-                        ConcreteGraphicsDeviceManager cgdm = ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<Platform.ConcreteGraphicsDeviceManager>();
-                        cgdm.InternalUpdateBackBufferBounds(this.Width, this.Height);
+                        ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                        gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
 
                         _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                     }
