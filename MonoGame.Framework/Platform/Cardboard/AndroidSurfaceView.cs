@@ -183,9 +183,6 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
-                if (OGL_DROID.Current == null)
-                    OGL_DROID.Initialize();
-
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
 
@@ -310,7 +307,7 @@ namespace Microsoft.Xna.Framework
                 var GL = adapter.Ogl;
 
                 /* Cardboard: Surface was created by GLSurfaceView.
-                _eglSurface = GL.Egl.EglCreateWindowSurface(_eglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
                 if (_eglSurface == EGL10.EglNoSurface)
                     _eglSurface = null;
                 if (_eglSurface == null)
@@ -332,7 +329,7 @@ namespace Microsoft.Xna.Framework
                 var GL = adapter.Ogl;
 
                 /* Cardboard: Surface was created by GLSurfaceView.
-                if (!GL.Egl.EglMakeCurrent(_eglDisplay, _eglSurface, _eglSurface, _eglContext))
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                     throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                 */
             }
