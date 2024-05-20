@@ -227,23 +227,16 @@ namespace Microsoft.Xna.Framework
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                         */
 
-                        try
+                        GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                        if (gdm != null)
                         {
-                            GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                            if (gdm != null)
+                            if (gdm.GraphicsDevice != null)
                             {
-                                if (gdm.GraphicsDevice != null)
-                                {
-                                    ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
-                                    gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
+                                ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                                gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
 
-                                    _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
-                                }
+                                _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error("AndroidGameView", ex.ToString());
                         }
                     }
 
@@ -274,23 +267,16 @@ namespace Microsoft.Xna.Framework
                         throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                     */
 
-                    try
+                    GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                    if (gdm != null)
                     {
-                        GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                        if (gdm != null)
+                        if (gdm.GraphicsDevice != null)
                         {
-                            if (gdm.GraphicsDevice != null)
-                            {
-                                ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
-                                gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
+                            ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                            gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
 
-                                _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
-                            }
+                            _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error("AndroidGameView", ex.ToString());
                     }
                 }
 
