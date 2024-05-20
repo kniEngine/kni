@@ -105,8 +105,6 @@ namespace Microsoft.Xna.Platform
             // TODO: In XNA this seems to be done as part of the 
             // GraphicsDevice.DeviceReset event... we need to get 
             // those working.
-            TouchPanel.DisplayWidth = this.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = this.GraphicsDevice.PresentationParameters.BackBufferHeight;
             TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
 
             this.OnDeviceCreated(EventArgs.Empty);
@@ -131,11 +129,26 @@ namespace Microsoft.Xna.Platform
                     break;
             }
 
-            PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
-            this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
+            // ResetClientBounds
+            {
+                // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
+                View view = ((AndroidGameWindow)base.Game.Window).GameView;
+                int viewWidth = view.Width;
+                int viewHeight = view.Height;
 
-            // Force the Viewport to be correctly set
-            this.ResetClientBounds();
+                base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
+                base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
+
+                // Set the viewport from PresentationParameters
+                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
+                {
+                    PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
+                    base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                    base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                }
+
+                ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
+            }
         }
 
         public override void ApplyChanges()
@@ -161,16 +174,26 @@ namespace Microsoft.Xna.Platform
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = isLandscape ? Math.Max(w, h) : Math.Min(w, h);
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = isLandscape ? Math.Min(w, h) : Math.Max(w, h);
 
-            ResetClientBounds();
+            // ResetClientBounds
+            {
+                // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
+                View view = ((AndroidGameWindow)base.Game.Window).GameView;
+                int viewWidth = view.Width;
+                int viewHeight = view.Height;
 
-            // Set the new display size on the touch panel.
-            //
-            // TODO: In XNA this seems to be done as part of the 
-            // GraphicsDevice.DeviceReset event... we need to get 
-            // those working.
-            //
-            TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
+                base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
+                base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
+
+                // Set the viewport from PresentationParameters
+                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
+                {
+                    PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
+                    base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                    base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                }
+
+                ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
+            }
 
         }
 
@@ -187,42 +210,9 @@ namespace Microsoft.Xna.Platform
             }
         }
 
-        private void ResetClientBounds()
-        {
-            var newClientBounds = new Rectangle();
-            // Set the ClientBounds to match the DisplayMode
-            // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-            newClientBounds.X = 0;
-            newClientBounds.Y = 0;
-            newClientBounds.Width = base.GraphicsDevice.DisplayMode.Width;
-            newClientBounds.Height = base.GraphicsDevice.DisplayMode.Height;
-
-            // Ensure buffer size is reported correctly
-            base.GraphicsDevice.PresentationParameters.BackBufferWidth = newClientBounds.Width;
-            base.GraphicsDevice.PresentationParameters.BackBufferHeight = newClientBounds.Height;
-
-            // Set the viewport from client bounds
-            if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
-            {
-                base.GraphicsDevice.Viewport = new Viewport(0, 0, newClientBounds.Width, newClientBounds.Height);
-                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, newClientBounds.Width, newClientBounds.Height);
-            }
-
-            ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(newClientBounds);
-            Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + newClientBounds.ToString());
-
-            // Touch panel needs latest buffer size for scaling
-            TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
-        }
-
         internal void InternalForceSetFullScreen()
         {
             this.ForceSetFullScreen(IsFullScreen);
-        }
-        internal void InternalResetClientBounds()
-        {
-            this.ResetClientBounds();
         }
 
 
