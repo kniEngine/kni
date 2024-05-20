@@ -206,10 +206,8 @@ namespace Microsoft.Xna.Platform
 
             ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
             Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + viewWidth + "," + viewHeight);
-
-            // Touch panel needs latest buffer size for scaling
-            TouchPanel.DisplayWidth = viewWidth;
-            TouchPanel.DisplayHeight = viewHeight;
+            TouchPanel.DisplayWidth = base.Game.Window.ClientBounds.Width;
+            TouchPanel.DisplayHeight = base.Game.Window.ClientBounds.Height;
         }
 
         internal void InternalForceSetFullScreen()
