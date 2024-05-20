@@ -234,13 +234,9 @@ namespace Microsoft.Xna.Platform
         {
             this.ForceSetFullScreen(IsFullScreen);
         }
-        internal void InternalResetClientBounds()
-        {
-            // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-            View view = ((AndroidGameWindow)base.Game.Window).GameView;
-            int viewWidth = view.Width;
-            int viewHeight = view.Height;
 
+        internal void InternalResetClientBounds(int viewWidth, int viewHeight)
+        {
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
 
