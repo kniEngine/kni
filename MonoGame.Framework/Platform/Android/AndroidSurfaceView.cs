@@ -278,7 +278,24 @@ namespace Microsoft.Xna.Framework
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
 
-                        GdmResetClientBounds();
+                        try
+                        {
+                            GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                            if (gdm != null)
+                            {
+                                if (gdm.GraphicsDevice != null)
+                                {
+                                    ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                                    gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
+
+                                    _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("AndroidGameView", ex.ToString());
+                        }
                     }
 
                     // OGL.InitExtensions() must be called while we have a gl context.
@@ -304,7 +321,24 @@ namespace Microsoft.Xna.Framework
                     if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                         throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
 
-                    GdmResetClientBounds();
+                    try
+                    {
+                        GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                        if (gdm != null)
+                        {
+                            if (gdm.GraphicsDevice != null)
+                            {
+                                ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                                gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
+
+                                _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("AndroidGameView", ex.ToString());
+                    }
                 }
 
                 // check if app wants to exit
@@ -466,28 +500,6 @@ namespace Microsoft.Xna.Framework
 
             Log.Verbose("AndroidGameView", "Created GLES {0} Context", _glesVersion);
             _eglConfig = results[0];
-        }
-
-        private void GdmResetClientBounds()
-        {
-            try
-            {
-                GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                if (gdm != null)
-                {
-                    if (gdm.GraphicsDevice != null)
-                    {
-                        ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
-                        gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
-
-                        _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("AndroidGameView", ex.ToString());
-            }
         }
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
