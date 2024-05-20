@@ -190,12 +190,12 @@ namespace Microsoft.Xna.Platform
         private void ResetClientBounds()
         {
             var newClientBounds = new Rectangle();
-            // Set the ClientBounds to match the DisplayMode
             // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
+            View view = ((AndroidGameWindow)base.Game.Window).GameView;
             newClientBounds.X = 0;
             newClientBounds.Y = 0;
-            newClientBounds.Width = base.GraphicsDevice.DisplayMode.Width;
-            newClientBounds.Height = base.GraphicsDevice.DisplayMode.Height;
+            newClientBounds.Width = view.Width;
+            newClientBounds.Height = view.Height;
 
             // Ensure buffer size is reported correctly
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = newClientBounds.Width;
