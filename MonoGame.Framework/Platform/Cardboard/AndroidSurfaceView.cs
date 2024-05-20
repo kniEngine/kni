@@ -222,7 +222,6 @@ namespace Microsoft.Xna.Framework
                             throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
                         */
 
-                        System.Diagnostics.Debug.Assert(_eglContext != null);
                         /* Cardboard: Surface was created by GLSurfaceView.
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
@@ -253,7 +252,6 @@ namespace Microsoft.Xna.Framework
                         throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
                     */
 
-                    System.Diagnostics.Debug.Assert(_eglContext != null);
                     /* Cardboard: Surface was created by GLSurfaceView.
                     if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                         throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());

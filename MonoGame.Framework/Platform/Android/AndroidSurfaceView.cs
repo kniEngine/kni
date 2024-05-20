@@ -275,7 +275,6 @@ namespace Microsoft.Xna.Framework
                         if (_eglSurface == null)
                             throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
 
-                        System.Diagnostics.Debug.Assert(_eglContext != null);
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
 
@@ -302,7 +301,6 @@ namespace Microsoft.Xna.Framework
                     if (_eglSurface == null)
                         throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
 
-                    System.Diagnostics.Debug.Assert(_eglContext != null);
                     if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                         throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
 
