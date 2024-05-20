@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Platform.Graphics
             Log.Verbose("AndroidGameView", "Device Supports");
             foreach (EGLConfig eglConfig in _eglConfigs)
             {
-                Log.Verbose("AndroidGameView", string.Format(" {0}", AndroidSurfaceView.SurfaceConfig.FromEGLConfig(eglConfig, _ogl.Egl, _eglDisplay)));
+                Log.Verbose("AndroidGameView", string.Format(" {0}", SurfaceConfig.FromEGLConfig(eglConfig, _ogl.Egl, _eglDisplay)));
             }
 
         }

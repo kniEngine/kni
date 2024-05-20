@@ -97,6 +97,7 @@
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsContext.Android.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsDevice.Android.cs" />
     <Compile Include="Graphics\.GL.Android\OpenGL.Android.cs" />
+    <Compile Include="Graphics\.GL.Android\SurfaceConfig.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
 
