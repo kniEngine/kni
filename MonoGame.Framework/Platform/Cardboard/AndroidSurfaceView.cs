@@ -230,7 +230,17 @@ namespace Microsoft.Xna.Framework
                             Log.Error("AndroidGameView", ex.ToString());
                         }
                         System.Diagnostics.Debug.Assert(_eglContext != null);
-                        MakeCurrentGLContext();
+                        try
+                        {
+                            /* Cardboard: Surface was created by GLSurfaceView.
+                            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
+                                throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                            */
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("AndroidGameView", ex.ToString());
+                        }
                         GdmResetClientBounds();
                     }
 
@@ -264,7 +274,17 @@ namespace Microsoft.Xna.Framework
                         Log.Error("AndroidGameView", ex.ToString());
                     }
                     System.Diagnostics.Debug.Assert(_eglContext != null);
-                    MakeCurrentGLContext();
+                    try
+                    {
+                        /* Cardboard: Surface was created by GLSurfaceView.
+                        if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
+                            throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                        */
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("AndroidGameView", ex.ToString());
+                    }
                     GdmResetClientBounds();
                 }
 
@@ -323,24 +343,6 @@ namespace Microsoft.Xna.Framework
             }
 
             base.Dispose(disposing);
-        }
-
-        private void MakeCurrentGLContext()
-        {
-            try
-            {
-                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                /* Cardboard: Surface was created by GLSurfaceView.
-                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
-                    throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
-                */
-            }
-            catch (Exception ex)
-            {
-                Log.Error("AndroidGameView", ex.ToString());
-            }
         }
 
         private void GdmResetClientBounds()
