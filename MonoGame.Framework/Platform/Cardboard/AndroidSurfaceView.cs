@@ -215,7 +215,20 @@ namespace Microsoft.Xna.Framework
 
                     if (_eglSurface == null)
                     {
-                        CreateGLSurface();
+                        try
+                        {
+                            /* Cardboard: Surface was created by GLSurfaceView.
+                            _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                            if (_eglSurface == EGL10.EglNoSurface) _eglSurface = null;
+                            if (_eglSurface == null)
+                                throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
+                            */
+                        }
+                        catch (Exception ex)
+                        {
+                            _eglSurface = null;
+                            Log.Error("AndroidGameView", ex.ToString());
+                        }
                         System.Diagnostics.Debug.Assert(_eglContext != null);
                         MakeCurrentGLContext();
                         GdmResetClientBounds();
@@ -236,7 +249,20 @@ namespace Microsoft.Xna.Framework
 
                 if (_eglSurface == null)
                 {
-                    CreateGLSurface();
+                    try
+                    {
+                        /* Cardboard: Surface was created by GLSurfaceView.
+                        _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
+                        if (_eglSurface == EGL10.EglNoSurface) _eglSurface = null;
+                        if (_eglSurface == null)
+                            throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
+                        */
+                    }
+                    catch (Exception ex)
+                    {
+                        _eglSurface = null;
+                        Log.Error("AndroidGameView", ex.ToString());
+                    }
                     System.Diagnostics.Debug.Assert(_eglContext != null);
                     MakeCurrentGLContext();
                     GdmResetClientBounds();
@@ -297,28 +323,6 @@ namespace Microsoft.Xna.Framework
             }
 
             base.Dispose(disposing);
-        }
-
-        protected void CreateGLSurface()
-        {
-            try
-            {
-                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                /* Cardboard: Surface was created by GLSurfaceView.
-                _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, _eglConfig, (Java.Lang.Object)this.Holder, null);
-                if (_eglSurface == EGL10.EglNoSurface)
-                    _eglSurface = null;
-                if (_eglSurface == null)
-                    throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
-                */
-            }
-            catch (Exception ex)
-            {
-                _eglSurface = null;
-                Log.Error("AndroidGameView", ex.ToString());
-            }
         }
 
         private void MakeCurrentGLContext()
