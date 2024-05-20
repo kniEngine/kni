@@ -498,8 +498,6 @@ namespace Microsoft.Xna.Framework
         {
             try
             {
-                // Must set viewport after creation, the viewport has correct values in it already as we call it, but
-                // the surface is created after the correct viewport is already applied so we must do it again.
                 GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
                 if (gdm != null)
                 {
