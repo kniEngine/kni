@@ -237,6 +237,12 @@ namespace Microsoft.Xna.Platform
 
         internal void InternalResetClientBounds(int viewWidth, int viewHeight)
         {
+            InternalUpdateBackBufferBounds(viewWidth, viewHeight);
+            InternalUpcateWindowBounds(viewWidth, viewHeight);
+        }
+
+        internal void InternalUpdateBackBufferBounds(int viewWidth, int viewHeight)
+        {
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
 
@@ -247,7 +253,10 @@ namespace Microsoft.Xna.Platform
                 base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
                 base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
             }
+        }
 
+        internal void InternalUpcateWindowBounds(int viewWidth, int viewHeight)
+        {
             ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
             Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + viewWidth + "," + viewHeight);
             TouchPanel.DisplayWidth = base.Game.Window.ClientBounds.Width;
