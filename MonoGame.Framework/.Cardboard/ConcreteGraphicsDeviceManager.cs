@@ -189,31 +189,27 @@ namespace Microsoft.Xna.Platform
 
         private void ResetClientBounds()
         {
-            var newClientBounds = new Rectangle();
             // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
             View view = ((AndroidGameWindow)base.Game.Window).GameView;
-            newClientBounds.X = 0;
-            newClientBounds.Y = 0;
-            newClientBounds.Width = view.Width;
-            newClientBounds.Height = view.Height;
+            int viewWidth = view.Width;
+            int viewHeight = view.Height;
 
-            // Ensure buffer size is reported correctly
-            base.GraphicsDevice.PresentationParameters.BackBufferWidth = newClientBounds.Width;
-            base.GraphicsDevice.PresentationParameters.BackBufferHeight = newClientBounds.Height;
+            base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
+            base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
 
             // Set the viewport from client bounds
             if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
-                base.GraphicsDevice.Viewport = new Viewport(0, 0, newClientBounds.Width, newClientBounds.Height);
-                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, newClientBounds.Width, newClientBounds.Height);
+                base.GraphicsDevice.Viewport = new Viewport(0, 0, viewWidth, viewHeight);
+                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, viewWidth, viewHeight);
             }
 
-            ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(newClientBounds);
-            Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + newClientBounds.ToString());
+            ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
+            Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + viewWidth + "," + viewHeight);
 
             // Touch panel needs latest buffer size for scaling
-            TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
+            TouchPanel.DisplayWidth = viewWidth;
+            TouchPanel.DisplayHeight = viewHeight;
         }
 
         internal void InternalForceSetFullScreen()
