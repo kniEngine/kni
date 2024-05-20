@@ -148,9 +148,6 @@ namespace Microsoft.Xna.Platform
                 }
 
                 ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
-                Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + viewWidth + "," + viewHeight);
-                TouchPanel.DisplayWidth = base.Game.Window.ClientBounds.Width;
-                TouchPanel.DisplayHeight = base.Game.Window.ClientBounds.Height;
             }
         }
 
@@ -196,9 +193,6 @@ namespace Microsoft.Xna.Platform
                 }
 
                 ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
-                Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + viewWidth + "," + viewHeight);
-                TouchPanel.DisplayWidth = base.Game.Window.ClientBounds.Width;
-                TouchPanel.DisplayHeight = base.Game.Window.ClientBounds.Height;
             }
 
         }
@@ -238,9 +232,6 @@ namespace Microsoft.Xna.Platform
         internal void InternalUpcateWindowBounds(int viewWidth, int viewHeight)
         {
             ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
-            Android.Util.Log.Debug("Kni", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + viewWidth + "," + viewHeight);
-            TouchPanel.DisplayWidth = base.Game.Window.ClientBounds.Width;
-            TouchPanel.DisplayHeight = base.Game.Window.ClientBounds.Height;
         }
 
 
