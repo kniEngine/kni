@@ -129,9 +129,6 @@ namespace Microsoft.Xna.Platform
                     break;
             }
 
-            PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
-            this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
-
             // ResetClientBounds
             {
                 // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
