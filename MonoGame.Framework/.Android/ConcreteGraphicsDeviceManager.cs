@@ -105,8 +105,6 @@ namespace Microsoft.Xna.Platform
             // TODO: In XNA this seems to be done as part of the 
             // GraphicsDevice.DeviceReset event... we need to get 
             // those working.
-            TouchPanel.DisplayWidth = this.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = this.GraphicsDevice.PresentationParameters.BackBufferHeight;
             TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
 
             this.OnDeviceCreated(EventArgs.Empty);
@@ -205,15 +203,6 @@ namespace Microsoft.Xna.Platform
                 TouchPanel.DisplayWidth = base.Game.Window.ClientBounds.Width;
                 TouchPanel.DisplayHeight = base.Game.Window.ClientBounds.Height;
             }
-
-            // Set the new display size on the touch panel.
-            //
-            // TODO: In XNA this seems to be done as part of the 
-            // GraphicsDevice.DeviceReset event... we need to get 
-            // those working.
-            //
-            TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
         }
 
