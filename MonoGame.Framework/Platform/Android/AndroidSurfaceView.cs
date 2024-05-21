@@ -475,9 +475,7 @@ namespace Microsoft.Xna.Framework
                 break;
             }
 
-            if (_eglContext == EGL10.EglNoContext)
-                _eglContext = null;
-
+            if (_eglContext == EGL10.EglNoContext) _eglContext = null;
             if (_eglContext == null)
                 throw new Exception("Could not create EGL context" + GL.GetEglErrorAsString());
 
