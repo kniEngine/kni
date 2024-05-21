@@ -458,12 +458,13 @@ namespace Microsoft.Xna.Framework
 
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GL.GetEglErrorAsString());
+            _eglConfig = results[0];
 
             foreach (GLESVersion ver in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", ver);
 
-                _eglContext = GL.Egl.EglCreateContext(adapter.EglDisplay, results[0], EGL10.EglNoContext, ver.GetAttributes());
+                _eglContext = GL.Egl.EglCreateContext(adapter.EglDisplay, _eglConfig, EGL10.EglNoContext, ver.GetAttributes());
 
                 if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
@@ -480,7 +481,6 @@ namespace Microsoft.Xna.Framework
                 throw new Exception("Could not create EGL context" + GL.GetEglErrorAsString());
 
             Log.Verbose("AndroidGameView", "Created GLES {0} Context", _glesVersion);
-            _eglConfig = results[0];
         }
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
