@@ -278,6 +278,10 @@ namespace Microsoft.Xna.Framework
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
 
+                        // OGL.InitExtensions() must be called while we have a current gl context.
+                        if (OGL_DROID.Current.Extensions == null)
+                            OGL_DROID.Current.InitExtensions();
+
                         GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
                         if (gdm != null)
                         {
@@ -290,10 +294,6 @@ namespace Microsoft.Xna.Framework
                             }
                         }
                     }
-
-                    // OGL.InitExtensions() must be called while we have a current gl context.
-                    if (OGL_DROID.Current.Extensions == null)
-                        OGL_DROID.Current.InitExtensions();
 
                     if (_isGLContextLost)
                     {
