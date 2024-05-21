@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework
                             throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
                         */
 
-                        /* Cardboard: Surface was created by GLSurfaceView.
+                        /* Cardboard: Context was created by GLSurfaceView.
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                         */
@@ -240,7 +240,7 @@ namespace Microsoft.Xna.Framework
                         }
                     }
 
-                    // OGL.InitExtensions() must be called while we have a gl context.
+                    // OGL.InitExtensions() must be called while we have a current gl context.
                     if (OGL_DROID.Current.Extensions == null)
                         OGL_DROID.Current.InitExtensions();
 
@@ -262,7 +262,7 @@ namespace Microsoft.Xna.Framework
                         throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
                     */
 
-                    /* Cardboard: Surface was created by GLSurfaceView.
+                    /* Cardboard: Context was created by GLSurfaceView.
                     if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, _eglSurface, _eglSurface, _eglContext))
                         throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                     */
@@ -505,6 +505,7 @@ namespace Microsoft.Xna.Framework
                     _eglContext = null;
             }
 
+            // OGL.InitExtensions() must be called while we have a current gl context.
             if (OGL_DROID.Current.Extensions == null)
                 OGL_DROID.Current.InitExtensions();
 

@@ -291,7 +291,7 @@ namespace Microsoft.Xna.Framework
                         }
                     }
 
-                    // OGL.InitExtensions() must be called while we have a gl context.
+                    // OGL.InitExtensions() must be called while we have a current gl context.
                     if (OGL_DROID.Current.Extensions == null)
                         OGL_DROID.Current.InitExtensions();
 
