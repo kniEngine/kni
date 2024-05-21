@@ -183,6 +183,11 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not available
             if (_isAndroidSurfaceAvailable)
             {
+                if (_isCancellationRequested.Value == true)
+                {
+                    _appState = AppState.Exited;
+                    return;
+                }
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
 
@@ -277,14 +282,6 @@ namespace Microsoft.Xna.Framework
                         }
                     }
                     _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
-                }
-
-                // check if app wants to exit
-                if (_isCancellationRequested.Value == true)
-                {
-                    // change state to exit and skip game loop
-                    _appState = AppState.Exited;
-                    return;
                 }
 
                 AndroidGameWindow.Activity._orientationListener.Update();
