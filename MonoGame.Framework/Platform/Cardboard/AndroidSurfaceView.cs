@@ -188,6 +188,7 @@ namespace Microsoft.Xna.Framework
                     _appState = AppState.Exited;
                     return;
                 }
+
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
 
