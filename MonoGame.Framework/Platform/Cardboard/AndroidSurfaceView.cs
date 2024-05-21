@@ -217,6 +217,8 @@ namespace Microsoft.Xna.Framework
                 // create context if not available
                 if (_eglContext == null)
                 {
+                    //ChooseGLConfig();
+
                     //CreateGLContext();
 
                     if (_eglSurface == null)

@@ -272,6 +272,8 @@ namespace Microsoft.Xna.Framework
                 // create context if not available
                 if (_eglContext == null)
                 {
+                    ChooseGLConfig();
+
                     CreateGLContext();
 
                     if (_eglSurface == null)
@@ -382,7 +384,7 @@ namespace Microsoft.Xna.Framework
             base.Dispose(disposing);
         }
 
-        protected void CreateGLContext()
+        protected void ChooseGLConfig()
         {
             var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
@@ -459,6 +461,12 @@ namespace Microsoft.Xna.Framework
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GL.GetEglErrorAsString());
             _eglConfig = results[0];
+        }
+
+        protected void CreateGLContext()
+        {
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
 
             foreach (GLESVersion ver in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
             {
