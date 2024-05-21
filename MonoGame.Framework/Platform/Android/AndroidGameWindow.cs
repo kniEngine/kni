@@ -244,11 +244,12 @@ namespace Microsoft.Xna.Framework
             {
                 _clientBounds = bounds;
                 OnClientSizeChanged();
+
+                Android.Util.Log.Debug("Kni", "GameWindow.ChangeClientBounds: newClientBounds=" + this.ClientBounds.Width + "," + this.ClientBounds.Height);
+                TouchPanel.DisplayWidth = this.ClientBounds.Width;
+                TouchPanel.DisplayHeight = this.ClientBounds.Height;
             }
 
-            Android.Util.Log.Debug("Kni", "GameWindow.ChangeClientBounds: newClientBounds=" + this.ClientBounds.Width + "," + this.ClientBounds.Height);
-            TouchPanel.DisplayWidth = this.ClientBounds.Width;
-            TouchPanel.DisplayHeight = this.ClientBounds.Height;
         }
 
         public override bool AllowUserResizing
