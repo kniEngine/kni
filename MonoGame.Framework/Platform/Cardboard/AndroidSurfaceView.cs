@@ -238,10 +238,9 @@ namespace Microsoft.Xna.Framework
                             {
                                 ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
                                 gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
-
-                                _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                             }
                         }
+                        _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                     }
 
                     if (_isGLContextLost)
@@ -275,9 +274,9 @@ namespace Microsoft.Xna.Framework
                             ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
                             gd.Android_UpdateBackBufferBounds(this.Width, this.Height);
 
-                            _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                         }
                     }
+                    _gameWindow.ChangeClientBounds(new Rectangle(0, 0, this.Width, this.Height));
                 }
 
                 // check if app wants to exit
