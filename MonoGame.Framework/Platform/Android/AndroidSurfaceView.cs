@@ -269,6 +269,11 @@ namespace Microsoft.Xna.Framework
                     _isGLContextLost = false;
                 }
 
+                if (_eglConfig == null)
+                {
+                    ChooseGLConfig();
+                }
+
                 // create context if not available
                 if (_eglContext == null)
                 {
@@ -382,7 +387,7 @@ namespace Microsoft.Xna.Framework
             base.Dispose(disposing);
         }
 
-        protected void CreateGLContext()
+        protected void ChooseGLConfig()
         {
             var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
@@ -458,12 +463,19 @@ namespace Microsoft.Xna.Framework
 
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GL.GetEglErrorAsString());
+            _eglConfig = results[0];
+        }
+
+        protected void CreateGLContext()
+        {
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
 
             foreach (GLESVersion ver in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
             {
                 Log.Verbose("AndroidGameView", "Creating GLES {0} Context", ver);
 
-                _eglContext = GL.Egl.EglCreateContext(adapter.EglDisplay, results[0], EGL10.EglNoContext, ver.GetAttributes());
+                _eglContext = GL.Egl.EglCreateContext(adapter.EglDisplay, _eglConfig, EGL10.EglNoContext, ver.GetAttributes());
 
                 if (_eglContext == null || _eglContext == EGL10.EglNoContext)
                 {
@@ -475,14 +487,11 @@ namespace Microsoft.Xna.Framework
                 break;
             }
 
-            if (_eglContext == EGL10.EglNoContext)
-                _eglContext = null;
-
+            if (_eglContext == EGL10.EglNoContext) _eglContext = null;
             if (_eglContext == null)
                 throw new Exception("Could not create EGL context" + GL.GetEglErrorAsString());
 
             Log.Verbose("AndroidGameView", "Created GLES {0} Context", _glesVersion);
-            _eglConfig = results[0];
         }
 
         protected EGLSurface CreatePBufferSurface(EGLConfig config, int[] attribList)
