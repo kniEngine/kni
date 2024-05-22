@@ -439,18 +439,18 @@ namespace Microsoft.Xna.Platform.Graphics
                 Height = PresentationParameters.BackBufferHeight,
             };
 
-            if (output == null)
-            {
-                width = PresentationParameters.BackBufferWidth;
-                height = PresentationParameters.BackBufferHeight;
-            }
-            else
+            if (output != null)
             {
                 DXGI.ModeDescription closest;
                 output.GetClosestMatchingMode(this.D3DDevice, target, out closest);
                 width = closest.Width;
                 height = closest.Height;
                 output.Dispose();
+            }
+            else
+            {
+                width = PresentationParameters.BackBufferWidth;
+                height = PresentationParameters.BackBufferHeight;
             }
         }
 
