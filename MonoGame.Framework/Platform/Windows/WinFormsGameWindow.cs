@@ -406,14 +406,14 @@ namespace Microsoft.Xna.Framework
 
         internal void ChangeClientSize(int width, int height)
         {
-            var clientBounds = new SysDrawing.Size(width, height);
+            Rectangle clientBounds = this.ClientBounds;
 
-            var prevIsResizing = Form.IsResizing;
+            bool prevIsResizing = Form.IsResizing;
             // make sure we don't see the events from this as a user resize
             Form.IsResizing = true;
 
-            if (this.Form.ClientSize != clientBounds)
-                this.Form.ClientSize = clientBounds;
+            if (clientBounds.Width != width || clientBounds.Height != height)
+                this.Form.ClientSize = new SysDrawing.Size(width, height);
 
             // if the window wasn't moved manually and it's resized, it should be centered
             if (!_wasMoved)
