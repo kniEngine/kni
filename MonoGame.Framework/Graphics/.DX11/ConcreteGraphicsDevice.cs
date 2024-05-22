@@ -411,17 +411,17 @@ namespace Microsoft.Xna.Platform.Graphics
         private void GetModeSwitchedSize()
         {
             DXGI.Output output = null;
-            if (_swapChain == null)
+            if (_swapChain != null)
+            {
+                try { output = _swapChain.ContainingOutput; }
+                catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
+            }
+            else
             {
                 // get the primary output
                 using (DXGI.Factory1 factory = new DXGI.Factory1())
                 using (DXGI.Adapter1 adapter = factory.GetAdapter1(0))
                     output = adapter.Outputs[0];
-            }
-            else
-            {
-                try { output = _swapChain.ContainingOutput; }
-                catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
 
             if (output != null)
