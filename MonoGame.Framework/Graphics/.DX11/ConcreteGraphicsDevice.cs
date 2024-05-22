@@ -76,22 +76,22 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWSDX
             if (this.PresentationParameters.IsFullScreen)
             {
+                int width, height;
                 if (!this.PresentationParameters.HardwareModeSwitch)
                 {
                     DisplayMode displayMode = Adapter.CurrentDisplayMode;
-                    this.PresentationParameters.BackBufferWidth = displayMode.Width;
-                    this.PresentationParameters.BackBufferHeight = displayMode.Height;
+                    width = displayMode.Width;
+                    height = displayMode.Height;
                 }
                 else
                 {
                     int preferredWidth = this.PresentationParameters.BackBufferWidth;
                     int preferredHeight = this.PresentationParameters.BackBufferHeight;
                     SurfaceFormat preferredFormat = this.PresentationParameters.BackBufferFormat;
-                    int width, height;
                     GetClosestBackBufferSize(preferredWidth, preferredHeight, preferredFormat, out width, out height);
-                    this.PresentationParameters.BackBufferWidth = width;
-                    this.PresentationParameters.BackBufferHeight = height;
                 }
+                this.PresentationParameters.BackBufferWidth = width;
+                this.PresentationParameters.BackBufferHeight = height;
             }
 #endif
 
@@ -404,22 +404,22 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWSDX
             if (this.PresentationParameters.IsFullScreen)
             {
+                int width, height;
                 if (!this.PresentationParameters.HardwareModeSwitch)
                 {
                     DisplayMode displayMode = Adapter.CurrentDisplayMode;
-                    this.PresentationParameters.BackBufferWidth = displayMode.Width;
-                    this.PresentationParameters.BackBufferHeight = displayMode.Height;
+                    width = displayMode.Width;
+                    height = displayMode.Height;
                 }
                 else
                 {
                     int preferredWidth = this.PresentationParameters.BackBufferWidth;
                     int preferredHeight = this.PresentationParameters.BackBufferHeight;
                     SurfaceFormat preferredFormat = this.PresentationParameters.BackBufferFormat;
-                    int width, height;
                     GetClosestBackBufferSize(preferredWidth, preferredHeight, preferredFormat, out width, out height);
-                    this.PresentationParameters.BackBufferWidth = width;
-                    this.PresentationParameters.BackBufferHeight = height;
                 }
+                this.PresentationParameters.BackBufferWidth = width;
+                this.PresentationParameters.BackBufferHeight = height;
             }
 #endif
             CreateSizeDependentResources();
