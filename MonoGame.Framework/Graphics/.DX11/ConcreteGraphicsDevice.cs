@@ -86,15 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset()
         {
-#if WINDOWSDX
-            CorrectBackBufferSize();
-#endif
-
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
-                throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
-
-            CreateSizeDependentResources();
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
+            Reset(this.PresentationParameters);
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
