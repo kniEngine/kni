@@ -427,19 +427,17 @@ namespace Microsoft.Xna.Platform.Graphics
                 catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
 
-            DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
-            DXGI.ModeDescription target = new DXGI.ModeDescription
-            {
-                Format = format,
-                Scaling = DXGI.DisplayModeScaling.Unspecified,
-                Width = PresentationParameters.BackBufferWidth,
-                Height = PresentationParameters.BackBufferHeight,
-            };
+            DXGI.ModeDescription targetModeDesc = new DXGI.ModeDescription();
+            targetModeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
+            targetModeDesc.Width = PresentationParameters.BackBufferWidth;
+            targetModeDesc.Height = PresentationParameters.BackBufferHeight;
+            targetModeDesc.Format = PresentationParameters.BackBufferFormat.ToDXFormat();
 
             if (output != null)
             {
+
                 DXGI.ModeDescription closest;
-                output.GetClosestMatchingMode(this.D3DDevice, target, out closest);
+                output.GetClosestMatchingMode(this.D3DDevice, targetModeDesc, out closest);
                 this.PresentationParameters.BackBufferWidth = closest.Width;
                 this.PresentationParameters.BackBufferHeight = closest.Height;
                 output.Dispose();
