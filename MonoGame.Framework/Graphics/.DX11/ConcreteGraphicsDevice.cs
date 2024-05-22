@@ -398,10 +398,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (this.PresentationParameters.HardwareModeSwitch)
                 {
-                    int newWidth, newHeight;
-                    GetModeSwitchedSize(out newWidth, out newHeight);
-                    this.PresentationParameters.BackBufferWidth = newWidth;
-                    this.PresentationParameters.BackBufferHeight = newHeight;
+                    GetModeSwitchedSize();
                 }
                 else
                 {
@@ -411,7 +408,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private void GetModeSwitchedSize(out int width, out int height)
+        private void GetModeSwitchedSize()
         {
             DXGI.Output output = null;
             if (_swapChain == null)
@@ -443,14 +440,14 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 DXGI.ModeDescription closest;
                 output.GetClosestMatchingMode(this.D3DDevice, target, out closest);
-                width = closest.Width;
-                height = closest.Height;
+                this.PresentationParameters.BackBufferWidth = closest.Width;
+                this.PresentationParameters.BackBufferHeight = closest.Height;
                 output.Dispose();
             }
             else
             {
-                width = PresentationParameters.BackBufferWidth;
-                height = PresentationParameters.BackBufferHeight;
+                this.PresentationParameters.BackBufferWidth = PresentationParameters.BackBufferWidth;
+                this.PresentationParameters.BackBufferHeight = PresentationParameters.BackBufferHeight;
             }
         }
 
