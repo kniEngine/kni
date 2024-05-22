@@ -396,14 +396,14 @@ namespace Microsoft.Xna.Platform.Graphics
             // so the back buffer has the right size.
             if (this.PresentationParameters.IsFullScreen)
             {
-                if (this.PresentationParameters.HardwareModeSwitch)
-                {
-                    GetModeSwitchedSize();
-                }
-                else
+                if (!this.PresentationParameters.HardwareModeSwitch)
                 {
                     this.PresentationParameters.BackBufferWidth = Adapter.CurrentDisplayMode.Width;
                     this.PresentationParameters.BackBufferHeight = Adapter.CurrentDisplayMode.Height;
+                }
+                else
+                {
+                    GetModeSwitchedSize();
                 }
             }
         }
