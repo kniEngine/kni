@@ -155,7 +155,11 @@ namespace Microsoft.Xna.Platform
                 gameWindow.EnterFullScreen(pp);
 
                 if (!pp.HardwareModeSwitch)
-                    ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().OnPresentationChanged();
+                {
+                    ConcreteGraphicsDevice cgd = ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>();
+                    cgd.Internal_CreateSizeDependentResources();
+                    ((IPlatformGraphicsContext)cgd.MainContext).Strategy.ApplyRenderTargets(null);
+                }
             }
         }
 

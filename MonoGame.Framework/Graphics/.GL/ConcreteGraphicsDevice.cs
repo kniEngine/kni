@@ -44,8 +44,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset()
         {
-            // Update the back buffer.
-            this.OnPresentationChanged();
+#if DESKTOPGL
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(this.PresentationParameters.PresentationInterval);
+            Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
+#endif
+
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
@@ -144,18 +149,6 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.GetInteger(GetPName.MaxSamples, out maxMultiSampleCount);
             return maxMultiSampleCount;
         }
-
-        internal void OnPresentationChanged()
-        {
-#if DESKTOPGL
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
-            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(this.PresentationParameters.PresentationInterval);
-            Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
-#endif
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
-        }
-
 
         protected override void Dispose(bool disposing)
         {

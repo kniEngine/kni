@@ -37,8 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset()
         {
-            // Update the back buffer.
-            this.OnPresentationChanged();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
@@ -173,11 +172,6 @@ namespace Microsoft.Xna.Platform.Graphics
         public override System.Reflection.Assembly ConcreteAssembly
         {
             get { return ReflectionHelpers.GetAssembly(typeof(ConcreteGraphicsDevice)); }
-        }
-
-        internal void OnPresentationChanged()
-        {
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
 
