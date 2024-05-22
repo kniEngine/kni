@@ -444,11 +444,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 this.PresentationParameters.BackBufferHeight = closest.Height;
                 output.Dispose();
             }
-            else
-            {
-                this.PresentationParameters.BackBufferWidth = PresentationParameters.BackBufferWidth;
-                this.PresentationParameters.BackBufferHeight = PresentationParameters.BackBufferHeight;
-            }
         }
 
 #endif
