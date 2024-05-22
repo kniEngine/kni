@@ -403,7 +403,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    GetDisplayResolution(out newWidth, out newHeight);
+                    newWidth = Adapter.CurrentDisplayMode.Width;
+                    newHeight = Adapter.CurrentDisplayMode.Height;
                 }
 
                 PresentationParameters.BackBufferWidth = newWidth;
@@ -452,12 +453,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 height = closest.Height;
                 output.Dispose();
             }
-        }
-
-        private void GetDisplayResolution(out int width, out int height)
-        {
-            width = Adapter.CurrentDisplayMode.Width;
-            height = Adapter.CurrentDisplayMode.Height;
         }
 
 #endif
