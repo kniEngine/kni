@@ -71,17 +71,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset(PresentationParameters presentationParameters)
         {
-            PresentationParameters = presentationParameters;
-            Reset();
-        }
+            this.PresentationParameters = presentationParameters;
 
-        public override void Reset()
-        {
 #if WINDOWSDX
             CorrectBackBufferSize();
 #endif
 
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
+            if (this.PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
                 throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
 
             CreateSizeDependentResources();

@@ -336,13 +336,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Reset()
         {
-            _strategy.OnDeviceResetting(EventArgs.Empty);
-
-            _strategy.Reset();
-
-            _strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
-
-            _strategy.OnDeviceReset(EventArgs.Empty);
+            Reset(this.PresentationParameters);
         }
 
         public void Reset(PresentationParameters presentationParameters)
@@ -354,7 +348,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy.Reset(presentationParameters);
 
-            _strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
+            _strategy.OnPresentationChanged(new PresentationEventArgs(this.PresentationParameters));
 
             _strategy.OnDeviceReset(EventArgs.Empty);
         }
