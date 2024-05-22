@@ -299,7 +299,11 @@ namespace Microsoft.Xna.Framework
                         ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
                     }
                 }
-                UpdateBackBufferSize();
+                GraphicsDeviceManager gdm2 = _concreteGame.GraphicsDeviceManager;
+                if (gdm2 != null)
+                {
+                    ((IPlatformGraphicsDeviceManager)gdm2).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
+                }
             }
 
             _lastFormState = Form.WindowState;
@@ -311,7 +315,11 @@ namespace Microsoft.Xna.Framework
             _wasMoved = true;
             if (_concreteGame.Window == this)
             {
-                UpdateBackBufferSize();
+                GraphicsDeviceManager gdm2 = _concreteGame.GraphicsDeviceManager;
+                if (gdm2 != null)
+                {
+                    ((IPlatformGraphicsDeviceManager)gdm2).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
+                }
 
                 // the display that the window is on might have changed, so we need to
                 // check and possibly update the Adapter of the GraphicsDevice
@@ -324,15 +332,6 @@ namespace Microsoft.Xna.Framework
             }
 
             OnClientSizeChanged();
-        }
-
-        private void UpdateBackBufferSize()
-        {
-            GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
-            if (gdm != null)
-            {
-                ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
-            }
         }
 
         protected override void SetTitle(string title)
