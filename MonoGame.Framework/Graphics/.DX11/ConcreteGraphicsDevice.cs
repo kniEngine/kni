@@ -84,7 +84,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    GetModeSwitchedSize();
+                    int preferredWidth = this.PresentationParameters.BackBufferWidth;
+                    int preferredHeight = this.PresentationParameters.BackBufferHeight;
+                    SurfaceFormat preferredFormat = this.PresentationParameters.BackBufferFormat;
+                    GetClosestBackBufferSize(preferredWidth, preferredHeight, preferredFormat);
                 }
             }
 #endif
@@ -406,7 +409,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    GetModeSwitchedSize();
+                    int preferredWidth = this.PresentationParameters.BackBufferWidth;
+                    int preferredHeight = this.PresentationParameters.BackBufferHeight;
+                    SurfaceFormat preferredFormat = this.PresentationParameters.BackBufferFormat;
+                    GetClosestBackBufferSize(preferredWidth, preferredHeight, preferredFormat);
                 }
             }
 #endif
@@ -414,7 +420,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 #if WINDOWSDX
-        private void GetModeSwitchedSize()
+        private void GetClosestBackBufferSize(int preferredWidth, int preferredHeight, SurfaceFormat preferredFormat)
         {
             DXGI.Output output = null;
             if (_swapChain != null)
@@ -436,9 +442,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     DXGI.ModeDescription targetModeDesc = new DXGI.ModeDescription();
                     targetModeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
-                    targetModeDesc.Width = PresentationParameters.BackBufferWidth;
-                    targetModeDesc.Height = PresentationParameters.BackBufferHeight;
-                    targetModeDesc.Format = PresentationParameters.BackBufferFormat.ToDXFormat();
+                    targetModeDesc.Width = preferredWidth;
+                    targetModeDesc.Height = preferredHeight;
+                    targetModeDesc.Format = preferredFormat.ToDXFormat();
 
                     DXGI.ModeDescription closest;
                     output.GetClosestMatchingMode(this.D3DDevice, targetModeDesc, out closest);
