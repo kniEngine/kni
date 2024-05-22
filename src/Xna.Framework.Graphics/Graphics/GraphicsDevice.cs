@@ -348,7 +348,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _strategy.Reset(presentationParameters);
 
-            _strategy.OnPresentationChanged(new PresentationEventArgs(PresentationParameters));
+            _strategy.OnPresentationChanged(new PresentationEventArgs(this.PresentationParameters));
 
             _strategy.OnDeviceReset(EventArgs.Empty);
         }

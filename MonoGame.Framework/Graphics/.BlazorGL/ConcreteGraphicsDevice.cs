@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Reset(PresentationParameters presentationParameters)
         {
-            PresentationParameters = presentationParameters;
+            this.PresentationParameters = presentationParameters;
 
             ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
