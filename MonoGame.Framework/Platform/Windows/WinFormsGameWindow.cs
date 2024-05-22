@@ -290,14 +290,12 @@ namespace Microsoft.Xna.Framework
 
             if (_concreteGame.Window == this && Form.WindowState != FormWindowState.Minimized)
             {
-                // we may need to restore full screen when coming back from a minimized window
-                if (_lastFormState == FormWindowState.Minimized)
+                GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
+                if (gdm != null)
                 {
-                    GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
-                    if (gdm != null)
-                    {
+                    // we may need to restore full screen when coming back from a minimized window
+                    if (_lastFormState == FormWindowState.Minimized)
                         ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
-                    }
                 }
                 GraphicsDeviceManager gdm2 = _concreteGame.GraphicsDeviceManager;
                 if (gdm2 != null)
