@@ -328,22 +328,10 @@ namespace Microsoft.Xna.Framework
 
         private void UpdateBackBufferSize()
         {
-            Rectangle clientBounds = this.ClientBounds;
-
             GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
             if (gdm != null)
             {
-                if (gdm.GraphicsDevice != null)
-                {
-                    if (clientBounds.Width  != gdm.PreferredBackBufferWidth
-                    ||  clientBounds.Height != gdm.PreferredBackBufferHeight)
-                    {
-                        // Set the default new back buffer size
-                        gdm.PreferredBackBufferWidth  = clientBounds.Width;
-                        gdm.PreferredBackBufferHeight = clientBounds.Height;
-                        gdm.ApplyChanges();
-                    }
-                }
+                ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
             }
         }
 
