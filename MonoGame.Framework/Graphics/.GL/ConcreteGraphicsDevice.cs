@@ -39,7 +39,14 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void Reset(PresentationParameters presentationParameters)
         {
             PresentationParameters = presentationParameters;
-            Reset();
+
+#if DESKTOPGL
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().MakeCurrent(this.PresentationParameters.DeviceWindowHandle);
+            int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(this.PresentationParameters.PresentationInterval);
+            Sdl.Current.OpenGL.SetSwapInterval(swapInterval);
+#endif
+
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
         public override void Reset()
