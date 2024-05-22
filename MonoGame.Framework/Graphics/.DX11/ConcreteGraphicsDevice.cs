@@ -420,10 +420,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                try
-                {
-                    output = _swapChain.ContainingOutput;
-                }
+                try { output = _swapChain.ContainingOutput; }
                 catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
 
@@ -481,10 +478,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
 
             DXGI.Output output = null;
-            try
-            {
-                output = _swapChain.ContainingOutput;
-            }
+            try { output = _swapChain.ContainingOutput; }
             catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
 
             if (output != null)
