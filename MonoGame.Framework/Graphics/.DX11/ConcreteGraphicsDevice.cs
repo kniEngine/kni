@@ -74,7 +74,25 @@ namespace Microsoft.Xna.Platform.Graphics
             this.PresentationParameters = presentationParameters;
 
 #if WINDOWSDX
-            CorrectBackBufferSize();
+            if (this.PresentationParameters.IsFullScreen)
+            {
+                int width, height;
+                if (!this.PresentationParameters.HardwareModeSwitch)
+                {
+                    DisplayMode displayMode = Adapter.CurrentDisplayMode;
+                    width = displayMode.Width;
+                    height = displayMode.Height;
+                }
+                else
+                {
+                    int preferredWidth = this.PresentationParameters.BackBufferWidth;
+                    int preferredHeight = this.PresentationParameters.BackBufferHeight;
+                    SurfaceFormat preferredFormat = this.PresentationParameters.BackBufferFormat;
+                    GetClosestBackBufferSize(preferredWidth, preferredHeight, preferredFormat, out width, out height);
+                }
+                this.PresentationParameters.BackBufferWidth = width;
+                this.PresentationParameters.BackBufferHeight = height;
+            }
 #endif
 
             if (this.PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
@@ -384,80 +402,69 @@ namespace Microsoft.Xna.Platform.Graphics
         protected override void PlatformInitialize()
         {
 #if WINDOWSDX
-            CorrectBackBufferSize();
+            if (this.PresentationParameters.IsFullScreen)
+            {
+                int width, height;
+                if (!this.PresentationParameters.HardwareModeSwitch)
+                {
+                    DisplayMode displayMode = Adapter.CurrentDisplayMode;
+                    width = displayMode.Width;
+                    height = displayMode.Height;
+                }
+                else
+                {
+                    int preferredWidth = this.PresentationParameters.BackBufferWidth;
+                    int preferredHeight = this.PresentationParameters.BackBufferHeight;
+                    SurfaceFormat preferredFormat = this.PresentationParameters.BackBufferFormat;
+                    GetClosestBackBufferSize(preferredWidth, preferredHeight, preferredFormat, out width, out height);
+                }
+                this.PresentationParameters.BackBufferWidth = width;
+                this.PresentationParameters.BackBufferHeight = height;
+            }
 #endif
             CreateSizeDependentResources();
         }
 
 #if WINDOWSDX
-        private void CorrectBackBufferSize()
+        private void GetClosestBackBufferSize(int preferredWidth, int preferredHeight, SurfaceFormat preferredFormat,
+             out int width, out int height)
         {
-            // Window size can be modified when we're going full screen, we need to take that into account
-            // so the back buffer has the right size.
-            if (PresentationParameters.IsFullScreen)
-            {
-                int newWidth, newHeight;
-                if (PresentationParameters.HardwareModeSwitch)
-                {
-                    GetModeSwitchedSize(out newWidth, out newHeight);
-                }
-                else
-                {
-                    GetDisplayResolution(out newWidth, out newHeight);
-                }
+            width = preferredWidth;
+            height = preferredHeight;
 
-                PresentationParameters.BackBufferWidth = newWidth;
-                PresentationParameters.BackBufferHeight = newHeight;
-            }
-        }
+            // TODO: we can get a matching DisplayMode from this.Adapter.SupportedDisplayModes
 
-        private void GetModeSwitchedSize(out int width, out int height)
-        {
             DXGI.Output output = null;
-            if (_swapChain == null)
+            if (_swapChain != null)
+            {
+                try { output = _swapChain.ContainingOutput; }
+                catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
+            }
+            else
             {
                 // get the primary output
+                // TODO: GetAdapter1(0) here is wrong. Get the DXGI.Adapter1 from ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>()._dxAdapter.
                 using (DXGI.Factory1 factory = new DXGI.Factory1())
                 using (DXGI.Adapter1 adapter = factory.GetAdapter1(0))
                     output = adapter.Outputs[0];
             }
-            else
+
+            if (output != null)
             {
-                try
+                using (output)
                 {
-                    output = _swapChain.ContainingOutput;
+                    DXGI.ModeDescription targetModeDesc = new DXGI.ModeDescription();
+                    targetModeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
+                    targetModeDesc.Width = preferredWidth;
+                    targetModeDesc.Height = preferredHeight;
+                    targetModeDesc.Format = preferredFormat.ToDXFormat();
+
+                    DXGI.ModeDescription closestMode;
+                    output.GetClosestMatchingMode(this.D3DDevice, targetModeDesc, out closestMode);
+                    width = closestMode.Width;
+                    height = closestMode.Height;
                 }
-                catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
-
-            DXGI.Format format = PresentationParameters.BackBufferFormat.ToDXFormat();
-            DXGI.ModeDescription target = new DXGI.ModeDescription
-            {
-                Format = format,
-                Scaling = DXGI.DisplayModeScaling.Unspecified,
-                Width = PresentationParameters.BackBufferWidth,
-                Height = PresentationParameters.BackBufferHeight,
-            };
-
-            if (output == null)
-            {
-                width = PresentationParameters.BackBufferWidth;
-                height = PresentationParameters.BackBufferHeight;
-            }
-            else
-            {
-                DXGI.ModeDescription closest;
-                output.GetClosestMatchingMode(this.D3DDevice, target, out closest);
-                width = closest.Width;
-                height = closest.Height;
-                output.Dispose();
-            }
-        }
-
-        private void GetDisplayResolution(out int width, out int height)
-        {
-            width = Adapter.CurrentDisplayMode.Width;
-            height = Adapter.CurrentDisplayMode.Height;
         }
 
 #endif
@@ -496,24 +503,22 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
 
             DXGI.Output output = null;
-            try
-            {
-                output = _swapChain.ContainingOutput;
-            }
+            try { output = _swapChain.ContainingOutput; }
             catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
 
             if (output != null)
             {
-                foreach (GraphicsAdapter adapter in GraphicsAdapter.Adapters)
+                using (output)
                 {
-                    if (adapter.DeviceName == output.Description.DeviceName)
+                    foreach (GraphicsAdapter adapter in GraphicsAdapter.Adapters)
                     {
-                        Adapter = adapter;
-                        break;
+                        if (adapter.DeviceName == output.Description.DeviceName)
+                        {
+                            Adapter = adapter;
+                            break;
+                        }
                     }
                 }
-
-                output.Dispose();
             }
         }
 #endif
