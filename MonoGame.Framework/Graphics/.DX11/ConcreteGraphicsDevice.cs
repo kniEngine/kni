@@ -74,7 +74,19 @@ namespace Microsoft.Xna.Platform.Graphics
             this.PresentationParameters = presentationParameters;
 
 #if WINDOWSDX
-            CorrectBackBufferSize();
+            if (this.PresentationParameters.IsFullScreen)
+            {
+                if (!this.PresentationParameters.HardwareModeSwitch)
+                {
+                    DisplayMode displayMode = Adapter.CurrentDisplayMode;
+                    this.PresentationParameters.BackBufferWidth = displayMode.Width;
+                    this.PresentationParameters.BackBufferHeight = displayMode.Height;
+                }
+                else
+                {
+                    GetModeSwitchedSize();
+                }
+            }
 #endif
 
             if (this.PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
@@ -384,14 +396,6 @@ namespace Microsoft.Xna.Platform.Graphics
         protected override void PlatformInitialize()
         {
 #if WINDOWSDX
-            CorrectBackBufferSize();
-#endif
-            CreateSizeDependentResources();
-        }
-
-#if WINDOWSDX
-        private void CorrectBackBufferSize()
-        {
             if (this.PresentationParameters.IsFullScreen)
             {
                 if (!this.PresentationParameters.HardwareModeSwitch)
@@ -405,8 +409,11 @@ namespace Microsoft.Xna.Platform.Graphics
                     GetModeSwitchedSize();
                 }
             }
+#endif
+            CreateSizeDependentResources();
         }
 
+#if WINDOWSDX
         private void GetModeSwitchedSize()
         {
             DXGI.Output output = null;
