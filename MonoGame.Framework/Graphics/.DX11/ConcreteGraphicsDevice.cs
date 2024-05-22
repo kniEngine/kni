@@ -394,21 +394,20 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // Window size can be modified when we're going full screen, we need to take that into account
             // so the back buffer has the right size.
-            if (PresentationParameters.IsFullScreen)
+            if (this.PresentationParameters.IsFullScreen)
             {
-                int newWidth, newHeight;
-                if (PresentationParameters.HardwareModeSwitch)
+                if (this.PresentationParameters.HardwareModeSwitch)
                 {
+                    int newWidth, newHeight;
                     GetModeSwitchedSize(out newWidth, out newHeight);
+                    this.PresentationParameters.BackBufferWidth = newWidth;
+                    this.PresentationParameters.BackBufferHeight = newHeight;
                 }
                 else
                 {
-                    newWidth = Adapter.CurrentDisplayMode.Width;
-                    newHeight = Adapter.CurrentDisplayMode.Height;
+                    this.PresentationParameters.BackBufferWidth = Adapter.CurrentDisplayMode.Width;
+                    this.PresentationParameters.BackBufferHeight = Adapter.CurrentDisplayMode.Height;
                 }
-
-                PresentationParameters.BackBufferWidth = newWidth;
-                PresentationParameters.BackBufferHeight = newHeight;
             }
         }
 
