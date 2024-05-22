@@ -392,8 +392,6 @@ namespace Microsoft.Xna.Platform.Graphics
 #if WINDOWSDX
         private void CorrectBackBufferSize()
         {
-            // Window size can be modified when we're going full screen, we need to take that into account
-            // so the back buffer has the right size.
             if (this.PresentationParameters.IsFullScreen)
             {
                 if (!this.PresentationParameters.HardwareModeSwitch)
