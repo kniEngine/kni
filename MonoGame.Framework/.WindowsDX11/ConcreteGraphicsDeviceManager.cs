@@ -177,6 +177,20 @@ namespace Microsoft.Xna.Platform
             ((WinFormsGameWindow)this.Game.Window).OnPresentationChanged(pp);
         }
 
+        internal void UpdateBackBufferSize(Rectangle clientBounds)
+        {
+            if (this.GraphicsDevice != null)
+            {
+                if (clientBounds.Width  != this.PreferredBackBufferWidth
+                ||  clientBounds.Height != this.PreferredBackBufferHeight)
+                {
+                    // Set the default new back buffer size
+                    this.PreferredBackBufferWidth  = clientBounds.Width;
+                    this.PreferredBackBufferHeight = clientBounds.Height;
+                    this.ApplyChanges();
+                }
+            }
+        }
 
         #region IGraphicsDeviceManager strategy
 

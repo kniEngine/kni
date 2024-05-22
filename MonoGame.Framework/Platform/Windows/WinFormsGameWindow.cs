@@ -290,16 +290,15 @@ namespace Microsoft.Xna.Framework
 
             if (_concreteGame.Window == this && Form.WindowState != FormWindowState.Minimized)
             {
-                // we may need to restore full screen when coming back from a minimized window
-                if (_lastFormState == FormWindowState.Minimized)
+                GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
+                if (gdm != null)
                 {
-                    GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
-                    if (gdm != null)
-                    {
+                    // we may need to restore full screen when coming back from a minimized window
+                    if (_lastFormState == FormWindowState.Minimized)
                         ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
-                    }
+
+                    ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
                 }
-                UpdateBackBufferSize();
             }
 
             _lastFormState = Form.WindowState;
@@ -311,41 +310,19 @@ namespace Microsoft.Xna.Framework
             _wasMoved = true;
             if (_concreteGame.Window == this)
             {
-                UpdateBackBufferSize();
-
                 // the display that the window is on might have changed, so we need to
                 // check and possibly update the Adapter of the GraphicsDevice
                 GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
                 if (gdm != null)
                 {
+                    ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
+
                     if (_concreteGame.GraphicsDevice != null)
                         ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().RefreshAdapter();
                 }
             }
 
             OnClientSizeChanged();
-        }
-
-        private void UpdateBackBufferSize()
-        {
-            GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
-            if (gdm != null)
-            {
-                if (gdm.GraphicsDevice == null)
-                    return;
-
-                SysDrawing.Size newSize = Form.ClientSize;
-                int newWidth  = newSize.Width;
-                int newHeight = newSize.Height;
-                if (newWidth  != gdm.PreferredBackBufferWidth
-                ||  newHeight != gdm.PreferredBackBufferHeight)
-                {
-                    // Set the default new back buffer size
-                    gdm.PreferredBackBufferWidth = newWidth;
-                    gdm.PreferredBackBufferHeight = newHeight;
-                    gdm.ApplyChanges();
-                }
-            }
         }
 
         protected override void SetTitle(string title)
