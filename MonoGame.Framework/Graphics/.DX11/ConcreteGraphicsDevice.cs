@@ -84,8 +84,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
                 throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
 
-            // Update the back buffer.
-            this.OnPresentationChanged();
+            CreateSizeDependentResources();
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
@@ -529,6 +529,10 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 #endif
 
+        internal void Internal_CreateSizeDependentResources()
+        {
+            this.CreateSizeDependentResources();
+        }
 
         private void CreateSizeDependentResources()
         {
@@ -944,12 +948,6 @@ namespace Microsoft.Xna.Platform.Graphics
         public override System.Reflection.Assembly ConcreteAssembly
         {
             get { return ReflectionHelpers.GetAssembly(typeof(ConcreteGraphicsDevice)); }
-        }
-
-        internal void OnPresentationChanged()
-        {
-            CreateSizeDependentResources();
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
 
