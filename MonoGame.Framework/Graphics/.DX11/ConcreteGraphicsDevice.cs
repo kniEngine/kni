@@ -427,14 +427,13 @@ namespace Microsoft.Xna.Platform.Graphics
                 catch (DX.SharpDXException) { /* ContainingOutput fails on a headless device */ }
             }
 
-            DXGI.ModeDescription targetModeDesc = new DXGI.ModeDescription();
-            targetModeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
-            targetModeDesc.Width = PresentationParameters.BackBufferWidth;
-            targetModeDesc.Height = PresentationParameters.BackBufferHeight;
-            targetModeDesc.Format = PresentationParameters.BackBufferFormat.ToDXFormat();
-
             if (output != null)
             {
+                DXGI.ModeDescription targetModeDesc = new DXGI.ModeDescription();
+                targetModeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
+                targetModeDesc.Width = PresentationParameters.BackBufferWidth;
+                targetModeDesc.Height = PresentationParameters.BackBufferHeight;
+                targetModeDesc.Format = PresentationParameters.BackBufferFormat.ToDXFormat();
 
                 DXGI.ModeDescription closest;
                 output.GetClosestMatchingMode(this.D3DDevice, targetModeDesc, out closest);
