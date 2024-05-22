@@ -432,6 +432,8 @@ namespace Microsoft.Xna.Platform.Graphics
             width = preferredWidth;
             height = preferredHeight;
 
+            // TODO: we can get a matching DisplayMode from this.Adapter.SupportedDisplayModes
+
             DXGI.Output output = null;
             if (_swapChain != null)
             {
@@ -441,6 +443,7 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 // get the primary output
+                // TODO: GetAdapter1(0) here is wrong. Get the DXGI.Adapter1 from ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>()._dxAdapter.
                 using (DXGI.Factory1 factory = new DXGI.Factory1())
                 using (DXGI.Adapter1 adapter = factory.GetAdapter1(0))
                     output = adapter.Outputs[0];
