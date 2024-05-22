@@ -215,7 +215,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        public abstract void Reset();
         public abstract void Reset(PresentationParameters presentationParameters);
         public abstract void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle);
         public virtual void Present()

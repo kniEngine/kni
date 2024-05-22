@@ -23,11 +23,6 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        public override void Reset()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
             throw new PlatformNotSupportedException();

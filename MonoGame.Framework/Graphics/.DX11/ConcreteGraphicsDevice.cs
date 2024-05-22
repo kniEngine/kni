@@ -84,11 +84,6 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
-        public override void Reset()
-        {
-            Reset(this.PresentationParameters);
-        }
-
         public override void Present(Rectangle? sourceRectangle, Rectangle? destinationRectangle, IntPtr overrideWindowHandle)
         {
             throw new NotImplementedException();
