@@ -43,7 +43,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     int monitorCount = dxAdapter.GetOutputCount();
                     for (int j = 0; j < monitorCount; j++)
                     {
-                        using (DXGI.Output dxMonitor = dxAdapter.GetOutput(j))
+                        DXGI.Output dxMonitor;
+                        using (dxMonitor = dxAdapter.GetOutput(j))
                         {
                             ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(dxAdapter, dxMonitor);
                             GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);

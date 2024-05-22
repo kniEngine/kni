@@ -429,17 +429,19 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (output != null)
             {
-                DXGI.ModeDescription targetModeDesc = new DXGI.ModeDescription();
-                targetModeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
-                targetModeDesc.Width = PresentationParameters.BackBufferWidth;
-                targetModeDesc.Height = PresentationParameters.BackBufferHeight;
-                targetModeDesc.Format = PresentationParameters.BackBufferFormat.ToDXFormat();
+                using (output)
+                {
+                    DXGI.ModeDescription targetModeDesc = new DXGI.ModeDescription();
+                    targetModeDesc.Scaling = DXGI.DisplayModeScaling.Unspecified;
+                    targetModeDesc.Width = PresentationParameters.BackBufferWidth;
+                    targetModeDesc.Height = PresentationParameters.BackBufferHeight;
+                    targetModeDesc.Format = PresentationParameters.BackBufferFormat.ToDXFormat();
 
-                DXGI.ModeDescription closest;
-                output.GetClosestMatchingMode(this.D3DDevice, targetModeDesc, out closest);
-                this.PresentationParameters.BackBufferWidth = closest.Width;
-                this.PresentationParameters.BackBufferHeight = closest.Height;
-                output.Dispose();
+                    DXGI.ModeDescription closest;
+                    output.GetClosestMatchingMode(this.D3DDevice, targetModeDesc, out closest);
+                    this.PresentationParameters.BackBufferWidth = closest.Width;
+                    this.PresentationParameters.BackBufferHeight = closest.Height;
+                }
             }
         }
 
@@ -487,16 +489,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (output != null)
             {
-                foreach (GraphicsAdapter adapter in GraphicsAdapter.Adapters)
+                using (output)
                 {
-                    if (adapter.DeviceName == output.Description.DeviceName)
+                    foreach (GraphicsAdapter adapter in GraphicsAdapter.Adapters)
                     {
-                        Adapter = adapter;
-                        break;
+                        if (adapter.DeviceName == output.Description.DeviceName)
+                        {
+                            Adapter = adapter;
+                            break;
+                        }
                     }
                 }
-
-                output.Dispose();
             }
         }
 #endif
