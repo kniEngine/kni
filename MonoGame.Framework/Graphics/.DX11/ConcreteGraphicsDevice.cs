@@ -398,8 +398,9 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (!this.PresentationParameters.HardwareModeSwitch)
                 {
-                    this.PresentationParameters.BackBufferWidth = Adapter.CurrentDisplayMode.Width;
-                    this.PresentationParameters.BackBufferHeight = Adapter.CurrentDisplayMode.Height;
+                    DisplayMode displayMode = Adapter.CurrentDisplayMode;
+                    this.PresentationParameters.BackBufferWidth = displayMode.Width;
+                    this.PresentationParameters.BackBufferHeight = displayMode.Height;
                 }
                 else
                 {
