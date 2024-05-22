@@ -296,11 +296,8 @@ namespace Microsoft.Xna.Framework
                     // we may need to restore full screen when coming back from a minimized window
                     if (_lastFormState == FormWindowState.Minimized)
                         ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().SetHardwareFullscreen();
-                }
-                GraphicsDeviceManager gdm2 = _concreteGame.GraphicsDeviceManager;
-                if (gdm2 != null)
-                {
-                    ((IPlatformGraphicsDeviceManager)gdm2).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
+
+                    ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
                 }
             }
 
@@ -313,17 +310,13 @@ namespace Microsoft.Xna.Framework
             _wasMoved = true;
             if (_concreteGame.Window == this)
             {
-                GraphicsDeviceManager gdm2 = _concreteGame.GraphicsDeviceManager;
-                if (gdm2 != null)
-                {
-                    ((IPlatformGraphicsDeviceManager)gdm2).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
-                }
-
                 // the display that the window is on might have changed, so we need to
                 // check and possibly update the Adapter of the GraphicsDevice
                 GraphicsDeviceManager gdm = _concreteGame.GraphicsDeviceManager;
                 if (gdm != null)
                 {
+                    ((IPlatformGraphicsDeviceManager)gdm).GetStrategy<ConcreteGraphicsDeviceManager>().UpdateBackBufferSize(this.ClientBounds);
+
                     if (_concreteGame.GraphicsDevice != null)
                         ((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().RefreshAdapter();
                 }
