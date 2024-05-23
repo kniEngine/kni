@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal BufferBindingInfo[] _bufferBindingInfos;
         private int _activeBufferBindingInfosCount;
         internal bool[] _newEnabledVertexAttributes;
-        private readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
+        private readonly HashSet<int> _enabledVertexAttributesSet = new HashSet<int>();
         private bool _attribsDirty;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
@@ -425,7 +425,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (attrs[x])
                 {
-                    if (_enabledVertexAttributes.Add(x))
+                    if (_enabledVertexAttributesSet.Add(x))
                     {
                         GL.EnableVertexAttribArray(x);
                         GL.CheckGLError();
@@ -433,7 +433,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    if (_enabledVertexAttributes.Remove(x))
+                    if (_enabledVertexAttributesSet.Remove(x))
                     {
                         GL.DisableVertexAttribArray(x);
                         GL.CheckGLError();
@@ -1184,7 +1184,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _shaderProgram = null;
 
             //invalidate VertexAttributes
-            _enabledVertexAttributes.Clear();
+            _enabledVertexAttributesSet.Clear();
 
             //invalidate textures
             ((IPlatformTextureCollection)this.Textures).Strategy.Clear();
