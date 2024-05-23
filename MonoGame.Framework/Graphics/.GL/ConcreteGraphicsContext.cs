@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal BufferBindingInfo[] _bufferBindingInfos;
         private int _activeBufferBindingInfosCount;
         internal bool[] _newEnabledVertexAttributes;
-        internal readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
+        private readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
         private bool _attribsDirty;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls

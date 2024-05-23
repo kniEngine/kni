@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal BufferBindingInfo[] _bufferBindingInfos;
         private int _activeBufferBindingInfosCount;
         internal bool[] _newEnabledVertexAttributes;
-        internal readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
+        private readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
         private bool _attribsDirty;
 
         private DepthStencilState _clearDepthStencilState = new DepthStencilState { StencilEnable = true };
