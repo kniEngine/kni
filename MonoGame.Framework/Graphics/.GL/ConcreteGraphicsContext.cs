@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal BufferBindingInfo[] _bufferBindingInfos;
         private int _activeBufferBindingInfosCount;
         internal bool[] _newEnabledVertexAttributes;
-        internal readonly HashSet<int> _enabledVertexAttributes = new HashSet<int>();
+        private readonly HashSet<int> _enabledVertexAttributesSet = new HashSet<int>();
         private bool _attribsDirty;
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
@@ -419,29 +419,6 @@ namespace Microsoft.Xna.Platform.Graphics
             return location;
         }
 
-        private void SetVertexAttributeArray(bool[] attrs)
-        {
-            for (int x = 0; x < attrs.Length; x++)
-            {
-                if (attrs[x])
-                {
-                    if (_enabledVertexAttributes.Add(x))
-                    {
-                        GL.EnableVertexAttribArray(x);
-                        GL.CheckGLError();
-                    }
-                }
-                else
-                {
-                    if (_enabledVertexAttributes.Remove(x))
-                    {
-                        GL.DisableVertexAttribArray(x);
-                        GL.CheckGLError();
-                    }
-                }
-            }
-        }
-
         private void PlatformApplyVertexBuffersAttribs(int baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
@@ -507,6 +484,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
                     _newEnabledVertexAttributes[eva] = false;
+
                 for (int slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
                     for (int e = 0; e < _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
@@ -518,7 +496,28 @@ namespace Microsoft.Xna.Platform.Graphics
                 _activeBufferBindingInfosCount = _vertexBuffers.Count;
             }
 
-            SetVertexAttributeArray(_newEnabledVertexAttributes);
+            // SetVertexAttributeArray
+            {
+                for (int x = 0; x < _newEnabledVertexAttributes.Length; x++)
+                {
+                    if (_newEnabledVertexAttributes[x] == true)
+                    {
+                        if (_enabledVertexAttributesSet.Add(x))
+                        {
+                            GL.EnableVertexAttribArray(x);
+                            GL.CheckGLError();
+                        }
+                    }
+                    else // (_newEnabledVertexAttributes[x] == false)
+                    {
+                        if (_enabledVertexAttributesSet.Remove(x))
+                        {
+                            GL.DisableVertexAttribArray(x);
+                            GL.CheckGLError();
+                        }
+                    }
+                }
+            }
         }
 
         internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
@@ -551,7 +550,28 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
             }
 
-            SetVertexAttributeArray(vertexAttribInfo.EnabledAttributes);
+            // SetVertexAttributeArray
+            {
+                for (int x = 0; x < vertexAttribInfo.EnabledAttributes.Length; x++)
+                {
+                    if (vertexAttribInfo.EnabledAttributes[x] == true)
+                    {
+                        if (_enabledVertexAttributesSet.Add(x))
+                        {
+                            GL.EnableVertexAttribArray(x);
+                            GL.CheckGLError();
+                        }
+                    }
+                    else // (vertexAttribInfo.EnabledAttributes[x] == false)
+                    {
+                        if (_enabledVertexAttributesSet.Remove(x))
+                        {
+                            GL.DisableVertexAttribArray(x);
+                            GL.CheckGLError();
+                        }
+                    }
+                }
+            }
             _attribsDirty = true;
         }
 
@@ -1184,7 +1204,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _shaderProgram = null;
 
             //invalidate VertexAttributes
-            _enabledVertexAttributes.Clear();
+            _enabledVertexAttributesSet.Clear();
 
             //invalidate textures
             ((IPlatformTextureCollection)this.Textures).Strategy.Clear();
