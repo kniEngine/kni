@@ -377,7 +377,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             for (int x = 0; x < attrs.Length; x++)
             {
-                if (attrs[x])
+                if (attrs[x] == true)
                 {
                     if (_enabledVertexAttributesSet.Add(x))
                     {
@@ -385,7 +385,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
                     }
                 }
-                else
+                else // (attrs[x] == false)
                 {
                     if (_enabledVertexAttributesSet.Remove(x))
                     {
@@ -461,6 +461,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
                     _newEnabledVertexAttributes[eva] = false;
+
                 for (int slot = 0; slot < _vertexBuffers.Count; slot++)
                 {
                     for (int e = 0; e < _bufferBindingInfos[slot].AttributeInfo.Elements.Count; e++)
