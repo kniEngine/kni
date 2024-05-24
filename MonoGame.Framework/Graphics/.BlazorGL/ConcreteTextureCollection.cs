@@ -55,8 +55,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
                     GL.CheckGLError();
-                    _targets[i] = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget;
-                    GL.BindTexture(((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTexture);
+                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                    _targets[i] = ctexture._glTarget;
+                    GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
                     GL.CheckGLError();
 
                     _contextStrategy.Metrics_AddTextureCount();
