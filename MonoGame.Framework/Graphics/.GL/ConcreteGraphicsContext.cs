@@ -491,6 +491,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // SetVertexAttributeArray
+            if (bindingsChanged || _lastVertexAttribs != 1)
             {
                 for (int x = 0; x < _newEnabledVertexAttributes.Length; x++)
                 {
