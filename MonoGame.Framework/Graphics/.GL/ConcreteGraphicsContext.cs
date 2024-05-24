@@ -516,7 +516,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
+        internal void PlatformApplyUserVertexBuffers(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
@@ -709,7 +709,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vbHandle.AddrOfPinnedObject());
+                PlatformApplyUserVertexBuffers(vertexDeclaration, vbHandle.AddrOfPinnedObject());
 
                 //Draw
                 GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
@@ -750,7 +750,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexAddr);
+                PlatformApplyUserVertexBuffers(vertexDeclaration, vertexAddr);
 
                 //Draw
                 GL.DrawElements(
@@ -794,7 +794,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexAddr);
+                PlatformApplyUserVertexBuffers(vertexDeclaration, vertexAddr);
 
                 //Draw
                 GL.DrawElements(
