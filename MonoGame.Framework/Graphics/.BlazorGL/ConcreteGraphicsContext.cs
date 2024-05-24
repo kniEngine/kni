@@ -200,10 +200,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private void PlatformApplyVertexBuffers()
-        {
-        }
-
         private void PlatformApplyShaders()
         {
             if (_vertexShaderDirty || _pixelShaderDirty)
@@ -551,7 +547,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             PlatformApplyVertexBuffersAttribs(0);
@@ -572,7 +567,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             WebGLDataType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
@@ -599,7 +593,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();
@@ -613,7 +606,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -660,7 +652,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -728,7 +719,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();

@@ -239,10 +239,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private void PlatformApplyVertexBuffers()
-        {
-        }
-
         private void PlatformApplyShaders()
         {
             if (_vertexShaderDirty || _pixelShaderDirty)
@@ -598,7 +594,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             PlatformApplyVertexBuffersAttribs(0);
@@ -619,7 +614,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             DrawElementsType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
@@ -660,7 +654,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             DrawElementsType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
@@ -704,7 +697,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
@@ -740,7 +732,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
@@ -785,7 +776,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
