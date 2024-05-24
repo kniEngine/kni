@@ -200,10 +200,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private void PlatformApplyVertexBuffers()
-        {
-        }
-
         private void PlatformApplyShaders()
         {
             if (_vertexShaderDirty || _pixelShaderDirty)
@@ -373,7 +369,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return location;
         }
 
-        private void PlatformApplyVertexBuffersAttribs(int baseVertex)
+        private void PlatformApplyVertexBuffers(int baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
             bool bindingsChanged = false;
@@ -474,7 +470,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, int baseVertex)
+        internal void PlatformApplyUserVertexBuffers(VertexDeclaration vertexDeclaration, int baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
@@ -551,10 +547,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            PlatformApplyVertexBuffersAttribs(0);
+            PlatformApplyVertexBuffers(0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -572,7 +567,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             WebGLDataType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
@@ -580,7 +574,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(baseVertex);
+            PlatformApplyVertexBuffers(baseVertex);
 
             GL.DrawElements(target,
                             indexElementCount,
@@ -599,7 +593,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();
@@ -613,7 +606,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -635,7 +627,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexOffset);
+            PlatformApplyUserVertexBuffers(vertexDeclaration, vertexOffset);
 
             WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
@@ -660,7 +652,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // TODO: reimplement without creating new buffers
@@ -698,7 +689,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexOffset);
+            PlatformApplyUserVertexBuffers(vertexDeclaration, vertexOffset);
 
 
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
@@ -728,7 +719,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             throw new NotImplementedException();

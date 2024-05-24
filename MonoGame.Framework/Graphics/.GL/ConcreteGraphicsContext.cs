@@ -239,10 +239,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private void PlatformApplyVertexBuffers()
-        {
-        }
-
         private void PlatformApplyShaders()
         {
             if (_vertexShaderDirty || _pixelShaderDirty)
@@ -419,7 +415,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return location;
         }
 
-        private void PlatformApplyVertexBuffersAttribs(int baseVertex)
+        private void PlatformApplyVertexBuffers(int baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
@@ -520,7 +516,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApplyUserVertexDataAttribs(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
+        internal void PlatformApplyUserVertexBuffers(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
@@ -598,10 +594,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
-            PlatformApplyVertexBuffersAttribs(0);
+            PlatformApplyVertexBuffers(0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -619,7 +614,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             DrawElementsType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
@@ -629,7 +623,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (GL.DrawElementsBaseVertex != null)
             {
-                PlatformApplyVertexBuffersAttribs(0);
+                PlatformApplyVertexBuffers(0);
 
                 GL.DrawElementsBaseVertex(target,
                                   indexElementCount,
@@ -640,7 +634,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                PlatformApplyVertexBuffersAttribs(baseVertex);
+                PlatformApplyVertexBuffers(baseVertex);
 
                 GL.DrawElements(target,
                                 indexElementCount,
@@ -660,7 +654,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             PlatformApplyState();
             PlatformApplyIndexBuffer();
-            PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             DrawElementsType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
@@ -673,7 +666,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
-                PlatformApplyVertexBuffersAttribs(baseVertex);
+                PlatformApplyVertexBuffers(baseVertex);
 
                 GL.DrawElementsInstancedBaseInstance(target,
                                                      indexElementCount,
@@ -684,7 +677,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                PlatformApplyVertexBuffersAttribs(baseVertex);
+                PlatformApplyVertexBuffers(baseVertex);
 
                 GL.DrawElementsInstanced(target,
                                          indexElementCount,
@@ -704,7 +697,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
@@ -717,7 +709,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vbHandle.AddrOfPinnedObject());
+                PlatformApplyUserVertexBuffers(vertexDeclaration, vbHandle.AddrOfPinnedObject());
 
                 //Draw
                 GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
@@ -740,7 +732,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
@@ -759,7 +750,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexAddr);
+                PlatformApplyUserVertexBuffers(vertexDeclaration, vertexAddr);
 
                 //Draw
                 GL.DrawElements(
@@ -785,7 +776,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             PlatformApplyState();
             //PlatformApplyIndexBuffer();
-            //PlatformApplyVertexBuffers();
             PlatformApplyShaders();
 
             // Unbind current VBOs.
@@ -804,7 +794,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexDataAttribs(vertexDeclaration, vertexAddr);
+                PlatformApplyUserVertexBuffers(vertexDeclaration, vertexAddr);
 
                 //Draw
                 GL.DrawElements(
