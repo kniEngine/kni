@@ -415,7 +415,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return location;
         }
 
-        private void PlatformApplyVertexBuffersAttribs(int baseVertex)
+        private void PlatformApplyVertexBuffers(int baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
@@ -596,7 +596,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             PlatformApplyShaders();
 
-            PlatformApplyVertexBuffersAttribs(0);
+            PlatformApplyVertexBuffers(0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -623,7 +623,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (GL.DrawElementsBaseVertex != null)
             {
-                PlatformApplyVertexBuffersAttribs(0);
+                PlatformApplyVertexBuffers(0);
 
                 GL.DrawElementsBaseVertex(target,
                                   indexElementCount,
@@ -634,7 +634,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                PlatformApplyVertexBuffersAttribs(baseVertex);
+                PlatformApplyVertexBuffers(baseVertex);
 
                 GL.DrawElements(target,
                                 indexElementCount,
@@ -666,7 +666,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
-                PlatformApplyVertexBuffersAttribs(baseVertex);
+                PlatformApplyVertexBuffers(baseVertex);
 
                 GL.DrawElementsInstancedBaseInstance(target,
                                                      indexElementCount,
@@ -677,7 +677,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                PlatformApplyVertexBuffersAttribs(baseVertex);
+                PlatformApplyVertexBuffers(baseVertex);
 
                 GL.DrawElementsInstanced(target,
                                          indexElementCount,

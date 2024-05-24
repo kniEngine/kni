@@ -369,7 +369,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return location;
         }
 
-        private void PlatformApplyVertexBuffersAttribs(int baseVertex)
+        private void PlatformApplyVertexBuffers(int baseVertex)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
             bool bindingsChanged = false;
@@ -549,7 +549,7 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             PlatformApplyShaders();
 
-            PlatformApplyVertexBuffersAttribs(0);
+            PlatformApplyVertexBuffers(0);
 
             if (vertexStart < 0)
                 vertexStart = 0;
@@ -574,7 +574,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            PlatformApplyVertexBuffersAttribs(baseVertex);
+            PlatformApplyVertexBuffers(baseVertex);
 
             GL.DrawElements(target,
                             indexElementCount,
