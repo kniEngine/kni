@@ -67,7 +67,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (texture != null && !texture.IsDisposed)
                 {
-                    shaderStage.SetShaderResource(i, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>().GetShaderResourceView());
+                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                    shaderStage.SetShaderResource(i, ctexture.GetShaderResourceView());
 
                     _contextStrategy.Metrics_AddTextureCount();
                 }
