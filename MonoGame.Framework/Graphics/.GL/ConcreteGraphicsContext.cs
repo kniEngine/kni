@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private int _activeBufferBindingInfosCount;
         internal bool[] _newEnabledVertexAttributes;
         private readonly HashSet<int> _enabledVertexAttributesSet = new HashSet<int>();
-        private bool _attribsDirty;
+        private int _lastVertexAttribs; // 0 = dirty, 1 = last set by PlatformApplyVertexBuffers, 2 = last set by PlatformApplyUserVertexData
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
         private Vector4 _lastClearColor = Vector4.Zero;
@@ -431,7 +431,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int maxVertexBufferSlots = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.MaxVertexBufferSlots;
                 VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration, maxVertexBufferSlots);
 
-                if (_attribsDirty
+                if (_lastVertexAttribs != 1
                 ||  _bufferBindingInfos[slot].GLVertexBuffer != ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy
                 ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, vertexAttribInfo)
                 ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
@@ -474,8 +474,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            _attribsDirty = false;
-
             if (bindingsChanged)
             {
                 for (int eva = 0; eva < _newEnabledVertexAttributes.Length; eva++)
@@ -514,6 +512,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
             }
+            _lastVertexAttribs = 1;
         }
 
         internal void PlatformApplyUserVertexData(VertexDeclaration vertexDeclaration, IntPtr baseVertex)
@@ -568,7 +567,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
             }
-            _attribsDirty = true;
+            _lastVertexAttribs = 2;
         }
 
         private static GLPrimitiveType PrimitiveTypeGL(PrimitiveType primitiveType)
@@ -1184,8 +1183,8 @@ namespace Microsoft.Xna.Platform.Graphics
             //invalidate scissor
             _scissorRectangleDirty = true;
 
-            //invalidate index buffer
-            _attribsDirty = true;
+            //invalidate vertex and index buffer
+            _lastVertexAttribs = 0;
             _indexBufferDirty = true;
 
             //invalidate shaders
