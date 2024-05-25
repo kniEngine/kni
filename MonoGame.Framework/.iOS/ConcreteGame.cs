@@ -149,6 +149,11 @@ namespace Microsoft.Xna.Platform
 
             if (disposing)
             {
+                if (_gameWindow != null)
+                {
+                    _gameWindow.Dispose();
+                }
+
                 if (_viewController != null)
                 {
                     _viewController.View.RemoveFromSuperview();

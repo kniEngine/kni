@@ -74,7 +74,7 @@ using UIKit;
 
 namespace Microsoft.Xna.Framework
 {
-    class iOSGameWindow : GameWindow
+    class iOSGameWindow : GameWindow, IDisposable
     {
         private static Dictionary<IntPtr, iOSGameWindow> _instances = new Dictionary<IntPtr, iOSGameWindow>();
 
@@ -100,6 +100,11 @@ namespace Microsoft.Xna.Framework
             _viewController.InterfaceOrientationChanged += HandleInterfaceOrientationChanged;
 
             _instances.Add(this.Handle, this);
+        }
+
+        ~iOSGameWindow()
+        {
+            Dispose(false);
         }
 
         void HandleInterfaceOrientationChanged(object sender, EventArgs e)
@@ -227,5 +232,21 @@ namespace Microsoft.Xna.Framework
         }
 
         #endregion Notification Handling
+
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+               
+            }
+            
+        }
     }
 }
