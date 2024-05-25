@@ -73,7 +73,7 @@ using Foundation;
 using UIKit;
 
 namespace Microsoft.Xna.Framework
- {
+{
     class iOSGameWindow : GameWindow
     {
         private static Dictionary<IntPtr, iOSGameWindow> _instances = new Dictionary<IntPtr, iOSGameWindow>();
