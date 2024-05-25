@@ -27,16 +27,11 @@ namespace Microsoft.Xna.Platform
         private NSObject WillTerminateHolder;
         private CADisplayLink _displayLink;
 
-        private static ConcreteGame _concreteGameInstance = null;
-        internal static ConcreteGame ConcreteGameInstance { get { return ConcreteGame._concreteGameInstance; } }
-
         private iOSGameWindow _gameWindow;
 
 
         public ConcreteGame(Game game) : base(game)
         {
-            ConcreteGame._concreteGameInstance = this;
-
             this.Services.AddService(typeof(ConcreteGame), this);
 
             string appLocation = ((ITitleContainer)TitleContainer.Current).Location;
@@ -123,14 +118,6 @@ namespace Microsoft.Xna.Platform
 
             _gameWindow.ViewController.View.BecomeFirstResponder();
             CreateDisplayLink();
-        }
-
-
-        // FIXME: VideoPlayer 'needs' this to set up its own movie player view
-        //        controller.
-        public iOSGameViewController ViewController
-        {
-            get { return _gameWindow.ViewController; }
         }
 
         protected override void Dispose(bool disposing)
