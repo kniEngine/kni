@@ -68,6 +68,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
+        public override void Reset()
+        {
+            Reset(this.PresentationParameters);
+        }
 
         public override void Reset(PresentationParameters presentationParameters)
         {
