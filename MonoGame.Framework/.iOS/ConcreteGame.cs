@@ -36,10 +36,6 @@ namespace Microsoft.Xna.Platform
             string appLocation = ((ITitleContainer)TitleContainer.Current).Location;
             Directory.SetCurrentDirectory(appLocation);
 
-            #if !TVOS
-            UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
-            #endif
-
             _gameWindow = new iOSGameWindow(this);
             base.Window = _gameWindow;
             base.SetWindowListeners();

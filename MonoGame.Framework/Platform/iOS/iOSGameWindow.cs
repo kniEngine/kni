@@ -96,6 +96,10 @@ namespace Microsoft.Xna.Framework
 
         public iOSGameWindow(ConcreteGame concreteGame)
         {
+#if !TVOS
+            UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
+#endif
+
             // Create a full-screen window
             _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
             //_uiKitWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
