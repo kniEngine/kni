@@ -23,7 +23,6 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
-        private iOSGameViewController _viewController;
         private UIWindow _uiWindow;
         private NSObject WillTerminateHolder;
         private CADisplayLink _displayLink;
@@ -53,18 +52,15 @@ namespace Microsoft.Xna.Platform
             
             this.Services.AddService(typeof(UIWindow), _uiWindow);
 
-            _viewController = new iOSGameViewController(this);
-            this.Services.AddService(typeof(UIViewController), _viewController);
-
-            _gameWindow = new iOSGameWindow(_viewController);
+            _gameWindow = new iOSGameWindow(this);
             base.Window = _gameWindow;
             base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 
-            _uiWindow.Add(_viewController.View);
+            _uiWindow.Add(_gameWindow.ViewController.View);
 
-            _viewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
+            _gameWindow.ViewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
 
             //(SJ) Why is this called here when it's not in any other project
             //Guide.Initialise(game);
@@ -88,7 +84,7 @@ namespace Microsoft.Xna.Platform
             if (_displayLink != null)
                 _displayLink.RemoveFromRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
 
-            _displayLink = UIScreen.MainScreen.CreateDisplayLink(_viewController.View as iOSGameView, new Selector("doTick"));
+            _displayLink = UIScreen.MainScreen.CreateDisplayLink(_gameWindow.ViewController.View as iOSGameView, new Selector("doTick"));
 
             // FrameInterval represents how many frames must pass before the selector
             // is called again. We calculate this by dividing our target elapsed time by
@@ -120,12 +116,12 @@ namespace Microsoft.Xna.Platform
             // In iOS 8+ we need to set the root view controller *after* Window MakeKey
             // This ensures that the viewController's supported interface orientations
             // will be respected at launch
-            _uiWindow.RootViewController = _viewController;
+            _uiWindow.RootViewController = _gameWindow.ViewController;
 
             _gameWindow.BeginObservingUIApplication();
             BeginObservingUIApplicationExit();
 
-            _viewController.View.BecomeFirstResponder();
+            _gameWindow.ViewController.View.BecomeFirstResponder();
             CreateDisplayLink();
         }
 
@@ -134,7 +130,7 @@ namespace Microsoft.Xna.Platform
         //        controller.
         public iOSGameViewController ViewController
         {
-            get { return _viewController; }
+            get { return _gameWindow.ViewController; }
         }
 
         protected override void Dispose(bool disposing)
@@ -152,14 +148,6 @@ namespace Microsoft.Xna.Platform
                 if (_gameWindow != null)
                 {
                     _gameWindow.Dispose();
-                }
-
-                if (_viewController != null)
-                {
-                    _viewController.View.RemoveFromSuperview();
-                    _viewController.RemoveFromParentViewController();
-                    _viewController.Dispose();
-                    _viewController = null;
                 }
 
                 if (_uiWindow != null)
@@ -181,7 +169,7 @@ namespace Microsoft.Xna.Platform
             //        functionality is actually implemented.  At that
             //        point, it should be possible to pass Game.Tick
             //        directly to NSTimer.CreateRepeatingTimer.
-            _viewController.View.MakeCurrent();
+            _gameWindow.ViewController.View.MakeCurrent();
             Game.Tick();
 
             GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
@@ -190,7 +178,7 @@ namespace Microsoft.Xna.Platform
                     gdm.GraphicsDevice.Present();
             }
 
-            _viewController.View.Present();
+            _gameWindow.ViewController.View.Present();
         }
 
         public override void Exit()
@@ -233,7 +221,7 @@ namespace Microsoft.Xna.Platform
                 #if TVOS
                 return DisplayOrientation.LandscapeLeft;
                 #else
-                return OrientationConverter.ToDisplayOrientation(_viewController.InterfaceOrientation);
+                return OrientationConverter.ToDisplayOrientation(_gameWindow.ViewController.InterfaceOrientation);
                 #endif
             }
         }
@@ -259,7 +247,7 @@ namespace Microsoft.Xna.Platform
                 presentParams.DisplayOrientation = orientation;
 
                 // Recalculate our views.
-                ViewController.View.LayoutSubviews();
+                _gameWindow.ViewController.View.LayoutSubviews();
                 
                 gdm.ApplyChanges();
             }

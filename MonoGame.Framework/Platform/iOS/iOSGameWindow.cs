@@ -68,6 +68,7 @@ non-infringement.
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform;
 
 using Foundation;
 using UIKit;
@@ -83,7 +84,7 @@ namespace Microsoft.Xna.Framework
             return _instances[windowHandle];
         }
 
-        private readonly iOSGameViewController _viewController;
+        private iOSGameViewController _viewController;
 
         internal iOSGameViewController ViewController { get { return _viewController; } }
 
@@ -91,12 +92,11 @@ namespace Microsoft.Xna.Framework
         private NSObject WillResignActiveHolder;
 
 
-        public iOSGameWindow(iOSGameViewController viewController)
+        public iOSGameWindow(ConcreteGame concreteGame)
         {
-            if (viewController == null)
-                throw new ArgumentNullException("viewController");
+            _viewController = new iOSGameViewController(concreteGame);
+            concreteGame.Services.AddService(typeof(UIViewController), _viewController);
 
-            _viewController = viewController;
             _viewController.InterfaceOrientationChanged += HandleInterfaceOrientationChanged;
 
             _instances.Add(this.Handle, this);
@@ -244,7 +244,14 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
-               
+                if (_viewController != null)
+                {
+                    _viewController.View.RemoveFromSuperview();
+                    _viewController.RemoveFromParentViewController();
+                    _viewController.Dispose();
+                    _viewController = null;
+                }
+
             }
             
         }
