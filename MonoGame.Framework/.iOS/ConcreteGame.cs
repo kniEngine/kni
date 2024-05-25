@@ -23,7 +23,6 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
-        private UIWindow _uiWindow;
         private NSObject WillTerminateHolder;
         private CADisplayLink _displayLink;
 
@@ -41,19 +40,13 @@ namespace Microsoft.Xna.Platform
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
             #endif
 
-            // Create a full-screen window
-            _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
-            //_uiWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
-            
-            this.Services.AddService(typeof(UIWindow), _uiWindow);
-
             _gameWindow = new iOSGameWindow(this);
             base.Window = _gameWindow;
             base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 
-            _uiWindow.Add(_gameWindow.ViewController.View);
+            _gameWindow.UIWindow.Add(_gameWindow.ViewController.View);
 
             _gameWindow.ViewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
 
@@ -106,12 +99,12 @@ namespace Microsoft.Xna.Platform
         private void StartGameLoop()
         {
             // Show the window
-            _uiWindow.MakeKeyAndVisible();
+            _gameWindow.UIWindow.MakeKeyAndVisible();
 
             // In iOS 8+ we need to set the root view controller *after* Window MakeKey
             // This ensures that the viewController's supported interface orientations
             // will be respected at launch
-            _uiWindow.RootViewController = _gameWindow.ViewController;
+            _gameWindow.UIWindow.RootViewController = _gameWindow.ViewController;
 
             _gameWindow.BeginObservingUIApplication();
             BeginObservingUIApplicationExit();
@@ -135,12 +128,6 @@ namespace Microsoft.Xna.Platform
                 if (_gameWindow != null)
                 {
                     _gameWindow.Dispose();
-                }
-
-                if (_uiWindow != null)
-                {
-                    _uiWindow.Dispose();
-                    _uiWindow = null;
                 }
             }
             

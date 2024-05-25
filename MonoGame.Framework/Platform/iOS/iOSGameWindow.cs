@@ -85,8 +85,10 @@ namespace Microsoft.Xna.Framework
         }
 
         private iOSGameViewController _viewController;
+        private UIWindow _uiWindow;
 
         internal iOSGameViewController ViewController { get { return _viewController; } }
+        internal UIWindow UIWindow { get { return _uiWindow; } }
 
         private NSObject DidBecomeActiveHolder;
         private NSObject WillResignActiveHolder;
@@ -94,6 +96,11 @@ namespace Microsoft.Xna.Framework
 
         public iOSGameWindow(ConcreteGame concreteGame)
         {
+            // Create a full-screen window
+            _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
+            //_uiKitWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+            concreteGame.Services.AddService(typeof(UIWindow), _uiWindow);
+
             _viewController = new iOSGameViewController(concreteGame);
             concreteGame.Services.AddService(typeof(UIViewController), _viewController);
 
@@ -252,6 +259,11 @@ namespace Microsoft.Xna.Framework
                     _viewController = null;
                 }
 
+                if (_uiWindow != null)
+                {
+                    _uiWindow.Dispose();
+                    _uiWindow = null;
+                }
             }
             
         }
