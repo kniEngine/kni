@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Platform
 
             this.OnDeviceCreated(EventArgs.Empty);
 
-            ((IPlatformGame)this.Game).GetStrategy<ConcreteGame>().ViewController.View.LayoutSubviews();
+            ((iOSGameWindow)Game.Window).ViewController.View.LayoutSubviews();
 
             PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
             this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
