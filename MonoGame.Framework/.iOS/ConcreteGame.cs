@@ -23,48 +23,28 @@ namespace Microsoft.Xna.Platform
 {
     sealed class ConcreteGame : GameStrategy
     {
-        private iOSGameViewController _viewController;
-        private UIWindow _uiWindow;
         private NSObject WillTerminateHolder;
         private CADisplayLink _displayLink;
-
-        private static ConcreteGame _concreteGameInstance = null;
-        internal static ConcreteGame ConcreteGameInstance { get { return ConcreteGame._concreteGameInstance; } }
 
         private iOSGameWindow _gameWindow;
 
 
         public ConcreteGame(Game game) : base(game)
         {
-            ConcreteGame._concreteGameInstance = this;
-
             this.Services.AddService(typeof(ConcreteGame), this);
 
             string appLocation = ((ITitleContainer)TitleContainer.Current).Location;
             Directory.SetCurrentDirectory(appLocation);
 
-            #if !TVOS
-            UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
-            #endif
-
-            // Create a full-screen window
-            _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
-            //_uiWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
-            
-            this.Services.AddService(typeof(UIWindow), _uiWindow);
-
-            _viewController = new iOSGameViewController(this);
-            this.Services.AddService(typeof(UIViewController), _viewController);
-
-            _gameWindow = new iOSGameWindow(_viewController);
+            _gameWindow = new iOSGameWindow(this);
             base.Window = _gameWindow;
             base.SetWindowListeners();
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = base.Window.Handle;
 
-            _uiWindow.Add(_viewController.View);
+            _gameWindow.UIWindow.Add(_gameWindow.ViewController.View);
 
-            _viewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
+            _gameWindow.ViewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
 
             //(SJ) Why is this called here when it's not in any other project
             //Guide.Initialise(game);
@@ -88,7 +68,7 @@ namespace Microsoft.Xna.Platform
             if (_displayLink != null)
                 _displayLink.RemoveFromRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
 
-            _displayLink = UIScreen.MainScreen.CreateDisplayLink(_viewController.View as iOSGameView, new Selector("doTick"));
+            _displayLink = UIScreen.MainScreen.CreateDisplayLink(_gameWindow.ViewController.View as iOSGameView, new Selector("doTick"));
 
             // FrameInterval represents how many frames must pass before the selector
             // is called again. We calculate this by dividing our target elapsed time by
@@ -115,26 +95,18 @@ namespace Microsoft.Xna.Platform
         private void StartGameLoop()
         {
             // Show the window
-            _uiWindow.MakeKeyAndVisible();
+            _gameWindow.UIWindow.MakeKeyAndVisible();
 
             // In iOS 8+ we need to set the root view controller *after* Window MakeKey
             // This ensures that the viewController's supported interface orientations
             // will be respected at launch
-            _uiWindow.RootViewController = _viewController;
+            _gameWindow.UIWindow.RootViewController = _gameWindow.ViewController;
 
             _gameWindow.BeginObservingUIApplication();
             BeginObservingUIApplicationExit();
 
-            _viewController.View.BecomeFirstResponder();
+            _gameWindow.ViewController.View.BecomeFirstResponder();
             CreateDisplayLink();
-        }
-
-
-        // FIXME: VideoPlayer 'needs' this to set up its own movie player view
-        //        controller.
-        public iOSGameViewController ViewController
-        {
-            get { return _viewController; }
         }
 
         protected override void Dispose(bool disposing)
@@ -149,18 +121,9 @@ namespace Microsoft.Xna.Platform
 
             if (disposing)
             {
-                if (_viewController != null)
+                if (_gameWindow != null)
                 {
-                    _viewController.View.RemoveFromSuperview();
-                    _viewController.RemoveFromParentViewController();
-                    _viewController.Dispose();
-                    _viewController = null;
-                }
-
-                if (_uiWindow != null)
-                {
-                    _uiWindow.Dispose();
-                    _uiWindow = null;
+                    _gameWindow.Dispose();
                 }
             }
             
@@ -176,7 +139,7 @@ namespace Microsoft.Xna.Platform
             //        functionality is actually implemented.  At that
             //        point, it should be possible to pass Game.Tick
             //        directly to NSTimer.CreateRepeatingTimer.
-            _viewController.View.MakeCurrent();
+            _gameWindow.ViewController.View.MakeCurrent();
             Game.Tick();
 
             GraphicsDeviceManager gdm = this.GraphicsDeviceManager;
@@ -185,7 +148,7 @@ namespace Microsoft.Xna.Platform
                     gdm.GraphicsDevice.Present();
             }
 
-            _viewController.View.Present();
+            _gameWindow.ViewController.View.Present();
         }
 
         public override void Exit()
@@ -228,7 +191,7 @@ namespace Microsoft.Xna.Platform
                 #if TVOS
                 return DisplayOrientation.LandscapeLeft;
                 #else
-                return OrientationConverter.ToDisplayOrientation(_viewController.InterfaceOrientation);
+                return OrientationConverter.ToDisplayOrientation(_gameWindow.ViewController.InterfaceOrientation);
                 #endif
             }
         }
@@ -254,7 +217,7 @@ namespace Microsoft.Xna.Platform
                 presentParams.DisplayOrientation = orientation;
 
                 // Recalculate our views.
-                ViewController.View.LayoutSubviews();
+                _gameWindow.ViewController.View.LayoutSubviews();
                 
                 gdm.ApplyChanges();
             }

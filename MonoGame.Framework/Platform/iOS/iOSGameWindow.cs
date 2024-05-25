@@ -68,13 +68,14 @@ non-infringement.
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform;
 
 using Foundation;
 using UIKit;
 
 namespace Microsoft.Xna.Framework
- {
-    class iOSGameWindow : GameWindow
+{
+    class iOSGameWindow : GameWindow, IDisposable
     {
         private static Dictionary<IntPtr, iOSGameWindow> _instances = new Dictionary<IntPtr, iOSGameWindow>();
 
@@ -83,23 +84,38 @@ namespace Microsoft.Xna.Framework
             return _instances[windowHandle];
         }
 
-        private readonly iOSGameViewController _viewController;
+        private iOSGameViewController _viewController;
+        private UIWindow _uiWindow;
 
         internal iOSGameViewController ViewController { get { return _viewController; } }
+        internal UIWindow UIWindow { get { return _uiWindow; } }
 
         private NSObject DidBecomeActiveHolder;
         private NSObject WillResignActiveHolder;
 
 
-        public iOSGameWindow(iOSGameViewController viewController)
+        public iOSGameWindow(ConcreteGame concreteGame)
         {
-            if (viewController == null)
-                throw new ArgumentNullException("viewController");
+#if !TVOS
+            UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
+#endif
 
-            _viewController = viewController;
+            // Create a full-screen window
+            _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
+            //_uiKitWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+            concreteGame.Services.AddService(typeof(UIWindow), _uiWindow);
+
+            _viewController = new iOSGameViewController(concreteGame);
+            concreteGame.Services.AddService(typeof(UIViewController), _viewController);
+
             _viewController.InterfaceOrientationChanged += HandleInterfaceOrientationChanged;
 
             _instances.Add(this.Handle, this);
+        }
+
+        ~iOSGameWindow()
+        {
+            Dispose(false);
         }
 
         void HandleInterfaceOrientationChanged(object sender, EventArgs e)
@@ -227,5 +243,33 @@ namespace Microsoft.Xna.Framework
         }
 
         #endregion Notification Handling
+
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_viewController != null)
+                {
+                    _viewController.View.RemoveFromSuperview();
+                    _viewController.RemoveFromParentViewController();
+                    _viewController.Dispose();
+                    _viewController = null;
+                }
+
+                if (_uiWindow != null)
+                {
+                    _uiWindow.Dispose();
+                    _uiWindow = null;
+                }
+            }
+            
+        }
     }
 }

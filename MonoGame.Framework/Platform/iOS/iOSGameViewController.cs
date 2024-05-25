@@ -3,16 +3,15 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Drawing;
 
 using UIKit;
 using Foundation;
 using CoreGraphics;
 using ObjCRuntime;
-using Microsoft.Xna.Platform;
+using Microsoft.Xna.Framework;
 
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
     class iOSGameViewController : 
     #if TVOS

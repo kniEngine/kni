@@ -75,17 +75,16 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.Video = video;
 
-            ConcreteGame concreteGame = ConcreteGame.ConcreteGameInstance;
-            if (concreteGame == null)
-                throw new InvalidOperationException("No iOS GameStrategy instance was available");
-
             _playbackDidFinishObserver = NSNotificationCenter.DefaultCenter.AddObserver(
                 MPMoviePlayerController.PlaybackDidFinishNotification, OnStop);
 
             VideoPlatformStream _videoPlatformStream = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GetVideoPlatformStream();
             _videoPlatformStream.MovieView.MoviePlayer.RepeatMode = IsLooped ? MPMovieRepeatMode.One : MPMovieRepeatMode.None;
 
-            concreteGame.ViewController.PresentViewController(_videoPlatformStream.MovieView, false, null);
+            GraphicsDevice graphicsDevice = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GraphicsDevice;
+            iOSGameWindow gameWindow = iOSGameWindow.FromHandle(graphicsDevice.PresentationParameters.DeviceWindowHandle);
+
+            gameWindow.ViewController.PresentViewController(_videoPlatformStream.MovieView, false, null);
             _videoPlatformStream.MovieView.MoviePlayer.Play();
 
             State = MediaState.Playing;
@@ -105,19 +104,18 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
-            ConcreteGame concreteGame = ConcreteGame.ConcreteGameInstance;
-            if (concreteGame == null)
-                throw new InvalidOperationException("No iOS GameStrategy instance was available");
-
             if (_playbackDidFinishObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(_playbackDidFinishObserver);
                 _playbackDidFinishObserver = null;
             }
 
+            GraphicsDevice graphicsDevice = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GraphicsDevice;
+            iOSGameWindow gameWindow = iOSGameWindow.FromHandle(graphicsDevice.PresentationParameters.DeviceWindowHandle);
+
             VideoPlatformStream _videoPlatformStream = ((IPlatformVideo)base.Video).Strategy.ToConcrete<ConcreteVideoStrategy>().GetVideoPlatformStream();
             _videoPlatformStream.MovieView.MoviePlayer.Stop();
-            concreteGame.ViewController.DismissViewController(false, null);
+            gameWindow.ViewController.DismissViewController(false, null);
 
             State = MediaState.Stopped;
         }
