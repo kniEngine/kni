@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform
         {
             ConcreteGame._concreteGameInstance = this;
 
-            game.Services.AddService(typeof(ConcreteGame), this);
+            this.Services.AddService(typeof(ConcreteGame), this);
 
             string appLocation = ((ITitleContainer)TitleContainer.Current).Location;
             Directory.SetCurrentDirectory(appLocation);
@@ -51,10 +51,10 @@ namespace Microsoft.Xna.Platform
             _uiWindow = new UIWindow(UIScreen.MainScreen.Bounds);
             //_uiWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
             
-            game.Services.AddService(typeof(UIWindow), _uiWindow);
+            this.Services.AddService(typeof(UIWindow), _uiWindow);
 
             _viewController = new iOSGameViewController(this);
-            game.Services.AddService(typeof(UIViewController), _viewController);
+            this.Services.AddService(typeof(UIViewController), _viewController);
 
             _gameWindow = new iOSGameWindow(_viewController);
             base.Window = _gameWindow;
