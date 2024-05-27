@@ -137,13 +137,13 @@ namespace Microsoft.Xna.Platform.Input
         internal void AddDevices()
         {
             int numJoysticks = SDL.JOYSTICK.NumJoysticks();
-            for (int i = 0; i < numJoysticks; i++)
-                AddDevice(i);
+            for (int deviceIndex = 0; deviceIndex < numJoysticks; deviceIndex++)
+                AddDevice(deviceIndex);
         }
 
-        internal void AddDevice(int deviceId)
+        internal void AddDevice(int deviceIndex)
         {
-            IntPtr sdlJoystick = SDL.JOYSTICK.Open(deviceId);
+            IntPtr sdlJoystick = SDL.JOYSTICK.Open(deviceIndex);
             if (_sdlJoysticks.ContainsValue(sdlJoystick)) return;
 
             int id = 0;
@@ -154,15 +154,15 @@ namespace Microsoft.Xna.Platform.Input
 
             _sdlJoysticks.Add(id, sdlJoystick);
 
-            if (SDL.GAMECONTROLLER.IsGameController(deviceId) == 1)
-                ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceId);
+            if (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1)
+                ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
         }
 
-        internal void RemoveDevice(int instanceid)
+        internal void RemoveDevice(int deviceIndex)
         {
             foreach (KeyValuePair<int, IntPtr> entry in _sdlJoysticks)
             {
-                if (SDL.JOYSTICK.InstanceID(entry.Value) == instanceid)
+                if (SDL.JOYSTICK.InstanceID(entry.Value) == deviceIndex)
                 {
                     SDL.JOYSTICK.Close(_sdlJoysticks[entry.Key]);
                     _sdlJoysticks.Remove(entry.Key);
