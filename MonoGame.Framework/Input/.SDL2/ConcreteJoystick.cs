@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Platform.Input
             {
                 if (SDL.JOYSTICK.InstanceID(item.Value) == deviceIndex)
                 {
-                    SDL.JOYSTICK.Close(_sdlJoysticks[item.Key]);
+                    SDL.JOYSTICK.Close(item.Value);
                     _sdlJoysticks.Remove(item.Key);
 
                     if (_lastConnectedIndex == item.Key)
