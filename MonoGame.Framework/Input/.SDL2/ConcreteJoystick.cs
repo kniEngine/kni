@@ -205,10 +205,10 @@ namespace Microsoft.Xna.Platform.Input
     {
         public IntPtr Handle { get; private set; }
 
-        public SdlJoystickDevice(IntPtr sdlJoystick)
+        public SdlJoystickDevice(IntPtr handle)
             : base()
         {
-            this.Handle = sdlJoystick;
+            this.Handle = handle;
         }
     }
 
