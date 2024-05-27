@@ -140,35 +140,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
             {
-                //--
-                GamePadType gamePadType = GamePadType.Unknown;
-                string displayName = String.Empty;
-                string identifier = String.Empty;
-                bool isConnected;
-                Buttons buttons = (Buttons)0;
-                bool hasLeftVibrationMotor = false;
-                bool hasRightVibrationMotor = false;
-                bool hasVoiceSupport = false;
-                //--
-
-                isConnected = true;
-                displayName = SDL.GAMECONTROLLER.GetName(sdlGamepad.Handle);
-                identifier = SDL.JOYSTICK.GetGUID(SDL.GAMECONTROLLER.GetJoystick(sdlGamepad.Handle)).ToString();
-                hasLeftVibrationMotor = hasRightVibrationMotor = SDL.GAMECONTROLLER.HasRumble(sdlGamepad.Handle) != 0;
-                gamePadType = GamePadType.GamePad;
-
-                ParseCapabilities(sdlGamepad.Handle, ref buttons);
-
-                return base.CreateGamePadCapabilities(
-                        gamePadType: gamePadType,
-                        displayName: displayName,
-                        identifier: identifier,
-                        isConnected: isConnected,
-                        buttons: buttons,
-                        hasLeftVibrationMotor: hasLeftVibrationMotor,
-                        hasRightVibrationMotor: hasRightVibrationMotor,
-                        hasVoiceSupport: hasVoiceSupport
-                    );
+                return InternalGetCapabilities(sdlGamepad.Handle);
             }
             else
             {
@@ -183,6 +155,39 @@ namespace Microsoft.Xna.Platform.Input
                         hasVoiceSupport: false
                     );
             }
+        }
+
+        private GamePadCapabilities InternalGetCapabilities(IntPtr handle)
+        {
+            //--
+            GamePadType gamePadType = GamePadType.Unknown;
+            string displayName = String.Empty;
+            string identifier = String.Empty;
+            bool isConnected;
+            Buttons buttons = (Buttons)0;
+            bool hasLeftVibrationMotor = false;
+            bool hasRightVibrationMotor = false;
+            bool hasVoiceSupport = false;
+            //--
+
+            isConnected = true;
+            displayName = SDL.GAMECONTROLLER.GetName(handle);
+            identifier = SDL.JOYSTICK.GetGUID(SDL.GAMECONTROLLER.GetJoystick(handle)).ToString();
+            hasLeftVibrationMotor = hasRightVibrationMotor = SDL.GAMECONTROLLER.HasRumble(handle) != 0;
+            gamePadType = GamePadType.GamePad;
+
+            ParseCapabilities(handle, ref buttons);
+
+            return base.CreateGamePadCapabilities(
+                    gamePadType: gamePadType,
+                    displayName: displayName,
+                    identifier: identifier,
+                    isConnected: isConnected,
+                    buttons: buttons,
+                    hasLeftVibrationMotor: hasLeftVibrationMotor,
+                    hasRightVibrationMotor: hasRightVibrationMotor,
+                    hasVoiceSupport: hasVoiceSupport
+                );
         }
 
         private void ParseCapabilities(IntPtr gamecontroller, ref Buttons buttons)
