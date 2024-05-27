@@ -54,8 +54,8 @@ namespace Microsoft.Xna.Platform.Input
 
         ~ConcreteGamePad()
         {
-            foreach (KeyValuePair<int, SdlGamePadDevice> entry in _gamepads)
-                SDL.GAMECONTROLLER.Close(entry.Value.Handle);
+            foreach (SdlGamePadDevice sdlGamepad in _gamepads.Values)
+                SDL.GAMECONTROLLER.Close(sdlGamepad.Handle);
 
             _gamepads.Clear();            
         }
