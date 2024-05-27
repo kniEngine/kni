@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Platform.Input
         private Sdl SDL { get { return Sdl.Current; } }
 
         private Dictionary<int, IntPtr> _sdlJoysticks = new Dictionary<int, IntPtr>();
-        private int _lastConnectedIndex = -1;
+        private int _maxConnectedIndex = -1;
 
         public override bool PlatformIsSupported
         {
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformLastConnectedIndex
         {
-            get { return _lastConnectedIndex; }
+            get { return _maxConnectedIndex; }
         }
 
         public ConcreteJoystick()
@@ -151,7 +151,7 @@ namespace Microsoft.Xna.Platform.Input
             while (_sdlJoysticks.ContainsKey(index))
                 index++;
 
-            _lastConnectedIndex = Math.Max(_lastConnectedIndex, index);
+            _maxConnectedIndex = Math.Max(_maxConnectedIndex, index);
 
             _sdlJoysticks.Add(index, sdlJoystick);
 
@@ -168,8 +168,8 @@ namespace Microsoft.Xna.Platform.Input
                     SDL.JOYSTICK.Close(item.Value);
                     _sdlJoysticks.Remove(item.Key);
 
-                    if (_lastConnectedIndex == item.Key)
-                        _lastConnectedIndex = CalculateMaxConnectedIndex();
+                    if (_maxConnectedIndex == item.Key)
+                        _maxConnectedIndex = CalculateMaxConnectedIndex();
 
                     break;
                 }
