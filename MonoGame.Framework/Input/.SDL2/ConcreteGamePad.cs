@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.Input
 
         private class SdlGamePadDevice
         {
-            public IntPtr Device;
+            public IntPtr Handle;
             public int PacketNumber;
         }
 
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Input
         ~ConcreteGamePad()
         {
             foreach (KeyValuePair<int, SdlGamePadDevice> entry in Gamepads)
-                SDL.GAMECONTROLLER.Close(entry.Value.Device);
+                SDL.GAMECONTROLLER.Close(entry.Value.Handle);
 
             Gamepads.Clear();            
         }
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Platform.Input
         internal void AddDevice(int deviceIndex)
         {
             SdlGamePadDevice gamepad = new SdlGamePadDevice();
-            gamepad.Device = SDL.GAMECONTROLLER.Open(deviceIndex);
+            gamepad.Handle = SDL.GAMECONTROLLER.Open(deviceIndex);
 
             int index = 0;
             while (Gamepads.ContainsKey(index))
@@ -82,10 +82,10 @@ namespace Microsoft.Xna.Platform.Input
         {
             foreach (KeyValuePair<int, SdlGamePadDevice> entry in Gamepads)
             {
-                if (SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(entry.Value.Device)) == deviceIndex)
+                if (SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(entry.Value.Handle)) == deviceIndex)
                 {
                     Gamepads.Remove(entry.Key);
-                    SDL.GAMECONTROLLER.Close(entry.Value.Device);
+                    SDL.GAMECONTROLLER.Close(entry.Value.Handle);
                     break;
                 }
             }
@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Platform.Input
             _translationTable.Clear();
             foreach (KeyValuePair<int,SdlGamePadDevice> pair in Gamepads)
             {
-                _translationTable[SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(pair.Value.Device))] = pair.Key;
+                _translationTable[SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(pair.Value.Handle))] = pair.Key;
             }
         }
 
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Platform.Input
                     );
             }
 
-            IntPtr gamecontroller = Gamepads[index].Device;
+            IntPtr gamecontroller = Gamepads[index].Handle;
 
             //--
             GamePadType gamePadType = GamePadType.Unknown;
@@ -304,7 +304,7 @@ namespace Microsoft.Xna.Platform.Input
                 return GamePadState.Default;
 
             SdlGamePadDevice gamepadInfo = Gamepads[index];
-            IntPtr gdevice = gamepadInfo.Device;
+            IntPtr gdevice = gamepadInfo.Handle;
 
             // Y gamepad axis is rotate between SDL and XNA
             GamePadThumbSticks thumbSticks =
@@ -363,9 +363,9 @@ namespace Microsoft.Xna.Platform.Input
 
             SdlGamePadDevice gamepad = Gamepads[index];
 
-            return SDL.GAMECONTROLLER.Rumble(gamepad.Device, (ushort)(65535f * leftMotor),
+            return SDL.GAMECONTROLLER.Rumble(gamepad.Handle, (ushort)(65535f * leftMotor),
                        (ushort)(65535f * rightMotor), uint.MaxValue) == 0 &&
-                   SDL.GAMECONTROLLER.RumbleTriggers(gamepad.Device, (ushort)(65535f * leftTrigger),
+                   SDL.GAMECONTROLLER.RumbleTriggers(gamepad.Handle, (ushort)(65535f * leftTrigger),
                        (ushort)(65535f * rightTrigger), uint.MaxValue) == 0;
         }
     }
