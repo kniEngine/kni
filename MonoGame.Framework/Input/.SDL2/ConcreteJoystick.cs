@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Input
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        private Dictionary<int, IntPtr> Joysticks = new Dictionary<int, IntPtr>();
+        private Dictionary<int, IntPtr> _sdlJoysticks = new Dictionary<int, IntPtr>();
         private int _lastConnectedIndex = -1;
 
         public override bool PlatformIsSupported
@@ -34,16 +34,16 @@ namespace Microsoft.Xna.Platform.Input
 
         ~ConcreteJoystick()
         {
-            foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
+            foreach (KeyValuePair<int, IntPtr> entry in _sdlJoysticks)
                 SDL.JOYSTICK.Close(entry.Value);
 
-            Joysticks.Clear();
+            _sdlJoysticks.Clear();
         }
 
         public override JoystickCapabilities PlatformGetCapabilities(int index)
         {
             IntPtr joystickPtr = IntPtr.Zero;
-            if (!Joysticks.TryGetValue(index, out joystickPtr))
+            if (!_sdlJoysticks.TryGetValue(index, out joystickPtr))
                 return base.CreateJoystickCapabilities(false, string.Empty, string.Empty, false, 0, 0, 0);
 
             return base.CreateJoystickCapabilities(
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Input
         public override JoystickState PlatformGetState(int index)
         {
             IntPtr joystickPtr = IntPtr.Zero;
-            if (!Joysticks.TryGetValue(index, out joystickPtr))
+            if (!_sdlJoysticks.TryGetValue(index, out joystickPtr))
                 return JoystickStrategy.DefaultJoystickState;
 
             JoystickCapabilities jcap = PlatformGetCapabilities(index);
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Input
             JoystickHat[] hats = joystickState.Hats;
 
             IntPtr joystickPtr = IntPtr.Zero;
-            if (!Joysticks.TryGetValue(index, out joystickPtr))
+            if (!_sdlJoysticks.TryGetValue(index, out joystickPtr))
             {
                 joystickState = base.CreateJoystickState(false, axes, buttons, hats);
                 return;
@@ -144,15 +144,15 @@ namespace Microsoft.Xna.Platform.Input
         internal void AddDevice(int deviceId)
         {
             IntPtr jdevice = SDL.JOYSTICK.Open(deviceId);
-            if (Joysticks.ContainsValue(jdevice)) return;
+            if (_sdlJoysticks.ContainsValue(jdevice)) return;
 
             int id = 0;
-            while (Joysticks.ContainsKey(id))
+            while (_sdlJoysticks.ContainsKey(id))
                 id++;
 
             _lastConnectedIndex = Math.Max(_lastConnectedIndex, id);
 
-            Joysticks.Add(id, jdevice);
+            _sdlJoysticks.Add(id, jdevice);
 
             if (SDL.GAMECONTROLLER.IsGameController(deviceId) == 1)
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceId);
@@ -160,12 +160,12 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void RemoveDevice(int instanceid)
         {
-            foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
+            foreach (KeyValuePair<int, IntPtr> entry in _sdlJoysticks)
             {
                 if (SDL.JOYSTICK.InstanceID(entry.Value) == instanceid)
                 {
-                    SDL.JOYSTICK.Close(Joysticks[entry.Key]);
-                    Joysticks.Remove(entry.Key);
+                    SDL.JOYSTICK.Close(_sdlJoysticks[entry.Key]);
+                    _sdlJoysticks.Remove(entry.Key);
 
                     if (_lastConnectedIndex == entry.Key)
                         _lastConnectedIndex = RecalculateLastConnectedIndex();
@@ -178,7 +178,7 @@ namespace Microsoft.Xna.Platform.Input
         private int RecalculateLastConnectedIndex()
         {
             int lastConnectedIndex = -1;
-            foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
+            foreach (KeyValuePair<int, IntPtr> entry in _sdlJoysticks)
                 lastConnectedIndex = Math.Max(lastConnectedIndex, entry.Key);
 
             return lastConnectedIndex;
