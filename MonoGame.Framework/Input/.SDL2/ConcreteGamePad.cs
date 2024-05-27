@@ -17,13 +17,13 @@ namespace Microsoft.Xna.Platform.Input
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        private class GamePadInfo
+        private class SdlGamePadDevice
         {
             public IntPtr Device;
             public int PacketNumber;
         }
 
-        private readonly Dictionary<int, GamePadInfo> Gamepads = new Dictionary<int, GamePadInfo>();
+        private readonly Dictionary<int, SdlGamePadDevice> Gamepads = new Dictionary<int, SdlGamePadDevice>();
         private readonly Dictionary<int, int> _translationTable = new Dictionary<int, int>();
 
         // Default & SDL Xbox Controller dead zones
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Input
 
         ~ConcreteGamePad()
         {
-            foreach (KeyValuePair<int, GamePadInfo> entry in Gamepads)
+            foreach (KeyValuePair<int, SdlGamePadDevice> entry in Gamepads)
                 SDL.GAMECONTROLLER.Close(entry.Value.Device);
 
             Gamepads.Clear();            
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void AddDevice(int deviceIndex)
         {
-            GamePadInfo gamepad = new GamePadInfo();
+            SdlGamePadDevice gamepad = new SdlGamePadDevice();
             gamepad.Device = SDL.GAMECONTROLLER.Open(deviceIndex);
 
             int index = 0;
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void RemoveDevice(int deviceIndex)
         {
-            foreach (KeyValuePair<int, GamePadInfo> entry in Gamepads)
+            foreach (KeyValuePair<int, SdlGamePadDevice> entry in Gamepads)
             {
                 if (SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(entry.Value.Device)) == deviceIndex)
                 {
@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Input
         internal void RefreshTranslationTable()
         {
             _translationTable.Clear();
-            foreach (KeyValuePair<int,GamePadInfo> pair in Gamepads)
+            foreach (KeyValuePair<int,SdlGamePadDevice> pair in Gamepads)
             {
                 _translationTable[SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(pair.Value.Device))] = pair.Key;
             }
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Platform.Input
             int index;
             if (_translationTable.TryGetValue(instanceid, out index))
             {
-                GamePadInfo info = null;
+                SdlGamePadDevice info = null;
                 if (Gamepads.TryGetValue(index, out info))
                 {
                     info.PacketNumber = packetNumber < int.MaxValue ? (int)packetNumber : (int)(packetNumber - (uint)int.MaxValue);
@@ -303,7 +303,7 @@ namespace Microsoft.Xna.Platform.Input
             if (!Gamepads.ContainsKey(index))
                 return GamePadState.Default;
 
-            GamePadInfo gamepadInfo = Gamepads[index];
+            SdlGamePadDevice gamepadInfo = Gamepads[index];
             IntPtr gdevice = gamepadInfo.Device;
 
             // Y gamepad axis is rotate between SDL and XNA
@@ -361,7 +361,7 @@ namespace Microsoft.Xna.Platform.Input
             if (!Gamepads.ContainsKey(index))
                 return false;
 
-            GamePadInfo gamepad = Gamepads[index];
+            SdlGamePadDevice gamepad = Gamepads[index];
 
             return SDL.GAMECONTROLLER.Rumble(gamepad.Device, (ushort)(65535f * leftMotor),
                        (ushort)(65535f * rightMotor), uint.MaxValue) == 0 &&
