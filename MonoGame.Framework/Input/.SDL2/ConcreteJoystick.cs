@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Platform.Input
                     isConnected: true,
                     displayName: SDL.JOYSTICK.GetJoystickName(handle),
                     identifier:  SDL.JOYSTICK.GetGUID(handle).ToString(),
-                    isGamepad:   (SDL.GAMECONTROLLER.IsGameController(index) == 1),
+                    isGamepad:   (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1),
                     axisCount:   SDL.JOYSTICK.NumAxes(handle),
                     buttonCount: SDL.JOYSTICK.NumButtons(handle),
                     hatCount:    SDL.JOYSTICK.NumHats(handle)
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Platform.Input
 
             _sdlJoysticks.Add(index, sdlJoystick);
 
-            if (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1)
+            if (sdlJoystick.Capabilities.IsGamepad)
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
         }
 
