@@ -159,23 +159,15 @@ namespace Microsoft.Xna.Platform.Input
 
         private GamePadCapabilities InternalGetCapabilities(IntPtr handle)
         {
-            //--
-            GamePadType gamePadType = GamePadType.Unknown;
-            string displayName = String.Empty;
-            string identifier = String.Empty;
-            bool isConnected;
-            Buttons buttons = (Buttons)0;
-            bool hasLeftVibrationMotor = false;
-            bool hasRightVibrationMotor = false;
+            GamePadType gamePadType = GamePadType.GamePad;
+            string displayName = SDL.GAMECONTROLLER.GetName(handle);
+            string identifier = SDL.JOYSTICK.GetGUID(SDL.GAMECONTROLLER.GetJoystick(handle)).ToString();
+            bool isConnected = true;
+            bool hasLeftVibrationMotor  = SDL.GAMECONTROLLER.HasRumble(handle) != 0;
+            bool hasRightVibrationMotor = SDL.GAMECONTROLLER.HasRumble(handle) != 0;
             bool hasVoiceSupport = false;
-            //--
 
-            isConnected = true;
-            displayName = SDL.GAMECONTROLLER.GetName(handle);
-            identifier = SDL.JOYSTICK.GetGUID(SDL.GAMECONTROLLER.GetJoystick(handle)).ToString();
-            hasLeftVibrationMotor = hasRightVibrationMotor = SDL.GAMECONTROLLER.HasRumble(handle) != 0;
-            gamePadType = GamePadType.GamePad;
-
+            Buttons buttons = (Buttons)0;
             ParseCapabilities(handle, ref buttons);
 
             return base.CreateGamePadCapabilities(
