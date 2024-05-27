@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Input
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        internal Dictionary<int, IntPtr> Joysticks = new Dictionary<int, IntPtr>();
+        private Dictionary<int, IntPtr> Joysticks = new Dictionary<int, IntPtr>();
         private int _lastConnectedIndex = -1;
 
         public override bool PlatformIsSupported
