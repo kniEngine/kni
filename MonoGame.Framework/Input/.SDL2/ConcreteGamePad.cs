@@ -21,6 +21,11 @@ namespace Microsoft.Xna.Platform.Input
         {
             public IntPtr Handle;
             public int PacketNumber;
+
+            public SdlGamePadDevice(IntPtr handle)
+            {
+                this.Handle = handle;
+            }
         }
 
         private readonly Dictionary<int, SdlGamePadDevice> Gamepads = new Dictionary<int, SdlGamePadDevice>();
@@ -66,12 +71,13 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void AddDevice(int deviceIndex)
         {
-            SdlGamePadDevice gamepad = new SdlGamePadDevice();
-            gamepad.Handle = SDL.GAMECONTROLLER.Open(deviceIndex);
+            IntPtr handle = SDL.GAMECONTROLLER.Open(deviceIndex);
 
             int index = 0;
             while (Gamepads.ContainsKey(index))
                 index++;
+
+            SdlGamePadDevice gamepad = new SdlGamePadDevice(handle);
 
             Gamepads.Add(index, gamepad);
 
