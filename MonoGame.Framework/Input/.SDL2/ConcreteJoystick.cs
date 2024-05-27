@@ -43,17 +43,7 @@ namespace Microsoft.Xna.Platform.Input
         public override JoystickCapabilities PlatformGetCapabilities(int index)
         {
             if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
-            {
-                return base.CreateJoystickCapabilities(
-                    isConnected: true,
-                    displayName: SDL.JOYSTICK.GetJoystickName(sdlJoystick.Handle),
-                    identifier: SDL.JOYSTICK.GetGUID(sdlJoystick.Handle).ToString(),
-                    isGamepad: (SDL.GAMECONTROLLER.IsGameController(index) == 1),
-                    axisCount: SDL.JOYSTICK.NumAxes(sdlJoystick.Handle),
-                    buttonCount: SDL.JOYSTICK.NumButtons(sdlJoystick.Handle),
-                    hatCount: SDL.JOYSTICK.NumHats(sdlJoystick.Handle)
-                );
-            }
+                return sdlJoystick.Capabilities;
 
             return base.CreateJoystickCapabilities(false, string.Empty, string.Empty, false, 0, 0, 0);
         }
@@ -156,6 +146,16 @@ namespace Microsoft.Xna.Platform.Input
             _maxConnectedIndex = Math.Max(_maxConnectedIndex, index);
 
             SdlJoystickDevice sdlJoystick = new SdlJoystickDevice(handle);
+            sdlJoystick.Capabilities = base.CreateJoystickCapabilities(
+                    isConnected: true,
+                    displayName: SDL.JOYSTICK.GetJoystickName(handle),
+                    identifier:  SDL.JOYSTICK.GetGUID(handle).ToString(),
+                    isGamepad:   (SDL.GAMECONTROLLER.IsGameController(index) == 1),
+                    axisCount:   SDL.JOYSTICK.NumAxes(handle),
+                    buttonCount: SDL.JOYSTICK.NumButtons(handle),
+                    hatCount:    SDL.JOYSTICK.NumHats(handle)
+                );
+
             _sdlJoysticks.Add(index, sdlJoystick);
 
             if (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1)
@@ -214,6 +214,7 @@ namespace Microsoft.Xna.Platform.Input
 
     public class JoystickDevice
     {
+        public JoystickCapabilities Capabilities;
 
         public JoystickDevice()
         {
