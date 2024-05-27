@@ -144,9 +144,9 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void AddDevice(int deviceIndex)
         {
-            IntPtr sdlJoystick = SDL.JOYSTICK.Open(deviceIndex);
+            IntPtr handle = SDL.JOYSTICK.Open(deviceIndex);
             foreach (SdlJoystickDevice joystickDevice in _sdlJoysticks.Values)
-                if (joystickDevice.Handle == sdlJoystick)
+                if (joystickDevice.Handle == handle)
                     return;
 
             int index = 0;
@@ -155,8 +155,8 @@ namespace Microsoft.Xna.Platform.Input
 
             _maxConnectedIndex = Math.Max(_maxConnectedIndex, index);
 
-            SdlJoystickDevice sdlJoystickDevice = new SdlJoystickDevice(sdlJoystick);
-            _sdlJoysticks.Add(index, sdlJoystickDevice);
+            SdlJoystickDevice sdlJoystick = new SdlJoystickDevice(handle);
+            _sdlJoysticks.Add(index, sdlJoystick);
 
             if (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1)
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
