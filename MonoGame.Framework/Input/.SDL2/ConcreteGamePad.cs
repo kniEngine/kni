@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Input
         }
 
 
-        private readonly Dictionary<int, SdlGamePadDevice> Gamepads = new Dictionary<int, SdlGamePadDevice>();
+        private readonly Dictionary<int, SdlGamePadDevice> _gamepads = new Dictionary<int, SdlGamePadDevice>();
         private readonly Dictionary<int, int> _translationTable = new Dictionary<int, int>();
 
         // Default & SDL Xbox Controller dead zones
@@ -54,10 +54,10 @@ namespace Microsoft.Xna.Platform.Input
 
         ~ConcreteGamePad()
         {
-            foreach (KeyValuePair<int, SdlGamePadDevice> entry in Gamepads)
+            foreach (KeyValuePair<int, SdlGamePadDevice> entry in _gamepads)
                 SDL.GAMECONTROLLER.Close(entry.Value.Handle);
 
-            Gamepads.Clear();            
+            _gamepads.Clear();            
         }
 
 
@@ -85,23 +85,23 @@ namespace Microsoft.Xna.Platform.Input
             IntPtr handle = SDL.GAMECONTROLLER.Open(deviceIndex);
 
             int index = 0;
-            while (Gamepads.ContainsKey(index))
+            while (_gamepads.ContainsKey(index))
                 index++;
 
             SdlGamePadDevice gamepad = new SdlGamePadDevice(handle);
 
-            Gamepads.Add(index, gamepad);
+            _gamepads.Add(index, gamepad);
 
             RefreshTranslationTable();
         }
 
         internal void RemoveDevice(int deviceIndex)
         {
-            foreach (KeyValuePair<int, SdlGamePadDevice> entry in Gamepads)
+            foreach (KeyValuePair<int, SdlGamePadDevice> entry in _gamepads)
             {
                 if (SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(entry.Value.Handle)) == deviceIndex)
                 {
-                    Gamepads.Remove(entry.Key);
+                    _gamepads.Remove(entry.Key);
                     SDL.GAMECONTROLLER.Close(entry.Value.Handle);
                     break;
                 }
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Platform.Input
         internal void RefreshTranslationTable()
         {
             _translationTable.Clear();
-            foreach (KeyValuePair<int,SdlGamePadDevice> pair in Gamepads)
+            foreach (KeyValuePair<int,SdlGamePadDevice> pair in _gamepads)
             {
                 _translationTable[SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(pair.Value.Handle))] = pair.Key;
             }
@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Platform.Input
             if (_translationTable.TryGetValue(instanceid, out index))
             {
                 SdlGamePadDevice info = null;
-                if (Gamepads.TryGetValue(index, out info))
+                if (_gamepads.TryGetValue(index, out info))
                 {
                     info.PacketNumber = packetNumber < int.MaxValue ? (int)packetNumber : (int)(packetNumber - (uint)int.MaxValue);
                 }
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            if (!Gamepads.ContainsKey(index))
+            if (!_gamepads.ContainsKey(index))
             {
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Platform.Input
                     );
             }
 
-            IntPtr gamecontroller = Gamepads[index].Handle;
+            IntPtr gamecontroller = _gamepads[index].Handle;
 
             //--
             GamePadType gamePadType = GamePadType.Unknown;
@@ -317,10 +317,10 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            if (!Gamepads.ContainsKey(index))
+            if (!_gamepads.ContainsKey(index))
                 return GamePadState.Default;
 
-            SdlGamePadDevice gamepadInfo = Gamepads[index];
+            SdlGamePadDevice gamepadInfo = _gamepads[index];
             IntPtr gdevice = gamepadInfo.Handle;
 
             // Y gamepad axis is rotate between SDL and XNA
@@ -375,10 +375,10 @@ namespace Microsoft.Xna.Platform.Input
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            if (!Gamepads.ContainsKey(index))
+            if (!_gamepads.ContainsKey(index))
                 return false;
 
-            SdlGamePadDevice gamepad = Gamepads[index];
+            SdlGamePadDevice gamepad = _gamepads[index];
 
             return SDL.GAMECONTROLLER.Rumble(gamepad.Handle, (ushort)(65535f * leftMotor),
                        (ushort)(65535f * rightMotor), uint.MaxValue) == 0 &&
