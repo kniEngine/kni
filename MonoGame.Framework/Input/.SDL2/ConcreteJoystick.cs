@@ -146,13 +146,13 @@ namespace Microsoft.Xna.Platform.Input
             IntPtr sdlJoystick = SDL.JOYSTICK.Open(deviceIndex);
             if (_sdlJoysticks.ContainsValue(sdlJoystick)) return;
 
-            int id = 0;
-            while (_sdlJoysticks.ContainsKey(id))
-                id++;
+            int index = 0;
+            while (_sdlJoysticks.ContainsKey(index))
+                index++;
 
-            _lastConnectedIndex = Math.Max(_lastConnectedIndex, id);
+            _lastConnectedIndex = Math.Max(_lastConnectedIndex, index);
 
-            _sdlJoysticks.Add(id, sdlJoystick);
+            _sdlJoysticks.Add(index, sdlJoystick);
 
             if (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1)
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);

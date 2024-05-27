@@ -69,11 +69,11 @@ namespace Microsoft.Xna.Platform.Input
             GamePadInfo gamepad = new GamePadInfo();
             gamepad.Device = SDL.GAMECONTROLLER.Open(deviceIndex);
 
-            int id = 0;
-            while (Gamepads.ContainsKey(id))
-                id++;
+            int index = 0;
+            while (Gamepads.ContainsKey(index))
+                index++;
 
-            Gamepads.Add(id, gamepad);
+            Gamepads.Add(index, gamepad);
 
             RefreshTranslationTable();
         }
