@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Platform.Input
         private class SdlGamePadDevice : GamePadDevice
         {
             public IntPtr Handle;
+            public GamePadCapabilities Capabilities;
             public int PacketNumber;
 
             public SdlGamePadDevice(IntPtr handle)
@@ -89,6 +90,7 @@ namespace Microsoft.Xna.Platform.Input
                 index++;
 
             SdlGamePadDevice sdlGamepad = new SdlGamePadDevice(handle);
+            sdlGamepad.Capabilities = InternalGetCapabilities(handle);
 
             _gamepads.Add(index, sdlGamepad);
 
@@ -139,22 +141,18 @@ namespace Microsoft.Xna.Platform.Input
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
-            {
-                return InternalGetCapabilities(sdlGamepad.Handle);
-            }
-            else
-            {
-                return base.CreateGamePadCapabilities(
-                        gamePadType: GamePadType.Unknown,
-                        displayName: null,
-                        identifier: null,
-                        isConnected: false,
-                        buttons: (Buttons)0,
-                        hasLeftVibrationMotor: false,
-                        hasRightVibrationMotor: false,
-                        hasVoiceSupport: false
-                    );
-            }
+                return sdlGamepad.Capabilities;
+                        
+            return base.CreateGamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: (Buttons)0,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
         }
 
         private GamePadCapabilities InternalGetCapabilities(IntPtr handle)
