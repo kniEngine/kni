@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Platform.Input
                     SDL.JOYSTICK.Close(Joysticks[entry.Key]);
                     Joysticks.Remove(entry.Key);
 
-                    if (entry.Key == _lastConnectedIndex)
+                    if (_lastConnectedIndex == entry.Key)
                         RecalculateLastConnectedIndex();
 
                     break;
