@@ -150,7 +150,6 @@ namespace Microsoft.Xna.Platform.Input
             if (Joysticks.ContainsValue(jdevice)) return;
 
             int id = 0;
-
             while (Joysticks.ContainsKey(id))
                 id++;
 
@@ -183,9 +182,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             _lastConnectedIndex = -1;
             foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
-            {
                 _lastConnectedIndex = Math.Max(_lastConnectedIndex, entry.Key);
-            }
         }
 
         private Buttons SDLToXnaDPadButtons(Sdl.Joystick.Hat hatstate)
