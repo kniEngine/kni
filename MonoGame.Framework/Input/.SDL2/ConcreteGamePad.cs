@@ -88,9 +88,9 @@ namespace Microsoft.Xna.Platform.Input
             while (_gamepads.ContainsKey(index))
                 index++;
 
-            SdlGamePadDevice gamepad = new SdlGamePadDevice(handle);
+            SdlGamePadDevice sdlGamepad = new SdlGamePadDevice(handle);
 
-            _gamepads.Add(index, gamepad);
+            _gamepads.Add(index, sdlGamepad);
 
             RefreshTranslationTable();
         }
@@ -124,10 +124,9 @@ namespace Microsoft.Xna.Platform.Input
             int index;
             if (_translationTable.TryGetValue(instanceid, out index))
             {
-                SdlGamePadDevice info = null;
-                if (_gamepads.TryGetValue(index, out info))
+                if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
                 {
-                    info.PacketNumber = packetNumber < int.MaxValue ? (int)packetNumber : (int)(packetNumber - (uint)int.MaxValue);
+                    sdlGamepad.PacketNumber = packetNumber < int.MaxValue ? (int)packetNumber : (int)(packetNumber - (uint)int.MaxValue);
                 }
             }
         }
@@ -320,8 +319,8 @@ namespace Microsoft.Xna.Platform.Input
             if (!_gamepads.ContainsKey(index))
                 return GamePadState.Default;
 
-            SdlGamePadDevice gamepadInfo = _gamepads[index];
-            IntPtr gdevice = gamepadInfo.Handle;
+            SdlGamePadDevice sdlGamepad = _gamepads[index];
+            IntPtr gdevice = sdlGamepad.Handle;
 
             // Y gamepad axis is rotate between SDL and XNA
             GamePadThumbSticks thumbSticks =
@@ -369,7 +368,7 @@ namespace Microsoft.Xna.Platform.Input
                 );
 
             GamePadState ret = base.CreateGamePadState(thumbSticks, triggers, buttons, dPad,
-                packetNumber: gamepadInfo.PacketNumber);
+                packetNumber: sdlGamepad.PacketNumber);
             return ret;
         }
 
@@ -378,11 +377,11 @@ namespace Microsoft.Xna.Platform.Input
             if (!_gamepads.ContainsKey(index))
                 return false;
 
-            SdlGamePadDevice gamepad = _gamepads[index];
+            SdlGamePadDevice sdlGamepad = _gamepads[index];
 
-            return SDL.GAMECONTROLLER.Rumble(gamepad.Handle, (ushort)(65535f * leftMotor),
+            return SDL.GAMECONTROLLER.Rumble(sdlGamepad.Handle, (ushort)(65535f * leftMotor),
                        (ushort)(65535f * rightMotor), uint.MaxValue) == 0 &&
-                   SDL.GAMECONTROLLER.RumbleTriggers(gamepad.Handle, (ushort)(65535f * leftTrigger),
+                   SDL.GAMECONTROLLER.RumbleTriggers(sdlGamepad.Handle, (ushort)(65535f * leftTrigger),
                        (ushort)(65535f * rightTrigger), uint.MaxValue) == 0;
         }
     }
