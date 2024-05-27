@@ -34,8 +34,8 @@ namespace Microsoft.Xna.Platform.Input
 
         ~ConcreteJoystick()
         {
-            foreach (KeyValuePair<int, IntPtr> entry in _sdlJoysticks)
-                SDL.JOYSTICK.Close(entry.Value);
+            foreach (IntPtr sdlJoystick in _sdlJoysticks.Values)
+                SDL.JOYSTICK.Close(sdlJoystick);
 
             _sdlJoysticks.Clear();
         }
@@ -178,8 +178,8 @@ namespace Microsoft.Xna.Platform.Input
         private int RecalculateLastConnectedIndex()
         {
             int lastConnectedIndex = -1;
-            foreach (KeyValuePair<int, IntPtr> entry in _sdlJoysticks)
-                lastConnectedIndex = Math.Max(lastConnectedIndex, entry.Key);
+            foreach (int index in _sdlJoysticks.Keys)
+                lastConnectedIndex = Math.Max(lastConnectedIndex, index);
 
             return lastConnectedIndex;
         }
