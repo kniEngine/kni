@@ -154,8 +154,7 @@ namespace Microsoft.Xna.Platform.Input
             while (Joysticks.ContainsKey(id))
                 id++;
 
-            if (id > _lastConnectedIndex)
-                _lastConnectedIndex = id;
+            _lastConnectedIndex = Math.Max(_lastConnectedIndex, id);
 
             Joysticks.Add(id, jdevice);
 
@@ -185,8 +184,7 @@ namespace Microsoft.Xna.Platform.Input
             _lastConnectedIndex = -1;
             foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
             {
-                if (entry.Key > _lastConnectedIndex)
-                    _lastConnectedIndex = entry.Key;
+                _lastConnectedIndex = Math.Max(_lastConnectedIndex, entry.Key);
             }
         }
 
