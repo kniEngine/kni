@@ -64,25 +64,25 @@ namespace Microsoft.Xna.Platform.Input
             }
         }
 
-        internal void AddDevice(int deviceId)
+        internal void AddDevice(int deviceIndex)
         {
             GamePadInfo gamepad = new GamePadInfo();
-            gamepad.Device = SDL.GAMECONTROLLER.Open(deviceId);
+            gamepad.Device = SDL.GAMECONTROLLER.Open(deviceIndex);
 
-            int id = 0;
-            while (Gamepads.ContainsKey(id))
-                id++;
+            int index = 0;
+            while (Gamepads.ContainsKey(index))
+                index++;
 
-            Gamepads.Add(id, gamepad);
+            Gamepads.Add(index, gamepad);
 
             RefreshTranslationTable();
         }
 
-        internal void RemoveDevice(int instanceid)
+        internal void RemoveDevice(int deviceIndex)
         {
             foreach (KeyValuePair<int, GamePadInfo> entry in Gamepads)
             {
-                if (SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(entry.Value.Device)) == instanceid)
+                if (SDL.JOYSTICK.InstanceID(SDL.GAMECONTROLLER.GetJoystick(entry.Value.Device)) == deviceIndex)
                 {
                     Gamepads.Remove(entry.Key);
                     SDL.GAMECONTROLLER.Close(entry.Value.Device);

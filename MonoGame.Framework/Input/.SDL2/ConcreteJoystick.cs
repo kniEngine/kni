@@ -14,8 +14,8 @@ namespace Microsoft.Xna.Platform.Input
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        internal Dictionary<int, IntPtr> Joysticks = new Dictionary<int, IntPtr>();
-        private int _lastConnectedIndex = -1;
+        private Dictionary<int, SdlJoystickDevice> _sdlJoysticks = new Dictionary<int, SdlJoystickDevice>();
+        private int _maxConnectedIndex = -1;
 
         public override bool PlatformIsSupported
         {
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformLastConnectedIndex
         {
-            get { return _lastConnectedIndex; }
+            get { return _maxConnectedIndex; }
         }
 
         public ConcreteJoystick()
@@ -34,162 +34,158 @@ namespace Microsoft.Xna.Platform.Input
 
         ~ConcreteJoystick()
         {
-            foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
-                SDL.JOYSTICK.Close(entry.Value);
+            foreach (SdlJoystickDevice sdlJoystick in _sdlJoysticks.Values)
+                SDL.JOYSTICK.Close(sdlJoystick.Handle);
 
-            Joysticks.Clear();
+            _sdlJoysticks.Clear();
         }
 
         public override JoystickCapabilities PlatformGetCapabilities(int index)
         {
-            IntPtr joystickPtr = IntPtr.Zero;
-            if (!Joysticks.TryGetValue(index, out joystickPtr))
-                return base.CreateJoystickCapabilities(false, string.Empty, string.Empty, false, 0, 0, 0);
+            if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
+            {
+                return base.CreateJoystickCapabilities(
+                    isConnected: true,
+                    displayName: SDL.JOYSTICK.GetJoystickName(sdlJoystick.Handle),
+                    identifier: SDL.JOYSTICK.GetGUID(sdlJoystick.Handle).ToString(),
+                    isGamepad: (SDL.GAMECONTROLLER.IsGameController(index) == 1),
+                    axisCount: SDL.JOYSTICK.NumAxes(sdlJoystick.Handle),
+                    buttonCount: SDL.JOYSTICK.NumButtons(sdlJoystick.Handle),
+                    hatCount: SDL.JOYSTICK.NumHats(sdlJoystick.Handle)
+                );
+            }
 
-            IntPtr jdevice = joystickPtr;
-            return base.CreateJoystickCapabilities(
-                isConnected : true,
-                displayName : SDL.JOYSTICK.GetJoystickName(jdevice),
-                identifier :  SDL.JOYSTICK.GetGUID(jdevice).ToString(),
-                isGamepad :   (SDL.GAMECONTROLLER.IsGameController(index) == 1),
-                axisCount :   SDL.JOYSTICK.NumAxes(jdevice),
-                buttonCount : SDL.JOYSTICK.NumButtons(jdevice), 
-                hatCount :    SDL.JOYSTICK.NumHats(jdevice)
-            );
+            return base.CreateJoystickCapabilities(false, string.Empty, string.Empty, false, 0, 0, 0);
         }
 
         public override JoystickState PlatformGetState(int index)
         {
-            IntPtr joystickPtr = IntPtr.Zero;
-            if (!Joysticks.TryGetValue(index, out joystickPtr))
-                return JoystickStrategy.DefaultJoystickState;
-
-            JoystickCapabilities jcap = PlatformGetCapabilities(index);
-            IntPtr jdevice = joystickPtr;
-
-            int[] axes = new int[jcap.AxisCount];
-            for (int i = 0; i < axes.Length; i++)
-                axes[i] = SDL.JOYSTICK.GetAxis(jdevice, i);
-
-            ButtonState[] buttons = new ButtonState[jcap.ButtonCount];
-            for (int i = 0; i < buttons.Length; i++)
-                buttons[i] = (SDL.JOYSTICK.GetButton(jdevice, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
-
-            JoystickHat[] hats = new JoystickHat[jcap.HatCount];
-            for (int i = 0; i < hats.Length; i++)
+            if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(jdevice, i);
-                Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
+                JoystickCapabilities jcap = PlatformGetCapabilities(index);
 
-                hats[i] = base.CreateJoystickHat(dPadButtons);
+                int[] axes = new int[jcap.AxisCount];
+                for (int i = 0; i < axes.Length; i++)
+                    axes[i] = SDL.JOYSTICK.GetAxis(sdlJoystick.Handle, i);
+
+                ButtonState[] buttons = new ButtonState[jcap.ButtonCount];
+                for (int i = 0; i < buttons.Length; i++)
+                    buttons[i] = (SDL.JOYSTICK.GetButton(sdlJoystick.Handle, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
+
+                JoystickHat[] hats = new JoystickHat[jcap.HatCount];
+                for (int i = 0; i < hats.Length; i++)
+                {
+                    Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(sdlJoystick.Handle, i);
+                    Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
+
+                    hats[i] = base.CreateJoystickHat(dPadButtons);
+                }
+
+                return base.CreateJoystickState(
+                        isConnected: true,
+                        axes: axes,
+                        buttons: buttons,
+                        hats: hats
+                    );
             }
 
-            return base.CreateJoystickState(
-                    isConnected: true,
-                    axes: axes,
-                    buttons: buttons,
-                    hats: hats
-                );
+            return JoystickStrategy.DefaultJoystickState;
+
         }
 
         public override void PlatformGetState(int index, ref JoystickState joystickState)
         {
+            bool isConnected = false;
             int[] axes = joystickState.Axes;
             ButtonState[] buttons = joystickState.Buttons;
             JoystickHat[] hats = joystickState.Hats;
 
-            IntPtr joystickPtr = IntPtr.Zero;
-            if (!Joysticks.TryGetValue(index, out joystickPtr))
+            if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                joystickState = base.CreateJoystickState(false, axes, buttons, hats);
-                return;
+                JoystickCapabilities jcap = PlatformGetCapabilities(index);
+
+                //Resize each array if the length is less than the count returned by the capabilities
+                if (axes.Length < jcap.AxisCount)
+                    axes = new int[jcap.AxisCount];
+
+                if (buttons.Length < jcap.ButtonCount)
+                    buttons = new ButtonState[jcap.ButtonCount];
+
+                if (hats.Length < jcap.HatCount)
+                    hats = new JoystickHat[jcap.HatCount];
+
+                for (int i = 0; i < jcap.AxisCount; i++)
+                    axes[i] = SDL.JOYSTICK.GetAxis(sdlJoystick.Handle, i);
+
+                for (int i = 0; i < jcap.ButtonCount; i++)
+                    buttons[i] = (SDL.JOYSTICK.GetButton(sdlJoystick.Handle, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
+
+                for (int i = 0; i < jcap.HatCount; i++)
+                {
+                    Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(sdlJoystick.Handle, i);
+                    Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
+
+                    hats[i] = base.CreateJoystickHat(dPadButtons);
+                }
+
+                isConnected = true;
             }
 
-            JoystickCapabilities jcap = PlatformGetCapabilities(index);
-            IntPtr jdevice = joystickPtr;
-
-            //Resize each array if the length is less than the count returned by the capabilities
-            if (axes.Length < jcap.AxisCount)
-                axes = new int[jcap.AxisCount];
-
-            if (buttons.Length < jcap.ButtonCount)
-                buttons = new ButtonState[jcap.ButtonCount];
-
-            if (hats.Length < jcap.HatCount)
-                hats = new JoystickHat[jcap.HatCount];
-
-            for (int i = 0; i < jcap.AxisCount; i++)
-                axes[i] = SDL.JOYSTICK.GetAxis(jdevice, i);
-
-            for (int i = 0; i < jcap.ButtonCount; i++)
-                buttons[i] = (SDL.JOYSTICK.GetButton(jdevice, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
-
-            for (int i = 0; i < jcap.HatCount; i++)
-            {
-                Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(jdevice, i);
-                Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
-
-                hats[i] = base.CreateJoystickHat(dPadButtons);
-            }
-
-            joystickState = base.CreateJoystickState(true, axes, buttons, hats);
-            return;
+            joystickState = base.CreateJoystickState(isConnected, axes, buttons, hats);
         }
 
 
         internal void AddDevices()
         {
             int numJoysticks = SDL.JOYSTICK.NumJoysticks();
-            for (int i = 0; i < numJoysticks; i++)
-                AddDevice(i);
+            for (int deviceIndex = 0; deviceIndex < numJoysticks; deviceIndex++)
+                AddDevice(deviceIndex);
         }
 
-        internal void AddDevice(int deviceId)
+        internal void AddDevice(int deviceIndex)
         {
-            IntPtr jdevice = SDL.JOYSTICK.Open(deviceId);
-            if (Joysticks.ContainsValue(jdevice)) return;
+            IntPtr sdlJoystick = SDL.JOYSTICK.Open(deviceIndex);
+            foreach (SdlJoystickDevice joystickDevice in _sdlJoysticks.Values)
+                if (joystickDevice.Handle == sdlJoystick)
+                    return;
 
-            int id = 0;
+            int index = 0;
+            while (_sdlJoysticks.ContainsKey(index))
+                index++;
 
-            while (Joysticks.ContainsKey(id))
-                id++;
+            _maxConnectedIndex = Math.Max(_maxConnectedIndex, index);
 
-            if (id > _lastConnectedIndex)
-                _lastConnectedIndex = id;
+            SdlJoystickDevice sdlJoystickDevice = new SdlJoystickDevice(sdlJoystick);
+            _sdlJoysticks.Add(index, sdlJoystickDevice);
 
-            Joysticks.Add(id, jdevice);
-
-            if (SDL.GAMECONTROLLER.IsGameController(deviceId) == 1)
-                ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceId);
+            if (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1)
+                ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
         }
 
-        internal void RemoveDevice(int instanceid)
+        internal void RemoveDevice(int deviceIndex)
         {
-            foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
+            foreach (KeyValuePair<int, SdlJoystickDevice> item in _sdlJoysticks)
             {
-                if (SDL.JOYSTICK.InstanceID(entry.Value) == instanceid)
+                if (SDL.JOYSTICK.InstanceID(item.Value.Handle) == deviceIndex)
                 {
-                    int key = entry.Key;
+                    SDL.JOYSTICK.Close(item.Value.Handle);
+                    _sdlJoysticks.Remove(item.Key);
 
-                    SDL.JOYSTICK.Close(Joysticks[entry.Key]);
-                    Joysticks.Remove(entry.Key);
-
-                    if (key == _lastConnectedIndex)
-                        RecalculateLastConnectedIndex();
+                    if (_maxConnectedIndex == item.Key)
+                        _maxConnectedIndex = CalculateMaxConnectedIndex();
 
                     break;
                 }
             }
         }
 
-        private void RecalculateLastConnectedIndex()
+        private int CalculateMaxConnectedIndex()
         {
-            _lastConnectedIndex = -1;
-            foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
-            {
-                if (entry.Key > _lastConnectedIndex)
-                    _lastConnectedIndex = entry.Key;
-            }
+            int maxConnectedIndex = -1;
+            foreach (int index in _sdlJoysticks.Keys)
+                maxConnectedIndex = Math.Max(maxConnectedIndex, index);
+
+            return maxConnectedIndex;
         }
 
         private Buttons SDLToXnaDPadButtons(Sdl.Joystick.Hat hatstate)
@@ -203,6 +199,25 @@ namespace Microsoft.Xna.Platform.Input
             return dPadButtons;
         }
 
+    }
+
+    public class SdlJoystickDevice : JoystickDevice
+    {
+        public IntPtr Handle { get; private set; }
+
+        public SdlJoystickDevice(IntPtr sdlJoystick)
+            : base()
+        {
+            this.Handle = sdlJoystick;
+        }
+    }
+
+    public class JoystickDevice
+    {
+
+        public JoystickDevice()
+        {
+        }
     }
 }
 
