@@ -17,16 +17,27 @@ namespace Microsoft.Xna.Platform.Input
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        private class SdlGamePadDevice
+        private class SdlGamePadDevice : GamePadDevice
         {
             public IntPtr Handle;
             public int PacketNumber;
 
             public SdlGamePadDevice(IntPtr handle)
+                : base()
             {
                 this.Handle = handle;
             }
         }
+
+        public class GamePadDevice
+        {
+
+            public GamePadDevice()
+            {
+
+            }
+        }
+
 
         private readonly Dictionary<int, SdlGamePadDevice> Gamepads = new Dictionary<int, SdlGamePadDevice>();
         private readonly Dictionary<int, int> _translationTable = new Dictionary<int, int>();
