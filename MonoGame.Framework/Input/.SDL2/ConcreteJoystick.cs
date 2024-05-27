@@ -161,14 +161,14 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void RemoveDevice(int deviceIndex)
         {
-            foreach (KeyValuePair<int, IntPtr> entry in _sdlJoysticks)
+            foreach (KeyValuePair<int, IntPtr> item in _sdlJoysticks)
             {
-                if (SDL.JOYSTICK.InstanceID(entry.Value) == deviceIndex)
+                if (SDL.JOYSTICK.InstanceID(item.Value) == deviceIndex)
                 {
-                    SDL.JOYSTICK.Close(_sdlJoysticks[entry.Key]);
-                    _sdlJoysticks.Remove(entry.Key);
+                    SDL.JOYSTICK.Close(_sdlJoysticks[item.Key]);
+                    _sdlJoysticks.Remove(item.Key);
 
-                    if (_lastConnectedIndex == entry.Key)
+                    if (_lastConnectedIndex == item.Key)
                         _lastConnectedIndex = CalculateMaxConnectedIndex();
 
                     break;
