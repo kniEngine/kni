@@ -169,12 +169,10 @@ namespace Microsoft.Xna.Platform.Input
             {
                 if (SDL.JOYSTICK.InstanceID(entry.Value) == instanceid)
                 {
-                    int key = entry.Key;
-
                     SDL.JOYSTICK.Close(Joysticks[entry.Key]);
                     Joysticks.Remove(entry.Key);
 
-                    if (key == _lastConnectedIndex)
+                    if (entry.Key == _lastConnectedIndex)
                         RecalculateLastConnectedIndex();
 
                     break;
