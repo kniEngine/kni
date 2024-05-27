@@ -171,18 +171,20 @@ namespace Microsoft.Xna.Platform.Input
                     Joysticks.Remove(entry.Key);
 
                     if (_lastConnectedIndex == entry.Key)
-                        RecalculateLastConnectedIndex();
+                        _lastConnectedIndex = RecalculateLastConnectedIndex();
 
                     break;
                 }
             }
         }
 
-        private void RecalculateLastConnectedIndex()
+        private int RecalculateLastConnectedIndex()
         {
-            _lastConnectedIndex = -1;
+            int lastConnectedIndex = -1;
             foreach (KeyValuePair<int, IntPtr> entry in Joysticks)
-                _lastConnectedIndex = Math.Max(_lastConnectedIndex, entry.Key);
+                lastConnectedIndex = Math.Max(lastConnectedIndex, entry.Key);
+
+            return lastConnectedIndex;
         }
 
         private Buttons SDLToXnaDPadButtons(Sdl.Joystick.Hat hatstate)
