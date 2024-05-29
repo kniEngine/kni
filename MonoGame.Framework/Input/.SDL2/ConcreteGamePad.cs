@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Input
 
 
         private readonly Dictionary<int, SdlGamePadDevice> _gamepads = new Dictionary<int, SdlGamePadDevice>();
-        private readonly Dictionary<int, int> _translationTable = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _indicesMap = new Dictionary<int, int>();
 
         // Default & SDL Xbox Controller dead zones
         // Based on the XInput constants
@@ -96,26 +96,26 @@ namespace Microsoft.Xna.Platform.Input
 
             _gamepads.Add(index, sdlGamepad);
 
-            _translationTable[instanceID] = index;
+            _indicesMap[instanceID] = index;
         }
 
         internal void RemoveDevice(int instanceID)
         {
-            if (_translationTable.TryGetValue(instanceID, out int index))
+            if (_indicesMap.TryGetValue(instanceID, out int index))
             {
                 if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
                 {
                     _gamepads.Remove(index);
                     SDL.GAMECONTROLLER.Close(sdlGamepad.Handle);
 
-                    _translationTable.Remove(instanceID);
+                    _indicesMap.Remove(instanceID);
                 }
             }
         }
 
         internal void UpdatePacketInfo(int instanceID, uint packetNumber)
         {
-            if (_translationTable.TryGetValue(instanceID, out int index))
+            if (_indicesMap.TryGetValue(instanceID, out int index))
             {
                 if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
                 {
