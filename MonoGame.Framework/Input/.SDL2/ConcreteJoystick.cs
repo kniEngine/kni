@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                JoystickCapabilities jcap = PlatformGetCapabilities(index);
+                JoystickCapabilities jcap = sdlJoystick.Capabilities;
 
                 int[] axes = new int[jcap.AxisCount];
                 for (int i = 0; i < axes.Length; i++)
@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Input
 
             if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                JoystickCapabilities jcap = PlatformGetCapabilities(index);
+                JoystickCapabilities jcap = sdlJoystick.Capabilities;
 
                 //Resize each array if the length is less than the count returned by the capabilities
                 if (axes.Length < jcap.AxisCount)
