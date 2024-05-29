@@ -120,7 +120,9 @@ namespace Microsoft.Xna.Platform.Input
             {
                 if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
                 {
-                    sdlGamepad.PacketNumber = packetNumber < int.MaxValue ? (int)packetNumber : (int)(packetNumber - (uint)int.MaxValue);
+                    sdlGamepad.PacketNumber = (packetNumber < int.MaxValue)
+                                            ? (int)packetNumber
+                                            : (int)(packetNumber - (uint)int.MaxValue);
                 }
             }
         }
