@@ -61,7 +61,9 @@ namespace Microsoft.Xna.Platform.Input
             foreach (SdlGamePadDevice sdlGamepad in _gamepads.Values)
                 SDL.GAMECONTROLLER.Close(sdlGamepad.Handle);
 
-            _gamepads.Clear();            
+            _gamepads.Clear();
+            _indicesMap.Clear();
+
         }
 
 
