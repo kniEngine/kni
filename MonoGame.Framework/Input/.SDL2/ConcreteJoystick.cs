@@ -162,11 +162,11 @@ namespace Microsoft.Xna.Platform.Input
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
         }
 
-        internal void RemoveDevice(int deviceIndex)
+        internal void RemoveDevice(int instanceID)
         {
             foreach (KeyValuePair<int, SdlJoystickDevice> item in _sdlJoysticks)
             {
-                if (SDL.JOYSTICK.InstanceID(item.Value.Handle) == deviceIndex)
+                if (SDL.JOYSTICK.InstanceID(item.Value.Handle) == instanceID)
                 {
                     SDL.JOYSTICK.Close(item.Value.Handle);
                     _sdlJoysticks.Remove(item.Key);
