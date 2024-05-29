@@ -39,8 +39,9 @@ namespace Microsoft.Xna.Platform.Input
             }
         }
 
-
+        // map GamePad indices (PlayerIndex) -> GamePadDevices
         private readonly Dictionary<int, SdlGamePadDevice> _gamepads = new Dictionary<int, SdlGamePadDevice>();
+        // map Joystick instanceIDs -> gamepad indices (PlayerIndex)
         private readonly Dictionary<int, int> _indicesMap = new Dictionary<int, int>();
 
         // Default & SDL Xbox Controller dead zones

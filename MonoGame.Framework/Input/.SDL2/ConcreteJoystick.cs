@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Platform.Input
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
+        // map Joystick indices (PlayerIndex) -> JoystickDevices
         private Dictionary<int, SdlJoystickDevice> _sdlJoysticks = new Dictionary<int, SdlJoystickDevice>();
         private int _maxConnectedIndex = -1;
 
