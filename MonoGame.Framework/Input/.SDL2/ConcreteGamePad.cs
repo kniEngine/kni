@@ -108,11 +108,12 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     _gamepads.Remove(item.Key);
                     SDL.GAMECONTROLLER.Close(item.Value.Handle);
+
+                    RefreshTranslationTable();
+
                     break;
                 }
             }
-
-            RefreshTranslationTable();
         }
 
         internal void RefreshTranslationTable()
