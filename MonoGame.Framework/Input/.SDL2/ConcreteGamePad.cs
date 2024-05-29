@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Platform.Input
         {
             public IntPtr Handle;
             public GamePadCapabilities Capabilities;
+
+            internal GamePadState State;
             public int PacketNumber;
 
             public SdlGamePadDevice(IntPtr handle)
@@ -352,9 +354,10 @@ namespace Microsoft.Xna.Platform.Input
                         (SDL.GAMECONTROLLER.GetButton(sdlGamepad.Handle, Sdl.GameController.Button.DpadRight) == 1) ? ButtonState.Pressed : ButtonState.Released
                     );
 
-                GamePadState ret = base.CreateGamePadState(thumbSticks, triggers, buttons, dPad,
-                    packetNumber: sdlGamepad.PacketNumber);
-                return ret;
+                sdlGamepad.State = base.CreateGamePadState(thumbSticks, triggers, buttons, dPad,
+                                                           packetNumber: sdlGamepad.PacketNumber);
+
+                return sdlGamepad.State;
             }
 
             return GamePadState.Default;

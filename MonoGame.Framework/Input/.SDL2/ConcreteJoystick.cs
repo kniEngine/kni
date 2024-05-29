@@ -72,12 +72,14 @@ namespace Microsoft.Xna.Platform.Input
                     hats[i] = base.CreateJoystickHat(dPadButtons);
                 }
 
-                return base.CreateJoystickState(
-                        isConnected: true,
-                        axes: axes,
-                        buttons: buttons,
-                        hats: hats
-                    );
+                sdlJoystick.State = base.CreateJoystickState(
+                                            isConnected: true,
+                                            axes: axes,
+                                            buttons: buttons,
+                                            hats: hats
+                                        );
+
+                return sdlJoystick.State;
             }
 
             return JoystickStrategy.DefaultJoystickState;
@@ -205,7 +207,11 @@ namespace Microsoft.Xna.Platform.Input
 
     public class SdlJoystickDevice : JoystickDevice
     {
+
         public IntPtr Handle { get; private set; }
+
+        internal JoystickState State;
+
 
         public SdlJoystickDevice(IntPtr handle)
             : base()
