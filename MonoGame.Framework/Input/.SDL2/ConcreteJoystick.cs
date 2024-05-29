@@ -53,17 +53,17 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                JoystickCapabilities jcap = sdlJoystick.Capabilities;
+                JoystickCapabilities caps = sdlJoystick.Capabilities;
 
-                int[] axes = new int[jcap.AxisCount];
+                int[] axes = new int[caps.AxisCount];
                 for (int i = 0; i < axes.Length; i++)
                     axes[i] = SDL.JOYSTICK.GetAxis(sdlJoystick.Handle, i);
 
-                ButtonState[] buttons = new ButtonState[jcap.ButtonCount];
+                ButtonState[] buttons = new ButtonState[caps.ButtonCount];
                 for (int i = 0; i < buttons.Length; i++)
                     buttons[i] = (SDL.JOYSTICK.GetButton(sdlJoystick.Handle, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
 
-                JoystickHat[] hats = new JoystickHat[jcap.HatCount];
+                JoystickHat[] hats = new JoystickHat[caps.HatCount];
                 for (int i = 0; i < hats.Length; i++)
                 {
                     Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(sdlJoystick.Handle, i);
@@ -93,25 +93,25 @@ namespace Microsoft.Xna.Platform.Input
 
             if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                JoystickCapabilities jcap = sdlJoystick.Capabilities;
+                JoystickCapabilities caps = sdlJoystick.Capabilities;
 
                 //Resize each array if the length is less than the count returned by the capabilities
-                if (axes.Length < jcap.AxisCount)
-                    axes = new int[jcap.AxisCount];
+                if (axes.Length < caps.AxisCount)
+                    axes = new int[caps.AxisCount];
 
-                if (buttons.Length < jcap.ButtonCount)
-                    buttons = new ButtonState[jcap.ButtonCount];
+                if (buttons.Length < caps.ButtonCount)
+                    buttons = new ButtonState[caps.ButtonCount];
 
-                if (hats.Length < jcap.HatCount)
-                    hats = new JoystickHat[jcap.HatCount];
+                if (hats.Length < caps.HatCount)
+                    hats = new JoystickHat[caps.HatCount];
 
-                for (int i = 0; i < jcap.AxisCount; i++)
+                for (int i = 0; i < caps.AxisCount; i++)
                     axes[i] = SDL.JOYSTICK.GetAxis(sdlJoystick.Handle, i);
 
-                for (int i = 0; i < jcap.ButtonCount; i++)
+                for (int i = 0; i < caps.ButtonCount; i++)
                     buttons[i] = (SDL.JOYSTICK.GetButton(sdlJoystick.Handle, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
 
-                for (int i = 0; i < jcap.HatCount; i++)
+                for (int i = 0; i < caps.HatCount; i++)
                 {
                     Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(sdlJoystick.Handle, i);
                     Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
