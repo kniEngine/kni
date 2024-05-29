@@ -16,6 +16,9 @@ namespace Microsoft.Xna.Platform.Input
 
         // map Joystick indices (PlayerIndex) -> JoystickDevices
         private Dictionary<int, SdlJoystickDevice> _sdlJoysticks = new Dictionary<int, SdlJoystickDevice>();
+        // map Joystick instanceIDs -> gamepad indices (PlayerIndex)
+        private readonly Dictionary<int, int> _indicesMap = new Dictionary<int, int>();
+
         private int _maxConnectedIndex = -1;
 
         public override bool PlatformIsSupported
@@ -39,6 +42,7 @@ namespace Microsoft.Xna.Platform.Input
                 SDL.JOYSTICK.Close(sdlJoystick.Handle);
 
             _sdlJoysticks.Clear();
+            _indicesMap.Clear();
         }
 
         public override JoystickCapabilities PlatformGetCapabilities(int index)
@@ -162,23 +166,25 @@ namespace Microsoft.Xna.Platform.Input
 
             _sdlJoysticks.Add(index, sdlJoystick);
 
+            _indicesMap[instanceID] = index;
+
             if (sdlJoystick.Capabilities.IsGamepad)
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
         }
 
         internal void RemoveDevice(int instanceID)
         {
-            foreach (KeyValuePair<int, SdlJoystickDevice> item in _sdlJoysticks)
+            if (_indicesMap.TryGetValue(instanceID, out int index))
             {
-                if (SDL.JOYSTICK.InstanceID(item.Value.Handle) == instanceID)
+                if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
                 {
-                    SDL.JOYSTICK.Close(item.Value.Handle);
-                    _sdlJoysticks.Remove(item.Key);
+                    SDL.JOYSTICK.Close(sdlJoystick.Handle);
+                    _sdlJoysticks.Remove(index);
 
-                    if (_maxConnectedIndex == item.Key)
+                    if (_maxConnectedIndex == index)
                         _maxConnectedIndex = CalculateMaxConnectedIndex();
 
-                    break;
+                    _indicesMap.Remove(instanceID);
                 }
             }
         }
