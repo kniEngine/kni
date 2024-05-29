@@ -145,6 +145,7 @@ namespace Microsoft.Xna.Platform.Input
 
             _maxConnectedIndex = Math.Max(_maxConnectedIndex, index);
 
+            int instanceID = SDL.JOYSTICK.InstanceID(handle);
             SdlJoystickDevice sdlJoystick = new SdlJoystickDevice(handle);
             sdlJoystick.Capabilities = base.CreateJoystickCapabilities(
                     isConnected: true,
