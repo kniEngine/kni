@@ -96,7 +96,14 @@ namespace Microsoft.Xna.Platform.Input
 
             _gamepads.Add(index, sdlGamepad);
 
-            RefreshTranslationTable();
+            // Update TranslationTable
+            _translationTable.Clear();
+            foreach (KeyValuePair<int, SdlGamePadDevice> item2 in _gamepads)
+            {
+                IntPtr joystickHandle2 = SDL.GAMECONTROLLER.GetJoystick(item2.Value.Handle);
+                int instanceID2 = SDL.JOYSTICK.InstanceID(joystickHandle2);
+                _translationTable[instanceID2] = item2.Key;
+            }
         }
 
         internal void RemoveDevice(int instanceID)
@@ -109,21 +116,17 @@ namespace Microsoft.Xna.Platform.Input
                     _gamepads.Remove(item.Key);
                     SDL.GAMECONTROLLER.Close(item.Value.Handle);
 
-                    RefreshTranslationTable();
+                    // Update TranslationTable
+                    _translationTable.Clear();
+                    foreach (KeyValuePair<int, SdlGamePadDevice> item2 in _gamepads)
+                    {
+                        IntPtr joystickHandle2 = SDL.GAMECONTROLLER.GetJoystick(item2.Value.Handle);
+                        int instanceID2 = SDL.JOYSTICK.InstanceID(joystickHandle2);
+                        _translationTable[instanceID2] = item2.Key;
+                    }
 
                     break;
                 }
-            }
-        }
-
-        internal void RefreshTranslationTable()
-        {
-            _translationTable.Clear();
-            foreach (KeyValuePair<int,SdlGamePadDevice> item in _gamepads)
-            {
-                IntPtr joystickHandle = SDL.GAMECONTROLLER.GetJoystick(item.Value.Handle);
-                int instanceID = SDL.JOYSTICK.InstanceID(joystickHandle);
-                _translationTable[instanceID] = item.Key;
             }
         }
 
