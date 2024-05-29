@@ -123,8 +123,7 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void UpdatePacketInfo(int instanceID, uint packetNumber)
         {
-            int index;
-            if (_translationTable.TryGetValue(instanceID, out index))
+            if (_translationTable.TryGetValue(instanceID, out int index))
             {
                 if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
                 {
