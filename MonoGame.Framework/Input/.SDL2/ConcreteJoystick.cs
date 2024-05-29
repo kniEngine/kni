@@ -14,7 +14,11 @@ namespace Microsoft.Xna.Platform.Input
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
+        // map Joystick indices (PlayerIndex) -> JoystickDevices
         private Dictionary<int, SdlJoystickDevice> _sdlJoysticks = new Dictionary<int, SdlJoystickDevice>();
+        // map Joystick instanceIDs -> gamepad indices (PlayerIndex)
+        private readonly Dictionary<int, int> _indicesMap = new Dictionary<int, int>();
+
         private int _maxConnectedIndex = -1;
 
         public override bool PlatformIsSupported
@@ -38,6 +42,7 @@ namespace Microsoft.Xna.Platform.Input
                 SDL.JOYSTICK.Close(sdlJoystick.Handle);
 
             _sdlJoysticks.Clear();
+            _indicesMap.Clear();
         }
 
         public override JoystickCapabilities PlatformGetCapabilities(int index)
@@ -52,17 +57,17 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                JoystickCapabilities jcap = PlatformGetCapabilities(index);
+                JoystickCapabilities caps = sdlJoystick.Capabilities;
 
-                int[] axes = new int[jcap.AxisCount];
+                int[] axes = new int[caps.AxisCount];
                 for (int i = 0; i < axes.Length; i++)
                     axes[i] = SDL.JOYSTICK.GetAxis(sdlJoystick.Handle, i);
 
-                ButtonState[] buttons = new ButtonState[jcap.ButtonCount];
+                ButtonState[] buttons = new ButtonState[caps.ButtonCount];
                 for (int i = 0; i < buttons.Length; i++)
                     buttons[i] = (SDL.JOYSTICK.GetButton(sdlJoystick.Handle, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
 
-                JoystickHat[] hats = new JoystickHat[jcap.HatCount];
+                JoystickHat[] hats = new JoystickHat[caps.HatCount];
                 for (int i = 0; i < hats.Length; i++)
                 {
                     Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(sdlJoystick.Handle, i);
@@ -71,12 +76,14 @@ namespace Microsoft.Xna.Platform.Input
                     hats[i] = base.CreateJoystickHat(dPadButtons);
                 }
 
-                return base.CreateJoystickState(
-                        isConnected: true,
-                        axes: axes,
-                        buttons: buttons,
-                        hats: hats
-                    );
+                sdlJoystick.State = base.CreateJoystickState(
+                                            isConnected: true,
+                                            axes: axes,
+                                            buttons: buttons,
+                                            hats: hats
+                                        );
+
+                return sdlJoystick.State;
             }
 
             return JoystickStrategy.DefaultJoystickState;
@@ -92,25 +99,25 @@ namespace Microsoft.Xna.Platform.Input
 
             if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
             {
-                JoystickCapabilities jcap = PlatformGetCapabilities(index);
+                JoystickCapabilities caps = sdlJoystick.Capabilities;
 
                 //Resize each array if the length is less than the count returned by the capabilities
-                if (axes.Length < jcap.AxisCount)
-                    axes = new int[jcap.AxisCount];
+                if (axes.Length < caps.AxisCount)
+                    axes = new int[caps.AxisCount];
 
-                if (buttons.Length < jcap.ButtonCount)
-                    buttons = new ButtonState[jcap.ButtonCount];
+                if (buttons.Length < caps.ButtonCount)
+                    buttons = new ButtonState[caps.ButtonCount];
 
-                if (hats.Length < jcap.HatCount)
-                    hats = new JoystickHat[jcap.HatCount];
+                if (hats.Length < caps.HatCount)
+                    hats = new JoystickHat[caps.HatCount];
 
-                for (int i = 0; i < jcap.AxisCount; i++)
+                for (int i = 0; i < caps.AxisCount; i++)
                     axes[i] = SDL.JOYSTICK.GetAxis(sdlJoystick.Handle, i);
 
-                for (int i = 0; i < jcap.ButtonCount; i++)
+                for (int i = 0; i < caps.ButtonCount; i++)
                     buttons[i] = (SDL.JOYSTICK.GetButton(sdlJoystick.Handle, i) == 0) ? ButtonState.Released : ButtonState.Pressed;
 
-                for (int i = 0; i < jcap.HatCount; i++)
+                for (int i = 0; i < caps.HatCount; i++)
                 {
                     Sdl.Joystick.Hat hatstate = SDL.JOYSTICK.GetHat(sdlJoystick.Handle, i);
                     Buttons dPadButtons = SDLToXnaDPadButtons(hatstate);
@@ -145,6 +152,7 @@ namespace Microsoft.Xna.Platform.Input
 
             _maxConnectedIndex = Math.Max(_maxConnectedIndex, index);
 
+            int instanceID = SDL.JOYSTICK.InstanceID(handle);
             SdlJoystickDevice sdlJoystick = new SdlJoystickDevice(handle);
             sdlJoystick.Capabilities = base.CreateJoystickCapabilities(
                     isConnected: true,
@@ -158,23 +166,25 @@ namespace Microsoft.Xna.Platform.Input
 
             _sdlJoysticks.Add(index, sdlJoystick);
 
+            _indicesMap[instanceID] = index;
+
             if (sdlJoystick.Capabilities.IsGamepad)
                 ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
         }
 
-        internal void RemoveDevice(int deviceIndex)
+        internal void RemoveDevice(int instanceID)
         {
-            foreach (KeyValuePair<int, SdlJoystickDevice> item in _sdlJoysticks)
+            if (_indicesMap.TryGetValue(instanceID, out int index))
             {
-                if (SDL.JOYSTICK.InstanceID(item.Value.Handle) == deviceIndex)
+                if (_sdlJoysticks.TryGetValue(index, out SdlJoystickDevice sdlJoystick))
                 {
-                    SDL.JOYSTICK.Close(item.Value.Handle);
-                    _sdlJoysticks.Remove(item.Key);
+                    SDL.JOYSTICK.Close(sdlJoystick.Handle);
+                    _sdlJoysticks.Remove(index);
 
-                    if (_maxConnectedIndex == item.Key)
+                    if (_maxConnectedIndex == index)
                         _maxConnectedIndex = CalculateMaxConnectedIndex();
 
-                    break;
+                    _indicesMap.Remove(instanceID);
                 }
             }
         }
@@ -203,7 +213,11 @@ namespace Microsoft.Xna.Platform.Input
 
     public class SdlJoystickDevice : JoystickDevice
     {
+
         public IntPtr Handle { get; private set; }
+
+        internal JoystickState State;
+
 
         public SdlJoystickDevice(IntPtr handle)
             : base()
