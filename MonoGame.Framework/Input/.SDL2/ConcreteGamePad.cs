@@ -19,8 +19,7 @@ namespace Microsoft.Xna.Platform.Input
 
         private class SdlGamePadDevice : GamePadDevice
         {
-            public IntPtr Handle;
-            public GamePadCapabilities Capabilities;
+            public IntPtr Handle { get; private set; }
 
             internal GamePadState State;
             public int PacketNumber;
@@ -34,6 +33,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public class GamePadDevice
         {
+            public GamePadCapabilities Capabilities;
 
             public GamePadDevice()
             {
