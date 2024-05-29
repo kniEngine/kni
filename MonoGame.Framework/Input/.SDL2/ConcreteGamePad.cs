@@ -305,7 +305,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
             {
-// Y gamepad axis is rotate between SDL and XNA
+                // Y gamepad axis is rotate between SDL and XNA
                 GamePadThumbSticks thumbSticks =
                     base.CreateGamePadThumbSticks(
                         new Vector2(
