@@ -13,6 +13,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform.Input
 {
+    // TODO: move GamePadDevice to Framework.Input library
     public class GamePadDevice
     {
         public GamePadCapabilities Capabilities;
