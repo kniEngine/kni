@@ -11,7 +11,18 @@ using Android.Views;
 
 namespace Microsoft.Xna.Platform.Input
 {
-    internal class AndroidGamePad
+    // TODO: move GamePadDevice to Framework.Input library
+    public class GamePadDevice
+    {
+        public GamePadCapabilities Capabilities;
+
+        public GamePadDevice()
+        {
+
+        }
+    }
+
+    internal class AndroidGamePadDevice : GamePadDevice
     {
         public InputDevice _device;
         public int _deviceId;
@@ -23,15 +34,14 @@ namespace Microsoft.Xna.Platform.Input
         public float _leftTrigger, _rightTrigger;
         public Vector2 _leftStick, _rightStick;
 
-        public readonly GamePadCapabilities _capabilities;
-
-        public AndroidGamePad(InputDevice device, GamePadCapabilities caps)
+        public AndroidGamePadDevice(InputDevice device, GamePadCapabilities caps)
+            : base()
         {
             _device = device;
             _deviceId = device.Id;
             _descriptor = device.Descriptor;
             _isConnected = true;
-            _capabilities = caps;
+            Capabilities = caps;
         }
 
     }
@@ -39,7 +49,7 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         // we will support up to 4 local controllers
-        private readonly AndroidGamePad[] GamePads = new AndroidGamePad[4];
+        private readonly AndroidGamePadDevice[] GamePads = new AndroidGamePadDevice[4];
         // support the back button when we don't have a gamepad connected
         internal bool Back;
 
@@ -55,9 +65,9 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            AndroidGamePad gamePad = GamePads[index];
+            AndroidGamePadDevice gamePad = GamePads[index];
             if (gamePad != null)
-                return gamePad._capabilities;
+                return gamePad.Capabilities;
 
             // we need to add the default "no gamepad connected but the user hit back"
             // behaviour here
@@ -75,7 +85,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            AndroidGamePad gamePad = GamePads[index];
+            AndroidGamePadDevice gamePad = GamePads[index];
             GamePadState state = GamePadState.Default;
             if (gamePad != null && gamePad._isConnected)
             {
@@ -115,7 +125,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            AndroidGamePad gamePad = GamePads[index];
+            AndroidGamePadDevice gamePad = GamePads[index];
             if (gamePad == null)
                 return false;
 
@@ -126,7 +136,7 @@ namespace Microsoft.Xna.Platform.Input
             return true;
         }
 
-        internal AndroidGamePad GetGamePad(InputDevice device)
+        internal AndroidGamePadDevice GetGamePad(InputDevice device)
         {
             if (device == null || (device.Sources & InputSourceType.Gamepad) != InputSourceType.Gamepad)
                 return null;
@@ -134,7 +144,7 @@ namespace Microsoft.Xna.Platform.Input
             int firstDisconnectedPadId = -1;
             for (int i = 0; i < GamePads.Length; i++)
             {
-                AndroidGamePad pad = GamePads[i];
+                AndroidGamePadDevice pad = GamePads[i];
                 if (pad != null && pad._isConnected && pad._deviceId == device.Id)
                 {
                     return pad;
@@ -150,7 +160,7 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     Android.Util.Log.Debug("MonoGame", "Found new controller [" + i + "] " + device.Name);
                     GamePadCapabilities caps = CapabilitiesOfDevice(device);
-                    pad = new AndroidGamePad(device, caps);
+                    pad = new AndroidGamePadDevice(device, caps);
                     GamePads[i] = pad;
                     return pad;
                 }
@@ -166,7 +176,7 @@ namespace Microsoft.Xna.Platform.Input
             {
                 Android.Util.Log.Debug("MonoGame", "Found new controller in place of disconnected controller [" + firstDisconnectedPadId + "] " + device.Name);
                 GamePadCapabilities caps = CapabilitiesOfDevice(device);
-                AndroidGamePad pad = new AndroidGamePad(device, caps);
+                AndroidGamePadDevice pad = new AndroidGamePadDevice(device, caps);
                 GamePads[firstDisconnectedPadId] = pad;
                 return pad;
             }
@@ -177,7 +187,7 @@ namespace Microsoft.Xna.Platform.Input
 
         internal bool OnKeyDown(Keycode keyCode, KeyEvent e)
         {
-            AndroidGamePad gamePad = GetGamePad(e.Device);
+            AndroidGamePadDevice gamePad = GetGamePad(e.Device);
             if (gamePad == null)
                 return false;
 
@@ -192,7 +202,7 @@ namespace Microsoft.Xna.Platform.Input
 
         internal bool OnKeyUp(Keycode keyCode, KeyEvent e)
         {
-            AndroidGamePad gamePad = GetGamePad(e.Device);
+            AndroidGamePadDevice gamePad = GetGamePad(e.Device);
             if (gamePad == null)
                 return false;
 
@@ -202,7 +212,7 @@ namespace Microsoft.Xna.Platform.Input
 
         internal bool OnGenericMotionEvent(MotionEvent e)
         {
-            AndroidGamePad gamePad = GetGamePad(e.Device);
+            AndroidGamePadDevice gamePad = GetGamePad(e.Device);
             if (gamePad == null)
                 return false;
 

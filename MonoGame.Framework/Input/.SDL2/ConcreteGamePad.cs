@@ -13,33 +13,35 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform.Input
 {
+    // TODO: move GamePadDevice to Framework.Input library
+    public class GamePadDevice
+    {
+        public GamePadCapabilities Capabilities;
+
+        public GamePadDevice()
+        {
+
+        }
+    }
+
+    internal class SdlGamePadDevice : GamePadDevice
+    {
+        public IntPtr Handle { get; private set; }
+
+        internal GamePadState State;
+        public int PacketNumber;
+
+        public SdlGamePadDevice(IntPtr handle)
+            : base()
+        {
+            this.Handle = handle;
+        }
+    }
+
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        private class SdlGamePadDevice : GamePadDevice
-        {
-            public IntPtr Handle { get; private set; }
-
-            internal GamePadState State;
-            public int PacketNumber;
-
-            public SdlGamePadDevice(IntPtr handle)
-                : base()
-            {
-                this.Handle = handle;
-            }
-        }
-
-        public class GamePadDevice
-        {
-            public GamePadCapabilities Capabilities;
-
-            public GamePadDevice()
-            {
-
-            }
-        }
 
         // map GamePad indices (PlayerIndex) -> GamePadDevices
         private readonly Dictionary<int, SdlGamePadDevice> _gamepads = new Dictionary<int, SdlGamePadDevice>();
