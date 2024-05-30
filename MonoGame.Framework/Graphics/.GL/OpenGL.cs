@@ -24,7 +24,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
     internal enum BufferAccess
     {
-        ReadOnly = 0x88B8,
+        ReadOnly  = 0x88B8,
+        WriteOnly = 0x88B9,
+        ReadWrite = 0x88BA,
     }
 
     internal enum BufferUsageHint
