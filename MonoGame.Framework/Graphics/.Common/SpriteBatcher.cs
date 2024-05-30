@@ -53,6 +53,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private DynamicVertexBuffer _vertexBuffer;
         private IndexBuffer _indexBuffer;
 
+        SetDataOptions _defaultVertexBufferSetDataMode = SetDataOptions.NoOverwrite;
+
         public override int BatchItemCount { get { return _batchItemCount; } }
 
         public SpriteBatcher(GraphicsDevice device, int capacity = 0)
@@ -71,6 +73,17 @@ namespace Microsoft.Xna.Platform.Graphics
                 _batchItemList[i] = new SpriteBatchItem();
 
             EnsureArrayCapacity(capacity);
+
+            switch (_device.Adapter.Backend)
+            {
+                case GraphicsBackend.OpenGL:
+                case GraphicsBackend.GLES:
+                case GraphicsBackend.WebGL:
+                    // NoOverwrite is not implemented in GL.
+                    _defaultVertexBufferSetDataMode = SetDataOptions.Discard;
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -208,8 +221,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     VertexPositionColorTexture* vertexArrayPtr = vertexArrayFixedPtr;
 
-                    SetDataOptions mode = SetDataOptions.NoOverwrite;
-                    if ((_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
+                    SetDataOptions mode = _defaultVertexBufferSetDataMode;
+                    if (mode == SetDataOptions.Discard
+                    || (_baseQuad + numBatchesToProcess) * 4 > _vertexBuffer.VertexCount)
                     {
                         mode = SetDataOptions.Discard;
                         _baseQuad = 0;
