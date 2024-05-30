@@ -13,6 +13,16 @@ using WGI = Windows.Gaming.Input;
 
 namespace Microsoft.Xna.Platform.Input
 {
+    public class GamePadDevice
+    {
+        public GamePadCapabilities Capabilities;
+
+        public GamePadDevice()
+        {
+
+        }
+    }
+
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         // Attempts to mimic SharpDX.XInput.Gamepad which defines the trigger threshold as 30 with a range of 0 to 255. 

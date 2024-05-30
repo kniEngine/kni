@@ -11,6 +11,16 @@ using Android.Views;
 
 namespace Microsoft.Xna.Platform.Input
 {
+    public class GamePadDevice
+    {
+        public GamePadCapabilities Capabilities;
+
+        public GamePadDevice()
+        {
+
+        }
+    }
+
     internal class AndroidGamePadDevice
     {
         public InputDevice _device;

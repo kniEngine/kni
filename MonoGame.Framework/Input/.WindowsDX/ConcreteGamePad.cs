@@ -13,6 +13,16 @@ using GPBF = SharpDX.XInput.GamepadButtonFlags;
 
 namespace Microsoft.Xna.Platform.Input
 {
+    public class GamePadDevice
+    {
+        public GamePadCapabilities Capabilities;
+
+        public GamePadDevice()
+        {
+
+        }
+    }
+
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         const int DeviceNotConnectedHResult = unchecked((int)0x8007048f);

@@ -7,6 +7,16 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Microsoft.Xna.Platform.Input
 {
+    public class GamePadDevice
+    {
+        public GamePadCapabilities Capabilities;
+
+        public GamePadDevice()
+        {
+
+        }
+    }
+
     public sealed class ConcreteGamePad : GamePadStrategy
     {
 
