@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Input
         }
     }
 
-    internal class AndroidGamePadDevice
+    internal class AndroidGamePadDevice : GamePadDevice
     {
         public InputDevice _device;
         public int _deviceId;
@@ -33,9 +33,8 @@ namespace Microsoft.Xna.Platform.Input
         public float _leftTrigger, _rightTrigger;
         public Vector2 _leftStick, _rightStick;
 
-        public readonly GamePadCapabilities Capabilities;
-
         public AndroidGamePadDevice(InputDevice device, GamePadCapabilities caps)
+            : base()
         {
             _device = device;
             _deviceId = device.Id;
