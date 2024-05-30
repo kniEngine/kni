@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform.Input
         public float _leftTrigger, _rightTrigger;
         public Vector2 _leftStick, _rightStick;
 
-        public readonly GamePadCapabilities _capabilities;
+        public readonly GamePadCapabilities Capabilities;
 
         public AndroidGamePadDevice(InputDevice device, GamePadCapabilities caps)
         {
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Input
             _deviceId = device.Id;
             _descriptor = device.Descriptor;
             _isConnected = true;
-            _capabilities = caps;
+            Capabilities = caps;
         }
 
     }
@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             AndroidGamePadDevice gamePad = GamePads[index];
             if (gamePad != null)
-                return gamePad._capabilities;
+                return gamePad.Capabilities;
 
             // we need to add the default "no gamepad connected but the user hit back"
             // behaviour here
