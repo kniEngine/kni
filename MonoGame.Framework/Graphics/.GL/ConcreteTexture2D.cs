@@ -98,13 +98,6 @@ namespace Microsoft.Xna.Platform.Graphics
                         TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0,_glFormat, _glType, dataPtr);
                 }
                 GL.CheckGLError();
-
-#if !ANDROID
-                // Required to make sure that any texture uploads on a thread are completed
-                // before the main thread tries to use the texture.
-                GL.Finish();
-                GL.CheckGLError();
-#endif
             }
             finally
             {
@@ -149,13 +142,6 @@ namespace Microsoft.Xna.Platform.Graphics
                         _glFormat, _glType, dataPtr);
                 }
                 GL.CheckGLError();
-
-#if !ANDROID
-                // Required to make sure that any texture uploads on a thread are completed
-                // before the main thread tries to use the texture.
-                GL.Finish();
-                GL.CheckGLError();
-#endif
             }
             finally
             {
