@@ -211,6 +211,21 @@ namespace Microsoft.Xna.Framework
             _viewController.Title = title;
         }
 
+        protected override void SetSupportedOrientations(DisplayOrientation orientations)
+        {
+
+        }
+
+        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+        {
+
+        }
+
+        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        {
+
+        }
+
         #endregion GameWindow Members
 
 

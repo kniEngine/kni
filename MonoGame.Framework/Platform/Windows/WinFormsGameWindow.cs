@@ -330,6 +330,21 @@ namespace Microsoft.Xna.Framework
             Form.Text = title;
         }
 
+        protected override void SetSupportedOrientations(DisplayOrientation orientations)
+        {
+            
+        }
+
+        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+        {
+            
+        }
+
+        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        {
+            
+        }
+
         internal void RunGameLoop()
         {
             Application.Idle += Application_Idle;
@@ -579,6 +594,7 @@ namespace Microsoft.Xna.Framework
         {
             return this.IsKeyUpDownAttached();
         }
+
     }
 }
 

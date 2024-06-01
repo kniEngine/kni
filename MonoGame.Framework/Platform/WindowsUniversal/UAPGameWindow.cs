@@ -314,6 +314,21 @@ namespace Microsoft.Xna.Framework
             Debug.WriteLine("WARNING: GameWindow.Title has no effect under UWP.");
         }
 
+        protected override void SetSupportedOrientations(DisplayOrientation orientations)
+        {
+
+        }
+
+        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+        {
+
+        }
+
+        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        {
+
+        }
+
         internal void SetCursor(bool visible)
         {
             if ( _coreWindow == null )

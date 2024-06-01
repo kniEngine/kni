@@ -393,5 +393,20 @@ namespace Microsoft.Xna.Framework
         protected override void SetTitle(string title)
         {
         }
+
+        protected override void SetSupportedOrientations(DisplayOrientation orientations)
+        {
+
+        }
+
+        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+        {
+
+        }
+
+        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        {
+
+        }
     }
 }

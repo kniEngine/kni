@@ -554,6 +554,21 @@ namespace Microsoft.Xna.Framework
             SDL.WINDOW.SetTitle(_handle, title);
         }
 
+        protected override void SetSupportedOrientations(DisplayOrientation orientations)
+        {
+
+        }
+
+        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+        {
+
+        }
+
+        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        {
+
+        }
+
         public void Dispose()
         {
             Dispose(true);

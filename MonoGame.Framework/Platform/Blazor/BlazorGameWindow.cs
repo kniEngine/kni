@@ -252,6 +252,21 @@ namespace Microsoft.Xna.Framework
             _window.Document.Title = title;
         }
 
+        protected override void SetSupportedOrientations(DisplayOrientation orientations)
+        {
+
+        }
+
+        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+        {
+
+        }
+
+        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+        {
+
+        }
+
         // Run game loop when the app becomes Idle.
         private void TickOnIdle(object sender, EventArgs e)
         {
