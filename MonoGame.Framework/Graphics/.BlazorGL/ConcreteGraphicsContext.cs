@@ -279,7 +279,7 @@ namespace Microsoft.Xna.Platform.Graphics
             for (int slot = 0; slot < csamplerStateCollection.InternalActualSamplers.Length; slot++)
             {
                 SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
-                Texture texture = this.Textures[slot];
+                Texture texture = ctextureCollection[slot];
 
                 if (sampler != null && texture != null)
                 {
