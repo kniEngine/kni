@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
-        private WebGLTextureTarget[] _targets;
+        internal WebGLTextureTarget[] _targets;
 
         internal uint InternalDirty
         {

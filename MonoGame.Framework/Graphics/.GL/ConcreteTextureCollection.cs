@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
-        private TextureTarget[] _targets;
+        internal TextureTarget[] _targets;
 
         internal uint InternalDirty
         {
