@@ -15,6 +15,13 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteTextureCollection : TextureCollectionStrategy
     {
 
+        internal uint InternalDirty
+        {
+            get { return base._dirty; }
+            set { base._dirty = value; }
+        }
+
+
         internal ConcreteTextureCollection(GraphicsContextStrategy contextStrategy, int capacity)
             : base(contextStrategy, capacity)
         {
@@ -57,10 +64,10 @@ namespace Microsoft.Xna.Platform.Graphics
             // NOTE: We make the assumption here that the caller has
             // locked the d3dContext for us to use.
 
-            for (int i = 0; ctextureCollection._dirty != 0 && i < ctextureCollection._textures.Length; i++)
+            for (int i = 0; ctextureCollection.InternalDirty != 0 && i < ctextureCollection._textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
-                if ((ctextureCollection._dirty & mask) != 0)
+                if ((ctextureCollection.InternalDirty & mask) != 0)
                 {
                     Texture texture = ctextureCollection._textures[i];
 
@@ -75,7 +82,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         shaderStage.SetShaderResource(i, null);
 
                     // clear texture bit
-                    ctextureCollection._dirty &= ~mask;
+                    ctextureCollection.InternalDirty &= ~mask;
                 }
             }
         }
