@@ -36,14 +36,14 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Dirty();
         }
 
-        internal void PlatformApply()
+        internal static void PlatformApply(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection)
         {
-            var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = cgraphicsContext.GL;
 
-            for (int i = 0; i < _actualSamplers.Length; i++)
+            for (int i = 0; i < csamplerStateCollection._actualSamplers.Length; i++)
             {
-                SamplerState sampler = _actualSamplers[i];
-                Texture texture = _contextStrategy.Textures[i];
+                SamplerState sampler = csamplerStateCollection._actualSamplers[i];
+                Texture texture = cgraphicsContext.Textures[i];
 
                 if (sampler != null && texture != null && sampler != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glLastSamplerState)
                 {
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // GL.BindTexture(texture._glTarget, texture._glTexture);
                     // GL.CheckGLError();
 
-                    ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>().PlatformApplyState(_contextStrategy.Context, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
+                    ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>().PlatformApplyState(cgraphicsContext.Context, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
                     ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = sampler;
                 }
             }

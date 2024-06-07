@@ -287,7 +287,7 @@ namespace Microsoft.Xna.Platform.Graphics
             ConcreteTextureCollection.PlatformApply(this, ctextureCollection, dxShaderStage);
 
             // Apply Samplers
-            csamplerStateCollection.PlatformApply(dxShaderStage);
+            ConcreteSamplerStateCollection.PlatformApply(this, csamplerStateCollection, dxShaderStage);
         }
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
