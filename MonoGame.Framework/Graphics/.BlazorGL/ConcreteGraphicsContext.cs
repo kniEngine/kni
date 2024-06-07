@@ -420,13 +420,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Apply Pixel Sampler TextureUnits
             // Assign the texture unit index to the sampler uniforms.
-            foreach (SamplerInfo sampler in cpixelShader.Samplers)
+            for (int i = 0; i < cpixelShader.Samplers.Length; i++)
             {
-                WebGLUniformLocation loc = GL.GetUniformLocation(program, sampler.GLsamplerName);
+                WebGLUniformLocation loc = GL.GetUniformLocation(program, cpixelShader.Samplers[i].GLsamplerName);
                 GL.CheckGLError();
                 if (loc != null)
                 {
-                    GL.Uniform1i(loc, sampler.textureSlot);
+                    GL.Uniform1i(loc, cpixelShader.Samplers[i].textureSlot);
                     GL.CheckGLError();
                 }
             }
