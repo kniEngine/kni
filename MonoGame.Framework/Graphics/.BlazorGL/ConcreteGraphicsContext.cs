@@ -349,8 +349,8 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 string log = GL.GetProgramInfoLog(program);
-                vertexShader.Dispose();
-                pixelShader.Dispose();
+                //GL.DetachShader(program, vertexShaderHandle);
+                //GL.DetachShader(program, pixelShaderHandle);
                 program.Dispose();
                 throw new InvalidOperationException("Unable to link effect program");
             }
