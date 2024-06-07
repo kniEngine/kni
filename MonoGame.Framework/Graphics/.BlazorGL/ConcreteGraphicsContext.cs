@@ -411,7 +411,12 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.UseProgram(program);
             GL.CheckGLError();
 
-            cvertexShader.GetVertexAttributeLocations(this, program);
+            // Get Vertex AttributeLocations
+            for (int i = 0; i < cvertexShader.Attributes.Length; i++)
+            {
+                cvertexShader.Attributes[i].location = GL.GetAttribLocation(program, cvertexShader.Attributes[i].name);
+                GL.CheckGLError();
+            }
 
             cpixelShader.ApplySamplerTextureUnits(this, program);
 

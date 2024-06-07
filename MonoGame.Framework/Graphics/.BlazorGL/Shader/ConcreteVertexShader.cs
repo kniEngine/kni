@@ -19,17 +19,6 @@ namespace Microsoft.Xna.Platform.Graphics
             base.CreateShader(contextStrategy, WebGLShaderType.VERTEX, shaderBytecode);
         }
 
-        internal void GetVertexAttributeLocations(GraphicsContextStrategy contextStrategy, WebGLProgram program)
-        {
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            for (int i = 0; i < Attributes.Length; i++)
-            {
-                Attributes[i].location = GL.GetAttribLocation(program, Attributes[i].name);
-                GL.CheckGLError();
-            }
-        }
-
         private int GetAttributeLocation(VertexElementUsage usage, int index)
         {
             for (int i = 0; i < Attributes.Length; i++)
