@@ -287,8 +287,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     Texture texture = ctextureCollection[slot];
 
-                    // Clear the previous binding if the 
-                    // target is different from the new one.
+                    // Clear the previous binding if the target is different from the new one.
                     if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
                     {
                         GL.ActiveTexture(TextureUnit.Texture0 + slot);
@@ -327,15 +326,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     if (sampler != ctexture._glLastSamplerState)
                     {
-                        // TODO: Avoid doing this redundantly (see TextureCollection.Apply())
-                        // However, I suspect that rendering from the same texture with different sampling modes
-                        // is a relatively rare occurrence...
+                        // TODO: Avoid doing this redundantly.
+                        //       Merge the two loops 'Apply Textures' and 'Apply Samplers'.
+                        //       Use information from 'cshader.Samplers' to find active samplers.
                         GL.ActiveTexture(TextureUnit.Texture0 + slot);
                         GL.CheckGLError();
 
-                        // NOTE: We don't have to bind the texture here because it is already bound in
-                        // TextureCollection.Apply(). This, of course, assumes that Apply() is called
-                        // before this method is called. If that ever changes this code will misbehave.
+                        // NOTE: We don't have to bind the texture here because it is already bound in the loop above.
                         // GL.BindTexture(ctexture._glTarget, texture._glTexture);
                         // GL.CheckGLError();
 
