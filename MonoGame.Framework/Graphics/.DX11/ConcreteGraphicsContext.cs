@@ -245,22 +245,25 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // NOTE: This code assumes CurrentD3DContext has been locked by the caller.
 
+            ConcreteVertexShader cvertexShader = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
+            ConcretePixelShader  cpixelShader  = ((IPlatformShader)this.PixelShader).Strategy.ToConcrete<ConcretePixelShader>();
+
             if (_vertexShaderDirty)
             {
-                this.D3dContext.VertexShader.Set(((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>().DXVertexShader);
+                this.D3dContext.VertexShader.Set(cvertexShader.DXVertexShader);
 
                 base.Metrics_AddVertexShaderCount();
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
-                this.D3dContext.InputAssembler.InputLayout = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>().InputLayouts.GetOrCreate(_vertexBuffers);
+                this.D3dContext.InputAssembler.InputLayout = cvertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
                 _vertexShaderDirty = false;
                 _vertexBuffersDirty = false;
             }
 
             if (_pixelShaderDirty)
             {
-                this.D3dContext.PixelShader.Set(((IPlatformShader)this.PixelShader).Strategy.ToConcrete<ConcretePixelShader>().DXPixelShader);
+                this.D3dContext.PixelShader.Set(cpixelShader.DXPixelShader);
                 _pixelShaderDirty = false;
 
                 base.Metrics_AddPixelShaderCount();
@@ -268,20 +271,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, ((IPlatformShader)this.VertexShader).Strategy, this.D3dContext.VertexShader);
-            ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, ((IPlatformShader)this.PixelShader).Strategy, this.D3dContext.PixelShader);
+            ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, cvertexShader, this.D3dContext.VertexShader);
+            ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, cpixelShader, this.D3dContext.PixelShader);
 
 
             // Apply Shader Texture and SamplersSamplers
-            PlatformApplyTexturesAndSamplers(this.D3dContext.VertexShader,
+            PlatformApplyTexturesAndSamplers(cvertexShader, this.D3dContext.VertexShader,
                 ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
                 ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
-            PlatformApplyTexturesAndSamplers(this.D3dContext.PixelShader,
+            PlatformApplyTexturesAndSamplers(cpixelShader, this.D3dContext.PixelShader,
                 ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
                 ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
         }
 
-        private void PlatformApplyTexturesAndSamplers(D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
+        private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // NOTE: We make the assumption here that the caller has locked the d3dContext for us to use.
 

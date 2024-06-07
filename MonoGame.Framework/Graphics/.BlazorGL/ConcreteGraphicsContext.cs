@@ -202,6 +202,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyShaders()
         {
+            ConcreteVertexShader cvertexShader = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
+            ConcretePixelShader  cpixelShader  = ((IPlatformShader)this.PixelShader).Strategy.ToConcrete<ConcretePixelShader>();
+
             if (_vertexShaderDirty || _pixelShaderDirty)
             {
                 ActivateShaderProgram();
@@ -227,15 +230,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Shader Texture and Samplers
-            PlatformApplyTexturesAndSamplers(
+            PlatformApplyTexturesAndSamplers(cvertexShader,
                 ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
                 ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
-            PlatformApplyTexturesAndSamplers(
+            PlatformApplyTexturesAndSamplers(cpixelShader,
                 ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
                 ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
         }
 
-        private void PlatformApplyTexturesAndSamplers(ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
+        private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // Apply Textures
             for (int i = 0; ctextureCollection.InternalDirty != 0 && i < ctextureCollection.Length; i++)
