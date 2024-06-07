@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _targets[i] = 0;
         }
 
-        internal static void PlatformApply(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection)
+        internal static void PlatformApplyTextures(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection)
         {
             var GL = cgraphicsContext.GL;
 

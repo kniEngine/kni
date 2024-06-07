@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal static void PlatformApply(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection, D3D11.CommonShaderStage shaderStage)
+        internal static void PlatformApplyTextures(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection, D3D11.CommonShaderStage shaderStage)
         {
             for (int i = 0; ctextureCollection._dirty != 0 && i < ctextureCollection._textures.Length; i++)
             {
