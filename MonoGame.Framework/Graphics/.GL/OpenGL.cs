@@ -1283,7 +1283,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void UnmapBufferDelegate(BufferTarget target);
+        internal delegate bool UnmapBufferDelegate(BufferTarget target);
         internal UnmapBufferDelegate UnmapBuffer;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
