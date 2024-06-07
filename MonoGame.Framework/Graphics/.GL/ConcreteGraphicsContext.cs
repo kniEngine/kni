@@ -277,16 +277,6 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformApplyTexturesAndSamplers(ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // Apply Textures
-            PlatformApplyTextures(this, ctextureCollection);
-
-            // Apply Samplers
-            PlatformApplySamplers(this, csamplerStateCollection);
-        }
-
-        private static void PlatformApplyTextures(ConcreteGraphicsContextGL cgraphicsContext, ConcreteTextureCollection ctextureCollection)
-        {
-            var GL = cgraphicsContext.GL;
-
             for (int i = 0; ctextureCollection.InternalDirty != 0 && i < ctextureCollection.Length; i++)
             {
                 uint mask = ((uint)1) << i;
@@ -314,13 +304,16 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
                         GL.CheckGLError();
 
-                        cgraphicsContext.Metrics_AddTextureCount();
+                        this.Metrics_AddTextureCount();
                     }
 
                     // clear texture bit
                     ctextureCollection.InternalDirty &= ~mask;
                 }
             }
+
+            // Apply Samplers
+            PlatformApplySamplers(this, csamplerStateCollection);
         }
 
         private static void PlatformApplySamplers(ConcreteGraphicsContextGL cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection)

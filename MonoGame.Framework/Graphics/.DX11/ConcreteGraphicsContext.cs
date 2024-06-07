@@ -283,18 +283,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyTexturesAndSamplers(D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
+            // NOTE: We make the assumption here that the caller has locked the d3dContext for us to use.
+
             // Apply Textures
-            PlatformApplyTextures(this, ctextureCollection, dxShaderStage);
-
-            // Apply Samplers
-            PlatformApplySamplers(this, csamplerStateCollection, dxShaderStage);
-        }
-
-        private static void PlatformApplyTextures(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection, D3D11.CommonShaderStage shaderStage)
-        {
-            // NOTE: We make the assumption here that the caller has
-            // locked the d3dContext for us to use.
-
             for (int i = 0; ctextureCollection.InternalDirty != 0 && i < ctextureCollection.Length; i++)
             {
                 uint mask = ((uint)1) << i;
@@ -305,17 +296,20 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (texture != null && !texture.IsDisposed)
                     {
                         ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                        shaderStage.SetShaderResource(i, ctexture.GetShaderResourceView());
+                        dxShaderStage.SetShaderResource(i, ctexture.GetShaderResourceView());
 
-                        cgraphicsContext.Metrics_AddTextureCount();
+                        this.Metrics_AddTextureCount();
                     }
                     else
-                        shaderStage.SetShaderResource(i, null);
+                        dxShaderStage.SetShaderResource(i, null);
 
                     // clear texture bit
                     ctextureCollection.InternalDirty &= ~mask;
                 }
             }
+
+            // Apply Samplers
+            PlatformApplySamplers(this, csamplerStateCollection, dxShaderStage);
         }
 
         private static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection, D3D11.CommonShaderStage shaderStage)
