@@ -207,7 +207,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_vertexShaderDirty || _pixelShaderDirty)
             {
-                ActivateShaderProgram();
+                ActivateShaderProgram(cvertexShader, cpixelShader);
 
                 if (_vertexShaderDirty)
                 {
@@ -312,11 +312,11 @@ namespace Microsoft.Xna.Platform.Graphics
         /// <summary>
         /// Activates the Current Vertex/Pixel shader pair into a program.         
         /// </summary>
-        private unsafe void ActivateShaderProgram()
+        private unsafe void ActivateShaderProgram(ConcreteVertexShader cvertexShader, ConcretePixelShader cpixelShader)
         {
             // Lookup the shader program.
             ShaderProgram shaderProgram;
-            int shaderProgramHash = (((IPlatformShader)this.VertexShader).Strategy.HashKey ^ ((IPlatformShader)this.PixelShader).Strategy.HashKey);
+            int shaderProgramHash = (cvertexShader.HashKey ^ cpixelShader.HashKey);
             if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
@@ -428,6 +428,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 //GL.DetachShader(program, vertexShaderHandle);
                 //GL.DetachShader(program, pixelShaderHandle);
                 program.Dispose();
+
                 throw new InvalidOperationException("Unable to link effect program");
             }
         }
