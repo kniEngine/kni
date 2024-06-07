@@ -280,30 +280,30 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // Apply Textures
-            for (int i = 0; ctextureCollection.InternalDirty != 0 && i < ctextureCollection.Length; i++)
+            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < ctextureCollection.Length; slot++)
             {
-                uint mask = ((uint)1) << i;
+                uint mask = ((uint)1) << slot;
                 if ((ctextureCollection.InternalDirty & mask) != 0)
                 {
-                    Texture texture = ctextureCollection[i];
+                    Texture texture = ctextureCollection[slot];
 
                     // Clear the previous binding if the 
                     // target is different from the new one.
-                    if (ctextureCollection._targets[i] != 0 && (texture == null || ctextureCollection._targets[i] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                    if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
                     {
-                        GL.ActiveTexture(TextureUnit.Texture0 + i);
+                        GL.ActiveTexture(TextureUnit.Texture0 + slot);
                         GL.CheckGLError();
-                        GL.BindTexture(ctextureCollection._targets[i], 0);
-                        ctextureCollection._targets[i] = 0;
+                        GL.BindTexture(ctextureCollection._targets[slot], 0);
+                        ctextureCollection._targets[slot] = 0;
                         GL.CheckGLError();
                     }
 
                     if (texture != null)
                     {
-                        GL.ActiveTexture(TextureUnit.Texture0 + i);
+                        GL.ActiveTexture(TextureUnit.Texture0 + slot);
                         GL.CheckGLError();
                         ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                        ctextureCollection._targets[i] = ctexture._glTarget;
+                        ctextureCollection._targets[slot] = ctexture._glTarget;
                         GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
                         GL.CheckGLError();
 
@@ -316,10 +316,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Apply Samplers
-            for (int i = 0; i < csamplerStateCollection.InternalActualSamplers.Length; i++)
+            for (int slot = 0; slot < csamplerStateCollection.InternalActualSamplers.Length; slot++)
             {
-                SamplerState sampler = csamplerStateCollection.InternalActualSamplers[i];
-                Texture texture = this.Textures[i];
+                SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
+                Texture texture = this.Textures[slot];
 
                 if (sampler != null && texture != null)
                 {
@@ -330,7 +330,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         // TODO: Avoid doing this redundantly (see TextureCollection.Apply())
                         // However, I suspect that rendering from the same texture with different sampling modes
                         // is a relatively rare occurrence...
-                        GL.ActiveTexture(TextureUnit.Texture0 + i);
+                        GL.ActiveTexture(TextureUnit.Texture0 + slot);
                         GL.CheckGLError();
 
                         // NOTE: We don't have to bind the texture here because it is already bound in
