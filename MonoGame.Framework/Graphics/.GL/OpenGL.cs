@@ -273,6 +273,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         TextureBinding2D = 0x8069,
         MaxTextureMaxAnisotropyExt = 0x84FF,
         MaxSamples = 0x8D57,
+        MaxElementsVertices = 0x80E8,
+        MaxElementsIndices  = 0x80E9,
     }
 
     internal enum StringName
@@ -770,6 +772,18 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [MonoNativeFunctionWrapper]
         internal delegate void DrawElementsBaseVertexDelegate(GLPrimitiveType primitiveType, int count, DrawElementsType elementType, IntPtr offset, int baseVertex);
         internal DrawElementsBaseVertexDelegate DrawElementsBaseVertex; // OpenGL 3.2, GLES 3.2, or GL_ARB_draw_elements_base_vertex
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal delegate void DrawRangeElementsDelegate(GLPrimitiveType primitiveType, int start, int end, int count, DrawElementsType elementType, IntPtr offset);
+        internal DrawRangeElementsDelegate DrawRangeElements; // OpenGL 2.0, GLES 3.0
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal delegate void DrawRangeElementsBaseVertexDelegate(GLPrimitiveType primitiveType, int start, int end, int count, DrawElementsType elementType, IntPtr offset, int baseVertex);
+        internal DrawRangeElementsBaseVertexDelegate DrawRangeElementsBaseVertex; // OpenGL 3.2, GLES 3.2, or GL_ARB_draw_elements_base_vertex
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1391,6 +1405,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             DrawElements = LoadFunctionOrNull<DrawElementsDelegate>("glDrawElements");
             DrawArrays = LoadFunctionOrNull<DrawArraysDelegate>("glDrawArrays");
 
+            DrawRangeElements = LoadFunctionOrNull<DrawRangeElementsDelegate>("glDrawRangeElements");
 
             // uniforms OpenGL Version >= 2.0
             Uniform1i = LoadFunctionOrNull<Uniform1iDelegate>("glUniform1i");
@@ -1615,6 +1630,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
             if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
                 DrawElementsBaseVertex = LoadFunctionOrNull<DrawElementsBaseVertexDelegate>("glDrawElementsBaseVertex");
+            if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
+                DrawRangeElementsBaseVertex = LoadFunctionOrNull<DrawRangeElementsBaseVertexDelegate>("glDrawRangeElementsBaseVertex");
         }
 
 
