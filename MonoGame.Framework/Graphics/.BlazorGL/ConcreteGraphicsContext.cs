@@ -238,10 +238,50 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformApplyTexturesAndSamplers(ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // Apply Textures
-            ConcreteTextureCollection.PlatformApplyTextures(this, ctextureCollection);
+            PlatformApplyTextures(this, ctextureCollection);
 
             // Apply Samplers
             PlatformApplySamplers(this, csamplerStateCollection);
+        }
+
+        private static void PlatformApplyTextures(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection)
+        {
+            var GL = cgraphicsContext.GL;
+
+            for (int i = 0; ctextureCollection.InternalDirty != 0 && i < ctextureCollection.Length; i++)
+            {
+                uint mask = ((uint)1) << i;
+                if ((ctextureCollection.InternalDirty & mask) != 0)
+                {
+                    Texture texture = ctextureCollection[i];
+
+                    // Clear the previous binding if the 
+                    // target is different from the new one.
+                    if (ctextureCollection._targets[i] != 0 && (texture == null || ctextureCollection._targets[i] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                    {
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
+                        GL.CheckGLError();
+                        GL.BindTexture(ctextureCollection._targets[i], null);
+                        ctextureCollection._targets[i] = 0;
+                        GL.CheckGLError();
+                    }
+
+                    if (texture != null)
+                    {
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
+                        GL.CheckGLError();
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                        ctextureCollection._targets[i] = ctexture._glTarget;
+                        GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
+                        GL.CheckGLError();
+
+                        cgraphicsContext.Metrics_AddTextureCount();
+                    }
+
+                    // clear texture bit
+                    ctextureCollection.InternalDirty &= ~mask;
+                }
+            }
         }
 
         private static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection)

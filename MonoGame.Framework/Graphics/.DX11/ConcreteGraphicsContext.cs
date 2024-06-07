@@ -284,10 +284,38 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformApplyTexturesAndSamplers(D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // Apply Textures
-            ConcreteTextureCollection.PlatformApplyTextures(this, ctextureCollection, dxShaderStage);
+            PlatformApplyTextures(this, ctextureCollection, dxShaderStage);
 
             // Apply Samplers
             PlatformApplySamplers(this, csamplerStateCollection, dxShaderStage);
+        }
+
+        private static void PlatformApplyTextures(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection, D3D11.CommonShaderStage shaderStage)
+        {
+            // NOTE: We make the assumption here that the caller has
+            // locked the d3dContext for us to use.
+
+            for (int i = 0; ctextureCollection.InternalDirty != 0 && i < ctextureCollection.Length; i++)
+            {
+                uint mask = ((uint)1) << i;
+                if ((ctextureCollection.InternalDirty & mask) != 0)
+                {
+                    Texture texture = ctextureCollection[i];
+
+                    if (texture != null && !texture.IsDisposed)
+                    {
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                        shaderStage.SetShaderResource(i, ctexture.GetShaderResourceView());
+
+                        cgraphicsContext.Metrics_AddTextureCount();
+                    }
+                    else
+                        shaderStage.SetShaderResource(i, null);
+
+                    // clear texture bit
+                    ctextureCollection.InternalDirty &= ~mask;
+                }
+            }
         }
 
         private static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection, D3D11.CommonShaderStage shaderStage)
@@ -318,7 +346,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
         }
-
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
         {
