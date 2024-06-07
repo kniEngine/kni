@@ -30,11 +30,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        internal void PlatformApplyState(GraphicsContext context, TextureTarget target, bool useMipmaps = false)
+        internal void PlatformApplyState(ConcreteGraphicsContextGL cgraphicsContext, TextureTarget target, bool useMipmaps = false)
         {
-            Debug.Assert(GraphicsDevice == ((IPlatformGraphicsContext)context).DeviceStrategy.Device, "The state was created for a different device!");
+            Debug.Assert(GraphicsDevice == ((IPlatformGraphicsContext)cgraphicsContext.Context).DeviceStrategy.Device, "The state was created for a different device!");
 
-            var GL = ((IPlatformGraphicsContext)context).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var GL = cgraphicsContext.GL;
 
             switch (Filter)
             {

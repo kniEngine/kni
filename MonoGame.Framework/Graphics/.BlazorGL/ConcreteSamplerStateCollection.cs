@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
 
-                        csamplerState.PlatformApplyState(cgraphicsContext.Context, ctexture._glTarget, ctexture.LevelCount > 1);
+                        csamplerState.PlatformApplyState(cgraphicsContext, ctexture._glTarget, ctexture.LevelCount > 1);
                         ctexture._glLastSamplerState = sampler;
                     }
                 }
