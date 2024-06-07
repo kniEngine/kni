@@ -279,6 +279,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void FlushVertexArray(int baseQuad, int spriteCount, Effect effect, Texture texture)
         {
             int baseVertex = baseQuad * 4;
+            int minVertexIndex = baseQuad * 4;
             int numVertices = spriteCount * 4;
             int primitiveCount = spriteCount * 2;
 
@@ -288,7 +289,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).SB_DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
-                    baseVertex, //0, numVertices,
+                    baseVertex,
+                    //minVertexIndex, numVertices,
                     0, primitiveCount);
             }
             else // If the effect is not null, then apply each pass and render the geometry
@@ -304,7 +306,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).SB_DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
-                        baseVertex, //0, numVertices,
+                        baseVertex,
+                        //minVertexIndex, numVertices,
                         0, primitiveCount);
                 }
             }
