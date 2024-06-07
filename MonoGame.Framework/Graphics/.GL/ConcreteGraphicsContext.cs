@@ -353,14 +353,16 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         private unsafe void ActivateShaderProgram(ConcreteVertexShader cvertexShader, ConcretePixelShader cpixelShader)
         {
+            ConcreteGraphicsDevice deviceStrategy = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>();
+
             // Lookup the shader program.
             ShaderProgram shaderProgram;
             int shaderProgramHash = (cvertexShader.HashKey ^ cpixelShader.HashKey);
-            if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
+            if (!deviceStrategy.ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
                 shaderProgram = CreateProgram(cvertexShader, cpixelShader);
-               ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.Add(shaderProgramHash, shaderProgram);
+                deviceStrategy.ProgramCache.Add(shaderProgramHash, shaderProgram);
             }
 
             if (shaderProgram.Program == -1)
