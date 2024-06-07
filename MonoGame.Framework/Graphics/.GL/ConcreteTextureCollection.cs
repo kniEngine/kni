@@ -39,36 +39,36 @@ namespace Microsoft.Xna.Platform.Graphics
             for (int i = 0; ctextureCollection._dirty != 0 && i < ctextureCollection._textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
-                if ((ctextureCollection._dirty & mask) == 0)
-                    continue;
-
-                Texture texture = ctextureCollection._textures[i];
-
-                // Clear the previous binding if the 
-                // target is different from the new one.
-                if (ctextureCollection._targets[i] != 0 && (texture == null || ctextureCollection._targets[i] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                if ((ctextureCollection._dirty & mask) != 0)
                 {
-                    GL.ActiveTexture(TextureUnit.Texture0 + i);
-                    GL.CheckGLError();
-                    GL.BindTexture(ctextureCollection._targets[i], 0);
-                    ctextureCollection._targets[i] = 0;
-                    GL.CheckGLError();
+                    Texture texture = ctextureCollection._textures[i];
+
+                    // Clear the previous binding if the 
+                    // target is different from the new one.
+                    if (ctextureCollection._targets[i] != 0 && (texture == null || ctextureCollection._targets[i] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                    {
+                        GL.ActiveTexture(TextureUnit.Texture0 + i);
+                        GL.CheckGLError();
+                        GL.BindTexture(ctextureCollection._targets[i], 0);
+                        ctextureCollection._targets[i] = 0;
+                        GL.CheckGLError();
+                    }
+
+                    if (texture != null)
+                    {
+                        GL.ActiveTexture(TextureUnit.Texture0 + i);
+                        GL.CheckGLError();
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                        ctextureCollection._targets[i] = ctexture._glTarget;
+                        GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
+                        GL.CheckGLError();
+
+                        cgraphicsContext.Metrics_AddTextureCount();
+                    }
+
+                    // clear texture bit
+                    ctextureCollection._dirty &= ~mask;
                 }
-
-                if (texture != null)
-                {
-                    GL.ActiveTexture(TextureUnit.Texture0 + i);
-                    GL.CheckGLError();
-                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                    ctextureCollection._targets[i] = ctexture._glTarget;
-                    GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
-                    GL.CheckGLError();
-
-                    cgraphicsContext.Metrics_AddTextureCount();
-                }
-
-                // clear texture bit
-                ctextureCollection._dirty &= ~mask;
             }
         }
 

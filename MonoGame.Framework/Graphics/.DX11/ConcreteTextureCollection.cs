@@ -54,29 +54,29 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformApplyTextures(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection, D3D11.CommonShaderStage shaderStage)
         {
+            // NOTE: We make the assumption here that the caller has
+            // locked the d3dContext for us to use.
+
             for (int i = 0; ctextureCollection._dirty != 0 && i < ctextureCollection._textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
-                if ((ctextureCollection._dirty & mask) == 0)
-                    continue;
-
-                // NOTE: We make the assumption here that the caller has
-                // locked the d3dContext for us to use.
-
-                Texture texture = ctextureCollection._textures[i];
-
-                if (texture != null && !texture.IsDisposed)
+                if ((ctextureCollection._dirty & mask) != 0)
                 {
-                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                    shaderStage.SetShaderResource(i, ctexture.GetShaderResourceView());
+                    Texture texture = ctextureCollection._textures[i];
 
-                    cgraphicsContext.Metrics_AddTextureCount();
+                    if (texture != null && !texture.IsDisposed)
+                    {
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                        shaderStage.SetShaderResource(i, ctexture.GetShaderResourceView());
+
+                        cgraphicsContext.Metrics_AddTextureCount();
+                    }
+                    else
+                        shaderStage.SetShaderResource(i, null);
+
+                    // clear texture bit
+                    ctextureCollection._dirty &= ~mask;
                 }
-                else
-                    shaderStage.SetShaderResource(i, null);
-
-                // clear texture bit
-                ctextureCollection._dirty &= ~mask;
             }
         }
 
