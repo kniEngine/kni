@@ -241,7 +241,43 @@ namespace Microsoft.Xna.Platform.Graphics
             ConcreteTextureCollection.PlatformApplyTextures(this, ctextureCollection);
 
             // Apply Samplers
-            ConcreteSamplerStateCollection.PlatformApplySamplers(this, csamplerStateCollection);
+            PlatformApplySamplers(this, csamplerStateCollection);
+        }
+
+        private static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection)
+        {
+            var GL = cgraphicsContext.GL;
+
+            for (int i = 0; i < csamplerStateCollection.InternalActualSamplers.Length; i++)
+            {
+                SamplerState sampler = csamplerStateCollection.InternalActualSamplers[i];
+                Texture texture = cgraphicsContext.Textures[i];
+
+                if (sampler != null && texture != null)
+                {
+                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+
+                    if (sampler != ctexture._glLastSamplerState)
+                    {
+                        // TODO: Avoid doing this redundantly (see TextureCollection.Apply())
+                        // However, I suspect that rendering from the same texture with different sampling modes
+                        // is a relatively rare occurrence...
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
+                        GL.CheckGLError();
+
+                        // NOTE: We don't have to bind the texture here because it is already bound in
+                        // TextureCollection.Apply(). This, of course, assumes that Apply() is called
+                        // before this method is called. If that ever changes this code will misbehave.
+                        // GL.BindTexture(ctexture._glTarget, texture._glTexture);
+                        // GL.CheckGLError();
+
+                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
+
+                        csamplerState.PlatformApplyState(cgraphicsContext, ctexture._glTarget, ctexture.LevelCount > 1);
+                        ctexture._glLastSamplerState = sampler;
+                    }
+                }
+            }
         }
 
         /// <summary>

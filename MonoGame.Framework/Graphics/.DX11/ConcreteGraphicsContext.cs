@@ -287,8 +287,38 @@ namespace Microsoft.Xna.Platform.Graphics
             ConcreteTextureCollection.PlatformApplyTextures(this, ctextureCollection, dxShaderStage);
 
             // Apply Samplers
-            ConcreteSamplerStateCollection.PlatformApplySamplers(this, csamplerStateCollection, dxShaderStage);
+            PlatformApplySamplers(this, csamplerStateCollection, dxShaderStage);
         }
+
+        private static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection, D3D11.CommonShaderStage shaderStage)
+        {
+            // NOTE: We make the assumption here that the caller has
+            // locked the d3dContext for us to use.
+
+            for (int i = 0; csamplerStateCollection.InternalD3dDirty != 0 && i < csamplerStateCollection.InternalActualSamplers.Length; i++)
+            {
+                uint mask = ((uint)1) << i;
+                if ((csamplerStateCollection.InternalD3dDirty & mask) != 0)
+                {
+                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[i];
+                    D3D11.SamplerState state = null;
+                    if (sampler != null)
+                    {
+                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
+
+                        state = csamplerState.GetDxState();
+
+                        Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)cgraphicsContext.Context).DeviceStrategy.Device, "The state was created for a different device!");
+                    }
+
+                    shaderStage.SetSampler(i, state);
+
+                    // clear sampler bit
+                    csamplerStateCollection.InternalD3dDirty &= ~mask;
+                }
+            }
+        }
+
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)
         {
