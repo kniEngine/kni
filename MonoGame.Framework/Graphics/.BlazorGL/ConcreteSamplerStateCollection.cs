@@ -45,22 +45,29 @@ namespace Microsoft.Xna.Platform.Graphics
                 SamplerState sampler = csamplerStateCollection._actualSamplers[i];
                 Texture texture = cgraphicsContext.Textures[i];
 
-                if (sampler != null && texture != null && sampler != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glLastSamplerState)
+                if (sampler != null && texture != null)
                 {
-                    // TODO: Avoid doing this redundantly (see TextureCollection.Apply())
-                    // However, I suspect that rendering from the same texture with different sampling modes
-                    // is a relatively rare occurrence...
-                    GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
-                    GL.CheckGLError();
+                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
 
-                    // NOTE: We don't have to bind the texture here because it is already bound in
-                    // TextureCollection.Apply(). This, of course, assumes that Apply() is called
-                    // before this method is called. If that ever changes this code will misbehave.
-                    // GL.BindTexture(texture._glTarget, texture._glTexture);
-                    // GL.CheckGLError();
+                    if (sampler != ctexture._glLastSamplerState)
+                    {
+                        // TODO: Avoid doing this redundantly (see TextureCollection.Apply())
+                        // However, I suspect that rendering from the same texture with different sampling modes
+                        // is a relatively rare occurrence...
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
+                        GL.CheckGLError();
 
-                    ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>().PlatformApplyState(cgraphicsContext.Context, ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget, texture.LevelCount > 1);
-                    ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glLastSamplerState = sampler;
+                        // NOTE: We don't have to bind the texture here because it is already bound in
+                        // TextureCollection.Apply(). This, of course, assumes that Apply() is called
+                        // before this method is called. If that ever changes this code will misbehave.
+                        // GL.BindTexture(ctexture._glTarget, texture._glTexture);
+                        // GL.CheckGLError();
+
+                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
+
+                        csamplerState.PlatformApplyState(cgraphicsContext.Context, ctexture._glTarget, ctexture.LevelCount > 1);
+                        ctexture._glLastSamplerState = sampler;
+                    }
                 }
             }
         }
