@@ -418,7 +418,18 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
             }
 
-            cpixelShader.ApplySamplerTextureUnits(this, program);
+            // Apply Pixel Sampler TextureUnits
+            // Assign the texture unit index to the sampler uniforms.
+            foreach (SamplerInfo sampler in cpixelShader.Samplers)
+            {
+                WebGLUniformLocation loc = GL.GetUniformLocation(program, sampler.GLsamplerName);
+                GL.CheckGLError();
+                if (loc != null)
+                {
+                    GL.Uniform1i(loc, sampler.textureSlot);
+                    GL.CheckGLError();
+                }
+            }
 
             bool linkStatus;
             linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
