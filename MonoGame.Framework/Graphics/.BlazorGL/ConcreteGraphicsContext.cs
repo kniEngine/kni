@@ -320,7 +320,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
-                shaderProgram = CreateProgram(this.VertexShader, this.PixelShader);
+                shaderProgram = CreateProgram(cvertexShader, cpixelShader);
                ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.Add(shaderProgramHash, shaderProgram);
             }
 
@@ -390,16 +390,16 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
         }
 
-        private ShaderProgram CreateProgram(VertexShader vertexShader, PixelShader pixelShader)
+        private ShaderProgram CreateProgram(ConcreteVertexShader cvertexShader, ConcretePixelShader cpixelShader)
         {
             WebGLProgram program = GL.CreateProgram();
             GL.CheckGLError();
 
-            WebGLShader vertexShaderHandle = ((IPlatformShader)vertexShader).Strategy.ToConcrete<ConcreteVertexShader>().ShaderHandle;
+            WebGLShader vertexShaderHandle = cvertexShader.ShaderHandle;
             GL.AttachShader(program, vertexShaderHandle);
             GL.CheckGLError();
 
-            WebGLShader pixelShaderHandle = ((IPlatformShader)pixelShader).Strategy.ToConcrete<ConcretePixelShader>().ShaderHandle;
+            WebGLShader pixelShaderHandle = cpixelShader.ShaderHandle;
             GL.AttachShader(program, pixelShaderHandle);
             GL.CheckGLError();
 
@@ -411,9 +411,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.UseProgram(program);
             GL.CheckGLError();
 
-            ((IPlatformShader)vertexShader).Strategy.ToConcrete<ConcreteVertexShader>().GetVertexAttributeLocations(this, program);
+            cvertexShader.GetVertexAttributeLocations(this, program);
 
-            ((IPlatformShader)pixelShader).Strategy.ToConcrete<ConcretePixelShader>().ApplySamplerTextureUnits(this, program);
+            cpixelShader.ApplySamplerTextureUnits(this, program);
 
             bool linkStatus;
             linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
