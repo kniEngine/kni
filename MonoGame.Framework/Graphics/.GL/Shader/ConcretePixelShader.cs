@@ -23,23 +23,6 @@ namespace Microsoft.Xna.Platform.Graphics
             base.CreateShader(contextStrategy, ShaderType.FragmentShader, shaderBytecode);
         }
 
-        internal void ApplySamplerTextureUnits(GraphicsContextStrategy contextStrategy, int program)
-        {
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            // Assign the texture unit index to the sampler uniforms.
-            foreach (SamplerInfo sampler in Samplers)
-            {
-                int loc = GL.GetUniformLocation(program, sampler.GLsamplerName);
-                GL.CheckGLError();
-                if (loc != -1)
-                {
-                    GL.Uniform1(loc, sampler.textureSlot);
-                    GL.CheckGLError();
-                }
-            }
-        }
-
         protected override void PlatformGraphicsContextLost()
         {
 

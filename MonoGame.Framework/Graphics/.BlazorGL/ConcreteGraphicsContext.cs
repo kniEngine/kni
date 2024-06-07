@@ -202,9 +202,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyShaders()
         {
+            ConcreteVertexShader cvertexShader = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
+            ConcretePixelShader  cpixelShader  = ((IPlatformShader)this.PixelShader).Strategy.ToConcrete<ConcretePixelShader>();
+
             if (_vertexShaderDirty || _pixelShaderDirty)
             {
-                ActivateShaderProgram();
+                ActivateShaderProgram(cvertexShader, cpixelShader);
 
                 if (_vertexShaderDirty)
                 {
@@ -226,26 +229,98 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
 
 
-            // Apply Shader Buffers
-            ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
-            ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
-            ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
-            ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
+            // Apply Shader Texture and Samplers
+            PlatformApplyTexturesAndSamplers(cvertexShader,
+                ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
+                ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+            PlatformApplyTexturesAndSamplers(cpixelShader,
+                ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
+                ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+        }
+
+        private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
+        {
+            // Apply Textures
+            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < ctextureCollection.Length; slot++)
+            {
+                uint mask = ((uint)1) << slot;
+                if ((ctextureCollection.InternalDirty & mask) != 0)
+                {
+                    Texture texture = ctextureCollection[slot];
+
+                    // Clear the previous binding if the target is different from the new one.
+                    if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                    {
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                        GL.CheckGLError();
+                        GL.BindTexture(ctextureCollection._targets[slot], null);
+                        ctextureCollection._targets[slot] = 0;
+                        GL.CheckGLError();
+                    }
+
+                    if (texture != null)
+                    {
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                        GL.CheckGLError();
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                        ctextureCollection._targets[slot] = ctexture._glTarget;
+                        GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
+                        GL.CheckGLError();
+
+                        this.Metrics_AddTextureCount();
+                    }
+
+                    // clear texture bit
+                    ctextureCollection.InternalDirty &= ~mask;
+                }
+            }
+
+            // Apply Samplers
+            for (int slot = 0; slot < csamplerStateCollection.InternalActualSamplers.Length; slot++)
+            {
+                SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
+                Texture texture = this.Textures[slot];
+
+                if (sampler != null && texture != null)
+                {
+                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+
+                    if (sampler != ctexture._glLastSamplerState)
+                    {
+                        // TODO: Avoid doing this redundantly.
+                        //       Merge the two loops 'Apply Textures' and 'Apply Samplers'.
+                        //       Use information from 'cshader.Samplers' to find active samplers.
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                        GL.CheckGLError();
+
+                        // NOTE: We don't have to bind the texture here because it is already bound in the loop above.
+                        // GL.BindTexture(ctexture._glTarget, texture._glTexture);
+                        // GL.CheckGLError();
+
+                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
+
+                        csamplerState.PlatformApplyState(this, ctexture._glTarget, ctexture.LevelCount > 1);
+                        ctexture._glLastSamplerState = sampler;
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// Activates the Current Vertex/Pixel shader pair into a program.         
         /// </summary>
-        private unsafe void ActivateShaderProgram()
+        private unsafe void ActivateShaderProgram(ConcreteVertexShader cvertexShader, ConcretePixelShader cpixelShader)
         {
+            ConcreteGraphicsDevice deviceStrategy = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>();
+
             // Lookup the shader program.
             ShaderProgram shaderProgram;
-            int shaderProgramHash = (((IPlatformShader)this.VertexShader).Strategy.HashKey ^ ((IPlatformShader)this.PixelShader).Strategy.HashKey);
-            if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
+            int shaderProgramHash = (cvertexShader.HashKey ^ cpixelShader.HashKey);
+            if (!deviceStrategy.ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
-                shaderProgram = CreateProgram(this.VertexShader, this.PixelShader);
-               ((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().ProgramCache.Add(shaderProgramHash, shaderProgram);
+                shaderProgram = CreateProgram(cvertexShader, cpixelShader);
+                deviceStrategy.ProgramCache.Add(shaderProgramHash, shaderProgram);
             }
 
             if (shaderProgram.Program == null)
@@ -314,16 +389,16 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
         }
 
-        private ShaderProgram CreateProgram(VertexShader vertexShader, PixelShader pixelShader)
+        private ShaderProgram CreateProgram(ConcreteVertexShader cvertexShader, ConcretePixelShader cpixelShader)
         {
             WebGLProgram program = GL.CreateProgram();
             GL.CheckGLError();
 
-            WebGLShader vertexShaderHandle = ((IPlatformShader)vertexShader).Strategy.ToConcrete<ConcreteVertexShader>().ShaderHandle;
+            WebGLShader vertexShaderHandle = cvertexShader.ShaderHandle;
             GL.AttachShader(program, vertexShaderHandle);
             GL.CheckGLError();
 
-            WebGLShader pixelShaderHandle = ((IPlatformShader)pixelShader).Strategy.ToConcrete<ConcretePixelShader>().ShaderHandle;
+            WebGLShader pixelShaderHandle = cpixelShader.ShaderHandle;
             GL.AttachShader(program, pixelShaderHandle);
             GL.CheckGLError();
 
@@ -335,9 +410,26 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.UseProgram(program);
             GL.CheckGLError();
 
-            ((IPlatformShader)vertexShader).Strategy.ToConcrete<ConcreteVertexShader>().GetVertexAttributeLocations(this, program);
+            // Get Vertex AttributeLocations
+            for (int i = 0; i < cvertexShader.Attributes.Length; i++)
+            {
+                int attribloc = GL.GetAttribLocation(program, cvertexShader.Attributes[i].name);
+                GL.CheckGLError();
+                cvertexShader.Attributes[i].location = attribloc;
+            }
 
-            ((IPlatformShader)pixelShader).Strategy.ToConcrete<ConcretePixelShader>().ApplySamplerTextureUnits(this, program);
+            // Apply Pixel Sampler TextureUnits
+            // Assign the texture unit index to the sampler uniforms.
+            for (int i = 0; i < cpixelShader.Samplers.Length; i++)
+            {
+                WebGLUniformLocation loc = GL.GetUniformLocation(program, cpixelShader.Samplers[i].GLsamplerName);
+                GL.CheckGLError();
+                if (loc != null)
+                {
+                    GL.Uniform1i(loc, cpixelShader.Samplers[i].textureSlot);
+                    GL.CheckGLError();
+                }
+            }
 
             bool linkStatus;
             linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
@@ -352,6 +444,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 //GL.DetachShader(program, vertexShaderHandle);
                 //GL.DetachShader(program, pixelShaderHandle);
                 program.Dispose();
+
                 throw new InvalidOperationException("Unable to link effect program");
             }
         }
