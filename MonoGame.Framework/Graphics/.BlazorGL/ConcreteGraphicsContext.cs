@@ -274,17 +274,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Apply Samplers
-            PlatformApplySamplers(this, csamplerStateCollection);
-        }
-
-        private static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection)
-        {
-            var GL = cgraphicsContext.GL;
-
             for (int i = 0; i < csamplerStateCollection.InternalActualSamplers.Length; i++)
             {
                 SamplerState sampler = csamplerStateCollection.InternalActualSamplers[i];
-                Texture texture = cgraphicsContext.Textures[i];
+                Texture texture = this.Textures[i];
 
                 if (sampler != null && texture != null)
                 {
@@ -306,7 +299,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
 
-                        csamplerState.PlatformApplyState(cgraphicsContext, ctexture._glTarget, ctexture.LevelCount > 1);
+                        csamplerState.PlatformApplyState(this, ctexture._glTarget, ctexture.LevelCount > 1);
                         ctexture._glLastSamplerState = sampler;
                     }
                 }

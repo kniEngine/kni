@@ -309,14 +309,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Apply Samplers
-            PlatformApplySamplers(this, csamplerStateCollection, dxShaderStage);
-        }
-
-        private static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection, D3D11.CommonShaderStage shaderStage)
-        {
-            // NOTE: We make the assumption here that the caller has
-            // locked the d3dContext for us to use.
-
             for (int i = 0; csamplerStateCollection.InternalD3dDirty != 0 && i < csamplerStateCollection.InternalActualSamplers.Length; i++)
             {
                 uint mask = ((uint)1) << i;
@@ -330,10 +322,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         state = csamplerState.GetDxState();
 
-                        Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)cgraphicsContext.Context).DeviceStrategy.Device, "The state was created for a different device!");
+                        Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
                     }
 
-                    shaderStage.SetSampler(i, state);
+                    dxShaderStage.SetSampler(i, state);
 
                     // clear sampler bit
                     csamplerStateCollection.InternalD3dDirty &= ~mask;
