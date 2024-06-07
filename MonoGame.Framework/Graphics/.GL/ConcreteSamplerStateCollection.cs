@@ -15,6 +15,9 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteSamplerStateCollection : SamplerStateCollectionStrategy
     {
 
+        internal SamplerState[] InternalActualSamplers { get { return base._actualSamplers; } }
+
+
         internal ConcreteSamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
             : base(contextStrategy, capacity)
         {
@@ -44,9 +47,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = cgraphicsContext.GL;
 
-            for (int i = 0; i < csamplerStateCollection._actualSamplers.Length; i++)
+            for (int i = 0; i < csamplerStateCollection.InternalActualSamplers.Length; i++)
             {
-                SamplerState sampler = csamplerStateCollection._actualSamplers[i];
+                SamplerState sampler = csamplerStateCollection.InternalActualSamplers[i];
                 Texture texture = cgraphicsContext.Textures[i];
 
                 if (sampler != null && texture != null)

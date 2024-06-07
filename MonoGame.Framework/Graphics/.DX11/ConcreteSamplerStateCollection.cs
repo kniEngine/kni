@@ -17,6 +17,9 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private uint _d3dDirty;
 
+        internal SamplerState[] InternalActualSamplers { get { return base._actualSamplers; } }
+
+
         internal ConcreteSamplerStateCollection(GraphicsContextStrategy contextStrategy, int capacity)
             : base(contextStrategy, capacity)
         {
@@ -51,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection, D3D11.CommonShaderStage shaderStage)
         {
-            for (int i = 0; csamplerStateCollection._d3dDirty != 0 && i < csamplerStateCollection._actualSamplers.Length; i++)
+            for (int i = 0; csamplerStateCollection._d3dDirty != 0 && i < csamplerStateCollection.InternalActualSamplers.Length; i++)
             {
                 uint mask = ((uint)1) << i;
                 if ((csamplerStateCollection._d3dDirty & mask) == 0)
@@ -60,7 +63,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
 
-                SamplerState sampler = csamplerStateCollection._actualSamplers[i];
+                SamplerState sampler = csamplerStateCollection.InternalActualSamplers[i];
                 D3D11.SamplerState state = null;
                 if (sampler != null)
                 {
