@@ -284,7 +284,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformApplyTexturesAndSamplers(D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // Apply Textures
-            ctextureCollection.PlatformApply(dxShaderStage);
+            ConcreteTextureCollection.PlatformApply(this, ctextureCollection, dxShaderStage);
 
             // Apply Samplers
             csamplerStateCollection.PlatformApply(dxShaderStage);

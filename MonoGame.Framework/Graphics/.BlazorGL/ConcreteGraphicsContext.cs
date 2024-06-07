@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformApplyTexturesAndSamplers(ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             // Apply Textures
-            ctextureCollection.PlatformApply();
+            ConcreteTextureCollection.PlatformApply(this, ctextureCollection);
 
             // Apply Samplers
             csamplerStateCollection.PlatformApply();

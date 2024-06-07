@@ -28,26 +28,26 @@ namespace Microsoft.Xna.Platform.Graphics
                 _targets[i] = 0;
         }
 
-        internal void PlatformApply()
+        internal static void PlatformApply(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection)
         {
-            var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var GL = cgraphicsContext.GL;
 
-            for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
+            for (int i = 0; ctextureCollection._dirty != 0 && i < ctextureCollection._textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
-                if ((_dirty & mask) == 0)
+                if ((ctextureCollection._dirty & mask) == 0)
                     continue;
 
-                Texture texture = _textures[i];
+                Texture texture = ctextureCollection._textures[i];
 
                 // Clear the previous binding if the 
                 // target is different from the new one.
-                if (_targets[i] != 0 && (texture == null || _targets[i] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                if (ctextureCollection._targets[i] != 0 && (texture == null || ctextureCollection._targets[i] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
                 {
                     GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
                     GL.CheckGLError();
-                    GL.BindTexture(_targets[i], null);
-                    _targets[i] = 0;
+                    GL.BindTexture(ctextureCollection._targets[i], null);
+                    ctextureCollection._targets[i] = 0;
                     GL.CheckGLError();
                 }
 
@@ -56,15 +56,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + i);
                     GL.CheckGLError();
                     ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                    _targets[i] = ctexture._glTarget;
+                    ctextureCollection._targets[i] = ctexture._glTarget;
                     GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
                     GL.CheckGLError();
 
-                    _contextStrategy.Metrics_AddTextureCount();
+                    cgraphicsContext.Metrics_AddTextureCount();
                 }
 
                 // clear texture bit
-                _dirty &= ~mask;
+                ctextureCollection._dirty &= ~mask;
             }
         }
 

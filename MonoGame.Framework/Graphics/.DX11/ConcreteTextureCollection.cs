@@ -52,31 +52,31 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal void PlatformApply(D3D11.CommonShaderStage shaderStage)
+        internal static void PlatformApply(ConcreteGraphicsContext cgraphicsContext, ConcreteTextureCollection ctextureCollection, D3D11.CommonShaderStage shaderStage)
         {
-            for (int i = 0; _dirty != 0 && i < _textures.Length; i++)
+            for (int i = 0; ctextureCollection._dirty != 0 && i < ctextureCollection._textures.Length; i++)
             {
                 uint mask = ((uint)1) << i;
-                if ((_dirty & mask) == 0)
+                if ((ctextureCollection._dirty & mask) == 0)
                     continue;
 
                 // NOTE: We make the assumption here that the caller has
                 // locked the d3dContext for us to use.
 
-                Texture texture = _textures[i];
+                Texture texture = ctextureCollection._textures[i];
 
                 if (texture != null && !texture.IsDisposed)
                 {
                     ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
                     shaderStage.SetShaderResource(i, ctexture.GetShaderResourceView());
 
-                    _contextStrategy.Metrics_AddTextureCount();
+                    cgraphicsContext.Metrics_AddTextureCount();
                 }
                 else
                     shaderStage.SetShaderResource(i, null);
 
                 // clear texture bit
-                _dirty &= ~mask;
+                ctextureCollection._dirty &= ~mask;
             }
         }
 
