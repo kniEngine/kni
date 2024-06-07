@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Platform.Graphics
             ConcreteTextureCollection.PlatformApplyTextures(this, ctextureCollection);
 
             // Apply Samplers
-            ConcreteSamplerStateCollection.PlatformApply(this, csamplerStateCollection);
+            ConcreteSamplerStateCollection.PlatformApplySamplers(this, csamplerStateCollection);
         }
 
         /// <summary>

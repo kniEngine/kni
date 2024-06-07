@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Dirty();
         }
 
-        internal static void PlatformApply(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection)
+        internal static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             var GL = cgraphicsContext.GL;
 

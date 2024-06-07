@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 _d3dDirty |= (((uint)1) << i);
         }
 
-        internal static void PlatformApply(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection, D3D11.CommonShaderStage shaderStage)
+        internal static void PlatformApplySamplers(ConcreteGraphicsContext cgraphicsContext, ConcreteSamplerStateCollection csamplerStateCollection, D3D11.CommonShaderStage shaderStage)
         {
             for (int i = 0; csamplerStateCollection._d3dDirty != 0 && i < csamplerStateCollection._actualSamplers.Length; i++)
             {
