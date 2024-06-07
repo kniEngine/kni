@@ -272,11 +272,22 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, ((IPlatformShader)this.PixelShader).Strategy, this.D3dContext.PixelShader);
 
 
-            // Apply Shader Texture and Samplers
-            ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.VertexShader);
-            ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply(this.D3dContext.VertexShader);
-            ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply(this.D3dContext.PixelShader);
-            ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply(this.D3dContext.PixelShader);
+            // Apply Shader Texture and SamplersSamplers
+            PlatformApplyTexturesAndSamplers(this.D3dContext.VertexShader,
+                ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
+                ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+            PlatformApplyTexturesAndSamplers(this.D3dContext.PixelShader,
+                ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
+                ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+        }
+
+        private void PlatformApplyTexturesAndSamplers(D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
+        {
+            // Apply Textures
+            ctextureCollection.PlatformApply(dxShaderStage);
+
+            // Apply Samplers
+            csamplerStateCollection.PlatformApply(dxShaderStage);
         }
 
         private void PlatformApplyPrimitiveType(PrimitiveType primitiveType)

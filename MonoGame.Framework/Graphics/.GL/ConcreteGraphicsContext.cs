@@ -266,10 +266,21 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Shader Texture and Samplers
-            ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
-            ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
-            ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>().PlatformApply();
-            ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>().PlatformApply();
+            PlatformApplyTexturesAndSamplers(
+                ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
+                ((IPlatformSamplerStateCollection)this.VertexSamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+            PlatformApplyTexturesAndSamplers(
+                ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
+                ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+        }
+
+        private void PlatformApplyTexturesAndSamplers(ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
+        {
+            // Apply Textures
+            ctextureCollection.PlatformApply();
+
+            // Apply Samplers
+            csamplerStateCollection.PlatformApply();
         }
 
         /// <summary>
