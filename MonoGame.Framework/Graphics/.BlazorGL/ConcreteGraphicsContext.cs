@@ -252,11 +252,12 @@ namespace Microsoft.Xna.Platform.Graphics
                         ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
 
                         // Clear the previous binding if the target is different from the new one.
-                        if (ctextureCollection._targets[slot] != 0 && ctextureCollection._targets[slot] != ctexture._glTarget)
+                        WebGLTextureTarget prevTarget = ctextureCollection._targets[slot];
+                        if (prevTarget != 0 && prevTarget != ctexture._glTarget)
                         {
                             GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
                             GL.CheckGLError();
-                            GL.BindTexture(ctextureCollection._targets[slot], null);
+                            GL.BindTexture(prevTarget, null);
                             ctextureCollection._targets[slot] = 0;
                             GL.CheckGLError();
                         }
@@ -272,11 +273,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     else // (texture == null)
                     {
                         // Clear the previous binding if the target is different from the new one.
-                        if (ctextureCollection._targets[slot] != 0)
+                        WebGLTextureTarget prevTarget = ctextureCollection._targets[slot];
+                        if (prevTarget != 0)
                         {
                             GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
                             GL.CheckGLError();
-                            GL.BindTexture(ctextureCollection._targets[slot], null);
+                            GL.BindTexture(prevTarget, null);
                             ctextureCollection._targets[slot] = 0;
                             GL.CheckGLError();
                         }
