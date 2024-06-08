@@ -317,15 +317,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 uint mask = ((uint)1) << slot;
                 if ((csamplerStateCollection.InternalD3dDirty & mask) != 0)
                 {
-                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
                     D3D11.SamplerState state = null;
+
+                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
                     if (sampler != null)
                     {
+                        Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
+               
                         ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
 
                         state = csamplerState.GetDxState();
-
-                        Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
                     }
 
                     dxShaderStage.SetSampler(slot, state);

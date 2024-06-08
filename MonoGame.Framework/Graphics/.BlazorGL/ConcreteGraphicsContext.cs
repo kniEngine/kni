@@ -278,29 +278,31 @@ namespace Microsoft.Xna.Platform.Graphics
             // Apply Samplers
             for (int slot = 0; slot < csamplerStateCollection.InternalActualSamplers.Length; slot++)
             {
-                SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
                 Texture texture = ctextureCollection[slot];
-
-                if (sampler != null && texture != null)
+                if (texture != null)
                 {
-                    ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-
-                    if (sampler != ctexture._glLastSamplerState)
+                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
+                    if (sampler != null)
                     {
-                        // TODO: Avoid doing this redundantly.
-                        //       Merge the two loops 'Apply Textures' and 'Apply Samplers'.
-                        //       Use information from 'cshader.Samplers' to find active samplers.
-                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
-                        GL.CheckGLError();
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
 
-                        // NOTE: We don't have to bind the texture here because it is already bound in the loop above.
-                        // GL.BindTexture(ctexture._glTarget, texture._glTexture);
-                        // GL.CheckGLError();
+                        if (sampler != ctexture._glLastSamplerState)
+                        {
+                            // TODO: Avoid doing this redundantly.
+                            //       Merge the two loops 'Apply Textures' and 'Apply Samplers'.
+                            //       Use information from 'cshader.Samplers' to find active samplers.
+                            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                            GL.CheckGLError();
 
-                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
+                            // NOTE: We don't have to bind the texture here because it is already bound in the loop above.
+                            // GL.BindTexture(ctexture._glTarget, texture._glTexture);
+                            // GL.CheckGLError();
 
-                        csamplerState.PlatformApplyState(this, ctexture._glTarget, ctexture.LevelCount > 1);
-                        ctexture._glLastSamplerState = sampler;
+                            ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
+
+                            csamplerState.PlatformApplyState(this, ctexture._glTarget, ctexture.LevelCount > 1);
+                            ctexture._glLastSamplerState = sampler;
+                        }
                     }
                 }
             }
