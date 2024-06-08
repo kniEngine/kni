@@ -298,7 +298,6 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.CheckGLError();
                         }
 
-                        if (true)
                         {
                             GL.ActiveTexture(TextureUnit.Texture0 + slot);
                             GL.CheckGLError();
@@ -320,18 +319,6 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.BindTexture(ctextureCollection._targets[slot], 0);
                             ctextureCollection._targets[slot] = 0;
                             GL.CheckGLError();
-                        }
-
-                        if (false)
-                        {
-                            GL.ActiveTexture(TextureUnit.Texture0 + slot);
-                            GL.CheckGLError();
-                            ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                            ctextureCollection._targets[slot] = ctexture._glTarget;
-                            GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
-                            GL.CheckGLError();
-
-                            this.Metrics_AddTextureCount();
                         }
                     }
 
