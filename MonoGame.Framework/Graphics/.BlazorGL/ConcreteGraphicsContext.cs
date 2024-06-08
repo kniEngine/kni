@@ -261,15 +261,13 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.CheckGLError();
                         }
 
-                        {
-                            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
-                            GL.CheckGLError();
-                            ctextureCollection._targets[slot] = ctexture._glTarget;
-                            GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
-                            GL.CheckGLError();
+                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                        GL.CheckGLError();
+                        ctextureCollection._targets[slot] = ctexture._glTarget;
+                        GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
+                        GL.CheckGLError();
 
-                            this.Metrics_AddTextureCount();
-                        }
+                        this.Metrics_AddTextureCount();
                     }
                     else // (texture == null)
                     {
