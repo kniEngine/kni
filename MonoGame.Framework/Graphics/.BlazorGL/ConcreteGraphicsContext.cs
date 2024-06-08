@@ -247,27 +247,53 @@ namespace Microsoft.Xna.Platform.Graphics
                 if ((ctextureCollection.InternalDirty & mask) != 0)
                 {
                     Texture texture = ctextureCollection[slot];
-
-                    // Clear the previous binding if the target is different from the new one.
-                    if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
-                    {
-                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
-                        GL.CheckGLError();
-                        GL.BindTexture(ctextureCollection._targets[slot], null);
-                        ctextureCollection._targets[slot] = 0;
-                        GL.CheckGLError();
-                    }
-
                     if (texture != null)
                     {
-                        GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
-                        GL.CheckGLError();
-                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                        ctextureCollection._targets[slot] = ctexture._glTarget;
-                        GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
-                        GL.CheckGLError();
+                        // Clear the previous binding if the target is different from the new one.
+                        if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                        {
+                            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                            GL.CheckGLError();
+                            GL.BindTexture(ctextureCollection._targets[slot], null);
+                            ctextureCollection._targets[slot] = 0;
+                            GL.CheckGLError();
+                        }
 
-                        this.Metrics_AddTextureCount();
+                        if (texture != null)
+                        {
+                            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                            GL.CheckGLError();
+                            ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                            ctextureCollection._targets[slot] = ctexture._glTarget;
+                            GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
+                            GL.CheckGLError();
+
+                            this.Metrics_AddTextureCount();
+                        }
+                    }
+                    else // (texture == null)
+                    {
+                        // Clear the previous binding if the target is different from the new one.
+                        if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                        {
+                            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                            GL.CheckGLError();
+                            GL.BindTexture(ctextureCollection._targets[slot], null);
+                            ctextureCollection._targets[slot] = 0;
+                            GL.CheckGLError();
+                        }
+
+                        if (texture != null)
+                        {
+                            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + slot);
+                            GL.CheckGLError();
+                            ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                            ctextureCollection._targets[slot] = ctexture._glTarget;
+                            GL.BindTexture(ctexture._glTarget, ctexture._glTexture);
+                            GL.CheckGLError();
+
+                            this.Metrics_AddTextureCount();
+                        }
                     }
 
                     // clear texture bit
