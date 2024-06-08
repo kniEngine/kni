@@ -289,7 +289,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (texture != null)
                     {
                         // Clear the previous binding if the target is different from the new one.
-                        if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                        if (ctextureCollection._targets[slot] != 0 && (false || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
                         {
                             GL.ActiveTexture(TextureUnit.Texture0 + slot);
                             GL.CheckGLError();
@@ -298,7 +298,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.CheckGLError();
                         }
 
-                        if (texture != null)
+                        if (true)
                         {
                             GL.ActiveTexture(TextureUnit.Texture0 + slot);
                             GL.CheckGLError();
@@ -313,7 +313,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     else // (texture == null)
                     {
                         // Clear the previous binding if the target is different from the new one.
-                        if (ctextureCollection._targets[slot] != 0 && (texture == null || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
+                        if (ctextureCollection._targets[slot] != 0 && (true || ctextureCollection._targets[slot] != ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTarget))
                         {
                             GL.ActiveTexture(TextureUnit.Texture0 + slot);
                             GL.CheckGLError();
@@ -322,7 +322,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.CheckGLError();
                         }
 
-                        if (texture != null)
+                        if (false)
                         {
                             GL.ActiveTexture(TextureUnit.Texture0 + slot);
                             GL.CheckGLError();
