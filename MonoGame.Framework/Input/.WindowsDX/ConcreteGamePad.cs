@@ -39,8 +39,8 @@ namespace Microsoft.Xna.Platform.Input
         };
 
         private readonly bool[] _connected = new bool[4];
-        private readonly long[] _timeout = new long[4];
-        private readonly long TimeoutTicks = TimeSpan.FromSeconds(1).Ticks;
+        private readonly DateTime[] _timeout = new DateTime[4];
+        private readonly TimeSpan TimeoutTicks = TimeSpan.FromSeconds(1);
 
         // XInput Xbox Controller dead zones
         // Dead zones are slightly different between left and right sticks, this may come from Microsoft usability tests
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && _timeout[index] > DateTime.UtcNow.Ticks)
+            if (!_connected[index] && _timeout[index] > DateTime.UtcNow)
             {
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.Input
             // timeout period has elapsed to avoid the overhead.
             if (!_connected[index])
             {
-                _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
+                _timeout[index] = DateTime.UtcNow + TimeoutTicks;
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
                         displayName: null,
@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
-                    _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
+                    _timeout[index] = DateTime.UtcNow + TimeoutTicks;
                     return base.CreateGamePadCapabilities(
                             gamePadType: GamePadType.Unknown,
                             displayName: null,
@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && _timeout[index] > DateTime.UtcNow.Ticks)
+            if (!_connected[index] && _timeout[index] > DateTime.UtcNow)
                 return GetDefaultState();
 
             int packetNumber = 0;
@@ -257,7 +257,7 @@ namespace Microsoft.Xna.Platform.Input
             // timeout period has elapsed to avoid the overhead.
             if (!_connected[index])
             {
-                _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
+                _timeout[index] = DateTime.UtcNow + TimeoutTicks;
                 return GetDefaultState();
             }
 
@@ -343,11 +343,11 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (!_connected[index])
             {
-                if (_timeout[index] > DateTime.UtcNow.Ticks)
+                if (_timeout[index] > DateTime.UtcNow)
                     return false;
                 if (!_controllers[index].IsConnected)
                 {
-                    _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
+                    _timeout[index] = DateTime.UtcNow + TimeoutTicks;
                     return false;
                 }
                 _connected[index] = true;
@@ -366,7 +366,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
-                    _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
+                    _timeout[index] = DateTime.UtcNow + TimeoutTicks;
                     return false;
                 }
                 throw;
