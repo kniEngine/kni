@@ -284,7 +284,41 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>Note that minVertexIndex and numVertices are unused in MonoGame and will be ignored.</remarks>
         public void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
         {
-            DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+            if (_strategy._vertexBuffers.Count == 0)
+                throw new InvalidOperationException("Vertex buffer must be set before calling DrawIndexedPrimitives.");
+
+            if (_strategy.Indices == null)
+                throw new InvalidOperationException("Index buffer must be set before calling DrawIndexedPrimitives.");
+
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach && primitiveCount > 65535)
+                throw new NotSupportedException("Reach profile supports a maximum of 65535 primitives per draw call.");
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.HiDef && primitiveCount > 1048575)
+                throw new NotSupportedException("HiDef profile supports a maximum of 1048575 primitives per draw call.");
+            if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            {
+                int texturesCount = ((IPlatformTextureCollection)_strategy.Textures).Strategy.Length;
+                for (int i = 0; i < texturesCount; i++)
+                {
+                    Texture2D tx2D = ((IPlatformTextureCollection)_strategy.Textures).Strategy[i] as Texture2D;
+                    if (tx2D != null)
+                    {
+                        if (_strategy.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        || _strategy.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
+                    }
+                }
+            }
+
+            if (primitiveCount <= 0)
+                throw new ArgumentOutOfRangeException("primitiveCount");
+
+            if (_strategy.VertexShader == null)
+                throw new InvalidOperationException("Vertex shader must be set before calling DrawIndexedPrimitives.");
+            if (_strategy.PixelShader == null)
+                throw new InvalidOperationException("Pixel shader must be set before calling DrawIndexedPrimitives.");
+
+
+            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
         }
 
         /// <summary>
