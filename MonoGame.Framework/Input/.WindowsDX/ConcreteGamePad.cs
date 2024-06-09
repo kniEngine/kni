@@ -54,9 +54,11 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
+            DateTime utcNow = DateTime.UtcNow;
+
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && _timeout[index] > DateTime.UtcNow)
+            if (!_connected[index] && _timeout[index] > utcNow)
             {
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
@@ -78,7 +80,7 @@ namespace Microsoft.Xna.Platform.Input
             // timeout period has elapsed to avoid the overhead.
             if (!_connected[index])
             {
-                _timeout[index] = DateTime.UtcNow + TimeoutTicks;
+                _timeout[index] = utcNow + TimeoutTicks;
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
                         displayName: null,
@@ -101,7 +103,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
-                    _timeout[index] = DateTime.UtcNow + TimeoutTicks;
+                    _timeout[index] = utcNow + TimeoutTicks;
                     return base.CreateGamePadCapabilities(
                             gamePadType: GamePadType.Unknown,
                             displayName: null,
@@ -232,9 +234,11 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
+            DateTime utcNow = DateTime.UtcNow;
+
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && _timeout[index] > DateTime.UtcNow)
+            if (!_connected[index] && _timeout[index] > utcNow)
                 return GetDefaultState();
 
             int packetNumber = 0;
@@ -257,7 +261,7 @@ namespace Microsoft.Xna.Platform.Input
             // timeout period has elapsed to avoid the overhead.
             if (!_connected[index])
             {
-                _timeout[index] = DateTime.UtcNow + TimeoutTicks;
+                _timeout[index] = utcNow + TimeoutTicks;
                 return GetDefaultState();
             }
 
@@ -341,13 +345,15 @@ namespace Microsoft.Xna.Platform.Input
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
+            DateTime utcNow = DateTime.UtcNow;
+
             if (!_connected[index])
             {
-                if (_timeout[index] > DateTime.UtcNow)
+                if (_timeout[index] > utcNow)
                     return false;
                 if (!_controllers[index].IsConnected)
                 {
-                    _timeout[index] = DateTime.UtcNow + TimeoutTicks;
+                    _timeout[index] = utcNow + TimeoutTicks;
                     return false;
                 }
                 _connected[index] = true;
@@ -366,7 +372,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
-                    _timeout[index] = DateTime.UtcNow + TimeoutTicks;
+                    _timeout[index] = utcNow + TimeoutTicks;
                     return false;
                 }
                 throw;
