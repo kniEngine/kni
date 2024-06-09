@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Input
         };
 
         private readonly bool[] _isConnected = new bool[MaxNumberOfGamePads];
-        private readonly DateTime[] _timeout = new DateTime[MaxNumberOfGamePads];
+        private readonly DateTime[] _lastDisconnectTime = new DateTime[MaxNumberOfGamePads];
         private readonly TimeSpan TimeoutTicks = TimeSpan.FromSeconds(1);
 
         // XInput Xbox Controller dead zones
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Input
             // the timeout to elapsed before we test it again.
             if (_isConnected[index] == false)
             {
-                if (_timeout[index] > utcNow)
+                if (_lastDisconnectTime[index] + TimeoutTicks > utcNow)
                 {
                     return GetDefaultCapabilities();
                 }
@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Input
                 // If the device is disconnected retry it after the
                 // timeout period has elapsed to avoid the overhead.
                 _isConnected[index] = false;
-                _timeout[index] = utcNow + TimeoutTicks;
+                _lastDisconnectTime[index] = utcNow;
                 return GetDefaultCapabilities();
             }
             else
@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _isConnected[index] = false;
-                    _timeout[index] = utcNow + TimeoutTicks;
+                    _lastDisconnectTime[index] = utcNow;
                     return GetDefaultCapabilities();
                 }
                 throw;
@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Platform.Input
             // the timeout to elapsed before we test it again.
             if (_isConnected[index] == false)
             {
-                if (_timeout[index] > utcNow)
+                if (_lastDisconnectTime[index] + TimeoutTicks > utcNow)
                 {
                     return GetDefaultState();
                 }
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Platform.Input
             // timeout period has elapsed to avoid the overhead.
             if (_isConnected[index] == false)
             {
-                _timeout[index] = utcNow + TimeoutTicks;
+                _lastDisconnectTime[index] = utcNow;
                 return GetDefaultState();
             }
 
@@ -355,13 +355,13 @@ namespace Microsoft.Xna.Platform.Input
 
             if (_isConnected[index] == false)
             {
-                if (_timeout[index] > utcNow)
+                if (_lastDisconnectTime[index] + TimeoutTicks > utcNow)
                     return false;
 
                 bool isControllerConnected = _controllers[index].IsConnected;
                 if (isControllerConnected == false)
                 {
-                    _timeout[index] = utcNow + TimeoutTicks;
+                    _lastDisconnectTime[index] = utcNow;
                     return false;
                 }
                 else
@@ -383,7 +383,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _isConnected[index] = false;
-                    _timeout[index] = utcNow + TimeoutTicks;
+                    _lastDisconnectTime[index] = utcNow;
                     return false;
                 }
                 throw;
