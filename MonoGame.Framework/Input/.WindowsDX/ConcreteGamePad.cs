@@ -27,6 +27,7 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         const int DeviceNotConnectedHResult = unchecked((int)0x8007048f);
+        const int MaxNumberOfGamePads = 4;
 
         internal bool Back;
 
@@ -38,8 +39,8 @@ namespace Microsoft.Xna.Platform.Input
             new XInput.Controller(XInput.UserIndex.Four),
         };
 
-        private readonly bool[] _isConnected = new bool[4];
-        private readonly DateTime[] _timeout = new DateTime[4];
+        private readonly bool[] _isConnected = new bool[MaxNumberOfGamePads];
+        private readonly DateTime[] _timeout = new DateTime[MaxNumberOfGamePads];
         private readonly TimeSpan TimeoutTicks = TimeSpan.FromSeconds(1);
 
         // XInput Xbox Controller dead zones
@@ -49,7 +50,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformGetMaxNumberOfGamePads()
         {
-            return 4;
+            return MaxNumberOfGamePads;
         }
 
         private GamePadCapabilities GetDefaultCapabilities()
