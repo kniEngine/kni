@@ -76,8 +76,7 @@ namespace Microsoft.Xna.Platform.Input
             }
 
             // Check to see if the device is connected.
-            XInput.Controller controller = _controllers[index];
-            _isConnected[index] = controller.IsConnected;
+            _isConnected[index] = _controllers[index].IsConnected;
 
             // If the device is disconnected retry it after the
             // timeout period has elapsed to avoid the overhead.
@@ -99,7 +98,7 @@ namespace Microsoft.Xna.Platform.Input
             XInput.Capabilities capabilities;
             try
             {
-                capabilities = controller.GetCapabilities(XInput.DeviceQueryType.Any);
+                capabilities = _controllers[index].GetCapabilities(XInput.DeviceQueryType.Any);
             }
             catch (SharpDX.SharpDXException ex)
             {
@@ -173,7 +172,7 @@ namespace Microsoft.Xna.Platform.Input
 #endif
 
             // other
-            isConnected = controller.IsConnected;
+            isConnected = _controllers[index].IsConnected;
             hasVoiceSupport = (capabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
             
             return base.CreateGamePadCapabilities(
@@ -256,8 +255,7 @@ namespace Microsoft.Xna.Platform.Input
             try
             {
                 XInput.State xistate;
-                XInput.Controller controller = _controllers[index];
-                _isConnected[index] = controller.GetState(out xistate);
+                _isConnected[index] = _controllers[index].GetState(out xistate);
                 packetNumber = xistate.PacketNumber;
                 gamepad = xistate.Gamepad;
             }
