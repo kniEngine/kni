@@ -367,7 +367,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         // internal DrawIndexedPrimitives without checks, used by SpriteBatcher.
-        void IPlatformGraphicsContext.SB_DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount)
+        void IPlatformGraphicsContext.SB_DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
         {
             if (_deviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
@@ -384,7 +384,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
 
-            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, minVertexIndex, numVertices, startIndex, primitiveCount);
         }
 
         /// <summary>

@@ -291,7 +291,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).SB_DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
                     baseVertex,
-                    //minVertexIndex, numVertices,
+                    minVertexIndex, numVertices,
                     startIndex, primitiveCount);
             }
             else // If the effect is not null, then apply each pass and render the geometry
@@ -308,7 +308,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).SB_DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
                         baseVertex,
-                        //minVertexIndex, numVertices,
+                        minVertexIndex, numVertices,
                         startIndex, primitiveCount);
                 }
             }
