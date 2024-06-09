@@ -14,27 +14,13 @@ using MonoGame.Framework.Utilities;
 namespace Microsoft.Xna.Platform.Input
 {
     // TODO: move GamePadDevice to Framework.Input library
-    public class GamePadDevice
+    public abstract class GamePadDevice
     {
         public GamePadCapabilities Capabilities;
 
         public GamePadDevice()
         {
 
-        }
-    }
-
-    internal class SdlGamePadDevice : GamePadDevice
-    {
-        public IntPtr Handle { get; private set; }
-
-        internal GamePadState State;
-        public int PacketNumber;
-
-        public SdlGamePadDevice(IntPtr handle)
-            : base()
-        {
-            this.Handle = handle;
         }
     }
 

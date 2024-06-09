@@ -147,6 +147,7 @@
 
     <Compile Include="Input\.SDL2\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.SDL2\ConcreteGamePad.cs" />
+    <Compile Include="Input\.SDL2\ConcreteGamePadDevice.cs" />
     <Compile Include="Input\.SDL2\ConcreteInputFactory.cs" />
     <Compile Include="Input\.SDL2\ConcreteJoystick.cs" />
     <Compile Include="Input\.SDL2\ConcreteKeyboard.cs" />

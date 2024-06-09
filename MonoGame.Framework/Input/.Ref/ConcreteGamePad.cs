@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Microsoft.Xna.Platform.Input
 {
     // TODO: move GamePadDevice to Framework.Input library
-    public class GamePadDevice
+    public abstract class GamePadDevice
     {
         public GamePadCapabilities Capabilities;
 
