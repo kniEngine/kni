@@ -82,7 +82,8 @@ namespace Microsoft.Xna.Platform.Input
             }
 
             // Check to see if the device is connected.
-            _isConnected[index] = _controllers[index].IsConnected;
+            bool isControllerConnected = _controllers[index].IsConnected;
+            _isConnected[index] = isControllerConnected;
 
             // If the device is disconnected retry it after the
             // timeout period has elapsed to avoid the overhead.
@@ -243,7 +244,8 @@ namespace Microsoft.Xna.Platform.Input
             try
             {
                 XInput.State xistate;
-                _isConnected[index] = _controllers[index].GetState(out xistate);
+                bool isControllerConnected = _controllers[index].GetState(out xistate);
+                _isConnected[index] = isControllerConnected;
                 packetNumber = xistate.PacketNumber;
                 gamepad = xistate.Gamepad;
             }
@@ -346,7 +348,8 @@ namespace Microsoft.Xna.Platform.Input
                 if (_timeout[index] > utcNow)
                     return false;
 
-                if (_controllers[index].IsConnected == false)
+                bool isControllerConnected = _controllers[index].IsConnected;
+                if (isControllerConnected == false)
                 {
                     _timeout[index] = utcNow + TimeoutTicks;
                     return false;
