@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Input
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             AndroidGamePadDevice gamePad = GamePads[index];
-            GamePadState state = GamePadState.Default;
+            GamePadState state = new GamePadState();
             if (gamePad != null && gamePad._isConnected)
             {
                 // Check if the device was disconnected

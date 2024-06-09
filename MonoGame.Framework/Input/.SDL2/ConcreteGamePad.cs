@@ -350,7 +350,7 @@ namespace Microsoft.Xna.Platform.Input
                 return sdlGamepad.State;
             }
 
-            return GamePadState.Default;
+            return new GamePadState();
         }
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)

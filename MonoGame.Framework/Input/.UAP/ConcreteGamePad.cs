@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
-                return (index == 0 ? GetDefaultState() : GamePadState.Default);
+                return (index == 0 ? GetDefaultState() : new GamePadState());
             
             WGI.GamepadReading state = gamepad.GetCurrentReading();
 
