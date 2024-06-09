@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device was disconnected then wait for
             // the timeout to elapsed before we test it again.
-            if (!_isConnected[index])
+            if (_isConnected[index] == false)
             {
                 if (_timeout[index] > utcNow)
                 {
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device is disconnected retry it after the
             // timeout period has elapsed to avoid the overhead.
-            if (!_isConnected[index])
+            if (_isConnected[index] == false)
             {
                 _timeout[index] = utcNow + TimeoutTicks;
                 return GetDefaultCapabilities();
@@ -228,7 +228,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device was disconnected then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_isConnected[index])
+            if (_isConnected[index] == false)
             {
                 if (_timeout[index] > utcNow)
                 {
@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device is disconnected retry it after the
             // timeout period has elapsed to avoid the overhead.
-            if (!_isConnected[index])
+            if (_isConnected[index] == false)
             {
                 _timeout[index] = utcNow + TimeoutTicks;
                 return GetDefaultState();
@@ -341,11 +341,12 @@ namespace Microsoft.Xna.Platform.Input
         {
             DateTime utcNow = DateTime.UtcNow;
 
-            if (!_isConnected[index])
+            if (_isConnected[index] == false)
             {
                 if (_timeout[index] > utcNow)
                     return false;
-                if (!_controllers[index].IsConnected)
+
+                if (_controllers[index].IsConnected == false)
                 {
                     _timeout[index] = utcNow + TimeoutTicks;
                     return false;
