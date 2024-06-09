@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             DateTime utcNow = DateTime.UtcNow;
 
-            // If the device was disconneced then wait for 
+            // If the device was disconnected then wait for
             // the timeout to elapsed before we test it again.
             if (!_isConnected[index] && _timeout[index] > utcNow)
             {
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             DateTime utcNow = DateTime.UtcNow;
 
-            // If the device was disconneced then wait for 
+            // If the device was disconnected then wait for 
             // the timeout to elapsed before we test it again.
             if (!_isConnected[index] && _timeout[index] > utcNow)
                 return GetDefaultState();
