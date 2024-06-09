@@ -95,10 +95,10 @@ namespace Microsoft.Xna.Platform.Input
                     );
             }
 
-            XInput.Capabilities capabilities;
+            XInput.Capabilities xCapabilities;
             try
             {
-                capabilities = _controllers[index].GetCapabilities(XInput.DeviceQueryType.Any);
+                xCapabilities = _controllers[index].GetCapabilities(XInput.DeviceQueryType.Any);
             }
             catch (SharpDX.SharpDXException ex)
             {
@@ -131,9 +131,9 @@ namespace Microsoft.Xna.Platform.Input
             bool hasVoiceSupport = false;
             //--
 
-            gamePadType = XInputToXnaGamePadType(capabilities.SubType);
+            gamePadType = XInputToXnaGamePadType(xCapabilities.SubType);
 
-            XInput.Gamepad xgamepad = capabilities.Gamepad;
+            XInput.Gamepad xgamepad = xCapabilities.Gamepad;
 
             // digital buttons
             XInput.GamepadButtonFlags xbuttons = xgamepad.Buttons;
@@ -163,17 +163,17 @@ namespace Microsoft.Xna.Platform.Input
 
             // vibration
 #if DIRECTX11_1
-            bool hasForceFeedback = (capabilities.Flags & XInput.CapabilityFlags.FfbSupported) == XInput.CapabilityFlags.FfbSupported;
-            hasLeftVibrationMotor = hasForceFeedback && capabilities.Vibration.LeftMotorSpeed > 0;
-            hasRightVibrationMotor = hasForceFeedback && capabilities.Vibration.RightMotorSpeed > 0;
+            bool hasForceFeedback = (xCapabilities.Flags & XInput.CapabilityFlags.FfbSupported) == XInput.CapabilityFlags.FfbSupported;
+            hasLeftVibrationMotor = hasForceFeedback && xCapabilities.Vibration.LeftMotorSpeed > 0;
+            hasRightVibrationMotor = hasForceFeedback && xCapabilities.Vibration.RightMotorSpeed > 0;
 #else
-            hasLeftVibrationMotor = (capabilities.Vibration.LeftMotorSpeed > 0);
-            hasRightVibrationMotor = (capabilities.Vibration.RightMotorSpeed > 0);
+            hasLeftVibrationMotor = (xCapabilities.Vibration.LeftMotorSpeed > 0);
+            hasRightVibrationMotor = (xCapabilities.Vibration.RightMotorSpeed > 0);
 #endif
 
             // other
             isConnected = _controllers[index].IsConnected;
-            hasVoiceSupport = (capabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
+            hasVoiceSupport = (xCapabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
             
             return base.CreateGamePadCapabilities(
                     gamePadType: gamePadType,
