@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Input
             new XInput.Controller(XInput.UserIndex.Four),
         };
 
-        private readonly bool[] _connected = new bool[4];
+        private readonly bool[] _isConnected = new bool[4];
         private readonly DateTime[] _timeout = new DateTime[4];
         private readonly TimeSpan TimeoutTicks = TimeSpan.FromSeconds(1);
 
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && _timeout[index] > utcNow)
+            if (!_isConnected[index] && _timeout[index] > utcNow)
             {
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
@@ -74,11 +74,11 @@ namespace Microsoft.Xna.Platform.Input
 
             // Check to see if the device is connected.
             XInput.Controller controller = _controllers[index];
-            _connected[index] = controller.IsConnected;
+            _isConnected[index] = controller.IsConnected;
 
             // If the device is disconnected retry it after the
             // timeout period has elapsed to avoid the overhead.
-            if (!_connected[index])
+            if (!_isConnected[index])
             {
                 _timeout[index] = utcNow + TimeoutTicks;
                 return base.CreateGamePadCapabilities(
@@ -102,7 +102,7 @@ namespace Microsoft.Xna.Platform.Input
             {
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
-                    _connected[index] = false;
+                    _isConnected[index] = false;
                     _timeout[index] = utcNow + TimeoutTicks;
                     return base.CreateGamePadCapabilities(
                             gamePadType: GamePadType.Unknown,
@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && _timeout[index] > utcNow)
+            if (!_isConnected[index] && _timeout[index] > utcNow)
                 return GetDefaultState();
 
             int packetNumber = 0;
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Platform.Input
             {
                 XInput.State xistate;
                 XInput.Controller controller = _controllers[index];
-                _connected[index] = controller.GetState(out xistate);
+                _isConnected[index] = controller.GetState(out xistate);
                 packetNumber = xistate.PacketNumber;
                 gamepad = xistate.Gamepad;
             }
@@ -259,7 +259,7 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device is disconnected retry it after the
             // timeout period has elapsed to avoid the overhead.
-            if (!_connected[index])
+            if (!_isConnected[index])
             {
                 _timeout[index] = utcNow + TimeoutTicks;
                 return GetDefaultState();
@@ -347,7 +347,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             DateTime utcNow = DateTime.UtcNow;
 
-            if (!_connected[index])
+            if (!_isConnected[index])
             {
                 if (_timeout[index] > utcNow)
                     return false;
@@ -356,7 +356,7 @@ namespace Microsoft.Xna.Platform.Input
                     _timeout[index] = utcNow + TimeoutTicks;
                     return false;
                 }
-                _connected[index] = true;
+                _isConnected[index] = true;
             }
 
             SharpDX.Result result;
@@ -371,7 +371,7 @@ namespace Microsoft.Xna.Platform.Input
             {
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
-                    _connected[index] = false;
+                    _isConnected[index] = false;
                     _timeout[index] = utcNow + TimeoutTicks;
                     return false;
                 }
