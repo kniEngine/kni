@@ -291,6 +291,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int baseVertex = baseQuad * 4;
             int minVertexIndex = baseQuad * 4;
             int numVertices = spriteCount * 4;
+            int startIndex = 0;
             int primitiveCount = spriteCount * 2;
 
             if (effect == null) // If no custom effect is defined, then simply render.
@@ -301,7 +302,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     PrimitiveType.TriangleList,
                     baseVertex,
                     //minVertexIndex, numVertices,
-                    0, primitiveCount);
+                    startIndex, primitiveCount);
             }
             else // If the effect is not null, then apply each pass and render the geometry
             {
@@ -318,7 +319,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         PrimitiveType.TriangleList,
                         baseVertex,
                         //minVertexIndex, numVertices,
-                        0, primitiveCount);
+                        startIndex, primitiveCount);
                 }
             }
         }
