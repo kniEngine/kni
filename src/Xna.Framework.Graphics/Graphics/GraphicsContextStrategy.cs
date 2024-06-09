@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
         GraphicsContextStrategy Strategy { get; }
         GraphicsDeviceStrategy DeviceStrategy { get; }
 
-        void SB_DrawIndexedPrimitives(PrimitiveType triangleList, int baseVertex, int v, int primitiveCount);
+        void SB_DrawIndexedPrimitives(PrimitiveType triangleList, int baseVertex, int startIndex, int primitiveCount);
     }
 
     public abstract class GraphicsContextStrategy : IDisposable
