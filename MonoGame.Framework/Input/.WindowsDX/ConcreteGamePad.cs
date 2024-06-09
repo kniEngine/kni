@@ -27,6 +27,7 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         const int DeviceNotConnectedHResult = unchecked((int)0x8007048f);
+        const int MaxNumberOfGamePads = 4;
 
         internal bool Back;
 
@@ -38,9 +39,9 @@ namespace Microsoft.Xna.Platform.Input
             new XInput.Controller(XInput.UserIndex.Four),
         };
 
-        private readonly bool[] _connected = new bool[4];
-        private readonly long[] _timeout = new long[4];
-        private readonly long TimeoutTicks = TimeSpan.FromSeconds(1).Ticks;
+        private readonly bool[] _isConnected = new bool[MaxNumberOfGamePads];
+        private readonly DateTime[] _lastDisconnectTime = new DateTime[MaxNumberOfGamePads];
+        private readonly TimeSpan TimeoutTicks = TimeSpan.FromSeconds(1);
 
         // XInput Xbox Controller dead zones
         // Dead zones are slightly different between left and right sticks, this may come from Microsoft usability tests
@@ -49,69 +50,64 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformGetMaxNumberOfGamePads()
         {
-            return 4;
+            return MaxNumberOfGamePads;
+        }
+
+        private GamePadCapabilities GetDefaultCapabilities()
+        {
+            return base.CreateGamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: (Buttons)0,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
         }
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            // If the device was disconneced then wait for 
+            DateTime utcNow = DateTime.UtcNow;
+
+            // If the device was disconnected then wait for
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && !HasDisconnectedTimeoutElapsed(index))
+            if (_isConnected[index] == false)
             {
-                return base.CreateGamePadCapabilities(
-                        gamePadType: GamePadType.Unknown,
-                        displayName: null,
-                        identifier: null,
-                        isConnected: false,
-                        buttons: (Buttons)0,
-                        hasLeftVibrationMotor: false,
-                        hasRightVibrationMotor: false,
-                        hasVoiceSupport: false
-                    );
+                if (_lastDisconnectTime[index] + TimeoutTicks > utcNow)
+                {
+                    return GetDefaultCapabilities();
+                }
             }
 
             // Check to see if the device is connected.
-            XInput.Controller controller = _controllers[index];
-            _connected[index] = controller.IsConnected;
-
-            // If the device is disconnected retry it after the
-            // timeout period has elapsed to avoid the overhead.
-            if (!_connected[index])
+            bool isControllerConnected = _controllers[index].IsConnected;
+            if (isControllerConnected == false)
             {
-                SetDisconnectedTimeout(index);
-                return base.CreateGamePadCapabilities(
-                        gamePadType: GamePadType.Unknown,
-                        displayName: null,
-                        identifier: null,
-                        isConnected: false,
-                        buttons: (Buttons)0,
-                        hasLeftVibrationMotor: false,
-                        hasRightVibrationMotor: false,
-                        hasVoiceSupport: false
-                    );
+                // If the device is disconnected retry it after the
+                // timeout period has elapsed to avoid the overhead.
+                _isConnected[index] = false;
+                _lastDisconnectTime[index] = utcNow;
+                return GetDefaultCapabilities();
+            }
+            else
+            {
+                _isConnected[index] = true;
             }
 
-            XInput.Capabilities capabilities;
+            XInput.Capabilities xCapabilities;
             try
             {
-                capabilities = controller.GetCapabilities(XInput.DeviceQueryType.Any);
+                xCapabilities = _controllers[index].GetCapabilities(XInput.DeviceQueryType.Any);
             }
             catch (SharpDX.SharpDXException ex)
             {
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
-                    _connected[index] = false;
-                    SetDisconnectedTimeout(index);
-                    return base.CreateGamePadCapabilities(
-                            gamePadType: GamePadType.Unknown,
-                            displayName: null,
-                            identifier: null,
-                            isConnected: false,
-                            buttons: (Buttons)0,
-                            hasLeftVibrationMotor: false,
-                            hasRightVibrationMotor: false,
-                            hasVoiceSupport: false
-                        );
+                    _isConnected[index] = false;
+                    _lastDisconnectTime[index] = utcNow;
+                    return GetDefaultCapabilities();
                 }
                 throw;
             }
@@ -127,9 +123,9 @@ namespace Microsoft.Xna.Platform.Input
             bool hasVoiceSupport = false;
             //--
 
-            gamePadType = XInputToXnaGamePadType(capabilities.SubType);
+            gamePadType = XInputToXnaGamePadType(xCapabilities.SubType);
 
-            XInput.Gamepad xgamepad = capabilities.Gamepad;
+            XInput.Gamepad xgamepad = xCapabilities.Gamepad;
 
             // digital buttons
             XInput.GamepadButtonFlags xbuttons = xgamepad.Buttons;
@@ -159,17 +155,17 @@ namespace Microsoft.Xna.Platform.Input
 
             // vibration
 #if DIRECTX11_1
-            bool hasForceFeedback = (capabilities.Flags & XInput.CapabilityFlags.FfbSupported) == XInput.CapabilityFlags.FfbSupported;
-            hasLeftVibrationMotor = hasForceFeedback && capabilities.Vibration.LeftMotorSpeed > 0;
-            hasRightVibrationMotor = hasForceFeedback && capabilities.Vibration.RightMotorSpeed > 0;
+            bool hasForceFeedback = (xCapabilities.Flags & XInput.CapabilityFlags.FfbSupported) == XInput.CapabilityFlags.FfbSupported;
+            hasLeftVibrationMotor = hasForceFeedback && xCapabilities.Vibration.LeftMotorSpeed > 0;
+            hasRightVibrationMotor = hasForceFeedback && xCapabilities.Vibration.RightMotorSpeed > 0;
 #else
-            hasLeftVibrationMotor = (capabilities.Vibration.LeftMotorSpeed > 0);
-            hasRightVibrationMotor = (capabilities.Vibration.RightMotorSpeed > 0);
+            hasLeftVibrationMotor = (xCapabilities.Vibration.LeftMotorSpeed > 0);
+            hasRightVibrationMotor = (xCapabilities.Vibration.RightMotorSpeed > 0);
 #endif
 
             // other
-            isConnected = controller.IsConnected;
-            hasVoiceSupport = (capabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
+            isConnected = _controllers[index].IsConnected;
+            hasVoiceSupport = (xCapabilities.Flags & XInput.CapabilityFlags.VoiceSupported) == XInput.CapabilityFlags.VoiceSupported;
             
             return base.CreateGamePadCapabilities(
                     gamePadType: gamePadType,
@@ -232,10 +228,17 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            // If the device was disconneced then wait for 
+            DateTime utcNow = DateTime.UtcNow;
+
+            // If the device was disconnected then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && !HasDisconnectedTimeoutElapsed(index))
-                return GetDefaultState();
+            if (_isConnected[index] == false)
+            {
+                if (_lastDisconnectTime[index] + TimeoutTicks > utcNow)
+                {
+                    return GetDefaultState();
+                }
+            }
 
             int packetNumber = 0;
 
@@ -244,8 +247,15 @@ namespace Microsoft.Xna.Platform.Input
             try
             {
                 XInput.State xistate;
-                XInput.Controller controller = _controllers[index];
-                _connected[index] = controller.GetState(out xistate);
+                bool isControllerConnected = _controllers[index].GetState(out xistate);
+                if (isControllerConnected == false)
+                {
+                    _isConnected[index] = false;
+                }
+                else
+                {
+                    _isConnected[index] = true;
+                }
                 packetNumber = xistate.PacketNumber;
                 gamepad = xistate.Gamepad;
             }
@@ -255,9 +265,9 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device is disconnected retry it after the
             // timeout period has elapsed to avoid the overhead.
-            if (!_connected[index])
+            if (_isConnected[index] == false)
             {
-                SetDisconnectedTimeout(index);
+                _lastDisconnectTime[index] = utcNow;
                 return GetDefaultState();
             }
 
@@ -341,16 +351,23 @@ namespace Microsoft.Xna.Platform.Input
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            if (!_connected[index])
+            DateTime utcNow = DateTime.UtcNow;
+
+            if (_isConnected[index] == false)
             {
-                if (!HasDisconnectedTimeoutElapsed(index))
+                if (_lastDisconnectTime[index] + TimeoutTicks > utcNow)
                     return false;
-                if (!_controllers[index].IsConnected)
+
+                bool isControllerConnected = _controllers[index].IsConnected;
+                if (isControllerConnected == false)
                 {
-                    SetDisconnectedTimeout(index);
+                    _lastDisconnectTime[index] = utcNow;
                     return false;
                 }
-                _connected[index] = true;
+                else
+                {
+                    _isConnected[index] = true;
+                }
             }
 
             SharpDX.Result result;
@@ -365,24 +382,14 @@ namespace Microsoft.Xna.Platform.Input
             {
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
-                    _connected[index] = false;
-                    SetDisconnectedTimeout(index);
+                    _isConnected[index] = false;
+                    _lastDisconnectTime[index] = utcNow;
                     return false;
                 }
                 throw;
             }
 
             return result == SharpDX.Result.Ok;
-        }
-
-        private bool HasDisconnectedTimeoutElapsed(int index)
-        {
-            return _timeout[index] <= DateTime.UtcNow.Ticks;
-        }
-
-        private void SetDisconnectedTimeout(int index)
-        {
-            _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
         }
     }
 }
