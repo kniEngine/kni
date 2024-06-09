@@ -401,6 +401,24 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
+        {
+            lock (this.SyncHandle)
+            {
+                PlatformApplyState();
+                PlatformApplyIndexBuffer();
+                PlatformApplyVertexBuffers();
+                PlatformApplyShaders();
+
+                PlatformApplyPrimitiveType(primitiveType);
+                int indexCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+                this.D3dContext.DrawIndexed(indexCount, startIndex, baseVertex);
+
+                base.Metrics_AddDrawCount();
+                base.Metrics_AddPrimitiveCount(primitiveCount);
+            }
+        }
+
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex,
             int primitiveCount, int baseInstance, int instanceCount)
         {

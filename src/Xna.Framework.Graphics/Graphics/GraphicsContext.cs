@@ -317,8 +317,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_strategy.PixelShader == null)
                 throw new InvalidOperationException("Pixel shader must be set before calling DrawIndexedPrimitives.");
 
-
-            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, minVertexIndex, numVertices, startIndex, primitiveCount);
         }
 
         /// <summary>

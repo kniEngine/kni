@@ -695,6 +695,29 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Metrics_AddPrimitiveCount(primitiveCount);
         }
 
+        public override void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
+        {
+            PlatformApplyState();
+            PlatformApplyIndexBuffer();
+            PlatformApplyShaders();
+
+            WebGLDataType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            int indexOffsetInBytes = (startIndex * ((IPlatformIndexBuffer)Indices).Strategy.ElementSizeInBytes);
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            PlatformApplyVertexBuffers(baseVertex);
+
+            GL.DrawElements(target,
+                            indexElementCount,
+                            indexElementType,
+                            indexOffsetInBytes);
+            GL.CheckGLError();
+
+            base.Metrics_AddDrawCount();
+            base.Metrics_AddPrimitiveCount(primitiveCount);
+        }
+
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
             if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
