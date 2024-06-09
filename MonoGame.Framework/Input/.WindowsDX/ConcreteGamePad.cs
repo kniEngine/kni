@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.Input
             // timeout period has elapsed to avoid the overhead.
             if (!_connected[index])
             {
-                SetDisconnectedTimeout(index);
+                _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
                         displayName: null,
@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
-                    SetDisconnectedTimeout(index);
+                    _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
                     return base.CreateGamePadCapabilities(
                             gamePadType: GamePadType.Unknown,
                             displayName: null,
@@ -257,7 +257,7 @@ namespace Microsoft.Xna.Platform.Input
             // timeout period has elapsed to avoid the overhead.
             if (!_connected[index])
             {
-                SetDisconnectedTimeout(index);
+                _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
                 return GetDefaultState();
             }
 
@@ -347,7 +347,7 @@ namespace Microsoft.Xna.Platform.Input
                     return false;
                 if (!_controllers[index].IsConnected)
                 {
-                    SetDisconnectedTimeout(index);
+                    _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
                     return false;
                 }
                 _connected[index] = true;
@@ -366,18 +366,13 @@ namespace Microsoft.Xna.Platform.Input
                 if (ex.ResultCode.Code == DeviceNotConnectedHResult)
                 {
                     _connected[index] = false;
-                    SetDisconnectedTimeout(index);
+                    _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
                     return false;
                 }
                 throw;
             }
 
             return result == SharpDX.Result.Ok;
-        }
-
-        private void SetDisconnectedTimeout(int index)
-        {
-            _timeout[index] = DateTime.UtcNow.Ticks + TimeoutTicks;
         }
     }
 }
