@@ -14,11 +14,21 @@ using GPBF = SharpDX.XInput.GamepadButtonFlags;
 namespace Microsoft.Xna.Platform.Input
 {
     // TODO: move GamePadDevice to Framework.Input library
-    public class GamePadDevice
+    public abstract class GamePadDevice
     {
         public GamePadCapabilities Capabilities;
 
         public GamePadDevice()
+        {
+
+        }
+    }
+
+    internal class XInputGamePadDevice : GamePadDevice
+    {
+
+        public XInputGamePadDevice()
+            : base()
         {
 
         }
