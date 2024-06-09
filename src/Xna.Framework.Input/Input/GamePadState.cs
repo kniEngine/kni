@@ -14,11 +14,6 @@ namespace Microsoft.Xna.Framework.Input
     public partial struct GamePadState
     {
         /// <summary>
-        /// The default initialized gamepad state.
-        /// </summary>
-        public static readonly GamePadState Default = new GamePadState();
-
-        /// <summary>
         /// Gets a value indicating if the controller is connected.
         /// </summary>
         /// <value><c>true</c> if it is connected; otherwise, <c>false</c>.</value>
