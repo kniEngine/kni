@@ -24,20 +24,6 @@ namespace Microsoft.Xna.Platform.Input
         }
     }
 
-    internal class SdlGamePadDevice : GamePadDevice
-    {
-        public IntPtr Handle { get; private set; }
-
-        internal GamePadState State;
-        public int PacketNumber;
-
-        public SdlGamePadDevice(IntPtr handle)
-            : base()
-        {
-            this.Handle = handle;
-        }
-    }
-
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         private Sdl SDL { get { return Sdl.Current; } }

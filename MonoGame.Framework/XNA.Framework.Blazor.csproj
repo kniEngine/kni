@@ -83,6 +83,7 @@
 
     <Compile Include="Input\.Blazor\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Blazor\ConcreteGamePad.cs" />
+    <Compile Include="Input\.Blazor\ConcreteGamePadDevice.cs" />
     <Compile Include="Input\.Blazor\ConcreteInputFactory.cs" />
     <Compile Include="Input\.Blazor\ConcreteJoystick.cs" />
     <Compile Include="Input\.Blazor\ConcreteKeyboard.cs" />

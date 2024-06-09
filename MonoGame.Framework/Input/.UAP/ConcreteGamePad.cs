@@ -24,16 +24,6 @@ namespace Microsoft.Xna.Platform.Input
         }
     }
 
-    internal class WGIGamePadDevice : GamePadDevice
-    {
-
-        public WGIGamePadDevice()
-            : base()
-        {
-
-        }
-    }
-
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         // Attempts to mimic SharpDX.XInput.Gamepad which defines the trigger threshold as 30 with a range of 0 to 255. 

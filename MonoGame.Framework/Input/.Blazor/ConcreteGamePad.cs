@@ -18,16 +18,6 @@ namespace Microsoft.Xna.Platform.Input
         }
     }
 
-    internal class BlazorGamePadDevice : GamePadDevice
-    {
-
-        public BlazorGamePadDevice()
-            : base()
-        {
-
-        }
-    }
-
     public sealed class ConcreteGamePad : GamePadStrategy
     {
 

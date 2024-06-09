@@ -24,16 +24,6 @@ namespace Microsoft.Xna.Platform.Input
         }
     }
 
-    internal class XInputGamePadDevice : GamePadDevice
-    {
-
-        public XInputGamePadDevice()
-            : base()
-        {
-
-        }
-    }
-
     public sealed class ConcreteGamePad : GamePadStrategy
     {
         const int DeviceNotConnectedHResult = unchecked((int)0x8007048f);

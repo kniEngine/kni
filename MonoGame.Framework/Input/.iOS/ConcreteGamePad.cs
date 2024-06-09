@@ -23,16 +23,6 @@ namespace Microsoft.Xna.Platform.Input
         }
     }
 
-    internal class IOSGamePadDevice : GamePadDevice
-    {
-
-        public IOSGamePadDevice()
-            : base()
-        {
-
-        }
-    }
-
     public sealed class ConcreteGamePad : GamePadStrategy
     {
 
