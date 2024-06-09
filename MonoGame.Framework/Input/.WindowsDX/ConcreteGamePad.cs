@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && !HasDisconnectedTimeoutElapsed(index))
+            if (!_connected[index] && _timeout[index] > DateTime.UtcNow.Ticks)
             {
                 return base.CreateGamePadCapabilities(
                         gamePadType: GamePadType.Unknown,
@@ -234,7 +234,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             // If the device was disconneced then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_connected[index] && !HasDisconnectedTimeoutElapsed(index))
+            if (!_connected[index] && _timeout[index] > DateTime.UtcNow.Ticks)
                 return GetDefaultState();
 
             int packetNumber = 0;
@@ -343,7 +343,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (!_connected[index])
             {
-                if (!HasDisconnectedTimeoutElapsed(index))
+                if (_timeout[index] > DateTime.UtcNow.Ticks)
                     return false;
                 if (!_controllers[index].IsConnected)
                 {
@@ -373,11 +373,6 @@ namespace Microsoft.Xna.Platform.Input
             }
 
             return result == SharpDX.Result.Ok;
-        }
-
-        private bool HasDisconnectedTimeoutElapsed(int index)
-        {
-            return _timeout[index] <= DateTime.UtcNow.Ticks;
         }
 
         private void SetDisconnectedTimeout(int index)
