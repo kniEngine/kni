@@ -58,18 +58,21 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device was disconnected then wait for
             // the timeout to elapsed before we test it again.
-            if (!_isConnected[index] && _timeout[index] > utcNow)
+            if (!_isConnected[index])
             {
-                return base.CreateGamePadCapabilities(
-                        gamePadType: GamePadType.Unknown,
-                        displayName: null,
-                        identifier: null,
-                        isConnected: false,
-                        buttons: (Buttons)0,
-                        hasLeftVibrationMotor: false,
-                        hasRightVibrationMotor: false,
-                        hasVoiceSupport: false
-                    );
+                if (_timeout[index] > utcNow)
+                {
+                    return base.CreateGamePadCapabilities(
+                            gamePadType: GamePadType.Unknown,
+                            displayName: null,
+                            identifier: null,
+                            isConnected: false,
+                            buttons: (Buttons)0,
+                            hasLeftVibrationMotor: false,
+                            hasRightVibrationMotor: false,
+                            hasVoiceSupport: false
+                        );
+                }
             }
 
             // Check to see if the device is connected.
@@ -238,8 +241,13 @@ namespace Microsoft.Xna.Platform.Input
 
             // If the device was disconnected then wait for 
             // the timeout to elapsed before we test it again.
-            if (!_isConnected[index] && _timeout[index] > utcNow)
-                return GetDefaultState();
+            if (!_isConnected[index])
+            {
+                if (_timeout[index] > utcNow)
+                {
+                    return GetDefaultState();
+                }
+            }
 
             int packetNumber = 0;
 
