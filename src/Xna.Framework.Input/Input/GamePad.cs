@@ -284,7 +284,7 @@ namespace Microsoft.Xna.Framework.Input
         GamePadState IGamePad.GetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             if (index < 0 || index >= _strategy.PlatformGetMaxNumberOfGamePads())
-                return GamePadState.Default;
+                return new GamePadState();
 
             return _strategy.PlatformGetState(index, leftDeadZoneMode, rightDeadZoneMode);
         }
