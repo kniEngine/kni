@@ -85,19 +85,15 @@ namespace Microsoft.Xna.Platform.Input
             bool isControllerConnected = _controllers[index].IsConnected;
             if (isControllerConnected == false)
             {
+                // If the device is disconnected retry it after the
+                // timeout period has elapsed to avoid the overhead.
                 _isConnected[index] = false;
+                _timeout[index] = utcNow + TimeoutTicks;
+                return GetDefaultCapabilities();
             }
             else
             {
                 _isConnected[index] = true;
-            }
-
-            // If the device is disconnected retry it after the
-            // timeout period has elapsed to avoid the overhead.
-            if (_isConnected[index] == false)
-            {
-                _timeout[index] = utcNow + TimeoutTicks;
-                return GetDefaultCapabilities();
             }
 
             XInput.Capabilities xCapabilities;
