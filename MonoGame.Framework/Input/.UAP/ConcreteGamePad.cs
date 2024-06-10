@@ -51,29 +51,32 @@ namespace Microsoft.Xna.Platform.Input
             for (int i = 0; i < _gamepads.Length && i < gamepads.Count; i++)
                 _gamepads[i] = gamepads[i];
 
-            WGI.Gamepad.GamepadAdded += (o, e) =>
-            {
-                for (int i = 0; i < _gamepads.Length; i++)
-                {
-                    if (_gamepads[i] == null)
-                    {
-                        _gamepads[i] = e;
-                        break;
-                    }
-                }
-            };
+            WGI.Gamepad.GamepadAdded += WGIGamepad_GamepadAdded;
+            WGI.Gamepad.GamepadRemoved += WGIGamepad_GamepadRemoved;
+        }
 
-            WGI.Gamepad.GamepadRemoved += (o, e) =>
+        private void WGIGamepad_GamepadAdded(object sender, WGI.Gamepad device)
+        {
+            for (int i = 0; i < _gamepads.Length; i++)
             {
-                for (int i = 0; i < _gamepads.Length; i++)
+                if (_gamepads[i] == null)
                 {
-                    if (_gamepads[i] == e)
-                    {
-                        _gamepads[i] = null;
-                        break;
-                    }
+                    _gamepads[i] = device;
+                    break;
                 }
-            };
+            }
+        }
+
+        private void WGIGamepad_GamepadRemoved(object sender, WGI.Gamepad device)
+        {
+            for (int i = 0; i < _gamepads.Length; i++)
+            {
+                if (_gamepads[i] == device)
+                {
+                    _gamepads[i] = null;
+                    break;
+                }
+            }
         }
 
         public override int PlatformGetMaxNumberOfGamePads()
