@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform.Input
         internal bool Back;
 
         private WGI.Gamepad[] _gamepads;
-        private int tmp;
+        private int _initGamepadsCount;
 
         // Default & SDL Xbox Controller dead zones
         // Based on the XInput constants
@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             _gamepads = new WGI.Gamepad[PlatformGetMaxNumberOfGamePads()];
             IReadOnlyList<WGI.Gamepad> gamepadsTmp = WGI.Gamepad.Gamepads;
-            tmp = gamepadsTmp.Count; // workaround UAP bug. first call to 'WGI.Gamepad.Gamepads' returns an empty instance.
+            _initGamepadsCount = gamepadsTmp.Count; // workaround UAP bug. first call to 'WGI.Gamepad.Gamepads' returns an empty instance.
             IReadOnlyList<WGI.Gamepad> gamepads = WGI.Gamepad.Gamepads;
             for (int i = 0; i < _gamepads.Length && i < gamepads.Count; i++)
                 _gamepads[i] = gamepads[i];
