@@ -39,17 +39,20 @@ namespace Microsoft.Xna.Platform.Input
 
         private void AssingIndex(GCControllerPlayerIndex index)
         {
+            GCController[] controllers = GCController.Controllers;
+
             // index is used ?
-            foreach (GCController controller in GCController.Controllers)
+            foreach (GCController controller in controllers)
             {
                 if ((long)controller.PlayerIndex == (long)index)
                     return;
             }
 
-            foreach (GCController controller in GCController.Controllers)
+            foreach (GCController controller in controllers)
             {
                 if ((long)controller.PlayerIndex == (long)index)
                     break;
+
                 if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
                 {
 #if XAMARINIOS
