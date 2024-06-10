@@ -37,29 +37,6 @@ namespace Microsoft.Xna.Platform.Input
             return MaxNumberOfGamePads;
         }
 
-        private void AssingIndex(GCController[] controllers, GCControllerPlayerIndex gcindex)
-        {
-            // index is used ?
-            foreach (GCController controller in controllers)
-            {
-                if ((long)controller.PlayerIndex == (long)gcindex)
-                    return;
-            }
-
-            foreach (GCController controller in controllers)
-            {
-                if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
-                {
-#if XAMARINIOS
-                    controller.PlayerIndex = (System.nint)(long)index;
-#else
-                    controller.PlayerIndex = gcindex;
-#endif
-                    return;
-                }
-            }
-        }
-
         private GamePadCapabilities GetDefaultCapabilities()
         {
             return base.CreateGamePadCapabilities(
@@ -274,6 +251,29 @@ namespace Microsoft.Xna.Platform.Input
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             return false;
+        }
+
+        private void AssingIndex(GCController[] controllers, GCControllerPlayerIndex gcindex)
+        {
+            // index is used ?
+            foreach (GCController controller in controllers)
+            {
+                if ((long)controller.PlayerIndex == (long)gcindex)
+                    return;
+            }
+
+            foreach (GCController controller in controllers)
+            {
+                if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
+                {
+#if XAMARINIOS
+                    controller.PlayerIndex = (System.nint)(long)index;
+#else
+                    controller.PlayerIndex = gcindex;
+#endif
+                    return;
+                }
+            }
         }
 
         private GCController FindGCController(GCControllerPlayerIndex gcindex)
