@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Input
 
         internal bool Back;
 
-        private WGI.Gamepad[] _gamepads;
+        private WGIGamePadDevice[] _gamepads;
         private int _initGamepadsCount;
 
         // Default & SDL Xbox Controller dead zones
@@ -44,12 +44,12 @@ namespace Microsoft.Xna.Platform.Input
 
         public ConcreteGamePad()
         {
-            _gamepads = new WGI.Gamepad[MaxNumberOfGamePads];
+            _gamepads = new WGIGamePadDevice[MaxNumberOfGamePads];
             IReadOnlyList<WGI.Gamepad> gamepadsTmp = WGI.Gamepad.Gamepads;
             _initGamepadsCount = gamepadsTmp.Count; // workaround UAP bug. first call to 'WGI.Gamepad.Gamepads' returns an empty instance.
             IReadOnlyList<WGI.Gamepad> gamepads = WGI.Gamepad.Gamepads;
             for (int i = 0; i < _gamepads.Length && i < gamepads.Count; i++)
-                _gamepads[i] = gamepads[i];
+                _gamepads[i] = new WGIGamePadDevice(gamepads[i]);
 
             WGI.Gamepad.GamepadAdded += WGIGamepad_GamepadAdded;
             WGI.Gamepad.GamepadRemoved += WGIGamepad_GamepadRemoved;
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Input
             {
                 if (_gamepads[i] == null)
                 {
-                    _gamepads[i] = device;
+                    _gamepads[i] = new WGIGamePadDevice(device);
                     break;
                 }
             }
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             for (int i = 0; i < _gamepads.Length; i++)
             {
-                if (_gamepads[i] == device)
+                if (_gamepads[i]._device == device)
                 {
                     _gamepads[i] = null;
                     break;
@@ -100,8 +100,8 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            WGI.Gamepad gamepad = _gamepads[index];
-            if (gamepad == null)
+            WGIGamePadDevice gamepadDevice = _gamepads[index];
+            if (gamepadDevice == null)
                 return GetDefaultCapabilities();
 
             //--
@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Platform.Input
                 buttons |= Buttons.RightThumbstickDown | Buttons.RightThumbstickUp;
                 hasLeftVibrationMotor = true;
                 hasRightVibrationMotor = true;
-                hasVoiceSupport = (gamepad.Headset != null && !string.IsNullOrEmpty(gamepad.Headset.CaptureDeviceId));
+                hasVoiceSupport = (gamepadDevice._device.Headset != null && !string.IsNullOrEmpty(gamepadDevice._device.Headset.CaptureDeviceId));
             };
 
             return base.CreateGamePadCapabilities(
@@ -164,11 +164,11 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            WGI.Gamepad gamepad = _gamepads[index];
-            if (gamepad == null)
+            WGIGamePadDevice gamepadDevice = _gamepads[index];
+            if (gamepadDevice == null)
                 return (index == 0 ? GetDefaultState() : new GamePadState());
-            
-            WGI.GamepadReading state = gamepad.GetCurrentReading();
+
+            WGI.GamepadReading state = gamepadDevice._device.GetCurrentReading();
 
             GamePadThumbSticks sticks = base.CreateGamePadThumbSticks(
                     new Vector2((float)state.LeftThumbstickX, (float)state.LeftThumbstickY),
@@ -217,11 +217,11 @@ namespace Microsoft.Xna.Platform.Input
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            WGI.Gamepad gamepad = _gamepads[index];
-            if (gamepad == null)
+            WGIGamePadDevice gamepadDevice = _gamepads[index];
+            if (gamepadDevice == null)
                 return false;
 
-            gamepad.Vibration = new WGI.GamepadVibration
+            gamepadDevice._device.Vibration = new WGI.GamepadVibration
             {
                 LeftMotor = leftMotor,
                 LeftTrigger = leftTrigger,

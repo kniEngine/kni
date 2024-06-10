@@ -11,10 +11,12 @@ namespace Microsoft.Xna.Platform.Input
 {
     internal class WGIGamePadDevice : GamePadDevice
     {
+        public WGI.Gamepad _device;
 
-        public WGIGamePadDevice()
+        public WGIGamePadDevice(WGI.Gamepad device)
             : base()
         {
+            _device = device;
 
         }
     }
