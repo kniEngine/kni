@@ -253,13 +253,15 @@ namespace Microsoft.Xna.Platform.Input
             return false;
         }
 
-        private void AssingIndex(GCController[] controllers, GCControllerPlayerIndex gcindex)
+        private GCController FindGCController(GCControllerPlayerIndex gcindex)
         {
+            GCController[] controllers = GCController.Controllers;
+
             // index is used ?
             foreach (GCController controller in controllers)
             {
                 if ((long)controller.PlayerIndex == (long)gcindex)
-                    return;
+                    return controller;
             }
 
             foreach (GCController controller in controllers)
@@ -271,16 +273,9 @@ namespace Microsoft.Xna.Platform.Input
 #else
                     controller.PlayerIndex = gcindex;
 #endif
-                    return;
+                    break;
                 }
             }
-        }
-
-        private GCController FindGCController(GCControllerPlayerIndex gcindex)
-        {
-            GCController[] controllers = GCController.Controllers;
-
-            AssingIndex(controllers, gcindex);
 
             foreach (GCController controller in controllers)
             {
@@ -288,9 +283,7 @@ namespace Microsoft.Xna.Platform.Input
                     continue;
 
                 if ((long)controller.PlayerIndex == (long)gcindex)
-                {
                     return controller;
-                }
             }
 
             return null;
