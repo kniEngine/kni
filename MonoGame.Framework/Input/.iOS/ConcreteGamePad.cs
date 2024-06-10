@@ -37,12 +37,12 @@ namespace Microsoft.Xna.Platform.Input
             return MaxNumberOfGamePads;
         }
 
-        private void AssingIndex(GCController[] controllers, GCControllerPlayerIndex index)
+        private void AssingIndex(GCController[] controllers, GCControllerPlayerIndex gcindex)
         {
             // index is used ?
             foreach (GCController controller in controllers)
             {
-                if ((long)controller.PlayerIndex == (long)index)
+                if ((long)controller.PlayerIndex == (long)gcindex)
                     return;
             }
 
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Input
 #if XAMARINIOS
                     controller.PlayerIndex = (System.nint)(long)index;
 #else
-                    controller.PlayerIndex = index;
+                    controller.PlayerIndex = gcindex;
 #endif
                     return;
                 }
@@ -76,18 +76,18 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
-            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
+            GCControllerPlayerIndex gcindex = (GCControllerPlayerIndex)index;
 
             GCController[] controllers = GCController.Controllers;
 
-            AssingIndex(controllers, ind);
+            AssingIndex(controllers, gcindex);
 
             foreach (GCController controller in controllers)
             {
                 if (controller == null)
                     continue;
 
-                if ((long)controller.PlayerIndex == (long)ind)
+                if ((long)controller.PlayerIndex == (long)gcindex)
                     return GetCapabilities(controller);
             }
 
