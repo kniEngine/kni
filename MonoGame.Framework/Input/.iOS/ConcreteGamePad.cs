@@ -132,6 +132,16 @@ namespace Microsoft.Xna.Platform.Input
             GCControllerPlayerIndex gcindex = (GCControllerPlayerIndex)index;
             GCController gccontroller = FindGCController(gcindex);
 
+            if (gccontroller == null)
+            {
+                return base.CreateGamePadState(
+                    base.CreateGamePadThumbSticks(Vector2.Zero, Vector2.Zero, leftDeadZoneMode, rightDeadZoneMode),
+                    new GamePadTriggers(0, 0),
+                    new GamePadButtons((Buttons)0),
+                    new GamePadDPad(ButtonState.Released, ButtonState.Released, ButtonState.Released, ButtonState.Released),
+                    isConnected: false);
+            }
+            
             Buttons buttons = 0;
             bool connected = false;
             ButtonState Up = ButtonState.Released;
@@ -145,16 +155,6 @@ namespace Microsoft.Xna.Platform.Input
             float leftTriggerValue = 0;
             float rightTriggerValue = 0;
 
-            if (gccontroller == null)
-            {
-                return base.CreateGamePadState(
-                    base.CreateGamePadThumbSticks(leftThumbStickPosition, rightThumbStickPosition, leftDeadZoneMode, rightDeadZoneMode),
-                    new GamePadTriggers(leftTriggerValue, rightTriggerValue),
-                    new GamePadButtons(buttons),
-                    new GamePadDPad(Up, Down, Left, Right),
-                    isConnected: connected);
-            }
-            
             connected = true;
 
             if (gccontroller.ExtendedGamepad != null)
