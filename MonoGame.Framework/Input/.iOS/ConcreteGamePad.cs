@@ -82,16 +82,23 @@ namespace Microsoft.Xna.Platform.Input
 
             AssingIndex(controllers, gcindex);
 
+            GCController gccontroller = null;
             foreach (GCController controller in controllers)
             {
                 if (controller == null)
                     continue;
 
                 if ((long)controller.PlayerIndex == (long)gcindex)
-                    return GetCapabilities(controller);
+                {
+                    gccontroller = controller;
+                    break;
+                }
             }
 
-            return GetDefaultCapabilities();
+            if (gccontroller == null)
+                return GetDefaultCapabilities();
+
+            return GetCapabilities(gccontroller);
         }
 
         private GamePadCapabilities GetCapabilities(GCController controller)
