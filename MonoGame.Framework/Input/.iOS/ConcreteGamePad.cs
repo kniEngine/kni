@@ -25,6 +25,7 @@ namespace Microsoft.Xna.Platform.Input
 
     public sealed class ConcreteGamePad : GamePadStrategy
     {
+        const int MaxNumberOfGamePads = 4;
 
         // Default & SDL Xbox Controller dead zones
         // Based on the XInput constants
@@ -33,7 +34,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformGetMaxNumberOfGamePads()
         {
-            return 4;
+            return MaxNumberOfGamePads;
         }
 
         private bool IndexIsUsed(GCControllerPlayerIndex index)
