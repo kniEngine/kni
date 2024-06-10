@@ -174,7 +174,12 @@ namespace Microsoft.Xna.Platform.Input
         {
             WGIGamePadDevice gamepadDevice = _gamepads[index];
             if (gamepadDevice == null)
-                return (index == 0 ? GetDefaultState() : new GamePadState());
+            {
+                if (index == 0)
+                    return GetDefaultState(); // emulate Back button
+                else
+                    return new GamePadState();
+            }
 
             WGI.GamepadReading state = gamepadDevice._device.GetCurrentReading();
 
