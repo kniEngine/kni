@@ -48,7 +48,10 @@ namespace Microsoft.Xna.Platform.Input
             _initGamepadsCount = gamepadsTmp.Count; // workaround UAP bug. first call to 'WGI.Gamepad.Gamepads' returns an empty instance.
             IReadOnlyList<WGI.Gamepad> gamepads = WGI.Gamepad.Gamepads;
             for (int i = 0; i < _gamepads.Length && i < gamepads.Count; i++)
+            {
                 _gamepads[i] = new WGIGamePadDevice(gamepads[i]);
+                _gamepads[i].Capabilities = CreateCapabilities(_gamepads[i]);
+            }
 
             WGI.Gamepad.GamepadAdded += WGIGamepad_GamepadAdded;
             WGI.Gamepad.GamepadRemoved += WGIGamepad_GamepadRemoved;
@@ -61,6 +64,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (_gamepads[i] == null)
                 {
                     _gamepads[i] = new WGIGamePadDevice(device);
+                    _gamepads[i].Capabilities = CreateCapabilities(_gamepads[i]);
                     break;
                 }
             }
@@ -103,8 +107,7 @@ namespace Microsoft.Xna.Platform.Input
             if (gamepadDevice == null)
                 return GetDefaultCapabilities();
 
-            GamePadCapabilities capabilities = CreateCapabilities(gamepadDevice);
-            return capabilities;
+            return gamepadDevice.Capabilities;
         }
 
         private GamePadCapabilities CreateCapabilities(WGIGamePadDevice gamepadDevice)
