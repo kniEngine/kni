@@ -62,6 +62,20 @@ namespace Microsoft.Xna.Platform.Input
             }
         }
 
+        private GamePadCapabilities GetDefaultCapabilities()
+        {
+            return base.CreateGamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: (Buttons)0,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
+        }
+
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
@@ -76,16 +90,7 @@ namespace Microsoft.Xna.Platform.Input
                     return GetCapabilities(controller);
             }
 
-            return base.CreateGamePadCapabilities(
-                    gamePadType: GamePadType.Unknown,
-                    displayName: null,
-                    identifier: null,
-                    isConnected: false,
-                    buttons: (Buttons)0,
-                    hasLeftVibrationMotor: false,
-                    hasRightVibrationMotor: false,
-                    hasVoiceSupport: false
-                );
+            return GetDefaultCapabilities();
         }
 
         private GamePadCapabilities GetCapabilities(GCController controller)
