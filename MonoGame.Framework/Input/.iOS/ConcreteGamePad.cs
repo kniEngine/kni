@@ -77,29 +77,14 @@ namespace Microsoft.Xna.Platform.Input
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             GCControllerPlayerIndex gcindex = (GCControllerPlayerIndex)index;
-
-            GCController[] controllers = GCController.Controllers;
-
-            AssingIndex(controllers, gcindex);
-
-            GCController gccontroller = null;
-            foreach (GCController controller in controllers)
-            {
-                if (controller == null)
-                    continue;
-
-                if ((long)controller.PlayerIndex == (long)gcindex)
-                {
-                    gccontroller = controller;
-                    break;
-                }
-            }
+            GCController gccontroller = FindGCController(gcindex);
 
             if (gccontroller == null)
                 return GetDefaultCapabilities();
 
             return GetCapabilities(gccontroller);
         }
+
 
         private GamePadCapabilities GetCapabilities(GCController controller)
         {
@@ -168,6 +153,7 @@ namespace Microsoft.Xna.Platform.Input
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
             GCControllerPlayerIndex gcindex = (GCControllerPlayerIndex)index;
+            GCController gccontroller = FindGCController(gcindex);
 
             Buttons buttons = 0;
             bool connected = false;
@@ -181,23 +167,6 @@ namespace Microsoft.Xna.Platform.Input
 
             float leftTriggerValue = 0;
             float rightTriggerValue = 0;
-
-            GCController[] controllers = GCController.Controllers;
-
-            AssingIndex(controllers, gcindex);
-
-            GCController gccontroller = null;
-            foreach (GCController controller in controllers)
-            {
-                if (controller == null)
-                    continue;
-
-                if ((long)controller.PlayerIndex == (long)gcindex)
-                {
-                    gccontroller = controller;
-                    break;
-                }
-            }
 
             if (gccontroller != null)
             {
@@ -291,6 +260,7 @@ namespace Microsoft.Xna.Platform.Input
                     }
                 }
             }
+
             GamePadState state = base.CreateGamePadState(
                 base.CreateGamePadThumbSticks(leftThumbStickPosition, rightThumbStickPosition, leftDeadZoneMode, rightDeadZoneMode),
                 new GamePadTriggers(leftTriggerValue, rightTriggerValue),
@@ -300,9 +270,31 @@ namespace Microsoft.Xna.Platform.Input
             return state;
         }
 
+
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             return false;
         }
+
+        private GCController FindGCController(GCControllerPlayerIndex gcindex)
+        {
+            GCController[] controllers = GCController.Controllers;
+
+            AssingIndex(controllers, gcindex);
+
+            foreach (GCController controller in controllers)
+            {
+                if (controller == null)
+                    continue;
+
+                if ((long)controller.PlayerIndex == (long)gcindex)
+                {
+                    return controller;
+                }
+            }
+
+            return null;
+        }
+
     }
 }
