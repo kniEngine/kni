@@ -84,22 +84,25 @@ namespace Microsoft.Xna.Platform.Input
             return MaxNumberOfGamePads;
         }
 
+        private GamePadCapabilities GetDefaultCapabilities()
+        {
+            return base.CreateGamePadCapabilities(
+                    gamePadType: GamePadType.Unknown,
+                    displayName: null,
+                    identifier: null,
+                    isConnected: false,
+                    buttons: (Buttons)0,
+                    hasLeftVibrationMotor: false,
+                    hasRightVibrationMotor: false,
+                    hasVoiceSupport: false
+                );
+        }
+
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             WGI.Gamepad gamepad = _gamepads[index];
             if (gamepad == null)
-            {
-                return base.CreateGamePadCapabilities(
-                        gamePadType: GamePadType.Unknown,
-                        displayName: null,
-                        identifier: null,
-                        isConnected: false,
-                        buttons: (Buttons)0,
-                        hasLeftVibrationMotor: false,
-                        hasRightVibrationMotor: false,
-                        hasVoiceSupport: false
-                    );
-            }
+                return GetDefaultCapabilities();
 
             //--
             GamePadType gamePadType = GamePadType.Unknown;
