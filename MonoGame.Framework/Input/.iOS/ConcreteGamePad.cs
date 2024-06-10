@@ -37,18 +37,14 @@ namespace Microsoft.Xna.Platform.Input
             return MaxNumberOfGamePads;
         }
 
-        private bool IndexIsUsed(GCControllerPlayerIndex index)
-        {
-            foreach (GCController ctrl in GCController.Controllers)
-                if ((long)ctrl.PlayerIndex == (long)index) return true;
-
-            return false;
-        }
-
         private void AssingIndex(GCControllerPlayerIndex index)
         {
-            if (IndexIsUsed(index))
-                return;
+            // index is used ?
+            foreach (GCController controller in GCController.Controllers)
+            {
+                if ((long)controller.PlayerIndex == (long)index)
+                    return;
+            }
 
             foreach (GCController controller in GCController.Controllers)
             {
