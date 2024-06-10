@@ -50,9 +50,6 @@ namespace Microsoft.Xna.Platform.Input
 
             foreach (GCController controller in controllers)
             {
-                if ((long)controller.PlayerIndex == (long)index)
-                    break;
-
                 if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
                 {
 #if XAMARINIOS
