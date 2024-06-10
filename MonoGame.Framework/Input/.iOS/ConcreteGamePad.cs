@@ -264,6 +264,7 @@ namespace Microsoft.Xna.Platform.Input
                     return controller;
             }
 
+            // assing index
             foreach (GCController controller in controllers)
             {
                 if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
@@ -273,17 +274,8 @@ namespace Microsoft.Xna.Platform.Input
 #else
                     controller.PlayerIndex = gcindex;
 #endif
-                    break;
-                }
-            }
-
-            foreach (GCController controller in controllers)
-            {
-                if (controller == null)
-                    continue;
-
-                if ((long)controller.PlayerIndex == (long)gcindex)
                     return controller;
+                }
             }
 
             return null;
