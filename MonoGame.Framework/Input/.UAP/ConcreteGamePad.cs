@@ -220,13 +220,13 @@ namespace Microsoft.Xna.Platform.Input
             if (gamepadDevice == null)
                 return false;
 
-            gamepadDevice._device.Vibration = new WGI.GamepadVibration
-            {
-                LeftMotor = leftMotor,
-                LeftTrigger = leftTrigger,
-                RightMotor = rightMotor,
-                RightTrigger = rightTrigger
-            };
+            WGI.GamepadVibration gamepadVibration = new WGI.GamepadVibration();
+            gamepadVibration.LeftMotor = leftMotor;
+            gamepadVibration.LeftTrigger = leftTrigger;
+            gamepadVibration.RightMotor = rightMotor;
+            gamepadVibration.RightTrigger = rightTrigger;
+
+            gamepadDevice._device.Vibration = gamepadVibration;
 
             return true;
         }
