@@ -25,6 +25,7 @@ namespace Microsoft.Xna.Platform.Input
 
     public sealed class ConcreteGamePad : GamePadStrategy
     {
+        const int MaxNumberOfGamePads = 4;
 
         // Default & SDL Xbox Controller dead zones
         // Based on the XInput constants
@@ -33,52 +34,11 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformGetMaxNumberOfGamePads()
         {
-            return 4;
+            return MaxNumberOfGamePads;
         }
 
-        private bool IndexIsUsed(GCControllerPlayerIndex index)
+        private GamePadCapabilities GetDefaultCapabilities()
         {
-            foreach (GCController ctrl in GCController.Controllers)
-                if ((long)ctrl.PlayerIndex == (long)index) return true;
-
-            return false;
-        }
-
-        private void AssingIndex(GCControllerPlayerIndex index)
-        {
-            if (IndexIsUsed(index))
-                return;
-
-            foreach (GCController controller in GCController.Controllers)
-            {
-                if ((long)controller.PlayerIndex == (long)index)
-                    break;
-                if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
-                {
-#if XAMARINIOS
-                    controller.PlayerIndex = (System.nint)(long)index;
-#else
-                    controller.PlayerIndex = index;
-#endif
-                    break;
-                }
-            }
-        }
-
-        public override GamePadCapabilities PlatformGetCapabilities(int index)
-        {
-            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
-
-            AssingIndex(ind);
-
-            foreach (GCController controller in GCController.Controllers)
-            {
-                if (controller == null)
-                    continue;
-                if ((long)controller.PlayerIndex == (long)ind)
-                    return GetCapabilities(controller);
-            }
-
             return base.CreateGamePadCapabilities(
                     gamePadType: GamePadType.Unknown,
                     displayName: null,
@@ -90,6 +50,18 @@ namespace Microsoft.Xna.Platform.Input
                     hasVoiceSupport: false
                 );
         }
+
+        public override GamePadCapabilities PlatformGetCapabilities(int index)
+        {
+            GCControllerPlayerIndex gcindex = (GCControllerPlayerIndex)index;
+            GCController gccontroller = FindGCController(gcindex);
+
+            if (gccontroller == null)
+                return GetDefaultCapabilities();
+
+            return GetCapabilities(gccontroller);
+        }
+
 
         private GamePadCapabilities GetCapabilities(GCController controller)
         {
@@ -157,9 +129,19 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
+            GCControllerPlayerIndex gcindex = (GCControllerPlayerIndex)index;
+            GCController gccontroller = FindGCController(gcindex);
 
-
+            if (gccontroller == null)
+            {
+                return base.CreateGamePadState(
+                    base.CreateGamePadThumbSticks(Vector2.Zero, Vector2.Zero, leftDeadZoneMode, rightDeadZoneMode),
+                    new GamePadTriggers(0, 0),
+                    new GamePadButtons((Buttons)0),
+                    new GamePadDPad(ButtonState.Released, ButtonState.Released, ButtonState.Released, ButtonState.Released),
+                    isConnected: false);
+            }
+            
             Buttons buttons = 0;
             bool connected = false;
             ButtonState Up = ButtonState.Released;
@@ -173,107 +155,96 @@ namespace Microsoft.Xna.Platform.Input
             float leftTriggerValue = 0;
             float rightTriggerValue = 0;
 
-            AssingIndex(ind);
+            connected = true;
 
-            foreach (GCController controller in GCController.Controllers)
+            if (gccontroller.ExtendedGamepad != null)
             {
+                if (gccontroller.ExtendedGamepad.ButtonA.IsPressed)
+                    buttons |= Buttons.A;
+                if (gccontroller.ExtendedGamepad.ButtonB.IsPressed)
+                    buttons |= Buttons.B;
+                if (gccontroller.ExtendedGamepad.ButtonX.IsPressed)
+                    buttons |= Buttons.X;
+                if (gccontroller.ExtendedGamepad.ButtonY.IsPressed)
+                    buttons |= Buttons.Y;
 
-                if (controller == null)
-                    continue;
+                if (gccontroller.ExtendedGamepad.LeftShoulder.IsPressed)
+                    buttons |= Buttons.LeftShoulder;
+                if (gccontroller.ExtendedGamepad.RightShoulder.IsPressed)
+                    buttons |= Buttons.RightShoulder;
 
-                if ((long)controller.PlayerIndex != (long)ind)
-                    continue;
+                if (gccontroller.ExtendedGamepad.LeftTrigger.IsPressed)
+                    buttons |= Buttons.LeftTrigger;
+                if (gccontroller.ExtendedGamepad.RightTrigger.IsPressed)
+                    buttons |= Buttons.RightTrigger;
 
-                connected = true;
+                if (gccontroller.ExtendedGamepad.ButtonMenu.IsPressed)
+                    buttons |= Buttons.Start;
+                if (gccontroller.ExtendedGamepad.ButtonOptions != null &&
+                    gccontroller.ExtendedGamepad.ButtonOptions.IsPressed)
+                    buttons |= Buttons.Back;
 
-                if (controller.ExtendedGamepad != null)
+                if (gccontroller.ExtendedGamepad.DPad.Up.IsPressed)
                 {
-                    if (controller.ExtendedGamepad.ButtonA.IsPressed)
-                        buttons |= Buttons.A;
-                    if (controller.ExtendedGamepad.ButtonB.IsPressed)
-                        buttons |= Buttons.B;
-                    if (controller.ExtendedGamepad.ButtonX.IsPressed)
-                        buttons |= Buttons.X;
-                    if (controller.ExtendedGamepad.ButtonY.IsPressed)
-                        buttons |= Buttons.Y;
-
-                    if (controller.ExtendedGamepad.LeftShoulder.IsPressed)
-                        buttons |= Buttons.LeftShoulder;
-                    if (controller.ExtendedGamepad.RightShoulder.IsPressed)
-                        buttons |= Buttons.RightShoulder;
-
-                    if (controller.ExtendedGamepad.LeftTrigger.IsPressed)
-                        buttons |= Buttons.LeftTrigger;
-                    if (controller.ExtendedGamepad.RightTrigger.IsPressed)
-                        buttons |= Buttons.RightTrigger;
-
-                    if (controller.ExtendedGamepad.ButtonMenu.IsPressed)
-                        buttons |= Buttons.Start;
-                    if (controller.ExtendedGamepad.ButtonOptions != null &&
-                        controller.ExtendedGamepad.ButtonOptions.IsPressed)
-                        buttons |= Buttons.Back;
-
-                    if (controller.ExtendedGamepad.DPad.Up.IsPressed)
-                    {
-                        Up = ButtonState.Pressed;
-                        buttons |= Buttons.DPadUp;
-                    }
-                    if (controller.ExtendedGamepad.DPad.Down.IsPressed)
-                    {
-                        Down = ButtonState.Pressed;
-                        buttons |= Buttons.DPadDown;
-                    }
-                    if (controller.ExtendedGamepad.DPad.Left.IsPressed)
-                    {
-                        Left = ButtonState.Pressed;
-                        buttons |= Buttons.DPadLeft;
-                    }
-                    if (controller.ExtendedGamepad.DPad.Right.IsPressed)
-                    {
-                        Right = ButtonState.Pressed;
-                        buttons |= Buttons.DPadRight;
-                    }
-
-                    leftThumbStickPosition.X = controller.ExtendedGamepad.LeftThumbstick.XAxis.Value;
-                    leftThumbStickPosition.Y = controller.ExtendedGamepad.LeftThumbstick.YAxis.Value;
-                    rightThumbStickPosition.X = controller.ExtendedGamepad.RightThumbstick.XAxis.Value;
-                    rightThumbStickPosition.Y = controller.ExtendedGamepad.RightThumbstick.YAxis.Value;
-                    leftTriggerValue = controller.ExtendedGamepad.LeftTrigger.Value;
-                    rightTriggerValue = controller.ExtendedGamepad.RightTrigger.Value;
+                    Up = ButtonState.Pressed;
+                    buttons |= Buttons.DPadUp;
                 }
-                else if (controller.Gamepad != null)
+                if (gccontroller.ExtendedGamepad.DPad.Down.IsPressed)
                 {
-                    if (controller.Gamepad.ButtonA.IsPressed)
-                        buttons |= Buttons.A;
-                    if (controller.Gamepad.ButtonB.IsPressed)
-                        buttons |= Buttons.B;
-                    if (controller.Gamepad.ButtonX.IsPressed)
-                        buttons |= Buttons.X;
-                    if (controller.Gamepad.ButtonY.IsPressed)
-                        buttons |= Buttons.Y;
+                    Down = ButtonState.Pressed;
+                    buttons |= Buttons.DPadDown;
+                }
+                if (gccontroller.ExtendedGamepad.DPad.Left.IsPressed)
+                {
+                    Left = ButtonState.Pressed;
+                    buttons |= Buttons.DPadLeft;
+                }
+                if (gccontroller.ExtendedGamepad.DPad.Right.IsPressed)
+                {
+                    Right = ButtonState.Pressed;
+                    buttons |= Buttons.DPadRight;
+                }
 
-                    if (controller.Gamepad.DPad.Up.IsPressed)
-                    {
-                        Up = ButtonState.Pressed;
-                        buttons |= Buttons.DPadUp;
-                    }
-                    if (controller.Gamepad.DPad.Down.IsPressed)
-                    {
-                        Down = ButtonState.Pressed;
-                        buttons |= Buttons.DPadDown;
-                    }
-                    if (controller.Gamepad.DPad.Left.IsPressed)
-                    {
-                        Left = ButtonState.Pressed;
-                        buttons |= Buttons.DPadLeft;
-                    }
-                    if (controller.Gamepad.DPad.Right.IsPressed)
-                    {
-                        Right = ButtonState.Pressed;
-                        buttons |= Buttons.DPadRight;
-                    }
+                leftThumbStickPosition.X = gccontroller.ExtendedGamepad.LeftThumbstick.XAxis.Value;
+                leftThumbStickPosition.Y = gccontroller.ExtendedGamepad.LeftThumbstick.YAxis.Value;
+                rightThumbStickPosition.X = gccontroller.ExtendedGamepad.RightThumbstick.XAxis.Value;
+                rightThumbStickPosition.Y = gccontroller.ExtendedGamepad.RightThumbstick.YAxis.Value;
+                leftTriggerValue = gccontroller.ExtendedGamepad.LeftTrigger.Value;
+                rightTriggerValue = gccontroller.ExtendedGamepad.RightTrigger.Value;
+            }
+            else if (gccontroller.Gamepad != null)
+            {
+                if (gccontroller.Gamepad.ButtonA.IsPressed)
+                    buttons |= Buttons.A;
+                if (gccontroller.Gamepad.ButtonB.IsPressed)
+                    buttons |= Buttons.B;
+                if (gccontroller.Gamepad.ButtonX.IsPressed)
+                    buttons |= Buttons.X;
+                if (gccontroller.Gamepad.ButtonY.IsPressed)
+                    buttons |= Buttons.Y;
+
+                if (gccontroller.Gamepad.DPad.Up.IsPressed)
+                {
+                    Up = ButtonState.Pressed;
+                    buttons |= Buttons.DPadUp;
+                }
+                if (gccontroller.Gamepad.DPad.Down.IsPressed)
+                {
+                    Down = ButtonState.Pressed;
+                    buttons |= Buttons.DPadDown;
+                }
+                if (gccontroller.Gamepad.DPad.Left.IsPressed)
+                {
+                    Left = ButtonState.Pressed;
+                    buttons |= Buttons.DPadLeft;
+                }
+                if (gccontroller.Gamepad.DPad.Right.IsPressed)
+                {
+                    Right = ButtonState.Pressed;
+                    buttons |= Buttons.DPadRight;
                 }
             }
+
             GamePadState state = base.CreateGamePadState(
                 base.CreateGamePadThumbSticks(leftThumbStickPosition, rightThumbStickPosition, leftDeadZoneMode, rightDeadZoneMode),
                 new GamePadTriggers(leftTriggerValue, rightTriggerValue),
@@ -283,9 +254,39 @@ namespace Microsoft.Xna.Platform.Input
             return state;
         }
 
+
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
             return false;
         }
+
+        private GCController FindGCController(GCControllerPlayerIndex gcindex)
+        {
+            GCController[] controllers = GCController.Controllers;
+
+            // index is used ?
+            foreach (GCController controller in controllers)
+            {
+                if ((long)controller.PlayerIndex == (long)gcindex)
+                    return controller;
+            }
+
+            // assing index
+            foreach (GCController controller in controllers)
+            {
+                if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
+                {
+#if XAMARINIOS
+                    controller.PlayerIndex = (System.nint)(long)index;
+#else
+                    controller.PlayerIndex = gcindex;
+#endif
+                    return controller;
+                }
+            }
+
+            return null;
+        }
+
     }
 }
