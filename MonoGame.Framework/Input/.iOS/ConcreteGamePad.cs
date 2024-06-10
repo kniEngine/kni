@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Input
 #else
                     controller.PlayerIndex = index;
 #endif
-                    break;
+                    return;
                 }
             }
         }
