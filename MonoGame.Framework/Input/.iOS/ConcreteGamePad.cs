@@ -159,8 +159,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
-
+            GCControllerPlayerIndex gcindex = (GCControllerPlayerIndex)index;
 
             Buttons buttons = 0;
             bool connected = false;
@@ -175,7 +174,7 @@ namespace Microsoft.Xna.Platform.Input
             float leftTriggerValue = 0;
             float rightTriggerValue = 0;
 
-            AssingIndex(ind);
+            AssingIndex(gcindex);
 
             foreach (GCController controller in GCController.Controllers)
             {
@@ -183,7 +182,7 @@ namespace Microsoft.Xna.Platform.Input
                 if (controller == null)
                     continue;
 
-                if ((long)controller.PlayerIndex != (long)ind)
+                if ((long)controller.PlayerIndex != (long)gcindex)
                     continue;
 
                 connected = true;
