@@ -37,10 +37,8 @@ namespace Microsoft.Xna.Platform.Input
             return MaxNumberOfGamePads;
         }
 
-        private void AssingIndex(GCControllerPlayerIndex index)
+        private void AssingIndex(GCController[] controllers, GCControllerPlayerIndex index)
         {
-            GCController[] controllers = GCController.Controllers;
-
             // index is used ?
             foreach (GCController controller in controllers)
             {
@@ -80,12 +78,15 @@ namespace Microsoft.Xna.Platform.Input
         {
             GCControllerPlayerIndex ind = (GCControllerPlayerIndex)index;
 
-            AssingIndex(ind);
+            GCController[] controllers = GCController.Controllers;
 
-            foreach (GCController controller in GCController.Controllers)
+            AssingIndex(controllers, ind);
+
+            foreach (GCController controller in controllers)
             {
                 if (controller == null)
                     continue;
+
                 if ((long)controller.PlayerIndex == (long)ind)
                     return GetCapabilities(controller);
             }
@@ -174,11 +175,12 @@ namespace Microsoft.Xna.Platform.Input
             float leftTriggerValue = 0;
             float rightTriggerValue = 0;
 
-            AssingIndex(gcindex);
+            GCController[] controllers = GCController.Controllers;
 
-            foreach (GCController controller in GCController.Controllers)
+            AssingIndex(controllers, gcindex);
+
+            foreach (GCController controller in controllers)
             {
-
                 if (controller == null)
                     continue;
 
