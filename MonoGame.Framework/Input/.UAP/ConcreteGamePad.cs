@@ -103,6 +103,12 @@ namespace Microsoft.Xna.Platform.Input
             if (gamepadDevice == null)
                 return GetDefaultCapabilities();
 
+            GamePadCapabilities capabilities = CreateCapabilities(gamepadDevice);
+            return capabilities;
+        }
+
+        private GamePadCapabilities CreateCapabilities(WGIGamePadDevice gamepadDevice)
+        {
             //--
             GamePadType gamePadType = GamePadType.Unknown;
             string displayName = String.Empty;
