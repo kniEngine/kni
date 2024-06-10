@@ -30,6 +30,8 @@ namespace Microsoft.Xna.Platform.Input
         // The trigger here has a range of 0.0 to 1.0. So, 30 / 255 = 0.11765.
         private const double TriggerThreshold = 0.11765;
 
+        const int MaxNumberOfGamePads = 16;
+
         internal bool Back;
 
         private WGI.Gamepad[] _gamepads;
@@ -42,7 +44,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public ConcreteGamePad()
         {
-            _gamepads = new WGI.Gamepad[PlatformGetMaxNumberOfGamePads()];
+            _gamepads = new WGI.Gamepad[MaxNumberOfGamePads];
             IReadOnlyList<WGI.Gamepad> gamepadsTmp = WGI.Gamepad.Gamepads;
             _initGamepadsCount = gamepadsTmp.Count; // workaround UAP bug. first call to 'WGI.Gamepad.Gamepads' returns an empty instance.
             IReadOnlyList<WGI.Gamepad> gamepads = WGI.Gamepad.Gamepads;
@@ -76,7 +78,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformGetMaxNumberOfGamePads()
         {
-            return 16;
+            return MaxNumberOfGamePads;
         }
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
