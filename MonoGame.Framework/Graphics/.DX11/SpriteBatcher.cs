@@ -284,12 +284,14 @@ namespace Microsoft.Xna.Platform.Graphics
             int startIndex = 0;
             int primitiveCount = spriteCount * 2;
 
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).Strategy;
+
             if (effect == null) // If no custom effect is defined, then simply render.
             {
-                _device.Textures[0] = texture;
+                contextStrategy.Textures[0] = texture;
 
                 // call GraphicsContextStrategy.DrawIndexedPrimitives() directly, bypassing checks.
-                ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).Strategy.DrawIndexedPrimitives(
+                contextStrategy.DrawIndexedPrimitives(
                     PrimitiveType.TriangleList,
                     baseVertex,
                     minVertexIndex, numVertices,
@@ -304,10 +306,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     // We have to set the texture again on each pass,
                     // because pass.Apply() might have set a texture from the effect.
-                    _device.Textures[0] = texture;
+                    contextStrategy.Textures[0] = texture;
 
                     // call GraphicsContextStrategy.DrawIndexedPrimitives() directly, bypassing checks.
-                    ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)_device).Strategy.CurrentContext).Strategy.DrawIndexedPrimitives(
+                    contextStrategy.DrawIndexedPrimitives(
                         PrimitiveType.TriangleList,
                         baseVertex,
                         minVertexIndex, numVertices,
