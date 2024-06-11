@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\src\Xna.Framework.Graphics\Graphics\Utilities\DxtDecoder.cs">
-      <Link>Graphics\Utilities\DxtDecoder.cs</Link>
+      <Link>Utilities\DxtDecoder.cs</Link>
     </Compile>
   </ItemGroup>
 
