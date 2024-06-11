@@ -1,4 +1,5 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <XnaInstall>C:\Program Files (x86)\MSBuild\Microsoft\XNA Game Studio\v4.0</XnaInstall>
   </PropertyGroup>
