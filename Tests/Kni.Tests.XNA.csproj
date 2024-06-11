@@ -79,7 +79,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MonoGame.Framework\Graphics\Utilities\DxtDecoder.cs">
+    <Compile Include="..\src\Xna.Framework.Graphics\Graphics\Utilities\DxtDecoder.cs">
       <Link>Graphics\Utilities\DxtDecoder.cs</Link>
     </Compile>
   </ItemGroup>
