@@ -330,7 +330,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // Check Samplers
-            if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
+            if (graphicsProfile == GraphicsProfile.Reach)
             {
                 for (int slot = 0; slot < texturesCount; slot++)
                 {
