@@ -6,7 +6,7 @@
     <TargetFrameworks>net472</TargetFrameworks>
     <ProjectGuid>{DED2DDB6-D4BE-B1B4-2E54-657374732E57}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MonoGame.Tests</RootNamespace>
+    <RootNamespace>Kni.Tests</RootNamespace>
     <AssemblyName>Kni.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
