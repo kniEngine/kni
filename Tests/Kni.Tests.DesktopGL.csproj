@@ -71,8 +71,8 @@
     <Compile Include="Framework\VertexTests.cs" />
     <Compile Include="Framework\Audio\SoundEffectTest.cs" />
     <Compile Include="Framework\Audio\XactTest.cs" />
-    <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
+    <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Components\DrawFrameNumberComponent.cs" />
     <Compile Include="Framework\Components\FlexibleGameComponent.cs" />
     <Compile Include="Framework\Components\FrameCompareComponent.cs" />
@@ -120,6 +120,9 @@
     <Compile Include="Framework\Graphics\ProfileReachTest.cs" />
     <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
     <Compile Include="Framework\Visual\VisualTestGame.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="ContentPipeline\AssetTestUtility.cs" />
   </ItemGroup>
 
@@ -794,6 +797,9 @@
     <Content Include="Assets\Fonts\Strings.resx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\OpenGL\Bevels.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -821,6 +827,9 @@
     <Content Include="Assets\Effects\OpenGL\CustomSpriteBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Textures\GlassPane.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

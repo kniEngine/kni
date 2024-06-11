@@ -136,9 +136,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="ContentPipeline\AssetTestUtility.cs" />
     <Compile Include="ContentPipeline\BuilderTargetsTest.cs" />
     <Compile Include="ContentPipeline\AssetTestClasses.cs" />
-    <Compile Include="ContentPipeline\AssetTestUtility.cs" />
     <Compile Include="ContentPipeline\AudioContentTests.cs" />
     <Compile Include="ContentPipeline\BitmapContentTests.cs" />
     <Compile Include="ContentPipeline\ContentCompilerTest.cs" />
@@ -891,6 +891,9 @@
     <Content Include="Assets\Fonts\Strings.resx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\DirectX\Bevels.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -918,6 +921,9 @@
     <Content Include="Assets\Effects\DirectX\CustomSpriteBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\DirectX\CustomSpriteBatchEffectComparisonSampler.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -930,6 +936,9 @@
     <Content Include="Assets\Effects\DirectX\VertexTextureEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Textures\GlassPane.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
