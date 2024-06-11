@@ -332,13 +332,13 @@ namespace Microsoft.Xna.Platform.Graphics
             // Check Samplers
             if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
             {
-                for (int i = 0; i < texturesCount; i++)
+                for (int slot = 0; slot < texturesCount; slot++)
                 {
-                    Texture2D tx2D = ctextureCollection[i] as Texture2D;
-                    if (tx2D != null)
+                    Texture2D texture2D = ctextureCollection[slot] as Texture2D;
+                    if (texture2D != null)
                     {
-                        if (this.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  this.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                        if (this.SamplerStates[slot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
+                        ||  this.SamplerStates[slot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
