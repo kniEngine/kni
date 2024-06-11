@@ -38,10 +38,10 @@
     <Compile Include="Runner\Extensions.cs" />
     <Compile Include="Runner\FrameInfo.cs" />
     <Compile Include="Runner\FramePixelData.cs" />
+    <Compile Include="Runner\FramePixelData.Desktop.cs" />
     <Compile Include="Runner\PixelArgb.cs" />
     <Compile Include="Runner\Utility.cs" />
     <Compile Include="Runner\Program.cs" />
-    <Compile Include="Runner\Desktop\FramePixelData.cs" />
     <Compile Include="Framework\ByteBufferPoolTest.cs" />
     <Compile Include="Utilities\ActionDaemon.cs" />
     <Compile Include="Framework\Bounding.cs" />

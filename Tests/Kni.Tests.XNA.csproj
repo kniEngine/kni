@@ -166,10 +166,10 @@
     <Compile Include="Framework\Graphics\BlendStateTest.cs" />
     <Compile Include="Framework\Graphics\IndexBufferTest.cs" />
     <Compile Include="Runner\Constants.cs" />
-    <Compile Include="Runner\Desktop\FramePixelData.cs" />
     <Compile Include="Runner\Extensions.cs" />
     <Compile Include="Runner\FrameInfo.cs" />
     <Compile Include="Runner\FramePixelData.cs" />
+    <Compile Include="Runner\FramePixelData.Desktop.cs" />
     <Compile Include="Framework\Bounding.cs" />
     <Compile Include="Framework\MathHelperTest.cs" />
     <Compile Include="Framework\RayTest.cs" />
