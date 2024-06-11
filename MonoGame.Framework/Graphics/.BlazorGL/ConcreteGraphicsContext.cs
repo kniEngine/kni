@@ -228,21 +228,6 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
             ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
 
-            if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
-            {
-                int texturesCount = ((IPlatformTextureCollection)this.Textures).Strategy.Length;
-                for (int i = 0; i < texturesCount; i++)
-                {
-                    Texture2D tx2D = ((IPlatformTextureCollection)this.Textures).Strategy[i] as Texture2D;
-                    if (tx2D != null)
-                    {
-                        if (this.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
-                        ||  this.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
-                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                    }
-                }
-            }
-
             // Apply Shader Texture and Samplers
             PlatformApplyTexturesAndSamplers(cvertexShader,
                 ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
@@ -254,8 +239,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
+            int texturesCount = ctextureCollection.Length;
+
             // Apply Textures
-            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < ctextureCollection.Length; slot++)
+            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < texturesCount; slot++)
             {
                 uint mask = ((uint)1) << slot;
                 if ((ctextureCollection.InternalDirty & mask) != 0)
@@ -303,8 +290,23 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
+            // Check Samplers
+            if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            {
+                for (int i = 0; i < texturesCount; i++)
+                {
+                    Texture2D tx2D = ctextureCollection[i] as Texture2D;
+                    if (tx2D != null)
+                    {
+                        if (this.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        || this.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
+                    }
+                }
+            }
+
             // Apply Samplers
-            for (int slot = 0; slot < csamplerStateCollection.InternalActualSamplers.Length; slot++)
+            for (int slot = 0; slot < texturesCount; slot++)
             {
                 Texture texture = ctextureCollection[slot];
                 if (texture != null)
