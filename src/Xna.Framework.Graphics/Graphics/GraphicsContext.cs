@@ -338,12 +338,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
         }
 
-        // internal DrawIndexedPrimitives without checks, used by SpriteBatcher.
-        void IPlatformGraphicsContext.SB_DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
-        {
-            _strategy.DrawIndexedPrimitives(primitiveType, baseVertex, minVertexIndex, numVertices, startIndex, primitiveCount);
-        }
-
         /// <summary>
         /// Draw primitives of the specified type from the data in an array of vertices without indexing.
         /// </summary>
