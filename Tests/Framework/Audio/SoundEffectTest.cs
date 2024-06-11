@@ -34,6 +34,7 @@ namespace MonoGame.Tests.Audio
             // TODO: Add some range tests.
         }
 
+#if !XNA
         [Test]
         public void GetSampleDuration()
         {
@@ -112,6 +113,7 @@ namespace MonoGame.Tests.Audio
             Assert.AreEqual(32000, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 8000, AudioChannels.Stereo));
             Assert.AreEqual(192000, Microsoft.Xna.Platform.Audio.AudioService.GetSampleSizeInBytes(TimeSpan.FromSeconds(1), 48000, AudioChannels.Stereo));
         }
+#endif
 
         [Test]
         public void Ctor1()
