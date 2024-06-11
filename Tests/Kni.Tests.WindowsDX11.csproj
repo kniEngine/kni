@@ -86,7 +86,7 @@
     <Compile Include="Framework\Audio\XactTest.cs" />
     <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
-    <Compile Include="Framework\WindowsDX\Audio\SoundEffectInstanceXAudioTest.cs" />
+    <Compile Include="Framework\Audio\XAudio\SoundEffectInstanceXAudioTest.cs" />
     <Compile Include="Framework\Components\DrawFrameNumberComponent.cs" />
     <Compile Include="Framework\Components\FlexibleGameComponent.cs" />
     <Compile Include="Framework\Components\FrameCompareComponent.cs" />
