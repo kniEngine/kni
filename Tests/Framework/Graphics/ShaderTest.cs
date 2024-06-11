@@ -20,10 +20,7 @@ namespace MonoGame.Tests.Graphics
 		[TestCase("ColorFlip")]
 		[TestCase("Invert")]
 		[TestCase("BlackOut")]
-#if !DESKTOPGL
-        // TODO this does not render for some reason, we need to fix this
         [TestCase("RainbowH")]
-#endif
         public void Shader(string effectName)
 		{
             PrepareFrameCapture();
