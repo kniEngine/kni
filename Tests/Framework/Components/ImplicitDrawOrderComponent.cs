@@ -73,7 +73,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests.Components {
+namespace Kni.Tests.Components {
 	class ImplicitDrawOrderComponent : VisualTestDrawableGameComponent {
 		private const int NumberOfBatches = 3;
 		private const int ItemsPerBatch = 3;

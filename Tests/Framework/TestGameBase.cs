@@ -14,14 +14,14 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using MonoGame.Tests.Components;
+using Kni.Tests.Components;
 
 #if IOS || TVOS
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 #endif
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 	class TestGameBase : Game, IFrameInfoSource {
 		private bool _isExiting;
 

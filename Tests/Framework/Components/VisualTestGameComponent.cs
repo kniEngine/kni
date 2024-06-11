@@ -73,7 +73,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Components {
+namespace Kni.Tests.Components {
 	class VisualTestGameComponent : GameComponent {
 		public VisualTestGameComponent (Game game)
 			: base (game)

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 
     public class MatrixComparer : IEqualityComparer<Matrix>
     {

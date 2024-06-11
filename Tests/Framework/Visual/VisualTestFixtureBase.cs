@@ -10,9 +10,9 @@ using Microsoft.Xna.Framework;
 
 using NUnit.Framework;
 
-using MonoGame.Tests.Components;
+using Kni.Tests.Components;
 
-namespace MonoGame.Tests.Visual {
+namespace Kni.Tests.Visual {
 	class VisualTestFixtureBase {
 		private VisualTestGame _game;
 		protected VisualTestGame Game { get { return _game; } }

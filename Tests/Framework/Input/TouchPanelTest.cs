@@ -4,10 +4,10 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Input.Touch;
-using MonoGame.Tests.Framework;
+using Kni.Tests.Framework;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Input
+namespace Kni.Tests.Input
 {
     [TestFixture]
     internal class TouchPanelTest

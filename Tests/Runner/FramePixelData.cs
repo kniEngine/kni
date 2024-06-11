@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 	partial class FramePixelData {
 		public FramePixelData (int width, int height, Color[] data)
 		{

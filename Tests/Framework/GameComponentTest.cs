@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
-using MonoGame.Tests.Framework.Components;
+using Kni.Tests.Framework.Components;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     public static class GameComponentTest
     {

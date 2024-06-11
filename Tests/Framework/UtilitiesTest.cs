@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Microsoft.Xna.Platform.Content.Utilities;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     class UtilitiesTest
     {

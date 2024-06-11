@@ -3,10 +3,10 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using Microsoft.Xna.Framework;
-using MonoGame.Tests.Components;
+using Kni.Tests.Components;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Visual {
+namespace Kni.Tests.Visual {
 	[TestFixture]
 	class MiscellaneousTests : VisualTestFixtureBase
     {

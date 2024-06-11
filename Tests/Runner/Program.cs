@@ -7,7 +7,7 @@ using System.IO;
 using NUnitLite;
 using NUnit.Framework;
 
-namespace MonoGame.Tests
+namespace Kni.Tests
 {
     static class Program
     {

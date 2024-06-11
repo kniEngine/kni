@@ -70,7 +70,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
 #if ! WINDOWSDX
     [Ignore("Texture3D is not implemented for the OpenGL backend.")]

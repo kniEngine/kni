@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Audio
+namespace Kni.Tests.Audio
 {
     // Tests specific to SoundEffectInstance.XAudio (Windows DirectX)
     public class SoundEffectInstanceXAudioTest

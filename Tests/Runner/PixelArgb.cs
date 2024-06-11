@@ -72,7 +72,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 	[StructLayout (LayoutKind.Sequential)]
 	struct PixelArgb {
 		public const int MaxDelta = 4 * Byte.MaxValue;

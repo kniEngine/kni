@@ -92,7 +92,7 @@ using NUnit.Framework;
 //       differences, contrast differences, color-contrast differences, edge
 //       differences, etc.
 
-namespace MonoGame.Tests.Components {
+namespace Kni.Tests.Components {
 	/// <summary>
 	/// Defines behavior needed for frames to be scheduled for capture and
 	/// then manipulated and released.

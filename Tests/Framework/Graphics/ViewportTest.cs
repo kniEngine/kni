@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics {
+namespace Kni.Tests.Graphics {
 	class ViewportTest : GraphicsDeviceTestFixtureBase {
 		[Test]
 		public void Affects_draw_origin ()

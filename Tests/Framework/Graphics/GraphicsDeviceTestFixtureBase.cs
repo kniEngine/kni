@@ -10,11 +10,11 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Tests.Components;
-using MonoGame.Tests.Utilities;
+using Kni.Tests.Components;
+using Kni.Tests.Utilities;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     internal class GraphicsDeviceTestFixtureBase
     {

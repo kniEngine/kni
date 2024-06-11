@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Audio
+namespace Kni.Tests.Audio
 {
     class DynamicSoundEffectInstanceTest
     {

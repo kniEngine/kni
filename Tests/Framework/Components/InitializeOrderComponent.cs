@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Framework.Components
+namespace Kni.Tests.Framework.Components
 {
     class InitializeOrderComponent: GameComponent
     {

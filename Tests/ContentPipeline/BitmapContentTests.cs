@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class BitmapContentTests
     {

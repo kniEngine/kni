@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class TestImporterContext : ContentImporterContext
     {

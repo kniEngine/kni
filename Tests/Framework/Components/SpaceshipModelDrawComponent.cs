@@ -75,7 +75,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests.Components
+namespace Kni.Tests.Components
 {
 	class SpaceshipModelDrawComponent : VisualTestDrawableGameComponent
 	{

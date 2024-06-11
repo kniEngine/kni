@@ -71,7 +71,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 	static class Constants {
 		public const float StandardRequiredSimilarity = 0.99f;
 	}

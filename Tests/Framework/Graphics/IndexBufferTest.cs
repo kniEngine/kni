@@ -6,7 +6,7 @@ using System;
 using NUnit.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     [TestFixture]
     class IndexBufferTest: GraphicsDeviceTestFixtureBase

@@ -71,7 +71,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonoGame.Tests.Components {
+namespace Kni.Tests.Components {
 	class UpdateGuard {
 		private int _lastDrawNumberOfUpdate = -1;
 

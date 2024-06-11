@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 #endif
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     internal static class AssetTestUtility
     {

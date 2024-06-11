@@ -1,7 +1,7 @@
 ﻿using MonoGame.Framework.Utilities;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     public class ByteBufferPoolTest
     {

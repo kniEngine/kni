@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Input
+namespace Kni.Tests.Input
 {
     class MouseTest
     {

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     [TestFixture]
     class VertexBufferTest : GraphicsDeviceTestFixtureBase

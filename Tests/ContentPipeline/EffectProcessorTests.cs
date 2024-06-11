@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 #endif
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class EffectProcessorTests
     {

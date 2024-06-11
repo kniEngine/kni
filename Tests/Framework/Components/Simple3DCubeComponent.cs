@@ -7,7 +7,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests.Components {
+namespace Kni.Tests.Components {
 	class Simple3DCubeComponent
 	{
 	    GraphicsDevice graphicsDevice;

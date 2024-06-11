@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Input
+namespace Kni.Tests.Input
 {
     public class GamePadTest
     {

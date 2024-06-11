@@ -534,7 +534,7 @@ class StructArrayNoElements
     public Vector2[] Vector2ArrayNoElements = new Vector2[] {};
 }
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     #region Namespaces
     public class NamespaceHelper
@@ -590,7 +590,7 @@ namespace MonoGame.Tests.ContentPipeline
     #endregion
 }
 
-namespace MonoGame.Tests.SomethingElse.ContentPipeline
+namespace Kni.Tests.SomethingElse.ContentPipeline
 {
     public class ClassInsideAmbiguousNamespace
     {

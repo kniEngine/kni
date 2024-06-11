@@ -73,7 +73,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 	struct FrameInfo {
 		public int UpdateNumber;
 		public int DrawNumber;

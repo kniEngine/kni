@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
 
     [TestFixture]

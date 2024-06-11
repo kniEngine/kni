@@ -73,7 +73,7 @@ using System.Text;
 
 using NUnit.Framework;
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 	partial class GameTest {
 		public static class Methods {
 			[TestFixture]

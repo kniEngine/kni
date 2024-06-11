@@ -80,7 +80,7 @@ using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
-namespace MonoGame.Tests 
+namespace Kni.Tests 
 {
 	partial class GameTest 
     {

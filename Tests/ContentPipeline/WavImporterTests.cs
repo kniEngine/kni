@@ -7,7 +7,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class WavImporterTests
     {

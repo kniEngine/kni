@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Components {
+namespace Kni.Tests.Components {
 	class FlexibleGameComponent : VisualTestDrawableGameComponent {
 
 		public FlexibleGameComponent (Game game)

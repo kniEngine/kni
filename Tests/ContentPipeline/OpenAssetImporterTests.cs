@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using NUnit.Framework;
 using System.IO;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class OpenAssetImporterTests
     {

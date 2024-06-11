@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
-namespace MonoGame.Tests {
+namespace Kni.Tests {
 	static class Extensions {
 		public static void Add (
 			this GameComponentCollection self,

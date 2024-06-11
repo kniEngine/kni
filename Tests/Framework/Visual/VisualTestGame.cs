@@ -70,9 +70,9 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using MonoGame.Tests.Components;
+using Kni.Tests.Components;
 
-namespace MonoGame.Tests.Visual {
+namespace Kni.Tests.Visual {
 	class VisualTestGame : TestGameBase, IFrameCaptureSource {
 		public VisualTestGame ()
 		{
