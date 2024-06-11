@@ -228,7 +228,6 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
             ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
 
-
             // Apply Shader Texture and Samplers
             PlatformApplyTexturesAndSamplers(cvertexShader,
                 ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
@@ -240,8 +239,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
+            int texturesCount = ctextureCollection.Length;
+
             // Apply Textures
-            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < ctextureCollection.Length; slot++)
+            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < texturesCount; slot++)
             {
                 uint mask = ((uint)1) << slot;
                 if ((ctextureCollection.InternalDirty & mask) != 0)
@@ -289,8 +290,24 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
+            // Check Samplers
+            GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
+            if (graphicsProfile == GraphicsProfile.Reach)
+            {
+                for (int slot = 0; slot < texturesCount; slot++)
+                {
+                    Texture2D texture2D = ctextureCollection[slot] as Texture2D;
+                    if (texture2D != null)
+                    {
+                        if (this.SamplerStates[slot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
+                        ||  this.SamplerStates[slot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
+                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
+                    }
+                }
+            }
+
             // Apply Samplers
-            for (int slot = 0; slot < csamplerStateCollection.InternalActualSamplers.Length; slot++)
+            for (int slot = 0; slot < texturesCount; slot++)
             {
                 Texture texture = ctextureCollection[slot];
                 if (texture != null)
