@@ -240,7 +240,9 @@ namespace MonoGame.Tests.Framework
             Assert.AreEqual(1, (int)PrimitiveType.TriangleStrip);
             Assert.AreEqual(2, (int)PrimitiveType.LineList);
             Assert.AreEqual(3, (int)PrimitiveType.LineStrip);
+#if !XNA
             Assert.AreEqual(4, (int)PrimitiveType.PointList);
+#endif
         }
 
         [Test]
