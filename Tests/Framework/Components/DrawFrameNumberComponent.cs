@@ -10,39 +10,41 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Kni.Tests.Components {
-	class DrawFrameNumberComponent : DrawableGameComponent {
+namespace Kni.Tests.Components
+{
+	class DrawFrameNumberComponent : DrawableGameComponent
+	{
 		private SpriteBatch _batch;
 		private SpriteFont _font;
 
-		public DrawFrameNumberComponent (Game game)
-			: base (game)
+		public DrawFrameNumberComponent(Game game)
+			: base(game)
 		{
 		}
 
-		protected override void LoadContent ()
+		protected override void LoadContent()
 		{
-			_batch = new SpriteBatch (Game.GraphicsDevice);
-			_font = Game.Content.Load<SpriteFont> (Paths.Font ("Default"));
+			_batch = new SpriteBatch(Game.GraphicsDevice);
+			_font = Game.Content.Load<SpriteFont>(Paths.Font("Default"));
 		}
 
-		protected override void UnloadContent ()
+		protected override void UnloadContent()
 		{
-			_batch.Dispose ();
+			_batch.Dispose();
 			_batch = null;
 
 			_font = null;
 		}
 
-		public override void Draw (GameTime gameTime)
+		public override void Draw(GameTime gameTime)
 		{
-			var frameInfoSource = Game.Services.RequireService<IFrameInfoSource> ();
+			var frameInfoSource = Game.Services.RequireService<IFrameInfoSource>();
 			var frameInfo = frameInfoSource.FrameInfo;
 
 			// TODO: Add support for different placements and colors.
-			_batch.Begin ();
-			_batch.DrawString (_font, frameInfo.DrawNumber.ToString(), Vector2.Zero, Color.White);
-			_batch.End ();
+			_batch.Begin();
+			_batch.DrawString(_font, frameInfo.DrawNumber.ToString(), Vector2.Zero, Color.White);
+			_batch.End();
 		}
 	}
 }

@@ -17,24 +17,24 @@ using MonoTouch.UIKit;
 
 namespace MonoTest
 {
-	[Register ("AppDelegate")]
-	class Program : UIApplicationDelegate 
+	[Register("AppDelegate")]
+	class Program : UIApplicationDelegate
 	{
-		public override void FinishedLaunching (UIApplication app)
+		public override void FinishedLaunching(UIApplication app)
 		{
 			// Fun begins..
 			using (Game1 game = new Game1())
-            {
-                game.Run();
-            }
-			
+			{
+				game.Run();
+			}
+
 			//MediaLibrary lib = new MediaLibrary();
 			//object result = lib.Playlists;
 		}
 
-		static void Main (string [] args)
+		static void Main(string[] args)
 		{
-			UIApplication.Main (args,null,"AppDelegate");
+			UIApplication.Main(args, null, "AppDelegate");
 		}
 	}
 }

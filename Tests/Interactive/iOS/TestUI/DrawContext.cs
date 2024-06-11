@@ -8,58 +8,63 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.InteractiveTests.TestUI {
-	class DrawContext : IDisposable {
+namespace MonoGame.InteractiveTests.TestUI
+{
+	class DrawContext : IDisposable
+	{
 		private readonly Stack<Matrix> _states;
-		public DrawContext (GraphicsDevice graphicsDevice, Matrix matrix)
+		public DrawContext(GraphicsDevice graphicsDevice, Matrix matrix)
 		{
 			_graphicsDevice = graphicsDevice;
-			_spriteBatch = new SpriteBatch (graphicsDevice);
+			_spriteBatch = new SpriteBatch(graphicsDevice);
 			_matrix = matrix;
-			_states = new Stack<Matrix> ();
+			_states = new Stack<Matrix>();
 		}
 
-		public DrawContext (GraphicsDevice graphicsDevice)
+		public DrawContext(GraphicsDevice graphicsDevice)
 			: this(graphicsDevice, Matrix.Identity)
 		{
 		}
 
 		~DrawContext()
 		{
-			Dispose (false);
+			Dispose(false);
 		}
 
 		private readonly GraphicsDevice _graphicsDevice;
-		public GraphicsDevice GraphicsDevice {
+		public GraphicsDevice GraphicsDevice
+		{
 			get { return _graphicsDevice; }
 		}
 
 		private Matrix _matrix;
-		public Matrix Matrix {
+		public Matrix Matrix
+		{
 			get { return _matrix; }
 		}
 
 		private readonly SpriteBatch _spriteBatch;
-		public SpriteBatch SpriteBatch {
+		public SpriteBatch SpriteBatch
+		{
 			get { return _spriteBatch; }
 		}
 
-		public void Begin (Matrix matrix)
+		public void Begin(Matrix matrix)
 		{
 			if (_states.Count > 0)
-				_spriteBatch.End ();
+				_spriteBatch.End();
 
-			_states.Push (_matrix);
+			_states.Push(_matrix);
 			_matrix = matrix;
-			_spriteBatch.Begin (
+			_spriteBatch.Begin(
 				SpriteSortMode.Immediate, BlendState.AlphaBlend,
 				null, null, null, null, _matrix);
 		}
 
-		public void End ()
+		public void End()
 		{
-			_spriteBatch.End ();
-			_matrix = _states.Pop ();
+			_spriteBatch.End();
+			_matrix = _states.Pop();
 
 			if (_states.Count > 0)
 				_spriteBatch.Begin
@@ -71,13 +76,14 @@ namespace MonoGame.InteractiveTests.TestUI {
 
 		public void Dispose()
 		{
-			Dispose (true);
+			Dispose(true);
 		}
 
-		protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
-			if (disposing) {
-				_spriteBatch.Dispose ();
+			if (disposing)
+			{
+				_spriteBatch.Dispose();
 			}
 		}
 

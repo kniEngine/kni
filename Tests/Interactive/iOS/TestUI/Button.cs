@@ -8,46 +8,55 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using System.Drawing;
 
-namespace MonoGame.InteractiveTests.TestUI {
-	class Button : View {
-		public Button ()
+namespace MonoGame.InteractiveTests.TestUI
+{
+	class Button : View
+	{
+		public Button()
 		{
-			Padding = new PaddingF (10);
+			Padding = new PaddingF(10);
 		}
 
 		private View _content;
-		public View Content {
+		public View Content
+		{
 			get { return _content; }
-			set {
-				if (_content != value) {
+			set
+			{
+				if (_content != value)
+				{
 					if (_content != null)
-						_content.RemoveFromSuperview ();
+						_content.RemoveFromSuperview();
 					_content = value;
 					if (_content != null)
-						Add (_content);
+						Add(_content);
 				}
 			}
 		}
 
 		private PaddingF _padding;
-		public PaddingF Padding {
+		public PaddingF Padding
+		{
 			get { return _padding; }
-			set {
-				if (_padding != value) {
+			set
+			{
+				if (_padding != value)
+				{
 					_padding = value;
-					SetNeedsLayout ();
+					SetNeedsLayout();
 				}
 			}
 		}
 
 		public override void LayoutSubviews()
 		{
-			foreach (var view in Subviews) {
-				view.LayoutIfNeeded ();
+			foreach (var view in Subviews)
+			{
+				view.LayoutIfNeeded();
 
 				var frame = view.Frame;
-				frame.X = Math.Max (frame.X, Padding.Left);
-				frame.Y = Math.Max (frame.Y, Padding.Top);
+				frame.X = Math.Max(frame.X, Padding.Left);
+				frame.Y = Math.Max(frame.Y, Padding.Top);
 				view.Frame = frame;
 			}
 		}
@@ -55,12 +64,13 @@ namespace MonoGame.InteractiveTests.TestUI {
 		public override System.Drawing.SizeF SizeThatFits(SizeF size)
 		{
 			var maxContentSize = size;
-			if (size != Size.Empty) {
+			if (size != Size.Empty)
+			{
 				size.Width -= Padding.Horizontal;
 				size.Height -= Padding.Vertical;
 			}
 
-			var fitSize = Content.SizeThatFits (maxContentSize);
+			var fitSize = Content.SizeThatFits(maxContentSize);
 			fitSize.Width += Padding.Horizontal;
 			fitSize.Height += Padding.Vertical;
 			return fitSize;
@@ -71,13 +81,14 @@ namespace MonoGame.InteractiveTests.TestUI {
 		{
 			var handler = Tapped;
 			if (handler != null)
-				handler (this, e);
+				handler(this, e);
 		}
 
 		public override bool HandleGestureSample(GestureSample gestureSample, GameTime gameTime)
 		{
-			if (gestureSample.GestureType == GestureType.Tap) {
-				OnTapped (EventArgs.Empty);
+			if (gestureSample.GestureType == GestureType.Tap)
+			{
+				OnTapped(EventArgs.Empty);
 				return true;
 			}
 			return base.HandleGestureSample(gestureSample, gameTime);

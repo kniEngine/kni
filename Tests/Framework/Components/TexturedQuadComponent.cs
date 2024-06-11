@@ -12,9 +12,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Kni.Tests.Components
 {
-	class TexturedQuadComponent : VisualTestDrawableGameComponent {
+	class TexturedQuadComponent : VisualTestDrawableGameComponent
+	{
 
-		struct Quad {
+		struct Quad
+		{
 			public Vector3 Origin;
 			public Vector3 UpperLeft;
 			public Vector3 LowerLeft;
@@ -23,46 +25,46 @@ namespace Kni.Tests.Components
 			public Vector3 Normal;
 			public Vector3 Up;
 			public Vector3 Left;
-	
+
 			public VertexPositionNormalTexture[] Vertices;
 			public short[] Indexes;
-	
-	
-			public Quad( Vector3 origin, Vector3 normal, Vector3 up, 
-				float width, float height )
+
+
+			public Quad(Vector3 origin, Vector3 normal, Vector3 up,
+				float width, float height)
 			{
 				Vertices = new VertexPositionNormalTexture[4];
 				Indexes = new short[6];
 				Origin = origin;
 				Normal = normal;
 				Up = up;
-	
+
 				// Calculate the quad corners
-				Left = Vector3.Cross( normal, Up );
+				Left = Vector3.Cross(normal, Up);
 				Vector3 uppercenter = (Up * height / 2) + origin;
 				UpperLeft = uppercenter + (Left * width / 2);
 				UpperRight = uppercenter - (Left * width / 2);
 				LowerLeft = UpperLeft - (Up * height);
 				LowerRight = UpperRight - (Up * height);
-	
+
 				FillVertices();
 			}
-			
+
 			private void FillVertices()
 			{
 				// Fill in texture coordinates to display full texture
 				// on quad
-				Vector2 textureUpperLeft = new Vector2( 0.0f, 0.0f );
-				Vector2 textureUpperRight = new Vector2( 1.0f, 0.0f );
-				Vector2 textureLowerLeft = new Vector2( 0.0f, 1.0f );
-				Vector2 textureLowerRight = new Vector2( 1.0f, 1.0f );
-	
+				Vector2 textureUpperLeft = new Vector2(0.0f, 0.0f);
+				Vector2 textureUpperRight = new Vector2(1.0f, 0.0f);
+				Vector2 textureLowerLeft = new Vector2(0.0f, 1.0f);
+				Vector2 textureLowerRight = new Vector2(1.0f, 1.0f);
+
 				// Provide a normal for each vertex
 				for (int i = 0; i < Vertices.Length; i++)
 				{
 					Vertices[i].Normal = Normal;
 				}
-	
+
 				// Set the position and texture coordinate for each
 				// vertex
 				Vertices[0].Position = LowerLeft;
@@ -73,7 +75,7 @@ namespace Kni.Tests.Components
 				Vertices[2].TextureCoordinate = textureLowerRight;
 				Vertices[3].Position = UpperRight;
 				Vertices[3].TextureCoordinate = textureUpperRight;
-	
+
 				// Set the index buffer for each vertex, using
 				// clockwise winding
 				Indexes[0] = 0;
@@ -95,7 +97,7 @@ namespace Kni.Tests.Components
 
 		bool enableLighting;
 
-		public TexturedQuadComponent (Game game, bool enableLighting) : base(game)
+		public TexturedQuadComponent(Game game, bool enableLighting) : base(game)
 		{
 			this.enableLighting = enableLighting;
 		}
@@ -124,9 +126,9 @@ namespace Kni.Tests.Components
 
 		protected override void UnloadContent()
 		{
-			texture.Dispose ();
+			texture.Dispose();
 			texture = null;
-			quadEffect.Dispose ();
+			quadEffect.Dispose();
 			quadEffect = null;
 		}
 

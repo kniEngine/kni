@@ -9,7 +9,8 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 
-namespace Kni.Tests {
+namespace Kni.Tests
+{
 
     public class MatrixComparer : IEqualityComparer<Matrix>
     {
@@ -24,7 +25,7 @@ namespace Kni.Tests {
 
         public bool Equals(Matrix x, Matrix y)
         {
-            return  Math.Abs(x.M11 - y.M11) < _epsilon &&
+            return Math.Abs(x.M11 - y.M11) < _epsilon &&
                     Math.Abs(x.M12 - y.M12) < _epsilon &&
                     Math.Abs(x.M13 - y.M13) < _epsilon &&
                     Math.Abs(x.M14 - y.M14) < _epsilon &&
@@ -121,7 +122,7 @@ namespace Kni.Tests {
 
         public bool Equals(BoundingSphere x, BoundingSphere y)
         {
-            return  Math.Abs(x.Center.X - y.Center.X) < _epsilon &&
+            return Math.Abs(x.Center.X - y.Center.X) < _epsilon &&
                     Math.Abs(x.Center.Y - y.Center.Y) < _epsilon &&
                     Math.Abs(x.Center.Z - y.Center.Z) < _epsilon &&
                     Math.Abs(x.Radius - y.Radius) < _epsilon;
@@ -265,7 +266,7 @@ namespace Kni.Tests {
             var pinned = GCHandle.Alloc(source, GCHandleType.Pinned);
             var pointer = pinned.AddrOfPinnedObject();
 
-            for (var i = 0; i < count; i++, pointer+=sizeOfDest)
+            for (var i = 0; i < count; i++, pointer += sizeOfDest)
                 dest[i] = (T)Marshal.PtrToStructure(pointer, typeof(T));
 
             pinned.Free();
@@ -291,40 +292,40 @@ namespace Kni.Tests {
         }
     }
 
-	static class MathUtility
+    static class MathUtility
     {
-		public static void MinMax (int a, int b, out int min, out int max)
-		{
-			if (a > b)
+        public static void MinMax(int a, int b, out int min, out int max)
+        {
+            if (a > b)
             {
-				min = b;
-				max = a;
-			}
+                min = b;
+                max = a;
+            }
             else
             {
-				min = a;
-				max = b;
-			}
-		}
-	}
+                min = a;
+                max = b;
+            }
+        }
+    }
 
-	static class Paths
+    static class Paths
     {
-		private const string AssetFolder = "Assets";
+        private const string AssetFolder = "Assets";
         private static readonly string AudioFolder = Path.Combine(AssetFolder, "Audio");
         private static readonly string FontFolder = Path.Combine(AssetFolder, "Fonts");
-		private static readonly string ReferenceImageFolder = Path.Combine (AssetFolder, "ReferenceImages");
-		private static readonly string TextureFolder = Path.Combine (AssetFolder, "Textures");
-		private static readonly string EffectFolder = Path.Combine (AssetFolder, "Effects");
-		private static readonly string ModelFolder = Path.Combine (AssetFolder, "Models");
+        private static readonly string ReferenceImageFolder = Path.Combine(AssetFolder, "ReferenceImages");
+        private static readonly string TextureFolder = Path.Combine(AssetFolder, "Textures");
+        private static readonly string EffectFolder = Path.Combine(AssetFolder, "Effects");
+        private static readonly string ModelFolder = Path.Combine(AssetFolder, "Models");
         private static readonly string XmlFolder = Path.Combine(AssetFolder, "Xml");
         private const string CapturedFrameFolder = "CapturedFrames";
-		private const string CapturedFrameDiffFolder = "Diffs";
+        private const string CapturedFrameDiffFolder = "Diffs";
 
-		public static string Asset (params string [] pathParts)
-		{
-			return Combine (AssetFolder, pathParts);
-		}
+        public static string Asset(params string[] pathParts)
+        {
+            return Combine(AssetFolder, pathParts);
+        }
 
         public static string Audio(params string[] pathParts)
         {
@@ -332,23 +333,23 @@ namespace Kni.Tests {
         }
 
         public static string Font(params string[] pathParts)
-		{
-			return Combine (FontFolder, pathParts);
-		}
+        {
+            return Combine(FontFolder, pathParts);
+        }
 
-		public static string Texture (params string [] pathParts)
-		{
-			return Combine (TextureFolder, pathParts);
-		}
+        public static string Texture(params string[] pathParts)
+        {
+            return Combine(TextureFolder, pathParts);
+        }
 
         public static string RawEffect(params string[] pathParts)
         {
             return Combine(EffectFolder, pathParts) + ".fx";
         }
 
-		public static string CompiledEffect (params string [] pathParts)
-		{
-		    string type;
+        public static string CompiledEffect(params string[] pathParts)
+        {
+            string type;
 #if XNA
             type = "XNA";
 #elif DIRECTX
@@ -358,54 +359,54 @@ namespace Kni.Tests {
 #else
             throw new Exception("Make sure the effect path is set up correctly for this platform!");
 #endif
-			var path = Combine(type, pathParts);
-		    return Combine(EffectFolder, path);
+            var path = Combine(type, pathParts);
+            return Combine(EffectFolder, path);
 
-		}
+        }
 
-		public static string Model (params string [] pathParts)
-		{
-			return Combine (ModelFolder, pathParts);
-		}
+        public static string Model(params string[] pathParts)
+        {
+            return Combine(ModelFolder, pathParts);
+        }
 
         public static string Xml(params string[] pathParts)
         {
             return Combine(XmlFolder, pathParts);
         }
 
-		public static string ReferenceImage (params string [] pathParts)
-		{
-			return Combine (ReferenceImageFolder, pathParts);
-		}
+        public static string ReferenceImage(params string[] pathParts)
+        {
+            return Combine(ReferenceImageFolder, pathParts);
+        }
 
-		public static string CapturedFrame (params string [] pathParts)
-		{
-			return Combine (CapturedFrameFolder, pathParts);
-		}
+        public static string CapturedFrame(params string[] pathParts)
+        {
+            return Combine(CapturedFrameFolder, pathParts);
+        }
 
-		public static string CapturedFrameDiff (params string [] pathParts)
-		{
-			return Combine (CapturedFrameDiffFolder, pathParts);
-		}
+        public static string CapturedFrameDiff(params string[] pathParts)
+        {
+            return Combine(CapturedFrameDiffFolder, pathParts);
+        }
 
 
-		private static string Combine (string head, params string [] tail)
-		{
-			return Path.Combine (head, Path.Combine (tail));
-		}
+        private static string Combine(string head, params string[] tail)
+        {
+            return Path.Combine(head, Path.Combine(tail));
+        }
 
-		public static void SetStandardWorkingDirectory()
-		{
+        public static void SetStandardWorkingDirectory()
+        {
             var directory = AppDomain.CurrentDomain.BaseDirectory;
-			Directory.SetCurrentDirectory(directory);
-		}
+            Directory.SetCurrentDirectory(directory);
+        }
 
         public static void AreEqual(string expected, string actual)
         {
             expected = Path.GetFullPath(expected);
-            actual = Path.GetFullPath(actual);            
+            actual = Path.GetFullPath(actual);
             Assert.AreEqual(expected, actual, "Paths not equal!");
         }
 
-	}
+    }
 }

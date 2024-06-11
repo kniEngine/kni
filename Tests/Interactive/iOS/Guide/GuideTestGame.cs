@@ -12,10 +12,12 @@ using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.InteractiveTests.TestUI;
 using System.Drawing;
 
-namespace MonoGame.InteractiveTests {
+namespace MonoGame.InteractiveTests
+{
 	[InteractiveTest("Guide", Categories.GamerServices)]
-	public class GuideTestGame : Game {
-		public GuideTestGame ()
+	public class GuideTestGame : Game
+	{
+		public GuideTestGame()
 		{
 			var graphics = new GraphicsDeviceManager(this);
 			graphics.SupportedOrientations =
@@ -23,7 +25,7 @@ namespace MonoGame.InteractiveTests {
 				DisplayOrientation.LandscapeLeft |
 				DisplayOrientation.LandscapeRight;
 
-			Components.Add (new GamerServicesComponent (this));
+			Components.Add(new GamerServicesComponent(this));
 
 			Content.RootDirectory = "Content";
 		}
@@ -39,7 +41,7 @@ namespace MonoGame.InteractiveTests {
 		{
 			base.LoadContent();
 
-			_font = Content.Load<SpriteFont> (@"Fonts\Default");
+			_font = Content.Load<SpriteFont>(@"Fonts\Default");
 			InitializeGui();
 		}
 
@@ -48,16 +50,17 @@ namespace MonoGame.InteractiveTests {
 		private Label _labelShowKeyboardInputCallback;
 		private void InitializeGui()
 		{
-			_universe = new Universe (Content)
+			_universe = new Universe(Content)
 			{
 				AutoHandleInput = true
 			};
-			Components.Add (new UniverseComponent (this, _universe));
+			Components.Add(new UniverseComponent(this, _universe));
 
 			var exitButton = new Button
 			{
 				BackgroundColor = Color.Black,
-				Content = new Label {
+				Content = new Label
+				{
 					Font = _font,
 					Text = "Exit",
 					TextColor = Color.White
@@ -65,22 +68,23 @@ namespace MonoGame.InteractiveTests {
 				Location = PointF.Empty
 			};
 
-			exitButton.Content.SizeToFit ();
-			exitButton.SizeToFit ();
-			exitButton.Tapped += (sender, e) => {
-				Exit ();
+			exitButton.Content.SizeToFit();
+			exitButton.SizeToFit();
+			exitButton.Tapped += (sender, e) =>
+			{
+				Exit();
 			};
 
 			_labelEndShowKeyboardInput = new Label
 			{
-				Frame = new RectangleF (20, 60, 320, 20),
+				Frame = new RectangleF(20, 60, 320, 20),
 				Font = _font,
 				TextColor = Color.White
 			};
 
 			_labelShowKeyboardInputCallback = new Label
 			{
-				Frame = new RectangleF (
+				Frame = new RectangleF(
 					_labelEndShowKeyboardInput.Frame.Left,
 					_labelEndShowKeyboardInput.Frame.Bottom + 10,
 					_labelEndShowKeyboardInput.Frame.Width,
@@ -101,10 +105,11 @@ namespace MonoGame.InteractiveTests {
 				Location = new PointF(20, 200)
 			};
 
-			buttonShowKeyboardInput.Content.SizeToFit ();
-			buttonShowKeyboardInput.SizeToFit ();
-			buttonShowKeyboardInput.Tapped += (sender, e) => {
-				TestShowKeyboardInput (
+			buttonShowKeyboardInput.Content.SizeToFit();
+			buttonShowKeyboardInput.SizeToFit();
+			buttonShowKeyboardInput.Tapped += (sender, e) =>
+			{
+				TestShowKeyboardInput(
 					"Some normal title",
 					"And a perfectly ordinary description",
 					"the default");
@@ -124,10 +129,11 @@ namespace MonoGame.InteractiveTests {
 					buttonShowKeyboardInput.Frame.Bottom + 10)
 			};
 
-			buttonShowKeyboardInputLong.Content.SizeToFit ();
-			buttonShowKeyboardInputLong.SizeToFit ();
-			buttonShowKeyboardInputLong.Tapped += (sender, e) => {
-				TestShowKeyboardInput (
+			buttonShowKeyboardInputLong.Content.SizeToFit();
+			buttonShowKeyboardInputLong.SizeToFit();
+			buttonShowKeyboardInputLong.Tapped += (sender, e) =>
+			{
+				TestShowKeyboardInput(
 					"This is the title that never ends, yes it goes on and on my friends.  One " +
 					"day some people started writing it, etc",
 					"And here is a super-duper description that rambles on a bit about, you " +
@@ -135,14 +141,14 @@ namespace MonoGame.InteractiveTests {
 					"surprisingly terse default");
 			};
 
-			_universe.Add (exitButton);
-			_universe.Add (_labelEndShowKeyboardInput);
-			_universe.Add (_labelShowKeyboardInputCallback);
-			_universe.Add (buttonShowKeyboardInput);
-			_universe.Add (buttonShowKeyboardInputLong);
+			_universe.Add(exitButton);
+			_universe.Add(_labelEndShowKeyboardInput);
+			_universe.Add(_labelShowKeyboardInputCallback);
+			_universe.Add(buttonShowKeyboardInput);
+			_universe.Add(buttonShowKeyboardInputLong);
 		}
 
-		private void TestShowKeyboardInput (string title, string description, string defaultText)
+		private void TestShowKeyboardInput(string title, string description, string defaultText)
 		{
 			var result = Guide.BeginShowKeyboardInput(
 				PlayerIndex.One,
@@ -152,13 +158,13 @@ namespace MonoGame.InteractiveTests {
 				Guide_ShowKeyboardInputCallback, null);
 
 			_labelEndShowKeyboardInput.Text =
-				"EndShow: " + (Guide.EndShowKeyboardInput (result) ?? "<null>");
+				"EndShow: " + (Guide.EndShowKeyboardInput(result) ?? "<null>");
 		}
 
 		private void Guide_ShowKeyboardInputCallback(IAsyncResult result)
 		{
 			_labelShowKeyboardInputCallback.Text =
-				"CallBack: " + (Guide.EndShowKeyboardInput (result) ?? "<null>");
+				"CallBack: " + (Guide.EndShowKeyboardInput(result) ?? "<null>");
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -168,7 +174,7 @@ namespace MonoGame.InteractiveTests {
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear (Color.Indigo);
+			GraphicsDevice.Clear(Color.Indigo);
 			base.Draw(gameTime);
 		}
 	}

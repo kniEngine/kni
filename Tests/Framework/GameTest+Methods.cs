@@ -9,16 +9,20 @@ using System.Text;
 
 using NUnit.Framework;
 
-namespace Kni.Tests {
-	partial class GameTest {
-		public static class Methods {
+namespace Kni.Tests
+{
+	partial class GameTest
+	{
+		public static class Methods
+		{
 			[TestFixture]
-			public class Run : FixtureBase {
+			public class Run : FixtureBase
+			{
 				[Test, Ignore("Fix me!")]
-				public void Can_only_be_called_once ()
+				public void Can_only_be_called_once()
 				{
-					Game.Run ();
-					Assert.Throws<InvalidOperationException> (() => Game.Run ());
+					Game.Run();
+					Assert.Throws<InvalidOperationException>(() => Game.Run());
 				}
 			}
 		}

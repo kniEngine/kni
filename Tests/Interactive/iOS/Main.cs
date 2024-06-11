@@ -9,11 +9,13 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoGame.InteractiveTests.iOS {
-	public class Application {
-		static void Main (string[] args)
+namespace MonoGame.InteractiveTests.iOS
+{
+	public class Application
+	{
+		static void Main(string[] args)
 		{
-			UIApplication.Main (args, null, "AppDelegate");
+			UIApplication.Main(args, null, "AppDelegate");
 		}
 	}
 }

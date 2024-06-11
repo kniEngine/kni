@@ -4,27 +4,31 @@
 
 using System;
 
-namespace MonoGame.InteractiveTests.TestUI {
-	struct PaddingF {
+namespace MonoGame.InteractiveTests.TestUI
+{
+	struct PaddingF
+	{
 		public float Left;
 		public float Top;
 		public float Right;
 		public float Bottom;
 
-		public float Horizontal {
+		public float Horizontal
+		{
 			get { return Left + Right; }
 		}
 
-		public float Vertical {
+		public float Vertical
+		{
 			get { return Top + Bottom; }
 		}
 
-		public PaddingF (float all)
+		public PaddingF(float all)
 		{
 			Left = Top = Right = Bottom = all;
 		}
 
-		public PaddingF (float left, float top, float right, float bottom)
+		public PaddingF(float left, float top, float right, float bottom)
 		{
 			Left = left;
 			Top = top;
@@ -32,7 +36,7 @@ namespace MonoGame.InteractiveTests.TestUI {
 			Bottom = bottom;
 		}
 
-		public static bool operator == (PaddingF a, PaddingF b)
+		public static bool operator ==(PaddingF a, PaddingF b)
 		{
 			return
 				a.Left == b.Left &&
@@ -41,7 +45,7 @@ namespace MonoGame.InteractiveTests.TestUI {
 				a.Bottom == b.Bottom;
 		}
 
-		public static bool operator != (PaddingF a, PaddingF b)
+		public static bool operator !=(PaddingF a, PaddingF b)
 		{
 			return !(a == b);
 		}
@@ -58,10 +62,9 @@ namespace MonoGame.InteractiveTests.TestUI {
 		{
 			return
 				Left.GetHashCode() ^
-				(Top.GetHashCode () << 8) ^
-				(Right.GetHashCode () << 16) ^
-				(Bottom.GetHashCode () << 24);
+				(Top.GetHashCode() << 8) ^
+				(Right.GetHashCode() << 16) ^
+				(Bottom.GetHashCode() << 24);
 		}
 	}
 }
-

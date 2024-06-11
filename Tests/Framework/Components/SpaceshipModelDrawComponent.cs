@@ -19,13 +19,13 @@ namespace Kni.Tests.Components
 			#region Fields
 			// The XNA framework Model object that we are going to display.
 			Model spaceshipModel;
-	
+
 			// Array holding all the bone transform matrices for the entire model.
 			// We could just allocate this locally inside the Draw method, but it
 			// is more efficient to reuse a single array, as this avoids creating
 			// unnecessary garbage.
 			Matrix[] boneTransforms;
-	
+
 			// Spaceship drawing parameters
 			private Matrix projection;
 			private Matrix rotation;
@@ -34,7 +34,7 @@ namespace Kni.Tests.Components
 			bool isTextureEnabled;
 			bool isPerPixelLightingEnabled;
 			#endregion
-	
+
 			#region Initialization
 			/// <summary>
 			/// Loads the spaceship model.
@@ -43,12 +43,12 @@ namespace Kni.Tests.Components
 			{
 				// Load the spaceship model from the ContentManager.
 				spaceshipModel = content.Load<Model>(Paths.Model("Spaceship"));
-	
+
 				// Allocate the transform matrix array.
 				boneTransforms = new Matrix[spaceshipModel.Bones.Count];
 			}
 			#endregion
-	
+
 			#region Public accessors
 			/// <summary>
 			/// Gets or sets the projection matrix value.
@@ -58,7 +58,7 @@ namespace Kni.Tests.Components
 				get { return projection; }
 				set { projection = value; }
 			}
-	
+
 			/// <summary>
 			/// Gets or sets the rotation matrix value.
 			/// </summary>
@@ -67,7 +67,7 @@ namespace Kni.Tests.Components
 				get { return rotation; }
 				set { rotation = value; }
 			}
-	
+
 			/// <summary>
 			/// Gets or sets the rotation matrix value.
 			/// </summary>
@@ -76,7 +76,7 @@ namespace Kni.Tests.Components
 				get { return isTextureEnabled; }
 				set { isTextureEnabled = value; }
 			}
-	
+
 			/// <summary>
 			/// Gets or sets the view matrix value.
 			/// </summary>
@@ -85,7 +85,7 @@ namespace Kni.Tests.Components
 				get { return view; }
 				set { view = value; }
 			}
-	
+
 			/// <summary>
 			/// Gets or sets the lights states.
 			/// </summary>
@@ -94,7 +94,7 @@ namespace Kni.Tests.Components
 				get { return lights; }
 				set { lights = value; }
 			}
-	
+
 			/// <summary>
 			/// Gets or sets the per pixel lighting preferences
 			/// </summary>
@@ -104,7 +104,7 @@ namespace Kni.Tests.Components
 				set { isPerPixelLightingEnabled = value; }
 			}
 			#endregion
-	
+
 			#region Draw
 			/// <summary>
 			/// Draws the spaceship model, using the current drawing parameters.
@@ -113,10 +113,10 @@ namespace Kni.Tests.Components
 			{
 				// Set the world matrix as the root transform of the model.
 				spaceshipModel.Root.Transform = Rotation;
-	
+
 				// Look up combined bone matrices for the entire model.
 				spaceshipModel.CopyAbsoluteBoneTransformsTo(boneTransforms);
-	
+
 				// Draw the model.
 				foreach (ModelMesh mesh in spaceshipModel.Meshes)
 				{
@@ -125,17 +125,17 @@ namespace Kni.Tests.Components
 						effect.World = boneTransforms[mesh.ParentBone.Index];
 						effect.View = View;
 						effect.Projection = Projection;
-	
+
 						SetEffectLights(effect, Lights);
 						SetEffectPerPixelLightingEnabled(effect);
-	
+
 						effect.TextureEnabled = IsTextureEnabled;
 					}
-	
+
 					mesh.Draw();
 				}
 			}
-	
+
 			/// <summary>
 			/// Sets effect's per pixel lighting preference
 			/// </summary>
@@ -144,7 +144,7 @@ namespace Kni.Tests.Components
 			{
 				effect.PreferPerPixelLighting = isPerPixelLightingEnabled;
 			}
-	
+
 			/// <summary>
 			/// Sets effects lighting properties
 			/// </summary>
@@ -157,26 +157,26 @@ namespace Kni.Tests.Components
 				effect.SpecularColor = new Vector3(0.25f, 0.25f, 0.25f);
 				effect.SpecularPower = 5.0f;
 				effect.AmbientLightColor = new Vector3(0.75f, 0.75f, 0.75f);
-	
+
 				effect.DirectionalLight0.Enabled = lights[0];
 				effect.DirectionalLight0.DiffuseColor = Vector3.One;
 				effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(1, -1, 0));
 				effect.DirectionalLight0.SpecularColor = Vector3.One;
-	
+
 				effect.DirectionalLight1.Enabled = lights[1];
 				effect.DirectionalLight1.DiffuseColor = new Vector3(0.5f, 0.5f, 0.5f);
 				effect.DirectionalLight1.Direction = Vector3.Normalize(new Vector3(-1, -1, 0));
 				effect.DirectionalLight1.SpecularColor = new Vector3(1f, 1f, 1f);
-	
+
 				effect.DirectionalLight2.Enabled = lights[2];
 				effect.DirectionalLight2.DiffuseColor = new Vector3(0.3f, 0.3f, 0.3f);
 				effect.DirectionalLight2.Direction = Vector3.Normalize(new Vector3(-1, -1, -1));
 				effect.DirectionalLight2.SpecularColor = new Vector3(0.3f, 0.3f, 0.3f);
-	
+
 				effect.LightingEnabled = true;
 			}
 			#endregion
-	
+
 		}
 
 		Spaceship spaceship;
@@ -189,11 +189,11 @@ namespace Kni.Tests.Components
 		SpriteBatch spriteBatch;
 
 
-		public SpaceshipModelDrawComponent (Game game) : base(game)
+		public SpaceshipModelDrawComponent(Game game) : base(game)
 		{
 		}
 
-		protected override void LoadContent ()
+		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -202,7 +202,7 @@ namespace Kni.Tests.Components
 			spaceship = new Spaceship();
 			spaceship.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraFOV),
 				GraphicsDevice.Viewport.AspectRatio, 10, 20000);
-			spaceship.Load (Game.Content);
+			spaceship.Load(Game.Content);
 
 
 			base.LoadContent();
@@ -210,21 +210,21 @@ namespace Kni.Tests.Components
 
 		protected override void UnloadContent()
 		{
-			spriteBatch.Dispose ();
+			spriteBatch.Dispose();
 			spriteBatch = null;
-			background.Dispose ();
+			background.Dispose();
 			background = null;
 		}
 
 		protected override void UpdateOncePerDraw(GameTime gameTime)
 		{
-			var frameInfoSource = Game.Services.RequireService<IFrameInfoSource> ();
+			var frameInfoSource = Game.Services.RequireService<IFrameInfoSource>();
 			var frameInfo = frameInfoSource.FrameInfo;
 
 			spaceship.Rotation = Matrix.CreateWorld(new Vector3(0, 250, 0), Vector3.Forward, Vector3.Up) *
 				Matrix.CreateFromYawPitchRoll((float)Math.PI + MathHelper.PiOver2 + rotationXAmount / 100, rotationYAmount / 100, 0);
 
-			spaceship.View = Matrix.CreateLookAt (
+			spaceship.View = Matrix.CreateLookAt(
 				new Vector3(3500, 400, 0) + new Vector3(0, 250, 0),
 				new Vector3(0, 250, 0),
 				Vector3.Up);
@@ -233,7 +233,7 @@ namespace Kni.Tests.Components
 				GraphicsDevice.Viewport.AspectRatio, 10, 20000);
 
 
-			int frameNum = frameInfo.DrawNumber-1;
+			int frameNum = frameInfo.DrawNumber - 1;
 			spaceship.Lights = new bool[] {
 				(frameNum & 1) != 0,
 				(frameNum & 2) != 0,
@@ -250,8 +250,8 @@ namespace Kni.Tests.Components
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			spriteBatch.Begin();
-			spriteBatch.Draw (background, Vector2.Zero, Color.White);
-			spriteBatch.End ();
+			spriteBatch.Draw(background, Vector2.Zero, Color.White);
+			spriteBatch.End();
 
 			// Set render states.
 			GraphicsDevice.BlendState = BlendState.Opaque;
@@ -259,7 +259,7 @@ namespace Kni.Tests.Components
 			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 			GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-			spaceship.Draw ();
+			spaceship.Draw();
 
 			base.Draw(gameTime);
 		}

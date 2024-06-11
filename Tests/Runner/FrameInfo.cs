@@ -9,28 +9,30 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace Kni.Tests {
-	struct FrameInfo {
+namespace Kni.Tests
+{
+	struct FrameInfo
+	{
 		public int UpdateNumber;
 		public int DrawNumber;
 		public TimeSpan ElapsedGameTime;
 		public TimeSpan TotalGameTime;
 		public bool IsRunningSlowly;
-	    public GameTime GameTime;
+		public GameTime GameTime;
 
-		public void AdvanceUpdate (GameTime gameTime)
+		public void AdvanceUpdate(GameTime gameTime)
 		{
 			UpdateNumber++;
-			UpdateGameTime (gameTime);
+			UpdateGameTime(gameTime);
 		}
 
-		public void AdvanceDraw (GameTime gameTime)
+		public void AdvanceDraw(GameTime gameTime)
 		{
 			DrawNumber++;
-			UpdateGameTime (gameTime);
+			UpdateGameTime(gameTime);
 		}
 
-		public void Reset ()
+		public void Reset()
 		{
 			UpdateNumber = 0;
 			DrawNumber = 0;
@@ -39,21 +41,23 @@ namespace Kni.Tests {
 			IsRunningSlowly = false;
 		}
 
-		public void UpdateGameTime (GameTime gameTime)
+		public void UpdateGameTime(GameTime gameTime)
 		{
-		    GameTime = gameTime;
+			GameTime = gameTime;
 			ElapsedGameTime = gameTime.ElapsedGameTime;
 			TotalGameTime = gameTime.TotalGameTime;
 			IsRunningSlowly = gameTime.IsRunningSlowly;
 		}
 	}
 
-	interface IFrameInfoSource {
+	interface IFrameInfoSource
+	{
 		FrameInfo FrameInfo { get; }
 	}
 
-	class FrameInfoEventArgs : EventArgs {
-		public FrameInfoEventArgs (FrameInfo frameInfo)
+	class FrameInfoEventArgs : EventArgs
+	{
+		public FrameInfoEventArgs(FrameInfo frameInfo)
 		{
 			_frameInfo = frameInfo;
 		}

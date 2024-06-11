@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Kni.Tests.Components {
-	class UpdateGuard {
+namespace Kni.Tests.Components
+{
+	class UpdateGuard
+	{
 		private int _lastDrawNumberOfUpdate = -1;
 
-		public bool ShouldUpdate (FrameInfo frameInfo)
+		public bool ShouldUpdate(FrameInfo frameInfo)
 		{
 			if (_lastDrawNumberOfUpdate == frameInfo.DrawNumber)
 				return false;

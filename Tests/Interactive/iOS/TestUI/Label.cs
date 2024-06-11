@@ -8,12 +8,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Drawing;
 
-namespace MonoGame.InteractiveTests.TestUI {
-	class Label : View {
-		public Label ()
+namespace MonoGame.InteractiveTests.TestUI
+{
+	class Label : View
+	{
+		public Label()
 		{
 			TextColor = Color.Black;
-			Padding = new PaddingF (3);
+			Padding = new PaddingF(3);
 		}
 
 		public SpriteFont Font { get; set; }
@@ -26,17 +28,17 @@ namespace MonoGame.InteractiveTests.TestUI {
 			if (Font == null || string.IsNullOrWhiteSpace(Text))
 				return Frame.Size;
 
-			var sizeVector = Font.MeasureString (Text);
+			var sizeVector = Font.MeasureString(Text);
 			return new SizeF(sizeVector.X + Padding.Horizontal, sizeVector.Y + Padding.Vertical);
 		}
 
 		protected override void DrawForeground(DrawContext context, GameTime gameTime)
 		{
-			if (Font != null && !string.IsNullOrWhiteSpace(Text)) {
-				context.SpriteBatch.DrawString (
+			if (Font != null && !string.IsNullOrWhiteSpace(Text))
+			{
+				context.SpriteBatch.DrawString(
 					Font, Text, new Vector2(Padding.Left, Padding.Top), TextColor);
 			}
 		}
 	}
 }
-

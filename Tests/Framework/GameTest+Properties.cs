@@ -16,100 +16,103 @@ using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
-namespace Kni.Tests 
+namespace Kni.Tests
 {
-	partial class GameTest 
-    {
-		public static class Properties 
-        {
+	partial class GameTest
+	{
+		public static class Properties
+		{
 			[TestFixture]
-			public class Components : ReadOnlyPropertyFixtureBase<GameComponentCollection> 
-            {
-				public Components ()
-					: base (g => g.Components)
+			public class Components : ReadOnlyPropertyFixtureBase<GameComponentCollection>
+			{
+				public Components()
+					: base(g => g.Components)
 				{ }
 
-				public override void Has_correct_default_value () { }
+				public override void Has_correct_default_value() { }
 
 				[Test]
-				public void Is_available_before_Run ()
+				public void Is_available_before_Run()
 				{
-					Assert.That (Game, HasThisProperty.Not.Null);
+					Assert.That(Game, HasThisProperty.Not.Null);
 				}
 			}
 
 			[TestFixture]
-			public class Content : ReadWritePropertyFixtureBase<ContentManager> {
-				public Content ()
-					: base (g => g.Content)
+			public class Content : ReadWritePropertyFixtureBase<ContentManager>
+			{
+				public Content()
+					: base(g => g.Content)
 				{
-					AddLegalValue (new ContentManager (new GameServiceContainer ()));
+					AddLegalValue(new ContentManager(new GameServiceContainer()));
 
-					AddIllegalValue<ArgumentNullException> (null);
+					AddIllegalValue<ArgumentNullException>(null);
 				}
 
 				[SetUp]
-				public override void SetUp ()
+				public override void SetUp()
 				{
-					base.SetUp ();
+					base.SetUp();
 				}
 
-				public override void Has_correct_default_value () { }
+				public override void Has_correct_default_value() { }
 
 				[Test]
-				public void Is_available_before_Run ()
+				public void Is_available_before_Run()
 				{
-					Assert.That (Game, HasThisProperty.Not.Null);
+					Assert.That(Game, HasThisProperty.Not.Null);
 				}
 
 				[Test]
-				public void Is_not_provided_as_a_service ()
+				public void Is_not_provided_as_a_service()
 				{
-					Assert.IsNull (Game.Services.GetService (typeof (ContentManager)));
+					Assert.IsNull(Game.Services.GetService(typeof(ContentManager)));
 				}
 			}
 
 			[TestFixture]
-			public class GraphicsDevice_ : ReadOnlyPropertyFixtureBase<GraphicsDevice> {
-				public GraphicsDevice_ ()
-					: base (g => g.GraphicsDevice)
+			public class GraphicsDevice_ : ReadOnlyPropertyFixtureBase<GraphicsDevice>
+			{
+				public GraphicsDevice_()
+					: base(g => g.GraphicsDevice)
 				{ }
 
-				public override void Has_correct_default_value () { }
+				public override void Has_correct_default_value() { }
 
 				[Test]
-				public void Is_invalid_without_IGraphicsDeviceService ()
+				public void Is_invalid_without_IGraphicsDeviceService()
 				{
-					Assert.IsNull (Game.Services.GetService (typeof (IGraphicsDeviceService)));
-					Assert.Throws<InvalidOperationException> (() => {
+					Assert.IsNull(Game.Services.GetService(typeof(IGraphicsDeviceService)));
+					Assert.Throws<InvalidOperationException>(() =>
+					{
 						var device = ThisProperty;
 					});
 				}
 
 				[Test]
-				public void Is_valid_with_IGraphicsDeviceService ()
+				public void Is_valid_with_IGraphicsDeviceService()
 				{
-					var service = new MockGraphicsDeviceService ();
-					Game.Services.AddService (typeof (IGraphicsDeviceService), service);
+					var service = new MockGraphicsDeviceService();
+					Game.Services.AddService(typeof(IGraphicsDeviceService), service);
 
-					Assert.That (Game, HasThisProperty.SameAs (service.GraphicsDevice));
+					Assert.That(Game, HasThisProperty.SameAs(service.GraphicsDevice));
 				}
 
 				[Test]
-				public void Is_not_available_in_graphical_game_before_Run ()
+				public void Is_not_available_in_graphical_game_before_Run()
 				{
-					Game.MakeGraphical ();
-					Assert.That (Game, HasThisProperty.Null);
+					Game.MakeGraphical();
+					Assert.That(Game, HasThisProperty.Null);
 				}
 
 				private class MockGraphicsDeviceService : IGraphicsDeviceService
-                {
-                    #pragma warning disable 67
+				{
+#pragma warning disable 67
 					public event EventHandler<EventArgs> DeviceCreated;
 					public event EventHandler<EventArgs> DeviceDisposing;
 					public event EventHandler<EventArgs> DeviceReset;
-                    public event EventHandler<EventArgs> DeviceResetting;
-                    #pragma warning restore 67
+					public event EventHandler<EventArgs> DeviceResetting;
+#pragma warning restore 67
 
 					// TODO: It might be nice to try to use a real, live
 					//       GraphicsDevice here rather than null.
@@ -118,184 +121,200 @@ namespace Kni.Tests
 			}
 
 			[TestFixture]
-			public class InactiveSleepTime : ReadWritePropertyFixtureBase<TimeSpan> {
-				public InactiveSleepTime ()
-					: base (g => g.InactiveSleepTime)
+			public class InactiveSleepTime : ReadWritePropertyFixtureBase<TimeSpan>
+			{
+				public InactiveSleepTime()
+					: base(g => g.InactiveSleepTime)
 				{
-					DefaultValue = TimeSpan.FromSeconds (0.02);
+					DefaultValue = TimeSpan.FromSeconds(0.02);
 
-					AddLegalValue (TimeSpan.Zero);
-					AddLegalValue (TimeSpan.Zero);
-					AddLegalValue (TimeSpan.FromSeconds (1));
-					AddLegalValue (TimeSpan.MaxValue);
+					AddLegalValue(TimeSpan.Zero);
+					AddLegalValue(TimeSpan.Zero);
+					AddLegalValue(TimeSpan.FromSeconds(1));
+					AddLegalValue(TimeSpan.MaxValue);
 
-					AddIllegalValue<ArgumentOutOfRangeException> (TimeSpan.FromSeconds (-1));
-					AddIllegalValue<ArgumentOutOfRangeException> (TimeSpan.MinValue);
+					AddIllegalValue<ArgumentOutOfRangeException>(TimeSpan.FromSeconds(-1));
+					AddIllegalValue<ArgumentOutOfRangeException>(TimeSpan.MinValue);
 				}
 			}
 
 			[TestFixture]
-			public class IsActive : ReadOnlyPropertyFixtureBase<bool> {
-				public IsActive ()
-					: base (g => g.IsActive)
+			public class IsActive : ReadOnlyPropertyFixtureBase<bool>
+			{
+				public IsActive()
+					: base(g => g.IsActive)
 				{
 					DefaultValue = false;
 				}
 			}
 
 			[TestFixture]
-			public class IsFixedTimeStep : ReadWritePropertyFixtureBase<bool> {
-				public IsFixedTimeStep ()
-					: base (g => g.IsFixedTimeStep)
+			public class IsFixedTimeStep : ReadWritePropertyFixtureBase<bool>
+			{
+				public IsFixedTimeStep()
+					: base(g => g.IsFixedTimeStep)
 				{
 					DefaultValue = true;
 
-					AddLegalValue (true);
-					AddLegalValue (false);
+					AddLegalValue(true);
+					AddLegalValue(false);
 				}
 
-				public override void Cannot_set_illegal_value (Tuple<bool, Type> valueAndException) { }
+				public override void Cannot_set_illegal_value(Tuple<bool, Type> valueAndException) { }
 			}
 
 			[TestFixture]
-			public class IsMouseVisible : ReadWritePropertyFixtureBase<bool> {
-				public IsMouseVisible ()
-					: base (g => g.IsMouseVisible)
+			public class IsMouseVisible : ReadWritePropertyFixtureBase<bool>
+			{
+				public IsMouseVisible()
+					: base(g => g.IsMouseVisible)
 				{
 					DefaultValue = false;
 
-					AddLegalValue (true);
-					AddLegalValue (false);
+					AddLegalValue(true);
+					AddLegalValue(false);
 				}
 
-				public override void Cannot_set_illegal_value (Tuple<bool, Type> valueAndException) { }
+				public override void Cannot_set_illegal_value(Tuple<bool, Type> valueAndException) { }
 			}
 
 			[TestFixture]
-			public class LaunchParameters_ : ReadOnlyPropertyFixtureBase<LaunchParameters> {
-				public LaunchParameters_ ()
-					: base (g => g.LaunchParameters)
+			public class LaunchParameters_ : ReadOnlyPropertyFixtureBase<LaunchParameters>
+			{
+				public LaunchParameters_()
+					: base(g => g.LaunchParameters)
 				{ }
 
-				public override void Has_correct_default_value () { }
+				public override void Has_correct_default_value() { }
 
 				[Test]
-				public void Is_available_before_Run ()
+				public void Is_available_before_Run()
 				{
-					Assert.That (Game, HasThisProperty.Not.Null);
+					Assert.That(Game, HasThisProperty.Not.Null);
 				}
 			}
 
 			[TestFixture]
-			public class Services : ReadOnlyPropertyFixtureBase<GameServiceContainer> {
-				public Services ()
-					: base (g => g.Services)
+			public class Services : ReadOnlyPropertyFixtureBase<GameServiceContainer>
+			{
+				public Services()
+					: base(g => g.Services)
 				{ }
 
-				public override void Has_correct_default_value () { }
+				public override void Has_correct_default_value() { }
 
 				[Test]
-				public void Is_available_before_Run ()
+				public void Is_available_before_Run()
 				{
-					Assert.That (Game, HasThisProperty.Not.Null);
+					Assert.That(Game, HasThisProperty.Not.Null);
 				}
 			}
 
 			[TestFixture]
-			public class TargetElapsedTime : ReadWritePropertyFixtureBase<TimeSpan> {
-				public TargetElapsedTime ()
-					: base (g => g.TargetElapsedTime)
+			public class TargetElapsedTime : ReadWritePropertyFixtureBase<TimeSpan>
+			{
+				public TargetElapsedTime()
+					: base(g => g.TargetElapsedTime)
 				{
-					DefaultValue = TimeSpan.FromTicks (166666);
+					DefaultValue = TimeSpan.FromTicks(166666);
 
-					AddLegalValue (TimeSpan.FromSeconds (1));
-					AddLegalValue (TimeSpan.MaxValue);
+					AddLegalValue(TimeSpan.FromSeconds(1));
+					AddLegalValue(TimeSpan.MaxValue);
 
-					AddIllegalValue<ArgumentOutOfRangeException> (TimeSpan.Zero);
-					AddIllegalValue<ArgumentOutOfRangeException> (TimeSpan.FromSeconds (-1));
-					AddIllegalValue<ArgumentOutOfRangeException> (TimeSpan.MinValue);
+					AddIllegalValue<ArgumentOutOfRangeException>(TimeSpan.Zero);
+					AddIllegalValue<ArgumentOutOfRangeException>(TimeSpan.FromSeconds(-1));
+					AddIllegalValue<ArgumentOutOfRangeException>(TimeSpan.MinValue);
 				}
 			}
 
 			[TestFixture]
-			public class Window : ReadOnlyPropertyFixtureBase<GameWindow> {
-				public Window ()
-					: base (g => g.Window)
+			public class Window : ReadOnlyPropertyFixtureBase<GameWindow>
+			{
+				public Window()
+					: base(g => g.Window)
 				{ }
 
-				public override void Has_correct_default_value () { }
+				public override void Has_correct_default_value() { }
 
 				[Test]
-				public void Is_available_before_Run ()
+				public void Is_available_before_Run()
 				{
-					Game.MakeGraphical ();
-					Assert.That (Game, HasThisProperty.Not.Null);
+					Game.MakeGraphical();
+					Assert.That(Game, HasThisProperty.Not.Null);
 				}
 
 				[Test]
-				public void Is_available_in_non_graphical_game ()
+				public void Is_available_in_non_graphical_game()
 				{
-					Assert.That (Game, HasThisProperty.Not.Null);
+					Assert.That(Game, HasThisProperty.Not.Null);
 				}
 			}
 
-			public abstract class PropertyFixtureBase<PropertyT> : FixtureBase {
+			public abstract class PropertyFixtureBase<PropertyT> : FixtureBase
+			{
 				private Func<Game, PropertyT> _getter;
-				protected PropertyFixtureBase (Expression<Func<Game, PropertyT> > propertyExpression)
+				protected PropertyFixtureBase(Expression<Func<Game, PropertyT>> propertyExpression)
 				{
-					MemberExpression member = (MemberExpression) propertyExpression.Body;
+					MemberExpression member = (MemberExpression)propertyExpression.Body;
 
-					_propertyInfo = (PropertyInfo) member.Member;
-					_getter = propertyExpression.Compile ();
+					_propertyInfo = (PropertyInfo)member.Member;
+					_getter = propertyExpression.Compile();
 				}
 
-				protected PropertyT _GetValue ()
+				protected PropertyT _GetValue()
 				{
-					return _getter (Game);
+					return _getter(Game);
 				}
 
-				protected void _SetValue (PropertyT value)
+				protected void _SetValue(PropertyT value)
 				{
 				}
 
-				protected ResolvableConstraintExpression HasThisProperty {
-					get { return Has.Property (_propertyInfo.Name); }
+				protected ResolvableConstraintExpression HasThisProperty
+				{
+					get { return Has.Property(_propertyInfo.Name); }
 				}
 
 				private PropertyInfo _propertyInfo;
 
-				protected PropertyInfo PropertyInfo {
+				protected PropertyInfo PropertyInfo
+				{
 					get { return _propertyInfo; }
 				}
 
-				protected virtual PropertyT ThisProperty {
-					get { return _getter (Game); }
+				protected virtual PropertyT ThisProperty
+				{
+					get { return _getter(Game); }
 				}
 
 				private Maybe<PropertyT> _defaultValue;
 
-				protected PropertyT DefaultValue {
-					get {
+				protected PropertyT DefaultValue
+				{
+					get
+					{
 						if (!_defaultValue.HasValue)
-							throw new InvalidOperationException (
+							throw new InvalidOperationException(
 								"DefaultValue has never been set.");
 						return _defaultValue.Value;
 					}
-					set {
+					set
+					{
 						_defaultValue = value;
 					}
 				}
 
 				[Test]
-				public virtual void Has_correct_default_value ()
+				public virtual void Has_correct_default_value()
 				{
 					if (!_defaultValue.HasValue)
-						throw new IgnoreException ("No DefaultValue available");
-					Assert.That (Game, HasThisProperty.EqualTo (_defaultValue.Value));
+						throw new IgnoreException("No DefaultValue available");
+					Assert.That(Game, HasThisProperty.EqualTo(_defaultValue.Value));
 				}
 
-				private struct Maybe<T> {
-					public Maybe (T value)
+				private struct Maybe<T>
+				{
+					public Maybe(T value)
 					{
 						_hasValue = true;
 						_value = value;
@@ -303,50 +322,60 @@ namespace Kni.Tests
 
 					private readonly bool _hasValue;
 
-					public bool HasValue {
+					public bool HasValue
+					{
 						get { return _hasValue; }
 					}
 
 					private readonly T _value;
 
-					public T Value {
+					public T Value
+					{
 						get { return _value; }
 					}
 
-					public static implicit operator Maybe<T> (T value)
+					public static implicit operator Maybe<T>(T value)
 					{
-						return new Maybe<T> (value);
+						return new Maybe<T>(value);
 					}
 				}
 			}
 
-			public abstract class ReadOnlyPropertyFixtureBase<PropertyT> : PropertyFixtureBase<PropertyT> {
-				protected ReadOnlyPropertyFixtureBase (
-					Expression<Func<Game, PropertyT> > propertyExpression)
-					: base (propertyExpression)
+			public abstract class ReadOnlyPropertyFixtureBase<PropertyT> : PropertyFixtureBase<PropertyT>
+			{
+				protected ReadOnlyPropertyFixtureBase(
+					Expression<Func<Game, PropertyT>> propertyExpression)
+					: base(propertyExpression)
 				{ }
 
 				[Test]
-				public void Is_read_only ()
+				public void Is_read_only()
 				{
 					if (PropertyInfo.GetGetMethod() == null)
-						Assert.Fail ("Property {0} is not readable.", PropertyInfo.Name);
+						Assert.Fail("Property {0} is not readable.", PropertyInfo.Name);
 					if (PropertyInfo.GetSetMethod() != null)
-						Assert.Fail ("Property {0} is writeable.", PropertyInfo.Name);
+						Assert.Fail("Property {0} is writeable.", PropertyInfo.Name);
 				}
 			}
 
-			public abstract class ReadWritePropertyFixtureBase<PropertyT> : PropertyFixtureBase<PropertyT> {
-				protected ReadWritePropertyFixtureBase (
+			public abstract class ReadWritePropertyFixtureBase<PropertyT> : PropertyFixtureBase<PropertyT>
+			{
+				protected ReadWritePropertyFixtureBase(
 					Expression<Func<Game, PropertyT>> propertyExpression)
-					: base (propertyExpression)
+					: base(propertyExpression)
 				{ }
 
-				protected new PropertyT ThisProperty {
+				protected new PropertyT ThisProperty
+				{
 					get { return base.ThisProperty; }
-					set {
-						try { PropertyInfo.SetValue (Game, value, null);
-						} catch (TargetInvocationException ex) {
+					set
+					{
+						try
+						{
+							PropertyInfo.SetValue(Game, value, null);
+						}
+						catch (TargetInvocationException ex)
+						{
 							// Unpack the real exception
 							throw ex.InnerException;
 						}
@@ -354,49 +383,51 @@ namespace Kni.Tests
 				}
 
 				[Test]
-				public void Is_read_write ()
+				public void Is_read_write()
 				{
 					if (PropertyInfo.GetGetMethod() == null)
-						Assert.Fail ("Property {0} is not readable.", PropertyInfo.Name);
+						Assert.Fail("Property {0} is not readable.", PropertyInfo.Name);
 					if (PropertyInfo.GetSetMethod() == null)
-						Assert.Fail ("Property {0} is not writeable.", PropertyInfo.Name);
+						Assert.Fail("Property {0} is not writeable.", PropertyInfo.Name);
 				}
 
-				protected void AddLegalValue (PropertyT value)
+				protected void AddLegalValue(PropertyT value)
 				{
-					_legalValues.Add (value);
+					_legalValues.Add(value);
 				}
 
-				protected void AddIllegalValue<ExceptionT> (PropertyT value)
+				protected void AddIllegalValue<ExceptionT>(PropertyT value)
 				{
-					_illegalValues.Add (Tuple.Create (value, typeof (ExceptionT)));
+					_illegalValues.Add(Tuple.Create(value, typeof(ExceptionT)));
 				}
 
-				private List<PropertyT> _legalValues = new List<PropertyT> ();
+				private List<PropertyT> _legalValues = new List<PropertyT>();
 
-				protected List<PropertyT> LegalValues {
+				protected List<PropertyT> LegalValues
+				{
 					get { return _legalValues; }
 				}
 
 				private List<Tuple<PropertyT, Type>> _illegalValues =
-					new List<Tuple<PropertyT, Type>> ();
+					new List<Tuple<PropertyT, Type>>();
 
-				protected List<Tuple<PropertyT, Type>> IllegalValues {
+				protected List<Tuple<PropertyT, Type>> IllegalValues
+				{
 					get { return _illegalValues; }
 				}
 
-				[Test, TestCaseSource ("LegalValues"), Ignore("The sourceName specified on a TestCaseSourceAttribute must refer to a static field, property or method.")]
-				public virtual void Can_set_legal_value (PropertyT value)
+				[Test, TestCaseSource("LegalValues"), Ignore("The sourceName specified on a TestCaseSourceAttribute must refer to a static field, property or method.")]
+				public virtual void Can_set_legal_value(PropertyT value)
 				{
-					Assert.DoesNotThrow (() => ThisProperty = value);
+					Assert.DoesNotThrow(() => ThisProperty = value);
 				}
 
-				[Test, TestCaseSource ("IllegalValues"), Ignore("The sourceName specified on a TestCaseSourceAttribute must refer to a static field, property or method.")]
-				public virtual void Cannot_set_illegal_value (Tuple<PropertyT, Type> valueAndException)
+				[Test, TestCaseSource("IllegalValues"), Ignore("The sourceName specified on a TestCaseSourceAttribute must refer to a static field, property or method.")]
+				public virtual void Cannot_set_illegal_value(Tuple<PropertyT, Type> valueAndException)
 				{
 					var value = valueAndException.Item1;
 					var exceptionType = valueAndException.Item2;
-					Assert.Throws (exceptionType, () => ThisProperty = value);
+					Assert.Throws(exceptionType, () => ThisProperty = value);
 				}
 			}
 		}

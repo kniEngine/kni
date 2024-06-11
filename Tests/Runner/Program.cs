@@ -11,7 +11,7 @@ namespace Kni.Tests
 {
     static class Program
     {
-        static int Main(string [] args)
+        static int Main(string[] args)
         {
             return new AutoRun().Execute(args);
         }

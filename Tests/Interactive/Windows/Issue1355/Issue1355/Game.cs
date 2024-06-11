@@ -9,17 +9,20 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Issue1355 {
+namespace Issue1355
+{
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game : Microsoft.Xna.Framework.Game {
+    public class Game : Microsoft.Xna.Framework.Game
+    {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         Texture2D White;
         SpriteFont Font;
 
-        public Game () {
+        public Game()
+        {
             Graphics = new GraphicsDeviceManager(this);
             Graphics.PreferredBackBufferWidth = 700;
             Graphics.PreferredBackBufferHeight = 200;
@@ -33,7 +36,8 @@ namespace Issue1355 {
 #endif
         }
 
-        protected override void LoadContent () {
+        protected override void LoadContent()
+        {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             White = new Texture2D(GraphicsDevice, 1, 1);
@@ -42,7 +46,8 @@ namespace Issue1355 {
             Font = Content.Load<SpriteFont>("DutchAndHarley");
         }
 
-        protected override void Draw (GameTime gameTime) {
+        protected override void Draw(GameTime gameTime)
+        {
             GraphicsDevice.Clear(Color.Black);
 
             const string testText = "{Dutch & Harley}";
@@ -61,7 +66,8 @@ namespace Issue1355 {
             base.Draw(gameTime);
         }
 
-        public static void Main () {
+        public static void Main()
+        {
             new Game().Run();
         }
     }
