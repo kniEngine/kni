@@ -3,7 +3,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <ProjectGuid>{DED2DDB6-D4BE-B1B4-2E54-657374732E57}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Kni.Tests</RootNamespace>
@@ -15,6 +15,7 @@
     <IntermediateOutputPath>obj\DesktopGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);KNI;DESKTOPGL;WINDOWSDX</DefineConstants>
     <LangVersion>Default</LangVersion>
+    <StartupObject>Kni.Tests.Program</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -25,8 +26,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnitLite" Version="3.9.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
+    <PackageReference Include="NUnitLite" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
