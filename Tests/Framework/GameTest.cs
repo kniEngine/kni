@@ -224,9 +224,6 @@ namespace Kni.Tests
 			}
 
 			[Test]
-#if DESKTOPGL
-            [Ignore("This crashes inside SDL on Mac!")]
-#endif
 			public void ExitHappensAtEndOfTick()
 			{
 				// Exit called in Run

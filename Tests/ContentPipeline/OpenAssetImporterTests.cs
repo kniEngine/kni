@@ -25,9 +25,6 @@ namespace Kni.Tests.ContentPipeline
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("This crashes inside Assimp on Mac!")]
-#endif
         public void BlenderTests()
         {
             var context = new TestImporterContext("TestObj", "TestBin");

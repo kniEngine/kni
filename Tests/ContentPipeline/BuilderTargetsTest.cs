@@ -49,12 +49,8 @@ namespace Kni.Tests.ContentPipeline
 
         [Test]
         [TestCaseSource("BuilderTargetsBuildTools")]
-#if DESKTOPGL
-        [Ignore("Fails on Mac build server with xbuild for some reason.")]
 //TNC: re-enable content pipeline tests for NET.Framework
-//#else
 //        [Ignore("This test need to be rewritten to properly test Tools\\MonoGame.Content.Builder instead of the old builder targets.")]
-#endif
         public void BuildSimpleProject(string buildTool)
         {
             if (buildTool == "xbuild" && Environment.OSVersion.Platform == PlatformID.Win32NT)

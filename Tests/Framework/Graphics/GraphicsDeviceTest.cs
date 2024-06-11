@@ -159,9 +159,6 @@ namespace Kni.Tests.Graphics
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("Does not throw the exception. Needs Investigating")]
-#endif
         public void ResetWindowHandleNullThrowsException()
         {
             Assert.Throws<ArgumentException>(() =>
