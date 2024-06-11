@@ -13,7 +13,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\DesktopGL\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\DesktopGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>$(DefineConstants);WINDOWSDX;DESKTOPGL</DefineConstants>
+    <DefineConstants>$(DefineConstants);KNI;DESKTOPGL;WINDOWSDX</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
 

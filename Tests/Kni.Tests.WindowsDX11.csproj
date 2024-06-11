@@ -14,7 +14,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\WindowsDX11\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\WindowsDX11\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX</DefineConstants>
+    <DefineConstants>$(DefineConstants);KNI;WINDOWSDX;DIRECTX</DefineConstants>
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
 
