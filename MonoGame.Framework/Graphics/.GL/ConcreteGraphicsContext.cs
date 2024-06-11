@@ -267,6 +267,20 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
             ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
 
+            if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile == GraphicsProfile.Reach)
+            {
+                int texturesCount = ((IPlatformTextureCollection)this.Textures).Strategy.Length;
+                for (int i = 0; i < texturesCount; i++)
+                {
+                    Texture2D tx2D = ((IPlatformTextureCollection)this.Textures).Strategy[i] as Texture2D;
+                    if (tx2D != null)
+                    {
+                        if (this.SamplerStates[i].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Width)
+                        ||  this.SamplerStates[i].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(tx2D.Height))
+                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
+                    }
+                }
+            }
 
             // Apply Shader Texture and Samplers
             PlatformApplyTexturesAndSamplers(cvertexShader,
