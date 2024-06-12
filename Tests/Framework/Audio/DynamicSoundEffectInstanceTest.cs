@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Audio
+namespace Kni.Tests.Audio
 {
     class DynamicSoundEffectInstanceTest
     {
@@ -20,9 +20,6 @@ namespace MonoGame.Tests.Audio
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("Intermetent failure on first run of test. Needs investigating")]
-#endif
         public void BufferNeeded_DuringPlayback()
         {
             // XNA raises the event every time a buffer is consumed and there are less than two left.

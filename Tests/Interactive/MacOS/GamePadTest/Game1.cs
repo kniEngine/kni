@@ -16,42 +16,42 @@ namespace GamePadTest
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 
-		public Game1 ()
+		public Game1()
 		{
-			graphics = new GraphicsDeviceManager (this);
+			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
 		}
 
-		protected override void Initialize ()
+		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
 
-			base.Initialize ();
+			base.Initialize();
 		}
 
-		protected override void LoadContent ()
+		protected override void LoadContent()
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
-			spriteBatch = new SpriteBatch (GraphicsDevice);
-			Services.AddService (typeof(SpriteBatch), spriteBatch);
+			spriteBatch = new SpriteBatch(GraphicsDevice);
+			Services.AddService(typeof(SpriteBatch), spriteBatch);
 		}
 
-		protected override void UnloadContent ()
+		protected override void UnloadContent()
 		{
 			// TODO: Unload any non ContentManager content here
 		}
 
-		protected override void Update (GameTime gameTime)
+		protected override void Update(GameTime gameTime)
 		{
 
-			base.Update (gameTime);
+			base.Update(gameTime);
 		}
 
-		protected override void Draw (GameTime gameTime)
+		protected override void Draw(GameTime gameTime)
 		{
 
-			GraphicsDevice.Clear (Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			base.Draw(gameTime);
 

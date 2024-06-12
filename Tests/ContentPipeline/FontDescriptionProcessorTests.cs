@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class FontDescriptionProcessorTests
     {

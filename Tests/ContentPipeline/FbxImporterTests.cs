@@ -10,7 +10,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class FbxImporterTests
     {
@@ -48,9 +48,6 @@ namespace MonoGame.Tests.ContentPipeline
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("Disabled until latest NVTT is merged on Mac!")]
-#endif
         public void Dude()
         {
             var context = new TestImporterContext("TestObj", "TestBin");

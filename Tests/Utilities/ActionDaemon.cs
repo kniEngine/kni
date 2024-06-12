@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace MonoGame.Tests.Utilities
+namespace Kni.Tests.Utilities
 {
     internal class ActionDaemon
     {

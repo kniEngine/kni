@@ -6,10 +6,10 @@ using System;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     [TestFixture]
-    class Bounding
+    class BoundingTest
     {
         [Test]
         public void BoxContainsVector3Test()

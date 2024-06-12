@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Components {
-	class FlexibleGameComponent : VisualTestDrawableGameComponent {
+namespace Kni.Tests.Components
+{
+	class FlexibleGameComponent : VisualTestDrawableGameComponent
+	{
 
-		public FlexibleGameComponent (Game game)
-			: base (game)
+		public FlexibleGameComponent(Game game)
+			: base(game)
 		{
 		}
 
@@ -21,54 +21,54 @@ namespace MonoGame.Tests.Components {
 		public Action<FrameInfo> DrawAction { get; set; }
 
 		private IFrameInfoSource _frameInfoSource;
-		public override void Initialize ()
+		public override void Initialize()
 		{
-			_frameInfoSource = Game.Services.RequireService<IFrameInfoSource> ();
+			_frameInfoSource = Game.Services.RequireService<IFrameInfoSource>();
 
 			if (InitializeAction != null)
-				InitializeAction (_frameInfoSource.FrameInfo);
+				InitializeAction(_frameInfoSource.FrameInfo);
 
-			base.Initialize ();
+			base.Initialize();
 		}
 
-		protected override void LoadContent ()
+		protected override void LoadContent()
 		{
-			base.LoadContent ();
+			base.LoadContent();
 
 			if (LoadContentAction != null)
-				LoadContentAction (_frameInfoSource.FrameInfo);
+				LoadContentAction(_frameInfoSource.FrameInfo);
 		}
 
-		protected override void UnloadContent ()
+		protected override void UnloadContent()
 		{
-			base.UnloadContent ();
+			base.UnloadContent();
 
 			if (UnloadContentAction != null)
-				UnloadContentAction (_frameInfoSource.FrameInfo);
+				UnloadContentAction(_frameInfoSource.FrameInfo);
 		}
 
-		public override void Update (GameTime gameTime)
+		public override void Update(GameTime gameTime)
 		{
-			base.Update (gameTime);
+			base.Update(gameTime);
 
 			if (UpdateAction != null)
-				UpdateAction (_frameInfoSource.FrameInfo);
+				UpdateAction(_frameInfoSource.FrameInfo);
 		}
 
-		protected override void UpdateOncePerDraw (GameTime gameTime)
+		protected override void UpdateOncePerDraw(GameTime gameTime)
 		{
-			base.UpdateOncePerDraw (gameTime);
+			base.UpdateOncePerDraw(gameTime);
 
 			if (UpdateOncePerDrawAction != null)
-				UpdateOncePerDrawAction (_frameInfoSource.FrameInfo);
+				UpdateOncePerDrawAction(_frameInfoSource.FrameInfo);
 		}
 
-		public override void Draw (GameTime gameTime)
+		public override void Draw(GameTime gameTime)
 		{
-			base.Draw (gameTime);
+			base.Draw(gameTime);
 
 			if (DrawAction != null)
-				DrawAction (_frameInfoSource.FrameInfo);
+				DrawAction(_frameInfoSource.FrameInfo);
 		}
 	}
 }

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class TestCompiler
     {

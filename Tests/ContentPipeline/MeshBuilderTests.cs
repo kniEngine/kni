@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     internal class MeshBuilderTests
     {

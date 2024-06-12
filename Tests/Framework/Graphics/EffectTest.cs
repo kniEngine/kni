@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     [TestFixture]
     internal class EffectTest : GraphicsDeviceTestFixtureBase
@@ -103,9 +103,6 @@ namespace MonoGame.Tests.Graphics
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("Fails under OpenGL!")]
-#endif
         public void EffectParameterShouldBeSetIfSetByNameAndGetByIndex()
         {
             // This relies on the parameters permanently being on the same index.

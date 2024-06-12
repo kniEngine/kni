@@ -14,27 +14,29 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using MonoGame.Tests.Components;
+using Kni.Tests.Components;
 
 #if IOS || TVOS
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 #endif
 
-namespace MonoGame.Tests {
-	class TestGameBase : Game, IFrameInfoSource {
+namespace Kni.Tests
+{
+	class TestGameBase : Game, IFrameInfoSource
+	{
 		private bool _isExiting;
 
-		public TestGameBase ()
+		public TestGameBase()
 		{
 #if XNA
             Content.RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
 #endif
-            // We do all the tests using the reference device to
-            // avoid driver glitches and get consistent rendering.
-            GraphicsAdapter.UseReferenceDevice = true;
+			// We do all the tests using the reference device to
+			// avoid driver glitches and get consistent rendering.
+			GraphicsAdapter.UseReferenceDevice = true;
 
-            Services.AddService<IFrameInfoSource>(this);
+			Services.AddService<IFrameInfoSource>(this);
 			SuppressExtraUpdatesAndDraws = true;
 		}
 
@@ -64,7 +66,7 @@ namespace MonoGame.Tests {
 		public event EventHandler<FrameInfoEventArgs> PreDrawWith;
 		public event EventHandler<FrameInfoEventArgs> PreUpdateWith;
 
-		public void ClearActions ()
+		public void ClearActions()
 		{
 			InitializeWith = null;
 			LoadContentWith = null;
@@ -80,58 +82,61 @@ namespace MonoGame.Tests {
 			PreUpdateWith = null;
 		}
 
-		private void SafeRaise (EventHandler<FrameInfoEventArgs> handler)
+		private void SafeRaise(EventHandler<FrameInfoEventArgs> handler)
 		{
 			if (handler != null)
-				handler (this, new FrameInfoEventArgs(FrameInfo));
+				handler(this, new FrameInfoEventArgs(FrameInfo));
 		}
 
-	    public void InitializeOnly()
-	    {
-            if (GraphicsDevice == null)
-            {
-                var graphicsDeviceManager = Services.GetService(typeof(IGraphicsDeviceManager)) as IGraphicsDeviceManager;
-                graphicsDeviceManager.CreateDevice();
-            }
-            Initialize();
-	    }
-
-		protected override void Initialize ()
+		public void InitializeOnly()
 		{
-			SafeRaise (PreInitializeWith);
-			base.Initialize ();
-			SafeRaise (InitializeWith);
+			if (GraphicsDevice == null)
+			{
+				var graphicsDeviceManager = Services.GetService(typeof(IGraphicsDeviceManager)) as IGraphicsDeviceManager;
+				graphicsDeviceManager.CreateDevice();
+			}
+			Initialize();
 		}
 
-		protected override void LoadContent ()
+		protected override void Initialize()
 		{
-			SafeRaise (PreLoadContentWith);
-			base.LoadContent ();
-			SafeRaise (LoadContentWith);
+			SafeRaise(PreInitializeWith);
+			base.Initialize();
+			SafeRaise(InitializeWith);
 		}
 
-		protected override void UnloadContent ()
+		protected override void LoadContent()
 		{
-			SafeRaise (PreUnloadContentWith);
-			base.UnloadContent ();
-			SafeRaise (UnloadContentWith);
+			SafeRaise(PreLoadContentWith);
+			base.LoadContent();
+			SafeRaise(LoadContentWith);
 		}
 
-		public void Run (Predicate<FrameInfo> until = null)
+		protected override void UnloadContent()
+		{
+			SafeRaise(PreUnloadContentWith);
+			base.UnloadContent();
+			SafeRaise(UnloadContentWith);
+		}
+
+		public void Run(Predicate<FrameInfo> until = null)
 		{
 			if (until != null)
 				ExitCondition = until;
 #if XNA
-			try {
-				base.Run ();
-			} finally {
+			try
+			{
+				base.Run();
+			}
+			finally
+			{
 				// XNA (WinForms) leaves WM_QUIT hanging around
 				// in the message queue sometimes, and when it
 				// does, all future windows that are created are
 				// instantly killed.  So, we manually absorb any
 				// WM_QUIT that exists.
 				if (_isExiting)
-					AbsorbQuitMessage ();
+					AbsorbQuitMessage();
 			}
 #elif IOS || TVOS || ANDROID
 			RunOnMainThreadAndWait();
@@ -145,19 +150,22 @@ namespace MonoGame.Tests {
 		{
 			var exitEvent = new ManualResetEvent(false);
 			var exitHandler = new EventHandler<EventArgs>(
-				(sender, e) => exitEvent.Set ());
+				(sender, e) => exitEvent.Set() );
 
 			Exiting += exitHandler;
-			try {
+			try 
+			{
 				InvokeRunOnMainThread();
 				var maxExecutionTime = TimeSpan.FromSeconds(30);
-				if (!exitEvent.WaitOne (maxExecutionTime)) {
-					throw new TimeoutException (string.Format (
+				if (!exitEvent.WaitOne (maxExecutionTime)) 
+				{
+					throw new TimeoutException(string.Format(
 						"Game.Run timed out.  Maximum execution time is {0}.",
 						maxExecutionTime));
 				}
 			}
-			finally {
+			finally 
+			{
 				Exiting -= exitHandler;
 			}
 		}
@@ -167,10 +175,14 @@ namespace MonoGame.Tests {
 		private void InvokeRunOnMainThread()
 		{
 			Exception ex = null;
-			UIApplication.SharedApplication.InvokeOnMainThread(() => {
-				try {
+			UIApplication.SharedApplication.InvokeOnMainThread(() => 
+			{
+				try
+				{
 					base.Run();
-				} catch (Exception innerEx) {
+				} 
+				catch (Exception innerEx) 
+				{
 					ex = innerEx;
 				}
 			});
@@ -188,56 +200,56 @@ namespace MonoGame.Tests {
 		}
 #endif
 
-		private readonly UpdateGuard _updateGuard = new UpdateGuard ();
-		protected override void Update (GameTime gameTime)
+		private readonly UpdateGuard _updateGuard = new UpdateGuard();
+		protected override void Update(GameTime gameTime)
 		{
-			_frameInfo.AdvanceUpdate (gameTime);
-			EvaluateExitCondition ();
+			_frameInfo.AdvanceUpdate(gameTime);
+			EvaluateExitCondition();
 
 			if (_isExiting && SuppressExtraUpdatesAndDraws)
 				return;
 
-			SafeRaise (PreUpdateWith);
+			SafeRaise(PreUpdateWith);
 
-			base.Update (gameTime);
+			base.Update(gameTime);
 
-			if (_updateGuard.ShouldUpdate (FrameInfo))
-				UpdateOncePerDraw (gameTime);
+			if (_updateGuard.ShouldUpdate(FrameInfo))
+				UpdateOncePerDraw(gameTime);
 
-			SafeRaise (UpdateWith);
+			SafeRaise(UpdateWith);
 		}
 
-		protected virtual void UpdateOncePerDraw (GameTime gameTime)
+		protected virtual void UpdateOncePerDraw(GameTime gameTime)
 		{
-			SafeRaise (UpdateOncePerDrawWith);
+			SafeRaise(UpdateOncePerDrawWith);
 		}
 
-		protected override void Draw (GameTime gameTime)
+		protected override void Draw(GameTime gameTime)
 		{
-			_frameInfo.AdvanceDraw (gameTime);
-			EvaluateExitCondition ();
+			_frameInfo.AdvanceDraw(gameTime);
+			EvaluateExitCondition();
 
 			if (_isExiting && SuppressExtraUpdatesAndDraws)
 				return;
 
-			SafeRaise (PreDrawWith);
-			base.Draw (gameTime);
-			SafeRaise (DrawWith);
+			SafeRaise(PreDrawWith);
+			base.Draw(gameTime);
+			SafeRaise(DrawWith);
 		}
 
-        protected void DoExit()
-        {
-            try { Exit(); }
-            catch (PlatformNotSupportedException ex)
-            {
-                // We need to halt the app on platforms that disallow 
-                // exit after we complete running all the unit tests.
-                // So we do the next best thing can call the internal
-                // platform code directly which produces the same result.
-                Exit();
-                SuppressDraw();
-            }
-        }
+		protected void DoExit()
+		{
+			try { Exit(); }
+			catch (PlatformNotSupportedException ex)
+			{
+				// We need to halt the app on platforms that disallow 
+				// exit after we complete running all the unit tests.
+				// So we do the next best thing can call the internal
+				// platform code directly which produces the same result.
+				Exit();
+				SuppressDraw();
+			}
+		}
 
 		private void EvaluateExitCondition()
 		{
@@ -245,7 +257,7 @@ namespace MonoGame.Tests {
 				return;
 
 			if (ExitCondition(_frameInfo))
-            {
+			{
 				_isExiting = true;
 				DoExit();
 			}
@@ -253,7 +265,8 @@ namespace MonoGame.Tests {
 
 #if XNA
 		[StructLayout (LayoutKind.Sequential)]
-		public struct NativeMessage {
+		public struct NativeMessage 
+		{
 			public IntPtr handle;
 			public uint msg;
 			public IntPtr wParam;
@@ -269,22 +282,24 @@ namespace MonoGame.Tests {
 			uint wMsgFilterMin, uint wMsgFilterMax, uint wRemoveMsg);
 
 		[DllImport ("user32.dll")]
-		private static extern int GetMessage (
+		private static extern int GetMessage(
 			out NativeMessage msg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
 		const uint WM_QUIT = 0x12;
 
-		protected static void AbsorbQuitMessage ()
+		protected static void AbsorbQuitMessage()
 		{
 			NativeMessage msg;
-			if (!PeekMessage (out msg, IntPtr.Zero, 0, 0, 0))
+			if (!PeekMessage(out msg, IntPtr.Zero, 0, 0, 0))
 				return;
 
-			do {
-				int result = GetMessage (out msg, IntPtr.Zero, 0, 0);
+			do
+			{
+				int result = GetMessage(out msg, IntPtr.Zero, 0, 0);
 				if (result == -1 || result == 0)
 					return;
-			} while (msg.msg != WM_QUIT);
+			}
+			while (msg.msg != WM_QUIT);
 		}
 #endif
 	}

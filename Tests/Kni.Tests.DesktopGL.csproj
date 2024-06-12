@@ -3,18 +3,19 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <ProjectGuid>{DED2DDB6-D4BE-B1B4-2E54-657374732E57}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MonoGame.Tests</RootNamespace>
+    <RootNamespace>Kni.Tests</RootNamespace>
     <AssemblyName>Kni.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\DesktopGL\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\DesktopGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>$(DefineConstants);WINDOWSDX;DESKTOPGL</DefineConstants>
+    <DefineConstants>$(DefineConstants);KNI;DESKTOPGL;WINDOWSDX</DefineConstants>
     <LangVersion>Default</LangVersion>
+    <StartupObject>Kni.Tests.Program</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -25,8 +26,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnitLite" Version="3.9.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
+    <PackageReference Include="NUnitLite" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,13 +38,21 @@
     <Compile Include="Runner\Extensions.cs" />
     <Compile Include="Runner\FrameInfo.cs" />
     <Compile Include="Runner\FramePixelData.cs" />
+    <Compile Include="Runner\FramePixelData.Desktop.cs" />
     <Compile Include="Runner\PixelArgb.cs" />
     <Compile Include="Runner\Utility.cs" />
     <Compile Include="Runner\Program.cs" />
-    <Compile Include="Runner\Desktop\FramePixelData.cs" />
+    <Compile Include="Runner\GameBase\CountCallsGame.cs" />
+    <Compile Include="Runner\GameBase\FixtureBase.cs" />
+    <Compile Include="Runner\GameBase\MockGame.cs" />
+    <Compile Include="Runner\GameBase\MockWindow.cs" />
+    <Compile Include="Runner\GameBase\TestGameBase.cs" />
+    <Compile Include="Runner\GameBase\GraphicsDeviceTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestGame.cs" />
     <Compile Include="Framework\ByteBufferPoolTest.cs" />
     <Compile Include="Utilities\ActionDaemon.cs" />
-    <Compile Include="Framework\Bounding.cs" />
+    <Compile Include="Framework\BoundingTest.cs" />
     <Compile Include="Framework\ColorTest.cs" />
     <Compile Include="Framework\CurveKeyCollectionTest.cs" />
     <Compile Include="Framework\CurveKeyTest.cs" />
@@ -54,13 +65,11 @@
     <Compile Include="Framework\GameTest+Properties.cs" />
     <Compile Include="Framework\MathHelperTest.cs" />
     <Compile Include="Framework\MatrixTest.cs" />
-    <Compile Include="Framework\MockWindow.cs" />
     <Compile Include="Framework\PackedVectorTest.cs" />
     <Compile Include="Framework\PlaneTest.cs" />
     <Compile Include="Framework\QuaternionTest.cs" />
     <Compile Include="Framework\RayTest.cs" />
     <Compile Include="Framework\RectangleTest.cs" />
-    <Compile Include="Framework\TestGameBase.cs" />
     <Compile Include="Framework\TitleContainerTest.cs" />
     <Compile Include="Framework\TouchCollectionTest.cs" />
     <Compile Include="Framework\TouchLocationTest.cs" />
@@ -71,8 +80,8 @@
     <Compile Include="Framework\VertexTests.cs" />
     <Compile Include="Framework\Audio\SoundEffectTest.cs" />
     <Compile Include="Framework\Audio\XactTest.cs" />
-    <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
+    <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
     <Compile Include="Framework\Components\DrawFrameNumberComponent.cs" />
     <Compile Include="Framework\Components\FlexibleGameComponent.cs" />
     <Compile Include="Framework\Components\FrameCompareComponent.cs" />
@@ -91,7 +100,6 @@
     <Compile Include="Framework\Graphics\GraphicsAdapterTest.cs" />
     <Compile Include="Framework\Graphics\GraphicsDeviceTest.cs" />
     <Compile Include="Framework\Graphics\MiscellaneousTests.cs" />
-    <Compile Include="Framework\Graphics\GraphicsDeviceTestFixtureBase.cs" />
     <Compile Include="Framework\Graphics\IndexBufferTest.cs" />
     <Compile Include="Framework\Graphics\Texture2DNonVisualTest.cs" />
     <Compile Include="Framework\Input\GamePadTest.cs" />
@@ -110,7 +118,7 @@
     <Compile Include="Framework\Graphics\Texture2DTest.cs" />
     <Compile Include="Framework\Graphics\TextureCubeTest.cs" />
     <Compile Include="Framework\Graphics\VertexBufferTest.cs" />
-    <Compile Include="Framework\Visual\MiscellaneousTests.cs" />
+    <Compile Include="Framework\Graphics\VisualMiscellaneousTests.cs" />
     <Compile Include="Framework\Graphics\ShaderTest.cs" />
     <Compile Include="Framework\Graphics\SpriteBatchTest.cs" />
     <Compile Include="Framework\Graphics\SpriteFontTest.cs" />
@@ -118,8 +126,9 @@
     <Compile Include="Framework\Graphics\ModelTest.cs" />
     <Compile Include="Framework\Graphics\OcclusionQueryTest.cs" />
     <Compile Include="Framework\Graphics\ProfileReachTest.cs" />
-    <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
-    <Compile Include="Framework\Visual\VisualTestGame.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="ContentPipeline\AssetTestUtility.cs" />
   </ItemGroup>
 
@@ -794,6 +803,9 @@
     <Content Include="Assets\Fonts\Strings.resx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\OpenGL\Bevels.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -821,6 +833,9 @@
     <Content Include="Assets\Effects\OpenGL\CustomSpriteBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Textures\GlassPane.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1029,7 +1044,7 @@
       <Project>{3f81f76d-f0f3-44fe-a256-40af153c33f7}</Project>
       <Name>Xna.Framework.Audio</Name>
     </ProjectReference>
-    <ProjectReference Include="..\src\Xna.Framework.Input\Xna.Framework.Input.csproj" >
+    <ProjectReference Include="..\src\Xna.Framework.Input\Xna.Framework.Input.csproj">
       <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
       <Name>Xna.Framework.Input</Name>
     </ProjectReference>

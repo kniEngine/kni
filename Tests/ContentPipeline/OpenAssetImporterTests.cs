@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using NUnit.Framework;
 using System.IO;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class OpenAssetImporterTests
     {
@@ -25,9 +25,6 @@ namespace MonoGame.Tests.ContentPipeline
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("This crashes inside Assimp on Mac!")]
-#endif
         public void BlenderTests()
         {
             var context = new TestImporterContext("TestObj", "TestBin");

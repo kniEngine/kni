@@ -7,14 +7,14 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Tests.ContentPipeline;
+using Kni.Tests.ContentPipeline;
 using NUnit.Framework;
 using Microsoft.Xna.Platform.Graphics;
 #if DESKTOPGL
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 #endif
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     [TestFixture]
     internal class GraphicsDeviceTest : GraphicsDeviceTestFixtureBase
@@ -159,9 +159,6 @@ namespace MonoGame.Tests.Graphics
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("Does not throw the exception. Needs Investigating")]
-#endif
         public void ResetWindowHandleNullThrowsException()
         {
             Assert.Throws<ArgumentException>(() =>

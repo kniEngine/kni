@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Threading;
 
-namespace MonoGame.Tests.Audio
+namespace Kni.Tests.Audio
 {
     class SoundEffectInstanceTest
     {

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     class Vector2Test
     {

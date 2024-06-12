@@ -5,7 +5,7 @@
 using System;
 
 
-namespace MonoGame.Tests.Components 
+namespace Kni.Tests.Components 
 {
 	class PixelDeltaFrameComparer : IFrameComparer 
     {

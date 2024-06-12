@@ -15,7 +15,7 @@ using NUnit.Framework;
 using System.Reflection;
 #endif
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class ContentCompilerTest
     {

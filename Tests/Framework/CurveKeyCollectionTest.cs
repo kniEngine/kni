@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     class CurveKeyCollectionTest
     {

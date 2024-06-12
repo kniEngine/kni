@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     [TestFixture]
     internal class BlendStateTest : GraphicsDeviceTestFixtureBase
@@ -80,9 +80,6 @@ namespace MonoGame.Tests.Graphics
         }
 
         [Test]
-#if DESKTOPGL
-        [Ignore("Fails similarity test. Needs Investigating")]
-#endif
         public void VisualTests()
         {
             var blends = new[]

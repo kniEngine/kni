@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     class PackedVectorTest
     {

@@ -5,20 +5,16 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Tests.Components;
+using Kni.Tests.Components;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     [TestFixture]
     internal class RasterizerStateTest : GraphicsDeviceTestFixtureBase
     {
         [TestCase(-1f)]
-#if DESKTOPGL
-        [TestCase(1f), Ignore ("fails similarity test. Needs Investigating")]
-#else
         [TestCase(1f)]
-#endif
         [TestCase(-0.0004f)]
         public void DepthBiasVisualTest(float depthBias)
         {

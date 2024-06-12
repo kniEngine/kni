@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class ModelProcessorTests
     {

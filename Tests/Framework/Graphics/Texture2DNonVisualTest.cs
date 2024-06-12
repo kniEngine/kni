@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     [TestFixture]
     internal class Texture2DNonVisualTest : GraphicsDeviceTestFixtureBase

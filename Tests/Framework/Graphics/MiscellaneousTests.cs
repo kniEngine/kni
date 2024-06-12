@@ -1,7 +1,7 @@
-﻿using MonoGame.Tests.Components;
+﻿using Kni.Tests.Components;
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics
+namespace Kni.Tests.Graphics
 {
     internal class MiscellaneousTests : GraphicsDeviceTestFixtureBase
     {

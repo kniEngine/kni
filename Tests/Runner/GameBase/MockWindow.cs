@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     internal class MockWindow : GameWindow
     {

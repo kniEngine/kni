@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
-using MonoGame.Tests.Framework.Components;
+using Kni.Tests.Framework.Components;
 
-namespace MonoGame.Tests.Framework
+namespace Kni.Tests.Framework
 {
     public static class GameComponentTest
     {
         [Test]
-#if DESKTOPGL
-        [Ignore("This crashes inside SDL on Mac!")]
-#endif
         public static void InitializeOrderTest()
         {
             var game = new TestGameBase();

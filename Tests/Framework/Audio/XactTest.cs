@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Audio;
 using NUnit.Framework;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Audio
+namespace Kni.Tests.Audio
 {
     [TestFixture]
     public class XactTests

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 using NUnit.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
-namespace MonoGame.Tests.ContentPipeline
+namespace Kni.Tests.ContentPipeline
 {
     class TextureProcessorTests
     {

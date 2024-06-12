@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace MonoGame.Tests
+namespace Kni.Tests
 {
     partial class FramePixelData
     {
