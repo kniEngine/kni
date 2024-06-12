@@ -15,29 +15,6 @@ namespace Kni.Tests
 {
 	static partial class GameTest
 	{
-		public abstract class FixtureBase
-		{
-			private MockGame _game;
-
-			protected MockGame Game
-			{
-				get { return _game; }
-			}
-
-			[SetUp]
-			public virtual void SetUp()
-			{
-				Paths.SetStandardWorkingDirectory();
-				_game = new MockGame();
-			}
-
-			[TearDown]
-			public virtual void TearDown()
-			{
-				_game.Dispose();
-				_game = null;
-			}
-		}
 
 		[TestFixture]
 		public class Disposal : FixtureBase

@@ -176,6 +176,7 @@
     <Compile Include="Framework\GameTest.cs" />
     <Compile Include="Framework\GameTest+Properties.cs" />
     <Compile Include="Framework\GameTest+Methods.cs" />
+    <Compile Include="Runner\GameBase\FixtureBase.cs" />
     <Compile Include="Runner\GameBase\MockGame.cs" />
     <Compile Include="Runner\GameBase\GraphicsDeviceTestFixtureBase.cs" />
     <Compile Include="Runner\GameBase\TestGameBase.cs" />
