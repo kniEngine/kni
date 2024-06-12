@@ -175,7 +175,6 @@ namespace Kni.Tests
 		public class Misc
 		{
 			[Test]
-			[Ignore("MG crashes when no graphicsDeviceManager is set and Run is called")]
 			public void LoadContentNotCalledWithoutGdm()
 			{
 				var g = new CountCallsGame();
@@ -187,7 +186,6 @@ namespace Kni.Tests
 			}
 
 			[Test]
-			[Ignore("MG crashes when no GraphicsDevice is set and Run is called")]
 			public void LoadContentNotCalledWithoutGd()
 			{
 				var g = new CountCallsGame();
