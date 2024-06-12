@@ -127,7 +127,7 @@ namespace Kni.Tests
 		[TestFixture]
 		public class Behaviors : FixtureBase
 		{
-			[Test, Ignore("Fix me!")]
+			[Test]
 			public void Nongraphical_run_succeeds()
 			{
 				Game.Run();
