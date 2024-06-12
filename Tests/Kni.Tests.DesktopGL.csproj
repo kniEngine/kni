@@ -42,6 +42,11 @@
     <Compile Include="Runner\PixelArgb.cs" />
     <Compile Include="Runner\Utility.cs" />
     <Compile Include="Runner\Program.cs" />
+    <Compile Include="Runner\GameBase\MockWindow.cs" />
+    <Compile Include="Runner\GameBase\TestGameBase.cs" />
+    <Compile Include="Runner\GameBase\GraphicsDeviceTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestGame.cs" />
     <Compile Include="Framework\ByteBufferPoolTest.cs" />
     <Compile Include="Utilities\ActionDaemon.cs" />
     <Compile Include="Framework\Bounding.cs" />
@@ -57,13 +62,11 @@
     <Compile Include="Framework\GameTest+Properties.cs" />
     <Compile Include="Framework\MathHelperTest.cs" />
     <Compile Include="Framework\MatrixTest.cs" />
-    <Compile Include="Framework\MockWindow.cs" />
     <Compile Include="Framework\PackedVectorTest.cs" />
     <Compile Include="Framework\PlaneTest.cs" />
     <Compile Include="Framework\QuaternionTest.cs" />
     <Compile Include="Framework\RayTest.cs" />
     <Compile Include="Framework\RectangleTest.cs" />
-    <Compile Include="Framework\TestGameBase.cs" />
     <Compile Include="Framework\TitleContainerTest.cs" />
     <Compile Include="Framework\TouchCollectionTest.cs" />
     <Compile Include="Framework\TouchLocationTest.cs" />
@@ -94,7 +97,6 @@
     <Compile Include="Framework\Graphics\GraphicsAdapterTest.cs" />
     <Compile Include="Framework\Graphics\GraphicsDeviceTest.cs" />
     <Compile Include="Framework\Graphics\MiscellaneousTests.cs" />
-    <Compile Include="Framework\Graphics\GraphicsDeviceTestFixtureBase.cs" />
     <Compile Include="Framework\Graphics\IndexBufferTest.cs" />
     <Compile Include="Framework\Graphics\Texture2DNonVisualTest.cs" />
     <Compile Include="Framework\Input\GamePadTest.cs" />
@@ -113,7 +115,7 @@
     <Compile Include="Framework\Graphics\Texture2DTest.cs" />
     <Compile Include="Framework\Graphics\TextureCubeTest.cs" />
     <Compile Include="Framework\Graphics\VertexBufferTest.cs" />
-    <Compile Include="Framework\Visual\MiscellaneousTests.cs" />
+    <Compile Include="Framework\Graphics\VisualMiscellaneousTests.cs" />
     <Compile Include="Framework\Graphics\ShaderTest.cs" />
     <Compile Include="Framework\Graphics\SpriteBatchTest.cs" />
     <Compile Include="Framework\Graphics\SpriteFontTest.cs" />
@@ -121,8 +123,6 @@
     <Compile Include="Framework\Graphics\ModelTest.cs" />
     <Compile Include="Framework\Graphics\OcclusionQueryTest.cs" />
     <Compile Include="Framework\Graphics\ProfileReachTest.cs" />
-    <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
-    <Compile Include="Framework\Visual\VisualTestGame.cs" />
   </ItemGroup>
 
   <ItemGroup>

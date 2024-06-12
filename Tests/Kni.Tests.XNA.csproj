@@ -84,7 +84,7 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>	  
+  <ItemGroup>
     <Compile Include="ContentPipeline\AssetTestClasses.cs" />
     <Compile Include="ContentPipeline\AssetTestUtility.cs" />
     <Compile Include="ContentPipeline\AudioContentTests.cs" />
@@ -130,7 +130,6 @@
     <Compile Include="Framework\Graphics\GraphicsAdapterTest.cs" />
     <Compile Include="Framework\Graphics\GraphicsDeviceManagerTest.cs" />
     <Compile Include="Framework\Graphics\GraphicsDeviceTest.cs" />
-    <Compile Include="Framework\Graphics\GraphicsDeviceTestFixtureBase.cs" />
     <Compile Include="Framework\Graphics\MiscellaneousTests.cs" />
     <Compile Include="Framework\Graphics\ModelTest.cs" />
     <Compile Include="Framework\Graphics\OcclusionQueryTest.cs" />
@@ -150,6 +149,7 @@
     <Compile Include="Framework\Graphics\TextureCubeTest.cs" />
     <Compile Include="Framework\Graphics\VertexBufferTest.cs" />
     <Compile Include="Framework\Graphics\ViewportTest.cs" />
+    <Compile Include="Framework\Graphics\VisualMiscellaneousTests.cs" />
     <Compile Include="Framework\Input\GamePadTest.cs" />
     <Compile Include="Framework\Input\KeyboardTest.cs" />
     <Compile Include="Framework\Input\MouseTest.cs" />
@@ -173,23 +173,23 @@
     <Compile Include="Framework\Bounding.cs" />
     <Compile Include="Framework\MathHelperTest.cs" />
     <Compile Include="Framework\RayTest.cs" />
+    <Compile Include="Framework\GameTest.cs" />
+    <Compile Include="Framework\GameTest+Properties.cs" />
     <Compile Include="Framework\GameTest+Methods.cs" />
+    <Compile Include="Runner\GameBase\GraphicsDeviceTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\TestGameBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestGame.cs" />
     <Compile Include="Runner\PixelArgb.cs" />
     <Compile Include="Runner\Program.cs" />
     <Compile Include="Runner\Utility.cs" />
     <Compile Include="Framework\Components\FrameCompareComponent.cs" />
-    <Compile Include="Framework\GameTest+Properties.cs" />
-    <Compile Include="Framework\GameTest.cs" />
-    <Compile Include="Framework\TestGameBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Components\PixelDeltaFrameComparer.cs" />
     <Compile Include="Framework\Components\UpdateGuard.cs" />
-    <Compile Include="Framework\Visual\VisualTestFixtureBase.cs" />
-    <Compile Include="Framework\Visual\VisualTestGame.cs" />
     <Compile Include="Framework\Components\Colored3DCubeComponent.cs" />
     <Compile Include="Framework\Components\TexturedQuadComponent.cs" />
     <Compile Include="Framework\Components\SpaceshipModelDrawComponent.cs" />
-    <Compile Include="Framework\Visual\MiscellaneousTests.cs" />
     <Compile Include="Utilities\ActionDaemon.cs" />
   </ItemGroup>
   <ItemGroup>

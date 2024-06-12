@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 using Kni.Tests.Components;
 
-namespace Kni.Tests.Visual
+namespace Kni.Tests
 {
 	class VisualTestFixtureBase
 	{

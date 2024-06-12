@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework;
 using Kni.Tests.Components;
 using NUnit.Framework;
 
-namespace Kni.Tests.Visual
+namespace Kni.Tests.Graphics
 {
 	[TestFixture]
-	class MiscellaneousTests : VisualTestFixtureBase
+	class VisualMiscellaneousTests : VisualTestFixtureBase
 	{
 		[Test]
 		public void DrawOrder_falls_back_to_order_of_addition_to_Game()

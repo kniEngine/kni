@@ -290,12 +290,12 @@ namespace Kni.Tests
 		protected static void AbsorbQuitMessage()
 		{
 			NativeMessage msg;
-			if (!PeekMessage (out msg, IntPtr.Zero, 0, 0, 0))
+			if (!PeekMessage(out msg, IntPtr.Zero, 0, 0, 0))
 				return;
 
 			do
 			{
-				int result = GetMessage (out msg, IntPtr.Zero, 0, 0);
+				int result = GetMessage(out msg, IntPtr.Zero, 0, 0);
 				if (result == -1 || result == 0)
 					return;
 			}

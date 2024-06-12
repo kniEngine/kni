@@ -14,7 +14,7 @@ using Kni.Tests.Components;
 using Kni.Tests.Utilities;
 using NUnit.Framework;
 
-namespace Kni.Tests.Graphics
+namespace Kni.Tests
 {
     internal class GraphicsDeviceTestFixtureBase
     {

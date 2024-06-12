@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Kni.Tests.Components;
 
-namespace Kni.Tests.Visual
+namespace Kni.Tests
 {
 	class VisualTestGame : TestGameBase, IFrameCaptureSource
 	{
