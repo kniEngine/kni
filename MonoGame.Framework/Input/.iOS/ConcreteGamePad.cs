@@ -277,7 +277,7 @@ namespace Microsoft.Xna.Platform.Input
                 if ((long)controller.PlayerIndex == (long)GCControllerPlayerIndex.Unset)
                 {
 #if XAMARINIOS
-                    controller.PlayerIndex = (System.nint)(long)index;
+                    controller.PlayerIndex = (System.nint)(long)gcindex;
 #else
                     controller.PlayerIndex = gcindex;
 #endif
