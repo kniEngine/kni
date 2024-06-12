@@ -452,8 +452,13 @@ namespace Kni.Tests
 			}
 
 			public struct Entry
-			{
-				public static Entry FromDraw(GameTime gameTime)
+            {
+                public RunLoopAction Action { get; set; }
+                public TimeSpan ElapsedGameTime { get; set; }
+                public TimeSpan TotalGameTime { get; set; }
+                public bool WasRunningSlowly { get; set; }
+
+                public static Entry FromDraw(GameTime gameTime)
 				{
 					return new Entry
 					{
@@ -473,26 +478,6 @@ namespace Kni.Tests
 						TotalGameTime = gameTime.TotalGameTime,
 						WasRunningSlowly = gameTime.IsRunningSlowly
 					};
-				}
-
-				public RunLoopAction Action
-				{
-					get; set;
-				}
-
-				public TimeSpan ElapsedGameTime
-				{
-					get; set;
-				}
-
-				public TimeSpan TotalGameTime
-				{
-					get; set;
-				}
-
-				public bool WasRunningSlowly
-				{
-					get; set;
 				}
 
 				public override string ToString()
