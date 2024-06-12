@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Kni.Tests.Framework
 {
     [TestFixture]
-    class Bounding
+    class BoundingTest
     {
         [Test]
         public void BoxContainsVector3Test()

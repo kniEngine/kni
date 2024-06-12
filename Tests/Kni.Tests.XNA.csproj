@@ -170,7 +170,7 @@
     <Compile Include="Runner\FrameInfo.cs" />
     <Compile Include="Runner\FramePixelData.cs" />
     <Compile Include="Runner\FramePixelData.Desktop.cs" />
-    <Compile Include="Framework\Bounding.cs" />
+    <Compile Include="Framework\BoundingTest.cs" />
     <Compile Include="Framework\MathHelperTest.cs" />
     <Compile Include="Framework\RayTest.cs" />
     <Compile Include="Framework\GameTest.cs" />

@@ -49,7 +49,7 @@
     <Compile Include="Runner\GameBase\VisualTestGame.cs" />
     <Compile Include="Framework\ByteBufferPoolTest.cs" />
     <Compile Include="Utilities\ActionDaemon.cs" />
-    <Compile Include="Framework\Bounding.cs" />
+    <Compile Include="Framework\BoundingTest.cs" />
     <Compile Include="Framework\ColorTest.cs" />
     <Compile Include="Framework\CurveKeyCollectionTest.cs" />
     <Compile Include="Framework\CurveKeyTest.cs" />
