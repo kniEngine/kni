@@ -308,8 +308,16 @@ namespace Kni.Tests
 		}
 
 		public class MockGame : TestGameBase
-		{
-			public MockGame()
+        {
+            public int MinUpdateCount { get; set; }
+            public int MaxUpdateCount { get; set; }
+            public int MinDrawCount { get; set; }
+            public int MaxDrawCount { get; set; }
+            public int UpdateCount { get; private set; }
+            public int DrawCount { get; private set; }
+            public ExitReason ExitReason { get; private set; }
+
+            public MockGame()
 			{
 				MinUpdateCount = int.MaxValue;
 				MinDrawCount = int.MaxValue;
@@ -322,41 +330,6 @@ namespace Kni.Tests
 				if (Services.GetService(typeof(IGraphicsDeviceManager)) == null)
 					new GraphicsDeviceManager(this);
 				return this;
-			}
-
-			public int MinUpdateCount
-			{
-				get; set;
-			}
-
-			public int MaxUpdateCount
-			{
-				get; set;
-			}
-
-			public int MinDrawCount
-			{
-				get; set;
-			}
-
-			public int MaxDrawCount
-			{
-				get; set;
-			}
-
-			public int UpdateCount
-			{
-				get; private set;
-			}
-
-			public int DrawCount
-			{
-				get; private set;
-			}
-
-			public ExitReason ExitReason
-			{
-				get; private set;
 			}
 
 			private void EvaluateExitCriteria()
