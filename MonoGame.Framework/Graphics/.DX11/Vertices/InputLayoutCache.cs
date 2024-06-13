@@ -103,7 +103,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     for (int v = 0; v < vertexElements.Length; v++)
                     {
-                        D3D11.InputElement inputElement = GetInputElement(ref vertexElements[v], i, vertexInputLayout.InstanceFrequencies[i]);
+                        D3D11.InputElement inputElement = new D3D11.InputElement();
+                        inputElement.SemanticName = ToDXSemanticName(vertexElements[v].VertexElementUsage);
+                        inputElement.SemanticIndex = vertexElements[v].UsageIndex;
+                        inputElement.Format = ToDXFormat(vertexElements[v].VertexElementFormat);
+                        inputElement.Slot = i;
+                        inputElement.AlignedByteOffset = vertexElements[v].Offset;
+                        // Note that instancing is only supported in feature level 9.3 and above.
+                        inputElement.Classification = (vertexInputLayout.InstanceFrequencies[i] == 0)
+                                                 ? D3D11.InputClassification.PerVertexData
+                                                 : D3D11.InputClassification.PerInstanceData;
+                        inputElement.InstanceDataStepRate = vertexInputLayout.InstanceFrequencies[i];
 
                         list.Add(inputElement);
                     }
@@ -207,39 +217,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             return inputLayout;
         }
-
-        /// <summary>
-        /// Gets the DirectX <see cref="SharpDX.Direct3D11.InputElement"/>.
-        /// </summary>
-        /// <param name="vertexElement">The vertexElement.</param>
-        /// <param name="slot">The input resource slot.</param>
-        /// <param name="instanceFrequency">
-        /// The number of instances to draw using the same per-instance data before advancing in the
-        /// buffer by one element. This value must be 0 for an element that contains per-vertex
-        /// data.
-        /// </param>
-        /// <returns><see cref="SharpDX.Direct3D11.InputElement"/>.</returns>
-        /// <exception cref="NotSupportedException">
-        /// Unknown vertex element format or usage!
-        /// </exception>
-        internal static D3D11.InputElement GetInputElement(ref VertexElement vertexElement, int slot, int instanceFrequency)
-        {
-            D3D11.InputElement inputElement = new D3D11.InputElement();
-            inputElement.SemanticName = ToDXSemanticName(vertexElement.VertexElementUsage);
-            inputElement.SemanticIndex = vertexElement.UsageIndex;
-            inputElement.Format = ToDXFormat(vertexElement.VertexElementFormat);
-            inputElement.Slot = slot;
-            inputElement.AlignedByteOffset = vertexElement.Offset;
-
-            // Note that instancing is only supported in feature level 9.3 and above.
-            inputElement.Classification = (instanceFrequency == 0)
-                                     ? D3D11.InputClassification.PerVertexData
-                                     : D3D11.InputClassification.PerInstanceData;
-            inputElement.InstanceDataStepRate = instanceFrequency;
-
-            return inputElement;
-        }
-   
+           
         private static string ToDXSemanticName(VertexElementUsage vertexElementUsage)
         {
             switch (vertexElementUsage)
