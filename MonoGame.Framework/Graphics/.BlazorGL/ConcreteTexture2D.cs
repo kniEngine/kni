@@ -196,7 +196,20 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                CreateGLTexture2D(contextStrategy);
+                System.Diagnostics.Debug.Assert(_glTexture == null);
+                _glTexture = GL.CreateTexture();
+                GL.CheckGLError();
+
+                ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
+                GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
+                GL.CheckGLError();
+                GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
+                GL.CheckGLError();
+
+                // Set mipMap levels
+                //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
+                //GL.CheckGLError();
+
 
                 int w = width;
                 int h = height;
@@ -244,27 +257,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     ++level;
                 }
             }
-        }
-
-        private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
-        {
-            System.Diagnostics.Debug.Assert(_glTexture == null);
-
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            _glTexture = GL.CreateTexture();
-            GL.CheckGLError();
-
-            ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
-            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
-            GL.CheckGLError();
-            GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
-            GL.CheckGLError();
-
-
-            // Set mipMap levels
-            //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
-            //GL.CheckGLError();
         }
 
         protected override void Dispose(bool disposing)
