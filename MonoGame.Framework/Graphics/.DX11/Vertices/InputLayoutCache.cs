@@ -78,16 +78,67 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets or create the DirectX input layout for the specified vertex buffers.
         /// </summary>
-        /// <param name="vertexBuffers">The vertex buffers.</param>
+        /// <param name="vertexInputLayout">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
-        public D3D11.InputLayout GetOrCreate(VertexBufferBindings vertexBuffers)
+        public D3D11.InputLayout GetOrCreate(VertexInputLayout vertexInputLayout)
         {
             D3D11.InputLayout inputLayout;
-            if (_cache.TryGetValue(vertexBuffers, out inputLayout))
+            if (_cache.TryGetValue(vertexInputLayout, out inputLayout))
                 return inputLayout;
 
-            ImmutableVertexInputLayout immutableVertexInputLayout = InputLayoutCache.ToImmutable(vertexBuffers);
-            D3D11.InputElement[] inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
+            // Create an 'ImmutableVertexInputLayout' that can be used as a key in the 'InputLayoutCache'.
+            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[vertexInputLayout.Count];
+            int[] instanceFrequencies = new int[vertexInputLayout.Count];
+            Array.Copy(vertexInputLayout.VertexDeclarations, vertexDeclarations, vertexDeclarations.Length);
+            Array.Copy(vertexInputLayout.InstanceFrequencies, instanceFrequencies, instanceFrequencies.Length);
+            ImmutableVertexInputLayout immutableVertexInputLayout = new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
+
+            // Get inputElements
+            D3D11.InputElement[] inputElements;
+            {
+                List<D3D11.InputElement> list = new List<D3D11.InputElement>();
+                for (int i = 0; i < vertexInputLayout.Count; i++)
+                {
+                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexInputLayout.VertexDeclarations[i]).InternalVertexElements;
+
+                    for (int v = 0; v < vertexElements.Length; v++)
+                    {
+                        D3D11.InputElement inputElement = new D3D11.InputElement();
+                        inputElement.SemanticName = ToDXSemanticName(vertexElements[v].VertexElementUsage);
+                        inputElement.SemanticIndex = vertexElements[v].UsageIndex;
+                        inputElement.Format = ToDXFormat(vertexElements[v].VertexElementFormat);
+                        inputElement.Slot = i;
+                        inputElement.AlignedByteOffset = vertexElements[v].Offset;
+                        // Note that instancing is only supported in feature level 9.3 and above.
+                        inputElement.Classification = (vertexInputLayout.InstanceFrequencies[i] == 0)
+                                                 ? D3D11.InputClassification.PerVertexData
+                                                 : D3D11.InputClassification.PerInstanceData;
+                        inputElement.InstanceDataStepRate = vertexInputLayout.InstanceFrequencies[i];
+
+                        list.Add(inputElement);
+                    }
+                }
+                inputElements = list.ToArray();
+
+                // Fix semantics indices. (If there are more vertex declarations with, for example, 
+                // POSITION0, the indices are changed to POSITION1/2/3/...)
+                for (int i = 1; i < inputElements.Length; i++)
+                {
+                    string semanticName = inputElements[i].SemanticName;
+                    int semanticIndex = inputElements[i].SemanticIndex;
+                    for (int j = 0; j < i; j++)
+                    {
+                        if (inputElements[j].SemanticName == semanticName && inputElements[j].SemanticIndex == semanticIndex)
+                        {
+                            // Semantic index already used.
+                            semanticIndex++;
+                        }
+                    }
+
+                    inputElements[i].SemanticIndex = semanticIndex;
+                }
+            }
+
             try
             {
                 inputLayout = new D3D11.InputLayout(_graphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
@@ -166,171 +217,69 @@ namespace Microsoft.Xna.Framework.Graphics
 
             return inputLayout;
         }
-
-        /// <summary>
-        /// Creates an <see cref="ImmutableVertexInputLayout"/> that can be used as a key in the
-        /// <see cref="InputLayoutCache"/>.
-        /// </summary>
-        /// <returns>The <see cref="ImmutableVertexInputLayout"/>.</returns>
-        public static ImmutableVertexInputLayout ToImmutable(VertexBufferBindings vertexBuffers)
+           
+        private static string ToDXSemanticName(VertexElementUsage vertexElementUsage)
         {
-            int count = vertexBuffers.Count;
-
-            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[count];
-            Array.Copy(vertexBuffers.VertexDeclarations, vertexDeclarations, count);
-
-            int[] instanceFrequencies = new int[count];
-            Array.Copy(vertexBuffers.InstanceFrequencies, instanceFrequencies, count);
-
-            return new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
-        }
-  
-
-        internal static D3D11.InputElement[] GetInputElements(ImmutableVertexInputLayout vertexInputLayout)
-        {
-            List<D3D11.InputElement> list = new List<D3D11.InputElement>();
-
-            for (int i = 0; i < vertexInputLayout.Count; i++)
-            {
-                VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexInputLayout.VertexDeclarations[i]).InternalVertexElements;
-
-                for (int v = 0; v < vertexElements.Length; v++)
-                {
-                    D3D11.InputElement inputElement = GetInputElement(ref vertexElements[v], i, vertexInputLayout.InstanceFrequencies[i]);
-                    list.Add(inputElement);
-                }
-            }
-
-            D3D11.InputElement[] inputElements = list.ToArray();
-
-            // Fix semantics indices. (If there are more vertex declarations with, for example, 
-            // POSITION0, the indices are changed to POSITION1/2/3/...)
-            for (int i = 1; i < inputElements.Length; i++)
-            {
-                string semanticName = inputElements[i].SemanticName;
-                int semanticIndex = inputElements[i].SemanticIndex;
-                for (int j = 0; j < i; j++)
-                {
-                    if (inputElements[j].SemanticName == semanticName && inputElements[j].SemanticIndex == semanticIndex)
-                    {
-                        // Semantic index already used.
-                        semanticIndex++;
-                    }
-                }
-
-                inputElements[i].SemanticIndex = semanticIndex;
-            }
-
-            return inputElements;
-        }
-
-        /// <summary>
-        /// Gets the DirectX <see cref="SharpDX.Direct3D11.InputElement"/>.
-        /// </summary>
-        /// <param name="vertexElement">The vertexElement.</param>
-        /// <param name="slot">The input resource slot.</param>
-        /// <param name="instanceFrequency">
-        /// The number of instances to draw using the same per-instance data before advancing in the
-        /// buffer by one element. This value must be 0 for an element that contains per-vertex
-        /// data.
-        /// </param>
-        /// <returns><see cref="SharpDX.Direct3D11.InputElement"/>.</returns>
-        /// <exception cref="NotSupportedException">
-        /// Unknown vertex element format or usage!
-        /// </exception>
-        internal static D3D11.InputElement GetInputElement(ref VertexElement vertexElement, int slot, int instanceFrequency)
-        {
-            D3D11.InputElement element = new D3D11.InputElement();
-
-            switch (vertexElement.VertexElementUsage)
+            switch (vertexElementUsage)
             {
                 case VertexElementUsage.Position:
-                    element.SemanticName = "POSITION";
-                    break;
+                    return "POSITION";
                 case VertexElementUsage.Color:
-                    element.SemanticName = "COLOR";
-                    break;
+                    return "COLOR";
                 case VertexElementUsage.Normal:
-                    element.SemanticName = "NORMAL";
-                    break;
+                    return "NORMAL";
                 case VertexElementUsage.TextureCoordinate:
-                    element.SemanticName = "TEXCOORD";
-                    break;
+                    return "TEXCOORD";
                 case VertexElementUsage.BlendIndices:
-                    element.SemanticName = "BLENDINDICES";
-                    break;
+                    return "BLENDINDICES";
                 case VertexElementUsage.BlendWeight:
-                    element.SemanticName = "BLENDWEIGHT";
-                    break;
+                    return "BLENDWEIGHT";
                 case VertexElementUsage.Binormal:
-                    element.SemanticName = "BINORMAL";
-                    break;
+                    return "BINORMAL";
                 case VertexElementUsage.Tangent:
-                    element.SemanticName = "TANGENT";
-                    break;
+                    return "TANGENT";
                 case VertexElementUsage.PointSize:
-                    element.SemanticName = "PSIZE";
-                    break;
+                    return "PSIZE";
+
                 default:
                     throw new NotSupportedException("Unknown vertex element usage!");
             }
+        }
 
-            element.SemanticIndex = vertexElement.UsageIndex;
-
-            switch (vertexElement.VertexElementFormat)
+        private static DXGI.Format ToDXFormat(VertexElementFormat vertexElementFormat)
+        {
+            switch (vertexElementFormat)
             {
                 case VertexElementFormat.Single:
-                    element.Format = DXGI.Format.R32_Float;
-                    break;
+                    return DXGI.Format.R32_Float;
                 case VertexElementFormat.Vector2:
-                    element.Format = DXGI.Format.R32G32_Float;
-                    break;
+                    return DXGI.Format.R32G32_Float;
                 case VertexElementFormat.Vector3:
-                    element.Format = DXGI.Format.R32G32B32_Float;
-                    break;
+                    return DXGI.Format.R32G32B32_Float;
                 case VertexElementFormat.Vector4:
-                    element.Format = DXGI.Format.R32G32B32A32_Float;
-                    break;
+                    return DXGI.Format.R32G32B32A32_Float;
                 case VertexElementFormat.Color:
-                    element.Format = DXGI.Format.R8G8B8A8_UNorm;
-                    break;
+                    return DXGI.Format.R8G8B8A8_UNorm;
                 case VertexElementFormat.Byte4:
-                    element.Format = DXGI.Format.R8G8B8A8_UInt;
-                    break;
+                    return DXGI.Format.R8G8B8A8_UInt;
                 case VertexElementFormat.Short2:
-                    element.Format = DXGI.Format.R16G16_SInt;
-                    break;
+                    return DXGI.Format.R16G16_SInt;
                 case VertexElementFormat.Short4:
-                    element.Format = DXGI.Format.R16G16B16A16_SInt;
-                    break;
+                    return DXGI.Format.R16G16B16A16_SInt;
                 case VertexElementFormat.NormalizedShort2:
-                    element.Format = DXGI.Format.R16G16_SNorm;
-                    break;
+                    return DXGI.Format.R16G16_SNorm;
                 case VertexElementFormat.NormalizedShort4:
-                    element.Format = DXGI.Format.R16G16B16A16_SNorm;
-                    break;
+                    return DXGI.Format.R16G16B16A16_SNorm;
                 case VertexElementFormat.HalfVector2:
-                    element.Format = DXGI.Format.R16G16_Float;
-                    break;
+                    return DXGI.Format.R16G16_Float;
                 case VertexElementFormat.HalfVector4:
-                    element.Format = DXGI.Format.R16G16B16A16_Float;
-                    break;
+                    return DXGI.Format.R16G16B16A16_Float;
+
                 default:
                     throw new NotSupportedException("Unknown vertex element format!");
             }
-
-            element.Slot = slot;
-            element.AlignedByteOffset = vertexElement.Offset;
-
-            // Note that instancing is only supported in feature level 9.3 and above.
-            element.Classification = (instanceFrequency == 0)
-                                     ? D3D11.InputClassification.PerVertexData
-                                     : D3D11.InputClassification.PerInstanceData;
-            element.InstanceDataStepRate = instanceFrequency;
-
-            return element;
         }
-   
+
         /// <summary>
         /// Gets a more helpful message for the SharpDX invalid arg error.
         /// </summary>
