@@ -284,7 +284,22 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                CreateGLTexture2D(contextStrategy);
+                System.Diagnostics.Debug.Assert(_glTexture < 0);
+                _glTexture = GL.GenTexture();
+                GL.CheckGLError();
+
+                ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
+                GL.ActiveTexture(TextureUnit.Texture0 + 0);
+                GL.CheckGLError();
+                GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+                GL.CheckGLError();
+
+                // Set mipMap levels
+#if !GLES
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
+                GL.CheckGLError();
+#endif
+
 
                 int w = width;
                 int h = height;
@@ -331,28 +346,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     ++level;
                 }
             }
-        }
-
-        private void CreateGLTexture2D(GraphicsContextStrategy contextStrategy)
-        {
-            System.Diagnostics.Debug.Assert(_glTexture < 0);
-
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            _glTexture = GL.GenTexture();
-            GL.CheckGLError();
-
-            ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
-            GL.ActiveTexture(TextureUnit.Texture0 + 0);
-            GL.CheckGLError();
-            GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-            GL.CheckGLError();
-
-            // Set mipMap levels
-#if !GLES
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-            GL.CheckGLError();
-#endif
         }
 
     }
