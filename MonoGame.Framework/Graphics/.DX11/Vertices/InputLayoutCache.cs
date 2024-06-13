@@ -93,7 +93,40 @@ namespace Microsoft.Xna.Framework.Graphics
             Array.Copy(vertexInputLayout.InstanceFrequencies, instanceFrequencies, instanceFrequencies.Length);
             ImmutableVertexInputLayout immutableVertexInputLayout = new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
 
-            D3D11.InputElement[] inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
+            // Get inputElements
+            D3D11.InputElement[] inputElements;
+            {
+                List<D3D11.InputElement> list = new List<D3D11.InputElement>();
+                for (int i = 0; i < vertexInputLayout.Count; i++)
+                {
+                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexInputLayout.VertexDeclarations[i]).InternalVertexElements;
+
+                    for (int v = 0; v < vertexElements.Length; v++)
+                    {
+                        D3D11.InputElement inputElement = GetInputElement(ref vertexElements[v], i, vertexInputLayout.InstanceFrequencies[i]);
+                        list.Add(inputElement);
+                    }
+                }
+                inputElements = list.ToArray();
+
+                // Fix semantics indices. (If there are more vertex declarations with, for example, 
+                // POSITION0, the indices are changed to POSITION1/2/3/...)
+                for (int i = 1; i < inputElements.Length; i++)
+                {
+                    string semanticName = inputElements[i].SemanticName;
+                    int semanticIndex = inputElements[i].SemanticIndex;
+                    for (int j = 0; j < i; j++)
+                    {
+                        if (inputElements[j].SemanticName == semanticName && inputElements[j].SemanticIndex == semanticIndex)
+                        {
+                            // Semantic index already used.
+                            semanticIndex++;
+                        }
+                    }
+
+                    inputElements[i].SemanticIndex = semanticIndex;
+                }
+            }
 
             try
             {
@@ -172,44 +205,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _cache.Add(immutableVertexInputLayout, inputLayout);
 
             return inputLayout;
-        }
-
-        internal static D3D11.InputElement[] GetInputElements(ImmutableVertexInputLayout vertexInputLayout)
-        {
-            List<D3D11.InputElement> list = new List<D3D11.InputElement>();
-
-            for (int i = 0; i < vertexInputLayout.Count; i++)
-            {
-                VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexInputLayout.VertexDeclarations[i]).InternalVertexElements;
-
-                for (int v = 0; v < vertexElements.Length; v++)
-                {
-                    D3D11.InputElement inputElement = GetInputElement(ref vertexElements[v], i, vertexInputLayout.InstanceFrequencies[i]);
-                    list.Add(inputElement);
-                }
-            }
-
-            D3D11.InputElement[] inputElements = list.ToArray();
-
-            // Fix semantics indices. (If there are more vertex declarations with, for example, 
-            // POSITION0, the indices are changed to POSITION1/2/3/...)
-            for (int i = 1; i < inputElements.Length; i++)
-            {
-                string semanticName = inputElements[i].SemanticName;
-                int semanticIndex = inputElements[i].SemanticIndex;
-                for (int j = 0; j < i; j++)
-                {
-                    if (inputElements[j].SemanticName == semanticName && inputElements[j].SemanticIndex == semanticIndex)
-                    {
-                        // Semantic index already used.
-                        semanticIndex++;
-                    }
-                }
-
-                inputElements[i].SemanticIndex = semanticIndex;
-            }
-
-            return inputElements;
         }
 
         /// <summary>
