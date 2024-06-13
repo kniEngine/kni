@@ -227,49 +227,7 @@ namespace Microsoft.Xna.Framework.Graphics
             D3D11.InputElement element = new D3D11.InputElement();
             element.SemanticName = ToDXSemanticName(vertexElement.VertexElementUsage);
             element.SemanticIndex = vertexElement.UsageIndex;
-
-            switch (vertexElement.VertexElementFormat)
-            {
-                case VertexElementFormat.Single:
-                    element.Format = DXGI.Format.R32_Float;
-                    break;
-                case VertexElementFormat.Vector2:
-                    element.Format = DXGI.Format.R32G32_Float;
-                    break;
-                case VertexElementFormat.Vector3:
-                    element.Format = DXGI.Format.R32G32B32_Float;
-                    break;
-                case VertexElementFormat.Vector4:
-                    element.Format = DXGI.Format.R32G32B32A32_Float;
-                    break;
-                case VertexElementFormat.Color:
-                    element.Format = DXGI.Format.R8G8B8A8_UNorm;
-                    break;
-                case VertexElementFormat.Byte4:
-                    element.Format = DXGI.Format.R8G8B8A8_UInt;
-                    break;
-                case VertexElementFormat.Short2:
-                    element.Format = DXGI.Format.R16G16_SInt;
-                    break;
-                case VertexElementFormat.Short4:
-                    element.Format = DXGI.Format.R16G16B16A16_SInt;
-                    break;
-                case VertexElementFormat.NormalizedShort2:
-                    element.Format = DXGI.Format.R16G16_SNorm;
-                    break;
-                case VertexElementFormat.NormalizedShort4:
-                    element.Format = DXGI.Format.R16G16B16A16_SNorm;
-                    break;
-                case VertexElementFormat.HalfVector2:
-                    element.Format = DXGI.Format.R16G16_Float;
-                    break;
-                case VertexElementFormat.HalfVector4:
-                    element.Format = DXGI.Format.R16G16B16A16_Float;
-                    break;
-                default:
-                    throw new NotSupportedException("Unknown vertex element format!");
-            }
-
+            element.Format = ToDXFormat(vertexElement.VertexElementFormat);
             element.Slot = slot;
             element.AlignedByteOffset = vertexElement.Offset;
 
@@ -307,6 +265,40 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 default:
                     throw new NotSupportedException("Unknown vertex element usage!");
+            }
+        }
+
+        private static DXGI.Format ToDXFormat(VertexElementFormat vertexElementFormat)
+        {
+            switch (vertexElementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return DXGI.Format.R32_Float;
+                case VertexElementFormat.Vector2:
+                    return DXGI.Format.R32G32_Float;
+                case VertexElementFormat.Vector3:
+                    return DXGI.Format.R32G32B32_Float;
+                case VertexElementFormat.Vector4:
+                    return DXGI.Format.R32G32B32A32_Float;
+                case VertexElementFormat.Color:
+                    return DXGI.Format.R8G8B8A8_UNorm;
+                case VertexElementFormat.Byte4:
+                    return DXGI.Format.R8G8B8A8_UInt;
+                case VertexElementFormat.Short2:
+                    return DXGI.Format.R16G16_SInt;
+                case VertexElementFormat.Short4:
+                    return DXGI.Format.R16G16B16A16_SInt;
+                case VertexElementFormat.NormalizedShort2:
+                    return DXGI.Format.R16G16_SNorm;
+                case VertexElementFormat.NormalizedShort4:
+                    return DXGI.Format.R16G16B16A16_SNorm;
+                case VertexElementFormat.HalfVector2:
+                    return DXGI.Format.R16G16_Float;
+                case VertexElementFormat.HalfVector4:
+                    return DXGI.Format.R16G16B16A16_Float;
+
+                default:
+                    throw new NotSupportedException("Unknown vertex element format!");
             }
         }
 
