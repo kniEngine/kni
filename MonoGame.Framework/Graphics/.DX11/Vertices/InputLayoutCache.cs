@@ -78,16 +78,23 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets or create the DirectX input layout for the specified vertex buffers.
         /// </summary>
-        /// <param name="vertexBuffers">The vertex buffers.</param>
+        /// <param name="vertexInputLayout">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
-        public D3D11.InputLayout GetOrCreate(VertexBufferBindings vertexBuffers)
+        public D3D11.InputLayout GetOrCreate(VertexInputLayout vertexInputLayout)
         {
             D3D11.InputLayout inputLayout;
-            if (_cache.TryGetValue(vertexBuffers, out inputLayout))
+            if (_cache.TryGetValue(vertexInputLayout, out inputLayout))
                 return inputLayout;
 
-            ImmutableVertexInputLayout immutableVertexInputLayout = InputLayoutCache.ToImmutable(vertexBuffers);
+            // Create an 'ImmutableVertexInputLayout' that can be used as a key in the 'InputLayoutCache'.
+            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[vertexInputLayout.Count];
+            int[] instanceFrequencies = new int[vertexInputLayout.Count];
+            Array.Copy(vertexInputLayout.VertexDeclarations, vertexDeclarations, vertexDeclarations.Length);
+            Array.Copy(vertexInputLayout.InstanceFrequencies, instanceFrequencies, instanceFrequencies.Length);
+            ImmutableVertexInputLayout immutableVertexInputLayout = new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
+
             D3D11.InputElement[] inputElements = InputLayoutCache.GetInputElements(immutableVertexInputLayout);
+
             try
             {
                 inputLayout = new D3D11.InputLayout(_graphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _shaderByteCode, inputElements);
@@ -166,25 +173,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             return inputLayout;
         }
-
-        /// <summary>
-        /// Creates an <see cref="ImmutableVertexInputLayout"/> that can be used as a key in the
-        /// <see cref="InputLayoutCache"/>.
-        /// </summary>
-        /// <returns>The <see cref="ImmutableVertexInputLayout"/>.</returns>
-        public static ImmutableVertexInputLayout ToImmutable(VertexBufferBindings vertexBuffers)
-        {
-            int count = vertexBuffers.Count;
-
-            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[count];
-            Array.Copy(vertexBuffers.VertexDeclarations, vertexDeclarations, count);
-
-            int[] instanceFrequencies = new int[count];
-            Array.Copy(vertexBuffers.InstanceFrequencies, instanceFrequencies, count);
-
-            return new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
-        }
-  
 
         internal static D3D11.InputElement[] GetInputElements(ImmutableVertexInputLayout vertexInputLayout)
         {
