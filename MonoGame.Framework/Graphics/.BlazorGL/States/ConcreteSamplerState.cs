@@ -25,37 +25,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = cgraphicsContext.GL;
 
+            // texture filtering
+            float textureMaxAnisotropy;
+            WebGLTexParam textureMinFilter;
+            WebGLTexParam textureMaxFilter; 
             switch (Filter)
             {
                 case TextureFilter.Point:
-                    if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureFilterAnisotropic)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, (useMipmaps ? WebGLTexParam.NEAREST_MIPMAP_NEAREST : WebGLTexParam.NEAREST));
-                    GL.CheckGLError();
-                    GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, WebGLTexParam.NEAREST);
-                    GL.CheckGLError();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.NEAREST_MIPMAP_NEAREST : WebGLTexParam.NEAREST);
+                    textureMaxFilter = WebGLTexParam.NEAREST;
                     break;
                 case TextureFilter.Linear:
-                    if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureFilterAnisotropic)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR));
-                    GL.CheckGLError();
-                    GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, WebGLTexParam.LINEAR);
-                    GL.CheckGLError();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
+                    textureMaxFilter = WebGLTexParam.LINEAR;
                     break;
                 case TextureFilter.Anisotropic:
-                    if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureFilterAnisotropic)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR));
-                    GL.CheckGLError();
-                    GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, WebGLTexParam.LINEAR);
-                    GL.CheckGLError();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
+                    textureMaxFilter = WebGLTexParam.LINEAR;
                     break;
                 case TextureFilter.PointMipLinear:
                     throw new NotImplementedException();
@@ -73,6 +59,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 default:
                     throw new NotSupportedException();
             }
+            if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureFilterAnisotropic)
+            {
+                throw new NotImplementedException();
+            }
+            GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, textureMinFilter);
+            GL.CheckGLError();
+            GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAG_FILTER, textureMaxFilter);
+            GL.CheckGLError();
 
             // Set up texture addressing.
             GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_S, ToGLTextureAddressMode(AddressU));
@@ -80,17 +74,13 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.TexParameter(target, WebGLTexParamName.TEXTURE_WRAP_T, ToGLTextureAddressMode(AddressV));
             GL.CheckGLError();
 
+            // TextureMaxLevel
             if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureMaxLevel)
             {
+                int textureMaxLevel = 1000;
                 if (this.MaxMipLevel > 0)
-                {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-                GL.CheckGLError();
+                    textureMaxLevel = this.MaxMipLevel;
+                throw new NotImplementedException();
             }
         }
 
