@@ -215,20 +215,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
                 GL.CheckGLError();
 
-                GL.TexParameter(
-                    TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter,
-                    mipMap ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
-                GL.CheckGLError();
-
-                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-                GL.CheckGLError();
-
-                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                GL.CheckGLError();
-
-                GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                GL.CheckGLError();
-
                 ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                     out _glInternalFormat,
                     out _glFormat,

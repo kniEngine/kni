@@ -342,32 +342,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _glTexture = GL.GenTexture();
             GL.CheckGLError();
 
-            // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
-            // dimension is not a power of two.
-            TextureWrapMode wrap = TextureWrapMode.Repeat;
-            if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
-                wrap = TextureWrapMode.ClampToEdge;
-
             ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.CheckGLError();
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-            GL.CheckGLError();
-
-            GL.TexParameter(
-                TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                (this.LevelCount > 1) ? (int)TextureMinFilter.LinearMipmapLinear : (int)TextureMinFilter.Linear);
-            GL.CheckGLError();
-
-            GL.TexParameter(
-                TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-                (int)TextureMagFilter.Linear);
-            GL.CheckGLError();
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)wrap);
-            GL.CheckGLError();
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrap);
             GL.CheckGLError();
 
             // Set mipMap levels
@@ -375,19 +353,6 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
             GL.CheckGLError();
 #endif
-            if (((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
-            {
-                if (this.LevelCount > 0)
-                {
-                    GL.TexParameter(TextureTarget.Texture2D, ConcreteSamplerState.TextureParameterNameTextureMaxLevel, this.LevelCount - 1);
-                    GL.CheckGLError();
-                }
-                else
-                {
-                    GL.TexParameter(TextureTarget.Texture2D, ConcreteSamplerState.TextureParameterNameTextureMaxLevel, 1000);
-                    GL.CheckGLError();
-                }
-            }
         }
 
     }
