@@ -224,20 +224,20 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </exception>
         internal static D3D11.InputElement GetInputElement(ref VertexElement vertexElement, int slot, int instanceFrequency)
         {
-            D3D11.InputElement element = new D3D11.InputElement();
-            element.SemanticName = ToDXSemanticName(vertexElement.VertexElementUsage);
-            element.SemanticIndex = vertexElement.UsageIndex;
-            element.Format = ToDXFormat(vertexElement.VertexElementFormat);
-            element.Slot = slot;
-            element.AlignedByteOffset = vertexElement.Offset;
+            D3D11.InputElement inputElement = new D3D11.InputElement();
+            inputElement.SemanticName = ToDXSemanticName(vertexElement.VertexElementUsage);
+            inputElement.SemanticIndex = vertexElement.UsageIndex;
+            inputElement.Format = ToDXFormat(vertexElement.VertexElementFormat);
+            inputElement.Slot = slot;
+            inputElement.AlignedByteOffset = vertexElement.Offset;
 
             // Note that instancing is only supported in feature level 9.3 and above.
-            element.Classification = (instanceFrequency == 0)
+            inputElement.Classification = (instanceFrequency == 0)
                                      ? D3D11.InputClassification.PerVertexData
                                      : D3D11.InputClassification.PerInstanceData;
-            element.InstanceDataStepRate = instanceFrequency;
+            inputElement.InstanceDataStepRate = instanceFrequency;
 
-            return element;
+            return inputElement;
         }
    
         private static string ToDXSemanticName(VertexElementUsage vertexElementUsage)
