@@ -255,52 +255,16 @@ namespace Microsoft.Xna.Platform.Graphics
             _glTexture = GL.CreateTexture();
             GL.CheckGLError();
 
-            // For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
-            // dimension is not a power of two.
-            WebGLTexParam wrap = WebGLTexParam.REPEAT;
-            if (((this.Width & (this.Width - 1)) != 0) || ((this.Height & (this.Height - 1)) != 0))
-                wrap = WebGLTexParam.CLAMP_TO_EDGE;
-
             ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
             GL.CheckGLError();
             GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
             GL.CheckGLError();
 
-            GL.TexParameter(
-                WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_MIN_FILTER,
-                (this.LevelCount > 1) ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
-            GL.CheckGLError();
-
-            GL.TexParameter(
-                WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_MAG_FILTER,
-                WebGLTexParam.LINEAR);
-            GL.CheckGLError();
-
-            GL.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_WRAP_S, wrap);
-            GL.CheckGLError();
-
-            GL.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGLTexParamName.TEXTURE_WRAP_T, wrap);
-            GL.CheckGLError();
 
             // Set mipMap levels
             //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
             //GL.CheckGLError();
-            if (((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsTextureMaxLevel)
-            {
-                if (this.LevelCount > 0)
-                {
-                    throw new NotImplementedException();
-                    //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, _levelCount - 1);
-                    //GL.CheckGLError();
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                    // GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_MAX_LEVEL, 1000);
-                    //GL.CheckGLError();
-                }
-            }
         }
 
         protected override void Dispose(bool disposing)
