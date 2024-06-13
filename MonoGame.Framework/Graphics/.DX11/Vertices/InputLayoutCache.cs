@@ -104,6 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     for (int v = 0; v < vertexElements.Length; v++)
                     {
                         D3D11.InputElement inputElement = GetInputElement(ref vertexElements[v], i, vertexInputLayout.InstanceFrequencies[i]);
+
                         list.Add(inputElement);
                     }
                 }
@@ -224,40 +225,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal static D3D11.InputElement GetInputElement(ref VertexElement vertexElement, int slot, int instanceFrequency)
         {
             D3D11.InputElement element = new D3D11.InputElement();
-
-            switch (vertexElement.VertexElementUsage)
-            {
-                case VertexElementUsage.Position:
-                    element.SemanticName = "POSITION";
-                    break;
-                case VertexElementUsage.Color:
-                    element.SemanticName = "COLOR";
-                    break;
-                case VertexElementUsage.Normal:
-                    element.SemanticName = "NORMAL";
-                    break;
-                case VertexElementUsage.TextureCoordinate:
-                    element.SemanticName = "TEXCOORD";
-                    break;
-                case VertexElementUsage.BlendIndices:
-                    element.SemanticName = "BLENDINDICES";
-                    break;
-                case VertexElementUsage.BlendWeight:
-                    element.SemanticName = "BLENDWEIGHT";
-                    break;
-                case VertexElementUsage.Binormal:
-                    element.SemanticName = "BINORMAL";
-                    break;
-                case VertexElementUsage.Tangent:
-                    element.SemanticName = "TANGENT";
-                    break;
-                case VertexElementUsage.PointSize:
-                    element.SemanticName = "PSIZE";
-                    break;
-                default:
-                    throw new NotSupportedException("Unknown vertex element usage!");
-            }
-
+            element.SemanticName = ToDXSemanticName(vertexElement.VertexElementUsage);
             element.SemanticIndex = vertexElement.UsageIndex;
 
             switch (vertexElement.VertexElementFormat)
@@ -314,6 +282,34 @@ namespace Microsoft.Xna.Framework.Graphics
             return element;
         }
    
+        private static string ToDXSemanticName(VertexElementUsage vertexElementUsage)
+        {
+            switch (vertexElementUsage)
+            {
+                case VertexElementUsage.Position:
+                    return "POSITION";
+                case VertexElementUsage.Color:
+                    return "COLOR";
+                case VertexElementUsage.Normal:
+                    return "NORMAL";
+                case VertexElementUsage.TextureCoordinate:
+                    return "TEXCOORD";
+                case VertexElementUsage.BlendIndices:
+                    return "BLENDINDICES";
+                case VertexElementUsage.BlendWeight:
+                    return "BLENDWEIGHT";
+                case VertexElementUsage.Binormal:
+                    return "BINORMAL";
+                case VertexElementUsage.Tangent:
+                    return "TANGENT";
+                case VertexElementUsage.PointSize:
+                    return "PSIZE";
+
+                default:
+                    throw new NotSupportedException("Unknown vertex element usage!");
+            }
+        }
+
         /// <summary>
         /// Gets a more helpful message for the SharpDX invalid arg error.
         /// </summary>
