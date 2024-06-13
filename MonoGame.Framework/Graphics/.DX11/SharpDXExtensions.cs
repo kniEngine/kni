@@ -16,7 +16,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    static partial class SharpDXExtensions
+    static class SharpDXExtensions
     {
         static public int ToDXSwapInterval(this PresentInterval interval)
         {
