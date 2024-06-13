@@ -256,7 +256,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
-                this.D3dContext.InputAssembler.InputLayout = cvertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
+                VertexInputLayout vertexInputLayoutKey = _vertexBuffers;
+                this.D3dContext.InputAssembler.InputLayout = cvertexShader.InputLayouts.GetOrCreate(vertexInputLayoutKey, _vertexBuffers);
                 _vertexShaderDirty = false;
                 _vertexBuffersDirty = false;
             }
