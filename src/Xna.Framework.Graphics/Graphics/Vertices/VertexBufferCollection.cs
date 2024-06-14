@@ -14,16 +14,19 @@ namespace Microsoft.Xna.Platform.Graphics
     /// </summary>
     public sealed class VertexBufferCollection
     {
+        private readonly VertexBuffer[] _vertexBuffers;
+        private readonly int[] _vertexOffsets;
+
         /// <summary>
         /// Gets or sets the number of used input slots.
         /// </summary>
         /// <value>The number of used input slots.</value>
         public int Count { get; private set; }
+
+        // VertexDeclarations and InstanceFrequencies are used by DX VertexInputLayoutKey and InputLayoutCache
         public VertexDeclaration[] VertexDeclarations { get; private set; }
         public int[] InstanceFrequencies { get; private set; }
 
-        private readonly VertexBuffer[] _vertexBuffers;
-        private readonly int[] _vertexOffsets;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VertexBufferCollection" /> class.
@@ -32,11 +35,12 @@ namespace Microsoft.Xna.Platform.Graphics
         internal VertexBufferCollection(int maxVertexBufferSlots)
         {
             Count = 0;
+            _vertexBuffers = new VertexBuffer[maxVertexBufferSlots];
+            _vertexOffsets = new int[maxVertexBufferSlots];
+
             VertexDeclarations = new VertexDeclaration[maxVertexBufferSlots];
             InstanceFrequencies = new int[maxVertexBufferSlots];
 
-            _vertexBuffers = new VertexBuffer[maxVertexBufferSlots];
-            _vertexOffsets = new int[maxVertexBufferSlots];
         }
 
         /// <summary>
@@ -51,10 +55,11 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Count == 0)
                 return false;
 
-            Array.Clear(VertexDeclarations, 0, Count);
-            Array.Clear(InstanceFrequencies, 0, Count);
             Array.Clear(_vertexBuffers, 0, Count);
             Array.Clear(_vertexOffsets, 0, Count);
+
+            Array.Clear(VertexDeclarations, 0, Count);
+            Array.Clear(InstanceFrequencies, 0, Count);
             Count = 0;
             return true;
         }
@@ -77,23 +82,26 @@ namespace Microsoft.Xna.Platform.Graphics
             Debug.Assert(0 <= vertexOffset && vertexOffset < vertexBuffer.VertexCount);
 
             if (Count == 1
-                && InstanceFrequencies[0] == 0
-                && _vertexBuffers[0] == vertexBuffer
-                && _vertexOffsets[0] == vertexOffset)
+            && _vertexBuffers[0] == vertexBuffer
+            && _vertexOffsets[0] == vertexOffset
+            && InstanceFrequencies[0] == 0)
             {
                 return false;
             }
 
-            VertexDeclarations[0] = vertexBuffer.VertexDeclaration;
-            InstanceFrequencies[0] = 0;
             _vertexBuffers[0] = vertexBuffer;
             _vertexOffsets[0] = vertexOffset;
+
+            VertexDeclarations[0] = vertexBuffer.VertexDeclaration;
+            InstanceFrequencies[0] = 0;
+
             if (Count > 1)
             {
-                Array.Clear(VertexDeclarations, 1, Count - 1);
-                Array.Clear(InstanceFrequencies, 1, Count - 1);
                 Array.Clear(_vertexBuffers, 1, Count - 1);
                 Array.Clear(_vertexOffsets, 1, Count - 1);
+
+                Array.Clear(VertexDeclarations, 1, Count - 1);
+                Array.Clear(InstanceFrequencies, 1, Count - 1);
             }
 
             Count = 1;
@@ -123,10 +131,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 ||  _vertexOffsets[i] != vertexBufferBindings[i].VertexOffset
                 ||  InstanceFrequencies[i] != vertexBufferBindings[i].InstanceFrequency)
                 {
-                    VertexDeclarations[i] = vertexBufferBindings[i].VertexBuffer.VertexDeclaration;
-                    InstanceFrequencies[i] = vertexBufferBindings[i].InstanceFrequency;
                     _vertexBuffers[i] = vertexBufferBindings[i].VertexBuffer;
                     _vertexOffsets[i] = vertexBufferBindings[i].VertexOffset;
+
+                    VertexDeclarations[i] = vertexBufferBindings[i].VertexBuffer.VertexDeclaration;
+                    InstanceFrequencies[i] = vertexBufferBindings[i].InstanceFrequency;
                     isDirty = true;
                 }
             }
@@ -135,10 +144,11 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 int startIndex = vertexBufferBindings.Length;
                 int length = Count - startIndex;
-                Array.Clear(VertexDeclarations, startIndex, length);
-                Array.Clear(InstanceFrequencies, startIndex, length);
                 Array.Clear(_vertexBuffers, startIndex, length);
                 Array.Clear(_vertexOffsets, startIndex, length);
+
+                Array.Clear(VertexDeclarations, startIndex, length);
+                Array.Clear(InstanceFrequencies, startIndex, length);
                 isDirty = true;
             }
 
@@ -153,7 +163,6 @@ namespace Microsoft.Xna.Platform.Graphics
         public VertexBufferBinding Get(int slot)
         {
             Debug.Assert(0 <= slot && slot < Count);
-
             return new VertexBufferBinding(
                 _vertexBuffers[slot],
                 _vertexOffsets[slot],
