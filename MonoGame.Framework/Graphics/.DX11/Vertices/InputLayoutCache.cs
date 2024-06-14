@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         private readonly GraphicsDeviceStrategy _graphicsDeviceStrategy;
         private readonly byte[] _shaderByteCode;
-        private readonly Dictionary<VertexInputLayout, D3D11.InputLayout> _cache;
+        private readonly Dictionary<VertexInputLayoutKey, D3D11.InputLayout> _cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InputLayoutCache"/> class.
@@ -39,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _graphicsDeviceStrategy = graphicsDeviceStrategy;
             _shaderByteCode = shaderByteCode;
-            _cache = new Dictionary<VertexInputLayout, D3D11.InputLayout>();
+            _cache = new Dictionary<VertexInputLayoutKey, D3D11.InputLayout>();
         }
 
         /// <summary>
@@ -80,26 +82,21 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="vertexInputLayout">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
-        public D3D11.InputLayout GetOrCreate(VertexInputLayout vertexInputLayoutKey, VertexBufferBindings vertexBufferBindings)
+        public D3D11.InputLayout GetOrCreate(VertexInputLayoutKey vertexInputLayoutKey, VertexBufferCollection vertexBuffers)
         {
             D3D11.InputLayout inputLayout;
             if (_cache.TryGetValue(vertexInputLayoutKey, out inputLayout))
                 return inputLayout;
 
-            // Create an 'ImmutableVertexInputLayout' that can be used as a key in the 'InputLayoutCache'.
-            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[vertexBufferBindings.Count];
-            int[] instanceFrequencies = new int[vertexBufferBindings.Count];
-            Array.Copy(vertexBufferBindings.VertexDeclarations, vertexDeclarations, vertexDeclarations.Length);
-            Array.Copy(vertexBufferBindings.InstanceFrequencies, instanceFrequencies, instanceFrequencies.Length);
-            ImmutableVertexInputLayout immutableVertexInputLayout = new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
+            ImmutableVertexInputLayoutKey immutableVertexInputLayout = vertexInputLayoutKey.CreateImmutable();
 
             // Get inputElements
             D3D11.InputElement[] inputElements;
             {
                 List<D3D11.InputElement> list = new List<D3D11.InputElement>();
-                for (int i = 0; i < vertexBufferBindings.Count; i++)
+                for (int i = 0; i < vertexBuffers.Count; i++)
                 {
-                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexBufferBindings.VertexDeclarations[i]).InternalVertexElements;
+                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexBuffers.VertexDeclarations[i]).InternalVertexElements;
 
                     for (int v = 0; v < vertexElements.Length; v++)
                     {
@@ -110,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         inputElement.Slot = i;
                         inputElement.AlignedByteOffset = vertexElements[v].Offset;
                         // Note that instancing is only supported in feature level 9.3 and above.
-                        inputElement.Classification = (vertexBufferBindings.InstanceFrequencies[i] == 0)
+                        inputElement.Classification = (vertexBuffers.InstanceFrequencies[i] == 0)
                                                     ? D3D11.InputClassification.PerVertexData
                                                     : D3D11.InputClassification.PerInstanceData;
                         inputElement.InstanceDataStepRate = vertexInputLayoutKey.InstanceFrequencies[i];

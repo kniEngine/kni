@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         // buffers
         private IndexBuffer _indexBuffer;
-        protected internal VertexBufferBindings _vertexBuffers;
+        protected internal VertexBufferCollection _vertexBuffers;
 
         // buffers dirty flags
         public bool _indexBufferDirty;

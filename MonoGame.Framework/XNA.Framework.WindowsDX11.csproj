@@ -114,7 +114,7 @@
     <Compile Include="Graphics\.DX11\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\InputLayoutCache.cs" />
-    <Compile Include="Graphics\.DX11\Vertices\ImmutableVertexInputLayout.cs" />
+    <Compile Include="Graphics\.DX11\Vertices\VertexInputLayoutKey.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdaptersProvider.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsCapabilities.cs" />
