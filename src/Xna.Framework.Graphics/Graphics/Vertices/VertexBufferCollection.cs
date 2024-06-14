@@ -14,8 +14,7 @@ namespace Microsoft.Xna.Platform.Graphics
     /// </summary>
     public sealed class VertexBufferCollection
     {
-        private readonly VertexBuffer[] _vertexBuffers;
-        private readonly int[] _vertexOffsets;
+        VertexBufferBinding[] _bindings;
 
         /// <summary>
         /// Gets or sets the number of used input slots.
@@ -35,8 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal VertexBufferCollection(int maxVertexBufferSlots)
         {
             Count = 0;
-            _vertexBuffers = new VertexBuffer[maxVertexBufferSlots];
-            _vertexOffsets = new int[maxVertexBufferSlots];
+            _bindings = new VertexBufferBinding[maxVertexBufferSlots];
 
             VertexDeclarations = new VertexDeclaration[maxVertexBufferSlots];
             InstanceFrequencies = new int[maxVertexBufferSlots];
@@ -55,8 +53,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Count == 0)
                 return false;
 
-            Array.Clear(_vertexBuffers, 0, Count);
-            Array.Clear(_vertexOffsets, 0, Count);
+            Array.Clear(_bindings, 0, Count);
 
             Array.Clear(VertexDeclarations, 0, Count);
             Array.Clear(InstanceFrequencies, 0, Count);
@@ -82,23 +79,21 @@ namespace Microsoft.Xna.Platform.Graphics
             Debug.Assert(0 <= vertexOffset && vertexOffset < vertexBuffer.VertexCount);
 
             if (Count == 1
-            && _vertexBuffers[0] == vertexBuffer
-            && _vertexOffsets[0] == vertexOffset
-            && InstanceFrequencies[0] == 0)
+            &&  _bindings[0].VertexBuffer == vertexBuffer
+            &&  _bindings[0].VertexOffset == vertexOffset
+            &&  _bindings[0].InstanceFrequency == 0)
             {
                 return false;
             }
 
-            _vertexBuffers[0] = vertexBuffer;
-            _vertexOffsets[0] = vertexOffset;
+            _bindings[0] = new VertexBufferBinding(vertexBuffer, vertexOffset, 0);
 
             VertexDeclarations[0] = vertexBuffer.VertexDeclaration;
             InstanceFrequencies[0] = 0;
 
             if (Count > 1)
             {
-                Array.Clear(_vertexBuffers, 1, Count - 1);
-                Array.Clear(_vertexOffsets, 1, Count - 1);
+                Array.Clear(_bindings, 1, Count - 1);
 
                 Array.Clear(VertexDeclarations, 1, Count - 1);
                 Array.Clear(InstanceFrequencies, 1, Count - 1);
@@ -120,19 +115,18 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(vertexBufferBindings != null);
             Debug.Assert(vertexBufferBindings.Length > 0);
-            Debug.Assert(vertexBufferBindings.Length <= _vertexBuffers.Length);
+            Debug.Assert(vertexBufferBindings.Length <= _bindings.Length);
 
             bool isDirty = false;
             for (int i = 0; i < vertexBufferBindings.Length; i++)
             {
                 Debug.Assert(vertexBufferBindings[i].VertexBuffer != null);
 
-                if (_vertexBuffers[i] != vertexBufferBindings[i].VertexBuffer
-                ||  _vertexOffsets[i] != vertexBufferBindings[i].VertexOffset
-                ||  InstanceFrequencies[i] != vertexBufferBindings[i].InstanceFrequency)
+                if (_bindings[i].VertexBuffer != vertexBufferBindings[i].VertexBuffer
+                ||  _bindings[i].VertexOffset != vertexBufferBindings[i].VertexOffset
+                ||  _bindings[i].InstanceFrequency != vertexBufferBindings[i].InstanceFrequency)
                 {
-                    _vertexBuffers[i] = vertexBufferBindings[i].VertexBuffer;
-                    _vertexOffsets[i] = vertexBufferBindings[i].VertexOffset;
+                    _bindings[i] = vertexBufferBindings[i];
 
                     VertexDeclarations[i] = vertexBufferBindings[i].VertexBuffer.VertexDeclaration;
                     InstanceFrequencies[i] = vertexBufferBindings[i].InstanceFrequency;
@@ -144,8 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 int startIndex = vertexBufferBindings.Length;
                 int length = Count - startIndex;
-                Array.Clear(_vertexBuffers, startIndex, length);
-                Array.Clear(_vertexOffsets, startIndex, length);
+                Array.Clear(_bindings, startIndex, length);
 
                 Array.Clear(VertexDeclarations, startIndex, length);
                 Array.Clear(InstanceFrequencies, startIndex, length);
@@ -163,10 +156,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public VertexBufferBinding Get(int slot)
         {
             Debug.Assert(0 <= slot && slot < Count);
-            return new VertexBufferBinding(
-                _vertexBuffers[slot],
-                _vertexOffsets[slot],
-                InstanceFrequencies[slot]);
+            return _bindings[slot];
         }
     }
 }
