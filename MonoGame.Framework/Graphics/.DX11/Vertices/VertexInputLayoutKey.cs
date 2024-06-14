@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal void Set(VertexBufferBindings vertexBuffers)
+        internal void Set(VertexBufferCollection vertexBuffers)
         {
             this.VertexDeclarations = vertexBuffers.VertexDeclarations;
             this.InstanceFrequencies = vertexBuffers.InstanceFrequencies;

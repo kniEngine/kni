@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="vertexInputLayout">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
-        public D3D11.InputLayout GetOrCreate(VertexInputLayoutKey vertexInputLayoutKey, VertexBufferBindings vertexBufferBindings)
+        public D3D11.InputLayout GetOrCreate(VertexInputLayoutKey vertexInputLayoutKey, VertexBufferCollection vertexBuffers)
         {
             D3D11.InputLayout inputLayout;
             if (_cache.TryGetValue(vertexInputLayoutKey, out inputLayout))
@@ -94,9 +94,9 @@ namespace Microsoft.Xna.Framework.Graphics
             D3D11.InputElement[] inputElements;
             {
                 List<D3D11.InputElement> list = new List<D3D11.InputElement>();
-                for (int i = 0; i < vertexBufferBindings.Count; i++)
+                for (int i = 0; i < vertexBuffers.Count; i++)
                 {
-                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexBufferBindings.VertexDeclarations[i]).InternalVertexElements;
+                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexBuffers.VertexDeclarations[i]).InternalVertexElements;
 
                     for (int v = 0; v < vertexElements.Length; v++)
                     {
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         inputElement.Slot = i;
                         inputElement.AlignedByteOffset = vertexElements[v].Offset;
                         // Note that instancing is only supported in feature level 9.3 and above.
-                        inputElement.Classification = (vertexBufferBindings.InstanceFrequencies[i] == 0)
+                        inputElement.Classification = (vertexBuffers.InstanceFrequencies[i] == 0)
                                                     ? D3D11.InputClassification.PerVertexData
                                                     : D3D11.InputClassification.PerInstanceData;
                         inputElement.InstanceDataStepRate = vertexInputLayoutKey.InstanceFrequencies[i];

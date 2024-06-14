@@ -169,7 +169,7 @@ namespace Microsoft.Xna.Platform.Graphics
              ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Force set the buffers and shaders on next ApplyState() call
-             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffers = new VertexBufferBindings(this.Capabilities.MaxVertexBufferSlots);
+             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffers = new VertexBufferCollection(this.Capabilities.MaxVertexBufferSlots);
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffersDirty = true;
              ((IPlatformGraphicsContext)_mainContext).Strategy._indexBufferDirty = true;
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexShaderDirty = true;
