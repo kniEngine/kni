@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets or create the DirectX input layout for the specified vertex buffers.
         /// </summary>
-        /// <param name="vertexInputLayout">The vertex buffers.</param>
+        /// <param name="vertexBuffers">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
         public D3D11.InputLayout GetOrCreate(VertexInputLayoutKey vertexInputLayoutKey, VertexBufferCollection vertexBuffers)
         {
@@ -96,7 +96,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 List<D3D11.InputElement> list = new List<D3D11.InputElement>();
                 for (int i = 0; i < vertexBuffers.Count; i++)
                 {
-                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexBuffers.VertexDeclarations[i]).InternalVertexElements;
+                    VertexBufferBinding vertexBufferBinding = vertexBuffers.Get(i);
+
+                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexBufferBinding.VertexBuffer.VertexDeclaration).InternalVertexElements;
 
                     for (int v = 0; v < vertexElements.Length; v++)
                     {
@@ -107,7 +109,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         inputElement.Slot = i;
                         inputElement.AlignedByteOffset = vertexElements[v].Offset;
                         // Note that instancing is only supported in feature level 9.3 and above.
-                        inputElement.Classification = (vertexBuffers.InstanceFrequencies[i] == 0)
+                        inputElement.Classification = (vertexBufferBinding.InstanceFrequency == 0)
                                                     ? D3D11.InputClassification.PerVertexData
                                                     : D3D11.InputClassification.PerInstanceData;
                         inputElement.InstanceDataStepRate = vertexInputLayoutKey.InstanceFrequencies[i];

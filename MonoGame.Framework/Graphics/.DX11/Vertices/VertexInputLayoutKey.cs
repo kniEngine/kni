@@ -24,11 +24,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        internal void Set(VertexBufferCollection vertexBuffers)
+        internal void Set(VertexDeclaration[] vertexDeclarations, int[] instanceFrequencies, int count)
         {
-            this.VertexDeclarations = vertexBuffers.VertexDeclarations;
-            this.InstanceFrequencies = vertexBuffers.InstanceFrequencies;
-            this.Count = vertexBuffers.Count;
+            this.VertexDeclarations = vertexDeclarations;
+            this.InstanceFrequencies = instanceFrequencies;
+            this.Count = count;
         }
 
         public override bool Equals(object obj)
