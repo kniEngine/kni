@@ -16,7 +16,7 @@ using DXGI = SharpDX.DXGI;
 
 namespace Microsoft.Xna.Platform.Graphics
 {
-    static partial class SharpDXExtensions
+    static class SharpDXExtensions
     {
         static public int ToDXSwapInterval(this PresentInterval interval)
         {
@@ -70,6 +70,68 @@ namespace Microsoft.Xna.Platform.Graphics
             //effect = DXGI.SwapEffect.Discard;
 
             return effect;
+        }
+
+        static public string ToDXSemanticName(this VertexElementUsage vertexElementUsage)
+        {
+            switch (vertexElementUsage)
+            {
+                case VertexElementUsage.Position:
+                    return "POSITION";
+                case VertexElementUsage.Color:
+                    return "COLOR";
+                case VertexElementUsage.Normal:
+                    return "NORMAL";
+                case VertexElementUsage.TextureCoordinate:
+                    return "TEXCOORD";
+                case VertexElementUsage.BlendIndices:
+                    return "BLENDINDICES";
+                case VertexElementUsage.BlendWeight:
+                    return "BLENDWEIGHT";
+                case VertexElementUsage.Binormal:
+                    return "BINORMAL";
+                case VertexElementUsage.Tangent:
+                    return "TANGENT";
+                case VertexElementUsage.PointSize:
+                    return "PSIZE";
+
+                default:
+                    throw new NotSupportedException("Unknown vertex element usage!");
+            }
+        }
+
+        static public DXGI.Format ToDXFormat(this VertexElementFormat vertexElementFormat)
+        {
+            switch (vertexElementFormat)
+            {
+                case VertexElementFormat.Single:
+                    return DXGI.Format.R32_Float;
+                case VertexElementFormat.Vector2:
+                    return DXGI.Format.R32G32_Float;
+                case VertexElementFormat.Vector3:
+                    return DXGI.Format.R32G32B32_Float;
+                case VertexElementFormat.Vector4:
+                    return DXGI.Format.R32G32B32A32_Float;
+                case VertexElementFormat.Color:
+                    return DXGI.Format.R8G8B8A8_UNorm;
+                case VertexElementFormat.Byte4:
+                    return DXGI.Format.R8G8B8A8_UInt;
+                case VertexElementFormat.Short2:
+                    return DXGI.Format.R16G16_SInt;
+                case VertexElementFormat.Short4:
+                    return DXGI.Format.R16G16B16A16_SInt;
+                case VertexElementFormat.NormalizedShort2:
+                    return DXGI.Format.R16G16_SNorm;
+                case VertexElementFormat.NormalizedShort4:
+                    return DXGI.Format.R16G16B16A16_SNorm;
+                case VertexElementFormat.HalfVector2:
+                    return DXGI.Format.R16G16_Float;
+                case VertexElementFormat.HalfVector4:
+                    return DXGI.Format.R16G16B16A16_Float;
+
+                default:
+                    throw new NotSupportedException("Unknown vertex element format!");
+            }
         }
 
         static public DXGI.Format ToDXFormat(this DepthFormat format)

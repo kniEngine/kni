@@ -80,40 +80,40 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="vertexInputLayout">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
-        public D3D11.InputLayout GetOrCreate(VertexInputLayout vertexInputLayout)
+        public D3D11.InputLayout GetOrCreate(VertexInputLayout vertexInputLayoutKey, VertexBufferBindings vertexBufferBindings)
         {
             D3D11.InputLayout inputLayout;
-            if (_cache.TryGetValue(vertexInputLayout, out inputLayout))
+            if (_cache.TryGetValue(vertexInputLayoutKey, out inputLayout))
                 return inputLayout;
 
             // Create an 'ImmutableVertexInputLayout' that can be used as a key in the 'InputLayoutCache'.
-            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[vertexInputLayout.Count];
-            int[] instanceFrequencies = new int[vertexInputLayout.Count];
-            Array.Copy(vertexInputLayout.VertexDeclarations, vertexDeclarations, vertexDeclarations.Length);
-            Array.Copy(vertexInputLayout.InstanceFrequencies, instanceFrequencies, instanceFrequencies.Length);
+            VertexDeclaration[] vertexDeclarations = new VertexDeclaration[vertexBufferBindings.Count];
+            int[] instanceFrequencies = new int[vertexBufferBindings.Count];
+            Array.Copy(vertexBufferBindings.VertexDeclarations, vertexDeclarations, vertexDeclarations.Length);
+            Array.Copy(vertexBufferBindings.InstanceFrequencies, instanceFrequencies, instanceFrequencies.Length);
             ImmutableVertexInputLayout immutableVertexInputLayout = new ImmutableVertexInputLayout(vertexDeclarations, instanceFrequencies);
 
             // Get inputElements
             D3D11.InputElement[] inputElements;
             {
                 List<D3D11.InputElement> list = new List<D3D11.InputElement>();
-                for (int i = 0; i < vertexInputLayout.Count; i++)
+                for (int i = 0; i < vertexBufferBindings.Count; i++)
                 {
-                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexInputLayout.VertexDeclarations[i]).InternalVertexElements;
+                    VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexBufferBindings.VertexDeclarations[i]).InternalVertexElements;
 
                     for (int v = 0; v < vertexElements.Length; v++)
                     {
                         D3D11.InputElement inputElement = new D3D11.InputElement();
-                        inputElement.SemanticName = ToDXSemanticName(vertexElements[v].VertexElementUsage);
+                        inputElement.SemanticName = vertexElements[v].VertexElementUsage.ToDXSemanticName();
                         inputElement.SemanticIndex = vertexElements[v].UsageIndex;
-                        inputElement.Format = ToDXFormat(vertexElements[v].VertexElementFormat);
+                        inputElement.Format = vertexElements[v].VertexElementFormat.ToDXFormat();
                         inputElement.Slot = i;
                         inputElement.AlignedByteOffset = vertexElements[v].Offset;
                         // Note that instancing is only supported in feature level 9.3 and above.
-                        inputElement.Classification = (vertexInputLayout.InstanceFrequencies[i] == 0)
-                                                 ? D3D11.InputClassification.PerVertexData
-                                                 : D3D11.InputClassification.PerInstanceData;
-                        inputElement.InstanceDataStepRate = vertexInputLayout.InstanceFrequencies[i];
+                        inputElement.Classification = (vertexBufferBindings.InstanceFrequencies[i] == 0)
+                                                    ? D3D11.InputClassification.PerVertexData
+                                                    : D3D11.InputClassification.PerInstanceData;
+                        inputElement.InstanceDataStepRate = vertexInputLayoutKey.InstanceFrequencies[i];
 
                         list.Add(inputElement);
                     }
@@ -216,68 +216,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _cache.Add(immutableVertexInputLayout, inputLayout);
 
             return inputLayout;
-        }
-           
-        private static string ToDXSemanticName(VertexElementUsage vertexElementUsage)
-        {
-            switch (vertexElementUsage)
-            {
-                case VertexElementUsage.Position:
-                    return "POSITION";
-                case VertexElementUsage.Color:
-                    return "COLOR";
-                case VertexElementUsage.Normal:
-                    return "NORMAL";
-                case VertexElementUsage.TextureCoordinate:
-                    return "TEXCOORD";
-                case VertexElementUsage.BlendIndices:
-                    return "BLENDINDICES";
-                case VertexElementUsage.BlendWeight:
-                    return "BLENDWEIGHT";
-                case VertexElementUsage.Binormal:
-                    return "BINORMAL";
-                case VertexElementUsage.Tangent:
-                    return "TANGENT";
-                case VertexElementUsage.PointSize:
-                    return "PSIZE";
-
-                default:
-                    throw new NotSupportedException("Unknown vertex element usage!");
-            }
-        }
-
-        private static DXGI.Format ToDXFormat(VertexElementFormat vertexElementFormat)
-        {
-            switch (vertexElementFormat)
-            {
-                case VertexElementFormat.Single:
-                    return DXGI.Format.R32_Float;
-                case VertexElementFormat.Vector2:
-                    return DXGI.Format.R32G32_Float;
-                case VertexElementFormat.Vector3:
-                    return DXGI.Format.R32G32B32_Float;
-                case VertexElementFormat.Vector4:
-                    return DXGI.Format.R32G32B32A32_Float;
-                case VertexElementFormat.Color:
-                    return DXGI.Format.R8G8B8A8_UNorm;
-                case VertexElementFormat.Byte4:
-                    return DXGI.Format.R8G8B8A8_UInt;
-                case VertexElementFormat.Short2:
-                    return DXGI.Format.R16G16_SInt;
-                case VertexElementFormat.Short4:
-                    return DXGI.Format.R16G16B16A16_SInt;
-                case VertexElementFormat.NormalizedShort2:
-                    return DXGI.Format.R16G16_SNorm;
-                case VertexElementFormat.NormalizedShort4:
-                    return DXGI.Format.R16G16B16A16_SNorm;
-                case VertexElementFormat.HalfVector2:
-                    return DXGI.Format.R16G16_Float;
-                case VertexElementFormat.HalfVector4:
-                    return DXGI.Format.R16G16B16A16_Float;
-
-                default:
-                    throw new NotSupportedException("Unknown vertex element format!");
-            }
         }
 
         /// <summary>
