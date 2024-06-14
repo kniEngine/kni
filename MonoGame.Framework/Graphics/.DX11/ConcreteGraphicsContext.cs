@@ -23,6 +23,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private D3D11.DeviceContext _d3dContext;
         internal int _vertexBufferSlotsUsed;
 
+        VertexInputLayoutKey _vertexInputLayoutKey = new VertexInputLayoutKey();
+
         private PrimitiveType _lastPrimitiveType = (PrimitiveType)(-1);
 
         // The active render targets.
@@ -256,8 +258,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             if (_vertexShaderDirty || _vertexBuffersDirty)
             {
-                VertexInputLayout vertexInputLayoutKey = _vertexBuffers;
-                this.D3dContext.InputAssembler.InputLayout = cvertexShader.InputLayouts.GetOrCreate(vertexInputLayoutKey, _vertexBuffers);
+                _vertexInputLayoutKey.Set(_vertexBuffers);
+                this.D3dContext.InputAssembler.InputLayout = cvertexShader.InputLayouts.GetOrCreate(_vertexInputLayoutKey, _vertexBuffers);
                 _vertexShaderDirty = false;
                 _vertexBuffersDirty = false;
             }
