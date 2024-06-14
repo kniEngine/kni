@@ -159,21 +159,5 @@ namespace Microsoft.Xna.Platform.Graphics
                 _vertexOffsets[slot],
                 InstanceFrequencies[slot]);
         }
-
-        /// <summary>
-        /// Gets vertex buffers bound to the input slots.
-        /// </summary>
-        /// <returns>The vertex buffer bindings.</returns>
-        public VertexBufferBinding[] Get()
-        {
-            var bindings = new VertexBufferBinding[Count];
-            for (int i = 0; i < bindings.Length; i++)
-                bindings[i] = new VertexBufferBinding(
-                    _vertexBuffers[i],
-                    _vertexOffsets[i],
-                    InstanceFrequencies[i]);
-
-            return bindings;
-        }
     }
 }
