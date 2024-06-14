@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets or create the DirectX input layout for the specified vertex buffers.
         /// </summary>
-        /// <param name="vertexInputLayout">The vertex buffers.</param>
+        /// <param name="vertexBuffers">The vertex buffers.</param>
         /// <returns>The DirectX input layout.</returns>
         public D3D11.InputLayout GetOrCreate(VertexInputLayoutKey vertexInputLayoutKey, VertexBufferCollection vertexBuffers)
         {
