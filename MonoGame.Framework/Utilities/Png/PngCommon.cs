@@ -3,13 +3,13 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Utilities.Png
+namespace Microsoft.Xna.Platform.Graphics.Utilities.Png
 {
     internal class Palette
     {

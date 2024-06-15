@@ -91,7 +91,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Platform.Utilities.Deflate
 {
 
     /// <summary>
