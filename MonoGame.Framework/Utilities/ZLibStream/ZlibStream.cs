@@ -130,7 +130,7 @@ namespace MonoGame.Framework.Utilities
     /// </para>
     /// </remarks>
     /// <seealso cref="GZipStream" />
-    public class ZlibStream : Stream
+    internal class ZlibStream : Stream
     {
         internal ZlibBaseStream _baseStream;
         bool _disposed;
@@ -2065,7 +2065,7 @@ namespace MonoGame.Framework.Utilities
     /// <remarks>
     /// The different FlushType values are useful when using a Deflate in a streaming application.
     /// </remarks>
-    public enum FlushType
+    internal enum FlushType
     {
         /// <summary>No flush at all.</summary>
         None = 0,
@@ -2211,7 +2211,7 @@ namespace MonoGame.Framework.Utilities
     /// <summary>
     /// An enum to specify the direction of transcoding - whether to compress or decompress.
     /// </summary>
-    public enum CompressionMode
+    internal enum CompressionMode
     {
         /// <summary>
         /// Used to specify that the stream should compress the data.
