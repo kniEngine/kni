@@ -18,7 +18,7 @@
     <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>$(DefineConstants);STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
