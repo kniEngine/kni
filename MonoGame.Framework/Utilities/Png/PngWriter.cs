@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 
-namespace MonoGame.Utilities.Png
+namespace Microsoft.Xna.Platform.Graphics.Utilities.Png
 {
     public class PngWriter
     {

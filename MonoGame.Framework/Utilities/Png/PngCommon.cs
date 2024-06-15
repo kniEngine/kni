@@ -9,7 +9,7 @@ using System.Collections;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Utilities.Png
+namespace Microsoft.Xna.Platform.Graphics.Utilities.Png
 {
     internal class Palette
     {

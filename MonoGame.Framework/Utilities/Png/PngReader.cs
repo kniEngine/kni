@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MonoGame.Framework.Utilities;
 
-namespace MonoGame.Utilities.Png
+namespace Microsoft.Xna.Platform.Graphics.Utilities.Png
 {
     public class PngReader
     {

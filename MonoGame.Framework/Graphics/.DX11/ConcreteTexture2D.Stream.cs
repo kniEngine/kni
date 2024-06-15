@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
-using MonoGame.Utilities.Png;
+using Microsoft.Xna.Platform.Graphics.Utilities.Png;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;

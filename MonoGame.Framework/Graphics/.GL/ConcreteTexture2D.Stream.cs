@@ -26,7 +26,7 @@ using Android.Graphics;
 using UIKit;
 using CoreGraphics;
 using Foundation;
-using MonoGame.Utilities.Png;
+using Microsoft.Xna.Platform.Graphics.Utilities.Png;
 #endif
 
 
