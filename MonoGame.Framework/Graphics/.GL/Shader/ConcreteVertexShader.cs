@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return -1;
         }
 
-        internal VertexDeclarationAttributeInfo GetVertexAttribInfo(VertexDeclaration vertexDeclaration, int maxVertexBufferSlots)
+        internal VertexDeclarationAttributeInfo GetVertexAttribInfo(VertexDeclaration vertexDeclaration)
         {
             VertexElement[] vertexElements = ((IPlatformVertexDeclaration)vertexDeclaration).InternalVertexElements;
 
@@ -42,6 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_vertexAttribInfoCache.TryGetValue(vertexElements, out vertexAttribInfo))
                 return vertexAttribInfo;
 
+            int maxVertexBufferSlots = this.GraphicsDeviceStrategy.Capabilities.MaxVertexBufferSlots;
             vertexAttribInfo = ConcreteVertexShader.CreateVertexAttribInfo(this, vertexElements, maxVertexBufferSlots);
             _vertexAttribInfoCache.Add(vertexElements, vertexAttribInfo);
             return vertexAttribInfo;
