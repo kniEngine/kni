@@ -41,106 +41,20 @@
       <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.DXGI.dll</HintPath>
     </Reference>
   </ItemGroup>
-
+	
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runner\Constants.cs" />
-    <Compile Include="Runner\Extensions.cs" />
-    <Compile Include="Runner\FrameInfo.cs" />
-    <Compile Include="Runner\FramePixelData.cs" />
-    <Compile Include="Runner\FramePixelData.Desktop.cs" />
-    <Compile Include="Runner\PixelArgb.cs" />
-    <Compile Include="Runner\Utility.cs" />
-    <Compile Include="Runner\Program.cs" />
-    <Compile Include="Runner\GameBase\CountCallsGame.cs" />
-    <Compile Include="Runner\GameBase\FixtureBase.cs" />
-    <Compile Include="Runner\GameBase\MockGame.cs" />
-    <Compile Include="Runner\GameBase\MockWindow.cs" />
-    <Compile Include="Runner\GameBase\TestGameBase.cs" />
-    <Compile Include="Runner\GameBase\GraphicsDeviceTestFixtureBase.cs" />
-    <Compile Include="Runner\GameBase\VisualTestFixtureBase.cs" />
-    <Compile Include="Runner\GameBase\VisualTestGame.cs" />
-    <Compile Include="Runner\GameBase\FrameCompareComponent.cs" />
-    <Compile Include="Runner\GameBase\PixelDeltaFrameComparer.cs" />
-    <Compile Include="Runner\GameBase\UpdateGuard.cs" />
-    <Compile Include="Framework\ByteBufferPoolTest.cs" />
-    <Compile Include="Utilities\ActionDaemon.cs" />
-    <Compile Include="Framework\BoundingTest.cs" />
-    <Compile Include="Framework\ColorTest.cs" />
-    <Compile Include="Framework\CurveKeyCollectionTest.cs" />
-    <Compile Include="Framework\CurveKeyTest.cs" />
-    <Compile Include="Framework\CurveTest.cs" />
-    <Compile Include="Framework\EnumConformingTest.cs" />
-    <Compile Include="Framework\FrameworkDispatcherTest.cs" />
-    <Compile Include="Framework\GameComponentTest.cs" />
-    <Compile Include="Framework\GameTest.cs" />
-    <Compile Include="Framework\GameTest+Methods.cs" />
-    <Compile Include="Framework\GameTest+Properties.cs" />
-    <Compile Include="Framework\MathHelperTest.cs" />
-    <Compile Include="Framework\MatrixTest.cs" />
-    <Compile Include="Framework\PackedVectorTest.cs" />
-    <Compile Include="Framework\PlaneTest.cs" />
-    <Compile Include="Framework\QuaternionTest.cs" />
-    <Compile Include="Framework\RayTest.cs" />
-    <Compile Include="Framework\RectangleTest.cs" />
-    <Compile Include="Framework\TitleContainerTest.cs" />
-    <Compile Include="Framework\TouchCollectionTest.cs" />
-    <Compile Include="Framework\TouchLocationTest.cs" />
-    <Compile Include="Framework\UtilitiesTest.cs" />
-    <Compile Include="Framework\Vector2Test.cs" />
-    <Compile Include="Framework\Vector3Test.cs" />
-    <Compile Include="Framework\Vector4Test.cs" />
-    <Compile Include="Framework\VertexTests.cs" />
-    <Compile Include="Framework\Audio\SoundEffectTest.cs" />
-    <Compile Include="Framework\Audio\XactTest.cs" />
-    <Compile Include="Framework\Audio\DynamicSoundEffectInstanceTest.cs" />
-    <Compile Include="Framework\Audio\SoundEffectInstanceTest.cs" />
-    <Compile Include="Framework\Audio\XAudio\SoundEffectInstanceXAudioTest.cs" />
-    <Compile Include="Framework\Components\DrawFrameNumberComponent.cs" />
-    <Compile Include="Framework\Components\FlexibleGameComponent.cs" />
-    <Compile Include="Framework\Components\ImplicitDrawOrderComponent.cs" />
-    <Compile Include="Framework\Components\InitializeOrderComponent.cs" />
-    <Compile Include="Framework\Components\Simple3DCubeComponent.cs" />
-    <Compile Include="Framework\Components\SpaceshipModelDrawComponent.cs" />
-    <Compile Include="Framework\Components\VisualTestDrawableGameComponent.cs" />
-    <Compile Include="Framework\Components\VisualTestGameComponent.cs" />
-    <Compile Include="Framework\Components\Colored3DCubeComponent.cs" />
-    <Compile Include="Framework\Components\TexturedQuadComponent.cs" />
-    <Compile Include="Framework\Graphics\BlendStateTest.cs" />
-    <Compile Include="Framework\Graphics\EffectTest.cs" />
-    <Compile Include="Framework\Graphics\GraphicsAdapterTest.cs" />
-    <Compile Include="Framework\Graphics\GraphicsDeviceTest.cs" />
-    <Compile Include="Framework\Graphics\MiscellaneousTests.cs" />
-    <Compile Include="Framework\Graphics\IndexBufferTest.cs" />
-    <Compile Include="Framework\Graphics\Texture2DNonVisualTest.cs" />
-    <Compile Include="Framework\Graphics\Texture3DNonVisualTest.cs" />
-    <Compile Include="Framework\Input\GamePadTest.cs" />
-    <Compile Include="Framework\Input\JoystickTest.cs" />
-    <Compile Include="Framework\Input\KeyboardTest.cs" />
-    <Compile Include="Framework\Input\MouseTest.cs" />
-    <Compile Include="Framework\Input\TouchPanelTest.cs" />
-    <Compile Include="Framework\Input\GestureRecognizerTest.cs" />
-    <Compile Include="Framework\Graphics\DepthStencilStateTest.cs" />
-    <Compile Include="Framework\Graphics\GraphicsDeviceManagerTest.cs" />
-    <Compile Include="Framework\Graphics\RasterizerStateTest.cs" />
-    <Compile Include="Framework\Graphics\RenderTarget2DTest.cs" />
-    <Compile Include="Framework\Graphics\RenderTargetCubeTest.cs" />
-    <Compile Include="Framework\Graphics\SamplerStateTest.cs" />
-    <Compile Include="Framework\Graphics\ScissorRectangleTest.cs" />
-    <Compile Include="Framework\Graphics\Texture2DTest.cs" />
-    <Compile Include="Framework\Graphics\Texture3DTest.cs" />
-    <Compile Include="Framework\Graphics\TextureCubeTest.cs" />
-    <Compile Include="Framework\Graphics\VertexBufferTest.cs" />
-    <Compile Include="Framework\Graphics\VisualMiscellaneousTests.cs" />
-    <Compile Include="Framework\Graphics\ShaderTest.cs" />
-    <Compile Include="Framework\Graphics\SpriteBatchTest.cs" />
-    <Compile Include="Framework\Graphics\SpriteFontTest.cs" />
-    <Compile Include="Framework\Graphics\ViewportTest.cs" />
-    <Compile Include="Framework\Graphics\ModelTest.cs" />
-    <Compile Include="Framework\Graphics\OcclusionQueryTest.cs" />
-    <Compile Include="Framework\Graphics\ProfileReachTest.cs" />
+    <Compile Include="Components\DrawFrameNumberComponent.cs" />
+    <Compile Include="Components\FlexibleGameComponent.cs" />
+    <Compile Include="Components\ImplicitDrawOrderComponent.cs" />
+    <Compile Include="Components\InitializeOrderComponent.cs" />
+    <Compile Include="Components\Simple3DCubeComponent.cs" />
+    <Compile Include="Components\SpaceshipModelDrawComponent.cs" />
+    <Compile Include="Components\VisualTestDrawableGameComponent.cs" />
+    <Compile Include="Components\VisualTestGameComponent.cs" />
+    <Compile Include="Components\Colored3DCubeComponent.cs" />
+    <Compile Include="Components\TexturedQuadComponent.cs" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <Compile Include="ContentPipeline\AssetTestUtility.cs" />
     <Compile Include="ContentPipeline\BuilderTargetsTest.cs" />
@@ -170,6 +84,113 @@
     <Compile Include="ContentPipeline\TextureProcessorTests.cs" />
     <Compile Include="ContentPipeline\WavImporterTests.cs" />
     <Compile Include="ContentPipeline\WmaImporterTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Framework\BoundingTest.cs" />
+    <Compile Include="Framework\ByteBufferPoolTest.cs" />
+    <Compile Include="Framework\ColorTest.cs" />
+    <Compile Include="Framework\CurveKeyCollectionTest.cs" />
+    <Compile Include="Framework\CurveKeyTest.cs" />
+    <Compile Include="Framework\CurveTest.cs" />
+    <Compile Include="Framework\EnumConformingTest.cs" />
+    <Compile Include="Framework\FrameworkDispatcherTest.cs" />
+    <Compile Include="Framework\MathHelperTest.cs" />
+    <Compile Include="Framework\MatrixTest.cs" />
+    <Compile Include="Framework\PackedVectorTest.cs" />
+    <Compile Include="Framework\PlaneTest.cs" />
+    <Compile Include="Framework\QuaternionTest.cs" />
+    <Compile Include="Framework\RayTest.cs" />
+    <Compile Include="Framework\RectangleTest.cs" />
+    <Compile Include="Framework\TitleContainerTest.cs" />
+    <Compile Include="Framework\UtilitiesTest.cs" />
+    <Compile Include="Framework\Vector2Test.cs" />
+    <Compile Include="Framework\Vector3Test.cs" />
+    <Compile Include="Framework\Vector4Test.cs" />
+    <Compile Include="Framework\VertexTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Framework.Audio\SoundEffectTest.cs" />
+    <Compile Include="Framework.Audio\XactTest.cs" />
+    <Compile Include="Framework.Audio\DynamicSoundEffectInstanceTest.cs" />
+    <Compile Include="Framework.Audio\SoundEffectInstanceTest.cs" />
+    <Compile Include="Framework.Audio\XAudio\SoundEffectInstanceXAudioTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Framework.Game\GameComponentTest.cs" />
+    <Compile Include="Framework.Game\GameTest.cs" />
+    <Compile Include="Framework.Game\GameTest+Methods.cs" />
+    <Compile Include="Framework.Game\GameTest+Properties.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Framework.Graphics\BlendStateTest.cs" />
+    <Compile Include="Framework.Graphics\EffectTest.cs" />
+    <Compile Include="Framework.Graphics\GraphicsAdapterTest.cs" />
+    <Compile Include="Framework.Graphics\GraphicsDeviceTest.cs" />
+    <Compile Include="Framework.Graphics\MiscellaneousTests.cs" />
+    <Compile Include="Framework.Graphics\IndexBufferTest.cs" />
+    <Compile Include="Framework.Graphics\Texture2DNonVisualTest.cs" />
+    <Compile Include="Framework.Graphics\Texture3DNonVisualTest.cs" />
+    <Compile Include="Framework.Graphics\DepthStencilStateTest.cs" />
+    <Compile Include="Framework.Graphics\GraphicsDeviceManagerTest.cs" />
+    <Compile Include="Framework.Graphics\RasterizerStateTest.cs" />
+    <Compile Include="Framework.Graphics\RenderTarget2DTest.cs" />
+    <Compile Include="Framework.Graphics\RenderTargetCubeTest.cs" />
+    <Compile Include="Framework.Graphics\SamplerStateTest.cs" />
+    <Compile Include="Framework.Graphics\ScissorRectangleTest.cs" />
+    <Compile Include="Framework.Graphics\Texture2DTest.cs" />
+    <Compile Include="Framework.Graphics\Texture3DTest.cs" />
+    <Compile Include="Framework.Graphics\TextureCubeTest.cs" />
+    <Compile Include="Framework.Graphics\VertexBufferTest.cs" />
+    <Compile Include="Framework.Graphics\VisualMiscellaneousTests.cs" />
+    <Compile Include="Framework.Graphics\ShaderTest.cs" />
+    <Compile Include="Framework.Graphics\SpriteBatchTest.cs" />
+    <Compile Include="Framework.Graphics\SpriteFontTest.cs" />
+    <Compile Include="Framework.Graphics\ViewportTest.cs" />
+    <Compile Include="Framework.Graphics\ModelTest.cs" />
+    <Compile Include="Framework.Graphics\OcclusionQueryTest.cs" />
+    <Compile Include="Framework.Graphics\ProfileReachTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Framework.Input\GamePadTest.cs" />
+    <Compile Include="Framework.Input\JoystickTest.cs" />
+    <Compile Include="Framework.Input\KeyboardTest.cs" />
+    <Compile Include="Framework.Input\MouseTest.cs" />
+    <Compile Include="Framework.Input\TouchCollectionTest.cs" />
+    <Compile Include="Framework.Input\TouchLocationTest.cs" />
+    <Compile Include="Framework.Input\TouchPanelTest.cs" />
+    <Compile Include="Framework.Input\GestureRecognizerTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runner\Constants.cs" />
+    <Compile Include="Runner\Extensions.cs" />
+    <Compile Include="Runner\FrameInfo.cs" />
+    <Compile Include="Runner\FramePixelData.cs" />
+    <Compile Include="Runner\FramePixelData.Desktop.cs" />
+    <Compile Include="Runner\PixelArgb.cs" />
+    <Compile Include="Runner\Utility.cs" />
+    <Compile Include="Runner\Program.cs" />
+    <Compile Include="Runner\GameBase\CountCallsGame.cs" />
+    <Compile Include="Runner\GameBase\FixtureBase.cs" />
+    <Compile Include="Runner\GameBase\MockGame.cs" />
+    <Compile Include="Runner\GameBase\MockWindow.cs" />
+    <Compile Include="Runner\GameBase\TestGameBase.cs" />
+    <Compile Include="Runner\GameBase\GraphicsDeviceTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestFixtureBase.cs" />
+    <Compile Include="Runner\GameBase\VisualTestGame.cs" />
+    <Compile Include="Runner\GameBase\FrameCompareComponent.cs" />
+    <Compile Include="Runner\GameBase\PixelDeltaFrameComparer.cs" />
+    <Compile Include="Runner\GameBase\UpdateGuard.cs" />
+    <Compile Include="Utilities\ActionDaemon.cs" />	  
   </ItemGroup>
 
   <ItemGroup>
