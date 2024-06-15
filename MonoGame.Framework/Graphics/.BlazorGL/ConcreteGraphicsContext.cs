@@ -500,6 +500,7 @@ namespace Microsoft.Xna.Platform.Graphics
             for (int slot = 0; slot < _vertexBuffers.Count; slot++)
             {
                 VertexBufferBinding vertexBufferBinding = _vertexBuffers.Get(slot);
+
                 VertexDeclaration vertexDeclaration = vertexBufferBinding.VertexBuffer.VertexDeclaration;
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr vertexOffset = (IntPtr)(vertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
@@ -507,7 +508,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration);
 
                 if (_lastVertexAttribs != 1
-                ||  _bufferBindingInfos[slot].GLVertexBuffer != ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy
+                ||  _bufferBindingInfos[slot].VertexBuffer != vertexBufferBinding.VertexBuffer
                 ||  _bufferBindingInfos[slot].VertexOffset != vertexOffset
                 ||  _bufferBindingInfos[slot].InstanceFrequency != vertexBufferBinding.InstanceFrequency
                 ||  !ReferenceEquals(_bufferBindingInfos[slot].AttributeInfo, vertexAttribInfo)
@@ -543,7 +544,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                     }
 
-                    _bufferBindingInfos[slot].GLVertexBuffer = ((IPlatformVertexBuffer)vertexBufferBinding.VertexBuffer).Strategy;
+                    _bufferBindingInfos[slot].VertexBuffer = vertexBufferBinding.VertexBuffer;
                     _bufferBindingInfos[slot].AttributeInfo = vertexAttribInfo;
                     _bufferBindingInfos[slot].VertexOffset = vertexOffset;
                     _bufferBindingInfos[slot].InstanceFrequency = vertexBufferBinding.InstanceFrequency;
