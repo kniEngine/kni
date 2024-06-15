@@ -5,11 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Microsoft.Xna.Platform.Graphics;
-using Microsoft.Xna.Platform.Graphics.Utilities;
 using Microsoft.Xna.Platform.Utilities.Deflate;
 
 namespace Microsoft.Xna.Platform.Graphics.Utilities.Png
