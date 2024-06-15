@@ -17,28 +17,29 @@ namespace Microsoft.Xna.Platform.Graphics
         private WeakReference _vertexBufferStrategyRef = new WeakReference(null);
 
         public VertexDeclarationAttributeInfo AttributeInfo;
+
+        public VertexBuffer VertexBuffer
+        {
+            get { return (VertexBuffer)_vertexBufferStrategyRef.Target; }
+            set { _vertexBufferStrategyRef.Target = value; }
+        }
         public IntPtr VertexOffset;
         public int InstanceFrequency;
 
-        public VertexBufferStrategy GLVertexBuffer
-        {
-            get { return (VertexBufferStrategy)_vertexBufferStrategyRef.Target; }
-            set { _vertexBufferStrategyRef.Target = value; }
-        }
 
-
-        public BufferBindingInfo(VertexDeclarationAttributeInfo attributeInfo, IntPtr vertexOffset, int instanceFrequency, VertexBufferStrategy vertexBufferStrategy)
+        public BufferBindingInfo(VertexDeclarationAttributeInfo attributeInfo, VertexBuffer vertexBuffer, IntPtr vertexOffset, int instanceFrequency)
         {
             AttributeInfo = attributeInfo;
+
+            VertexBuffer = vertexBuffer;
             VertexOffset = vertexOffset;
             InstanceFrequency = instanceFrequency;
-            GLVertexBuffer = vertexBufferStrategy;
         }
 
         public override string ToString()
         {
-            return String.Format("{{glVertexBuffer: {0}, VertexOffset: {1}, InstanceFrequency: {2}}}",
-                GLVertexBuffer, VertexOffset, InstanceFrequency);
+            return String.Format("{{VertexBuffer: {0}, VertexOffset: {1}, InstanceFrequency: {2}}}",
+                VertexBuffer, VertexOffset, InstanceFrequency);
         }
     }
 
