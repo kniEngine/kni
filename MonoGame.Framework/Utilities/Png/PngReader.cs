@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Utilities.Deflate;
 
 namespace Microsoft.Xna.Platform.Graphics.Utilities.Png
 {
