@@ -183,13 +183,13 @@
     <Compile Include="Runner\GameBase\TestGameBase.cs" />
     <Compile Include="Runner\GameBase\VisualTestFixtureBase.cs" />
     <Compile Include="Runner\GameBase\VisualTestGame.cs" />
+    <Compile Include="Runner\GameBase\FrameCompareComponent.cs" />
+    <Compile Include="Runner\GameBase\PixelDeltaFrameComparer.cs" />
+    <Compile Include="Runner\GameBase\UpdateGuard.cs" />
     <Compile Include="Runner\PixelArgb.cs" />
     <Compile Include="Runner\Program.cs" />
     <Compile Include="Runner\Utility.cs" />
-    <Compile Include="Framework\Components\FrameCompareComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Framework\Components\PixelDeltaFrameComparer.cs" />
-    <Compile Include="Framework\Components\UpdateGuard.cs" />
     <Compile Include="Framework\Components\Colored3DCubeComponent.cs" />
     <Compile Include="Framework\Components\TexturedQuadComponent.cs" />
     <Compile Include="Framework\Components\SpaceshipModelDrawComponent.cs" />
