@@ -78,7 +78,7 @@ Then replace:
 With:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.11.9002" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.12.9001" />
 ```
 
 Then rename 'MonoGameContentReference':
