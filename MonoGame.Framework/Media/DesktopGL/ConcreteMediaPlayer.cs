@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (mediaPlatformStream._player != null)
                 {
                     mediaPlatformStream._player.Stop();
-                    mediaPlatformStream.DestroyPlayer();
+                    MediaPlatformStream.DestroyPlayer(mediaPlatformStream);
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (mediaPlatformStream._player != null)
                 {
                     mediaPlatformStream._player.Stop();
-                    mediaPlatformStream.DestroyPlayer();
+                    MediaPlatformStream.DestroyPlayer(mediaPlatformStream);
                 }
 
                 base.RemoveQueuedSong(song);

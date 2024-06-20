@@ -56,21 +56,21 @@ namespace Microsoft.Xna.Platform.Media
                 handler();
         }
 
-        internal void DestroyPlayer()
+        static internal void DestroyPlayer(MediaPlatformStream mediaPlatformStream)
         {
-            if (_player != null)
+            if (mediaPlatformStream._player != null)
             {
-                _player.BufferNeeded -= sfxi_BufferNeeded;
-                _player.Dispose();
+                mediaPlatformStream._player.BufferNeeded -= mediaPlatformStream.sfxi_BufferNeeded;
+                mediaPlatformStream._player.Dispose();
             }
-            _player = null;
+            mediaPlatformStream._player = null;
 
-            if (_reader != null)
-                _reader.Dispose();
-            _reader = null;
+            if (mediaPlatformStream._reader != null)
+                mediaPlatformStream._reader.Dispose();
+            mediaPlatformStream._reader = null;
 
-            _sampleBuffer = null;
-            _dataBuffer = null;
+            mediaPlatformStream._sampleBuffer = null;
+            mediaPlatformStream._dataBuffer = null;
         }
 
         #region IDisposable
