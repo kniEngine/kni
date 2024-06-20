@@ -213,6 +213,14 @@ namespace Microsoft.Xna.Platform.Media
             }
             else // (count == 0)
             {
+                if (this.PlatformIsRepeating && base.Queue.Count == 1)
+                {
+                    // TODO: Fix the play gap between two loops by resetting _reader.DecodedPosition.
+                    //       Do we need to manually fire any events when the last pending buffer of the previous loop played?
+                    // _reader.DecodedPosition = 0; // reset song
+                    //return;
+                }
+
                 if (sfxi.PendingBufferCount <= 0) // song finished
                 {
                     ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += Song_OnUpdate;
