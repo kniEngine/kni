@@ -85,7 +85,9 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (base.Queue.ActiveSong != null)
             {
-                _mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
+                // Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
+                if (DonePlaying == null)
+                    DonePlaying += this.OnSongFinishedPlaying;
 
                 float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
@@ -178,7 +180,7 @@ namespace Microsoft.Xna.Platform.Media
                 {
                     if (_mediaPlatformStream._player != null)
                     {
-                        _mediaPlatformStream._player.BufferNeeded -= _mediaPlatformStream.sfxi_BufferNeeded;
+                        _mediaPlatformStream._player.BufferNeeded -= this.sfxi_BufferNeeded;
                         _mediaPlatformStream._player.Dispose();
                     }
                     _mediaPlatformStream._player = null;
@@ -202,6 +204,27 @@ namespace Microsoft.Xna.Platform.Media
 
 
         internal delegate void FinishedPlayingHandler();
+        event ConcreteMediaPlayerStrategy.FinishedPlayingHandler DonePlaying;
+
+        internal void sfxi_BufferNeeded(object sender, EventArgs e)
+        {
+            DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
+            int count = ConcreteMediaPlayerStrategy.SubmitBuffer(_mediaPlatformStream, sfxi, _mediaPlatformStream._reader);
+
+            if (count == 0 && sfxi.PendingBufferCount <= 0)
+            {
+                ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += Song_OnUpdate;
+            }
+        }
+
+        private void Song_OnUpdate()
+        {
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
+
+            ConcreteMediaPlayerStrategy.FinishedPlayingHandler handler = DonePlaying;
+            if (handler != null)
+                handler();
+        }
 
         internal void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
         {
@@ -215,7 +238,7 @@ namespace Microsoft.Xna.Platform.Media
                 mediaPlatformStream._dataBuffer = new byte[samples * sizeof(short)];
 
                 mediaPlatformStream._player = new DynamicSoundEffectInstance(mediaPlatformStream._reader.SampleRate, (AudioChannels)mediaPlatformStream._reader.Channels);
-                mediaPlatformStream._player.BufferNeeded += mediaPlatformStream.sfxi_BufferNeeded;
+                mediaPlatformStream._player.BufferNeeded += this.sfxi_BufferNeeded;
             }
         }
 
@@ -223,7 +246,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (mediaPlatformStream._player != null)
             {
-                mediaPlatformStream._player.BufferNeeded -= mediaPlatformStream.sfxi_BufferNeeded;
+                mediaPlatformStream._player.BufferNeeded -= this.sfxi_BufferNeeded;
                 mediaPlatformStream._player.Dispose();
             }
             mediaPlatformStream._player = null;

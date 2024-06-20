@@ -25,37 +25,6 @@ namespace Microsoft.Xna.Platform.Media
         {
         }
 
-        event ConcreteMediaPlayerStrategy.FinishedPlayingHandler DonePlaying;
-
-        /// <summary>
-        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-        /// </summary>
-        internal void SetEventHandler(ConcreteMediaPlayerStrategy.FinishedPlayingHandler handler)
-        {
-            if (DonePlaying == null)
-                DonePlaying += handler;
-        }
-
-        internal void sfxi_BufferNeeded(object sender, EventArgs e)
-        {
-            DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
-            int count = ConcreteMediaPlayerStrategy.SubmitBuffer(this, sfxi, _reader);
-
-            if (count == 0 && sfxi.PendingBufferCount <= 0)
-            {
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += Song_OnUpdate;
-            }
-        }
-
-        private void Song_OnUpdate()
-        {
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
-
-            ConcreteMediaPlayerStrategy.FinishedPlayingHandler handler = DonePlaying;
-            if (handler != null)
-                handler();
-        }
-
     }
 }
 
