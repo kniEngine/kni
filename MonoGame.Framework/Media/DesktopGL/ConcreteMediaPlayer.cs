@@ -176,9 +176,23 @@ namespace Microsoft.Xna.Platform.Media
             {
                 if (_mediaPlatformStream != null)
                 {
-                    _mediaPlatformStream.Dispose();
+                    if (_mediaPlatformStream._player != null)
+                    {
+                        _mediaPlatformStream._player.BufferNeeded -= _mediaPlatformStream.sfxi_BufferNeeded;
+                        _mediaPlatformStream._player.Dispose();
+                    }
+                    _mediaPlatformStream._player = null;
+
+                    if (_mediaPlatformStream._reader != null)
+                        _mediaPlatformStream._reader.Dispose();
+                    _mediaPlatformStream._reader = null;
+
+                    _mediaPlatformStream._sampleBuffer = null;
+                    _mediaPlatformStream._dataBuffer = null;
+
                     _mediaPlatformStream = null;
                 }
+
             }
 
             base.Dispose(disposing);
