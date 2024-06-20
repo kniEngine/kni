@@ -8,8 +8,6 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteSongStrategy : SongStrategy
     {
-        internal MediaPlatformStream _mediaPlatformStream;
-
         private Uri _streamSource;
 
 
@@ -76,25 +74,12 @@ namespace Microsoft.Xna.Platform.Media
         {
             this.Name = name;
             this._streamSource = streamSource;
-
-            this._mediaPlatformStream = new MediaPlatformStream();
         }
-
-        internal MediaPlatformStream GetMediaPlatformStream()
-        {
-            return _mediaPlatformStream;
-        }
-
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (_mediaPlatformStream != null)
-                {
-                    _mediaPlatformStream.Dispose();
-                    _mediaPlatformStream = null;
-                }
 
             }
 

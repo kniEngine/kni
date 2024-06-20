@@ -15,9 +15,11 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
+        MediaPlatformStream _mediaPlatformStream;
 
         internal ConcreteMediaPlayerStrategy()
         {
+            this._mediaPlatformStream = new MediaPlatformStream();
         }
 
         #region Properties
@@ -41,9 +43,8 @@ namespace Microsoft.Xna.Platform.Media
                 if (activeSong == null)
                     return TimeSpan.Zero;
 
-                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                if (mediaPlatformStream._reader != null)
-                    return mediaPlatformStream._reader.DecodedTime;
+                if (_mediaPlatformStream._reader != null)
+                    return _mediaPlatformStream._reader.DecodedTime;
                 else
                     return TimeSpan.Zero;
             }
@@ -76,43 +77,34 @@ namespace Microsoft.Xna.Platform.Media
         {
             float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-            for (int i = 0; i < base.Queue.Count; i++)
-            {
-                Song queuedSong = base.Queue[i];
-
-                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)queuedSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                if (mediaPlatformStream._player != null)
-                    mediaPlatformStream._player.Volume = innerVolume;
-            }
+            if (_mediaPlatformStream._player != null)
+                _mediaPlatformStream._player.Volume = innerVolume;
         }
 
         public override void PlatformPlaySong(Song song)
         {
             if (base.Queue.ActiveSong != null)
             {
-                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
+                _mediaPlatformStream.SetEventHandler(OnSongFinishedPlaying);
 
                 float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-                if (mediaPlatformStream._player != null)
-                    mediaPlatformStream._player.Volume = innerVolume;
+                if (_mediaPlatformStream._player != null)
+                    _mediaPlatformStream._player.Volume = innerVolume;
 
-                ConcreteMediaPlayerStrategy.CreatePlayer(mediaPlatformStream, ((IPlatformSong)song).Strategy);
+                ConcreteMediaPlayerStrategy.CreatePlayer(_mediaPlatformStream, ((IPlatformSong)song).Strategy);
 
-                DynamicSoundEffectInstance player = mediaPlatformStream._player;
-
-                SoundState state = player.State;
+                SoundState state = _mediaPlatformStream._player.State;
                 switch (state)
                 {
                     case SoundState.Playing:
                         return;
                     case SoundState.Paused:
-                        player.Resume();
+                        _mediaPlatformStream._player.Resume();
                         return;
                     case SoundState.Stopped:
-                        player.Volume = innerVolume;
-                        player.Play();
+                        _mediaPlatformStream._player.Volume = innerVolume;
+                        _mediaPlatformStream._player.Play();
                         ((IPlatformSong)song).Strategy.PlayCount++;
                         return;
                 }
@@ -125,9 +117,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
-                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                if (mediaPlatformStream._player != null)
-                    mediaPlatformStream._player.Pause();
+                if (_mediaPlatformStream._player != null)
+                    _mediaPlatformStream._player.Pause();
             }
         }
 
@@ -136,9 +127,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
-                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                if (mediaPlatformStream._player != null)
-                    mediaPlatformStream._player.Resume();
+                if (_mediaPlatformStream._player != null)
+                    _mediaPlatformStream._player.Resume();
             }
         }
 
@@ -149,11 +139,11 @@ namespace Microsoft.Xna.Platform.Media
                 Song queuedSong = base.Queue[i];
 
                 Song activeSong = base.Queue.ActiveSong;
-                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                if (mediaPlatformStream._player != null)
+
+                if (_mediaPlatformStream._player != null)
                 {
-                    mediaPlatformStream._player.Stop();
-                    ConcreteMediaPlayerStrategy.DestroyPlayer(mediaPlatformStream);
+                    _mediaPlatformStream._player.Stop();
+                    ConcreteMediaPlayerStrategy.DestroyPlayer(_mediaPlatformStream);
                 }
             }
         }
@@ -164,11 +154,10 @@ namespace Microsoft.Xna.Platform.Media
             {
                 Song song = base.Queue[0];
 
-                MediaPlatformStream mediaPlatformStream = ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                if (mediaPlatformStream._player != null)
+                if (_mediaPlatformStream._player != null)
                 {
-                    mediaPlatformStream._player.Stop();
-                    ConcreteMediaPlayerStrategy.DestroyPlayer(mediaPlatformStream);
+                    _mediaPlatformStream._player.Stop();
+                    ConcreteMediaPlayerStrategy.DestroyPlayer(_mediaPlatformStream);
                 }
 
                 base.RemoveQueuedSong(song);
@@ -185,7 +174,11 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-
+                if (_mediaPlatformStream != null)
+                {
+                    _mediaPlatformStream.Dispose();
+                    _mediaPlatformStream = null;
+                }
             }
 
             base.Dispose(disposing);
