@@ -25,13 +25,12 @@ namespace Microsoft.Xna.Platform.Media
         {
         }
 
-        internal delegate void FinishedPlayingHandler();
-        event FinishedPlayingHandler DonePlaying;
+        event ConcreteMediaPlayerStrategy.FinishedPlayingHandler DonePlaying;
 
         /// <summary>
         /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
         /// </summary>
-        internal void SetEventHandler(FinishedPlayingHandler handler)
+        internal void SetEventHandler(ConcreteMediaPlayerStrategy.FinishedPlayingHandler handler)
         {
             if (DonePlaying == null)
                 DonePlaying += handler;
@@ -52,7 +51,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
 
-            FinishedPlayingHandler handler = DonePlaying;
+            ConcreteMediaPlayerStrategy.FinishedPlayingHandler handler = DonePlaying;
             if (handler != null)
                 handler();
         }

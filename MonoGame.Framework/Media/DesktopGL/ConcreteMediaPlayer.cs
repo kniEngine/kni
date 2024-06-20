@@ -178,6 +178,9 @@ namespace Microsoft.Xna.Platform.Media
             //base.ClearQueue();
         }
 
+
+        internal delegate void FinishedPlayingHandler();
+
         internal static void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
         {
             if (mediaPlatformStream._player == null)
