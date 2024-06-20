@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_mediaPlatformStream._player != null)
                 {
                     _mediaPlatformStream._player.Stop();
-                    ConcreteMediaPlayerStrategy.DestroyPlayer(_mediaPlatformStream);
+                    this.DestroyPlayer(_mediaPlatformStream);
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_mediaPlatformStream._player != null)
                 {
                     _mediaPlatformStream._player.Stop();
-                    ConcreteMediaPlayerStrategy.DestroyPlayer(_mediaPlatformStream);
+                    this.DestroyPlayer(_mediaPlatformStream);
                 }
 
                 base.RemoveQueuedSong(song);
@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        static internal void DestroyPlayer(MediaPlatformStream mediaPlatformStream)
+        internal void DestroyPlayer(MediaPlatformStream mediaPlatformStream)
         {
             if (mediaPlatformStream._player != null)
             {
