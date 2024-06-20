@@ -211,11 +211,12 @@ namespace Microsoft.Xna.Platform.Media
                 }
                 sfxi.SubmitBuffer(_dataBuffer, 0, count * sizeof(short));
             }
-
-
-            if (count == 0 && sfxi.PendingBufferCount <= 0)
+            else // (count == 0)
             {
-                ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += Song_OnUpdate;
+                if (sfxi.PendingBufferCount <= 0) // song finished
+                {
+                    ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += Song_OnUpdate;
+                }
             }
         }
 
