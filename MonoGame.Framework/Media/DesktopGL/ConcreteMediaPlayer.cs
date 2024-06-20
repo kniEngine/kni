@@ -42,8 +42,8 @@ namespace Microsoft.Xna.Platform.Media
                     return TimeSpan.Zero;
 
                 MediaPlatformStream mediaPlatformStream = ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>().GetMediaPlatformStream();
-                if (mediaPlatformStream.Reader != null)
-                    return mediaPlatformStream.Reader.DecodedTime;
+                if (mediaPlatformStream._reader != null)
+                    return mediaPlatformStream._reader.DecodedTime;
                 else
                     return TimeSpan.Zero;
             }
