@@ -13,7 +13,7 @@ using NVorbis;
 
 namespace Microsoft.Xna.Platform.Media
 {
-    internal sealed class MediaPlatformStream : IDisposable
+    internal sealed class MediaPlatformStream
     {
         internal DynamicSoundEffectInstance _player; // TODO: Move _player to MediaPlayer
         internal VorbisReader _reader;
@@ -56,29 +56,6 @@ namespace Microsoft.Xna.Platform.Media
                 handler();
         }
 
-        #region IDisposable
-        ~MediaPlatformStream()
-        {
-            Dispose(false);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-
-            }
-
-            //base.Dispose(disposing);
-
-        }
-        #endregion
     }
 }
 
