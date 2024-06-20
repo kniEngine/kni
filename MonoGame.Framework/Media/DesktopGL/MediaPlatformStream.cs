@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform.Media
         internal VorbisReader Reader { get { return _reader; } }
 
 
-        internal MediaPlatformStream(Uri streamSource)
+        internal MediaPlatformStream()
         {
         }
 

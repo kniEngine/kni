@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Media
             this.Name = name;
             this._streamSource = streamSource;
 
-            this._mediaPlatformStream = new MediaPlatformStream(this._streamSource);
+            this._mediaPlatformStream = new MediaPlatformStream();
         }
 
         internal MediaPlatformStream GetMediaPlatformStream()
