@@ -89,7 +89,20 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                DestroyPlayer();
+                if (_player != null)
+                {
+                    _player.BufferNeeded -= sfxi_BufferNeeded;
+                    _player.Dispose();
+                }
+                _player = null;
+
+                if (_reader != null)
+                    _reader.Dispose();
+                _reader = null;
+
+                _sampleBuffer = null;
+                _dataBuffer = null;
+
 
             }
 
