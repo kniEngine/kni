@@ -102,6 +102,7 @@
     <Compile Include="Media\DesktopGL\ConcreteMediaFactory.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaLibrary.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\DesktopGL\MediaPlatformStream.cs" />
     <Compile Include="Media\DesktopGL\ConcreteSong.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideo.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideoPlayer.cs" />
