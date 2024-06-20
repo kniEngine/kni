@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (mediaPlatformStream._player != null)
                 {
                     mediaPlatformStream._player.Stop();
-                    MediaPlatformStream.DestroyPlayer(mediaPlatformStream);
+                    ConcreteMediaPlayerStrategy.DestroyPlayer(mediaPlatformStream);
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (mediaPlatformStream._player != null)
                 {
                     mediaPlatformStream._player.Stop();
-                    MediaPlatformStream.DestroyPlayer(mediaPlatformStream);
+                    ConcreteMediaPlayerStrategy.DestroyPlayer(mediaPlatformStream);
                 }
 
                 base.RemoveQueuedSong(song);
@@ -210,6 +210,23 @@ namespace Microsoft.Xna.Platform.Media
                 mediaPlatformStream._player = new DynamicSoundEffectInstance(mediaPlatformStream._reader.SampleRate, (AudioChannels)mediaPlatformStream._reader.Channels);
                 mediaPlatformStream._player.BufferNeeded += mediaPlatformStream.sfxi_BufferNeeded;
             }
+        }
+
+        static internal void DestroyPlayer(MediaPlatformStream mediaPlatformStream)
+        {
+            if (mediaPlatformStream._player != null)
+            {
+                mediaPlatformStream._player.BufferNeeded -= mediaPlatformStream.sfxi_BufferNeeded;
+                mediaPlatformStream._player.Dispose();
+            }
+            mediaPlatformStream._player = null;
+
+            if (mediaPlatformStream._reader != null)
+                mediaPlatformStream._reader.Dispose();
+            mediaPlatformStream._reader = null;
+
+            mediaPlatformStream._sampleBuffer = null;
+            mediaPlatformStream._dataBuffer = null;
         }
 
         static internal unsafe int SubmitBuffer(MediaPlatformStream mediaPlatformStream, DynamicSoundEffectInstance sfxi, VorbisReader reader)
