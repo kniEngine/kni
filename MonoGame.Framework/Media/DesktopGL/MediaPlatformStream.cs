@@ -17,8 +17,8 @@ namespace Microsoft.Xna.Platform.Media
     {
         internal DynamicSoundEffectInstance _player; // TODO: Move _player to MediaPlayer
         internal VorbisReader _reader;
-        float[] _sampleBuffer;
-        byte[] _dataBuffer;
+        internal float[] _sampleBuffer;
+        internal byte[] _dataBuffer;
 
 
         internal MediaPlatformStream()
@@ -37,23 +37,7 @@ namespace Microsoft.Xna.Platform.Media
                 DonePlaying += handler;
         }
 
-        internal static void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
-        {
-            if (mediaPlatformStream._player == null)
-            {
-                mediaPlatformStream._reader = new VorbisReader(strategy.Filename);
-                strategy.Duration = mediaPlatformStream._reader.TotalTime;
-
-                int samples = (mediaPlatformStream._reader.SampleRate * mediaPlatformStream._reader.Channels) / 2;
-                mediaPlatformStream._sampleBuffer = new float[samples];
-                mediaPlatformStream._dataBuffer = new byte[samples * sizeof(short)];
-
-                mediaPlatformStream._player = new DynamicSoundEffectInstance(mediaPlatformStream._reader.SampleRate, (AudioChannels)mediaPlatformStream._reader.Channels);
-                mediaPlatformStream._player.BufferNeeded += mediaPlatformStream.sfxi_BufferNeeded;
-            }
-        }
-
-        private void sfxi_BufferNeeded(object sender, EventArgs e)
+        internal void sfxi_BufferNeeded(object sender, EventArgs e)
         {
             DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
             int count = SubmitBuffer(sfxi, _reader);
