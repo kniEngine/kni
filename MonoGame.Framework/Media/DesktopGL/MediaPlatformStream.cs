@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Media
         internal void sfxi_BufferNeeded(object sender, EventArgs e)
         {
             DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
-            int count = SubmitBuffer(sfxi, _reader);
+            int count = MediaPlatformStream.SubmitBuffer(this, sfxi, _reader);
 
             if (count == 0 && sfxi.PendingBufferCount <= 0)
             {
@@ -57,17 +57,17 @@ namespace Microsoft.Xna.Platform.Media
                 handler();
         }
 
-        private unsafe int SubmitBuffer(DynamicSoundEffectInstance sfxi, VorbisReader reader)
+        static private unsafe int SubmitBuffer(MediaPlatformStream mediaPlatformStream, DynamicSoundEffectInstance sfxi, VorbisReader reader)
         {
-            int count = _reader.ReadSamples(_sampleBuffer, 0, _sampleBuffer.Length);
+            int count = mediaPlatformStream._reader.ReadSamples(mediaPlatformStream._sampleBuffer, 0, mediaPlatformStream._sampleBuffer.Length);
             if (count > 0)
             {
-                fixed (float* pSampleBuffer = _sampleBuffer)
-                fixed (byte* pDataBuffer = _dataBuffer)
+                fixed (float* pSampleBuffer = mediaPlatformStream._sampleBuffer)
+                fixed (byte* pDataBuffer = mediaPlatformStream._dataBuffer)
                 {
-                    ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
+                    MediaPlatformStream.ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
                 }
-                sfxi.SubmitBuffer(_dataBuffer, 0, count * sizeof(short));
+                sfxi.SubmitBuffer(mediaPlatformStream._dataBuffer, 0, count * sizeof(short));
             }
 
             return count;
