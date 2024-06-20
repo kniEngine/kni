@@ -200,9 +200,6 @@ namespace Microsoft.Xna.Platform.Media
         #endregion
 
 
-        internal delegate void FinishedPlayingHandler();
-        event ConcreteMediaPlayerStrategy.FinishedPlayingHandler DonePlaying;
-
         internal unsafe void sfxi_BufferNeeded(object sender, EventArgs e)
         {
             DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
@@ -230,9 +227,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
 
-            ConcreteMediaPlayerStrategy.FinishedPlayingHandler handler = DonePlaying;
-            if (handler != null)
-                handler();
+            this.OnSongFinishedPlaying();
         }
 
         internal void CreatePlayer(SongStrategy strategy)
