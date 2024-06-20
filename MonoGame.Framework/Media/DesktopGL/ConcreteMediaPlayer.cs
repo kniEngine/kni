@@ -15,7 +15,6 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
-        MediaPlatformStream _mediaPlatformStream;
         private DynamicSoundEffectInstance _player;
         private VorbisReader _reader;
         private float[] _sampleBuffer;
@@ -23,7 +22,6 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteMediaPlayerStrategy()
         {
-            this._mediaPlatformStream = new MediaPlatformStream();
         }
 
         #region Properties
@@ -98,7 +96,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_player != null)
                     _player.Volume = innerVolume;
 
-                this.CreatePlayer(_mediaPlatformStream, ((IPlatformSong)song).Strategy);
+                this.CreatePlayer(((IPlatformSong)song).Strategy);
 
                 SoundState state = _player.State;
                 switch (state)
@@ -149,7 +147,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_player != null)
                 {
                     _player.Stop();
-                    this.DestroyPlayer(_mediaPlatformStream);
+                    this.DestroyPlayer();
                 }
             }
         }
@@ -163,7 +161,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_player != null)
                 {
                     _player.Stop();
-                    this.DestroyPlayer(_mediaPlatformStream);
+                    this.DestroyPlayer();
                 }
 
                 base.RemoveQueuedSong(song);
@@ -180,24 +178,19 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                if (_mediaPlatformStream != null)
+                if (_player != null)
                 {
-                    if (_player != null)
-                    {
-                        _player.BufferNeeded -= this.sfxi_BufferNeeded;
-                        _player.Dispose();
-                    }
-                    _player = null;
-
-                    if (_reader != null)
-                        _reader.Dispose();
-                    _reader = null;
-
-                    _sampleBuffer = null;
-                    _dataBuffer = null;
-
-                    _mediaPlatformStream = null;
+                    _player.BufferNeeded -= this.sfxi_BufferNeeded;
+                    _player.Dispose();
                 }
+                _player = null;
+
+                if (_reader != null)
+                    _reader.Dispose();
+                _reader = null;
+
+                _sampleBuffer = null;
+                _dataBuffer = null;
 
             }
 
@@ -213,7 +206,7 @@ namespace Microsoft.Xna.Platform.Media
         internal void sfxi_BufferNeeded(object sender, EventArgs e)
         {
             DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
-            int count = this.SubmitBuffer(_mediaPlatformStream, sfxi, _reader);
+            int count = this.SubmitBuffer(sfxi, _reader);
 
             if (count == 0 && sfxi.PendingBufferCount <= 0)
             {
@@ -230,7 +223,7 @@ namespace Microsoft.Xna.Platform.Media
                 handler();
         }
 
-        internal void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
+        internal void CreatePlayer(SongStrategy strategy)
         {
             if (_player == null)
             {
@@ -246,7 +239,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal void DestroyPlayer(MediaPlatformStream mediaPlatformStream)
+        internal void DestroyPlayer()
         {
             if (_player != null)
             {
@@ -263,7 +256,7 @@ namespace Microsoft.Xna.Platform.Media
             _dataBuffer = null;
         }
 
-        internal unsafe int SubmitBuffer(MediaPlatformStream mediaPlatformStream, DynamicSoundEffectInstance sfxi, VorbisReader reader)
+        internal unsafe int SubmitBuffer(DynamicSoundEffectInstance sfxi, VorbisReader reader)
         {
             int count = _reader.ReadSamples(_sampleBuffer, 0, _sampleBuffer.Length);
             if (count > 0)
