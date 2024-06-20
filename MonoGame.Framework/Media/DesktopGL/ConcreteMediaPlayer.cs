@@ -16,6 +16,10 @@ namespace Microsoft.Xna.Platform.Media
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
         MediaPlatformStream _mediaPlatformStream;
+        private DynamicSoundEffectInstance _player;
+        private VorbisReader _reader;
+        private float[] _sampleBuffer;
+        private byte[] _dataBuffer;
 
         internal ConcreteMediaPlayerStrategy()
         {
@@ -43,8 +47,8 @@ namespace Microsoft.Xna.Platform.Media
                 if (activeSong == null)
                     return TimeSpan.Zero;
 
-                if (_mediaPlatformStream._reader != null)
-                    return _mediaPlatformStream._reader.DecodedTime;
+                if (_reader != null)
+                    return _reader.DecodedTime;
                 else
                     return TimeSpan.Zero;
             }
@@ -77,8 +81,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-            if (_mediaPlatformStream._player != null)
-                _mediaPlatformStream._player.Volume = innerVolume;
+            if (_player != null)
+                _player.Volume = innerVolume;
         }
 
         public override void PlatformPlaySong(Song song)
@@ -91,22 +95,22 @@ namespace Microsoft.Xna.Platform.Media
 
                 float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-                if (_mediaPlatformStream._player != null)
-                    _mediaPlatformStream._player.Volume = innerVolume;
+                if (_player != null)
+                    _player.Volume = innerVolume;
 
                 this.CreatePlayer(_mediaPlatformStream, ((IPlatformSong)song).Strategy);
 
-                SoundState state = _mediaPlatformStream._player.State;
+                SoundState state = _player.State;
                 switch (state)
                 {
                     case SoundState.Playing:
                         return;
                     case SoundState.Paused:
-                        _mediaPlatformStream._player.Resume();
+                        _player.Resume();
                         return;
                     case SoundState.Stopped:
-                        _mediaPlatformStream._player.Volume = innerVolume;
-                        _mediaPlatformStream._player.Play();
+                        _player.Volume = innerVolume;
+                        _player.Play();
                         ((IPlatformSong)song).Strategy.PlayCount++;
                         return;
                 }
@@ -119,8 +123,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
-                if (_mediaPlatformStream._player != null)
-                    _mediaPlatformStream._player.Pause();
+                if (_player != null)
+                    _player.Pause();
             }
         }
 
@@ -129,8 +133,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
-                if (_mediaPlatformStream._player != null)
-                    _mediaPlatformStream._player.Resume();
+                if (_player != null)
+                    _player.Resume();
             }
         }
 
@@ -142,9 +146,9 @@ namespace Microsoft.Xna.Platform.Media
 
                 Song activeSong = base.Queue.ActiveSong;
 
-                if (_mediaPlatformStream._player != null)
+                if (_player != null)
                 {
-                    _mediaPlatformStream._player.Stop();
+                    _player.Stop();
                     this.DestroyPlayer(_mediaPlatformStream);
                 }
             }
@@ -156,9 +160,9 @@ namespace Microsoft.Xna.Platform.Media
             {
                 Song song = base.Queue[0];
 
-                if (_mediaPlatformStream._player != null)
+                if (_player != null)
                 {
-                    _mediaPlatformStream._player.Stop();
+                    _player.Stop();
                     this.DestroyPlayer(_mediaPlatformStream);
                 }
 
@@ -178,19 +182,19 @@ namespace Microsoft.Xna.Platform.Media
             {
                 if (_mediaPlatformStream != null)
                 {
-                    if (_mediaPlatformStream._player != null)
+                    if (_player != null)
                     {
-                        _mediaPlatformStream._player.BufferNeeded -= this.sfxi_BufferNeeded;
-                        _mediaPlatformStream._player.Dispose();
+                        _player.BufferNeeded -= this.sfxi_BufferNeeded;
+                        _player.Dispose();
                     }
-                    _mediaPlatformStream._player = null;
+                    _player = null;
 
-                    if (_mediaPlatformStream._reader != null)
-                        _mediaPlatformStream._reader.Dispose();
-                    _mediaPlatformStream._reader = null;
+                    if (_reader != null)
+                        _reader.Dispose();
+                    _reader = null;
 
-                    _mediaPlatformStream._sampleBuffer = null;
-                    _mediaPlatformStream._dataBuffer = null;
+                    _sampleBuffer = null;
+                    _dataBuffer = null;
 
                     _mediaPlatformStream = null;
                 }
@@ -209,7 +213,7 @@ namespace Microsoft.Xna.Platform.Media
         internal void sfxi_BufferNeeded(object sender, EventArgs e)
         {
             DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
-            int count = ConcreteMediaPlayerStrategy.SubmitBuffer(_mediaPlatformStream, sfxi, _mediaPlatformStream._reader);
+            int count = this.SubmitBuffer(_mediaPlatformStream, sfxi, _reader);
 
             if (count == 0 && sfxi.PendingBufferCount <= 0)
             {
@@ -228,48 +232,48 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
         {
-            if (mediaPlatformStream._player == null)
+            if (_player == null)
             {
-                mediaPlatformStream._reader = new VorbisReader(strategy.Filename);
-                strategy.Duration = mediaPlatformStream._reader.TotalTime;
+                _reader = new VorbisReader(strategy.Filename);
+                strategy.Duration = _reader.TotalTime;
 
-                int samples = (mediaPlatformStream._reader.SampleRate * mediaPlatformStream._reader.Channels) / 2;
-                mediaPlatformStream._sampleBuffer = new float[samples];
-                mediaPlatformStream._dataBuffer = new byte[samples * sizeof(short)];
+                int samples = (_reader.SampleRate * _reader.Channels) / 2;
+                _sampleBuffer = new float[samples];
+                _dataBuffer = new byte[samples * sizeof(short)];
 
-                mediaPlatformStream._player = new DynamicSoundEffectInstance(mediaPlatformStream._reader.SampleRate, (AudioChannels)mediaPlatformStream._reader.Channels);
-                mediaPlatformStream._player.BufferNeeded += this.sfxi_BufferNeeded;
+                _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
+                _player.BufferNeeded += this.sfxi_BufferNeeded;
             }
         }
 
         internal void DestroyPlayer(MediaPlatformStream mediaPlatformStream)
         {
-            if (mediaPlatformStream._player != null)
+            if (_player != null)
             {
-                mediaPlatformStream._player.BufferNeeded -= this.sfxi_BufferNeeded;
-                mediaPlatformStream._player.Dispose();
+                _player.BufferNeeded -= this.sfxi_BufferNeeded;
+                _player.Dispose();
             }
-            mediaPlatformStream._player = null;
+            _player = null;
 
-            if (mediaPlatformStream._reader != null)
-                mediaPlatformStream._reader.Dispose();
-            mediaPlatformStream._reader = null;
+            if (_reader != null)
+                _reader.Dispose();
+            _reader = null;
 
-            mediaPlatformStream._sampleBuffer = null;
-            mediaPlatformStream._dataBuffer = null;
+            _sampleBuffer = null;
+            _dataBuffer = null;
         }
 
-        static internal unsafe int SubmitBuffer(MediaPlatformStream mediaPlatformStream, DynamicSoundEffectInstance sfxi, VorbisReader reader)
+        internal unsafe int SubmitBuffer(MediaPlatformStream mediaPlatformStream, DynamicSoundEffectInstance sfxi, VorbisReader reader)
         {
-            int count = mediaPlatformStream._reader.ReadSamples(mediaPlatformStream._sampleBuffer, 0, mediaPlatformStream._sampleBuffer.Length);
+            int count = _reader.ReadSamples(_sampleBuffer, 0, _sampleBuffer.Length);
             if (count > 0)
             {
-                fixed (float* pSampleBuffer = mediaPlatformStream._sampleBuffer)
-                fixed (byte* pDataBuffer = mediaPlatformStream._dataBuffer)
+                fixed (float* pSampleBuffer = _sampleBuffer)
+                fixed (byte* pDataBuffer = _dataBuffer)
                 {
                     ConcreteMediaPlayerStrategy.ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
                 }
-                sfxi.SubmitBuffer(mediaPlatformStream._dataBuffer, 0, count * sizeof(short));
+                sfxi.SubmitBuffer(_dataBuffer, 0, count * sizeof(short));
             }
 
             return count;

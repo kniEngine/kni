@@ -15,10 +15,6 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class MediaPlatformStream
     {
-        internal DynamicSoundEffectInstance _player; // TODO: Move _player to MediaPlayer
-        internal VorbisReader _reader;
-        internal float[] _sampleBuffer;
-        internal byte[] _dataBuffer;
 
 
         internal MediaPlatformStream()
