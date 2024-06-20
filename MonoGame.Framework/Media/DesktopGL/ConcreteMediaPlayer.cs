@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (_mediaPlatformStream._player != null)
                     _mediaPlatformStream._player.Volume = innerVolume;
 
-                ConcreteMediaPlayerStrategy.CreatePlayer(_mediaPlatformStream, ((IPlatformSong)song).Strategy);
+                this.CreatePlayer(_mediaPlatformStream, ((IPlatformSong)song).Strategy);
 
                 SoundState state = _mediaPlatformStream._player.State;
                 switch (state)
@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Platform.Media
 
         internal delegate void FinishedPlayingHandler();
 
-        internal static void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
+        internal void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
         {
             if (mediaPlatformStream._player == null)
             {
