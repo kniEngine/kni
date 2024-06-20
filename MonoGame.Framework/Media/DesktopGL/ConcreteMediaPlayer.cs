@@ -223,7 +223,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
 
-            this.OnSongFinishedPlaying();
+            base.OnSongFinishedPlaying();
         }
 
         internal void CreatePlayer(SongStrategy strategy)
