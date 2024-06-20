@@ -37,19 +37,19 @@ namespace Microsoft.Xna.Platform.Media
                 DonePlaying += handler;
         }
 
-        internal void CreatePlayer(SongStrategy strategy)
+        internal static void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
         {
-            if (_player == null)
+            if (mediaPlatformStream._player == null)
             {
-                _reader = new VorbisReader(strategy.Filename);
-                strategy.Duration = _reader.TotalTime;
+                mediaPlatformStream._reader = new VorbisReader(strategy.Filename);
+                strategy.Duration = mediaPlatformStream._reader.TotalTime;
 
-                int samples = (_reader.SampleRate * _reader.Channels) / 2;
-                _sampleBuffer = new float[samples];
-                _dataBuffer = new byte[samples * sizeof(short)];
+                int samples = (mediaPlatformStream._reader.SampleRate * mediaPlatformStream._reader.Channels) / 2;
+                mediaPlatformStream._sampleBuffer = new float[samples];
+                mediaPlatformStream._dataBuffer = new byte[samples * sizeof(short)];
 
-                _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
-                _player.BufferNeeded += sfxi_BufferNeeded;
+                mediaPlatformStream._player = new DynamicSoundEffectInstance(mediaPlatformStream._reader.SampleRate, (AudioChannels)mediaPlatformStream._reader.Channels);
+                mediaPlatformStream._player.BufferNeeded += mediaPlatformStream.sfxi_BufferNeeded;
             }
         }
 

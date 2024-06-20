@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Platform.Media
                 if (mediaPlatformStream._player != null)
                     mediaPlatformStream._player.Volume = innerVolume;
 
-                mediaPlatformStream.CreatePlayer(((IPlatformSong)song).Strategy);
+                MediaPlatformStream.CreatePlayer(mediaPlatformStream, ((IPlatformSong)song).Strategy);
 
                 DynamicSoundEffectInstance player = mediaPlatformStream._player;
 
