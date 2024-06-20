@@ -179,6 +179,21 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
+        #region IDisposable Members
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+
+            base.Dispose(disposing);
+        }
+
+        #endregion
+
+
         internal delegate void FinishedPlayingHandler();
 
         internal static void CreatePlayer(MediaPlatformStream mediaPlatformStream, SongStrategy strategy)
