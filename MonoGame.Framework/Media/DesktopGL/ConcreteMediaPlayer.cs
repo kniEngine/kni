@@ -194,6 +194,33 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+        static internal unsafe int SubmitBuffer(MediaPlatformStream mediaPlatformStream, DynamicSoundEffectInstance sfxi, VorbisReader reader)
+        {
+            int count = mediaPlatformStream._reader.ReadSamples(mediaPlatformStream._sampleBuffer, 0, mediaPlatformStream._sampleBuffer.Length);
+            if (count > 0)
+            {
+                fixed (float* pSampleBuffer = mediaPlatformStream._sampleBuffer)
+                fixed (byte* pDataBuffer = mediaPlatformStream._dataBuffer)
+                {
+                    ConcreteMediaPlayerStrategy.ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
+                }
+                sfxi.SubmitBuffer(mediaPlatformStream._dataBuffer, 0, count * sizeof(short));
+            }
+
+            return count;
+        }
+
+        static unsafe void ConvertFloat32ToInt16(float* fbuffer, short* outBuffer, int samples)
+        {
+            for (int i = 0; i < samples; i++)
+            {
+                int val = (int)(fbuffer[i] * short.MaxValue);
+                val = Math.Min(val, +short.MaxValue);
+                val = Math.Max(val, -short.MaxValue);
+                outBuffer[i] = (short)val;
+            }
+        }
+
     }
 
 
