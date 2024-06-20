@@ -203,10 +203,22 @@ namespace Microsoft.Xna.Platform.Media
         internal delegate void FinishedPlayingHandler();
         event ConcreteMediaPlayerStrategy.FinishedPlayingHandler DonePlaying;
 
-        internal void sfxi_BufferNeeded(object sender, EventArgs e)
+        internal unsafe void sfxi_BufferNeeded(object sender, EventArgs e)
         {
             DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
-            int count = this.SubmitBuffer(sfxi, _reader);
+
+            // Submit Buffer
+            int count = _reader.ReadSamples(_sampleBuffer, 0, _sampleBuffer.Length);
+            if (count > 0)
+            {
+                fixed (float* pSampleBuffer = _sampleBuffer)
+                fixed (byte*  pDataBuffer = _dataBuffer)
+                {
+                    ConcreteMediaPlayerStrategy.ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
+                }
+                sfxi.SubmitBuffer(_dataBuffer, 0, count * sizeof(short));
+            }
+
 
             if (count == 0 && sfxi.PendingBufferCount <= 0)
             {
@@ -254,22 +266,6 @@ namespace Microsoft.Xna.Platform.Media
 
             _sampleBuffer = null;
             _dataBuffer = null;
-        }
-
-        internal unsafe int SubmitBuffer(DynamicSoundEffectInstance sfxi, VorbisReader reader)
-        {
-            int count = _reader.ReadSamples(_sampleBuffer, 0, _sampleBuffer.Length);
-            if (count > 0)
-            {
-                fixed (float* pSampleBuffer = _sampleBuffer)
-                fixed (byte* pDataBuffer = _dataBuffer)
-                {
-                    ConcreteMediaPlayerStrategy.ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
-                }
-                sfxi.SubmitBuffer(_dataBuffer, 0, count * sizeof(short));
-            }
-
-            return count;
         }
 
         static unsafe void ConvertFloat32ToInt16(float* fbuffer, short* outBuffer, int samples)
