@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework;
@@ -87,10 +87,6 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (base.Queue.ActiveSong != null)
             {
-                // Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-                if (DonePlaying == null)
-                    DonePlaying += this.OnSongFinishedPlaying;
-
                 float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
                 if (_player != null)
