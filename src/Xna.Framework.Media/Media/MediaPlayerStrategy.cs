@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Platform.Media
         public abstract void PlatformStop();
 
 
-        internal void OnPlatformActiveSongChanged()
+        internal protected void OnPlatformActiveSongChanged()
         {
             if (_mediaPlayerRef.Target != null)
             {
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal void OnPlatformMediaStateChanged()
+        internal protected void OnPlatformMediaStateChanged()
         {
             if (_mediaPlayerRef.Target != null)
             {
