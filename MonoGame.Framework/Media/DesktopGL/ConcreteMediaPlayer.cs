@@ -219,11 +219,18 @@ namespace Microsoft.Xna.Platform.Media
                     //       Do we need to manually fire any events when the last pending buffer of the previous loop played?
                     // _reader.DecodedPosition = 0; // reset song
                     //return;
-                }
 
-                if (sfxi.PendingBufferCount <= 0) // song finished
+                    if (sfxi.PendingBufferCount <= 0) // song finished
+                    {
+                        base.OnSongFinishedPlaying();
+                    }
+                }
+                else
                 {
-                    base.OnSongFinishedPlaying();
+                    if (sfxi.PendingBufferCount <= 0) // song finished
+                    {
+                        base.OnSongFinishedPlaying();
+                    }
                 }
             }
         }
