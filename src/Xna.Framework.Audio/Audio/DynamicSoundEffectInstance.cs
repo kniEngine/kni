@@ -356,7 +356,11 @@ namespace Microsoft.Xna.Framework.Audio
                 {
                     // raise the event for each processed buffer
                     while(_dynamicStrategy.BuffersNeeded-- != 0)
+                    {
                         bufferNeededHandler(this, EventArgs.Empty);
+                        if (this.IsDisposed)
+                            return;
+                    }
 
                     if (State == SoundState.Playing && PendingBufferCount < TargetPendingBufferCount)
                         bufferNeededHandler(this, EventArgs.Empty);
