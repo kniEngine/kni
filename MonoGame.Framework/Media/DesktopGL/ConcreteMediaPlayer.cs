@@ -244,8 +244,11 @@ namespace Microsoft.Xna.Platform.Media
 
                 _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
                 _player.BufferNeeded += this.sfxi_BufferNeeded;
+            }
 
-                int samples = (_reader.SampleRate * _reader.Channels) / 2;
+            int samples = (_reader.SampleRate * _reader.Channels) / 2;
+            if (_sampleBuffer == null || _sampleBuffer.Length != samples)
+            {
                 _sampleBuffer = new float[samples];
                 _dataBuffer = new byte[samples * sizeof(short)];
             }
@@ -263,9 +266,6 @@ namespace Microsoft.Xna.Platform.Media
             if (_reader != null)
                 _reader.Dispose();
             _reader = null;
-
-            _sampleBuffer = null;
-            _dataBuffer = null;
         }
 
         static unsafe void ConvertFloat32ToInt16(float* fbuffer, short* outBuffer, int samples)
