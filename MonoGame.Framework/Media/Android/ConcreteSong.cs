@@ -15,8 +15,6 @@ namespace Microsoft.Xna.Platform.Media
         private Uri _streamSource;
         internal Android.Net.Uri _assetUri;
 
-        internal TimeSpan _position;
-
         internal Uri StreamSource { get { return _streamSource; } }
 
         [CLSCompliant(false)]
