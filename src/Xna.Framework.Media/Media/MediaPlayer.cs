@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework.Media
             MediaPlayer.Current.MovePrevious();
         }
 
-        private void OnActiveSongChanged(EventArgs args)
+        internal void OnActiveSongChanged(EventArgs args)
         {
             var handler = _activeSongChanged;
             if (handler != null)
@@ -148,7 +148,7 @@ namespace Microsoft.Xna.Framework.Media
                 staticHandler(null, args);
         }
 
-        private void OnMediaStateChanged(EventArgs args)
+        internal void OnMediaStateChanged(EventArgs args)
         {
             var handler = _mediaStateChanged;
             if (handler != null)
@@ -241,17 +241,6 @@ namespace Microsoft.Xna.Framework.Media
         {
             _strategy = MediaFactory.Current.CreateMediaPlayerStrategy();
             _strategy.MediaPlayer = this;
-        }
-
-
-        internal void Strategy_PlatformActiveSongChanged()
-        {
-            OnActiveSongChanged(EventArgs.Empty);
-        }
-
-        internal void Strategy_PlatformMediaStateChanged()
-        {
-            OnMediaStateChanged(EventArgs.Empty);
         }
 
         void IMediaPlayer.Play(Song song)

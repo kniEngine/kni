@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Media
             if (_mediaPlayerRef.Target != null)
             {
                 FrameworkMedia.MediaPlayer mediaPlayer = (FrameworkMedia.MediaPlayer)_mediaPlayerRef.Target;
-                mediaPlayer.Strategy_PlatformActiveSongChanged();
+                mediaPlayer.OnActiveSongChanged(EventArgs.Empty);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Platform.Media
             if (_mediaPlayerRef.Target != null)
             {
                 FrameworkMedia.MediaPlayer mediaPlayer = (FrameworkMedia.MediaPlayer)_mediaPlayerRef.Target;
-                mediaPlayer.Strategy_PlatformMediaStateChanged();
+                mediaPlayer.OnMediaStateChanged(EventArgs.Empty);
             }
         }
 
