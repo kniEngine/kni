@@ -91,21 +91,21 @@ namespace Microsoft.Xna.Platform.Media
         public abstract void PlatformStop();
 
 
-        internal void OnPlatformActiveSongChanged()
+        internal protected void OnPlatformActiveSongChanged()
         {
             if (_mediaPlayerRef.Target != null)
             {
                 FrameworkMedia.MediaPlayer mediaPlayer = (FrameworkMedia.MediaPlayer)_mediaPlayerRef.Target;
-                mediaPlayer.Strategy_PlatformActiveSongChanged();
+                mediaPlayer.OnActiveSongChanged(EventArgs.Empty);
             }
         }
 
-        internal void OnPlatformMediaStateChanged()
+        internal protected void OnPlatformMediaStateChanged()
         {
             if (_mediaPlayerRef.Target != null)
             {
                 FrameworkMedia.MediaPlayer mediaPlayer = (FrameworkMedia.MediaPlayer)_mediaPlayerRef.Target;
-                mediaPlayer.Strategy_PlatformMediaStateChanged();
+                mediaPlayer.OnMediaStateChanged(EventArgs.Empty);
             }
         }
 
