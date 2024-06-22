@@ -242,12 +242,12 @@ namespace Microsoft.Xna.Platform.Media
                 _reader = new VorbisReader(strategy.Filename);
                 strategy.Duration = _reader.TotalTime;
 
+                _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
+                _player.BufferNeeded += this.sfxi_BufferNeeded;
+
                 int samples = (_reader.SampleRate * _reader.Channels) / 2;
                 _sampleBuffer = new float[samples];
                 _dataBuffer = new byte[samples * sizeof(short)];
-
-                _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
-                _player.BufferNeeded += this.sfxi_BufferNeeded;
             }
         }
 
