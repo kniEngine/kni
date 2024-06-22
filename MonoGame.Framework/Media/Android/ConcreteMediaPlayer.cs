@@ -44,9 +44,9 @@ namespace Microsoft.Xna.Platform.Media
                     return TimeSpan.Zero;
 
                 if (_playingSong == activeSong && _androidPlayer.IsPlaying)
-                    ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
-
-                return ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>()._position;
+                    return TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
+                else
+                    return TimeSpan.Zero;
             }
         }
 
@@ -149,9 +149,6 @@ namespace Microsoft.Xna.Platform.Media
                 _androidPlayer.Stop();
                 _playingSong = null;
                 ((IPlatformSong)activeSong).Strategy.PlayCount = 0;
-                ((IPlatformSong)activeSong).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.Zero;
-
-
             }
         }
 
@@ -164,7 +161,6 @@ namespace Microsoft.Xna.Platform.Media
                 _androidPlayer.Stop();
                 _playingSong = null;
                 ((IPlatformSong)song).Strategy.PlayCount = 0;
-                ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>()._position = TimeSpan.Zero;
 
                 base.RemoveQueuedSong(song);
             }
