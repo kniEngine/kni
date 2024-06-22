@@ -213,17 +213,40 @@ namespace Microsoft.Xna.Platform.Media
             }
             else // (count == 0)
             {
-                if (this.PlatformIsRepeating && base.Queue.Count == 1)
+                if (this.PlatformIsRepeating && base.Queue.Count == 1) // single song repeat
                 {
-                    // TODO: Fix the play gap between two loops by resetting _reader.DecodedPosition.
-                    //       Do we need to manually fire any events when the last pending buffer of the previous loop played?
-                    // _reader.DecodedPosition = 0; // reset song
-                    //return;
-                }
+                    // TODO: Fix the play gap between two loops by resetting _reader.DecodedPosition
+                    //       before PendingBufferCount reach zero and keep feeding buffers.
+                    //       In that case we have to fire the events later by counting PendingBufferCount
+                    //       and the number of submited buffers.
+                    if (sfxi.PendingBufferCount <= 0) // song finished
+                    {
+                        Song activeSong = this.Queue.ActiveSong;
+                        long decodedPosition = _reader.DecodedPosition;
+                        VorbisReader reader = _reader;
 
-                if (sfxi.PendingBufferCount <= 0) // song finished
+                        ((IPlatformSong)activeSong).Strategy.PlayCount++;
+
+                        OnPlatformMediaStateChanged();
+                        // check if user changed the state during the MediaStateChanged event.
+                        if (this.State != MediaState.Playing
+                        ||  this.Queue.Count != 1
+                        ||  this.Queue.ActiveSong != activeSong
+                        ||  _reader != reader
+                        ||  decodedPosition != _reader.DecodedPosition)
+                            return;
+
+                        _reader.DecodedPosition = 0; // reset song
+
+                        OnPlatformActiveSongChanged();
+                    }
+                }
+                else
                 {
-                    base.OnSongFinishedPlaying();
+                    if (sfxi.PendingBufferCount <= 0) // song finished
+                    {
+                        base.OnSongFinishedPlaying();
+                    }
                 }
             }
         }

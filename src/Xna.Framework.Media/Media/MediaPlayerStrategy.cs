@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Media
             Dispose(false);
         }
         
-        internal MediaState State
+        internal protected MediaState State
         {
             get
             {
