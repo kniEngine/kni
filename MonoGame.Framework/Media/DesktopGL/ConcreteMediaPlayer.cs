@@ -223,16 +223,9 @@ namespace Microsoft.Xna.Platform.Media
 
                 if (sfxi.PendingBufferCount <= 0) // song finished
                 {
-                    ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += Song_OnUpdate;
+                    base.OnSongFinishedPlaying();
                 }
             }
-        }
-
-        private void Song_OnUpdate()
-        {
-            ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= Song_OnUpdate;
-
-            base.OnSongFinishedPlaying();
         }
 
         internal void CreatePlayer(SongStrategy strategy)
