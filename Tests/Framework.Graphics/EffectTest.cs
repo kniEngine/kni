@@ -15,16 +15,16 @@ namespace Kni.Tests.Graphics
         [Test]
         public void EffectPassShouldSetTexture()
         {
-            var texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             game.GraphicsDevice.Textures[0] = null;
 
-            var effect = new BasicEffect(game.GraphicsDevice);
+            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
             effect.TextureEnabled = true;
             effect.Texture = texture;
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.Null);
 
-            var effectPass = effect.CurrentTechnique.Passes[0];
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
             effectPass.Apply();
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.SameAs(texture));
@@ -36,16 +36,16 @@ namespace Kni.Tests.Graphics
         [Test]
         public void EffectPassShouldSetTextureOnSubsequentCalls()
         {
-            var texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             game.GraphicsDevice.Textures[0] = null;
 
-            var effect = new BasicEffect(game.GraphicsDevice);
+            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
             effect.TextureEnabled = true;
             effect.Texture = texture;
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.Null);
 
-            var effectPass = effect.CurrentTechnique.Passes[0];
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
             effectPass.Apply();
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.SameAs(texture));
@@ -64,16 +64,16 @@ namespace Kni.Tests.Graphics
         [Test]
         public void EffectPassShouldSetTextureEvenIfNull()
         {
-            var texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             game.GraphicsDevice.Textures[0] = texture;
 
-            var effect = new BasicEffect(game.GraphicsDevice);
+            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
             effect.TextureEnabled = true;
             effect.Texture = null;
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.SameAs(texture));
 
-            var effectPass = effect.CurrentTechnique.Passes[0];
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
             effectPass.Apply();
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.Null);
@@ -85,15 +85,15 @@ namespace Kni.Tests.Graphics
         [Test]
         public void EffectPassShouldOverrideTextureIfNotExplicitlySet()
         {
-            var texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             game.GraphicsDevice.Textures[0] = texture;
 
-            var effect = new BasicEffect(game.GraphicsDevice);
+            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
             effect.TextureEnabled = true;
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.SameAs(texture));
 
-            var effectPass = effect.CurrentTechnique.Passes[0];
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
             effectPass.Apply();
 
             Assert.That(game.GraphicsDevice.Textures[0], Is.Null);
@@ -107,10 +107,10 @@ namespace Kni.Tests.Graphics
         {
             // This relies on the parameters permanently being on the same index.
             // Should be no problem except when adding parameters.
-            var texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             game.GraphicsDevice.Textures[0] = texture;
 
-            var effect = new BasicEffect(game.GraphicsDevice);
+            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
             effect.TextureEnabled = true;
             effect.Texture = null;
             effect.Parameters["DiffuseColor"].SetValue(Color.HotPink.ToVector3());

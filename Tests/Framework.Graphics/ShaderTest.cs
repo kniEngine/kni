@@ -25,21 +25,20 @@ namespace Kni.Tests.Graphics
 		{
             PrepareFrameCapture();
 
-            var spriteBatch = new SpriteBatch(gd);
-            var effect = AssetTestUtility.LoadEffect(content, effectName);
-			// A background texture to test that the effect doesn't
-			// mess up other textures
-            var background = content.Load<Texture2D>(Paths.Texture ("fun-background"));
-			// The texture to apply the effect to
-            var surge = content.Load<Texture2D>(Paths.Texture("Surge"));
+            SpriteBatch spriteBatch = new SpriteBatch(gd);
+            Effect effect = AssetTestUtility.LoadEffect(content, effectName);
+            // A background texture to test that the effect doesn't
+            // mess up other textures
+            Texture2D background = content.Load<Texture2D>(Paths.Texture("fun-background"));
+            // The texture to apply the effect to
+            Texture2D surge = content.Load<Texture2D>(Paths.Texture("Surge"));
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             spriteBatch.Draw(background, Vector2.Zero, Color.White);
 
             effect.CurrentTechnique.Passes[0].Apply();
-            spriteBatch.Draw(
-                surge, new Vector2(300, 200), null, Color.White,
-                0f, Vector2.Zero, 2.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(surge, new Vector2(300, 200), null, Color.White,
+                             0f, Vector2.Zero, 2.0f, SpriteEffects.None, 0f);
             spriteBatch.End();
 
             CheckFrames();
