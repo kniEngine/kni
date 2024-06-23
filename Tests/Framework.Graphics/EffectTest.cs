@@ -13,6 +13,27 @@ namespace Kni.Tests.Graphics
     {
 
         [Test]
+        public void EffectParameterShouldBeSetIfSetByNameAndGetByIndex()
+        {
+            // This relies on the parameters permanently being on the same index.
+            // Should be no problem except when adding parameters.
+            Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            game.GraphicsDevice.Textures[0] = texture;
+
+            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
+            effect.TextureEnabled = true;
+            effect.Texture = null;
+            effect.Parameters["DiffuseColor"].SetValue(Color.HotPink.ToVector3());
+            effect.Parameters["FogColor"].SetValue(Color.Honeydew.ToVector3());
+
+            Assert.That(effect.Parameters[0].GetValueVector3().Equals(Color.HotPink.ToVector3()));
+            Assert.That(effect.Parameters[14].GetValueVector3().Equals(Color.Honeydew.ToVector3()));
+
+            texture.Dispose();
+            effect.Dispose();
+        }
+
+        [Test]
         public void EffectPassShouldSetTexture()
         {
             Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
@@ -102,25 +123,5 @@ namespace Kni.Tests.Graphics
             effect.Dispose();
         }
 
-        [Test]
-        public void EffectParameterShouldBeSetIfSetByNameAndGetByIndex()
-        {
-            // This relies on the parameters permanently being on the same index.
-            // Should be no problem except when adding parameters.
-            Texture2D texture = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            game.GraphicsDevice.Textures[0] = texture;
-
-            BasicEffect effect = new BasicEffect(game.GraphicsDevice);
-            effect.TextureEnabled = true;
-            effect.Texture = null;
-            effect.Parameters["DiffuseColor"].SetValue(Color.HotPink.ToVector3());
-            effect.Parameters["FogColor"].SetValue(Color.Honeydew.ToVector3());
-
-            Assert.That(effect.Parameters[0].GetValueVector3().Equals(Color.HotPink.ToVector3()));
-            Assert.That(effect.Parameters[14].GetValueVector3().Equals(Color.Honeydew.ToVector3()));
-
-            texture.Dispose();
-            effect.Dispose();
-        }
     }
 }
