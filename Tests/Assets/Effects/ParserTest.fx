@@ -2,8 +2,6 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-#include "include.fxh"
-
 uniform float TestFloat;
 uniform float2 TestFloat2;
 uniform float3 TestFloat3;
@@ -55,8 +53,8 @@ technique Technique1
 		ZWriteEnable = FALSE;
 		ZWriteEnable = TRUE;
 
-        VertexShader = compile VS_PROFILE VS_Main();
-        PixelShader = compile PS_PROFILE PS_Main();
+        VertexShader = compile vs_2_0 VS_Main();
+        PixelShader = compile ps_2_0 PS_Main();
     }
 }
 
@@ -64,8 +62,8 @@ technique
 {
     pass
     {
-        VertexShader = compile VS_PROFILE VS_Main();
-        PixelShader = compile PS_PROFILE PS_Main();
+        VertexShader = compile vs_2_0 VS_Main();
+        PixelShader = compile ps_2_0 PS_Main();
     }
 }
 

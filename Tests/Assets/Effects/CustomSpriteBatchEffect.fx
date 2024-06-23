@@ -2,8 +2,6 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-#include "include.fxh"
-
 Texture2D SourceTexture;
 Texture2D OtherTexture;
 
@@ -26,6 +24,6 @@ technique
 {
     pass
     {
-        PixelShader = compile PS_PROFILE PS_Main();
+        PixelShader = compile ps_2_0 PS_Main();
     }
 }

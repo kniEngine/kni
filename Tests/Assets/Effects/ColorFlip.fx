@@ -2,8 +2,6 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-#include "include.fxh"
-
 sampler s0;
 
 float4 PixelShaderFunction( float4 inPosition : SV_Position,
@@ -20,6 +18,6 @@ technique Technique1
 {
     pass Pass1
     {
-        PixelShader = compile PS_PROFILE PixelShaderFunction();
+        PixelShader = compile ps_2_0 PixelShaderFunction();
     }
 }
