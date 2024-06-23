@@ -41,19 +41,11 @@ float4 PS(PSInput input) : COLOR0
     return float4(input.TexCoord.xy, 0, 1);
 }
 
-#if __KNIFX__
-#define PS_PROFILE ps_4_0_level_9_3
-#define VS_PROFILE vs_4_0_level_9_3
-#else
-#define PS_PROFILE ps_3_0
-#define VS_PROFILE vs_3_0
-#endif
-
 technique
 {
     pass
     {
-        VertexShader = compile VS_PROFILE VS();
-        PixelShader = compile PS_PROFILE PS();
+        VertexShader = compile vs_3_0 VS();
+        PixelShader = compile ps_3_0 PS();
     }
 }
