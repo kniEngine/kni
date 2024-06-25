@@ -98,3 +98,9 @@
 /processorParam:DebugMode=Auto
 /build:TextureArrayEffect.fx
 
+#begin OldSyntax_s0s1t0t1.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:OldSyntax_s0s1t0t1.fx
+
