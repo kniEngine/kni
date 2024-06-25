@@ -99,7 +99,6 @@
 
   <ItemGroup>
     <Compile Include="ContentPipeline\AssetTestClasses.cs" />
-    <Compile Include="ContentPipeline\AssetTestUtility.cs" />
     <Compile Include="ContentPipeline\AudioContentTests.cs" />
     <Compile Include="ContentPipeline\BitmapContentTests.cs" />
     <Compile Include="ContentPipeline\FbxImporterTests.cs" />
@@ -110,9 +109,7 @@
     <Compile Include="ContentPipeline\MeshHelperTest.cs" />
     <Compile Include="ContentPipeline\ModelProcessorTests.cs" />
     <Compile Include="ContentPipeline\Mp3ImporterTests.cs" />
-    <Compile Include="ContentPipeline\TestContentBuildLogger.cs" />
     <Compile Include="ContentPipeline\TestImporterContext.cs" />
-    <Compile Include="ContentPipeline\TestProcessorContext.cs" />
     <Compile Include="ContentPipeline\TextureContentTests.cs" />
     <Compile Include="ContentPipeline\TextureProcessorTests.cs" />
     <Compile Include="ContentPipeline\WavImporterTests.cs" />
@@ -192,6 +189,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Runner\ContentPipeline\AssetTestUtility.cs" />
+    <Compile Include="Runner\ContentPipeline\TestContentBuildLogger.cs" />
+    <Compile Include="Runner\ContentPipeline\TestProcessorContext.cs" />
     <Compile Include="Runner\Constants.cs" />
     <Compile Include="Runner\Extensions.cs" />
     <Compile Include="Runner\FrameInfo.cs" />

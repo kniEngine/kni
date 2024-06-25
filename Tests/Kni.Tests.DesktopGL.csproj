@@ -127,6 +127,7 @@
 
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runner\ContentPipeline\AssetTestUtility.cs" />
     <Compile Include="Runner\Constants.cs" />
     <Compile Include="Runner\Extensions.cs" />
     <Compile Include="Runner\FrameInfo.cs" />
@@ -147,10 +148,6 @@
     <Compile Include="Runner\GameBase\PixelDeltaFrameComparer.cs" />
     <Compile Include="Runner\GameBase\UpdateGuard.cs" />
     <Compile Include="Utilities\ActionDaemon.cs" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Compile Include="ContentPipeline\AssetTestUtility.cs" />
   </ItemGroup>
 
   <ItemGroup>
