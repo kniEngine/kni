@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+using Kni.Tests.ContentPipeline;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
@@ -132,6 +134,67 @@ namespace Kni.Tests.Graphics
 
             texture.Dispose();
             effect.Dispose();
+        }
+
+
+        private bool IsSamplerEqual(SamplerState s0, SamplerState s1)
+        {
+            if (s0 == null && s1 == null)
+                return true;
+
+            return s0.Filter == s1.Filter
+                && s0.AddressU == s1.AddressU
+                && s0.AddressV == s1.AddressV
+                ;
+        }
+
+        [Test]
+        public void OldSyntaxEffectPassShouldSetTexturesAndSamplers()
+        {
+            GraphicsDevice device = game.GraphicsDevice;
+
+            // Reset Samplers and Textures
+            for (int i = 0; i < 16; i++)
+            {
+                device.Textures[i] = null;
+                device.SamplerStates[i] = SamplerState.LinearWrap;
+            }
+
+            Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+
+            SamplerState sampler0 = SamplerState.PointWrap;
+            SamplerState sampler1 = SamplerState.PointClamp;
+#if XNA
+            sampler0 = null;
+            sampler1 = null;
+#endif
+
+            string effectName = "OldSyntax_s0s1t0t1";
+
+#if WINDOWSDX || DESKTOPGL
+            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+#else
+            Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
+#endif
+
+            effect.Parameters["Texture0"].SetValue(texture0);
+            effect.Parameters["Texture1"].SetValue(texture1);
+
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
+            effectPass.Apply();
+
+            Assert.That(device.Textures[0], Is.SameAs(texture0));
+            Assert.That(device.Textures[1], Is.SameAs(texture1));
+            Assert.That(device.Textures[2], Is.Null);
+
+            Assert.That(IsSamplerEqual(device.SamplerStates[0],sampler0));
+            Assert.That(IsSamplerEqual(device.SamplerStates[1],sampler1));
+            Assert.That(device.SamplerStates[2], Is.SameAs(SamplerState.LinearWrap));
+
+            effect.Dispose();
+            texture1.Dispose();
+            texture0.Dispose();
         }
 
     }
