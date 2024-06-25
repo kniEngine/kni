@@ -82,7 +82,7 @@ namespace Kni.Tests.Graphics
         [Test]
         public void VisualTests()
         {
-            var blends = new[]
+            Blend[] blends = new[]
             {
                 Blend.One,
                 Blend.Zero,
@@ -99,12 +99,12 @@ namespace Kni.Tests.Graphics
                 Blend.SourceAlphaSaturation,
             };
 
-            var spriteBatch = new SpriteBatch(gd);
-            var texture = content.Load<Texture2D>(Paths.Texture("MonoGameIcon"));
-            var blendStates = new BlendState[blends.Length * blends.Length];
-            for (var y = 0; y < blends.Length; y++)
+            SpriteBatch spriteBatch = new SpriteBatch(gd);
+            Texture2D texture = content.Load<Texture2D>(Paths.Texture("MonoGameIcon"));
+            BlendState[ blendStates = new BlendState[blends.Length * blends.Length];
+            for (int y = 0; y < blends.Length; y++)
             {
-                for (var x = 0; x < blends.Length; x++)
+                for (int x = 0; x < blends.Length; x++)
                 {
                     blendStates[(y*blends.Length) + x] = new BlendState
                     {
@@ -117,18 +117,18 @@ namespace Kni.Tests.Graphics
                 }
             }
 
-            var size = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
-            var offset = new Vector2(10, 10);
+            Vector2 size = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+            Vector2 offset = new Vector2(10, 10);
 
             PrepareFrameCapture();
 
             gd.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1.0f, 0);
 
-            for (var y = 0; y < blends.Length; y++)
+            for (int y = 0; y < blends.Length; y++)
             {
-                for (var x = 0; x < blends.Length; x++)
+                for (int x = 0; x < blends.Length; x++)
                 {
-                    var pos = offset + new Vector2(x*size.X, y*size.Y);
+                    Vector2 pos = offset + new Vector2(x*size.X, y*size.Y);
                     spriteBatch.Begin(SpriteSortMode.Deferred, blendStates[(y*blends.Length) + x]);
                     spriteBatch.Draw(texture, new Rectangle((int) pos.X, (int) pos.Y, (int) size.X, (int) size.Y),
                         Color.White);
