@@ -23,11 +23,19 @@ namespace Kni.Tests.Graphics
             BasicEffect effect = new BasicEffect(game.GraphicsDevice);
             effect.TextureEnabled = true;
             effect.Texture = null;
-            effect.Parameters["DiffuseColor"].SetValue(Color.HotPink.ToVector3());
+            effect.Parameters["DiffuseColor"].SetValue(Color.HotPink.ToVector4());
             effect.Parameters["FogColor"].SetValue(Color.Honeydew.ToVector3());
 
-            Assert.That(effect.Parameters[0].GetValueVector3().Equals(Color.HotPink.ToVector3()));
-            Assert.That(effect.Parameters[14].GetValueVector3().Equals(Color.Honeydew.ToVector3()));
+            int DiffuseColorIndex = 0;
+            int FogColorIndex = 14;
+
+#if XNA
+            DiffuseColorIndex = 1;
+            FogColorIndex = 15;
+#endif
+
+            Assert.That(effect.Parameters[DiffuseColorIndex].GetValueVector4().Equals(Color.HotPink.ToVector4()));
+            Assert.That(effect.Parameters[FogColorIndex].GetValueVector3().Equals(Color.Honeydew.ToVector3()));
 
             texture.Dispose();
             effect.Dispose();
