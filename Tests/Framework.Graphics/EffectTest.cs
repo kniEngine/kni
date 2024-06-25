@@ -26,8 +26,11 @@ namespace Kni.Tests.Graphics
             effect.Parameters["DiffuseColor"].SetValue(Color.HotPink.ToVector3());
             effect.Parameters["FogColor"].SetValue(Color.Honeydew.ToVector3());
 
-            Assert.That(effect.Parameters[0].GetValueVector3().Equals(Color.HotPink.ToVector3()));
-            Assert.That(effect.Parameters[14].GetValueVector3().Equals(Color.Honeydew.ToVector3()));
+            int DiffuseColorIndex = 0;
+            int FogColorIndex = 14;
+
+            Assert.That(effect.Parameters[DiffuseColorIndex].GetValueVector3().Equals(Color.HotPink.ToVector3()));
+            Assert.That(effect.Parameters[FogColorIndex].GetValueVector3().Equals(Color.Honeydew.ToVector3()));
 
             texture.Dispose();
             effect.Dispose();
