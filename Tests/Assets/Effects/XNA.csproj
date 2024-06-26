@@ -44,6 +44,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="OldSyntax_t0t1.fx">
+      <Name>OldSyntax_t0t1</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <Compile Include="OldSyntax_s0s1t0t1.fx">
       <Name>OldSyntax_s0s1t0t1</Name>
       <Importer>EffectImporter</Importer>
