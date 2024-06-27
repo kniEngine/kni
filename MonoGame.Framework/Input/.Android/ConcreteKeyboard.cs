@@ -19,17 +19,13 @@ namespace Microsoft.Xna.Platform.Input
 
         public ConcreteKeyboard()
         {
+            _keys = new List<Keys>();
             _keyMap = LoadKeyMap();
         }
 
         public override KeyboardState PlatformGetState()
         {
             return base.CreateKeyboardState(_keys);
-        }
-
-        internal void SetKeys(List<Keys> keys)
-        {
-            _keys = keys;
         }
 
         internal bool KeyDown(DroidKeycode keyCode)
