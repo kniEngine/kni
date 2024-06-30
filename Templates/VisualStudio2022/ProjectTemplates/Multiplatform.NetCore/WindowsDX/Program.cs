@@ -2,7 +2,6 @@
 
 namespace $ext_safeprojectname$
 {
-#if  WINDOWSDX || LINUX
     /// <summary>
     /// The main class.
     /// </summary>
@@ -18,5 +17,4 @@ namespace $ext_safeprojectname$
                 game.Run();
         }
     }
-#endif
 }
