@@ -28,16 +28,20 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor">MainLayout.razor</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="MainLayout.razor.css">MainLayout.razor.css</ProjectItem>      
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
+
       <Folder Name="Content" TargetFolderName="Content">
         <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Content.mgcb">Content.mgcb</ProjectItem>
       </Folder>
+
       <Folder Name="Pages" TargetFolderName="Pages">
         <ProjectItem ReplaceParameters="true" TargetFileName="Index.razor">Index.razor</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="Index.razor.cs">Index.razor.cs</ProjectItem>
       </Folder>
+
       <Folder Name="Properties" TargetFolderName="Properties">
         <ProjectItem ReplaceParameters="true" TargetFileName="launchSettings.json">launchSettings.json</ProjectItem>
       </Folder>
+
       <Folder Name="wwwroot" TargetFolderName="wwwroot">
         <Folder Name="css" TargetFolderName="css">
             <ProjectItem ReplaceParameters="false" TargetFileName="app.css">app.css</ProjectItem>
@@ -53,6 +57,7 @@
         <ProjectItem ReplaceParameters="false" TargetFileName="kni.png">kni.png</ProjectItem>
         <ProjectItem ReplaceParameters="true" TargetFileName="index.html">index.html</ProjectItem>
       </Folder>
+
     </Project>
   </TemplateContent>
 </VSTemplate>

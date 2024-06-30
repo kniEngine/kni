@@ -20,13 +20,20 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="Application.csproj" File="Application.csproj" ReplaceParameters="true">
+
       <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="AndroidManifest.xml">AndroidManifest.xml</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Activity.cs">Activity.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game.cs</ProjectItem>
+
+      <Folder Name="Content" TargetFolderName="Content">
+        <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Content.mgcb">Content.mgcb</ProjectItem>
+      </Folder>
+
       <Folder Name="Assets" TargetFolderName="Assets">
         <ProjectItem ReplaceParameters="true" TargetFileName="AboutAssets.txt">AboutAssets.txt</ProjectItem>
       </Folder>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game.cs</ProjectItem>
+
       <Folder Name="Resources" TargetFolderName="Resources">
         <ProjectItem ReplaceParameters="true" TargetFileName="AboutResources.txt">AboutResources.txt</ProjectItem>
         <Folder Name="Drawable" TargetFolderName="Drawable">
@@ -40,9 +47,7 @@
           <ProjectItem ReplaceParameters="true" TargetFileName="Styles.xml">Styles.xml</ProjectItem>
         </Folder>
       </Folder>
-      <Folder Name="Content" TargetFolderName="Content">
-        <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Content.mgcb">Content.mgcb</ProjectItem>
-      </Folder>
+
     </Project>
   </TemplateContent>
 </VSTemplate>
