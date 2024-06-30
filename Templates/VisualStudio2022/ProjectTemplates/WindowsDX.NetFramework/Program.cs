@@ -13,7 +13,7 @@ namespace $safeprojectname$
         [STAThread]
         static void Main()
         {
-            using (var game = new $projectname$Game())
+            using (var game = new $safeprojectname$Game())
                 game.Run();
         }
     }

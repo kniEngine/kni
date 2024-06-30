@@ -24,7 +24,7 @@
 
       <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="AndroidManifest.xml">AndroidManifest.xml</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Activity.cs">Activity.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Activity.cs">Activity.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game.cs</ProjectItem>
 
       <Folder Name="Content" TargetFolderName="Content">

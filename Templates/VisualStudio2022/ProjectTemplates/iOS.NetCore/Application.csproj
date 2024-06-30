@@ -28,7 +28,7 @@
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.12.9001" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$projectname$Game.cs" />
+    <Compile Include="$safeprojectname$Game.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

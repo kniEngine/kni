@@ -7,11 +7,11 @@ namespace $safeprojectname$
     [Register("AppDelegate")]
     class Program : UIApplicationDelegate
     {
-        private static $projectname$Game game;
+        private static $safeprojectname$Game game;
 
         internal static void RunGame()
         {
-            game = new $projectname$Game();
+            game = new $safeprojectname$Game();
             game.Run();
         }
 

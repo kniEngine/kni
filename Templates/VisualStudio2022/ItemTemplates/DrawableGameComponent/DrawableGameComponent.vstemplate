@@ -11,7 +11,7 @@
     <!--
     <References>
       <Reference>
-        <Assembly>MonoGame.Framework</Assembly>
+        <Assembly>nkast.Xna.Framework.Game</Assembly>
       </Reference>
     </References>
     -->
