@@ -13,12 +13,12 @@ namespace $safeprojectname$
         , LaunchMode = LaunchMode.SingleInstance
         , ScreenOrientation = ScreenOrientation.FullSensor
         , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout | ConfigChanges.UiMode | ConfigChanges.SmallestScreenSize)]
-    public class $projectname$Activity : Microsoft.Xna.Framework.AndroidGameActivity
+    public class $safeprojectname$Activity : Microsoft.Xna.Framework.AndroidGameActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            var game = new $projectname$Game();
+            var game = new $safeprojectname$Game();
             SetContentView((View)game.Services.GetService(typeof(View)));
             game.Run();
         }

@@ -12,12 +12,12 @@ namespace $safeprojectname$
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class $projectname$Game : Game
+    public class $safeprojectname$Game : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public $projectname$Game()
+        public $safeprojectname$Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

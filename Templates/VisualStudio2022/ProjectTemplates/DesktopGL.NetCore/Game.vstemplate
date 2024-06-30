@@ -24,7 +24,7 @@
   <TemplateContent>
     <Project TargetFileName="DesktopGLApplication.csproj" File="Application.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$projectname$Game.cs">Game.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$safeprojectname$Game.cs">Game.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Icon.ico">Icon.ico</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="Icon.bmp">Icon.bmp</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>

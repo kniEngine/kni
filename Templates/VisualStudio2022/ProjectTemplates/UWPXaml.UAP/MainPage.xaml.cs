@@ -22,7 +22,7 @@ namespace $safeprojectname$
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        readonly $projectname$Game _game;
+        readonly $safeprojectname$Game _game;
 
         public MainPage()
         {
@@ -30,7 +30,7 @@ namespace $safeprojectname$
 
             // Create the game.
             string launchArguments = String.Empty;
-            _game = MonoGame.Framework.XamlGame<$projectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
+            _game = MonoGame.Framework.XamlGame<$safeprojectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }
 }
