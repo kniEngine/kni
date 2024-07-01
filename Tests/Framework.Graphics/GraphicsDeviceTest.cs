@@ -338,7 +338,7 @@ namespace Kni.Tests.Graphics
         }
 #endif
 
-#if XNA || DIRECTX
+#if XNA || WINDOWSDX
         [Test]
         public void DrawInstancedPrimitivesParameterValidation()
         {

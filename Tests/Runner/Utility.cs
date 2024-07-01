@@ -352,7 +352,7 @@ namespace Kni.Tests
             string type;
 #if XNA
             type = "XNA";
-#elif DIRECTX
+#elif WINDOWSDX
             type = "DirectX";
 #elif DESKTOPGL
             type = "OpenGL";

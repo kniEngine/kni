@@ -156,7 +156,7 @@ namespace Kni.Tests.Graphics
             rt.Dispose();
         }
 
-#if DIRECTX
+#if WINDOWSDX
         [TestCase(1)]
         [TestCase(2)]
         public void GetSharedHandle(int preferredMultiSampleCount)

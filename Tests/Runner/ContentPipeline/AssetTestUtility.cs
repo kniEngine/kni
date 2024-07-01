@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content;
-#if DIRECTX || XNA
+#if WINDOWSDX || XNA
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
@@ -19,7 +19,7 @@ namespace Kni.Tests.ContentPipeline
 
         public static Effect LoadEffect(ContentManager content, string effectName)
         {
-#if DIRECTX
+#if WINDOWSDX
             GraphicsDevice gd = ((IGraphicsDeviceService)content.ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
             
             Effect effect = AssetTestUtility.CompileEffect(gd, Paths.RawEffect(effectName));
@@ -32,7 +32,7 @@ namespace Kni.Tests.ContentPipeline
 
         public static Effect CompileEffect(GraphicsDevice graphicsDevice, string effectPath)
         {
-#if DIRECTX || XNA
+#if WINDOWSDX || XNA
 
             TargetPlatform targetPlatform = TargetPlatform.Windows;
 

@@ -7,10 +7,10 @@ using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
-// HACK: Only enable for XNA and DirectX which are the 
+// HACK: Only enable for XNA and WINDOWSDX which are the 
 // only platforms which currently correctly implement 
 // the GraphicsAdapter API.
-#if XNA || DIRECTX
+#if XNA || WINDOWSDX
 
 namespace Kni.Tests.Graphics
 {
@@ -107,7 +107,7 @@ namespace Kni.Tests.Graphics
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt3, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt5, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt5, SurfaceFormat.Color, false)]
-#if !XNA        
+#if !XNA
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt1a, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt1a, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt1SRgb, SurfaceFormat.Color, false)]
@@ -160,4 +160,4 @@ namespace Kni.Tests.Graphics
     }
 }
 
-#endif // XNA || DIRECTX
+#endif // XNA || WINDOWSDX

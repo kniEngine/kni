@@ -80,8 +80,8 @@ namespace Kni.Tests.Graphics
 
             texture2D.Dispose();
         }
-		
-#if DIRECTX
+
+#if WINDOWSDX
         [TestCase(SurfaceFormat.Color, false)]
         [TestCase(SurfaceFormat.Color, true)]
         [TestCase(SurfaceFormat.ColorSRgb, false)]
@@ -167,7 +167,7 @@ namespace Kni.Tests.Graphics
         }
 #endif
 
-#if DIRECTX
+#if WINDOWSDX
         [Test]
         public void TextureArrayAsRenderTargetAndShaderResource()
         {

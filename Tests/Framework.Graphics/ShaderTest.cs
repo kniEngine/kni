@@ -25,7 +25,7 @@ namespace Kni.Tests.Graphics
 		{
             PrepareFrameCapture();
 
-#if DIRECTX
+#if WINDOWSDX
             Effect effect = AssetTestUtility.CompileEffect(gd, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));

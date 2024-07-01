@@ -14,7 +14,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\WindowsDX11\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\WindowsDX11\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>$(DefineConstants);KNI;WINDOWSDX;DIRECTX</DefineConstants>
+    <DefineConstants>$(DefineConstants);KNI;WINDOWSDX</DefineConstants>
     <LangVersion>Default</LangVersion>
     <StartupObject>Kni.Tests.Program</StartupObject>
   </PropertyGroup>

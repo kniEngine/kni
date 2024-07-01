@@ -419,7 +419,7 @@ namespace Kni.Tests.Audio
         [TestCase(@"Assets/Audio/tone_stereo_44khz_16bit.wav", 500)]
 #if !XNA
         // XNA does not support 24-bit, 32-bit float, MS-ADPCM or IMA/ADPCM in SoundEffect.FromStream, but MonoGame does
-#if DIRECTX
+#if WINDOWSDX
         [TestCase(@"Assets/Audio/blast_mono_44hz_adpcm_ms.wav", 7202)]
         [TestCase(@"Assets/Audio/blast_mono_22hz_adpcm_ms.wav", 7202)]
         [TestCase(@"Assets/Audio/blast_mono_11hz_adpcm_ms.wav", 7202)]
@@ -491,7 +491,7 @@ namespace Kni.Tests.Audio
         [TestCase("tone_stereo_44khz_16bit", 5000000)]
 #if !XNA
         // XNA does not support 32-bit float, MS-ADPCM or IMA/ADPCM in SoundEffect.FromStream, but MonoGame does
-#if !DIRECTX
+#if !WINDOWSDX
         [TestCase("tone_mono_44khz_imaadpcm", 6010000)]
         [TestCase("tone_stereo_44khz_imaadpcm", 5300000)]
 #endif
