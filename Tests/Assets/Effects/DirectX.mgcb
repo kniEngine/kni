@@ -110,6 +110,12 @@
 /processorParam:DebugMode=Auto
 /build:OldSyntax_s0s1t0t1.fx
 
+#begin NewSyntax_t0t1.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:NewSyntax_t0t1.fx
+
 #begin NewSyntax_s0s1t0t1.fx
 /importer:EffectImporter
 /processor:EffectProcessor
