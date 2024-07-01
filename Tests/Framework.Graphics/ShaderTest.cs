@@ -25,7 +25,7 @@ namespace Kni.Tests.Graphics
 		{
             PrepareFrameCapture();
 
-#if WINDOWSDX
+#if WINDOWSDX || DESKTOPGL
             Effect effect = AssetTestUtility.CompileEffect(gd, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
