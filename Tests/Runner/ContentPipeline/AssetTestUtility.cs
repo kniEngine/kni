@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content;
-#if WINDOWSDX || XNA
+#if WINDOWSDX || DESKTOPGL || XNA
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
@@ -32,9 +32,12 @@ namespace Kni.Tests.ContentPipeline
 
         public static Effect CompileEffect(GraphicsDevice graphicsDevice, string effectPath)
         {
-#if WINDOWSDX || XNA
+#if WINDOWSDX || DESKTOPGL || XNA
 
             TargetPlatform targetPlatform = TargetPlatform.Windows;
+#if DESKTOPGL
+            targetPlatform = TargetPlatform.DesktopGL;
+#endif
 
             EffectProcessor effectProcessor = new EffectProcessor();
             ContentProcessorContext context = new TestProcessorContext(targetPlatform, "notused.xnb");

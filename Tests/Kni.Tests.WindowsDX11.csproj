@@ -164,9 +164,6 @@
   </ItemGroup>
 
   <ItemGroup>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner\ContentPipeline\AssetTestUtility.cs" />
     <Compile Include="Runner\ContentPipeline\TestContentBuildLogger.cs" />
