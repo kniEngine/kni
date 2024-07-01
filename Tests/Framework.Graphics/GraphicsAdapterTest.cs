@@ -7,10 +7,6 @@ using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
-// HACK: Only enable for XNA and WINDOWSDX which are the 
-// only platforms which currently correctly implement 
-// the GraphicsAdapter API.
-#if XNA || WINDOWSDX
 
 namespace Kni.Tests.Graphics
 {
@@ -159,5 +155,3 @@ namespace Kni.Tests.Graphics
         }
     }
 }
-
-#endif // XNA || WINDOWSDX
