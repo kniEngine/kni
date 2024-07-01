@@ -32,6 +32,9 @@ namespace Kni.Tests.Graphics
 #if XNA
             DiffuseColorIndex = 1;
             FogColorIndex = 15;
+#elif DESKTOPGL
+            DiffuseColorIndex = 1;
+            FogColorIndex = 2;
 #endif
 
             Assert.That(effect.Parameters[DiffuseColorIndex].GetValueVector4().Equals(Color.HotPink.ToVector4()));
