@@ -201,7 +201,7 @@ namespace Kni.Tests.Graphics
             gd.SetRenderTargets(originalRenderTargets);
 
             // Now render into backbuffer, using texture array as a shader resource.
-            var effect = AssetTestUtility.LoadEffect(content, "TextureArrayEffect");
+            Effect effect = AssetTestUtility.LoadEffect(content, "TextureArrayEffect");
             effect.Parameters["Texture"].SetValue(textureArray);
             effect.CurrentTechnique.Passes[0].Apply();
 

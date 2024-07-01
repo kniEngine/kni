@@ -25,8 +25,9 @@ namespace Kni.Tests.Graphics
 		{
             PrepareFrameCapture();
 
-            SpriteBatch spriteBatch = new SpriteBatch(gd);
             Effect effect = AssetTestUtility.LoadEffect(content, effectName);
+
+            SpriteBatch spriteBatch = new SpriteBatch(gd);
             // A background texture to test that the effect doesn't
             // mess up other textures
             Texture2D background = content.Load<Texture2D>(Paths.Texture("fun-background"));

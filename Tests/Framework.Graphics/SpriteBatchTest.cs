@@ -322,20 +322,20 @@ namespace Kni.Tests.Graphics
         [Test]
         public void DrawWithCustomEffectAndTwoTextures()
         {
-            var customSpriteEffect = AssetTestUtility.LoadEffect(content, "CustomSpriteBatchEffect");
+            Effect effect = AssetTestUtility.LoadEffect(content, "CustomSpriteBatchEffect");
             var texture2 = new Texture2D(gd, 1, 1, false, SurfaceFormat.Color);
 
-            customSpriteEffect.Parameters["SourceTexture"].SetValue(texture2);
-            customSpriteEffect.Parameters["OtherTexture"].SetValue(texture2);
+            effect.Parameters["SourceTexture"].SetValue(texture2);
+            effect.Parameters["OtherTexture"].SetValue(texture2);
 
-            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, null, null, null, customSpriteEffect);
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, null, null, null, effect);
             _spriteBatch.Draw(_texture, new Vector2(20, 20), Color.White);
             _spriteBatch.End();
 
             Assert.That(gd.Textures[0], Is.SameAs(_texture));
             Assert.That(gd.Textures[1], Is.SameAs(texture2));
 
-            customSpriteEffect.Dispose();
+            effect.Dispose();
             texture2.Dispose();
         }
 
