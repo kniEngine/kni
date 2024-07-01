@@ -283,11 +283,10 @@ namespace Kni.Tests.Graphics
             CheckFrames();
         }
 
-        // FIXME: This scissoring code is not valid in XNA. It
-        //        complains about RasterizerState being
-        //        immutable after it's bound to a
-        //        GraphicsDevice.  MonoGame probably should to,
-        //        rather than allowing mutation.
+        // FIXME: This scissoring code is not valid in XNA.
+        //        It complains about RasterizerState being immutable
+        //        after it's bound to a GraphicsDevice.
+        //        KNI probably should too, rather than allowing mutation.
 
         // Now let's try some scissoring
         //_spriteBatch.Begin();

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MonoGameTests")]
+[assembly: AssemblyTitle("KNI Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MonoGameTests")]
-[assembly: AssemblyCopyright("Copyright ©2022 MonoGame Team, ©2022 Nick Kastellanos")]
+[assembly: AssemblyProduct("KNI Tests")]
+[assembly: AssemblyCopyright("Copyright ©2022 MonoGame Team, ©2022-2024 Nick Kastellanos")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

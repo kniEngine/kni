@@ -39,8 +39,8 @@ namespace Kni.Tests.Graphics
         public void GenerateMips()
         {
             // Please note:
-            // The reference image was created with the MonoGame/Windows test.
-            // Mipmaps created by XNA and MonoGame are different.
+            // The reference image was created with the KNI/Windows test.
+            // Mipmaps created by XNA and KNI are different.
             // Mipmaps created by DirectX 11 and OpenGL can also be different - at least for 
             // NPOT textures.
 
