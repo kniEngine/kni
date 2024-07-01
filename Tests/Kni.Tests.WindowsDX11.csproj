@@ -396,6 +396,9 @@
     <Content Include="Assets\Effects\VertexTextureEffect.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\Bevels.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -420,6 +423,9 @@
     <Content Include="Assets\Effects\RainbowH.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\CustomSpriteBatchEffect.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -942,6 +948,9 @@
     <Content Include="Assets\Effects\DirectX\RainbowH.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\DirectX\CustomSpriteBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -850,6 +850,9 @@
     <Content Include="Assets\Effects\OpenGL\RainbowH.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\OpenGL\CustomSpriteBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
