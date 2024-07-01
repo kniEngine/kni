@@ -503,7 +503,7 @@ namespace Kni.Tests.Graphics
             }, "GraphicsDevice.Reset(PresentationParameters)");
         }
 
-#if DIRECTX
+#if WINDOWSDX
         [Test]
         public void TooHighMultiSampleCountClampedToMaxSupported()
         {

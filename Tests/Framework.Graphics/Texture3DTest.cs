@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Kni.Tests.Graphics
 {
-#if ! WINDOWSDX
+#if DESKTOPGL
     [Ignore("Texture3D is not implemented for the OpenGL backend.")]
 #endif
     [TestFixture]

@@ -10,7 +10,7 @@ namespace Kni.Tests.Framework
     /// </summary>
     class EnumConformingTest
     {
-        #region MonoGame.Framework
+        #region Framework
 
         [Test]
         public void ContainmentTypeEnum()
@@ -73,7 +73,7 @@ namespace Kni.Tests.Framework
 
         #endregion
 
-        #region MonoGame.Framework.Graphics
+        #region Framework.Graphics
 
         [Test]
         public void BlendEnum()
@@ -368,7 +368,7 @@ namespace Kni.Tests.Framework
 
         #endregion
 
-        #region MonoGame.Framework.Input
+        #region Framework.Input
 
         [Test]
         public void ButtonsEnum()

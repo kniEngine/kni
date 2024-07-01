@@ -86,7 +86,7 @@ namespace Kni.Tests.Audio
             var cue = soundBank.GetCue("blast_mono");
             Assert.True(soundBank.IsInUse);
             cue.Dispose();
-            //Assert.False(soundBank.IsInUse); // MonoGame Fail
+            //Assert.False(soundBank.IsInUse); // KNI Fail
 
             soundBank.Dispose();
             Assert.True(soundBank.IsDisposed);

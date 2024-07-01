@@ -13,7 +13,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>bin\DesktopGL\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\DesktopGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>$(DefineConstants);KNI;DESKTOPGL;WINDOWSDX</DefineConstants>
+    <DefineConstants>$(DefineConstants);KNI;DESKTOPGL</DefineConstants>
     <LangVersion>Default</LangVersion>
     <StartupObject>Kni.Tests.Program</StartupObject>
   </PropertyGroup>
@@ -94,6 +94,7 @@
     <Compile Include="Framework.Graphics\MiscellaneousTests.cs" />
     <Compile Include="Framework.Graphics\IndexBufferTest.cs" />
     <Compile Include="Framework.Graphics\Texture2DNonVisualTest.cs" />
+    <Compile Include="Framework.Graphics\Texture3DNonVisualTest.cs" />
     <Compile Include="Framework.Graphics\DepthStencilStateTest.cs" />
     <Compile Include="Framework.Graphics\GraphicsDeviceManagerTest.cs" />
     <Compile Include="Framework.Graphics\RasterizerStateTest.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Framework.Graphics\SamplerStateTest.cs" />
     <Compile Include="Framework.Graphics\ScissorRectangleTest.cs" />
     <Compile Include="Framework.Graphics\Texture2DTest.cs" />
+    <Compile Include="Framework.Graphics\Texture3DTest.cs" />
     <Compile Include="Framework.Graphics\TextureCubeTest.cs" />
     <Compile Include="Framework.Graphics\VertexBufferTest.cs" />
     <Compile Include="Framework.Graphics\VisualMiscellaneousTests.cs" />
@@ -848,6 +850,9 @@
     <Content Include="Assets\Effects\OpenGL\RainbowH.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Effects\OpenGL\CustomSpriteBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

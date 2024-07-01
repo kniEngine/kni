@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content;
-#if ! WINDOWSDX || DIRECTX || XNA
+#if WINDOWSDX || XNA
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
@@ -17,28 +17,34 @@ namespace Kni.Tests.ContentPipeline
     internal static class AssetTestUtility
     {
 
-        public static Effect LoadEffect(ContentManager content, string name)
+        public static Effect LoadEffect(ContentManager content, string effectName)
         {
-#if DIRECTX
-            var gd = ((IGraphicsDeviceService) content.ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
-            return CompileEffect(gd, Paths.RawEffect(name));
+#if WINDOWSDX
+            GraphicsDevice gd = ((IGraphicsDeviceService)content.ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
+            
+            Effect effect = AssetTestUtility.CompileEffect(gd, Paths.RawEffect(effectName));
+            return effect;
 #else
-            return content.Load<Effect>(Paths.CompiledEffect(name));
+            Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
+            return effect;
 #endif
         }
 
         public static Effect CompileEffect(GraphicsDevice graphicsDevice, string effectPath)
         {
-#if ! WINDOWSDX || DIRECTX || XNA
-            var effectProcessor = new EffectProcessor();
-            var context = new TestProcessorContext(TargetPlatform.Windows, "notused.xnb");
-            var compiledEffect = effectProcessor.Process(new EffectContent
-            {
-                EffectCode = File.ReadAllText(effectPath),
-                Identity = new ContentIdentity(effectPath)
-            }, context);
+#if WINDOWSDX || XNA
 
-            return new Effect(graphicsDevice, compiledEffect.GetEffectCode());
+            TargetPlatform targetPlatform = TargetPlatform.Windows;
+
+            EffectProcessor effectProcessor = new EffectProcessor();
+            ContentProcessorContext context = new TestProcessorContext(targetPlatform, "notused.xnb");
+            EffectContent effectContent = new EffectContent();
+            effectContent.EffectCode = File.ReadAllText(effectPath);
+            effectContent.Identity = new ContentIdentity(effectPath);
+
+            CompiledEffectContent compiledEffect = effectProcessor.Process(effectContent, context);
+            byte[] effectCode = compiledEffect.GetEffectCode();
+            return new Effect(graphicsDevice, effectCode);
 #else // OpenGL
             throw new NotImplementedException();
 #endif

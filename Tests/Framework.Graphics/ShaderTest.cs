@@ -13,20 +13,25 @@ namespace Kni.Tests.Graphics
 	[TestFixture]
 	class ShaderTest : GraphicsDeviceTestFixtureBase
     {
-		[TestCase("NoEffect")]
-		[TestCase("HighContrast")]
 		[TestCase("Bevels")]
-		[TestCase("Grayscale")]
-		[TestCase("ColorFlip")]
-		[TestCase("Invert")]
 		[TestCase("BlackOut")]
+		[TestCase("ColorFlip")]
+		[TestCase("Grayscale")]
+		[TestCase("HighContrast")]
+		[TestCase("Invert")]
+		[TestCase("NoEffect")]
         [TestCase("RainbowH")]
         public void Shader(string effectName)
 		{
             PrepareFrameCapture();
 
+#if WINDOWSDX
+            Effect effect = AssetTestUtility.CompileEffect(gd, Paths.RawEffect(effectName));
+#else
+            Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
+#endif
+
             SpriteBatch spriteBatch = new SpriteBatch(gd);
-            Effect effect = AssetTestUtility.LoadEffect(content, effectName);
             // A background texture to test that the effect doesn't
             // mess up other textures
             Texture2D background = content.Load<Texture2D>(Paths.Texture("fun-background"));

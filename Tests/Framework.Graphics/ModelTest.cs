@@ -69,7 +69,7 @@ namespace Kni.Tests.Graphics
             Assert.That(cube.Effects[0], Is.EqualTo(newEffect));
         }
 
-#if !XNA // Tests below are valid for MonoGame only because of manual model creation.
+#if !XNA // Tests below are valid for KNI only because of manual model creation.
 
         [Test]
         public void ShouldConstructAndInitialize()

@@ -7,10 +7,6 @@ using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 
-// HACK: Only enable for XNA and DirectX which are the 
-// only platforms which currently correctly implement 
-// the GraphicsAdapter API.
-#if XNA || DIRECTX
 
 namespace Kni.Tests.Graphics
 {
@@ -56,7 +52,7 @@ namespace Kni.Tests.Graphics
                 Assert.AreEqual(1, adapter.SupportedDisplayModes.Count(m => Equals(m, adapter.CurrentDisplayMode)));
 
                 // Seems like XNA treats aspect ratios above 16:10 as wide screen. A 1680x1050 display (exactly 16:10) was considered not to be wide screen.
-                // MonoGame considers ratios equal or greater than 16:10 to be wide screen.
+                // KNI considers ratios equal or greater than 16:10 to be wide screen.
                 const float minWideScreenAspect = 16.0f / 10.0f;
 #if XNA
                 var isWidescreen = adapter.CurrentDisplayMode.AspectRatio > minWideScreenAspect;
@@ -107,7 +103,7 @@ namespace Kni.Tests.Graphics
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt3, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt5, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt5, SurfaceFormat.Color, false)]
-#if !XNA        
+#if !XNA
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt1a, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt1a, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt1SRgb, SurfaceFormat.Color, false)]
@@ -159,5 +155,3 @@ namespace Kni.Tests.Graphics
         }
     }
 }
-
-#endif // XNA || DIRECTX

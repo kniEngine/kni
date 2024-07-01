@@ -60,7 +60,8 @@ namespace Kni.Tests.Graphics
 
                 Assert.AreEqual(b, b2);
 
-                // MonoGame allows any kind of type that is not larger than one element while XNA only allows byte
+                // KNI allows any kind of type that is not larger than one element
+                // while XNA only allows byte.
 #if !XNA
                 var b3 = new short[t.Size*t.Size/4];
                 t.GetData(face, b3);

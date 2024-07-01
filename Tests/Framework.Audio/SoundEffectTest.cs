@@ -239,8 +239,8 @@ namespace Kni.Tests.Audio
             Assert.DoesNotThrow(() => new SoundEffect(new byte[4], 2, 2, 8000, AudioChannels.Mono, 0, 0));
 
             // XNA seems to not allow misaligned offsets even when
-            // the data is within range of the buffer.  We go ahead
-            // and allow this in MonoGame.
+            // the data is within range of the buffer. We go ahead
+            // and allow this in KNI.
 #if XNA
             Assert.Throws<ArgumentException>(() => new SoundEffect(new byte[4], 1, 2, 8000, AudioChannels.Mono, 0, 0));
 #else
@@ -418,8 +418,8 @@ namespace Kni.Tests.Audio
         [TestCase(@"Assets/Audio/tone_mono_44khz_16bit.wav", 500)]
         [TestCase(@"Assets/Audio/tone_stereo_44khz_16bit.wav", 500)]
 #if !XNA
-        // XNA does not support 24-bit, 32-bit float, MS-ADPCM or IMA/ADPCM in SoundEffect.FromStream, but MonoGame does
-#if DIRECTX
+        // XNA does not support 24-bit, 32-bit float, MS-ADPCM or IMA/ADPCM in SoundEffect.FromStream, but KNI does.
+#if WINDOWSDX
         [TestCase(@"Assets/Audio/blast_mono_44hz_adpcm_ms.wav", 7202)]
         [TestCase(@"Assets/Audio/blast_mono_22hz_adpcm_ms.wav", 7202)]
         [TestCase(@"Assets/Audio/blast_mono_11hz_adpcm_ms.wav", 7202)]
@@ -444,7 +444,7 @@ namespace Kni.Tests.Audio
         }
 
 #if XNA
-        // MonoGame now supports loading ADPCM through SoundEffect.FromStream()
+        // KNI now supports loading ADPCM through SoundEffect.FromStream()
         [TestCase(@"Assets/Audio/blast_mono_44hz_adpcm_ms.wav")]
         [TestCase(@"Assets/Audio/blast_mono_22hz_adpcm_ms.wav")]
         [TestCase(@"Assets/Audio/blast_mono_11hz_adpcm_ms.wav")]
@@ -490,8 +490,8 @@ namespace Kni.Tests.Audio
         [TestCase("tone_mono_44khz_16bit", 5000000)]
         [TestCase("tone_stereo_44khz_16bit", 5000000)]
 #if !XNA
-        // XNA does not support 32-bit float, MS-ADPCM or IMA/ADPCM in SoundEffect.FromStream, but MonoGame does
-#if !DIRECTX
+        // XNA does not support 32-bit float, MS-ADPCM or IMA/ADPCM in SoundEffect.FromStream, but KNI does.
+#if !WINDOWSDX
         [TestCase("tone_mono_44khz_imaadpcm", 6010000)]
         [TestCase("tone_stereo_44khz_imaadpcm", 5300000)]
 #endif
