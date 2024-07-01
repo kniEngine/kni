@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content;
-#if ! WINDOWSDX || DIRECTX || XNA
+#if DIRECTX || XNA
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
@@ -32,7 +32,7 @@ namespace Kni.Tests.ContentPipeline
 
         public static Effect CompileEffect(GraphicsDevice graphicsDevice, string effectPath)
         {
-#if ! WINDOWSDX || DIRECTX || XNA
+#if DIRECTX || XNA
 
             TargetPlatform targetPlatform = TargetPlatform.Windows;
 
