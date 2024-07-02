@@ -385,5 +385,63 @@ namespace Kni.Tests.Graphics
         {
             Assert.Throws<NotSupportedException>( ()=> MultipleRenderTargets(count) );
         }
+
+        [Test]
+        public void NonPowerOfTwoTextureShouldThrowTest()
+        {
+            CheckProfile();
+
+            BasicEffect effect = new BasicEffect(_gd);
+            effect.TextureEnabled = true;
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
+            effectPass.Apply();
+
+            Texture2D texture0 = new Texture2D(_gd, 8, 9, false, SurfaceFormat.Color);
+            _gd.Textures[0] = texture0;
+
+            _gd.SamplerStates[0] = SamplerState.LinearWrap;
+
+            int vertexStart = 0;
+            int primitiveCount = 2;
+            int verticesCount = vertexStart + 3 * primitiveCount;
+            VertexBuffer vb = new VertexBuffer(_gd, VertexPositionColorTexture.VertexDeclaration, verticesCount, BufferUsage.None);
+            _gd.SetVertexBuffer(vb);
+            
+            Assert.Throws<NotSupportedException>(() => _gd.DrawPrimitives(PrimitiveType.TriangleList, vertexStart, primitiveCount) );
+
+            vb.Dispose();
+            effect.Dispose();
+        }
+
+        [Test]
+        public void NonPowerOfTwoUnusedTextureShouldNotThrowTest()
+        {
+            CheckProfile();
+
+            BasicEffect effect = new BasicEffect(_gd);
+            effect.TextureEnabled = true;
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
+            effectPass.Apply();
+
+            Texture2D texture0 = new Texture2D(_gd, 8, 9, false, SurfaceFormat.Color);
+            Texture2D texture1 = new Texture2D(_gd, 9, 8, false, SurfaceFormat.Color);
+            _gd.Textures[0] = texture0;
+            _gd.Textures[1] = texture1;
+
+            _gd.SamplerStates[0] = SamplerState.LinearClamp;
+            _gd.SamplerStates[1] = SamplerState.LinearWrap;
+
+            int vertexStart = 0;
+            int primitiveCount = 2;
+            int verticesCount = vertexStart + 3 * primitiveCount;
+            VertexBuffer vb = new VertexBuffer(_gd, VertexPositionColorTexture.VertexDeclaration, verticesCount, BufferUsage.None);
+            _gd.SetVertexBuffer(vb);
+
+            Assert.DoesNotThrow( ()=> _gd.DrawPrimitives(PrimitiveType.TriangleList, vertexStart, primitiveCount) );
+
+            vb.Dispose();
+            effect.Dispose();
+        }
+
     }
 }
