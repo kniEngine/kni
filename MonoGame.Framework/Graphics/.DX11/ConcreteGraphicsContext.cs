@@ -319,13 +319,20 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
             if (graphicsProfile == GraphicsProfile.Reach)
             {
-                for (int slot = 0; slot < texturesCount; slot++)
+                for (int i = 0; i < cshader.Samplers.Length; i++)
                 {
-                    Texture2D texture2D = ctextureCollection[slot] as Texture2D;
+                    int textureSlot = cshader.Samplers[i].textureSlot;
+                    int samplerSlot = cshader.Samplers[i].samplerSlot;
+
+                    // Debug.Assert(samplerSlot != 255);
+                    if (samplerSlot == 255)
+                        samplerSlot = textureSlot;
+
+                    Texture2D texture2D = ctextureCollection[textureSlot] as Texture2D;
                     if (texture2D != null)
                     {
-                        if (this.SamplerStates[slot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
-                        ||  this.SamplerStates[slot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
+                        if (this.SamplerStates[samplerSlot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
+                        ||  this.SamplerStates[samplerSlot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
