@@ -1628,9 +1628,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             if (BlendEquationSeparatei == null && Extensions.Contains("GL_ARB_draw_buffers_blend"))
                 BlendEquationSeparatei = LoadFunctionOrNull<OGL.BlendEquationSeparateiDelegate>("BlendEquationSeparateiARB");
 
-            if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
+            //if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
                 DrawElementsBaseVertex = LoadFunctionOrNull<DrawElementsBaseVertexDelegate>("glDrawElementsBaseVertex");
-            if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
+            //if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
                 DrawRangeElementsBaseVertex = LoadFunctionOrNull<DrawRangeElementsBaseVertexDelegate>("glDrawRangeElementsBaseVertex");
         }
 
