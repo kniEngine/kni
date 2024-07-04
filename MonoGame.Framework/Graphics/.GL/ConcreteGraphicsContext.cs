@@ -792,6 +792,18 @@ namespace Microsoft.Xna.Platform.Graphics
                                   baseVertex);
                 GL.CheckGLError();
             }
+            else if (GL.DrawRangeElements != null)
+            {
+                PlatformApplyVertexBuffers(baseVertex);
+
+                GL.DrawRangeElements(target,
+                                minVertexIndex,
+                                minVertexIndex + numVertices -1,
+                                indexElementCount,
+                                indexElementType,
+                                indexOffsetInBytes);
+                GL.CheckGLError();
+            }
             else
             {
                 PlatformApplyVertexBuffers(baseVertex);
