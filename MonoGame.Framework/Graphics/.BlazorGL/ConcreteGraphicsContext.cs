@@ -290,6 +290,22 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
+            // Check Samplers
+            GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
+            if (graphicsProfile == GraphicsProfile.Reach)
+            {
+                for (int slot = 0; slot < texturesCount; slot++)
+                {
+                    Texture2D texture2D = ctextureCollection[slot] as Texture2D;
+                    if (texture2D != null)
+                    {
+                        if (this.SamplerStates[slot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
+                        ||  this.SamplerStates[slot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
+                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
+                    }
+                }
+            }
+
             // Apply Samplers
             for (int slot = 0; slot < texturesCount; slot++)
             {
@@ -314,19 +330,6 @@ namespace Microsoft.Xna.Platform.Graphics
                             // GL.CheckGLError();
 
                             ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
-
-                            // Check Samplers
-                            GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
-                            if (graphicsProfile == GraphicsProfile.Reach)
-                            {
-                                Texture2D texture2D = texture as Texture2D;
-                                if (texture2D != null)
-                                {
-                                    if (csamplerState.AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
-                                    ||  csamplerState.AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
-                                        throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                                }
-                            }
 
                             csamplerState.PlatformApplyState(this, ctexture._glTarget, ctexture.LevelCount > 1);
                             ctexture._glLastSamplerState = sampler;
