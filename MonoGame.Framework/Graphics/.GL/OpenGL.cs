@@ -770,14 +770,14 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DrawElementsBaseVertexDelegate(GLPrimitiveType primitiveType, int count, DrawElementsType elementType, IntPtr offset, int baseVertex);
-        internal DrawElementsBaseVertexDelegate DrawElementsBaseVertex; // OpenGL 3.2, GLES 3.2, or GL_ARB_draw_elements_base_vertex
+        internal delegate void DrawRangeElementsDelegate(GLPrimitiveType primitiveType, int start, int end, int count, DrawElementsType elementType, IntPtr offset);
+        internal DrawRangeElementsDelegate DrawRangeElements; // OpenGL 2.0, GLES 3.0
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DrawRangeElementsDelegate(GLPrimitiveType primitiveType, int start, int end, int count, DrawElementsType elementType, IntPtr offset);
-        internal DrawRangeElementsDelegate DrawRangeElements; // OpenGL 2.0, GLES 3.0
+        internal delegate void DrawElementsBaseVertexDelegate(GLPrimitiveType primitiveType, int count, DrawElementsType elementType, IntPtr offset, int baseVertex);
+        internal DrawElementsBaseVertexDelegate DrawElementsBaseVertex; // OpenGL 3.2, GLES 3.2, or GL_ARB_draw_elements_base_vertex
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
