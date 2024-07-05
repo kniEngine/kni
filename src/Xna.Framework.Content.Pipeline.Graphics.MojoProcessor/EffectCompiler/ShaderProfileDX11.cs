@@ -49,7 +49,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                 if (psShaderVersion.Major == -1)
                     throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}'.", pass.psModel, pass.psFunction));
-
             }
         }
 
@@ -121,32 +120,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     }
                 }
 
-                // Get the samplers.
-                List<SamplerInfo> samplers = new List<SamplerInfo>();
-                foreach (D3DC.InputBindingDescription samplerDesc in samplersMap)
-                {
-                    SamplerInfo samplerInfo = new SamplerInfo();
-                    samplerInfo.GLsamplerName = String.Empty;
-                    samplerInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
-                    samplerInfo.samplerSlot = -1;
-                    samplerInfo.state = null;
-                    samplerInfo.textureSlot = -1;
-                    samplerInfo.textureName = null;
-                    samplerInfo.textureParameter = -1;
-
-                    SamplerStateInfo samplerStateInfo = shaderInfo.SamplerStates[samplerDesc.Name];
-                    samplerInfo.state = samplerStateInfo.State;
-                    samplerInfo.GLsamplerName = samplerDesc.Name;
-                    samplerInfo.samplerSlot = samplerDesc.BindPoint;
-                    samplerInfo.textureName = samplerStateInfo.TextureName;
-
-                    samplers.Add(samplerInfo);
-                }
-
                 // Get the textures.
                 List<SamplerInfo> textures = new List<SamplerInfo>();
                 foreach (D3DC.InputBindingDescription txDesc in texturesMap)
                 {
+                    // Init samplerInfo
                     SamplerInfo textureInfo = new SamplerInfo();
                     textureInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
                     textureInfo.GLsamplerName = String.Empty;
@@ -163,44 +141,76 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     textures.Add(textureInfo);
                 }
 
+                // Get the samplers.
+                List<SamplerInfo> samplers = new List<SamplerInfo>();
+                foreach (D3DC.InputBindingDescription samplerDesc in samplersMap)
+                {
+                    // Init samplerInfo
+                    SamplerInfo samplerInfo = new SamplerInfo();
+                    samplerInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
+                    samplerInfo.GLsamplerName = String.Empty;
+                    samplerInfo.samplerSlot = -1;
+                    samplerInfo.state = null;
+                    samplerInfo.textureSlot = -1;
+                    samplerInfo.textureName = null;
+                    samplerInfo.textureParameter = -1;
+
+                    samplerInfo.samplerSlot = samplerDesc.BindPoint;
+                    samplerInfo.GLsamplerName = samplerDesc.Name;
+
+                    SamplerStateInfo samplerStateInfo = shaderInfo.SamplerStates[samplerDesc.Name];
+                    samplerInfo.textureName = samplerStateInfo.TextureName;
+                    samplerInfo.state = samplerStateInfo.State;
+
+                    samplers.Add(samplerInfo);
+                }
+
                 // merge paired samples & textures
                 // & resolve textureName from sample.
                 for(int t = 0; t< textures.Count; t++)
                 {
-                    var textureInfo = textures[t];
+                    SamplerInfo textureInfo = textures[t];
+
                     for (int s = samplers.Count - 1; s >= 0; s--)
                     {
                         if (textureInfo.textureName == samplers[s].GLsamplerName)
                         {
                             if (samplers[s].textureName != null)
                                 textureInfo.textureName = samplers[s].textureName;
+
                             if (samplers[s].state != null)
                             {
                                 textureInfo.samplerSlot = samplers[s].samplerSlot;
                                 textureInfo.state = samplers[s].state;
                             }
-                            textures[t] = textureInfo;
+
                             samplers.RemoveAt(s);
                             break;
                         }
                     }
+
+                    textures[t] = textureInfo; // update struct
                 }
 
                 // merge remaining samples into textures 
                 for (int t = 0; t < textures.Count; t++)
                 {
-                    var textureInfo = textures[t];
+                    SamplerInfo textureInfo = textures[t];
+
                     if (textureInfo.samplerSlot == -1 && samplers.Count > 0)
                     {
                         int s = samplers.Count - 1;
+
                         if (samplers[s].state != null)
                         {
                             textureInfo.samplerSlot = samplers[s].samplerSlot;
                             textureInfo.state = samplers[s].state;
                         }
-                        textures[t] = textureInfo;
+
                         samplers.RemoveAt(s);
                     }
+
+                    textures[t] = textureInfo; // update struct
                 }
 
                 if (samplers.Count > 0)
