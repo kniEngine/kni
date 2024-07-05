@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 {
                     SamplerInfo textureInfo = textures[t];
 
-                    for (int s = samplers.Count - 1; s >= 0; s--)
+                    for (int s = 0; s < samplers.Count; s++)
                     {
                         if (textureInfo.textureName == samplers[s].GLsamplerName)
                         {
@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                 textureInfo.state = samplers[s].state;
                             }
 
-                            samplers.RemoveAt(s);
+                            samplers.RemoveAt(s--);
                             break;
                         }
                     }
@@ -197,17 +197,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 {
                     SamplerInfo textureInfo = textures[t];
 
-                    if (textureInfo.samplerSlot == -1 && samplers.Count > 0)
+                    for (int s = 0; s < samplers.Count; s++)
                     {
-                        int s = samplers.Count - 1;
-
-                        if (samplers[s].state != null)
+                        if (textureInfo.samplerSlot == -1)
                         {
-                            textureInfo.samplerSlot = samplers[s].samplerSlot;
-                            textureInfo.state = samplers[s].state;
-                        }
+                            if (samplers[s].state != null)
+                            {
+                                textureInfo.samplerSlot = samplers[s].samplerSlot;
+                                textureInfo.state = samplers[s].state;
+                            }
 
-                        samplers.RemoveAt(s);
+                            samplers.RemoveAt(s--);
+                            break;
+                        }
                     }
 
                     textures[t] = textureInfo; // update struct
