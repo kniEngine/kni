@@ -120,6 +120,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     }
                 }
 
+                // Get the textures.
+                List<SamplerInfo> textures = new List<SamplerInfo>();
+                foreach (D3DC.InputBindingDescription txDesc in texturesMap)
+                {
+                    // Init samplerInfo
+                    SamplerInfo textureInfo = new SamplerInfo();
+                    textureInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
+                    textureInfo.GLsamplerName = String.Empty;
+                    textureInfo.samplerSlot = -1;
+                    textureInfo.state = null;
+                    textureInfo.textureSlot = -1;
+                    textureInfo.textureName = null;
+                    textureInfo.textureParameter = -1;
+
+                    textureInfo.textureSlot = txDesc.BindPoint;
+                    textureInfo.textureName = txDesc.Name;
+                    textureInfo.type = DXToSamplerType(txDesc.Dimension);
+
+                    textures.Add(textureInfo);
+                }
+
                 // Get the samplers.
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
                 foreach (D3DC.InputBindingDescription samplerDesc in samplersMap)
@@ -142,27 +163,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     samplerInfo.state = samplerStateInfo.State;
 
                     samplers.Add(samplerInfo);
-                }
-
-                // Get the textures.
-                List<SamplerInfo> textures = new List<SamplerInfo>();
-                foreach (D3DC.InputBindingDescription txDesc in texturesMap)
-                {
-                    // Init samplerInfo
-                    SamplerInfo textureInfo = new SamplerInfo();
-                    textureInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
-                    textureInfo.GLsamplerName = String.Empty;
-                    textureInfo.samplerSlot = -1;
-                    textureInfo.state = null;
-                    textureInfo.textureSlot = -1;
-                    textureInfo.textureName = null;
-                    textureInfo.textureParameter = -1;
-
-                    textureInfo.textureSlot = txDesc.BindPoint;
-                    textureInfo.textureName = txDesc.Name;
-                    textureInfo.type = DXToSamplerType(txDesc.Dimension);
-
-                    textures.Add(textureInfo);
                 }
 
                 // merge paired samples & textures
