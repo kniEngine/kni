@@ -167,7 +167,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 // & resolve textureName from sample.
                 for(int t = 0; t< textures.Count; t++)
                 {
-                    var textureInfo = textures[t];
+                    SamplerInfo textureInfo = textures[t];
                     for (int s = samplers.Count - 1; s >= 0; s--)
                     {
                         if (textureInfo.textureName == samplers[s].GLsamplerName)
@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 // merge remaining samples into textures 
                 for (int t = 0; t < textures.Count; t++)
                 {
-                    var textureInfo = textures[t];
+                    SamplerInfo textureInfo = textures[t];
                     if (textureInfo.samplerSlot == -1 && samplers.Count > 0)
                     {
                         int s = samplers.Count - 1;
