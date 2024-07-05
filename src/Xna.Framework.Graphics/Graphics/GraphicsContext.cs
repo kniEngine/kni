@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Framework.Graphics
         private GraphicsDeviceStrategy _deviceStrategy;
         private bool _isDisposed = false;
 
+        private readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
+
         GraphicsContextStrategy IPlatformGraphicsContext.Strategy { get { return _strategy; } }
         GraphicsDeviceStrategy IPlatformGraphicsContext.DeviceStrategy { get { return _deviceStrategy; } }
 
@@ -184,8 +186,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
-                SetRenderTargets(_strategy.SingleRenderTargetBinding);
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget);
+                SetRenderTargets(_singleRenderTargetBinding);
             }
         }
 
@@ -197,8 +199,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
-                SetRenderTargets(_strategy.SingleRenderTargetBinding);
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, cubeMapFace);
+                SetRenderTargets(_singleRenderTargetBinding);
             }
         }
 
@@ -214,8 +216,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_strategy.SingleRenderTargetBinding);
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_singleRenderTargetBinding);
             }
         }
 
@@ -228,8 +230,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                _strategy.SingleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
-                SetRenderTargets(_strategy.SingleRenderTargetBinding);
+                _singleRenderTargetBinding[0] = new RenderTargetBinding(renderTarget, arraySlice);
+                SetRenderTargets(_singleRenderTargetBinding);
             }
         }
 

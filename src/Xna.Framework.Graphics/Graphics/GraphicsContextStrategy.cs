@@ -90,7 +90,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         protected int _currentRenderTargetCount;
-        private readonly RenderTargetBinding[] _singleRenderTargetBinding = new RenderTargetBinding[1];
 
         private Color _discardColor = new Color(68, 34, 136, 255);
 
@@ -101,7 +100,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public RenderTargetBinding[] CurrentRenderTargetBindings { get { return _currentRenderTargetBindings; } }
         public int RenderTargetCount { get { return _currentRenderTargetCount; } }
-        public RenderTargetBinding[] SingleRenderTargetBinding { get { return _singleRenderTargetBinding; } }
         public bool IsRenderTargetBound { get { return _currentRenderTargetCount > 0; } }
 
         /// <summary>
