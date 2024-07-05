@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework.Content
         private string _rootDirectory = string.Empty;
         private IServiceProvider _serviceProvider;
         private Dictionary<string, object> _loadedAssets = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        private List<IDisposable> _disposableAssets = new List<IDisposable>();
+        private HashSet<IDisposable> _disposableAssets = new HashSet<IDisposable>();
         private bool _isDisposed;
 
         private static readonly List<char> _targetPlatformIdentifiers = new List<char>()
@@ -289,10 +289,7 @@ namespace Microsoft.Xna.Framework.Content
 
             lock (this.SyncHandle)
             {
-                // Avoid recording disposable objects twice.
-                // We don't know which asset recorded which disposable so just guard against storing multiple of the same instance.
-                if (!_disposableAssets.Contains(disposable))
-                    _disposableAssets.Add(disposable);
+                _disposableAssets.Add(disposable);
             }
         }
 
