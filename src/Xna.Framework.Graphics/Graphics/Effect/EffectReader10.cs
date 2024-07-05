@@ -111,6 +111,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     samplers[s].textureSlot = ReadByte();
                     samplers[s].samplerSlot = ReadByte();
 
+                    if (samplers[s].samplerSlot == 255)
+                        samplers[s].samplerSlot = samplers[s].textureSlot;
+
                     if (ReadBoolean())
                         samplers[s].state = ReadSamplerState();
 
