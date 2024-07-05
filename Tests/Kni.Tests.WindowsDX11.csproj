@@ -34,12 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SharpDX">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.DXGI.dll</HintPath>
-    </Reference>
+    <PackageReference Version="4.0.1" Include="SharpDX" />
+    <PackageReference Version="4.0.1" Include="SharpDX.DXGI" />
   </ItemGroup>
 	
   <ItemGroup>
