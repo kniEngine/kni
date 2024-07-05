@@ -49,7 +49,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                 if (psShaderVersion.Major == -1)
                     throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}'.", pass.psModel, pass.psFunction));
-
             }
         }
 
@@ -168,21 +167,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 for(int t = 0; t< textures.Count; t++)
                 {
                     SamplerInfo textureInfo = textures[t];
+
                     for (int s = samplers.Count - 1; s >= 0; s--)
                     {
                         if (textureInfo.textureName == samplers[s].GLsamplerName)
                         {
                             if (samplers[s].textureName != null)
                                 textureInfo.textureName = samplers[s].textureName;
+
                             if (samplers[s].state != null)
                             {
                                 textureInfo.samplerSlot = samplers[s].samplerSlot;
                                 textureInfo.state = samplers[s].state;
                             }
+
                             samplers.RemoveAt(s);
                             break;
                         }
                     }
+
                     textures[t] = textureInfo; // update struct
                 }
 
@@ -190,16 +193,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 for (int t = 0; t < textures.Count; t++)
                 {
                     SamplerInfo textureInfo = textures[t];
+
                     if (textureInfo.samplerSlot == -1 && samplers.Count > 0)
                     {
                         int s = samplers.Count - 1;
+
                         if (samplers[s].state != null)
                         {
                             textureInfo.samplerSlot = samplers[s].samplerSlot;
                             textureInfo.state = samplers[s].state;
                         }
+
                         samplers.RemoveAt(s);
                     }
+
                     textures[t] = textureInfo; // update struct
                 }
 
