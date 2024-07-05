@@ -179,11 +179,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                 textureInfo.samplerSlot = samplers[s].samplerSlot;
                                 textureInfo.state = samplers[s].state;
                             }
-                            textures[t] = textureInfo;
                             samplers.RemoveAt(s);
                             break;
                         }
                     }
+                    textures[t] = textureInfo; // update struct
                 }
 
                 // merge remaining samples into textures 
@@ -198,9 +198,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             textureInfo.samplerSlot = samplers[s].samplerSlot;
                             textureInfo.state = samplers[s].state;
                         }
-                        textures[t] = textureInfo;
                         samplers.RemoveAt(s);
                     }
+                    textures[t] = textureInfo; // update struct
                 }
 
                 if (samplers.Count > 0)
