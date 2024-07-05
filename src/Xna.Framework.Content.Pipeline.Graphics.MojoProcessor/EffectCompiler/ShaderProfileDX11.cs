@@ -124,20 +124,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 List<SamplerInfo> samplers = new List<SamplerInfo>();
                 foreach (D3DC.InputBindingDescription samplerDesc in samplersMap)
                 {
+                    // Init samplerInfo
                     SamplerInfo samplerInfo = new SamplerInfo();
-                    samplerInfo.GLsamplerName = String.Empty;
                     samplerInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
+                    samplerInfo.GLsamplerName = String.Empty;
                     samplerInfo.samplerSlot = -1;
                     samplerInfo.state = null;
                     samplerInfo.textureSlot = -1;
                     samplerInfo.textureName = null;
                     samplerInfo.textureParameter = -1;
 
-                    SamplerStateInfo samplerStateInfo = shaderInfo.SamplerStates[samplerDesc.Name];
-                    samplerInfo.state = samplerStateInfo.State;
-                    samplerInfo.GLsamplerName = samplerDesc.Name;
                     samplerInfo.samplerSlot = samplerDesc.BindPoint;
+                    samplerInfo.GLsamplerName = samplerDesc.Name;
+
+                    SamplerStateInfo samplerStateInfo = shaderInfo.SamplerStates[samplerDesc.Name];
                     samplerInfo.textureName = samplerStateInfo.TextureName;
+                    samplerInfo.state = samplerStateInfo.State;
 
                     samplers.Add(samplerInfo);
                 }
@@ -146,6 +148,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 List<SamplerInfo> textures = new List<SamplerInfo>();
                 foreach (D3DC.InputBindingDescription txDesc in texturesMap)
                 {
+                    // Init samplerInfo
                     SamplerInfo textureInfo = new SamplerInfo();
                     textureInfo.type = MojoShader.SamplerType.SAMPLER_UNKNOWN;
                     textureInfo.GLsamplerName = String.Empty;
