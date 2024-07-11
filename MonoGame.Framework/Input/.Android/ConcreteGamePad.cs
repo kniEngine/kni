@@ -24,8 +24,10 @@ namespace Microsoft.Xna.Platform.Input
 
     public sealed class ConcreteGamePad : GamePadStrategy
     {
+        const int MaxNumberOfGamePads = 4;
+
         // we will support up to 4 local controllers
-        private readonly AndroidGamePadDevice[] _gamepads = new AndroidGamePadDevice[4];
+        private readonly AndroidGamePadDevice[] _gamepads = new AndroidGamePadDevice[MaxNumberOfGamePads];
         // support the back button when we don't have a gamepad connected
         internal bool Back;
 
@@ -36,7 +38,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override int PlatformGetMaxNumberOfGamePads()
         {
-            return 4;
+            return MaxNumberOfGamePads;
         }
 
         public override GamePadCapabilities PlatformGetCapabilities(int index)
