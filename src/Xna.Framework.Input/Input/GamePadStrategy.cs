@@ -22,14 +22,14 @@ namespace Microsoft.Xna.Platform.Input
             bool hasVoiceSupport)
         {
             return new GamePadCapabilities(
-                        gamePadType: GamePadType.Unknown,
-                        displayName: null,
-                        identifier: null,
-                        isConnected: false,
-                        buttons: (Buttons)0,
-                        hasLeftVibrationMotor: false,
-                        hasRightVibrationMotor: false,
-                        hasVoiceSupport: false
+                        gamePadType: gamePadType,
+                        displayName: displayName,
+                        identifier: identifier,
+                        isConnected: isConnected,
+                        buttons: buttons,
+                        hasLeftVibrationMotor: hasLeftVibrationMotor,
+                        hasRightVibrationMotor: hasRightVibrationMotor,
+                        hasVoiceSupport: hasVoiceSupport
                     );
         }
 
