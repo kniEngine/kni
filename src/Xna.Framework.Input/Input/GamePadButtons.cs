@@ -205,15 +205,15 @@ namespace Microsoft.Xna.Framework.Input
             return "[GamePadButtons:" +
                 " A=" + (int)A +
                 ", B=" + (int)B +
-                ", Back=" + (int)Back +
                 ", X=" + (int)X +
                 ", Y=" + (int)Y +
                 ", Start=" + (int)Start +
-                ", LeftShoulder=" + (int)LeftShoulder +
-                ", LeftStick=" + (int)LeftStick +
-                ", RightShoulder=" + (int)RightShoulder +
-                ", RightStick=" + (int)RightStick +
+                ", Back=" + (int)Back +
                 ", BigButton=" + (int)BigButton +
+                ", LeftShoulder=" + (int)LeftShoulder +
+                ", RightShoulder=" + (int)RightShoulder +
+                ", LeftStick=" + (int)LeftStick +
+                ", RightStick=" + (int)RightStick +
                 "]";
         }
     }
