@@ -47,6 +47,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 if (vsShaderVersion.Major == -1)
                     throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}'.", pass.vsModel, pass.vsFunction));
 
+                if (vsShaderVersion.Major < 2)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}' must be at least SM 2.0.", pass.vsModel, pass.vsFunction));
+
                 if (vsShaderVersion.Major > MojoMaxShaderVersion)
                     throw new Exception(String.Format("Invalid profile '{0}'. Vertex shader '{1}' must be SM 3.0 or lower.", pass.vsModel, pass.vsFunction));
             }
@@ -57,6 +60,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                 if (psShaderVersion.Major == -1)
                     throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}'.", pass.psModel, pass.psFunction));
+
+                if (psShaderVersion.Major < 2)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}' must be at least SM 2.0.", pass.psModel, pass.psFunction));
 
                 if (psShaderVersion.Major > MojoMaxShaderVersion)
                     throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}' must be SM 3.0 or lower.", pass.psModel, pass.psFunction));
