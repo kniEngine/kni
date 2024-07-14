@@ -202,7 +202,7 @@ namespace Microsoft.Xna.Framework.Media
         bool IMediaPlayer.IsShuffled
         {
             get { return _strategy.PlatformIsShuffled; }
-            set { _strategy.PlatformIsShuffled=value; }
+            set { _strategy.PlatformIsShuffled = value; }
         }
 
         bool IMediaPlayer.IsVisualizationEnabled

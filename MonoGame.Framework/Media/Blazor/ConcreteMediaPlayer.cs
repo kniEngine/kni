@@ -19,7 +19,8 @@ namespace Microsoft.Xna.Platform.Media
         internal ConcreteMediaPlayerStrategy()
         {
             _webPlayer = new WasmDom.Audio();
-            _webPlayer.OnEnded += Player_OnEnded;
+            _webPlayer.OnEnded += WebPlayer_OnEnded;
+            _webPlayer.OnPlaying += WebPlayer_OnPlaying;
         }
 
         #region Properties
@@ -126,8 +127,11 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+        private void WebPlayer_OnPlaying(object sender, EventArgs e)
+        {
+        }
 
-        private void Player_OnEnded(object sender, EventArgs e)
+        private void WebPlayer_OnEnded(object sender, EventArgs e)
         {
             if (_playingSong != null)
             {
@@ -141,7 +145,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                _webPlayer.OnEnded -= Player_OnEnded;
+                _webPlayer.OnPlaying -= WebPlayer_OnPlaying;
+                _webPlayer.OnEnded -= WebPlayer_OnEnded;
             }
 
             base.Dispose(disposing);
