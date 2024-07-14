@@ -145,6 +145,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
+                _webPlayer.OnPlaying -= WebPlayer_OnPlaying;
                 _webPlayer.OnEnded -= WebPlayer_OnEnded;
             }
 
