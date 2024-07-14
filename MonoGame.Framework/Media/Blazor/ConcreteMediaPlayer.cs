@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Media
 
                 _webPlayer.Volume = this.PlatformVolume;
                 _webPlayer.Muted = this.PlatformIsMuted;
-                _webPlayer.Loop = this.PlatformIsShuffled;
+                _webPlayer.Loop = this.PlatformIsRepeating;
                 _playingSong = song;
 
                 _webPlayer.Play();
