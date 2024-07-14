@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                _webPlayer.OnEnded -= Player_OnEnded;
+                _webPlayer.OnEnded -= WebPlayer_OnEnded;
             }
 
             base.Dispose(disposing);
