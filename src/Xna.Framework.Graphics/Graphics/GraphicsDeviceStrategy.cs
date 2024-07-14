@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public abstract Assembly ConcreteAssembly { get; }
 
-        internal const string ResourceNameAlphaTestEffect = "Resources.BasicEffect.fxo";
+        internal const string ResourceNameAlphaTestEffect = "Resources.AlphaTestEffect.fxo";
         internal const string ResourceNameBasicEffect = "Resources.BasicEffect.fxo";
         internal const string ResourceNameDualTextureEffect = "Resources.DualTextureEffect.fxo";
         internal const string ResourceNameEnvironmentMapEffect = "Resources.EnvironmentMapEffect.fxo";
