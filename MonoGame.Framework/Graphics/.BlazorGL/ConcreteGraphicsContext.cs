@@ -820,7 +820,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _vertexBuffersDirty = true;
 
             //set vertex data
-            GL.BufferSubData<T>(WebGLBufferType.ARRAY, 0, vertexData, vertexData.Length);
+            GL.BufferSubData<T>(WebGLBufferType.ARRAY, 0, vertexData, vertexOffset, numVertices);
             GL.CheckGLError();
 
             // create and bind index buffer
@@ -840,7 +840,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            PlatformApplyUserVertexData(vertexDeclaration, vertexOffset);
+            PlatformApplyUserVertexData(vertexDeclaration, 0);
 
 
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
