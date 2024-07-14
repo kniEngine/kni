@@ -599,12 +599,11 @@ namespace Microsoft.Xna.Platform.Graphics
             _lastVertexAttribs = 1;
         }
 
-        internal void PlatformApplyUserVertexData(VertexDeclaration vertexDeclaration, int baseVertex)
+        internal void PlatformApplyUserVertexData(VertexDeclaration vertexDeclaration)
         {
             ConcreteVertexShader vertexShaderStrategy = ((IPlatformShader)this.VertexShader).Strategy.ToConcrete<ConcreteVertexShader>();
 
             int vertexStride = vertexDeclaration.VertexStride;
-            int vertexOffset = baseVertex;
 
             VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration);
            
@@ -616,7 +615,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     element.VertexAttribPointerType,
                     element.Normalized,
                     vertexStride,
-                    (vertexOffset + element.Offset));
+                    element.Offset);
                 GL.CheckGLError();
 
                 if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
@@ -778,7 +777,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            PlatformApplyUserVertexData(vertexDeclaration, 0);
+            PlatformApplyUserVertexData(vertexDeclaration);
 
             WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
@@ -840,7 +839,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
 
             // Setup the vertex declaration to point at the VB data.
-            PlatformApplyUserVertexData(vertexDeclaration, 0);
+            PlatformApplyUserVertexData(vertexDeclaration);
 
 
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
