@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.Media
         internal ConcreteMediaPlayerStrategy()
         {
             _webPlayer = new WasmDom.Audio();
-            _webPlayer.OnEnded += Player_OnEnded;
+            _webPlayer.OnEnded += WebPlayer_OnEnded;
         }
 
         #region Properties
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        private void Player_OnEnded(object sender, EventArgs e)
+        private void WebPlayer_OnEnded(object sender, EventArgs e)
         {
             if (_playingSong != null)
             {
