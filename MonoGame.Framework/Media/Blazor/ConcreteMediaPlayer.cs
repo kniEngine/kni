@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             _webPlayer = new WasmDom.Audio();
             _webPlayer.OnEnded += WebPlayer_OnEnded;
+            _webPlayer.OnPlaying += WebPlayer_OnPlaying;
         }
 
         #region Properties
@@ -126,6 +127,9 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+        private void WebPlayer_OnPlaying(object sender, EventArgs e)
+        {
+        }
 
         private void WebPlayer_OnEnded(object sender, EventArgs e)
         {
