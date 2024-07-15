@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         _usageHint);
             }
 
-            GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, elementCount);
+            GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, startIndex, elementCount);
             GL.CheckGLError();
         }
 
