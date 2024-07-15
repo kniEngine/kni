@@ -230,6 +230,10 @@ internal class Sdl
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_sdl_quit();
+    public d_sdl_quit Quit;
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_sdl_disablescreensaver();
     public d_sdl_disablescreensaver DisableScreenSaver;
 
@@ -314,10 +318,6 @@ internal class Sdl
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_sdl_quit();
-    public d_sdl_quit Quit;
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate IntPtr d_sdl_rwfrommem(byte[] mem, int size);
     private d_sdl_rwfrommem SDL_RWFromMem;
 
@@ -338,6 +338,7 @@ internal class Sdl
     private void LoadEntryPoints(IntPtr library)
     {
         SDL_Init = FuncLoader.LoadFunctionOrNull<d_sdl_init>(library, "SDL_Init");
+        Quit = FuncLoader.LoadFunctionOrNull<d_sdl_quit>(library, "SDL_Quit");
         DisableScreenSaver = FuncLoader.LoadFunctionOrNull<d_sdl_disablescreensaver>(library, "SDL_DisableScreenSaver");
         GetVersion = FuncLoader.LoadFunctionOrNull<d_sdl_getversion>(library, "SDL_GetVersion");
         PollEvent = FuncLoader.LoadFunctionOrNull<d_sdl_pollevent>(library, "SDL_PollEvent");
@@ -348,7 +349,6 @@ internal class Sdl
         ClearError = FuncLoader.LoadFunctionOrNull<d_sdl_clearerror>(library, "SDL_ClearError");
         SDL_GetHint = FuncLoader.LoadFunctionOrNull<d_sdl_gethint>(library, "SDL_GetHint");
         SDL_LoadBMP_RW = FuncLoader.LoadFunctionOrNull<d_sdl_loadbmp_rw>(library, "SDL_LoadBMP_RW");
-        Quit = FuncLoader.LoadFunctionOrNull<d_sdl_quit>(library, "SDL_Quit");
         SDL_RWFromMem = FuncLoader.LoadFunctionOrNull<d_sdl_rwfrommem>(library, "SDL_RWFromMem");
         SetHint = FuncLoader.LoadFunctionOrNull<d_sdl_sethint>(library, "SDL_SetHint");
         SDL_Free = FuncLoader.LoadFunctionOrNull<d_sdl_free>(library, "SDL_free");
