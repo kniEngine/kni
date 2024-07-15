@@ -3,6 +3,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using nkast.Wasm.Dom;
 
 namespace Microsoft.Xna.Platform.Input.Touch
 {
@@ -49,8 +50,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             : base()
         {
             // Initialize Capabilities
-            int maximumTouchCount = 0;
-            bool isConnected = false;
+            int maximumTouchCount = Window.Current.Navigator.MaxTouchPoints;
+            bool isConnected = maximumTouchCount > 0;
             bool hasPressure = false;
             _capabilities = base.CreateTouchPanelCapabilities(maximumTouchCount, isConnected, hasPressure);
         }
