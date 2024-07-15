@@ -70,11 +70,11 @@ internal class Sdl
 
 
     [Flags]
-    public enum InitFlags
+    public enum InitFlags : int
     {
-        Video = 0x00000020,
-        Joystick = 0x00000200,
-        Haptic = 0x00001000,
+        Video          = 0x00000020,
+        Joystick       = 0x00000200,
+        Haptic         = 0x00001000,
         GameController = 0x00002000,
     }
 
@@ -220,12 +220,13 @@ internal class Sdl
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_sdl_init(int flags);
+    public delegate int d_sdl_init(InitFlags flags);
     public d_sdl_init SDL_Init;
 
-    public void Init(int flags)
+    public void Init(InitFlags flags)
     {
-        GetError(SDL_Init(flags));
+        int res = SDL_Init(flags);
+        GetError(res);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
