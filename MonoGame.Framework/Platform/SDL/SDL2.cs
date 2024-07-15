@@ -101,16 +101,16 @@ internal class Sdl
         JoyBallMotion = 0x601,
         JoyHatMotion = 0x602,
         JoyButtonDown = 0x603,
-        JoyButtonUp = 0x604,
-        JoyDeviceAdded = 0x605,
+        JoyButtonUp   = 0x604,
+        JoyDeviceAdded   = 0x605,
         JoyDeviceRemoved = 0x606,
 
         ControllerAxisMotion = 0x650,
         ControllerButtonDown = 0x651,
-        ControllerButtonUp = 0x652,
-        ControllerDeviceAdded = 0x653,
-        ControllerDeviceRemoved = 0x654,
-        ControllerDeviceRemapped = 0x654,
+        ControllerButtonUp   = 0x652,
+        ControllerDeviceAdded    = 0x653,
+        ControllerDeviceRemoved  = 0x654,
+        ControllerDeviceRemapped = 0x655,
 
         FingerDown = 0x700,
         FingerUp = 0x701,
@@ -1111,6 +1111,10 @@ internal class Sdl
             return _sdl.GetError(SDL_NumJoysticks());
         }
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void d_sdl_JoystickUpdate();
+        public d_sdl_JoystickUpdate JoystickUpdate;
+
         private void LoadEntryPoints(IntPtr library)
         {
             Close = FuncLoader.LoadFunctionOrNull<d_sdl_joystickclose>(library, "SDL_JoystickClose");
@@ -1126,6 +1130,7 @@ internal class Sdl
             SDL_JoystickNumButtons = FuncLoader.LoadFunctionOrNull<d_sdl_joysticknumbuttons>(library, "SDL_JoystickNumButtons");
             SDL_JoystickNumHats = FuncLoader.LoadFunctionOrNull<d_sdl_joysticknumhats>(library, "SDL_JoystickNumHats");
             SDL_NumJoysticks = FuncLoader.LoadFunctionOrNull<d_sdl_numjoysticks>(library, "SDL_NumJoysticks");
+            JoystickUpdate = FuncLoader.LoadFunctionOrNull<d_sdl_JoystickUpdate>(library, "SDL_JoystickUpdate");
         }
     }
 
@@ -1254,6 +1259,11 @@ internal class Sdl
         public d_sdl_gamecontrollerhasrumble HasRumble;
         public d_sdl_gamecontrollerhasrumble HasRumbleTriggers;
 
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void d_sdl_GameControllerUpdate();
+        public d_sdl_GameControllerUpdate GameControllerUpdate;
+
         private void LoadEntryPoints(IntPtr library)
         {            
             AddMapping = FuncLoader.LoadFunctionOrNull<d_sdl_gamecontrolleraddmapping>(library, "SDL_GameControllerAddMapping");
@@ -1271,6 +1281,7 @@ internal class Sdl
             RumbleTriggers = FuncLoader.LoadFunctionOrNull<d_sdl_gamecontrollerrumble>(library, "SDL_GameControllerRumbleTriggers");
             HasRumble = FuncLoader.LoadFunctionOrNull<d_sdl_gamecontrollerhasrumble>(library, "SDL_GameControllerHasRumble");
             HasRumbleTriggers = FuncLoader.LoadFunctionOrNull<d_sdl_gamecontrollerhasrumble>(library, "SDL_GameControllerHasRumbleTriggers");
+            GameControllerUpdate = FuncLoader.LoadFunctionOrNull<d_sdl_GameControllerUpdate>(library, "SDL_GameControllerUpdate");
         }
     }
 
