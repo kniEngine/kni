@@ -82,7 +82,15 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 // else we must copy each element separately
-                throw new NotImplementedException();
+                int dstOffset = offsetInBytes;
+
+                for (int i = 0; i < elementCount; i++)
+                {
+                    GL.BufferSubData<T>(WebGLBufferType.ARRAY, dstOffset, data, startIndex, 1);
+                    GL.CheckGLError();
+
+                    dstOffset += vertexStride;
+                }
             }
         }
 
