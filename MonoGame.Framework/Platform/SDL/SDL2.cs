@@ -70,11 +70,11 @@ internal class Sdl
 
 
     [Flags]
-    public enum InitFlags
+    public enum InitFlags : int
     {
-        Video = 0x00000020,
-        Joystick = 0x00000200,
-        Haptic = 0x00001000,
+        Video          = 0x00000020,
+        Joystick       = 0x00000200,
+        Haptic         = 0x00001000,
         GameController = 0x00002000,
     }
 
@@ -220,13 +220,36 @@ internal class Sdl
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_sdl_init(int flags);
+    public delegate int d_sdl_init(InitFlags flags);
     public d_sdl_init SDL_Init;
 
-    public void Init(int flags)
+    public void Init(InitFlags flags)
     {
-        GetError(SDL_Init(flags));
+        int res = SDL_Init(flags);
+        GetError(res);
     }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int d_sdl_InitSubSystem(InitFlags flags);
+    public d_sdl_InitSubSystem SDL_InitSubSystem;
+
+    public void InitSubSystem(InitFlags flags)
+    {
+        int res = SDL_InitSubSystem(flags);
+        GetError(res);
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_sdl_QuitSubSystem(InitFlags flags);
+    public d_sdl_QuitSubSystem QuitSubSystem;
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int d_sdl_WasInit(InitFlags flags);
+    public d_sdl_init WasInit;
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void d_sdl_quit();
+    public d_sdl_quit Quit;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_sdl_disablescreensaver();
@@ -313,10 +336,6 @@ internal class Sdl
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void d_sdl_quit();
-    public d_sdl_quit Quit;
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate IntPtr d_sdl_rwfrommem(byte[] mem, int size);
     private d_sdl_rwfrommem SDL_RWFromMem;
 
@@ -337,6 +356,10 @@ internal class Sdl
     private void LoadEntryPoints(IntPtr library)
     {
         SDL_Init = FuncLoader.LoadFunctionOrNull<d_sdl_init>(library, "SDL_Init");
+        SDL_InitSubSystem = FuncLoader.LoadFunctionOrNull<d_sdl_InitSubSystem>(library, "SDL_InitSubSystem");
+        QuitSubSystem = FuncLoader.LoadFunctionOrNull<d_sdl_QuitSubSystem>(library, "SDL_QuitSubSystem");
+        WasInit = FuncLoader.LoadFunctionOrNull<d_sdl_init>(library, "SDL_WasInit");
+        Quit = FuncLoader.LoadFunctionOrNull<d_sdl_quit>(library, "SDL_Quit");
         DisableScreenSaver = FuncLoader.LoadFunctionOrNull<d_sdl_disablescreensaver>(library, "SDL_DisableScreenSaver");
         GetVersion = FuncLoader.LoadFunctionOrNull<d_sdl_getversion>(library, "SDL_GetVersion");
         PollEvent = FuncLoader.LoadFunctionOrNull<d_sdl_pollevent>(library, "SDL_PollEvent");
@@ -347,7 +370,6 @@ internal class Sdl
         ClearError = FuncLoader.LoadFunctionOrNull<d_sdl_clearerror>(library, "SDL_ClearError");
         SDL_GetHint = FuncLoader.LoadFunctionOrNull<d_sdl_gethint>(library, "SDL_GetHint");
         SDL_LoadBMP_RW = FuncLoader.LoadFunctionOrNull<d_sdl_loadbmp_rw>(library, "SDL_LoadBMP_RW");
-        Quit = FuncLoader.LoadFunctionOrNull<d_sdl_quit>(library, "SDL_Quit");
         SDL_RWFromMem = FuncLoader.LoadFunctionOrNull<d_sdl_rwfrommem>(library, "SDL_RWFromMem");
         SetHint = FuncLoader.LoadFunctionOrNull<d_sdl_sethint>(library, "SDL_SetHint");
         SDL_Free = FuncLoader.LoadFunctionOrNull<d_sdl_free>(library, "SDL_free");

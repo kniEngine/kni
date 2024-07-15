@@ -47,12 +47,11 @@ namespace Microsoft.Xna.Platform
             if (SDL.version >= minVersion && CurrentPlatform.OS == OS.Windows && Debugger.IsAttached)
                 SDL.SetHint("SDL_WINDOWS_DISABLE_THREAD_NAMING", "1");
 
-            SDL.Init((int)(
-                Sdl.InitFlags.Video |
-                Sdl.InitFlags.Joystick |
-                Sdl.InitFlags.GameController |
-                Sdl.InitFlags.Haptic
-            ));
+            SDL.Init(Sdl.InitFlags.Video
+                   | Sdl.InitFlags.Joystick
+                   | Sdl.InitFlags.GameController
+                   | Sdl.InitFlags.Haptic
+            );
 
             SDL.DisableScreenSaver();
 
