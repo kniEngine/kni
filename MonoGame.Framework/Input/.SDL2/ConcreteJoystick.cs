@@ -31,9 +31,13 @@ namespace Microsoft.Xna.Platform.Input
             get { return _maxConnectedIndex; }
         }
 
+        const Sdl.InitFlags SdlSubSystems = Sdl.InitFlags.Joystick
+                                          ;
+       
         public ConcreteJoystick()
         {
-
+            Sdl.Current.InitSubSystem(SdlSubSystems);
+            InitDevices();
         }
 
         ~ConcreteJoystick()
@@ -43,6 +47,8 @@ namespace Microsoft.Xna.Platform.Input
 
             _sdlJoysticks.Clear();
             _indicesMap.Clear();
+
+            Sdl.Current.QuitSubSystem(SdlSubSystems);
         }
 
         public override JoystickCapabilities PlatformGetCapabilities(int index)
@@ -132,7 +138,7 @@ namespace Microsoft.Xna.Platform.Input
         }
 
 
-        internal void AddDevices()
+        private void InitDevices()
         {
             int numJoysticks = SDL.JOYSTICK.NumJoysticks();
             for (int deviceIndex = 0; deviceIndex < numJoysticks; deviceIndex++)
@@ -142,8 +148,9 @@ namespace Microsoft.Xna.Platform.Input
         internal void AddDevice(int deviceIndex)
         {
             IntPtr handle = SDL.JOYSTICK.Open(deviceIndex);
-            foreach (SdlJoystickDevice joystickDevice in _sdlJoysticks.Values)
-                if (joystickDevice.Handle == handle)
+            int instanceID = SDL.JOYSTICK.InstanceID(handle);
+
+            if (_indicesMap.ContainsKey(instanceID))
                     return;
 
             int index = 0;
@@ -152,8 +159,7 @@ namespace Microsoft.Xna.Platform.Input
 
             _maxConnectedIndex = Math.Max(_maxConnectedIndex, index);
 
-            int instanceID = SDL.JOYSTICK.InstanceID(handle);
-            SdlJoystickDevice sdlJoystick = new SdlJoystickDevice(handle);
+            SdlJoystickDevice sdlJoystick = new SdlJoystickDevice(instanceID, handle);
             sdlJoystick.Capabilities = base.CreateJoystickCapabilities(
                     isConnected: true,
                     displayName: SDL.JOYSTICK.GetJoystickName(handle),
@@ -167,9 +173,6 @@ namespace Microsoft.Xna.Platform.Input
             _sdlJoysticks.Add(index, sdlJoystick);
 
             _indicesMap[instanceID] = index;
-
-            if (sdlJoystick.Capabilities.IsGamepad)
-                ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(deviceIndex);
         }
 
         internal void RemoveDevice(int instanceID)
@@ -213,15 +216,16 @@ namespace Microsoft.Xna.Platform.Input
 
     public class SdlJoystickDevice : JoystickDevice
     {
-
+        public int InstanceID { get; private set; }
         public IntPtr Handle { get; private set; }
 
         internal JoystickState State;
 
 
-        public SdlJoystickDevice(IntPtr handle)
+        public SdlJoystickDevice(int instanceID, IntPtr handle)
             : base()
         {
+            this.InstanceID = instanceID;
             this.Handle = handle;
         }
     }

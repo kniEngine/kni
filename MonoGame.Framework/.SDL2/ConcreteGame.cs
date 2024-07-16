@@ -48,9 +48,6 @@ namespace Microsoft.Xna.Platform
                 SDL.SetHint("SDL_WINDOWS_DISABLE_THREAD_NAMING", "1");
 
             SDL.Init(Sdl.InitFlags.Video
-                   | Sdl.InitFlags.Joystick
-                   | Sdl.InitFlags.GameController
-                   | Sdl.InitFlags.Haptic
             );
 
             SDL.DisableScreenSaver();

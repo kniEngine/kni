@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Platform.Input
 
         public GamePadDevice()
         {
-
         }
     }
 
@@ -39,9 +38,15 @@ namespace Microsoft.Xna.Platform.Input
         public override float LeftThumbDeadZone { get { return 0.24f; } }
         public override float RightThumbDeadZone { get { return 0.265f; } }
 
+        const Sdl.InitFlags SdlSubSystems = Sdl.InitFlags.GameController
+                                          | Sdl.InitFlags.Haptic
+                                          ;
+
         public ConcreteGamePad()
         {
+            Sdl.Current.InitSubSystem(SdlSubSystems);;
             InitDatabase();
+            InitDevices();
         }
 
         ~ConcreteGamePad()
@@ -52,71 +57,8 @@ namespace Microsoft.Xna.Platform.Input
             _gamepads.Clear();
             _indicesMap.Clear();
 
-        }
+            Sdl.Current.QuitSubSystem(SdlSubSystems);
 
-
-        private void InitDatabase()
-        {
-            using (Stream stream = typeof(ConcreteGamePad).Assembly.GetManifestResourceStream("gamecontrollerdb.txt"))
-            {
-                if (stream != null)
-                {
-                    using (BinaryReader reader = new BinaryReader(stream))
-                    {
-                        try
-                        {
-                            IntPtr src = SDL.RwFromMem(reader.ReadBytes((int)stream.Length), (int)stream.Length);
-                            SDL.GAMECONTROLLER.AddMappingFromRw(src, 1);
-                        }
-                        catch { }
-                    }
-                }
-            }
-        }
-
-        internal void AddDevice(int deviceIndex)
-        {
-            IntPtr handle = SDL.GAMECONTROLLER.Open(deviceIndex);
-
-            int index = 0;
-            while (_gamepads.ContainsKey(index))
-                index++;
-
-            IntPtr joystickHandle = SDL.GAMECONTROLLER.GetJoystick(handle);
-            int instanceID = SDL.JOYSTICK.InstanceID(handle);
-            SdlGamePadDevice sdlGamepad = new SdlGamePadDevice(handle);
-            sdlGamepad.Capabilities = InternalGetCapabilities(handle);
-
-            _gamepads.Add(index, sdlGamepad);
-
-            _indicesMap[instanceID] = index;
-        }
-
-        internal void RemoveDevice(int instanceID)
-        {
-            if (_indicesMap.TryGetValue(instanceID, out int index))
-            {
-                if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
-                {
-                    _gamepads.Remove(index);
-                    SDL.GAMECONTROLLER.Close(sdlGamepad.Handle);
-
-                    _indicesMap.Remove(instanceID);
-                }
-            }
-        }
-
-        internal void UpdatePacketInfo(int instanceID, uint packetNumber)
-        {
-            if (_indicesMap.TryGetValue(instanceID, out int index))
-            {
-                if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
-                {
-                    sdlGamepad.PacketNumber = (packetNumber < int.MaxValue)
-                                            ? (int)packetNumber
-                                            : (int)(packetNumber - (uint)int.MaxValue);
-                }
-            }
         }
 
         public override int PlatformGetMaxNumberOfGamePads()
@@ -365,5 +307,88 @@ namespace Microsoft.Xna.Platform.Input
 
             return false;
         }
+
+
+        private void InitDatabase()
+        {
+            using (Stream stream = typeof(ConcreteGamePad).Assembly.GetManifestResourceStream("gamecontrollerdb.txt"))
+            {
+                if (stream != null)
+                {
+                    using (BinaryReader reader = new BinaryReader(stream))
+                    {
+                        try
+                        {
+                            IntPtr src = SDL.RwFromMem(reader.ReadBytes((int)stream.Length), (int)stream.Length);
+                            SDL.GAMECONTROLLER.AddMappingFromRw(src, 1);
+                        }
+                        catch { }
+                    }
+                }
+            }
+        }
+
+        private void InitDevices()
+        {
+            int numJoysticks = SDL.JOYSTICK.NumJoysticks();
+            for (int deviceIndex = 0; deviceIndex < numJoysticks; deviceIndex++)
+            {
+                if (SDL.GAMECONTROLLER.IsGameController(deviceIndex) == 1)
+                    AddDevice(deviceIndex);
+            }
+        }
+
+        internal void AddDevice(int deviceIndex)
+        {
+            IntPtr handle = SDL.GAMECONTROLLER.Open(deviceIndex);
+            IntPtr joystickHandle = SDL.GAMECONTROLLER.GetJoystick(handle);
+            int instanceID = SDL.JOYSTICK.InstanceID(joystickHandle);
+
+            if (_indicesMap.ContainsKey(instanceID))
+                return;
+
+            int index = 0;
+            while (_gamepads.ContainsKey(index))
+                index++;
+
+            SdlGamePadDevice sdlGamepad = new SdlGamePadDevice(instanceID, handle);
+            sdlGamepad.Capabilities = InternalGetCapabilities(handle);
+
+            _gamepads.Add(index, sdlGamepad);
+
+            _indicesMap[instanceID] = index;
+        }
+
+        internal void RemapDevice(int instanceID)
+        {
+        }
+
+        internal void RemoveDevice(int instanceID)
+        {
+            if (_indicesMap.TryGetValue(instanceID, out int index))
+            {
+                if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
+                {
+                    _gamepads.Remove(index);
+                    SDL.GAMECONTROLLER.Close(sdlGamepad.Handle);
+
+                    _indicesMap.Remove(instanceID);
+                }
+            }
+        }
+
+        internal void UpdatePacketInfo(int instanceID, uint packetNumber)
+        {
+            if (_indicesMap.TryGetValue(instanceID, out int index))
+            {
+                if (_gamepads.TryGetValue(index, out SdlGamePadDevice sdlGamepad))
+                {
+                    sdlGamepad.PacketNumber = (packetNumber < int.MaxValue)
+                                            ? (int)packetNumber
+                                            : (int)(packetNumber - (uint)int.MaxValue);
+                }
+            }
+        }
+
     }
 }
