@@ -191,6 +191,8 @@ namespace Microsoft.Xna.Framework
 
         private void OnDeactivated(object sender)
         {
+            _keys.Clear();
+
             base.OnDeactivated();
         }
 
