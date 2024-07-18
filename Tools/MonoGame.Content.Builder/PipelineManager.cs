@@ -529,23 +529,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void DeleteBuildEvent(string destFile)
         {
+            string dbname = ResponseFilename;
+
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(dbname), relativeEventPath);
             FileHelper.DeleteIfExists(intermediateEventPath);
         }
 
         private void SaveBuildEvent(string destFile, BuildEvent buildEvent)
         {
+            string dbname = ResponseFilename;
+
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(dbname), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
             buildEvent.SaveBinary(intermediateEventPath);
         }
 
         internal BuildEvent LoadBuildEvent(string destFile)
         {
+            string dbname = ResponseFilename;
+
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
-            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(ResponseFilename), relativeEventPath);
+            string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(dbname), relativeEventPath);
             intermediateEventPath = Path.GetFullPath(intermediateEventPath);
             return BuildEvent.LoadBinary(intermediateEventPath);
         }
