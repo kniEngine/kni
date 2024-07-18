@@ -701,8 +701,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         private void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
         {
-            string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(_responseFilename, SourceFileCollection.Extension));
-            fileCollection.SaveBinary(intermediateFileCollectionPath);
+            if(!string.IsNullOrEmpty( _responseFilename))
+            {
+                string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(_responseFilename, SourceFileCollection.Extension));
+                fileCollection.SaveBinary(intermediateFileCollectionPath);
+            }
         }
 
         private SourceFileCollection LoadFileCollection(string intermediatePath)
