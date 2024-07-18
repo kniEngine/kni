@@ -696,6 +696,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void DeleteFileCollection(string intermediatePath)
         {
             string dbname = _responseFilename;
+            if (dbname == String.Empty)
+                dbname = PipelineManager.DefaultFileCollectionFilename;
 
             string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(dbname, SourceFileCollection.Extension));
             FileHelper.DeleteIfExists(intermediateFileCollectionPath);
@@ -704,6 +706,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
         {
             string dbname = _responseFilename;
+            if (dbname == String.Empty)
+                dbname = PipelineManager.DefaultFileCollectionFilename;
 
             string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(dbname, SourceFileCollection.Extension));
             fileCollection.SaveBinary(intermediateFileCollectionPath);
@@ -712,6 +716,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private SourceFileCollection LoadFileCollection(string intermediatePath)
         {
             string dbname = _responseFilename;
+            if (dbname == String.Empty)
+                dbname = PipelineManager.DefaultFileCollectionFilename;
 
             string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(dbname, SourceFileCollection.Extension));
             return SourceFileCollection.LoadBinary(intermediateFileCollectionPath);

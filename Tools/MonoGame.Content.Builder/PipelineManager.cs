@@ -87,6 +87,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// </summary>
         public bool CompressContent { get; set; }
 
+        internal const String DefaultFileCollectionFilename = "assetsdb.kniContent";
+
         public PipelineManager(string projectDir, string responseFilename, string outputDir, string intermediateDir, bool quiet)
         {
             _buildEventsMap = new Dictionary<string, List<BuildEvent>>();
@@ -530,6 +532,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void DeleteBuildEvent(string destFile)
         {
             string dbname = ResponseFilename;
+            if (dbname == String.Empty)
+                dbname = DefaultFileCollectionFilename;
 
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(dbname), relativeEventPath);
@@ -539,6 +543,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void SaveBuildEvent(string destFile, BuildEvent buildEvent)
         {
             string dbname = ResponseFilename;
+            if (dbname == String.Empty)
+                dbname = DefaultFileCollectionFilename;
 
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(dbname), relativeEventPath);
@@ -549,6 +555,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         internal BuildEvent LoadBuildEvent(string destFile)
         {
             string dbname = ResponseFilename;
+            if (dbname == String.Empty)
+                dbname = DefaultFileCollectionFilename;
 
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(dbname), relativeEventPath);
