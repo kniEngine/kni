@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Platform.Audio
         public override void PlatformLoadAudioStream(Stream stream, out TimeSpan duration)
         {
             duration = TimeSpan.Zero;
+
+            throw new NotImplementedException();
         }
 
         public override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
