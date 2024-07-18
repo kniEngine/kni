@@ -14,6 +14,11 @@
       "commandName": "Project",
       "commandLineArgs": "/@:OpenGL.mgcb /Rebuild /SingleThread",
       "workingDirectory": "X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\"
+    },
+    "Debug NoResponseFile": {
+      "commandName": "Project",
+      "commandLineArgs": "/SingleThread /outputDir:X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\DirectX /intermediateDir:X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\obj\\ /platform:Windows /importer:EffectImporter /processor:EffectProcessor /build:X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\Bevels.fx /build:X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\BlackOut.fx /build:X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\ColorFlip.fx",
+      "workingDirectory": "X:\\kniEngine\\kni\\Tests\\Assets\\Effects\\"
     }
   }
 }
