@@ -58,7 +58,49 @@ namespace Microsoft.Xna.Platform.Audio
         {
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
-            ALFormat alFormat = GetSoundFormat(audioFormat, channels, bitsPerSample);
+            ALFormat alFormat;
+            switch (audioFormat)
+            {
+                case AudioLoader.FormatPcm:
+                    // PCM
+                    switch (channels)
+                    {
+                        case 1: alFormat = bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16; break;
+                        case 2: alFormat = bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16; break;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+                case AudioLoader.FormatMsAdpcm:
+                    // Microsoft ADPCM
+                    switch (channels)
+                    {
+                        case 1: alFormat = ALFormat.MonoMSAdpcm; break;
+                        case 2: alFormat = ALFormat.StereoMSAdpcm; break;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+                case AudioLoader.FormatIeee:
+                    // IEEE Float
+                    switch (channels)
+                    {
+                        case 1: alFormat = ALFormat.MonoFloat32; break;
+                        case 2: alFormat = ALFormat.StereoFloat32; break;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+                case AudioLoader.FormatIma4:
+                    // IMA4 ADPCM
+                    switch (channels)
+                    {
+                        case 1: alFormat = ALFormat.MonoIma4;
+                        case 2: alFormat = ALFormat.StereoIma4;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+
+                default:
+                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
+            }
 
             switch (alFormat)
             {
