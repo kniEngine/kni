@@ -58,66 +58,18 @@ namespace Microsoft.Xna.Platform.Audio
         {
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
-            ALFormat alFormat;
             switch (audioFormat)
             {
                 case AudioLoader.FormatPcm:
                     // PCM
                     if (channels < 1 || 2 < channels)
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
-                    switch (channels)
-                    {
-                        case 1: alFormat = bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16; break;
-                        case 2: alFormat = bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16; break;
-                    }
+                    PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                     break;
                 case AudioLoader.FormatMsAdpcm:
                     // Microsoft ADPCM
                     if (channels < 1 || 2 < channels)
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
-                    switch (channels)
-                    {
-                        case 1: alFormat = ALFormat.MonoMSAdpcm; break;
-                        case 2: alFormat = ALFormat.StereoMSAdpcm; break;
-                    }
-                    break;
-                case AudioLoader.FormatIeee:
-                    // IEEE Float
-                    if (channels < 1 || 2 < channels)
-                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
-                    switch (channels)
-                    {
-                        case 1: alFormat = ALFormat.MonoFloat32; break;
-                        case 2: alFormat = ALFormat.StereoFloat32; break;
-                    }
-                    break;
-                case AudioLoader.FormatIma4:
-                    // IMA4 ADPCM
-                    if (channels < 1 || 2 < channels)
-                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
-                    switch (channels)
-                    {
-                        case 1: alFormat = ALFormat.MonoIma4;
-                        case 2: alFormat = ALFormat.StereoIma4;
-                    }
-                    break;
-
-                default:
-                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
-            }
-
-            switch (alFormat)
-            {
-                case ALFormat.Mono8:
-                case ALFormat.Mono16:
-                case ALFormat.Stereo8:
-                case ALFormat.Stereo16:
-                    {
-                        PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                    }
-                    break;
-                case ALFormat.MonoMSAdpcm:
-                case ALFormat.StereoMSAdpcm:
                     if (!concreteAudioService.SupportsAdpcm)
                     {
                         // If MS-ADPCM is not supported, convert to 16-bit signed PCM
@@ -129,8 +81,10 @@ namespace Microsoft.Xna.Platform.Audio
                         InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
                     break;
-                case ALFormat.MonoFloat32:
-                case ALFormat.StereoFloat32:
+                case AudioLoader.FormatIeee:
+                    // IEEE Float
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
                     if (!concreteAudioService.SupportsIeee)
                     {
                         // If 32-bit IEEE float is not supported, convert to 16-bit signed PCM
@@ -142,8 +96,10 @@ namespace Microsoft.Xna.Platform.Audio
                         InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
                     }
                     break;
-                case ALFormat.MonoIma4:
-                case ALFormat.StereoIma4:
+                case AudioLoader.FormatIma4:
+                    // IMA4 ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
                     if (!concreteAudioService.SupportsIma4)
                     {
                         // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
@@ -155,8 +111,9 @@ namespace Microsoft.Xna.Platform.Audio
                         InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
                     break;
+
                 default:
-                    throw new NotSupportedException("Unsupported wave format!");
+                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
             }
         }
 
