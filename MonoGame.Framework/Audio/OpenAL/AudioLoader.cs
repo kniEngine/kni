@@ -84,8 +84,8 @@ namespace Microsoft.Xna.Platform.Audio
                     // Microsoft ADPCM
                     switch (channels)
                     {
-                        case 1: alFormat = ALFormat.MonoMSAdpcm; break;
-                        case 2: alFormat = ALFormat.StereoMSAdpcm; break;
+                        case 1: return (blockAlignment / channels - 7) * 2 + 2;
+                        case 2: return (blockAlignment / channels - 7) * 2 + 2;
                         default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                     break;
@@ -93,28 +93,13 @@ namespace Microsoft.Xna.Platform.Audio
                     // IMA4 ADPCM
                     switch (channels)
                     {
-                        case 1: alFormat = ALFormat.MonoIma4; break;
-                        case 2: alFormat = ALFormat.StereoIma4; break;
+                        case 1: return (blockAlignment / channels - 4) / 4 * 8 + 1;
+                        case 2: return (blockAlignment / channels - 4) / 4 * 8 + 1;
                         default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                     break;
                 default:
                     throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
-            }
-
-            switch (alFormat)
-            {
-                case ALFormat.MonoIma4:
-                    return (blockAlignment - 4) / 4 * 8 + 1;
-                case ALFormat.StereoIma4:
-                    return (blockAlignment / 2 - 4) / 4 * 8 + 1;
-                case ALFormat.MonoMSAdpcm:
-                    return (blockAlignment - 7) * 2 + 2;
-                case ALFormat.StereoMSAdpcm:
-                    return (blockAlignment / 2 - 7) * 2 + 2;
-
-                default:
-                    return 0;
             }
         }
 
