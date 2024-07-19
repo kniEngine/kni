@@ -68,11 +68,10 @@ namespace Microsoft.Xna.Platform.Audio
                     // PCM
                     switch (channels)
                     {
-                        case 1: alFormat = bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16; break;
-                        case 2: alFormat = bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16; break;
+                        case 1: return 0;
+                        case 2: return 0;
                         default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
-                    break;
                 case FormatMsAdpcm:
                     // Microsoft ADPCM
                     switch (channels)
@@ -86,11 +85,10 @@ namespace Microsoft.Xna.Platform.Audio
                     // IEEE Float
                     switch (channels)
                     {
-                        case 1: alFormat = ALFormat.MonoFloat32; break;
-                        case 2: alFormat = ALFormat.StereoFloat32; break;
+                        case 1: return 0;
+                        case 2: return 0;
                         default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
-                    break;
                 case FormatIma4:
                     // IMA4 ADPCM
                     switch (channels)
@@ -114,6 +112,7 @@ namespace Microsoft.Xna.Platform.Audio
                     return (blockAlignment - 7) * 2 + 2;
                 case ALFormat.StereoMSAdpcm:
                     return (blockAlignment / 2 - 7) * 2 + 2;
+
                 default:
                     return 0;
             }
