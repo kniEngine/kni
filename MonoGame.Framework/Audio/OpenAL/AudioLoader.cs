@@ -207,14 +207,16 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     switch (audioFormat)
                     {
-                        case FormatIma4:
-                        case FormatMsAdpcm:
-                            sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(audioFormat, channels, bitsPerSample, audioData.Length % blockAlignment);
-                            break;
                         case FormatPcm:
                         case FormatIeee:
                             sampleCount = audioData.Length / ((channels * bitsPerSample) / 8);
                             break;
+
+                        case FormatIma4:
+                        case FormatMsAdpcm:
+                            sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(audioFormat, channels, bitsPerSample, audioData.Length % blockAlignment);
+                            break;
+
                         default:
                             throw new InvalidDataException("Unhandled WAV format " + audioFormat.ToString());
                     }
