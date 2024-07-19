@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Platform.Audio
     {
         private int _sampleRate;
         private int _channels;
-        private ALFormat _format;
+        private ALFormat _alFormat;
         private Queue<int> _queuedBuffers = new Queue<int>();
 
         private readonly WeakReference _dynamicSoundEffectInstanceRef = new WeakReference(null);
@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Audio
             _sampleRate = sampleRate;
             _channels = channels;
 
-            _format = channels == 1 ? ALFormat.Mono16 : ALFormat.Stereo16;
+            _alFormat = channels == 1 ? ALFormat.Mono16 : ALFormat.Stereo16;
 
             _sourceId = ConcreteAudioService.ReserveSource();
         }
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Audio
             ConcreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
             
             // Bind the data
-            ConcreteAudioService.OpenAL.BufferData(alBuffer, _format, buffer, offset, count, _sampleRate, 0);
+            ConcreteAudioService.OpenAL.BufferData(alBuffer, _alFormat, buffer, offset, count, _sampleRate, 0);
             ConcreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
 
             // Queue the buffer

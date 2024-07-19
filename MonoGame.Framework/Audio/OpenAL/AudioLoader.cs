@@ -58,9 +58,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         // Converts block alignment in bytes to sample alignment, primarily for compressed formats
         // Calculation of sample alignment from http://kcat.strangesoft.net/openal-extensions/SOFT_block_alignment.txt
-        public static int SampleAlignment(ALFormat format, int blockAlignment)
+        public static int SampleAlignment(ALFormat alFormat, int blockAlignment)
         {
-            switch (format)
+            switch (alFormat)
             {
                 case ALFormat.MonoIma4:
                     return (blockAlignment - 4) / 4 * 8 + 1;
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Audio
         /// Load a WAV file from stream.
         /// </summary>
         /// <param name="stream">The stream positioned at the start of the WAV file.</param>
-        /// <param name="format">Gets the OpenAL format enumeration value.</param>
+        /// <param name="alFormat">Gets the OpenAL format enumeration value.</param>
         /// <param name="frequency">Gets the frequency or sample rate.</param>
         /// <param name="channels">Gets the number of channels.</param>
         /// <param name="blockAlignment">Gets the block alignment, important for compressed sounds.</param>
@@ -87,20 +87,20 @@ namespace Microsoft.Xna.Platform.Audio
         /// <param name="samplesPerBlock">Gets the number of samples per block.</param>
         /// <param name="sampleCount">Gets the total number of samples.</param>
         /// <returns>The byte buffer containing the waveform data or compressed blocks.</returns>
-        public static byte[] Load(Stream stream, out ALFormat format, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
+        public static byte[] Load(Stream stream, out ALFormat alFormat, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
         {
             byte[] audioData = null;
 
             using (BinaryReader reader = new BinaryReader(stream))
             {
                 // for now we'll only support wave files
-                audioData = LoadWave(reader, out format, out frequency, out channels, out blockAlignment, out bitsPerSample, out samplesPerBlock, out sampleCount);
+                audioData = LoadWave(reader, out alFormat, out frequency, out channels, out blockAlignment, out bitsPerSample, out samplesPerBlock, out sampleCount);
             }
 
             return audioData;
         }
 
-        private static byte[] LoadWave(BinaryReader reader, out ALFormat format, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
+        private static byte[] LoadWave(BinaryReader reader, out ALFormat alFormat, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
         {
             byte[] audioData = null;
 
@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Platform.Audio
             int audioFormat = 0;
             channels = 0;
             bitsPerSample = 0;
-            format = ALFormat.Mono16;
+            alFormat = ALFormat.Mono16;
             frequency = 0;
             blockAlignment = 0;
             samplesPerBlock = 0;
@@ -196,11 +196,11 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             // Calculate fields we didn't read from the file
-            format = GetSoundFormat(audioFormat, channels, bitsPerSample);
+            alFormat = GetSoundFormat(audioFormat, channels, bitsPerSample);
 
             if (samplesPerBlock == 0)
             {
-                samplesPerBlock = SampleAlignment(format, blockAlignment);
+                samplesPerBlock = SampleAlignment(alFormat, blockAlignment);
             }
 
             if (sampleCount == 0)
@@ -209,14 +209,14 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     case FormatIma4:
                     case FormatMsAdpcm:
-                        sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(format, audioData.Length % blockAlignment);
+                        sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(alFormat, audioData.Length % blockAlignment);
                         break;
                     case FormatPcm:
                     case FormatIeee:
                         sampleCount = audioData.Length / ((channels * bitsPerSample) / 8);
                         break;
                     default:
-                        throw new InvalidDataException("Unhandled WAV format " + format.ToString());
+                        throw new InvalidDataException("Unhandled WAV format " + alFormat.ToString());
                 }
             }
 
