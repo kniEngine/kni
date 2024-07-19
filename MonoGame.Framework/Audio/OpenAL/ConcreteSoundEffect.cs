@@ -40,28 +40,25 @@ namespace Microsoft.Xna.Platform.Audio
 
             duration = TimeSpan.FromSeconds((float)sampleCount / (float)freq);
 
-            ALFormat alFormat = ALFormat.Mono16;
-            alFormat = AudioLoader.GetSoundFormat(audioFormat, channels, bitsPerSample);
-
-            PlatformInitializeBuffer(buffer, 0, buffer.Length, alFormat, channels, freq, blockAlignment, bitsPerSample, 0, 0);
+            PlatformInitializeBuffer(buffer, 0, buffer.Length, audioFormat, channels, freq, blockAlignment, bitsPerSample, 0, 0);
         }
 
         public override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
-            short format = BitConverter.ToInt16(header, 0);
+            short audioFormat = BitConverter.ToInt16(header, 0);
             short channels = BitConverter.ToInt16(header, 2);
             int sampleRate = BitConverter.ToInt32(header, 4);
             short blockAlignment = BitConverter.ToInt16(header, 12);
             short bitsPerSample = BitConverter.ToInt16(header, 14);
 
-            ALFormat alFormat = AudioLoader.GetSoundFormat(format, channels, bitsPerSample);
-
-            PlatformInitializeBuffer(buffer, index, count, alFormat, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
+            PlatformInitializeBuffer(buffer, index, count, audioFormat, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
         }
 
-        private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, ALFormat alFormat, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
+        private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, int audioFormat, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
         {
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
+
+            ALFormat alFormat = AudioLoader.GetSoundFormat(audioFormat, channels, bitsPerSample);
 
             switch (alFormat)
             {
