@@ -4,7 +4,6 @@
 
 using System;
 using System.IO;
-using Microsoft.Xna.Platform.Audio.OpenAL;
 
 namespace Microsoft.Xna.Platform.Audio
 {
@@ -15,63 +14,36 @@ namespace Microsoft.Xna.Platform.Audio
         internal const int FormatIeee = 3;
         internal const int FormatIma4 = 17;
 
-        public static ALFormat GetSoundFormat(int format, int channels, int bits)
-        {
-            switch (format)
-            {
-                case FormatPcm:
-                    // PCM
-                    switch (channels)
-                    {
-                        case 1: return bits == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
-                        case 2: return bits == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                case FormatMsAdpcm:
-                    // Microsoft ADPCM
-                    switch (channels)
-                    {
-                        case 1: return ALFormat.MonoMSAdpcm;
-                        case 2: return ALFormat.StereoMSAdpcm;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                case FormatIeee:
-                    // IEEE Float
-                    switch (channels)
-                    {
-                        case 1: return ALFormat.MonoFloat32;
-                        case 2: return ALFormat.StereoFloat32;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                case FormatIma4:
-                    // IMA4 ADPCM
-                    switch (channels)
-                    {
-                        case 1: return ALFormat.MonoIma4;
-                        case 2: return ALFormat.StereoIma4;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                default:
-                    throw new NotSupportedException("The specified sound format (" + format.ToString() + ") is not supported.");
-            }
-        }
 
         // Converts block alignment in bytes to sample alignment, primarily for compressed formats
         // Calculation of sample alignment from http://kcat.strangesoft.net/openal-extensions/SOFT_block_alignment.txt
-        public static int SampleAlignment(ALFormat format, int blockAlignment)
+        public static int SampleAlignment(int audioFormat, int channels, int bitsPerSample, int blockAlignment)
         {
-            switch (format)
+            switch (audioFormat)
             {
-                case ALFormat.MonoIma4:
-                    return (blockAlignment - 4) / 4 * 8 + 1;
-                case ALFormat.StereoIma4:
-                    return (blockAlignment / 2 - 4) / 4 * 8 + 1;
-                case ALFormat.MonoMSAdpcm:
-                    return (blockAlignment - 7) * 2 + 2;
-                case ALFormat.StereoMSAdpcm:
-                    return (blockAlignment / 2 - 7) * 2 + 2;
-                default:
+                case FormatPcm:
+                    // PCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count ("+ channels + ") is not supported.");
                     return 0;
+                case FormatIeee:
+                    // IEEE Float
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    return 0;
+                case FormatMsAdpcm:
+                    // Microsoft ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    return (blockAlignment / channels - 7) * 2 + 2;
+                case FormatIma4:
+                    // IMA4 ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    return (blockAlignment / channels - 4) / 4 * 8 + 1;
+
+                default:
+                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
             }
         }
 
@@ -79,7 +51,7 @@ namespace Microsoft.Xna.Platform.Audio
         /// Load a WAV file from stream.
         /// </summary>
         /// <param name="stream">The stream positioned at the start of the WAV file.</param>
-        /// <param name="format">Gets the OpenAL format enumeration value.</param>
+        /// <param name="audioFormat">Gets the audio format value.</param>
         /// <param name="frequency">Gets the frequency or sample rate.</param>
         /// <param name="channels">Gets the number of channels.</param>
         /// <param name="blockAlignment">Gets the block alignment, important for compressed sounds.</param>
@@ -87,89 +59,91 @@ namespace Microsoft.Xna.Platform.Audio
         /// <param name="samplesPerBlock">Gets the number of samples per block.</param>
         /// <param name="sampleCount">Gets the total number of samples.</param>
         /// <returns>The byte buffer containing the waveform data or compressed blocks.</returns>
-        public static byte[] Load(Stream stream, out ALFormat format, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
+        public static byte[] Load(Stream stream, out int audioFormat, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
         {
-            byte[] audioData = null;
-
             using (BinaryReader reader = new BinaryReader(stream))
             {
-                // for now we'll only support wave files
-                audioData = LoadWave(reader, out format, out frequency, out channels, out blockAlignment, out bitsPerSample, out samplesPerBlock, out sampleCount);
-            }
+                byte[] audioData = null;
 
-            return audioData;
-        }
+                //header
+                string signature = new string(reader.ReadChars(4));
+                if (signature != "RIFF")
+                    throw new ArgumentException("Specified stream is not a wave file.");
+                reader.ReadInt32(); // riff_chunk_size
 
-        private static byte[] LoadWave(BinaryReader reader, out ALFormat format, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
-        {
-            byte[] audioData = null;
+                string wformat = new string(reader.ReadChars(4));
+                if (wformat != "WAVE")
+                    throw new ArgumentException("Specified stream is not a wave file.");
 
-            //header
-            string signature = new string(reader.ReadChars(4));
-            if (signature != "RIFF")
-                throw new ArgumentException("Specified stream is not a wave file.");
-            reader.ReadInt32(); // riff_chunk_size
+                audioFormat = 0;
+                channels = 0;
+                bitsPerSample = 0;
+                frequency = 0;
+                blockAlignment = 0;
+                samplesPerBlock = 0;
+                sampleCount = 0;
 
-            string wformat = new string(reader.ReadChars(4));
-            if (wformat != "WAVE")
-                throw new ArgumentException("Specified stream is not a wave file.");
-
-            int audioFormat = 0;
-            channels = 0;
-            bitsPerSample = 0;
-            format = ALFormat.Mono16;
-            frequency = 0;
-            blockAlignment = 0;
-            samplesPerBlock = 0;
-            sampleCount = 0;
-
-            // WAVE header
-            while (audioData == null)
-            {
-                string chunkType = new string(reader.ReadChars(4));
-                int chunkSize = reader.ReadInt32();
-                switch (chunkType)
+                // WAVE header
+                while (audioData == null)
                 {
-                    case "fmt ":
-                        {
-                            audioFormat = reader.ReadInt16(); // 2
-                            channels = reader.ReadInt16(); // 4
-                            frequency = reader.ReadInt32();  // 8
-                            int byteRate = reader.ReadInt32();    // 12
-                            blockAlignment = (int)reader.ReadInt16();  // 14
-                            bitsPerSample = reader.ReadInt16(); // 16
-
-                            // Read extra data if present
-                            if (chunkSize > 16)
+                    string chunkType = new string(reader.ReadChars(4));
+                    int chunkSize = reader.ReadInt32();
+                    switch (chunkType)
+                    {
+                        case "fmt ":
                             {
-                                int extraDataSize = reader.ReadInt16();
-                                if (audioFormat == FormatIma4)
+                                audioFormat = reader.ReadInt16(); // 2
+                                channels = reader.ReadInt16(); // 4
+                                frequency = reader.ReadInt32();  // 8
+                                int byteRate = reader.ReadInt32();    // 12
+                                blockAlignment = (int)reader.ReadInt16();  // 14
+                                bitsPerSample = reader.ReadInt16(); // 16
+
+                                // Read extra data if present
+                                if (chunkSize > 16)
                                 {
-                                    samplesPerBlock = reader.ReadInt16();
-                                    extraDataSize -= 2;
-                                }
-                                if (extraDataSize > 0)
-                                {
-                                    if (reader.BaseStream.CanSeek)
-                                        reader.BaseStream.Seek(extraDataSize, SeekOrigin.Current);
-                                    else
+                                    int extraDataSize = reader.ReadInt16();
+                                    if (audioFormat == FormatIma4)
                                     {
-                                        for (int i = 0; i < extraDataSize; ++i)
-                                            reader.ReadByte();
+                                        samplesPerBlock = reader.ReadInt16();
+                                        extraDataSize -= 2;
+                                    }
+                                    if (extraDataSize > 0)
+                                    {
+                                        if (reader.BaseStream.CanSeek)
+                                            reader.BaseStream.Seek(extraDataSize, SeekOrigin.Current);
+                                        else
+                                        {
+                                            for (int i = 0; i < extraDataSize; ++i)
+                                                reader.ReadByte();
+                                        }
                                     }
                                 }
                             }
-                        }
-                        break;
-                    case "fact":
-                        if (audioFormat == FormatIma4)
-                        {
-                            sampleCount = reader.ReadInt32() * channels;
-                            chunkSize -= 4;
-                        }
-                        // Skip any remaining chunk data
-                        if (chunkSize > 0)
-                        {
+                            break;
+                        case "fact":
+                            if (audioFormat == FormatIma4)
+                            {
+                                sampleCount = reader.ReadInt32() * channels;
+                                chunkSize -= 4;
+                            }
+                            // Skip any remaining chunk data
+                            if (chunkSize > 0)
+                            {
+                                if (reader.BaseStream.CanSeek)
+                                    reader.BaseStream.Seek(chunkSize, SeekOrigin.Current);
+                                else
+                                {
+                                    for (int i = 0; i < chunkSize; ++i)
+                                        reader.ReadByte();
+                                }
+                            }
+                            break;
+                        case "data":
+                            audioData = reader.ReadBytes(chunkSize);
+                            break;
+                        default:
+                            // Skip this chunk
                             if (reader.BaseStream.CanSeek)
                                 reader.BaseStream.Seek(chunkSize, SeekOrigin.Current);
                             else
@@ -177,50 +151,38 @@ namespace Microsoft.Xna.Platform.Audio
                                 for (int i = 0; i < chunkSize; ++i)
                                     reader.ReadByte();
                             }
-                        }
-                        break;
-                    case "data":
-                        audioData = reader.ReadBytes(chunkSize);
-                        break;
-                    default:
-                        // Skip this chunk
-                        if (reader.BaseStream.CanSeek)
-                            reader.BaseStream.Seek(chunkSize, SeekOrigin.Current);
-                        else
-                        {
-                            for (int i = 0; i < chunkSize; ++i)
-                                reader.ReadByte();
-                        }
-                        break;
+                            break;
+                    }
                 }
-            }
 
-            // Calculate fields we didn't read from the file
-            format = GetSoundFormat(audioFormat, channels, bitsPerSample);
+                // Calculate fields we didn't read from the file
 
-            if (samplesPerBlock == 0)
-            {
-                samplesPerBlock = SampleAlignment(format, blockAlignment);
-            }
-
-            if (sampleCount == 0)
-            {
-                switch (audioFormat)
+                if (samplesPerBlock == 0)
                 {
-                    case FormatIma4:
-                    case FormatMsAdpcm:
-                        sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(format, audioData.Length % blockAlignment);
-                        break;
-                    case FormatPcm:
-                    case FormatIeee:
-                        sampleCount = audioData.Length / ((channels * bitsPerSample) / 8);
-                        break;
-                    default:
-                        throw new InvalidDataException("Unhandled WAV format " + format.ToString());
+                    samplesPerBlock = SampleAlignment(audioFormat, channels, bitsPerSample, blockAlignment);
                 }
-            }
 
-            return audioData;
+                if (sampleCount == 0)
+                {
+                    switch (audioFormat)
+                    {
+                        case FormatPcm:
+                        case FormatIeee:
+                            sampleCount = audioData.Length / ((channels * bitsPerSample) / 8);
+                            break;
+
+                        case FormatIma4:
+                        case FormatMsAdpcm:
+                            sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(audioFormat, channels, bitsPerSample, audioData.Length % blockAlignment);
+                            break;
+
+                        default:
+                            throw new InvalidDataException("Unhandled WAV format " + audioFormat.ToString());
+                    }
+                }
+
+                return audioData;
+            }
         }
 
         // Convert buffer containing 24-bit signed PCM wav data to a 16-bit signed PCM buffer

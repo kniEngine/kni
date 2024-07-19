@@ -263,7 +263,7 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
         internal unsafe delegate void d_albufferdata(int buffer, int format, byte* data, int size, int freq);
         internal d_albufferdata alBufferData;
 
-        internal unsafe void BufferData(int buffer, ALFormat format, byte[] data, int index, int count, int freq, int sampleAlignment)
+        internal unsafe void BufferData(int buffer, ALFormat alFormat, byte[] data, int index, int count, int freq, int sampleAlignment)
         {
             if (sampleAlignment > 0)
             {
@@ -273,15 +273,15 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
             fixed(byte* pData = data)
             {
-                alBufferData(buffer, (int)format, (pData + index), count, freq);
+                alBufferData(buffer, (int)alFormat, (pData + index), count, freq);
             }
         }
 
-        internal unsafe void BufferData(int buffer, ALFormat format, short[] data, int count, int freq)
+        internal unsafe void BufferData(int buffer, ALFormat alFormat, short[] data, int count, int freq)
         {
             fixed (void* pData = data)
             {
-                alBufferData(buffer, (int)format, (byte*)pData, count, freq);
+                alBufferData(buffer, (int)alFormat, (byte*)pData, count, freq);
             }
         }
 
@@ -650,9 +650,9 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
         internal delegate IntPtr d_alccaptureopendevice(string device, uint sampleRate, int format, int sampleSize);
         internal d_alccaptureopendevice alcCaptureOpenDevice;
 
-        internal IntPtr CaptureOpenDevice(string device, uint sampleRate, ALFormat format, int sampleSize)
+        internal IntPtr CaptureOpenDevice(string device, uint sampleRate, ALFormat alFormat, int sampleSize)
         {
-            return alcCaptureOpenDevice(device, sampleRate, (int)format, sampleSize);
+            return alcCaptureOpenDevice(device, sampleRate, (int)alFormat, sampleSize);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1021,13 +1021,13 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             }
         }
 
-        public static bool IsStereoFormat(ALFormat format)
+        public static bool IsStereoFormat(ALFormat alFormat)
         {
-            return (format == ALFormat.Stereo8
-                || format == ALFormat.Stereo16
-                || format == ALFormat.StereoFloat32
-                || format == ALFormat.StereoIma4
-                || format == ALFormat.StereoMSAdpcm);
+            return (alFormat == ALFormat.Stereo8
+                ||  alFormat == ALFormat.Stereo16
+                ||  alFormat == ALFormat.StereoFloat32
+                ||  alFormat == ALFormat.StereoIma4
+                ||  alFormat == ALFormat.StereoMSAdpcm);
         }
     }
 
