@@ -60,7 +60,49 @@ namespace Microsoft.Xna.Platform.Audio
         // Calculation of sample alignment from http://kcat.strangesoft.net/openal-extensions/SOFT_block_alignment.txt
         public static int SampleAlignment(int audioFormat, int channels, int bitsPerSample, int blockAlignment)
         {
-            ALFormat alFormat = GetSoundFormat(audioFormat, channels, bitsPerSample);
+            ALFormat alFormat;
+
+            switch (audioFormat)
+            {
+                case FormatPcm:
+                    // PCM
+                    switch (channels)
+                    {
+                        case 1: alFormat = bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16; break;
+                        case 2: alFormat = bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16; break;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+                case FormatMsAdpcm:
+                    // Microsoft ADPCM
+                    switch (channels)
+                    {
+                        case 1: alFormat = ALFormat.MonoMSAdpcm; break;
+                        case 2: alFormat = ALFormat.StereoMSAdpcm; break;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+                case FormatIeee:
+                    // IEEE Float
+                    switch (channels)
+                    {
+                        case 1: alFormat = ALFormat.MonoFloat32; break;
+                        case 2: alFormat = ALFormat.StereoFloat32; break;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+                case FormatIma4:
+                    // IMA4 ADPCM
+                    switch (channels)
+                    {
+                        case 1: alFormat = ALFormat.MonoIma4; break;
+                        case 2: alFormat = ALFormat.StereoIma4; break;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                    break;
+                default:
+                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
+            }
 
             switch (alFormat)
             {
