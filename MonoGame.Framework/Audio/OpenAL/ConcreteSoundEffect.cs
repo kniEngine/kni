@@ -63,38 +63,42 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 case AudioLoader.FormatPcm:
                     // PCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
                     switch (channels)
                     {
                         case 1: alFormat = bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16; break;
                         case 2: alFormat = bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16; break;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                     break;
                 case AudioLoader.FormatMsAdpcm:
                     // Microsoft ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
                     switch (channels)
                     {
                         case 1: alFormat = ALFormat.MonoMSAdpcm; break;
                         case 2: alFormat = ALFormat.StereoMSAdpcm; break;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                     break;
                 case AudioLoader.FormatIeee:
                     // IEEE Float
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
                     switch (channels)
                     {
                         case 1: alFormat = ALFormat.MonoFloat32; break;
                         case 2: alFormat = ALFormat.StereoFloat32; break;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                     break;
                 case AudioLoader.FormatIma4:
                     // IMA4 ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
                     switch (channels)
                     {
                         case 1: alFormat = ALFormat.MonoIma4;
                         case 2: alFormat = ALFormat.StereoIma4;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                     break;
 
