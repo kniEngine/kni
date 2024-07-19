@@ -20,9 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Input", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Game", "src\Xna.Framework.Game\Xna.Framework.Game.csproj", "{90BBD6EF-F386-4F47-88CD-BF386C7D1705}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Cardboard", "MonoGame.Framework\Xna.Framework.Cardboard.csproj", "{BF257928-8B5D-4371-BD03-C18DA71918C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Cardboard", "Platforms\Xna.Framework.Cardboard.csproj", "{BF257928-8B5D-4371-BD03-C18DA71918C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCardboard", "MonoGame.Framework\Platform\Cardboard\GoogleCardboard\GoogleCardboard.csproj", "{4EAA991B-83C7-41AA-B845-8A13E05E0334}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCardboard", "Platforms\Platform\Cardboard\GoogleCardboard\GoogleCardboard.csproj", "{4EAA991B-83C7-41AA-B845-8A13E05E0334}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

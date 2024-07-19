@@ -19,12 +19,12 @@ dotnet pack src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipel
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.iOS.nuspec				-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.12.9001.1  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.12.9001.1  -Properties Configuration=Release
 
-dotnet pack MonoGame.Framework\Xna.Framework.WindowsDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
-dotnet pack MonoGame.Framework\Xna.Framework.DesktopGL.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
+dotnet pack Platforms\Xna.Framework.WindowsDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
+dotnet pack Platforms\Xna.Framework.DesktopGL.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack XNA.Framework.Blazor.sln --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
-dotnet pack MonoGame.Framework\Xna.Framework.Ref.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
-dotnet pack MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
+dotnet pack Platforms\Xna.Framework.Ref.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
+dotnet pack Platforms\XNA.Framework.Oculus.OvrDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
 
-dotnet pack MonoGame.Framework\Xna.Framework.Cardboard.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
+dotnet pack Platforms\Xna.Framework.Cardboard.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 
 @pause

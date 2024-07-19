@@ -1,0 +1,8 @@
+<Project>
+
+  <PropertyGroup>
+	<KniPlatform>WindowsStoreApp</KniPlatform>
+    <MonoGamePlatform>WindowsStoreApp</MonoGamePlatform>
+  </PropertyGroup>
+
+</Project>

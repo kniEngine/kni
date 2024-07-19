@@ -220,7 +220,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="..\..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
+    <Compile Include="..\..\Platforms\Platform\Utilities\CurrentPlatform.cs">
       <Link>Utilities\CurrentPlatform.cs</Link>
     </Compile>
     <Compile Include="..\..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />

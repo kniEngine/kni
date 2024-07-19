@@ -2,8 +2,9 @@
 
   <Import Project="..\kniPackage.props" />
   <PropertyGroup>
-    <BaseOutputPath>..\Artifacts\MonoGame.Framework\Ref</BaseOutputPath>
-    <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
+    <BaseOutputPath>..\Artifacts\Platforms\Blazor\</BaseOutputPath>
+
+    <DefineConstants>BLAZORGL;STBSHARP_INTERNAL</DefineConstants>
     
     <Version>3.12.9001.0</Version>
     <AssemblyVersion>3.12.9001.0</AssemblyVersion>
@@ -12,21 +13,28 @@
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
+    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>REF</DefineConstants>
+    <DefineConstants>$(DefineConstants);STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Description>Reference XNA framework for libraries.</Description>
-    <PackageTags>KNI;monogame;.net core;core;.net standard;standard;Reference;</PackageTags>
-    <PackageId>nkast.Xna.Framework.Ref</PackageId>
+    <Description>XNA framework for the WebAssembly.</Description>
+    <PackageTags>KNI;monogame;.net core;core;.net standard;standard;Blazor;webassembly</PackageTags>
+    <PackageId>nkast.Xna.Framework.Blazor</PackageId>
     <Product>Xna.Framework</Product>
     <Company>MonoGame Team, Kastellanos Nikos</Company>
   </PropertyGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
@@ -80,35 +88,35 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="P:\MonoGame\Images\Icon.png" />
+    <Compile Include=".Blazor\ConcreteGame.cs" />
+    <Compile Include=".Blazor\ConcreteGameFactory.cs" />
+    <Compile Include=".Blazor\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
 
-    <Compile Include=".Ref\ConcreteGame.cs" />
-    <Compile Include=".Ref\ConcreteGameFactory.cs" />
-    <Compile Include=".Ref\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Input\.Ref\Touch\ConcreteTouchPanel.cs" />
-    <Compile Include="Input\.Ref\ConcreteGamePad.cs" />
-    <Compile Include="Input\.Ref\ConcreteGamePadDevice.cs" />
-    <Compile Include="Input\.Ref\ConcreteInputFactory.cs" />
-    <Compile Include="Input\.Ref\ConcreteJoystick.cs" />
-    <Compile Include="Input\.Ref\ConcreteKeyboard.cs" />
-    <Compile Include="Input\.Ref\ConcreteMouse.cs" />
-    <Compile Include="Input\.Ref\ConcreteMouseCursor.cs" />
-    <Compile Include="Input\.Ref\ConcreteKeyboardInput.cs" />
-    <Compile Include="Input\.Ref\ConcreteMessageBox.cs" />
-    <Compile Include="Media\Ref\ConcreteAlbum.cs" />
-    <Compile Include="Media\Ref\ConcreteMediaFactory.cs" />
-    <Compile Include="Media\Ref\ConcreteMediaLibrary.cs" />
-    <Compile Include="Media\Ref\ConcreteMediaPlayer.cs" />
-    <Compile Include="Media\Ref\ConcreteSong.cs" />
-    <Compile Include="Media\Ref\ConcreteVideoPlayer.cs" />
-    <Compile Include="Media\Ref\ConcreteVideo.cs" />
-    <Compile Include=".Ref\ConcreteTitleContainer.cs" />
-    <Compile Include=".Ref\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Input\.Blazor\Touch\ConcreteTouchPanel.cs" />
+    <Compile Include="Input\.Blazor\ConcreteGamePad.cs" />
+    <Compile Include="Input\.Blazor\ConcreteGamePadDevice.cs" />
+    <Compile Include="Input\.Blazor\ConcreteInputFactory.cs" />
+    <Compile Include="Input\.Blazor\ConcreteJoystick.cs" />
+    <Compile Include="Input\.Blazor\ConcreteKeyboard.cs" />
+    <Compile Include="Input\.Blazor\ConcreteMouse.cs" />
+    <Compile Include="Input\.Blazor\ConcreteMouseCursor.cs" />
+    <Compile Include="Input\.Blazor\ConcreteKeyboardInput.cs" />
+    <Compile Include="Input\.Blazor\ConcreteMessageBox.cs" />
+    <Compile Include="Media\Blazor\ConcreteAlbum.cs" />
+    <Compile Include="Media\Blazor\ConcreteMediaFactory.cs" />
+    <Compile Include="Media\Blazor\ConcreteMediaLibrary.cs" />
+    <Compile Include="Media\Blazor\ConcreteMediaPlayer.cs" />
+    <Compile Include="Media\Blazor\ConcreteSong.cs" />
+    <Compile Include="Media\Blazor\ConcreteVideoPlayer.cs" />
+    <Compile Include="Media\Blazor\ConcreteVideo.cs" />
+    <Compile Include=".Blazor\ConcreteTitleContainer.cs" />
+    <Compile Include=".Blazor\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.Ref.cs" />
+    <Compile Include="Properties\AssemblyInfo.Blazor.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -116,8 +124,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="nkast.Wasm.Audio" Version="8.0.1" />
+    <PackageReference Include="nkast.Wasm.Canvas" Version="8.0.1" />
+    <PackageReference Include="nkast.Wasm.Dom" Version="8.0.1" />
+    <PackageReference Include="nkast.Wasm.XHR" Version="8.0.1" />
   </ItemGroup>
 
-  <Import Project="RefGraphics.targets" />
-  <Import Project="RefAudio.targets" />
+  <Import Project="Blazor.targets" />
+  <Import Project="BlazorAudio.targets" />
 </Project>

@@ -33,7 +33,7 @@ jobs:
    # - name: Build
    #   run: dotnet build KNI.sln --no-restore --property:WarningLevel=1
     - name: Build Ref
-      run: dotnet build MonoGame.Framework\Xna.Framework.Ref.csproj --property:WarningLevel=1     
+      run: dotnet build Platforms\Xna.Framework.Ref.csproj --property:WarningLevel=1
     - name: Build BlazorGL
       run: dotnet build XNA.Framework.Blazor.sln --property:WarningLevel=1
     - name: Build WindowsDX11

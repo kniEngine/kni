@@ -72,10 +72,10 @@
     <Compile Include="ExternalTool.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MonoGame.Framework\Platform\Utilities\CurrentPlatform.cs">
+    <Compile Include="..\..\Platforms\Platform\Utilities\CurrentPlatform.cs">
       <Link>Utilities\CurrentPlatform.cs</Link>
     </Compile>
-    <Compile Include="..\..\MonoGame.Framework\Utilities\Hash.cs">
+    <Compile Include="..\..\Platforms\Utilities\Hash.cs">
       <Link>Utilities\Hash.cs</Link>
     </Compile>
   </ItemGroup>

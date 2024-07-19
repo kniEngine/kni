@@ -19,7 +19,7 @@
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <BaseOutputPath>..\Artifacts\MonoGame.Framework\DesktopGL\</BaseOutputPath>
+    <BaseOutputPath>..\Artifacts\Platforms\DesktopGL\</BaseOutputPath>
     <IntermediateOutputPath>obj\SdlGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>

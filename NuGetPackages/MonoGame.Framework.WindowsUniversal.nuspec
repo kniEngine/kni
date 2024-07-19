@@ -41,9 +41,9 @@
     <files>
         <file src="NuGetPackages\build\WindowsUniversal\MonoGame.Framework.WindowsUniversal.9000.targets" target="build\MonoGame.Framework.WindowsUniversal.9000.targets" />
                 
-        <file src="MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.dll"                       target="lib\netcore\MonoGame.Framework.dll" />
-        <file src="MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.pri"                       target="lib\netcore\MonoGame.Framework.pri" />
-        <file src="MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.xml"                       target="lib\netcore\MonoGame.Framework.xml" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.dll"                       target="lib\netcore\MonoGame.Framework.dll" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.pri"                       target="lib\netcore\MonoGame.Framework.pri" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.xml"                       target="lib\netcore\MonoGame.Framework.xml" />
         
         <!-- Nuget Icon -->
         <file src="Images\Icon.png" target="\" />
