@@ -66,38 +66,25 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 case FormatPcm:
                     // PCM
-                    switch (channels)
-                    {
-                        case 1: return 0;
-                        case 2: return 0;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count ("+ channels + ") is not supported.");
+                    return 0;
                 case FormatIeee:
                     // IEEE Float
-                    switch (channels)
-                    {
-                        case 1: return 0;
-                        case 2: return 0;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    return 0;
                 case FormatMsAdpcm:
                     // Microsoft ADPCM
-                    switch (channels)
-                    {
-                        case 1: return (blockAlignment / channels - 7) * 2 + 2;
-                        case 2: return (blockAlignment / channels - 7) * 2 + 2;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                    break;
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    return (blockAlignment / channels - 7) * 2 + 2;
                 case FormatIma4:
                     // IMA4 ADPCM
-                    switch (channels)
-                    {
-                        case 1: return (blockAlignment / channels - 4) / 4 * 8 + 1;
-                        case 2: return (blockAlignment / channels - 4) / 4 * 8 + 1;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                    break;
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    return (blockAlignment / channels - 4) / 4 * 8 + 1;
+
                 default:
                     throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
             }
