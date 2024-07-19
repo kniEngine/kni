@@ -15,9 +15,9 @@ namespace Microsoft.Xna.Platform.Audio
         internal const int FormatIeee = 3;
         internal const int FormatIma4 = 17;
 
-        public static ALFormat GetSoundFormat(int format, int channels, int bitsPerSample)
+        public static ALFormat GetSoundFormat(int audioFormat, int channels, int bitsPerSample)
         {
-            switch (format)
+            switch (audioFormat)
             {
                 case FormatPcm:
                     // PCM
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Audio
                         default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                 default:
-                    throw new NotSupportedException("The specified sound format (" + format.ToString() + ") is not supported.");
+                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
             }
         }
 
