@@ -58,8 +58,10 @@ namespace Microsoft.Xna.Platform.Audio
 
         // Converts block alignment in bytes to sample alignment, primarily for compressed formats
         // Calculation of sample alignment from http://kcat.strangesoft.net/openal-extensions/SOFT_block_alignment.txt
-        public static int SampleAlignment(ALFormat alFormat, int blockAlignment)
+        public static int SampleAlignment(int audioFormat, int channels, int bitsPerSample, int blockAlignment)
         {
+            ALFormat alFormat = GetSoundFormat(audioFormat, channels, bitsPerSample);
+
             switch (alFormat)
             {
                 case ALFormat.MonoIma4:
@@ -200,7 +202,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (samplesPerBlock == 0)
             {
-                samplesPerBlock = SampleAlignment(alFormat, blockAlignment);
+                samplesPerBlock = SampleAlignment(audioFormat, channels, bitsPerSample, blockAlignment);
             }
 
             if (sampleCount == 0)
@@ -209,14 +211,14 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     case FormatIma4:
                     case FormatMsAdpcm:
-                        sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(alFormat, audioData.Length % blockAlignment);
+                        sampleCount = ((audioData.Length / blockAlignment) * samplesPerBlock) + SampleAlignment(audioFormat, channels, bitsPerSample, audioData.Length % blockAlignment);
                         break;
                     case FormatPcm:
                     case FormatIeee:
                         sampleCount = audioData.Length / ((channels * bitsPerSample) / 8);
                         break;
                     default:
-                        throw new InvalidDataException("Unhandled WAV format " + alFormat.ToString());
+                        throw new InvalidDataException("Unhandled WAV format " + audioFormat.ToString());
                 }
             }
 

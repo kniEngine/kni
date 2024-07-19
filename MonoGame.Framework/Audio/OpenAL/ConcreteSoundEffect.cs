@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Platform.Audio
         {           
 
             ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);
+            int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatMsAdpcm, channels, 0, blockAlignment);
 
             // Buffer length must be aligned with the block alignment
             int alignedCount = count - (count % blockAlignment);
@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Platform.Audio
         private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
         {
             ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(alFormat, blockAlignment);
+            int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatIma4, channels, 0, blockAlignment);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
