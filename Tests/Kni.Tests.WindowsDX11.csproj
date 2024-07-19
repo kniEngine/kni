@@ -1189,9 +1189,9 @@
       <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
       <Name>XNA.Framework.WindowsDX11</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tools\MonoGame.Content.Builder\MGCB.Windows.9K.csproj">
+    <ProjectReference Include="..\Tools\MonoGame.Content.Builder\MGCB.csproj">
       <Project>{4243474D-572E-6E69-646F-77734D474342}</Project>
-      <Name>MGCB.Windows.9K</Name>
+      <Name>MGCB</Name>
     </ProjectReference>
   </ItemGroup>
 

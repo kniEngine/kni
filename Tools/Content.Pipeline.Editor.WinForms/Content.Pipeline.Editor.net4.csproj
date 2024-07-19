@@ -177,9 +177,9 @@
       <Project>{63486463-8aee-483e-862a-7720cd62b4df}</Project>
       <Name>Xna.Framework.Content.Pipeline.Media</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Content.Builder\MGCB.Windows.9K.csproj">
+    <ProjectReference Include="..\MonoGame.Content.Builder\MGCB.csproj">
       <Project>{4243474d-572e-6e69-646f-77734d474342}</Project>
-      <Name>MGCB.Windows.9K</Name>
+      <Name>MGCB</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
