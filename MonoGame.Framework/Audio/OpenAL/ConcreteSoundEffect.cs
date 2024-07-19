@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Audio
         {
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
-            ALFormat alFormat = AudioLoader.GetSoundFormat(audioFormat, channels, bitsPerSample);
+            ALFormat alFormat = GetSoundFormat(audioFormat, channels, bitsPerSample);
 
             switch (alFormat)
             {
@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Platform.Audio
                 sampleBits = 16;
             }
 
-            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
+            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
@@ -150,7 +150,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void InitializeIeeeFloat(byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
         {
-            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
+            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Platform.Audio
         private void InitializeAdpcm(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
         {           
 
-            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
+            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatMsAdpcm, channels, 0, blockAlignment);
 
             // Buffer length must be aligned with the block alignment
@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
         {
-            ALFormat alFormat = AudioLoader.GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
+            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatIma4, channels, 0, blockAlignment);
 
             // bind buffer
@@ -189,7 +189,49 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
 
-#region IDisposable Members
+        public static ALFormat GetSoundFormat(int audioFormat, int channels, int bitsPerSample)
+        {
+            switch (audioFormat)
+            {
+                case AudioLoader.FormatPcm: 
+                    // PCM
+                    switch (channels)
+                    {
+                        case 1: return bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
+                        case 2: return bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                case AudioLoader.FormatMsAdpcm:
+                    // Microsoft ADPCM
+                    switch (channels)
+                    {
+                        case 1: return ALFormat.MonoMSAdpcm;
+                        case 2: return ALFormat.StereoMSAdpcm;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                case AudioLoader.FormatIeee:
+                    // IEEE Float
+                    switch (channels)
+                    {
+                        case 1: return ALFormat.MonoFloat32;
+                        case 2: return ALFormat.StereoFloat32;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                case AudioLoader.FormatIma4:
+                    // IMA4 ADPCM
+                    switch (channels)
+                    {
+                        case 1: return ALFormat.MonoIma4;
+                        case 2: return ALFormat.StereoIma4;
+                        default: throw new NotSupportedException("The specified channel count is not supported.");
+                    }
+                default:
+                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
+            }
+        }
+
+
+        #region IDisposable Members
 
         protected override void Dispose(bool disposing)
         {

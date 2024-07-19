@@ -4,7 +4,6 @@
 
 using System;
 using System.IO;
-using Microsoft.Xna.Platform.Audio.OpenAL;
 
 namespace Microsoft.Xna.Platform.Audio
 {
@@ -15,46 +14,6 @@ namespace Microsoft.Xna.Platform.Audio
         internal const int FormatIeee = 3;
         internal const int FormatIma4 = 17;
 
-        public static ALFormat GetSoundFormat(int audioFormat, int channels, int bitsPerSample)
-        {
-            switch (audioFormat)
-            {
-                case FormatPcm:
-                    // PCM
-                    switch (channels)
-                    {
-                        case 1: return bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
-                        case 2: return bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                case FormatMsAdpcm:
-                    // Microsoft ADPCM
-                    switch (channels)
-                    {
-                        case 1: return ALFormat.MonoMSAdpcm;
-                        case 2: return ALFormat.StereoMSAdpcm;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                case FormatIeee:
-                    // IEEE Float
-                    switch (channels)
-                    {
-                        case 1: return ALFormat.MonoFloat32;
-                        case 2: return ALFormat.StereoFloat32;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                case FormatIma4:
-                    // IMA4 ADPCM
-                    switch (channels)
-                    {
-                        case 1: return ALFormat.MonoIma4;
-                        case 2: return ALFormat.StereoIma4;
-                        default: throw new NotSupportedException("The specified channel count is not supported.");
-                    }
-                default:
-                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
-            }
-        }
 
         // Converts block alignment in bytes to sample alignment, primarily for compressed formats
         // Calculation of sample alignment from http://kcat.strangesoft.net/openal-extensions/SOFT_block_alignment.txt
