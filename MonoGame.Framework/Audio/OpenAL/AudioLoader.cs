@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform.Audio
         /// Load a WAV file from stream.
         /// </summary>
         /// <param name="stream">The stream positioned at the start of the WAV file.</param>
-        /// <param name="alFormat">Gets the OpenAL format enumeration value.</param>
+        /// <param name="audioFormat">Gets the audio format value.</param>
         /// <param name="frequency">Gets the frequency or sample rate.</param>
         /// <param name="channels">Gets the number of channels.</param>
         /// <param name="blockAlignment">Gets the block alignment, important for compressed sounds.</param>
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Audio
         /// <param name="samplesPerBlock">Gets the number of samples per block.</param>
         /// <param name="sampleCount">Gets the total number of samples.</param>
         /// <returns>The byte buffer containing the waveform data or compressed blocks.</returns>
-        public static byte[] Load(Stream stream, out ALFormat alFormat, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
+        public static byte[] Load(Stream stream, out int audioFormat, out int frequency, out int channels, out int blockAlignment, out int bitsPerSample, out int samplesPerBlock, out int sampleCount)
         {
             using (BinaryReader reader = new BinaryReader(stream))
             {
@@ -105,10 +105,9 @@ namespace Microsoft.Xna.Platform.Audio
                 if (wformat != "WAVE")
                     throw new ArgumentException("Specified stream is not a wave file.");
 
-                int audioFormat = 0;
+                audioFormat = 0;
                 channels = 0;
                 bitsPerSample = 0;
-                alFormat = ALFormat.Mono16;
                 frequency = 0;
                 blockAlignment = 0;
                 samplesPerBlock = 0;
@@ -187,7 +186,6 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 // Calculate fields we didn't read from the file
-                alFormat = GetSoundFormat(audioFormat, channels, bitsPerSample);
 
                 if (samplesPerBlock == 0)
                 {
