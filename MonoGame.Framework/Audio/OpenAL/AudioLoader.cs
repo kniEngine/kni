@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Platform.Audio
         internal const int FormatIeee = 3;
         internal const int FormatIma4 = 17;
 
-        public static ALFormat GetSoundFormat(int format, int channels, int bits)
+        public static ALFormat GetSoundFormat(int format, int channels, int bitsPerSample)
         {
             switch (format)
             {
@@ -23,8 +23,8 @@ namespace Microsoft.Xna.Platform.Audio
                     // PCM
                     switch (channels)
                     {
-                        case 1: return bits == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
-                        case 2: return bits == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
+                        case 1: return bitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
+                        case 2: return bitsPerSample == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
                         default: throw new NotSupportedException("The specified channel count is not supported.");
                     }
                 case FormatMsAdpcm:
