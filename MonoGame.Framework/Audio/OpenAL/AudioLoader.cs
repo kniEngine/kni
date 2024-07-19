@@ -60,8 +60,6 @@ namespace Microsoft.Xna.Platform.Audio
         // Calculation of sample alignment from http://kcat.strangesoft.net/openal-extensions/SOFT_block_alignment.txt
         public static int SampleAlignment(int audioFormat, int channels, int bitsPerSample, int blockAlignment)
         {
-            ALFormat alFormat;
-
             switch (audioFormat)
             {
                 case FormatPcm:
