@@ -66,21 +66,6 @@ namespace Microsoft.Xna.Platform.Audio
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
                     PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                     break;
-                case AudioLoader.FormatMsAdpcm:
-                    // Microsoft ADPCM
-                    if (channels < 1 || 2 < channels)
-                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
-                    if (!concreteAudioService.SupportsAdpcm)
-                    {
-                        // If MS-ADPCM is not supported, convert to 16-bit signed PCM
-                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
-                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-                    }
-                    else
-                    {
-                        InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
-                    }
-                    break;
                 case AudioLoader.FormatIeee:
                     // IEEE Float
                     if (channels < 1 || 2 < channels)
@@ -94,6 +79,21 @@ namespace Microsoft.Xna.Platform.Audio
                     else
                     {
                         InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                    }
+                    break;
+                case AudioLoader.FormatMsAdpcm:
+                    // Microsoft ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    if (!concreteAudioService.SupportsAdpcm)
+                    {
+                        // If MS-ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    else
+                    {
+                        InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
                     break;
                 case AudioLoader.FormatIma4:
