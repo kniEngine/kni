@@ -150,13 +150,13 @@ namespace Microsoft.Xna.Framework
 
             // keyboard events
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKeys(_keys);
-            _window.OnKeyDown += (object sender, char key, int keyCode) =>
+            _window.OnKeyDown += (object sender, char key, int keyCode, int location) =>
             {
                 var xnakey = (Keys)keyCode;
                 if (!_keys.Contains(xnakey))
                     _keys.Add(xnakey);
             };
-            _window.OnKeyUp += (object sender, char key, int keyCode) =>
+            _window.OnKeyUp += (object sender, char key, int keyCode, int location) =>
             {
                 var xnakey = (Keys)keyCode;
                 if (_keys.Contains(xnakey))
