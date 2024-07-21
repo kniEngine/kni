@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
+    <Compile Include="Audio\Blazor\AudioLoader.cs" />
     <Compile Include="Audio\Blazor\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\Blazor\ConcreteAudioService.cs" />
     <Compile Include="Audio\Blazor\ConcreteDynamicSoundEffectInstance.cs" />
