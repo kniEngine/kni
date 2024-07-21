@@ -26,10 +26,75 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformLoadAudioStream(Stream stream, out TimeSpan duration)
         {
-            duration = TimeSpan.Zero;
+            byte[] buffer;
 
-            throw new NotImplementedException();
+            int audioFormat;
+            int freq;
+            int channels;
+            int blockAlignment;
+            int bitsPerSample;
+            int samplesPerBlock;
+            int sampleCount;
+
+            buffer = AudioLoader.Load(stream, out audioFormat, out freq, out channels, out blockAlignment, out bitsPerSample, out samplesPerBlock, out sampleCount);
+
+            duration = TimeSpan.FromSeconds((float)sampleCount / (float)freq);
+
+            PlatformInitializeBuffer(buffer, 0, buffer.Length, audioFormat, channels, freq, blockAlignment, bitsPerSample, 0, sampleCount / channels);
         }
+
+        private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, int audioFormat, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
+        {
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
+
+            switch (audioFormat)
+            {
+                case AudioLoader.FormatPcm:
+                    // PCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+                    PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    break;
+                case AudioLoader.FormatIeee:
+                    // IEEE Float
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+
+                    {
+                        //InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                        buffer = AudioLoader.ConvertFloatTo16(buffer, bufferOffset, bufferSize);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+
+                    }
+                    break;
+                case AudioLoader.FormatMsAdpcm:
+                    // Microsoft ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+
+                    {
+                        // If MS-ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    break;
+                case AudioLoader.FormatIma4:
+                    // IMA4 ADPCM
+                    if (channels < 1 || 2 < channels)
+                        throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+
+                    {
+                        // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
+                        buffer = AudioLoader.ConvertIma4ToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    break;
+
+                default:
+                    throw new NotSupportedException("The specified sound format (" + audioFormat.ToString() + ") is not supported.");
+            }
+        }
+
 
         public override void PlatformInitializeFormat(byte[] header, byte[] buffer, int index, int count, int loopStart, int loopLength)
         {
