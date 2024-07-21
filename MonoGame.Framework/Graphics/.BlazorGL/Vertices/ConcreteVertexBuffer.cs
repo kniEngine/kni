@@ -76,13 +76,21 @@ namespace Microsoft.Xna.Platform.Graphics
             if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
             {
                 // there are no gaps so we can copy in one go
-                GL.BufferSubData<T>(WebGLBufferType.ARRAY, offsetInBytes, data, elementCount);
+                GL.BufferSubData<T>(WebGLBufferType.ARRAY, offsetInBytes, data, startIndex, elementCount);
                 GL.CheckGLError();
             }
             else
             {
                 // else we must copy each element separately
-                throw new NotImplementedException();
+                int dstOffset = offsetInBytes;
+
+                for (int i = 0; i < elementCount; i++)
+                {
+                    GL.BufferSubData<T>(WebGLBufferType.ARRAY, dstOffset, data, startIndex, 1);
+                    GL.CheckGLError();
+
+                    dstOffset += vertexStride;
+                }
             }
         }
 
