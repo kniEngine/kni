@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Platform.Audio.Utilities;
 using nkast.Wasm.Audio;
 
 namespace Microsoft.Xna.Platform.Audio
@@ -15,6 +16,11 @@ namespace Microsoft.Xna.Platform.Audio
     {
         private AudioBuffer _audioBuffer;
 
+
+        internal const int FormatPcm = 1;
+        internal const int FormatMsAdpcm = 2;
+        internal const int FormatIeee = 3;
+        internal const int FormatIma4 = 17;
 
         #region Initialization
 
@@ -35,12 +41,21 @@ namespace Microsoft.Xna.Platform.Audio
 
             switch (format)
             {
-                case 1:
+                case FormatPcm:
                     {
                         this.PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
-                        return;
                     }
                     break;
+
+                case FormatMsAdpcm:
+                    {
+                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, 0, buffer.Length, channels, blockAlignment);
+                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                    }
+                    break;
+
+                default:
+                    throw new NotImplementedException();
             }
         }
 
@@ -76,6 +91,7 @@ namespace Microsoft.Xna.Platform.Audio
                                 _audioBuffer.CopyToChannel(dest, c);
                             }                           
                             break;
+
                         default:
                             throw new NotImplementedException();
                     }
