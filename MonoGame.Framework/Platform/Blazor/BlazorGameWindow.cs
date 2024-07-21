@@ -152,13 +152,43 @@ namespace Microsoft.Xna.Framework
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKeys(_keys);
             _window.OnKeyDown += (object sender, char key, int keyCode, int location) =>
             {
-                var xnakey = (Keys)keyCode;
+                Keys xnakey = (Keys)keyCode;
+
+                // map special keys
+                switch (keyCode)
+                {
+                    case 16:
+                        xnakey = (location == 2) ? Keys.RightShift: Keys.LeftShift;
+                        break;
+                    case 17:
+                        xnakey = (location == 2) ? Keys.RightControl : Keys.LeftControl;
+                        break;
+                    case 18:
+                        xnakey = (location == 2) ? Keys.RightAlt : Keys.LeftAlt;
+                        break;
+                }
+
                 if (!_keys.Contains(xnakey))
                     _keys.Add(xnakey);
             };
             _window.OnKeyUp += (object sender, char key, int keyCode, int location) =>
             {
-                var xnakey = (Keys)keyCode;
+                Keys xnakey = (Keys)keyCode;
+                
+                // map special keys
+                switch (keyCode)
+                {
+                    case 16:
+                        xnakey = (location == 2) ? Keys.RightShift: Keys.LeftShift;
+                        break;
+                    case 17:
+                        xnakey = (location == 2) ? Keys.RightControl : Keys.LeftControl;
+                        break;
+                    case 18:
+                        xnakey = (location == 2) ? Keys.RightAlt : Keys.LeftAlt;
+                        break;
+                }
+
                 if (_keys.Contains(xnakey))
                     _keys.Remove(xnakey);
             };
