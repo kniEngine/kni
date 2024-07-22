@@ -17,8 +17,7 @@
   <!-- Clean the build output directories. -->
   <target name="_clean">
     <delete dir="${project::get-base-directory()}\Artifacts" />
-    <delete dir="${project::get-base-directory()}\MonoGame.Framework\obj" />
-    <delete dir="${project::get-base-directory()}\MonoGame.Framework.Content.Pipeline\obj" />
+    <delete dir="${project::get-base-directory()}\Platforms\obj" />
     
     <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:Clean /p:Configuration=Release" />
@@ -66,7 +65,7 @@
 
     <exec program="dotnet" commandline="pack src\Xna.Framework\Xna.Framework.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.Ref.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.Ref.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
@@ -80,12 +79,12 @@
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.Android.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.iOS.nuspec			-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
 
-    <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.WindowsDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.DesktopGL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.WindowsDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.DesktopGL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack XNA.Framework.Blazor.sln --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack MonoGame.Framework\XNA.Framework.Oculus.OvrDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\XNA.Framework.Oculus.OvrDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
-    <exec program="dotnet" commandline="pack MonoGame.Framework\Xna.Framework.Cardboard.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.Cardboard.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
   </target>
 
@@ -110,8 +109,8 @@
     
   <target name="build_ref" description="Build reference">
 
-      <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.Ref.csproj /t:restore" />
-      <exec program="dotnet" commandline="build MonoGame.Framework\Xna.Framework.Ref.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build Platforms\Xna.Framework.Ref.csproj /t:restore" />
+      <exec program="dotnet" commandline="build Platforms\Xna.Framework.Ref.csproj /t:Build /p:Configuration=Release" />
 
   </target>
   
@@ -131,8 +130,8 @@
   
   <target name="build_desktopGL" description="Build DesktopGL">
 
-      <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.DesktopGL.csproj /t:restore" />
-      <exec program="dotnet" commandline="build MonoGame.Framework\XNA.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build Platforms\XNA.Framework.DesktopGL.csproj /t:restore" />
+      <exec program="dotnet" commandline="build Platforms\XNA.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
       
   </target>
 
@@ -175,8 +174,8 @@
   <target name="build_windowsUAP10" description="Build Windows 10 UAP">
 
       <!--
-      <exec program="${msbuild17}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild17}" commandline='MonoGame.Framework\XNA.Framework.UAP.csproj /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /p:Configuration=Release' />
       -->
       <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Restore /p:Configuration=Release' />
       <exec program="${msbuild17}" commandline='XNA.Framework.UAP.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />

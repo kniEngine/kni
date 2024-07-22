@@ -32,13 +32,13 @@
     <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.9000.targets" target="build\MonoGame.Framework.Android.9000.targets" />
     
     <!-- C# Assemblies (.mono) -->
-    <file src="MonoGame.Framework\bin\Android\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />
-    <file src="MonoGame.Framework\bin\Android\AnyCPU\Release\MonoGame.Framework.xml" target="lib\MonoAndroid\MonoGame.Framework.xml" />
+    <file src="Platforms\bin\Android\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />
+    <file src="Platforms\bin\Android\AnyCPU\Release\MonoGame.Framework.xml" target="lib\MonoAndroid\MonoGame.Framework.xml" />
     
     <!-- C# Assemblies (.netcore) -->
-    <file src="Artifacts\MonoGame.Framework\Android\Release\net8.0-android\MonoGame.Framework.aar" target="lib\net8.0-android\MonoGame.Framework.aar" />
-    <file src="Artifacts\MonoGame.Framework\Android\Release\net8.0-android\MonoGame.Framework.dll" target="lib\net8.0-android\MonoGame.Framework.dll" />
-    <file src="Artifacts\MonoGame.Framework\Android\Release\net8.0-android\MonoGame.Framework.xml" target="lib\net8.0-android\MonoGame.Framework.xml" />
+    <file src="Artifacts\Platforms\Android\Release\net8.0-android\MonoGame.Framework.aar" target="lib\net8.0-android\MonoGame.Framework.aar" />
+    <file src="Artifacts\Platforms\Android\Release\net8.0-android\MonoGame.Framework.dll" target="lib\net8.0-android\MonoGame.Framework.dll" />
+    <file src="Artifacts\Platforms\Android\Release\net8.0-android\MonoGame.Framework.xml" target="lib\net8.0-android\MonoGame.Framework.xml" />
     
     <!-- Nuget Icon -->
     <file src="Images\Icon.png" target="\" />

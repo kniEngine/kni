@@ -1,9 +1,0 @@
-<Project>
-
-  <PropertyGroup>
-	<KniPlatform>Android</KniPlatform>
-    <MonoGamePlatform>Android</MonoGamePlatform>
-  </PropertyGroup>
-
-</Project>
-

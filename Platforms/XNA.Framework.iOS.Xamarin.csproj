@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.44">
 
   <PropertyGroup>
-    <BaseOutputPath>..\Artifacts\MonoGame.Framework\iOS\</BaseOutputPath>
+    <BaseOutputPath>..\Artifacts\Platforms\iOS\</BaseOutputPath>
     <ProjectGuid>{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}</ProjectGuid>
     <OutputType>Library</OutputType>
   </PropertyGroup>

@@ -19,7 +19,7 @@
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <BaseOutputPath>..\Artifacts\MonoGame.Framework\WindowsDX\</BaseOutputPath>
+    <BaseOutputPath>..\Artifacts\Platforms\WindowsDX\</BaseOutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>

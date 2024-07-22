@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Input", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Game", "src\Xna.Framework.Game\Xna.Framework.Game.csproj", "{90BBD6EF-F386-4F47-88CD-BF386C7D1705}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Blazor", "MonoGame.Framework\Xna.Framework.Blazor.csproj", "{6FE118A2-6D2B-4652-8C50-79DF113CA22B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Blazor", "Platforms\Xna.Framework.Blazor.csproj", "{6FE118A2-6D2B-4652-8C50-79DF113CA22B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

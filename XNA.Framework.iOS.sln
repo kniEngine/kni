@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Input", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Game", "src\Xna.Framework.Game\Xna.Framework.Game.csproj", "{90BBD6EF-F386-4F47-88CD-BF386C7D1705}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS", "MonoGame.Framework\Xna.Framework.iOS.csproj", "{D93291EF-3419-412E-BC56-376BD6A02224}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS", "Platforms\Xna.Framework.iOS.csproj", "{D93291EF-3419-412E-BC56-376BD6A02224}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

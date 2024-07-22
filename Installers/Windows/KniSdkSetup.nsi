@@ -124,19 +124,19 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   
   ; Install Reference Assemblies
   SetOutPath '$INSTDIR\Assemblies\Ref\net40'
-  File '..\..\Artifacts\MonoGame.Framework\Ref\Release\net40\*.*'
+  File '..\..\Artifacts\Platforms\Ref\Release\net40\*.*'
   SetOutPath '$INSTDIR\Assemblies\Ref\netstandard2.0'
-  File '..\..\Artifacts\MonoGame.Framework\Ref\Release\netstandard2.0\*.*'
+  File '..\..\Artifacts\Platforms\Ref\Release\netstandard2.0\*.*'
   
   ; Install Android Assemblies
   SetOutPath '$INSTDIR\Assemblies\Android'
-  File '..\..\MonoGame.Framework\bin\Android\AnyCPU\Release\*.dll'
-  File '..\..\MonoGame.Framework\bin\Android\AnyCPU\Release\*.xml'
+  File '..\..\Platforms\bin\Android\AnyCPU\Release\*.dll'
+  File '..\..\Platforms\bin\Android\AnyCPU\Release\*.xml'
   
   ; Install DesktopGL Assemblies
   SetOutPath '$INSTDIR\Assemblies\DesktopGL'
-  File /nonfatal '..\..\Artifacts\MonoGame.Framework\DesktopGL\Release\net40\*.dll'
-  File /nonfatal '..\..\Artifacts\MonoGame.Framework\DesktopGL\Release\net40\*.xml'
+  File /nonfatal '..\..\Artifacts\Platforms\DesktopGL\Release\net40\*.dll'
+  File /nonfatal '..\..\Artifacts\Platforms\DesktopGL\Release\net40\*.xml'
   File '..\..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib'
   File '..\..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib'
   File '..\..\ThirdParty\Dependencies\MonoGame.Framework.dll.config'
@@ -156,29 +156,29 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   
   ; Install Windows Desktop DirectX Assemblies
   SetOutPath '$INSTDIR\Assemblies\Windows'
-  File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net40\*.dll'
-  File '..\..\Artifacts\MonoGame.Framework\WindowsDX\Release\net40\*.xml'
+  File '..\..\Artifacts\Platforms\WindowsDX\Release\net40\*.dll'
+  File '..\..\Artifacts\Platforms\WindowsDX\Release\net40\*.xml'
   
   ; Install Oculus Ovr DirectX Assemblies
   SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\net40'
-  File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.dll'
-  File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.xml'
-  File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net40\nkast.LibOVR.dll'
-  File '..\..\Artifacts\MonoGame.Framework\OculusOvrDX11\Release\net40\nkast.LibOVR.Native.dll'  
+  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.dll'
+  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.xml'
+  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\nkast.LibOVR.dll'
+  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\nkast.LibOVR.Native.dll'  
 
   ; Install Windows 10 UAP Assemblies
   SetOutPath '$INSTDIR\Assemblies\WindowsUniversal'
-  ;File '..\..\MonoGame.Framework\bin\WindowsUniversal\Release\uap10.0\*.dll'
-  ;File '..\..\MonoGame.Framework\bin\WindowsUniversal\Release\uap10.0\*.xml' 
-  File '..\..\MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\*.dll'
-  File '..\..\MonoGame.Framework\bin\WindowsUniversal\AnyCPU\Release\*.xml'
+  ;File '..\..\Platforms\bin\WindowsUniversal\Release\uap10.0\*.dll'
+  ;File '..\..\Platforms\bin\WindowsUniversal\Release\uap10.0\*.xml' 
+  File '..\..\Platforms\bin\WindowsUniversal\AnyCPU\Release\*.dll'
+  File '..\..\Platforms\bin\WindowsUniversal\AnyCPU\Release\*.xml'
 
   ; Install iOS Assemblies
   IfFileExists `$PROGRAMFILES\MSBuild\Xamarin\iOS\*.*` InstalliOSAssemblies SkipiOSAssemblies
   InstalliOSAssemblies:
   ;SetOutPath '$INSTDIR\Assemblies\iOS'
-  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.dll'
-  ;File '..\..\Artifacts\MonoGame.Framework\iOS\Release\xamarinios10\*.xml'
+  ;File '..\..\Artifacts\Platforms\iOS\Release\xamarinios10\*.dll'
+  ;File '..\..\Artifacts\Platforms\iOS\Release\xamarinios10\*.xml'
   SkipiOSAssemblies:
 
   WriteRegStr HKLM 'SOFTWARE\Microsoft\MonoAndroid\v2.3\AssemblyFoldersEx\${APPNAME} for Android' '' '$INSTDIR\Assemblies\Android'

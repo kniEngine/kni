@@ -1,0 +1,9 @@
+<Project>
+
+  <PropertyGroup>
+	<KniPlatform>iOS</KniPlatform>
+    <MonoGamePlatform>iOS</MonoGamePlatform>
+  </PropertyGroup>
+
+</Project>
+
