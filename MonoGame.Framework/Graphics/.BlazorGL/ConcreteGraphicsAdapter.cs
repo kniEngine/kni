@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using nkast.Wasm.Canvas;
+using nkast.Wasm.Canvas.WebGL;
+using nkast.Wasm.Dom;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -100,6 +103,11 @@ namespace Microsoft.Xna.Platform.Graphics
                     return true;
                 case GraphicsProfile.HiDef:
                     return false;
+                    //using (OffscreenCanvas oc = new OffscreenCanvas(1, 1))
+                    //{
+                    //    IWebGL2RenderingContext webgl2 = oc.GetContext<IWebGL2RenderingContext>();
+                    //    return (webgl2 != null);
+                    //}
                 case GraphicsProfile.FL10_0:
                     return false;
                 case GraphicsProfile.FL10_1:

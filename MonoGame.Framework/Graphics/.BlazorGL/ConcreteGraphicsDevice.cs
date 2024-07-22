@@ -170,7 +170,19 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
             }
 
-            IWebGLRenderingContext glContext = canvas.GetContext<IWebGLRenderingContext>(contextAttributes);
+            IWebGLRenderingContext glContext = null;
+            switch (this.GraphicsProfile)
+            {
+                case GraphicsProfile.Reach:
+                    glContext = canvas.GetContext<IWebGLRenderingContext>(contextAttributes);
+                    break;
+                case GraphicsProfile.HiDef:
+                    glContext = canvas.GetContext<IWebGL2RenderingContext>(contextAttributes);
+                    break;
+
+                default:
+                    throw new NotSupportedException("GraphicsProfile "+ this.GraphicsProfile);
+            }
 
             return new ConcreteGraphicsContext(context, glContext);
         }

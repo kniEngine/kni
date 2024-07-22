@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsSRgb = true;
 
             SupportsTextureArrays = profile >= GraphicsProfile.HiDef;
-            SupportsDepthClamp = profile >= GraphicsProfile.HiDef;
+            //SupportsDepthClamp = profile >= GraphicsProfile.HiDef;
             SupportsFloatTextures = profile >= GraphicsProfile.HiDef;
             SupportsHalfFloatTextures = profile >= GraphicsProfile.HiDef;
             SupportsNormalized = profile >= GraphicsProfile.HiDef;
