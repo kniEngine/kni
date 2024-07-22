@@ -726,11 +726,24 @@ namespace Microsoft.Xna.Platform.Graphics
 
             PlatformApplyVertexBuffers(baseVertex);
 
-            GL.DrawElements(target,
-                            indexElementCount,
-                            indexElementType,
-                            indexOffsetInBytes);
-            GL.CheckGLError();
+            if (GL is IWebGL2RenderingContext)
+            {
+                ((IWebGL2RenderingContext)GL).DrawRangeElements(target,
+                                    minVertexIndex,
+                                    minVertexIndex + numVertices - 1,
+                                    indexElementCount,
+                                    indexElementType,
+                                    indexOffsetInBytes);
+                GL.CheckGLError();
+            }
+            else
+            {
+                GL.DrawElements(target,
+                                indexElementCount,
+                                indexElementType,
+                                indexOffsetInBytes);
+                GL.CheckGLError();
+            }
 
             base.Metrics_AddDrawCount();
             base.Metrics_AddPrimitiveCount(primitiveCount);
