@@ -884,7 +884,61 @@ namespace Microsoft.Xna.Platform.Graphics
             //PlatformApplyIndexBuffer();
             PlatformApplyShaders();
 
-            throw new NotImplementedException();
+            // TODO: reimplement without creating new buffers
+
+            // create and bind vertexBuffer
+            WebGLBuffer vbo = GL.CreateBuffer();
+            GL.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ARRAY, vbo);
+            GL.CheckGLError();
+            GL.BufferData(WebGLBufferType.ARRAY,
+                          (vertexDeclaration.VertexStride * vertexData.Length),
+                          (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GL.CheckGLError();
+            // mark the default Vertex buffers for rebinding
+            _vertexBuffersDirty = true;
+
+            //set vertex data
+            GL.BufferSubData<T>(WebGLBufferType.ARRAY, 0, vertexData, vertexOffset, numVertices);
+            GL.CheckGLError();
+
+            // create and bind index buffer
+            WebGLBuffer ibo = GL.CreateBuffer();
+            GL.CheckGLError();
+            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, ibo);
+            GL.CheckGLError();
+            GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
+                          (indexData.Length * sizeof(int)),
+                          (false) ? WebGLBufferUsageHint.DYNAMIC_DRAW : WebGLBufferUsageHint.STATIC_DRAW);
+            GL.CheckGLError();
+            // mark the default index buffer for rebinding
+            _indexBufferDirty = true;
+
+            // set index buffer
+            ((IWebGL2RenderingContext)GL).BufferSubData<int>(WebGLBufferType.ELEMENT_ARRAY, 0, indexData, indexData.Length);
+            GL.CheckGLError();
+
+            // Setup the vertex declaration to point at the VB data.
+            PlatformApplyUserVertexData(vertexDeclaration);
+
+
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            int indexOffsetInBytes = (indexOffset * sizeof(int));
+            WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            GL.DrawElements(target,
+                            indexElementCount,
+                            WebGLDataType.UINT,
+                            indexOffsetInBytes);
+            GL.CheckGLError();
+
+            //GL.BindBuffer(WebGLBufferType.ARRAY, null);
+            //GL.CheckGLError();
+            //GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, null);
+            //GL.CheckGLError();
+
+            ibo.Dispose();
+            vbo.Dispose();
 
             base.Metrics_AddDrawCount();
             base.Metrics_AddPrimitiveCount(primitiveCount);
