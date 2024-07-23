@@ -1,5 +1,58 @@
 ﻿# Changelog
 
+## 3.13.9001 Release - July 24, 2024
+
+### Fixed
+ - fix GamePadCapabilities #1565
+ - [iOS] fix Game.Services NullReferenceException #1607
+ - [SDL] fix JoystickCapabilities.IsGamepad #1626
+ - [ANDROID] fix Keyboard #1688
+ - fix templates .mgcb file creation #1693
+ - Fix templates projectname #1694
+ - fix BlazorGL template alpha blend #1695
+ - [DX11] fix NonPowerOfTwoUnusedTextureShouldNotThrow test #1701
+ - [GL] fix NonPowerOfTwoUnusedTextureShouldNotThrow test #1702
+ - [EffectProcessor] inorder samplers merge #1709
+ - [EffectProcessor] fix ShaderProfileDX11 samplerSlot #1710
+ - fix CreateGamePadCapabilities #1713
+ - fix ResourceNameAlphaTestEffect #1724
+ - [BlazorGL] fix MediaPlayer IsRepeating #1726
+ - [SDL] early Joysticks initialization #1735
+ - [BlazorGL] clear KeyboardState on focus lost #1736
+ - [BlazorGL] fix Keyboard special keys #1738
+ - fix MGCB builds with no response file #1745
+
+### Performance
+ - optimize ConcreteTextureCollection.PlatformApply() #1605
+ - perf use HashSet for ContentManager _disposableAssets #1711
+ - [Android] reduce FromEGLConfig() allocations #1583
+ - [GL] use HashSet for GL Extensions #1587
+ - [GL] optimized PlatformApplyVertexBuffers() #1604, #1673
+ - [GL] discard VertexBuffer in SpriteBatcher #1636
+ - [OpenGL] remove glFinish() from Texture2D.SetData() #1638
+ - [OpenGL] use DrawRangeElements #1703
+ - [SDL] cache JoystickCapabilities #1625
+ - [SDL] cache GamePadCapabilities #1630
+ - [SDL] reduce Vorbis MediaPlayer allocations #1680
+ - [SDL] reuse Vorbis reader for Song Repeat #1684
+
+### Changed
+ - [EffectProcessor] Shader Model 1.x error message #1722
+ - [BlazorGL] implemented DrawUserPrimitives and DrawUserIndexedPrimitives with vertexOffset #1723
+ - [BlazorGL] implemented GamePad #1730
+ - [BlazorGL] implemented TouchPanelCapabilities MaximumTouchCount and IsConnected #1731
+ - [BlazorGL] implemented Medium quality SoundEfects (MsAdpcm) #1748
+ - [BlazorGL] implemented SoundEffect.FromStream() #1749
+ - [BlazorGL] implemented Buffers SetData(...) with startIndex #1753
+ - [BlazorGL] implemented HiDef and WebGL2 #1756
+
+### Added
+
+### Removed
+ - VS2019 templates removed #1631
+ - Xamarin templates removed #1632
+ - removed GamePadState.Default #1650, #1651, #1653
+
 ## 3.12.9001 Release - May 12, 2024
 
 ### Fixed
