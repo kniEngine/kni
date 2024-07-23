@@ -102,12 +102,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 case GraphicsProfile.Reach:
                     return true;
                 case GraphicsProfile.HiDef:
-                    return false;
-                    //using (OffscreenCanvas oc = new OffscreenCanvas(1, 1))
-                    //{
-                    //    IWebGL2RenderingContext webgl2 = oc.GetContext<IWebGL2RenderingContext>();
-                    //    return (webgl2 != null);
-                    //}
+                    using (OffscreenCanvas oc = new OffscreenCanvas(1, 1))
+                    {
+                        IWebGL2RenderingContext webgl2 = oc.GetContext<IWebGL2RenderingContext>();
+                        return (webgl2 != null);
+                    }
                 case GraphicsProfile.FL10_0:
                     return false;
                 case GraphicsProfile.FL10_1:
