@@ -5,8 +5,8 @@
     <BaseOutputPath>..\Artifacts\Platforms\OculusOvrDX11</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
     
-    <Version>3.12.9001.0</Version>
-    <AssemblyVersion>3.12.9001.0</AssemblyVersion>
+    <Version>3.13.9001.0</Version>
+    <AssemblyVersion>3.13.9001.0</AssemblyVersion>
 
   </PropertyGroup>
 
