@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             // If we have gestures enabled then collect events for those too.
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-            if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
+            if (EnabledGestures != GestureType.None || _gestureStates.Count > 0)
             {
                 _gestureStates.Add(evt);
 
@@ -299,7 +299,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             // If we have gestures enabled then collect events for those too.
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-            if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
+            if (EnabledGestures != GestureType.None || _gestureStates.Count > 0)
             {
                 //Find the matching touch
                 for (int i = 0; i < _gestureStates.Count; i++)
@@ -461,7 +461,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             // If we have gestures enabled then collect events for those too.
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-            if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
+            if (EnabledGestures != GestureType.None || _gestureStates.Count > 0)
             {
                 //Find the matching touch
                 for (int i = 0; i < _gestureStates.Count; i++)
