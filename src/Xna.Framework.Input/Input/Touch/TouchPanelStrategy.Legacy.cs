@@ -123,25 +123,25 @@ namespace Microsoft.Xna.Platform.Input.Touch
             switch (state)
             {
                 case TouchLocationState.Pressed:
-                    AddPressedEvent(nativeTouchId, state, position, winSize);
+                    AddPressedEvent(nativeTouchId, position, winSize);
                     break;
 
                 case TouchLocationState.Moved:
-                case TouchLocationState.Invalid:
-                    AddMovedEvent(nativeTouchId, state, position, winSize);
+                    AddMovedEvent(nativeTouchId, position, winSize);
                     break;
 
                 case TouchLocationState.Released:
-                    AddReleasedEvent(nativeTouchId, state, position, winSize);
+                    AddReleasedEvent(nativeTouchId, position, winSize);
                     break;
 
+                case TouchLocationState.Invalid:
                 default:
                     throw new InvalidOperationException();
             }
 
         }
 
-        private void AddPressedEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
+        private void AddPressedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
             // Different platforms return different touch identifiers
             // based on the specifics of their implementation and the
@@ -182,7 +182,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             // Add event
             System.Diagnostics.Debug.Assert(_touchStates.TrueForAll(t => t.Id != touchId));
-            TouchLocationData evt = new TouchLocationData(touchId, state, position, currentTimestamp, currentFramestamp);
+            TouchLocationData evt = new TouchLocationData(touchId, TouchLocationState.Pressed, position, currentTimestamp, currentFramestamp);
             _touchStates.Add(evt);
 
             // If we have gestures enabled then collect events for those too.
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
-        private void AddMovedEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
+        private void AddMovedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
             // Different platforms return different touch identifiers
             // based on the specifics of their implementation and the
@@ -263,7 +263,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     {
                         // Update the touch based on the new one
                         System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                        System.Diagnostics.Debug.Assert(state == TouchLocationState.Moved, "The new touch event should be a move or a release.");
                         System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                         // Store the current state as the previous one.
@@ -311,8 +310,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         {
                             // Update the touch based on the new one
                             System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                            System.Diagnostics.Debug.Assert(state == TouchLocationState.Moved, "The new touch event should be a move or a release.");
-                            System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+                             System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                             // Store the current state as the previous one.
                             existingTouch._previousPosition = existingTouch.Position;
@@ -377,7 +375,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
-        private void AddReleasedEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
+        private void AddReleasedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
             // Different platforms return different touch identifiers
             // based on the specifics of their implementation and the
@@ -434,7 +432,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         // Set the new state.
                         existingTouch._position = position;
-                        existingTouch._state = state; // = TouchLocationState.Released
+                        existingTouch._state = TouchLocationState.Released;
 
                         // Update the velocity.
                         UpdateVelocity(currentTimestamp, ref existingTouch);
@@ -490,7 +488,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                             // Set the new state.
                             existingTouch._position = position;
-                            existingTouch._state = state; // = TouchLocationState.Released
+                            existingTouch._state = TouchLocationState.Released;
 
                             // Update the velocity.
                             UpdateVelocity(currentTimestamp, ref existingTouch);
