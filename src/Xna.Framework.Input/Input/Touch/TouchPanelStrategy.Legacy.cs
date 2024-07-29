@@ -157,6 +157,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     break;
 
                 case TouchLocationState.Moved:
+                case TouchLocationState.Invalid:
                     {
                         // Try to find the touch id.
                         if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
@@ -171,20 +172,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     break;
 
                 case TouchLocationState.Released:
-                    {
-                        // Try to find the touch id.
-                        if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
-                        {
-                            System.Diagnostics.Debug.Assert(false);
-                            // If we got here that means either the device is sending
-                            // us bad, out of order, or old touch events.
-                            // In any case just ignore them.
-                            return;
-                        }
-                    }
-                    break;
-
-                case TouchLocationState.Invalid:
                     {
                         // Try to find the touch id.
                         if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
