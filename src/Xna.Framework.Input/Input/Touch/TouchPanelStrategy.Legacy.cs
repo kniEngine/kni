@@ -89,15 +89,13 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
 
             TouchCollection result = (_touchStates.Count > 0) ? new TouchCollection(_touchStates) : TouchCollection.Empty;
+
             // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
             for (int i = _touchStates.Count - 1; i >= 0; i--)
             {
                 TouchLocationData touch = _touchStates[i];
                 switch (touch.State)
                 {
-                    case TouchLocationState.Released:
-                        _touchStates.RemoveAt(i);
-                        break;
                     case TouchLocationState.Pressed:
                         touch._previousState = touch.State;
                         touch._previousPosition = touch.Position;
@@ -111,6 +109,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         touch._previousState = touch.State;
                         touch._previousPosition = touch.Position;
                         _touchStates[i] = touch;
+                        break;
+                    case TouchLocationState.Released:
+                        _touchStates.RemoveAt(i);
                         break;
                 }
             }
@@ -200,9 +201,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     TouchLocationData touch = _gestureStates[i];
                     switch (touch.State)
                     {
-                        case TouchLocationState.Released:
-                            _gestureStates.RemoveAt(i);
-                            break;
                         case TouchLocationState.Pressed:
                             touch._previousState = touch.State;
                             touch._previousPosition = touch.Position;
@@ -216,6 +214,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             touch._previousState = touch.State;
                             touch._previousPosition = touch.Position;
                             _gestureStates[i] = touch;
+                            break;
+                        case TouchLocationState.Released:
+                            _gestureStates.RemoveAt(i);
                             break;
                     }
                 }
@@ -354,9 +355,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     TouchLocationData touch = _gestureStates[i];
                     switch (touch.State)
                     {
-                        case TouchLocationState.Released:
-                            _gestureStates.RemoveAt(i);
-                            break;
                         case TouchLocationState.Pressed:
                             touch._previousState = touch.State;
                             touch._previousPosition = touch.Position;
@@ -370,6 +368,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             touch._previousState = touch.State;
                             touch._previousPosition = touch.Position;
                             _gestureStates[i] = touch;
+                            break;
+                        case TouchLocationState.Released:
+                            _gestureStates.RemoveAt(i);
                             break;
                     }
                 }
@@ -526,9 +527,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     TouchLocationData touch = _gestureStates[i];
                     switch (touch.State)
                     {
-                        case TouchLocationState.Released:
-                            _gestureStates.RemoveAt(i);
-                            break;
                         case TouchLocationState.Pressed:
                             touch._previousState = touch.State;
                             touch._previousPosition = touch.Position;
@@ -542,6 +540,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                             touch._previousState = touch.State;
                             touch._previousPosition = touch.Position;
                             _gestureStates[i] = touch;
+                            break;
+                        case TouchLocationState.Released:
+                            _gestureStates.RemoveAt(i);
                             break;
                     }
                 }
