@@ -120,6 +120,29 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void LegacyAddEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
         {
+            switch (state)
+            {
+                case TouchLocationState.Pressed:
+                    AddPressedEvent(nativeTouchId, state, position, winSize);
+                    break;
+
+                case TouchLocationState.Moved:
+                case TouchLocationState.Invalid:
+                    AddMovedEvent(nativeTouchId, state, position, winSize);
+                    break;
+
+                case TouchLocationState.Released:
+                    AddReleasedEvent(nativeTouchId, state, position, winSize);
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+
+        }
+
+        private void AddPressedEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
+        {
             // Different platforms return different touch identifiers
             // based on the specifics of their implementation and the
             // system drivers.
@@ -133,60 +156,21 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // and release events.
             // 
             int touchId;
-            switch (state)
+            // Try to find the touch id.
+            if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                case TouchLocationState.Pressed:
-                    {
-                        // Try to find the touch id.
-                        if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
-                        {
-                            touchId = _nextTouchId;
-                            _touchIdsMap[nativeTouchId] = touchId;
+                touchId = _nextTouchId;
+                _touchIdsMap[nativeTouchId] = touchId;
 
-                            if (_nextTouchId < int.MaxValue)
-                                _nextTouchId++;
-                            else
-                                _nextTouchId = StartingTouchId;
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.Assert(false);
-                            // did we miss some event to clear old events?
-                        }
-                    }
-                    break;
-
-                case TouchLocationState.Moved:
-                case TouchLocationState.Invalid:
-                    {
-                        // Try to find the touch id.
-                        if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
-                        {
-                            System.Diagnostics.Debug.Assert(false);
-                            // If we got here that means either the device is sending
-                            // us bad, out of order, or old touch events.
-                            // In any case just ignore them.
-                            return;
-                        }
-                    }
-                    break;
-
-                case TouchLocationState.Released:
-                    {
-                        // Try to find the touch id.
-                        if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
-                        {
-                            System.Diagnostics.Debug.Assert(false);
-                            // If we got here that means either the device is sending
-                            // us bad, out of order, or old touch events.
-                            // In any case just ignore them.
-                            return;
-                        }
-                    }
-                    break;
-
-                default:
-                    throw new InvalidOperationException();
+                if (_nextTouchId < int.MaxValue)
+                    _nextTouchId++;
+                else
+                    _nextTouchId = StartingTouchId;
+            }
+            else
+            {
+                System.Diagnostics.Debug.Assert(false);
+                // did we miss some event to clear old events?
             }
 
             // scale position
@@ -196,333 +180,375 @@ namespace Microsoft.Xna.Platform.Input.Touch
             TimeSpan currentTimestamp = this.CurrentTimestamp;
             int currentFramestamp = this._currentFramestamp;
 
-            // Apply the given new touch to the state. If it is a Pressed it will be added as a new touch, 
-            // otherwise we update the existing touch it matches
-            switch (state)
+            // Add event
+            System.Diagnostics.Debug.Assert(_touchStates.TrueForAll(t => t.Id != touchId));
+            TouchLocationData evt = new TouchLocationData(touchId, state, position, currentTimestamp, currentFramestamp);
+            _touchStates.Add(evt);
+
+            // If we have gestures enabled then collect events for those too.
+            // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
+            if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
             {
-                case TouchLocationState.Pressed:
+                _gestureStates.Add(evt);
+
+                if (EnabledGestures != GestureType.None)
+                    UpdateGestures(currentTimestamp, true);
+
+                // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
+                for (int i = _gestureStates.Count - 1; i >= 0; i--)
+                {
+                    TouchLocationData touch = _gestureStates[i];
+                    switch (touch.State)
                     {
-                        System.Diagnostics.Debug.Assert(_touchStates.TrueForAll(t => t.Id != touchId));
-                        TouchLocationData evt = new TouchLocationData(touchId, state, position, currentTimestamp, currentFramestamp);
-                        _touchStates.Add(evt);
-                    }
-
-                    // If we have gestures enabled then collect events for those too.
-                    // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-                    if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
-                    {
-                        TouchLocationData evt = new TouchLocationData(touchId, state, position, currentTimestamp, currentFramestamp);
-                        _gestureStates.Add(evt);
-
-                        if (EnabledGestures != GestureType.None)
-                            UpdateGestures(currentTimestamp, true);
-
-                        // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
-                        for (int i = _gestureStates.Count - 1; i >= 0; i--)
-                        {
-                            TouchLocationData touch = _gestureStates[i];
-                            switch (touch.State)
-                            {
-                                case TouchLocationState.Released:
-                                    _gestureStates.RemoveAt(i);
-                                    break;
-                                case TouchLocationState.Pressed:
-                                    touch._previousState = touch.State;
-                                    touch._previousPosition = touch.Position;
-                                    if (touch.SameFrameReleased)
-                                        touch._state = TouchLocationState.Released;
-                                    else
-                                        touch._state = TouchLocationState.Moved;
-                                    _gestureStates[i] = touch;
-                                    break;
-                                case TouchLocationState.Moved:
-                                    touch._previousState = touch.State;
-                                    touch._previousPosition = touch.Position;
-                                    _gestureStates[i] = touch;
-                                    break;
-                            }
-                        }
-                    }
-
-                    break;
-
-                case TouchLocationState.Moved:
-                case TouchLocationState.Invalid:
-                    //Find the matching touch
-                    for (int i = 0; i < _touchStates.Count; i++)
-                    {
-                        TouchLocationData existingTouch = _touchStates[i];
-                        if (existingTouch.Id == touchId)
-                        {
-                            {
-                                // Update the touch based on the new one
-                                System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                                System.Diagnostics.Debug.Assert(state == TouchLocationState.Moved, "The new touch event should be a move or a release.");
-                                System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
-
-                                // Store the current state as the previous one.
-                                existingTouch._previousPosition = existingTouch.Position;
-                                existingTouch._previousState = existingTouch.State;
-
-                                // Set the new state.
-                                existingTouch._position = position;
-
-                                // Update the velocity.
-                                UpdateVelocity(currentTimestamp, ref existingTouch);
-
-                                //Going straight from pressed to released on the same frame
-                                if (existingTouch._state == TouchLocationState.Released
-                                &&  existingTouch._previousState == TouchLocationState.Pressed)
-                                {
-                                    if (existingTouch.Framestamp == currentFramestamp)
-                                    {
-                                        //Lie that we are pressed for now
-                                        existingTouch.SameFrameReleased = true;
-                                        existingTouch._state = TouchLocationState.Pressed;
-                                    }
-                                }
-
-                                // Set the new timestamp.
-                                existingTouch._timestamp = currentTimestamp;
-                                existingTouch._framestamp = currentFramestamp;
-
-                                _touchStates[i] = existingTouch;
-                            }
+                        case TouchLocationState.Released:
+                            _gestureStates.RemoveAt(i);
                             break;
-                        }
-                    }
-
-                    // If we have gestures enabled then collect events for those too.
-                    // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-                    if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
-                    {
-                        //Find the matching touch
-                        for (int i = 0; i < _gestureStates.Count; i++)
-                        {
-                            TouchLocationData existingTouch = _gestureStates[i];
-                            if (existingTouch.Id == touchId)
-                            {
-                                {
-                                    // Update the touch based on the new one
-                                    System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                                    System.Diagnostics.Debug.Assert(state == TouchLocationState.Moved, "The new touch event should be a move or a release.");
-                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
-
-                                    // Store the current state as the previous one.
-                                    existingTouch._previousPosition = existingTouch.Position;
-                                    existingTouch._previousState = existingTouch.State;
-
-                                    // Set the new state.
-                                    existingTouch._position = position;
-
-                                    // Update the velocity.
-                                    UpdateVelocity(currentTimestamp, ref existingTouch);
-
-                                    //Going straight from pressed to released on the same frame
-                                    if (existingTouch._state == TouchLocationState.Released
-                                    && existingTouch._previousState == TouchLocationState.Pressed)
-                                    {
-                                        if (existingTouch.Framestamp == currentFramestamp)
-                                        {
-                                            //Lie that we are pressed for now
-                                            existingTouch.SameFrameReleased = true;
-                                            existingTouch._state = TouchLocationState.Pressed;
-                                        }
-                                    }
-
-                                    // Set the new timestamp.
-                                    existingTouch._timestamp = currentTimestamp;
-                                    existingTouch._framestamp = currentFramestamp;
-
-                                    _gestureStates[i] = existingTouch;
-                                }
-                                break;
-                            }
-                        }
-
-                        if (EnabledGestures != GestureType.None)
-                            UpdateGestures(currentTimestamp, true);
-
-                        // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
-                        for (int i = _gestureStates.Count - 1; i >= 0; i--)
-                        {
-                            TouchLocationData touch = _gestureStates[i];
-                            switch (touch.State)
-                            {
-                                case TouchLocationState.Released:
-                                    _gestureStates.RemoveAt(i);
-                                    break;
-                                case TouchLocationState.Pressed:
-                                    touch._previousState = touch.State;
-                                    touch._previousPosition = touch.Position;
-                                    if (touch.SameFrameReleased)
-                                        touch._state = TouchLocationState.Released;
-                                    else
-                                        touch._state = TouchLocationState.Moved;
-                                    _gestureStates[i] = touch;
-                                    break;
-                                case TouchLocationState.Moved:
-                                    touch._previousState = touch.State;
-                                    touch._previousPosition = touch.Position;
-                                    _gestureStates[i] = touch;
-                                    break;
-                            }
-                        }
-                    }
-
-                    break;
-
-                case TouchLocationState.Released:
-                    //Find the matching touch
-                    for (int i = 0; i < _touchStates.Count; i++)
-                    {
-                        TouchLocationData existingTouch = _touchStates[i];
-                        if (existingTouch.Id == touchId)
-                        {
-                            //If we are moving straight from Pressed to Released and we've existed for multiple frames,
-                            // that means we've never been seen, so just get rid of us
-                            if (existingTouch.State == TouchLocationState.Pressed
-                            &&  existingTouch.Framestamp != currentFramestamp)
-                            {
-                                _touchStates.RemoveAt(i);
-                            }
+                        case TouchLocationState.Pressed:
+                            touch._previousState = touch.State;
+                            touch._previousPosition = touch.Position;
+                            if (touch.SameFrameReleased)
+                                touch._state = TouchLocationState.Released;
                             else
-                            {
-                                //Otherwise update the touch based on the new one
-                                System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                                System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
-
-                                // Store the current state as the previous one.
-                                existingTouch._previousPosition = existingTouch.Position;
-                                existingTouch._previousState = existingTouch.State;
-
-                                // Set the new state.
-                                existingTouch._position = position;
-                                existingTouch._state = state; // = TouchLocationState.Released
-
-                                // Update the velocity.
-                                UpdateVelocity(currentTimestamp, ref existingTouch);
-
-                                //Going straight from pressed to released on the same frame
-                                if (existingTouch._state == TouchLocationState.Released
-                                &&  existingTouch._previousState == TouchLocationState.Pressed)
-                                {
-                                    if (existingTouch.Framestamp == currentFramestamp)
-                                    {
-                                        //Lie that we are pressed for now
-                                        existingTouch.SameFrameReleased = true;
-                                        existingTouch._state = TouchLocationState.Pressed;
-                                    }
-                                }
-
-                                // Set the new timestamp.
-                                existingTouch._timestamp = currentTimestamp;
-                                existingTouch._framestamp = currentFramestamp;
-
-                                _touchStates[i] = existingTouch;
-                            }
+                                touch._state = TouchLocationState.Moved;
+                            _gestureStates[i] = touch;
                             break;
-                        }
+                        case TouchLocationState.Moved:
+                            touch._previousState = touch.State;
+                            touch._previousPosition = touch.Position;
+                            _gestureStates[i] = touch;
+                            break;
                     }
+                }
+            }
+        }
 
-                    // If we have gestures enabled then collect events for those too.
-                    // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
-                    if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
+        private void AddMovedEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
+        {
+            // Different platforms return different touch identifiers
+            // based on the specifics of their implementation and the
+            // system drivers.
+            //
+            // Sometimes these ids are suitable for our use, but other
+            // times it can recycle ids or do cute things like return
+            // the same id for double tap events.
+            //
+            // We instead provide consistent ids by generating them
+            // ourselves on the press and looking them up on move 
+            // and release events.
+            // 
+            int touchId;
+            // Try to find the touch id.
+            if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
+            {
+                System.Diagnostics.Debug.Assert(false);
+                // If we got here that means either the device is sending
+                // us bad, out of order, or old touch events.
+                // In any case just ignore them.
+                return;
+            }
+
+            // scale position
+            position.X = position.X * (DisplayWidth / winSize.X);
+            position.Y = position.Y * (DisplayHeight / winSize.Y);
+
+            TimeSpan currentTimestamp = this.CurrentTimestamp;
+            int currentFramestamp = this._currentFramestamp;
+
+            //Find the matching touch
+            for (int i = 0; i < _touchStates.Count; i++)
+            {
+                TouchLocationData existingTouch = _touchStates[i];
+                if (existingTouch.Id == touchId)
+                {
                     {
-                        //Find the matching touch
-                        for (int i = 0; i < _gestureStates.Count; i++)
+                        // Update the touch based on the new one
+                        System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
+                        System.Diagnostics.Debug.Assert(state == TouchLocationState.Moved, "The new touch event should be a move or a release.");
+                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+
+                        // Store the current state as the previous one.
+                        existingTouch._previousPosition = existingTouch.Position;
+                        existingTouch._previousState = existingTouch.State;
+
+                        // Set the new state.
+                        existingTouch._position = position;
+
+                        // Update the velocity.
+                        UpdateVelocity(currentTimestamp, ref existingTouch);
+
+                        //Going straight from pressed to released on the same frame
+                        if (existingTouch._state == TouchLocationState.Released
+                        &&  existingTouch._previousState == TouchLocationState.Pressed)
                         {
-                            TouchLocationData existingTouch = _gestureStates[i];
-                            if (existingTouch.Id == touchId)
+                            if (existingTouch.Framestamp == currentFramestamp)
                             {
-                                //If we are moving straight from Pressed to Released and we've existed for multiple frames,
-                                // that means we've never been seen, so just get rid of us
-                                if (existingTouch.State == TouchLocationState.Pressed
-                                && existingTouch.Framestamp != currentFramestamp)
-                                {
-                                    _gestureStates.RemoveAt(i);
-                                }
-                                else
-                                {
-                                    //Otherwise update the touch based on the new one
-                                    System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
-
-                                    // Store the current state as the previous one.
-                                    existingTouch._previousPosition = existingTouch.Position;
-                                    existingTouch._previousState = existingTouch.State;
-
-                                    // Set the new state.
-                                    existingTouch._position = position;
-                                    existingTouch._state = state; // = TouchLocationState.Released
-
-                                    // Update the velocity.
-                                    UpdateVelocity(currentTimestamp, ref existingTouch);
-
-                                    //Going straight from pressed to released on the same frame
-                                    if (existingTouch._state == TouchLocationState.Released
-                                    && existingTouch._previousState == TouchLocationState.Pressed)
-                                    {
-                                        if (existingTouch.Framestamp == currentFramestamp)
-                                        {
-                                            //Lie that we are pressed for now
-                                            existingTouch.SameFrameReleased = true;
-                                            existingTouch._state = TouchLocationState.Pressed;
-                                        }
-                                    }
-
-                                    // Set the new timestamp.
-                                    existingTouch._timestamp = currentTimestamp;
-                                    existingTouch._framestamp = currentFramestamp;
-
-                                    _gestureStates[i] = existingTouch;
-                                }
-                                break;
+                                //Lie that we are pressed for now
+                                existingTouch.SameFrameReleased = true;
+                                existingTouch._state = TouchLocationState.Pressed;
                             }
                         }
 
-                        if (EnabledGestures != GestureType.None)
-                            UpdateGestures(currentTimestamp, true);
+                        // Set the new timestamp.
+                        existingTouch._timestamp = currentTimestamp;
+                        existingTouch._framestamp = currentFramestamp;
 
-                        // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
-                        for (int i = _gestureStates.Count - 1; i >= 0; i--)
-                        {
-                            TouchLocationData touch = _gestureStates[i];
-                            switch (touch.State)
-                            {
-                                case TouchLocationState.Released:
-                                    _gestureStates.RemoveAt(i);
-                                    break;
-                                case TouchLocationState.Pressed:
-                                    touch._previousState = touch.State;
-                                    touch._previousPosition = touch.Position;
-                                    if (touch.SameFrameReleased)
-                                        touch._state = TouchLocationState.Released;
-                                    else
-                                        touch._state = TouchLocationState.Moved;
-                                    _gestureStates[i] = touch;
-                                    break;
-                                case TouchLocationState.Moved:
-                                    touch._previousState = touch.State;
-                                    touch._previousPosition = touch.Position;
-                                    _gestureStates[i] = touch;
-                                    break;
-                            }
-                        }
+                        _touchStates[i] = existingTouch;
                     }
-
                     break;
+                }
+            }
+
+            // If we have gestures enabled then collect events for those too.
+            // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
+            if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
+            {
+                //Find the matching touch
+                for (int i = 0; i < _gestureStates.Count; i++)
+                {
+                    TouchLocationData existingTouch = _gestureStates[i];
+                    if (existingTouch.Id == touchId)
+                    {
+                        {
+                            // Update the touch based on the new one
+                            System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
+                            System.Diagnostics.Debug.Assert(state == TouchLocationState.Moved, "The new touch event should be a move or a release.");
+                            System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+
+                            // Store the current state as the previous one.
+                            existingTouch._previousPosition = existingTouch.Position;
+                            existingTouch._previousState = existingTouch.State;
+
+                            // Set the new state.
+                            existingTouch._position = position;
+
+                            // Update the velocity.
+                            UpdateVelocity(currentTimestamp, ref existingTouch);
+
+                            //Going straight from pressed to released on the same frame
+                            if (existingTouch._state == TouchLocationState.Released
+                            && existingTouch._previousState == TouchLocationState.Pressed)
+                            {
+                                if (existingTouch.Framestamp == currentFramestamp)
+                                {
+                                    //Lie that we are pressed for now
+                                    existingTouch.SameFrameReleased = true;
+                                    existingTouch._state = TouchLocationState.Pressed;
+                                }
+                            }
+
+                            // Set the new timestamp.
+                            existingTouch._timestamp = currentTimestamp;
+                            existingTouch._framestamp = currentFramestamp;
+
+                            _gestureStates[i] = existingTouch;
+                        }
+                        break;
+                    }
+                }
+
+                if (EnabledGestures != GestureType.None)
+                    UpdateGestures(currentTimestamp, true);
+
+                // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
+                for (int i = _gestureStates.Count - 1; i >= 0; i--)
+                {
+                    TouchLocationData touch = _gestureStates[i];
+                    switch (touch.State)
+                    {
+                        case TouchLocationState.Released:
+                            _gestureStates.RemoveAt(i);
+                            break;
+                        case TouchLocationState.Pressed:
+                            touch._previousState = touch.State;
+                            touch._previousPosition = touch.Position;
+                            if (touch.SameFrameReleased)
+                                touch._state = TouchLocationState.Released;
+                            else
+                                touch._state = TouchLocationState.Moved;
+                            _gestureStates[i] = touch;
+                            break;
+                        case TouchLocationState.Moved:
+                            touch._previousState = touch.State;
+                            touch._previousPosition = touch.Position;
+                            _gestureStates[i] = touch;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void AddReleasedEvent(int nativeTouchId, TouchLocationState state, Vector2 position, Point winSize)
+        {
+            // Different platforms return different touch identifiers
+            // based on the specifics of their implementation and the
+            // system drivers.
+            //
+            // Sometimes these ids are suitable for our use, but other
+            // times it can recycle ids or do cute things like return
+            // the same id for double tap events.
+            //
+            // We instead provide consistent ids by generating them
+            // ourselves on the press and looking them up on move 
+            // and release events.
+            // 
+            int touchId;
+            // Try to find the touch id.
+            if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
+            {
+                System.Diagnostics.Debug.Assert(false);
+                // If we got here that means either the device is sending
+                // us bad, out of order, or old touch events.
+                // In any case just ignore them.
+                return;
+            }
+
+            // scale position
+            position.X = position.X * (DisplayWidth / winSize.X);
+            position.Y = position.Y * (DisplayHeight / winSize.Y);
+
+            TimeSpan currentTimestamp = this.CurrentTimestamp;
+            int currentFramestamp = this._currentFramestamp;
+
+            //Find the matching touch
+            for (int i = 0; i < _touchStates.Count; i++)
+            {
+                TouchLocationData existingTouch = _touchStates[i];
+                if (existingTouch.Id == touchId)
+                {
+                    //If we are moving straight from Pressed to Released and we've existed for multiple frames,
+                    // that means we've never been seen, so just get rid of us
+                    if (existingTouch.State == TouchLocationState.Pressed
+                    && existingTouch.Framestamp != currentFramestamp)
+                    {
+                        _touchStates.RemoveAt(i);
+                    }
+                    else
+                    {
+                        //Otherwise update the touch based on the new one
+                        System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
+                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+
+                        // Store the current state as the previous one.
+                        existingTouch._previousPosition = existingTouch.Position;
+                        existingTouch._previousState = existingTouch.State;
+
+                        // Set the new state.
+                        existingTouch._position = position;
+                        existingTouch._state = state; // = TouchLocationState.Released
+
+                        // Update the velocity.
+                        UpdateVelocity(currentTimestamp, ref existingTouch);
+
+                        //Going straight from pressed to released on the same frame
+                        if (existingTouch._state == TouchLocationState.Released
+                        && existingTouch._previousState == TouchLocationState.Pressed)
+                        {
+                            if (existingTouch.Framestamp == currentFramestamp)
+                            {
+                                //Lie that we are pressed for now
+                                existingTouch.SameFrameReleased = true;
+                                existingTouch._state = TouchLocationState.Pressed;
+                            }
+                        }
+
+                        // Set the new timestamp.
+                        existingTouch._timestamp = currentTimestamp;
+                        existingTouch._framestamp = currentFramestamp;
+
+                        _touchStates[i] = existingTouch;
+                    }
+                    break;
+                }
+            }
+
+            // If we have gestures enabled then collect events for those too.
+            // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
+            if ((EnabledGestures != GestureType.None || _gestureStates.Count > 0))
+            {
+                //Find the matching touch
+                for (int i = 0; i < _gestureStates.Count; i++)
+                {
+                    TouchLocationData existingTouch = _gestureStates[i];
+                    if (existingTouch.Id == touchId)
+                    {
+                        //If we are moving straight from Pressed to Released and we've existed for multiple frames,
+                        // that means we've never been seen, so just get rid of us
+                        if (existingTouch.State == TouchLocationState.Pressed
+                        && existingTouch.Framestamp != currentFramestamp)
+                        {
+                            _gestureStates.RemoveAt(i);
+                        }
+                        else
+                        {
+                            //Otherwise update the touch based on the new one
+                            System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
+                            System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+
+                            // Store the current state as the previous one.
+                            existingTouch._previousPosition = existingTouch.Position;
+                            existingTouch._previousState = existingTouch.State;
+
+                            // Set the new state.
+                            existingTouch._position = position;
+                            existingTouch._state = state; // = TouchLocationState.Released
+
+                            // Update the velocity.
+                            UpdateVelocity(currentTimestamp, ref existingTouch);
+
+                            //Going straight from pressed to released on the same frame
+                            if (existingTouch._state == TouchLocationState.Released
+                            && existingTouch._previousState == TouchLocationState.Pressed)
+                            {
+                                if (existingTouch.Framestamp == currentFramestamp)
+                                {
+                                    //Lie that we are pressed for now
+                                    existingTouch.SameFrameReleased = true;
+                                    existingTouch._state = TouchLocationState.Pressed;
+                                }
+                            }
+
+                            // Set the new timestamp.
+                            existingTouch._timestamp = currentTimestamp;
+                            existingTouch._framestamp = currentFramestamp;
+
+                            _gestureStates[i] = existingTouch;
+                        }
+                        break;
+                    }
+                }
+
+                if (EnabledGestures != GestureType.None)
+                    UpdateGestures(currentTimestamp, true);
+
+                // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
+                for (int i = _gestureStates.Count - 1; i >= 0; i--)
+                {
+                    TouchLocationData touch = _gestureStates[i];
+                    switch (touch.State)
+                    {
+                        case TouchLocationState.Released:
+                            _gestureStates.RemoveAt(i);
+                            break;
+                        case TouchLocationState.Pressed:
+                            touch._previousState = touch.State;
+                            touch._previousPosition = touch.Position;
+                            if (touch.SameFrameReleased)
+                                touch._state = TouchLocationState.Released;
+                            else
+                                touch._state = TouchLocationState.Moved;
+                            _gestureStates[i] = touch;
+                            break;
+                        case TouchLocationState.Moved:
+                            touch._previousState = touch.State;
+                            touch._previousPosition = touch.Position;
+                            _gestureStates[i] = touch;
+                            break;
+                    }
+                }
             }
 
             // If this is a release unmap the hardware id.
-            switch (state)
-            {
-                case TouchLocationState.Released:
-                    {
-                        _touchIdsMap.Remove(nativeTouchId);
-                    }
-                    break;
-            }
+            _touchIdsMap.Remove(nativeTouchId);
         }
 
         private static void UpdateVelocity(TimeSpan currentTimestamp, ref TouchLocationData existingTouch)
