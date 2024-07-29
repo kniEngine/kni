@@ -256,9 +256,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int currentFramestamp = this._currentFramestamp;
 
             //Find the matching touch
-            for (int i = 0; i < _touchStates.Count; i++)
+            for (int tidx = 0; tidx < _touchStates.Count; tidx++)
             {
-                TouchLocationData existingTouch = _touchStates[i];
+                TouchLocationData existingTouch = _touchStates[tidx];
                 if (existingTouch.Id == touchId)
                 {
                     {
@@ -292,7 +292,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         existingTouch._timestamp = currentTimestamp;
                         existingTouch._framestamp = currentFramestamp;
 
-                        _touchStates[i] = existingTouch;
+                        _touchStates[tidx] = existingTouch;
                     }
                     break;
                 }
@@ -302,9 +302,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
 
             //Find the matching gesture
-            for (int i = 0; i < _gestureStates.Count; i++)
+            for (int gidx = 0; gidx < _gestureStates.Count; gidx++)
             {
-                TouchLocationData existingTouch = _gestureStates[i];
+                TouchLocationData existingTouch = _gestureStates[gidx];
                 if (existingTouch.Id == touchId)
                 {
                     {
@@ -338,7 +338,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         existingTouch._timestamp = currentTimestamp;
                         existingTouch._framestamp = currentFramestamp;
 
-                        _gestureStates[i] = existingTouch;
+                        _gestureStates[gidx] = existingTouch;
                     }
                     break;
                 }
@@ -410,9 +410,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int currentFramestamp = this._currentFramestamp;
 
             //Find the matching touch
-            for (int i = 0; i < _touchStates.Count; i++)
+            for (int tidx = 0; tidx < _touchStates.Count; tidx++)
             {
-                TouchLocationData existingTouch = _touchStates[i];
+                TouchLocationData existingTouch = _touchStates[tidx];
                 if (existingTouch.Id == touchId)
                 {
                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
@@ -420,7 +420,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     if (existingTouch.State == TouchLocationState.Pressed
                     && existingTouch.Framestamp != currentFramestamp)
                     {
-                        _touchStates.RemoveAt(i);
+                        _touchStates.RemoveAt(tidx);
                     }
                     else
                     {
@@ -455,7 +455,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         existingTouch._timestamp = currentTimestamp;
                         existingTouch._framestamp = currentFramestamp;
 
-                        _touchStates[i] = existingTouch;
+                        _touchStates[tidx] = existingTouch;
                     }
                     break;
                 }
@@ -465,9 +465,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
 
             //Find the matching gesture
-            for (int i = 0; i < _gestureStates.Count; i++)
+            for (int gidx = 0; gidx < _gestureStates.Count; gidx++)
             {
-                TouchLocationData existingTouch = _gestureStates[i];
+                TouchLocationData existingTouch = _gestureStates[gidx];
                 if (existingTouch.Id == touchId)
                 {
                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
@@ -475,7 +475,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     if (existingTouch.State == TouchLocationState.Pressed
                     && existingTouch.Framestamp != currentFramestamp)
                     {
-                        _gestureStates.RemoveAt(i);
+                        _gestureStates.RemoveAt(gidx);
                     }
                     else
                     {
@@ -510,7 +510,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         existingTouch._timestamp = currentTimestamp;
                         existingTouch._framestamp = currentFramestamp;
 
-                        _gestureStates[i] = existingTouch;
+                        _gestureStates[gidx] = existingTouch;
                     }
                     break;
                 }
