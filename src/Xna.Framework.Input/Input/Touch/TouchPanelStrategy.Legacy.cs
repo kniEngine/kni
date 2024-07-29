@@ -469,8 +469,14 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
 
             // If this is a release unmap the hardware id.
-            if (state == TouchLocationState.Released)
-                _touchIdsMap.Remove(nativeTouchId);
+            switch (state)
+            {
+                case TouchLocationState.Released:
+                    {
+                        _touchIdsMap.Remove(nativeTouchId);
+                    }
+                    break;
+            }
         }
 
         private static void UpdateVelocity(TimeSpan currentTimestamp, ref TouchLocationData existingTouch)
