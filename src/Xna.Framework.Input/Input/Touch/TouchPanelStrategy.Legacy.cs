@@ -256,10 +256,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int currentFramestamp = this._currentFramestamp;
 
             //Find the matching touch
-            for (int tidx = 0; tidx < _touchStates.Count; tidx++)
+            int tidx = FindTouchStateIndex(touchId);
+            if (tidx != -1)
             {
                 TouchLocationData existingTouch = _touchStates[tidx];
-                if (existingTouch.Id == touchId)
                 {
                     {
                         // Update the touch based on the new one
@@ -294,7 +294,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         _touchStates[tidx] = existingTouch;
                     }
-                    break;
                 }
             }
 
@@ -302,10 +301,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
 
             //Find the matching gesture
-            for (int gidx = 0; gidx < _gestureStates.Count; gidx++)
+            int gidx = FindGestureStateIndex(touchId);
+            if (gidx != -1)
             {
                 TouchLocationData existingTouch = _gestureStates[gidx];
-                if (existingTouch.Id == touchId)
                 {
                     {
                         // Update the touch based on the new one
@@ -340,7 +339,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         _gestureStates[gidx] = existingTouch;
                     }
-                    break;
                 }
             }
 
@@ -410,10 +408,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int currentFramestamp = this._currentFramestamp;
 
             //Find the matching touch
-            for (int tidx = 0; tidx < _touchStates.Count; tidx++)
+            int tidx = FindTouchStateIndex(touchId);
+            if (tidx != -1)
             {
                 TouchLocationData existingTouch = _touchStates[tidx];
-                if (existingTouch.Id == touchId)
                 {
                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                     // that means we've never been seen, so just get rid of us
@@ -457,7 +455,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         _touchStates[tidx] = existingTouch;
                     }
-                    break;
                 }
             }
 
@@ -465,10 +462,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
 
             //Find the matching gesture
-            for (int gidx = 0; gidx < _gestureStates.Count; gidx++)
+            int gidx = FindGestureStateIndex(touchId);
+            if (gidx != -1)
             {
                 TouchLocationData existingTouch = _gestureStates[gidx];
-                if (existingTouch.Id == touchId)
                 {
                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                     // that means we've never been seen, so just get rid of us
@@ -512,7 +509,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         _gestureStates[gidx] = existingTouch;
                     }
-                    break;
                 }
             }
 
@@ -551,6 +547,26 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // If this is a release unmap the hardware id.
             _touchIdsMap.Remove(nativeTouchId);
         }
+
+        private int FindTouchStateIndex(int touchId)
+        {
+            for (int tidx = 0; tidx < _touchStates.Count; tidx++)
+            {
+                if (_touchStates[tidx].Id == touchId)
+                    return tidx;
+            }
+            return -1;
+        }
+
+        private int FindGestureStateIndex(int touchId)
+        {
+            for (int gidx = 0; gidx < _gestureStates.Count; gidx++)
+            {
+                if (_gestureStates[gidx].Id == touchId)
+                    return gidx;
+            }
+            return -1;
+        }        
 
         private static void UpdateVelocity(TimeSpan currentTimestamp, ref TouchLocationData existingTouch)
         {
