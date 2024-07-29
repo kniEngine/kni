@@ -27,11 +27,11 @@ namespace Kni.Tests.Input
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            GameWindow gameWindow = new MockWindow();
+            Game game = new Game();
 
-            TouchPanel.WindowHandle = gameWindow.Handle;
-            TouchPanel.DisplayWidth = gameWindow.ClientBounds.Width;
-            TouchPanel.DisplayHeight = gameWindow.ClientBounds.Height;
+            TouchPanel.WindowHandle  = game.Window.Handle;
+            TouchPanel.DisplayWidth  = game.Window.ClientBounds.Width;
+            TouchPanel.DisplayHeight = game.Window.ClientBounds.Height;
         }
 
         [TearDown]
@@ -84,7 +84,8 @@ namespace Kni.Tests.Input
 
         [Test]
         [Order(2)]
-        [TestCase(true), TestCase(false)]
+        [TestCase(true)]
+        [TestCase(false)]
         public void BasicDoubleTapGesture(bool enableTap)
         {
             GestureSample gesture;
@@ -170,7 +171,8 @@ namespace Kni.Tests.Input
         }
 
         [Test]
-        [TestCase(GestureType.None), TestCase(GestureType.FreeDrag | GestureType.DragComplete)]
+        [TestCase(GestureType.None)]
+        [TestCase(GestureType.FreeDrag | GestureType.DragComplete)]
         [Description("Hold a finger down, then perform a tap and double tap with another, this should not make any tap gestures")]
         public void MultiFingerTap(GestureType otherEnabledGestures)
         {
@@ -329,8 +331,10 @@ namespace Kni.Tests.Input
         }
 
         [Test]
-        [TestCase(AllDrags, GestureType.HorizontalDrag), TestCase(GestureType.HorizontalDrag, GestureType.HorizontalDrag)]
-        [TestCase(AllDrags, GestureType.VerticalDrag), TestCase(GestureType.VerticalDrag, GestureType.VerticalDrag)]
+        [TestCase(AllDrags, GestureType.HorizontalDrag)]
+        [TestCase(GestureType.HorizontalDrag, GestureType.HorizontalDrag)]
+        [TestCase(AllDrags, GestureType.VerticalDrag)]
+        [TestCase(GestureType.VerticalDrag, GestureType.VerticalDrag)]
         public void BasicDirectionalDrag(GestureType enabledGestures, GestureType direction)
         {
             TouchPanel.EnabledGestures = enabledGestures;
@@ -399,7 +403,9 @@ namespace Kni.Tests.Input
         }
 
         [Test]
-        [TestCase(AllDrags), TestCase(GestureType.FreeDrag | GestureType.DragComplete), TestCase(GestureType.FreeDrag)]
+        [TestCase(AllDrags)]
+        [TestCase(GestureType.FreeDrag | GestureType.DragComplete)]
+        [TestCase(GestureType.FreeDrag)]
         [Description("Drag on an angle, it should generate a FreeDrag event, not a directional one")]
         public void BasicFreeDragTest(GestureType enabledGestures)
         {

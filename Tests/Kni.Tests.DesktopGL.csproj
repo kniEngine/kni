@@ -143,7 +143,6 @@
     <Compile Include="Runner\GameBase\CountCallsGame.cs" />
     <Compile Include="Runner\GameBase\FixtureBase.cs" />
     <Compile Include="Runner\GameBase\MockGame.cs" />
-    <Compile Include="Runner\GameBase\MockWindow.cs" />
     <Compile Include="Runner\GameBase\TestGameBase.cs" />
     <Compile Include="Runner\GameBase\GraphicsDeviceTestFixtureBase.cs" />
     <Compile Include="Runner\GameBase\VisualTestFixtureBase.cs" />
