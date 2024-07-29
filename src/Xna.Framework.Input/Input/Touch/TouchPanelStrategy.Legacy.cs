@@ -310,7 +310,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     {
                         // Update the touch based on the new one
                         System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                            System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                         // Store the current state as the previous one.
                         existingTouch._previousPosition = existingTouch.Position;
@@ -324,7 +324,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         //Going straight from pressed to released on the same frame
                         if (existingTouch._state == TouchLocationState.Released
-                        && existingTouch._previousState == TouchLocationState.Pressed)
+                        &&  existingTouch._previousState == TouchLocationState.Pressed)
                         {
                             if (existingTouch.Framestamp == currentFramestamp)
                             {
@@ -441,7 +441,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         //Going straight from pressed to released on the same frame
                         if (existingTouch._state == TouchLocationState.Released
-                        && existingTouch._previousState == TouchLocationState.Pressed)
+                        &&  existingTouch._previousState == TouchLocationState.Pressed)
                         {
                             if (existingTouch.Framestamp == currentFramestamp)
                             {
@@ -473,7 +473,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                     // that means we've never been seen, so just get rid of us
                     if (existingTouch.State == TouchLocationState.Pressed
-                    && existingTouch.Framestamp != currentFramestamp)
+                    &&  existingTouch.Framestamp != currentFramestamp)
                     {
                         _gestureStates.RemoveAt(gidx);
                     }
@@ -496,7 +496,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                         //Going straight from pressed to released on the same frame
                         if (existingTouch._state == TouchLocationState.Released
-                        && existingTouch._previousState == TouchLocationState.Pressed)
+                        &&  existingTouch._previousState == TouchLocationState.Pressed)
                         {
                             if (existingTouch.Framestamp == currentFramestamp)
                             {
