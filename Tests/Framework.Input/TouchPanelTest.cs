@@ -20,11 +20,11 @@ namespace Kni.Tests.Input
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            GameWindow gameWindow = new MockWindow();
+            Game game = new Game();
 
-            TouchPanel.WindowHandle = gameWindow.Handle;
-            TouchPanel.DisplayWidth = gameWindow.ClientBounds.Width;
-            TouchPanel.DisplayHeight = gameWindow.ClientBounds.Height;
+            TouchPanel.WindowHandle  = game.Window.Handle;
+            TouchPanel.DisplayWidth  = game.Window.ClientBounds.Width;
+            TouchPanel.DisplayHeight = game.Window.ClientBounds.Height;
         }
 
         [TearDown]
@@ -429,7 +429,8 @@ namespace Kni.Tests.Input
 
         [Test]
         [Order(12)]
-        [TestCase(false), TestCase(true)]
+        [TestCase(false)]
+        [TestCase(true)]
         public void ReleaseAllTouchesTest(bool testBetween)
         {
             //Create multiple touches in different states
@@ -459,7 +460,7 @@ namespace Kni.Tests.Input
                 Assert.AreEqual(TouchLocationState.Pressed, touch2.State);
             }
 
-            //Call ReleaseAllTouches
+            // Invalidate touches
             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
 
             //If we saw the second touch happen then we should see it be released, otherwise it will be in pressed, then in released next time
