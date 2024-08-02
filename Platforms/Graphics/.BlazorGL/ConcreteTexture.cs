@@ -96,6 +96,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType = WebGLTexelType.UNSIGNED_BYTE;
                     glIsCompressedTexture = true;
                     break;
+                case SurfaceFormat.Dxt5:
+                    if (!supportsS3tc) goto default;
+                    glInternalFormat = WebGLInternalFormat.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+                    glFormat = (WebGLFormat)0x83F3;
+                    glType = WebGLTexelType.UNSIGNED_BYTE;
+                    glIsCompressedTexture = true;
+                    break;
                 
                 default:
                     throw new PlatformNotSupportedException(string.Format("The requested SurfaceFormat `{0}` is not supported.", format));
