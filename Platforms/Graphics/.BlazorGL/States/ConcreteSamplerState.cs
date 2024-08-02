@@ -44,17 +44,29 @@ namespace Microsoft.Xna.Platform.Graphics
                     textureMaxFilter = WebGLTexParam.LINEAR;
                     break;
                 case TextureFilter.PointMipLinear:
-                    throw new NotImplementedException();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.NEAREST_MIPMAP_LINEAR : WebGLTexParam.NEAREST);
+                    textureMaxFilter = WebGLTexParam.NEAREST;
+                    break;
                 case TextureFilter.LinearMipPoint:
-                    throw new NotImplementedException();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_NEAREST : WebGLTexParam.LINEAR);
+                    textureMaxFilter = WebGLTexParam.LINEAR;
+                    break;
                 case TextureFilter.MinLinearMagPointMipLinear:
-                    throw new NotImplementedException();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
+                    textureMaxFilter = WebGLTexParam.NEAREST;
+                    break;
                 case TextureFilter.MinLinearMagPointMipPoint:
-                    throw new NotImplementedException();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_NEAREST : WebGLTexParam.LINEAR);
+                    textureMaxFilter = WebGLTexParam.NEAREST;
+                    break;
                 case TextureFilter.MinPointMagLinearMipLinear:
-                    throw new NotImplementedException();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.NEAREST_MIPMAP_LINEAR : WebGLTexParam.NEAREST);
+                    textureMaxFilter = WebGLTexParam.LINEAR;
+                    break;
                 case TextureFilter.MinPointMagLinearMipPoint:
-                    throw new NotImplementedException();
+                    textureMinFilter = (useMipmaps ? WebGLTexParam.NEAREST_MIPMAP_NEAREST : WebGLTexParam.NEAREST);
+                    textureMaxFilter = WebGLTexParam.LINEAR;
+                    break;
 
                 default:
                     throw new NotSupportedException();
