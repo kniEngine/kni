@@ -40,8 +40,9 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     if (_gamepads[deviceIndex] != null)
                     {
-                        _gamepads[deviceIndex] = new BlazorGamePadDevice(gamepads[deviceIndex].Index);
-                        _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepads[deviceIndex]);
+                        Gamepad gamepad = gamepads[deviceIndex];
+                        _gamepads[deviceIndex] = new BlazorGamePadDevice(deviceIndex);
+                        _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepad);
                     }
                 }
 
