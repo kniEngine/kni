@@ -41,8 +41,7 @@ namespace Microsoft.Xna.Platform.Input
                     if (_gamepads[deviceIndex] != null)
                     {
                         Gamepad gamepad = gamepads[deviceIndex];
-                        _gamepads[deviceIndex] = new BlazorGamePadDevice(deviceIndex);
-                        _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepad);
+                        AddDevice(deviceIndex, gamepad);
                     }
                 }
 
@@ -58,8 +57,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             Gamepad[] gamepads = Window.Current.Navigator.GetGamepads();
             Gamepad gamepad = gamepads[deviceIndex];
-            _gamepads[deviceIndex] = new BlazorGamePadDevice(deviceIndex);
-            _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepad);
+            AddDevice(deviceIndex, gamepad);
         }
 
         internal void Window_OnGamepadDisconnected(object sender, int deviceIndex)
@@ -69,6 +67,11 @@ namespace Microsoft.Xna.Platform.Input
             _gamepads[deviceIndex] = null;
         }
 
+        private void AddDevice(int deviceIndex, Gamepad gamepad)
+        {
+            _gamepads[deviceIndex] = new BlazorGamePadDevice(deviceIndex);
+            _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepad);
+        }
 
         public override int PlatformGetMaxNumberOfGamePads()
         {
