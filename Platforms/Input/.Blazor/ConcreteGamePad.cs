@@ -62,15 +62,20 @@ namespace Microsoft.Xna.Platform.Input
 
         internal void Window_OnGamepadDisconnected(object sender, int deviceIndex)
         {
-            BlazorGamePadDevice gamepad = _gamepads[deviceIndex];
-
-            _gamepads[deviceIndex] = null;
+            RemoveDevice(deviceIndex);
         }
 
         private void AddDevice(int deviceIndex, Gamepad gamepad)
         {
             _gamepads[deviceIndex] = new BlazorGamePadDevice(deviceIndex);
             _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepad);
+        }
+
+        private void RemoveDevice(int deviceIndex)
+        {
+            BlazorGamePadDevice gamepad = _gamepads[deviceIndex];
+
+            _gamepads[deviceIndex] = null;
         }
 
         public override int PlatformGetMaxNumberOfGamePads()
