@@ -76,6 +76,7 @@ namespace Microsoft.Xna.Platform.Input
         public override GamePadCapabilities PlatformGetCapabilities(int index)
         {
             BlazorGamePadDevice gamepadDevice = _gamepads[index];
+
             if (gamepadDevice == null)
                 return GetDefaultCapabilities();
 
@@ -85,24 +86,23 @@ namespace Microsoft.Xna.Platform.Input
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
-            BlazorGamePadDevice gamePad = _gamepads[index];
+            BlazorGamePadDevice gamepadDevice = _gamepads[index];
             GamePadState state = new GamePadState();
 
-            if (gamePad != null)
+            if (gamepadDevice != null)
             {
                 Gamepad[] gamepads = Window.Current.Navigator.GetGamepads();
-                Gamepad gamepad = gamepads[gamePad._index];
+                Gamepad gamepad = gamepads[gamepadDevice._index];
 
-                if (gamepad.Mapping == "standard")
+                if (gamepad != null && gamepad.Mapping == "standard")
                 {
                     state = CreateGamePadState(gamepad, leftDeadZoneMode, rightDeadZoneMode);
+                    return state;
                 }
             }
-            else
-            {
-                state = base.CreateGamePadState(new GamePadThumbSticks(), new GamePadTriggers(), new GamePadButtons(), new GamePadDPad(),
-                        isConnected: false);
-            }
+
+            state = base.CreateGamePadState(new GamePadThumbSticks(), new GamePadTriggers(), new GamePadButtons(), new GamePadDPad(),
+                    isConnected: false);
 
             return state;
         }
