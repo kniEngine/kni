@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Platform.Input
             if (gamepadDevice != null)
             {
                 Gamepad[] gamepads = Window.Current.Navigator.GetGamepads();
-                Gamepad gamepad = gamepads[gamepadDevice._index];
+                Gamepad gamepad = gamepads[gamepadDevice.DeviceIndex];
 
                 if (gamepad != null && gamepad.Mapping == "standard")
                 {
