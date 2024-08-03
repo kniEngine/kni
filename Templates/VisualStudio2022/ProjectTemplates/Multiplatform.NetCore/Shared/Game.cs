@@ -73,9 +73,7 @@ namespace $ext_safeprojectname$
         {
             MouseState mouseState = Mouse.GetState();
             KeyboardState keyboardState = Keyboard.GetState();
-            GamePadState gamePadState = default;
-            try { gamePadState = GamePad.GetState(PlayerIndex.One); }
-            catch (NotImplementedException) { /* ignore gamePadState */ }
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (keyboardState.IsKeyDown(Keys.Escape) ||
                 keyboardState.IsKeyDown(Keys.Back) ||
