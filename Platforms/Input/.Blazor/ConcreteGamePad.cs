@@ -142,10 +142,10 @@ namespace Microsoft.Xna.Platform.Input
                 buttons |= Buttons.LeftShoulder;
             if (gpbuttons[5].Pressed)
                 buttons |= Buttons.RightShoulder;
-            //if (gpbuttons[6].Pressed)
-            //    buttons |= Buttons.LeftTrigger;
-            //if (gpbuttons[7].Pressed)
-            //    buttons |= Buttons.RightTrigger;
+            if (gpbuttons[6].Pressed)
+                buttons |= Buttons.LeftTrigger;
+            if (gpbuttons[7].Pressed)
+                buttons |= Buttons.RightTrigger;
             if (gpbuttons[8].Pressed)
                 buttons |= Buttons.Back;
             if (gpbuttons[9].Pressed)
