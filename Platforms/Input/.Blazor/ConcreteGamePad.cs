@@ -57,8 +57,9 @@ namespace Microsoft.Xna.Platform.Input
         internal void Window_OnGamepadConnected(object sender, int deviceIndex)
         {
             Gamepad[] gamepads = Window.Current.Navigator.GetGamepads();
+            Gamepad gamepad = gamepads[deviceIndex];
             _gamepads[deviceIndex] = new BlazorGamePadDevice(deviceIndex);
-            _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepads[deviceIndex]);
+            _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepad);
         }
 
         internal void Window_OnGamepadDisconnected(object sender, int deviceIndex)
