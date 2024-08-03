@@ -223,7 +223,8 @@ namespace Microsoft.Xna.Platform.Input
         private GamePadState GetDefaultState()
         {
             GamePadButtons buttons = new GamePadButtons((Back) ? Buttons.Back : 0);
-            return base.CreateGamePadState(default(GamePadThumbSticks), default(GamePadTriggers), buttons, default(GamePadDPad));
+            return base.CreateGamePadState(default(GamePadThumbSticks), default(GamePadTriggers), buttons, default(GamePadDPad),
+                        isConnected: false);
         }
 
         public override GamePadState PlatformGetState(int index, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
