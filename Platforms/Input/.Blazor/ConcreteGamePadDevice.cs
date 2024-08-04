@@ -10,12 +10,12 @@ namespace Microsoft.Xna.Platform.Input
 {
     internal class BlazorGamePadDevice : GamePadDevice
     {
-        public int _index;
+        public int DeviceIndex { get; private set; }
 
-        public BlazorGamePadDevice(int index)
+        public BlazorGamePadDevice(int deviceIndex)
             : base()
         {
-            _index = index;
+            DeviceIndex = deviceIndex;
         }
     }
 
