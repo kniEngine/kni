@@ -26,6 +26,9 @@ namespace Microsoft.Xna.Platform.Input
 
         private readonly BlazorGamePadDevice[] _gamepads = new BlazorGamePadDevice[MaxNumberOfGamePads];
 
+        // map native indices -> gamepad indices (PlayerIndex)
+        private readonly Dictionary<int, int> _indicesMap = new Dictionary<int, int>();
+
         // Default & SDL Xbox Controller dead zones
         // Based on the XInput constants
         public override float LeftThumbDeadZone { get { return 0.24f; } }
@@ -67,15 +70,35 @@ namespace Microsoft.Xna.Platform.Input
 
         private void AddDevice(int deviceIndex, Gamepad gamepad)
         {
-            _gamepads[deviceIndex] = new BlazorGamePadDevice(deviceIndex);
-            _gamepads[deviceIndex].Capabilities = CreateCapabilities(gamepad);
+            if (gamepad.Mapping == "standard")
+            {
+                if (_indicesMap.ContainsKey(deviceIndex))
+                    return;
+
+                int index = 0;
+                while (index < MaxNumberOfGamePads && _gamepads[index] != null)
+                    index++;
+
+                if (index >= MaxNumberOfGamePads)
+                    return;
+
+                _gamepads[index] = new BlazorGamePadDevice(deviceIndex);
+                _gamepads[index].Capabilities = CreateCapabilities(gamepad);
+
+                _indicesMap[deviceIndex] = index;
+            }
         }
 
         private void RemoveDevice(int deviceIndex)
         {
-            BlazorGamePadDevice gamepad = _gamepads[deviceIndex];
+            int index = -1;
+            if (_indicesMap.TryGetValue(deviceIndex, out index))
+            {
+                BlazorGamePadDevice gamepad = _gamepads[index];
 
-            _gamepads[deviceIndex] = null;
+                _gamepads[index] = null;
+                _indicesMap.Remove(deviceIndex);
+            }
         }
 
         public override int PlatformGetMaxNumberOfGamePads()
@@ -104,7 +127,7 @@ namespace Microsoft.Xna.Platform.Input
                 Gamepad[] gamepads = Window.Current.Navigator.GetGamepads();
                 Gamepad gamepad = gamepads[gamepadDevice.DeviceIndex];
 
-                if (gamepad != null && gamepad.Mapping == "standard")
+                if (gamepad != null)
                 {
                     state = CreateGamePadState(gamepad, leftDeadZoneMode, rightDeadZoneMode);
                     return state;
@@ -198,28 +221,26 @@ namespace Microsoft.Xna.Platform.Input
             {
                 displayName = gamepad.Id;
 
+                isConnected = true;
                 if (gamepad.Mapping == "standard")
-                {
-                    isConnected = true;
                     gamePadType = GamePadType.GamePad;
-                    buttons |= Buttons.A;
-                    buttons |= Buttons.B;
-                    buttons |= Buttons.X;
-                    buttons |= Buttons.Y;
-                    buttons |= Buttons.LeftShoulder;
-                    buttons |= Buttons.RightShoulder;
-                    buttons |= Buttons.LeftTrigger;
-                    buttons |= Buttons.RightTrigger;
-                    buttons |= Buttons.Back;
-                    buttons |= Buttons.Start;
-                    buttons |= Buttons.LeftStick;
-                    buttons |= Buttons.RightStick;
-                    buttons |= Buttons.DPadUp;
-                    buttons |= Buttons.DPadDown;
-                    buttons |= Buttons.DPadLeft;
-                    buttons |= Buttons.DPadRight;
-                    buttons |= Buttons.BigButton;
-                }
+                buttons |= Buttons.A;
+                buttons |= Buttons.B;
+                buttons |= Buttons.X;
+                buttons |= Buttons.Y;
+                buttons |= Buttons.LeftShoulder;
+                buttons |= Buttons.RightShoulder;
+                buttons |= Buttons.LeftTrigger;
+                buttons |= Buttons.RightTrigger;
+                buttons |= Buttons.Back;
+                buttons |= Buttons.Start;
+                buttons |= Buttons.LeftStick;
+                buttons |= Buttons.RightStick;
+                buttons |= Buttons.DPadUp;
+                buttons |= Buttons.DPadDown;
+                buttons |= Buttons.DPadLeft;
+                buttons |= Buttons.DPadRight;
+                buttons |= Buttons.BigButton;
             }
 
             return base.CreateGamePadCapabilities(
