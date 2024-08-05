@@ -203,6 +203,7 @@ namespace Microsoft.Xna.Framework.Windows
                 case WM_POINTERUPDATE:
                     state = TouchLocationState.Moved;
                     break;
+
                 case WM_ENTERSIZEMOVE:
                     IsResizing = true;
                     break;
@@ -214,11 +215,9 @@ namespace Microsoft.Xna.Framework.Windows
             if (state != TouchLocationState.Invalid)
             {
                 var id = m.GetPointerId();
-
                 var position = m.GetPointerLocation();
                 position = PointToClient(position);
                 var vec = new Vector2(position.X, position.Y);
-
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, state, vec);
             }
 

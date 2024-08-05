@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework
                     case UITouchPhase.Began:
                         ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Pressed, position);
                         break;
-                    case UITouchPhase.Ended	:
+                    case UITouchPhase.Ended:
                         ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Released, position);
                         break;
                     case UITouchPhase.Cancelled:
