@@ -103,17 +103,17 @@ namespace Microsoft.Xna.Framework
                 // If we have an input UIElement then we bind input events
                 // to it else we'll get events for overlapping XAML controls.
                 inputElement.PointerPressed += UIElement_PointerPressed;
-                inputElement.PointerReleased += UIElement_PointerReleased;
-                inputElement.PointerCanceled += UIElement_PointerReleased;
                 inputElement.PointerMoved += UIElement_PointerMoved;
+                inputElement.PointerReleased += UIElement_PointerReleased;
+                inputElement.PointerCanceled += UIElement_PointerCanceled;
                 inputElement.PointerWheelChanged += UIElement_PointerWheelChanged;
             }
             else // (inputElement == null)
             {
                 // If we only have a CoreWindow then use it for input events.
                 window.PointerPressed += CoreWindow_PointerPressed;
-                window.PointerReleased += CoreWindow_PointerReleased;
                 window.PointerMoved += CoreWindow_PointerMoved;
+                window.PointerReleased += CoreWindow_PointerReleased;
                 window.PointerWheelChanged += CoreWindow_PointerWheelChanged;
             }
         }
@@ -148,6 +148,15 @@ namespace Microsoft.Xna.Framework
 
             var pointerPoint = args.GetCurrentPoint(null);
             PointerReleased(pointerPoint, sender as UIElement, args.Pointer);
+            args.Handled = true;
+        }
+
+        private void UIElement_PointerCanceled(object sender, PointerRoutedEventArgs args)
+        {
+            ((UIElement)sender).ReleasePointerCapture(args.Pointer);
+
+            var pointerPoint = args.GetCurrentPoint(null);
+            PointerCanceled(pointerPoint, sender as UIElement, args.Pointer);
             args.Handled = true;
         }
 
@@ -190,9 +199,9 @@ namespace Microsoft.Xna.Framework
 
         private void PointerPressed(PointerPoint pointerPoint, UIElement target, Pointer pointer)
         {
-            var pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
 
-            var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch)
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos);
@@ -210,10 +219,10 @@ namespace Microsoft.Xna.Framework
 
         private void PointerMoved(PointerPoint pointerPoint)
         {
-            var pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
 
-            var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
-            var touchIsDown = pointerPoint.IsInContact;
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+            bool touchIsDown = pointerPoint.IsInContact;
 
             if (isTouch && touchIsDown)
             {
@@ -229,11 +238,31 @@ namespace Microsoft.Xna.Framework
 
         private void PointerReleased(PointerPoint pointerPoint, UIElement target, Pointer pointer)
         {
-            var pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
 
-            var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch) 
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
+
+            if (!isTouch)
+            {
+                // Mouse or stylus event.
+                UpdateMouse(pointerPoint);
+
+                // Release the captured pointer.
+                if (target != null)
+                    target.ReleasePointerCapture(pointer);
+            }
+        }
+
+        private void PointerCanceled(PointerPoint pointerPoint, UIElement target, Pointer pointer)
+        {
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+
+            if (isTouch)
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
 
             if (!isTouch)

@@ -111,8 +111,6 @@ namespace Microsoft.Xna.Framework.Windows
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         protected override void WndProc(ref Message m)
         {
-            var state = TouchLocationState.Invalid;
-           
             switch (m.Msg)
             {
                 case WM_ERASEBKGND:
@@ -194,32 +192,40 @@ namespace Microsoft.Xna.Framework.Windows
                     }
                     break;
 
-                case WM_POINTERUP:
-                    state = TouchLocationState.Released;
-                    break;
                 case WM_POINTERDOWN:
-                    state = TouchLocationState.Pressed;
+                    {
+                        int id = m.GetPointerId();
+                        var position = m.GetPointerLocation();
+                        position = PointToClient(position);
+                        Vector2 vec = new Vector2(position.X, position.Y);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Pressed, vec);
+                    }
                     break;
                 case WM_POINTERUPDATE:
-                    state = TouchLocationState.Moved;
+                    {
+                        int id = m.GetPointerId();
+                        var position = m.GetPointerLocation();
+                        position = PointToClient(position);
+                        Vector2 vec = new Vector2(position.X, position.Y);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Moved, vec);
+                    }
                     break;
+                case WM_POINTERUP:
+                    {
+                        int id = m.GetPointerId();
+                        var position = m.GetPointerLocation();
+                        position = PointToClient(position);
+                        Vector2 vec = new Vector2(position.X, position.Y);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, vec);
+                    }
+                    break;
+
                 case WM_ENTERSIZEMOVE:
                     IsResizing = true;
                     break;
                 case WM_EXITSIZEMOVE:
                     IsResizing = false;
                     break;
-            }
-
-            if (state != TouchLocationState.Invalid)
-            {
-                var id = m.GetPointerId();
-
-                var position = m.GetPointerLocation();
-                position = PointToClient(position);
-                var vec = new Vector2(position.X, position.Y);
-
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, state, vec);
             }
 
             base.WndProc(ref m);

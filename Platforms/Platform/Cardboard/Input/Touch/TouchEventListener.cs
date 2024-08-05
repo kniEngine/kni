@@ -31,19 +31,13 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             switch (e.ActionMasked)
             {
-                // DOWN                
+                // DOWN
                 case MotionEventActions.Down:
                 case MotionEventActions.PointerDown:
                     ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Pressed, position);
                     break;
 
-                // UP                
-                case MotionEventActions.Up:
-                case MotionEventActions.PointerUp:
-                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
-                    break;
-
-                // MOVE                
+                // MOVE
                 case MotionEventActions.Move:
                     for (int i = 0; i < e.PointerCount; i++)
                     {
@@ -54,9 +48,23 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     }
                     break;
 
-                // CANCEL, OUTSIDE                
-                case MotionEventActions.Cancel:
+                // UP
+                case MotionEventActions.Up:
+                case MotionEventActions.PointerUp:
+                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
+                    break;
+
+                // OUTSIDE
                 case MotionEventActions.Outside:
+                    for (int i = 0; i < e.PointerCount; i++)
+                    {
+                        id = e.GetPointerId(i);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
+                    }
+                    break;
+
+                // CANCEL
+                case MotionEventActions.Cancel:
                     for (int i = 0; i < e.PointerCount; i++)
                     {
                         id = e.GetPointerId(i);

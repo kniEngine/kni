@@ -132,14 +132,14 @@ namespace Microsoft.Xna.Framework
 
                 switch (touch.Phase) 
                 {
+                    case UITouchPhase.Began:
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Pressed, position);
+                        break;
                     //case UITouchPhase.Stationary:
                     case UITouchPhase.Moved:
                         ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Moved, position);					
                         break;
-                    case UITouchPhase.Began:
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Pressed, position);
-                        break;
-                    case UITouchPhase.Ended	:
+                    case UITouchPhase.Ended:
                         ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(id, TouchLocationState.Released, position);
                         break;
                     case UITouchPhase.Cancelled:
