@@ -8,11 +8,13 @@ namespace Microsoft.Xna.Framework.Input.Touch
     internal struct TouchLocationData : IEquatable<TouchLocationData>
     {
         private int _id;
+
         internal TouchLocationState _state;
         internal Vector2 _position;
 
-        internal Vector2 _previousPosition;
         internal TouchLocationState _previousState;
+        internal Vector2 _previousPosition;
+
 
         // Used for gesture recognition.
         internal Vector2 _velocity;
