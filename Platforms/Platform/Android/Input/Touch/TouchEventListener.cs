@@ -54,9 +54,17 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
                     break;
 
-                // CANCEL, OUTSIDE
-                case MotionEventActions.Cancel:
+                // OUTSIDE
                 case MotionEventActions.Outside:
+                    for (int i = 0; i < e.PointerCount; i++)
+                    {
+                        id = e.GetPointerId(i);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
+                    }
+                    break;
+
+                // CANCEL
+                case MotionEventActions.Cancel:
                     for (int i = 0; i < e.PointerCount; i++)
                     {
                         id = e.GetPointerId(i);
