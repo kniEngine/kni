@@ -331,8 +331,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         UpdateVelocity(currentTimestamp, ref existingTouch);
 
                         //Going straight from pressed to released on the same frame
-                        if (existingTouch._state == TouchLocationState.Released
-                        &&  existingTouch._previousState == TouchLocationState.Pressed)
+                        if (existingTouch._previousState == TouchLocationState.Pressed)
                         {
                             if (existingTouch.Framestamp == currentFramestamp)
                             {
@@ -550,8 +549,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         UpdateVelocity(currentTimestamp, ref existingTouch);
 
                         //Going straight from pressed to released on the same frame
-                        if (existingTouch._state == TouchLocationState.Released
-                        &&  existingTouch._previousState == TouchLocationState.Pressed)
+                        if (existingTouch._previousState == TouchLocationState.Pressed)
                         {
                             if (existingTouch.Framestamp == currentFramestamp)
                             {
