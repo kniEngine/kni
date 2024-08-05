@@ -234,8 +234,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                     // Store the current state as the previous one.
-                    existingTouch._previousPosition = existingTouch.Position;
                     existingTouch._previousState = existingTouch.State;
+                    existingTouch._previousPosition = existingTouch.Position;
 
                     // Set the new state.
                     existingTouch._position = position;
@@ -308,12 +308,12 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
 
                         // Store the current state as the previous one.
-                        existingTouch._previousPosition = existingTouch.Position;
                         existingTouch._previousState = existingTouch.State;
+                        existingTouch._previousPosition = existingTouch.Position;
 
                         // Set the new state.
-                        existingTouch._position = position;
                         existingTouch._state = TouchLocationState.Released;
+                        existingTouch._position = position;
 
                         // Update the velocity.
                         UpdateVelocity(currentTimestamp, ref existingTouch);
