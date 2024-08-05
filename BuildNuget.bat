@@ -17,7 +17,7 @@ dotnet pack src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipel
 
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.Android.nuspec			-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.13.9001.0  -Properties Configuration=Release
 "C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.iOS.nuspec				-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.13.9001.0  -Properties Configuration=Release
-"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.13.9001.0  -Properties Configuration=Release
+"C:\Program Files (x86)\NuGet3\nuget.exe" pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory NuGetPackages\Output\  -BasePath .  -Version 3.13.9001.1  -Properties Configuration=Release
 
 dotnet pack Platforms\Xna.Framework.WindowsDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack Platforms\Xna.Framework.DesktopGL.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
