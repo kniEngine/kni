@@ -280,8 +280,4 @@
 	</EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Properties\AssemblyInfo.Android.cs" />
-  </ItemGroup>
-
 </Project>
