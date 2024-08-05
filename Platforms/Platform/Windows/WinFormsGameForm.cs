@@ -194,14 +194,14 @@ namespace Microsoft.Xna.Framework.Windows
                     }
                     break;
 
-                case WM_POINTERUP:
-                    state = TouchLocationState.Released;
-                    break;
                 case WM_POINTERDOWN:
                     state = TouchLocationState.Pressed;
                     break;
                 case WM_POINTERUPDATE:
                     state = TouchLocationState.Moved;
+                    break;
+                case WM_POINTERUP:
+                    state = TouchLocationState.Released;
                     break;
 
                 case WM_ENTERSIZEMOVE:

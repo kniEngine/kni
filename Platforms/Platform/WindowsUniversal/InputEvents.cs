@@ -103,17 +103,17 @@ namespace Microsoft.Xna.Framework
                 // If we have an input UIElement then we bind input events
                 // to it else we'll get events for overlapping XAML controls.
                 inputElement.PointerPressed += UIElement_PointerPressed;
+                inputElement.PointerMoved += UIElement_PointerMoved;
                 inputElement.PointerReleased += UIElement_PointerReleased;
                 inputElement.PointerCanceled += UIElement_PointerReleased;
-                inputElement.PointerMoved += UIElement_PointerMoved;
                 inputElement.PointerWheelChanged += UIElement_PointerWheelChanged;
             }
             else // (inputElement == null)
             {
                 // If we only have a CoreWindow then use it for input events.
                 window.PointerPressed += CoreWindow_PointerPressed;
-                window.PointerReleased += CoreWindow_PointerReleased;
                 window.PointerMoved += CoreWindow_PointerMoved;
+                window.PointerReleased += CoreWindow_PointerReleased;
                 window.PointerWheelChanged += CoreWindow_PointerWheelChanged;
             }
         }

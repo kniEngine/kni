@@ -37,12 +37,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Pressed, position);
                     break;
 
-                // UP
-                case MotionEventActions.Up:
-                case MotionEventActions.PointerUp:
-                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
-                    break;
-
                 // MOVE
                 case MotionEventActions.Move:
                     for (int i = 0; i < e.PointerCount; i++)
@@ -52,6 +46,12 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         position.Y = e.GetY(i);
                         ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Moved, position);
                     }
+                    break;
+
+                // UP
+                case MotionEventActions.Up:
+                case MotionEventActions.PointerUp:
+                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
                     break;
 
                 // CANCEL, OUTSIDE
