@@ -105,7 +105,7 @@ namespace Microsoft.Xna.Framework
                 inputElement.PointerPressed += UIElement_PointerPressed;
                 inputElement.PointerMoved += UIElement_PointerMoved;
                 inputElement.PointerReleased += UIElement_PointerReleased;
-                inputElement.PointerCanceled += UIElement_PointerReleased;
+                inputElement.PointerCanceled += UIElement_PointerCanceled;
                 inputElement.PointerWheelChanged += UIElement_PointerWheelChanged;
             }
             else // (inputElement == null)
@@ -148,6 +148,15 @@ namespace Microsoft.Xna.Framework
 
             var pointerPoint = args.GetCurrentPoint(null);
             PointerReleased(pointerPoint, sender as UIElement, args.Pointer);
+            args.Handled = true;
+        }
+
+        private void UIElement_PointerCanceled(object sender, PointerRoutedEventArgs args)
+        {
+            ((UIElement)sender).ReleasePointerCapture(args.Pointer);
+
+            var pointerPoint = args.GetCurrentPoint(null);
+            PointerCanceled(pointerPoint, sender as UIElement, args.Pointer);
             args.Handled = true;
         }
 
@@ -234,6 +243,26 @@ namespace Microsoft.Xna.Framework
             bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch) 
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
+
+            if (!isTouch)
+            {
+                // Mouse or stylus event.
+                UpdateMouse(pointerPoint);
+
+                // Release the captured pointer.
+                if (target != null)
+                    target.ReleasePointerCapture(pointer);
+            }
+        }
+
+        private void PointerCanceled(PointerPoint pointerPoint, UIElement target, Pointer pointer)
+        {
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+
+            if (isTouch)
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);
 
             if (!isTouch)
