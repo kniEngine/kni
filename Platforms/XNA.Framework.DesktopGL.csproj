@@ -23,7 +23,7 @@
     <IntermediateOutputPath>obj\SdlGL\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <LangVersion>Default</LangVersion>
-    <Description>XNA framework for SDL Desktop Platforms (OpenGL).</Description>
+    <Description>KNI backend for SDL Desktop Platforms (OpenGL)</Description>
     <PackageTags>KNI;</PackageTags>
     <PackageId>MonoGame.Framework.DesktopGL.9000</PackageId>
     <Product>Xna.Framework</Product>

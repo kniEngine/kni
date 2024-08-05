@@ -23,8 +23,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Description>The MonoGame runtime for iOS amd iPadOS. </Description>
-    <PackageTags>monogame;.net core;core;.net standard;standard;ios</PackageTags>
+    <Description>KNI backend for iOS platform (GLES).</Description>
+    <PackageTags>KNI;monogame;.net core;core;.net standard;standard;ios</PackageTags>
     <PackageId>MonoGame.Framework.iOS</PackageId>
   </PropertyGroup>
   
