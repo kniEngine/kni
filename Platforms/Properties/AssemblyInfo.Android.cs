@@ -4,7 +4,7 @@
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("KNI for Android platform (GLES)")]
+[assembly: AssemblyTitle("KNI backend for Android platform (GLES)")]
 
 // Version information for the assembly which is automatically
 // set by our automated build process.

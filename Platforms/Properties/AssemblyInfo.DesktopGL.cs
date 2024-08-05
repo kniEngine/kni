@@ -4,4 +4,4 @@
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("KNI for SDL Desktop Platforms (OpenGL)")]
+[assembly: AssemblyTitle("KNI backend for SDL Desktop Platforms (OpenGL)")]

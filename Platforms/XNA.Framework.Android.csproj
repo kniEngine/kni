@@ -22,8 +22,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Description>The MonoGame runtime for Android.</Description>
-    <PackageTags>monogame;.net core;core;.net standard;standard;android</PackageTags>
+    <Description>KNI backend for Android platform (GLES).</Description>
+    <PackageTags>KNI;monogame;.net core;core;.net standard;standard;android</PackageTags>
     <PackageId>MonoGame.Framework.Android</PackageId>
   </PropertyGroup>
   

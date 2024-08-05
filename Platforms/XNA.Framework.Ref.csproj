@@ -20,7 +20,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Description>Reference XNA framework for libraries.</Description>
+    <Description>Reference KNI backend for libraries.</Description>
     <PackageTags>KNI;monogame;.net core;core;.net standard;standard;Reference;</PackageTags>
     <PackageId>nkast.Xna.Framework.Ref</PackageId>
     <Product>Xna.Framework</Product>
