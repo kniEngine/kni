@@ -190,9 +190,9 @@ namespace Microsoft.Xna.Framework
 
         private void PointerPressed(PointerPoint pointerPoint, UIElement target, Pointer pointer)
         {
-            var pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
 
-            var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch)
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Pressed, pos);
@@ -210,10 +210,10 @@ namespace Microsoft.Xna.Framework
 
         private void PointerMoved(PointerPoint pointerPoint)
         {
-            var pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
 
-            var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
-            var touchIsDown = pointerPoint.IsInContact;
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+            bool touchIsDown = pointerPoint.IsInContact;
 
             if (isTouch && touchIsDown)
             {
@@ -229,9 +229,9 @@ namespace Microsoft.Xna.Framework
 
         private void PointerReleased(PointerPoint pointerPoint, UIElement target, Pointer pointer)
         {
-            var pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
+            Vector2 pos = new Vector2((float)pointerPoint.Position.X, (float)pointerPoint.Position.Y) * _currentDipFactor;
 
-            var isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
+            bool isTouch = pointerPoint.PointerDevice.PointerDeviceType == PointerDeviceType.Touch;
 
             if (isTouch) 
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent((int)pointerPoint.PointerId, TouchLocationState.Released, pos);

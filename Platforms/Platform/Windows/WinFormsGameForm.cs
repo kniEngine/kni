@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Windows
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         protected override void WndProc(ref Message m)
         {
-            var state = TouchLocationState.Invalid;
+            TouchLocationState state = TouchLocationState.Invalid;
            
             switch (m.Msg)
             {
@@ -214,10 +214,10 @@ namespace Microsoft.Xna.Framework.Windows
 
             if (state != TouchLocationState.Invalid)
             {
-                var id = m.GetPointerId();
+                int id = m.GetPointerId();
                 var position = m.GetPointerLocation();
                 position = PointToClient(position);
-                var vec = new Vector2(position.X, position.Y);
+                Vector2 vec = new Vector2(position.X, position.Y);
                 ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, state, vec);
             }
 
