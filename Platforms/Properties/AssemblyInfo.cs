@@ -36,7 +36,3 @@ using System.Resources;
 // don't need to load any language specific resources.
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 
-// Version information for the assembly which is automatically
-// set by our automated build process.
-[assembly: AssemblyVersion("3.13.9001.0")]
-[assembly: AssemblyFileVersion("3.13.9001.0")]

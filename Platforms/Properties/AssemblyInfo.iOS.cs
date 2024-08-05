@@ -5,3 +5,8 @@
 // associated with an assembly.
 
 [assembly: AssemblyTitle("KNI for iOS platform (GLES)")]
+
+// Version information for the assembly which is automatically
+// set by our automated build process.
+[assembly: AssemblyVersion("3.13.9001.0")]
+[assembly: AssemblyFileVersion("3.13.9001.0")]
