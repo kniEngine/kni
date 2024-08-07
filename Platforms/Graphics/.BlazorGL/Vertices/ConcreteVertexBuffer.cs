@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
 
@@ -97,7 +98,24 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             Debug.Assert(GLVertexBuffer != null);
-            throw new NotImplementedException();
+
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            GL.BindBuffer(WebGLBufferType.ARRAY, GLVertexBuffer);
+            GL.CheckGLError();
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
+
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+
+            if (elementSizeInByte == vertexStride)
+            {
+                //((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ARRAY, offsetInBytes, data, startIndex, elementCount);
+                throw new NotImplementedException();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         protected override void PlatformGraphicsContextLost()
