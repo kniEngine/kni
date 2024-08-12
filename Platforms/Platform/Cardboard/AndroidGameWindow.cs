@@ -8,11 +8,16 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using Android.Util;
+using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using Microsoft.Xna.Platform.Input.Touch;
+using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 
 namespace Microsoft.Xna.Framework
@@ -20,6 +25,14 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
+        // What is the state of the app.
+        internal enum AppState
+        {
+            Paused,
+            Resumed,
+            Exited,
+        }
+
         private static Dictionary<IntPtr, AndroidGameWindow> _instances = new Dictionary<IntPtr, AndroidGameWindow>();
 
         internal static AndroidGameWindow FromHandle(IntPtr windowHandle)
@@ -49,11 +62,11 @@ namespace Microsoft.Xna.Framework
             _activity = activity;
             _game = game;
 
-            _activity.Paused += _activity_Paused;
-            _activity.Resumed += _activity_Resumed;
+            _activity.Paused += Activity_Paused;
+            _activity.Resumed += Activity_Resumed;
 
-            _activity.WindowFocused += _activity_WindowFocused;
-            _activity.WindowUnfocused += _activity_WindowUnfocused;
+            _activity.WindowFocused += Activity_WindowFocused;
+            _activity.WindowUnfocused += Activity_WindowUnfocused;
 
             Point size;
             // GetRealSize() was defined in JellyBeanMr1 / API 17 / Android 4.2
@@ -72,8 +85,7 @@ namespace Microsoft.Xna.Framework
 
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
             
-            GameView = new AndroidSurfaceView(activity, this, _game);
-            GameView.Tick += OnTick;
+            GameView = new AndroidSurfaceView(activity, this);
 
             GameView.RequestFocus();
             GameView.FocusableInTouchMode = true;
@@ -87,7 +99,7 @@ namespace Microsoft.Xna.Framework
                 TouchPanel.WindowHandle = this.Handle;
         }
 
-        void _activity_Resumed(object sender, EventArgs e)
+        void Activity_Resumed(object sender, EventArgs e)
         {
             if (!_isActivated)
             {
@@ -95,7 +107,16 @@ namespace Microsoft.Xna.Framework
                 OnActivated();
             }
 
-            GameView.Resume();
+            GameView._appState = AndroidGameWindow.AppState.Resumed;
+            try
+            {
+                if (!GameView.IsFocused)
+                    GameView.RequestFocus();
+            }
+            catch (Exception ex)
+            {
+                Log.Verbose("RequestFocus()", ex.ToString());
+            }
             Microsoft.Xna.Platform.Audio.AudioService.Resume();
             if (_mediaPlayer_PrevState == MediaState.Playing && _activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Resume();
@@ -112,7 +133,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        void _activity_Paused(object sender, EventArgs e)
+        void Activity_Paused(object sender, EventArgs e)
         {
             if (_isActivated)
             {
@@ -121,14 +142,14 @@ namespace Microsoft.Xna.Framework
             }
 
             _mediaPlayer_PrevState = MediaPlayer.State;
-            this.GameView.Pause();
+            this.GameView._appState = AndroidGameWindow.AppState.Paused;
             this.GameView.ClearFocus();
             Microsoft.Xna.Platform.Audio.AudioService.Suspend();
             if (_activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Pause();
         }
 
-        private void _activity_WindowFocused(object sender, EventArgs e)
+        private void Activity_WindowFocused(object sender, EventArgs e)
         {
             if (!_isActivated)
             {
@@ -137,7 +158,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private void _activity_WindowUnfocused(object sender, EventArgs e)
+        private void Activity_WindowUnfocused(object sender, EventArgs e)
         {
             if (_isActivated)
             {
@@ -145,19 +166,6 @@ namespace Microsoft.Xna.Framework
                 OnDeactivated();
             }
         }
-
-        #region AndroidGameView Methods
-
-        private void OnTick(object sender, EventArgs args)
-        {
-            if (_game != null && !ScreenReceiver.ScreenLocked)
-            {
-                ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
-            }
-        }
-
-        #endregion
-
 
         /// <summary>
         /// In Xna, setting SupportedOrientations = DisplayOrientation.Default (which is the default value)
@@ -368,11 +376,11 @@ namespace Microsoft.Xna.Framework
         {
             if (_activity != null)
             {
-                _activity.Paused -= _activity_Paused;
-                _activity.Resumed -= _activity_Resumed;
+                _activity.Paused -= Activity_Paused;
+                _activity.Resumed -= Activity_Resumed;
 
-                _activity.WindowFocused += _activity_WindowFocused;
-                _activity.WindowUnfocused += _activity_WindowUnfocused;
+                _activity.WindowFocused += Activity_WindowFocused;
+                _activity.WindowUnfocused += Activity_WindowUnfocused;
 
                 _activity = null;
             }
@@ -392,5 +400,418 @@ namespace Microsoft.Xna.Framework
         protected override void SetTitle(string title)
         {
         }
+
+        private void RunFrame()
+        {
+            if (GameView._isCancellationRequested == null)
+                GameView._isCancellationRequested = false;
+
+            if (GameView._isCancellationRequested.Value == false)
+            {
+                try
+                {
+                    // tick
+                    this.RunStep();
+                }
+                catch (Exception ex) { /* ignore */ }
+            }
+
+            return;
+        }
+
+        internal void StartGameLoop()
+        {
+            // Cardboard: 
+            _isStarted = true;
+            return;
+
+            GameView._isCancellationRequested = false;
+
+            // prepare gameLoop
+            Threading.MakeMainThread();
+        }
+
+        void RunStep()
+        {
+            Threading.MakeMainThread();
+
+            switch (GameView._appState)
+            {
+                case AndroidGameWindow.AppState.Resumed:
+                    ProcessStateResumed();
+                    break;
+
+                case AndroidGameWindow.AppState.Paused:
+                    break;
+
+                case AndroidGameWindow.AppState.Exited:
+                    GameView._isCancellationRequested = true;
+                    break;
+
+                default:
+                    throw new InvalidOperationException("currentState");
+            }
+
+            return;
+        }
+
+        void ProcessStateResumed()
+        {
+            // do not run game if surface is not available
+            if (GameView._isAndroidSurfaceAvailable)
+            {
+                if (GameView._isCancellationRequested.Value == true)
+                {
+                    GameView._appState = AndroidGameWindow.AppState.Exited;
+                    return;
+                }
+
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
+
+                ISurfaceView surfaceView = GameView;
+
+                // Restart due to context loss
+                bool contextLost = false;
+                if (_isGLContextLost)
+                {
+                    // we actually lost the context so we need to free up our existing 
+                    // objects and re-create one.
+                    if (this.EglContext != null)
+                    {
+                        if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, this.EglContext))
+                            throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
+                    }
+                    _eglContext = null;
+
+                    if (_game.GraphicsDevice != null)
+                    {
+                        ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
+                    }
+
+                    contextLost = true;
+                    _isGLContextLost = false;
+                }
+
+                if (this.EglConfig == null)
+                {
+                    //ChooseGLConfig();
+                }
+
+                // create context if not available
+                if (this.EglContext == null)
+                {
+                    //CreateGLContext();
+
+                    if (surfaceView.EglSurface == null)
+                    {
+                        /* Cardboard: Surface was created by GLSurfaceView.
+                        GameView.GLCreateSurface(adapter, this.EglConfig);
+                        */
+
+                        /* Cardboard: Context was created by GLSurfaceView.
+                        if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
+                            throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                        */
+
+                        // OGL.InitExtensions() must be called while we have a current gl context.
+                        if (OGL_DROID.Current.Extensions == null)
+                            OGL_DROID.Current.InitExtensions();
+
+                        GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                        if (gdm != null)
+                        {
+                            if (gdm.GraphicsDevice != null)
+                            {
+                                ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                                gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
+                            }
+                        }
+                        this.ChangeClientBounds(new Rectangle(0, 0, GameView.Width, GameView.Height));
+                    }
+
+                    if (_isGLContextLost)
+                    {
+                        // we lost the gl context, we need to let the programmer
+                        // know so they can re-create textures etc.
+                        if (_game.GraphicsDevice != null)
+                            ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
+                    }
+                }
+
+                if (surfaceView.EglSurface == null)
+                {
+                    /* Cardboard: Surface was created by GLSurfaceView.
+                    GameView.GLCreateSurface(adapter, this.EglConfig);
+                    */
+
+                    /* Cardboard: Context was created by GLSurfaceView.
+                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, this.EglSurface, surfaceView.EglSurface, this.EglContext))
+                        throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                    */
+
+                    GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                    if (gdm != null)
+                    {
+                        if (gdm.GraphicsDevice != null)
+                        {
+                            ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                            gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
+
+                        }
+                    }
+                    this.ChangeClientBounds(new Rectangle(0, 0, GameView.Width, GameView.Height));
+                }
+
+                _activity._orientationListener.Update();
+
+                try
+                {
+                    if (_game != null && !ScreenReceiver.ScreenLocked)
+                    {
+                        ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
+                    }
+                }
+                catch (OpenGLException ex)
+                {
+                    Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
+                }
+            }
+        }
+
+        private bool _isGLContextLost;
+
+        private GLESVersion _glesVersion;
+        private EGLConfig _eglConfig;
+        internal EGLContext _eglContext;
+
+        internal GLESVersion GLesVersion { get { return _glesVersion; } }
+        internal EGLConfig EglConfig { get { return _eglConfig; } }
+        internal EGLContext EglContext { get { return _eglContext; } }
+
+
+        internal static EGLSurface GLCreatePBufferSurface(EGLConfig config, int[] attribList)
+        {
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+            EGLSurface result = GL.Egl.EglCreatePbufferSurface(adapter.EglDisplay, config, attribList);
+
+            if (result == EGL10.EglNoSurface)
+                result = null;
+
+            if (result == null)
+                throw new Exception("EglCreatePBufferSurface");
+
+            return result;
+        }
+
+        internal void GLSwapBuffers()
+        {
+            // Surface is presented by GLSurfaceView. 
+            // see: OnFinishFrame.
+        }
+
+
+
+        Input.Cardboard.HeadsetState _hsState;
+        private void UpdateLocalHeadsetState(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
+        {
+            Viewport2XNA(eyeParams1.Viewport, ref _hsState.LeftEye.Viewport);
+            Matrix2XNA(eyeParams1.Transform.GetEyeView(), ref _hsState.LeftEye.View);
+            Matrix2XNA(eyeParams1.Transform.GetPerspective(), ref _hsState.LeftEye.Projection);
+
+            if (eyeParams2 == null)
+            {
+                _hsState.RightEye.Viewport = new Viewport();
+                _hsState.RightEye.View = Microsoft.Xna.Framework.Matrix.Identity;
+                _hsState.RightEye.Projection = Microsoft.Xna.Framework.Matrix.Identity;
+            }
+            else
+            {
+                Viewport2XNA(eyeParams2.Viewport, ref _hsState.RightEye.Viewport);
+                Matrix2XNA(eyeParams2.Transform.GetEyeView(), ref _hsState.RightEye.View);
+                Matrix2XNA(eyeParams2.Transform.GetPerspective(), ref _hsState.RightEye.Projection);
+            }
+        }
+
+        private void Viewport2XNA(VRCardboard.Viewport viewport, ref Viewport result)
+        {
+            result.X = viewport.X;
+            result.Y = viewport.Y;
+            result.Width = viewport.Width;
+            result.Height = viewport.Height;
+            result.MinDepth = 0f;
+            result.MaxDepth = 1f;
+        }
+
+        private void Matrix2XNA(float[] matrix, ref Matrix result)
+        {
+            result.M11 = matrix[0];
+            result.M12 = matrix[1];
+            result.M13 = matrix[2];
+            result.M14 = matrix[3];
+            result.M21 = matrix[4];
+            result.M22 = matrix[5];
+            result.M23 = matrix[6];
+            result.M24 = matrix[7];
+            result.M31 = matrix[8];
+            result.M32 = matrix[9];
+            result.M33 = matrix[10];
+            result.M34 = matrix[11];
+            result.M41 = matrix[12];
+            result.M42 = matrix[13];
+            result.M43 = matrix[14];
+            result.M44 = matrix[15];
+        }
+
+        internal void UpdateHeadsetState(out Input.Cardboard.HeadsetState state)
+        {
+            state = _hsState;
+        }
+
+
+        #region CardboardView.IRenderer
+
+        volatile bool _isStarted = false;
+
+        private int _glFramebuffer; // the current frame buffer
+        private int[] _parameterFramebufferBinding = new int[3];
+
+
+        private void GLGetRenderBufferSize(out int w, out int h)
+        {
+            var device = _game.GraphicsDevice;
+
+            GraphicsContext graphicsContext = ((IPlatformGraphicsDevice)device).Strategy.CurrentContext;
+            var GL = ((IPlatformGraphicsContext)graphicsContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
+            int[] renderbufferParameters = new int[2];
+
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _glFramebuffer);
+            GL.CheckGLError();
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _glFramebuffer);
+            GL.CheckGLError();
+
+            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+                (int)RenderbufferTarget.Renderbuffer,
+                Android.Opengl.GLES20.GlRenderbufferWidth,
+                renderbufferParameters, 0
+                );
+            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+                (int)RenderbufferTarget.Renderbuffer,
+                Android.Opengl.GLES20.GlRenderbufferHeight,
+                renderbufferParameters, 1
+                );
+
+            w = renderbufferParameters[0];
+            h = renderbufferParameters[1];
+
+            renderbufferParameters = new int[10];
+            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+                (int)RenderbufferTarget.Renderbuffer,
+                Android.Opengl.GLES20.GlRenderbufferInternalFormat,
+                renderbufferParameters, 0
+                );
+            int internalFormat = renderbufferParameters[0];
+
+            renderbufferParameters = new int[10];
+            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+                (int)RenderbufferTarget.Renderbuffer,
+                Android.Opengl.GLES20.GlRenderbufferRedSize,
+                renderbufferParameters, 0
+                );
+            int redSize = renderbufferParameters[0];
+
+            renderbufferParameters = new int[10];
+            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+                (int)RenderbufferTarget.Renderbuffer,
+                Android.Opengl.GLES20.GlRenderbufferDepthSize,
+                renderbufferParameters, 0
+                );
+            int depthSize = renderbufferParameters[0];
+
+            renderbufferParameters = new int[10];
+            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+                (int)RenderbufferTarget.Renderbuffer,
+                Android.Opengl.GLES20.GlRenderbufferStencilSize,
+                renderbufferParameters, 0
+                );
+            int stencilSize = renderbufferParameters[0];
+        }
+
+
+        internal void VrRendererOnDrawFrame(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
+        {
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+            if (this.EglContext == null)
+            {
+                _eglContext = GL.Egl.EglGetCurrentContext();
+                if (this.EglContext == EGL10.EglNoContext)
+                    _eglContext = null;
+
+                // OGL.InitExtensions() must be called while we have a current gl context.
+                if (OGL_DROID.Current.Extensions == null)
+                    OGL_DROID.Current.InitExtensions();
+            }
+
+            if (!_isStarted)
+                return;
+
+            this.UpdateLocalHeadsetState(headTransform, eyeParams1, eyeParams2);
+
+            // If distortion correction is enabled the GL context will be set to draw into a framebuffer backed 
+            // by a texture at the time of this call. If an implementor needs to change the current framebuffer, 
+            // it must be reset back afterwards to the one obtained viaglGetIntegerv(GL_FRAMEBUFFER_BINDING, ...) 
+            // at the beginning of this call.
+            Android.Opengl.GLES20.GlGetIntegerv(Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 0);
+            _glFramebuffer = _parameterFramebufferBinding[0];
+
+            if (_game.GraphicsDevice != null)
+            {
+                ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer = _glFramebuffer;
+
+                // GL Context is modified by cardboard. We have to reset your cached state.
+                GraphicsContext mainContext = ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.MainContext;
+                ((IPlatformGraphicsContext)mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().Cardboard_ResetContext();
+            }
+
+            if (_game.GraphicsDevice != null)
+            {
+                //int w, h;
+                //GLGetRenderBufferSize(out w, out h);
+                //_game.GraphicsDevice.Viewport = new Viewport(0,0,w,h);
+            }
+
+            this.RunFrame();
+
+            Android.Opengl.GLES20.GlGetIntegerv(Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 1);
+            System.Diagnostics.Debug.Assert(_glFramebuffer == _parameterFramebufferBinding[1],
+                "framebuffer must be restored back to the one set at the beggining of CardboardView.IRenderer.OnDrawFrame()");
+
+        }
+
+        internal void VrRendererOnFinishFrame(VRCardboard.Viewport viewport)
+        {
+            Android.Opengl.GLES20.GlGetIntegerv(Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 2);
+            _glFramebuffer = _parameterFramebufferBinding[2];
+        }
+
+        internal void VrRendererOnRendererShutdown()
+        {
+        }
+
+        internal void VrRendererOnSurfaceChanged(int width, int height)
+        {
+        }
+
+        internal void VrRendererOnSurfaceCreated(EGLConfig config)
+        {
+            _eglConfig = config;
+        }
+
+        #endregion CardboardView.IRenderer
     }
 }

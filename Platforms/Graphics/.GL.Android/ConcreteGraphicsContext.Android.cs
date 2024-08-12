@@ -27,10 +27,9 @@ namespace Microsoft.Xna.Platform.Graphics
             var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
-            ISurfaceView view = gameWindow.GameView;
 
-            int[] attribs = view.GLesVersion.GetAttributes();
-            _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, view.EglConfig, view.EglContext, attribs);
+            int[] attribs = gameWindow.GLesVersion.GetAttributes();
+            _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, gameWindow.EglConfig, gameWindow.EglContext, attribs);
             if (_glSharedContext != null && _glSharedContext != EGL10.EglNoContext)
                     throw new Exception("Could not create _glSharedContext" + GL.GetEglErrorAsString());
         }

@@ -10,8 +10,6 @@ namespace Microsoft.Xna.Platform
 {
     interface ISurfaceView
     {
-        GLESVersion GLesVersion { get; }
-        EGLConfig EglConfig { get; }
-        EGLContext EglContext { get; }
+        EGLSurface EglSurface { get; }
     }
 }

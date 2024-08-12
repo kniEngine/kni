@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform
 
         private void StartGameLoop()
         {
-            _gameWindow.GameView.StartGameLoop();
+            _gameWindow.StartGameLoop();
         }
 
         private void OnFrameTickBegin()
