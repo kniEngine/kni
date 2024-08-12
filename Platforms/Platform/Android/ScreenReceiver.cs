@@ -3,6 +3,7 @@ using Android.Content;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Platform;
 using Android.App;
+using Android.Util;
 
 
 namespace Microsoft.Xna.Framework
@@ -61,7 +62,17 @@ namespace Microsoft.Xna.Framework
         {
             ScreenReceiver.ScreenLocked = false;
             MediaPlayer.IsMuted = false;
-            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.Resume();
+            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView._appState = AndroidGameWindow.AppState.Resumed;
+            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.RequestFrame();
+            try
+            {
+                if (!((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.IsFocused)
+                    ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.RequestFocus();
+            }
+            catch (Exception ex)
+            {
+                Log.Verbose("RequestFocus()", ex.ToString());
+            }
         }
     }
 }

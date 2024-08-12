@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr windowHandle = this.PresentationParameters.DeviceWindowHandle;
                 AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(windowHandle);
 
-                gameWindow.GameView.SwapBuffers();
+                gameWindow.GLSwapBuffers();
             }
             catch (Exception ex)
             {
