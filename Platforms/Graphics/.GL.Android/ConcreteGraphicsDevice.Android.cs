@@ -27,7 +27,24 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr windowHandle = this.PresentationParameters.DeviceWindowHandle;
                 AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(windowHandle);
 
-                gameWindow.GLSwapBuffers();
+#if CARDBOARD
+                // Surface is presented by OnFinishFrame.
+#else
+                var adapter = ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
+
+                ISurfaceView surfaceView = gameWindow.GameView;
+
+                if (!GL.Egl.EglSwapBuffers(adapter.EglDisplay, surfaceView.EglSurface))
+                {
+                    if (GL.Egl.EglGetError() == 0)
+                    {
+                        if (gameWindow._isGLContextLost)
+                            System.Diagnostics.Debug.WriteLine("Lost EGL context" + GL.GetEglErrorAsString());
+                        gameWindow._isGLContextLost = true;
+                    }
+                }
+#endif
             }
             catch (Exception ex)
             {

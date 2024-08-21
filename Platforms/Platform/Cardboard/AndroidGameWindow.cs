@@ -606,12 +606,6 @@ namespace Microsoft.Xna.Framework
             return result;
         }
 
-        internal void GLSwapBuffers()
-        {
-            // Surface is presented by GLSurfaceView. 
-            // see: OnFinishFrame.
-        }
-
 
 
         Input.Cardboard.HeadsetState _hsState;
