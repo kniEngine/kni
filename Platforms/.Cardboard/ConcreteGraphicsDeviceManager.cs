@@ -232,7 +232,8 @@ namespace Microsoft.Xna.Platform
             GraphicsDevice device = this.GraphicsDevice;
             if (device != null)
             {
-                device.Present();
+                // // Surface is presented by OnFinishFrame.
+                //device.Present();
             }
         }
 
