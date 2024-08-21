@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Framework
             _instances.Add(this.Handle, this);
 
             _touchEventListener = new TouchEventListener();
-            _touchEventListener.SetTouchListener(this);
+            GameView.SetOnTouchListener(_touchEventListener);
 
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = this.Handle;

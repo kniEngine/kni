@@ -14,14 +14,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
     class TouchEventListener : Java.Lang.Object
         , View.IOnTouchListener
     {
-        public void SetTouchListener(GameWindow window)
-        {
-            GameWindow gameWindow = window;
-
-            AndroidGameWindow androidGameWindow = (AndroidGameWindow)gameWindow;
-            androidGameWindow.GameView.SetOnTouchListener(this);
-        }
-
         bool View.IOnTouchListener.OnTouch(View v, MotionEvent e)
         {
             Vector2 position = Vector2.Zero;
