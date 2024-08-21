@@ -37,14 +37,12 @@ namespace Microsoft.Xna.Framework
         internal bool? _isCancellationRequested = null;
         private int _frameRequests = 0;
 
-        private readonly AndroidGameWindow _gameWindow;
+        internal event EventHandler Tick;
 
 
-        public AndroidSurfaceView(Context context, AndroidGameWindow gameWindow)
+        public AndroidSurfaceView(Context context)
             : base(context)
         {
-            _gameWindow = gameWindow;
-
             // default
             _surfaceHolder = Holder;
             // Add callback to get the SurfaceCreated etc events
@@ -114,7 +112,10 @@ namespace Microsoft.Xna.Framework
         void Java.Lang.IRunnable.Run()
         {
             _frameRequests--;
-            _gameWindow.RunFrame();
+            
+            var handler = Tick;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         protected override void Dispose(bool disposing)

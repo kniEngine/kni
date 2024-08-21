@@ -84,7 +84,8 @@ namespace Microsoft.Xna.Framework
 
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
             
-            GameView = new AndroidSurfaceView(activity, this);
+            GameView = new AndroidSurfaceView(activity);
+            GameView.Tick += OnTick;
 
             GameView.RequestFocus();
             GameView.FocusableInTouchMode = true;
@@ -415,7 +416,7 @@ namespace Microsoft.Xna.Framework
             GameView.RequestFrame();
         }
 
-        internal void RunFrame()
+        internal void OnTick(object sender, EventArgs args)
         {
             if (GameView._isCancellationRequested.Value == false)
             {
