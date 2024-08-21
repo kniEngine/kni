@@ -579,7 +579,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private bool _isGLContextLost;
+        internal bool _isGLContextLost;
 
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
