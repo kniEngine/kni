@@ -109,7 +109,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Platform\PrimaryThreadLoader.cs" />
     <Compile Include=".Android\ConcreteTitleContainer.cs" />
     <Compile Include=".Android\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>

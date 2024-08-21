@@ -130,7 +130,6 @@
     <Compile Include="Media\Android\ConcreteSong.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
-    <Compile Include="Platform\PrimaryThreadLoader.cs" />
     <Compile Include=".Android\ConcreteTitleContainer.cs" />
     <Compile Include=".Android\ConcreteTitleContainerFactory.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />

@@ -222,8 +222,6 @@ namespace Microsoft.Xna.Platform
         {
             //return base.BeginDraw();
 
-            PrimaryThreadLoader.DoLoads();
-
             return true;
         }
 
