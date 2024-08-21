@@ -43,6 +43,8 @@ namespace Microsoft.Xna.Framework
 
         internal AndroidSurfaceView GameView { get; private set; }
 
+        internal RunnableObject _runner;
+
         private AndroidGameActivity _activity;
         private readonly Game _game;
         private bool _isActivated = false;
@@ -85,7 +87,8 @@ namespace Microsoft.Xna.Framework
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
             
             GameView = new AndroidSurfaceView(activity);
-            GameView.Tick += OnTick;
+            _runner = new RunnableObject();
+            _runner.Tick += OnTick;
 
             GameView.RequestFocus();
             GameView.FocusableInTouchMode = true;
@@ -108,7 +111,7 @@ namespace Microsoft.Xna.Framework
             }
 
             GameView._appState = AndroidGameWindow.AppState.Resumed;
-            GameView.RequestFrame();
+            _runner.RequestFrame();
             try
             {
                 if (!GameView.IsFocused)
@@ -410,10 +413,8 @@ namespace Microsoft.Xna.Framework
             // prepare gameLoop
             Threading.MakeMainThread();
 
-            GameView.InitLoopHandler();
-
-            // request first tick.
-            GameView.RequestFrame();
+            _runner.InitLoopHandler();
+            _runner.RequestFrame();
         }
 
         internal void OnTick(object sender, EventArgs args)
@@ -429,7 +430,7 @@ namespace Microsoft.Xna.Framework
                 {
                     // request next tick
                     if (GameView._appState == AndroidGameWindow.AppState.Resumed)
-                        GameView.RequestFrame();
+                        _runner.RequestFrame();
                 }
             }
             else
