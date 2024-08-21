@@ -26,7 +26,6 @@ namespace Microsoft.Xna.Framework
     public class AndroidSurfaceView : SurfaceView
         , ISurfaceView
         , ISurfaceHolderCallback
-        , Java.Lang.IRunnable
     {
         ISurfaceHolder _surfaceHolder;
 
@@ -35,16 +34,12 @@ namespace Microsoft.Xna.Framework
         internal bool _isAndroidSurfaceAvailable = false;
 
         internal bool? _isCancellationRequested = null;
-        private int _frameRequests = 0;
-
-        private readonly AndroidGameWindow _gameWindow;
 
 
-        public AndroidSurfaceView(Context context, AndroidGameWindow gameWindow)
+
+        public AndroidSurfaceView(Context context)
             : base(context)
         {
-            _gameWindow = gameWindow;
-
             // default
             _surfaceHolder = Holder;
             // Add callback to get the SurfaceCreated etc events
@@ -93,28 +88,6 @@ namespace Microsoft.Xna.Framework
             }
 
             _isAndroidSurfaceAvailable = false;
-        }
-
-        internal void InitLoopHandler()
-        {
-            Android.OS.Looper looper = Android.OS.Looper.MainLooper;
-            _handler = new Android.OS.Handler(looper); // why GameView.Handler is null? Do we initialize the game too soon?
-        }
-
-        internal void RequestFrame()
-        {
-            if (_frameRequests == 0)
-            {
-                _handler.Post((Java.Lang.IRunnable)this);
-                _frameRequests++;
-            }
-        }
-
-        internal Android.OS.Handler _handler;
-        void Java.Lang.IRunnable.Run()
-        {
-            _frameRequests--;
-            _gameWindow.RunFrame();
         }
 
         protected override void Dispose(bool disposing)

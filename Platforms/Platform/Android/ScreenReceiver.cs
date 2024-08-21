@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework
             ScreenReceiver.ScreenLocked = false;
             MediaPlayer.IsMuted = false;
             ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView._appState = AndroidGameWindow.AppState.Resumed;
-            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.RequestFrame();
+            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window)._runner.RequestFrame();
             try
             {
                 if (!((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.IsFocused)
