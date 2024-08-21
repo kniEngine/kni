@@ -27,9 +27,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr windowHandle = this.PresentationParameters.DeviceWindowHandle;
                 AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(windowHandle);
 
-#if CARDBOARD
-                // Surface is presented by OnFinishFrame.
-#else
                 var adapter = ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
 
@@ -44,7 +41,6 @@ namespace Microsoft.Xna.Platform.Graphics
                         gameWindow._isGLContextLost = true;
                     }
                 }
-#endif
             }
             catch (Exception ex)
             {
