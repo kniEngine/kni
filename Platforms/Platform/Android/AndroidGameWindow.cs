@@ -609,7 +609,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private bool _isGLContextLost;
+        internal bool _isGLContextLost;
 
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
@@ -741,24 +741,6 @@ namespace Microsoft.Xna.Framework
                 throw new Exception("EglCreatePBufferSurface");
 
             return result;
-        }
-
-        internal void GLSwapBuffers()
-        {
-            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-            var GL = adapter.Ogl;
-
-            ISurfaceView surfaceView = GameView;
-
-            if (!GL.Egl.EglSwapBuffers(adapter.EglDisplay, surfaceView.EglSurface))
-            {
-                if (GL.Egl.EglGetError() == 0)
-                {
-                    if (_isGLContextLost)
-                        System.Diagnostics.Debug.WriteLine("Lost EGL context" + GL.GetEglErrorAsString());
-                    _isGLContextLost = true;
-                }
-            }
         }
     }
 }
