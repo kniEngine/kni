@@ -145,9 +145,9 @@
 
 
 
-    <Compile Include="Platform\Cardboard\Devices\Sensors\Accelerometer.cs" />
-    <Compile Include="Platform\Cardboard\Devices\Sensors\Compass.cs" />
-    <Compile Include="Platform\Cardboard\Input\Touch\TouchEventListener.cs" />
+    <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />
+    <Compile Include="Platform\Android\Devices\Sensors\Compass.cs" />
+    <Compile Include="Platform\Android\Input\Touch\TouchEventListener.cs" />
     <Compile Include="Platform\Cardboard\AndroidCompatibility.cs" />
     <Compile Include="Platform\Cardboard\AndroidGameActivity.cs" />
     <Compile Include=".Cardboard\ConcreteGame.cs" />
@@ -155,8 +155,8 @@
     <Compile Include=".Cardboard\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\Cardboard\AndroidGameWindow.cs" />
     <Compile Include="Platform\Cardboard\AndroidSurfaceView.cs" />
-    <Compile Include="Platform\Cardboard\ISurfaceView.cs" />
-    <Compile Include="Platform\Cardboard\OrientationListener.cs" />
+    <Compile Include="Platform\Android\ISurfaceView.cs" />
+    <Compile Include="Platform\Android\OrientationListener.cs" />
     <Compile Include="Platform\Cardboard\ScreenReceiver.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />

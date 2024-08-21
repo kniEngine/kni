@@ -8,6 +8,8 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using Android.Util;
+using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
@@ -15,8 +17,6 @@ using Microsoft.Xna.Platform.Graphics.OpenGL;
 using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Framework.Graphics;
-using Javax.Microedition.Khronos.Egl;
-using Android.Util;
 
 
 namespace Microsoft.Xna.Framework
@@ -261,7 +261,6 @@ namespace Microsoft.Xna.Framework
                 TouchPanel.DisplayWidth = this.ClientBounds.Width;
                 TouchPanel.DisplayHeight = this.ClientBounds.Height;
             }
-
         }
 
         public override bool AllowUserResizing
@@ -487,7 +486,7 @@ namespace Microsoft.Xna.Framework
                 case AndroidGameWindow.AppState.Exited:
                     GameView._isCancellationRequested = true;
                     break;
-                
+
                 default:
                     throw new InvalidOperationException("currentState");
             }
