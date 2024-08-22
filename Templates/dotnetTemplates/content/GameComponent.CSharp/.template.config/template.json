@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "KNI Engine",
+    "classifications": [ "Common", "Code" ],
+    "identity": "nkast.Kni.GameComponent.CSharp",
+    "name": "KNI GameComponent Item",
+    "shortName": "KniGameComponent",
+    "tags": {
+      "language": "C#",
+      "type": "item"
+    },
+    "symbols": {
+      "ClassName":{
+        "type": "parameter",
+        "description": "The name of the code file and class.",
+        "datatype": "text",
+        "replaces": "GameComponent1",
+        "fileRename": "GameComponent1",
+        "defaultValue": "GameComponent1"
+      }
+    },
+  "icon": "TemplateIcon.png"
+}
