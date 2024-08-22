@@ -208,6 +208,7 @@
     <Compile Include="Platform\Android\Input\Touch\TouchEventListener.cs" />
     <Compile Include="Platform\Android\ISurfaceView.cs" />
     <Compile Include="Platform\Android\OrientationListener.cs" />
+    <Compile Include="Platform\Android\RunnableObject.cs" />
     <Compile Include="Platform\Android\ScreenReceiver.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
 
