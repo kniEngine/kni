@@ -93,9 +93,15 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private int Initialize(GraphicsDevice graphicsDevice)
-        {            
-            if (graphicsDevice.GraphicsProfile < GraphicsProfile.FL10_0)
-                throw new InvalidOperationException("GraphicsProfile must be FL10_0 or higher.");
+        {
+            // check supported feature level
+            switch (graphicsDevice.Adapter.Backend)
+            {
+                case GraphicsBackend.DirectX11:
+                    if (graphicsDevice.GraphicsProfile < GraphicsProfile.FL11_0)
+                        throw new InvalidOperationException("GraphicsProfile must be FL11_0 or higher.");
+                    break;
+            }
 
             int ovrResult = 0;
 
