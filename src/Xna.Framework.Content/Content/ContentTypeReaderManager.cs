@@ -40,6 +40,16 @@ namespace Microsoft.Xna.Framework.Content
 
         }
 
+        public static void AddTypeCreator(
+            string typeString,
+            Func<ContentTypeReader> createFunction)
+        {
+            var reader = createFunction();
+            var readerType = reader.GetType();
+            _contentTypeReadersCache.Add(typeString, readerType);
+            _contentReadersCache.Add(readerType, reader);
+        }
+
         public ContentTypeReader GetTypeReader(Type targetType)
         {
             if (targetType.IsArray && targetType.GetArrayRank() > 1)
