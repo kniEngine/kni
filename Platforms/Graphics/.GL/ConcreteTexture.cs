@@ -82,6 +82,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     glFormat = PixelFormat.Rgba;
                     glType = PixelType.UnsignedByte;
                     break;
+
+                case SurfaceFormat.ColorSRgba:
+                    if (!supportsSRgb)
+                        goto case SurfaceFormat.Color;
+                    glInternalFormat = PixelInternalFormat.Srgba;
+                    glFormat = PixelFormat.Rgba;
+                    glType = PixelType.UnsignedByte;
+                    break;
+
                 case SurfaceFormat.Bgr565:
                     glInternalFormat = PixelInternalFormat.Rgb;
                     glFormat = PixelFormat.Rgb;
