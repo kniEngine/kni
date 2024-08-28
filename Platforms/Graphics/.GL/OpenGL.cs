@@ -379,6 +379,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         // sRGB
         Srgb  = 0x8C40,
+        Srgba = 0x8C43,
 
         // PVRTC
         CompressedRgbPvrtc2Bppv1Img = 0x8C01,

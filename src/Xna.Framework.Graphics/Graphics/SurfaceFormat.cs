@@ -184,6 +184,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         SRgb8A8Etc2 = 95,
 
+        /// <summary>
+        /// Unsigned 32-bit RGBA sRGBA pixel format that supports 8 bits per channel.
+        /// </summary>
+        ColorSRgba = 96,
+
         #endregion
     }
 }
