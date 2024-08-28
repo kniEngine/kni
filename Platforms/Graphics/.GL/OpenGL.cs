@@ -351,18 +351,18 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum PixelInternalFormat
     {
+        Rgb  = 0x1907,
         Rgba = 0x1908,
-        Rgb = 0x1907,
         Rgba4 = 0x8056,
         Luminance = 0x1909,
-        CompressedRgbS3tcDxt1Ext = 0x83F0,
-        CompressedSrgbS3tcDxt1Ext = 0x8C4C,
+        CompressedRgbS3tcDxt1Ext  = 0x83F0,
         CompressedRgbaS3tcDxt1Ext = 0x83F1,
         CompressedRgbaS3tcDxt3Ext = 0x83F2,
-        CompressedSrgbAlphaS3tcDxt3Ext = 0x8C4E,
         CompressedRgbaS3tcDxt5Ext = 0x83F3,
+        CompressedSrgbS3tcDxt1Ext = 0x8C4C,
+        CompressedSrgbAlphaS3tcDxt3Ext = 0x8C4E,
         CompressedSrgbAlphaS3tcDxt5Ext = 0x8C4F,
-        R32f = 0x822E,
+        R32f  = 0x822E,
         Rg16f = 0x822F,
         Rgba16f = 0x881A,
         R16f = 0x822D,
@@ -374,6 +374,10 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         Rgba16ui = 0x8D76,
         Rgb10A2ui = 0x906F,
         Rgba16 = 0x805B,
+
+        // sRGB
+        Srgb  = 0x8C40,
+
         // PVRTC
         CompressedRgbPvrtc2Bppv1Img = 0x8C01,
         CompressedRgbPvrtc4Bppv1Img = 0x8C00,
@@ -382,16 +386,15 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         // ATITC
         AtcRgbaExplicitAlphaAmd = 0x8C93,
         AtcRgbaInterpolatedAlphaAmd = 0x87EE,
+
         // ETC1
         Etc1 = 0x8D64,
-        Srgb = 0x8C40,
-
         // ETC2 RGB8A1
-        Etc2Rgb8 = 0x9274,
+        Etc2Rgb8  = 0x9274,
         Etc2Srgb8 = 0x9275,
-        Etc2Rgb8A1 = 0x9276,
+        Etc2Rgb8A1  = 0x9276,
         Etc2Srgb8A1 = 0x9277,
-        Etc2Rgba8Eac = 0x9278,
+        Etc2Rgba8Eac   = 0x9278,
         Etc2SRgb8A8Eac = 0x9279,
     }
 
