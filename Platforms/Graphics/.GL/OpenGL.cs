@@ -263,6 +263,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum GetPName : int
     {
+        MajorVersion = 0x821B,
+        MinorVersion = 0x821C,
         ArrayBufferBinding = 0x8894,
         MaxTextureImageUnits = 0x8872,
         MaxVertexTextureImageUnits = 0x8B4C,
