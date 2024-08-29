@@ -71,20 +71,23 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public virtual void ResolveSubresource(GraphicsContextStrategy contextStrategy)
+        public virtual void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
         {
-            lock (contextStrategy.SyncHandle)
+            if (this.MultiSampleCount > 1)
             {
-                D3D11.DeviceContext d3dContext = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                lock (graphicsContextStrategy.SyncHandle)
+                {
+                    D3D11.DeviceContext d3dContext = graphicsContextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                System.Diagnostics.Debug.Assert(_msTexture != null);
+                    System.Diagnostics.Debug.Assert(_msTexture != null);
 
-                d3dContext.ResolveSubresource(
-                    _msTexture,
-                    0,
-                    this.GetTexture(),
-                    0,
-                    this.Format.ToDXFormat());
+                    d3dContext.ResolveSubresource(
+                        _msTexture,
+                        0,
+                        this.GetTexture(),
+                        0,
+                        this.Format.ToDXFormat());
+                }
             }
         }
         #endregion IRenderTargetStrategy

@@ -73,9 +73,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
+        public virtual void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
         {
-            
+            if (this.MultiSampleCount > 1)
+            {
+            }
         }
         #endregion IRenderTargetStrategy
 
