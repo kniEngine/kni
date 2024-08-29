@@ -1344,6 +1344,61 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         internal delegate void VertexAttribDivisorDelegate(int location, int frequency);
         internal VertexAttribDivisorDelegate VertexAttribDivisor;
 
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void GenVertexArraysDelegate(int count, uint* pVertexArrays);
+        internal GenVertexArraysDelegate GenVertexArrays; // OpenGL 3.0, GLES 3.0.
+
+        internal unsafe uint GenVertexArray()
+        {
+            uint VertexArray;
+            this.GenVertexArrays(1, &VertexArray);
+            return VertexArray;
+        }
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void BindVertexArrayDelegate(uint vertexArray);
+        internal BindVertexArrayDelegate BindVertexArray; // OpenGL 3.0, GLES 3.0.
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void BindAttribLocationDelegate(uint programId, uint index, void* name);
+        internal BindAttribLocationDelegate BindAttribLocationInternal; // OpenGL 2.0, GLES 2.0.
+
+        internal unsafe void BindAttribLocation(uint programId, uint AttributeLocation, string name)
+        {
+            fixed (void* pData = name)
+            {
+                BindAttribLocationInternal(programId, AttributeLocation, pData);
+            }
+        }
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate uint GetUniformBlockIndexDelegate(uint programId, void* name);
+        internal GetUniformBlockIndexDelegate GetUniformBlockIndexInternal; // OpenGL 3.1, GLES 3.0.
+
+        internal unsafe uint GetUniformBlockIndex(uint programId, string name)
+        {
+            fixed (void* pData = name)
+            {
+                uint index =  GetUniformBlockIndexInternal(programId, pData);
+                return index;
+            }
+        }
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void UniformBlockBindingDelegate(uint programId, uint uniformBlockIndex, uint uniformBlockBinding);
+        internal UniformBlockBindingDelegate UniformBlockBinding; // OpenGL 3.1, GLES 3.0.
+
+
 #if DEBUG
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         delegate void DebugMessageCallbackProc(int source, int type, int id, int severity, int length, IntPtr message, IntPtr userParam);
@@ -1513,6 +1568,12 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             DeleteBuffers = LoadFunctionOrNull<DeleteBuffersDelegate>("glDeleteBuffers");
 
             VertexAttribPointer = LoadFunctionOrNull<VertexAttribPointerDelegate>("glVertexAttribPointer");
+
+            GenVertexArrays = LoadFunctionOrNull<GenVertexArraysDelegate>("glGenVertexArrays");
+            BindVertexArray = LoadFunctionOrNull<BindVertexArrayDelegate>("glBindVertexArray");
+            BindAttribLocationInternal = LoadFunctionOrNull<BindAttribLocationDelegate>("glBindAttribLocation");
+            GetUniformBlockIndexInternal = LoadFunctionOrNull<GetUniformBlockIndexDelegate>("glGetUniformBlockIndex");
+            UniformBlockBinding = LoadFunctionOrNull<UniformBlockBindingDelegate>("glUniformBlockBinding");
 
             // Instanced drawing requires GL 3.2 or up, if the either of the following entry points can not be loaded
             // this will get flagged by setting SupportsInstancing in GraphicsCapabilities to false.
