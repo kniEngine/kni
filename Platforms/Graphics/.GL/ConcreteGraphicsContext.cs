@@ -1206,8 +1206,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
                 if (renderTarget != null)
                 {
-                    if (renderTarget.MultiSampleCount > 1)
-                        ((IRenderTarget)renderTarget).RenderTargetStrategy.ResolveSubresource(this);
+                    ((IRenderTarget)renderTarget).RenderTargetStrategy.ResolveSubresource(this);
                 }
 
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
