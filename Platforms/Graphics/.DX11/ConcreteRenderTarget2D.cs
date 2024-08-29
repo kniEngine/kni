@@ -71,11 +71,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public virtual void ResolveSubresource(GraphicsContextStrategy contextStrategy)
+        public virtual void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
         {
-            lock (contextStrategy.SyncHandle)
+            lock (graphicsContextStrategy.SyncHandle)
             {
-                D3D11.DeviceContext d3dContext = contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
+                D3D11.DeviceContext d3dContext = graphicsContextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 System.Diagnostics.Debug.Assert(_msTexture != null);
 
