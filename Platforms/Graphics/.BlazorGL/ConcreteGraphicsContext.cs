@@ -166,21 +166,33 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyScissorRectangle()
         {
-            Rectangle scissorRect = _scissorRectangle;
-            if (!IsRenderTargetBound)
-                scissorRect.Y = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
-            GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
-            GL.CheckGLError();
+            if (this.IsRenderTargetBound)
+            {
+                GL.Scissor(_scissorRectangle.X, _scissorRectangle.Y, _scissorRectangle.Width, _scissorRectangle.Height);
+                GL.CheckGLError();
+            }
+            else
+            {
+                int backBufferHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
+                GL.Scissor(_scissorRectangle.X, backBufferHeight - (_scissorRectangle.Y + _scissorRectangle.Height), _scissorRectangle.Width, _scissorRectangle.Height);
+                GL.CheckGLError();
+            }
 
         }
 
         internal void PlatformApplyViewport()
         {
             if (this.IsRenderTargetBound)
+            {
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
+                GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+            }
             else
-                GL.Viewport(_viewport.X, ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
-            GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+            {
+                int backBufferHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
+                GL.Viewport(_viewport.X, backBufferHeight - (_viewport.Y + _viewport.Height), _viewport.Width, _viewport.Height);
+                GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+            }
 
             GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
             //GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
