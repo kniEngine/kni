@@ -90,9 +90,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     // from the docs it seems this works the same as for Direct3D
                     // https://www.khronos.org/opengles/sdk/docs/man/xhtml/glPolygonOffset.xml
                     // explanation for Direct3D is  in https://github.com/MonoGame/MonoGame/issues/4826
-                    DepthFormat activeDepthFormat = (context.IsRenderTargetBound)
-                                                  ? ((IRenderTarget)context.CurrentRenderTargetBindings[0].RenderTarget).DepthStencilFormat
-                                                  : base.GraphicsDeviceStrategy.PresentationParameters.DepthStencilFormat;
+                    DepthFormat activeDepthFormat;
+                    if (context.IsRenderTargetBound)
+                        activeDepthFormat = ((IRenderTarget)context.CurrentRenderTargetBindings[0].RenderTarget).DepthStencilFormat;
+                    else
+                        activeDepthFormat = base.GraphicsDeviceStrategy.PresentationParameters.DepthStencilFormat;
+
                     int depthMul;
                     switch (activeDepthFormat)
                     {
