@@ -206,14 +206,14 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformApplyScissorRectangle()
         {
             Rectangle scissorRect = _scissorRectangle;
-            if (!IsRenderTargetBound)
+            if (IsRenderTargetBound)
             {
-                scissorRect.Y = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
                 GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
                 GL.CheckGLError();
             }
             else
             {
+                scissorRect.Y = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
                 GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
                 GL.CheckGLError();
             }
