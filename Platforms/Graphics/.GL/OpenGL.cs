@@ -525,7 +525,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         protected static OGL _current;
 
-        public static OGL Current { get { return _current; } }
+        internal static OGL Current { get { return _current; } }
 
         protected OGL()
         {
@@ -867,8 +867,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        public delegate void InvalidateFramebufferDelegate(FramebufferTarget target, int numAttachments, FramebufferAttachment[] attachments);
-        public InvalidateFramebufferDelegate InvalidateFramebuffer;
+        internal delegate void InvalidateFramebufferDelegate(FramebufferTarget target, int numAttachments, FramebufferAttachment[] attachments);
+        internal InvalidateFramebufferDelegate InvalidateFramebuffer;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -894,8 +894,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        public delegate void RenderbufferStorageDelegate(RenderbufferTarget target, RenderbufferStorage storage, int width, int hegiht);
-        public RenderbufferStorageDelegate RenderbufferStorage;
+        internal delegate void RenderbufferStorageDelegate(RenderbufferTarget target, RenderbufferStorage storage, int width, int hegiht);
+        internal RenderbufferStorageDelegate RenderbufferStorage;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
