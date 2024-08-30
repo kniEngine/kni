@@ -213,9 +213,7 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 int backBufferHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
-                Rectangle scissorRect = _scissorRectangle;
-                scissorRect.Y = backBufferHeight - (scissorRect.Y + scissorRect.Height);
-                GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
+                GL.Scissor(_scissorRectangle.X, backBufferHeight - (_scissorRectangle.Y + _scissorRectangle.Height), _scissorRectangle.Width, _scissorRectangle.Height);
                 GL.CheckGLError();
             }
 
