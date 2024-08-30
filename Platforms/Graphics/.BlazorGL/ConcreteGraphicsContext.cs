@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 int backBufferHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
-                GL.Viewport(_viewport.X, backBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
+                GL.Viewport(_viewport.X, backBufferHeight - (_viewport.Y + _viewport.Height), _viewport.Width, _viewport.Height);
                 GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
             }
 
