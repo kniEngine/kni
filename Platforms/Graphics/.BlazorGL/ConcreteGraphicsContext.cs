@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyScissorRectangle()
         {
-            if (IsRenderTargetBound)
+            if (this.IsRenderTargetBound)
             {
                 GL.Scissor(_scissorRectangle.X, _scissorRectangle.Y, _scissorRectangle.Width, _scissorRectangle.Height);
                 GL.CheckGLError();
