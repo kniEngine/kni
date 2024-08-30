@@ -177,10 +177,15 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformApplyViewport()
         {
             if (this.IsRenderTargetBound)
+            {
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
+                GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+            }
             else
+            {
                 GL.Viewport(_viewport.X, ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
-            GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+                GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+            }
 
             GL.DepthRange(_viewport.MinDepth, _viewport.MaxDepth);
             //GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
