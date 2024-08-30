@@ -114,6 +114,7 @@ namespace Microsoft.Xna.Platform.Graphics.Utilities
                     return 2;
                 case SurfaceFormat.Color:
                 case SurfaceFormat.ColorSRgb:
+                case SurfaceFormat.ColorSRgba:
                 case SurfaceFormat.Single:
                 case SurfaceFormat.Rg32:
                 case SurfaceFormat.HalfVector2:

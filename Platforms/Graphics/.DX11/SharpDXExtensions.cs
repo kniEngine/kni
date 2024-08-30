@@ -207,6 +207,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     return DXGI.Format.B8G8R8A8_UNorm;
                 case SurfaceFormat.ColorSRgb:
                     return DXGI.Format.R8G8B8A8_UNorm_SRgb;
+                case SurfaceFormat.ColorSRgba:
+                    return DXGI.Format.R8G8B8A8_UNorm_SRgb;
                 case SurfaceFormat.Bgr32SRgb:
                     return DXGI.Format.B8G8R8X8_UNorm_SRgb;
                 case SurfaceFormat.Bgra32SRgb:

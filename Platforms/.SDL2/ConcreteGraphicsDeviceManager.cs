@@ -192,6 +192,7 @@ namespace Microsoft.Xna.Platform
                 case SurfaceFormat.Bgra32:
                 case SurfaceFormat.Color:
                 case SurfaceFormat.ColorSRgb:
+                case SurfaceFormat.ColorSRgba:
                     return new ColorFormat(8, 8, 8, 8);
                 case SurfaceFormat.Rgba1010102:
                     return new ColorFormat(10, 10, 10, 2);
