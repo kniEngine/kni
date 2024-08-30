@@ -212,8 +212,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
+                int backBufferHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
                 Rectangle scissorRect = _scissorRectangle;
-                scissorRect.Y = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - (scissorRect.Y + scissorRect.Height);
+                scissorRect.Y = backBufferHeight - (scissorRect.Y + scissorRect.Height);
                 GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
                 GL.CheckGLError();
             }
@@ -230,7 +231,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                GL.Viewport(_viewport.X, ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
+                int backBufferHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
+                GL.Viewport(_viewport.X, backBufferHeight - _viewport.Y - _viewport.Height, _viewport.Width, _viewport.Height);
                 GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
             }
 
