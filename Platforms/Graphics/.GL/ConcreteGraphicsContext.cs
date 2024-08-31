@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
-        internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0); } }
+        internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0 && !(CurrentRenderTargetBindings[0].RenderTarget is SwapChainRenderTarget)); } }
 
         public override Viewport Viewport
         {
