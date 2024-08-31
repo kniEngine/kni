@@ -40,6 +40,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
+        internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0); } }
+
         internal IWebGLRenderingContext GlContext { get { return _glContext; } }
         internal IWebGLRenderingContext GL { get { return _glContext; } }
 
@@ -166,7 +168,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyScissorRectangle()
         {
-            if (this.IsRenderTargetBound)
+            if (this.FramebufferRequireFlippedY)
             {
                 GL.Scissor(_scissorRectangle.X, _scissorRectangle.Y, _scissorRectangle.Width, _scissorRectangle.Height);
                 GL.CheckGLError();
@@ -182,7 +184,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformApplyViewport()
         {
-            if (this.IsRenderTargetBound)
+            if (this.FramebufferRequireFlippedY)
             {
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
                 GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
@@ -426,7 +428,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             //If we have a render target bound (rendering offscreen)
-            if (this.IsRenderTargetBound)
+            if (this.FramebufferRequireFlippedY)
             {
                 //flip vertically
                 _posFixup.Y = -_posFixup.Y;

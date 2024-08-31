@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // When rendering offscreen the faces change order.
-            bool offscreen = context.IsRenderTargetBound;
+            bool offscreen = context.FramebufferRequireFlippedY;
 
             switch (CullMode)
             {
