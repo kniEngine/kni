@@ -173,6 +173,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.Scissor(_scissorRectangle.X, _scissorRectangle.Y, _scissorRectangle.Width, _scissorRectangle.Height);
                 GL.CheckGLError();
             }
+            else if (this.IsRenderTargetBound)
+            {
+                int backBufferHeight = ((IRenderTarget)CurrentRenderTargetBindings[0].RenderTarget).Height;
+                GL.Scissor(_scissorRectangle.X, backBufferHeight - (_scissorRectangle.Y + _scissorRectangle.Height), _scissorRectangle.Width, _scissorRectangle.Height);
+                GL.CheckGLError();
+            }
             else
             {
                 int backBufferHeight = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.PresentationParameters.BackBufferHeight;
@@ -187,6 +193,12 @@ namespace Microsoft.Xna.Platform.Graphics
             if (this.FramebufferRequireFlippedY)
             {
                 GL.Viewport(_viewport.X, _viewport.Y, _viewport.Width, _viewport.Height);
+                GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+            }
+            else if (this.IsRenderTargetBound)
+            {
+                int backBufferHeight = ((IRenderTarget)CurrentRenderTargetBindings[0].RenderTarget).Height;
+                GL.Viewport(_viewport.X, backBufferHeight - (_viewport.Y + _viewport.Height), _viewport.Width, _viewport.Height);
                 GL.CheckGLError(); // GL.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
             }
             else
