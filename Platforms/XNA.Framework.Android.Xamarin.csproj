@@ -138,6 +138,7 @@
     <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
     <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTargetSwapChain.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
     <Compile Include="Graphics\.GL\ConcreteTexture2D.Stream.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
     <Compile Include="Graphics\.GL\Threading.cs" />
+    <Compile Include="Graphics\RenderTargetSwapChain.OpenGL.cs" />
 
     <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL.Android\Vertices\ConcreteVertexBuffer.cs" />
