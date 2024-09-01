@@ -41,12 +41,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         Front = 0x0404,
         Back  = 0x0405,
     }
-    internal enum DrawBuffersEnum
-    {
-        None             = 0x0000,
-        Back             = 0x0405,
-        ColorAttachment0 = 0x8CE0,
-    }
 
     internal enum ShaderType
     {
@@ -97,6 +91,13 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum DrawBufferMode
     {
+        ColorAttachment0 = 0x8CE0,
+    }
+
+    internal enum DrawBuffersEnum
+    {
+        None             = 0x0000,
+        Back             = 0x0405,
         ColorAttachment0 = 0x8CE0,
     }
 
@@ -680,12 +681,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DrawBuffersDelegate(int count, DrawBuffersEnum[] buffers);
-        internal DrawBuffersDelegate DrawBuffers;
-
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        [UnmanagedFunctionPointer(callingConvention)]
-        [MonoNativeFunctionWrapper]
         internal delegate void UseProgramDelegate(int program);
         internal UseProgramDelegate UseProgram;
 
@@ -914,6 +909,12 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [MonoNativeFunctionWrapper]
         internal delegate void DrawBufferDelegate(DrawBufferMode buffer);
         internal DrawBufferDelegate DrawBuffer;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal delegate void DrawBuffersDelegate(int count, DrawBuffersEnum[] buffers);
+        internal DrawBuffersDelegate DrawBuffers;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1462,6 +1463,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             PolygonOffset = LoadFunctionOrNull<PolygonOffsetDelegate>("glPolygonOffset");
 
             BindBuffer = LoadFunctionOrNull<BindBufferDelegate>("glBindBuffer");
+            ReadBuffer = LoadFunctionOrNull<ReadBufferDelegate>("glReadBuffer");
+            DrawBuffer = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
             DrawBuffers = LoadFunctionOrNull<DrawBuffersDelegate>("glDrawBuffers");
             DrawElements = LoadFunctionOrNull<DrawElementsDelegate>("glDrawElements");
             DrawArrays = LoadFunctionOrNull<DrawArraysDelegate>("glDrawArrays");
@@ -1485,8 +1488,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             // uniforms OpenGL Version >= 3.0
             // ... Uniform 1ui,1uiv,2ui,2uiv,2ui,2uiv,2ui,2uiv
 
-            ReadBuffer = LoadFunctionOrNull<ReadBufferDelegate>("glReadBuffer");
-            DrawBuffer = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
 
             // Render Target Support. These might be null if they are not supported
             GenRenderbuffers = LoadFunctionOrNull<GenRenderbuffersDelegate>("glGenRenderbuffers");
