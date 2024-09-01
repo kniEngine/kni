@@ -1170,7 +1170,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     for (int i = 0; i < base.RenderTargetCount; i++)
                     {
-                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)base.CurrentRenderTargetBindings[i].RenderTarget;
+                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IRenderTarget)base.CurrentRenderTargetBindings[i].RenderTarget).RenderTargetStrategy;
 
                         FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
                         TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
