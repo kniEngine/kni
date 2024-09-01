@@ -903,13 +903,26 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
         internal delegate void DrawBufferDelegate(DrawBufferMode buffer);
-        internal DrawBufferDelegate DrawBuffer;
+        internal DrawBufferDelegate DrawBufferInternal;
+
+        internal unsafe void DrawBuffer(DrawBufferMode buffer)
+        {
+            DrawBufferInternal(buffer);
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DrawBuffersDelegate(int count, DrawBufferMode[] buffers);
-        internal DrawBuffersDelegate DrawBuffers;
+        internal unsafe delegate void DrawBuffersDelegate(int count, DrawBufferMode* pbuffers);
+        internal DrawBuffersDelegate DrawBuffersInternal;
+
+        internal unsafe void DrawBuffers(int count, DrawBufferMode[] buffers)
+        {
+            fixed (DrawBufferMode* pbuffers = buffers)
+            {
+                DrawBuffersInternal(count, pbuffers);
+            }
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1459,8 +1472,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
             BindBuffer = LoadFunctionOrNull<BindBufferDelegate>("glBindBuffer");
             ReadBuffer = LoadFunctionOrNull<ReadBufferDelegate>("glReadBuffer");
-            DrawBuffer = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
-            DrawBuffers = LoadFunctionOrNull<DrawBuffersDelegate>("glDrawBuffers");
+            DrawBufferInternal = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
+            DrawBuffersInternal = LoadFunctionOrNull<DrawBuffersDelegate>("glDrawBuffers");
             DrawElements = LoadFunctionOrNull<DrawElementsDelegate>("glDrawElements");
             DrawArrays = LoadFunctionOrNull<DrawArraysDelegate>("glDrawArrays");
 
