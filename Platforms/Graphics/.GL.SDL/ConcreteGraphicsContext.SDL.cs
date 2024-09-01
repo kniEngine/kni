@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private IntPtr _glSharedContext;
         private IntPtr _glSharedContextWindowHandle;
 
-        internal DrawBuffersEnum[] _drawBuffers;
+        internal DrawBufferMode[] _drawBuffers;
 
         internal IntPtr GlContext { get { return _glContext; } }
 

@@ -41,12 +41,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         Front = 0x0404,
         Back  = 0x0405,
     }
-    internal enum DrawBuffersEnum
-    {
-        None             = 0x0000,
-        Back             = 0x0405,
-        ColorAttachment0 = 0x8CE0,
-    }
 
     internal enum ShaderType
     {
@@ -97,6 +91,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum DrawBufferMode
     {
+        None             = 0x0000,
+        Back             = 0x0405,
         ColorAttachment0 = 0x8CE0,
     }
 
@@ -680,12 +676,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DrawBuffersDelegate(int count, DrawBuffersEnum[] buffers);
-        internal DrawBuffersDelegate DrawBuffers;
-
-        [System.Security.SuppressUnmanagedCodeSecurity()]
-        [UnmanagedFunctionPointer(callingConvention)]
-        [MonoNativeFunctionWrapper]
         internal delegate void UseProgramDelegate(int program);
         internal UseProgramDelegate UseProgram;
 
@@ -913,7 +903,26 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
         internal delegate void DrawBufferDelegate(DrawBufferMode buffer);
-        internal DrawBufferDelegate DrawBuffer;
+        internal DrawBufferDelegate DrawBufferInternal; // OpenGL 2.0, GLES N/A.
+
+        internal unsafe void DrawBuffer(DrawBufferMode buffer)
+        {
+            DrawBufferInternal(buffer);
+        }
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal unsafe delegate void DrawBuffersDelegate(int count, DrawBufferMode* pbuffers);
+        internal DrawBuffersDelegate DrawBuffersInternal; // OpenGL 2.0, GLES 3.0.
+
+        internal unsafe void DrawBuffers(int count, DrawBufferMode[] buffers)
+        {
+            fixed (DrawBufferMode* pbuffers = buffers)
+            {
+                DrawBuffersInternal(count, pbuffers);
+            }
+        }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -928,7 +937,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             int dstY1,
             ClearBufferMask mask,
             BlitFramebufferFilter filter);
-        internal BlitFramebufferDelegate BlitFramebuffer;
+        internal BlitFramebufferDelegate BlitFramebuffer; // OpenGL 3.0, GLES 3.0.
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1462,7 +1471,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             PolygonOffset = LoadFunctionOrNull<PolygonOffsetDelegate>("glPolygonOffset");
 
             BindBuffer = LoadFunctionOrNull<BindBufferDelegate>("glBindBuffer");
-            DrawBuffers = LoadFunctionOrNull<DrawBuffersDelegate>("glDrawBuffers");
+            ReadBuffer = LoadFunctionOrNull<ReadBufferDelegate>("glReadBuffer");
+            DrawBufferInternal = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
+            DrawBuffersInternal = LoadFunctionOrNull<DrawBuffersDelegate>("glDrawBuffers");
             DrawElements = LoadFunctionOrNull<DrawElementsDelegate>("glDrawElements");
             DrawArrays = LoadFunctionOrNull<DrawArraysDelegate>("glDrawArrays");
 
@@ -1485,8 +1496,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             // uniforms OpenGL Version >= 3.0
             // ... Uniform 1ui,1uiv,2ui,2uiv,2ui,2uiv,2ui,2uiv
 
-            ReadBuffer = LoadFunctionOrNull<ReadBufferDelegate>("glReadBuffer");
-            DrawBuffer = LoadFunctionOrNull<DrawBufferDelegate>("glDrawBuffer");
 
             // Render Target Support. These might be null if they are not supported
             GenRenderbuffers = LoadFunctionOrNull<GenRenderbuffersDelegate>("glGenRenderbuffers");
