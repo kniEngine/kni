@@ -903,7 +903,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
         internal delegate void DrawBufferDelegate(DrawBufferMode buffer);
-        internal DrawBufferDelegate DrawBufferInternal;
+        internal DrawBufferDelegate DrawBufferInternal; // OpenGL 2.0, GLES N/A.
 
         internal unsafe void DrawBuffer(DrawBufferMode buffer)
         {
@@ -914,7 +914,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
         internal unsafe delegate void DrawBuffersDelegate(int count, DrawBufferMode* pbuffers);
-        internal DrawBuffersDelegate DrawBuffersInternal;
+        internal DrawBuffersDelegate DrawBuffersInternal; // OpenGL 2.0, GLES 3.0.
 
         internal unsafe void DrawBuffers(int count, DrawBufferMode[] buffers)
         {
@@ -937,7 +937,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             int dstY1,
             ClearBufferMask mask,
             BlitFramebufferFilter filter);
-        internal BlitFramebufferDelegate BlitFramebuffer;
+        internal BlitFramebufferDelegate BlitFramebuffer; // OpenGL 3.0, GLES 3.0.
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
