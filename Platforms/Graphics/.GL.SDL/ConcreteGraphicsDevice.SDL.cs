@@ -82,9 +82,9 @@ namespace Microsoft.Xna.Platform.Graphics
             ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
 
             // Initialize draw buffer attachment array
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBuffersEnum[((ConcreteGraphicsCapabilities)this.Capabilities).MaxDrawBuffers];
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBufferMode[((ConcreteGraphicsCapabilities)this.Capabilities).MaxDrawBuffers];
             for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers.Length; i++)
-                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBuffersEnum)(DrawBuffersEnum.ColorAttachment0 + i);
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
 
             ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }

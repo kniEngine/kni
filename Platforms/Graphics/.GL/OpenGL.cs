@@ -91,11 +91,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum DrawBufferMode
     {
-        ColorAttachment0 = 0x8CE0,
-    }
-
-    internal enum DrawBuffersEnum
-    {
         None             = 0x0000,
         Back             = 0x0405,
         ColorAttachment0 = 0x8CE0,
@@ -913,7 +908,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
-        internal delegate void DrawBuffersDelegate(int count, DrawBuffersEnum[] buffers);
+        internal delegate void DrawBuffersDelegate(int count, DrawBufferMode[] buffers);
         internal DrawBuffersDelegate DrawBuffers;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
