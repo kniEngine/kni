@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override IntPtr Platform_MonitorHandle
         {
-            get { throw new NotImplementedException(); }
+            get { return _eglDisplay.Handle; }
         }
 
         public override bool Platform_IsDefaultAdapter
