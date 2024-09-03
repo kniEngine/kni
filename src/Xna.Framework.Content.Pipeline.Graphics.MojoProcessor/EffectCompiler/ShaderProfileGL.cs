@@ -277,11 +277,31 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 glslCode;
 
             // Enable standard derivatives extension as necessary
+            /*
             if (glslCode.IndexOf("dFdx", StringComparison.InvariantCulture) >= 0
             || glslCode.IndexOf("dFdy", StringComparison.InvariantCulture) >= 0)
             {
                 glslCode = "#extension GL_OES_standard_derivatives : enable\r\n" + glslCode;
             }
+            */
+
+            // Transform to GLES 3
+            glslCode = glslCode.Replace("attribute ", "in ");
+
+            if (shaderStage == ShaderStage.Pixel)
+            {
+                glslCode = glslCode.Replace("varying ", "in ");
+            }
+            else
+            {
+                glslCode = glslCode.Replace("varying ", "out ");
+            }
+
+            glslCode = glslCode.Replace("texture2D", "texture");
+
+            glslCode = glslCode.Replace("#define ps_oC0 gl_FragColor", "out vec4 ps_oC0;");
+
+            glslCode = "#version 300 es\r\n" + glslCode;
 
             // Store the code for serialization.
             dxshader.ShaderCode = Encoding.ASCII.GetBytes(glslCode);
