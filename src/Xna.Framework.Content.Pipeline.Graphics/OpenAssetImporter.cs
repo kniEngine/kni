@@ -279,7 +279,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // nodes shoud not be thrown away, meshes/materials should not be merged,
                 // etc. Custom model processors may depend on this information!
                 Scene aiScene = importer.ImportFile(filename,
-                    PostProcessSteps.FindDegenerates |
+                    //PostProcessSteps.FindDegenerates |
                     PostProcessSteps.FindInvalidData |
                     PostProcessSteps.FlipUVs |              // Required for Direct3D
                     PostProcessSteps.FlipWindingOrder |     // Required for Direct3D
