@@ -26,9 +26,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int _glDefaultFramebuffer = 0;
 
-        internal int _glMajorVersion = 0;
-        internal int _glMinorVersion = 0;
-
 
         internal ConcreteGraphicsDeviceGL(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
             : base(device, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters)

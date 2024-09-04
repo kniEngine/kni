@@ -72,14 +72,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _mainContext = base.CreateGraphicsContext();
 
-            var GL = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().GL;
-
-            // get the GL version.
-            _glMajorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMajorVersion;
-            _glMinorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMinorVersion;
+            int glMajorVersion = ((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy)._glMajorVersion;
+            int glMinorVersion = ((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy)._glMinorVersion;
 
             _capabilities = new ConcreteGraphicsCapabilities();
-            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
+            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, glMajorVersion, glMinorVersion);
 
             // Initialize draw buffer attachment array
             ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBufferMode[((ConcreteGraphicsCapabilities)this.Capabilities).MaxDrawBuffers];

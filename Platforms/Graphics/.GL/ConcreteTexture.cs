@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Graphics
             bool supportsFloat = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsFloatTextures;
             bool supportsHalfFloat = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsHalfFloatTextures;
             bool supportsNormalized = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsNormalized;
-            bool isGLES2 = GL.BoundApi == OGL.RenderApi.ES && ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glMajorVersion == 2;
+            bool isGLES2 = GL.BoundApi == OGL.RenderApi.ES && ((ConcreteGraphicsContextGL)contextStrategy)._glMajorVersion == 2;
 
             switch (format)
             {

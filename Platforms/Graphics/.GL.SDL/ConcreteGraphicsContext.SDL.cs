@@ -40,6 +40,12 @@ namespace Microsoft.Xna.Platform.Graphics
             MakeCurrent(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.PresentationInterval);
             SDL.OpenGL.SetSwapInterval(swapInterval);
+
+
+            // get the GL version.
+            _glMajorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMajorVersion;
+            _glMinorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMinorVersion;
+
         }
 
         public void MakeCurrent(IntPtr winHandle)
