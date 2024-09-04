@@ -33,35 +33,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _mainContext = base.CreateGraphicsContext();
 
-            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            // try getting the context version
-            // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string
-            try
-            {
-                string version = GL.GetString(StringName.Version);
-                if (string.IsNullOrEmpty(version))
-                    throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
-
-                // for GLES, the GL_VERSION string is formatted as:
-                //     OpenGL<space>ES<space><version number><space><vendor-specific information>
-                if (version.StartsWith("OpenGL ES "))
-                    version =  version.Split(' ')[2];
-                else // if it fails, we assume to be on a 1.1 context
-                    version = "1.1";
-
-                _glMajorVersion = Convert.ToInt32(version.Substring(0, 1));
-                _glMinorVersion = Convert.ToInt32(version.Substring(2, 1));
-            }
-            catch (FormatException)
-            {
-                // if it fails, we assume to be on a 1.1 context
-                _glMajorVersion = 1;
-                _glMinorVersion = 1;
-            }
+            int glMajorVersion = ((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy)._glMajorVersion;
+            int glMinorVersion = ((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy)._glMinorVersion;
 
             _capabilities = new ConcreteGraphicsCapabilities();
-            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, _glMajorVersion, _glMinorVersion);
+            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, glMajorVersion, glMinorVersion);
 
             ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
         }
