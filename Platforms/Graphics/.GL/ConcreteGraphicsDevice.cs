@@ -106,8 +106,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
-            if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectARB
-            ||  ((ConcreteGraphicsCapabilities)this.Capabilities).SupportsFramebufferObjectEXT)
+            if (((ConcreteGraphicsCapabilities)((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities).SupportsFramebufferObjectARB
+            ||  ((ConcreteGraphicsCapabilities)((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities).SupportsFramebufferObjectEXT)
             {
                 _supportsBlitFramebuffer = GL.BlitFramebuffer != null;
                 _supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformDepthStencilState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
             ((IPlatformRasterizerState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
 
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[Capabilities.MaxVertexBufferSlots];
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
                 ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, null, IntPtr.Zero, 0);
         }

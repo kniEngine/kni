@@ -588,7 +588,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int vertexStride = vertexDeclaration.VertexStride;
                 IntPtr vertexOffset = (IntPtr)(vertexStride * (baseVertex + vertexBufferBinding.VertexOffset));
 
-                VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration);
+                VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(this, vertexDeclaration);
 
                 if (_lastVertexAttribs != 1
                 ||  _bufferBindingInfos[slot].VertexBuffer != vertexBufferBinding.VertexBuffer
@@ -614,7 +614,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
 
                         // only set the divisor if instancing is supported
-                        if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
+                        if (base.Capabilities.SupportsInstancing)
                         {
                             GL.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
                             GL.CheckGLError();
@@ -682,7 +682,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int vertexStride = vertexDeclaration.VertexStride;
             IntPtr vertexOffset = baseVertex;
 
-            VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(vertexDeclaration);
+            VertexDeclarationAttributeInfo vertexAttribInfo = vertexShaderStrategy.GetVertexAttribInfo(this, vertexDeclaration);
 
             for (int e = 0; e < vertexAttribInfo.Elements.Count; e++)
             {
@@ -696,7 +696,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
 
 #if DESKTOPGL
-                if (((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
+                if (base.Capabilities.SupportsInstancing)
                 {
                     GL.VertexAttribDivisor(element.AttributeLocation, 0);
                     GL.CheckGLError();
@@ -858,7 +858,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
-            if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsInstancing)
+            if (!base.Capabilities.SupportsInstancing)
                 throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
 
             PlatformApplyState();
@@ -872,7 +872,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (baseInstance > 0)
             {
-                if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
+                if (!base.Capabilities.SupportsBaseIndexInstancing)
                     throw new PlatformNotSupportedException("Instanced geometry drawing with base instance requires at least OpenGL 4.2. Try upgrading your graphics card drivers.");
 
                 PlatformApplyVertexBuffers(baseVertex);

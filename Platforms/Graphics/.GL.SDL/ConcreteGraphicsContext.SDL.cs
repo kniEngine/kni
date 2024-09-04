@@ -46,6 +46,11 @@ namespace Microsoft.Xna.Platform.Graphics
             _glMajorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMajorVersion;
             _glMinorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMinorVersion;
 
+            base._capabilities = new ConcreteGraphicsCapabilities();
+            ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
+                ((IPlatformGraphicsContext)this.Context).DeviceStrategy,
+                _glMajorVersion, _glMinorVersion);
+
         }
 
         public void MakeCurrent(IntPtr winHandle)

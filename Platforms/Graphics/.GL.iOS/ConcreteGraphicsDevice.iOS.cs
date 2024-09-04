@@ -33,13 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _mainContext = base.CreateGraphicsContext();
 
-            int glMajorVersion = ((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy)._glMajorVersion;
-            int glMinorVersion = ((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy)._glMinorVersion;
-
-            _capabilities = new ConcreteGraphicsCapabilities();
-            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this, glMajorVersion, glMinorVersion);
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[this.Capabilities.MaxVertexBufferSlots];
+            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
         }
 
 

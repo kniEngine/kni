@@ -30,6 +30,12 @@ namespace Microsoft.Xna.Platform.Graphics
         private bool _isDisposed = false;
 
         internal GraphicsMetrics _graphicsMetrics;
+        protected internal GraphicsCapabilities _capabilities;
+
+        public GraphicsCapabilities Capabilities
+        {
+            get { return _capabilities; }
+        }
 
         protected internal Rectangle _scissorRectangle;
         protected internal bool _scissorRectangleDirty;
@@ -165,7 +171,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_blendState, BlendState.Opaque))
                     newBlendState = _blendStateOpaque;
 
-                if (newBlendState.IndependentBlendEnable && !((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsSeparateBlendStates)
+                if (newBlendState.IndependentBlendEnable && !this.Capabilities.SupportsSeparateBlendStates)
                     throw new PlatformNotSupportedException("Independent blend states requires at least OpenGL 4.0 or GL_ARB_draw_buffers_blend. Try upgrading your graphics drivers.");
 
                 // Blend state is now bound to a device... no one should
@@ -236,7 +242,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_rasterizerState == value)
                     return;
 
-                if (!value.DepthClipEnable && !((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsDepthClamp)
+                if (!value.DepthClipEnable && !this.Capabilities.SupportsDepthClamp)
                     throw new InvalidOperationException("Cannot set RasterizerState.DepthClipEnable to false on this graphics device");
 
                 _rasterizerState = value;
@@ -367,13 +373,13 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (vertexBuffers != null && vertexBuffers.Length > 0)
             {
-                if (vertexBuffers.Length <= ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.MaxVertexBufferSlots)
+                if (vertexBuffers.Length <= this.Capabilities.MaxVertexBufferSlots)
                 {
                     _vertexBuffersDirty |= _vertexBuffers.Set(vertexBuffers);
                 }
                 else
                 {
-                    string message = String.Format("Max number of vertex buffers is {0}.", ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.MaxVertexBufferSlots);
+                    string message = String.Format("Max number of vertex buffers is {0}.", this.Capabilities.MaxVertexBufferSlots);
                     throw new ArgumentOutOfRangeException("vertexBuffers", message);
                 }
             }

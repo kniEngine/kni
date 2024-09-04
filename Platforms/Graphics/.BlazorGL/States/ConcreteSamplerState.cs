@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 default:
                     throw new NotSupportedException();
             }
-            if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureFilterAnisotropic)
+            if (cgraphicsContext.Capabilities.SupportsTextureFilterAnisotropic)
             {
                 throw new NotImplementedException();
             }
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
 
             // TextureMaxLevel
-            if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureMaxLevel)
+            if (cgraphicsContext.Capabilities.SupportsTextureMaxLevel)
             {
                 int textureMaxLevel = 1000;
                 if (this.MaxMipLevel > 0)

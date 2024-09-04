@@ -49,12 +49,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
                 case TextureFilter.Linear:
                     textureMaxAnisotropy = 1.0f;
-                    if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureFilterAnisotropic)
+                    if (cgraphicsContext.Capabilities.SupportsTextureFilterAnisotropic)
                     textureMinFilter = (useMipmaps ? TextureMinFilter.LinearMipmapLinear : TextureMinFilter.Linear);
                     textureMaxFilter = TextureMagFilter.Linear;
                     break;
                 case TextureFilter.Anisotropic:
-                    textureMaxAnisotropy = MathHelper.Clamp(this.MaxAnisotropy, 1.0f, base.GraphicsDeviceStrategy.Capabilities.MaxTextureAnisotropy);
+                    textureMaxAnisotropy = MathHelper.Clamp(this.MaxAnisotropy, 1.0f, cgraphicsContext.Capabilities.MaxTextureAnisotropy);
                     textureMinFilter = (useMipmaps ? TextureMinFilter.LinearMipmapLinear : TextureMinFilter.Linear);
                     textureMaxFilter = TextureMagFilter.Linear;
                     break;
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 default:
                     throw new NotSupportedException();
             }
-            if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureFilterAnisotropic)
+            if (cgraphicsContext.Capabilities.SupportsTextureFilterAnisotropic)
             {
                 GL.TexParameter(target, TextureParameterNameTextureMaxAnisotropy, textureMaxAnisotropy);
                 GL.CheckGLError();
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
             // TextureMaxLevel
-            if (base.GraphicsDeviceStrategy.Capabilities.SupportsTextureMaxLevel)
+            if (cgraphicsContext.Capabilities.SupportsTextureMaxLevel)
             {
                 int textureMaxLevel = 1000;
                 if (this.MaxMipLevel > 0)
