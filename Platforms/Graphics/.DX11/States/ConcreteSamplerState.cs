@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteSamplerState(GraphicsContextStrategy contextStrategy, ISamplerStateStrategy source)
             : base(contextStrategy, source)
         {
-            _state = CreateDXState(base.GraphicsDeviceStrategy);
+            _state = CreateDXState(contextStrategy, base.GraphicsDeviceStrategy);
         }
 
         internal D3D11.SamplerState GetDxState()
@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return _state;
         }
 
-        internal D3D11.SamplerState CreateDXState(GraphicsDeviceStrategy deviceStrategy)
+        internal D3D11.SamplerState CreateDXState(GraphicsContextStrategy contextStrategy, GraphicsDeviceStrategy deviceStrategy)
         {
             // Build the description.
             D3D11.SamplerStateDescription samplerStateDesc = new D3D11.SamplerStateDescription();
@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
             samplerStateDesc.Filter = ToDXTextureFilter(Filter, FilterMode);
-            samplerStateDesc.MaximumAnisotropy = Math.Min(MaxAnisotropy, deviceStrategy.Capabilities.MaxTextureAnisotropy);
+            samplerStateDesc.MaximumAnisotropy = Math.Min(MaxAnisotropy, contextStrategy.Capabilities.MaxTextureAnisotropy);
             samplerStateDesc.MipLodBias = MipMapLevelOfDetailBias;
             samplerStateDesc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
 

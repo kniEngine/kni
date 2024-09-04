@@ -377,13 +377,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Create Direct2D context
             _d2dContext = new D2D.DeviceContext(_d2dDevice, D2D.DeviceContextOptions.None);
-#endif
 
-
-            _capabilities = new ConcreteGraphicsCapabilities();
-            ((ConcreteGraphicsCapabilities)_capabilities).PlatformInitialize(this);
-
-#if UAP || WINUI
             this.Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
 #endif
         }

@@ -57,15 +57,15 @@ namespace Microsoft.Xna.Platform.Graphics
             glFormat = PixelFormat.Rgba;
             glType = PixelType.UnsignedByte;
 
-            bool supportsSRgb = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsSRgb;
-            bool supportsS3tc = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsS3tc;
-            bool supportsPvrtc = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsPvrtc;
-            bool supportsEtc1 = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsEtc1;
-            bool supportsEtc2 = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsEtc2;
-            bool supportsAtitc = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsAtitc;
-            bool supportsFloat = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsFloatTextures;
-            bool supportsHalfFloat = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsHalfFloatTextures;
-            bool supportsNormalized = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Capabilities.SupportsNormalized;
+            bool supportsSRgb = contextStrategy.Capabilities.SupportsSRgb;
+            bool supportsS3tc = contextStrategy.Capabilities.SupportsS3tc;
+            bool supportsPvrtc = contextStrategy.Capabilities.SupportsPvrtc;
+            bool supportsEtc1 = contextStrategy.Capabilities.SupportsEtc1;
+            bool supportsEtc2 = contextStrategy.Capabilities.SupportsEtc2;
+            bool supportsAtitc = contextStrategy.Capabilities.SupportsAtitc;
+            bool supportsFloat = contextStrategy.Capabilities.SupportsFloatTextures;
+            bool supportsHalfFloat = contextStrategy.Capabilities.SupportsHalfFloatTextures;
+            bool supportsNormalized = contextStrategy.Capabilities.SupportsNormalized;
             bool isGLES2 = GL.BoundApi == OGL.RenderApi.ES && ((ConcreteGraphicsContextGL)contextStrategy)._glMajorVersion == 2;
 
             switch (format)
@@ -327,8 +327,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            GraphicsDeviceStrategy deviceStrategy = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy;
-
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             if (multiSampleCount > 0)
@@ -367,22 +365,22 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if GLES
                     case DepthFormat.Depth24:
-                        if (deviceStrategy.Capabilities.SupportsDepth24)
+                        if (contextStrategy.Capabilities.SupportsDepth24)
                             depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                        else if (deviceStrategy.Capabilities.SupportsDepthNonLinear)
+                        else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
                             depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                         else
                             depthInternalFormat = RenderbufferStorage.DepthComponent16;
                         break;
 
                     case DepthFormat.Depth24Stencil8:
-                        if (deviceStrategy.Capabilities.SupportsPackedDepthStencil)
+                        if (contextStrategy.Capabilities.SupportsPackedDepthStencil)
                             depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
                         else
                         {
-                            if (deviceStrategy.Capabilities.SupportsDepth24)
+                            if (contextStrategy.Capabilities.SupportsDepth24)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                            else if (deviceStrategy.Capabilities.SupportsDepthNonLinear)
+                            else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                             else
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16;

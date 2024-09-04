@@ -92,6 +92,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsDebug = base.CreateGraphicsDebug();
 #endif
 
+            base._capabilities = new ConcreteGraphicsCapabilities();
+            ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
+                ((IPlatformGraphicsContext)this.Context).DeviceStrategy);
         }
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
@@ -461,7 +464,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (baseInstance > 0)
                 {
-                    if (!((IPlatformGraphicsContext)this.Context).DeviceStrategy.Capabilities.SupportsBaseIndexInstancing)
+                    if (!this.Capabilities.SupportsBaseIndexInstancing)
                         throw new PlatformNotSupportedException("Instanced geometry drawing with base instance not supported.");
 
                     this.D3dContext.DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, baseInstance);

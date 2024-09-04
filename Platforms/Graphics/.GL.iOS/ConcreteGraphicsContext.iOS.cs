@@ -59,6 +59,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 _glMajorVersion = 1;
                 _glMinorVersion = 1;
             }
+
+            base._capabilities = new ConcreteGraphicsCapabilities();
+            ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
+                ((IPlatformGraphicsContext)this.Context).DeviceStrategy,
+                _glMajorVersion, _glMinorVersion);
+
         }
 
         public override void BindDisposeContext()
