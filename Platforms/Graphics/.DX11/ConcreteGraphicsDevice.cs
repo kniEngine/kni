@@ -66,6 +66,108 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteGraphicsDevice(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
             : base(device, adapter, graphicsProfile, false, presentationParameters)
         {
+            CreateDeviceIndependentResources();
+
+            // Windows requires BGRA support out of DX.
+            D3D11.DeviceCreationFlags creationFlags = D3D11.DeviceCreationFlags.BgraSupport;
+
+            if (presentationParameters.UseDebugLayers)
+                creationFlags |= D3D11.DeviceCreationFlags.Debug;
+
+#if DEBUG && (UAP || WINUI)
+            creationFlags |= D3D11.DeviceCreationFlags.Debug;
+#endif
+
+            // Pass the preferred feature levels based on the
+            // target profile that may have been set by the user.
+            D3D.FeatureLevel[] featureLevels;
+            List<D3D.FeatureLevel> featureLevelsList = new List<D3D.FeatureLevel>();
+            // create device with the highest available profile
+            featureLevelsList.Add(D3D.FeatureLevel.Level_11_1);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_11_0);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_10_1);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_10_0);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_9_3);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_9_2);
+            featureLevelsList.Add(D3D.FeatureLevel.Level_9_1);
+#if DEBUG
+            featureLevelsList.Clear();
+            // create device specific to profile
+            if (GraphicsProfile == GraphicsProfile.FL11_1) featureLevelsList.Add(D3D.FeatureLevel.Level_11_1);
+            if (GraphicsProfile == GraphicsProfile.FL11_0) featureLevelsList.Add(D3D.FeatureLevel.Level_11_0);
+            if (GraphicsProfile == GraphicsProfile.FL10_1) featureLevelsList.Add(D3D.FeatureLevel.Level_10_1);
+            if (GraphicsProfile == GraphicsProfile.FL10_0) featureLevelsList.Add(D3D.FeatureLevel.Level_10_0);
+            if (GraphicsProfile == GraphicsProfile.HiDef) featureLevelsList.Add(D3D.FeatureLevel.Level_9_3);
+            if (GraphicsProfile == GraphicsProfile.Reach) featureLevelsList.Add(D3D.FeatureLevel.Level_9_1);
+#endif
+            featureLevels = featureLevelsList.ToArray();
+
+            D3D.DriverType driverType = D3D.DriverType.Hardware;   //Default value
+
+#if WINDOWSDX
+            switch (presentationParameters.UseDriverType)
+            {
+                case PresentationParameters.DriverType.Reference:
+                    driverType = D3D.DriverType.Reference;
+                    break;
+
+                case PresentationParameters.DriverType.FastSoftware:
+                    driverType = D3D.DriverType.Warp;
+                    break;
+            }
+#endif
+
+#if UAP || WINUI
+            driverType = GraphicsAdapter.UseReferenceDevice
+                       ? D3D.DriverType.Reference
+                       : D3D.DriverType.Hardware;
+#endif
+
+            try
+            {
+                // Create the Direct3D device.
+                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
+                {
+#if WINDOWSDX
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
+#endif
+#if UAP || WINUI
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
+#endif
+                }
+
+#if UAP || WINUI
+                // Necessary to enable video playback
+                D3D.DeviceMultithread multithread = _d3dDevice.QueryInterface<D3D.DeviceMultithread>();
+                multithread.SetMultithreadProtected(true);
+#endif
+            }
+            catch (DX.SharpDXException)
+            {
+                // Try again without the debug flag.  This allows debug builds to run
+                // on machines that don't have the debug runtime installed.
+                creationFlags &= ~D3D11.DeviceCreationFlags.Debug;
+                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
+                {
+#if WINDOWSDX
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
+#endif
+#if UAP || WINUI
+                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
+#endif
+                }
+            }
+
+#if UAP || WINUI
+            // Create the Direct2D device.
+            using (DXGI.Device dxgiDevice = _d3dDevice.QueryInterface<DXGI.Device>())
+                _d2dDevice = new D2D.Device(_d2dFactory, dxgiDevice);
+
+            // Create Direct2D context
+            _d2dContext = new D2D.DeviceContext(_d2dDevice, D2D.DeviceContextOptions.None);
+
+            this.Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
+#endif
         }
 
         public override void Reset()
@@ -274,112 +376,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformSetup(PresentationParameters presentationParameters)
         {
-            CreateDeviceIndependentResources();
-
-            // Windows requires BGRA support out of DX.
-            D3D11.DeviceCreationFlags creationFlags = D3D11.DeviceCreationFlags.BgraSupport;
-
-            if (presentationParameters.UseDebugLayers)
-            {
-                creationFlags |= D3D11.DeviceCreationFlags.Debug;
-            }
-
-#if DEBUG && (UAP || WINUI)
-            creationFlags |= D3D11.DeviceCreationFlags.Debug;
-#endif
-
-            // Pass the preferred feature levels based on the
-            // target profile that may have been set by the user.
-            D3D.FeatureLevel[] featureLevels;
-            List<D3D.FeatureLevel> featureLevelsList = new List<D3D.FeatureLevel>();
-            // create device with the highest available profile
-            featureLevelsList.Add(D3D.FeatureLevel.Level_11_1);
-            featureLevelsList.Add(D3D.FeatureLevel.Level_11_0);
-            featureLevelsList.Add(D3D.FeatureLevel.Level_10_1);
-            featureLevelsList.Add(D3D.FeatureLevel.Level_10_0);
-            featureLevelsList.Add(D3D.FeatureLevel.Level_9_3);
-            featureLevelsList.Add(D3D.FeatureLevel.Level_9_2);
-            featureLevelsList.Add(D3D.FeatureLevel.Level_9_1);
-#if DEBUG
-            featureLevelsList.Clear();
-            // create device specific to profile
-            if (GraphicsProfile == GraphicsProfile.FL11_1) featureLevelsList.Add(D3D.FeatureLevel.Level_11_1);
-            if (GraphicsProfile == GraphicsProfile.FL11_0) featureLevelsList.Add(D3D.FeatureLevel.Level_11_0);
-            if (GraphicsProfile == GraphicsProfile.FL10_1) featureLevelsList.Add(D3D.FeatureLevel.Level_10_1);
-            if (GraphicsProfile == GraphicsProfile.FL10_0) featureLevelsList.Add(D3D.FeatureLevel.Level_10_0);
-            if (GraphicsProfile == GraphicsProfile.HiDef) featureLevelsList.Add(D3D.FeatureLevel.Level_9_3);
-            if (GraphicsProfile == GraphicsProfile.Reach) featureLevelsList.Add(D3D.FeatureLevel.Level_9_1);
-#endif
-            featureLevels = featureLevelsList.ToArray();
-
-            D3D.DriverType driverType = D3D.DriverType.Hardware;   //Default value
-
-#if WINDOWSDX
-            switch (presentationParameters.UseDriverType)
-            {
-                case PresentationParameters.DriverType.Reference:
-                    driverType = D3D.DriverType.Reference;
-                    break;
-
-                case PresentationParameters.DriverType.FastSoftware:
-                    driverType = D3D.DriverType.Warp;
-                    break;
-            }
-#endif
-
-#if UAP || WINUI
-            driverType = GraphicsAdapter.UseReferenceDevice
-                       ? D3D.DriverType.Reference
-                       : D3D.DriverType.Hardware;
-#endif
-
-            try
-            {
-                // Create the Direct3D device.
-                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
-                {
-#if WINDOWSDX
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
-#endif
-#if UAP || WINUI
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
-#endif
-                }
-
-#if UAP || WINUI
-                // Necessary to enable video playback
-                D3D.DeviceMultithread multithread = _d3dDevice.QueryInterface<D3D.DeviceMultithread>();
-                multithread.SetMultithreadProtected(true);
-#endif
-            }
-            catch (DX.SharpDXException)
-            {
-                // Try again without the debug flag.  This allows debug builds to run
-                // on machines that don't have the debug runtime installed.
-                creationFlags &= ~D3D11.DeviceCreationFlags.Debug;
-                using (D3D11.Device defaultDevice = new D3D11.Device(driverType, creationFlags, featureLevels))
-                {
-#if WINDOWSDX
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device>();
-#endif
-#if UAP || WINUI
-                    _d3dDevice = defaultDevice.QueryInterface<D3D11.Device1>();
-#endif
-                }
-            }
-
             _mainContext = base.CreateGraphicsContext();
-
-#if UAP || WINUI
-            // Create the Direct2D device.
-            using (DXGI.Device dxgiDevice = _d3dDevice.QueryInterface<DXGI.Device>())
-                _d2dDevice = new D2D.Device(_d2dFactory, dxgiDevice);
-
-            // Create Direct2D context
-            _d2dContext = new D2D.DeviceContext(_d2dDevice, D2D.DeviceContextOptions.None);
-
-            this.Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
-#endif
         }
 
         /// <summary>
