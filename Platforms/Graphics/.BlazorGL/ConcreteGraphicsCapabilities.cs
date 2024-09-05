@@ -10,9 +10,9 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsCapabilities : GraphicsCapabilities
     {
 
-        internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy)
+        internal void PlatformInitialize(ConcreteGraphicsContext cgraphicsContext, GraphicsDeviceStrategy deviceStrategy)
         {
-            IWebGLRenderingContext GL = ((IPlatformGraphicsContext)deviceStrategy.MainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            IWebGLRenderingContext GL = cgraphicsContext.GL;
 
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 

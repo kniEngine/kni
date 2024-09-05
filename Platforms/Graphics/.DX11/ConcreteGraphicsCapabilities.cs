@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsCapabilities : GraphicsCapabilities
     {
 
-        internal void PlatformInitialize(GraphicsDeviceStrategy deviceStrategy)
+        internal void PlatformInitialize(ConcreteGraphicsContext cgraphicsContext, GraphicsDeviceStrategy deviceStrategy)
         {
             GraphicsProfile profile = deviceStrategy.GraphicsProfile;
 
