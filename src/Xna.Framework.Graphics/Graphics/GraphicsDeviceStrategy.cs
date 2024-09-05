@@ -111,7 +111,9 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void Initialize(PresentationParameters presentationParameters)
         {
             // Setup
-            this.PlatformSetup(presentationParameters);
+            _mainContext = this.CreateGraphicsContext();
+
+            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
 
 #if DEBUG
             if (this.DisplayMode == null)
@@ -182,7 +184,6 @@ namespace Microsoft.Xna.Platform.Graphics
              ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);
         }
 
-        protected abstract void PlatformSetup(PresentationParameters presentationParameters);
         protected abstract void PlatformInitialize();
 
         protected void OnContextLost(EventArgs e)

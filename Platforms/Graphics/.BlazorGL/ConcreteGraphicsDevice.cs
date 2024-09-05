@@ -61,14 +61,6 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-
-        protected override void PlatformSetup(PresentationParameters presentationParameters)
-        {
-            _mainContext = base.CreateGraphicsContext();
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
-       }
-
         protected override void PlatformInitialize()
         {
             // set actual backbuffer size

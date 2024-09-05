@@ -68,14 +68,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        protected override void PlatformSetup(PresentationParameters presentationParameters)
-        {
-            _mainContext = base.CreateGraphicsContext();
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
-        }
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

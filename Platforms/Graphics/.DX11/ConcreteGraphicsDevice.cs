@@ -372,13 +372,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
-        protected override void PlatformSetup(PresentationParameters presentationParameters)
-        {
-            _mainContext = base.CreateGraphicsContext();
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
-        }
-
         /// <summary>
         /// Creates resources not tied the active graphics device.
         /// </summary>
