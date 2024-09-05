@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this._depthStencilFormat = preferredDepthFormat;
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
-            if (!((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer
+            if (!contextStrategy.ToConcrete<ConcreteGraphicsContext>()._supportsBlitFramebuffer
             /* ||  GL.RenderbufferStorageMultisample == null */ )
                 maxMultiSampleCount = 0;
             this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);

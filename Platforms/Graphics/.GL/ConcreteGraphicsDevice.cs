@@ -21,9 +21,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal Dictionary<int, ShaderProgram> ProgramCache { get { return _programCache; } }
 
-        internal bool _supportsInvalidateFramebuffer;
-        internal bool _supportsBlitFramebuffer;
-
         internal int _glDefaultFramebuffer = 0;
 
 
@@ -102,15 +99,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformInitialize()
         {
-            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
             ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
             if (((ConcreteGraphicsCapabilities)((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities).SupportsFramebufferObjectARB
             ||  ((ConcreteGraphicsCapabilities)((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities).SupportsFramebufferObjectEXT)
             {
-                _supportsBlitFramebuffer = GL.BlitFramebuffer != null;
-                _supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+                var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>()._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>()._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
             }
             else
             {

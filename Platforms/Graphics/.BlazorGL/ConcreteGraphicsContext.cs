@@ -23,6 +23,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram _shaderProgram = null;
 
+        internal bool _supportsInvalidateFramebuffer;
+        internal bool _supportsBlitFramebuffer;
+
         private Vector4 _posFixup;
 
         internal BufferBindingInfo[] _bufferBindingInfos;

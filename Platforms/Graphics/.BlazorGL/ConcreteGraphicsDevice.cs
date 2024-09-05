@@ -17,9 +17,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal Dictionary<int, ShaderProgram> ProgramCache { get { return _programCache; } }
 
-        internal bool _supportsInvalidateFramebuffer;
-        internal bool _supportsBlitFramebuffer;
-
         internal WebGLFramebuffer _glDefaultFramebuffer = null;
 
 
@@ -74,8 +71,8 @@ namespace Microsoft.Xna.Platform.Graphics
             //||  this.Capabilities.SupportsFramebufferObjectEXT)
             if (true)
             {
-                _supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
-                _supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
+                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
             }
             else
             {
