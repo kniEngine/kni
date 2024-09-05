@@ -126,6 +126,8 @@ namespace Microsoft.Xna.Platform
             if (gdi.PresentationParameters == null || gdi.Adapter == null)
                 throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
 
+            this.UpdateTouchPanel(pp);
+
             return gdi;
         }
 
@@ -164,9 +166,15 @@ namespace Microsoft.Xna.Platform
 
         private void GraphicsDevice_DeviceReset_UpdateTouchPanel(object sender, EventArgs eventArgs)
         {
-            TouchPanel.DisplayWidth = this.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = this.GraphicsDevice.PresentationParameters.BackBufferHeight;
-            TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
+            this.UpdateTouchPanel(this.GraphicsDevice.PresentationParameters);
+        }
+
+        private void UpdateTouchPanel(
+            PresentationParameters presentationParameters)
+        {
+            TouchPanel.DisplayWidth = presentationParameters.BackBufferWidth;
+            TouchPanel.DisplayHeight = presentationParameters.BackBufferHeight;
+            TouchPanel.DisplayOrientation = presentationParameters.DisplayOrientation;
         }
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
