@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
-        internal void Initialize(PresentationParameters presentationParameters)
+        internal void Initialize()
         {
             // Setup
             _mainContext = this.CreateGraphicsContext();
