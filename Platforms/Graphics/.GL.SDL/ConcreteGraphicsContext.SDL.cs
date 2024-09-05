@@ -61,6 +61,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 this._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
 
             base._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
+
+            if (((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectARB
+            ||  ((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectEXT)
+            {
+                base._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                base._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
         }
 
         public void MakeCurrent(IntPtr winHandle)

@@ -66,21 +66,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
-            // TODO: check for FramebufferObjectARB
-            //if (this.Capabilities.SupportsFramebufferObjectARB
-            //||  this.Capabilities.SupportsFramebufferObjectEXT)
-            if (true)
-            {
-                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
-                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
-            }
-            else
-            {
-                throw new PlatformNotSupportedException(
-                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
-                    "Try updating your graphics drivers.");
-            }
-
             // Force resetting states
             ((IPlatformBlendState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState(((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
             ((IPlatformDepthStencilState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>(), true);
