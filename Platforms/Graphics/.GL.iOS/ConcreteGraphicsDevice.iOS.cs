@@ -29,14 +29,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        protected override void PlatformSetup(PresentationParameters presentationParameters)
-        {
-            _mainContext = base.CreateGraphicsContext();
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
-        }
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -67,6 +67,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public override void PlatformSetup()
+        {
+            base._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
+        }
+
         public override void BindDisposeContext()
         {
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)

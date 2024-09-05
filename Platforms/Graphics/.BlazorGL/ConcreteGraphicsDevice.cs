@@ -61,15 +61,6 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-
-        protected override void PlatformSetup(PresentationParameters presentationParameters)
-        {
-            _mainContext = base.CreateGraphicsContext();
-            //_glContext = new LogContent(_glContext);
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
-        }
-
         protected override void PlatformInitialize()
         {
             // set actual backbuffer size

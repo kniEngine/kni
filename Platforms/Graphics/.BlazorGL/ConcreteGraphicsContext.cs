@@ -67,6 +67,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public override void PlatformSetup()
+        {
+            //_glContext = new LogContent(_glContext);
+
+            this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
+
+        }
+
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             // TODO: We need to figure out how to detect if we have a

@@ -97,6 +97,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 ((IPlatformGraphicsContext)this.Context).DeviceStrategy);
         }
 
+        public override void PlatformSetup()
+        {
+        }
+
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             // Clear options for depth/stencil buffer if not attached.

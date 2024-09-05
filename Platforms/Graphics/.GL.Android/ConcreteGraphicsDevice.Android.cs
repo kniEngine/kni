@@ -54,14 +54,6 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteGraphicsContext(context);
         }
 
-
-        protected override void PlatformSetup(PresentationParameters presentationParameters)
-        {
-            _mainContext = base.CreateGraphicsContext();
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
-        }
-
         internal void Android_OnContextLost()
         {
             this.OnContextLost(EventArgs.Empty);

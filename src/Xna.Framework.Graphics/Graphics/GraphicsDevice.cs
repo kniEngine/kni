@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
-            _strategy.Initialize(presentationParameters);
+            _strategy.Initialize();
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.PresentationChanged += (sender, e) => { OnPresentationChanged(e); };
             _strategy.Disposing += (sender, e) => { OnDisposing(e); };
 
-            _strategy.Initialize(presentationParameters);
+            _strategy.Initialize();
         }
 
         ~GraphicsDevice()

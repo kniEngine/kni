@@ -68,19 +68,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        protected override void PlatformSetup(PresentationParameters presentationParameters)
-        {
-            _mainContext = base.CreateGraphicsContext();
-
-            // Initialize draw buffer attachment array
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers = new DrawBufferMode[((ConcreteGraphicsCapabilities)((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities).MaxDrawBuffers];
-            for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers.Length; i++)
-                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
-        }
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

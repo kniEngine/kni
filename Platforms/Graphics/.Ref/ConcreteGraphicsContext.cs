@@ -28,6 +28,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public override void PlatformSetup()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
             throw new PlatformNotSupportedException();
