@@ -101,29 +101,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
 
-            if (((ConcreteGraphicsCapabilities)((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities).SupportsFramebufferObjectARB
-            ||  ((ConcreteGraphicsCapabilities)((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities).SupportsFramebufferObjectEXT)
-            {
-                var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>()._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
-                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>()._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
-            }
-            else
-            {
-                throw new PlatformNotSupportedException(
-                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
-                    "Try updating your graphics drivers.");
-            }
-
             // Force resetting states
             ((IPlatformBlendState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
             ((IPlatformDepthStencilState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
             ((IPlatformRasterizerState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos = new BufferBindingInfo[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
-            for (int i = 0; i < ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos.Length; i++)
-                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._bufferBindingInfos[i] = new BufferBindingInfo(null, null, IntPtr.Zero, 0);
         }
 
         private void ClearProgramCache()
