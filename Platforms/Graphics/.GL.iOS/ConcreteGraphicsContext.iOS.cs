@@ -83,6 +83,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
                     "Try updating your graphics drivers.");
             }
+
+            this._bufferBindingInfos = new BufferBindingInfo[base.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < this._bufferBindingInfos.Length; i++)
+                this._bufferBindingInfos[i] = new BufferBindingInfo(null, null, IntPtr.Zero, 0);
         }
 
         public override void BindDisposeContext()

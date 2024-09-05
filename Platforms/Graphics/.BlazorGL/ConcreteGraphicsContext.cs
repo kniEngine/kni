@@ -91,6 +91,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     "Try updating your graphics drivers.");
             }
 
+            this._bufferBindingInfos = new BufferBindingInfo[base.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < this._bufferBindingInfos.Length; i++)
+                this._bufferBindingInfos[i] = new BufferBindingInfo(null, null, IntPtr.Zero, 0);
         }
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
