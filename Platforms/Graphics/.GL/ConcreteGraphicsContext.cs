@@ -57,6 +57,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
 
+        internal bool _supportsInvalidateFramebuffer;
+        internal bool _supportsBlitFramebuffer;
+
         internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0 && !(CurrentRenderTargetBindings[0].RenderTarget is RenderTargetSwapChain)); } }
 
         internal int _glMajorVersion = 0;
@@ -1209,16 +1212,16 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                     GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + i);
                     GL.CheckGLError();
-                    Debug.Assert(((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsBlitFramebuffer);
+                    Debug.Assert(this._supportsBlitFramebuffer);
                     GL.BlitFramebuffer(0, 0, renderTarget.Width, renderTarget.Height,
                                        0, 0, renderTarget.Width, renderTarget.Height,
                                        ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
                     GL.CheckGLError();
                 }
 
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents &&((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer)
+                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this._supportsInvalidateFramebuffer)
                 {
-                    Debug.Assert(((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._supportsInvalidateFramebuffer);
+                    Debug.Assert(this._supportsInvalidateFramebuffer);
                     GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
                     GL.CheckGLError();
                 }
