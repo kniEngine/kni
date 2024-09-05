@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _mainContext = base.CreateGraphicsContext();
 
-            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>()._newEnabledVertexAttributes = new bool[((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots];
+            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
         }
 
 

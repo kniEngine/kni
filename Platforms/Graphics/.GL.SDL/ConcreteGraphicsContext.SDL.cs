@@ -53,6 +53,16 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public override void PlatformSetup()
+        {
+            // Initialize draw buffer attachment array
+            this._drawBuffers = new DrawBufferMode[((ConcreteGraphicsCapabilities)base.Capabilities).MaxDrawBuffers];
+            for (int i = 0; i < this._drawBuffers.Length; i++)
+                this._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
+
+            base._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
+        }
+
         public void MakeCurrent(IntPtr winHandle)
         {
             SDL.OpenGL.MakeCurrent(winHandle, _glContext);
