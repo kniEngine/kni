@@ -113,8 +113,6 @@ namespace Microsoft.Xna.Platform.Graphics
             // Setup
             _mainContext = this.CreateGraphicsContext();
 
-            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
-
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
              ((IPlatformGraphicsContext)_mainContext).Strategy._pixelConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
 
@@ -155,6 +153,8 @@ namespace Microsoft.Xna.Platform.Graphics
              ((IPlatformGraphicsContext)_mainContext).Strategy._pixelShaderDirty = true;
 
              ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangleDirty = true;
+
+            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
 
             this.PlatformInitialize();
 
