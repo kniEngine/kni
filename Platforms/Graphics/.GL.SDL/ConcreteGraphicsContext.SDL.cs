@@ -78,6 +78,11 @@ namespace Microsoft.Xna.Platform.Graphics
             base._bufferBindingInfos = new BufferBindingInfo[base.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < base._bufferBindingInfos.Length; i++)
                 base._bufferBindingInfos[i] = new BufferBindingInfo(null, null, IntPtr.Zero, 0);
+
+            // Force resetting states
+            ((IPlatformBlendState)base._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
+            ((IPlatformDepthStencilState)base._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
+            ((IPlatformRasterizerState)base._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
         }
 
         public void MakeCurrent(IntPtr winHandle)
