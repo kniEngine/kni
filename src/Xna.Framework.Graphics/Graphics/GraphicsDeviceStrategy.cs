@@ -115,19 +115,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
 
-#if DEBUG
-            if (this.DisplayMode == null)
-            {
-                throw new Exception(
-                    "Unable to determine the current display mode.  This can indicate that the " +
-                    "game is not configured to be HiDPI aware under Windows 10 or later.  See " +
-                    "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
-            }
-#endif
-
-            // Initialize the main viewport
-             ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, this.DisplayMode.Width, this.DisplayMode.Height);
-
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
              ((IPlatformGraphicsContext)_mainContext).Strategy._pixelConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
 
@@ -143,31 +130,26 @@ namespace Microsoft.Xna.Platform.Graphics
              ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateOpaque = new BlendState(BlendState.Opaque);
 
              ((IPlatformGraphicsContext)_mainContext).Strategy.BlendState = BlendState.Opaque;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendFactorDirty = true;
 
              ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
              ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
              ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
 
-            _mainContext.DepthStencilState = DepthStencilState.Default;
+             ((IPlatformGraphicsContext)_mainContext).Strategy.DepthStencilState = DepthStencilState.Default;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDirty = true;
 
              ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
              ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
              ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
 
-             ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+            ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateDirty = true;
 
             // Setup end
 
             this.PlatformInitialize();
-
-            // Force set the default render states.
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendFactorDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy.BlendState = BlendState.Opaque;
-             ((IPlatformGraphicsContext)_mainContext).Strategy.DepthStencilState = DepthStencilState.Default;
-             ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Force set the buffers and shaders on next ApplyState() call
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffers = new VertexBufferCollection(((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots);
@@ -176,9 +158,7 @@ namespace Microsoft.Xna.Platform.Graphics
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexShaderDirty = true;
              ((IPlatformGraphicsContext)_mainContext).Strategy._pixelShaderDirty = true;
 
-            // Set the default scissor rect.
              ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangleDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangle =  ((IPlatformGraphicsContext)_mainContext).Strategy._viewport.Bounds;
 
             // Set the default render target.
              ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);

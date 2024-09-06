@@ -109,6 +109,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_currentDisplayMode == null) //(i.e. desktop mode wasn't found in the available modes)
             {
+#if DEBUG
+                throw new Exception(
+                    "Unable to determine the current display mode.  This can indicate that the " +
+                    "game is not configured to be HiDPI aware under Windows 10 or later.  See " +
+                    "https://github.com/MonoGame/MonoGame/issues/5040 for more information.");
+#endif
+
                 _currentDisplayMode = base.CreateDisplayMode(desktopWidth, desktopHeight, SurfaceFormat.Color);
             }
 
