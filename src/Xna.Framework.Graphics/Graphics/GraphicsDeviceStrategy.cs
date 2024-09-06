@@ -125,9 +125,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 #endif
 
-            // Initialize the main viewport
-             ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, this.DisplayMode.Width, this.DisplayMode.Height);
-
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
              ((IPlatformGraphicsContext)_mainContext).Strategy._pixelConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
 
@@ -171,9 +168,7 @@ namespace Microsoft.Xna.Platform.Graphics
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexShaderDirty = true;
              ((IPlatformGraphicsContext)_mainContext).Strategy._pixelShaderDirty = true;
 
-            // Set the default scissor rect.
              ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangleDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangle =  ((IPlatformGraphicsContext)_mainContext).Strategy._viewport.Bounds;
 
             // Set the default render target.
              ((IPlatformGraphicsContext)_mainContext).Strategy.ApplyRenderTargets(null);

@@ -99,8 +99,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformInitialize()
         {
-            ((IPlatformGraphicsContext)_mainContext).Strategy._viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-
             // Force resetting states
             ((IPlatformBlendState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
             ((IPlatformDepthStencilState) ((IPlatformGraphicsContext)_mainContext).Strategy._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)((IPlatformGraphicsContext)_mainContext).Strategy, true);
