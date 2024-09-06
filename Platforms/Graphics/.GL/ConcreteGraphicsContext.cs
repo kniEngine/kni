@@ -84,6 +84,33 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
+        public override void PlatformSetup()
+        {
+            this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
+
+            if (((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectARB
+            || ((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectEXT)
+            {
+                this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
+
+            this._bufferBindingInfos = new BufferBindingInfo[base.Capabilities.MaxVertexBufferSlots];
+            for (int i = 0; i < this._bufferBindingInfos.Length; i++)
+                this._bufferBindingInfos[i] = new BufferBindingInfo(null, null, IntPtr.Zero, 0);
+
+            // Force resetting states
+            ((IPlatformBlendState)base._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
+            ((IPlatformDepthStencilState)base._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
+            ((IPlatformRasterizerState)base._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
+        }
+
         public abstract void BindDisposeContext();
         public abstract void UnbindDisposeContext();
 
