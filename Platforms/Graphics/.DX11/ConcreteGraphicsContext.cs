@@ -97,6 +97,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 this, ((IPlatformGraphicsContext)this.Context).DeviceStrategy);
 
             base.Initialize(this.Capabilities);
+
+            this.PlatformSetup();
         }
 
         public override void PlatformSetup()

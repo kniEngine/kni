@@ -65,6 +65,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 _glMajorVersion, _glMinorVersion);
 
             base.Initialize(this.Capabilities);
+
+            this.PlatformSetup();
         }
 
         public override void PlatformSetup()

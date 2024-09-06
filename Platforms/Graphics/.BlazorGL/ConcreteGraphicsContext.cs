@@ -69,6 +69,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 );
 
             base.Initialize(this.Capabilities);
+
+            this.PlatformSetup();
         }
 
         public override void PlatformSetup()

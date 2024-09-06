@@ -113,8 +113,6 @@ namespace Microsoft.Xna.Platform.Graphics
             // Setup
             _mainContext = this.CreateGraphicsContext();
 
-            ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
-
             this.PlatformInitialize();
 
             // Set the default render target.
