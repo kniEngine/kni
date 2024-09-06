@@ -143,31 +143,26 @@ namespace Microsoft.Xna.Platform.Graphics
              ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateOpaque = new BlendState(BlendState.Opaque);
 
              ((IPlatformGraphicsContext)_mainContext).Strategy.BlendState = BlendState.Opaque;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateDirty = true;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._blendFactorDirty = true;
 
              ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
              ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
              ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
 
-            _mainContext.DepthStencilState = DepthStencilState.Default;
+             ((IPlatformGraphicsContext)_mainContext).Strategy.DepthStencilState = DepthStencilState.Default;
+             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDirty = true;
 
              ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
              ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
              ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
 
-             ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+            ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
+            ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateDirty = true;
 
             // Setup end
 
             this.PlatformInitialize();
-
-            // Force set the default render states.
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendFactorDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy.BlendState = BlendState.Opaque;
-             ((IPlatformGraphicsContext)_mainContext).Strategy.DepthStencilState = DepthStencilState.Default;
-             ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
 
             // Force set the buffers and shaders on next ApplyState() call
              ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffers = new VertexBufferCollection(((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots);
