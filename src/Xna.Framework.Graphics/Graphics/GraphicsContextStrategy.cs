@@ -333,6 +333,52 @@ namespace Microsoft.Xna.Platform.Graphics
             
         }
 
+        protected void Initialize(GraphicsCapabilities capabilities)
+        {
+            this._vertexConstantBuffers = new ConstantBufferCollection(this, 16);
+            this._pixelConstantBuffers = new ConstantBufferCollection(this, 16);
+
+            this._vertexTextures = new TextureCollection(this, this.Capabilities.MaxVertexTextureSlots);
+            this._pixelTextures = new TextureCollection(this, this.Capabilities.MaxTextureSlots);
+
+            this._pixelSamplerStates = new SamplerStateCollection(this, this.Capabilities.MaxTextureSlots);
+            this._vertexSamplerStates = new SamplerStateCollection(this, this.Capabilities.MaxVertexTextureSlots);
+
+            this._blendStateAdditive = new BlendState(BlendState.Additive);
+            this._blendStateAlphaBlend = new BlendState(BlendState.AlphaBlend);
+            this._blendStateNonPremultiplied = new BlendState(BlendState.NonPremultiplied);
+            this._blendStateOpaque = new BlendState(BlendState.Opaque);
+
+            this.BlendState = BlendState.Opaque;
+            this._blendStateDirty = true;
+            this._blendFactorDirty = true;
+
+            this._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
+            this._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
+            this._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
+
+            this.DepthStencilState = DepthStencilState.Default;
+            this._depthStencilStateDirty = true;
+
+            this._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
+            this._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
+            this._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
+
+            this.RasterizerState = RasterizerState.CullCounterClockwise;
+            this._rasterizerStateDirty = true;
+
+            // Force set the buffers and shaders on next ApplyState() call
+            this._vertexBuffers = new VertexBufferCollection(this.Capabilities.MaxVertexBufferSlots);
+            this._vertexBuffersDirty = true;
+            this._indexBufferDirty = true;
+            this._vertexShaderDirty = true;
+            this._pixelShaderDirty = true;
+
+            this._scissorRectangleDirty = true;
+
+        }
+
+
         protected internal void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
             if (vertexBuffer != null)

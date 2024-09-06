@@ -62,17 +62,20 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(context)
         {
             _glContext = glContext;
+            //_glContext = new LogContent(_glContext);
 
             base._capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
                 this, ((IPlatformGraphicsContext)this.Context).DeviceStrategy
                 );
 
+            base.Initialize(this.Capabilities);
+
+            this.PlatformSetup();
         }
 
         public override void PlatformSetup()
         {
-            //_glContext = new LogContent(_glContext);
 
             this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
 
@@ -94,6 +97,11 @@ namespace Microsoft.Xna.Platform.Graphics
             this._bufferBindingInfos = new BufferBindingInfo[base.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < this._bufferBindingInfos.Length; i++)
                 this._bufferBindingInfos[i] = new BufferBindingInfo(null, null, IntPtr.Zero, 0);
+
+            // Force resetting states
+            ((IPlatformBlendState)base._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState(this, true);
+            ((IPlatformDepthStencilState)base._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(this, true);
+            ((IPlatformRasterizerState)base._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState(this, true);
         }
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
