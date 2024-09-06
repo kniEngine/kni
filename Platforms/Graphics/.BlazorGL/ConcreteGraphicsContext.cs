@@ -62,6 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(context)
         {
             _glContext = glContext;
+            //_glContext = new LogContent(_glContext);
 
             base._capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
@@ -75,7 +76,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void PlatformSetup()
         {
-            //_glContext = new LogContent(_glContext);
 
             this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
 
