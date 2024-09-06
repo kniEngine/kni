@@ -95,6 +95,8 @@ namespace Microsoft.Xna.Platform.Graphics
             base._capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
                 this, ((IPlatformGraphicsContext)this.Context).DeviceStrategy);
+
+            base.Initialize(this.Capabilities);
         }
 
         public override void PlatformSetup()

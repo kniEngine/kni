@@ -51,6 +51,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 this, ((IPlatformGraphicsContext)this.Context).DeviceStrategy,
                 _glMajorVersion, _glMinorVersion);
 
+            base.Initialize(this.Capabilities);
         }
 
         public override void PlatformSetup()

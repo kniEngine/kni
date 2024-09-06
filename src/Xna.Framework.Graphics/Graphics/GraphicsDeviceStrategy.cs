@@ -113,47 +113,6 @@ namespace Microsoft.Xna.Platform.Graphics
             // Setup
             _mainContext = this.CreateGraphicsContext();
 
-             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelConstantBuffers = new ConstantBufferCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, 16);
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexTextures = new TextureCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, ((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexTextureSlots);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelTextures = new TextureCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, ((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxTextureSlots);
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelSamplerStates = new SamplerStateCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, ((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxTextureSlots);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexSamplerStates = new SamplerStateCollection( ((IPlatformGraphicsContext)_mainContext).Strategy, ((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexTextureSlots);
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateAdditive = new BlendState(BlendState.Additive);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateAlphaBlend = new BlendState(BlendState.AlphaBlend);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateNonPremultiplied = new BlendState(BlendState.NonPremultiplied);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateOpaque = new BlendState(BlendState.Opaque);
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy.BlendState = BlendState.Opaque;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendStateDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._blendFactorDirty = true;
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDefault = new DepthStencilState(DepthStencilState.Default);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDepthRead = new DepthStencilState(DepthStencilState.DepthRead);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateNone = new DepthStencilState(DepthStencilState.None);
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy.DepthStencilState = DepthStencilState.Default;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._depthStencilStateDirty = true;
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullClockwise = new RasterizerState(RasterizerState.CullClockwise);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullCounterClockwise = new RasterizerState(RasterizerState.CullCounterClockwise);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateCullNone = new RasterizerState(RasterizerState.CullNone);
-
-            ((IPlatformGraphicsContext)_mainContext).Strategy.RasterizerState = RasterizerState.CullCounterClockwise;
-            ((IPlatformGraphicsContext)_mainContext).Strategy._rasterizerStateDirty = true;
-
-            // Force set the buffers and shaders on next ApplyState() call
-             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffers = new VertexBufferCollection(((IPlatformGraphicsContext)_mainContext).Strategy.Capabilities.MaxVertexBufferSlots);
-             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexBuffersDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._indexBufferDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._vertexShaderDirty = true;
-             ((IPlatformGraphicsContext)_mainContext).Strategy._pixelShaderDirty = true;
-
-             ((IPlatformGraphicsContext)_mainContext).Strategy._scissorRectangleDirty = true;
-
             ((IPlatformGraphicsContext)_mainContext).Strategy.PlatformSetup();
 
             this.PlatformInitialize();
