@@ -131,18 +131,19 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _strategy.MultiSampleMask = value; }
         }
 
-        internal void BindToGraphicsDevice(GraphicsDeviceStrategy deviceStrategy)
+        internal void BindToGraphicsDevice(GraphicsContextStrategy contextStrategy)
         {
             if (_strategy is ReadonlyBlendStateStrategy)
                 throw new InvalidOperationException("You cannot bind a default state object.");
 
+            GraphicsDeviceStrategy deviceStrategy  = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy;
             if (this.GraphicsDevice != deviceStrategy.Device)
             {
                 if (this.GraphicsDevice == null)
                 {
                     System.Diagnostics.Debug.Assert(deviceStrategy.Device != null);
 
-                    _strategy = ((IPlatformGraphicsContext)deviceStrategy.CurrentContext).Strategy.CreateBlendStateStrategy(_strategy);
+                    _strategy = contextStrategy.CreateBlendStateStrategy(_strategy);
                     SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
                 }
                 else

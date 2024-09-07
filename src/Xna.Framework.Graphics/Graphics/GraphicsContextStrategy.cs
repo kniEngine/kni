@@ -176,7 +176,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Blend state is now bound to a device... no one should
                 // be changing the state of the blend state object now!
-                newBlendState.BindToGraphicsDevice(((IPlatformGraphicsContext)this.Context).DeviceStrategy);
+                newBlendState.BindToGraphicsDevice(this);
 
                 _actualBlendState = newBlendState;
 
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_depthStencilState, DepthStencilState.None))
                     newDepthStencilState = _depthStencilStateNone;
 
-                newDepthStencilState.BindToGraphicsDevice(((IPlatformGraphicsContext)this.Context).DeviceStrategy);
+                newDepthStencilState.BindToGraphicsDevice(this);
 
                 _actualDepthStencilState = newDepthStencilState;
 
@@ -257,7 +257,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 else if (ReferenceEquals(_rasterizerState, RasterizerState.CullNone))
                     newRasterizerState = _rasterizerStateCullNone;
 
-                newRasterizerState.BindToGraphicsDevice(((IPlatformGraphicsContext)this.Context).DeviceStrategy);
+                newRasterizerState.BindToGraphicsDevice(this);
 
                 _actualRasterizerState = newRasterizerState;
 
