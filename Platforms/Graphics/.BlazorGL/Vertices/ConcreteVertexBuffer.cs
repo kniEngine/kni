@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 for (int i = 0; i < elementCount; i++)
                 {
-                    GL.BufferSubData<T>(WebGLBufferType.ARRAY, dstOffset, data, startIndex, 1);
+                    GL.BufferSubData<T>(WebGLBufferType.ARRAY, dstOffset, data, startIndex+i, 1);
                     GL.CheckGLError();
 
                     dstOffset += vertexStride;
