@@ -550,7 +550,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 //GL.DetachShader(program, pixelShaderHandle);
                 program.Dispose();
 
-                throw new InvalidOperationException("Unable to link effect program");
+                throw new InvalidOperationException("Unable to link effect program."
+                    + Environment.NewLine + log);
             }
         }
 

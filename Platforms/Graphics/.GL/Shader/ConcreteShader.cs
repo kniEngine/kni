@@ -60,7 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 _shaderHandle = -1;
 
-                throw new InvalidOperationException("Shader Compilation Failed");
+                throw new InvalidOperationException("Shader Compilation Failed."
+                    + Environment.NewLine + log);
             }
         }
 
