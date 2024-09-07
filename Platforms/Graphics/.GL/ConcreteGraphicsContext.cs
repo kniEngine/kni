@@ -587,7 +587,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.DeleteProgram(program);
                     GL.CheckGLError();
                 }
-                throw new InvalidOperationException("Unable to link effect program");
+                throw new InvalidOperationException("Unable to link effect program."
+                    + Environment.NewLine + log);
             }
         }
 
