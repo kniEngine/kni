@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using nkast.Wasm.Canvas.WebGL;
@@ -33,6 +34,13 @@ namespace Microsoft.Xna.Platform.Graphics
             _shaderHandle = GL.CreateShader(shaderType);
             GL.CheckGLError();
             string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+
+            if (GL is IWebGL2RenderingContext)
+            {
+                // GLES 3.00 is required for dFdx/dFdy
+                glslCode = ConvertGLES100ToGLES300(contextStrategy, shaderType, glslCode);
+            }
+
             GL.ShaderSource(_shaderHandle, glslCode);
             GL.CheckGLError();
             GL.CompileShader(_shaderHandle);
@@ -49,6 +57,44 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new InvalidOperationException("Shader Compilation Failed."
                     + Environment.NewLine + log);
             }
+        }
+
+        static Regex rgxOES = new Regex(
+                @"#extension GL_OES_standard_derivatives : enable", System.Text.RegularExpressions.RegexOptions.Multiline);
+        static Regex rgxAttribute = new Regex(
+            @"^attribute(?=\s)", System.Text.RegularExpressions.RegexOptions.Multiline);
+        static Regex rgxVarying = new Regex(
+            @"^varying(?=\s)", System.Text.RegularExpressions.RegexOptions.Multiline);
+        static Regex rgxFragColor = new Regex(
+            @"^#define ps_oC0 gl_FragColor", System.Text.RegularExpressions.RegexOptions.Multiline);
+        static Regex rgxTexture = new Regex(
+            @"texture(2D|3D|Cube)(?=\()", System.Text.RegularExpressions.RegexOptions.Multiline);
+
+        private string ConvertGLES100ToGLES300(object glsl, WebGLShaderType shaderType, string glslCode)
+        {
+            switch (shaderType)
+            {
+                case WebGLShaderType.VERTEX:
+                    {
+                        glslCode = rgxVarying.Replace(glslCode, "out");
+                    }
+                    break;
+
+                case WebGLShaderType.FRAGMENT:
+                    {
+                        glslCode = rgxOES.Replace(glslCode, "");
+                        glslCode = rgxVarying.Replace(glslCode, "in");
+                        glslCode = rgxFragColor.Replace(glslCode, "out vec4 ps_oC0;");
+                    }
+                    break;
+            }
+
+            glslCode = rgxAttribute.Replace(glslCode, "in");
+            glslCode = rgxTexture.Replace(glslCode, "texture");
+
+            glslCode = "#version 300 es" + '\n' + glslCode;
+
+            return glslCode;
         }
 
         protected override void PlatformGraphicsContextLost()
