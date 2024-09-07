@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         static Regex rgxOES = new Regex(
-                @"#extension GL_OES_standard_derivatives : enable", System.Text.RegularExpressions.RegexOptions.Multiline);
+                @"^#extension GL_OES_standard_derivatives : enable", System.Text.RegularExpressions.RegexOptions.Multiline);
         static Regex rgxAttribute = new Regex(
                 @"^attribute(?=\s)", System.Text.RegularExpressions.RegexOptions.Multiline);
         static Regex rgxVarying = new Regex(
