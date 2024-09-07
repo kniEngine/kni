@@ -62,13 +62,13 @@ namespace Microsoft.Xna.Platform.Graphics
         static Regex rgxOES = new Regex(
                 @"#extension GL_OES_standard_derivatives : enable", System.Text.RegularExpressions.RegexOptions.Multiline);
         static Regex rgxAttribute = new Regex(
-            @"^attribute(?=\s)", System.Text.RegularExpressions.RegexOptions.Multiline);
+                @"^attribute(?=\s)", System.Text.RegularExpressions.RegexOptions.Multiline);
         static Regex rgxVarying = new Regex(
-            @"^varying(?=\s)", System.Text.RegularExpressions.RegexOptions.Multiline);
+                @"^varying(?=\s)", System.Text.RegularExpressions.RegexOptions.Multiline);
         static Regex rgxFragColor = new Regex(
-            @"^#define ps_oC0 gl_FragColor", System.Text.RegularExpressions.RegexOptions.Multiline);
+                @"^#define ps_oC0 gl_FragColor", System.Text.RegularExpressions.RegexOptions.Multiline);
         static Regex rgxTexture = new Regex(
-            @"texture(2D|3D|Cube)(?=\()", System.Text.RegularExpressions.RegexOptions.Multiline);
+                @"texture(2D|3D|Cube)(?=\()", System.Text.RegularExpressions.RegexOptions.Multiline);
 
         private string ConvertGLES100ToGLES300(object glsl, WebGLShaderType shaderType, string glslCode)
         {
