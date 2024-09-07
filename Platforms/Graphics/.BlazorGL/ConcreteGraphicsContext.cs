@@ -436,6 +436,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 GL.UseProgram(shaderProgram.Program);
                 GL.CheckGLError();
+
                 _shaderProgram = shaderProgram;
             }
 
@@ -512,6 +513,19 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.LinkProgram(program);
             GL.CheckGLError();
 
+            bool linkStatus;
+            linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
+            if (linkStatus == false)
+            {
+                string log = GL.GetProgramInfoLog(program);
+                //vertexShaderHandle.Dispose();
+                //pixelShaderHandle.Dispose();
+                program.Dispose();
+
+                throw new InvalidOperationException("Unable to link effect program."
+                    + Environment.NewLine + log);
+            }
+
             GL.UseProgram(program);
             GL.CheckGLError();
 
@@ -536,23 +550,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            bool linkStatus;
-            linkStatus = GL.GetProgramParameter(program, WebGLProgramStatus.LINK);
-
-            if (linkStatus == true)
-            {
-                return new ShaderProgram(program);
-            }
-            else
-            {
-                string log = GL.GetProgramInfoLog(program);
-                //GL.DetachShader(program, vertexShaderHandle);
-                //GL.DetachShader(program, pixelShaderHandle);
-                program.Dispose();
-
-                throw new InvalidOperationException("Unable to link effect program."
-                    + Environment.NewLine + log);
-            }
+            return new ShaderProgram(program);
         }
 
         public WebGLUniformLocation GetUniformLocation(ShaderProgram shaderProgram, string name)

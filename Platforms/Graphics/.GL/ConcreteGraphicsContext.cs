@@ -543,6 +543,24 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.LinkProgram(program);
             GL.CheckGLError();
 
+            int linkStatus;
+            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
+            GL.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
+            if (linkStatus == (int)Bool.True)
+            {
+                string log = GL.GetProgramInfoLog(program);
+                GL.DetachShader(program, vertexShaderHandle);
+                GL.DetachShader(program, pixelShaderHandle);
+
+                if (GL.IsProgram(program))
+                {
+                    GL.DeleteProgram(program);
+                    GL.CheckGLError();
+                }
+                throw new InvalidOperationException("Unable to link effect program."
+                    + Environment.NewLine + log);
+            }
+
             GL.UseProgram(program);
             GL.CheckGLError();
 
@@ -567,29 +585,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
             }
 
-            int linkStatus;
-            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
-            GL.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
 
-            if (linkStatus == (int)Bool.True)
-            {
-                return new ShaderProgram(program);
-            }
-            else
-            {
-                string log = GL.GetProgramInfoLog(program);
-                Console.WriteLine(log);
-                GL.DetachShader(program, vertexShaderHandle);
-                GL.DetachShader(program, pixelShaderHandle);
-
-                if (GL.IsProgram(program))
-                {
-                    GL.DeleteProgram(program);
-                    GL.CheckGLError();
-                }
-                throw new InvalidOperationException("Unable to link effect program."
-                    + Environment.NewLine + log);
-            }
+            return new ShaderProgram(program);
         }
 
         internal int GetUniformLocation(ShaderProgram shaderProgram, string name)
