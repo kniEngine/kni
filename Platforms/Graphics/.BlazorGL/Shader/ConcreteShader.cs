@@ -67,6 +67,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 @"^varying(?=\s)", RegexOptions.Multiline);
         static Regex rgxFragColor = new Regex(
                 @"^#define (\w+) gl_FragColor", RegexOptions.Multiline);
+        static Regex rgxFragData = new Regex(
+                @"^#define (\w+) gl_FragData\[(\d+)\]", RegexOptions.Multiline);
         static Regex rgxTexture = new Regex(
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
 
@@ -85,6 +87,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         glslCode = rgxOES.Replace(glslCode, "");
                         glslCode = rgxVarying.Replace(glslCode, "in");
                         glslCode = rgxFragColor.Replace(glslCode, "out vec4 $1;");
+                        glslCode = rgxFragData .Replace(glslCode, "layout(location=$2) out vec4 $1;");
                     }
                     break;
             }
