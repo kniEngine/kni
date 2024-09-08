@@ -546,7 +546,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int linkStatus;
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linkStatus);
             GL.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
-            if (linkStatus == (int)Bool.True)
+            if (linkStatus == (int)Bool.False)
             {
                 string log = GL.GetProgramInfoLog(program);
                 GL.DetachShader(program, vertexShaderHandle);
