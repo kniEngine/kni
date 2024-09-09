@@ -51,7 +51,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             SupportsTextureArrays = profile >= GraphicsProfile.HiDef;
             //SupportsDepthClamp = profile >= GraphicsProfile.HiDef;
-            SupportsFloatTextures = profile >= GraphicsProfile.HiDef;
+            SupportsFloatTextures = (profile >= GraphicsProfile.HiDef)
+                ? GL.GetExtension("EXT_color_buffer_float") 
+                : false;
             SupportsHalfFloatTextures = profile >= GraphicsProfile.HiDef;
             SupportsNormalized = profile >= GraphicsProfile.HiDef;
             
