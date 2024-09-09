@@ -1234,6 +1234,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 int glFramebuffer = _glFramebuffers[base.CurrentRenderTargetBindings];
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
+                GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, glResolveFramebuffer);
                 GL.CheckGLError();
 
                 for (int i = 0; i < base.RenderTargetCount; i++)
