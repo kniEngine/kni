@@ -907,7 +907,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         internal unsafe void DrawBuffer(DrawBufferMode buffer)
         {
-            DrawBufferInternal(buffer);
+            DrawBuffersInternal(1, &buffer);
         }
 
         [System.Security.SuppressUnmanagedCodeSecurity()]

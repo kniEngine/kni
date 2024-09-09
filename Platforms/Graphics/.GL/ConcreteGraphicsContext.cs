@@ -27,6 +27,8 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal abstract class ConcreteGraphicsContextGL : GraphicsContextStrategy
     {
+        private DrawBufferMode[] _drawBuffers;
+
         // Keeps track of last applied state to avoid redundant OpenGL calls
         internal BlendState _lastBlendState = new BlendState();
         internal bool _lastBlendEnable = false;
@@ -109,6 +111,12 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformBlendState)base._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
             ((IPlatformDepthStencilState)base._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
             ((IPlatformRasterizerState)base._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState((ConcreteGraphicsContextGL)this, true);
+    
+        
+            // Initialize draw buffer attachment array
+            this._drawBuffers = new DrawBufferMode[((ConcreteGraphicsCapabilities)base.Capabilities).MaxDrawBuffers];
+            for (int i = 0; i < this._drawBuffers.Length; i++)
+                this._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
         }
 
         public abstract void BindDisposeContext();
