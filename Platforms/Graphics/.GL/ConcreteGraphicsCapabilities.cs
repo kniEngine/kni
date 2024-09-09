@@ -29,11 +29,9 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         internal bool SupportsFramebufferObjectIMG { get; private set; }
 
-#if DESKTOPGL
         private int _maxDrawBuffers;
 
         internal int MaxDrawBuffers { get { return _maxDrawBuffers; } }
-#endif
 
 
         internal void PlatformInitialize(ConcreteGraphicsContextGL cgraphicsContext, GraphicsDeviceStrategy deviceStrategy, int majorVersion, int minorVersion)
@@ -165,10 +163,8 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsSeparateBlendStates = majorVersion >= 4 || GL.Extensions.Contains("GL_ARB_draw_buffers_blend");
 #endif
 
-#if DESKTOPGL
             GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
             GL.CheckGLError();
-#endif
         }
 
     }

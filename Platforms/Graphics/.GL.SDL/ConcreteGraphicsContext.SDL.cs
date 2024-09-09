@@ -23,7 +23,6 @@ namespace Microsoft.Xna.Platform.Graphics
         private IntPtr _glSharedContext;
         private IntPtr _glSharedContextWindowHandle;
 
-        internal DrawBufferMode[] _drawBuffers;
 
         internal IntPtr GlContext { get { return _glContext; } }
 
@@ -54,16 +53,6 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Initialize(this.Capabilities);
 
             this.PlatformSetup();
-        }
-
-        public override void PlatformSetup()
-        {
-            base.PlatformSetup();
-
-            // Initialize draw buffer attachment array
-            this._drawBuffers = new DrawBufferMode[((ConcreteGraphicsCapabilities)base.Capabilities).MaxDrawBuffers];
-            for (int i = 0; i < this._drawBuffers.Length; i++)
-                this._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
         }
 
         public void MakeCurrent(IntPtr winHandle)
