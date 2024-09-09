@@ -9,6 +9,9 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteGraphicsCapabilities : GraphicsCapabilities
     {
+        private int _maxDrawBuffers;
+
+        internal int MaxDrawBuffers { get { return _maxDrawBuffers; } }
 
         internal void PlatformInitialize(ConcreteGraphicsContext cgraphicsContext, GraphicsDeviceStrategy deviceStrategy)
         {
@@ -74,6 +77,9 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsSeparateBlendStates = true;
 
             MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
+
+            if (profile >= GraphicsProfile.HiDef)
+                _maxDrawBuffers = 4;
         }
 
     }
