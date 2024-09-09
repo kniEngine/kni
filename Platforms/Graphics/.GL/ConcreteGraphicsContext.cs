@@ -1255,9 +1255,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this._supportsInvalidateFramebuffer)
                 {
+#if OPENGL
                     Debug.Assert(this._supportsInvalidateFramebuffer);
                     GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
                     GL.CheckGLError();
+#endif
                 }
 
                 if (_lastRasterizerState.ScissorTestEnable)
