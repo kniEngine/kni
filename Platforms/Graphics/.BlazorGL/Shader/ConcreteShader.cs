@@ -62,6 +62,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         static Regex rgxOES = new Regex(
                 @"^#extension GL_OES_standard_derivatives : enable", RegexOptions.Multiline);
+        static Regex rgxPrecision = new Regex(
+                @"precision mediump (float|int);", RegexOptions.Multiline);
         static Regex rgxAttribute = new Regex(
                 @"^attribute(?=\s)", RegexOptions.Multiline);
         static Regex rgxVarying = new Regex(
@@ -93,6 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
             }
 
+            glslCode = rgxPrecision.Replace(glslCode, "precision highp $1;");
             glslCode = rgxAttribute.Replace(glslCode, "in");
             glslCode = rgxTexture.Replace(glslCode, "texture");
 
