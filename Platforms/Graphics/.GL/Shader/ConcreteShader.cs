@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
@@ -38,6 +39,16 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _shaderHandle = GL.CreateShader(shaderType);
             GL.CheckGLError();
+
+            if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
+            &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES)
+            {
+                string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+                // GLES 3.00 is required for gl_FragData
+                glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
+                shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glslCode);
+            }
+
             GL.ShaderSource(_shaderHandle, shaderBytecode);
             GL.CheckGLError();
             GL.CompileShader(_shaderHandle);
@@ -63,6 +74,50 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new InvalidOperationException("Shader Compilation Failed."
                     + Environment.NewLine + log);
             }
+        }
+
+        static Regex rgxOES = new Regex(
+                @"^#extension GL_OES_standard_derivatives : enable", RegexOptions.Multiline);
+        static Regex rgxPrecision = new Regex(
+                @"precision mediump (float|int);", RegexOptions.Multiline);
+        static Regex rgxAttribute = new Regex(
+                @"^attribute(?=\s)", RegexOptions.Multiline);
+        static Regex rgxVarying = new Regex(
+                @"^varying(?=\s)", RegexOptions.Multiline);
+        static Regex rgxFragColor = new Regex(
+                @"^#define (\w+) gl_FragColor", RegexOptions.Multiline);
+        static Regex rgxFragData = new Regex(
+                @"^#define (\w+) gl_FragData\[(\d+)\]", RegexOptions.Multiline);
+        static Regex rgxTexture = new Regex(
+                @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
+
+        private string ConvertGLES100ToGLES300(ShaderType shaderType, string glslCode)
+        {
+            switch (shaderType)
+            {
+                case ShaderType.VertexShader:
+                    {
+                        glslCode = rgxVarying.Replace(glslCode, "out");
+                    }
+                    break;
+
+                case ShaderType.FragmentShader:
+                    {
+                        glslCode = rgxOES.Replace(glslCode, "");
+                        glslCode = rgxVarying.Replace(glslCode, "in");
+                        glslCode = rgxFragColor.Replace(glslCode, "out vec4 $1;");
+                        glslCode = rgxFragData .Replace(glslCode, "layout(location=$2) out vec4 $1;");
+                    }
+                    break;
+            }
+
+            glslCode = rgxPrecision.Replace(glslCode, "precision highp $1;");
+            glslCode = rgxAttribute.Replace(glslCode, "in");
+            glslCode = rgxTexture.Replace(glslCode, "texture");
+
+            glslCode = "#version 300 es" + '\n' + glslCode;
+
+            return glslCode;
         }
 
         protected override void PlatformGraphicsContextLost()
