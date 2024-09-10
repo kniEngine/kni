@@ -134,3 +134,9 @@
 /processorParam:DebugMode=Auto
 /build:NewSyntax_s0s1t0t1.fx
 
+#begin DeferredBasicEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:DeferredBasicEffect.fx
+

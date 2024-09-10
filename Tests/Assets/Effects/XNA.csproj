@@ -64,6 +64,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="DeferredBasicEffect.fx">
+      <Name>DeferredBasicEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <Compile Include="BlackOut.fx">
       <Name>BlackOut</Name>
       <Importer>EffectImporter</Importer>
