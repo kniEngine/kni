@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (GL is IWebGL2RenderingContext)
             {
                 // GLES 3.00 is required for dFdx/dFdy
-                glslCode = ConvertGLES100ToGLES300(contextStrategy, shaderType, glslCode);
+                glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
             }
 
             GL.ShaderSource(_shaderHandle, glslCode);
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Graphics
         static Regex rgxTexture = new Regex(
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
 
-        private string ConvertGLES100ToGLES300(object glsl, WebGLShaderType shaderType, string glslCode)
+        private string ConvertGLES100ToGLES300(WebGLShaderType shaderType, string glslCode)
         {
             switch (shaderType)
             {
