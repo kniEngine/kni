@@ -1352,6 +1352,10 @@ namespace Microsoft.Xna.Platform.Graphics
 #if DESKTOPGL
             GL.DrawBuffers(base.RenderTargetCount, this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers);
 #endif
+#if GLES
+            if (GL.DrawBuffers!=null)
+                GL.DrawBuffers(base.RenderTargetCount, this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers);
+#endif
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
