@@ -35,10 +35,11 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
 
-            if (GL is IWebGL2RenderingContext)
+            if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
+            &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL)
             {
                 // GLES 3.00 is required for dFdx/dFdy
-                glslCode = ConvertGLES100ToGLES300(contextStrategy, shaderType, glslCode);
+                glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
             }
 
             GL.ShaderSource(_shaderHandle, glslCode);
@@ -61,6 +62,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         static Regex rgxOES = new Regex(
                 @"^#extension GL_OES_standard_derivatives : enable", RegexOptions.Multiline);
+        static Regex rgxPrecision = new Regex(
+                @"precision mediump (float|int);", RegexOptions.Multiline);
         static Regex rgxAttribute = new Regex(
                 @"^attribute(?=\s)", RegexOptions.Multiline);
         static Regex rgxVarying = new Regex(
@@ -72,7 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
         static Regex rgxTexture = new Regex(
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
 
-        private string ConvertGLES100ToGLES300(object glsl, WebGLShaderType shaderType, string glslCode)
+        private string ConvertGLES100ToGLES300(WebGLShaderType shaderType, string glslCode)
         {
             switch (shaderType)
             {
@@ -92,6 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
             }
 
+            glslCode = rgxPrecision.Replace(glslCode, "precision highp $1;");
             glslCode = rgxAttribute.Replace(glslCode, "in");
             glslCode = rgxTexture.Replace(glslCode, "texture");
 
