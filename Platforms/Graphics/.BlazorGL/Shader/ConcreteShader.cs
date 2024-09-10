@@ -35,7 +35,8 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
 
-            if (GL is IWebGL2RenderingContext)
+            if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
+            &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL)
             {
                 // GLES 3.00 is required for dFdx/dFdy
                 glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
