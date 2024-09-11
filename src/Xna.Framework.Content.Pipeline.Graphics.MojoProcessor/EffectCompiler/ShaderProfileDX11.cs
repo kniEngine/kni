@@ -185,6 +185,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                                 textureInfo.textureName = samplers[s].textureName;
 
                             textureInfo.samplerSlot = samplers[s].samplerSlot;
+                            textureInfo.textureSlot = samplers[s].samplerSlot;
                             if (samplers[s].state != null)
                             {
                                 textureInfo.state = samplers[s].state;
