@@ -361,8 +361,8 @@ namespace Kni.Tests.Graphics
             Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
 
-            SamplerState sampler0 = SamplerState.PointWrap;
-            SamplerState sampler1 = SamplerState.PointClamp;
+            SamplerState sampler0 = SamplerState.LinearWrap;
+            SamplerState sampler1 = SamplerState.LinearWrap;
 #if XNA
             sampler0 = null;
             sampler1 = null;
