@@ -175,8 +175,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
 
             // scale position
-            position.X = position.X * (DisplayWidth / winSize.X);
-            position.Y = position.Y * (DisplayHeight / winSize.Y);
+            position.X = position.X * DisplayWidth / winSize.X;
+            position.Y = position.Y * DisplayHeight / winSize.Y;
 
             TimeSpan currentTimestamp = this.CurrentTimestamp;
             int currentFramestamp = this._currentFramestamp;
@@ -217,8 +217,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
 
             // scale position
-            position.X = position.X * (DisplayWidth / winSize.X);
-            position.Y = position.Y * (DisplayHeight / winSize.Y);
+            position.X = position.X * DisplayWidth / winSize.X;
+            position.Y = position.Y * DisplayHeight / winSize.Y;
 
             TimeSpan currentTimestamp = this.CurrentTimestamp;
             int currentFramestamp = this._currentFramestamp;
@@ -282,8 +282,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
 
             // scale position
-            position.X = position.X * (DisplayWidth / winSize.X);
-            position.Y = position.Y * (DisplayHeight / winSize.Y);
+            position.X = position.X * DisplayWidth / winSize.X;
+            position.Y = position.Y * DisplayHeight / winSize.Y;
 
             TimeSpan currentTimestamp = this.CurrentTimestamp;
             int currentFramestamp = this._currentFramestamp;
