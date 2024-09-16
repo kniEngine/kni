@@ -33,75 +33,190 @@ namespace Microsoft.Xna.Platform.Graphics
                 out _glType);
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
-            _multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
+            PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, false);
+
+            PlatformConstructRenderTarget2D(contextStrategy, width, height, mipMap, preferredDepthFormat, _multiSampleCount, false);
+        }
+
+        private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredSurfaceFormat, object shared)
+        {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            _glTarget = OpenGL.TextureTarget.Texture2D;
-            _glTexture = glTextureHandle.ToInt32();
+            _glTarget = TextureTarget.Texture2D;
+            _glTexture = _glTextureHandle.ToInt32();
 
-            OpenGL.TextureTarget colorTextureTarget = OpenGL.TextureTarget.Texture2D;
+            TextureTarget colorTextureTarget = TextureTarget.Texture2D;
             GL.BindTexture(colorTextureTarget, _glTexture);
             GL.CheckGLError();
-            GL.TexParameteri(colorTextureTarget, OpenGL.TextureParameterName.TextureWrapS, (int)OpenGL.TextureWrapMode.ClampToEdge);
+            GL.TexParameteri(colorTextureTarget, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
             GL.CheckGLError();
-            GL.TexParameteri(colorTextureTarget, OpenGL.TextureParameterName.TextureWrapT, (int)OpenGL.TextureWrapMode.ClampToEdge);
+            GL.TexParameteri(colorTextureTarget, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
             GL.CheckGLError();
-            GL.TexParameteri(colorTextureTarget, OpenGL.TextureParameterName.TextureMinFilter, (int)OpenGL.TextureMinFilter.Linear);
+            GL.TexParameteri(colorTextureTarget, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.CheckGLError();
-            GL.TexParameteri(colorTextureTarget, OpenGL.TextureParameterName.TextureMagFilter, (int)OpenGL.TextureMagFilter.Linear);
+            GL.TexParameteri(colorTextureTarget, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.CheckGLError();
             GL.BindTexture(colorTextureTarget, 0);
             GL.CheckGLError();
 
+        }
 
-            //if (multisamples > 1 && glRenderbufferStorageMultisampleEXT != NULL
-            //                     && glFramebufferTexture2DMultisampleEXT != NULL)
-            //{
+        private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, DepthFormat preferredDepthFormat, int multiSampleCount, object shared)
+        {
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            //}
-            //else
+            IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)this;
+
+            if (multiSampleCount > 1)
             {
-                // Create depth buffer.
-                ((IRenderTargetStrategyGL)this).GLDepthBuffer = GL.GenRenderbuffer();
-                GL.BindRenderbuffer(OpenGL.RenderbufferTarget.Renderbuffer, ((IRenderTargetStrategyGL)this).GLDepthBuffer);
-                GL.CheckGLError();
-                GL.RenderbufferStorage(OpenGL.RenderbufferTarget.Renderbuffer, OpenGL.RenderbufferStorage.DepthComponent24, width, height);
-                GL.CheckGLError();
-                GL.BindRenderbuffer(OpenGL.RenderbufferTarget.Renderbuffer, 0);
-                GL.CheckGLError();
+                RenderbufferStorage colorInternalFormat = RenderbufferStorage.Rgba8;
 
-
-                // Create the frame buffer.
-                uint framebufferId = (uint)GL.GenFramebuffer();
-                GL.BindFramebuffer(OpenGL.FramebufferTarget.Framebuffer, (int)framebufferId);
+                renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
                 GL.CheckGLError();
-                
-                GL.FramebufferRenderbuffer(
-                    OpenGL.FramebufferTarget.Framebuffer,
-                    OpenGL.FramebufferAttachment.DepthAttachment,
-                    OpenGL.RenderbufferTarget.Renderbuffer,
-                    ((IRenderTargetStrategyGL)this).GLDepthBuffer);
+                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
                 GL.CheckGLError();
-
-                GL.FramebufferTexture2D(
-                    OpenGL.FramebufferTarget.Framebuffer, OpenGL.FramebufferAttachment.ColorAttachment0, OpenGL.TextureTarget.Texture2D, _glTexture, 0);
-                GL.CheckGLError();
-                OpenGL.FramebufferErrorCode renderFramebufferStatus = GL.CheckFramebufferStatus(OpenGL.FramebufferTarget.Framebuffer);
-             
-                GL.BindFramebuffer(OpenGL.FramebufferTarget.Framebuffer, 0);
-                GL.CheckGLError();
-                if (renderFramebufferStatus != OpenGL.FramebufferErrorCode.FramebufferComplete)
+                if (multiSampleCount > 0)
                 {
-                    Console.WriteLine(
-                        "Incomplete frame buffer object: {0}",
-                        "" //GL.FrameBufferStatusString(renderFramebufferStatus)
-                        );
-                    throw new Exception("Incomplete frame buffer");
+                    System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
+                    GL.CheckGLError();
+                }
+                else
+                {
+                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, colorInternalFormat, width, height);
+                    GL.CheckGLError();
+                }
+            }
+
+            if (preferredDepthFormat != DepthFormat.None)
+            {
+                RenderbufferStorage depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                RenderbufferStorage stencilInternalFormat = (RenderbufferStorage)0;
+                switch (preferredDepthFormat)
+                {
+                    case DepthFormat.None:
+                        break;
+
+                    case DepthFormat.Depth16:
+                        depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                        break;
+
+#if GLES
+                    case DepthFormat.Depth24:
+                        if (contextStrategy.Capabilities.SupportsDepth24)
+                            depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                        else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
+                            depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
+                        else
+                            depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                        break;
+
+                    case DepthFormat.Depth24Stencil8:
+                        if (contextStrategy.Capabilities.SupportsPackedDepthStencil)
+                            depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
+                        else
+                        {
+                            if (contextStrategy.Capabilities.SupportsDepth24)
+                                depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                            else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
+                                depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
+                            else
+                                depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                            stencilInternalFormat = RenderbufferStorage.StencilIndex8;
+                        }
+                        break;
+
+#else
+                    case DepthFormat.Depth24:
+                        depthInternalFormat = RenderbufferStorage.DepthComponent24;
+                        break;
+
+                    case DepthFormat.Depth24Stencil8:
+                        depthInternalFormat = RenderbufferStorage.Depth24Stencil8;
+                        break;
+#endif
+
+                    default:
+                        throw new InvalidOperationException("preferredDepthFormat");
                 }
 
-                GL.DeleteFramebuffer((int)framebufferId);
+                if (depthInternalFormat != 0)
+                {
+                    // Create depth buffer.
+                    renderTargetGL.GLDepthBuffer = GL.GenRenderbuffer();
+                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
+                    GL.CheckGLError();
+                    if (multiSampleCount > 1)
+                    {
+                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, depthInternalFormat, width, height);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
+                        GL.CheckGLError();
+                    }
+                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
+                    GL.CheckGLError();
+
+                    if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
+                    {
+                        renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
+                        if (stencilInternalFormat != 0)
+                        {
+                            renderTargetGL.GLStencilBuffer = GL.GenRenderbuffer();
+                            GL.CheckGLError();
+                            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
+                            GL.CheckGLError();
+                            if (multiSampleCount > 1)
+                            {
+                                System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
+                                GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, stencilInternalFormat, width, height);
+                                GL.CheckGLError();
+                            }
+                            else
+                            {
+                                GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
+                                GL.CheckGLError();
+                            }
+                        }
+                    }
+
+                    // Create the frame buffer.
+                    //uint framebufferId = (uint)GL.GenFramebuffer();
+                    //GL.BindFramebuffer(FramebufferTarget.Framebuffer, (int)framebufferId);
+                    //GL.CheckGLError();
+
+                    //GL.FramebufferRenderbuffer(
+                    //    FramebufferTarget.Framebuffer,
+                    //    FramebufferAttachment.DepthAttachment,
+                    //    RenderbufferTarget.Renderbuffer,
+                    //    renderTargetGL.GLDepthBuffer);
+                    //GL.CheckGLError();
+
+                    //GL.FramebufferTexture2D(
+                    //    FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, 0);
+                    //GL.CheckGLError();
+                    //FramebufferErrorCode renderFramebufferStatus = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+
+                    //GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+                    //GL.CheckGLError();
+                    //if (renderFramebufferStatus != FramebufferErrorCode.FramebufferComplete)
+                    //{
+                    //    Console.WriteLine(
+                    //        "Incomplete frame buffer object: {0}",
+                    //        "" //GL.FrameBufferStatusString(renderFramebufferStatus)
+                    //        );
+                    //    throw new Exception("Incomplete frame buffer");
+                    //}
+
+                    //GL.DeleteFramebuffer((int)framebufferId);
+                }
+
             }
+
         }
 
         public void Present()
@@ -112,9 +227,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        static readonly OpenGL.FramebufferAttachment[] InvalidateFramebufferAttachements =
+        static readonly FramebufferAttachment[] InvalidateFramebufferAttachements =
         {
-            OpenGL.FramebufferAttachment.DepthAttachment,
+            FramebufferAttachment.DepthAttachment,
         };
 
         public override void ResolveSubresource(GraphicsContextStrategy contextStrategy)
@@ -122,7 +237,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             // Discard the depth buffer, so the tiler won't need to write it back out to memory.
-            GL.InvalidateFramebuffer(OpenGL.FramebufferTarget.Framebuffer, 1, InvalidateFramebufferAttachements);
+            GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 1, InvalidateFramebufferAttachements);
             GL.CheckGLError();
             // We now let the resolve happen implicitly.
 
