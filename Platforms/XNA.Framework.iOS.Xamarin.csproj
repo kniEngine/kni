@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+	<EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>xamarinios10</TargetFramework>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>

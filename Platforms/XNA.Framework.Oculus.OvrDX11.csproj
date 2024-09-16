@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\kniPackage.props" />
   <PropertyGroup>
@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;net6.0-windows;net8.0-windows</TargetFrameworks>
     <LangVersion>5</LangVersion>
