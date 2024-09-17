@@ -48,6 +48,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             bool supportsS3tc = contextStrategy.Capabilities.SupportsS3tc;
             //bool isGLES2 = GL.BoundApi == GL.RenderApi.ES && graphicsDevice._glMajorVersion == 2;
+            bool supportsFloat = contextStrategy.Capabilities.SupportsFloatTextures;
 
             switch (format)
             {
@@ -103,7 +104,30 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType = WebGLTexelType.UNSIGNED_BYTE;
                     glIsCompressedTexture = true;
                     break;
-                
+                case SurfaceFormat.Single:
+                    if (!supportsFloat) goto default;
+                    glInternalFormat = WebGLInternalFormat.R32F;
+                    glFormat = WebGLFormat.RED;
+                    glType = WebGLTexelType.FLOAT;
+                    glIsCompressedTexture = false;
+                    break;
+
+                case SurfaceFormat.Vector2:
+                    if (!supportsFloat) goto default;
+                    glInternalFormat = WebGLInternalFormat.RG32F;
+                    glFormat = WebGLFormat.RG;
+                    glType = WebGLTexelType.FLOAT;
+                    glIsCompressedTexture = false;
+                    break;
+
+                case SurfaceFormat.Vector4:
+                    if (!supportsFloat) goto default;
+                    glInternalFormat = WebGLInternalFormat.RGBA32F;
+                    glFormat = WebGLFormat.RGBA;
+                    glType = WebGLTexelType.FLOAT;
+                    glIsCompressedTexture = false;
+                    break;
+
                 default:
                     throw new PlatformNotSupportedException(string.Format("The requested SurfaceFormat `{0}` is not supported.", format));
             }
