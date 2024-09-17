@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
 
@@ -97,7 +98,32 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             Debug.Assert(GLVertexBuffer != null);
-            throw new NotImplementedException();
+
+            // IWebGL2RenderingContext is required.
+            if (this.GraphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
+                throw new NotSupportedException("GetData() on BlazorGL require HiDef profile or higher.");
+
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            GL.BindBuffer(WebGLBufferType.ARRAY, GLVertexBuffer);
+            GL.CheckGLError();
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
+
+            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+
+            if (elementSizeInByte == vertexStride || elementSizeInByte % vertexStride == 0)
+            {
+                ((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ARRAY, 
+                    offsetInBytes, data, startIndex, elementCount);
+            }
+            else
+            {
+                for (int i = 0; i < elementCount; i++)
+                {
+                    ((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ARRAY,
+                         offsetInBytes + (i*vertexStride), data, startIndex+i, 1);
+                }
+            }
         }
 
         protected override void PlatformGraphicsContextLost()
