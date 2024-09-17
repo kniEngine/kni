@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <remarks>
     /// This is an extension and not part of stock XNA.
     /// </remarks>
-    public class RenderTargetSwapChain : RenderTarget2D
+    internal class RenderTargetSwapChain : RenderTarget2D
     {
         internal ConcreteRenderTargetSwapChain _strategyRenderTargetSwapChain;
         public readonly PresentInterval PresentInterval;
