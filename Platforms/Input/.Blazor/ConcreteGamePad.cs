@@ -142,9 +142,37 @@ namespace Microsoft.Xna.Platform.Input
 
         public override bool PlatformSetVibration(int index, float leftMotor, float rightMotor, float leftTrigger, float rightTrigger)
         {
-            throw new NotImplementedException();
-        }
+            BlazorGamePadDevice gamepadDevice = _gamepads[index];
 
+            if (gamepadDevice != null)
+            {
+                Gamepad[] gamepads = Window.Current.Navigator.GetGamepads();
+                Gamepad gamepad = gamepads[gamepadDevice.DeviceIndex];
+
+                if (gamepad != null)
+                {
+                    GamepadHapticActuator va = gamepad.VibrationActuator;
+                    if (va != null)
+                    {
+                        float maxMotor = Math.Max(leftMotor, rightMotor);
+
+                        bool pulseResult = va.Pulse(maxMotor, 500);
+
+                        if (pulseResult)
+                            return true;
+
+                        GamepadHapticActuatorParams actuatorParams = new GamepadHapticActuatorParams();
+                        actuatorParams.Duration = 500;
+                        actuatorParams.StrongMagnitude = maxMotor;
+
+                        bool playEffectResult = va.PlayEffect("dual-rumble", actuatorParams);
+                        return playEffectResult;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         private GamePadState CreateGamePadState(Gamepad gamepad, GamePadDeadZone leftDeadZoneMode, GamePadDeadZone rightDeadZoneMode)
         {
