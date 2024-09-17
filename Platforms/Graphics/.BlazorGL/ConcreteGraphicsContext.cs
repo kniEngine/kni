@@ -15,6 +15,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private IWebGLRenderingContext _glContext;
 
+        private WebGL2DrawBufferAttachmentPoint[] _drawBuffers;
+
         // Keeps track of last applied state to avoid redundant OpenGL calls
         internal BlendState _lastBlendState = new BlendState();
         internal bool _lastBlendEnable = false;
@@ -102,6 +104,12 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformBlendState)base._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState(this, true);
             ((IPlatformDepthStencilState)base._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(this, true);
             ((IPlatformRasterizerState)base._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState(this, true);
+
+
+            // Initialize draw buffer attachment array
+            this._drawBuffers = new WebGL2DrawBufferAttachmentPoint[((ConcreteGraphicsCapabilities)base.Capabilities).MaxDrawBuffers];
+            for (int i = 0; i < this._drawBuffers.Length; i++)
+                this._drawBuffers[i] = (WebGL2DrawBufferAttachmentPoint)(WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
         }
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
@@ -1247,6 +1255,9 @@ namespace Microsoft.Xna.Platform.Graphics
 #if DESKTOPGL
             //GL.DrawBuffers(base.RenderTargetCount, _drawBuffers);
 #endif
+            var GL2 = GL as IWebGL2RenderingContext;
+            if (GL2 != null)
+                GL2.DrawBuffers(this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers, 0, base.RenderTargetCount);
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
