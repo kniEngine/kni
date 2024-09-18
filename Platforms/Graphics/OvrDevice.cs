@@ -51,6 +51,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         OvrStatusBits _statusFlags;
 
+        public bool TrackFloorLevelOrigin
+        {
+            get { return _ovrSession.GetTrackingOriginType() == OvrTrackingOrigin.FloorLevel; }
+            set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }
+        }
 
         public OvrDevice(IGraphicsDeviceService graphics) : base()
         {
