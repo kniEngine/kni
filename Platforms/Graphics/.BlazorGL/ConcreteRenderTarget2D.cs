@@ -64,11 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public bool IsContentLost
         {
-            get
-            {
-                throw new NotImplementedException("IsContentLost");
-                return _isContentLost;
-            }
+            get { return _isContentLost; }
         }
 
         public virtual void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)

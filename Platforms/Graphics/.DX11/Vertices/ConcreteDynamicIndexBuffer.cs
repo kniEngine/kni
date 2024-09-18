@@ -75,11 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
         #region IDynamicIndexBufferStrategy
         public bool IsContentLost
         {
-            get
-            {
-                throw new NotImplementedException("IsContentLost");
-                return _isContentLost;
-            }
+            get { return _isContentLost; }
         }
         #endregion IDynamicIndexBufferStrategy
 
