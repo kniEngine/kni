@@ -1082,7 +1082,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     }
 
                     // Apply transformation pivot.
-                    Matrix transform = pivot.GetTransform(scale, rotation, translation);
+                    //Matrix transform = pivot.GetTransform(scale, rotation, translation);
+
+                    // Apply transformation.
+                    // Assimp now seems to fix animation by default. pivot transformation
+                    // doesn't seem to be needed.
+                    // TODO: check if we can set FBXPreservePivotsConfig(false) and clean up the code.
+                    Matrix transform = Matrix.Identity;
+                    if (scale.HasValue)
+                        transform *= Matrix.CreateScale(scale.Value);
+                    if (rotation.HasValue)
+                        transform *= Matrix.CreateFromQuaternion(rotation.Value);
+                    if (translation.HasValue)
+                        transform *= Matrix.CreateTranslation(translation.Value);
 
                     long ticks = (long)(time * (TimeSpan.TicksPerSecond / aiAnimation.TicksPerSecond));
                     channel.Add(new AnimationKeyframe(TimeSpan.FromTicks(ticks), transform));
