@@ -166,46 +166,46 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 Matrix transform = Matrix.Identity;
 
                 if (GeometricScaling.HasValue)
-                    transform *= GeometricScaling.Value;
+                    transform = transform * GeometricScaling.Value;
                 if (GeometricRotation.HasValue)
-                    transform *= GeometricRotation.Value;
+                    transform = transform * GeometricRotation.Value;
                 if (GeometricTranslation.HasValue)
-                    transform *= GeometricTranslation.Value;
+                    transform = transform * GeometricTranslation.Value;
 
                 if (ScalingPivotInverse.HasValue)
-                    transform *= ScalingPivotInverse.Value;
+                    transform = transform * ScalingPivotInverse.Value;
 
                 if (scale.HasValue)
-                    transform *= Matrix.CreateScale(scale.Value);
+                    transform = transform * Matrix.CreateScale(scale.Value);
                 else if (Scaling.HasValue)
-                    transform *= Scaling.Value;
+                    transform = transform * Scaling.Value;
 
                 if (ScalingPivot.HasValue)
-                    transform *= ScalingPivot.Value;
+                    transform = transform * ScalingPivot.Value;
                 if (ScalingOffset.HasValue)
-                    transform *= ScalingOffset.Value;
+                    transform = transform * ScalingOffset.Value;
 
                 if (RotationPivotInverse.HasValue)
-                    transform *= RotationPivotInverse.Value;
+                    transform = transform * RotationPivotInverse.Value;
                 if (PostRotation.HasValue)
-                    transform *= PostRotation.Value;
+                    transform = transform * PostRotation.Value;
 
                 if (rotation.HasValue)
-                    transform *= Matrix.CreateFromQuaternion(rotation.Value);
+                    transform = transform * Matrix.CreateFromQuaternion(rotation.Value);
                 else if (Rotation.HasValue)
-                    transform *= Rotation.Value;
+                    transform = transform * Rotation.Value;
 
                 if (PreRotation.HasValue)
-                    transform *= PreRotation.Value;
+                    transform = transform * PreRotation.Value;
                 if (RotationPivot.HasValue)
-                    transform *= RotationPivot.Value;
+                    transform = transform * RotationPivot.Value;
                 if (RotationOffset.HasValue)
-                    transform *= RotationOffset.Value;
+                    transform = transform * RotationOffset.Value;
 
                 if (translation.HasValue)
-                    transform *= Matrix.CreateTranslation(translation.Value);
+                    transform = transform * Matrix.CreateTranslation(translation.Value);
                 else if (Translation.HasValue)
-                    transform *= Translation.Value;
+                    transform = transform * Translation.Value;
 
                 return transform;
             }
@@ -272,6 +272,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // This flag is very important when PostProcessSteps.FindDegenerates is used
                 // because FindDegenerates converts degenerate triangles to points and lines!
                 importer.SetConfig(new Assimp.Configs.RemoveDegeneratePrimitivesConfig(true));
+                // Set flag to not remove small triangles when PostProcessSteps.FindDegenerates is used.
+                //importer.SetConfig(new Assimp.Configs.RemoveDegeneratePrimitivesCheckAreaConfig(false));
 
                 // Note about Assimp post-processing:
                 // Keep post-processing to a minimum. The ModelImporter should import
@@ -317,6 +319,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 // Create _pivots and _rootNode (incl. children).
                 NodeContent rootNode = ImportNodes(context, aiScene, materials);
+
+                // If we have a simple hierarchy and just the one mesh,
+                // we can flatten it out so the mesh is the root node.
+                //if ((rootNode is MeshContent) == false
+                //&&  rootNode.Transform == Matrix.Identity
+                //&&  rootNode.Children.Count == 1 
+                //&&  rootNode.Children[0] is MeshContent)
+                //{
+                //    Matrix absXform = rootNode.Children[0].Transform;
+                //    rootNode = rootNode.Children[0];
+                //    rootNode.Identity = _identity;
+                //    rootNode.Transform = absXform;
+                //    rootNode.Parent = null;
+                //}
+
                 // Create skeleton (incl. animations) and add to _rootNode.
                 ImportSkeleton(aiScene, rootNode);
 
@@ -846,8 +863,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         else
                         {
                             // --> Let's assume that parent's transform is Identity.
-                        node.Transform = Matrix.Invert(offsetMatrix);
-                    }
+                            node.Transform = Matrix.Invert(offsetMatrix);
+                        }
                     }
                     else if (isOffsetMatrixValid && aiParent == _rootBone)
                     {
@@ -1110,7 +1127,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Node parent = node.Parent;
             while (parent != null && parent != ancestor)
             {
-                transform *= parent.Transform;
+                transform = transform * parent.Transform;
                 parent = parent.Parent;
             }
 
