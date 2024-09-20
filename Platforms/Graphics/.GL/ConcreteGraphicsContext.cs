@@ -857,8 +857,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 PlatformApplyVertexBuffers(0);
 
                 GL.DrawRangeElementsBaseVertex(target,
-                                  minVertexIndex - baseVertex,
-                                  minVertexIndex + numVertices - 1 - baseVertex,
+                                  minVertexIndex,
+                                  minVertexIndex + numVertices - 1,
                                   indexElementCount,
                                   indexElementType,
                                   indexOffsetInBytes,
@@ -871,7 +871,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 GL.DrawRangeElements(target,
                                 minVertexIndex,
-                                minVertexIndex + numVertices -1,
+                                minVertexIndex + numVertices - 1,
                                 indexElementCount,
                                 indexElementType,
                                 indexOffsetInBytes);

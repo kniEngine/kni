@@ -289,7 +289,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void FlushVertexArray(int baseQuad, int spriteCount, Effect effect, Texture texture)
         {
             int baseVertex = baseQuad * 4;
-            int minVertexIndex = baseQuad * 4;
+            int minVertexIndex = 0;
             int numVertices = spriteCount * 4;
             int startIndex = 0;
             int primitiveCount = spriteCount * 2;

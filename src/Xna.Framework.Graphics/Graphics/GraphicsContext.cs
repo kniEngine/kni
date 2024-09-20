@@ -278,12 +278,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Draw geometry by indexing into the vertex buffer.
         /// </summary>
         /// <param name="primitiveType">The type of primitives in the index buffer.</param>
-        /// <param name="baseVertex">Used to offset the vertex range indexed from the vertex buffer.</param>
-        /// <param name="minVertexIndex">This is unused and remains here only for XNA API compatibility.</param>
+        /// <param name="baseVertex">A hint of the lowest vertex indexed relative to baseVertex.</param>
+        /// <param name="minVertexIndex">A hint of the maximum vertex indexed.</param>
         /// <param name="numVertices">This is unused and remains here only for XNA API compatibility.</param>
         /// <param name="startIndex">The index within the index buffer to start drawing from.</param>
         /// <param name="primitiveCount">The number of primitives to render from the index buffer.</param>
-        /// <remarks>Note that minVertexIndex and numVertices are unused in MonoGame and will be ignored.</remarks>
         public void DrawIndexedPrimitives(PrimitiveType primitiveType, int baseVertex, int minVertexIndex, int numVertices, int startIndex, int primitiveCount)
         {
             if (_strategy._vertexBuffers.Count == 0)
