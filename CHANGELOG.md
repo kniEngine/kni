@@ -1,5 +1,49 @@
 ﻿# Changelog
 
+
+## 3.14.9001 Release - September 23, 2024
+
+### Fixed
+ - fixed TouchPanel scalling #1852
+ - [BlazorGL] fixed Gamepad disconnect #1771
+ - [BlazorGL] map GamePad Indices #1773
+ - [BlazorGL] fixed Buffers SetData(...) with startIndex #1834
+ - [BlazorGL] fixed TouchPanel initialization #1837
+ - [OpenGL] fix DrawIndexedPrimitives (#1869
+ - [WindowsDX/UAP] fixed GamePadState.IsConnected #1769
+ - [Content.Pipeline] fixed OpenAssetImporter #1817,#1868
+ - [Content.Pipeline] fixed DX textureSlot #1851
+
+### Performance
+
+### Changed
+ - IsContentLost will not throw NotImplementedException #1865
+ - [Android] GraphicsAdapter.MonitorHandle return the native eglDisplay handle #1795
+ - [OpenGL/WebGL] include GL shader compilation InfoLog in the exception message. #1830,#1832,#1838
+ - [BlazorGL] Upgrade Wasm packages to v8.0.2 #1860
+ - [UAP] update to SDK v10.19041 #1769
+ - [LibOVR] OvrDevice require GraphicsProfile FL11_0 #1795
+ - [LibOVR] Upgrade LibOVR packages to v2.1 #1862
+
+### Added
+ - [OpenGL] ColorSRgba support #1802,#1805
+ - [OpenGL] implemented GL shared texture2D #1854
+ - [Android/GLES] implemented RenderTarget multisampling #1843,#1814
+ - [Android/GLES] implemented Multiple Render Targets #1845
+ - [BlazorGL] implemented Multiple Render Targets #1840
+ - [BlazorGL] implemented SamplerStates #1765
+ - [BlazorGL] implemented DXT5 compression #1766
+ - [BlazorGL] implemented TextureCube #1767
+ - [BlazorGL] support for SM 3.0 standard_derivatives #1833,#1844
+ - [BlazorGL] implemented float texture surfaceTypes (Vector4,Vector2,Single) #1842
+ - [BlazorGL] implemented Buffers GetData(...)  #1861
+ - [BlazorGL] implemented Gamepad Trigger buttons #1770
+ - [BlazorGL] implemented GamePad.SetVibration #1853
+ - [LibOVR] add OvrDevice.TrackFloorLevelOrigin #1864
+ - [Oculus/OpenXR] add HandsState.GetGripTransform() #1856
+
+### Removed
+
 ## 3.13.9001 Release - July 24, 2024
 
 ### Fixed

@@ -4,8 +4,8 @@
   <PropertyGroup>
     <BaseOutputPath>..\..\Artifacts\Xna.Framework\</BaseOutputPath>
     
-    <Version>3.13.9001.0</Version>
-    <AssemblyVersion>3.13.9001.0</AssemblyVersion>
+    <Version>3.14.9001.0</Version>
+    <AssemblyVersion>3.14.9001.0</AssemblyVersion>
 
   </PropertyGroup>
 
