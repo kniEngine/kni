@@ -22,16 +22,15 @@ namespace Microsoft.Xna.Platform.Graphics
             iOSGameWindow gameWindow = iOSGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             iOSGameViewController viewController = gameWindow.ViewController;
             iOSGameView view = viewController.View;
-            GLGraphicsContext glContext = viewController.View._glContext;
             
             try
             {
-                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES3, glContext.Context.ShareGroup);
+                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES3, viewController.View._eaglContext.ShareGroup);
             }
             catch
             {
                 // Fall back to GLES 2.0
-                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES2, glContext.Context.ShareGroup);
+                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES2, viewController.View._eaglContext.ShareGroup);
             }
 
 

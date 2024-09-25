@@ -115,8 +115,14 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
-                if (_glContext != null)
-                    DestroyContext();
+                if (_eaglContext != null)
+                {
+                    AssertNotDisposed();
+
+                    _eaglContext.Dispose();
+                    _eaglContext = null;
+                    _glapi = null;
+                }
             }
 
             base.Dispose(disposing);
@@ -149,11 +155,8 @@ namespace Microsoft.Xna.Framework
             get { return base.Layer as CAEAGLLayer; }
         }
 
-        // FIXME: Someday, hopefully it will be possible to move
-        //        GLGraphicsContext into an iOS-specific GraphicsDevice.
-        //        Some level of cooperation with the UIView/Layer will
-        //        probably always be necessary, unfortunately.
-        internal GLGraphicsContext _glContext;
+        //TODO: Move _eaglContext into an iOS-specific GraphicsContext
+        internal EAGLContext _eaglContext;
         private OGL _glapi;
 
         private void CreateGLContext()
@@ -183,7 +186,15 @@ namespace Microsoft.Xna.Framework
 
             try 
             {
-                _glContext = new GLGraphicsContext();
+                try
+                {
+                    _eaglContext = new EAGLContext(EAGLRenderingAPI.OpenGLES3);
+                }
+                catch
+                {
+                    // Fall back to GLES 2.0
+                    _eaglContext = new EAGLContext(EAGLRenderingAPI.OpenGLES2);
+                }
                 //new GraphicsContext(null, null, 2, 0, GraphicsContextFlags.Embedded)
             } 
             catch (Exception ex)
@@ -196,16 +207,6 @@ namespace Microsoft.Xna.Framework
             OGL_IOS.Initialize();
             OGL_IOS.Current.InitExtensions();
             _glapi = OGL.Current;
-        }
-
-        private void DestroyContext()
-        {
-            AssertNotDisposed();
-            AssertValidContext();
-
-            _glContext.Dispose();
-            _glContext = null;
-            _glapi = null;
         }
 
         [Export("doTick")]
@@ -259,7 +260,7 @@ namespace Microsoft.Xna.Framework
             //       on all but the first call.  Nevertheless, it
             //       works.  Still, it would be nice to know why it
             //       claims to have failed.
-            _glContext.Context.RenderBufferStorage((uint)RenderbufferTarget.Renderbuffer, Layer);
+            _eaglContext.RenderBufferStorage((uint)RenderbufferTarget.Renderbuffer, Layer);
             
             _glapi.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, RenderbufferTarget.Renderbuffer, _colorbuffer);
 
@@ -306,7 +307,9 @@ namespace Microsoft.Xna.Framework
             AssertNotDisposed();
             AssertValidContext();
 
-            _glContext.MakeCurrent();
+            if (!EAGLContext.SetCurrentContext(_eaglContext))
+                throw new InvalidOperationException("Unable to change current EAGLContext.");
+            Threading.MakeMainThread();
 
             _glapi.DeleteFramebuffer(_framebuffer);
             _framebuffer = 0;
@@ -342,7 +345,9 @@ namespace Microsoft.Xna.Framework
             this.MakeCurrent();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, this._colorbuffer);
             GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 2, attachements);
-            _glContext.SwapBuffers();
+
+            if (!_eaglContext.PresentRenderBuffer(36161u))
+                throw new InvalidOperationException("EAGLContext.PresentRenderbuffer failed.");
         }
 
         // FIXME: This functionality belongs in GraphicsDevice.
@@ -351,9 +356,11 @@ namespace Microsoft.Xna.Framework
             AssertNotDisposed();
             AssertValidContext();
 
-            if (!_glContext.IsCurrent)
+            if (EAGLContext.CurrentContext != _eaglContext)
             {
-                _glContext.MakeCurrent();
+                if (!EAGLContext.SetCurrentContext(_eaglContext))
+                    throw new InvalidOperationException("Unable to change current EAGLContext.");
+                Threading.MakeMainThread();
             }
         }
 
@@ -366,7 +373,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (_framebuffer != 0)
                     DestroyFramebuffer();
-                if (_glContext == null)
+                if (_eaglContext == null)
                     CreateGLContext();
 
                 CreateFramebuffer();
@@ -380,7 +387,7 @@ namespace Microsoft.Xna.Framework
         {
             if (Window != null) 
             {
-                if (_glContext == null)
+                if (_eaglContext == null)
                     CreateGLContext();
                 if (_framebuffer == 0)
                     CreateFramebuffer();
@@ -397,8 +404,8 @@ namespace Microsoft.Xna.Framework
 
         private void AssertValidContext()
         {
-            if (_glContext == null)
-                throw new InvalidOperationException("GLGraphicsContext must be created for this operation to succeed.");
+            if (_eaglContext == null)
+                throw new InvalidOperationException("_eaglContext must be created for this operation to succeed.");
         }
     }
 }
