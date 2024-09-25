@@ -258,6 +258,8 @@ namespace Microsoft.Xna.Framework
                 OnClientSizeChanged();
 
                 Android.Util.Log.Debug("Kni", "GameWindow.ChangeClientBounds: newClientBounds=" + this.ClientBounds.Width + "," + this.ClientBounds.Height);
+
+                // Set the new display size on the touch panel.
                 TouchPanel.DisplayWidth = this.ClientBounds.Width;
                 TouchPanel.DisplayHeight = this.ClientBounds.Height;
             }
