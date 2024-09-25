@@ -147,7 +147,6 @@ namespace Microsoft.Xna.Platform
                     base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
                 }
 
-                ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
                 // Set the new display size on the touch panel.
                 TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
                 TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
@@ -195,7 +194,6 @@ namespace Microsoft.Xna.Platform
                     base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
                 }
 
-                ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
                 // Set the new display size on the touch panel.
                 TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
                 TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
