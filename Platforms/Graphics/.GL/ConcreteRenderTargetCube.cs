@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
             DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            Threading.EnsureMainThread();
+            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
             {
                 ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
             }
