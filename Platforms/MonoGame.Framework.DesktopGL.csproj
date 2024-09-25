@@ -95,6 +95,7 @@
     <Compile Include="Graphics\.GL.SDL\ConcreteGraphicsDevice.SDL.cs" />
     <Compile Include="Graphics\.GL.SDL\OpenGL.SDL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
+    <Compile Include="Graphics\.GL\Threading.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
   </ItemGroup>
 
