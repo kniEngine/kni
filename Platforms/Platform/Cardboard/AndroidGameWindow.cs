@@ -427,14 +427,10 @@ namespace Microsoft.Xna.Framework
 
             GameView._isCancellationRequested = false;
 
-            // prepare gameLoop
-            Threading.MakeMainThread();
         }
 
         void RunStep()
         {
-            Threading.MakeMainThread();
-
             switch (GameView._appState)
             {
                 case AndroidGameWindow.AppState.Resumed:
@@ -512,6 +508,7 @@ namespace Microsoft.Xna.Framework
                         /* Cardboard: Context was created by GLSurfaceView.
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                        Threading.MakeMainThread();
                         */
 
                         // OGL.InitExtensions() must be called while we have a current gl context.
@@ -548,6 +545,7 @@ namespace Microsoft.Xna.Framework
                     /* Cardboard: Context was created by GLSurfaceView.
                     if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, this.EglSurface, surfaceView.EglSurface, this.EglContext))
                         throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                    Threading.MakeMainThread();
                     */
 
                     GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
@@ -743,6 +741,7 @@ namespace Microsoft.Xna.Framework
             if (this.EglContext == null)
             {
                 _eglContext = GL.Egl.EglGetCurrentContext();
+                Threading.MakeMainThread();
                 if (this.EglContext == EGL10.EglNoContext)
                     _eglContext = null;
 
