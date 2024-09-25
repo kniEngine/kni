@@ -15,7 +15,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         static Threading()
         {
-            _mainThreadId = Thread.CurrentThread.ManagedThreadId;
         }
 
         /// <summary>
