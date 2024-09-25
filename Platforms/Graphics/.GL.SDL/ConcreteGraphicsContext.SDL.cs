@@ -60,6 +60,15 @@ namespace Microsoft.Xna.Platform.Graphics
             SDL.OpenGL.MakeCurrent(winHandle, _glContext);
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
         }
+        
+        internal override void EnsureContextCurrentThread()
+        {
+            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+                return;
+
+            throw new InvalidOperationException("Operation not called on main thread.");
+
+        }
 
         public override void BindDisposeContext()
         {

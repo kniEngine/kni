@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
-            Threading.EnsureMainThread();
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
             Debug.Assert(GLVertexBuffer != 0);
 

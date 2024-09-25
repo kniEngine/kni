@@ -69,6 +69,11 @@ namespace Microsoft.Xna.Platform.Graphics
             this.PlatformSetup();
         }
 
+        internal override void EnsureContextCurrentThread()
+        {
+            Threading.EnsureMainThread();
+        }
+
         public override void BindDisposeContext()
         {
             if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)

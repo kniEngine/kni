@@ -172,7 +172,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyState()
         {
-            // Threading.EnsureMainThread();
+            //this.EnsureContextCurrentThread();
 
             {
                 PlatformApplyBlend();

@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
     internal class Threading
     {
@@ -15,7 +15,6 @@ namespace Microsoft.Xna.Framework
 
         static Threading()
         {
-            _mainThreadId = Thread.CurrentThread.ManagedThreadId;
         }
 
         /// <summary>

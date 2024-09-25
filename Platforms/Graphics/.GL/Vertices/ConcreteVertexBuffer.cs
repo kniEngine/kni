@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformConstructVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            Threading.EnsureMainThread();
+            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
             Debug.Assert(_vbo == 0);
 
@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
-            Threading.EnsureMainThread();
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
             Debug.Assert(GLVertexBuffer != 0);
 

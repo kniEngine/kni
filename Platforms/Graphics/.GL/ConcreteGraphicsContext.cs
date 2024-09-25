@@ -119,8 +119,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 this._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
         }
 
+        /// <summary>
+        /// Throws an exception if the code is not currently running on the current thread.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if the code is not currently running on the current thread.</exception>
+        internal abstract void EnsureContextCurrentThread();
         public abstract void BindDisposeContext();
         public abstract void UnbindDisposeContext();
+
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {
@@ -202,7 +208,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyState()
         {
-            Threading.EnsureMainThread();
+            this.EnsureContextCurrentThread();
 
             {
                 PlatformApplyBlend();

@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
-            Threading.EnsureMainThread();
+            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
             Debug.Assert(GLIndexBuffer != 0);
 
