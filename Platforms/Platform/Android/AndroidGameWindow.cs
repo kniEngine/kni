@@ -87,6 +87,7 @@ namespace Microsoft.Xna.Framework
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
             
             GameView = new AndroidSurfaceView(activity);
+            GameView.LayoutChange += GameView_LayoutChange;
             _runner = new RunnableObject();
             _runner.Tick += OnTick;
 
@@ -250,8 +251,13 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void ChangeClientBounds(Rectangle bounds)
+
+        private void GameView_LayoutChange(object sender, View.LayoutChangeEventArgs e)
         {
+            Rectangle bounds = new Rectangle(
+                GameView.Left, GameView.Top,
+                GameView.Width, GameView.Height);
+
             if (bounds != _clientBounds)
             {
                 _clientBounds = bounds;
@@ -395,6 +401,8 @@ namespace Microsoft.Xna.Framework
             {
                 if (TouchPanel.WindowHandle == this.Handle)
                     TouchPanel.WindowHandle = IntPtr.Zero;
+
+                GameView.LayoutChange -= GameView_LayoutChange;
 
                 GameView.Dispose();
                 GameView = null;
@@ -560,7 +568,6 @@ namespace Microsoft.Xna.Framework
                                 gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
                             }
                         }
-                        this.ChangeClientBounds(new Rectangle(0, 0, GameView.Width, GameView.Height));
                     }
 
                     if (_isGLContextLost)
@@ -590,7 +597,6 @@ namespace Microsoft.Xna.Framework
 
                         }
                     }
-                    this.ChangeClientBounds(new Rectangle(0, 0, GameView.Width, GameView.Height));
                 }
 
                 _activity._orientationListener.Update();
