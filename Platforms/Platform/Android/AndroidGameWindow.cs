@@ -466,11 +466,6 @@ namespace Microsoft.Xna.Framework
                             throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
                     }
                     _eglContext = null;
-
-                    if (_game.GraphicsDevice != null)
-                    {
-                        ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
-                    }
                 }
 
                 GameView._appState = AndroidGameWindow.AppState.Exited;
@@ -515,28 +510,6 @@ namespace Microsoft.Xna.Framework
 
                 ISurfaceView surfaceView = GameView;
 
-                // Restart due to context loss
-                bool contextLost = false;
-                if (_isGLContextLost)
-                {
-                    // we actually lost the context so we need to free up our existing 
-                    // objects and re-create one.
-                    if (this.EglContext != null)
-                    {
-                        if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, this.EglContext))
-                            throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
-                    }
-                    _eglContext = null;
-
-                    if (_game.GraphicsDevice != null)
-                    {
-                        ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnContextLost();
-                    }
-
-                    contextLost = true;
-                    _isGLContextLost = false;
-                }
-
                 if (this.EglConfig == null)
                 {
                     this.GLChooseConfig();
@@ -568,14 +541,6 @@ namespace Microsoft.Xna.Framework
                                 gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
                             }
                         }
-                    }
-
-                    if (_isGLContextLost)
-                    {
-                        // we lost the gl context, we need to let the programmer
-                        // know so they can re-create textures etc.
-                        if (_game.GraphicsDevice != null)
-                            ((IPlatformGraphicsDevice)_game.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().Android_OnDeviceReset();
                     }
                 }
 
@@ -614,8 +579,6 @@ namespace Microsoft.Xna.Framework
                 }
             }
         }
-
-        internal bool _isGLContextLost;
 
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
