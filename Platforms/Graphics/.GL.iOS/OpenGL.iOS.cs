@@ -72,9 +72,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         public void MakeCurrent()
         {
             if (!EAGLContext.SetCurrentContext(this.Context))
-            {
                 throw new InvalidOperationException("Unable to change current EAGLContext.");
-            }
+            Threading.MakeMainThread();
         }
 
         public void SwapBuffers()
