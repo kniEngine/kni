@@ -148,6 +148,9 @@ namespace Microsoft.Xna.Platform
                 }
 
                 ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
+                // Set the new display size on the touch panel.
+                TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
+                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
             }
         }
 
@@ -193,6 +196,9 @@ namespace Microsoft.Xna.Platform
                 }
 
                 ((AndroidGameWindow)base.Game.Window).ChangeClientBounds(new Rectangle(0, 0, viewWidth, viewHeight));
+                // Set the new display size on the touch panel.
+                TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
+                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
             }
 
         }
