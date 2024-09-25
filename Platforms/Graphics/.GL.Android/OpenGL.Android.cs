@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
                     return "Bad Surface";
 
                 default:
-                    return "Unknown Error";
+                    return "Unknown EGL Error " + err;
             }
         }
     }

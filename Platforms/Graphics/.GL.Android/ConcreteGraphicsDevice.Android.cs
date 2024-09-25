@@ -22,29 +22,19 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             base.Present();
 
-            try
+            IntPtr windowHandle = this.PresentationParameters.DeviceWindowHandle;
+            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(windowHandle);
+
+            var adapter = ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+            ISurfaceView surfaceView = gameWindow.GameView;
+
+            bool SwapBuffersResult = GL.Egl.EglSwapBuffers(adapter.EglDisplay, surfaceView.EglSurface);
+            if (!SwapBuffersResult)
             {
-                IntPtr windowHandle = this.PresentationParameters.DeviceWindowHandle;
-                AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(windowHandle);
-
-                var adapter = ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                ISurfaceView surfaceView = gameWindow.GameView;
-
-                if (!GL.Egl.EglSwapBuffers(adapter.EglDisplay, surfaceView.EglSurface))
-                {
-                    if (GL.Egl.EglGetError() == 0)
-                    {
-                        if (gameWindow._isGLContextLost)
-                            System.Diagnostics.Debug.WriteLine("Lost EGL context" + GL.GetEglErrorAsString());
-                        gameWindow._isGLContextLost = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Android.Util.Log.Error("Error in swap buffers", ex.ToString());
+                int eglError = GL.Egl.EglGetError();
+                System.Diagnostics.Debug.WriteLine("SwapBuffers failed." + GL.GetEglErrorAsString());
             }
         }
 
