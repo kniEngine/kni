@@ -517,15 +517,15 @@ namespace Microsoft.Xna.Framework
             {
                 case AndroidGameWindow.AppState.Resumed:
                     System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-                    if (GameView._isCancellationRequested == CancellationRequested.True)
-                    {
-                        if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
-                            GameView._appState = AndroidGameWindow.AppState.Exited;
-                    }
-                    else // (GameView._isCancellationRequested == CancellationRequested.False)
+                    if (GameView._isCancellationRequested == CancellationRequested.False)
                     {
                         if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
                             ProcessStateResumed();
+                    }
+                    else // (GameView._isCancellationRequested == CancellationRequested.True)
+                    {
+                        if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
+                            GameView._appState = AndroidGameWindow.AppState.Exited;
                     }
                     break;
 
