@@ -22,6 +22,13 @@ using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 namespace Microsoft.Xna.Framework
 {
+    internal enum CancellationRequested
+    {
+        Null,
+        False,
+        True,
+    }
+
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
@@ -476,10 +483,11 @@ namespace Microsoft.Xna.Framework
 
         private void RunFrame()
         {
-            if (GameView._isCancellationRequested == null)
-                GameView._isCancellationRequested = false;
+            if (GameView._isCancellationRequested == CancellationRequested.Null)
+                GameView._isCancellationRequested = CancellationRequested.False;
 
-            if (GameView._isCancellationRequested.Value == false)
+            System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
+            if (GameView._isCancellationRequested == CancellationRequested.False)
             {
                 try
                 {
@@ -488,17 +496,18 @@ namespace Microsoft.Xna.Framework
                 }
                 catch (Exception ex) { /* ignore */ }
             }
+            //else // (GameView._isCancellationRequested == CancellationRequested.True)
 
             return;
         }
 
         internal void StartGameLoop()
         {
-            // Cardboard: 
+            // Cardboard:
             _isStarted = true;
             return;
 
-            GameView._isCancellationRequested = false;
+            GameView._isCancellationRequested = CancellationRequested.False;
 
         }
 
@@ -514,7 +523,7 @@ namespace Microsoft.Xna.Framework
                     break;
 
                 case AndroidGameWindow.AppState.Exited:
-                    GameView._isCancellationRequested = true;
+                    GameView._isCancellationRequested = CancellationRequested.True;
                     break;
 
                 default:
@@ -529,11 +538,13 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not available
             if (GameView._isAndroidSurfaceAvailable)
             {
-                if (GameView._isCancellationRequested.Value == true)
+                System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
+                if (GameView._isCancellationRequested == CancellationRequested.True)
                 {
                     GameView._appState = AndroidGameWindow.AppState.Exited;
                     return;
                 }
+                //else // (GameView._isCancellationRequested == CancellationRequested.False)
 
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;

@@ -21,6 +21,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework
 {
+    internal enum CancellationRequested
+    {
+        Null,
+        False,
+        True,
+    }
+
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
@@ -482,7 +489,7 @@ namespace Microsoft.Xna.Framework
 
         internal void StartGameLoop()
         {
-            GameView._isCancellationRequested = false;
+            GameView._isCancellationRequested = CancellationRequested.False;
 
             _runner.InitLoopHandler();
             _runner.RequestFrame();
@@ -490,7 +497,8 @@ namespace Microsoft.Xna.Framework
 
         internal void OnTick(object sender, EventArgs args)
         {
-            if (GameView._isCancellationRequested.Value == false)
+            System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
+            if (GameView._isCancellationRequested == CancellationRequested.False)
             {
                 try
                 {
@@ -504,9 +512,9 @@ namespace Microsoft.Xna.Framework
                         _runner.RequestFrame();
                 }
             }
-            else
+            else // (GameView._isCancellationRequested == CancellationRequested.True)
             {
-                GameView._isCancellationRequested = null;
+                GameView._isCancellationRequested = CancellationRequested.Null;
 
                 ISurfaceView surfaceView = GameView;
                 if (surfaceView.EglSurface != null)
@@ -549,7 +557,7 @@ namespace Microsoft.Xna.Framework
                     break;
 
                 case AndroidGameWindow.AppState.Exited:
-                    GameView._isCancellationRequested = true;
+                    GameView._isCancellationRequested = CancellationRequested.True;
                     break;
 
                 default:
@@ -564,11 +572,13 @@ namespace Microsoft.Xna.Framework
             // do not run game if surface is not available
             if (GameView._isAndroidSurfaceAvailable)
             {
-                if (GameView._isCancellationRequested.Value == true)
+                System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
+                if (GameView._isCancellationRequested == CancellationRequested.True)
                 {
                     GameView._appState = AndroidGameWindow.AppState.Exited;
                     return;
                 }
+                //else // (GameView._isCancellationRequested == CancellationRequested.False)
 
                 var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
