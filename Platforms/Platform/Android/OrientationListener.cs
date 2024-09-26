@@ -44,6 +44,7 @@ namespace Microsoft.Xna.Framework
             DisplayOrientation disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
             AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
+
             if ((gameWindow.GetEffectiveSupportedOrientations() & disporientation) == 0
             ||  disporientation == gameWindow.CurrentOrientation
             ||  disporientation == DisplayOrientation.Unknown
@@ -85,6 +86,7 @@ namespace Microsoft.Xna.Framework
                     if (elapsed.TotalSeconds > 0.5)
                     {
                         AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
+
                         gameWindow.SetOrientation(targetOrientation, true);
                         targetOrientation = DisplayOrientation.Unknown;
                         elapsed = TimeSpan.Zero;
