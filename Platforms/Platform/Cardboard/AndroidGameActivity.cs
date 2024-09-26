@@ -16,8 +16,6 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameActivity : VRCardboard.CardboardActivity
     {
-        internal ScreenReceiver _screenReceiver;
-
         public bool AutoPauseAndResumeMediaPlayer = true;
 
 
@@ -49,15 +47,6 @@ namespace Microsoft.Xna.Framework
             
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
-
-            IntentFilter filter = new IntentFilter();
-            filter.AddAction(Intent.ActionScreenOff);
-            filter.AddAction(Intent.ActionScreenOn);
-            filter.AddAction(Intent.ActionUserPresent);
-            filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
-            
-            _screenReceiver = new ScreenReceiver(this);
-            RegisterReceiver(_screenReceiver, filter);
 
             AndroidGameWindow.Activity = this;
         }
@@ -105,9 +94,6 @@ namespace Microsoft.Xna.Framework
 
         protected override void OnDestroy()
         {
-            UnregisterReceiver(_screenReceiver);
-            _screenReceiver.IsScreenLocked = false;
-
             var handler = Destroyed;
             if (handler != null)
                 handler(this, EventArgs.Empty);

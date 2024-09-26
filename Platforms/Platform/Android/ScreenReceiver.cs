@@ -9,7 +9,8 @@ using Android.Util;
 namespace Microsoft.Xna.Framework
 {
     internal class ScreenReceiver : BroadcastReceiver
-    {	
+    {
+        private AndroidGameWindow _gameWindow;
         private AndroidGameActivity _activity;
         private bool _isScreenLocked;
 
@@ -20,8 +21,9 @@ namespace Microsoft.Xna.Framework
             internal set { _isScreenLocked = value; }
         }
 
-        public ScreenReceiver(AndroidGameActivity activity)
+        public ScreenReceiver(AndroidGameWindow gameWindow, AndroidGameActivity activity)
         {
+            this._gameWindow = gameWindow;
             this._activity = activity;
         }
 
@@ -75,12 +77,12 @@ namespace Microsoft.Xna.Framework
         {
             _isScreenLocked = false;
             MediaPlayer.IsMuted = false;
-            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView._appState = AndroidGameWindow.AppState.Resumed;
-            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window)._runner.RequestFrame();
+            _gameWindow.GameView._appState = AndroidGameWindow.AppState.Resumed;
+            _gameWindow._runner.RequestFrame();
             try
             {
-                if (!((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.IsFocused)
-                    ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.RequestFocus();
+                if (!_gameWindow.GameView.IsFocused)
+                    _gameWindow.GameView.RequestFocus();
             }
             catch (Exception ex)
             {

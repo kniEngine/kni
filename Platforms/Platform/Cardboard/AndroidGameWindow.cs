@@ -54,6 +54,7 @@ namespace Microsoft.Xna.Framework
         private DisplayOrientation _currentOrientation;
 
         private OrientationListener _orientationListener;
+        internal ScreenReceiver _screenReceiver;
         private TouchEventListener _touchEventListener;
 
         public override IntPtr Handle { get { return GameView.Handle; } }
@@ -96,6 +97,14 @@ namespace Microsoft.Xna.Framework
             _instances.Add(this.Handle, this);
 
             _orientationListener = new OrientationListener(this, _activity);
+
+            IntentFilter filter = new IntentFilter();
+            filter.AddAction(Intent.ActionScreenOff);
+            filter.AddAction(Intent.ActionScreenOn);
+            filter.AddAction(Intent.ActionUserPresent);
+            filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
+            _screenReceiver = new ScreenReceiver(this, _activity);
+            _activity.RegisterReceiver(_screenReceiver, filter);
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
@@ -165,6 +174,9 @@ namespace Microsoft.Xna.Framework
 
         void Activity_Destroyed(object sender, EventArgs e)
         {
+            _activity.UnregisterReceiver(_screenReceiver);
+            _screenReceiver.IsScreenLocked = false;
+
             _orientationListener = null;
 
             if (_game != null)
@@ -535,7 +547,7 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
-                    if (_game != null && !_activity._screenReceiver.IsScreenLocked)
+                    if (_game != null && !_screenReceiver.IsScreenLocked)
                     {
                         ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
                     }

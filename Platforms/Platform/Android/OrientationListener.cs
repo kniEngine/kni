@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // Avoid changing orientation whilst the screen is locked
-            if (_gameWindow._activity._screenReceiver.IsScreenLocked)
+            if (_gameWindow._screenReceiver.IsScreenLocked)
                 return;
 
             DisplayOrientation disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
