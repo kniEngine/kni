@@ -481,7 +481,21 @@ namespace Microsoft.Xna.Framework
         {
         }
 
+        internal void StartGameLoop()
+        {
+            // Cardboard:
+            _isStarted = true;
+            return;
+
+            GameView._isCancellationRequested = CancellationRequested.False;
+        }
+
         private void RunFrame()
+        {
+            RunStep();
+        }
+
+        private void RunStep()
         {
             if (GameView._isCancellationRequested == CancellationRequested.Null)
                 GameView._isCancellationRequested = CancellationRequested.False;
@@ -515,16 +529,6 @@ namespace Microsoft.Xna.Framework
             //else // (GameView._isCancellationRequested == CancellationRequested.True)
 
             return;
-        }
-
-        internal void StartGameLoop()
-        {
-            // Cardboard:
-            _isStarted = true;
-            return;
-
-            GameView._isCancellationRequested = CancellationRequested.False;
-
         }
 
         void ProcessStateResumed()

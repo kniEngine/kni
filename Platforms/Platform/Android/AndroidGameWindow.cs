@@ -497,6 +497,11 @@ namespace Microsoft.Xna.Framework
 
         internal void OnTick(object sender, EventArgs args)
         {
+            RunStep();
+        }
+
+        private void RunStep()
+        {
             System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
             if (GameView._isCancellationRequested != CancellationRequested.True)
             {
@@ -559,6 +564,8 @@ namespace Microsoft.Xna.Framework
 
                 GameView._appState = AndroidGameWindow.AppState.Exited;
             }
+
+            return;
         }
 
         void ProcessStateResumed()
