@@ -158,7 +158,7 @@
     <Compile Include="Platform\Cardboard\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Android\ISurfaceView.cs" />
     <Compile Include="Platform\Android\OrientationListener.cs" />
-    <Compile Include="Platform\Cardboard\ScreenReceiver.cs" />
+    <Compile Include="Platform\Android\ScreenReceiver.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
 
