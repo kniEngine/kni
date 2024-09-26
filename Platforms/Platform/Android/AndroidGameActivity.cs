@@ -15,8 +15,6 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameActivity : Activity
     {
-        internal Game Game { private get; set; }
-
         private ScreenReceiver screenReceiver;
 
         public bool AutoPauseAndResumeMediaPlayer = true;
@@ -105,8 +103,6 @@ namespace Microsoft.Xna.Framework
             var handler = Destroyed;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-
-            this.Game = null;
 
             base.OnDestroy();
         }
