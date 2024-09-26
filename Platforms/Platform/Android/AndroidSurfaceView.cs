@@ -96,8 +96,8 @@ namespace Microsoft.Xna.Framework
             {
                 if (_isCancellationRequested != CancellationRequested.Null)
                 {
-                    _appState = AndroidGameWindow.AppState.Exited;
                     _isCancellationRequested = CancellationRequested.True;
+                    _appState = AndroidGameWindow.AppState.Exited;
                 }
             }
 
