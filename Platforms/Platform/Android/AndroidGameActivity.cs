@@ -15,8 +15,6 @@ namespace Microsoft.Xna.Framework
     [CLSCompliant(false)]
     public class AndroidGameActivity : Activity
     {
-        private ScreenReceiver screenReceiver;
-
         public bool AutoPauseAndResumeMediaPlayer = true;
 
 
@@ -41,15 +39,6 @@ namespace Microsoft.Xna.Framework
             
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
-
-            IntentFilter filter = new IntentFilter();
-            filter.AddAction(Intent.ActionScreenOff);
-            filter.AddAction(Intent.ActionScreenOn);
-            filter.AddAction(Intent.ActionUserPresent);
-            filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
-            
-            screenReceiver = new ScreenReceiver();
-            RegisterReceiver(screenReceiver, filter);
 
             AndroidGameWindow.Activity = this;
         }
@@ -97,9 +86,6 @@ namespace Microsoft.Xna.Framework
 
         protected override void OnDestroy()
         {
-            UnregisterReceiver(screenReceiver);
-            ScreenReceiver.ScreenLocked = false;
-
             var handler = Destroyed;
             if (handler != null)
                 handler(this, EventArgs.Empty);

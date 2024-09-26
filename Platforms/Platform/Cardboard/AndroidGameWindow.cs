@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework
 
         internal AndroidSurfaceView GameView { get; private set; }
 
-        private AndroidGameActivity _activity;
+        internal AndroidGameActivity _activity;
         private readonly Game _game;
         private bool _isActivated = false;
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
@@ -54,6 +54,7 @@ namespace Microsoft.Xna.Framework
         private DisplayOrientation _currentOrientation;
 
         private OrientationListener _orientationListener;
+        internal ScreenReceiver _screenReceiver;
         private TouchEventListener _touchEventListener;
 
         public override IntPtr Handle { get { return GameView.Handle; } }
@@ -97,11 +98,43 @@ namespace Microsoft.Xna.Framework
 
             _orientationListener = new OrientationListener(this, _activity);
 
+            IntentFilter filter = new IntentFilter();
+            filter.AddAction(Intent.ActionScreenOff);
+            filter.AddAction(Intent.ActionScreenOn);
+            filter.AddAction(Intent.ActionUserPresent);
+            filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
+            _screenReceiver = new ScreenReceiver(_activity);
+            _activity.RegisterReceiver(_screenReceiver, filter);
+            _screenReceiver.Unlocked += ScreenReceiver_Unlocked;
+            _screenReceiver.Locked += ScreenReceiver_Locked;
+
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
 
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = this.Handle;
+        }
+
+        private void ScreenReceiver_Unlocked(object sender, EventArgs e)
+        {
+            MediaPlayer.IsMuted = false;
+
+            this.GameView._appState = AndroidGameWindow.AppState.Resumed;
+
+            try
+            {
+                if (!this.GameView.IsFocused)
+                    this.GameView.RequestFocus();
+            }
+            catch (Exception ex)
+            {
+                Log.Verbose("RequestFocus()", ex.ToString());
+            }
+        }
+
+        private void ScreenReceiver_Locked(object sender, EventArgs e)
+        {
+            MediaPlayer.IsMuted = true;
         }
 
         void Activity_Resumed(object sender, EventArgs e)
@@ -165,6 +198,11 @@ namespace Microsoft.Xna.Framework
 
         void Activity_Destroyed(object sender, EventArgs e)
         {
+            _screenReceiver.Unlocked -= ScreenReceiver_Unlocked;
+            _screenReceiver.Locked -= ScreenReceiver_Locked;
+            _activity.UnregisterReceiver(_screenReceiver);
+            _screenReceiver.IsScreenLocked = false;
+
             _orientationListener = null;
 
             if (_game != null)
@@ -535,7 +573,7 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
-                    if (_game != null && !ScreenReceiver.ScreenLocked)
+                    if (_game != null && !_screenReceiver.IsScreenLocked)
                     {
                         ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
                     }

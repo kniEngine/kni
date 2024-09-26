@@ -9,9 +9,26 @@ using Android.Util;
 namespace Microsoft.Xna.Framework
 {
     internal class ScreenReceiver : BroadcastReceiver
-    {	
-        public static bool ScreenLocked;
-        
+    {
+        private AndroidGameActivity _activity;
+        private bool _isScreenLocked;
+
+
+        public event EventHandler Locked;
+        public event EventHandler Unlocked;
+
+
+        public bool IsScreenLocked
+        {
+            get { return _isScreenLocked; }
+            internal set { _isScreenLocked = value; }
+        }
+
+        public ScreenReceiver(AndroidGameActivity activity)
+        {
+            this._activity = activity;
+        }
+
         public override void OnReceive(Context context, Intent intent)
         {
             Android.Util.Log.Info("Kni", intent.Action.ToString());
@@ -46,7 +63,7 @@ namespace Microsoft.Xna.Framework
                         // TODO: Find a way to set Game.IsActive = false during a call.
                         // View.ClearFocus() doesn't have any affect. 
                         // The best we can do currently is to sent the game to foreground.
-                        AndroidGameWindow.Activity.MoveTaskToBack(true);
+                        _activity.MoveTaskToBack(true);
                     }
                 }
             }
@@ -54,25 +71,20 @@ namespace Microsoft.Xna.Framework
 
         private void OnLocked()
         {
-            ScreenReceiver.ScreenLocked = true;
-            MediaPlayer.IsMuted = true;
+            _isScreenLocked = true;
+
+            var handler = Locked;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         private void OnUnlocked()
         {
-            ScreenReceiver.ScreenLocked = false;
-            MediaPlayer.IsMuted = false;
-            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView._appState = AndroidGameWindow.AppState.Resumed;
-            ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window)._runner.RequestFrame();
-            try
-            {
-                if (!((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.IsFocused)
-                    ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView.RequestFocus();
-            }
-            catch (Exception ex)
-            {
-                Log.Verbose("RequestFocus()", ex.ToString());
-            }
+            _isScreenLocked = false;
+
+            var handler = Locked;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
     }
 }
