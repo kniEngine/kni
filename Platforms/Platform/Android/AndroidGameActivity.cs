@@ -54,8 +54,6 @@ namespace Microsoft.Xna.Framework
             screenReceiver = new ScreenReceiver();
             RegisterReceiver(screenReceiver, filter);
 
-            _orientationListener = new OrientationListener(this);
-
             AndroidGameWindow.Activity = this;
         }
 
@@ -104,7 +102,6 @@ namespace Microsoft.Xna.Framework
         {
             UnregisterReceiver(screenReceiver);
             ScreenReceiver.ScreenLocked = false;
-            _orientationListener = null;
 
             var handler = Destroyed;
             if (handler != null)

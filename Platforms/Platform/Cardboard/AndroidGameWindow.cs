@@ -94,6 +94,8 @@ namespace Microsoft.Xna.Framework
 
             _instances.Add(this.Handle, this);
 
+            _activity._orientationListener = new OrientationListener(_activity);
+
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
 
@@ -162,6 +164,8 @@ namespace Microsoft.Xna.Framework
 
         void Activity_Destroyed(object sender, EventArgs e)
         {
+            _activity._orientationListener = null;
+
             if (_game != null)
             {
                 _game.Dispose();
