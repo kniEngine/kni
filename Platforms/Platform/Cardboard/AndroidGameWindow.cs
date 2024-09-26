@@ -516,9 +516,18 @@ namespace Microsoft.Xna.Framework
             switch (GameView._appState)
             {
                 case AndroidGameWindow.AppState.Resumed:
-                    if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
                     {
-                        ProcessStateResumed();
+                        System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
+                        if (GameView._isCancellationRequested == CancellationRequested.True)
+                        {
+                            if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
+                                GameView._appState = AndroidGameWindow.AppState.Exited;
+                        }
+                        else // (GameView._isCancellationRequested == CancellationRequested.False)
+                        {
+                            if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
+                                ProcessStateResumed();
+                        }
                     }
                     break;
 
@@ -538,14 +547,6 @@ namespace Microsoft.Xna.Framework
 
         void ProcessStateResumed()
         {
-            System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-            if (GameView._isCancellationRequested == CancellationRequested.True)
-            {
-                GameView._appState = AndroidGameWindow.AppState.Exited;
-                return;
-            }
-            //else // (GameView._isCancellationRequested == CancellationRequested.False)
-
             var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
 
