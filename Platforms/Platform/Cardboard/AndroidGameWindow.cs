@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Framework
             filter.AddAction(Intent.ActionScreenOn);
             filter.AddAction(Intent.ActionUserPresent);
             filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
-            _screenReceiver = new ScreenReceiver(this, _activity);
+            _screenReceiver = new ScreenReceiver(_activity);
             _activity.RegisterReceiver(_screenReceiver, filter);
             _screenReceiver.Unlocked += ScreenReceiver_Unlocked;
             _screenReceiver.Locked += ScreenReceiver_Locked;

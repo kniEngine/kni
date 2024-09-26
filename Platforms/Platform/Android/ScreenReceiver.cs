@@ -10,7 +10,6 @@ namespace Microsoft.Xna.Framework
 {
     internal class ScreenReceiver : BroadcastReceiver
     {
-        private AndroidGameWindow _gameWindow;
         private AndroidGameActivity _activity;
         private bool _isScreenLocked;
 
@@ -25,9 +24,8 @@ namespace Microsoft.Xna.Framework
             internal set { _isScreenLocked = value; }
         }
 
-        public ScreenReceiver(AndroidGameWindow gameWindow, AndroidGameActivity activity)
+        public ScreenReceiver(AndroidGameActivity activity)
         {
-            this._gameWindow = gameWindow;
             this._activity = activity;
         }
 
