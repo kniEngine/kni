@@ -25,7 +25,6 @@ namespace Microsoft.Xna.Platform
             ConcreteGame._concreteGameInstance = this;
 
             System.Diagnostics.Debug.Assert(AndroidGameWindow.Activity != null, "Must set Game.Activity before creating the Game instance");
-            AndroidGameWindow.Activity.Game = Game;
 
             _gameWindow = new AndroidGameWindow(AndroidGameWindow.Activity, game);
             base.Window = _gameWindow;
