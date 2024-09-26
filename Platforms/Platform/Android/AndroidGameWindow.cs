@@ -572,58 +572,56 @@ namespace Microsoft.Xna.Framework
 
         void ProcessStateResumed()
         {
+            System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
+            if (GameView._isCancellationRequested == CancellationRequested.True)
             {
-                System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-                if (GameView._isCancellationRequested == CancellationRequested.True)
+                GameView._appState = AndroidGameWindow.AppState.Exited;
+                return;
+            }
+            //else // (GameView._isCancellationRequested == CancellationRequested.False)
+
+            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+            ISurfaceView surfaceView = GameView;
+
+            if (this.EglContext != null)
+            {
+                // recreate the surface and bind the context to the thread
+                if (surfaceView.EglSurface == null)
                 {
-                    GameView._appState = AndroidGameWindow.AppState.Exited;
-                    return;
-                }
-                //else // (GameView._isCancellationRequested == CancellationRequested.False)
+                    GameView.GLCreateSurface(adapter, this.EglConfig);
 
-                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                ISurfaceView surfaceView = GameView;
-
-                if (this.EglContext != null)
-                {
-                    // recreate the surface and bind the context to the thread
-                    if (surfaceView.EglSurface == null)
+                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
                     {
-                        GameView.GLCreateSurface(adapter, this.EglConfig);
+                        throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                    }
+                    Threading.MakeMainThread();
 
-                        if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
+                    GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                    if (gdm != null)
+                    {
+                        if (gdm.GraphicsDevice != null)
                         {
-                            throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
-                        }
-                        Threading.MakeMainThread();
-
-                        GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                        if (gdm != null)
-                        {
-                            if (gdm.GraphicsDevice != null)
-                            {
-                                ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
-                                gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
-                            }
+                            ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
+                            gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
                         }
                     }
                 }
+            }
 
-                _orientationListener.Update();
+            _orientationListener.Update();
 
-                try
+            try
+            {
+                if (_game != null && !_screenReceiver.IsScreenLocked)
                 {
-                    if (_game != null && !_screenReceiver.IsScreenLocked)
-                    {
-                        ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
-                    }
+                    ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
                 }
-                catch (OpenGLException ex)
-                {
-                    Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
-                }
+            }
+            catch (OpenGLException ex)
+            {
+                Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
             }
         }
 
