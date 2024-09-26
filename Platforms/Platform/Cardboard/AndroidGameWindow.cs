@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework
 
         internal AndroidSurfaceView GameView { get; private set; }
 
-        private AndroidGameActivity _activity;
+        internal AndroidGameActivity _activity;
         private readonly Game _game;
         private bool _isActivated = false;
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
@@ -535,7 +535,7 @@ namespace Microsoft.Xna.Framework
 
                 try
                 {
-                    if (_game != null && !ScreenReceiver.ScreenLocked)
+                    if (_game != null && !_activity._screenReceiver.IsScreenLocked)
                     {
                         ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
                     }

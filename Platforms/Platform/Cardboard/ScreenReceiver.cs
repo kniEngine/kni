@@ -10,8 +10,21 @@ namespace Microsoft.Xna.Framework
 {
     internal class ScreenReceiver : BroadcastReceiver
     {	
-        public static bool ScreenLocked;
-        
+        private AndroidGameActivity _activity;
+        private bool _isScreenLocked;
+
+
+        public bool IsScreenLocked
+        {
+            get { return _isScreenLocked; }
+            internal set { _isScreenLocked = value; }
+        }
+
+        public ScreenReceiver(AndroidGameActivity activity)
+        {
+            this._activity = activity;
+        }
+
         public override void OnReceive(Context context, Intent intent)
         {
             Android.Util.Log.Info("Kni", intent.Action.ToString());
@@ -46,7 +59,7 @@ namespace Microsoft.Xna.Framework
                         // TODO: Find a way to set Game.IsActive = false during a call.
                         // View.ClearFocus() doesn't have any affect. 
                         // The best we can do currently is to sent the game to foreground.
-                        AndroidGameWindow.Activity.MoveTaskToBack(true);
+                        _activity.MoveTaskToBack(true);
                     }
                 }
             }
@@ -54,13 +67,13 @@ namespace Microsoft.Xna.Framework
 
         private void OnLocked()
         {
-            ScreenReceiver.ScreenLocked = true;
+            _isScreenLocked = true;
             MediaPlayer.IsMuted = true;
         }
 
         private void OnUnlocked()
         {
-            ScreenReceiver.ScreenLocked = false;
+            _isScreenLocked = false;
             MediaPlayer.IsMuted = false;
             ((AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window).GameView._appState = AndroidGameWindow.AppState.Resumed;
             try
