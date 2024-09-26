@@ -86,9 +86,6 @@ namespace Microsoft.Xna.Framework
             var handler = Paused;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-
-            if (_orientationListener.CanDetectOrientation())
-                _orientationListener.Disable();
         }
 
         protected override void OnResume()
@@ -100,12 +97,6 @@ namespace Microsoft.Xna.Framework
             var handler = Resumed;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-
-            if (Game != null)
-            {
-                if (_orientationListener.CanDetectOrientation())
-                    _orientationListener.Enable();
-            }
         }
 
         public override void OnWindowFocusChanged(bool hasFocus)

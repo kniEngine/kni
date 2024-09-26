@@ -133,6 +133,12 @@ namespace Microsoft.Xna.Framework
                     ((IPlatformGraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
                 }
             }
+
+            if (_game != null)
+            {
+                if (_activity._orientationListener.CanDetectOrientation())
+                    _activity._orientationListener.Enable();
+            }
         }
 
         void Activity_Paused(object sender, EventArgs e)
@@ -149,6 +155,9 @@ namespace Microsoft.Xna.Framework
             Microsoft.Xna.Platform.Audio.AudioService.Suspend();
             if (_activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Pause();
+
+            if (_activity._orientationListener.CanDetectOrientation())
+                _activity._orientationListener.Disable();
         }
 
         void Activity_Destroyed(object sender, EventArgs e)
