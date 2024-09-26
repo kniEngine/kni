@@ -157,6 +157,10 @@ namespace Microsoft.Xna.Framework
 
         void Activity_Destroyed(object sender, EventArgs e)
         {
+            if (_game != null)
+            {
+                _game.Dispose();
+            }
         }
 
         private void Activity_WindowFocused(object sender, EventArgs e)

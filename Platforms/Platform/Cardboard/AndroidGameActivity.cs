@@ -123,15 +123,11 @@ namespace Microsoft.Xna.Framework
             ScreenReceiver.ScreenLocked = false;
             _orientationListener = null;
 
-            if (Game != null)
-            {
-                Game.Dispose();
-                Game = null;
-            }
-
             var handler = Destroyed;
             if (handler != null)
                 handler(this, EventArgs.Empty);
+
+            this.Game = null;
 
             base.OnDestroy();
         }
