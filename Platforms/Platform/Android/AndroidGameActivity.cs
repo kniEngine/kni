@@ -26,6 +26,9 @@ namespace Microsoft.Xna.Framework
         internal event EventHandler WindowFocused;
         internal event EventHandler WindowUnfocused;
 
+        public event EventHandler Paused;
+        public event EventHandler Resumed;
+
         /// <summary>
         /// OnCreate called when the activity is launched from cold or after the app
         /// has been killed due to a higher priority app needing the memory
@@ -58,8 +61,6 @@ namespace Microsoft.Xna.Framework
         private bool _isActivityActive = false;
         internal bool IsActivityActive { get { return _isActivityActive; } }
 
-        public event EventHandler Paused;
-        public event EventHandler Resumed;
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
         {
