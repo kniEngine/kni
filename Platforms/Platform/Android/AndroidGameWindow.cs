@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Framework
 
             _instances.Add(this.Handle, this);
 
-            _orientationListener = new OrientationListener(_activity);
+            _orientationListener = new OrientationListener(this, _activity);
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
