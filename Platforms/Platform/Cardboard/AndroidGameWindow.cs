@@ -492,7 +492,32 @@ namespace Microsoft.Xna.Framework
                 try
                 {
                     // tick
-                    this.RunStep();
+                    switch (GameView._appState)
+                    {
+                        case AndroidGameWindow.AppState.Resumed:
+                            System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
+                            if (GameView._isCancellationRequested == CancellationRequested.False)
+                            {
+                                if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
+                                    ProcessStateResumed();
+                            }
+                            else // (GameView._isCancellationRequested == CancellationRequested.True)
+                            {
+                                if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
+                                    GameView._appState = AndroidGameWindow.AppState.Exited;
+                            }
+                            break;
+
+                        case AndroidGameWindow.AppState.Paused:
+                            break;
+
+                        case AndroidGameWindow.AppState.Exited:
+                            GameView._isCancellationRequested = CancellationRequested.True;
+                            break;
+
+                        default:
+                            throw new InvalidOperationException("currentState");
+                    }
                 }
                 catch (Exception ex) { /* ignore */ }
             }
@@ -509,38 +534,6 @@ namespace Microsoft.Xna.Framework
 
             GameView._isCancellationRequested = CancellationRequested.False;
 
-        }
-
-        void RunStep()
-        {
-            switch (GameView._appState)
-            {
-                case AndroidGameWindow.AppState.Resumed:
-                    System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-                    if (GameView._isCancellationRequested == CancellationRequested.False)
-                    {
-                        if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
-                            ProcessStateResumed();
-                    }
-                    else // (GameView._isCancellationRequested == CancellationRequested.True)
-                    {
-                        if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
-                            GameView._appState = AndroidGameWindow.AppState.Exited;
-                    }
-                    break;
-
-                case AndroidGameWindow.AppState.Paused:
-                    break;
-
-                case AndroidGameWindow.AppState.Exited:
-                    GameView._isCancellationRequested = CancellationRequested.True;
-                    break;
-
-                default:
-                    throw new InvalidOperationException("currentState");
-            }
-
-            return;
         }
 
         void ProcessStateResumed()
