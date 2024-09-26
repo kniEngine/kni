@@ -64,6 +64,7 @@ namespace Microsoft.Xna.Framework
 
             _activity.Paused += Activity_Paused;
             _activity.Resumed += Activity_Resumed;
+            _activity.Destroyed += Activity_Destroyed;
 
             _activity.WindowFocused += Activity_WindowFocused;
             _activity.WindowUnfocused += Activity_WindowUnfocused;
@@ -148,6 +149,10 @@ namespace Microsoft.Xna.Framework
             Microsoft.Xna.Platform.Audio.AudioService.Suspend();
             if (_activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Pause();
+        }
+
+        void Activity_Destroyed(object sender, EventArgs e)
+        {
         }
 
         private void Activity_WindowFocused(object sender, EventArgs e)
@@ -386,6 +391,7 @@ namespace Microsoft.Xna.Framework
             {
                 _activity.Paused -= Activity_Paused;
                 _activity.Resumed -= Activity_Resumed;
+                _activity.Destroyed -= Activity_Destroyed;
 
                 _activity.WindowFocused += Activity_WindowFocused;
                 _activity.WindowUnfocused += Activity_WindowUnfocused;
