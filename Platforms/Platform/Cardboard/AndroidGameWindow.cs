@@ -517,7 +517,6 @@ namespace Microsoft.Xna.Framework
                             break;
 
                         case AndroidGameWindow.AppState.Exited:
-                            GameView._isCancellationRequested = CancellationRequested.True;
                             break;
 
                         default:
@@ -525,10 +524,6 @@ namespace Microsoft.Xna.Framework
                     }
                 }
                 catch (Exception ex) { /* ignore */ }
-            }
-            else // (GameView._isCancellationRequested == CancellationRequested.True)
-            {
-
             }
 
             return;

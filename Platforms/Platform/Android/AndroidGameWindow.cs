@@ -519,7 +519,6 @@ namespace Microsoft.Xna.Framework
                             break;
 
                         case AndroidGameWindow.AppState.Exited:
-                            GameView._isCancellationRequested = CancellationRequested.True;
                             break;
 
                         default:
@@ -535,7 +534,6 @@ namespace Microsoft.Xna.Framework
             }
             else // (GameView._isCancellationRequested == CancellationRequested.True)
             {
-
                 ISurfaceView surfaceView = GameView;
                 if (surfaceView.EglSurface != null)
                 {
@@ -560,9 +558,6 @@ namespace Microsoft.Xna.Framework
                     }
                     _eglContext = null;
                 }
-
-                GameView._isCancellationRequested = CancellationRequested.Null;
-                GameView._appState = AndroidGameWindow.AppState.Exited;
             }
 
             return;
