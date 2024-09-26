@@ -22,13 +22,6 @@ using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 namespace Microsoft.Xna.Framework
 {
-    internal enum CancellationRequested
-    {
-        Null,
-        False,
-        True,
-    }
-
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
@@ -486,8 +479,6 @@ namespace Microsoft.Xna.Framework
             // Cardboard:
             _isStarted = true;
             return;
-
-            GameView._isCancellationRequested = CancellationRequested.False;
         }
 
         private void RunFrame()
@@ -497,11 +488,6 @@ namespace Microsoft.Xna.Framework
 
         private void RunStep()
         {
-            if (GameView._isCancellationRequested == CancellationRequested.Null)
-                GameView._isCancellationRequested = CancellationRequested.False;
-
-            System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-            if (GameView._isCancellationRequested != CancellationRequested.True)
             {
                 try
                 {
@@ -517,6 +503,7 @@ namespace Microsoft.Xna.Framework
                             break;
 
                         case AndroidGameWindow.AppState.Exited:
+                            ProcessStateExited();
                             break;
 
                         default:
@@ -578,6 +565,10 @@ namespace Microsoft.Xna.Framework
             {
                 Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
             }
+        }
+
+        private void ProcessStateExited()
+        {
         }
 
         private GLESVersion _glesVersion;

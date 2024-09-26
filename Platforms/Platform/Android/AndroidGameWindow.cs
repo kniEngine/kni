@@ -21,13 +21,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework
 {
-    internal enum CancellationRequested
-    {
-        Null,
-        False,
-        True,
-    }
-
     [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
@@ -489,8 +482,6 @@ namespace Microsoft.Xna.Framework
 
         internal void StartGameLoop()
         {
-            GameView._isCancellationRequested = CancellationRequested.False;
-
             _runner.InitLoopHandler();
             _runner.RequestFrame();
         }
@@ -502,8 +493,6 @@ namespace Microsoft.Xna.Framework
 
         private void RunStep()
         {
-            System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-            if (GameView._isCancellationRequested != CancellationRequested.True)
             {
                 try
                 {
@@ -519,6 +508,7 @@ namespace Microsoft.Xna.Framework
                             break;
 
                         case AndroidGameWindow.AppState.Exited:
+                                ProcessStateExited();
                             break;
 
                         default:
@@ -530,33 +520,6 @@ namespace Microsoft.Xna.Framework
                     // request next tick
                     if (GameView._appState == AndroidGameWindow.AppState.Resumed)
                         _runner.RequestFrame();
-                }
-            }
-            else // (GameView._isCancellationRequested == CancellationRequested.True)
-            {
-                ISurfaceView surfaceView = GameView;
-                if (surfaceView.EglSurface != null)
-                {
-                    var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                    var GL = adapter.Ogl;
-
-                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                        Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
-
-                    GameView.GlDestroySurface(adapter);
-                }
-
-                if (_eglContext != null)
-                {
-                    var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                    var GL = adapter.Ogl;
-
-                    if (this.EglContext != null)
-                    {
-                        if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, _eglContext))
-                            throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
-                    }
-                    _eglContext = null;
                 }
             }
 
@@ -607,6 +570,34 @@ namespace Microsoft.Xna.Framework
             catch (OpenGLException ex)
             {
                 Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
+            }
+        }
+
+        private void ProcessStateExited()
+        {
+            ISurfaceView surfaceView = GameView;
+            if (surfaceView.EglSurface != null)
+            {
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
+
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
+
+                GameView.GlDestroySurface(adapter);
+            }
+
+            if (_eglContext != null)
+            {
+                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
+
+                if (this.EglContext != null)
+                {
+                    if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, _eglContext))
+                        throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
+                }
+                _eglContext = null;
             }
         }
 
