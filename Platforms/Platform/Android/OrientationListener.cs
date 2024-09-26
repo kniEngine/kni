@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework
             if (ScreenReceiver.ScreenLocked)
                 return;
 
-            var disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
+            DisplayOrientation disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
             AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
             if ((gameWindow.GetEffectiveSupportedOrientations() & disporientation) == 0 ||
