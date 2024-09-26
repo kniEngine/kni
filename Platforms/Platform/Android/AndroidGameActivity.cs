@@ -18,7 +18,6 @@ namespace Microsoft.Xna.Framework
         internal Game Game { private get; set; }
 
         private ScreenReceiver screenReceiver;
-        internal OrientationListener _orientationListener;
 
         public bool AutoPauseAndResumeMediaPlayer = true;
 

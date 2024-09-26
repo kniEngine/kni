@@ -54,6 +54,7 @@ namespace Microsoft.Xna.Framework
         internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
 
+        private OrientationListener _orientationListener;
         private TouchEventListener _touchEventListener;
 
         public override IntPtr Handle { get { return GameView.Handle; } }
@@ -97,7 +98,7 @@ namespace Microsoft.Xna.Framework
 
             _instances.Add(this.Handle, this);
 
-            _activity._orientationListener = new OrientationListener(_activity);
+            _orientationListener = new OrientationListener(_activity);
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
@@ -142,8 +143,8 @@ namespace Microsoft.Xna.Framework
 
             if (_game != null)
             {
-                if (_activity._orientationListener.CanDetectOrientation())
-                    _activity._orientationListener.Enable();
+                if (_orientationListener.CanDetectOrientation())
+                    _orientationListener.Enable();
             }
         }
 
@@ -162,13 +163,13 @@ namespace Microsoft.Xna.Framework
             if (_activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Pause();
 
-            if (_activity._orientationListener.CanDetectOrientation())
-                _activity._orientationListener.Disable();
+            if (_orientationListener.CanDetectOrientation())
+                _orientationListener.Disable();
         }
 
         void Activity_Destroyed(object sender, EventArgs e)
         {
-            _activity._orientationListener = null;
+            _orientationListener = null;
 
             if (_game != null)
             {
@@ -558,7 +559,7 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                _activity._orientationListener.Update();
+                _orientationListener.Update();
 
                 try
                 {
