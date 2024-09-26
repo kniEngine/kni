@@ -108,12 +108,22 @@ namespace Microsoft.Xna.Framework
             filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
             _screenReceiver = new ScreenReceiver(this, _activity);
             _activity.RegisterReceiver(_screenReceiver, filter);
+            _screenReceiver.Unlocked += ScreenReceiver_Unlocked;
+            _screenReceiver.Locked += ScreenReceiver_Locked;
 
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
 
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = this.Handle;
+        }
+
+        private void ScreenReceiver_Unlocked(object sender, EventArgs e)
+        {
+        }
+
+        private void ScreenReceiver_Locked(object sender, EventArgs e)
+        {
         }
 
         void Activity_Resumed(object sender, EventArgs e)
@@ -178,6 +188,8 @@ namespace Microsoft.Xna.Framework
 
         void Activity_Destroyed(object sender, EventArgs e)
         {
+            _screenReceiver.Unlocked -= ScreenReceiver_Unlocked;
+            _screenReceiver.Locked -= ScreenReceiver_Locked;
             _activity.UnregisterReceiver(_screenReceiver);
             _screenReceiver.IsScreenLocked = false;
 

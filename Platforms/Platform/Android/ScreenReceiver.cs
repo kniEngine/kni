@@ -15,6 +15,10 @@ namespace Microsoft.Xna.Framework
         private bool _isScreenLocked;
 
 
+        public event EventHandler Locked;
+        public event EventHandler Unlocked;
+
+
         public bool IsScreenLocked
         {
             get { return _isScreenLocked; }
@@ -71,6 +75,10 @@ namespace Microsoft.Xna.Framework
         {
             _isScreenLocked = true;
             MediaPlayer.IsMuted = true;
+
+            var handler = Locked;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         private void OnUnlocked()
@@ -88,6 +96,10 @@ namespace Microsoft.Xna.Framework
             {
                 Log.Verbose("RequestFocus()", ex.ToString());
             }
+
+            var handler = Locked;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
     }
 }
