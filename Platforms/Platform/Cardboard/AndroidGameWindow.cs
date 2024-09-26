@@ -526,7 +526,10 @@ namespace Microsoft.Xna.Framework
                 }
                 catch (Exception ex) { /* ignore */ }
             }
-            //else // (GameView._isCancellationRequested == CancellationRequested.True)
+            else // (GameView._isCancellationRequested == CancellationRequested.True)
+            {
+
+            }
 
             return;
         }

@@ -535,7 +535,6 @@ namespace Microsoft.Xna.Framework
             }
             else // (GameView._isCancellationRequested == CancellationRequested.True)
             {
-                GameView._isCancellationRequested = CancellationRequested.Null;
 
                 ISurfaceView surfaceView = GameView;
                 if (surfaceView.EglSurface != null)
@@ -562,6 +561,7 @@ namespace Microsoft.Xna.Framework
                     _eglContext = null;
                 }
 
+                GameView._isCancellationRequested = CancellationRequested.Null;
                 GameView._appState = AndroidGameWindow.AppState.Exited;
             }
 
