@@ -477,16 +477,9 @@ namespace Microsoft.Xna.Framework
 
                 ISurfaceView surfaceView = GameView;
 
-                if (this.EglConfig == null)
+                if (this.EglContext != null)
                 {
-                    //ChooseGLConfig();
-                }
-
-                // create context if not available
-                if (this.EglContext == null)
-                {
-                    //CreateGLContext();
-
+                    // recreate the surface and bind the context to the thread
                     if (surfaceView.EglSurface == null)
                     {
                         /* Cardboard: Surface was created by GLSurfaceView.
@@ -495,13 +488,11 @@ namespace Microsoft.Xna.Framework
 
                         /* Cardboard: Context was created by GLSurfaceView.
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
+                        {
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                        }
                         Threading.MakeMainThread();
                         */
-
-                        // OGL.InitExtensions() must be called while we have a current gl context.
-                        if (OGL_DROID.Current.Extensions == null)
-                            OGL_DROID.Current.InitExtensions();
 
                         GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
                         if (gdm != null)
@@ -511,30 +502,6 @@ namespace Microsoft.Xna.Framework
                                 ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
                                 gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
                             }
-                        }
-                    }
-                }
-
-                if (surfaceView.EglSurface == null)
-                {
-                    /* Cardboard: Surface was created by GLSurfaceView.
-                    GameView.GLCreateSurface(adapter, this.EglConfig);
-                    */
-
-                    /* Cardboard: Context was created by GLSurfaceView.
-                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, this.EglSurface, surfaceView.EglSurface, this.EglContext))
-                        throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
-                    Threading.MakeMainThread();
-                    */
-
-                    GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                    if (gdm != null)
-                    {
-                        if (gdm.GraphicsDevice != null)
-                        {
-                            ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
-                            gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
-
                         }
                     }
                 }
@@ -564,6 +531,11 @@ namespace Microsoft.Xna.Framework
         internal EGLContext EglContext { get { return _eglContext; } }
 
 
+        internal void GLChooseConfig()
+        {
+            // Cardboard: _eglConfig was created by GLSurfaceView.
+        }
+
         internal static EGLSurface GLCreatePBufferSurface(EGLConfig config, int[] attribList)
         {
             var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
@@ -581,6 +553,10 @@ namespace Microsoft.Xna.Framework
         }
 
 
+        internal void GLCreateContext()
+        {
+            
+        }
 
         Input.Cardboard.HeadsetState _hsState;
         private void UpdateLocalHeadsetState(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)

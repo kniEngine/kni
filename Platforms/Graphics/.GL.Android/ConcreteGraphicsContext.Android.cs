@@ -21,12 +21,35 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteGraphicsContext(GraphicsContext context)
             : base(context)
         {
-            _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
-
             var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
             var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+
+
+            // create context
+
+            ISurfaceView surfaceView = gameWindow.GameView;
+
+            if (gameWindow.EglConfig == null)
+                gameWindow.GLChooseConfig();
+
+            gameWindow.GLCreateContext();
+
+            if (surfaceView.EglSurface == null)
+                gameWindow.GameView.GLCreateSurface(adapter, gameWindow.EglConfig);
+
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, gameWindow.EglContext))
+                throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+            _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+            Threading.MakeMainThread();
+
+            // OGL.InitExtensions() must be called while we have a current gl context.
+            if (OGL_DROID.Current.Extensions == null)
+                OGL_DROID.Current.InitExtensions();
+
+
+            // create _glSharedContext for Disposing
 
             int[] attribs = gameWindow.GLesVersion.GetAttributes();
             _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, gameWindow.EglConfig, gameWindow.EglContext, attribs);

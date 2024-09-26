@@ -510,27 +510,18 @@ namespace Microsoft.Xna.Framework
 
                 ISurfaceView surfaceView = GameView;
 
-                if (this.EglConfig == null)
+                if (this.EglContext != null)
                 {
-                    this.GLChooseConfig();
-                }
-
-                // create context if not available
-                if (this.EglContext == null)
-                {
-                    this.GLCreateContext();
-
+                    // recreate the surface and bind the context to the thread
                     if (surfaceView.EglSurface == null)
                     {
                         GameView.GLCreateSurface(adapter, this.EglConfig);
 
                         if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
+                        {
                             throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                        }
                         Threading.MakeMainThread();
-
-                        // OGL.InitExtensions() must be called while we have a current gl context.
-                        if (OGL_DROID.Current.Extensions == null)
-                            OGL_DROID.Current.InitExtensions();
 
                         GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
                         if (gdm != null)
@@ -540,26 +531,6 @@ namespace Microsoft.Xna.Framework
                                 ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
                                 gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
                             }
-                        }
-                    }
-                }
-
-                if (surfaceView.EglSurface == null)
-                {
-                    GameView.GLCreateSurface(adapter, this.EglConfig);
-
-                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
-                        throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
-                    Threading.MakeMainThread();
-
-                    GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                    if (gdm != null)
-                    {
-                        if (gdm.GraphicsDevice != null)
-                        {
-                            ConcreteGraphicsDevice gd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)gdm.GraphicsDevice).Strategy;
-                            gd.Android_UpdateBackBufferBounds(GameView.Width, GameView.Height);
-
                         }
                     }
                 }
