@@ -19,7 +19,6 @@ namespace Microsoft.Xna.Framework
         internal Game Game { private get; set; }
 
         private ScreenReceiver screenReceiver;
-        internal OrientationListener _orientationListener;
 
         public bool AutoPauseAndResumeMediaPlayer = true;
 
@@ -62,8 +61,6 @@ namespace Microsoft.Xna.Framework
             screenReceiver = new ScreenReceiver();
             RegisterReceiver(screenReceiver, filter);
 
-            _orientationListener = new OrientationListener(this);
-
             AndroidGameWindow.Activity = this;
         }
 
@@ -86,9 +83,6 @@ namespace Microsoft.Xna.Framework
             var handler = Paused;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-
-            if (_orientationListener.CanDetectOrientation())
-                _orientationListener.Disable();
         }
 
         protected override void OnResume()
@@ -100,12 +94,6 @@ namespace Microsoft.Xna.Framework
             var handler = Resumed;
             if (handler != null)
                 handler(this, EventArgs.Empty);
-
-            if (Game != null)
-            {
-                if (_orientationListener.CanDetectOrientation())
-                    _orientationListener.Enable();
-            }
         }
 
         public override void OnWindowFocusChanged(bool hasFocus)
@@ -121,7 +109,6 @@ namespace Microsoft.Xna.Framework
         {
             UnregisterReceiver(screenReceiver);
             ScreenReceiver.ScreenLocked = false;
-            _orientationListener = null;
 
             var handler = Destroyed;
             if (handler != null)

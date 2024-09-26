@@ -53,6 +53,7 @@ namespace Microsoft.Xna.Framework
         internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
 
+        private OrientationListener _orientationListener;
         private TouchEventListener _touchEventListener;
 
         public override IntPtr Handle { get { return GameView.Handle; } }
@@ -94,6 +95,8 @@ namespace Microsoft.Xna.Framework
 
             _instances.Add(this.Handle, this);
 
+            _orientationListener = new OrientationListener(this, _activity);
+
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
 
@@ -133,6 +136,12 @@ namespace Microsoft.Xna.Framework
                     ((IPlatformGraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
                 }
             }
+
+            if (_game != null)
+            {
+                if (_orientationListener.CanDetectOrientation())
+                    _orientationListener.Enable();
+            }
         }
 
         void Activity_Paused(object sender, EventArgs e)
@@ -149,10 +158,15 @@ namespace Microsoft.Xna.Framework
             Microsoft.Xna.Platform.Audio.AudioService.Suspend();
             if (_activity.AutoPauseAndResumeMediaPlayer)
                 MediaPlayer.Pause();
+
+            if (_orientationListener.CanDetectOrientation())
+                _orientationListener.Disable();
         }
 
         void Activity_Destroyed(object sender, EventArgs e)
         {
+            _orientationListener = null;
+
             if (_game != null)
             {
                 _game.Dispose();
@@ -517,7 +531,7 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                _activity._orientationListener.Update();
+                _orientationListener.Update();
 
                 try
                 {

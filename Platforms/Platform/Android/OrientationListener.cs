@@ -15,6 +15,8 @@ namespace Microsoft.Xna.Framework
 {
     internal class OrientationListener : OrientationEventListener
     {
+        private AndroidGameWindow _gameWindow;
+
         internal DisplayOrientation targetOrientation = DisplayOrientation.Unknown;
         DateTime prevTickTime = DateTime.Now;
         TimeSpan elapsed = TimeSpan.Zero;
@@ -23,9 +25,10 @@ namespace Microsoft.Xna.Framework
         /// Constructor. SensorDelay.Ui is passed to the base class as this orientation listener 
         /// is just used for flipping the screen orientation, therefore high frequency data is not required.
         /// </summary>
-        public OrientationListener(Context context)
+        public OrientationListener(AndroidGameWindow gameWindow, Context context)
             : base(context, SensorDelay.Ui)
         {
+            this._gameWindow = gameWindow;
         }
 
         public override void OnOrientationChanged(int orientation)
@@ -41,12 +44,12 @@ namespace Microsoft.Xna.Framework
             if (ScreenReceiver.ScreenLocked)
                 return;
 
-            var disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
+            DisplayOrientation disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
-            AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
-            if ((gameWindow.GetEffectiveSupportedOrientations() & disporientation) == 0 ||
-                disporientation == gameWindow.CurrentOrientation ||
-                disporientation == DisplayOrientation.Unknown)
+            if ((_gameWindow.GetEffectiveSupportedOrientations() & disporientation) == 0
+            ||  disporientation == _gameWindow.CurrentOrientation
+            ||  disporientation == DisplayOrientation.Unknown
+               )
             {
                 targetOrientation = DisplayOrientation.Unknown;
                 elapsed = TimeSpan.Zero;
@@ -83,8 +86,7 @@ namespace Microsoft.Xna.Framework
                     // orientation must be stable for 0.5 seconds before changing.
                     if (elapsed.TotalSeconds > 0.5)
                     {
-                        AndroidGameWindow gameWindow = (AndroidGameWindow)ConcreteGame.GameConcreteInstance.Window;
-                        gameWindow.SetOrientation(targetOrientation, true);
+                        _gameWindow.SetOrientation(targetOrientation, true);
                         targetOrientation = DisplayOrientation.Unknown;
                         elapsed = TimeSpan.Zero;
                     }
