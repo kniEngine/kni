@@ -399,7 +399,7 @@ namespace Microsoft.Xna.Framework
                         ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
                     }
 
-                    AndroidGameWindow.Activity.RequestedOrientation = requestedOrientation;
+                    _activity.RequestedOrientation = requestedOrientation;
 
                     OnOrientationChanged();
                 }
