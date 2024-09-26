@@ -117,10 +117,24 @@ namespace Microsoft.Xna.Framework
 
         private void ScreenReceiver_Unlocked(object sender, EventArgs e)
         {
+            MediaPlayer.IsMuted = false;
+
+            this.GameView._appState = AndroidGameWindow.AppState.Resumed;
+
+            try
+            {
+                if (!this.GameView.IsFocused)
+                    this.GameView.RequestFocus();
+            }
+            catch (Exception ex)
+            {
+                Log.Verbose("RequestFocus()", ex.ToString());
+            }
         }
 
         private void ScreenReceiver_Locked(object sender, EventArgs e)
         {
+            MediaPlayer.IsMuted = true;
         }
 
         void Activity_Resumed(object sender, EventArgs e)

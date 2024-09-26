@@ -74,7 +74,6 @@ namespace Microsoft.Xna.Framework
         private void OnLocked()
         {
             _isScreenLocked = true;
-            MediaPlayer.IsMuted = true;
 
             var handler = Locked;
             if (handler != null)
@@ -84,17 +83,6 @@ namespace Microsoft.Xna.Framework
         private void OnUnlocked()
         {
             _isScreenLocked = false;
-            MediaPlayer.IsMuted = false;
-            _gameWindow.GameView._appState = AndroidGameWindow.AppState.Resumed;
-            try
-            {
-                if (!_gameWindow.GameView.IsFocused)
-                    _gameWindow.GameView.RequestFocus();
-            }
-            catch (Exception ex)
-            {
-                Log.Verbose("RequestFocus()", ex.ToString());
-            }
 
             var handler = Locked;
             if (handler != null)
