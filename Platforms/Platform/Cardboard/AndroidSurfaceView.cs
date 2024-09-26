@@ -32,8 +32,6 @@ namespace Microsoft.Xna.Framework
 
         internal bool _isAndroidSurfaceAvailable = false;
 
-        internal bool? _isCancellationRequested = null;
-
         private readonly AndroidGameWindow _gameWindow;
 
         public AndroidSurfaceView(Context context, AndroidGameWindow gameWindow)
@@ -105,16 +103,11 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
-                if (_isCancellationRequested != null)
-                {
-                    _appState = AndroidGameWindow.AppState.Exited;
-                    _isCancellationRequested = true;
-                }
+                _appState = AndroidGameWindow.AppState.Exited;
             }
 
             base.Dispose(disposing);
         }
-
 
         #region Key and Motion
 

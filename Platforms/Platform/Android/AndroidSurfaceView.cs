@@ -33,9 +33,6 @@ namespace Microsoft.Xna.Framework
 
         internal bool _isAndroidSurfaceAvailable = false;
 
-        internal bool? _isCancellationRequested = null;
-
-
 
         public AndroidSurfaceView(Context context)
             : base(context)
@@ -94,11 +91,7 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
-                if (_isCancellationRequested != null)
-                {
-                    _appState = AndroidGameWindow.AppState.Exited;
-                    _isCancellationRequested = true;
-                }
+                _appState = AndroidGameWindow.AppState.Exited;
             }
 
             base.Dispose(disposing);
