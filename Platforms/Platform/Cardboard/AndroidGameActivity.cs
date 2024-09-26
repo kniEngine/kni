@@ -29,6 +29,7 @@ namespace Microsoft.Xna.Framework
 
         public event EventHandler Paused;
         public event EventHandler Resumed;
+        internal event EventHandler Destroyed;
 
         /// <summary>
         /// OnCreate called when the activity is launched from cold or after the app
@@ -127,6 +128,10 @@ namespace Microsoft.Xna.Framework
                 Game.Dispose();
                 Game = null;
             }
+
+            var handler = Destroyed;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
 
             base.OnDestroy();
         }
