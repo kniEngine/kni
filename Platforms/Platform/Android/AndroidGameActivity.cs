@@ -26,6 +26,10 @@ namespace Microsoft.Xna.Framework
         internal event EventHandler WindowFocused;
         internal event EventHandler WindowUnfocused;
 
+        public event EventHandler Paused;
+        public event EventHandler Resumed;
+        internal event EventHandler Destroyed;
+
         /// <summary>
         /// OnCreate called when the activity is launched from cold or after the app
         /// has been killed due to a higher priority app needing the memory
@@ -58,8 +62,6 @@ namespace Microsoft.Xna.Framework
         private bool _isActivityActive = false;
         internal bool IsActivityActive { get { return _isActivityActive; } }
 
-        public event EventHandler Paused;
-        public event EventHandler Resumed;
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
         {
@@ -113,11 +115,11 @@ namespace Microsoft.Xna.Framework
             ScreenReceiver.ScreenLocked = false;
             _orientationListener = null;
 
-            if (Game != null)
-            {
-                Game.Dispose();
-                Game = null;
-            }
+            var handler = Destroyed;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+
+            this.Game = null;
 
             base.OnDestroy();
         }
