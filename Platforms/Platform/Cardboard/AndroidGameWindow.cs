@@ -487,7 +487,7 @@ namespace Microsoft.Xna.Framework
                 GameView._isCancellationRequested = CancellationRequested.False;
 
             System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-            if (GameView._isCancellationRequested == CancellationRequested.False)
+            if (GameView._isCancellationRequested != CancellationRequested.True)
             {
                 try
                 {

@@ -498,7 +498,7 @@ namespace Microsoft.Xna.Framework
         internal void OnTick(object sender, EventArgs args)
         {
             System.Diagnostics.Debug.Assert(GameView._isCancellationRequested != CancellationRequested.Null);
-            if (GameView._isCancellationRequested == CancellationRequested.False)
+            if (GameView._isCancellationRequested != CancellationRequested.True)
             {
                 try
                 {
