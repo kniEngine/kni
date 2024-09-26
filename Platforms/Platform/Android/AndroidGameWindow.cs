@@ -488,39 +488,36 @@ namespace Microsoft.Xna.Framework
 
         internal void OnTick(object sender, EventArgs args)
         {
-            RunStep();
+            try
+            {
+                RunStep(); // tick
+            }
+            finally
+            {
+                // request next tick
+                if (GameView._appState == AndroidGameWindow.AppState.Resumed)
+                    _runner.RequestFrame();
+            }
         }
 
         private void RunStep()
         {
+            switch (GameView._appState)
             {
-                try
-                {
-                    // tick
-                    switch (GameView._appState)
-                    {
-                        case AndroidGameWindow.AppState.Resumed:
-                            if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
-                                ProcessStateResumed();
-                            break;
+                case AndroidGameWindow.AppState.Resumed:
+                    if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
+                        ProcessStateResumed();
+                    break;
 
-                        case AndroidGameWindow.AppState.Paused:
-                            break;
+                case AndroidGameWindow.AppState.Paused:
+                    break;
 
-                        case AndroidGameWindow.AppState.Exited:
-                                ProcessStateExited();
-                            break;
+                case AndroidGameWindow.AppState.Exited:
+                        ProcessStateExited();
+                    break;
 
-                        default:
-                            throw new InvalidOperationException("currentState");
-                    }
-                }
-                finally
-                {
-                    // request next tick
-                    if (GameView._appState == AndroidGameWindow.AppState.Resumed)
-                        _runner.RequestFrame();
-                }
+                default:
+                    throw new InvalidOperationException("currentState");
             }
 
             return;

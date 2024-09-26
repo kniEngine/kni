@@ -483,34 +483,31 @@ namespace Microsoft.Xna.Framework
 
         private void RunFrame()
         {
-            RunStep();
+            try
+            {
+                RunStep(); // tick
+            }
+            catch (Exception ex) { /* ignore */ }
         }
 
         private void RunStep()
         {
+            switch (GameView._appState)
             {
-                try
-                {
-                    // tick
-                    switch (GameView._appState)
-                    {
-                        case AndroidGameWindow.AppState.Resumed:
-                            if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
-                                ProcessStateResumed();
-                            break;
+                case AndroidGameWindow.AppState.Resumed:
+                    if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
+                        ProcessStateResumed();
+                    break;
 
-                        case AndroidGameWindow.AppState.Paused:
-                            break;
+                case AndroidGameWindow.AppState.Paused:
+                    break;
 
-                        case AndroidGameWindow.AppState.Exited:
-                            ProcessStateExited();
-                            break;
+                case AndroidGameWindow.AppState.Exited:
+                    ProcessStateExited();
+                    break;
 
-                        default:
-                            throw new InvalidOperationException("currentState");
-                    }
-                }
-                catch (Exception ex) { /* ignore */ }
+                default:
+                    throw new InvalidOperationException("currentState");
             }
 
             return;
