@@ -116,8 +116,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include=".UAP\ConcreteTitleContainer.cs" />
-    <Compile Include=".UAP\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.UAP\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.UAP\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

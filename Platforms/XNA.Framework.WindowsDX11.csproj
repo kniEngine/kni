@@ -95,8 +95,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include=".WindowsDX11\ConcreteTitleContainer.cs" />
-    <Compile Include=".WindowsDX11\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.WindowsDX11\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.WindowsDX11\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

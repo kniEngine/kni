@@ -84,8 +84,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include=".iOS\ConcreteTitleContainer.cs" />
-    <Compile Include=".iOS\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.iOS\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.iOS\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
