@@ -154,15 +154,15 @@
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
 
-    <Compile Include="Platform\Microsoft\Devices\Sensors\AccelerometerFailedException.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\AccelerometerReading.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\CalibrationEventArgs.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\CompassReading.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\ISensorReading.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\SensorBase.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\SensorFailedException.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\SensorReadingEventArgs.cs" />
-    <Compile Include="Platform\Microsoft\Devices\Sensors\SensorState.cs" />
+    <Compile Include="Sensors\AccelerometerFailedException.cs" />
+    <Compile Include="Sensors\AccelerometerReading.cs" />
+    <Compile Include="Sensors\CalibrationEventArgs.cs" />
+    <Compile Include="Sensors\CompassReading.cs" />
+    <Compile Include="Sensors\ISensorReading.cs" />
+    <Compile Include="Sensors\SensorBase.cs" />
+    <Compile Include="Sensors\SensorFailedException.cs" />
+    <Compile Include="Sensors\SensorReadingEventArgs.cs" />
+    <Compile Include="Sensors\SensorState.cs" />
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
