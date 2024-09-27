@@ -94,8 +94,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include=".SDL2\ConcreteTitleContainer.cs" />
-    <Compile Include=".SDL2\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.SDL2\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.SDL2\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

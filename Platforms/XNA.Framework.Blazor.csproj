@@ -106,8 +106,8 @@
     <Compile Include="Media\Blazor\ConcreteSong.cs" />
     <Compile Include="Media\Blazor\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Blazor\ConcreteVideo.cs" />
-    <Compile Include=".Blazor\ConcreteTitleContainer.cs" />
-    <Compile Include=".Blazor\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.Blazor\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.Blazor\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
   
   <ItemGroup>

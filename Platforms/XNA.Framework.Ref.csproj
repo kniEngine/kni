@@ -99,8 +99,8 @@
     <Compile Include="Media\Ref\ConcreteSong.cs" />
     <Compile Include="Media\Ref\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Ref\ConcreteVideo.cs" />
-    <Compile Include=".Ref\ConcreteTitleContainer.cs" />
-    <Compile Include=".Ref\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.Ref\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.Ref\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

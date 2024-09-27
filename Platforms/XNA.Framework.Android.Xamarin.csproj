@@ -109,8 +109,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include=".Android\ConcreteTitleContainer.cs" />
-    <Compile Include=".Android\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.Android\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.Android\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

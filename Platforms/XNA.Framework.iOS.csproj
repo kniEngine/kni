@@ -126,8 +126,8 @@
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
-    <Compile Include=".iOS\ConcreteTitleContainer.cs" />
-    <Compile Include=".iOS\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Content\.iOS\ConcreteTitleContainer.cs" />
+    <Compile Include="Content\.iOS\ConcreteTitleContainerFactory.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.iOS.cs" />
     <Compile Include="Platform\Utilities\InteropHelpers.cs" />
 
