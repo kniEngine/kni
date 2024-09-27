@@ -48,6 +48,7 @@ namespace Microsoft.Xna.Framework
         internal AndroidGameActivity _activity;
         private readonly Game _game;
         private bool _isActivated = false;
+        private AndroidGameWindow.AppState _appState = AndroidGameWindow.AppState.Exited;
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         private Rectangle _clientBounds;
@@ -122,7 +123,7 @@ namespace Microsoft.Xna.Framework
         {
             MediaPlayer.IsMuted = false;
 
-            this.GameView._appState = AndroidGameWindow.AppState.Resumed;
+            _appState = AndroidGameWindow.AppState.Resumed;
             this._runner.RequestFrame();
 
             try
@@ -150,7 +151,7 @@ namespace Microsoft.Xna.Framework
                 OnActivated();
             }
 
-            GameView._appState = AndroidGameWindow.AppState.Resumed;
+            _appState = AndroidGameWindow.AppState.Resumed;
             _runner.RequestFrame();
             try
             {
@@ -192,7 +193,7 @@ namespace Microsoft.Xna.Framework
             }
 
             _mediaPlayer_PrevState = MediaPlayer.State;
-            this.GameView._appState = AndroidGameWindow.AppState.Paused;
+            _appState = AndroidGameWindow.AppState.Paused;
             this.GameView.ClearFocus();
             Microsoft.Xna.Platform.Audio.AudioService.Suspend();
             if (_activity.AutoPauseAndResumeMediaPlayer)
@@ -462,6 +463,8 @@ namespace Microsoft.Xna.Framework
                 _activity = null;
             }
 
+            _appState = AndroidGameWindow.AppState.Exited;
+
             if (GameView != null)
             {
                 if (TouchPanel.WindowHandle == this.Handle)
@@ -495,14 +498,14 @@ namespace Microsoft.Xna.Framework
             finally
             {
                 // request next tick
-                if (GameView._appState == AndroidGameWindow.AppState.Resumed)
+                if (_appState == AndroidGameWindow.AppState.Resumed)
                     _runner.RequestFrame();
             }
         }
 
         private void RunStep()
         {
-            switch (GameView._appState)
+            switch (_appState)
             {
                 case AndroidGameWindow.AppState.Resumed:
                     if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available

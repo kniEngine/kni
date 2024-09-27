@@ -28,7 +28,6 @@ namespace Microsoft.Xna.Framework
         , ISurfaceView
         , VRCardboard.CardboardView.IRenderer
     {
-        internal volatile AndroidGameWindow.AppState _appState = AndroidGameWindow.AppState.Exited;
 
         internal bool _isAndroidSurfaceAvailable = false;
 
@@ -103,7 +102,6 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
-                _appState = AndroidGameWindow.AppState.Exited;
             }
 
             base.Dispose(disposing);
