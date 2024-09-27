@@ -575,35 +575,11 @@ namespace Microsoft.Xna.Framework
 
         private void ProcessStateExited()
         {
-            ISurfaceView surfaceView = GameView;
-            if (surfaceView.EglSurface != null)
-            {
-                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
-
-                GameView.GlDestroySurface(adapter);
-            }
-
-            if (_eglContext != null)
-            {
-                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                if (this.EglContext != null)
-                {
-                    if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, _eglContext))
-                        throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
-                }
-                _eglContext = null;
-            }
         }
 
         private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
-        private EGLContext _eglContext;
+        internal EGLContext _eglContext;
 
         internal GLESVersion GLesVersion { get { return _glesVersion; } }
         internal EGLConfig EglConfig { get { return _eglConfig; } }
