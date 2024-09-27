@@ -177,11 +177,11 @@
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
-    <Compile Include=".SDL2\ConcreteGame.cs" />
-    <Compile Include=".SDL2\ConcreteGameFactory.cs" />
-    <Compile Include=".SDL2\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Platform\SDL\SDLGameWindow.cs" />
-    <Compile Include="Platform\SDL\SDL2.cs" />
+    <Compile Include="Game\.SDL2\ConcreteGame.cs" />
+    <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.SDL2\SDLGameWindow.cs" />
+    <Compile Include="Game\.SDL2\SDL2.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />

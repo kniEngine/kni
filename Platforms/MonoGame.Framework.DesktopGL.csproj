@@ -101,11 +101,11 @@
   <ItemGroup>
     <Compile Include=".SDL2\ConcreteTitleContainer.cs" />
     <Compile Include=".SDL2\ConcreteTitleContainerFactory.cs" />
-    <Compile Include="Platform\SDL\SDL2.cs" />
-    <Compile Include=".SDL2\ConcreteGame.cs" />
-    <Compile Include=".SDL2\ConcreteGameFactory.cs" />
-    <Compile Include=".SDL2\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Platform\SDL\SDLGameWindow.cs" />
+    <Compile Include="Game\.SDL2\SDL2.cs" />
+    <Compile Include="Game\.SDL2\ConcreteGame.cs" />
+    <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.SDL2\SDLGameWindow.cs" />
     <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
     <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
     <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />

@@ -185,14 +185,14 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
-    <Compile Include="Platform\WindowsUniversal\GameFrameworkViewSource.cs" />
-    <Compile Include="Platform\WindowsUniversal\UAPFrameworkView.cs" />
-    <Compile Include=".UAP\ConcreteGame.cs" />
-    <Compile Include=".UAP\ConcreteGameFactory.cs" />
-    <Compile Include=".UAP\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Platform\WindowsUniversal\UAPGameWindow.cs" />
-    <Compile Include="Platform\WindowsUniversal\XamlGame.cs" />
-    <Compile Include="Platform\WindowsUniversal\InputEvents.cs" />
+    <Compile Include="Game\.UAP\GameFrameworkViewSource.cs" />
+    <Compile Include="Game\.UAP\UAPFrameworkView.cs" />
+    <Compile Include="Game\.UAP\ConcreteGame.cs" />
+    <Compile Include="Game\.UAP\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.UAP\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.UAP\UAPGameWindow.cs" />
+    <Compile Include="Game\.UAP\XamlGame.cs" />
+    <Compile Include="Game\.UAP\InputEvents.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />
