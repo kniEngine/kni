@@ -99,6 +99,8 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
+    <Compile Include="Utilities\InteropHelpers.cs" />
+    <Compile Include="Utilities\.Android\FuncLoader.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -159,8 +161,6 @@
     <Compile Include="Game\.Android\ISurfaceView.cs" />
     <Compile Include="Game\.Android\OrientationListener.cs" />
     <Compile Include="Game\.Android\ScreenReceiver.cs" />
-    <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
-    <Compile Include="Platform\Utilities\InteropHelpers.cs" />
 
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />

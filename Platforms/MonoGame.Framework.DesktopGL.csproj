@@ -84,6 +84,10 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
+    <Compile Include="Utilities\AssemblyHelper.cs" />
+    <Compile Include="Utilities\CurrentPlatform.cs" />
+    <Compile Include="Utilities\InteropHelpers.cs" />
+    <Compile Include="Utilities\.SDL2\FuncLoader.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,10 +110,6 @@
     <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />
     <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Game\.SDL2\SDLGameWindow.cs" />
-    <Compile Include="Platform\Utilities\AssemblyHelper.cs" />
-    <Compile Include="Platform\Utilities\CurrentPlatform.cs" />
-    <Compile Include="Platform\Utilities\FuncLoader.Desktop.cs" />
-    <Compile Include="Platform\Utilities\InteropHelpers.cs" />
     <Compile Include="Media\DesktopGL\ConcreteAlbum.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaFactory.cs" />
     <Compile Include="Media\DesktopGL\ConcreteMediaLibrary.cs" />

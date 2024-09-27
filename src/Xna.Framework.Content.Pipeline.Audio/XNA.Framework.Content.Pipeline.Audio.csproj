@@ -60,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Platforms\Platform\Utilities\CurrentPlatform.cs">
+    <Compile Include="..\..\Platforms\Utilities\CurrentPlatform.cs">
       <Link>Utilities\CurrentPlatform.cs</Link>
     </Compile>
   </ItemGroup>
