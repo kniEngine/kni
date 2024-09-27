@@ -84,6 +84,8 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
+    <Compile Include="Utilities\InteropHelpers.cs" />
+    <Compile Include="Utilities\.Android\FuncLoader.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -135,8 +137,6 @@
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Content\.Android\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.Android\ConcreteTitleContainerFactory.cs" />
-    <Compile Include="Platform\Utilities\FuncLoader.Android.cs" />
-    <Compile Include="Platform\Utilities\InteropHelpers.cs" />
 
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
