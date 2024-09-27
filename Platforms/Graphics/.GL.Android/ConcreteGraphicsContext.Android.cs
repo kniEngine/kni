@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Log = Android.Util.Log;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -137,6 +138,31 @@ namespace Microsoft.Xna.Platform.Graphics
                 //_egl.EglDestroyContext(_eglDisplay, _glSharedContext);
             }
             _glSharedContext = null;
+
+
+            var gds = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gds.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(gds.PresentationParameters.DeviceWindowHandle);
+            ISurfaceView surfaceView = gameWindow.GameView;
+
+            if (surfaceView.EglSurface != null)
+            {
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
+
+                gameWindow.GameView.GlDestroySurface(adapter);
+            }
+
+            if (gameWindow.EglContext != null)
+            {
+                if (gameWindow.EglContext != null)
+                {
+                    if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, gameWindow.EglContext))
+                        throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
+                }
+                gameWindow._eglContext = null;
+            }
 
             base.Dispose(disposing);
         }
