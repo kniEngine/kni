@@ -87,7 +87,7 @@
     <Compile Include="Game\.Blazor\ConcreteGame.cs" />
     <Compile Include="Game\.Blazor\ConcreteGameFactory.cs" />
     <Compile Include="Game\.Blazor\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
+    <Compile Include="Game\.Blazor\BlazorGameWindow.cs" />
 
     <Compile Include="Input\.Blazor\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Blazor\ConcreteGamePad.cs" />

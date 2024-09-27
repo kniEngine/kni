@@ -102,20 +102,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Platform\Android\AndroidCompatibility.cs" />
-    <Compile Include="Platform\Android\AndroidGameActivity.cs" />
+    <Compile Include="Game\.Android\AndroidCompatibility.cs" />
+    <Compile Include="Game\.Android\AndroidGameActivity.cs" />
     <Compile Include="Game\.Android\ConcreteGame.cs" />
     <Compile Include="Game\.Android\ConcreteGameFactory.cs" />
     <Compile Include="Game\.Android\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Platform\Android\AndroidGameWindow.cs" />
+    <Compile Include="Game\.Android\AndroidGameWindow.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Compass.cs" />
-    <Compile Include="Platform\Android\Input\Touch\TouchEventListener.cs" />
-    <Compile Include="Platform\Android\ISurfaceView.cs" />
-    <Compile Include="Platform\Android\AndroidSurfaceView.cs" />
-    <Compile Include="Platform\Android\OrientationListener.cs" />
-    <Compile Include="Platform\Android\RunnableObject.cs" />
-    <Compile Include="Platform\Android\ScreenReceiver.cs" />
+    <Compile Include="Game\.Android\TouchEventListener.cs" />
+    <Compile Include="Game\.Android\ISurfaceView.cs" />
+    <Compile Include="Game\.Android\AndroidSurfaceView.cs" />
+    <Compile Include="Game\.Android\OrientationListener.cs" />
+    <Compile Include="Game\.Android\RunnableObject.cs" />
+    <Compile Include="Game\.Android\ScreenReceiver.cs" />
     <Compile Include="Input\.Android\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Android\ConcreteGamePad.cs" />
     <Compile Include="Input\.Android\ConcreteGamePadDevice.cs" />

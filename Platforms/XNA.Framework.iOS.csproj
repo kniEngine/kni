@@ -93,11 +93,11 @@
     <Compile Include="Game\.iOS\ConcreteGame.cs" />
     <Compile Include="Game\.iOS\ConcreteGameFactory.cs" />
     <Compile Include="Game\.iOS\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Platform\iOS\iOSGameView.cs" />
-    <Compile Include="Platform\iOS\iOSGameViewController.cs" />
-    <Compile Include="Platform\iOS\iOSGameView_Touch.cs" />
-    <Compile Include="Platform\iOS\iOSGameWindow.cs" />
-    <Compile Include="Platform\iOS\OrientationConverter.cs" />
+    <Compile Include="Game\.iOS\iOSGameView.cs" />
+    <Compile Include="Game\.iOS\iOSGameViewController.cs" />
+    <Compile Include="Game\.iOS\iOSGameView_Touch.cs" />
+    <Compile Include="Game\.iOS\iOSGameWindow.cs" />
+    <Compile Include="Game\.iOS\OrientationConverter.cs" />
 
     <Compile Include="Graphics\.GL.iOS\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL.iOS\Vertices\ConcreteVertexBuffer.cs" />
