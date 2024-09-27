@@ -151,9 +151,9 @@
     <Compile Include="Platform\Android\Input\Touch\TouchEventListener.cs" />
     <Compile Include="Platform\Cardboard\AndroidCompatibility.cs" />
     <Compile Include="Platform\Cardboard\AndroidGameActivity.cs" />
-    <Compile Include=".Cardboard\ConcreteGame.cs" />
-    <Compile Include=".Cardboard\ConcreteGameFactory.cs" />
-    <Compile Include=".Cardboard\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.Cardboard\ConcreteGame.cs" />
+    <Compile Include="Game\.Cardboard\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.Cardboard\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\Cardboard\AndroidGameWindow.cs" />
     <Compile Include="Platform\Cardboard\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Android\ISurfaceView.cs" />

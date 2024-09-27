@@ -84,9 +84,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include=".Blazor\ConcreteGame.cs" />
-    <Compile Include=".Blazor\ConcreteGameFactory.cs" />
-    <Compile Include=".Blazor\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.Blazor\ConcreteGame.cs" />
+    <Compile Include="Game\.Blazor\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.Blazor\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\Blazor\BlazorGameWindow.cs" />
 
     <Compile Include="Input\.Blazor\Touch\ConcreteTouchPanel.cs" />

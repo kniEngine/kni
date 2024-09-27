@@ -90,9 +90,9 @@
   <ItemGroup>
     <Compile Include="Platform\iOS\Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Platform\iOS\Devices\Sensors\Compass.cs" />
-    <Compile Include=".iOS\ConcreteGame.cs" />
-    <Compile Include=".iOS\ConcreteGameFactory.cs" />
-    <Compile Include=".iOS\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.iOS\ConcreteGame.cs" />
+    <Compile Include="Game\.iOS\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.iOS\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\iOS\iOSGameView.cs" />
     <Compile Include="Platform\iOS\iOSGameViewController.cs" />
     <Compile Include="Platform\iOS\iOSGameView_Touch.cs" />

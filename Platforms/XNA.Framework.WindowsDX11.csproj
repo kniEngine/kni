@@ -172,10 +172,10 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Windows\WinFormsGameWindow.cs" />
     <Compile Include="Platform\Windows\WinFormsGameForm.cs" />
-    <Compile Include=".WindowsDX11\ConcreteGame.cs" />
-    <Compile Include=".WindowsDX11\ConcreteGameFactory.cs" />
-    <Compile Include=".WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include=".WindowsDX11\KeysHelper.cs" />
+    <Compile Include="Game\.WindowsDX11\ConcreteGame.cs" />
+    <Compile Include="Game\.WindowsDX11\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.WindowsDX11\KeysHelper.cs" />
+    <Compile Include="Game\.WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
     <Compile Include="Storage\StorageDevice.cs" />

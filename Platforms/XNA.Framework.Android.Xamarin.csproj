@@ -200,9 +200,9 @@
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Platform\Android\AndroidCompatibility.cs" />
     <Compile Include="Platform\Android\AndroidGameActivity.cs" />
-    <Compile Include=".Android\ConcreteGame.cs" />
-    <Compile Include=".Android\ConcreteGameFactory.cs" />
-    <Compile Include=".Android\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.Android\ConcreteGame.cs" />
+    <Compile Include="Game\.Android\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.Android\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Platform\Android\AndroidGameWindow.cs" />
     <Compile Include="Platform\Android\AndroidSurfaceView.cs" />
     <Compile Include="Platform\Android\Devices\Sensors\Accelerometer.cs" />
