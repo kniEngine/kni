@@ -548,13 +548,9 @@ namespace Microsoft.Xna.Framework
         {
         }
 
-        private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
-        internal EGLContext _eglContext;
 
-        internal GLESVersion GLesVersion { get { return _glesVersion; } }
         internal EGLConfig EglConfig { get { return _eglConfig; } }
-        internal EGLContext EglContext { get { return _eglContext; } }
 
 
         internal void GLChooseConfig()
@@ -635,51 +631,6 @@ namespace Microsoft.Xna.Framework
                 throw new Exception("No valid EGL configs found" + GL.GetEglErrorAsString());
             _eglConfig = results[0];
         }
-
-        internal void GLCreateContext()
-        {
-            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-            var GL = adapter.Ogl;
-
-            foreach (GLESVersion ver in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
-            {
-                Log.Verbose("AndroidGameView", "Creating GLES {0} Context", ver);
-
-                _eglContext = GL.Egl.EglCreateContext(adapter.EglDisplay, this.EglConfig, EGL10.EglNoContext, ver.GetAttributes());
-
-                if (this.EglContext == null || this.EglContext == EGL10.EglNoContext)
-                {
-                    _eglContext = null;
-                    Log.Verbose("AndroidGameView", string.Format("GLES {0} Not Supported. {1}", ver, GL.GetEglErrorAsString()));
-                    continue;
-                }
-                _glesVersion = ver;
-                break;
-            }
-
-            if (this.EglContext == EGL10.EglNoContext) _eglContext = null;
-            if (this.EglContext == null)
-                throw new Exception("Could not create EGL context" + GL.GetEglErrorAsString());
-
-            Log.Verbose("AndroidGameView", "Created GLES {0} Context", this.GLesVersion);
-        }
-
-        internal EGLSurface GLCreatePBufferSurface(EGLConfig config, int[] attribList)
-        {
-            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-            var GL = adapter.Ogl;
-
-            EGLSurface result = GL.Egl.EglCreatePbufferSurface(adapter.EglDisplay, config, attribList);
-
-            if (result == EGL10.EglNoSurface)
-                result = null;
-
-            if (result == null)
-                throw new Exception("EglCreatePBufferSurface");
-
-            return result;
-        }
-
 
         private EGLSurface _eglSurface;
         internal EGLSurface EglSurface { get { return _eglSurface; } }

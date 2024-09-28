@@ -539,34 +539,14 @@ namespace Microsoft.Xna.Framework
         {
         }
 
-        private GLESVersion _glesVersion;
         private EGLConfig _eglConfig;
-        internal EGLContext _eglContext;
 
-        internal GLESVersion GLesVersion { get { return _glesVersion; } }
         internal EGLConfig EglConfig { get { return _eglConfig; } }
-        internal EGLContext EglContext { get { return _eglContext; } }
 
 
         internal void GLChooseConfig()
         {
             // Cardboard: _eglConfig was created by GLSurfaceView.
-        }
-
-        internal static EGLSurface GLCreatePBufferSurface(EGLConfig config, int[] attribList)
-        {
-            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-            var GL = adapter.Ogl;
-
-            EGLSurface result = GL.Egl.EglCreatePbufferSurface(adapter.EglDisplay, config, attribList);
-
-            if (result == EGL10.EglNoSurface)
-                result = null;
-
-            if (result == null)
-                throw new Exception("EglCreatePBufferSurface");
-
-            return result;
         }
 
 
@@ -597,11 +577,6 @@ namespace Microsoft.Xna.Framework
             if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
                 Log.Verbose("AndroidGameWindow", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
             _eglSurface = null;
-        }
-
-        internal void GLCreateContext()
-        {
-            
         }
 
         Input.Cardboard.HeadsetState _hsState;
@@ -733,21 +708,6 @@ namespace Microsoft.Xna.Framework
 
         internal void VrRendererOnDrawFrame(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
         {
-            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-            var GL = adapter.Ogl;
-
-            if (this.EglContext == null)
-            {
-                _eglContext = GL.Egl.EglGetCurrentContext();
-                Threading.MakeMainThread();
-                if (this.EglContext == EGL10.EglNoContext)
-                    _eglContext = null;
-
-                // OGL.InitExtensions() must be called while we have a current gl context.
-                if (OGL_DROID.Current.Extensions == null)
-                    OGL_DROID.Current.InitExtensions();
-            }
-
             if (!_isStarted)
                 return;
 
