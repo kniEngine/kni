@@ -17,7 +17,13 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsContext : ConcreteGraphicsContextGL
     {
         private int _glContextCurrentThreadId = -1;
-        EGLContext _glSharedContext;
+
+        private GLESVersion _glesVersion;
+        private EGLContext _eglContext;
+        private EGLContext _glSharedContext;
+
+        internal GLESVersion GLesVersion { get { return _glesVersion; } }
+        internal EGLContext EglContext { get { return _eglContext; } }
 
         internal ConcreteGraphicsContext(GraphicsContext context)
             : base(context)
@@ -39,12 +45,12 @@ namespace Microsoft.Xna.Platform.Graphics
             if (gameWindow.EglConfig == null)
                 gameWindow.GLChooseConfig();
 
-            gameWindow.GLCreateContext();
+            this.GLCreateContext();
 
             if (gameWindow.EglSurface == null)
                 gameWindow.GLCreateSurface(adapter, gameWindow.EglConfig);
 
-            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, gameWindow.EglContext))
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, this.EglContext))
                 throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
             Threading.MakeMainThread();
@@ -56,8 +62,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // create _glSharedContext for Disposing
 
-            int[] attribs = gameWindow.GLesVersion.GetAttributes();
-            _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, gameWindow.EglConfig, gameWindow.EglContext, attribs);
+            int[] attribs = this.GLesVersion.GetAttributes();
+            _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, gameWindow.EglConfig, this.EglContext, attribs);
             if (_glSharedContext != null && _glSharedContext != EGL10.EglNoContext)
                     throw new Exception("Could not create _glSharedContext" + GL.GetEglErrorAsString());
 
@@ -95,6 +101,62 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Initialize(this.Capabilities);
 
             this.PlatformSetup();
+        }
+
+
+        private void GLCreateContext()
+        {
+            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)Context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+
+            var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+#if CARDBOARD
+            // Cardboard: EglSurface and EglContext was created by GLSurfaceView.
+            _eglContext = GL.Egl.EglGetCurrentContext();
+            if (this.EglContext == EGL10.EglNoContext)
+                _eglContext = null;
+#else
+            foreach (GLESVersion ver in ((OGL_DROID)OGL.Current).GetSupportedGLESVersions())
+            {
+                Log.Verbose("ConcreteGraphicsContext", "Creating GLES {0} Context", ver);
+
+                _eglContext = GL.Egl.EglCreateContext(adapter.EglDisplay, gameWindow.EglConfig, EGL10.EglNoContext, ver.GetAttributes());
+
+                if (this.EglContext == null || this.EglContext == EGL10.EglNoContext)
+                {
+                    this._eglContext = null;
+                    Log.Verbose("ConcreteGraphicsContext", string.Format("GLES {0} Not Supported. {1}", ver, GL.GetEglErrorAsString()));
+                    continue;
+                }
+                _glesVersion = ver;
+                break;
+            }
+
+            if (this.EglContext == EGL10.EglNoContext) this._eglContext = null;
+            if (this.EglContext == null)
+                throw new Exception("Could not create EGL context" + GL.GetEglErrorAsString());
+
+            Log.Verbose("ConcreteGraphicsContext", "Created GLES {0} Context", this.GLesVersion);
+#endif
+        }
+
+        internal EGLSurface GLCreatePBufferSurface(EGLConfig config, int[] attribList)
+        {
+            var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+            EGLSurface result = GL.Egl.EglCreatePbufferSurface(adapter.EglDisplay, config, attribList);
+
+            if (result == EGL10.EglNoSurface)
+                result = null;
+
+            if (result == null)
+                throw new Exception("EglCreatePBufferSurface");
+
+            return result;
         }
 
         internal override void EnsureContextCurrentThread()
@@ -166,7 +228,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #else
                 gameWindow.GLCreateSurface(adapter, gameWindow.EglConfig);
 
-                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, gameWindow.EglContext))
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, this.EglContext))
                 {
                     throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                 }
@@ -242,14 +304,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 gameWindow.GlDestroySurface(adapter);
             }
 
-            if (gameWindow.EglContext != null)
+            if (this.EglContext != null)
             {
-                if (gameWindow.EglContext != null)
+                if (this.EglContext != null)
                 {
-                    if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, gameWindow.EglContext))
+                    if (!GL.Egl.EglDestroyContext(adapter.EglDisplay, this.EglContext))
                         throw new Exception("Could not destroy EGL context" + GL.GetEglErrorAsString());
                 }
-                gameWindow._eglContext = null;
+                this._eglContext = null;
             }
 
             base.Dispose(disposing);
