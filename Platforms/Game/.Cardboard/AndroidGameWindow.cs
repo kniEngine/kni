@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022-2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using Android.Content;
@@ -518,9 +520,7 @@ namespace Microsoft.Xna.Framework
 
         void ProcessStateResumed()
         {
-            ISurfaceView surfaceView = GameView;
-
-            if (surfaceView.EglSurface == null)
+            if (this.EglSurface == null)
             {
                 // recreate the surface and bind the context to the thread
                 if (this.EglContext != null)
@@ -529,11 +529,11 @@ namespace Microsoft.Xna.Framework
                     var GL = adapter.Ogl;
 
                     /* Cardboard: Surface was created by GLSurfaceView.
-                    GameView.GLCreateSurface(adapter, this.EglConfig);
+                    this.GLCreateSurface(adapter, this.EglConfig);
                     */
 
                     /* Cardboard: Context was created by GLSurfaceView.
-                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, surfaceView.EglSurface, surfaceView.EglSurface, this.EglContext))
+                    if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, this.EglSurface, this.EglSurface, this.EglContext))
                     {
                         throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                     }
@@ -601,6 +601,35 @@ namespace Microsoft.Xna.Framework
             return result;
         }
 
+
+        private EGLSurface _eglSurface;
+        internal EGLSurface EglSurface { get { return _eglSurface; } }
+
+
+        internal void GLCreateSurface(ConcreteGraphicsAdapter adapter, EGLConfig eglConfig)
+        {
+            System.Diagnostics.Debug.Assert(_eglSurface == null);
+
+            OGL_DROID GL = adapter.Ogl;
+
+            _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, eglConfig, (Java.Lang.Object)GameView.Holder, null);
+            if (_eglSurface == EGL10.EglNoSurface)
+                _eglSurface = null;
+
+            if (_eglSurface == null)
+                throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
+        }
+
+        internal void GlDestroySurface(ConcreteGraphicsAdapter adapter)
+        {
+            System.Diagnostics.Debug.Assert(_eglSurface != null);
+
+            OGL_DROID GL = adapter.Ogl;
+
+            if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
+                Log.Verbose("AndroidGameWindow", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
+            _eglSurface = null;
+        }
 
         internal void GLCreateContext()
         {
