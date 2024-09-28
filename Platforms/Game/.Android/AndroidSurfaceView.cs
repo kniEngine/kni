@@ -60,11 +60,18 @@ namespace Microsoft.Xna.Framework
                 GlDestroySurface(adapter);
             }
 
+            var handler = _surfaceChangedEvent;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
         {
             _isAndroidSurfaceAvailable = true;
+
+            var handler = _surfaceCreatedEvent;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
@@ -83,6 +90,10 @@ namespace Microsoft.Xna.Framework
             }
 
             _isAndroidSurfaceAvailable = false;
+
+            var handler = _surfaceDestroyedEvent;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         protected override void Dispose(bool disposing)
@@ -156,6 +167,29 @@ namespace Microsoft.Xna.Framework
         #region ISurfaceView
 
         EGLSurface ISurfaceView.EglSurface { get { return _eglSurface; } }
+
+
+        private event EventHandler<EventArgs> _surfaceCreatedEvent;
+        private event EventHandler<EventArgs> _surfaceChangedEvent;
+        private event EventHandler<EventArgs> _surfaceDestroyedEvent;
+
+        event EventHandler<EventArgs> ISurfaceView.SurfaceCreated
+        {
+            add { _surfaceCreatedEvent += value; }
+            remove { _surfaceCreatedEvent -= value; }
+        }
+
+        event EventHandler<EventArgs> ISurfaceView.SurfaceChanged
+        {
+            add { _surfaceChangedEvent += value; }
+            remove { _surfaceChangedEvent -= value; }
+        }
+
+        event EventHandler<EventArgs> ISurfaceView.SurfaceDestroyed
+        {
+            add { _surfaceDestroyedEvent += value; }
+            remove { _surfaceDestroyedEvent -= value; }
+        }
 
         #endregion
 
