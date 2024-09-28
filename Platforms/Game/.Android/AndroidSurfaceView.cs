@@ -47,19 +47,6 @@ namespace Microsoft.Xna.Framework
 
         void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
-            if (_eglSurface != null)
-            {
-                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                // unbind Context and Surface
-                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
-
-                // destroy the old _eglSurface
-                GlDestroySurface(adapter);
-            }
-
             var handler = _surfaceChangedEvent;
             if (handler != null)
                 handler(this, EventArgs.Empty);
@@ -76,19 +63,6 @@ namespace Microsoft.Xna.Framework
 
         void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
         {
-            if (_eglSurface != null)
-            {
-                var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-                var GL = adapter.Ogl;
-
-                // unbind Context and Surface
-                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                    Log.Verbose("AndroidGameView", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
-
-                // destroy the old _eglSurface
-                GlDestroySurface(adapter);
-            }
-
             _isAndroidSurfaceAvailable = false;
 
             var handler = _surfaceDestroyedEvent;
