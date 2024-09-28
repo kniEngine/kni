@@ -518,16 +518,16 @@ namespace Microsoft.Xna.Framework
 
         void ProcessStateResumed()
         {
-            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-            var GL = adapter.Ogl;
-
             ISurfaceView surfaceView = GameView;
 
-            if (this.EglContext != null)
+            if (surfaceView.EglSurface == null)
             {
                 // recreate the surface and bind the context to the thread
-                if (surfaceView.EglSurface == null)
+                if (this.EglContext != null)
                 {
+                    var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                    var GL = adapter.Ogl;
+
                     /* Cardboard: Surface was created by GLSurfaceView.
                     GameView.GLCreateSurface(adapter, this.EglConfig);
                     */

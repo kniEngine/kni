@@ -11,5 +11,9 @@ namespace Microsoft.Xna.Platform
     interface ISurfaceView
     {
         EGLSurface EglSurface { get; }
+
+        public event EventHandler<EventArgs> SurfaceCreated;
+        public event EventHandler<EventArgs> SurfaceChanged;
+        public event EventHandler<EventArgs> SurfaceDestroyed;
     }
 }
