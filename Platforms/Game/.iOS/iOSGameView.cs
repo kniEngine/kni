@@ -309,7 +309,6 @@ namespace Microsoft.Xna.Framework
 
             if (!EAGLContext.SetCurrentContext(_eaglContext))
                 throw new InvalidOperationException("Unable to change current EAGLContext.");
-            Threading.MakeMainThread();
 
             _glapi.DeleteFramebuffer(_framebuffer);
             _framebuffer = 0;
@@ -360,7 +359,6 @@ namespace Microsoft.Xna.Framework
             {
                 if (!EAGLContext.SetCurrentContext(_eaglContext))
                     throw new InvalidOperationException("Unable to change current EAGLContext.");
-                Threading.MakeMainThread();
             }
         }
 

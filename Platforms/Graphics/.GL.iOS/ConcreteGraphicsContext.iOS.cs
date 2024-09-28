@@ -71,7 +71,10 @@ namespace Microsoft.Xna.Platform.Graphics
         
         internal override void EnsureContextCurrentThread()
         {
-            Threading.EnsureMainThread();
+            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+                return;
+
+            throw new InvalidOperationException("Operation not called on main thread.");
         }
 
         public override void BindDisposeContext()
