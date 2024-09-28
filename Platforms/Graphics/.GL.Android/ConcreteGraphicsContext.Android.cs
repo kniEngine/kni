@@ -31,6 +31,10 @@ namespace Microsoft.Xna.Platform.Graphics
             // create context
 
             ISurfaceView surfaceView = gameWindow.GameView;
+            surfaceView.SurfaceCreated += SurfaceView_SurfaceCreated;
+            surfaceView.SurfaceChanged += SurfaceView_SurfaceChanged;
+            surfaceView.SurfaceDestroyed += SurfaceView_SurfaceDestroyed;
+
 
             if (gameWindow.EglConfig == null)
                 gameWindow.GLChooseConfig();
@@ -125,6 +129,25 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        private void SurfaceView_SurfaceCreated(object sender, EventArgs e)
+        {
+            ISurfaceView surfaceView = (ISurfaceView)sender;
+
+        }
+
+        private void SurfaceView_SurfaceChanged(object sender, EventArgs e)
+        {
+            ISurfaceView surfaceView = (ISurfaceView)sender;
+
+        }
+
+        private void SurfaceView_SurfaceDestroyed(object sender, EventArgs e)
+        {
+            ISurfaceView surfaceView = (ISurfaceView)sender;
+
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -145,6 +168,9 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = adapter.Ogl;
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(gds.PresentationParameters.DeviceWindowHandle);
             ISurfaceView surfaceView = gameWindow.GameView;
+            surfaceView.SurfaceCreated -= SurfaceView_SurfaceCreated;
+            surfaceView.SurfaceChanged -= SurfaceView_SurfaceChanged;
+            surfaceView.SurfaceDestroyed -= SurfaceView_SurfaceDestroyed;
 
             if (surfaceView.EglSurface != null)
             {
