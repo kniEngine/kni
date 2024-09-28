@@ -154,6 +154,38 @@ namespace Microsoft.Xna.Platform.Graphics
                 // destroy the old _eglSurface
                 gameWindow.GlDestroySurface(adapter);
             }
+
+            // recreate EglSurface and bind the context to the thread
+            {
+                ConcreteGraphicsAdapter adapter = ((IPlatformGraphicsAdapter)gds.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+                var GL = adapter.Ogl;
+
+#if CARDBOARD
+                // Cardboard: EglSurface and EglContext was created by GLSurfaceView.
+                _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+#else
+                gameWindow.GLCreateSurface(adapter, gameWindow.EglConfig);
+
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, gameWindow.EglContext))
+                {
+                    throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
+                }
+                _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+                Threading.MakeMainThread();
+#endif
+
+                // Update BackBuffer bounds
+                int w = gameWindow.GameView.Width;
+                int h = gameWindow.GameView.Height;
+                gds.PresentationParameters.BackBufferWidth  = w;
+                gds.PresentationParameters.BackBufferHeight = h;
+
+                if (!((IPlatformGraphicsContext)gds.MainContext).Strategy.IsRenderTargetBound)
+                {
+                    gds.MainContext.Viewport = new Viewport(0, 0, w, h);
+                    gds.MainContext.ScissorRectangle = new Rectangle(0, 0, w, h);
+                }
+            }
         }
 
         private void SurfaceView_SurfaceDestroyed(object sender, EventArgs e)
