@@ -149,7 +149,6 @@
     <Compile Include="Graphics\.GL\GLExtensions.cs" />
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
-    <Compile Include="Graphics\.GL\Threading.cs" />
     <Compile Include="Graphics\RenderTargetSwapChain.OpenGL.cs" />
 
     <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
