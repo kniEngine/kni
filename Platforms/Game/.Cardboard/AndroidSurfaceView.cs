@@ -54,15 +54,6 @@ namespace Microsoft.Xna.Framework
             //gameView.SetVRModeEnabled(false);
         }
 
-        public override void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
-        {
-            var handler = _surfaceChangedEvent;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-
-            base.SurfaceChanged(holder, format, width, height);
-        }
-
         public override void SurfaceCreated(ISurfaceHolder holder)
         {
             _isAndroidSurfaceAvailable = true;
@@ -72,6 +63,15 @@ namespace Microsoft.Xna.Framework
                 handler(this, EventArgs.Empty);
 
             base.SurfaceCreated(holder);
+        }
+
+        public override void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
+        {
+            var handler = _surfaceChangedEvent;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+
+            base.SurfaceChanged(holder, format, width, height);
         }
 
         public override void SurfaceDestroyed(ISurfaceHolder holder)

@@ -45,13 +45,6 @@ namespace Microsoft.Xna.Framework
                 _surfaceHolder.SetType(SurfaceType.Gpu);
         }
 
-        void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
-        {
-            var handler = _surfaceChangedEvent;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-        }
-
         void ISurfaceHolderCallback.SurfaceCreated(ISurfaceHolder holder)
         {
             _isAndroidSurfaceAvailable = true;
@@ -60,6 +53,14 @@ namespace Microsoft.Xna.Framework
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
+
+        void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
+        {
+            var handler = _surfaceChangedEvent;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
 
         void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
         {
