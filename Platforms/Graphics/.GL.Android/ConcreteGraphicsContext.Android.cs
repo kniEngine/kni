@@ -53,7 +53,6 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, this.EglContext))
                 throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
-            Threading.MakeMainThread();
 
             // OGL.InitExtensions() must be called while we have a current gl context.
             if (OGL_DROID.Current.Extensions == null)
@@ -161,7 +160,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal override void EnsureContextCurrentThread()
         {
-            Threading.EnsureMainThread();
+            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+                return;
+
+            throw new InvalidOperationException("Operation not called on main thread.");
         }
 
         public override void BindDisposeContext()
@@ -233,7 +235,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                 }
                 _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
-                Threading.MakeMainThread();
 #endif
 
                 // Update BackBuffer bounds
