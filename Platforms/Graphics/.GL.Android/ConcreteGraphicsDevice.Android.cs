@@ -1,4 +1,4 @@
-﻿// Copyright (C)2023 Nick Kastellanos
+﻿// Copyright (C)2023-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -28,9 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var adapter = ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
 
-            ISurfaceView surfaceView = gameWindow.GameView;
-
-            bool SwapBuffersResult = GL.Egl.EglSwapBuffers(adapter.EglDisplay, surfaceView.EglSurface);
+            bool SwapBuffersResult = GL.Egl.EglSwapBuffers(adapter.EglDisplay, gameWindow.EglSurface);
             if (!SwapBuffersResult)
             {
                 int eglError = GL.Egl.EglGetError();

@@ -2,21 +2,16 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Android.Content;
 using Android.Media;
 using Android.Util;
 using Android.Views;
-using Javax.Microedition.Khronos.Egl;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Platform;
-using Microsoft.Xna.Platform.Graphics;
-using Microsoft.Xna.Platform.Graphics.OpenGL;
 using Microsoft.Xna.Platform.Input;
 
 
@@ -139,16 +134,8 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-        #region Properties
-
-        private EGLSurface _eglSurface;
-
-        #endregion
 
         #region ISurfaceView
-
-        EGLSurface ISurfaceView.EglSurface { get { return _eglSurface; } }
-
 
         private event EventHandler<EventArgs> _surfaceCreatedEvent;
         private event EventHandler<EventArgs> _surfaceChangedEvent;
@@ -174,29 +161,5 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-        internal void GLCreateSurface(ConcreteGraphicsAdapter adapter, EGLConfig eglConfig)
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface == null);
-
-            OGL_DROID GL = adapter.Ogl;
-
-            _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, eglConfig, (Java.Lang.Object)this.Holder, null);
-            if (_eglSurface == EGL10.EglNoSurface)
-                _eglSurface = null;
-
-            if (_eglSurface == null)
-                throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
-        }
-
-        internal void GlDestroySurface(ConcreteGraphicsAdapter adapter)
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface != null);
-
-            OGL_DROID GL = adapter.Ogl;
-
-            if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
-                Log.Verbose("AndroidGameView", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
-            _eglSurface = null;
-        }
     }
 }
