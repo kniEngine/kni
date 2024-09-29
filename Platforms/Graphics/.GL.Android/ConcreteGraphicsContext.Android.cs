@@ -29,9 +29,10 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(context)
         {
             var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var cgd = gd.ToConcrete<ConcreteGraphicsDevice>();
             var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
-            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
+            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(gd.PresentationParameters.DeviceWindowHandle);
 
 
             // create context
@@ -47,10 +48,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             this.GLCreateContext();
 
-            if (gameWindow.EglSurface == null)
-                gameWindow.GLCreateSurface(adapter, gameWindow.EglConfig);
+            cgd.GLCreateSurface(gameWindow.EglConfig);
 
-            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, this.EglContext))
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, cgd.EglSurface, cgd.EglSurface, this.EglContext))
                 throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
             _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -158,6 +158,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return result;
         }
 
+
         internal override void EnsureContextCurrentThread()
         {
             if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
@@ -204,9 +205,10 @@ namespace Microsoft.Xna.Platform.Graphics
             ISurfaceView surfaceView = (ISurfaceView)sender;
 
             GraphicsDeviceStrategy gds = ((IPlatformGraphicsContext)Context).DeviceStrategy;
+            var cgd = gds.ToConcrete<ConcreteGraphicsDevice>();
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(gds.PresentationParameters.DeviceWindowHandle);
 
-            if (gameWindow.EglSurface != null)
+            if (cgd.EglSurface != null)
             {
                 ConcreteGraphicsAdapter adapter = ((IPlatformGraphicsAdapter)gds.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
@@ -216,7 +218,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     Log.Verbose("ConcreteGraphicsContext", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
 
                 // destroy the old _eglSurface
-                gameWindow.GlDestroySurface(adapter);
+                cgd.GlDestroySurface();
             }
 
             // recreate EglSurface and bind the context to the thread
@@ -228,9 +230,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Cardboard: EglSurface and EglContext was created by GLSurfaceView.
                 _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
 #else
-                gameWindow.GLCreateSurface(adapter, gameWindow.EglConfig);
+                cgd.GLCreateSurface(gameWindow.EglConfig);
 
-                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, gameWindow.EglSurface, gameWindow.EglSurface, this.EglContext))
+                if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, cgd.EglSurface, cgd.EglSurface, this.EglContext))
                 {
                     throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                 }
@@ -256,9 +258,9 @@ namespace Microsoft.Xna.Platform.Graphics
             ISurfaceView surfaceView = (ISurfaceView)sender;
 
             GraphicsDeviceStrategy gds = ((IPlatformGraphicsContext)Context).DeviceStrategy;
-            AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(gds.PresentationParameters.DeviceWindowHandle);
+            var cgd = gds.ToConcrete<ConcreteGraphicsDevice>();
 
-            if (gameWindow.EglSurface != null)
+            if (cgd.EglSurface != null)
             {
                 var adapter = ((IPlatformGraphicsAdapter)gds.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
                 var GL = adapter.Ogl;
@@ -268,7 +270,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     Log.Verbose("ConcreteGraphicsContext", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
 
                 // destroy the old _eglSurface
-                gameWindow.GlDestroySurface(adapter);
+                cgd.GlDestroySurface();
             }
         }
 
@@ -289,6 +291,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             var gds = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var cgd = gds.ToConcrete<ConcreteGraphicsDevice>();
             var adapter = ((IPlatformGraphicsAdapter)gds.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(gds.PresentationParameters.DeviceWindowHandle);
@@ -297,12 +300,12 @@ namespace Microsoft.Xna.Platform.Graphics
             surfaceView.SurfaceChanged -= SurfaceView_SurfaceChanged;
             surfaceView.SurfaceDestroyed -= SurfaceView_SurfaceDestroyed;
 
-            if (gameWindow.EglSurface != null)
+            if (cgd.EglSurface != null)
             {
                 if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
                     Log.Verbose("ConcreteGraphicsContext", "Could not unbind EGL surface" + GL.GetEglErrorAsString());
 
-                gameWindow.GlDestroySurface(adapter);
+                cgd.GlDestroySurface();
             }
 
             if (this.EglContext != null)
