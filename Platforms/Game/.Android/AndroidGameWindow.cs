@@ -513,19 +513,12 @@ namespace Microsoft.Xna.Framework
                     {
                         _orientationListener.Update();
 
-                        try
+                        if (!_screenReceiver.IsScreenLocked) // do not run game if Screen is Locked
                         {
-                            if (!_screenReceiver.IsScreenLocked) // do not run game if Screen is Locked
+                            if (_game != null)
                             {
-                                if (_game != null)
-                                {
-                                    ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
-                                }
+                                ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
                             }
-                        }
-                        catch (OpenGLException ex)
-                        {
-                            Log.Error("AndroidGameWindow", "OpenGL Exception occurred during OnFrameTick {0}", ex.Message);
                         }
                     }
                     break;
