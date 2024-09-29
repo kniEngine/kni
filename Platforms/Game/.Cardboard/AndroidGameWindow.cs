@@ -553,35 +553,6 @@ namespace Microsoft.Xna.Framework
         }
 
 
-        private EGLSurface _eglSurface;
-        internal EGLSurface EglSurface { get { return _eglSurface; } }
-
-
-        internal void GLCreateSurface(ConcreteGraphicsAdapter adapter, EGLConfig eglConfig)
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface == null);
-
-            OGL_DROID GL = adapter.Ogl;
-
-            _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, eglConfig, (Java.Lang.Object)GameView.Holder, null);
-            if (_eglSurface == EGL10.EglNoSurface)
-                _eglSurface = null;
-
-            if (_eglSurface == null)
-                throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
-        }
-
-        internal void GlDestroySurface(ConcreteGraphicsAdapter adapter)
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface != null);
-
-            OGL_DROID GL = adapter.Ogl;
-
-            if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
-                Log.Verbose("AndroidGameWindow", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
-            _eglSurface = null;
-        }
-
         Input.Cardboard.HeadsetState _hsState;
         private void UpdateLocalHeadsetState(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
         {

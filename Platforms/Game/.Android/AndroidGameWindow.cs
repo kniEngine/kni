@@ -15,7 +15,6 @@ using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
-using Microsoft.Xna.Platform.Graphics.OpenGL;
 using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Framework.Graphics;
@@ -633,35 +632,6 @@ namespace Microsoft.Xna.Framework
             if (!found || numConfigs[0] <= 0)
                 throw new Exception("No valid EGL configs found" + GL.GetEglErrorAsString());
             _eglConfig = results[0];
-        }
-
-        private EGLSurface _eglSurface;
-        internal EGLSurface EglSurface { get { return _eglSurface; } }
-
-
-        internal void GLCreateSurface(ConcreteGraphicsAdapter adapter, EGLConfig eglConfig)
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface == null);
-
-            OGL_DROID GL = adapter.Ogl;
-
-            _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, eglConfig, (Java.Lang.Object)GameView.Holder, null);
-            if (_eglSurface == EGL10.EglNoSurface)
-                _eglSurface = null;
-
-            if (_eglSurface == null)
-                throw new Exception("Could not create EGL window surface" + GL.GetEglErrorAsString());
-        }
-
-        internal void GlDestroySurface(ConcreteGraphicsAdapter adapter)
-        {
-            System.Diagnostics.Debug.Assert(_eglSurface != null);
-
-            OGL_DROID GL = adapter.Ogl;
-
-            if (!GL.Egl.EglDestroySurface(adapter.EglDisplay, _eglSurface))
-                Log.Verbose("AndroidGameWindow", "Could not destroy EGL surface" + GL.GetEglErrorAsString());
-            _eglSurface = null;
         }
 
     }
