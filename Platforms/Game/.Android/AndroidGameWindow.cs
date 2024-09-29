@@ -510,7 +510,21 @@ namespace Microsoft.Xna.Framework
             {
                 case AndroidGameWindow.AppState.Resumed:
                     if (GameView._isAndroidSurfaceAvailable) // do not run game if surface is not available
-                        ProcessStateResumed();
+                    {
+                        _orientationListener.Update();
+
+                        try
+                        {
+                            if (_game != null && !_screenReceiver.IsScreenLocked)
+                            {
+                                ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
+                            }
+                        }
+                        catch (OpenGLException ex)
+                        {
+                            Log.Error("AndroidGameWindow", "OpenGL Exception occurred during OnFrameTick {0}", ex.Message);
+                        }
+                    }
                     break;
 
                 case AndroidGameWindow.AppState.Paused:
@@ -524,23 +538,6 @@ namespace Microsoft.Xna.Framework
             }
 
             return;
-        }
-
-        void ProcessStateResumed()
-        {
-            _orientationListener.Update();
-
-            try
-            {
-                if (_game != null && !_screenReceiver.IsScreenLocked)
-                {
-                    ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
-                }
-            }
-            catch (OpenGLException ex)
-            {
-                Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
-            }
         }
 
         private EGLConfig _eglConfig;
