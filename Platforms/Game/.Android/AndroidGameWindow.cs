@@ -517,7 +517,6 @@ namespace Microsoft.Xna.Framework
                     break;
 
                 case AndroidGameWindow.AppState.Exited:
-                    ProcessStateExited();
                     break;
 
                 default:
@@ -542,10 +541,6 @@ namespace Microsoft.Xna.Framework
             {
                 Log.Error("AndroidGameView", "OpenGL Exception occurred during RunIteration {0}", ex.Message);
             }
-        }
-
-        private void ProcessStateExited()
-        {
         }
 
         private EGLConfig _eglConfig;
