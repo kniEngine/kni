@@ -543,14 +543,9 @@ namespace Microsoft.Xna.Framework
         }
 
         private EGLConfig _eglConfig;
-
         internal EGLConfig EglConfig { get { return _eglConfig; } }
 
 
-        internal void GLChooseConfig()
-        {
-            // Cardboard: _eglConfig was created by GLSurfaceView.
-        }
 
 
         Input.Cardboard.HeadsetState _hsState;

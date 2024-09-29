@@ -11,13 +11,10 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Util;
-using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Input.Touch;
-using Microsoft.Xna.Platform.Graphics;
-using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Microsoft.Xna.Framework
@@ -548,90 +545,6 @@ namespace Microsoft.Xna.Framework
             }
 
             return;
-        }
-
-        private EGLConfig _eglConfig;
-
-        internal EGLConfig EglConfig { get { return _eglConfig; } }
-
-
-        internal void GLChooseConfig()
-        {
-            var adapter = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
-            var GL = adapter.Ogl;
-
-            GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-
-            int depth = 0;
-            int stencil = 0;
-            int sampleBuffers = 0;
-            int samples = 0;
-            switch (gdm.PreferredDepthStencilFormat)
-            {
-                case DepthFormat.Depth16:
-                    depth = 16;
-                    break;
-                case DepthFormat.Depth24:
-                    depth = 24;
-                    break;
-                case DepthFormat.Depth24Stencil8:
-                    depth = 24;
-                    stencil = 8;
-                    break;
-                case DepthFormat.None:
-                    break;
-            }
-
-            if (gdm.PreferMultiSampling)
-            {
-                sampleBuffers = 1;
-                samples = 4;
-            }
-
-            List<SurfaceConfig> surfaceConfigs = new List<SurfaceConfig>();
-            if (depth > 0)
-            {
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = depth, Stencil = stencil, SampleBuffers = sampleBuffers, Samples = samples });
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = depth, Stencil = stencil });
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5, Depth = depth, Stencil = stencil });
-                surfaceConfigs.Add(new SurfaceConfig() { Depth = depth, Stencil = stencil });
-                if (depth > 16)
-                {
-                    surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, Depth = 16 });
-                    surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5, Depth = 16 });
-                    surfaceConfigs.Add(new SurfaceConfig() { Depth = 16 });
-                }
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8 });
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5 });
-            }
-            else
-            {
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8, SampleBuffers = sampleBuffers, Samples = samples });
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 8, Green = 8, Blue = 8, Alpha = 8 });
-                surfaceConfigs.Add(new SurfaceConfig() { Red = 5, Green = 6, Blue = 5 });
-            }
-            surfaceConfigs.Add(new SurfaceConfig() { Red = 4, Green = 4, Blue = 4 });
-            EGLConfig[] results = new EGLConfig[1];
-
-            bool found = false;
-            int[] numConfigs = new int[] { 0 };
-            foreach (SurfaceConfig surfaceConfig in surfaceConfigs)
-            {
-                Log.Verbose("AndroidGameView", string.Format("Checking Config : {0}", surfaceConfig));
-                found = GL.Egl.EglChooseConfig(adapter.EglDisplay, surfaceConfig.ToConfigAttribs(), results, 1, numConfigs);
-                Log.Verbose("AndroidGameView", "EglChooseConfig returned {0} and {1}", found, numConfigs[0]);
-                if (!found || numConfigs[0] <= 0)
-                {
-                    Log.Verbose("AndroidGameView", "Config not supported");
-                    continue;
-                }
-                Log.Verbose("AndroidGameView", string.Format("Selected Config : {0}", surfaceConfig));
-                break;
-            }
-
-            if (!found || numConfigs[0] <= 0)
-                throw new Exception("No valid EGL configs found" + GL.GetEglErrorAsString());
-            _eglConfig = results[0];
         }
 
     }
