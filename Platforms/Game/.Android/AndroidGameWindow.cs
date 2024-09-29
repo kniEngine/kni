@@ -515,9 +515,12 @@ namespace Microsoft.Xna.Framework
 
                         try
                         {
-                            if (_game != null && !_screenReceiver.IsScreenLocked)
+                            if (!_screenReceiver.IsScreenLocked) // do not run game if Screen is Locked
                             {
-                                ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
+                                if (_game != null)
+                                {
+                                    ((IPlatformGame)_game).GetStrategy<ConcreteGame>().OnFrameTick();
+                                }
                             }
                         }
                         catch (OpenGLException ex)
