@@ -12,6 +12,8 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal struct SurfaceConfig
     {
+        public const int EGL_OPENGL_ES2_BIT = 0x0004;
+
         public int Red;
         public int Green;
         public int Blue;
@@ -67,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 attribs.Add(Samples);
             }
             attribs.Add(EGL11.EglRenderableType);
-            attribs.Add(4);
+            attribs.Add(EGL_OPENGL_ES2_BIT);
             attribs.Add(EGL11.EglNone);
 
             return attribs.ToArray();
