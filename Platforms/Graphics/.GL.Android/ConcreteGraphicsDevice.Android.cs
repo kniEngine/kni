@@ -42,17 +42,6 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteGraphicsContext(context);
         }
 
-        internal void Android_OnContextLost()
-        {
-            this.OnContextLost(EventArgs.Empty);
-        }
-
-        internal void Android_OnDeviceReset()
-        {
-            this.OnDeviceReset(EventArgs.Empty);
-        }
-
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
