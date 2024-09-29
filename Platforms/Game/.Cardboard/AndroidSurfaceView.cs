@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Framework
 
         public override void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
-            Log.Debug("AndroidGameView", "SurfaceCreated: width=" + width + ", width=" + height + ", format=" + format.ToString());
+            Log.Debug("AndroidGameView", "SurfaceChanged: width=" + width + ", width=" + height + ", format=" + format.ToString());
 
             var handler = _surfaceChangedEvent;
             if (handler != null)
