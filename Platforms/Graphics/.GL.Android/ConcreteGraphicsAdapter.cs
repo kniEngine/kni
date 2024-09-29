@@ -118,6 +118,12 @@ namespace Microsoft.Xna.Platform.Graphics
         EGLDisplay _eglDisplay;
         EGLConfig[] _eglConfigs;
 
+        int _eglMajorVersion;
+        int _eglMinorVersion;
+        int _maxTextureSize;
+        int _maxVertexBufferSlots;
+        int _maxMultiSampleCount;
+
         internal OGL_DROID Ogl { get { return _ogl; } }
         internal EGLDisplay EglDisplay { get { return _eglDisplay; } }
         internal EGLConfig[] EglConfig { get { return _eglConfigs; } }
@@ -144,7 +150,55 @@ namespace Microsoft.Xna.Platform.Graphics
 
             InitConfigs();
 
+
+            // create a temporary context to query GLES version
+            EGLContext eglContext = null;
+            try
+            {
+                int[] configAttribs = new int[]
+                {
+                    EGL11.EglRenderableType, SurfaceConfig.EGL_OPENGL_ES2_BIT,
+                    EGL11.EglNone
+                };
+                EGLConfig config;
+                int[] numConfigs = new int[] { 0 };
+                EGLConfig[] results = new EGLConfig[1];
+                _ogl.Egl.EglChooseConfig(EglDisplay, configAttribs, results, 1, numConfigs);
+                config = results[0];
+
+                int[] contextAttribs = new int[]
+                {
+                    GLESVersion.EglContextClientVersion, 2,
+                    EGL10.EglNone
+                };
+                eglContext = _ogl.Egl.EglCreateContext(EglDisplay, config, EGL10.EglNoContext, contextAttribs);
+                _ogl.CheckGLError();
+
+                _ogl.Egl.EglMakeCurrent(EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, eglContext);
+                _ogl.CheckGLError();
+
+                _ogl.GetInteger(GetParamName.MajorVersion, out _eglMajorVersion);
+                _ogl.CheckGLError();
+                _ogl.GetInteger(GetParamName.MinorVersion, out _eglMinorVersion);
+                _ogl.CheckGLError();
+                _ogl.GetInteger(GetParamName.MaxTextureSize, out _maxTextureSize);
+                _ogl.CheckGLError();
+                _ogl.GetInteger(GetParamName.MaxVertexAttribs, out _maxVertexBufferSlots);
+                _ogl.CheckGLError();
+                _ogl.GetInteger(GetParamName.MaxSamples, out _maxMultiSampleCount);
+
+                _ogl.Egl.EglMakeCurrent(EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext);
+                _ogl.CheckGLError();
+            }
+            finally
+            {
+                if (eglContext != null)
+                    _ogl.Egl.EglDestroyContext(this.EglDisplay, eglContext);
+            }
+
         }
+
+
 
         ~ConcreteGraphicsAdapter()
         {
@@ -185,25 +239,17 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 case GraphicsProfile.Reach:
                     return true;
-                case GraphicsProfile.HiDef:
-                    int maxTextureSize;
-                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize);                    
-                    if (maxTextureSize >= 4096) return true;
+                case GraphicsProfile.HiDef:                   
+                    if (_maxTextureSize >= 4096) return true;
                     return false;
-                case GraphicsProfile.FL10_0:
-                    int maxTextureSize2;
-                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize2);                    
-                    if (maxTextureSize2 >= 8192) return true;
+                case GraphicsProfile.FL10_0:                  
+                    if (_maxTextureSize >= 8192) return true;
                     return false;
                 case GraphicsProfile.FL10_1:
-                    int maxVertexBufferSlots;
-                    _ogl.GetInteger(GetParamName.MaxVertexAttribs, out maxVertexBufferSlots);
-                    if (maxVertexBufferSlots >= 32) return true;
+                    if (_maxVertexBufferSlots >= 32) return true;
                     return false;
-                case GraphicsProfile.FL11_0:
-                    int maxTextureSize3;
-                    _ogl.GetInteger(GetParamName.MaxTextureSize, out maxTextureSize3);                    
-                    if (maxTextureSize3 >= 16384) return true;
+                case GraphicsProfile.FL11_0:                  
+                    if (_maxTextureSize >= 16384) return true;
                     return false;
                 case GraphicsProfile.FL11_1:
                     return false;
