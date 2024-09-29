@@ -174,7 +174,9 @@ namespace Microsoft.Xna.Framework
                 IGraphicsDeviceManager deviceManager = (IGraphicsDeviceManager)_game.Services.GetService(typeof(IGraphicsDeviceManager));
                 if (deviceManager != null)
                 {
-                    ((IPlatformGraphicsDeviceManager)deviceManager).GetStrategy<Platform.ConcreteGraphicsDeviceManager>().InternalForceSetFullScreen();
+                    // TODO: Set fullscreen in ApplyChanges()
+                    GraphicsDeviceManager gdm = (GraphicsDeviceManager)deviceManager;
+                    this.ForceSetFullScreen(gdm.IsFullScreen);
                 }
             }
 
@@ -235,6 +237,19 @@ namespace Microsoft.Xna.Framework
             {
                 _isActivated = false;
                 OnDeactivated();
+            }
+        }
+
+        internal void ForceSetFullScreen(bool _isFullScreen)
+        {
+            if (_isFullScreen)
+            {
+                _activity.Window.ClearFlags(WindowManagerFlags.ForceNotFullscreen);
+                _activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+            }
+            else
+            {
+                _activity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
             }
         }
 

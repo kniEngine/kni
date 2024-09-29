@@ -51,7 +51,12 @@ namespace Microsoft.Xna.Platform
                     base.GraphicsDevice.PresentationParameters.IsFullScreen = value;
 
                 if (base.GraphicsDevice != null)
-                    this.ForceSetFullScreen(base.IsFullScreen);
+                {
+                    // TODO: Set fullscreen in ApplyChanges()
+                    IntPtr windowHandle = base.GraphicsDevice.PresentationParameters.DeviceWindowHandle;
+                    AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(windowHandle);
+                    gameWindow.ForceSetFullScreen(base.IsFullScreen);
+                }
             }
         }
 
@@ -199,24 +204,6 @@ namespace Microsoft.Xna.Platform
                 TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
             }
 
-        }
-
-        private void ForceSetFullScreen(bool _isFullScreen)
-        {
-            if (_isFullScreen)
-            {
-                AndroidGameWindow.Activity.Window.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
-                AndroidGameWindow.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-            }
-            else
-            {
-                AndroidGameWindow.Activity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
-            }
-        }
-
-        internal void InternalForceSetFullScreen()
-        {
-            this.ForceSetFullScreen(IsFullScreen);
         }
 
 
