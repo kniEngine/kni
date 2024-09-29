@@ -150,8 +150,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     struct GLESVersion
     {
-        const int EglContextClientVersion = 0x3098;
-        const int EglContextMinorVersion = 0x30fb;
+        public const int EglContextClientVersion = 0x3098;
+        public const int EglContextMinorVersion  = 0x30FB;
 
         public int Major;
         public int Minor;
