@@ -81,7 +81,9 @@ namespace Microsoft.Xna.Platform
         public override void CreateDevice()
         {
             PresentationParameters pp = new PresentationParameters();
-            pp.DepthStencilFormat = DepthFormat.Depth24;
+            pp.MultiSampleCount = (this.PreferMultiSampling) ? 4 : 1;
+            pp.BackBufferFormat = this.PreferredBackBufferFormat;
+            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
             pp.BackBufferWidth = 800;
             pp.BackBufferHeight = 480;
 
