@@ -211,7 +211,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             {
                 contentwriter.WriteObject(content);
                 contentwriter.WriteSharedResources(contentwriter.SharedResources);
-
+                compressContent = true;
                 if (!compressContent)
                 {
                     BufferedStream bufferedStream = new BufferedStream(stream);
@@ -290,6 +290,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 return null;
             if (resultLength >= plainData.Length)
                 return null;
+
+#if NET6_0_OR_GREATER
+            {
+                bodyStream.Position = 0;
+
+                var compressedbrStream = new MemoryStream();
+                var brotliStream = new System.IO.Compression.BrotliStream(compressedbrStream,
+                    System.IO.Compression.CompressionLevel.SmallestSize,
+                    true);
+                // Copy the input stream to the BrotliStream, which will compress the data
+                bodyStream.CopyTo(brotliStream);
+                brotliStream.Flush();
+
+
+                var brcopdata = compressedbrStream.ToArray();
+
+                brotliStream.Dispose();
+            }
+#endif
 
             MemoryStream compressedStream = new MemoryStream();
             WriteUInt(compressedStream, (uint)bodyStream.Length);
