@@ -204,6 +204,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), identity);
             }
 
+            public Matrix GetTransform()
+            {
+                if (this.Type != PivotType.Invalid)
+                    return this.Transform;
+                else
+                    return Matrix.Identity;
+            }
+
             public Matrix GetTransform(Vector3? scale, Quaternion? rotation, Vector3? translation)
             {
                 Matrix result = Matrix.Identity;
@@ -870,7 +878,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         if (_pivots.TryGetValue(node.Name, out pivot))
                         {
                             // --> Use transformation pivot.
-                            node.Transform = pivot.GetTransform(null, null, null);
+                            node.Transform = pivot.GetTransform();
                         }
                         else
                         {
