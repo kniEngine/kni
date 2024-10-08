@@ -734,15 +734,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             Debug.Assert(aiScene != null);
 
-            Dictionary<string, Matrix> offsetMatrices = new Dictionary<string, Matrix>();
+            Dictionary<string, Matrix> deformationBones = new Dictionary<string, Matrix>();
             if (aiScene.HasMeshes)
                 foreach (Mesh aiMesh in aiScene.Meshes)
                     if (aiMesh.HasBones)
                         foreach (Bone aiBone in aiMesh.Bones)
-                            if (!offsetMatrices.ContainsKey(aiBone.Name))
-                                offsetMatrices[aiBone.Name] = ToXna(aiBone.OffsetMatrix);
+                            if (!deformationBones.ContainsKey(aiBone.Name))
+                                deformationBones[aiBone.Name] = ToXna(aiBone.OffsetMatrix);
 
-            return offsetMatrices;
+            return deformationBones;
         }
 
         /// <summary>
