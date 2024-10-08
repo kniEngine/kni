@@ -146,54 +146,60 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             public static readonly FbxPivot Default = new FbxPivot();
 
+            public enum PivotType
+            {
+                Invalid,
+                Translation,
+                RotationOffset,
+                RotationPivot,
+                PreRotation,
+                Rotation,
+                PostRotation,
+                RotationPivotInverse,
+                ScalingOffset,
+                ScalingPivot,
+                Scaling,
+                ScalingPivotInverse,
+                GeometricTranslation,
+                GeometricRotation,
+                GeometricScaling,
+            }
+
+            public PivotType Type;
             Matrix Transform;
-            public bool Translation;
-            public bool RotationOffset;
-            public bool RotationPivot;
-            public bool PreRotation;
-            public bool Rotation;
-            public bool PostRotation;
-            public bool RotationPivotInverse;
-            public bool ScalingOffset;
-            public bool ScalingPivot;
-            public bool Scaling;
-            public bool ScalingPivotInverse;
-            public bool GeometricTranslation;
-            public bool GeometricRotation;
-            public bool GeometricScaling;
 
             public void Update(Node aiNode, ContentIdentity identity)
             {
                 this.Transform = ToXna(aiNode.Transform);
 
                 if (aiNode.Name.EndsWith("_Translation"))
-                    this.Translation = true;
+                    Type = PivotType.Translation;
                 else if (aiNode.Name.EndsWith("_RotationOffset"))
-                    this.RotationOffset = true;
+                    Type = PivotType.RotationOffset;
                 else if (aiNode.Name.EndsWith("_RotationPivot"))
-                    this.RotationPivot = true;
+                    Type = PivotType.RotationPivot;
                 else if (aiNode.Name.EndsWith("_PreRotation"))
-                    this.PreRotation = true;
+                    Type = PivotType.PreRotation;
                 else if (aiNode.Name.EndsWith("_Rotation"))
-                    this.Rotation = true;
+                    Type = PivotType.Rotation;
                 else if (aiNode.Name.EndsWith("_PostRotation"))
-                    this.PostRotation = true;
+                    Type = PivotType.PostRotation;
                 else if (aiNode.Name.EndsWith("_RotationPivotInverse"))
-                    this.RotationPivotInverse = true;
+                    Type = PivotType.RotationPivotInverse;
                 else if (aiNode.Name.EndsWith("_ScalingOffset"))
-                    this.ScalingOffset = true;
+                    Type = PivotType.ScalingOffset;
                 else if (aiNode.Name.EndsWith("_ScalingPivot"))
-                    this.ScalingPivot = true;
+                    Type = PivotType.ScalingPivot;
                 else if (aiNode.Name.EndsWith("_Scaling"))
-                    this.Scaling = true;
+                    Type = PivotType.Scaling;
                 else if (aiNode.Name.EndsWith("_ScalingPivotInverse"))
-                    this.ScalingPivotInverse = true;
+                    Type = PivotType.ScalingPivotInverse;
                 else if (aiNode.Name.EndsWith("_GeometricTranslation"))
-                    this.GeometricTranslation = true;
+                    Type = PivotType.GeometricTranslation;
                 else if (aiNode.Name.EndsWith("_GeometricRotation"))
-                    this.GeometricRotation = true;
+                    Type = PivotType.GeometricRotation;
                 else if (aiNode.Name.EndsWith("_GeometricScaling"))
-                    this.GeometricScaling = true;
+                    Type = PivotType.GeometricScaling;
                 else
                     throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), identity);
             }
@@ -202,46 +208,46 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             {
                 Matrix result = Matrix.Identity;
 
-                if (GeometricScaling)
+                if (this.Type == PivotType.GeometricScaling)
                     result = result * this.Transform;
-                if (GeometricRotation)
+                if (this.Type == PivotType.GeometricRotation)
                     result = result * this.Transform;
-                if (GeometricTranslation)
+                if (this.Type == PivotType.GeometricTranslation)
                     result = result * this.Transform;
 
-                if (ScalingPivotInverse)
+                if (this.Type == PivotType.ScalingPivotInverse)
                     result = result * this.Transform;
 
                 if (scale.HasValue)
                     result = result * Matrix.CreateScale(scale.Value);
-                else if (Scaling)
+                else if (this.Type == PivotType.Scaling)
                     result = result * this.Transform;
 
-                if (ScalingPivot)
+                if (this.Type == PivotType.ScalingPivot)
                     result = result * this.Transform;
-                if (ScalingOffset)
+                if (this.Type == PivotType.ScalingOffset)
                     result = result * this.Transform;
 
-                if (RotationPivotInverse)
+                if (this.Type == PivotType.RotationPivotInverse)
                     result = result * this.Transform;
-                if (PostRotation)
+                if (this.Type == PivotType.PostRotation)
                     result = result * this.Transform;
 
                 if (rotation.HasValue)
                     result = result * Matrix.CreateFromQuaternion(rotation.Value);
-                else if (Rotation)
+                else if (this.Type == PivotType.Rotation)
                     result = result * this.Transform;
 
-                if (PreRotation)
+                if (this.Type == PivotType.PreRotation)
                     result = result * this.Transform;
-                if (RotationPivot)
+                if (this.Type == PivotType.RotationPivot)
                     result = result * this.Transform;
-                if (RotationOffset)
+                if (this.Type == PivotType.RotationOffset)
                     result = result * this.Transform;
 
                 if (translation.HasValue)
                     result = result * Matrix.CreateTranslation(translation.Value);
-                else if (Translation)
+                else if (this.Type == PivotType.Translation)
                     result = result * this.Transform;
 
                 return result;
@@ -957,7 +963,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         scaleKeys = aiChannel.ScalingKeys;
 
-                        Debug.Assert(pivot.Scaling);
+                        Debug.Assert(pivot.Type == FbxPivot.PivotType.Scaling);
                         Debug.Assert(!aiChannel.HasRotationKeys || (aiChannel.RotationKeyCount == 1 && (aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(1, 0, 0, 0) || aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(0, 0, 0, 0))));
                         Debug.Assert(!aiChannel.HasPositionKeys || (aiChannel.PositionKeyCount == 1 && aiChannel.PositionKeys[0].Value == new Vector3D(0, 0, 0)));
                     }
@@ -965,7 +971,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         rotationKeys = aiChannel.RotationKeys;
 
-                        Debug.Assert(pivot.Rotation);
+                        Debug.Assert(pivot.Type == FbxPivot.PivotType.Rotation);
                         Debug.Assert(!aiChannel.HasScalingKeys || (aiChannel.ScalingKeyCount == 1 && aiChannel.ScalingKeys[0].Value == new Vector3D(1, 1, 1)));
                         Debug.Assert(!aiChannel.HasPositionKeys || (aiChannel.PositionKeyCount == 1 && aiChannel.PositionKeys[0].Value == new Vector3D(0, 0, 0)));
                     }
@@ -973,7 +979,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         translationKeys = aiChannel.PositionKeys;
 
-                        Debug.Assert(pivot.Translation);
+                        Debug.Assert(pivot.Type == FbxPivot.PivotType.Translation);
                         Debug.Assert(!aiChannel.HasScalingKeys || (aiChannel.ScalingKeyCount == 1 && aiChannel.ScalingKeys[0].Value == new Vector3D(1, 1, 1)));
                         Debug.Assert(!aiChannel.HasRotationKeys || (aiChannel.RotationKeyCount == 1 && (aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(1, 0, 0, 0) || aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(0, 0, 0, 0))));
                     }
