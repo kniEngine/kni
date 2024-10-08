@@ -161,6 +161,41 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             public Matrix? GeometricRotation;
             public Matrix? GeometricScaling;
 
+            public void Update(Node aiNode, ContentIdentity identity)
+            {
+                Matrix transform = ToXna(aiNode.Transform);
+                if (aiNode.Name.EndsWith("_Translation"))
+                    this.Translation = transform;
+                else if (aiNode.Name.EndsWith("_RotationOffset"))
+                    this.RotationOffset = transform;
+                else if (aiNode.Name.EndsWith("_RotationPivot"))
+                    this.RotationPivot = transform;
+                else if (aiNode.Name.EndsWith("_PreRotation"))
+                    this.PreRotation = transform;
+                else if (aiNode.Name.EndsWith("_Rotation"))
+                    this.Rotation = transform;
+                else if (aiNode.Name.EndsWith("_PostRotation"))
+                    this.PostRotation = transform;
+                else if (aiNode.Name.EndsWith("_RotationPivotInverse"))
+                    this.RotationPivotInverse = transform;
+                else if (aiNode.Name.EndsWith("_ScalingOffset"))
+                    this.ScalingOffset = transform;
+                else if (aiNode.Name.EndsWith("_ScalingPivot"))
+                    this.ScalingPivot = transform;
+                else if (aiNode.Name.EndsWith("_Scaling"))
+                    this.Scaling = transform;
+                else if (aiNode.Name.EndsWith("_ScalingPivotInverse"))
+                    this.ScalingPivotInverse = transform;
+                else if (aiNode.Name.EndsWith("_GeometricTranslation"))
+                    this.GeometricTranslation = transform;
+                else if (aiNode.Name.EndsWith("_GeometricRotation"))
+                    this.GeometricRotation = transform;
+                else if (aiNode.Name.EndsWith("_GeometricScaling"))
+                    this.GeometricScaling = transform;
+                else
+                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), identity);
+            }
+
             public Matrix GetTransform(Vector3? scale, Quaternion? rotation, Vector3? translation)
             {
                 Matrix transform = Matrix.Identity;
@@ -554,38 +589,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     pivot = new FbxPivot();
                     _pivots.Add(originalName, pivot);
                 }
-
-                Matrix transform = ToXna(aiNode.Transform);
-                if (aiNode.Name.EndsWith("_Translation"))
-                    pivot.Translation = transform;
-                else if (aiNode.Name.EndsWith("_RotationOffset"))
-                    pivot.RotationOffset = transform;
-                else if (aiNode.Name.EndsWith("_RotationPivot"))
-                    pivot.RotationPivot = transform;
-                else if (aiNode.Name.EndsWith("_PreRotation"))
-                    pivot.PreRotation = transform;
-                else if (aiNode.Name.EndsWith("_Rotation"))
-                    pivot.Rotation = transform;
-                else if (aiNode.Name.EndsWith("_PostRotation"))
-                    pivot.PostRotation = transform;
-                else if (aiNode.Name.EndsWith("_RotationPivotInverse"))
-                    pivot.RotationPivotInverse = transform;
-                else if (aiNode.Name.EndsWith("_ScalingOffset"))
-                    pivot.ScalingOffset = transform;
-                else if (aiNode.Name.EndsWith("_ScalingPivot"))
-                    pivot.ScalingPivot = transform;
-                else if (aiNode.Name.EndsWith("_Scaling"))
-                    pivot.Scaling = transform;
-                else if (aiNode.Name.EndsWith("_ScalingPivotInverse"))
-                    pivot.ScalingPivotInverse = transform;
-                else if (aiNode.Name.EndsWith("_GeometricTranslation"))
-                    pivot.GeometricTranslation = transform;
-                else if (aiNode.Name.EndsWith("_GeometricRotation"))
-                    pivot.GeometricRotation = transform;
-                else if (aiNode.Name.EndsWith("_GeometricScaling"))
-                    pivot.GeometricScaling = transform;
-                else
-                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), _identity);
+                pivot.Update(aiNode, _identity);
             }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
