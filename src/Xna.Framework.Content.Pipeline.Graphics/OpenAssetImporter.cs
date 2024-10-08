@@ -728,15 +728,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Finds the deformation bones (= bones attached to meshes).
         /// </summary>
-        /// <param name="scene">The scene.</param>
+        /// <param name="aiScene">The scene.</param>
         /// <returns>A dictionary of all deformation bones and their offset matrices.</returns>
-        private static Dictionary<string, Matrix> FindDeformationBones(Scene scene)
+        private static Dictionary<string, Matrix> FindDeformationBones(Scene aiScene)
         {
-            Debug.Assert(scene != null);
+            Debug.Assert(aiScene != null);
 
             Dictionary<string, Matrix> offsetMatrices = new Dictionary<string, Matrix>();
-            if (scene.HasMeshes)
-                foreach (Mesh aiMesh in scene.Meshes)
+            if (aiScene.HasMeshes)
+                foreach (Mesh aiMesh in aiScene.Meshes)
                     if (aiMesh.HasBones)
                         foreach (Bone aiBone in aiMesh.Bones)
                             if (!offsetMatrices.ContainsKey(aiBone.Name))
@@ -748,21 +748,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <summary>
         /// Finds the root bone of a specific bone in the skeleton.
         /// </summary>
-        /// <param name="scene">The scene.</param>
+        /// <param name="aiScene">The scene.</param>
         /// <param name="boneName">The name of a bone in the skeleton.</param>
         /// <returns>The root bone.</returns>
-        private static Node FindRootBone(Scene scene, string boneName)
+        private static Node FindRootBone(Scene aiScene, string boneName)
         {
-            Debug.Assert(scene != null);
+            Debug.Assert(aiScene != null);
             Debug.Assert(!string.IsNullOrEmpty(boneName));
 
             // Start with the specified bone.
-            Node node = scene.RootNode.FindNode(boneName);
+            Node node = aiScene.RootNode.FindNode(boneName);
             Debug.Assert(node != null, "Node referenced by mesh not found in model.");
 
             // Walk all the way up to the scene root or the mesh node.
             Node rootBone = node;
-            while (node != scene.RootNode && !node.HasMeshes)
+            while (node != aiScene.RootNode && !node.HasMeshes)
             {
                 // Only when FBXPreservePivotsConfig(true):
                 // The FBX path likes to put these extra preserve pivot nodes in here.
