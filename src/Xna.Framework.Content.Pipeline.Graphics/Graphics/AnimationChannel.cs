@@ -13,47 +13,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
     /// </summary>
     public sealed class AnimationChannel : ICollection<AnimationKeyframe>, IEnumerable<AnimationKeyframe>, IEnumerable
     {
-        List<AnimationKeyframe> keyframes;
+        List<AnimationKeyframe> _keyframes;
 
         /// <summary>
         /// Gets the number of keyframes in the collection.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return keyframes.Count;
-            }
-        }
+        public int Count { get { return _keyframes.Count; } }
 
         /// <summary>
         /// Gets the keyframe at the specified index position.
         /// </summary>
-        public AnimationKeyframe this[int index]
-        {
-            get
-            {
-                return keyframes[index];
-            }
-        }
+        public AnimationKeyframe this[int index] { get { return _keyframes[index]; } }
 
         /// <summary>
         /// Returns a value indicating whether the object is read-only.
         /// </summary>
-        bool ICollection<AnimationKeyframe>.IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ICollection<AnimationKeyframe>.IsReadOnly { get { return false; } }
 
         /// <summary>
         /// Initializes a new instance of AnimationChannel.
         /// </summary>
         public AnimationChannel()
         {
-            keyframes = new List<AnimationKeyframe>();
+            _keyframes = new List<AnimationKeyframe>();
         }
 
         /// <summary>
@@ -62,7 +44,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="item"></param>
         void ICollection<AnimationKeyframe>.Add(AnimationKeyframe item)
         {
-            keyframes.Add(item);
+            _keyframes.Add(item);
         }
 
         /// <summary>
@@ -81,17 +63,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
             // BinarySearch returns the index of the first item found with the same time, or the bitwise
             // complement of the next largest item found.
-            int index = keyframes.BinarySearch(item);
+            int index = _keyframes.BinarySearch(item);
             if (index >= 0)
             {
                 // If a match is found, we do not know if it is at the start, middle or end of a range of
                 // keyframes with the same time value.  So look for the end of the range and insert there
                 // so we have deterministic behaviour.
-                while (index < keyframes.Count)
+                while (index < _keyframes.Count)
                 {
-                    if (item.CompareTo(keyframes[index]) != 0)
+                    if (item.CompareTo(_keyframes[index]) != 0)
                         break;
-                    ++index;
+                    index++;
                 }
             }
             else
@@ -100,7 +82,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // item in the list.  So we just do a bitwise complement and insert at that index.
                 index = ~index;
             }
-            keyframes.Insert(index, item);
+            _keyframes.Insert(index, item);
 
             return index;
         }
@@ -110,7 +92,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// </summary>
         public void Clear()
         {
-            keyframes.Clear();
+            _keyframes.Clear();
         }
 
         /// <summary>
@@ -120,7 +102,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>true if the keyframe exists; false otherwise.</returns>
         public bool Contains(AnimationKeyframe item)
         {
-            return keyframes.Contains(item);
+            return _keyframes.Contains(item);
         }
 
         /// <summary>
@@ -130,7 +112,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="arrayIndex"></param>
         void ICollection<AnimationKeyframe>.CopyTo(AnimationKeyframe[] array, int arrayIndex)
         {
-            keyframes.CopyTo(array, arrayIndex);
+            _keyframes.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -140,7 +122,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>Index of the specified keyframe.</returns>
         public int IndexOf(AnimationKeyframe item)
         {
-            return keyframes.IndexOf(item);
+            return _keyframes.IndexOf(item);
         }
 
         /// <summary>
@@ -150,7 +132,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>true if the keyframe was removed; false otherwise.</returns>
         public bool Remove(AnimationKeyframe item)
         {
-            return keyframes.Remove(item);
+            return _keyframes.Remove(item);
         }
 
         /// <summary>
@@ -159,7 +141,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <param name="index">Index of the keyframe being removed.</param>
         public void RemoveAt(int index)
         {
-            keyframes.RemoveAt(index);
+            _keyframes.RemoveAt(index);
         }
 
         /// <summary>
@@ -168,7 +150,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns>Enumerator for the keyframe collection.</returns>
         public IEnumerator<AnimationKeyframe> GetEnumerator()
         {
-            return keyframes.GetEnumerator();
+            return _keyframes.GetEnumerator();
         }
 
         /// <summary>
@@ -177,7 +159,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return keyframes.GetEnumerator();
+            return _keyframes.GetEnumerator();
         }
     }
 }
