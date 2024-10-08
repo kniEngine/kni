@@ -212,7 +212,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     return Matrix.Identity;
             }
 
-            public Matrix GetTransform(Vector3? scale, Quaternion? rotation, Vector3? translation)
+            public Matrix GetTransform(Vector3 scale, Quaternion rotation, Vector3 translation)
             {
                 Matrix result = Matrix.Identity;
 
@@ -222,9 +222,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 ||  this.Type == PivotType.ScalingPivotInverse)
                     result = result * this.Transform;
 
-                if (scale.HasValue)
-                    result = result * Matrix.CreateScale(scale.Value);
-                else if (this.Type == PivotType.Scaling)
+                result = result * Matrix.CreateScale(scale);
+                if (this.Type == PivotType.Scaling)
                     result = result * this.Transform;
 
                 if (this.Type == PivotType.ScalingPivot
@@ -233,9 +232,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 ||  this.Type == PivotType.PostRotation)
                     result = result * this.Transform;
 
-                if (rotation.HasValue)
-                    result = result * Matrix.CreateFromQuaternion(rotation.Value);
-                else if (this.Type == PivotType.Rotation)
+                result = result * Matrix.CreateFromQuaternion(rotation);
+                if (this.Type == PivotType.Rotation)
                     result = result * this.Transform;
 
                 if (this.Type == PivotType.PreRotation
@@ -243,9 +241,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 ||  this.Type == PivotType.RotationOffset)
                     result = result * this.Transform;
 
-                if (translation.HasValue)
-                    result = result * Matrix.CreateTranslation(translation.Value);
-                else if (this.Type == PivotType.Translation)
+                result = result * Matrix.CreateTranslation(translation);
+                if (this.Type == PivotType.Translation)
                     result = result * this.Transform;
 
                 return result;
@@ -1092,7 +1089,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     }
 
                     // Apply transformation pivot.
-                    //Matrix transform = pivot.GetTransform(scale, rotation, translation);
+                    //if (scale.HasValue)
+                    //    scale = Vector3.One;
+                    //if (rotation.HasValue)
+                    //    rotation = Quaternion.Identity;
+                    //if (translation.HasValue)
+                    //    translation = Vector3.Zero;
+                    //Matrix transform = pivot.GetTransform(scale.Value, rotation.Value, translation.Value);
 
                     // Apply transformation.
                     // Assimp now seems to fix animation by default. pivot transformation
