@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private Dictionary<string, Matrix> _deformationBones;   // The names and offset matrices of all deformation bones.
         private Node _rootBone;                                 // The node that represents the root bone.
         private List<Node> _bones = new List<Node>();           // All nodes attached to the root bone.
-        private Dictionary<string, FbxPivot> _pivots;              // The transformation pivots.
+        private Dictionary<string, FbxPivot> _pivots;           // The transformation pivots.
 
 
         /// <summary>
