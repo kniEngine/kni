@@ -216,14 +216,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             {
                 Matrix result = Matrix.Identity;
 
-                if (this.Type == PivotType.GeometricScaling)
-                    result = result * this.Transform;
-                if (this.Type == PivotType.GeometricRotation)
-                    result = result * this.Transform;
-                if (this.Type == PivotType.GeometricTranslation)
-                    result = result * this.Transform;
-
-                if (this.Type == PivotType.ScalingPivotInverse)
+                if (this.Type == PivotType.GeometricScaling
+                ||  this.Type == PivotType.GeometricRotation
+                ||  this.Type == PivotType.GeometricTranslation
+                ||  this.Type == PivotType.ScalingPivotInverse)
                     result = result * this.Transform;
 
                 if (scale.HasValue)
@@ -231,14 +227,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 else if (this.Type == PivotType.Scaling)
                     result = result * this.Transform;
 
-                if (this.Type == PivotType.ScalingPivot)
-                    result = result * this.Transform;
-                if (this.Type == PivotType.ScalingOffset)
-                    result = result * this.Transform;
-
-                if (this.Type == PivotType.RotationPivotInverse)
-                    result = result * this.Transform;
-                if (this.Type == PivotType.PostRotation)
+                if (this.Type == PivotType.ScalingPivot
+                ||  this.Type == PivotType.ScalingOffset
+                ||  this.Type == PivotType.RotationPivotInverse
+                ||  this.Type == PivotType.PostRotation)
                     result = result * this.Transform;
 
                 if (rotation.HasValue)
@@ -246,11 +238,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 else if (this.Type == PivotType.Rotation)
                     result = result * this.Transform;
 
-                if (this.Type == PivotType.PreRotation)
-                    result = result * this.Transform;
-                if (this.Type == PivotType.RotationPivot)
-                    result = result * this.Transform;
-                if (this.Type == PivotType.RotationOffset)
+                if (this.Type == PivotType.PreRotation
+                ||  this.Type == PivotType.RotationPivot
+                ||  this.Type == PivotType.RotationOffset)
                     result = result * this.Transform;
 
                 if (translation.HasValue)
