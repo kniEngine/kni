@@ -4,8 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -20,10 +18,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         /// <summary>
         /// Gets the time offset from the start of the animation to the position described by this keyframe.
         /// </summary>
-        public TimeSpan Time
-        {
-            get { return _time; }
-        }
+        public TimeSpan Time { get { return _time; } }
 
         /// <summary>
         /// Gets or sets the position described by this keyframe.
