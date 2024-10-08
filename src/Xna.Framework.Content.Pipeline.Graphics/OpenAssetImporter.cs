@@ -200,51 +200,51 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             public Matrix GetTransform(Vector3? scale, Quaternion? rotation, Vector3? translation)
             {
-                Matrix transform = Matrix.Identity;
+                Matrix result = Matrix.Identity;
 
                 if (GeometricScaling)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
                 if (GeometricRotation)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
                 if (GeometricTranslation)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
                 if (ScalingPivotInverse)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
                 if (scale.HasValue)
-                    transform = transform * Matrix.CreateScale(scale.Value);
+                    result = result * Matrix.CreateScale(scale.Value);
                 else if (Scaling)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
                 if (ScalingPivot)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
                 if (ScalingOffset)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
                 if (RotationPivotInverse)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
                 if (PostRotation)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
                 if (rotation.HasValue)
-                    transform = transform * Matrix.CreateFromQuaternion(rotation.Value);
+                    result = result * Matrix.CreateFromQuaternion(rotation.Value);
                 else if (Rotation)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
                 if (PreRotation)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
                 if (RotationPivot)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
                 if (RotationOffset)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
                 if (translation.HasValue)
-                    transform = transform * Matrix.CreateTranslation(translation.Value);
+                    result = result * Matrix.CreateTranslation(translation.Value);
                 else if (Translation)
-                    transform = transform * this.Transform;
+                    result = result * this.Transform;
 
-                return transform;
+                return result;
             }
         }
         #endregion
