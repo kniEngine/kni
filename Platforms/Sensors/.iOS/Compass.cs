@@ -75,6 +75,7 @@ namespace Microsoft.Devices.Sensors
         public Compass()
         {
             _strategy = new CompassStrategy();
+            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
 
             if (!IsSupported)
                 throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
@@ -84,6 +85,11 @@ namespace Microsoft.Devices.Sensors
             ++_instanceCount;
 
             readingChanged += ReadingChangedHandler;
+        }
+
+        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
+        {
+            OnCurrentValueChanged(eventArgs);
         }
 
         public override void Start()
@@ -151,7 +157,7 @@ namespace Microsoft.Devices.Sensors
                 Strategy.CurrentValue = reading;
 
                 _eventArgs.SensorReading = Strategy.CurrentValue;
-                OnCurrentValueChanged(_eventArgs);
+                Strategy.OnCurrentValueChanged(_eventArgs);
             }
         }
 
