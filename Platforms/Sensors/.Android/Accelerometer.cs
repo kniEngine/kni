@@ -27,7 +27,7 @@ namespace Microsoft.Devices.Sensors
         bool _started = false;
 
         /// <summary>
-        /// Gets or sets whether the device on which the application is running supports the accelerometer sensor.
+        /// Gets whether the device on which the application is running supports the accelerometer sensor.
         /// </summary>
         public static bool IsSupported
         {
@@ -90,7 +90,6 @@ namespace Microsoft.Devices.Sensors
         void _activity_Resumed(object sender, EventArgs eventArgs)
         {
             _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
-
         }
 
         private void _sensorListener_AccuracyChanged(object sender, EventArgs eventArgs)

@@ -37,7 +37,6 @@ namespace Microsoft.Devices.Sensors
 
             this.TimeBetweenUpdatesChanged += this.UpdateInterval;
             readingChanged += ReadingChangedHandler;
-
         }
 
         protected override void Dispose(bool disposing)

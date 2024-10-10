@@ -55,7 +55,9 @@ namespace Microsoft.Devices.Sensors
                 if (IsDisposed)
                     throw new ObjectDisposedException(GetType().Name);
                 if (_sensorManager == null)
+                {
                     Initialize();
+                }
                 return _state;
             }
         }
