@@ -59,6 +59,12 @@ namespace Microsoft.Devices.Sensors
             this.TimeBetweenUpdates = TimeSpan.FromMilliseconds(2);
         }
 
+        public abstract void Start();
+
+        public abstract void Stop();
+
+        #region IDisposable
+
         ~SensorBase()
         {
             Dispose(false);
@@ -68,6 +74,7 @@ namespace Microsoft.Devices.Sensors
         {
             if (_disposed)
                 throw new ObjectDisposedException(GetType().Name);
+
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -81,9 +88,7 @@ namespace Microsoft.Devices.Sensors
             _disposed = true;
         }
 
-        public abstract void Start();
-
-        public abstract void Stop();
+        #endregion IDisposable
     }
 }
 

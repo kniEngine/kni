@@ -39,20 +39,6 @@ namespace Microsoft.Devices.Sensors
             readingChanged += ReadingChangedHandler;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                {
-                    if (_started)
-                        Stop();
-                    --_instanceCount;
-                }
-            }
-            base.Dispose(disposing);
-        }
-
         public override void Start()
         {
             if (_started == false)
@@ -94,6 +80,20 @@ namespace Microsoft.Devices.Sensors
         private void UpdateInterval(object sender, EventArgs args)
         {
             _motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                {
+                    if (_started)
+                        Stop();
+                    --_instanceCount;
+                }
+            }
+            base.Dispose(disposing);
         }
     }
 }
