@@ -232,14 +232,14 @@ namespace Microsoft.Devices.Sensors
             {
             }
 
-            public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
+            void ISensorEventListener.OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
             {
                 var handler = AccuracyChanged;
                 if (handler != null)
                     handler(this, EventArgs.Empty);
             }
 
-            public void OnSensorChanged(SensorEvent e)
+            void ISensorEventListener.OnSensorChanged(SensorEvent e)
             {
                 var handler = SensorChanged;
                 if (handler != null)
