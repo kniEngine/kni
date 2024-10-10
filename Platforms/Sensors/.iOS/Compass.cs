@@ -12,6 +12,7 @@ namespace Microsoft.Devices.Sensors
         const int MaxSensorCount = 10;
 
         private bool _isDisposed;
+        private bool _isDataValid;
 
         static int _instanceCount;
         private static bool _started = false;
@@ -33,6 +34,11 @@ namespace Microsoft.Devices.Sensors
         protected override bool IsDisposed
         {
             get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
         }
 
         private static event CMDeviceMotionHandler readingChanged;
@@ -78,8 +84,8 @@ namespace Microsoft.Devices.Sensors
         private void ReadingChangedHandler(CMDeviceMotion data, NSError error)
         {
             CompassReading reading = new CompassReading();
-            this.IsDataValid = error == null;
-            if (this.IsDataValid)
+            _isDataValid = (error == null);
+            if (_isDataValid)
             {
                 reading.MagnetometerReading = new Vector3((float)data.MagneticField.Field.Y, (float)-data.MagneticField.Field.X, (float)data.MagneticField.Field.Z);
                 reading.TrueHeading = Math.Atan2(reading.MagnetometerReading.Y, reading.MagnetometerReading.X) / Math.PI * 180;

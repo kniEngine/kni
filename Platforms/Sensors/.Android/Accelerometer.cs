@@ -18,6 +18,7 @@ namespace Microsoft.Devices.Sensors
         const int MaxSensorCount = 10;
 
         private bool _isDisposed;
+        private bool _isDataValid;
 
         static SensorManager _sensorManager;
         static Sensor _sensorAccelerometer;
@@ -63,6 +64,11 @@ namespace Microsoft.Devices.Sensors
         protected override bool IsDisposed
         {
             get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
         }
 
         /// <summary>
@@ -116,8 +122,8 @@ namespace Microsoft.Devices.Sensors
                     try
                     {
                         AccelerometerReading reading = new AccelerometerReading();
-                        this.IsDataValid = (values != null && values.Count == 3);
-                        if (this.IsDataValid)
+                        _isDataValid = (values != null && values.Count == 3);
+                        if (_isDataValid)
                         {
                             const float gravity = SensorManager.GravityEarth;
                             reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;

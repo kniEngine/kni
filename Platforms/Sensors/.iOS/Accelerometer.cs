@@ -12,6 +12,7 @@ namespace Microsoft.Devices.Sensors
         const int MaxSensorCount = 10;
 
         private bool _isDisposed;
+        private bool _isDataValid;
 
         static int _instanceCount;
         private static bool _started = false;
@@ -29,6 +30,11 @@ namespace Microsoft.Devices.Sensors
         protected override bool IsDisposed
         {
             get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
         }
 
         private static event CMAccelerometerHandler readingChanged;
@@ -73,14 +79,12 @@ namespace Microsoft.Devices.Sensors
         private void ReadingChangedHandler(CMAccelerometerData data, NSError error)
         {
             AccelerometerReading reading = new AccelerometerReading();
-            this.IsDataValid = error == null;
-            if (this.IsDataValid)
+            _isDataValid = (error == null);
+            if (_isDataValid)
             {
-                this.IsDataValid = true;
                 reading.Acceleration = new Vector3((float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z);
                 reading.Timestamp = DateTime.UtcNow;
                 this.CurrentValue = reading;
-                this.IsDataValid = error == null;
             }
         }
 

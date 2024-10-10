@@ -17,6 +17,7 @@ namespace Microsoft.Devices.Sensors
         const int MaxSensorCount = 10;
 
         private bool _isDisposed;
+        private bool _isDataValid;
 
         static SensorManager _sensorManager;
         static Sensor _sensorMagneticField;
@@ -68,6 +69,11 @@ namespace Microsoft.Devices.Sensors
         protected override bool IsDisposed
         {
             get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
         }
 
         /// <summary>
@@ -138,8 +144,8 @@ namespace Microsoft.Devices.Sensors
                         break;
                 }
 
-                this.IsDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
-                if (this.IsDataValid)
+                _isDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
+                if (_isDataValid)
                 {
                     SensorManager.GetOrientation(_matrixR, _matrixValues);
                     CompassReading reading = new CompassReading();

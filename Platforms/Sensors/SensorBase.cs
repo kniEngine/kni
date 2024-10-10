@@ -33,7 +33,9 @@ namespace Microsoft.Devices.Sensors
                 }
             }
         }
-        public bool IsDataValid { get; protected set; }
+
+        public abstract bool IsDataValid { get; }
+
         public TimeSpan TimeBetweenUpdates
         {
             get { return this._timeBetweenUpdates; }
