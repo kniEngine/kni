@@ -2,8 +2,10 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using Microsoft.Xna.Framework;
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
+using Microsoft.Xna.Framework;
 
 namespace Microsoft.Devices.Sensors
 {
@@ -13,11 +15,8 @@ namespace Microsoft.Devices.Sensors
         public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
 
         public abstract TSensorReading CurrentValue { get; }
-
         public abstract bool IsDataValid { get; }
-
         public abstract TimeSpan TimeBetweenUpdates { get; set; }
-
         protected abstract bool IsDisposed { get; }
 
         public SensorBase()
@@ -25,7 +24,6 @@ namespace Microsoft.Devices.Sensors
         }
 
         public abstract void Start();
-
         public abstract void Stop();
 
         protected virtual void OnCurrentValueChanged(SensorReadingEventArgs<TSensorReading> eventArgs)
@@ -34,6 +32,7 @@ namespace Microsoft.Devices.Sensors
             if (handler != null)
                 handler(this, eventArgs);
         }
+
 
         #region IDisposable
 
@@ -48,13 +47,8 @@ namespace Microsoft.Devices.Sensors
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Derived classes override this method to dispose of managed and unmanaged resources.
-        /// </summary>
-        /// <param name="disposing">True if unmanaged resources are to be disposed.</param>
         protected abstract void Dispose(bool disposing);
 
         #endregion IDisposable
     }
 }
-
