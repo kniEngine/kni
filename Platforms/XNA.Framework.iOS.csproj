@@ -75,6 +75,7 @@
 
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Sensors\SensorStrategy.cs" />
   </ItemGroup>
   
   <ItemGroup>
