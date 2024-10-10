@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using Android.Content;
 using Android.Hardware;
 using Microsoft.Xna.Framework;
@@ -175,7 +176,7 @@ namespace Microsoft.Devices.Sensors
                 {
                     if (e != null && e.Sensor.Type == SensorType.Accelerometer && _accelerometer != null)
                     {
-                        var values = e.Values;
+                        IList<float> values = e.Values;
                         try
                         {
                             AccelerometerReading reading = new AccelerometerReading();
