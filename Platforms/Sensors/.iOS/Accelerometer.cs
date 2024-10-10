@@ -13,6 +13,7 @@ namespace Microsoft.Devices.Sensors
 
         private bool _isDisposed;
         private bool _isDataValid;
+        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
 
         static int _instanceCount;
         private static bool _started = false;
@@ -37,6 +38,19 @@ namespace Microsoft.Devices.Sensors
             get { return _isDataValid; }
         }
 
+        public override TimeSpan TimeBetweenUpdates
+        {
+            get { return _timeBetweenUpdates; }
+            set
+            {
+                if (this._timeBetweenUpdates != value)
+                {
+                    this._timeBetweenUpdates = value;
+                    _motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+                }
+            }
+        }
+
         private static event CMAccelerometerHandler readingChanged;
 
         public Accelerometer()
@@ -48,7 +62,6 @@ namespace Microsoft.Devices.Sensors
 
             ++_instanceCount;
 
-            this.TimeBetweenUpdatesChanged += this.UpdateInterval;
             readingChanged += ReadingChangedHandler;
         }
 
@@ -86,11 +99,6 @@ namespace Microsoft.Devices.Sensors
                 reading.Timestamp = DateTime.UtcNow;
                 this.CurrentValue = reading;
             }
-        }
-
-        private void UpdateInterval(object sender, EventArgs args)
-        {
-            _motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
         }
 
         protected override void Dispose(bool disposing)

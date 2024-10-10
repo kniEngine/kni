@@ -18,6 +18,7 @@ namespace Microsoft.Devices.Sensors
 
         private bool _isDisposed;
         private bool _isDataValid;
+        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
 
         static SensorManager _sensorManager;
         static Sensor _sensorMagneticField;
@@ -74,6 +75,19 @@ namespace Microsoft.Devices.Sensors
         public override bool IsDataValid
         {
             get { return _isDataValid; }
+        }
+
+        public override TimeSpan TimeBetweenUpdates
+        {
+            get { return _timeBetweenUpdates; }
+            set
+            {
+                if (this._timeBetweenUpdates != value)
+                {
+                    this._timeBetweenUpdates = value;
+                    // TODO: implement _timeBetweenUpdates for Android
+                }
+            }
         }
 
         /// <summary>

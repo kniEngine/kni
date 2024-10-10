@@ -14,7 +14,6 @@ namespace Microsoft.Devices.Sensors
         [CLSCompliant(false)]
         protected static readonly CoreMotion.CMMotionManager _motionManager = new CoreMotion.CMMotionManager();
 #endif
-        private TimeSpan _timeBetweenUpdates;
         private TSensorReading _currentValue;
         private SensorReadingEventArgs<TSensorReading> _eventArgs = new SensorReadingEventArgs<TSensorReading>(default(TSensorReading));
 
@@ -36,28 +35,13 @@ namespace Microsoft.Devices.Sensors
 
         public abstract bool IsDataValid { get; }
 
-        public TimeSpan TimeBetweenUpdates
-        {
-            get { return this._timeBetweenUpdates; }
-            set
-            {
-                if (this._timeBetweenUpdates != value)
-                {
-                    this._timeBetweenUpdates = value;
-                    var handler = TimeBetweenUpdatesChanged;
-                    if (handler != null)
-                        handler(this, EventArgs.Empty);
-                }
-            }
-        }
+        public abstract TimeSpan TimeBetweenUpdates { get; set; }
 
         public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
-        protected event EventHandler<EventArgs> TimeBetweenUpdatesChanged;
         protected abstract bool IsDisposed { get; }
 
         public SensorBase()
         {
-            this.TimeBetweenUpdates = TimeSpan.FromMilliseconds(2);
         }
 
         public abstract void Start();
