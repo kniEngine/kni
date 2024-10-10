@@ -18,7 +18,7 @@ namespace Microsoft.Devices.Sensors
         const int MaxSensorCount = 10;
 
         static SensorManager _sensorManager;
-        static Sensor _sensor;
+        static Sensor _sensorAccelerometer;
         static int _instanceCount;
 
         SensorListener _sensorListener;
@@ -35,7 +35,7 @@ namespace Microsoft.Devices.Sensors
             {
                 if (_sensorManager == null)
                     Initialize();
-                return _sensor != null;
+                return _sensorAccelerometer != null;
             }
         }
 
@@ -51,7 +51,7 @@ namespace Microsoft.Devices.Sensors
                 if (_sensorManager == null)
                 {
                     Initialize();
-                    _state = _sensor != null ? SensorState.Initializing : SensorState.NotSupported;
+                    _state = _sensorAccelerometer != null ? SensorState.Initializing : SensorState.NotSupported;
                 }
                 return _state;
             }
@@ -66,7 +66,7 @@ namespace Microsoft.Devices.Sensors
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Accelerometer class per application has been exceeded.");
             ++_instanceCount;
 
-            _state = _sensor != null ? SensorState.Initializing : SensorState.NotSupported;
+            _state = _sensorAccelerometer != null ? SensorState.Initializing : SensorState.NotSupported;
 
             _sensorListener = new SensorListener();
             _sensorListener.AccuracyChanged += _sensorListener_AccuracyChanged;
@@ -79,17 +79,17 @@ namespace Microsoft.Devices.Sensors
         static void Initialize()
         {
             _sensorManager = (SensorManager)AndroidGameWindow.Activity.GetSystemService(Context.SensorService);
-            _sensor = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
+            _sensorAccelerometer = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }
 
         void _activity_Paused(object sender, EventArgs eventArgs)
         {
-            _sensorManager.UnregisterListener(_sensorListener, _sensor);
+            _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
         }
 
         void _activity_Resumed(object sender, EventArgs eventArgs)
         {
-            _sensorManager.RegisterListener(_sensorListener, _sensor, SensorDelay.Game);
+            _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
 
         }
 
@@ -146,10 +146,10 @@ namespace Microsoft.Devices.Sensors
                 Initialize();
             if (_started == false)
             {
-                if (_sensorManager != null && _sensor != null)
+                if (_sensorManager != null && _sensorAccelerometer != null)
                 {
                     _isRegistered = true;
-                    _sensorManager.RegisterListener(_sensorListener, _sensor, SensorDelay.Game);
+                    _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
                     // So the system can pause and resume the sensor when the activity is paused
                     AndroidGameWindow.Activity.Paused += _activity_Paused;
                     AndroidGameWindow.Activity.Resumed += _activity_Resumed;
@@ -177,11 +177,11 @@ namespace Microsoft.Devices.Sensors
                 throw new ObjectDisposedException(GetType().Name);
             if (_started)
             {
-                if (_sensorManager != null && _sensor != null)
+                if (_sensorManager != null && _sensorAccelerometer != null)
                 {
                     AndroidGameWindow.Activity.Paused -= _activity_Paused;
                     AndroidGameWindow.Activity.Resumed -= _activity_Resumed;
-                    _sensorManager.UnregisterListener(_sensorListener, _sensor);
+                    _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
                     _isRegistered = false;
                 }
             }
@@ -200,7 +200,7 @@ namespace Microsoft.Devices.Sensors
                     --_instanceCount;
                     if (_instanceCount == 0)
                     {
-                        _sensor = null;
+                        _sensorAccelerometer = null;
                         _sensorManager = null;
                     }
                 }
