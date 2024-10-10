@@ -21,9 +21,13 @@ namespace Microsoft.Devices.Sensors
         private static bool _started = false;
         private static SensorState _state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
 
+
+        internal static readonly CoreMotion.CMMotionManager _motionManager = new CoreMotion.CMMotionManager();
+
+
         public static bool IsSupported
         {
-            get { return _motionManager.AccelerometerAvailable; }
+            get { return Accelerometer._motionManager.AccelerometerAvailable; }
         }
         public SensorState State
         {
@@ -48,7 +52,7 @@ namespace Microsoft.Devices.Sensors
                 if (this._timeBetweenUpdates != value)
                 {
                     this._timeBetweenUpdates = value;
-                    _motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+                    Accelerometer._motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
                 }
             }
         }
@@ -76,7 +80,7 @@ namespace Microsoft.Devices.Sensors
         {
             if (_started == false)
             {
-                _motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
+                Accelerometer._motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
                 _started = true;
                 _state = SensorState.Ready;
             }
@@ -86,7 +90,7 @@ namespace Microsoft.Devices.Sensors
 
         public override void Stop()
         {
-            _motionManager.StopAccelerometerUpdates();
+            Accelerometer._motionManager.StopAccelerometerUpdates();
             _started = false;
             _state = SensorState.Disabled;
         }
