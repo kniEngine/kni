@@ -94,6 +94,7 @@ namespace Microsoft.Devices.Sensors
 
         private void _sensorListener_AccuracyChanged(object sender, EventArgs eventArgs)
         {
+            //do nothing
         }
 
         private void _sensorListener_SensorChanged(object sender, SensorListener.SensorChangedEventArgs eventArgs)
@@ -189,8 +190,6 @@ namespace Microsoft.Devices.Sensors
                 var handler = AccuracyChanged;
                 if (handler != null)
                     handler(this, EventArgs.Empty);
-
-                //do nothing
             }
 
             public void OnSensorChanged(SensorEvent e)
