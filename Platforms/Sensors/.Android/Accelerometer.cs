@@ -104,6 +104,7 @@ namespace Microsoft.Devices.Sensors
         public Accelerometer()
         {
             _strategy = new AccelerometerStrategy();
+            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
 
             if (_instanceCount >= MaxSensorCount)
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Accelerometer class per application has been exceeded.");
@@ -123,6 +124,11 @@ namespace Microsoft.Devices.Sensors
         {
             _sensorManager = (SensorManager)AndroidGameWindow.Activity.GetSystemService(Context.SensorService);
             _sensorAccelerometer = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
+        }
+
+        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> eventArgs)
+        {
+            OnCurrentValueChanged(eventArgs);
         }
 
         void _activity_Paused(object sender, EventArgs eventArgs)
@@ -161,7 +167,7 @@ namespace Microsoft.Devices.Sensors
                         Strategy.CurrentValue = reading;
 
                         _eventArgs.SensorReading = Strategy.CurrentValue;
-                        OnCurrentValueChanged(_eventArgs);
+                        Strategy.OnCurrentValueChanged(_eventArgs);
                     }
                     finally
                     {

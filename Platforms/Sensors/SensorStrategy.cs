@@ -14,6 +14,8 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
         private TSensorReading _currentValue;
 
+        public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
+
 
         public virtual SensorState State
         {
@@ -53,6 +55,13 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         {
         }
 
+        internal
+        protected virtual void OnCurrentValueChanged(SensorReadingEventArgs<TSensorReading> eventArgs)
+        {
+            var handler = CurrentValueChanged;
+            if (handler != null)
+                handler(this, eventArgs);
+        }
 
         #region IDisposable Members
 

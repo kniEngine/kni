@@ -109,6 +109,7 @@ namespace Microsoft.Devices.Sensors
         public Compass()
         {
             _strategy = new CompassStrategy();
+            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
 
             if (_instanceCount >= MaxSensorCount)
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Compass class per application has been exceeded.");
@@ -135,6 +136,12 @@ namespace Microsoft.Devices.Sensors
             _sensorMagneticField = _sensorManager.GetDefaultSensor(SensorType.MagneticField);
             _sensorAccelerometer = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }
+
+        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
+        {
+            OnCurrentValueChanged(eventArgs);
+        }
+
 
         void _activity_Paused(object sender, EventArgs eventArgs)
         {
@@ -188,7 +195,7 @@ namespace Microsoft.Devices.Sensors
                     Strategy.CurrentValue = reading;
 
                     _eventArgs.SensorReading = Strategy.CurrentValue;
-                    OnCurrentValueChanged(_eventArgs);
+                    Strategy.OnCurrentValueChanged(_eventArgs);
                 }
             }
             catch (NullReferenceException)

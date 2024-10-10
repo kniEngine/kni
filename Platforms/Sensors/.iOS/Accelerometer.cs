@@ -75,6 +75,7 @@ namespace Microsoft.Devices.Sensors
         public Accelerometer()
         {
             _strategy = new AccelerometerStrategy();
+            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
 
             if (!IsSupported)
                 throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
@@ -84,6 +85,11 @@ namespace Microsoft.Devices.Sensors
             ++_instanceCount;
 
             readingChanged += ReadingChangedHandler;
+        }
+
+        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> eventArgs)
+        {
+            OnCurrentValueChanged(eventArgs);
         }
 
         public override void Start()
@@ -121,7 +127,7 @@ namespace Microsoft.Devices.Sensors
                 Strategy.CurrentValue = reading;
 
                 _eventArgs.SensorReading = Strategy.CurrentValue;
-                OnCurrentValueChanged(_eventArgs);
+                Strategy.OnCurrentValueChanged(_eventArgs);
             }
         }
 
