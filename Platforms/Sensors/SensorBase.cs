@@ -12,37 +12,37 @@ namespace Microsoft.Devices.Sensors
     {
 #if IOS || TVOS
         [CLSCompliant(false)]
-        protected static readonly CoreMotion.CMMotionManager motionManager = new CoreMotion.CMMotionManager();
+        protected static readonly CoreMotion.CMMotionManager _motionManager = new CoreMotion.CMMotionManager();
 #endif
-        bool disposed;
-        private TimeSpan timeBetweenUpdates;
-        private TSensorReading currentValue;
-        private SensorReadingEventArgs<TSensorReading> eventArgs = new SensorReadingEventArgs<TSensorReading>(default(TSensorReading));
+        bool _disposed;
+        private TimeSpan _timeBetweenUpdates;
+        private TSensorReading _currentValue;
+        private SensorReadingEventArgs<TSensorReading> _eventArgs = new SensorReadingEventArgs<TSensorReading>(default(TSensorReading));
 
         public TSensorReading CurrentValue 
         {
-            get { return currentValue; }
+            get { return _currentValue; }
             protected set
             {
-                currentValue = value;
+                _currentValue = value;
 
                 var handler = CurrentValueChanged;
                 if (handler != null)
                 {
-                    eventArgs.SensorReading = value;
-                    handler(this, eventArgs);
+                    _eventArgs.SensorReading = value;
+                    handler(this, _eventArgs);
                 }
             }
         }
         public bool IsDataValid { get; protected set; }
         public TimeSpan TimeBetweenUpdates
         {
-            get { return this.timeBetweenUpdates; }
+            get { return this._timeBetweenUpdates; }
             set
             {
-                if (this.timeBetweenUpdates != value)
+                if (this._timeBetweenUpdates != value)
                 {
-                    this.timeBetweenUpdates = value;
+                    this._timeBetweenUpdates = value;
                     var handler = TimeBetweenUpdatesChanged;
                     if (handler != null)
                         handler(this, EventArgs.Empty);
@@ -52,7 +52,7 @@ namespace Microsoft.Devices.Sensors
 
         public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
         protected event EventHandler<EventArgs> TimeBetweenUpdatesChanged;
-        protected bool IsDisposed { get { return disposed; } }
+        protected bool IsDisposed { get { return _disposed; } }
 
         public SensorBase()
         {
@@ -66,7 +66,7 @@ namespace Microsoft.Devices.Sensors
 
         public void Dispose()
         {
-            if (disposed)
+            if (_disposed)
                 throw new ObjectDisposedException(GetType().Name);
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -78,7 +78,7 @@ namespace Microsoft.Devices.Sensors
         /// <param name="disposing">True if unmanaged resources are to be disposed.</param>
         protected virtual void Dispose(bool disposing)
         {
-            disposed = true;
+            _disposed = true;
         }
 
         public abstract void Start();
