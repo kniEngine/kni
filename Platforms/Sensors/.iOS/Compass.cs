@@ -1,7 +1,11 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
-
 using Microsoft.Xna.Framework;
-
 using CoreMotion;
 using Foundation;
 
@@ -10,6 +14,12 @@ namespace Microsoft.Devices.Sensors
     public sealed class Compass : SensorBase<CompassReading>
     {
         const int MaxSensorCount = 10;
+
+        private bool _isDisposed;
+        private bool _isDataValid;
+        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private CompassReading _currentValue;
+        private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
 
         static int _instanceCount;
         private static bool _started = false;
@@ -21,11 +31,39 @@ namespace Microsoft.Devices.Sensors
 
         public static bool IsSupported
         {
-            get { return _motionManager.DeviceMotionAvailable; }
+            get { return Accelerometer._motionManager.DeviceMotionAvailable; }
         }
         public SensorState State
         {
             get { return _state; }
+        }
+
+        protected override bool IsDisposed
+        {
+            get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
+        }
+
+        public override TimeSpan TimeBetweenUpdates
+        {
+            get { return _timeBetweenUpdates; }
+            set
+            {
+                if (this._timeBetweenUpdates != value)
+                {
+                    this._timeBetweenUpdates = value;
+                    Accelerometer._motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+                }
+            }
+        }
+
+        public override CompassReading CurrentValue
+        {
+            get { return _currentValue; }
         }
 
         private static event CMDeviceMotionHandler readingChanged;
@@ -39,7 +77,6 @@ namespace Microsoft.Devices.Sensors
 
             ++_instanceCount;
 
-            this.TimeBetweenUpdatesChanged += this.UpdateInterval;
             readingChanged += ReadingChangedHandler;
         }
 
@@ -48,7 +85,7 @@ namespace Microsoft.Devices.Sensors
             if (_started == false)
             {
                 // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
-                _motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
+                Accelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
                 _started = true;
                 _state = SensorState.Ready;
             }
@@ -58,7 +95,7 @@ namespace Microsoft.Devices.Sensors
 
         public override void Stop()
         {
-            _motionManager.StopDeviceMotionUpdates();
+            Accelerometer._motionManager.StopDeviceMotionUpdates();
             _started = false;
             _state = SensorState.Disabled;
         }
@@ -71,8 +108,8 @@ namespace Microsoft.Devices.Sensors
         private void ReadingChangedHandler(CMDeviceMotion data, NSError error)
         {
             CompassReading reading = new CompassReading();
-            this.IsDataValid = error == null;
-            if (this.IsDataValid)
+            _isDataValid = (error == null);
+            if (_isDataValid)
             {
                 reading.MagnetometerReading = new Vector3((float)data.MagneticField.Field.Y, (float)-data.MagneticField.Field.X, (float)data.MagneticField.Field.Z);
                 reading.TrueHeading = Math.Atan2(reading.MagnetometerReading.Y, reading.MagnetometerReading.X) / Math.PI * 180;
@@ -105,18 +142,16 @@ namespace Microsoft.Devices.Sensors
                     this._calibrate = false;
 
                 reading.Timestamp = DateTime.UtcNow;
-                this.CurrentValue = reading;
-            }
-        }
+                _currentValue = reading;
 
-        private void UpdateInterval(object sender, EventArgs args)
-        {
-            _motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+                _eventArgs.SensorReading = _currentValue;
+                OnCurrentValueChanged(_eventArgs);
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -124,8 +159,10 @@ namespace Microsoft.Devices.Sensors
                         Stop();
                     --_instanceCount;
                 }
+
+                _isDisposed = true;
+                //base.Dispose(disposing);
             }
-            base.Dispose(disposing);
         }
     }
 }

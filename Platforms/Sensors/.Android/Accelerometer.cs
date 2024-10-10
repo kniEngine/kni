@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using System.Collections.Generic;
 using Android.Content;
@@ -16,6 +18,12 @@ namespace Microsoft.Devices.Sensors
     public sealed class Accelerometer : SensorBase<AccelerometerReading>
     {
         const int MaxSensorCount = 10;
+
+        private bool _isDisposed;
+        private bool _isDataValid;
+        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private AccelerometerReading _currentValue;
+        private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
 
         static SensorManager _sensorManager;
         static Sensor _sensorAccelerometer;
@@ -46,8 +54,9 @@ namespace Microsoft.Devices.Sensors
         {
             get
             {
-                if (IsDisposed)
+                if (_isDisposed)
                     throw new ObjectDisposedException(GetType().Name);
+
                 if (_sensorManager == null)
                 {
                     Initialize();
@@ -55,6 +64,34 @@ namespace Microsoft.Devices.Sensors
                 }
                 return _state;
             }
+        }
+
+        protected override bool IsDisposed
+        {
+            get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
+        }
+
+        public override TimeSpan TimeBetweenUpdates
+        {
+            get { return _timeBetweenUpdates; }
+            set
+            {
+                if (this._timeBetweenUpdates != value)
+                {
+                    this._timeBetweenUpdates = value;
+                    // TODO: implement _timeBetweenUpdates for Android
+                }
+            }
+        }
+
+        public override AccelerometerReading CurrentValue
+        {
+            get { return _currentValue; }
         }
 
         /// <summary>
@@ -108,14 +145,17 @@ namespace Microsoft.Devices.Sensors
                     try
                     {
                         AccelerometerReading reading = new AccelerometerReading();
-                        this.IsDataValid = (values != null && values.Count == 3);
-                        if (this.IsDataValid)
+                        _isDataValid = (values != null && values.Count == 3);
+                        if (_isDataValid)
                         {
                             const float gravity = SensorManager.GravityEarth;
                             reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
                             reading.Timestamp = DateTime.UtcNow;
                         }
-                        this.CurrentValue = reading;
+                        _currentValue = reading;
+
+                        _eventArgs.SensorReading = _currentValue;
+                        OnCurrentValueChanged(_eventArgs);
                     }
                     finally
                     {
@@ -139,8 +179,9 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Start()
         {
-            if (IsDisposed)
+            if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
+
             if (_sensorManager == null)
                 Initialize();
             if (_started == false)
@@ -172,8 +213,9 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Stop()
         {
-            if (IsDisposed)
+            if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
+
             if (_started)
             {
                 if (_sensorManager != null && _sensorAccelerometer != null)
@@ -190,7 +232,7 @@ namespace Microsoft.Devices.Sensors
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -203,8 +245,10 @@ namespace Microsoft.Devices.Sensors
                         _sensorManager = null;
                     }
                 }
+
+                _isDisposed = true;
+                //base.Dispose(disposing);
             }
-            base.Dispose(disposing);
         }
     }
 }

@@ -1,7 +1,11 @@
+// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
-
 using Microsoft.Xna.Framework;
-
 using CoreMotion;
 using Foundation;
 
@@ -11,17 +15,55 @@ namespace Microsoft.Devices.Sensors
     {
         const int MaxSensorCount = 10;
 
+        private bool _isDisposed;
+        private bool _isDataValid;
+        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private AccelerometerReading _currentValue;
+        private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
+
         static int _instanceCount;
         private static bool _started = false;
         private static SensorState _state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
 
+
+        internal static readonly CoreMotion.CMMotionManager _motionManager = new CoreMotion.CMMotionManager();
+
+
         public static bool IsSupported
         {
-            get { return _motionManager.AccelerometerAvailable; }
+            get { return Accelerometer._motionManager.AccelerometerAvailable; }
         }
         public SensorState State
         {
             get { return _state; }
+        }
+
+        protected override bool IsDisposed
+        {
+            get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
+        }
+
+        public override TimeSpan TimeBetweenUpdates
+        {
+            get { return _timeBetweenUpdates; }
+            set
+            {
+                if (this._timeBetweenUpdates != value)
+                {
+                    this._timeBetweenUpdates = value;
+                    Accelerometer._motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+                }
+            }
+        }
+
+        public override AccelerometerReading CurrentValue
+        {
+            get { return _currentValue; }
         }
 
         private static event CMAccelerometerHandler readingChanged;
@@ -35,7 +77,6 @@ namespace Microsoft.Devices.Sensors
 
             ++_instanceCount;
 
-            this.TimeBetweenUpdatesChanged += this.UpdateInterval;
             readingChanged += ReadingChangedHandler;
         }
 
@@ -43,7 +84,7 @@ namespace Microsoft.Devices.Sensors
         {
             if (_started == false)
             {
-                _motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
+                Accelerometer._motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
                 _started = true;
                 _state = SensorState.Ready;
             }
@@ -53,7 +94,7 @@ namespace Microsoft.Devices.Sensors
 
         public override void Stop()
         {
-            _motionManager.StopAccelerometerUpdates();
+            Accelerometer._motionManager.StopAccelerometerUpdates();
             _started = false;
             _state = SensorState.Disabled;
         }
@@ -66,25 +107,21 @@ namespace Microsoft.Devices.Sensors
         private void ReadingChangedHandler(CMAccelerometerData data, NSError error)
         {
             AccelerometerReading reading = new AccelerometerReading();
-            this.IsDataValid = error == null;
-            if (this.IsDataValid)
+            _isDataValid = (error == null);
+            if (_isDataValid)
             {
-                this.IsDataValid = true;
                 reading.Acceleration = new Vector3((float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z);
                 reading.Timestamp = DateTime.UtcNow;
-                this.CurrentValue = reading;
-                this.IsDataValid = error == null;
-            }
-        }
+                _currentValue = reading;
 
-        private void UpdateInterval(object sender, EventArgs args)
-        {
-            _motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+                _eventArgs.SensorReading = _currentValue;
+                OnCurrentValueChanged(_eventArgs);
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -92,8 +129,10 @@ namespace Microsoft.Devices.Sensors
                         Stop();
                     --_instanceCount;
                 }
+
+                _isDisposed = true;
+                //base.Dispose(disposing);
             }
-            base.Dispose(disposing);
         }
     }
 }

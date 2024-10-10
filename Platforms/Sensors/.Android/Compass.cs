@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2024 Nick Kastellanos
+
 using System;
 using Android.Content;
 using Android.Hardware;
@@ -15,6 +17,12 @@ namespace Microsoft.Devices.Sensors
     public sealed class Compass : SensorBase<CompassReading>
     {
         const int MaxSensorCount = 10;
+
+        private bool _isDisposed;
+        private bool _isDataValid;
+        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private CompassReading _currentValue;
+        private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
 
         static SensorManager _sensorManager;
         static Sensor _sensorMagneticField;
@@ -52,14 +60,43 @@ namespace Microsoft.Devices.Sensors
         {
             get
             {
-                if (IsDisposed)
+                if (_isDisposed)
                     throw new ObjectDisposedException(GetType().Name);
+
                 if (_sensorManager == null)
                 {
                     Initialize();
                 }
                 return _state;
             }
+        }
+
+        protected override bool IsDisposed
+        {
+            get { return _isDisposed; }
+        }
+
+        public override bool IsDataValid
+        {
+            get { return _isDataValid; }
+        }
+
+        public override TimeSpan TimeBetweenUpdates
+        {
+            get { return _timeBetweenUpdates; }
+            set
+            {
+                if (this._timeBetweenUpdates != value)
+                {
+                    this._timeBetweenUpdates = value;
+                    // TODO: implement _timeBetweenUpdates for Android
+                }
+            }
+        }
+
+        public override CompassReading CurrentValue
+        {
+            get { return _currentValue; }
         }
 
         /// <summary>
@@ -130,8 +167,8 @@ namespace Microsoft.Devices.Sensors
                         break;
                 }
 
-                this.IsDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
-                if (this.IsDataValid)
+                _isDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
+                if (_isDataValid)
                 {
                     SensorManager.GetOrientation(_matrixR, _matrixValues);
                     CompassReading reading = new CompassReading();
@@ -142,7 +179,10 @@ namespace Microsoft.Devices.Sensors
                     // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
                     reading.TrueHeading = reading.MagneticHeading;
                     reading.Timestamp = DateTime.UtcNow;
-                    this.CurrentValue = reading;
+                    _currentValue = reading;
+
+                    _eventArgs.SensorReading = _currentValue;
+                    OnCurrentValueChanged(_eventArgs);
                 }
             }
             catch (NullReferenceException)
@@ -159,8 +199,9 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Start()
         {
-            if (IsDisposed)
+            if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
+
             if (_sensorManager == null)
                 Initialize();
             if (_started == false)
@@ -190,8 +231,9 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Stop()
         {
-            if (IsDisposed)
+            if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
+
             if (_started)
             {
                 if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
@@ -207,7 +249,7 @@ namespace Microsoft.Devices.Sensors
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -221,8 +263,10 @@ namespace Microsoft.Devices.Sensors
                         _sensorManager = null;
                     }
                 }
+
+                _isDisposed = true;
+                //base.Dispose(disposing);
             }
-            base.Dispose(disposing);
         }
     }
 }
