@@ -72,9 +72,6 @@ namespace Microsoft.Devices.Sensors
 
         public void Dispose()
         {
-            if (_disposed)
-                throw new ObjectDisposedException(GetType().Name);
-
             Dispose(true);
             GC.SuppressFinalize(this);
         }
