@@ -165,6 +165,10 @@ namespace Microsoft.Devices.Sensors
         {
             internal Accelerometer _accelerometer;
 
+            public SensorListener()
+            {
+            }
+
             public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
             {
                 //do nothing
