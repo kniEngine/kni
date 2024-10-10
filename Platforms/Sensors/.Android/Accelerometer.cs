@@ -66,7 +66,10 @@ namespace Microsoft.Devices.Sensors
             ++_instanceCount;
 
             _state = _sensor != null ? SensorState.Initializing : SensorState.NotSupported;
+
             _sensorListener = new SensorListener();
+            _sensorListener.AccuracyChanged += _sensorListener_AccuracyChanged;
+            _sensorListener.SensorChanged += _sensorListener_SensorChanged;
         }
 
         /// <summary>
@@ -86,6 +89,15 @@ namespace Microsoft.Devices.Sensors
         void _activity_Resumed(object sender, EventArgs eventArgs)
         {
             _sensorManager.RegisterListener(_sensorListener, _sensor, SensorDelay.Game);
+
+        }
+
+        private void _sensorListener_AccuracyChanged(object sender, EventArgs eventArgs)
+        {
+        }
+
+        private void _sensorListener_SensorChanged(object sender, SensorListener.SensorChangedEventArgs eventArgs)
+        {
         }
 
         /// <summary>
