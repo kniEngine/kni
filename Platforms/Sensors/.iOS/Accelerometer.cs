@@ -11,6 +11,8 @@ namespace Microsoft.Devices.Sensors
     {
         const int MaxSensorCount = 10;
 
+        private bool _isDisposed;
+
         static int _instanceCount;
         private static bool _started = false;
         private static SensorState _state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
@@ -22,6 +24,11 @@ namespace Microsoft.Devices.Sensors
         public SensorState State
         {
             get { return _state; }
+        }
+
+        protected override bool IsDisposed
+        {
+            get { return _isDisposed; }
         }
 
         private static event CMAccelerometerHandler readingChanged;
@@ -84,7 +91,7 @@ namespace Microsoft.Devices.Sensors
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -92,8 +99,10 @@ namespace Microsoft.Devices.Sensors
                         Stop();
                     --_instanceCount;
                 }
+
+                _isDisposed = true;
+                //base.Dispose(disposing);
             }
-            base.Dispose(disposing);
         }
     }
 }

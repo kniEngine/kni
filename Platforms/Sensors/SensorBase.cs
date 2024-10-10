@@ -14,7 +14,6 @@ namespace Microsoft.Devices.Sensors
         [CLSCompliant(false)]
         protected static readonly CoreMotion.CMMotionManager _motionManager = new CoreMotion.CMMotionManager();
 #endif
-        bool _disposed;
         private TimeSpan _timeBetweenUpdates;
         private TSensorReading _currentValue;
         private SensorReadingEventArgs<TSensorReading> _eventArgs = new SensorReadingEventArgs<TSensorReading>(default(TSensorReading));
@@ -52,7 +51,7 @@ namespace Microsoft.Devices.Sensors
 
         public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
         protected event EventHandler<EventArgs> TimeBetweenUpdatesChanged;
-        protected bool IsDisposed { get { return _disposed; } }
+        protected abstract bool IsDisposed { get; }
 
         public SensorBase()
         {
@@ -80,10 +79,7 @@ namespace Microsoft.Devices.Sensors
         /// Derived classes override this method to dispose of managed and unmanaged resources.
         /// </summary>
         /// <param name="disposing">True if unmanaged resources are to be disposed.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            _disposed = true;
-        }
+        protected abstract void Dispose(bool disposing);
 
         #endregion IDisposable
     }

@@ -16,6 +16,8 @@ namespace Microsoft.Devices.Sensors
     {
         const int MaxSensorCount = 10;
 
+        private bool _isDisposed;
+
         static SensorManager _sensorManager;
         static Sensor _sensorMagneticField;
         static Sensor _sensorAccelerometer;
@@ -52,14 +54,20 @@ namespace Microsoft.Devices.Sensors
         {
             get
             {
-                if (IsDisposed)
+                if (_isDisposed)
                     throw new ObjectDisposedException(GetType().Name);
+
                 if (_sensorManager == null)
                 {
                     Initialize();
                 }
                 return _state;
             }
+        }
+
+        protected override bool IsDisposed
+        {
+            get { return _isDisposed; }
         }
 
         /// <summary>
@@ -159,8 +167,9 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Start()
         {
-            if (IsDisposed)
+            if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
+
             if (_sensorManager == null)
                 Initialize();
             if (_started == false)
@@ -190,8 +199,9 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Stop()
         {
-            if (IsDisposed)
+            if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
+
             if (_started)
             {
                 if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
@@ -207,7 +217,7 @@ namespace Microsoft.Devices.Sensors
 
         protected override void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -221,8 +231,10 @@ namespace Microsoft.Devices.Sensors
                         _sensorManager = null;
                     }
                 }
+
+                _isDisposed = true;
+                //base.Dispose(disposing);
             }
-            base.Dispose(disposing);
         }
     }
 }
