@@ -14,30 +14,15 @@ namespace Microsoft.Devices.Sensors
         [CLSCompliant(false)]
         protected static readonly CoreMotion.CMMotionManager _motionManager = new CoreMotion.CMMotionManager();
 #endif
-        private TSensorReading _currentValue;
-        private SensorReadingEventArgs<TSensorReading> _eventArgs = new SensorReadingEventArgs<TSensorReading>(default(TSensorReading));
 
-        public TSensorReading CurrentValue 
-        {
-            get { return _currentValue; }
-            protected set
-            {
-                _currentValue = value;
+        public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
 
-                var handler = CurrentValueChanged;
-                if (handler != null)
-                {
-                    _eventArgs.SensorReading = value;
-                    handler(this, _eventArgs);
-                }
-            }
-        }
+        public abstract TSensorReading CurrentValue { get; }
 
         public abstract bool IsDataValid { get; }
 
         public abstract TimeSpan TimeBetweenUpdates { get; set; }
 
-        public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
         protected abstract bool IsDisposed { get; }
 
         public SensorBase()
@@ -47,6 +32,13 @@ namespace Microsoft.Devices.Sensors
         public abstract void Start();
 
         public abstract void Stop();
+
+        protected virtual void OnCurrentValueChanged(SensorReadingEventArgs<TSensorReading> eventArgs)
+        {
+            var handler = CurrentValueChanged;
+            if (handler != null)
+                handler(this, eventArgs);
+        }
 
         #region IDisposable
 

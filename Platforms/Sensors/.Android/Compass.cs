@@ -19,6 +19,8 @@ namespace Microsoft.Devices.Sensors
         private bool _isDisposed;
         private bool _isDataValid;
         private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private CompassReading _currentValue;
+        private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
 
         static SensorManager _sensorManager;
         static Sensor _sensorMagneticField;
@@ -88,6 +90,11 @@ namespace Microsoft.Devices.Sensors
                     // TODO: implement _timeBetweenUpdates for Android
                 }
             }
+        }
+
+        public override CompassReading CurrentValue
+        {
+            get { return _currentValue; }
         }
 
         /// <summary>
@@ -170,7 +177,10 @@ namespace Microsoft.Devices.Sensors
                     // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
                     reading.TrueHeading = reading.MagneticHeading;
                     reading.Timestamp = DateTime.UtcNow;
-                    this.CurrentValue = reading;
+                    _currentValue = reading;
+
+                    _eventArgs.SensorReading = _currentValue;
+                    OnCurrentValueChanged(_eventArgs);
                 }
             }
             catch (NullReferenceException)

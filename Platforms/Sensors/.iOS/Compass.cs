@@ -14,6 +14,8 @@ namespace Microsoft.Devices.Sensors
         private bool _isDisposed;
         private bool _isDataValid;
         private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private CompassReading _currentValue;
+        private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
 
         static int _instanceCount;
         private static bool _started = false;
@@ -53,6 +55,11 @@ namespace Microsoft.Devices.Sensors
                     _motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
                 }
             }
+        }
+
+        public override CompassReading CurrentValue
+        {
+            get { return _currentValue; }
         }
 
         private static event CMDeviceMotionHandler readingChanged;
@@ -131,7 +138,10 @@ namespace Microsoft.Devices.Sensors
                     this._calibrate = false;
 
                 reading.Timestamp = DateTime.UtcNow;
-                this.CurrentValue = reading;
+                _currentValue = reading;
+
+                _eventArgs.SensorReading = _currentValue;
+                OnCurrentValueChanged(_eventArgs);
             }
         }
 

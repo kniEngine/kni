@@ -20,6 +20,8 @@ namespace Microsoft.Devices.Sensors
         private bool _isDisposed;
         private bool _isDataValid;
         private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private AccelerometerReading _currentValue;
+        private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
 
         static SensorManager _sensorManager;
         static Sensor _sensorAccelerometer;
@@ -85,6 +87,11 @@ namespace Microsoft.Devices.Sensors
             }
         }
 
+        public override AccelerometerReading CurrentValue
+        {
+            get { return _currentValue; }
+        }
+
         /// <summary>
         /// Creates a new instance of the Accelerometer object.
         /// </summary>
@@ -143,7 +150,10 @@ namespace Microsoft.Devices.Sensors
                             reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
                             reading.Timestamp = DateTime.UtcNow;
                         }
-                        this.CurrentValue = reading;
+                        _currentValue = reading;
+
+                        _eventArgs.SensorReading = _currentValue;
+                        OnCurrentValueChanged(_eventArgs);
                     }
                     finally
                     {

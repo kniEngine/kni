@@ -14,6 +14,8 @@ namespace Microsoft.Devices.Sensors
         private bool _isDisposed;
         private bool _isDataValid;
         private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
+        private AccelerometerReading _currentValue;
+        private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
 
         static int _instanceCount;
         private static bool _started = false;
@@ -49,6 +51,11 @@ namespace Microsoft.Devices.Sensors
                     _motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
                 }
             }
+        }
+
+        public override AccelerometerReading CurrentValue
+        {
+            get { return _currentValue; }
         }
 
         private static event CMAccelerometerHandler readingChanged;
@@ -97,7 +104,10 @@ namespace Microsoft.Devices.Sensors
             {
                 reading.Acceleration = new Vector3((float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z);
                 reading.Timestamp = DateTime.UtcNow;
-                this.CurrentValue = reading;
+                _currentValue = reading;
+
+                _eventArgs.SensorReading = _currentValue;
+                OnCurrentValueChanged(_eventArgs);
             }
         }
 
