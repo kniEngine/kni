@@ -9,18 +9,19 @@ namespace Microsoft.Devices.Sensors
 {
     public sealed class Accelerometer : SensorBase<AccelerometerReading>
     {
-        static readonly int MaxSensorCount = 10;
-        static int instanceCount;
-        private static bool started = false;
-        private static SensorState state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
+        const int MaxSensorCount = 10;
+
+        static int _instanceCount;
+        private static bool _started = false;
+        private static SensorState _state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
 
         public static bool IsSupported
         {
-            get { return motionManager.AccelerometerAvailable; }
+            get { return _motionManager.AccelerometerAvailable; }
         }
         public SensorState State
         {
-            get { return state; }
+            get { return _state; }
         }
 
         private static event CMAccelerometerHandler readingChanged;
@@ -29,37 +30,22 @@ namespace Microsoft.Devices.Sensors
         {
             if (!IsSupported)
                 throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
-            else if (instanceCount >= MaxSensorCount)
+            else if (_instanceCount >= MaxSensorCount)
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Accelerometer class per application has been exceeded.");
 
-            ++instanceCount;
+            ++_instanceCount;
 
             this.TimeBetweenUpdatesChanged += this.UpdateInterval;
             readingChanged += ReadingChangedHandler;
-
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                {
-                    if (started)
-                        Stop();
-                    --instanceCount;
-                }
-            }
-            base.Dispose(disposing);
         }
 
         public override void Start()
         {
-            if (started == false)
+            if (_started == false)
             {
-                motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
-                started = true;
-                state = SensorState.Ready;
+                _motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
+                _started = true;
+                _state = SensorState.Ready;
             }
             else
                 throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
@@ -67,9 +53,9 @@ namespace Microsoft.Devices.Sensors
 
         public override void Stop()
         {
-            motionManager.StopAccelerometerUpdates();
-            started = false;
-            state = SensorState.Disabled;
+            _motionManager.StopAccelerometerUpdates();
+            _started = false;
+            _state = SensorState.Disabled;
         }
 
         private void AccelerometerHandler(CMAccelerometerData data, NSError error)
@@ -93,7 +79,21 @@ namespace Microsoft.Devices.Sensors
 
         private void UpdateInterval(object sender, EventArgs args)
         {
-            motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+            _motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                {
+                    if (_started)
+                        Stop();
+                    --_instanceCount;
+                }
+            }
+            base.Dispose(disposing);
         }
     }
 }

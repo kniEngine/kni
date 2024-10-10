@@ -14,14 +14,23 @@ namespace Microsoft.Devices.Sensors
     /// </summary>
     public sealed class Compass : SensorBase<CompassReading>
     {
-        static readonly int MaxSensorCount = 10;
-        static SensorManager sensorManager;
-        static Sensor sensorMagneticField;
-        static Sensor sensorAccelerometer;
-        SensorListener listener;
-        SensorState state;
-        bool started = false;
-        static int instanceCount;
+        const int MaxSensorCount = 10;
+
+        static SensorManager _sensorManager;
+        static Sensor _sensorMagneticField;
+        static Sensor _sensorAccelerometer;
+        static int _instanceCount;
+
+        SensorListener _sensorListener;
+        bool _isRegistered;
+        SensorState _state;
+        bool _started = false;
+
+        float[] _valuesAccelerometer;
+        float[] _valuesMagenticField;
+        float[] _matrixR;
+        float[] _matrixI;
+        float[] _matrixValues;
 
         /// <summary>
         /// Gets whether the device on which the application is running supports the compass sensor.
@@ -30,9 +39,9 @@ namespace Microsoft.Devices.Sensors
         {
             get
             {
-                if (sensorManager == null)
+                if (_sensorManager == null)
                     Initialize();
-                return sensorMagneticField != null;
+                return _sensorMagneticField != null;
             }
         }
 
@@ -45,9 +54,11 @@ namespace Microsoft.Devices.Sensors
             {
                 if (IsDisposed)
                     throw new ObjectDisposedException(GetType().Name);
-                if (sensorManager == null)
+                if (_sensorManager == null)
+                {
                     Initialize();
-                return state;
+                }
+                return _state;
             }
         }
 
@@ -56,12 +67,20 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public Compass()
         {
-            if (instanceCount >= MaxSensorCount)
+            if (_instanceCount >= MaxSensorCount)
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Compass class per application has been exceeded.");
-            ++instanceCount;
+            ++_instanceCount;
 
-            state = sensorMagneticField != null ? SensorState.Initializing : SensorState.NotSupported;
-            listener = new SensorListener();
+            _state = _sensorMagneticField != null ? SensorState.Initializing : SensorState.NotSupported;
+
+            _valuesAccelerometer = new float[3];
+            _valuesMagenticField = new float[3];
+            _matrixR = new float[9];
+            _matrixI = new float[9];
+            _matrixValues = new float[3];
+            _sensorListener = new SensorListener();
+            _sensorListener.AccuracyChanged += _sensorListener_AccuracyChanged;
+            _sensorListener.SensorChanged += _sensorListener_SensorChanged;
         }
 
         /// <summary>
@@ -69,21 +88,70 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         static void Initialize()
         {
-            sensorManager = (SensorManager)AndroidGameWindow.Activity.GetSystemService(Context.SensorService);
-            sensorMagneticField = sensorManager.GetDefaultSensor(SensorType.MagneticField);
-            sensorAccelerometer = sensorManager.GetDefaultSensor(SensorType.Accelerometer);
+            _sensorManager = (SensorManager)AndroidGameWindow.Activity.GetSystemService(Context.SensorService);
+            _sensorMagneticField = _sensorManager.GetDefaultSensor(SensorType.MagneticField);
+            _sensorAccelerometer = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }
 
         void _activity_Paused(object sender, EventArgs eventArgs)
         {
-            sensorManager.UnregisterListener(listener, sensorMagneticField);
-            sensorManager.UnregisterListener(listener, sensorAccelerometer);
+            _sensorManager.UnregisterListener(_sensorListener, _sensorMagneticField);
+            _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
         }
 
         void _activity_Resumed(object sender, EventArgs eventArgs)
         {
-            sensorManager.RegisterListener(listener, sensorAccelerometer, SensorDelay.Game);
-            sensorManager.RegisterListener(listener, sensorMagneticField, SensorDelay.Game);
+            _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
+            _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
+        }
+
+        private void _sensorListener_AccuracyChanged(object sender, EventArgs eventArgs)
+        {
+            //do nothing
+        }
+
+        private void _sensorListener_SensorChanged(object sender, SensorListener.SensorChangedEventArgs eventArgs)
+        {
+            try
+            {
+                SensorEvent e = eventArgs.Event;
+                switch (e.Sensor.Type)
+                {
+                    case SensorType.Accelerometer:
+                        _valuesAccelerometer[0] = e.Values[0];
+                        _valuesAccelerometer[1] = e.Values[1];
+                        _valuesAccelerometer[2] = e.Values[2];
+                        break;
+
+                    case SensorType.MagneticField:
+                        _valuesMagenticField[0] = e.Values[0];
+                        _valuesMagenticField[1] = e.Values[1];
+                        _valuesMagenticField[2] = e.Values[2];
+                        break;
+                }
+
+                this.IsDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
+                if (this.IsDataValid)
+                {
+                    SensorManager.GetOrientation(_matrixR, _matrixValues);
+                    CompassReading reading = new CompassReading();
+                    reading.MagneticHeading = _matrixValues[0];
+                    Vector3 magnetometer = new Vector3(_valuesMagenticField[0], _valuesMagenticField[1], _valuesMagenticField[2]);
+                    reading.MagnetometerReading = magnetometer;
+                    // We need the magnetic declination from true north to calculate the true heading from the magnetic heading.
+                    // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
+                    reading.TrueHeading = reading.MagneticHeading;
+                    reading.Timestamp = DateTime.UtcNow;
+                    this.CurrentValue = reading;
+                }
+            }
+            catch (NullReferenceException)
+            {
+                //Occassionally an NullReferenceException is thrown when accessing e.Values??
+                // mono    : Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object
+                // mono    :   at Android.Runtime.JNIEnv.GetObjectField (IntPtr jobject, IntPtr jfieldID) [0x00000] in <filename unknown>:0 
+                // mono    :   at Android.Hardware.SensorEvent.get_Values () [0x00000] in <filename unknown>:0
+            }
         }
 
         /// <summary>
@@ -93,22 +161,22 @@ namespace Microsoft.Devices.Sensors
         {
             if (IsDisposed)
                 throw new ObjectDisposedException(GetType().Name);
-            if (sensorManager == null)
+            if (_sensorManager == null)
                 Initialize();
-            if (started == false)
+            if (_started == false)
             {
-                if (sensorManager != null && sensorMagneticField != null && sensorAccelerometer != null)
+                if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
                 {
-                    listener.compass = this;
-                    sensorManager.RegisterListener(listener, sensorMagneticField, SensorDelay.Game);
-                    sensorManager.RegisterListener(listener, sensorAccelerometer, SensorDelay.Game);
+                    _isRegistered = true;
+                    _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
+                    _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
                 }
                 else
                 {
                     throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
                 }
-                started = true;
-                state = SensorState.Ready;
+                _started = true;
+                _state = SensorState.Ready;
                 return;
             }
             else
@@ -124,17 +192,17 @@ namespace Microsoft.Devices.Sensors
         {
             if (IsDisposed)
                 throw new ObjectDisposedException(GetType().Name);
-            if (started)
+            if (_started)
             {
-                if (sensorManager != null && sensorMagneticField != null && sensorAccelerometer != null)
+                if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
                 {
-                    sensorManager.UnregisterListener(listener, sensorAccelerometer);
-                    sensorManager.UnregisterListener(listener, sensorMagneticField);
-                    listener.compass = null;
+                    _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
+                    _sensorManager.UnregisterListener(_sensorListener, _sensorMagneticField);
+                    _isRegistered = false;
                 }
             }
-            started = false;
-            state = SensorState.Disabled;
+            _started = false;
+            _state = SensorState.Disabled;
         }
 
         protected override void Dispose(bool disposing)
@@ -143,85 +211,18 @@ namespace Microsoft.Devices.Sensors
             {
                 if (disposing)
                 {
-                    if (started)
+                    if (_started)
                         Stop();
-                    --instanceCount;
-                    if (instanceCount == 0)
+                    --_instanceCount;
+                    if (_instanceCount == 0)
                     {
-                        sensorAccelerometer = null;
-                        sensorMagneticField = null;
-                        sensorManager = null;
+                        _sensorAccelerometer = null;
+                        _sensorMagneticField = null;
+                        _sensorManager = null;
                     }
                 }
             }
             base.Dispose(disposing);
-        }
-
-        class SensorListener : Java.Lang.Object, ISensorEventListener
-        {
-            internal Compass compass;
-            float[] valuesAccelerometer;
-            float[] valuesMagenticField;
-            float[] matrixR;
-            float[] matrixI;
-            float[] matrixValues;
-
-            public SensorListener()
-            {
-                valuesAccelerometer = new float[3];
-                valuesMagenticField = new float[3];
-                matrixR = new float[9];
-                matrixI = new float[9];
-                matrixValues = new float[3];
-            }
-
-            public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
-            {
-                //do nothing
-            }
-
-            public void OnSensorChanged(SensorEvent e)
-            {
-                try
-                {
-                    switch (e.Sensor.Type)
-                    {
-                        case SensorType.Accelerometer:
-                            valuesAccelerometer[0] = e.Values[0];
-                            valuesAccelerometer[1] = e.Values[1];
-                            valuesAccelerometer[2] = e.Values[2];
-                            break;
-
-                        case SensorType.MagneticField:
-                            valuesMagenticField[0] = e.Values[0];
-                            valuesMagenticField[1] = e.Values[1];
-                            valuesMagenticField[2] = e.Values[2];
-                            break;
-                    }
-
-                    compass.IsDataValid = SensorManager.GetRotationMatrix(matrixR, matrixI, valuesAccelerometer, valuesMagenticField);
-                    if (compass.IsDataValid)
-                    {
-                        SensorManager.GetOrientation(matrixR, matrixValues);
-                        CompassReading reading = new CompassReading();
-                        reading.MagneticHeading = matrixValues[0];
-                        Vector3 magnetometer = new Vector3(valuesMagenticField[0], valuesMagenticField[1], valuesMagenticField[2]);
-                        reading.MagnetometerReading = magnetometer;
-                        // We need the magnetic declination from true north to calculate the true heading from the magnetic heading.
-                        // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
-                        reading.TrueHeading = reading.MagneticHeading;
-                        reading.Timestamp = DateTime.UtcNow;
-                        compass.CurrentValue = reading;
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    //Occassionally an NullReferenceException is thrown when accessing e.Values??
-                    // mono    : Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object
-                    // mono    :   at Android.Runtime.JNIEnv.GetObjectField (IntPtr jobject, IntPtr jfieldID) [0x00000] in <filename unknown>:0 
-                    // mono    :   at Android.Hardware.SensorEvent.get_Values () [0x00000] in <filename unknown>:0
-                }
-            }
         }
     }
 }

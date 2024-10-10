@@ -9,21 +9,23 @@ namespace Microsoft.Devices.Sensors
 {
     public sealed class Compass : SensorBase<CompassReading>
     {
-        static readonly int MaxSensorCount = 10;
-        static int instanceCount;
-        private static bool started = false;
-        private static SensorState state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
-        private bool calibrate = false;
+        const int MaxSensorCount = 10;
+
+        static int _instanceCount;
+        private static bool _started = false;
+        private static SensorState _state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
+
+        private bool _calibrate = false;
 
         public event EventHandler<CalibrationEventArgs> Calibrate;
 
         public static bool IsSupported
         {
-            get { return motionManager.DeviceMotionAvailable; }
+            get { return _motionManager.DeviceMotionAvailable; }
         }
         public SensorState State
         {
-            get { return state; }
+            get { return _state; }
         }
 
         private static event CMDeviceMotionHandler readingChanged;
@@ -32,37 +34,23 @@ namespace Microsoft.Devices.Sensors
         {
             if (!IsSupported)
                 throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
-            else if (instanceCount >= MaxSensorCount)
+            else if (_instanceCount >= MaxSensorCount)
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Compass class per application has been exceeded.");
 
-            ++instanceCount;
+            ++_instanceCount;
 
             this.TimeBetweenUpdatesChanged += this.UpdateInterval;
             readingChanged += ReadingChangedHandler;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                {
-                    if (started)
-                        Stop();
-                    --instanceCount;
-                }
-            }
-            base.Dispose(disposing);
-        }
-
         public override void Start()
         {
-            if (started == false)
+            if (_started == false)
             {
                 // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
-                motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
-                started = true;
-                state = SensorState.Ready;
+                _motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
+                _started = true;
+                _state = SensorState.Ready;
             }
             else
                 throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
@@ -70,9 +58,9 @@ namespace Microsoft.Devices.Sensors
 
         public override void Stop()
         {
-            motionManager.StopDeviceMotionUpdates();
-            started = false;
-            state = SensorState.Disabled;
+            _motionManager.StopDeviceMotionUpdates();
+            _started = false;
+            _state = SensorState.Disabled;
         }
 
         private void MagnetometerHandler(CMDeviceMotion magnetometerData, NSError error)
@@ -105,16 +93,16 @@ namespace Microsoft.Devices.Sensors
                 // Send calibrate event if needed
                 if (data.MagneticField.Accuracy == CMMagneticFieldCalibrationAccuracy.Uncalibrated)
                 {
-                    if (this.calibrate == false)
+                    if (this._calibrate == false)
                     {
                         var handler = Calibrate;
                         if (handler != null)
                             handler(this, CalibrationEventArgs.Empty);
                     }
-                    this.calibrate = true;
+                    this._calibrate = true;
                 }
-                else if (this.calibrate == true)
-                    this.calibrate = false;
+                else if (this._calibrate == true)
+                    this._calibrate = false;
 
                 reading.Timestamp = DateTime.UtcNow;
                 this.CurrentValue = reading;
@@ -123,7 +111,21 @@ namespace Microsoft.Devices.Sensors
 
         private void UpdateInterval(object sender, EventArgs args)
         {
-            motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+            _motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!IsDisposed)
+            {
+                if (disposing)
+                {
+                    if (_started)
+                        Stop();
+                    --_instanceCount;
+                }
+            }
+            base.Dispose(disposing);
         }
     }
 }
