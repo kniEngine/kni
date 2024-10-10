@@ -163,6 +163,9 @@ namespace Microsoft.Devices.Sensors
 
         class SensorListener : Java.Lang.Object, ISensorEventListener
         {
+            public event EventHandler<EventArgs> AccuracyChanged;
+            public event EventHandler<SensorListener.SensorChangedEventArgs> SensorChanged;
+
             internal Accelerometer _accelerometer;
 
             public SensorListener()
@@ -171,11 +174,19 @@ namespace Microsoft.Devices.Sensors
 
             public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
             {
+                var handler = AccuracyChanged;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
+
                 //do nothing
             }
 
             public void OnSensorChanged(SensorEvent e)
             {
+                var handler = SensorChanged;
+                if (handler != null)
+                    handler(this, new SensorListener.SensorChangedEventArgs(e));
+
                 try
                 {
                     if (e != null && e.Sensor.Type == SensorType.Accelerometer && _accelerometer != null)
@@ -207,6 +218,16 @@ namespace Microsoft.Devices.Sensors
                     // mono    : Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object
                     // mono    :   at Android.Runtime.JNIEnv.GetObjectField (IntPtr jobject, IntPtr jfieldID) [0x00000] in <filename unknown>:0 
                     // mono    :   at Android.Hardware.SensorEvent.get_Values () [0x00000] in <filename unknown>:0
+                }
+            }
+
+            public class SensorChangedEventArgs : EventArgs
+            {
+                public readonly SensorEvent Event;
+
+                internal SensorChangedEventArgs(SensorEvent sensorEvent)
+                {
+                    this.Event = sensorEvent;
                 }
             }
         }
