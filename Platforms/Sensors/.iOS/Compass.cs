@@ -76,6 +76,7 @@ namespace Microsoft.Devices.Sensors
         {
             _strategy = new CompassStrategy();
             _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
+            _strategy.Calibrate += _strategy_Calibrate;
 
             if (!IsSupported)
                 throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
@@ -90,6 +91,11 @@ namespace Microsoft.Devices.Sensors
         private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
         {
             OnCurrentValueChanged(eventArgs);
+        }
+
+        private void _strategy_Calibrate(object sender, CalibrationEventArgs eventArgs)
+        {
+            OnCalibrate(eventArgs);
         }
 
         public override void Start()
@@ -144,9 +150,7 @@ namespace Microsoft.Devices.Sensors
                 {
                     if (this._calibrate == false)
                     {
-                        var handler = Calibrate;
-                        if (handler != null)
-                            handler(this, CalibrationEventArgs.Empty);
+                        Strategy.OnCalibrate(CalibrationEventArgs.Empty);
                     }
                     this._calibrate = true;
                 }
@@ -159,6 +163,13 @@ namespace Microsoft.Devices.Sensors
                 _eventArgs.SensorReading = Strategy.CurrentValue;
                 Strategy.OnCurrentValueChanged(_eventArgs);
             }
+        }
+
+        private void OnCalibrate(CalibrationEventArgs eventArgs)
+        {
+            var handler = Calibrate;
+            if (handler != null)
+                handler(this, eventArgs);
         }
 
         protected override void Dispose(bool disposing)

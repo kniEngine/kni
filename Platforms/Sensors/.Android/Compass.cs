@@ -109,6 +109,7 @@ namespace Microsoft.Devices.Sensors
         {
             _strategy = new CompassStrategy();
             _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
+            _strategy.Calibrate += _strategy_Calibrate;
 
             if (_instanceCount >= MaxSensorCount)
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Compass class per application has been exceeded.");
@@ -139,6 +140,11 @@ namespace Microsoft.Devices.Sensors
         private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
         {
             OnCurrentValueChanged(eventArgs);
+        }
+
+        private void _strategy_Calibrate(object sender, CalibrationEventArgs eventArgs)
+        {
+            OnCalibrate(eventArgs);
         }
 
 
@@ -257,6 +263,13 @@ namespace Microsoft.Devices.Sensors
             }
             _started = false;
             Strategy.State = SensorState.Disabled;
+        }
+
+        private void OnCalibrate(CalibrationEventArgs eventArgs)
+        {
+            //var handler = Calibrate;
+            //if (handler != null)
+            //    handler(this, eventArgs);
         }
 
         protected override void Dispose(bool disposing)
