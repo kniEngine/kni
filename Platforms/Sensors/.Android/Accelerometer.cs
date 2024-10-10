@@ -22,6 +22,7 @@ namespace Microsoft.Devices.Sensors
         static int _instanceCount;
 
         SensorListener _sensorListener;
+        bool _isRegistered;
         SensorState _state;
         bool _started = false;
 
@@ -99,6 +100,39 @@ namespace Microsoft.Devices.Sensors
 
         private void _sensorListener_SensorChanged(object sender, SensorListener.SensorChangedEventArgs eventArgs)
         {
+            try
+            {
+                SensorEvent e = eventArgs.Event;
+                if (e != null && e.Sensor.Type == SensorType.Accelerometer && _isRegistered == true)
+                {
+                    IList<float> values = e.Values;
+                    try
+                    {
+                        AccelerometerReading reading = new AccelerometerReading();
+                        this.IsDataValid = (values != null && values.Count == 3);
+                        if (this.IsDataValid)
+                        {
+                            const float gravity = SensorManager.GravityEarth;
+                            reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
+                            reading.Timestamp = DateTime.UtcNow;
+                        }
+                        this.CurrentValue = reading;
+                    }
+                    finally
+                    {
+                        IDisposable d = values as IDisposable;
+                        if (d != null)
+                            d.Dispose();
+                    }
+                }
+            }
+            catch (NullReferenceException)
+            {
+                //Occassionally an NullReferenceException is thrown when accessing e.Values??
+                // mono    : Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object
+                // mono    :   at Android.Runtime.JNIEnv.GetObjectField (IntPtr jobject, IntPtr jfieldID) [0x00000] in <filename unknown>:0 
+                // mono    :   at Android.Hardware.SensorEvent.get_Values () [0x00000] in <filename unknown>:0
+            }
         }
 
         /// <summary>
@@ -114,7 +148,7 @@ namespace Microsoft.Devices.Sensors
             {
                 if (_sensorManager != null && _sensor != null)
                 {
-                    _sensorListener._accelerometer = this;
+                    _isRegistered = true;
                     _sensorManager.RegisterListener(_sensorListener, _sensor, SensorDelay.Game);
                     // So the system can pause and resume the sensor when the activity is paused
                     AndroidGameWindow.Activity.Paused += _activity_Paused;
@@ -148,7 +182,7 @@ namespace Microsoft.Devices.Sensors
                     AndroidGameWindow.Activity.Paused -= _activity_Paused;
                     AndroidGameWindow.Activity.Resumed -= _activity_Resumed;
                     _sensorManager.UnregisterListener(_sensorListener, _sensor);
-                    _sensorListener._accelerometer = null;
+                    _isRegistered = false;
                 }
             }
             _started = false;
@@ -179,8 +213,6 @@ namespace Microsoft.Devices.Sensors
             public event EventHandler<EventArgs> AccuracyChanged;
             public event EventHandler<SensorListener.SensorChangedEventArgs> SensorChanged;
 
-            internal Accelerometer _accelerometer;
-
             public SensorListener()
             {
             }
@@ -197,39 +229,6 @@ namespace Microsoft.Devices.Sensors
                 var handler = SensorChanged;
                 if (handler != null)
                     handler(this, new SensorListener.SensorChangedEventArgs(e));
-
-                try
-                {
-                    if (e != null && e.Sensor.Type == SensorType.Accelerometer && _accelerometer != null)
-                    {
-                        IList<float> values = e.Values;
-                        try
-                        {
-                            AccelerometerReading reading = new AccelerometerReading();
-                            _accelerometer.IsDataValid = (values != null && values.Count == 3);
-                            if (_accelerometer.IsDataValid)
-                            {
-                                const float gravity = SensorManager.GravityEarth;
-                                reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
-                                reading.Timestamp = DateTime.UtcNow;
-                            }
-                            _accelerometer.CurrentValue = reading;
-                        }
-                        finally
-                        {
-                            IDisposable d = values as IDisposable;
-                            if (d != null)
-                                d.Dispose();
-                        }
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    //Occassionally an NullReferenceException is thrown when accessing e.Values??
-                    // mono    : Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object
-                    // mono    :   at Android.Runtime.JNIEnv.GetObjectField (IntPtr jobject, IntPtr jfieldID) [0x00000] in <filename unknown>:0 
-                    // mono    :   at Android.Hardware.SensorEvent.get_Values () [0x00000] in <filename unknown>:0
-                }
             }
 
             public class SensorChangedEventArgs : EventArgs

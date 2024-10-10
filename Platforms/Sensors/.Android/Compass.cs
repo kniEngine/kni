@@ -22,8 +22,15 @@ namespace Microsoft.Devices.Sensors
         static int _instanceCount;
 
         SensorListener _sensorListener;
+        bool _isRegistered;
         SensorState _state;
         bool _started = false;
+
+        float[] _valuesAccelerometer;
+        float[] _valuesMagenticField;
+        float[] _matrixR;
+        float[] _matrixI;
+        float[] _matrixValues;
 
         /// <summary>
         /// Gets whether the device on which the application is running supports the compass sensor.
@@ -64,6 +71,11 @@ namespace Microsoft.Devices.Sensors
 
             _state = _sensorMagneticField != null ? SensorState.Initializing : SensorState.NotSupported;
 
+            _valuesAccelerometer = new float[3];
+            _valuesMagenticField = new float[3];
+            _matrixR = new float[9];
+            _matrixI = new float[9];
+            _matrixValues = new float[3];
             _sensorListener = new SensorListener();
             _sensorListener.AccuracyChanged += _sensorListener_AccuracyChanged;
             _sensorListener.SensorChanged += _sensorListener_SensorChanged;
@@ -98,6 +110,46 @@ namespace Microsoft.Devices.Sensors
 
         private void _sensorListener_SensorChanged(object sender, SensorListener.SensorChangedEventArgs eventArgs)
         {
+            try
+            {
+                SensorEvent e = eventArgs.Event;
+                switch (e.Sensor.Type)
+                {
+                    case SensorType.Accelerometer:
+                        _valuesAccelerometer[0] = e.Values[0];
+                        _valuesAccelerometer[1] = e.Values[1];
+                        _valuesAccelerometer[2] = e.Values[2];
+                        break;
+
+                    case SensorType.MagneticField:
+                        _valuesMagenticField[0] = e.Values[0];
+                        _valuesMagenticField[1] = e.Values[1];
+                        _valuesMagenticField[2] = e.Values[2];
+                        break;
+                }
+
+                this.IsDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
+                if (this.IsDataValid)
+                {
+                    SensorManager.GetOrientation(_matrixR, _matrixValues);
+                    CompassReading reading = new CompassReading();
+                    reading.MagneticHeading = _matrixValues[0];
+                    Vector3 magnetometer = new Vector3(_valuesMagenticField[0], _valuesMagenticField[1], _valuesMagenticField[2]);
+                    reading.MagnetometerReading = magnetometer;
+                    // We need the magnetic declination from true north to calculate the true heading from the magnetic heading.
+                    // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
+                    reading.TrueHeading = reading.MagneticHeading;
+                    reading.Timestamp = DateTime.UtcNow;
+                    this.CurrentValue = reading;
+                }
+            }
+            catch (NullReferenceException)
+            {
+                //Occassionally an NullReferenceException is thrown when accessing e.Values??
+                // mono    : Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object
+                // mono    :   at Android.Runtime.JNIEnv.GetObjectField (IntPtr jobject, IntPtr jfieldID) [0x00000] in <filename unknown>:0 
+                // mono    :   at Android.Hardware.SensorEvent.get_Values () [0x00000] in <filename unknown>:0
+            }
         }
 
         /// <summary>
@@ -113,7 +165,7 @@ namespace Microsoft.Devices.Sensors
             {
                 if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
                 {
-                    _sensorListener._compass = this;
+                    _isRegistered = true;
                     _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
                     _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
                 }
@@ -144,7 +196,7 @@ namespace Microsoft.Devices.Sensors
                 {
                     _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
                     _sensorManager.UnregisterListener(_sensorListener, _sensorMagneticField);
-                    _sensorListener._compass = null;
+                    _isRegistered = false;
                 }
             }
             _started = false;
@@ -176,21 +228,8 @@ namespace Microsoft.Devices.Sensors
             public event EventHandler<EventArgs> AccuracyChanged;
             public event EventHandler<SensorListener.SensorChangedEventArgs> SensorChanged;
 
-            internal Compass _compass;
-
-            float[] _valuesAccelerometer;
-            float[] _valuesMagenticField;
-            float[] _matrixR;
-            float[] _matrixI;
-            float[] _matrixValues;
-
             public SensorListener()
             {
-                _valuesAccelerometer = new float[3];
-                _valuesMagenticField = new float[3];
-                _matrixR = new float[9];
-                _matrixI = new float[9];
-                _matrixValues = new float[3];
             }
 
             public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
@@ -205,46 +244,6 @@ namespace Microsoft.Devices.Sensors
                 var handler = SensorChanged;
                 if (handler != null)
                     handler(this, new SensorListener.SensorChangedEventArgs(e));
-
-                try
-                {
-                    switch (e.Sensor.Type)
-                    {
-                        case SensorType.Accelerometer:
-                            _valuesAccelerometer[0] = e.Values[0];
-                            _valuesAccelerometer[1] = e.Values[1];
-                            _valuesAccelerometer[2] = e.Values[2];
-                            break;
-
-                        case SensorType.MagneticField:
-                            _valuesMagenticField[0] = e.Values[0];
-                            _valuesMagenticField[1] = e.Values[1];
-                            _valuesMagenticField[2] = e.Values[2];
-                            break;
-                    }
-
-                    _compass.IsDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
-                    if (_compass.IsDataValid)
-                    {
-                        SensorManager.GetOrientation(_matrixR, _matrixValues);
-                        CompassReading reading = new CompassReading();
-                        reading.MagneticHeading = _matrixValues[0];
-                        Vector3 magnetometer = new Vector3(_valuesMagenticField[0], _valuesMagenticField[1], _valuesMagenticField[2]);
-                        reading.MagnetometerReading = magnetometer;
-                        // We need the magnetic declination from true north to calculate the true heading from the magnetic heading.
-                        // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
-                        reading.TrueHeading = reading.MagneticHeading;
-                        reading.Timestamp = DateTime.UtcNow;
-                        _compass.CurrentValue = reading;
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    //Occassionally an NullReferenceException is thrown when accessing e.Values??
-                    // mono    : Unhandled Exception: System.NullReferenceException: Object reference not set to an instance of an object
-                    // mono    :   at Android.Runtime.JNIEnv.GetObjectField (IntPtr jobject, IntPtr jfieldID) [0x00000] in <filename unknown>:0 
-                    // mono    :   at Android.Hardware.SensorEvent.get_Values () [0x00000] in <filename unknown>:0
-                }
             }
 
             public class SensorChangedEventArgs : EventArgs
