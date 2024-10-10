@@ -6,6 +6,7 @@
 
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Platform.Input.Sensors;
 using CoreMotion;
 using Foundation;
 
@@ -13,12 +14,11 @@ namespace Microsoft.Devices.Sensors
 {
     public sealed class Compass : SensorBase<CompassReading>
     {
+        private CompassStrategy _strategy;
+
         const int MaxSensorCount = 10;
 
         private bool _isDisposed;
-        private bool _isDataValid;
-        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
-        private CompassReading _currentValue;
         private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
 
         static int _instanceCount;
@@ -28,6 +28,11 @@ namespace Microsoft.Devices.Sensors
         private bool _calibrate = false;
 
         public event EventHandler<CalibrationEventArgs> Calibrate;
+
+        internal CompassStrategy Strategy
+        {
+            get { return _strategy; }
+        }
 
         public static bool IsSupported
         {
@@ -45,17 +50,17 @@ namespace Microsoft.Devices.Sensors
 
         public override bool IsDataValid
         {
-            get { return _isDataValid; }
+            get { return Strategy.IsDataValid; }
         }
 
         public override TimeSpan TimeBetweenUpdates
         {
-            get { return _timeBetweenUpdates; }
+            get { return Strategy.TimeBetweenUpdates; }
             set
             {
-                if (this._timeBetweenUpdates != value)
+                if (Strategy.TimeBetweenUpdates != value)
                 {
-                    this._timeBetweenUpdates = value;
+                    Strategy.TimeBetweenUpdates = value;
                     Accelerometer._motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
                 }
             }
@@ -63,13 +68,15 @@ namespace Microsoft.Devices.Sensors
 
         public override CompassReading CurrentValue
         {
-            get { return _currentValue; }
+            get { return Strategy.CurrentValue; }
         }
 
         private static event CMDeviceMotionHandler readingChanged;
 
         public Compass()
         {
+            _strategy = new CompassStrategy();
+
             if (!IsSupported)
                 throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
             else if (_instanceCount >= MaxSensorCount)
@@ -108,8 +115,8 @@ namespace Microsoft.Devices.Sensors
         private void ReadingChangedHandler(CMDeviceMotion data, NSError error)
         {
             CompassReading reading = new CompassReading();
-            _isDataValid = (error == null);
-            if (_isDataValid)
+            Strategy.IsDataValid = (error == null);
+            if (Strategy.IsDataValid)
             {
                 reading.MagnetometerReading = new Vector3((float)data.MagneticField.Field.Y, (float)-data.MagneticField.Field.X, (float)data.MagneticField.Field.Z);
                 reading.TrueHeading = Math.Atan2(reading.MagnetometerReading.Y, reading.MagnetometerReading.X) / Math.PI * 180;
@@ -142,9 +149,9 @@ namespace Microsoft.Devices.Sensors
                     this._calibrate = false;
 
                 reading.Timestamp = DateTime.UtcNow;
-                _currentValue = reading;
+                Strategy.CurrentValue = reading;
 
-                _eventArgs.SensorReading = _currentValue;
+                _eventArgs.SensorReading = Strategy.CurrentValue;
                 OnCurrentValueChanged(_eventArgs);
             }
         }
@@ -155,6 +162,8 @@ namespace Microsoft.Devices.Sensors
             {
                 if (disposing)
                 {
+                    Strategy.Dispose();
+
                     if (_started)
                         Stop();
                     --_instanceCount;

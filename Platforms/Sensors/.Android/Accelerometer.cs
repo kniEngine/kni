@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Hardware;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Platform.Input.Sensors;
 
 namespace Microsoft.Devices.Sensors
 {
@@ -17,12 +18,11 @@ namespace Microsoft.Devices.Sensors
     /// </summary>
     public sealed class Accelerometer : SensorBase<AccelerometerReading>
     {
+        private AccelerometerStrategy _strategy;
+
         const int MaxSensorCount = 10;
 
         private bool _isDisposed;
-        private bool _isDataValid;
-        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
-        private AccelerometerReading _currentValue;
         private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
 
         static SensorManager _sensorManager;
@@ -31,8 +31,12 @@ namespace Microsoft.Devices.Sensors
 
         SensorListener _sensorListener;
         bool _isRegistered;
-        SensorState _state;
         bool _started = false;
+
+        internal AccelerometerStrategy Strategy
+        {
+            get { return _strategy; }
+        }
 
         /// <summary>
         /// Gets whether the device on which the application is running supports the accelerometer sensor.
@@ -60,9 +64,9 @@ namespace Microsoft.Devices.Sensors
                 if (_sensorManager == null)
                 {
                     Initialize();
-                    _state = _sensorAccelerometer != null ? SensorState.Initializing : SensorState.NotSupported;
-                }
-                return _state;
+                    Strategy.State = _sensorAccelerometer != null ? SensorState.Initializing : SensorState.NotSupported;
+                }                
+                return Strategy.State;
             }
         }
 
@@ -73,25 +77,25 @@ namespace Microsoft.Devices.Sensors
 
         public override bool IsDataValid
         {
-            get { return _isDataValid; }
+            get { return Strategy.IsDataValid; }
         }
 
         public override TimeSpan TimeBetweenUpdates
         {
-            get { return _timeBetweenUpdates; }
+            get { return Strategy.TimeBetweenUpdates; }
             set
             {
-                if (this._timeBetweenUpdates != value)
+                if (Strategy.TimeBetweenUpdates != value)
                 {
-                    this._timeBetweenUpdates = value;
-                    // TODO: implement _timeBetweenUpdates for Android
+                    Strategy.TimeBetweenUpdates = value;
+                    // TODO: implement TimeBetweenUpdates for Android
                 }
             }
         }
 
         public override AccelerometerReading CurrentValue
         {
-            get { return _currentValue; }
+            get { return Strategy.CurrentValue; }
         }
 
         /// <summary>
@@ -99,11 +103,13 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public Accelerometer()
         {
+            _strategy = new AccelerometerStrategy();
+
             if (_instanceCount >= MaxSensorCount)
                 throw new SensorFailedException("The limit of 10 simultaneous instances of the Accelerometer class per application has been exceeded.");
             ++_instanceCount;
 
-            _state = _sensorAccelerometer != null ? SensorState.Initializing : SensorState.NotSupported;
+            Strategy.State = _sensorAccelerometer != null ? SensorState.Initializing : SensorState.NotSupported;
 
             _sensorListener = new SensorListener();
             _sensorListener.AccuracyChanged += _sensorListener_AccuracyChanged;
@@ -145,16 +151,16 @@ namespace Microsoft.Devices.Sensors
                     try
                     {
                         AccelerometerReading reading = new AccelerometerReading();
-                        _isDataValid = (values != null && values.Count == 3);
-                        if (_isDataValid)
+                        Strategy.IsDataValid = (values != null && values.Count == 3);
+                        if (Strategy.IsDataValid)
                         {
                             const float gravity = SensorManager.GravityEarth;
                             reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
                             reading.Timestamp = DateTime.UtcNow;
                         }
-                        _currentValue = reading;
+                        Strategy.CurrentValue = reading;
 
-                        _eventArgs.SensorReading = _currentValue;
+                        _eventArgs.SensorReading = Strategy.CurrentValue;
                         OnCurrentValueChanged(_eventArgs);
                     }
                     finally
@@ -182,6 +188,8 @@ namespace Microsoft.Devices.Sensors
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
 
+            Strategy.Start();
+
             if (_sensorManager == null)
                 Initialize();
             if (_started == false)
@@ -199,7 +207,7 @@ namespace Microsoft.Devices.Sensors
                     throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
                 }
                 _started = true;
-                _state = SensorState.Ready;
+                Strategy.State = SensorState.Ready;
                 return;
             }
             else
@@ -216,6 +224,8 @@ namespace Microsoft.Devices.Sensors
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
 
+            Strategy.Stop();
+
             if (_started)
             {
                 if (_sensorManager != null && _sensorAccelerometer != null)
@@ -227,7 +237,7 @@ namespace Microsoft.Devices.Sensors
                 }
             }
             _started = false;
-            _state = SensorState.Disabled;
+            Strategy.State = SensorState.Disabled;
         }
 
         protected override void Dispose(bool disposing)
@@ -236,6 +246,8 @@ namespace Microsoft.Devices.Sensors
             {
                 if (disposing)
                 {
+                    Strategy.Dispose();
+
                     if (_started)
                         Stop();
                     --_instanceCount;
