@@ -36,7 +36,7 @@ namespace Microsoft.Devices.Sensors
 
         public static bool IsSupported
         {
-            get { return Accelerometer._motionManager.DeviceMotionAvailable; }
+            get { return ConcreteAccelerometer._motionManager.DeviceMotionAvailable; }
         }
         public SensorState State
         {
@@ -61,7 +61,7 @@ namespace Microsoft.Devices.Sensors
                 if (Strategy.TimeBetweenUpdates != value)
                 {
                     Strategy.TimeBetweenUpdates = value;
-                    Accelerometer._motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
+                    ConcreteAccelerometer._motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace Microsoft.Devices.Sensors
             if (_started == false)
             {
                 // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
-                Accelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
+                ConcreteAccelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
                 _started = true;
                 _state = SensorState.Ready;
             }
@@ -114,7 +114,7 @@ namespace Microsoft.Devices.Sensors
 
         public override void Stop()
         {
-            Accelerometer._motionManager.StopDeviceMotionUpdates();
+            ConcreteAccelerometer._motionManager.StopDeviceMotionUpdates();
             _started = false;
             _state = SensorState.Disabled;
         }
