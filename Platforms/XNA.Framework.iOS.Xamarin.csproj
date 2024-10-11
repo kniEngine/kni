@@ -176,6 +176,8 @@
     <Compile Include="Utilities\.iOS\FuncLoader.cs" />
     <Compile Include="Sensors\.iOS\Accelerometer.cs" />
     <Compile Include="Sensors\.iOS\Compass.cs" />
+    <Compile Include="Sensors\.iOS\ConcreteAccelerometer.cs" />
+    <Compile Include="Sensors\.iOS\ConcreteCompass.cs" />
     <Compile Include="Game\.iOS\ConcreteGame.cs" />
     <Compile Include="Game\.iOS\ConcreteGameFactory.cs" />
     <Compile Include="Game\.iOS\ConcreteGraphicsDeviceManager.cs" />

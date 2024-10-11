@@ -75,7 +75,7 @@ namespace Microsoft.Devices.Sensors
 
         public Compass()
         {
-            _strategy = new CompassStrategy();
+            _strategy = new ConcreteCompass();
             _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
             _strategy.Calibrate += _strategy_Calibrate;
 

@@ -74,7 +74,7 @@ namespace Microsoft.Devices.Sensors
 
         public Accelerometer()
         {
-            _strategy = new AccelerometerStrategy();
+            _strategy = new ConcreteAccelerometer();
             _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
 
             if (!IsSupported)
