@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         static int _instanceCount;
 
         SensorListener _sensorListener;
-        bool _isRegistered;
 
         private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
 
@@ -95,7 +94,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             {
                 if (_sensorManager != null && _sensorAccelerometer != null)
                 {
-                    _isRegistered = true;
                     _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
                     // So the system can pause and resume the sensor when the activity is paused
                     AndroidGameWindow.Activity.Paused += _activity_Paused;
@@ -122,7 +120,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                     AndroidGameWindow.Activity.Paused -= _activity_Paused;
                     AndroidGameWindow.Activity.Resumed -= _activity_Resumed;
                     _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
-                    _isRegistered = false;
                 }
             }
             base.State = SensorState.Disabled;
@@ -148,7 +145,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             try
             {
                 SensorEvent e = eventArgs.Event;
-                if (e != null && e.Sensor.Type == SensorType.Accelerometer && _isRegistered == true)
+                if (e != null && e.Sensor.Type == SensorType.Accelerometer)
                 {
                     IList<float> values = e.Values;
                     try
