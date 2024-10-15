@@ -15,8 +15,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 {
     internal class ConcreteAccelerometer : AccelerometerStrategy
     {
-        const int MaxSensorCount = 10;
-
         internal static SensorManager _sensorManager;
         internal static Sensor _sensorAccelerometer;
         static int _instanceCount;
@@ -72,8 +70,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public ConcreteAccelerometer()
         {
-            if (_instanceCount >= MaxSensorCount)
-                throw new SensorFailedException("The limit of 10 simultaneous instances of the Accelerometer class per application has been exceeded.");
             _instanceCount++;
 
             base.State = (_sensorAccelerometer != null)

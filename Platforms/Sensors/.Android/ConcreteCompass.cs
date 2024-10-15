@@ -14,8 +14,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 {
     internal class ConcreteCompass : CompassStrategy
     {
-        const int MaxSensorCount = 10;
-
         internal static SensorManager _sensorManager;
         internal static Sensor _sensorMagneticField;
         static Sensor _sensorAccelerometer;
@@ -75,8 +73,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public ConcreteCompass()
         {
-            if (_instanceCount >= MaxSensorCount)
-                throw new SensorFailedException("The limit of 10 simultaneous instances of the Compass class per application has been exceeded.");
             _instanceCount++;
 
             base.State = (_sensorMagneticField != null)
