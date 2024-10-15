@@ -10,8 +10,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 {
     internal class ConcreteCompass : CompassStrategy
     {
-        const int MaxSensorCount = 10;
-
         static int _instanceCount;
         private static bool _started = false;
         private static SensorState _state = (Compass.IsSupported)
@@ -64,9 +62,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             if (!Compass.IsSupported)
                 throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
             
-            if (_instanceCount >= MaxSensorCount)
-                throw new SensorFailedException("The limit of 10 simultaneous instances of the Compass class per application has been exceeded.");
-
             _instanceCount++;
 
             readingChanged += ReadingChangedHandler;
