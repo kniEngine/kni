@@ -153,6 +153,7 @@
     <Compile Include="Sensors\.Android\Compass.cs" />
     <Compile Include="Sensors\.Android\ConcreteAccelerometer.cs" />
     <Compile Include="Sensors\.Android\ConcreteCompass.cs" />
+    <Compile Include="Sensors\.Android\ConcreteSensorService.cs" />
     <Compile Include="Sensors\.Android\SensorListener.cs" />
     <Compile Include="Game\.Android\TouchEventListener.cs" />
     <Compile Include="Game\.Cardboard\AndroidCompatibility.cs" />

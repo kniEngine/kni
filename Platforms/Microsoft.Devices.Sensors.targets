@@ -10,6 +10,8 @@
     <Compile Include="Sensors\SensorBase.cs" />
     <Compile Include="Sensors\SensorFailedException.cs" />
     <Compile Include="Sensors\SensorReadingEventArgs.cs" />
+    <Compile Include="Sensors\SensorService.cs" />
+    <Compile Include="Sensors\SensorServiceStrategy.cs" />
     <Compile Include="Sensors\SensorState.cs" />
     <Compile Include="Sensors\SensorStrategy.cs" />
   </ItemGroup>
