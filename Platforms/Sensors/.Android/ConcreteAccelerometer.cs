@@ -191,15 +191,16 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         {
             if (disposing)
             {
-                if (_started)
-                    Stop();
+            }
 
-                _instanceCount--;
-                if (_instanceCount == 0)
-                {
-                    _sensorAccelerometer = null;
-                    _sensorManager = null;
-                }
+            if (_started)
+                Stop();
+
+            _instanceCount--;
+            if (_instanceCount == 0)
+            {
+                _sensorAccelerometer = null;
+                _sensorManager = null;
             }
 
             base.Dispose(disposing);

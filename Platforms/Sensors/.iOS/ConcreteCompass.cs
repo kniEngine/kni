@@ -139,10 +139,12 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         {
             if (disposing)
             {
-                if (_started)
-                    Stop();
-                _instanceCount--;
             }
+
+            if (_started)
+                Stop();
+
+            _instanceCount--;
 
             base.Dispose(disposing);
         }
