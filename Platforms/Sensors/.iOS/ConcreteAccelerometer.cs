@@ -11,7 +11,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
     internal class ConcreteAccelerometer : AccelerometerStrategy
     {
         static int _instanceCount;
-        private static bool _started = false;
         private static SensorState _state = (Accelerometer.IsSupported)
                                           ? SensorState.Initializing
                                           : SensorState.NotSupported;
@@ -70,10 +69,9 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override void Start()
         {
-            if (_started == false)
+            if (this.State != SensorState.Ready)
             {
                 ConcreteAccelerometer._motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
-                _started = true;
                 _state = SensorState.Ready;
             }
             else
@@ -85,7 +83,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         public override void Stop()
         {
             ConcreteAccelerometer._motionManager.StopAccelerometerUpdates();
-            _started = false;
             _state = SensorState.Disabled;
         }
 
@@ -116,7 +113,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             {
             } 
             
-            if (_started)
+            if (this.State == SensorState.Ready)
                 Stop();
 
             _instanceCount--;
