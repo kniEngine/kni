@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         static int _instanceCount;
 
         SensorListener _sensorListener;
-        bool _isRegistered;
 
         float[] _valuesAccelerometer;
         float[] _valuesMagenticField;
@@ -104,7 +103,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             {
                 if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
                 {
-                    _isRegistered = true;
                     _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
                     _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
                 }
@@ -128,7 +126,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                 {
                     _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
                     _sensorManager.UnregisterListener(_sensorListener, _sensorMagneticField);
-                    _isRegistered = false;
                 }
             }
             base.State = SensorState.Disabled;
