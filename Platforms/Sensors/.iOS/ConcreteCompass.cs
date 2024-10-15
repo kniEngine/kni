@@ -11,7 +11,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
     internal class ConcreteCompass : CompassStrategy
     {
         static int _instanceCount;
-        private static bool _started = false;
         private static SensorState _state = (Compass.IsSupported)
                                           ? SensorState.Initializing 
                                           : SensorState.NotSupported;
@@ -69,11 +68,10 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override void Start()
         {
-            if (_started == false)
+            if (this.State != SensorState.Ready)
             {
                 // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
                 ConcreteAccelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
-                _started = true;
                 _state = SensorState.Ready;
             }
             else
@@ -83,7 +81,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         public override void Stop()
         {
             ConcreteAccelerometer._motionManager.StopDeviceMotionUpdates();
-            _started = false;
             _state = SensorState.Disabled;
         }
 
@@ -141,7 +138,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             {
             }
 
-            if (_started)
+            if (this.State == SensorState.Ready)
                 Stop();
 
             _instanceCount--;

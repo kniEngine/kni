@@ -21,7 +21,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         SensorListener _sensorListener;
         bool _isRegistered;
-        bool _started = false;
 
         float[] _valuesAccelerometer;
         float[] _valuesMagenticField;
@@ -101,7 +100,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             if (_sensorManager == null)
                 ConcreteCompass.Initialize();
 
-            if (_started == false)
+            if (this.State != SensorState.Ready)
             {
                 if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
                 {
@@ -113,7 +112,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                 {
                     throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
                 }
-                _started = true;
                 base.State = SensorState.Ready;
             }
             else
@@ -124,7 +122,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override void Stop()
         {
-            if (_started)
+            if (this.State == SensorState.Ready)
             {
                 if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
                 {
@@ -133,7 +131,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                     _isRegistered = false;
                 }
             }
-            _started = false;
             base.State = SensorState.Disabled;
         }
 
@@ -209,7 +206,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                 
             }
             
-            if (_started)
+            if (this.State == SensorState.Ready)
                 Stop();
 
             _instanceCount--;

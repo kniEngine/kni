@@ -21,7 +21,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         SensorListener _sensorListener;
         bool _isRegistered;
-        bool _started = false;
 
         private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
 
@@ -92,7 +91,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             if (_sensorManager == null)
                 ConcreteAccelerometer.Initialize();
 
-            if (_started == false)
+            if (this.State != SensorState.Ready)
             {
                 if (_sensorManager != null && _sensorAccelerometer != null)
                 {
@@ -106,7 +105,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                 {
                     throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
                 }
-                _started = true;
                 base.State = SensorState.Ready;
             }
             else
@@ -117,7 +115,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override void Stop()
         {
-            if (_started)
+            if (this.State == SensorState.Ready)
             {
                 if (_sensorManager != null && _sensorAccelerometer != null)
                 {
@@ -127,7 +125,6 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                     _isRegistered = false;
                 }
             }
-            _started = false;
             base.State = SensorState.Disabled;
         }
 
@@ -193,7 +190,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             {
             }
 
-            if (_started)
+            if (this.State == SensorState.Ready)
                 Stop();
 
             _instanceCount--;
