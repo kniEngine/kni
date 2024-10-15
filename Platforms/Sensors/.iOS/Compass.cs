@@ -6,36 +6,31 @@
 
 using System;
 using Microsoft.Xna.Framework;
-using CoreMotion;
-using Foundation;
+using Microsoft.Xna.Platform.Input.Sensors;
 
 namespace Microsoft.Devices.Sensors
 {
     public sealed class Compass : SensorBase<CompassReading>
     {
-        const int MaxSensorCount = 10;
+        private CompassStrategy _strategy;
 
         private bool _isDisposed;
-        private bool _isDataValid;
-        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
-        private CompassReading _currentValue;
-        private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
-
-        static int _instanceCount;
-        private static bool _started = false;
-        private static SensorState _state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
-
-        private bool _calibrate = false;
 
         public event EventHandler<CalibrationEventArgs> Calibrate;
 
+        internal CompassStrategy Strategy
+        {
+            get { return _strategy; }
+        }
+
         public static bool IsSupported
         {
-            get { return Accelerometer._motionManager.DeviceMotionAvailable; }
+            get { return ConcreteAccelerometer._motionManager.DeviceMotionAvailable; }
         }
+
         public SensorState State
         {
-            get { return _state; }
+            get { return Strategy.State; }
         }
 
         protected override bool IsDisposed
@@ -45,109 +40,55 @@ namespace Microsoft.Devices.Sensors
 
         public override bool IsDataValid
         {
-            get { return _isDataValid; }
+            get { return Strategy.IsDataValid; }
         }
 
         public override TimeSpan TimeBetweenUpdates
         {
-            get { return _timeBetweenUpdates; }
-            set
-            {
-                if (this._timeBetweenUpdates != value)
-                {
-                    this._timeBetweenUpdates = value;
-                    Accelerometer._motionManager.MagnetometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
-                }
-            }
+            get { return Strategy.TimeBetweenUpdates; }
+            set { Strategy.TimeBetweenUpdates = value; }
         }
 
         public override CompassReading CurrentValue
         {
-            get { return _currentValue; }
+            get { return Strategy.CurrentValue; }
         }
 
-        private static event CMDeviceMotionHandler readingChanged;
 
         public Compass()
         {
-            if (!IsSupported)
-                throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
-            else if (_instanceCount >= MaxSensorCount)
-                throw new SensorFailedException("The limit of 10 simultaneous instances of the Compass class per application has been exceeded.");
+            _strategy = new ConcreteCompass();
+            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
+            _strategy.Calibrate += _strategy_Calibrate;
+        }
 
-            ++_instanceCount;
+        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
+        {
+            OnCurrentValueChanged(eventArgs);
+        }
 
-            readingChanged += ReadingChangedHandler;
+        private void _strategy_Calibrate(object sender, CalibrationEventArgs eventArgs)
+        {
+            OnCalibrate(eventArgs);
         }
 
         public override void Start()
         {
-            if (_started == false)
-            {
-                // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
-                Accelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
-                _started = true;
-                _state = SensorState.Ready;
-            }
-            else
-                throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
+            Strategy.Start();
         }
 
         public override void Stop()
         {
-            Accelerometer._motionManager.StopDeviceMotionUpdates();
-            _started = false;
-            _state = SensorState.Disabled;
+            Strategy.Stop();
         }
 
-        private void MagnetometerHandler(CMDeviceMotion magnetometerData, NSError error)
+        private void OnCalibrate(CalibrationEventArgs eventArgs)
         {
-            readingChanged(magnetometerData, error);
+            var handler = Calibrate;
+            if (handler != null)
+                handler(this, eventArgs);
         }
 
-        private void ReadingChangedHandler(CMDeviceMotion data, NSError error)
-        {
-            CompassReading reading = new CompassReading();
-            _isDataValid = (error == null);
-            if (_isDataValid)
-            {
-                reading.MagnetometerReading = new Vector3((float)data.MagneticField.Field.Y, (float)-data.MagneticField.Field.X, (float)data.MagneticField.Field.Z);
-                reading.TrueHeading = Math.Atan2(reading.MagnetometerReading.Y, reading.MagnetometerReading.X) / Math.PI * 180;
-                reading.MagneticHeading = reading.TrueHeading;
-                switch (data.MagneticField.Accuracy)
-                {
-                    case CMMagneticFieldCalibrationAccuracy.High:
-                        reading.HeadingAccuracy = 5d;
-                        break;
-                    case CMMagneticFieldCalibrationAccuracy.Medium:
-                        reading.HeadingAccuracy = 30d;
-                        break;
-                    case CMMagneticFieldCalibrationAccuracy.Low:
-                        reading.HeadingAccuracy = 45d;
-                        break;
-                }
-
-                // Send calibrate event if needed
-                if (data.MagneticField.Accuracy == CMMagneticFieldCalibrationAccuracy.Uncalibrated)
-                {
-                    if (this._calibrate == false)
-                    {
-                        var handler = Calibrate;
-                        if (handler != null)
-                            handler(this, CalibrationEventArgs.Empty);
-                    }
-                    this._calibrate = true;
-                }
-                else if (this._calibrate == true)
-                    this._calibrate = false;
-
-                reading.Timestamp = DateTime.UtcNow;
-                _currentValue = reading;
-
-                _eventArgs.SensorReading = _currentValue;
-                OnCurrentValueChanged(_eventArgs);
-            }
-        }
 
         protected override void Dispose(bool disposing)
         {
@@ -155,9 +96,7 @@ namespace Microsoft.Devices.Sensors
             {
                 if (disposing)
                 {
-                    if (_started)
-                        Stop();
-                    --_instanceCount;
+                    Strategy.Dispose();
                 }
 
                 _isDisposed = true;

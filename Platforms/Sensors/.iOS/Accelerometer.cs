@@ -6,36 +6,29 @@
 
 using System;
 using Microsoft.Xna.Framework;
-using CoreMotion;
-using Foundation;
+using Microsoft.Xna.Platform.Input.Sensors;
 
 namespace Microsoft.Devices.Sensors
 {
     public sealed class Accelerometer : SensorBase<AccelerometerReading>
     {
-        const int MaxSensorCount = 10;
+        private AccelerometerStrategy _strategy;
 
         private bool _isDisposed;
-        private bool _isDataValid;
-        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
-        private AccelerometerReading _currentValue;
-        private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
 
-        static int _instanceCount;
-        private static bool _started = false;
-        private static SensorState _state = IsSupported ? SensorState.Initializing : SensorState.NotSupported;
-
-
-        internal static readonly CoreMotion.CMMotionManager _motionManager = new CoreMotion.CMMotionManager();
-
+        internal AccelerometerStrategy Strategy
+        {
+            get { return _strategy; }
+        }
 
         public static bool IsSupported
         {
-            get { return Accelerometer._motionManager.AccelerometerAvailable; }
+            get { return ConcreteAccelerometer._motionManager.AccelerometerAvailable; }
         }
+
         public SensorState State
         {
-            get { return _state; }
+            get { return Strategy.State; }
         }
 
         protected override bool IsDisposed
@@ -45,79 +38,41 @@ namespace Microsoft.Devices.Sensors
 
         public override bool IsDataValid
         {
-            get { return _isDataValid; }
+            get { return Strategy.IsDataValid; }
         }
 
         public override TimeSpan TimeBetweenUpdates
         {
-            get { return _timeBetweenUpdates; }
-            set
-            {
-                if (this._timeBetweenUpdates != value)
-                {
-                    this._timeBetweenUpdates = value;
-                    Accelerometer._motionManager.AccelerometerUpdateInterval = this.TimeBetweenUpdates.TotalSeconds;
-                }
-            }
+            get { return Strategy.TimeBetweenUpdates; }
+            set { Strategy.TimeBetweenUpdates = value; }
         }
 
         public override AccelerometerReading CurrentValue
         {
-            get { return _currentValue; }
+            get { return Strategy.CurrentValue; }
         }
-
-        private static event CMAccelerometerHandler readingChanged;
 
         public Accelerometer()
         {
-            if (!IsSupported)
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
-            else if (_instanceCount >= MaxSensorCount)
-                throw new SensorFailedException("The limit of 10 simultaneous instances of the Accelerometer class per application has been exceeded.");
+            _strategy = new ConcreteAccelerometer();
+            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
+        }
 
-            ++_instanceCount;
-
-            readingChanged += ReadingChangedHandler;
+        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> eventArgs)
+        {
+            OnCurrentValueChanged(eventArgs);
         }
 
         public override void Start()
         {
-            if (_started == false)
-            {
-                Accelerometer._motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
-                _started = true;
-                _state = SensorState.Ready;
-            }
-            else
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
+            Strategy.Start();
         }
 
         public override void Stop()
         {
-            Accelerometer._motionManager.StopAccelerometerUpdates();
-            _started = false;
-            _state = SensorState.Disabled;
+            Strategy.Stop();
         }
 
-        private void AccelerometerHandler(CMAccelerometerData data, NSError error)
-        {
-            readingChanged(data, error);
-        }
-
-        private void ReadingChangedHandler(CMAccelerometerData data, NSError error)
-        {
-            AccelerometerReading reading = new AccelerometerReading();
-            _isDataValid = (error == null);
-            if (_isDataValid)
-            {
-                reading.Acceleration = new Vector3((float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z);
-                reading.Timestamp = DateTime.UtcNow;
-                _currentValue = reading;
-
-                _eventArgs.SensorReading = _currentValue;
-                OnCurrentValueChanged(_eventArgs);
-            }
-        }
 
         protected override void Dispose(bool disposing)
         {
@@ -125,9 +80,7 @@ namespace Microsoft.Devices.Sensors
             {
                 if (disposing)
                 {
-                    if (_started)
-                        Stop();
-                    --_instanceCount;
+                    Strategy.Dispose();
                 }
 
                 _isDisposed = true;
