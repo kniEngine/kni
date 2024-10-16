@@ -10,6 +10,9 @@ using Microsoft.Xna.Platform.Input.Sensors;
 
 namespace Microsoft.Devices.Sensors
 {
+    /// <summary>
+    /// Provides access to the device's compass sensor.
+    /// </summary>
     public sealed class Compass : SensorBase<CompassReading>
     {
         private CompassStrategy _strategy;
@@ -23,14 +26,23 @@ namespace Microsoft.Devices.Sensors
             get { return _strategy; }
         }
 
+        /// <summary>
+        /// Gets whether the device on which the application is running supports the compass sensor.
+        /// </summary>
         public static bool IsSupported
         {
             get { return SensorService.Current.IsCompassSupported; }
         }
 
+        /// <summary>
+        /// Gets the current state of the compass. The value is a member of the SensorState enumeration.
+        /// </summary>
         public SensorState State
         {
-            get { return Strategy.State; }
+            get
+            {
+                return Strategy.State;
+            }
         }
 
         protected override bool IsDisposed
@@ -54,7 +66,9 @@ namespace Microsoft.Devices.Sensors
             get { return Strategy.CurrentValue; }
         }
 
-
+        /// <summary>
+        /// Creates a new instance of the Compass object.
+        /// </summary>
         public Compass()
         {
             _strategy = new ConcreteCompass();
@@ -72,11 +86,17 @@ namespace Microsoft.Devices.Sensors
             OnCalibrate(eventArgs);
         }
 
+        /// <summary>
+        /// Starts data acquisition from the compass.
+        /// </summary>
         public override void Start()
         {
             Strategy.Start();
         }
 
+        /// <summary>
+        /// Stops data acquisition from the accelerometer.
+        /// </summary>
         public override void Stop()
         {
             Strategy.Stop();

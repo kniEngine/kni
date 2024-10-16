@@ -1,4 +1,8 @@
-﻿// Copyright (C)2024 Nick Kastellanos
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2024 Nick Kastellanos
 
 using System;
 using Microsoft.Xna.Framework;
@@ -19,6 +23,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         private static event CMDeviceMotionHandler readingChanged;
 
         private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
+
 
         public override SensorState State
         {
@@ -60,7 +65,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         {
             if (!SensorService.Current.IsCompassSupported)
                 throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
-            
+
             _instanceCount++;
 
             readingChanged += ReadingChangedHandler;
@@ -75,7 +80,9 @@ namespace Microsoft.Xna.Platform.Input.Sensors
                 _state = SensorState.Ready;
             }
             else
+            {
                 throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
+            }
         }
 
         public override void Stop()

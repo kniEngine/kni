@@ -12,7 +12,7 @@ using Microsoft.Xna.Platform.Input.Sensors;
 namespace Microsoft.Devices.Sensors
 {
     /// <summary>
-    /// Provides Android applications access to the device’s accelerometer sensor.
+    /// Provides access to the device's accelerometer sensor.
     /// </summary>
     public sealed class Accelerometer : SensorBase<AccelerometerReading>
     {
@@ -104,6 +104,7 @@ namespace Microsoft.Devices.Sensors
             Strategy.Stop();
         }
 
+
         protected override void Dispose(bool disposing)
         {
             if (!_isDisposed)
@@ -111,7 +112,6 @@ namespace Microsoft.Devices.Sensors
                 if (disposing)
                 {
                     Strategy.Dispose();
-
                 }
 
                 _isDisposed = true;

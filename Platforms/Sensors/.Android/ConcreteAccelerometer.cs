@@ -66,6 +66,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             set { base.CurrentValue = value; }
         }
 
+
         public ConcreteAccelerometer()
         {
             _instanceCount++;

@@ -69,6 +69,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             set { base.CurrentValue = value; }
         }
 
+
         public ConcreteCompass()
         {
             _instanceCount++;
@@ -200,9 +201,8 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         {
             if (disposing)
             {
-                
             }
-            
+
             if (this.State == SensorState.Ready)
                 Stop();
 

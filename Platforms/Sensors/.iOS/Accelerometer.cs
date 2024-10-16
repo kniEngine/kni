@@ -5,11 +5,15 @@
 // Copyright (C)2024 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Input.Sensors;
 
 namespace Microsoft.Devices.Sensors
 {
+    /// <summary>
+    /// Provides access to the device's accelerometer sensor.
+    /// </summary>
     public sealed class Accelerometer : SensorBase<AccelerometerReading>
     {
         private AccelerometerStrategy _strategy;
@@ -21,14 +25,23 @@ namespace Microsoft.Devices.Sensors
             get { return _strategy; }
         }
 
+        /// <summary>
+        /// Gets whether the device on which the application is running supports the accelerometer sensor.
+        /// </summary>
         public static bool IsSupported
         {
             get { return SensorService.Current.IsAccelerometerSupported; }
         }
 
+        /// <summary>
+        /// Gets the current state of the accelerometer. The value is a member of the SensorState enumeration.
+        /// </summary>
         public SensorState State
         {
-            get { return Strategy.State; }
+            get
+            {
+                return Strategy.State;
+            }
         }
 
         protected override bool IsDisposed
@@ -52,6 +65,9 @@ namespace Microsoft.Devices.Sensors
             get { return Strategy.CurrentValue; }
         }
 
+        /// <summary>
+        /// Creates a new instance of the Accelerometer object.
+        /// </summary>
         public Accelerometer()
         {
             _strategy = new ConcreteAccelerometer();
@@ -63,11 +79,17 @@ namespace Microsoft.Devices.Sensors
             OnCurrentValueChanged(eventArgs);
         }
 
+        /// <summary>
+        /// Starts data acquisition from the accelerometer.
+        /// </summary>
         public override void Start()
         {
             Strategy.Start();
         }
 
+        /// <summary>
+        /// Stops data acquisition from the accelerometer.
+        /// </summary>
         public override void Stop()
         {
             Strategy.Stop();

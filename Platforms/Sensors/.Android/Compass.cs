@@ -11,7 +11,7 @@ using Microsoft.Xna.Platform.Input.Sensors;
 namespace Microsoft.Devices.Sensors
 {
     /// <summary>
-    /// Provides Android applications access to the device’s compass sensor.
+    /// Provides access to the device's compass sensor.
     /// </summary>
     public sealed class Compass : SensorBase<CompassReading>
     {
@@ -87,7 +87,6 @@ namespace Microsoft.Devices.Sensors
             OnCalibrate(eventArgs);
         }
 
-
         /// <summary>
         /// Starts data acquisition from the compass.
         /// </summary>
@@ -108,7 +107,6 @@ namespace Microsoft.Devices.Sensors
                 throw new ObjectDisposedException(GetType().Name);
 
             Strategy.Stop();
-
         }
 
         private void OnCalibrate(CalibrationEventArgs eventArgs)
@@ -118,6 +116,7 @@ namespace Microsoft.Devices.Sensors
             //    handler(this, eventArgs);
         }
 
+
         protected override void Dispose(bool disposing)
         {
             if (!_isDisposed)
@@ -125,7 +124,6 @@ namespace Microsoft.Devices.Sensors
                 if (disposing)
                 {
                     Strategy.Dispose();
-
                 }
 
                 _isDisposed = true;
