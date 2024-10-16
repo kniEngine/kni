@@ -1,20 +1,20 @@
 <Project>
   <ItemGroup>
-    <Compile Include="Sensors\\Accelerometer.cs" />
-    <Compile Include="Sensors\AccelerometerFailedException.cs" />
-    <Compile Include="Sensors\AccelerometerReading.cs" />
-    <Compile Include="Sensors\AccelerometerStrategy.cs" />
-    <Compile Include="Sensors\CalibrationEventArgs.cs" />
-    <Compile Include="Sensors\Compass.cs" />
-    <Compile Include="Sensors\CompassReading.cs" />
-    <Compile Include="Sensors\CompassStrategy.cs" />
-    <Compile Include="Sensors\ISensorReading.cs" />
-    <Compile Include="Sensors\SensorBase.cs" />
-    <Compile Include="Sensors\SensorFailedException.cs" />
-    <Compile Include="Sensors\SensorReadingEventArgs.cs" />
-    <Compile Include="Sensors\SensorService.cs" />
-    <Compile Include="Sensors\SensorServiceStrategy.cs" />
-    <Compile Include="Sensors\SensorState.cs" />
-    <Compile Include="Sensors\SensorStrategy.cs" />
+    <Compile Include="Devices\Sensors\\Accelerometer.cs" />
+    <Compile Include="Devices\Sensors\AccelerometerFailedException.cs" />
+    <Compile Include="Devices\Sensors\AccelerometerReading.cs" />
+    <Compile Include="Devices\Sensors\AccelerometerStrategy.cs" />
+    <Compile Include="Devices\Sensors\CalibrationEventArgs.cs" />
+    <Compile Include="Devices\Sensors\Compass.cs" />
+    <Compile Include="Devices\Sensors\CompassReading.cs" />
+    <Compile Include="Devices\Sensors\CompassStrategy.cs" />
+    <Compile Include="Devices\Sensors\ISensorReading.cs" />
+    <Compile Include="Devices\Sensors\SensorBase.cs" />
+    <Compile Include="Devices\Sensors\SensorFailedException.cs" />
+    <Compile Include="Devices\Sensors\SensorReadingEventArgs.cs" />
+    <Compile Include="Devices\Sensors\SensorService.cs" />
+    <Compile Include="Devices\Sensors\SensorServiceStrategy.cs" />
+    <Compile Include="Devices\Sensors\SensorState.cs" />
+    <Compile Include="Devices\Sensors\SensorStrategy.cs" />
   </ItemGroup>
 </Project>
