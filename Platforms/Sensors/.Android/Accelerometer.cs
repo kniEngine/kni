@@ -40,9 +40,8 @@ namespace Microsoft.Devices.Sensors
         {
             get
             {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(GetType().Name);
-          
+                ThrowIfDisposed();
+
                 return Strategy.State;
             }
         }
@@ -87,8 +86,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Start()
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+            ThrowIfDisposed();
 
             Strategy.Start();
         }
@@ -98,8 +96,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Stop()
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+            ThrowIfDisposed();
 
             Strategy.Stop();
         }
@@ -117,6 +114,14 @@ namespace Microsoft.Devices.Sensors
                 _isDisposed = true;
                 //base.Dispose(disposing);
             }
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (!_isDisposed)
+                return;
+
+            throw new ObjectDisposedException("Accelerometer");
         }
     }
 }
