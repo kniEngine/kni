@@ -12,7 +12,7 @@ using Microsoft.Xna.Platform.Input.Sensors;
 namespace Microsoft.Devices.Sensors
 {
     /// <summary>
-    /// Provides Android applications access to the device’s accelerometer sensor.
+    /// Provides access to the device's accelerometer sensor.
     /// </summary>
     public sealed class Accelerometer : SensorBase<AccelerometerReading>
     {
@@ -40,9 +40,8 @@ namespace Microsoft.Devices.Sensors
         {
             get
             {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(GetType().Name);
-          
+                ThrowIfDisposed();
+
                 return Strategy.State;
             }
         }
@@ -87,8 +86,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Start()
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+            ThrowIfDisposed();
 
             Strategy.Start();
         }
@@ -98,11 +96,11 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Stop()
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+            ThrowIfDisposed();
 
             Strategy.Stop();
         }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -111,12 +109,19 @@ namespace Microsoft.Devices.Sensors
                 if (disposing)
                 {
                     Strategy.Dispose();
-
                 }
 
                 _isDisposed = true;
                 //base.Dispose(disposing);
             }
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (!_isDisposed)
+                return;
+
+            throw new ObjectDisposedException("Accelerometer");
         }
     }
 }

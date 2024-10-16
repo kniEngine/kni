@@ -90,8 +90,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Sensors\.iOS\Accelerometer.cs" />
-    <Compile Include="Sensors\.iOS\Compass.cs" />
     <Compile Include="Sensors\.iOS\ConcreteAccelerometer.cs" />
     <Compile Include="Sensors\.iOS\ConcreteCompass.cs" />
     <Compile Include="Sensors\.iOS\ConcreteSensorService.cs" />

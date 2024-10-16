@@ -11,13 +11,15 @@ using Microsoft.Xna.Platform.Input.Sensors;
 namespace Microsoft.Devices.Sensors
 {
     /// <summary>
-    /// Provides Android applications access to the device’s compass sensor.
+    /// Provides access to the device's compass sensor.
     /// </summary>
     public sealed class Compass : SensorBase<CompassReading>
     {
         private CompassStrategy _strategy;
 
         private bool _isDisposed;
+
+        public event EventHandler<CalibrationEventArgs> Calibrate;
 
         internal CompassStrategy Strategy
         {
@@ -39,8 +41,7 @@ namespace Microsoft.Devices.Sensors
         {
             get
             {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(GetType().Name);
+                ThrowIfDisposed();
 
                 return Strategy.State;
             }
@@ -87,14 +88,12 @@ namespace Microsoft.Devices.Sensors
             OnCalibrate(eventArgs);
         }
 
-
         /// <summary>
         /// Starts data acquisition from the compass.
         /// </summary>
         public override void Start()
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+            ThrowIfDisposed();
 
             Strategy.Start();
         }
@@ -104,19 +103,18 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public override void Stop()
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+            ThrowIfDisposed();
 
             Strategy.Stop();
-
         }
 
         private void OnCalibrate(CalibrationEventArgs eventArgs)
         {
-            //var handler = Calibrate;
-            //if (handler != null)
-            //    handler(this, eventArgs);
+            var handler = Calibrate;
+            if (handler != null)
+                handler(this, eventArgs);
         }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -125,12 +123,19 @@ namespace Microsoft.Devices.Sensors
                 if (disposing)
                 {
                     Strategy.Dispose();
-
                 }
 
                 _isDisposed = true;
                 //base.Dispose(disposing);
             }
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (!_isDisposed)
+                return;
+
+            throw new ObjectDisposedException("Compass");
         }
     }
 }

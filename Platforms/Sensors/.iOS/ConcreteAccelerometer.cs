@@ -1,6 +1,11 @@
-﻿// Copyright (C)2024 Nick Kastellanos
+﻿// MonoGame - Copyright (C) The MonoGame Team
+// This file is subject to the terms and conditions defined in
+// file 'LICENSE.txt', which is part of this source code package.
+
+// Copyright (C)2024 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Devices.Sensors;
 using CoreMotion;
@@ -41,7 +46,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         public override TimeSpan TimeBetweenUpdates
         {
             get { return base.TimeBetweenUpdates; }
-            set 
+            set
             {
                 if (base.TimeBetweenUpdates != value)
                 {
@@ -56,6 +61,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             get { return base.CurrentValue; }
             set { base.CurrentValue = value; }
         }
+
 
         public ConcreteAccelerometer()
         {
@@ -111,8 +117,8 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         {
             if (disposing)
             {
-            } 
-            
+            }
+
             if (this.State == SensorState.Ready)
                 Stop();
 
