@@ -1,20 +1,20 @@
 ﻿// Copyright (C)2022 Nick Kastellanos
 
-namespace Microsoft.Xna.Platform.Audio
+namespace Microsoft.Platform.Devices.Sensors
 {
     public sealed class ConcreteAudioFactory : AudioFactory
     {
-        public override AudioServiceStrategy CreateAudioServiceStrategy()
+        public override SensorServiceStrategy CreateSensorServiceStrategy()
         {
             return new ConcreteAudioService();
         }
 
-        public override MicrophoneStrategy CreateMicrophoneStrategy()
+        public override MicrophoneStrategy CreateAccelerometerStrategy()
         {
             return new ConcreteMicrophone();
         }
 
-        public override SoundEffectStrategy CreateSoundEffectStrategy()
+        public override CompassStrategy CreateCompassStrategy()
         {
             return new ConcreteSoundEffect();
         }

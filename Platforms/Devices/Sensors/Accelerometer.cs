@@ -72,7 +72,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public Accelerometer()
         {
-            _strategy = new ConcreteAccelerometer();
+            _strategy = SensorsFactory.Current.CreateAccelerometerStrategy();
             _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
         }
 

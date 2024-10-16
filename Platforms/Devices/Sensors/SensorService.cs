@@ -56,7 +56,7 @@ namespace Microsoft.Platform.Devices.Sensors
 
         private SensorService()
         {
-            _strategy = new ConcreteSensorService();
+            _strategy = ConcreteSensorsFactory.Current.CreateSensorServiceStrategy();
         }
 
         public static void Suspend()
