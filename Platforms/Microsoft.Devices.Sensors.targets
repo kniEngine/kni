@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <Compile Include="Devices\Sensors\\Accelerometer.cs" />
+    <Compile Include="Devices\Sensors\Accelerometer.cs" />
     <Compile Include="Devices\Sensors\AccelerometerFailedException.cs" />
     <Compile Include="Devices\Sensors\AccelerometerReading.cs" />
     <Compile Include="Devices\Sensors\AccelerometerStrategy.cs" />
