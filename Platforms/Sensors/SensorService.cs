@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Devices.Sensors;
 
-namespace Microsoft.Xna.Platform.Input.Sensors
+namespace Microsoft.Platform.Devices.Sensors
 {   
     public sealed class SensorService : IDisposable
         , IPlatformSensorService

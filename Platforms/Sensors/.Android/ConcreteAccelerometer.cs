@@ -11,7 +11,7 @@ using Microsoft.Devices.Sensors;
 using Android.Content;
 using Android.Hardware;
 
-namespace Microsoft.Xna.Platform.Input.Sensors
+namespace Microsoft.Platform.Devices.Sensors
 {
     internal class ConcreteAccelerometer : AccelerometerStrategy
     {

@@ -6,7 +6,7 @@
 
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Platform.Input.Sensors;
+using Microsoft.Platform.Devices.Sensors;
 
 namespace Microsoft.Devices.Sensors
 {

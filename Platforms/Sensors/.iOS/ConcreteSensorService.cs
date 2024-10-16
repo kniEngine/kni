@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Devices.Sensors;
 
-namespace Microsoft.Xna.Platform.Input.Sensors
+namespace Microsoft.Platform.Devices.Sensors
 {
     internal class ConcreteSensorService : SensorServiceStrategy
     {

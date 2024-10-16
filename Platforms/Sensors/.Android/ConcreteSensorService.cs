@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Android.Hardware;
 using Microsoft.Devices.Sensors;
 
-namespace Microsoft.Xna.Platform.Input.Sensors
+namespace Microsoft.Platform.Devices.Sensors
 {
     internal class ConcreteSensorService : SensorServiceStrategy
     {
