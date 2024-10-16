@@ -19,6 +19,8 @@ namespace Microsoft.Devices.Sensors
 
         private bool _isDisposed;
 
+        public event EventHandler<CalibrationEventArgs> Calibrate;
+
         internal CompassStrategy Strategy
         {
             get { return _strategy; }
@@ -108,9 +110,9 @@ namespace Microsoft.Devices.Sensors
 
         private void OnCalibrate(CalibrationEventArgs eventArgs)
         {
-            //var handler = Calibrate;
-            //if (handler != null)
-            //    handler(this, eventArgs);
+            var handler = Calibrate;
+            if (handler != null)
+                handler(this, eventArgs);
         }
 
 
