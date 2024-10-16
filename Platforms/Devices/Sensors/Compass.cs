@@ -5,36 +5,37 @@
 // Copyright (C)2024 Nick Kastellanos
 
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Platform.Input.Sensors;
+using Microsoft.Platform.Devices.Sensors;
 
 namespace Microsoft.Devices.Sensors
 {
     /// <summary>
-    /// Provides access to the device's accelerometer sensor.
+    /// Provides access to the device's compass sensor.
     /// </summary>
-    public sealed class Accelerometer : SensorBase<AccelerometerReading>
+    public sealed class Compass : SensorBase<CompassReading>
     {
-        private AccelerometerStrategy _strategy;
+        private CompassStrategy _strategy;
 
         private bool _isDisposed;
 
-        internal AccelerometerStrategy Strategy
+        public event EventHandler<CalibrationEventArgs> Calibrate;
+
+        internal CompassStrategy Strategy
         {
             get { return _strategy; }
         }
 
         /// <summary>
-        /// Gets whether the device on which the application is running supports the accelerometer sensor.
+        /// Gets whether the device on which the application is running supports the compass sensor.
         /// </summary>
         public static bool IsSupported
         {
-            get { return SensorService.Current.IsAccelerometerSupported; }
+            get { return SensorService.Current.IsCompassSupported; }
         }
 
         /// <summary>
-        /// Gets the current state of the accelerometer. The value is a member of the SensorState enumeration.
+        /// Gets the current state of the compass. The value is a member of the SensorState enumeration.
         /// </summary>
         public SensorState State
         {
@@ -62,27 +63,33 @@ namespace Microsoft.Devices.Sensors
             set { Strategy.TimeBetweenUpdates = value; }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override CompassReading CurrentValue
         {
             get { return Strategy.CurrentValue; }
         }
 
         /// <summary>
-        /// Creates a new instance of the Accelerometer object.
+        /// Creates a new instance of the Compass object.
         /// </summary>
-        public Accelerometer()
+        public Compass()
         {
-            _strategy = new ConcreteAccelerometer();
+            _strategy = new ConcreteCompass();
             _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
+            _strategy.Calibrate += _strategy_Calibrate;
         }
 
-        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> eventArgs)
+        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
         {
             OnCurrentValueChanged(eventArgs);
         }
 
+        private void _strategy_Calibrate(object sender, CalibrationEventArgs eventArgs)
+        {
+            OnCalibrate(eventArgs);
+        }
+
         /// <summary>
-        /// Starts data acquisition from the accelerometer.
+        /// Starts data acquisition from the compass.
         /// </summary>
         public override void Start()
         {
@@ -99,6 +106,13 @@ namespace Microsoft.Devices.Sensors
             ThrowIfDisposed();
 
             Strategy.Stop();
+        }
+
+        private void OnCalibrate(CalibrationEventArgs eventArgs)
+        {
+            var handler = Calibrate;
+            if (handler != null)
+                handler(this, eventArgs);
         }
 
 
@@ -121,7 +135,7 @@ namespace Microsoft.Devices.Sensors
             if (!_isDisposed)
                 return;
 
-            throw new ObjectDisposedException("Accelerometer");
+            throw new ObjectDisposedException("Compass");
         }
     }
 }

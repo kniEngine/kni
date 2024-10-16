@@ -5,23 +5,29 @@
 // Copyright (C)2024 Nick Kastellanos
 
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Devices.Sensors;
 using Android.Content;
 using Android.Hardware;
 
-namespace Microsoft.Xna.Platform.Input.Sensors
+namespace Microsoft.Platform.Devices.Sensors
 {
-    internal class ConcreteAccelerometer : AccelerometerStrategy
+    internal class ConcreteCompass : CompassStrategy
     {
         internal static SensorManager _sensorManager;
-        internal static Sensor _sensorAccelerometer;
+        internal static Sensor _sensorMagneticField;
+        static Sensor _sensorAccelerometer;
         static int _instanceCount;
 
         SensorListener _sensorListener;
 
-        private SensorReadingEventArgs<AccelerometerReading> _eventArgs = new SensorReadingEventArgs<AccelerometerReading>(default(AccelerometerReading));
+        float[] _valuesAccelerometer;
+        float[] _valuesMagenticField;
+        float[] _matrixR;
+        float[] _matrixI;
+        float[] _matrixValues;
+        
+        private SensorReadingEventArgs<CompassReading> _eventArgs = new SensorReadingEventArgs<CompassReading>(default(CompassReading));
 
 
         public override SensorState State
@@ -30,10 +36,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             {
                 if (_sensorManager == null)
                 {
-                    ConcreteAccelerometer.Initialize();
-                    base.State = (_sensorAccelerometer != null)
-                               ? SensorState.Initializing 
-                               : SensorState.NotSupported;
+                    ConcreteCompass.Initialize();
                 }
 
                 return base.State;
@@ -50,7 +53,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         public override TimeSpan TimeBetweenUpdates
         {
             get { return base.TimeBetweenUpdates; }
-            set
+            set 
             {
                 if (base.TimeBetweenUpdates != value)
                 {
@@ -60,21 +63,26 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override CompassReading CurrentValue
         {
             get { return base.CurrentValue; }
             set { base.CurrentValue = value; }
         }
 
 
-        public ConcreteAccelerometer()
+        public ConcreteCompass()
         {
             _instanceCount++;
 
-            base.State = (_sensorAccelerometer != null)
+            base.State = (_sensorMagneticField != null)
                        ? SensorState.Initializing 
                        : SensorState.NotSupported;
 
+            _valuesAccelerometer = new float[3];
+            _valuesMagenticField = new float[3];
+            _matrixR = new float[9];
+            _matrixI = new float[9];
+            _matrixValues = new float[3];
             _sensorListener = new SensorListener();
             _sensorListener.AccuracyChanged += _sensorListener_AccuracyChanged;
             _sensorListener.SensorChanged += _sensorListener_SensorChanged;
@@ -83,24 +91,23 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         static internal void Initialize()
         {
             _sensorManager = (SensorManager)AndroidGameWindow.Activity.GetSystemService(Context.SensorService);
+            _sensorMagneticField = _sensorManager.GetDefaultSensor(SensorType.MagneticField);
             _sensorAccelerometer = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
         }
 
         public override void Start()
         {
             if (this.State == SensorState.Ready)
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
+                throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
 
             if (_sensorManager == null)
-                ConcreteAccelerometer.Initialize();
+                ConcreteCompass.Initialize();
 
-            if ((_sensorManager == null || _sensorAccelerometer == null))
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
+            if ((_sensorManager == null || _sensorMagneticField == null || _sensorAccelerometer == null))
+                throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
 
+            _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
             _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
-            // So the system can pause and resume the sensor when the activity is paused
-            AndroidGameWindow.Activity.Paused += _activity_Paused;
-            AndroidGameWindow.Activity.Resumed += _activity_Resumed;
             base.State = SensorState.Ready;
         }
 
@@ -108,11 +115,10 @@ namespace Microsoft.Xna.Platform.Input.Sensors
         {
             if (this.State == SensorState.Ready)
             {
-                if (_sensorManager != null && _sensorAccelerometer != null)
+                if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
                 {
-                    AndroidGameWindow.Activity.Paused -= _activity_Paused;
-                    AndroidGameWindow.Activity.Resumed -= _activity_Resumed;
                     _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
+                    _sensorManager.UnregisterListener(_sensorListener, _sensorMagneticField);
                 }
             }
             base.State = SensorState.Disabled;
@@ -120,12 +126,14 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         void _activity_Paused(object sender, EventArgs eventArgs)
         {
+            _sensorManager.UnregisterListener(_sensorListener, _sensorMagneticField);
             _sensorManager.UnregisterListener(_sensorListener, _sensorAccelerometer);
         }
 
         void _activity_Resumed(object sender, EventArgs eventArgs)
         {
             _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
+            _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
         }
 
         private void _sensorListener_AccuracyChanged(object sender, EventArgs eventArgs)
@@ -138,30 +146,37 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             try
             {
                 SensorEvent e = eventArgs.Event;
-                if (e != null && e.Sensor.Type == SensorType.Accelerometer)
+                switch (e.Sensor.Type)
                 {
-                    IList<float> values = e.Values;
-                    try
-                    {
-                        AccelerometerReading reading = new AccelerometerReading();
-                        base.IsDataValid = (values != null && values.Count == 3);
-                        if (base.IsDataValid)
-                        {
-                            const float gravity = SensorManager.GravityEarth;
-                            reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
-                            reading.Timestamp = DateTime.UtcNow;
-                        }
-                        base.CurrentValue = reading;
+                    case SensorType.Accelerometer:
+                        _valuesAccelerometer[0] = e.Values[0];
+                        _valuesAccelerometer[1] = e.Values[1];
+                        _valuesAccelerometer[2] = e.Values[2];
+                        break;
 
-                        _eventArgs.SensorReading = base.CurrentValue;
-                        base.OnCurrentValueChanged(_eventArgs);
-                    }
-                    finally
-                    {
-                        IDisposable d = values as IDisposable;
-                        if (d != null)
-                            d.Dispose();
-                    }
+                    case SensorType.MagneticField:
+                        _valuesMagenticField[0] = e.Values[0];
+                        _valuesMagenticField[1] = e.Values[1];
+                        _valuesMagenticField[2] = e.Values[2];
+                        break;
+                }
+
+                base.IsDataValid = SensorManager.GetRotationMatrix(_matrixR, _matrixI, _valuesAccelerometer, _valuesMagenticField);
+                if (base.IsDataValid)
+                {
+                    SensorManager.GetOrientation(_matrixR, _matrixValues);
+                    CompassReading reading = new CompassReading();
+                    reading.MagneticHeading = _matrixValues[0];
+                    Vector3 magnetometer = new Vector3(_valuesMagenticField[0], _valuesMagenticField[1], _valuesMagenticField[2]);
+                    reading.MagnetometerReading = magnetometer;
+                    // We need the magnetic declination from true north to calculate the true heading from the magnetic heading.
+                    // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
+                    reading.TrueHeading = reading.MagneticHeading;
+                    reading.Timestamp = DateTime.UtcNow;
+                    base.CurrentValue = reading;
+
+                    _eventArgs.SensorReading = base.CurrentValue;
+                    base.OnCurrentValueChanged(_eventArgs);
                 }
             }
             catch (NullReferenceException)
@@ -187,6 +202,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             if (_instanceCount == 0)
             {
                 _sensorAccelerometer = null;
+                _sensorMagneticField = null;
                 _sensorManager = null;
             }
 

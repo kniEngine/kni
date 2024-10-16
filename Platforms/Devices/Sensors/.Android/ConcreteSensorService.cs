@@ -6,9 +6,10 @@
 
 using System;
 using System.Collections.Generic;
+using Android.Hardware;
 using Microsoft.Devices.Sensors;
 
-namespace Microsoft.Xna.Platform.Input.Sensors
+namespace Microsoft.Platform.Devices.Sensors
 {
     internal class ConcreteSensorService : SensorServiceStrategy
     {
@@ -19,12 +20,16 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override bool PlatformIsAccelerometerSupported()
         {
-            return ConcreteAccelerometer._motionManager.AccelerometerAvailable;
+            if (ConcreteAccelerometer._sensorManager == null)
+                ConcreteAccelerometer.Initialize();
+            return ConcreteAccelerometer._sensorAccelerometer != null;
         }
 
         public override bool PlatformIsCompassSupported()
         {
-            return ConcreteAccelerometer._motionManager.DeviceMotionAvailable;
+            if (ConcreteCompass._sensorManager == null)
+                ConcreteCompass.Initialize();
+            return ConcreteCompass._sensorMagneticField != null;
         }
 
         public override void Suspend()

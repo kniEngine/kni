@@ -10,7 +10,7 @@ using Microsoft.Devices.Sensors;
 using CoreMotion;
 using Foundation;
 
-namespace Microsoft.Xna.Platform.Input.Sensors
+namespace Microsoft.Platform.Devices.Sensors
 {
     internal class ConcreteCompass : CompassStrategy
     {
