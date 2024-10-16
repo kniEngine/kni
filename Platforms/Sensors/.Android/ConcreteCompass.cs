@@ -97,26 +97,18 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override void Start()
         {
+            if (this.State == SensorState.Ready)
+                throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
+
             if (_sensorManager == null)
                 ConcreteCompass.Initialize();
 
-            if (this.State != SensorState.Ready)
-            {
-                if (_sensorManager != null && _sensorMagneticField != null && _sensorAccelerometer != null)
-                {
-                    _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
-                    _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
-                }
-                else
-                {
-                    throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
-                }
-                base.State = SensorState.Ready;
-            }
-            else
-            {
-                throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
-            }
+            if ((_sensorManager == null || _sensorMagneticField == null || _sensorAccelerometer == null))
+                throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
+
+            _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
+            _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
+            base.State = SensorState.Ready;
         }
 
         public override void Stop()

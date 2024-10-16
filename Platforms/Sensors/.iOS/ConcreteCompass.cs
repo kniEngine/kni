@@ -73,16 +73,12 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override void Start()
         {
-            if (this.State != SensorState.Ready)
-            {
-                // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
-                ConcreteAccelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
-                _state = SensorState.Ready;
-            }
-            else
-            {
+            if (this.State == SensorState.Ready)
                 throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
-            }
+
+            // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
+            ConcreteAccelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);
+            _state = SensorState.Ready;
         }
 
         public override void Stop()

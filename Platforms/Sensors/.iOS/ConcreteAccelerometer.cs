@@ -75,15 +75,11 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public override void Start()
         {
-            if (this.State != SensorState.Ready)
-            {
-                ConcreteAccelerometer._motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
-                _state = SensorState.Ready;
-            }
-            else
-            {
+            if (this.State == SensorState.Ready)
                 throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
-            }
+
+            ConcreteAccelerometer._motionManager.StartAccelerometerUpdates(NSOperationQueue.CurrentQueue, AccelerometerHandler);
+            _state = SensorState.Ready;
         }
 
         public override void Stop()
