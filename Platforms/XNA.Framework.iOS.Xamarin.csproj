@@ -153,10 +153,12 @@
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
 
+    <Compile Include="Sensors\\Accelerometer.cs" />
     <Compile Include="Sensors\AccelerometerFailedException.cs" />
     <Compile Include="Sensors\AccelerometerReading.cs" />
     <Compile Include="Sensors\AccelerometerStrategy.cs" />
     <Compile Include="Sensors\CalibrationEventArgs.cs" />
+    <Compile Include="Sensors\Compass.cs" />
     <Compile Include="Sensors\CompassReading.cs" />
     <Compile Include="Sensors\CompassStrategy.cs" />
     <Compile Include="Sensors\ISensorReading.cs" />
@@ -176,8 +178,6 @@
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\.iOS\FuncLoader.cs" />
-    <Compile Include="Sensors\.iOS\Accelerometer.cs" />
-    <Compile Include="Sensors\.iOS\Compass.cs" />
     <Compile Include="Sensors\.iOS\ConcreteAccelerometer.cs" />
     <Compile Include="Sensors\.iOS\ConcreteCompass.cs" />
     <Compile Include="Sensors\.iOS\ConcreteSensorService.cs" />

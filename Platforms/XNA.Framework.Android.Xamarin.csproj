@@ -180,10 +180,12 @@
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
 	  
+    <Compile Include="Sensors\\Accelerometer.cs" />
     <Compile Include="Sensors\AccelerometerFailedException.cs" />
     <Compile Include="Sensors\AccelerometerReading.cs" />
     <Compile Include="Sensors\AccelerometerStrategy.cs" />
     <Compile Include="Sensors\CalibrationEventArgs.cs" />
+    <Compile Include="Sensors\Compass.cs" />
     <Compile Include="Sensors\CompassReading.cs" />
     <Compile Include="Sensors\CompassStrategy.cs" />
     <Compile Include="Sensors\ISensorReading.cs" />
@@ -210,8 +212,6 @@
     <Compile Include="Game\.Android\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Game\.Android\AndroidGameWindow.cs" />
     <Compile Include="Game\.Android\AndroidSurfaceView.cs" />
-    <Compile Include="Sensors\.Android\Accelerometer.cs" />
-    <Compile Include="Sensors\.Android\Compass.cs" />
     <Compile Include="Sensors\.Android\ConcreteAccelerometer.cs" />
     <Compile Include="Sensors\.Android\ConcreteCompass.cs" />
     <Compile Include="Sensors\.Android\ConcreteSensorService.cs" />

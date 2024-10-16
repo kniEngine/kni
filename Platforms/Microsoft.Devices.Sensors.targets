@@ -1,9 +1,11 @@
 <Project>
   <ItemGroup>
+    <Compile Include="Sensors\\Accelerometer.cs" />
     <Compile Include="Sensors\AccelerometerFailedException.cs" />
     <Compile Include="Sensors\AccelerometerReading.cs" />
     <Compile Include="Sensors\AccelerometerStrategy.cs" />
     <Compile Include="Sensors\CalibrationEventArgs.cs" />
+    <Compile Include="Sensors\Compass.cs" />
     <Compile Include="Sensors\CompassReading.cs" />
     <Compile Include="Sensors\CompassStrategy.cs" />
     <Compile Include="Sensors\ISensorReading.cs" />
