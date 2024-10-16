@@ -94,17 +94,13 @@ namespace Microsoft.Xna.Platform.Input.Sensors
             if (_sensorManager == null)
                 ConcreteAccelerometer.Initialize();
 
-            if (_sensorManager != null && _sensorAccelerometer != null)
-            {
-                _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
-                // So the system can pause and resume the sensor when the activity is paused
-                AndroidGameWindow.Activity.Paused += _activity_Paused;
-                AndroidGameWindow.Activity.Resumed += _activity_Resumed;
-            }
-            else
-            {
+            if ((_sensorManager == null || _sensorAccelerometer == null))
                 throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
-            }
+
+            _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
+            // So the system can pause and resume the sensor when the activity is paused
+            AndroidGameWindow.Activity.Paused += _activity_Paused;
+            AndroidGameWindow.Activity.Resumed += _activity_Resumed;
             base.State = SensorState.Ready;
         }
 
