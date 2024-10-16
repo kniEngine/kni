@@ -29,12 +29,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public static bool IsSupported
         {
-            get
-            {
-                if (ConcreteCompass._sensorManager == null)
-                    ConcreteCompass.Initialize();
-                return ConcreteCompass._sensorMagneticField != null;
-            }
+            get { return SensorService.Current.IsCompassSupported; }
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace Microsoft.Devices.Sensors
 
         public static bool IsSupported
         {
-            get { return ConcreteAccelerometer._motionManager.AccelerometerAvailable; }
+            get { return SensorService.Current.IsAccelerometerSupported; }
         }
 
         public SensorState State

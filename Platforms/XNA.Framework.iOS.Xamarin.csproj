@@ -163,6 +163,8 @@
     <Compile Include="Sensors\SensorBase.cs" />
     <Compile Include="Sensors\SensorFailedException.cs" />
     <Compile Include="Sensors\SensorReadingEventArgs.cs" />
+    <Compile Include="Sensors\SensorService.cs" />
+    <Compile Include="Sensors\SensorServiceStrategy.cs" />
     <Compile Include="Sensors\SensorState.cs" />
     <Compile Include="Sensors\SensorStrategy.cs" />
     <Compile Include="Utilities\Hash.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="Sensors\.iOS\Compass.cs" />
     <Compile Include="Sensors\.iOS\ConcreteAccelerometer.cs" />
     <Compile Include="Sensors\.iOS\ConcreteCompass.cs" />
+    <Compile Include="Sensors\.iOS\ConcreteSensorService.cs" />
     <Compile Include="Game\.iOS\ConcreteGame.cs" />
     <Compile Include="Game\.iOS\ConcreteGameFactory.cs" />
     <Compile Include="Game\.iOS\ConcreteGraphicsDeviceManager.cs" />

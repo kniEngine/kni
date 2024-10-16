@@ -25,7 +25,7 @@ namespace Microsoft.Devices.Sensors
 
         public static bool IsSupported
         {
-            get { return ConcreteAccelerometer._motionManager.DeviceMotionAvailable; }
+            get { return SensorService.Current.IsCompassSupported; }
         }
 
         public SensorState State

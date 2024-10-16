@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
     internal class ConcreteCompass : CompassStrategy
     {
         static int _instanceCount;
-        private static SensorState _state = (Compass.IsSupported)
+        private static SensorState _state = (SensorService.Current.IsCompassSupported)
                                           ? SensorState.Initializing 
                                           : SensorState.NotSupported;
         private bool _calibrate = false;
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Input.Sensors
 
         public ConcreteCompass()
         {
-            if (!Compass.IsSupported)
+            if (!SensorService.Current.IsCompassSupported)
                 throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
             
             _instanceCount++;

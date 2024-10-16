@@ -190,6 +190,8 @@
     <Compile Include="Sensors\SensorBase.cs" />
     <Compile Include="Sensors\SensorFailedException.cs" />
     <Compile Include="Sensors\SensorReadingEventArgs.cs" />
+    <Compile Include="Sensors\SensorService.cs" />
+    <Compile Include="Sensors\SensorServiceStrategy.cs" />
     <Compile Include="Sensors\SensorState.cs" />
     <Compile Include="Sensors\SensorStrategy.cs" />
     <Compile Include="Utilities\Hash.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="Sensors\.Android\Compass.cs" />
     <Compile Include="Sensors\.Android\ConcreteAccelerometer.cs" />
     <Compile Include="Sensors\.Android\ConcreteCompass.cs" />
+    <Compile Include="Sensors\.Android\ConcreteSensorService.cs" />
     <Compile Include="Sensors\.Android\SensorListener.cs" />
     <Compile Include="Game\.Android\TouchEventListener.cs" />
     <Compile Include="Game\.Android\ISurfaceView.cs" />

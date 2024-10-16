@@ -30,12 +30,7 @@ namespace Microsoft.Devices.Sensors
         /// </summary>
         public static bool IsSupported
         {
-            get
-            {
-                if (ConcreteAccelerometer._sensorManager == null)
-                    ConcreteAccelerometer.Initialize();
-                return ConcreteAccelerometer._sensorAccelerometer != null;
-            }
+            get { return SensorService.Current.IsAccelerometerSupported; }
         }
 
         /// <summary>
