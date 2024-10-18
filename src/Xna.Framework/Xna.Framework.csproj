@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
     <LangVersion>5</LangVersion>
