@@ -79,6 +79,11 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
+      <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
+      <Name>Xna.Framework.Devices</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -176,6 +181,8 @@
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\.SDL2\FuncLoader.cs" />
+    <Compile Include="Devices\.SDL2\ConcreteDevicesFactory.cs" />
+    <Compile Include="Devices\.SDL2\ConcreteVibrator.cs" />
     <Compile Include="Game\.SDL2\ConcreteGame.cs" />
     <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />
     <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />

@@ -85,6 +85,11 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
+      <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
+      <Name>Xna.Framework.Devices</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="Game\.Cardboard\GoogleCardboard\GoogleCardboard.csproj" >
     </ProjectReference>
   </ItemGroup>
@@ -145,6 +150,8 @@
     <Compile Include="Content\.Android\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.Android\ConcreteTitleContainerFactory.cs" />
 
+    <Compile Include="Devices\.Android\ConcreteDevicesFactory.cs" />
+    <Compile Include="Devices\.Android\ConcreteVibrator.cs" />
     <Compile Include="Devices\Sensors\.Android\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\Sensors\.Android\ConcreteCompass.cs" />
     <Compile Include="Devices\Sensors\.Android\ConcreteSensorService.cs" />

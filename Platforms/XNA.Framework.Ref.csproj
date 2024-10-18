@@ -64,6 +64,11 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
+      <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
+      <Name>Xna.Framework.Devices</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -79,6 +84,8 @@
   <ItemGroup>
     <None Remove="P:\MonoGame\Images\Icon.png" />
 
+    <Compile Include="Devices\.Ref\ConcreteDevicesFactory.cs" />
+    <Compile Include="Devices\.Ref\ConcreteVibrator.cs" />
     <Compile Include="Game\.Ref\ConcreteGame.cs" />
     <Compile Include="Game\.Ref\ConcreteGameFactory.cs" />
     <Compile Include="Game\.Ref\ConcreteGraphicsDeviceManager.cs" />
