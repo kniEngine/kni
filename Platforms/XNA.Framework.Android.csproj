@@ -4,7 +4,7 @@
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Platforms\Android</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
-    
+
     <Version>3.14.9001.0</Version>
     <AssemblyVersion>3.14.9001.0</AssemblyVersion>
 
@@ -27,13 +27,13 @@
     <PackageTags>KNI;monogame;.net core;core;.net standard;standard;android</PackageTags>
     <PackageId>MonoGame.Framework.Android</PackageId>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="ILLink.Descriptors.xml">
       <LogicalName>ILLink.Descriptors.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-	
+
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
@@ -75,7 +75,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="Utilities\Png\PngCommon.cs" />
     <Compile Include="Utilities\Png\PngReader.cs" />
@@ -99,7 +99,6 @@
     <Compile Include="Graphics\.GL.Android\SurfaceConfig.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
-
   </ItemGroup>
 
   <ItemGroup>
