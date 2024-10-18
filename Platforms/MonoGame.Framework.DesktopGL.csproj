@@ -70,6 +70,11 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
+      <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
+      <Name>Xna.Framework.Devices</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -105,6 +110,8 @@
   <ItemGroup>
     <Compile Include="Content\.SDL2\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.SDL2\ConcreteTitleContainerFactory.cs" />
+    <Compile Include="Devices\.SDL2\ConcreteDevicesFactory.cs" />
+    <Compile Include="Devices\.SDL2\ConcreteVibrator.cs" />
     <Compile Include="Game\.SDL2\SDL2.cs" />
     <Compile Include="Game\.SDL2\ConcreteGame.cs" />
     <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />

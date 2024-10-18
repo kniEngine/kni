@@ -71,6 +71,11 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
+      <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
+      <Name>Xna.Framework.Devices</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -90,6 +95,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Devices\.iOS\ConcreteDevicesFactory.cs" />
+    <Compile Include="Devices\.iOS\ConcreteVibrator.cs" />
     <Compile Include="Devices\Sensors\.iOS\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\Sensors\.iOS\ConcreteCompass.cs" />
     <Compile Include="Devices\Sensors\.iOS\ConcreteSensorService.cs" />
