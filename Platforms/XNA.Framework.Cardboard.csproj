@@ -4,7 +4,7 @@
   <PropertyGroup>
     <BaseOutputPath>..\Artifacts\Platforms\Cardboard</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
-    
+
     <Version>3.14.9001.0</Version>
     <AssemblyVersion>3.14.9001.0</AssemblyVersion>
 
@@ -42,13 +42,13 @@
     <PackageTags>KNI;android</PackageTags>
     <PackageId>MonoGame.Framework.Cardboard.9000</PackageId>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="ILLink.Descriptors.xml">
       <LogicalName>ILLink.Descriptors.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-	
+
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
@@ -92,7 +92,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="Utilities\Png\PngCommon.cs" />
     <Compile Include="Utilities\Png\PngReader.cs" />
@@ -145,14 +145,11 @@
     <Compile Include="Content\.Android\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.Android\ConcreteTitleContainerFactory.cs" />
 
-
-
-
-
     <Compile Include="Devices\Sensors\.Android\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\Sensors\.Android\ConcreteCompass.cs" />
     <Compile Include="Devices\Sensors\.Android\ConcreteSensorService.cs" />
     <Compile Include="Devices\Sensors\.Android\SensorListener.cs" />
+
     <Compile Include="Game\.Android\TouchEventListener.cs" />
     <Compile Include="Game\.Cardboard\AndroidCompatibility.cs" />
     <Compile Include="Game\.Cardboard\AndroidGameActivity.cs" />
