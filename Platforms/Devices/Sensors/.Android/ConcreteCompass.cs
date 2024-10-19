@@ -12,7 +12,7 @@ using Android.Hardware;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    internal class ConcreteCompass : CompassStrategy
+    internal sealed class ConcreteCompass : CompassStrategy
     {
         internal static SensorManager _sensorManager;
         internal static Sensor _sensorMagneticField;

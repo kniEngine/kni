@@ -12,7 +12,7 @@ using Foundation;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    internal class ConcreteCompass : CompassStrategy
+    internal sealed class ConcreteCompass : CompassStrategy
     {
         static int _instanceCount;
         private static SensorState _state = (SensorService.Current.IsCompassSupported)

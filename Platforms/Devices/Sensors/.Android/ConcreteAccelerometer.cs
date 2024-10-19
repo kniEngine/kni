@@ -13,7 +13,7 @@ using Android.Hardware;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    internal class ConcreteAccelerometer : AccelerometerStrategy
+    internal sealed class ConcreteAccelerometer : AccelerometerStrategy
     {
         internal static SensorManager _sensorManager;
         internal static Sensor _sensorAccelerometer;

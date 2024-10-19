@@ -13,7 +13,7 @@ using Foundation;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    internal class ConcreteAccelerometer : AccelerometerStrategy
+    internal sealed class ConcreteAccelerometer : AccelerometerStrategy
     {
         static int _instanceCount;
         private static SensorState _state = (SensorService.Current.IsAccelerometerSupported)

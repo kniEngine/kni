@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Devices.Sensors;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    internal class ConcreteSensorService : SensorServiceStrategy
+    internal sealed class ConcreteSensorService : SensorServiceStrategy
     {
 
         internal ConcreteSensorService()
