@@ -58,15 +58,15 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
             get { return Strategy.IsDataValid; }
         }
 
-        public override TimeSpan TimeBetweenUpdates
+        public override TimeSpan ReportInterval
         {
-            get { return Strategy.TimeBetweenUpdates; }
-            set { Strategy.TimeBetweenUpdates = value; }
+            get { return Strategy.ReportInterval; }
+            set { Strategy.ReportInterval = value; }
         }
 
-        public override CompassReading CurrentValue
+        public override CompassReading CurrentReading
         {
-            get { return Strategy.CurrentValue; }
+            get { return Strategy.CurrentReading; }
         }
 
         /// <summary>
@@ -75,13 +75,13 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
         public Compass()
         {
             _strategy = DevicesFactory.Current.CreateCompassStrategy();
-            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
+            _strategy.ReadingChanged += _strategy_CurrentReadingChanged;
             _strategy.Calibrate += _strategy_Calibrate;
         }
 
-        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
+        private void _strategy_CurrentReadingChanged(object sender, SensorReadingEventArgs<CompassReading> eventArgs)
         {
-            OnCurrentValueChanged(eventArgs);
+            OnReadingChanged(eventArgs);
         }
 
         private void _strategy_Calibrate(object sender, CalibrationEventArgs eventArgs)

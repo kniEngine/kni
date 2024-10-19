@@ -24,17 +24,17 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             set { base.IsDataValid = value; }
         }
 
-        public override TimeSpan TimeBetweenUpdates
+        public override TimeSpan ReportInterval
         {
-            get { return base.TimeBetweenUpdates; }
+            get { return base.ReportInterval; }
             set
             {
-                base.TimeBetweenUpdates = value;
+                base.ReportInterval = value;
                 _waccelerometer.ReportInterval = (uint)value.TotalMilliseconds;
             }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override AccelerometerReading CurrentReading
         {
             get
             {
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                 base.IsDataValid = true;
                 return reading;
             }
-            set { base.CurrentValue = value; }
+            set { base.CurrentReading = value; }
         }
 
         public ConcreteAccelerometer()
@@ -106,10 +106,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                );
             base.IsDataValid = true;
 
-            base.CurrentValue = reading;
+            base.CurrentReading = reading;
 
             var eventArgs = new SensorReadingEventArgs<AccelerometerReading>(reading);
-            base.OnCurrentValueChanged(eventArgs);
+            base.OnReadingChanged(eventArgs);
         }
 
         protected override void Dispose(bool disposing)

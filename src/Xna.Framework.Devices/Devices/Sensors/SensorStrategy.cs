@@ -11,10 +11,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
     {
         private SensorState _state;
         private bool _isDataValid;
-        private TimeSpan _timeBetweenUpdates = TimeSpan.FromMilliseconds(2);
-        private TSensorReading _currentValue;
+        private TimeSpan _reportInterval = TimeSpan.FromMilliseconds(2);
+        private TSensorReading _currentReading;
 
-        public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
+        public event EventHandler<SensorReadingEventArgs<TSensorReading>> ReadingChanged;
 
 
         public virtual SensorState State
@@ -29,16 +29,16 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             set { _isDataValid = value; }
         }
 
-        public virtual TimeSpan TimeBetweenUpdates
+        public virtual TimeSpan ReportInterval
         {
-            get { return _timeBetweenUpdates; }
-            set { _timeBetweenUpdates = value; }
+            get { return _reportInterval; }
+            set { _reportInterval = value; }
         }
 
-        public virtual TSensorReading CurrentValue
+        public virtual TSensorReading CurrentReading
         {
-            get { return _currentValue; }
-            set { _currentValue = value; }
+            get { return _currentReading; }
+            set { _currentReading = value; }
         }
 
         public SensorStrategy()
@@ -56,9 +56,9 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
         }
 
         internal
-        protected virtual void OnCurrentValueChanged(SensorReadingEventArgs<TSensorReading> eventArgs)
+        protected virtual void OnReadingChanged(SensorReadingEventArgs<TSensorReading> eventArgs)
         {
-            var handler = CurrentValueChanged;
+            var handler = ReadingChanged;
             if (handler != null)
                 handler(this, eventArgs);
         }

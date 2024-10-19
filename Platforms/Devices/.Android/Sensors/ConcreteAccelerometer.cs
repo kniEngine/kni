@@ -47,23 +47,23 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             set { base.IsDataValid = value; }
         }
 
-        public override TimeSpan TimeBetweenUpdates
+        public override TimeSpan ReportInterval
         {
-            get { return base.TimeBetweenUpdates; }
+            get { return base.ReportInterval; }
             set
             {
-                if (base.TimeBetweenUpdates != value)
+                if (base.ReportInterval != value)
                 {
-                    base.TimeBetweenUpdates = value;
-                    // TODO: implement TimeBetweenUpdates for Android
+                    base.ReportInterval = value;
+                    // TODO: implement ReportInterval for Android
                 }
             }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override AccelerometerReading CurrentReading
         {
-            get { return base.CurrentValue; }
-            set { base.CurrentValue = value; }
+            get { return base.CurrentReading; }
+            set { base.CurrentReading = value; }
         }
 
 
@@ -154,10 +154,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                             );
                         }
 
-                        base.CurrentValue = reading;
+                        base.CurrentReading = reading;
 
-                        _eventArgs.SensorReading = base.CurrentValue;
-                        base.OnCurrentValueChanged(_eventArgs);
+                        _eventArgs.SensorReading = base.CurrentReading;
+                        base.OnReadingChanged(_eventArgs);
                     }
                     finally
                     {
