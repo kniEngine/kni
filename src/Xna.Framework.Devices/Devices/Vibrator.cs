@@ -6,11 +6,6 @@ using Microsoft.Xna.Platform.Devices;
 
 namespace Microsoft.Xna.Platform.Devices
 {
-    public interface IVibrator
-    {
-        void Vibrate(TimeSpan duration);
-    }
-
     public interface IPlatformVibrator
     {
         T GetStrategy<T>() where T : VibratorStrategy;
@@ -19,15 +14,14 @@ namespace Microsoft.Xna.Platform.Devices
 
 namespace Microsoft.Xna.Framework.Devices
 {
-    public sealed class Vibrator : IVibrator
-        , IPlatformVibrator
+    public sealed class Vibrator : IPlatformVibrator
     {
         private static Vibrator _current;
 
         /// <summary>
         /// Returns the current Vibrator instance.
         /// </summary> 
-        public static IVibrator Current
+        public static Vibrator Current
         {
             get
             {
@@ -56,18 +50,13 @@ namespace Microsoft.Xna.Framework.Devices
             _strategy = DevicesFactory.Current.CreateVibratorStrategy();
         }
 
-
-        #region IVibrator
-
-        void IVibrator.Vibrate(TimeSpan duration)
+        void Vibrate(TimeSpan duration)
         {
             lock (typeof(Vibrator))
             {
                 _strategy.Vibrate(duration);
             }
         }
-
-        #endregion IVibrator
 
     }
 }
