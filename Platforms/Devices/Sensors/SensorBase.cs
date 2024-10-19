@@ -7,7 +7,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Microsoft.Devices.Sensors
+namespace Microsoft.Xna.Framework.Devices.Sensors
 {
     public abstract class SensorBase<TSensorReading> : IDisposable
         where TSensorReading : ISensorReading

@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Microsoft.Devices.Sensors
+namespace Microsoft.Xna.Framework.Devices.Sensors
 {
     public interface ISensorReading
     {

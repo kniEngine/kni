@@ -5,7 +5,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Microsoft.Devices.Sensors
+namespace Microsoft.Xna.Framework.Devices.Sensors
 {
     public struct CompassReading : ISensorReading
     {

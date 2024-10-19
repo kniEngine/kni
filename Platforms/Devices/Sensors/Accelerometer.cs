@@ -7,9 +7,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Platform.Devices.Sensors;
+using Microsoft.Xna.Platform.Devices.Sensors;
 
-namespace Microsoft.Devices.Sensors
+namespace Microsoft.Xna.Framework.Devices.Sensors
 {
     /// <summary>
     /// Provides access to the device's accelerometer sensor.
