@@ -3,7 +3,7 @@
 using System;
 using Android.Hardware;
 
-namespace Microsoft.Devices.Sensors
+namespace Microsoft.Xna.Platform.Devices.Sensors
 {
     internal class SensorListener : Java.Lang.Object, ISensorEventListener
     {

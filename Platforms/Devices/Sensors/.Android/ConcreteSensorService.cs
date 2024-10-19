@@ -6,10 +6,10 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Devices.Sensors;
 using Android.Hardware;
-using Microsoft.Devices.Sensors;
 
-namespace Microsoft.Platform.Devices.Sensors
+namespace Microsoft.Xna.Platform.Devices.Sensors
 {
     internal class ConcreteSensorService : SensorServiceStrategy
     {
