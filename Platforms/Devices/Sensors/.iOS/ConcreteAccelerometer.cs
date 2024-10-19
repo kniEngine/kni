@@ -99,8 +99,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             base.IsDataValid = (error == null);
             if (base.IsDataValid)
             {
-                reading.Acceleration = new Vector3((float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z);
-                reading.Timestamp = DateTime.UtcNow;
+                reading = base.CreateAccelerometerReading(
+                    acceleration: new Vector3((float)data.Acceleration.X, (float)data.Acceleration.Y, (float)data.Acceleration.Z),
+                    timestamp: DateTime.UtcNow
+                );
 
                 base.CurrentValue = reading;
 

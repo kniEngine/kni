@@ -148,8 +148,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                         if (base.IsDataValid)
                         {
                             const float gravity = SensorManager.GravityEarth;
-                            reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
-                            reading.Timestamp = DateTime.UtcNow;
+                            reading = base.CreateAccelerometerReading(
+                                acceleration: new Vector3(values[0], values[1], values[2]) / gravity,
+                                timestamp: DateTime.UtcNow
+                            );
                         }
 
                         base.CurrentValue = reading;

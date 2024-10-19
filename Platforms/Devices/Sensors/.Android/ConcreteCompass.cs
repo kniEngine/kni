@@ -173,13 +173,13 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                     // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
                     double trueHeading = magneticHeading; // Not implemented, fallback to magneticHeading.
 
-                    CompassReading reading = new CompassReading();
-                    reading.HeadingAccuracy = headingAccuracy;
-                    reading.MagneticHeading = magneticHeading;
-                    Vector3 magnetometer = magnetometerReading;
-                    reading.MagnetometerReading = magnetometer;
-                    reading.Timestamp = DateTime.UtcNow;
-                    reading.TrueHeading = trueHeading;
+                    CompassReading reading = base.CreateCompassReading(
+                        headingAccuracy: headingAccuracy,
+                        magneticHeading: magneticHeading,
+                        magnetometerReading: magnetometerReading,
+                        timestamp: DateTime.UtcNow,
+                        trueHeading: trueHeading
+                        );
 
                     base.CurrentValue = reading;
 

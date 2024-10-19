@@ -115,12 +115,13 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                 Vector3 magnetometerReading = new Vector3((float)data.MagneticField.Field.Y, (float)-data.MagneticField.Field.X, (float)data.MagneticField.Field.Z);
                 double trueHeading = magneticHeading; // Not implemented, fallback to magneticHeading.
 
-                CompassReading reading = new CompassReading();
-                reading.HeadingAccuracy = headingAccuracy;
-                reading.MagneticHeading = magneticHeading;
-                reading.MagnetometerReading = magnetometerReading;
-                reading.Timestamp = DateTime.UtcNow;
-                reading.TrueHeading = trueHeading;
+                CompassReading reading = base.CreateCompassReading(
+                    headingAccuracy: headingAccuracy,
+                    magneticHeading: magneticHeading,
+                    magnetometerReading: magnetometerReading,
+                    timestamp: DateTime.UtcNow,
+                    trueHeading: trueHeading
+                );
 
                 // Send calibrate event if needed
                 if (data.MagneticField.Accuracy == CMMagneticFieldCalibrationAccuracy.Uncalibrated)
