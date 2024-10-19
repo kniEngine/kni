@@ -57,10 +57,10 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
             get { return Strategy.IsDataValid; }
         }
 
-        public override TimeSpan TimeBetweenUpdates
+        public override TimeSpan ReportInterval
         {
-            get { return Strategy.TimeBetweenUpdates; }
-            set { Strategy.TimeBetweenUpdates = value; }
+            get { return Strategy.ReportInterval; }
+            set { Strategy.ReportInterval = value; }
         }
 
         public override AccelerometerReading CurrentReading

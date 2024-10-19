@@ -22,10 +22,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             set { base.IsDataValid = value; }
         }
 
-        public override TimeSpan TimeBetweenUpdates
+        public override TimeSpan ReportInterval
         {
-            get { return base.TimeBetweenUpdates; }
-            set { base.TimeBetweenUpdates = value; }
+            get { return base.ReportInterval; }
+            set { base.ReportInterval = value; }
         }
 
         public override CompassReading CurrentReading

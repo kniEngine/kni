@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
 
         public abstract TSensorReading CurrentReading { get; }
         public abstract bool IsDataValid { get; }
-        public abstract TimeSpan TimeBetweenUpdates { get; set; }
+        public abstract TimeSpan ReportInterval { get; set; }
         protected abstract bool IsDisposed { get; }
 
         public SensorBase()

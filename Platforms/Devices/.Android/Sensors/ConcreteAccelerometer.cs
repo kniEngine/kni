@@ -47,15 +47,15 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             set { base.IsDataValid = value; }
         }
 
-        public override TimeSpan TimeBetweenUpdates
+        public override TimeSpan ReportInterval
         {
-            get { return base.TimeBetweenUpdates; }
+            get { return base.ReportInterval; }
             set
             {
-                if (base.TimeBetweenUpdates != value)
+                if (base.ReportInterval != value)
                 {
-                    base.TimeBetweenUpdates = value;
-                    // TODO: implement TimeBetweenUpdates for Android
+                    base.ReportInterval = value;
+                    // TODO: implement ReportInterval for Android
                 }
             }
         }
