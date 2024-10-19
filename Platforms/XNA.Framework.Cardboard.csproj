@@ -152,10 +152,10 @@
 
     <Compile Include="Devices\.Android\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.Android\ConcreteVibrator.cs" />
-    <Compile Include="Devices\Sensors\.Android\ConcreteAccelerometer.cs" />
-    <Compile Include="Devices\Sensors\.Android\ConcreteCompass.cs" />
-    <Compile Include="Devices\Sensors\.Android\ConcreteSensorService.cs" />
-    <Compile Include="Devices\Sensors\.Android\SensorListener.cs" />
+    <Compile Include="Devices\.Android\Sensors\ConcreteAccelerometer.cs" />
+    <Compile Include="Devices\.Android\Sensors\ConcreteCompass.cs" />
+    <Compile Include="Devices\.Android\Sensors\ConcreteSensorService.cs" />
+    <Compile Include="Devices\.Android\Sensors\SensorListener.cs" />
 
     <Compile Include="Game\.Android\TouchEventListener.cs" />
     <Compile Include="Game\.Cardboard\AndroidCompatibility.cs" />
@@ -194,5 +194,4 @@
 
   <Import Project="OpenGL.targets" />
   <Import Project="OpenAL.targets" />
-  <Import Project="Microsoft.Devices.Sensors.targets" />
 </Project>

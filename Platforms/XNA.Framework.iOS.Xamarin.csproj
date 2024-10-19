@@ -157,23 +157,6 @@
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
-
-    <Compile Include="Devices\Sensors\Accelerometer.cs" />
-    <Compile Include="Devices\Sensors\AccelerometerFailedException.cs" />
-    <Compile Include="Devices\Sensors\AccelerometerReading.cs" />
-    <Compile Include="Devices\Sensors\AccelerometerStrategy.cs" />
-    <Compile Include="Devices\Sensors\CalibrationEventArgs.cs" />
-    <Compile Include="Devices\Sensors\Compass.cs" />
-    <Compile Include="Devices\Sensors\CompassReading.cs" />
-    <Compile Include="Devices\Sensors\CompassStrategy.cs" />
-    <Compile Include="Devices\Sensors\ISensorReading.cs" />
-    <Compile Include="Devices\Sensors\SensorBase.cs" />
-    <Compile Include="Devices\Sensors\SensorFailedException.cs" />
-    <Compile Include="Devices\Sensors\SensorReadingEventArgs.cs" />
-    <Compile Include="Devices\Sensors\SensorService.cs" />
-    <Compile Include="Devices\Sensors\SensorServiceStrategy.cs" />
-    <Compile Include="Devices\Sensors\SensorState.cs" />
-    <Compile Include="Devices\Sensors\SensorStrategy.cs" />
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
@@ -185,9 +168,9 @@
     <Compile Include="Utilities\.iOS\FuncLoader.cs" />
     <Compile Include="Devices\.iOS\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.iOS\ConcreteVibrator.cs" />
-    <Compile Include="Devices\Sensors\.iOS\ConcreteAccelerometer.cs" />
-    <Compile Include="Devices\Sensors\.iOS\ConcreteCompass.cs" />
-    <Compile Include="Devices\Sensors\.iOS\ConcreteSensorService.cs" />
+    <Compile Include="Devices\.iOS\Sensors\ConcreteAccelerometer.cs" />
+    <Compile Include="Devices\.iOS\Sensors\ConcreteCompass.cs" />
+    <Compile Include="Devices\.iOS\Sensors\ConcreteSensorService.cs" />
     <Compile Include="Game\.iOS\ConcreteGame.cs" />
     <Compile Include="Game\.iOS\ConcreteGameFactory.cs" />
     <Compile Include="Game\.iOS\ConcreteGraphicsDeviceManager.cs" />
