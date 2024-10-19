@@ -13,7 +13,7 @@ using Android.Hardware;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    internal class ConcreteAccelerometer : AccelerometerStrategy
+    internal sealed class ConcreteAccelerometer : AccelerometerStrategy
     {
         internal static SensorManager _sensorManager;
         internal static Sensor _sensorAccelerometer;
@@ -89,13 +89,13 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
         public override void Start()
         {
             if (this.State == SensorState.Ready)
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
+                throw base.CreateAccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
 
             if (_sensorManager == null)
                 ConcreteAccelerometer.Initialize();
 
             if ((_sensorManager == null || _sensorAccelerometer == null))
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
+                throw base.CreateAccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
 
             _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
             // So the system can pause and resume the sensor when the activity is paused
@@ -148,9 +148,12 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                         if (base.IsDataValid)
                         {
                             const float gravity = SensorManager.GravityEarth;
-                            reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
-                            reading.Timestamp = DateTime.UtcNow;
+                            reading = base.CreateAccelerometerReading(
+                                acceleration: new Vector3(values[0], values[1], values[2]) / gravity,
+                                timestamp: DateTime.UtcNow
+                            );
                         }
+
                         base.CurrentValue = reading;
 
                         _eventArgs.SensorReading = base.CurrentValue;

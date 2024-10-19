@@ -12,7 +12,7 @@ using Android.Hardware;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    internal class ConcreteCompass : CompassStrategy
+    internal sealed class ConcreteCompass : CompassStrategy
     {
         internal static SensorManager _sensorManager;
         internal static Sensor _sensorMagneticField;
@@ -98,13 +98,13 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
         public override void Start()
         {
             if (this.State == SensorState.Ready)
-                throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
+                throw base.CreateSensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
 
             if (_sensorManager == null)
                 ConcreteCompass.Initialize();
 
             if ((_sensorManager == null || _sensorMagneticField == null || _sensorAccelerometer == null))
-                throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
+                throw base.CreateSensorFailedException("Failed to start compass data acquisition. No default sensor found.");
 
             _sensorManager.RegisterListener(_sensorListener, _sensorMagneticField, SensorDelay.Game);
             _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
@@ -165,14 +165,22 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                 if (base.IsDataValid)
                 {
                     SensorManager.GetOrientation(_matrixR, _matrixValues);
-                    CompassReading reading = new CompassReading();
-                    reading.MagneticHeading = _matrixValues[0];
-                    Vector3 magnetometer = new Vector3(_valuesMagenticField[0], _valuesMagenticField[1], _valuesMagenticField[2]);
-                    reading.MagnetometerReading = magnetometer;
+
+                    double headingAccuracy = 0; // Not implemented.
+                    double magneticHeading = _matrixValues[0];
+                    Vector3 magnetometerReading = new Vector3(_valuesMagenticField[0], _valuesMagenticField[1], _valuesMagenticField[2]);
                     // We need the magnetic declination from true north to calculate the true heading from the magnetic heading.
                     // On Android, this is available through Android.Hardware.GeomagneticField, but this requires your geo position.
-                    reading.TrueHeading = reading.MagneticHeading;
-                    reading.Timestamp = DateTime.UtcNow;
+                    double trueHeading = magneticHeading; // Not implemented, fallback to magneticHeading.
+
+                    CompassReading reading = base.CreateCompassReading(
+                        headingAccuracy: headingAccuracy,
+                        magneticHeading: magneticHeading,
+                        magnetometerReading: magnetometerReading,
+                        timestamp: DateTime.UtcNow,
+                        trueHeading: trueHeading
+                        );
+
                     base.CurrentValue = reading;
 
                     _eventArgs.SensorReading = base.CurrentValue;
