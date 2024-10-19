@@ -181,8 +181,13 @@
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\.SDL2\FuncLoader.cs" />
+
     <Compile Include="Devices\.SDL2\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.SDL2\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.SDL2\Sensors\ConcreteAccelerometer.cs" />
+    <Compile Include="Devices\.SDL2\Sensors\ConcreteCompass.cs" />
+    <Compile Include="Devices\.SDL2\Sensors\ConcreteSensorService.cs" />
+
     <Compile Include="Game\.SDL2\ConcreteGame.cs" />
     <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />
     <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />

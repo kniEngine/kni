@@ -110,8 +110,13 @@
   <ItemGroup>
     <Compile Include="Content\.SDL2\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.SDL2\ConcreteTitleContainerFactory.cs" />
+
     <Compile Include="Devices\.SDL2\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.SDL2\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.SDL2\Sensors\ConcreteAccelerometer.cs" />
+    <Compile Include="Devices\.SDL2\Sensors\ConcreteCompass.cs" />
+    <Compile Include="Devices\.SDL2\Sensors\ConcreteSensorService.cs" />
+
     <Compile Include="Game\.SDL2\SDL2.cs" />
     <Compile Include="Game\.SDL2\ConcreteGame.cs" />
     <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />

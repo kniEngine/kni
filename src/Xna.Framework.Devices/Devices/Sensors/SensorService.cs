@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                         }
                         catch (Exception ex)
                         {
-                            throw new ("SensorService has failed to initialize.", ex);
+                            throw new Exception("SensorService has failed to initialize.", ex);
                         }
                     }
                     return _current;
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
 
         private SensorService()
         {
-            _strategy = new ConcreteSensorService();
+            _strategy = DevicesFactory.Current.CreateSensorServiceStrategy();
         }
 
         public static void Suspend()

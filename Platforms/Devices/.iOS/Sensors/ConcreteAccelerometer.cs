@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
     internal sealed class ConcreteAccelerometer : AccelerometerStrategy
     {
         static int _instanceCount;
-        private static SensorState _state = (SensorService.Current.IsAccelerometerSupported)
+        private static SensorState _state = (((IPlatformSensorService)SensorService.Current).Strategy.PlatformIsAccelerometerSupported())
                                           ? SensorState.Initializing
                                           : SensorState.NotSupported;
 
@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
 
         public ConcreteAccelerometer()
         {
-            if (!SensorService.Current.IsAccelerometerSupported)
+            if (!((IPlatformSensorService)SensorService.Current).Strategy.PlatformIsAccelerometerSupported())
                 throw base.CreateAccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
 
             _instanceCount++;

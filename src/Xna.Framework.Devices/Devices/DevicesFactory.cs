@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Devices;
+using Microsoft.Xna.Platform.Devices.Sensors;
 
 namespace Microsoft.Xna.Platform.Devices
 {
@@ -61,6 +62,9 @@ namespace Microsoft.Xna.Platform.Devices
 
         public abstract VibratorStrategy CreateVibratorStrategy();
 
+        public abstract SensorServiceStrategy CreateSensorServiceStrategy();
+        public abstract AccelerometerStrategy CreateAccelerometerStrategy();
+        public abstract CompassStrategy CreateCompassStrategy();
     }
 
 }

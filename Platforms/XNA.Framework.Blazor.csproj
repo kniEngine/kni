@@ -91,6 +91,9 @@
   <ItemGroup>
     <Compile Include="Devices\.Blazor\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.Blazor\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.Blazor\Sensors\ConcreteAccelerometer.cs" />
+    <Compile Include="Devices\.Blazor\Sensors\ConcreteCompass.cs" />
+    <Compile Include="Devices\.Blazor\Sensors\ConcreteSensorService.cs" />
 	  
     <Compile Include="Game\.Blazor\ConcreteGame.cs" />
     <Compile Include="Game\.Blazor\ConcreteGameFactory.cs" />

@@ -86,6 +86,10 @@
 
     <Compile Include="Devices\.Ref\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.Ref\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.Ref\Sensors\ConcreteAccelerometer.cs" />
+    <Compile Include="Devices\.Ref\Sensors\ConcreteCompass.cs" />
+    <Compile Include="Devices\.Ref\Sensors\ConcreteSensorService.cs" />
+
     <Compile Include="Game\.Ref\ConcreteGame.cs" />
     <Compile Include="Game\.Ref\ConcreteGameFactory.cs" />
     <Compile Include="Game\.Ref\ConcreteGraphicsDeviceManager.cs" />
