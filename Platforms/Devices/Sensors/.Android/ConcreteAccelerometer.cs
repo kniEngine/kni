@@ -151,6 +151,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                             reading.Acceleration = new Vector3(values[0], values[1], values[2]) / gravity;
                             reading.Timestamp = DateTime.UtcNow;
                         }
+
                         base.CurrentValue = reading;
 
                         _eventArgs.SensorReading = base.CurrentValue;

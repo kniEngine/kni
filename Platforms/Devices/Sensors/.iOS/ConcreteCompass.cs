@@ -94,25 +94,33 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
 
         private void ReadingChangedHandler(CMDeviceMotion data, NSError error)
         {
-            CompassReading reading = new CompassReading();
             base.IsDataValid = (error == null);
             if (base.IsDataValid)
             {
-                reading.MagnetometerReading = new Vector3((float)data.MagneticField.Field.Y, (float)-data.MagneticField.Field.X, (float)data.MagneticField.Field.Z);
-                reading.TrueHeading = Math.Atan2(reading.MagnetometerReading.Y, reading.MagnetometerReading.X) / Math.PI * 180;
-                reading.MagneticHeading = reading.TrueHeading;
+                double headingAccuracy = 0;
                 switch (data.MagneticField.Accuracy)
                 {
                     case CMMagneticFieldCalibrationAccuracy.High:
-                        reading.HeadingAccuracy = 5d;
+                        headingAccuracy = 5d;
                         break;
                     case CMMagneticFieldCalibrationAccuracy.Medium:
-                        reading.HeadingAccuracy = 30d;
+                        headingAccuracy = 30d;
                         break;
                     case CMMagneticFieldCalibrationAccuracy.Low:
-                        reading.HeadingAccuracy = 45d;
+                        headingAccuracy = 45d;
                         break;
                 }
+
+                double magneticHeading = Math.Atan2(-data.MagneticField.Field.X, data.MagneticField.Field.Y) / Math.PI * 180;
+                Vector3 magnetometerReading = new Vector3((float)data.MagneticField.Field.Y, (float)-data.MagneticField.Field.X, (float)data.MagneticField.Field.Z);
+                double trueHeading = magneticHeading; // Not implemented, fallback to magneticHeading.
+
+                CompassReading reading = new CompassReading();
+                reading.HeadingAccuracy = headingAccuracy;
+                reading.MagneticHeading = magneticHeading;
+                reading.MagnetometerReading = magnetometerReading;
+                reading.Timestamp = DateTime.UtcNow;
+                reading.TrueHeading = trueHeading;
 
                 // Send calibrate event if needed
                 if (data.MagneticField.Accuracy == CMMagneticFieldCalibrationAccuracy.Uncalibrated)
@@ -126,7 +134,6 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                 else if (this._calibrate == true)
                     this._calibrate = false;
 
-                reading.Timestamp = DateTime.UtcNow;
                 base.CurrentValue = reading;
 
                 _eventArgs.SensorReading = base.CurrentValue;
