@@ -64,7 +64,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
         public ConcreteCompass()
         {
             if (!SensorService.Current.IsCompassSupported)
-                throw new SensorFailedException("Failed to start compass data acquisition. No default sensor found.");
+                throw base.CreateSensorFailedException("Failed to start compass data acquisition. No default sensor found.");
 
             _instanceCount++;
 
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
         public override void Start()
         {
             if (this.State == SensorState.Ready)
-                throw new SensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
+                throw base.CreateSensorFailedException("Failed to start compass data acquisition. Data acquisition already started.");
 
             // For true north use CMAttitudeReferenceFrame.XTrueNorthZVertical, but be aware that it requires location service
             ConcreteAccelerometer._motionManager.StartDeviceMotionUpdates(CMAttitudeReferenceFrame.XMagneticNorthZVertical, NSOperationQueue.CurrentQueue, MagnetometerHandler);

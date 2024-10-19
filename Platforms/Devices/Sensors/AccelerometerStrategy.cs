@@ -14,5 +14,9 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
         {
         }
 
+        protected AccelerometerFailedException CreateAccelerometerFailedException(string message, int errorId)
+        {            
+            return new AccelerometerFailedException(message, errorId);
+        }
     }
 }

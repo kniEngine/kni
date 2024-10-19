@@ -63,6 +63,11 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                 handler(this, eventArgs);
         }
 
+        protected SensorFailedException CreateSensorFailedException(string message)
+        {
+            throw new SensorFailedException(message);
+        }
+
         #region IDisposable Members
 
         ~SensorStrategy()

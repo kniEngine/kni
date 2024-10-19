@@ -89,13 +89,13 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
         public override void Start()
         {
             if (this.State == SensorState.Ready)
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
+                throw base.CreateAccelerometerFailedException("Failed to start accelerometer data acquisition. Data acquisition already started.", -1);
 
             if (_sensorManager == null)
                 ConcreteAccelerometer.Initialize();
 
             if ((_sensorManager == null || _sensorAccelerometer == null))
-                throw new AccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
+                throw base.CreateAccelerometerFailedException("Failed to start accelerometer data acquisition. No default sensor found.", -1);
 
             _sensorManager.RegisterListener(_sensorListener, _sensorAccelerometer, SensorDelay.Game);
             // So the system can pause and resume the sensor when the activity is paused
