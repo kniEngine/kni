@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Devices
             _strategy = DevicesFactory.Current.CreateVibratorStrategy();
         }
 
-        void Vibrate(TimeSpan duration)
+        public void Vibrate(TimeSpan duration)
         {
             lock (typeof(Vibrator))
             {
