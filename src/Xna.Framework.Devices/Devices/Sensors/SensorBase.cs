@@ -12,9 +12,9 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
     public abstract class SensorBase<TSensorReading> : IDisposable
         where TSensorReading : ISensorReading
     {
-        public event EventHandler<SensorReadingEventArgs<TSensorReading>> CurrentValueChanged;
+        public event EventHandler<SensorReadingEventArgs<TSensorReading>> ReadingChanged;
 
-        public abstract TSensorReading CurrentValue { get; }
+        public abstract TSensorReading CurrentReading { get; }
         public abstract bool IsDataValid { get; }
         public abstract TimeSpan TimeBetweenUpdates { get; set; }
         protected abstract bool IsDisposed { get; }
@@ -26,9 +26,9 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
         public abstract void Start();
         public abstract void Stop();
 
-        protected virtual void OnCurrentValueChanged(SensorReadingEventArgs<TSensorReading> eventArgs)
+        protected virtual void OnReadingChanged(SensorReadingEventArgs<TSensorReading> eventArgs)
         {
-            var handler = CurrentValueChanged;
+            var handler = ReadingChanged;
             if (handler != null)
                 handler(this, eventArgs);
         }

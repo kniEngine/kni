@@ -63,9 +63,9 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
             set { Strategy.TimeBetweenUpdates = value; }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override AccelerometerReading CurrentReading
         {
-            get { return Strategy.CurrentValue; }
+            get { return Strategy.CurrentReading; }
         }
 
         /// <summary>
@@ -74,12 +74,12 @@ namespace Microsoft.Xna.Framework.Devices.Sensors
         public Accelerometer()
         {
             _strategy = DevicesFactory.Current.CreateAccelerometerStrategy();
-            _strategy.CurrentValueChanged += _strategy_CurrentValueChanged;
+            _strategy.ReadingChanged += _strategy_ReadingChanged;
         }
 
-        private void _strategy_CurrentValueChanged(object sender, SensorReadingEventArgs<AccelerometerReading> eventArgs)
+        private void _strategy_ReadingChanged(object sender, SensorReadingEventArgs<AccelerometerReading> eventArgs)
         {
-            OnCurrentValueChanged(eventArgs);
+            OnReadingChanged(eventArgs);
         }
 
         /// <summary>

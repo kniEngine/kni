@@ -56,10 +56,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override AccelerometerReading CurrentReading
         {
-            get { return base.CurrentValue; }
-            set { base.CurrentValue = value; }
+            get { return base.CurrentReading; }
+            set { base.CurrentReading = value; }
         }
 
 
@@ -104,10 +104,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                     timestamp: DateTime.UtcNow
                 );
 
-                base.CurrentValue = reading;
+                base.CurrentReading = reading;
 
-                _eventArgs.SensorReading = base.CurrentValue;
-                base.OnCurrentValueChanged(_eventArgs);
+                _eventArgs.SensorReading = base.CurrentReading;
+                base.OnReadingChanged(_eventArgs);
             }
         }
 

@@ -28,10 +28,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             set { base.TimeBetweenUpdates = value; }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override AccelerometerReading CurrentReading
         {
-            get { return base.CurrentValue; }
-            set { base.CurrentValue = value; }
+            get { return base.CurrentReading; }
+            set { base.CurrentReading = value; }
         }
 
 

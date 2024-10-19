@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             }
         }
 
-        public override AccelerometerReading CurrentValue
+        public override AccelerometerReading CurrentReading
         {
             get
             {
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                 base.IsDataValid = true;
                 return reading;
             }
-            set { base.CurrentValue = value; }
+            set { base.CurrentReading = value; }
         }
 
         public ConcreteAccelerometer()
@@ -106,10 +106,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                );
             base.IsDataValid = true;
 
-            base.CurrentValue = reading;
+            base.CurrentReading = reading;
 
             var eventArgs = new SensorReadingEventArgs<AccelerometerReading>(reading);
-            base.OnCurrentValueChanged(eventArgs);
+            base.OnReadingChanged(eventArgs);
         }
 
         protected override void Dispose(bool disposing)

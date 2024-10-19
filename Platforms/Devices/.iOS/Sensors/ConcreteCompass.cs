@@ -54,10 +54,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
             }
         }
 
-        public override CompassReading CurrentValue
+        public override CompassReading CurrentReading
         {
-            get { return base.CurrentValue; }
-            set { base.CurrentValue = value; }
+            get { return base.CurrentReading; }
+            set { base.CurrentReading = value; }
         }
 
 
@@ -135,10 +135,10 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
                 else if (this._calibrate == true)
                     this._calibrate = false;
 
-                base.CurrentValue = reading;
+                base.CurrentReading = reading;
 
-                _eventArgs.SensorReading = base.CurrentValue;
-                base.OnCurrentValueChanged(_eventArgs);
+                _eventArgs.SensorReading = base.CurrentReading;
+                base.OnReadingChanged(_eventArgs);
             }
         }
 
