@@ -89,6 +89,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Audio\Blazor\AudioLoader.cs" />
+    <Compile Include="Audio\Blazor\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\Blazor\ConcreteAudioService.cs" />
+    <Compile Include="Audio\Blazor\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\Blazor\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\Blazor\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\Blazor\ConcreteSoundEffectInstance.cs" />
+  </ItemGroup>
+	
+  <ItemGroup>
     <Compile Include="Devices\.Blazor\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.Blazor\ConcreteVibrator.cs" />
     <Compile Include="Devices\.Blazor\Sensors\ConcreteAccelerometer.cs" />
@@ -138,5 +148,4 @@
   </ItemGroup>
 
   <Import Project="Blazor.targets" />
-  <Import Project="BlazorAudio.targets" />
 </Project>
