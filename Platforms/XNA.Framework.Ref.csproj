@@ -83,7 +83,18 @@
 
   <ItemGroup>
     <None Remove="P:\MonoGame\Images\Icon.png" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="Audio\Ref\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\Ref\ConcreteAudioService.cs" />
+    <Compile Include="Audio\Ref\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\Ref\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\Ref\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\Ref\ConcreteSoundEffectInstance.cs" />
+  </ItemGroup>
+	
+  <ItemGroup>
     <Compile Include="Devices\.Ref\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.Ref\ConcreteVibrator.cs" />
     <Compile Include="Devices\.Ref\Sensors\ConcreteAccelerometer.cs" />
@@ -127,5 +138,4 @@
   </ItemGroup>
 
   <Import Project="RefGraphics.targets" />
-  <Import Project="RefAudio.targets" />
 </Project>
