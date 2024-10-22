@@ -110,16 +110,19 @@
     <Compile Include="Graphics\.DX11\Shader\ConcreteShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteVertexShader.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcretePixelShader.cs" />
+	  
     <Compile Include="Graphics\.DX11\States\ConcreteBlendState.cs" />
     <Compile Include="Graphics\.DX11\States\ConcreteDepthStencilState.cs" />
     <Compile Include="Graphics\.DX11\States\ConcreteRasterizerState.cs" />
     <Compile Include="Graphics\.DX11\States\ConcreteSamplerState.cs" />
+	  
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteDynamicVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.DX11\Vertices\InputLayoutCache.cs" />
     <Compile Include="Graphics\.DX11\Vertices\VertexInputLayoutKey.cs" />
+	  
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdapter.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsAdaptersProvider.cs" />
     <Compile Include="Graphics\.DX11\ConcreteGraphicsCapabilities.cs" />
@@ -145,7 +148,9 @@
     <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
 
     <Compile Include="Graphics\SwapChainRenderTarget.DirectX.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
     <Compile Include="Input\.WindowsDX\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteGamePad.cs" />
     <Compile Include="Input\.WindowsDX\ConcreteGamePadDevice.cs" />
