@@ -18,7 +18,7 @@
     <ProjectGuid>{BF257928-8B5D-4371-BD03-C18DA71918C3}</ProjectGuid>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>ANDROID;CARDBOARD;GLES;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>ANDROID;CARDBOARD;OPENAL;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -111,6 +111,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\AudioLoader.cs" />
+    <Compile Include="Audio\OpenAL\OALSoundBuffer.cs" />
+    <Compile Include="Audio\OpenAL\OpenAL.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL.Android\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
@@ -193,5 +205,4 @@
   </ItemGroup>
 
   <Import Project="OpenGL.targets" />
-  <Import Project="OpenAL.targets" />
 </Project>

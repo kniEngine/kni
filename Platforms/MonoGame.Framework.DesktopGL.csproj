@@ -16,7 +16,7 @@
     <LangVersion>5</LangVersion>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>OPENGL;OPENAL;LINUX;DESKTOPGL;SUPPORTS_EFX;NETSTANDARD;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>OPENGL;LINUX;DESKTOPGL;OPENAL;SUPPORTS_EFX;NETSTANDARD;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -93,6 +93,18 @@
     <Compile Include="Utilities\CurrentPlatform.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\.SDL2\FuncLoader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\AudioLoader.cs" />
+    <Compile Include="Audio\OpenAL\OALSoundBuffer.cs" />
+    <Compile Include="Audio\OpenAL\OpenAL.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -206,5 +218,4 @@
   </ItemGroup>
 
   <Import Project="OpenGL.targets" />
-  <Import Project="OpenAL.targets" />
 </Project>

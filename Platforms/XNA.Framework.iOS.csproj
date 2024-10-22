@@ -20,7 +20,7 @@
     <ProjectGuid>{D93291EF-3419-412E-BC56-376BD6A02224}</ProjectGuid>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>IOS;GLES;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>IOS;OPENAL;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -95,6 +95,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\AudioLoader.cs" />
+    <Compile Include="Audio\OpenAL\OALSoundBuffer.cs" />
+    <Compile Include="Audio\OpenAL\OpenAL.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Devices\.iOS\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.iOS\ConcreteVibrator.cs" />
     <Compile Include="Devices\.iOS\Sensors\ConcreteAccelerometer.cs" />
@@ -147,5 +159,4 @@
   </ItemGroup>
 
   <Import Project="OpenGL.targets" />
-  <Import Project="OpenAL.targets" />
 </Project>

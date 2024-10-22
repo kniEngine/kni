@@ -19,7 +19,7 @@
     <ProjectGuid>{CF09A088-6F64-4FA3-8FF8-E5B39F8BB0E6}</ProjectGuid>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>ANDROID;GLES;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>ANDROID;OPENAL;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -91,6 +91,18 @@
     <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\.Android\FuncLoader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\AudioLoader.cs" />
+    <Compile Include="Audio\OpenAL\OALSoundBuffer.cs" />
+    <Compile Include="Audio\OpenAL\OpenAL.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -171,5 +183,4 @@
   </ItemGroup>
 
   <Import Project="OpenGL.targets" />
-  <Import Project="OpenAL.targets" />
 </Project>
