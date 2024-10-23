@@ -18,7 +18,7 @@
     <ProjectGuid>{BF257928-8B5D-4371-BD03-C18DA71918C3}</ProjectGuid>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <DefineConstants>ANDROID;CARDBOARD;GLES;STBSHARP_INTERNAL</DefineConstants>
+    <DefineConstants>ANDROID;CARDBOARD;OPENAL;OPENGL;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -111,6 +111,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteMicrophone.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffect.cs" />
+    <Compile Include="Audio\OpenAL\ConcreteSoundEffectInstance.cs" />
+    <Compile Include="Audio\OpenAL\AudioLoader.cs" />
+    <Compile Include="Audio\OpenAL\OALSoundBuffer.cs" />
+    <Compile Include="Audio\OpenAL\OpenAL.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Graphics\.GL.Android\Vertices\ConcreteIndexBuffer.cs" />
     <Compile Include="Graphics\.GL.Android\Vertices\ConcreteVertexBuffer.cs" />
     <Compile Include="Graphics\.GL.Android\ConcreteGraphicsAdapter.cs" />
@@ -168,7 +180,52 @@
     <Compile Include="Game\.Android\ISurfaceView.cs" />
     <Compile Include="Game\.Android\OrientationListener.cs" />
     <Compile Include="Game\.Android\ScreenReceiver.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="Graphics\.GL\Shader\ConcreteConstantBuffer.cs" />
+    <Compile Include="Graphics\.GL\Shader\ConcreteConstantBufferCollection.cs" />
+    <Compile Include="Graphics\.GL\Shader\ConcreteShader.cs" />
+    <Compile Include="Graphics\.GL\Shader\ConcreteVertexShader.cs" />
+    <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
+    <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
+
+	<Compile Include="Graphics\.GL\States\ConcreteBlendState.cs" />
+	<Compile Include="Graphics\.GL\States\ConcreteDepthStencilState.cs" />
+	<Compile Include="Graphics\.GL\States\ConcreteRasterizerState.cs" />
+	<Compile Include="Graphics\.GL\States\ConcreteSamplerState.cs" />
+
+    <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicVertexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteIndexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\ConcreteVertexBuffer.cs" />
+    <Compile Include="Graphics\.GL\Vertices\VertexDeclarationAttributeInfo.cs" />
+
+    <Compile Include="Graphics\.GL\ConcreteGraphicsCapabilities.cs" />
+    <Compile Include="Graphics\.GL\ConcreteGraphicsContext.cs" />
+    <Compile Include="Graphics\.GL\ConcreteGraphicsDebug.cs" />
+    <Compile Include="Graphics\.GL\ConcreteGraphicsDevice.cs" />
+    <Compile Include="Graphics\.GL\ConcreteGraphicsFactory.cs" />
+    <Compile Include="Graphics\.GL\ConcreteOcclusionQuery.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTarget2D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTarget3D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTargetCube.cs" />
+    <Compile Include="Graphics\.GL\ConcreteRenderTargetSwapChain.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture2D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture2D.Stream.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTexture3D.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTextureCube.cs" />
+    <Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
+    <Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
+    <Compile Include="Graphics\.GL\GLExtensions.cs" />
+    <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
+    <Compile Include="Graphics\.GL\OpenGL.cs" />
+
+    <Compile Include="Graphics\RenderTargetSwapChain.OpenGL.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
   </ItemGroup>
@@ -192,6 +249,25 @@
     </EmbeddedNativeLibrary>
   </ItemGroup>
 
-  <Import Project="OpenGL.targets" />
-  <Import Project="OpenAL.targets" />
+  <ItemGroup>
+	<EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo">
+      <LogicalName>Resources.AlphaTestEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo">
+      <LogicalName>Resources.BasicEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo">
+      <LogicalName>Resources.DualTextureEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.fxo">
+      <LogicalName>Resources.EnvironmentMapEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo">
+      <LogicalName>Resources.SkinnedEffect.fxo</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo">
+      <LogicalName>Resources.SpriteEffect.fxo</LogicalName>
+	</EmbeddedResource>
+  </ItemGroup>
+
 </Project>
