@@ -146,6 +146,7 @@ namespace Microsoft.Xna.Framework.Storage
                 Directory.CreateDirectory(dirPath);
             }
 #endif
+            _strategy.CreateDirectory(directory);
         }
         
         /// <summary>
@@ -169,6 +170,7 @@ namespace Microsoft.Xna.Framework.Storage
             // return A new file with read/write access.
             return File.Create(filePath);
 #endif
+            return _strategy.CreateFile(file);
         }
         
         /// <summary>
@@ -191,6 +193,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             Directory.Delete(dirPath);
 #endif
+            _strategy.DeleteDirectory(directory);
         }
         
         /// <summary>
@@ -213,6 +216,7 @@ namespace Microsoft.Xna.Framework.Storage
             // Now let's try to delete it
             File.Delete(filePath);
 #endif
+            _strategy.DeleteFile(file);
         }
 
         /// <summary>
@@ -240,12 +244,12 @@ namespace Microsoft.Xna.Framework.Storage
             {
                 return false;
             }
-#else            
+#else
             return Directory.Exists(dirPath);
 #endif
+            return _strategy.DirectoryExists(directory);
         }
-            
-
+        
         /// <summary>
         /// Returns true if the specified file exists in the storage-container, false otherwise.
         /// </summary>
@@ -273,8 +277,10 @@ namespace Microsoft.Xna.Framework.Storage
             }
 #else
             // return A new file with read/write access.
-            return File.Exists(filePath);		
+            return File.Exists(filePath);
 #endif
+            return _strategy.FileExists(file);
+
         }
 
         /// <summary>
@@ -290,6 +296,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return Directory.GetDirectories(_strategy._storagePath);
 #endif
+            return _strategy.GetDirectoryNames();
         }
 
         /// <summary>
@@ -300,6 +307,8 @@ namespace Microsoft.Xna.Framework.Storage
         public string[] GetDirectoryNames(string searchPattern)
         {
             throw new NotImplementedException();
+
+            return _strategy.GetDirectoryNames(searchPattern);
         }
 
         /// <summary>
@@ -315,6 +324,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return Directory.GetFiles(_strategy._storagePath);
 #endif
+            return _strategy.GetFileNames();
         }
 
         /// <summary>
@@ -336,8 +346,8 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return Directory.GetFiles(_strategy._storagePath, searchPattern);
 #endif
+            return _strategy.GetFileNames(searchPattern);
         }
-
 
         /// <summary>
         /// Opens a file contained in storage-container.
@@ -410,6 +420,8 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return File.Open(filePath, fileMode, fileAccess, fileShare);
 #endif
+
+            return _strategy.OpenFile(file, fileMode, fileAccess, fileShare);
         }
 
 

@@ -1,5 +1,7 @@
 ﻿// Copyright (C)2024 Nick Kastellanos
 
+using System;
+
 namespace Microsoft.Xna.Framework.Storage
 {
     internal class StorageDeviceStrategy
@@ -32,6 +34,26 @@ namespace Microsoft.Xna.Framework.Storage
         {
             this._player = player;
             this._directoryCount = directoryCount;
+        }
+
+        public virtual IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual StorageContainer Open(string displayName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void DeleteContainer(string titleName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual StorageContainer EndOpenContainer(IAsyncResult result)
+        {
+            throw new NotImplementedException();
         }
     }
 }

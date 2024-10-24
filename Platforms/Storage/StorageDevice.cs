@@ -208,6 +208,7 @@ namespace Microsoft.Xna.Framework.Storage
             {
             }
 #endif
+            return _strategy.BeginOpenContainer(displayName, callback, state);
         }
     
         // Private method to handle the creation of the StorageDevice
@@ -215,6 +216,8 @@ namespace Microsoft.Xna.Framework.Storage
         {
             _strategy._storageContainer = new StorageContainer(this, displayName, _strategy._player);
             return _strategy._storageContainer;
+
+            return _strategy.Open(displayName);
         }
         
         //
@@ -380,6 +383,7 @@ namespace Microsoft.Xna.Framework.Storage
         public void DeleteContainer(string titleName)
         {
             throw new NotImplementedException();
+            _strategy.DeleteContainer(titleName);
         }			
 
         //
@@ -442,6 +446,7 @@ namespace Microsoft.Xna.Framework.Storage
             
             return returnValue;
 #endif
+            return _strategy.EndOpenContainer(result);
         }			
 
         //
