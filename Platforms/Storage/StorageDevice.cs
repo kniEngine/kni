@@ -471,10 +471,34 @@ namespace Microsoft.Xna.Framework.Storage
             get
             {
 #if (UAP || WINUI)
-                return ApplicationData.Current.LocalFolder.Path; 
+                return StorageDevice.GetStorageRootUAP();
 #elif DESKTOPGL
-                if(CurrentPlatform.OS == OS.Linux)
-                {
+                return StorageDevice.GetStorageRootDESKTOPGL();
+#else
+                return StorageDevice.GetStorageRootCommon();
+#endif
+            }
+        }
+
+        internal static string GetStorageRootUAP()
+        {
+#if (UAP || WINUI)
+            return ApplicationData.Current.LocalFolder.Path;
+#elif DESKTOPGL
+            throw new NotImplementedException();
+#else
+            throw new NotImplementedException();
+#endif
+        }
+
+        internal static string GetStorageRootDESKTOPGL()
+        {
+#if (UAP || WINUI)
+            throw new NotImplementedException();
+#elif DESKTOPGL
+
+            if (CurrentPlatform.OS == OS.Linux)
+            {
                 string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
                 if (String.IsNullOrEmpty(osConfigDir))
                 {
@@ -486,25 +510,35 @@ namespace Microsoft.Xna.Framework.Storage
                     osConfigDir += "/.local/share";
                 }
                 return osConfigDir;
-                }
-                else if (CurrentPlatform.OS == OS.MacOSX)
-                {
-                    string osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                    if (String.IsNullOrEmpty(osConfigDir))
-                    {
-                        return "."; // Oh well.
-                    }
-                    osConfigDir += "/Library/Application Support";
-                    return osConfigDir;
-                }
-                else if(CurrentPlatform.OS == OS.Windows)
-                    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                else
-                    throw new Exception("Unexpected platform!");
-#else
-                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-#endif
             }
+            else if (CurrentPlatform.OS == OS.MacOSX)
+            {
+                string osConfigDir = Environment.GetEnvironmentVariable("HOME");
+                if (String.IsNullOrEmpty(osConfigDir))
+                {
+                    return "."; // Oh well.
+                }
+                osConfigDir += "/Library/Application Support";
+                return osConfigDir;
+            }
+            else if (CurrentPlatform.OS == OS.Windows)
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            else
+                throw new Exception("Unexpected platform!");
+#else
+            throw new NotImplementedException();
+#endif
+        }
+
+        internal static string GetStorageRootCommon()
+        {
+#if (UAP || WINUI)
+            throw new NotImplementedException();
+#elif DESKTOPGL
+            throw new NotImplementedException();
+#else
+            return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+#endif
         }
     }
 }
