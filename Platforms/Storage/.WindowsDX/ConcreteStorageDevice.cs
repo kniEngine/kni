@@ -5,10 +5,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
-#if DESKTOPGL
-using MonoGame.Framework.Utilities;
-#endif
-
 #if ANDROID || IOS || TVOS
 using System.Threading.Tasks;
 #endif
@@ -52,42 +48,7 @@ namespace Microsoft.Xna.Platform.Storage
                 // when we get DeviceChanged events working.
                 if (_storageContainer == null)
                 {
-    #if DESKTOPGL
-                    switch (CurrentPlatform.OS)
-                    {
-                        case OS.Windows:
-                            {
-                                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                            }
-                        case OS.Linux:
-                            {
-                                string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
-                                if (String.IsNullOrEmpty(osConfigDir))
-                                {
-                                    osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                                    if (!String.IsNullOrEmpty(osConfigDir))
-                                        osConfigDir += "/.local/share";
-                                    else
-                                        osConfigDir = ".";
-                                }
-                                return osConfigDir;
-                            }
-                        case OS.MacOSX:
-                            {
-                                string osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                                if (!String.IsNullOrEmpty(osConfigDir))
-                                    osConfigDir += "/Library/Application Support";
-                                else
-                                    osConfigDir = ".";
-
-                                return osConfigDir;
-                            }
-                        default:
-                            throw new Exception("Unexpected platform.");
-                    }
-    #else
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-    #endif
                 }
                 else
                 {

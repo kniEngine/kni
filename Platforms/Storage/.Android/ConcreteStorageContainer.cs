@@ -10,10 +10,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
-#if DESKTOPGL
-using MonoGame.Framework.Utilities;
-#endif
-
 namespace Microsoft.Xna.Platform.Storage
 {
     //	Implementation on Windows
@@ -35,45 +31,8 @@ namespace Microsoft.Xna.Platform.Storage
         {
             string saved = "";
 
-#if DESKTOPGL
-            switch (CurrentPlatform.OS)
-            {
-                case OS.Windows:
-                    {
-                        saved = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                        saved = Path.Combine(saved, "SavedGames");
-                    }
-                    break;
-                case OS.Linux:
-                    {
-                        saved = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
-                        if (String.IsNullOrEmpty(saved))
-                        {
-                            saved = Environment.GetEnvironmentVariable("HOME");
-                            if (!String.IsNullOrEmpty(saved))
-                                saved += "/.local/share";
-                            else
-                                saved = ".";
-                        }
-                    }
-                    break;
-                case OS.MacOSX:
-                    {
-                        saved = Environment.GetEnvironmentVariable("HOME");
-                        if (!String.IsNullOrEmpty(saved))
-                            saved += "/Library/Application Support";
-                        else
-                            saved = ".";
-                    }
-                    break;
-
-                default:
-                    throw new Exception("Unexpected platform.");
-            }               
-#else
             string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saved = Path.Combine(root,"SavedGames");
-#endif
             _storagePath = Path.Combine(saved, name);
 
             string playerSave = string.Empty;

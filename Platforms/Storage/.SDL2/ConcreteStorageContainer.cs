@@ -10,9 +10,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
-#if DESKTOPGL
 using MonoGame.Framework.Utilities;
-#endif
 
 namespace Microsoft.Xna.Platform.Storage
 {
@@ -35,7 +33,6 @@ namespace Microsoft.Xna.Platform.Storage
         {
             string saved = "";
 
-#if DESKTOPGL
             switch (CurrentPlatform.OS)
             {
                 case OS.Windows:
@@ -69,11 +66,7 @@ namespace Microsoft.Xna.Platform.Storage
 
                 default:
                     throw new Exception("Unexpected platform.");
-            }               
-#else
-            string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            saved = Path.Combine(root,"SavedGames");
-#endif
+            }
             _storagePath = Path.Combine(saved, name);
 
             string playerSave = string.Empty;
