@@ -466,20 +466,6 @@ namespace Microsoft.Xna.Framework.Storage
 
         }
         
-        internal static string StorageRoot
-        {
-            get
-            {
-#if (UAP || WINUI)
-                return StorageDevice.GetStorageRootUAP();
-#elif DESKTOPGL
-                return StorageDevice.GetStorageRootDESKTOPGL();
-#else
-                return StorageDevice.GetStorageRootCommon();
-#endif
-            }
-        }
-
         internal static string GetStorageRootUAP()
         {
 #if (UAP || WINUI)

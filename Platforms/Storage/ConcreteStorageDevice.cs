@@ -55,7 +55,13 @@ namespace Microsoft.Xna.Platform.Storage
                 // when we get DeviceChanged events working.
                 if (_storageContainer == null)
                 {
-                    return StorageDevice.StorageRoot;
+    #if (UAP || WINUI)
+                    return StorageDevice.GetStorageRootUAP();
+    #elif DESKTOPGL
+                    return StorageDevice.GetStorageRootDESKTOPGL();
+    #else
+                    return StorageDevice.GetStorageRootCommon();
+    #endif
                 }
                 else
                 {
