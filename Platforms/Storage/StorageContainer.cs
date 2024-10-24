@@ -81,10 +81,18 @@ namespace Microsoft.Xna.Framework.Storage
             if (!string.IsNullOrEmpty(playerSave))
                 _strategy._storagePath = Path.Combine(_strategy._storagePath, "Player" + (int)playerIndex);
 
-            // Create the "device" if need be
-            CreateDirectoryAbsolute(_strategy._storagePath);
+#if (UAP || WINUI)
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            var task = folder.CreateFolderAsync(_strategy._storagePath, CreationCollisionOption.OpenIfExists);
+            task.AsTask().Wait();
+#else
+            if (!Directory.Exists(_strategy._storagePath))
+            {
+                Directory.CreateDirectory(_strategy._storagePath);
+            }
+#endif
         }
-        
+
         /// <summary>
         /// Returns display name of the title.
         /// </summary>
@@ -128,21 +136,14 @@ namespace Microsoft.Xna.Framework.Storage
             // relative so combine with our path
             string dirPath = Path.Combine(_strategy._storagePath, directory);
 
-            // Now let's try to create it
-            CreateDirectoryAbsolute(dirPath);
-        }
-
-        private void CreateDirectoryAbsolute(string path)
-        {
-            // Now let's try to create it
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
-            var task = folder.CreateFolderAsync(path, CreationCollisionOption.OpenIfExists);
+            var task = folder.CreateFolderAsync(dirPath, CreationCollisionOption.OpenIfExists);
             task.AsTask().Wait();
 #else
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(dirPath))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(dirPath);
             }
 #endif
         }
