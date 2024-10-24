@@ -465,10 +465,7 @@ namespace Microsoft.Xna.Framework.Storage
         
         internal static string GetStorageRootDESKTOPGL()
         {
-#if (UAP || WINUI)
-            throw new NotImplementedException();
-#elif DESKTOPGL
-
+#if DESKTOPGL
             if (CurrentPlatform.OS == OS.Linux)
             {
                 string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
