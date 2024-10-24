@@ -42,40 +42,27 @@ namespace Microsoft.Xna.Platform.Storage
             // From the examples the root is based on MyDocuments folder
 #if (UAP || WINUI)
             string saved = "";
+            // ?? saved = StorageDevice.GetStorageRootUAP();
 #elif DESKTOPGL
             string saved = "";
-            if (CurrentPlatform.OS == OS.Linux
-            ||  CurrentPlatform.OS == OS.MacOSX)
+            if (CurrentPlatform.OS == OS.Linux)
             {
-    #if (UAP || WINUI)
-                saved = StorageDevice.GetStorageRootUAP();
-    #elif DESKTOPGL
                 saved = StorageDevice.GetStorageRootDESKTOPGL();
-    #else
-                saved = StorageDevice.GetStorageRootCommon();
-    #endif
+            }
+            else if(CurrentPlatform.OS == OS.MacOSX)
+            {
+                saved = StorageDevice.GetStorageRootDESKTOPGL();
             }
             else if (CurrentPlatform.OS == OS.Windows)
             {
-    #if (UAP || WINUI)
-                saved = StorageDevice.GetStorageRootUAP();
-    #elif DESKTOPGL
                 saved = StorageDevice.GetStorageRootDESKTOPGL();
-    #else
-                saved = StorageDevice.GetStorageRootCommon();
-    #endif
+
                 saved = Path.Combine(saved, "SavedGames");
             }
             else
                 throw new Exception("Unexpected platform!");
 #else
-    #if (UAP || WINUI)
-            string root = StorageDevice.GetStorageRootUAP();
-    #elif DESKTOPGL
-            string root = StorageDevice.GetStorageRootDESKTOPGL();
-    #else
             string root = StorageDevice.GetStorageRootCommon();
-    #endif
             string saved = Path.Combine(root,"SavedGames");
 #endif
             _storagePath = Path.Combine(saved, name);
