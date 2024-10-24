@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Microsoft.Xna.Framework.Storage
 {
-    internal class StorageContainerStrategy : IDisposable
+    internal abstract class StorageContainerStrategy : IDisposable
     {
         internal /*readonly*/ string _storagePath;
         private readonly string _name;
@@ -20,57 +20,18 @@ namespace Microsoft.Xna.Framework.Storage
             _name = name;
         }
 
-        public virtual void CreateDirectory(string directory)
-        {
-        }
+        public abstract void CreateDirectory(string directory);
+        public abstract Stream CreateFile(string file);
+        public abstract void DeleteDirectory(string directory);
+        public abstract void DeleteFile(string file);
+        public abstract bool DirectoryExists(string directory);
+        public abstract bool FileExists(string file);
+        public abstract string[] GetDirectoryNames();
+        public abstract string[] GetDirectoryNames(string searchPattern);
+        public abstract string[] GetFileNames();
+        public abstract string[] GetFileNames(string searchPattern);
+        public abstract Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare);
 
-        public virtual Stream CreateFile(string file)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void DeleteDirectory(string directory)
-        {
-        }
-
-        public virtual void DeleteFile(string file)
-        {
-        }
-
-        public virtual bool DirectoryExists(string directory)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual bool FileExists(string file)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual string[] GetDirectoryNames()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual string[] GetDirectoryNames(string searchPattern)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual string[] GetFileNames()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual string[] GetFileNames(string searchPattern)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
-        {
-            throw new NotImplementedException();
-        }
 
         #region IDisposable
         ~StorageContainerStrategy()
