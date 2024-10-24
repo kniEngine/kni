@@ -39,12 +39,9 @@ namespace Microsoft.Xna.Platform.Storage
 
         public ConcreteStorageContainer(string name, PlayerIndex? playerIndex) : base(name)
         {
-            // From the examples the root is based on MyDocuments folder
-#if (UAP || WINUI)
             string saved = "";
-            // ?? saved = ApplicationData.Current.LocalFolder.Path;
-#elif DESKTOPGL
-            string saved = "";
+
+#if DESKTOPGL
             switch (CurrentPlatform.OS)
             {
                 case OS.Windows:
@@ -81,7 +78,7 @@ namespace Microsoft.Xna.Platform.Storage
             }               
 #else
             string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string saved = Path.Combine(root,"SavedGames");
+            saved = Path.Combine(root,"SavedGames");
 #endif
             _storagePath = Path.Combine(saved, name);
 
@@ -98,9 +95,7 @@ namespace Microsoft.Xna.Platform.Storage
             task.AsTask().Wait();
 #else
             if (!Directory.Exists(_storagePath))
-            {
                 Directory.CreateDirectory(_storagePath);
-            }
 #endif
         }
 
