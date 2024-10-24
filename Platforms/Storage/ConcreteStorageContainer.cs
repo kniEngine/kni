@@ -45,22 +45,29 @@ namespace Microsoft.Xna.Platform.Storage
             // ?? saved = ApplicationData.Current.LocalFolder.Path;
 #elif DESKTOPGL
             string saved = "";
-            if (CurrentPlatform.OS == OS.Linux)
+            switch (CurrentPlatform.OS)
             {
-                saved = StorageDevice.GetStorageRootDESKTOPGL();
-            }
-            else if(CurrentPlatform.OS == OS.MacOSX)
-            {
-                saved = StorageDevice.GetStorageRootDESKTOPGL();
-            }
-            else if (CurrentPlatform.OS == OS.Windows)
-            {
-                saved = StorageDevice.GetStorageRootDESKTOPGL();
+                case OS.Windows:
+                    {
+                        saved = StorageDevice.GetStorageRootDESKTOPGL();
+                        saved = Path.Combine(saved, "SavedGames");
+                    }
+                    break;
+                case OS.Linux:
+                    {
+                        saved = StorageDevice.GetStorageRootDESKTOPGL();
+                    }
+                    break;
 
-                saved = Path.Combine(saved, "SavedGames");
-            }
-            else
-                throw new Exception("Unexpected platform!");
+                case OS.MacOSX:
+                    {
+                        saved = StorageDevice.GetStorageRootDESKTOPGL();
+                    }
+                    break;
+
+                default:
+                    throw new Exception("Unexpected platform.");
+            }               
 #else
             string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string saved = Path.Combine(root,"SavedGames");

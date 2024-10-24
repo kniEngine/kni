@@ -466,34 +466,38 @@ namespace Microsoft.Xna.Framework.Storage
         internal static string GetStorageRootDESKTOPGL()
         {
 #if DESKTOPGL
-            if (CurrentPlatform.OS == OS.Linux)
+            switch (CurrentPlatform.OS)
             {
-                string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
-                if (String.IsNullOrEmpty(osConfigDir))
-                {
-                    osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                    if (String.IsNullOrEmpty(osConfigDir))
+                case OS.Windows:
                     {
-                        return "."; // Oh well.
+                        return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     }
-                    osConfigDir += "/.local/share";
-                }
-                return osConfigDir;
+
+                case OS.Linux:
+                    {
+                        string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
+                        if (String.IsNullOrEmpty(osConfigDir))
+                        {
+                            osConfigDir = Environment.GetEnvironmentVariable("HOME");
+                            if (String.IsNullOrEmpty(osConfigDir))
+                                return "."; // Oh well.
+                            osConfigDir += "/.local/share";
+                        }
+                        return osConfigDir;
+                    }
+
+                case OS.MacOSX:
+                    {
+                        string osConfigDir = Environment.GetEnvironmentVariable("HOME");
+                        if (String.IsNullOrEmpty(osConfigDir))
+                            return "."; // Oh well.
+                        osConfigDir += "/Library/Application Support";
+                        return osConfigDir;
+                    }
+
+                default:
+                    throw new Exception("Unexpected platform.");
             }
-            else if (CurrentPlatform.OS == OS.MacOSX)
-            {
-                string osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                if (String.IsNullOrEmpty(osConfigDir))
-                {
-                    return "."; // Oh well.
-                }
-                osConfigDir += "/Library/Application Support";
-                return osConfigDir;
-            }
-            else if (CurrentPlatform.OS == OS.Windows)
-                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            else
-                throw new Exception("Unexpected platform!");
 #else
             throw new NotImplementedException();
 #endif
