@@ -5,10 +5,6 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
-#if ANDROID || IOS || TVOS
-using System.Threading.Tasks;
-#endif
-
 
 namespace Microsoft.Xna.Platform.Storage
 {
@@ -65,25 +61,6 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override IAsyncResult BeginOpenContainer(StorageDevice storageDevice, string displayName, AsyncCallback callback, object state)
         {
-#if ANDROID || IOS || TVOS
-            TaskCompletionSource<StorageContainer> tcs = new TaskCompletionSource<StorageContainer>(state);
-            Task<StorageContainer> task = Task.Run<StorageContainer>(() => Open(storageDevice, displayName));
-            task.ContinueWith((t) =>
-            {
-                // Copy the task result into the returned task.
-                if (t.IsFaulted)
-                    tcs.TrySetException(t.Exception.InnerExceptions);
-                else if (t.IsCanceled)
-                    tcs.TrySetCanceled();
-                else
-                    tcs.TrySetResult(t.Result);
-
-                // Invoke the user callback if necessary.
-                if (callback != null)
-                    callback(tcs.Task);
-            });
-            return tcs.Task;
-#else
             try
             {
                 OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
@@ -92,21 +69,10 @@ namespace Microsoft.Xna.Platform.Storage
             finally
             {
             }
-#endif
         }
 
         public override StorageContainer EndOpenContainer(IAsyncResult result)
         {
-#if ANDROID || IOS || TVOS
-            try
-            {
-                return ((Task<StorageContainer>)result).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw;
-            }
-#else
             StorageContainer returnValue = null;
             try
             {
@@ -135,7 +101,6 @@ namespace Microsoft.Xna.Platform.Storage
             }
             
             return returnValue;
-#endif
         }
 
         public override void DeleteContainer(string titleName)
