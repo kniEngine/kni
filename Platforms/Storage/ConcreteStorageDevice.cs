@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Storage
             throw new NotImplementedException();
         }
 
-        public override StorageContainer Open(string displayName)
+        public override StorageContainer EndOpenContainer(IAsyncResult result)
         {
             throw new NotImplementedException();
         }
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Platform.Storage
         {
         }
 
-        public override StorageContainer EndOpenContainer(IAsyncResult result)
+        public override StorageContainer Open(string displayName)
         {
             throw new NotImplementedException();
         }

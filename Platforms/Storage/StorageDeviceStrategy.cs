@@ -27,8 +27,8 @@ namespace Microsoft.Xna.Platform.Storage
         }
 
         public abstract IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state);
-        public abstract StorageContainer Open(string displayName);
-        public abstract void DeleteContainer(string titleName);
         public abstract StorageContainer EndOpenContainer(IAsyncResult result);
+        public abstract void DeleteContainer(string titleName);
+        public abstract StorageContainer Open(string displayName);
     }
 }
