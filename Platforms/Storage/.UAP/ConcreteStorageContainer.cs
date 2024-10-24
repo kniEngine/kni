@@ -10,15 +10,9 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
-#if DESKTOPGL
-using MonoGame.Framework.Utilities;
-#endif
-
-#if (UAP || WINUI)
 using System.Linq;
 using Windows.Storage;
 using Windows.Storage.Search;
-#endif
 
 namespace Microsoft.Xna.Platform.Storage
 {
@@ -41,45 +35,9 @@ namespace Microsoft.Xna.Platform.Storage
         {
             string saved = "";
 
-#if DESKTOPGL
-            switch (CurrentPlatform.OS)
-            {
-                case OS.Windows:
-                    {
-                        saved = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                        saved = Path.Combine(saved, "SavedGames");
-                    }
-                    break;
-                case OS.Linux:
-                    {
-                        saved = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
-                        if (String.IsNullOrEmpty(saved))
-                        {
-                            saved = Environment.GetEnvironmentVariable("HOME");
-                            if (!String.IsNullOrEmpty(saved))
-                                saved += "/.local/share";
-                            else
-                                saved = ".";
-                        }
-                    }
-                    break;
-                case OS.MacOSX:
-                    {
-                        saved = Environment.GetEnvironmentVariable("HOME");
-                        if (!String.IsNullOrEmpty(saved))
-                            saved += "/Library/Application Support";
-                        else
-                            saved = ".";
-                    }
-                    break;
-
-                default:
-                    throw new Exception("Unexpected platform.");
-            }               
-#else
             string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saved = Path.Combine(root,"SavedGames");
-#endif
+
             _storagePath = Path.Combine(saved, name);
 
             string playerSave = string.Empty;
@@ -89,14 +47,9 @@ namespace Microsoft.Xna.Platform.Storage
             if (!string.IsNullOrEmpty(playerSave))
                 _storagePath = Path.Combine(_storagePath, "Player" + (int)playerIndex);
 
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             var task = folder.CreateFolderAsync(_storagePath, CreationCollisionOption.OpenIfExists);
             task.AsTask().Wait();
-#else
-            if (!Directory.Exists(_storagePath))
-                Directory.CreateDirectory(_storagePath);
-#endif
         }
 
 
@@ -105,16 +58,9 @@ namespace Microsoft.Xna.Platform.Storage
             // relative so combine with our path
             string dirPath = Path.Combine(_storagePath, directory);
 
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             var task = folder.CreateFolderAsync(dirPath, CreationCollisionOption.OpenIfExists);
             task.AsTask().Wait();
-#else
-            if (!Directory.Exists(dirPath))
-            {
-                Directory.CreateDirectory(dirPath);
-            }
-#endif
         }
 
         public override Stream CreateFile(string file)
@@ -122,14 +68,9 @@ namespace Microsoft.Xna.Platform.Storage
             // relative so combine with our path
             string filePath = Path.Combine(_storagePath, file);
 
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             var awaiter = folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter();
             return awaiter.GetResult();
-#else
-            // return A new file with read/write access.
-            return File.Create(filePath);
-#endif
         }
 
         public override void DeleteDirectory(string directory)
@@ -137,14 +78,10 @@ namespace Microsoft.Xna.Platform.Storage
             // relative so combine with our path
             string dirPath = Path.Combine(_storagePath, directory);
 
-            // Now let's try to delete itd
-#if (UAP || WINUI)
+            // Now let's try to delete it
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             var deleteFolder = folder.GetFolderAsync(dirPath).AsTask().GetAwaiter().GetResult();
             deleteFolder.DeleteAsync().AsTask().Wait();
-#else
-            Directory.Delete(dirPath);
-#endif
         }
 
         public override void DeleteFile(string file)
@@ -152,14 +89,9 @@ namespace Microsoft.Xna.Platform.Storage
             // relative so combine with our path
             string filePath = Path.Combine(_storagePath, file);
 
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             StorageFile deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
             deleteFile.DeleteAsync().AsTask().Wait();
-#else
-            // Now let's try to delete it
-            File.Delete(filePath);
-#endif
         }
 
         public override bool DirectoryExists(string directory)
@@ -167,7 +99,6 @@ namespace Microsoft.Xna.Platform.Storage
             // relative so combine with our path
             string dirPath = Path.Combine(_storagePath, directory);
 
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
 
             try
@@ -179,9 +110,6 @@ namespace Microsoft.Xna.Platform.Storage
             {
                 return false;
             }
-#else
-            return Directory.Exists(dirPath);
-#endif
         }
 
         public override bool FileExists(string file)
@@ -189,7 +117,6 @@ namespace Microsoft.Xna.Platform.Storage
             // relative so combine with our path
             string filePath = Path.Combine(_storagePath, file);
 
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             // GetFile returns an exception if the file doesn't exist, so we catch it here and return the boolean.
             try
@@ -201,21 +128,13 @@ namespace Microsoft.Xna.Platform.Storage
             {
                 return false;
             }
-#else
-            // return A new file with read/write access.
-            return File.Exists(filePath);
-#endif
         }
 
         public override string[] GetDirectoryNames()
         {
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             IReadOnlyList<StorageFolder> results = folder.GetFoldersAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFolder, string>(e => e.Name).ToArray();
-#else
-            return Directory.GetDirectories(_storagePath);
-#endif
         }
 
         public override string[] GetDirectoryNames(string searchPattern)
@@ -225,26 +144,18 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override string[] GetFileNames()
         {
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             var results = folder.GetFilesAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFile, string>(e => e.Name).ToArray();
-#else
-            return Directory.GetFiles(_storagePath);
-#endif
         }
 
         public override string[] GetFileNames(string searchPattern)
         {
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             QueryOptions options = new QueryOptions( CommonFileQuery.DefaultQuery, new [] { searchPattern } );
             StorageFileQueryResult query = folder.CreateFileQueryWithOptions(options);
             IReadOnlyList<StorageFile> files = query.GetFilesAsync().AsTask().GetAwaiter().GetResult();
             return files.Select<StorageFile, string>(e => e.Name).ToArray();
-#else
-            return Directory.GetFiles(_storagePath, searchPattern);
-#endif
         }
 
         public override Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
@@ -252,7 +163,6 @@ namespace Microsoft.Xna.Platform.Storage
             // relative so combine with our path
             string filePath = Path.Combine(_storagePath, file);
 
-#if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             if (fileMode == FileMode.Create || fileMode == FileMode.CreateNew)
             {
@@ -281,9 +191,6 @@ namespace Microsoft.Xna.Platform.Storage
                 StorageFile f = folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult();
                 return f.OpenAsync(FileAccessMode.ReadWrite).AsTask().GetAwaiter().GetResult().AsStream();
             }
-#else
-            return File.Open(filePath, fileMode, fileAccess, fileShare);
-#endif
         }
 
     }
