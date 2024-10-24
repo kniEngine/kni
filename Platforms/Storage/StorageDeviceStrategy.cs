@@ -26,9 +26,9 @@ namespace Microsoft.Xna.Platform.Storage
             this._directoryCount = directoryCount;
         }
 
-        public abstract IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state);
+        public abstract IAsyncResult BeginOpenContainer(StorageDevice storageDevice, string displayName, AsyncCallback callback, object state);
         public abstract StorageContainer EndOpenContainer(IAsyncResult result);
         public abstract void DeleteContainer(string titleName);
-        public abstract StorageContainer Open(string displayName);
+        public abstract StorageContainer Open(StorageDevice storageDevice, string displayName);
     }
 }

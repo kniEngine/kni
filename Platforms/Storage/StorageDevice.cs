@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Storage
 
     // The delegate must have the same signature as the method
     // it will call asynchronously.
-    public delegate StorageContainer OpenContainerAsynchronous(string displayName);
+    public delegate StorageContainer OpenContainerAsynchronous(StorageDevice storageDevice, string displayName);
     
     /// <summary>
     /// Exposes a storage device for storing user data.
@@ -134,38 +134,7 @@ namespace Microsoft.Xna.Framework.Storage
         //     A user-created object used to uniquely identify the request, or null.
         public IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state)
         {
-#if ANDROID || IOS || TVOS || NETFX_CORE
-            TaskCompletionSource<StorageContainer> tcs = new TaskCompletionSource<StorageContainer>(state);
-            Task<StorageContainer> task = Task.Run<StorageContainer>(() => Open(displayName));
-            task.ContinueWith((t) =>
-            {
-                // Copy the task result into the returned task.
-                if (t.IsFaulted)
-                    tcs.TrySetException(t.Exception.InnerExceptions);
-                else if (t.IsCanceled)
-                    tcs.TrySetCanceled();
-                else
-                    tcs.TrySetResult(t.Result);
-
-                // Invoke the user callback if necessary.
-                if (callback != null)
-                    callback(tcs.Task);
-            });
-            return tcs.Task;
-#else
-            try
-            {
-                OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
-#if (UAP || WINUI)
-                _containerDelegate = AsynchronousOpen;
-#endif
-                return AsynchronousOpen.BeginInvoke(displayName, callback, state);
-            }
-            finally
-            {
-            }
-#endif
-            return _strategy.BeginOpenContainer(displayName, callback, state);
+            return _strategy.BeginOpenContainer(this, displayName, callback, state);
         }
     
         // Summary:
@@ -176,58 +145,7 @@ namespace Microsoft.Xna.Framework.Storage
         //     The IAsyncResult returned from BeginOpenContainer.
         public StorageContainer EndOpenContainer(IAsyncResult result)
         {
-#if ANDROID || IOS || TVOS || NETFX_CORE
-            try
-            {
-                return ((Task<StorageContainer>)result).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw;
-            }
-#else
-            StorageContainer returnValue = null;
-            try
-            {
-#if (UAP || WINUI)
-                // AsyncResult does not exist in WinRT
-                var asyncResult = _containerDelegate as OpenContainerAsynchronous;
-                if (asyncResult != null)
-                {
-                    // Wait for the WaitHandle to become signaled.
-                    result.AsyncWaitHandle.WaitOne();
-
-                    // Call EndInvoke to retrieve the results.
-                    returnValue = asyncResult.EndInvoke(result);
-                }
-                _containerDelegate = null;
-#elif NET4_0_OR_GREATER
-                // Retrieve the delegate.
-                AsyncResult asyncResult = result as AsyncResult;
-                if (asyncResult != null)
-                {
-                    OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
-
-                    // Wait for the WaitHandle to become signaled.
-                    result.AsyncWaitHandle.WaitOne();
-
-                    // Call EndInvoke to retrieve the results.
-                    if (asyncDelegate != null)
-                        returnValue = asyncDelegate.EndInvoke(result);
-                }
-#else // NET6_0_OR_GREATER
-                throw new NotImplementedException();
-#endif
-            }
-            finally
-            {
-                // Close the wait handle.
-                result.AsyncWaitHandle.Dispose();
-            }
-            
-            return returnValue;
-#endif
-            _strategy.EndOpenContainer(result);
+            return _strategy.EndOpenContainer(result);
         }			
 
         // Parameters:
@@ -235,17 +153,13 @@ namespace Microsoft.Xna.Framework.Storage
         //     The name of the storage container to delete.
         public void DeleteContainer(string titleName)
         {
-            throw new NotImplementedException();
             _strategy.DeleteContainer(titleName);
         }
 
         // Private method to handle the creation of the StorageDevice
         private StorageContainer Open(string displayName)
         {
-            _strategy._storageContainer = new StorageContainer(this, displayName, _strategy._player);
-            return _strategy._storageContainer;
-
-            return _strategy.Open(displayName);
+            return _strategy.Open(this, displayName);
         }
 
 
