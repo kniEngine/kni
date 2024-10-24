@@ -55,13 +55,24 @@ namespace Microsoft.Xna.Platform.Storage
                     break;
                 case OS.Linux:
                     {
-                        saved = StorageDevice.GetStorageRootDESKTOPGL();
+                        saved = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
+                        if (String.IsNullOrEmpty(saved))
+                        {
+                            saved = Environment.GetEnvironmentVariable("HOME");
+                            if (!String.IsNullOrEmpty(saved))
+                                saved += "/.local/share";
+                            else
+                                saved = ".";
+                        }
                     }
                     break;
-
                 case OS.MacOSX:
                     {
-                        saved = StorageDevice.GetStorageRootDESKTOPGL();
+                        saved = Environment.GetEnvironmentVariable("HOME");
+                        if (!String.IsNullOrEmpty(saved))
+                            saved += "/Library/Application Support";
+                        else
+                            saved = ".";
                     }
                     break;
 

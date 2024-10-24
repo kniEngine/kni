@@ -32,7 +32,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Storage;
-using MonoGame.Framework.Utilities;
 
 #if NET4_0_OR_GREATER
 using System.Runtime.Remoting.Messaging;
@@ -461,44 +460,6 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentException("result");
 #endif
 
-        }
-        
-        internal static string GetStorageRootDESKTOPGL()
-        {
-#if DESKTOPGL
-            switch (CurrentPlatform.OS)
-            {
-                case OS.Linux:
-                    {
-                        string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
-                        if (String.IsNullOrEmpty(osConfigDir))
-                        {
-                            osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                            if (!String.IsNullOrEmpty(osConfigDir))
-                                osConfigDir += "/.local/share";
-                            else
-                                osConfigDir = ".";
-                        }
-                        return osConfigDir;
-                    }
-
-                case OS.MacOSX:
-                    {
-                        string osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                        if (!String.IsNullOrEmpty(osConfigDir))
-                            osConfigDir += "/Library/Application Support";
-                        else
-                            osConfigDir = ".";
-
-                        return osConfigDir;
-                    }
-
-                default:
-                    throw new Exception("Unexpected platform.");
-            }
-#else
-            throw new NotImplementedException();
-#endif
         }
     }
 }

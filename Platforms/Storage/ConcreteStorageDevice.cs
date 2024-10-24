@@ -74,11 +74,26 @@ namespace Microsoft.Xna.Platform.Storage
                             }
                         case OS.Linux:
                             {
-                                return StorageDevice.GetStorageRootDESKTOPGL();
+                                string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
+                                if (String.IsNullOrEmpty(osConfigDir))
+                                {
+                                    osConfigDir = Environment.GetEnvironmentVariable("HOME");
+                                    if (!String.IsNullOrEmpty(osConfigDir))
+                                        osConfigDir += "/.local/share";
+                                    else
+                                        osConfigDir = ".";
+                                }
+                                return osConfigDir;
                             }
                         case OS.MacOSX:
                             {
-                                return StorageDevice.GetStorageRootDESKTOPGL();
+                                string osConfigDir = Environment.GetEnvironmentVariable("HOME");
+                                if (!String.IsNullOrEmpty(osConfigDir))
+                                    osConfigDir += "/Library/Application Support";
+                                else
+                                    osConfigDir = ".";
+
+                                return osConfigDir;
                             }
                         default:
                             throw new Exception("Unexpected platform.");
