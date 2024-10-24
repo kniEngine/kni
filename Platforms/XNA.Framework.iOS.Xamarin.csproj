@@ -184,6 +184,8 @@
     <Compile Include="Storage\StorageContainerStrategy.cs" />
     <Compile Include="Storage\StorageDevice.cs" />
     <Compile Include="Storage\StorageDeviceStrategy.cs" />
+    <Compile Include="Storage\ConcreteStorageContainer.cs" />
+    <Compile Include="Storage\ConcreteStorageDevice.cs" />
 
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">
       <Link>Utilities\StbImageSharp\AnimatedFrameResult.cs</Link>
