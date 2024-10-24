@@ -34,9 +34,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Storage;
 using MonoGame.Framework.Utilities;
 
-#if (UAP || WINUI)
-using Windows.Storage;
-#endif
 #if NET4_0_OR_GREATER
 using System.Runtime.Remoting.Messaging;
 #endif
@@ -466,17 +463,6 @@ namespace Microsoft.Xna.Framework.Storage
 
         }
         
-        internal static string GetStorageRootUAP()
-        {
-#if (UAP || WINUI)
-            return ApplicationData.Current.LocalFolder.Path;
-#elif DESKTOPGL
-            throw new NotImplementedException();
-#else
-            throw new NotImplementedException();
-#endif
-        }
-
         internal static string GetStorageRootDESKTOPGL()
         {
 #if (UAP || WINUI)

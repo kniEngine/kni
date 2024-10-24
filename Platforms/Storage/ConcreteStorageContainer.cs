@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Storage
             // From the examples the root is based on MyDocuments folder
 #if (UAP || WINUI)
             string saved = "";
-            // ?? saved = StorageDevice.GetStorageRootUAP();
+            // ?? saved = ApplicationData.Current.LocalFolder.Path;
 #elif DESKTOPGL
             string saved = "";
             if (CurrentPlatform.OS == OS.Linux)

@@ -5,6 +5,10 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
+#if (UAP || WINUI)
+using Windows.Storage;
+#endif
+
 namespace Microsoft.Xna.Platform.Storage
 {
     internal class ConcreteStorageDevice : StorageDeviceStrategy
@@ -56,7 +60,7 @@ namespace Microsoft.Xna.Platform.Storage
                 if (_storageContainer == null)
                 {
     #if (UAP || WINUI)
-                    return StorageDevice.GetStorageRootUAP();
+                    return ApplicationData.Current.LocalFolder.Path;
     #elif DESKTOPGL
                     return StorageDevice.GetStorageRootDESKTOPGL();
     #else
