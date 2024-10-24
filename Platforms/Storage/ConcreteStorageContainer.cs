@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Storage
             else
                 throw new Exception("Unexpected platform!");
 #else
-            string root = StorageDevice.GetStorageRootCommon();
+            string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string saved = Path.Combine(root,"SavedGames");
 #endif
             _storagePath = Path.Combine(saved, name);

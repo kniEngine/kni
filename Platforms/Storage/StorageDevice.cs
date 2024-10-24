@@ -515,16 +515,5 @@ namespace Microsoft.Xna.Framework.Storage
             throw new NotImplementedException();
 #endif
         }
-
-        internal static string GetStorageRootCommon()
-        {
-#if (UAP || WINUI)
-            throw new NotImplementedException();
-#elif DESKTOPGL
-            throw new NotImplementedException();
-#else
-            return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-#endif
-        }
     }
 }

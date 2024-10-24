@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Storage
     #elif DESKTOPGL
                     return StorageDevice.GetStorageRootDESKTOPGL();
     #else
-                    return StorageDevice.GetStorageRootCommon();
+                    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     #endif
                 }
                 else
