@@ -92,6 +92,7 @@ namespace Microsoft.Xna.Framework.Storage
 #else
                 return new DriveInfo(GetDevicePath).AvailableFreeSpace;
 #endif
+                //return _strategy.FreeSpace;
             }
         }
 
@@ -107,7 +108,8 @@ namespace Microsoft.Xna.Framework.Storage
 #else
                 return new DriveInfo(GetDevicePath).IsReady;
 #endif
-            } 
+                //return _strategy.IsConnected;
+            }
         }
 
         /// <summary>
@@ -124,8 +126,9 @@ namespace Microsoft.Xna.Framework.Storage
                 return new DriveInfo(GetDevicePath).TotalSize;
 #endif
             }
+            //return _strategy.TotalSpace;
         }
-        
+
         string GetDevicePath
         {
             get
@@ -139,7 +142,9 @@ namespace Microsoft.Xna.Framework.Storage
                 else
                 {
                     return _strategy._storageContainer.Strategy._storagePath;
-                }				
+                }
+
+                //return _strategy.GetDevicePath;
             }
         }
 

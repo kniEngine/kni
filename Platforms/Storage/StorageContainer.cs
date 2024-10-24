@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public string DisplayName
         {
-            get { return _strategy._name; }
+            get { return _strategy.DisplayName; }
         }
         
         /// <summary>

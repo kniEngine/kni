@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Storage
     internal class StorageContainerStrategy : IDisposable
     {
         internal /*readonly*/ string _storagePath;
-        internal readonly string _name;
+        private readonly string _name;
 
         public virtual string DisplayName
         {

@@ -8,6 +8,26 @@ namespace Microsoft.Xna.Framework.Storage
         int _directoryCount;
         internal StorageContainer _storageContainer;
 
+        public virtual long FreeSpace
+        {
+            get;
+        }
+
+        public virtual bool IsConnected
+        {
+            get;
+        }
+
+        public virtual long TotalSpace
+        {
+            get;
+        }
+
+        public virtual string GetDevicePath
+        {
+            get;
+        }
+
         public StorageDeviceStrategy(PlayerIndex? player, int directoryCount)
         {
             this._player = player;
