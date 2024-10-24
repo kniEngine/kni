@@ -1,8 +1,0 @@
-<Project>
-    
-  <ItemGroup>
-    <Compile Include="Storage\StorageContainer.cs" />
-    <Compile Include="Storage\StorageDevice.cs" />
-  </ItemGroup>  
-
-</Project>
