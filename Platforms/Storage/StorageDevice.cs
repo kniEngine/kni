@@ -177,12 +177,6 @@ namespace Microsoft.Xna.Framework.Storage
         //     A user-created object used to uniquely identify the request, or null.
         public IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state)
         {
-            return OpenContainer(displayName, callback, state);
-
-        }
-        
-        private IAsyncResult OpenContainer(string displayName, AsyncCallback callback, object state)
-        {
 #if ANDROID || IOS || TVOS || NETFX_CORE
             TaskCompletionSource<StorageContainer> tcs = new TaskCompletionSource<StorageContainer>(state);
             Task<StorageContainer> task = Task.Run<StorageContainer>(() => Open(displayName));
