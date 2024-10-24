@@ -244,17 +244,6 @@ namespace Microsoft.Xna.Framework.Storage
 #endif
         }
             
-        /// <summary>
-        /// Disposes un-managed objects referenced by this object.
-        /// </summary>
-        public void Dispose()
-        {
-            _strategy.Dispose();
-            _strategy = null;
-
-            // Fill this in when we figure out what we should be disposing
-            _isDisposed = true;
-        }
 
         /// <summary>
         /// Returns true if the specified file exists in the storage-container, false otherwise.
@@ -420,6 +409,19 @@ namespace Microsoft.Xna.Framework.Storage
 #else
             return File.Open(filePath, fileMode, fileAccess, fileShare);
 #endif
+        }
+
+
+        /// <summary>
+        /// Disposes un-managed objects referenced by this object.
+        /// </summary>
+        public void Dispose()
+        {
+            _strategy.Dispose();
+            _strategy = null;
+
+            // Fill this in when we figure out what we should be disposing
+            _isDisposed = true;
         }
     }
 }
