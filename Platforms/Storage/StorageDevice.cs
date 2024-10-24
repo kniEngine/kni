@@ -62,6 +62,13 @@ namespace Microsoft.Xna.Framework.Storage
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx</remarks>
     public sealed class StorageDevice
     {
+        private StorageDeviceStrategy _strategy;
+
+        internal StorageDeviceStrategy Strategy
+        {
+            get { return _strategy; }
+        }
+
         PlayerIndex? _player;
         int _directoryCount;
         StorageContainer _storageContainer;
@@ -74,6 +81,8 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="directoryCount"></param>
         internal StorageDevice(PlayerIndex? player, int sizeInBytes, int directoryCount) 
         {
+            this._strategy = new StorageDeviceStrategy();
+
             this._player = player;
             this._directoryCount = directoryCount;
         }

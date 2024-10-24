@@ -194,7 +194,9 @@
     <Compile Include="Game\.WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
 
     <Compile Include="Storage\StorageContainer.cs" />
+    <Compile Include="Storage\StorageContainerStrategy.cs" />
     <Compile Include="Storage\StorageDevice.cs" />
+    <Compile Include="Storage\StorageDeviceStrategy.cs" />
 
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">
       <Link>Utilities\StbImageSharp\AnimatedFrameResult.cs</Link>

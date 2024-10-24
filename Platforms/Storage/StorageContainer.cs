@@ -30,6 +30,13 @@ namespace Microsoft.Xna.Framework.Storage
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx#ID4EDB</remarks>
     public class StorageContainer : IDisposable
     {
+        private StorageContainerStrategy _strategy;
+
+        internal StorageContainerStrategy Strategy
+        {
+            get { return _strategy; }
+        }
+
         bool _isDisposed;
 
         internal readonly string _storagePath;
@@ -46,6 +53,8 @@ namespace Microsoft.Xna.Framework.Storage
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("A title name has to be provided in parameter name.");			
+
+            this._strategy = new StorageContainerStrategy();
 
             _device = device;
             _name = name;
@@ -242,6 +251,9 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public void Dispose()
         {
+            _strategy.Dispose();
+            _strategy = null;
+
             // Fill this in when we figure out what we should be disposing
             _isDisposed = true;
         }
