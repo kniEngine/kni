@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform.Storage
             {
                 case OS.Windows:
                     {
-                        saved = StorageDevice.GetStorageRootDESKTOPGL();
+                        saved = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                         saved = Path.Combine(saved, "SavedGames");
                     }
                     break;

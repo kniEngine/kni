@@ -468,11 +468,6 @@ namespace Microsoft.Xna.Framework.Storage
 #if DESKTOPGL
             switch (CurrentPlatform.OS)
             {
-                case OS.Windows:
-                    {
-                        return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    }
-
                 case OS.Linux:
                     {
                         string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");

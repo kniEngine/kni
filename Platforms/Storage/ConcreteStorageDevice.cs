@@ -5,6 +5,10 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
+#if DESKTOPGL
+using MonoGame.Framework.Utilities;
+#endif
+
 #if (UAP || WINUI)
 using Windows.Storage;
 #endif
@@ -62,7 +66,23 @@ namespace Microsoft.Xna.Platform.Storage
     #if (UAP || WINUI)
                     return ApplicationData.Current.LocalFolder.Path;
     #elif DESKTOPGL
-                    return StorageDevice.GetStorageRootDESKTOPGL();
+                    switch (CurrentPlatform.OS)
+                    {
+                        case OS.Windows:
+                            {
+                                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                            }
+                        case OS.Linux:
+                            {
+                                return StorageDevice.GetStorageRootDESKTOPGL();
+                            }
+                        case OS.MacOSX:
+                            {
+                                return StorageDevice.GetStorageRootDESKTOPGL();
+                            }
+                        default:
+                            throw new Exception("Unexpected platform.");
+                    }
     #else
                     return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     #endif
