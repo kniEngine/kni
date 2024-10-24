@@ -2,8 +2,10 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Storage;
 
-namespace Microsoft.Xna.Framework.Storage
+namespace Microsoft.Xna.Platform.Storage
 {
     internal abstract class StorageContainerStrategy : IDisposable
     {

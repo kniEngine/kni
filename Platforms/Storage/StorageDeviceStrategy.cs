@@ -1,8 +1,10 @@
 ﻿// Copyright (C)2024 Nick Kastellanos
 
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Storage;
 
-namespace Microsoft.Xna.Framework.Storage
+namespace Microsoft.Xna.Platform.Storage
 {
     internal abstract class StorageDeviceStrategy
     {

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Xna.Platform.Storage;
 
 
 namespace Microsoft.Xna.Framework.Storage

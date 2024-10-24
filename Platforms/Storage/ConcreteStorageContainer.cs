@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Storage;
 
 #if DESKTOPGL
 using MonoGame.Framework.Utilities;
@@ -18,7 +20,7 @@ using Windows.Storage;
 using Windows.Storage.Search;
 #endif
 
-namespace Microsoft.Xna.Framework.Storage
+namespace Microsoft.Xna.Platform.Storage
 {
     //	Implementation on Windows
     //	

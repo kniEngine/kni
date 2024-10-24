@@ -32,6 +32,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Platform.Storage;
 using MonoGame.Framework.Utilities;
 
 #if (UAP || WINUI)
