@@ -29,7 +29,6 @@
 //}
 
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Storage;
@@ -86,15 +85,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public long FreeSpace
         {
-            get
-            {
-#if (UAP || WINUI)
-                return long.MaxValue;
-#else
-                return new DriveInfo(GetDevicePath).AvailableFreeSpace;
-#endif
-                //return _strategy.FreeSpace;
-            }
+            get { return _strategy.FreeSpace; }
         }
 
         /// <summary>
@@ -102,15 +93,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public bool IsConnected
         {
-            get
-            {
-#if (UAP || WINUI)
-                return true;
-#else
-                return new DriveInfo(GetDevicePath).IsReady;
-#endif
-                //return _strategy.IsConnected;
-            }
+            get { return _strategy.IsConnected; }
         }
 
         /// <summary>
@@ -118,35 +101,12 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public long TotalSpace
         {
-            get
-            {
-#if (UAP || WINUI)
-                return long.MaxValue;
-#else
-                // Not sure if this should be TotalSize or TotalFreeSize
-                return new DriveInfo(GetDevicePath).TotalSize;
-#endif
-            }
-            //return _strategy.TotalSpace;
+            get { return _strategy.TotalSpace; }
         }
 
         string GetDevicePath
         {
-            get
-            {
-                // We may not need to store the StorageContainer in the future
-                // when we get DeviceChanged events working.
-                if (_strategy._storageContainer == null)
-                {
-                    return StorageRoot;
-                }
-                else
-                {
-                    return _strategy._storageContainer.Strategy._storagePath;
-                }
-
-                //return _strategy.GetDevicePath;
-            }
+            get { return _strategy.GetDevicePath; }
         }
 
         // TODO: Implement DeviceChanged when we having the graphical implementation
