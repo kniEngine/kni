@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Devices.Sensors;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    public class AccelerometerStrategy : SensorStrategy<AccelerometerReading>
+    public abstract class AccelerometerStrategy : SensorStrategy<AccelerometerReading>
         , IDisposable
     {
 

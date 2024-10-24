@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Devices.Sensors;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
-    public class CompassStrategy : SensorStrategy<CompassReading>
+    public abstract class CompassStrategy : SensorStrategy<CompassReading>
         , IDisposable
     {
 
