@@ -474,9 +474,10 @@ namespace Microsoft.Xna.Framework.Storage
                         if (String.IsNullOrEmpty(osConfigDir))
                         {
                             osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                            if (String.IsNullOrEmpty(osConfigDir))
-                                return "."; // Oh well.
-                            osConfigDir += "/.local/share";
+                            if (!String.IsNullOrEmpty(osConfigDir))
+                                osConfigDir += "/.local/share";
+                            else
+                                osConfigDir = ".";
                         }
                         return osConfigDir;
                     }
@@ -484,9 +485,11 @@ namespace Microsoft.Xna.Framework.Storage
                 case OS.MacOSX:
                     {
                         string osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                        if (String.IsNullOrEmpty(osConfigDir))
-                            return "."; // Oh well.
-                        osConfigDir += "/Library/Application Support";
+                        if (!String.IsNullOrEmpty(osConfigDir))
+                            osConfigDir += "/Library/Application Support";
+                        else
+                            osConfigDir = ".";
+
                         return osConfigDir;
                     }
 
