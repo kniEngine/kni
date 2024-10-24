@@ -39,10 +39,8 @@ namespace Microsoft.Xna.Framework.Storage
 
         bool _isDisposed;
 
-        internal readonly string _storagePath;
         private readonly StorageDevice _device;
-        private readonly string _name;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Microsoft.Xna.Framework.Storage.StorageContainer"/> class.
         /// </summary>
@@ -52,12 +50,12 @@ namespace Microsoft.Xna.Framework.Storage
         internal StorageContainer(StorageDevice device, string name, PlayerIndex? playerIndex)
         {
             if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException("A title name has to be provided in parameter name.");			
+                throw new ArgumentNullException("A title name has to be provided in parameter name.");
 
-            this._strategy = new StorageContainerStrategy();
+            this._strategy = new StorageContainerStrategy(name);
 
             _device = device;
-            _name = name;
+
 
             // From the examples the root is based on MyDocuments folder
 #if (UAP || WINUI)
@@ -74,17 +72,17 @@ namespace Microsoft.Xna.Framework.Storage
             string root = StorageDevice.StorageRoot;
             string saved = Path.Combine(root,"SavedGames");
 #endif
-            _storagePath = Path.Combine(saved, name);
+            _strategy._storagePath = Path.Combine(saved, name);
 
             string playerSave = string.Empty;
             if (playerIndex.HasValue)
-                playerSave = Path.Combine(_storagePath, "Player" + (int)playerIndex.Value);
+                playerSave = Path.Combine(_strategy._storagePath, "Player" + (int)playerIndex.Value);
             
             if (!string.IsNullOrEmpty(playerSave))
-                _storagePath = Path.Combine(_storagePath, "Player" + (int)playerIndex);
+                _strategy._storagePath = Path.Combine(_strategy._storagePath, "Player" + (int)playerIndex);
 
             // Create the "device" if need be
-            CreateDirectoryAbsolute(_storagePath);
+            CreateDirectoryAbsolute(_strategy._storagePath);
         }
         
         /// <summary>
@@ -92,7 +90,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public string DisplayName
         {
-            get { return _name; }
+            get { return _strategy._name; }
         }
         
         /// <summary>
@@ -128,7 +126,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter directory must contain a value.");
 
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(_strategy._storagePath, directory);
 
             // Now let's try to create it
             CreateDirectoryAbsolute(dirPath);
@@ -160,7 +158,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
 
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_strategy._storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -182,7 +180,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter directory must contain a value.");
 
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(_strategy._storagePath, directory);
 
             // Now let's try to delete itd
 #if (UAP || WINUI)
@@ -204,7 +202,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
 
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_strategy._storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -227,7 +225,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter directory must contain a value.");
 
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(_strategy._storagePath, directory);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -269,7 +267,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
 
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_strategy._storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -300,7 +298,7 @@ namespace Microsoft.Xna.Framework.Storage
             IReadOnlyList<StorageFolder> results = folder.GetFoldersAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFolder, string>(e => e.Name).ToArray();
 #else
-            return Directory.GetDirectories(_storagePath);
+            return Directory.GetDirectories(_strategy._storagePath);
 #endif
         }
 
@@ -325,7 +323,7 @@ namespace Microsoft.Xna.Framework.Storage
             var results = folder.GetFilesAsync().AsTask().GetAwaiter().GetResult();
             return results.Select<StorageFile, string>(e => e.Name).ToArray();
 #else
-            return Directory.GetFiles(_storagePath);
+            return Directory.GetFiles(_strategy._storagePath);
 #endif
         }
 
@@ -346,7 +344,7 @@ namespace Microsoft.Xna.Framework.Storage
             IReadOnlyList<StorageFile> files = query.GetFilesAsync().AsTask().GetAwaiter().GetResult();
             return files.Select<StorageFile, string>(e => e.Name).ToArray();
 #else
-            return Directory.GetFiles(_storagePath, searchPattern);
+            return Directory.GetFiles(_strategy._storagePath, searchPattern);
 #endif
         }
 
@@ -388,7 +386,7 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentNullException("Parameter file must contain a value.");
 
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(_strategy._storagePath, file);
 
 #if (UAP || WINUI)
             StorageFolder folder = ApplicationData.Current.LocalFolder;

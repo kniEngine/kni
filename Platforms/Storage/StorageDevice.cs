@@ -69,10 +69,6 @@ namespace Microsoft.Xna.Framework.Storage
             get { return _strategy; }
         }
 
-        PlayerIndex? _player;
-        int _directoryCount;
-        StorageContainer _storageContainer;
-
         /// <summary>
         /// Creates a new <see cref="StorageDevice"/> instance.
         /// </summary>
@@ -81,10 +77,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="directoryCount"></param>
         internal StorageDevice(PlayerIndex? player, int sizeInBytes, int directoryCount) 
         {
-            this._strategy = new StorageDeviceStrategy();
-
-            this._player = player;
-            this._directoryCount = directoryCount;
+            this._strategy = new StorageDeviceStrategy(player, directoryCount);
         }
         
         /// <summary>
@@ -139,13 +132,13 @@ namespace Microsoft.Xna.Framework.Storage
             {
                 // We may not need to store the StorageContainer in the future
                 // when we get DeviceChanged events working.
-                if (_storageContainer == null)
+                if (_strategy._storageContainer == null)
                 {
                     return StorageRoot;
                 }
                 else
                 {
-                    return _storageContainer._storagePath;
+                    return _strategy._storageContainer.Strategy._storagePath;
                 }				
             }
         }
@@ -221,8 +214,8 @@ namespace Microsoft.Xna.Framework.Storage
         // Private method to handle the creation of the StorageDevice
         private StorageContainer Open(string displayName) 
         {
-            _storageContainer = new StorageContainer(this, displayName, _player);
-            return _storageContainer;
+            _strategy._storageContainer = new StorageContainer(this, displayName, _strategy._player);
+            return _strategy._storageContainer;
         }
         
         //
