@@ -29,14 +29,10 @@
 //}
 
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Storage;
 
-#if (UAP || WINUI)
-using Windows.Storage;
-#endif
 #if NET4_0_OR_GREATER
 using System.Runtime.Remoting.Messaging;
 #endif
@@ -54,7 +50,7 @@ namespace Microsoft.Xna.Framework.Storage
 
     // The delegate must have the same signature as the method
     // it will call asynchronously.
-    public delegate StorageContainer OpenContainerAsynchronous(string displayName);
+    public delegate StorageContainer OpenContainerAsynchronous(StorageDevice storageDevice, string displayName);
     
     /// <summary>
     /// Exposes a storage device for storing user data.
@@ -62,9 +58,12 @@ namespace Microsoft.Xna.Framework.Storage
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx</remarks>
     public sealed class StorageDevice
     {
-        PlayerIndex? _player;
-        int _directoryCount;
-        StorageContainer _storageContainer;
+        private StorageDeviceStrategy _strategy;
+
+        internal StorageDeviceStrategy Strategy
+        {
+            get { return _strategy; }
+        }
 
         /// <summary>
         /// Creates a new <see cref="StorageDevice"/> instance.
@@ -74,8 +73,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="directoryCount"></param>
         internal StorageDevice(PlayerIndex? player, int sizeInBytes, int directoryCount) 
         {
-            this._player = player;
-            this._directoryCount = directoryCount;
+            this._strategy = new ConcreteStorageDevice(player, directoryCount);
         }
         
         /// <summary>
@@ -83,14 +81,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public long FreeSpace
         {
-            get
-            {
-#if (UAP || WINUI)
-                return long.MaxValue;
-#else
-                return new DriveInfo(GetDevicePath).AvailableFreeSpace;
-#endif
-            }
+            get { return _strategy.FreeSpace; }
         }
 
         /// <summary>
@@ -98,14 +89,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public bool IsConnected
         {
-            get
-            {
-#if (UAP || WINUI)
-                return true;
-#else
-                return new DriveInfo(GetDevicePath).IsReady;
-#endif
-            } 
+            get { return _strategy.IsConnected; }
         }
 
         /// <summary>
@@ -113,32 +97,12 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         public long TotalSpace
         {
-            get
-            {
-#if (UAP || WINUI)
-                return long.MaxValue;
-#else
-                // Not sure if this should be TotalSize or TotalFreeSize
-                return new DriveInfo(GetDevicePath).TotalSize;
-#endif
-            }
+            get { return _strategy.TotalSpace; }
         }
-        
+
         string GetDevicePath
         {
-            get
-            {
-                // We may not need to store the StorageContainer in the future
-                // when we get DeviceChanged events working.
-                if (_storageContainer == null)
-                {
-                    return StorageRoot;
-                }
-                else
-                {
-                    return _storageContainer._storagePath;
-                }				
-            }
+            get { return _strategy.GetDevicePath; }
         }
 
         // TODO: Implement DeviceChanged when we having the graphical implementation
@@ -170,52 +134,35 @@ namespace Microsoft.Xna.Framework.Storage
         //     A user-created object used to uniquely identify the request, or null.
         public IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state)
         {
-            return OpenContainer(displayName, callback, state);
-
-        }
-        
-        private IAsyncResult OpenContainer(string displayName, AsyncCallback callback, object state)
-        {
-#if ANDROID || IOS || TVOS || NETFX_CORE
-            TaskCompletionSource<StorageContainer> tcs = new TaskCompletionSource<StorageContainer>(state);
-            Task<StorageContainer> task = Task.Run<StorageContainer>(() => Open(displayName));
-            task.ContinueWith((t) =>
-            {
-                // Copy the task result into the returned task.
-                if (t.IsFaulted)
-                    tcs.TrySetException(t.Exception.InnerExceptions);
-                else if (t.IsCanceled)
-                    tcs.TrySetCanceled();
-                else
-                    tcs.TrySetResult(t.Result);
-
-                // Invoke the user callback if necessary.
-                if (callback != null)
-                    callback(tcs.Task);
-            });
-            return tcs.Task;
-#else
-            try
-            {
-                OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
-#if (UAP || WINUI)
-                _containerDelegate = AsynchronousOpen;
-#endif
-                return AsynchronousOpen.BeginInvoke(displayName, callback, state);
-            }
-            finally
-            {
-            }
-#endif
+            return _strategy.BeginOpenContainer(this, displayName, callback, state);
         }
     
-        // Private method to handle the creation of the StorageDevice
-        private StorageContainer Open(string displayName) 
+        // Summary:
+        //     Ends the process for opening a StorageContainer.
+        //
+        // Parameters:
+        //   result:
+        //     The IAsyncResult returned from BeginOpenContainer.
+        public StorageContainer EndOpenContainer(IAsyncResult result)
         {
-            _storageContainer = new StorageContainer(this, displayName, _player);
-            return _storageContainer;
+            return _strategy.EndOpenContainer(result);
+        }			
+
+        // Parameters:
+        //   titleName:
+        //     The name of the storage container to delete.
+        public void DeleteContainer(string titleName)
+        {
+            _strategy.DeleteContainer(titleName);
         }
-        
+
+        // Private method to handle the creation of the StorageDevice
+        private StorageContainer Open(string displayName)
+        {
+            return _strategy.Open(this, displayName);
+        }
+
+
         //
         // Summary:
         //     Begins the process for displaying the storage device selector user interface,
@@ -372,78 +319,6 @@ namespace Microsoft.Xna.Framework.Storage
         }
         
         //
-        //
-        // Parameters:
-        //   titleName:
-        //     The name of the storage container to delete.
-        public void DeleteContainer(string titleName)
-        {
-            throw new NotImplementedException();
-        }			
-
-        //
-        // Summary:
-        //     Ends the process for opening a StorageContainer.
-        //
-        // Parameters:
-        //   result:
-        //     The IAsyncResult returned from BeginOpenContainer.
-        public StorageContainer EndOpenContainer(IAsyncResult result)
-        {
-#if ANDROID || IOS || TVOS || NETFX_CORE
-            try
-            {
-                return ((Task<StorageContainer>)result).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw;
-            }
-#else
-            StorageContainer returnValue = null;
-            try
-            {
-#if (UAP || WINUI)
-                // AsyncResult does not exist in WinRT
-                var asyncResult = _containerDelegate as OpenContainerAsynchronous;
-                if (asyncResult != null)
-                {
-                    // Wait for the WaitHandle to become signaled.
-                    result.AsyncWaitHandle.WaitOne();
-
-                    // Call EndInvoke to retrieve the results.
-                    returnValue = asyncResult.EndInvoke(result);
-                }
-                _containerDelegate = null;
-#elif NET4_0_OR_GREATER
-                // Retrieve the delegate.
-                AsyncResult asyncResult = result as AsyncResult;
-                if (asyncResult != null)
-                {
-                    OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
-
-                    // Wait for the WaitHandle to become signaled.
-                    result.AsyncWaitHandle.WaitOne();
-
-                    // Call EndInvoke to retrieve the results.
-                    if (asyncDelegate != null)
-                        returnValue = asyncDelegate.EndInvoke(result);
-                }
-#else // NET6_0_OR_GREATER
-                throw new NotImplementedException();
-#endif
-            }
-            finally
-            {
-                // Close the wait handle.
-                result.AsyncWaitHandle.Dispose();
-            }
-            
-            return returnValue;
-#endif
-        }			
-
-        //
         // Summary:
         //     Ends the display of the storage selector user interface. Reference page contains
         //     links to related code samples.
@@ -499,47 +374,6 @@ namespace Microsoft.Xna.Framework.Storage
                 throw new ArgumentException("result");
 #endif
 
-        }
-        
-        internal static string StorageRoot
-        {
-            get
-            {
-#if (UAP || WINUI)
-                return ApplicationData.Current.LocalFolder.Path; 
-#elif DESKTOPGL
-                if(CurrentPlatform.OS == OS.Linux)
-                {
-                string osConfigDir = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
-                if (String.IsNullOrEmpty(osConfigDir))
-                {
-                    osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                    if (String.IsNullOrEmpty(osConfigDir))
-                    {
-                        return "."; // Oh well.
-                    }
-                    osConfigDir += "/.local/share";
-                }
-                return osConfigDir;
-                }
-                else if (CurrentPlatform.OS == OS.MacOSX)
-                {
-                    string osConfigDir = Environment.GetEnvironmentVariable("HOME");
-                    if (String.IsNullOrEmpty(osConfigDir))
-                    {
-                        return "."; // Oh well.
-                    }
-                    osConfigDir += "/Library/Application Support";
-                    return osConfigDir;
-                }
-                else if(CurrentPlatform.OS == OS.Windows)
-                    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                else
-                    throw new Exception("Unexpected platform!");
-#else
-                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-#endif
-            }
         }
     }
 }
