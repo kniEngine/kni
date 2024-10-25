@@ -82,15 +82,15 @@ namespace Kni.Tests.ContentPipeline
         {
             ContentCompiler compiler = new ContentCompiler();
 
-            foreach (var platform in Platforms)
-                foreach (var gfxProfile in GraphicsProfiles)
-                    foreach (var compress in CompressContents)
-                        using (var xnbStream = new MemoryStream())
+            foreach (TargetPlatform platform in Platforms)
+                foreach (GraphicsProfile gfxProfile in GraphicsProfiles)
+                    foreach (bool compress in CompressContents)
+                        using (MemoryStream xnbStream = new MemoryStream())
                         {
                             compiler.Compile(xnbStream, data, platform, gfxProfile, compress, "", "");
-                            using (var content = new TestContentManager(xnbStream))
+                            using (ContentManager content = new TestContentManager(xnbStream))
                             {
-                                var result = content.Load<T>("foo");
+                                T result = content.Load<T>("foo");
                                 validation(result);
                             }
                         }

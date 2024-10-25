@@ -90,7 +90,7 @@ namespace Kni.Tests.ContentPipeline
 
         private static T CompileAndLoad<T>(T result)
         {
-            var xnbStream = new MemoryStream();
+            MemoryStream xnbStream = new MemoryStream();
 #if XNA
             // In MS XNA the ContentCompiler is completely internal, so we need
             // to use just a little reflection to get access to what we need.
@@ -101,13 +101,13 @@ namespace Kni.Tests.ContentPipeline
             compileMethod.Invoke(compiler, new object[] { xnbStream, result, TargetPlatform.Windows, GraphicsProfile.Reach,
                                 false, Directory.GetCurrentDirectory(), "referenceRelocationPath" });
 #else
-            var compiler = new ContentCompiler();
+            ContentCompiler compiler = new ContentCompiler();
             compiler.Compile(xnbStream, result, TargetPlatform.Windows, GraphicsProfile.Reach,
                                 false, "rootDirectory", "referenceRelocationPath");
 #endif
 
-            var content = new TestContentManager(xnbStream);
-            var loaded = content.Load<T>("Whatever");
+            ContentManager content = new TestContentManager(xnbStream);
+            T loaded = content.Load<T>("Whatever");
             return loaded;
         }
 
