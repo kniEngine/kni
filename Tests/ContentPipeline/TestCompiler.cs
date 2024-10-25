@@ -35,17 +35,17 @@ namespace Kni.Tests.ContentPipeline
                 }
             }
 
-            private readonly MemoryStream _xnbStream;
+            private readonly byte[] _bufferData;
 
-            public TestContentManager(MemoryStream xnbStream)
+            public TestContentManager(byte[] bufferData)
                 : base(new FakeServiceProvider(), "NONE")
             {
-                _xnbStream = xnbStream;
+                _bufferData = bufferData;
             }
 
             protected override Stream OpenStream(string assetName)
             {
-                return new MemoryStream(_xnbStream.GetBuffer(), false);
+                return new MemoryStream(_bufferData, false);
             }
         }
 
@@ -88,7 +88,8 @@ namespace Kni.Tests.ContentPipeline
                         using (MemoryStream xnbStream = new MemoryStream())
                         {
                             compiler.Compile(xnbStream, data, platform, gfxProfile, compress, "", "");
-                            using (ContentManager content = new TestContentManager(xnbStream))
+                            byte[] bufferData = xnbStream.GetBuffer();
+                            using (ContentManager content = new TestContentManager(bufferData))
                             {
                                 T result = content.Load<T>("foo");
                                 validation(result);
