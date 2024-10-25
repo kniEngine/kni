@@ -106,7 +106,7 @@ namespace Kni.Tests.ContentPipeline
                                 false, "rootDirectory", "referenceRelocationPath");
 #endif
 
-            byte[] bufferData = xnbStream.GetBuffer();
+            byte[] bufferData = xnbStream.ToArray();
             ContentManager content = new TestContentManager(bufferData);
             T loaded = content.Load<T>("Whatever");
             return loaded;
