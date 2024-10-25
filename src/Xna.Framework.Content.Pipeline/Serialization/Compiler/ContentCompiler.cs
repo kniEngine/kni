@@ -303,7 +303,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 return null;
             compressedStream.Write(outputArray, 0, resultLZ4Length);
 
-            if (compressedStream.Length >= decompressedDataSize)
+            if (compressedStream.Length >= bodyStream.Length)
                 return null;
 
 
