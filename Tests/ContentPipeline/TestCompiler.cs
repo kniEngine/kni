@@ -35,17 +35,17 @@ namespace Kni.Tests.ContentPipeline
                 }
             }
 
-            private readonly MemoryStream _xnbStream;
+            private readonly byte[] _bufferData;
 
-            public TestContentManager(MemoryStream xnbStream)
+            public TestContentManager(byte[] bufferData)
                 : base(new FakeServiceProvider(), "NONE")
             {
-                _xnbStream = xnbStream;
+                _bufferData = bufferData;
             }
 
             protected override Stream OpenStream(string assetName)
             {
-                return new MemoryStream(_xnbStream.GetBuffer(), false);
+                return new MemoryStream(_bufferData, false);
             }
         }
 
@@ -82,15 +82,16 @@ namespace Kni.Tests.ContentPipeline
         {
             ContentCompiler compiler = new ContentCompiler();
 
-            foreach (var platform in Platforms)
-                foreach (var gfxProfile in GraphicsProfiles)
-                    foreach (var compress in CompressContents)
-                        using (var xnbStream = new MemoryStream())
+            foreach (TargetPlatform platform in Platforms)
+                foreach (GraphicsProfile gfxProfile in GraphicsProfiles)
+                    foreach (bool compress in CompressContents)
+                        using (MemoryStream xnbStream = new MemoryStream())
                         {
                             compiler.Compile(xnbStream, data, platform, gfxProfile, compress, "", "");
-                            using (var content = new TestContentManager(xnbStream))
+                            byte[] bufferData = xnbStream.GetBuffer();
+                            using (ContentManager content = new TestContentManager(bufferData))
                             {
-                                var result = content.Load<T>("foo");
+                                T result = content.Load<T>("foo");
                                 validation(result);
                             }
                         }
