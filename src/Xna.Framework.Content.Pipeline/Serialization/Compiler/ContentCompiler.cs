@@ -212,7 +212,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 contentwriter.WriteObject(content);
                 contentwriter.WriteSharedResources(contentwriter.SharedResources);
 
-                if (!compressContent)
+                if (compressContent == false)
                 {
                     BufferedStream bufferedStream = new BufferedStream(stream);
                     WriteHeader(bufferedStream, targetPlatform, targetProfile, compressContent);
@@ -248,7 +248,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
                     // Before we write the header, try to compress the body stream. If compression fails, we want to
                     // turn off the compressContent flag so the correct flags are written in the header
-                    Stream compressedStream = CompressStream(bodyStream);
+                    Stream compressedStream = null;
+                    compressedStream = CompressStreamLZ4(bodyStream);
                     if (compressedStream == null)
                     {
                         compressContent = false;
@@ -270,15 +271,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             return;
         }
 
-        private static void WriteUInt(Stream bufferedStream, uint fileSize)
+        private static void WriteUShort(Stream stream, ushort value)
         {
-            byte[] data = BitConverter.GetBytes(fileSize);
-            bufferedStream.Write(data, 0, data.Length);
+            byte[] data = BitConverter.GetBytes(value);
+            stream.Write(data, 0, data.Length);
         }
 
-        private MemoryStream CompressStream(MemoryStream bodyStream)
+        private static void WriteUInt(Stream stream, uint value)
         {
-            byte[] plainData = new byte[bodyStream.Length];
+            byte[] data = BitConverter.GetBytes(value);
+            stream.Write(data, 0, data.Length);
+        }
+
+        private MemoryStream CompressStreamLZ4(MemoryStream bodyStream)
+        {
+            MemoryStream compressedStream = new MemoryStream();
+            long decompressedSize = bodyStream.Length;
+            WriteUInt(compressedStream, (uint)decompressedSize);
+
+            byte[] plainData = new byte[decompressedSize];
             bodyStream.Position = 0;
             bodyStream.Read(plainData, 0, plainData.Length);
 
@@ -286,13 +297,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             int maxLength = LZ4Codec.MaximumOutputLength((int)plainData.Length);
             byte[] outputArray = new byte[maxLength * 2];
             int resultLength = LZ4Codec.Encode32HC(plainData, 0, (int)plainData.Length, outputArray, 0, maxLength);
+
             if (resultLength < 0)
                 return null;
-            if (resultLength >= plainData.Length)
+            if (resultLength >= decompressedSize)
                 return null;
 
-            MemoryStream compressedStream = new MemoryStream();
-            WriteUInt(compressedStream, (uint)bodyStream.Length);
             compressedStream.Write(outputArray, 0, resultLength);
             return compressedStream;
         }
@@ -311,8 +321,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             byte flags = default(byte);
 
-            // We cannot use LZX compression, so we use the public domain LZ4 compression. Use one of the spare bits in the flags byte to specify LZ4.
-            if (compressContent)
+            // We cannot use LZX compression, so we use the public domain LZ4 compression.
+            // Use one of the spare bits in the flags byte to specify LZ4.
+            if (compressContent == true)
                 flags |= ContentFlagCompressedLz4;
 
             if (targetProfile == GraphicsProfile.HiDef)

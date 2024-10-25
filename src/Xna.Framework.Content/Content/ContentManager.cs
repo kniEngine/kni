@@ -238,15 +238,16 @@ namespace Microsoft.Xna.Framework.Content
 
             byte flags = xnbReader.ReadByte();
 
-            bool isCompressedLzx = (flags & ContentFlagCompressedLzx) != 0;
-            bool isCompressedLz4 = (flags & ContentFlagCompressedLz4) != 0;
+            bool isCompressedLzx = (flags & ContentFlagCompressedLzx) == ContentFlagCompressedLzx;
+            bool isCompressedLz4 = (flags & ContentFlagCompressedLz4) == ContentFlagCompressedLz4;
             bool isHiDef = (flags & ContentFlagHiDef) != 0;
 
             // The next int32 is the length of the XNB file
             int xnbLength = xnbReader.ReadInt32();
 
             Stream decompressedStream = null;
-            if (isCompressedLzx || isCompressedLz4)
+            if (isCompressedLzx
+            ||  isCompressedLz4)
             {
                 // Decompress the xnb
                 int decompressedSize = xnbReader.ReadInt32();
@@ -259,7 +260,7 @@ namespace Microsoft.Xna.Framework.Content
                     // Handle the case of Android's BufferedStream assets.
                     Stream compressedStream = stream;
                     if (stream is BufferedStream && !stream.CanSeek)
-                    {                        
+                    {
                         compressedStream = new MemoryStream(compressedSize);
                         stream.CopyTo(compressedStream);
                         compressedStream.Seek(0, SeekOrigin.Begin);
