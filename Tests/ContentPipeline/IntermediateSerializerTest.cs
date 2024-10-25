@@ -27,44 +27,6 @@ namespace Kni.Tests.ContentPipeline
 
     class IntermediateSerializerTest
     {
-        class TestContentManager : ContentManager
-        {
-            class FakeGraphicsService : IGraphicsDeviceService
-            {
-                public GraphicsDevice GraphicsDevice { get; private set; }
-
-                #pragma warning disable 67
-                public event EventHandler<EventArgs> DeviceCreated;
-                public event EventHandler<EventArgs> DeviceDisposing;
-                public event EventHandler<EventArgs> DeviceReset;
-                public event EventHandler<EventArgs> DeviceResetting;
-                #pragma warning restore 67
-            }
-
-            class FakeServiceProvider : IServiceProvider
-            {
-                public object GetService(Type serviceType)
-                {
-                    if (serviceType == typeof(IGraphicsDeviceService))
-                        return new FakeGraphicsService();
-
-                    throw new NotImplementedException();
-                }
-            }
-
-            private readonly byte[] _bufferData;
-
-            public TestContentManager(byte[] bufferData)
-                : base(new FakeServiceProvider(), "NONE")
-            {
-                _bufferData = bufferData;
-            }
-
-            protected override Stream OpenStream(string assetName)
-            {
-                return new MemoryStream(_bufferData, false);
-            }
-        }
 
         private static void SerializeAndAssert<T>(string file, T value)
         {
