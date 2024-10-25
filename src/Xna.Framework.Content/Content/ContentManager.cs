@@ -256,19 +256,19 @@ namespace Microsoft.Xna.Framework.Content
 
                 if (isCompressedLzx)
                 {
-                    int compressedSize = compressedFileSize - 14;
+                    int compressedDataSize = compressedFileSize - 14;
 
                     // LzxDecoderStream require a seekable stream.
                     // Handle the case of Android's BufferedStream assets.
                     Stream compressedStream = stream;
                     if (stream is BufferedStream && !stream.CanSeek)
                     {
-                        compressedStream = new MemoryStream(compressedSize);
+                        compressedStream = new MemoryStream(compressedDataSize);
                         stream.CopyTo(compressedStream);
                         compressedStream.Seek(0, SeekOrigin.Begin);
                     }
 
-                    decompressedStream = new LzxDecoderStream(compressedStream, decompressedDataSize, compressedSize);
+                    decompressedStream = new LzxDecoderStream(compressedStream, decompressedDataSize, compressedDataSize);
                 }
                 else if (isCompressedLz4)
                 {
