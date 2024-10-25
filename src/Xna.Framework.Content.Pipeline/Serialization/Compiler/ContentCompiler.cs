@@ -205,7 +205,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <param name="compressContent">True if the content should be LZ4 compressed.</param>
         /// <param name="rootDirectory">The root directory of the content.</param>
         /// <param name="referenceRelocationPath">The path of the XNB file, used to calculate relative paths for external references.</param>
+        [Obsolete]
         public void Compile(Stream stream, object content, TargetPlatform targetPlatform, GraphicsProfile targetProfile, bool compressContent, string rootDirectory, string referenceRelocationPath)
+        {
+            ContentCompression compression = (compressContent == true)
+                                           ? ContentCompression.LegacyLZ4
+                                           : ContentCompression.Uncompressed;
+            Compile(stream, content, targetPlatform, targetProfile, compression, rootDirectory, referenceRelocationPath);
+        }
+
+        /// <summary>
+        /// Write the content to a XNB file.
+        /// </summary>
+        /// <param name="stream">The stream to write the XNB file to.</param>
+        /// <param name="content">The content to write to the XNB file.</param>
+        /// <param name="targetPlatform">The platform the XNB is intended for.</param>
+        /// <param name="targetProfile">The graphics profile of the target.</param>
+        /// <param name="compression">The compression method.</param>
+        /// <param name="rootDirectory">The root directory of the content.</param>
+        /// <param name="referenceRelocationPath">The path of the XNB file, used to calculate relative paths for external references.</param>
+        public void Compile(Stream stream, object content, TargetPlatform targetPlatform, GraphicsProfile targetProfile, ContentCompression compression, string rootDirectory, string referenceRelocationPath)
         {
             using (MemoryStream contentStream = new MemoryStream())
             using (ContentWriter contentwriter = new ContentWriter(this, contentStream, targetPlatform, targetProfile, rootDirectory, referenceRelocationPath))
@@ -213,10 +232,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                 contentwriter.WriteObject(content);
                 contentwriter.WriteSharedResources(contentwriter.SharedResources);
 
-                if (compressContent == false)
+                if (compression == ContentCompression.Uncompressed)
                 {
                     BufferedStream bufferedStream = new BufferedStream(stream);
-                    WriteHeader(bufferedStream, targetPlatform, targetProfile, compressContent);
+                    WriteHeader(bufferedStream, targetPlatform, targetProfile, compression);
                     long fileSizePos = bufferedStream.Position;
                     uint compressedFileSize = 0; // compressedFileSize is not used on uncompressed XNBs.
                     WriteUInt(bufferedStream, compressedFileSize);
@@ -235,7 +254,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     WriteUInt(bufferedStream, (uint)bufferedStream.Length);
                     bufferedStream.Flush();
                 }
-                else // (compressContent != false)
+                else // (compression != ContentCompression.Uncompressed)
                 {
                     MemoryStream bodyStream = new MemoryStream();
                     using (XnbBodyWriter xnbBodyWriter = new XnbBodyWriter(bodyStream))
@@ -248,25 +267,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
                     // Before we write the header, try to compress the body stream.
                     Stream compressedStream = null;
-                    switch (compressContent)
+                    switch (compression)
                     {
-                        case false:
+                        case ContentCompression.Uncompressed:
                             throw new InvalidOperationException();
-                        case true:
+                        case ContentCompression.LegacyLZ4:
                             compressedStream = CompressStreamLegacyLZ4(bodyStream);
                             break;
+                        default:
+                            throw new NotImplementedException();
                     }
 
                     if (compressedStream == null || compressedStream.Length >= bodyStream.Length)
                     {
                         // If compression fails, we want to turn off the compression flag
                         // so the correct flags are written in the header.
-                        compressContent = false;
+                        compression = ContentCompression.Uncompressed;
                         compressedStream = bodyStream;
                     }
 
                     BufferedStream bufferedStream = new BufferedStream(stream);
-                    WriteHeader(bufferedStream, targetPlatform, targetProfile, compressContent);
+                    WriteHeader(bufferedStream, targetPlatform, targetProfile, compression);
                     long fileSizePos = bufferedStream.Position;
                     uint compressedFileSize = (uint)(fileSizePos + sizeof(UInt32) + compressedStream.Length);
                     WriteUInt(bufferedStream, compressedFileSize);
@@ -316,7 +337,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <summary>
         /// Write the header to the output stream.
         /// </summary>
-        private void WriteHeader(Stream stream, TargetPlatform targetPlatform, GraphicsProfile targetProfile, bool compressContent)
+        private void WriteHeader(Stream stream, TargetPlatform targetPlatform, GraphicsProfile targetProfile, ContentCompression compression)
         {
             stream.WriteByte((byte)'X');
             stream.WriteByte((byte)'N');
@@ -327,15 +348,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             byte flags = default(byte);
 
-            switch (compressContent)
+            switch (compression)
             {
-                case false:
+                case ContentCompression.Uncompressed:
                     break;
-                case true:
+                case ContentCompression.LegacyLZ4:
                     // We cannot use LZX compression, so we use the public domain LZ4 compression.
                     // Use one of the spare bits in the flags byte to specify LZ4.
                     flags |= ContentFlagCompressedLz4;
                     break;
+                default:
+                    throw new NotImplementedException();
             }
 
             if (targetProfile == GraphicsProfile.HiDef)

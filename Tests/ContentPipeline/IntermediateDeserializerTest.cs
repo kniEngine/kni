@@ -103,7 +103,7 @@ namespace Kni.Tests.ContentPipeline
 #else
             ContentCompiler compiler = new ContentCompiler();
             compiler.Compile(xnbStream, result, TargetPlatform.Windows, GraphicsProfile.Reach,
-                                false, "rootDirectory", "referenceRelocationPath");
+                                  ContentCompression.Uncompressed, "rootDirectory", "referenceRelocationPath");
 #endif
 
             byte[] bufferData = xnbStream.ToArray();

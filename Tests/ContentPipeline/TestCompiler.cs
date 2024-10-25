@@ -72,10 +72,10 @@ namespace Kni.Tests.ContentPipeline
             GraphicsProfile.HiDef,
             GraphicsProfile.Reach
         };
-        static readonly IReadOnlyCollection<bool> CompressContents = new[]
+        static readonly IReadOnlyCollection<ContentCompression> Compression = new[]
         {
-            true,
-            false
+            ContentCompression.LegacyLZ4,
+            ContentCompression.Uncompressed,
         };
 
         public static void CompileAndLoadAssets<T>(T data, Action<T> validation)
@@ -84,10 +84,10 @@ namespace Kni.Tests.ContentPipeline
 
             foreach (TargetPlatform platform in Platforms)
                 foreach (GraphicsProfile gfxProfile in GraphicsProfiles)
-                    foreach (bool compress in CompressContents)
+                    foreach (ContentCompression compression in Compression)
                         using (MemoryStream xnbStream = new MemoryStream())
                         {
-                            compiler.Compile(xnbStream, data, platform, gfxProfile, compress, "", "");
+                            compiler.Compile(xnbStream, data, platform, gfxProfile, compression, "", "");
                             byte[] bufferData = xnbStream.ToArray();
                             using (ContentManager content = new TestContentManager(bufferData))
                             {

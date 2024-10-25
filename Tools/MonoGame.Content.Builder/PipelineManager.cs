@@ -801,8 +801,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 _compiler = new ContentCompiler();
 
             // Write the XNB.
+            ContentCompression compression = (CompressContent == true)
+                                           ? ContentCompression.LegacyLZ4
+                                           : ContentCompression.Uncompressed;
             using (Stream stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
-                _compiler.Compile(stream, content, Platform, Profile, CompressContent, OutputDirectory, outputFileDir);
+                _compiler.Compile(stream, content, Platform, Profile, compression, OutputDirectory, outputFileDir);
 
             // Store the last write time of the output XNB here
             // so we can verify it hasn't been tampered with.
