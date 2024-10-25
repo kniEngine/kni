@@ -88,7 +88,7 @@ namespace Kni.Tests.ContentPipeline
                         using (MemoryStream xnbStream = new MemoryStream())
                         {
                             compiler.Compile(xnbStream, data, platform, gfxProfile, compress, "", "");
-                            byte[] bufferData = xnbStream.GetBuffer();
+                            byte[] bufferData = xnbStream.ToArray();
                             using (ContentManager content = new TestContentManager(bufferData))
                             {
                                 T result = content.Load<T>("foo");
