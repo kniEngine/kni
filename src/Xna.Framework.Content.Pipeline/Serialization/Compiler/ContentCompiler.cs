@@ -287,10 +287,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         private MemoryStream CompressStreamLZ4(MemoryStream bodyStream)
         {
             MemoryStream compressedStream = new MemoryStream();
-            long decompressedSize = bodyStream.Length;
-            WriteUInt(compressedStream, (uint)decompressedSize);
+            uint decompressedDataSize = (uint)bodyStream.Length;
+            WriteUInt(compressedStream, decompressedDataSize);
 
-            byte[] plainData = new byte[decompressedSize];
+            byte[] plainData = new byte[decompressedDataSize];
             bodyStream.Position = 0;
             bodyStream.Read(plainData, 0, plainData.Length);
 
@@ -301,7 +301,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             if (resultLength < 0) // check error
                 return null;
 
-            if (resultLength >= decompressedSize)
+            if (resultLength >= decompressedDataSize)
                 return null;
 
             compressedStream.Write(outputArray, 0, resultLength);

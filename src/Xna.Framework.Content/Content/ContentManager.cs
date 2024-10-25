@@ -252,7 +252,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 // Decompress the xnb
 
-                int decompressedSize = xnbReader.ReadInt32();
+                int decompressedDataSize = xnbReader.ReadInt32();
 
                 if (isCompressedLzx)
                 {
@@ -268,7 +268,7 @@ namespace Microsoft.Xna.Framework.Content
                         compressedStream.Seek(0, SeekOrigin.Begin);
                     }
 
-                    decompressedStream = new LzxDecoderStream(compressedStream, decompressedSize, compressedSize);
+                    decompressedStream = new LzxDecoderStream(compressedStream, decompressedDataSize, compressedSize);
                 }
                 else if (isCompressedLz4)
                 {
