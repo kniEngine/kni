@@ -253,7 +253,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                         case false:
                             throw new InvalidOperationException();
                         case true:
-                            compressedStream = CompressStreamLZ4(bodyStream);
+                            compressedStream = CompressStreamLegacyLZ4(bodyStream);
                             break;
                     }
 
@@ -292,7 +292,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             stream.Write(data, 0, data.Length);
         }
 
-        private MemoryStream CompressStreamLZ4(MemoryStream bodyStream)
+        private MemoryStream CompressStreamLegacyLZ4(MemoryStream bodyStream)
         {
             MemoryStream compressedStream = new MemoryStream();
             uint decompressedDataSize = (uint)bodyStream.Length;
