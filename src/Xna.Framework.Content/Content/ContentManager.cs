@@ -253,11 +253,10 @@ namespace Microsoft.Xna.Framework.Content
                 // Decompress the xnb
 
                 int decompressedDataSize = xnbReader.ReadInt32();
+                int compressedDataSize = compressedFileSize - 14;
 
                 if (isCompressedLzx)
                 {
-                    int compressedDataSize = compressedFileSize - 14;
-
                     // LzxDecoderStream require a seekable stream.
                     // Handle the case of Android's BufferedStream assets.
                     Stream compressedStream = stream;
