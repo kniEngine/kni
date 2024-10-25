@@ -23,6 +23,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
         const byte ContentFlagCompressedLzx = 0x80;
         const byte ContentFlagCompressedLz4 = 0x40;
+        const byte ContentFlagCompressedExt = 0xC0;
         const byte ContentFlagHiDef = 0x01;
 
         // This array must remain in sync with TargetPlatform

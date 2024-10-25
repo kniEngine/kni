@@ -15,6 +15,7 @@ namespace Microsoft.Xna.Framework.Content
     {
         const byte ContentFlagCompressedLzx = 0x80;
         const byte ContentFlagCompressedLz4 = 0x40;
+        const byte ContentFlagCompressedExt = 0xC0;
         const byte ContentFlagHiDef = 0x01;
 
         private readonly object SyncHandle = new object();
@@ -238,8 +239,7 @@ namespace Microsoft.Xna.Framework.Content
 
             byte flags = xnbReader.ReadByte();
 
-            bool isCompressedLzx = (flags & ContentFlagCompressedLzx) == ContentFlagCompressedLzx;
-            bool isCompressedLz4 = (flags & ContentFlagCompressedLz4) == ContentFlagCompressedLz4;
+            bool isCompressed = (flags & ContentFlagCompressedExt) != 0;
 
             bool isHiDef = (flags & ContentFlagHiDef) != 0;
 
@@ -247,13 +247,15 @@ namespace Microsoft.Xna.Framework.Content
             int compressedFileSize = xnbReader.ReadInt32();
 
             Stream decompressedStream = null;
-            if (isCompressedLzx
-            ||  isCompressedLz4)
+            if (isCompressed)
             {
                 // Decompress the xnb
 
                 int decompressedDataSize = xnbReader.ReadInt32();
                 int compressedDataSize = compressedFileSize - 14;
+
+                bool isCompressedLzx = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLzx;
+                bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
 
                 if (isCompressedLzx)
                 {
