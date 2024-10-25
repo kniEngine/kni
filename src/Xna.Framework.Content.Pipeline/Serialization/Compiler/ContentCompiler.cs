@@ -301,11 +301,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             int resultLength = LZ4Codec.Encode32HC(plainData, 0, (int)plainData.Length, outputArray, 0, maxLength);
             if (resultLength < 0) // check error
                 return null;
+            compressedStream.Write(outputArray, 0, resultLength);
 
             if (resultLength >= decompressedDataSize)
                 return null;
 
-            compressedStream.Write(outputArray, 0, resultLength);
 
             return compressedStream;
         }
