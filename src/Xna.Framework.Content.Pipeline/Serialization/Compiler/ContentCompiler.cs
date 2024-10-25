@@ -250,7 +250,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     Stream compressedStream = null;
                     compressedStream = CompressStreamLZ4(bodyStream);
 
-                    if (compressedStream == null)
+                    if (compressedStream == null || compressedStream.Length >= bodyStream.Length)
                     {
                         // If compression fails, we want to turn off the compression flag
                         // so the correct flags are written in the header.
@@ -302,10 +302,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             if (resultLZ4Length < 0) // check error
                 return null;
             compressedStream.Write(outputArray, 0, resultLZ4Length);
-
-            if (compressedStream.Length >= bodyStream.Length)
-                return null;
-
 
             return compressedStream;
         }
