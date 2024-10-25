@@ -217,8 +217,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     BufferedStream bufferedStream = new BufferedStream(stream);
                     WriteHeader(bufferedStream, targetPlatform, targetProfile, compressContent);
                     long fileSizePos = bufferedStream.Position;
-                    bufferedStream.WriteByte(0); bufferedStream.WriteByte(0);
-                    bufferedStream.WriteByte(0); bufferedStream.WriteByte(0);
+                    uint compressedFileSize = 0; // compressedFileSize is not used on uncompressed XNBs.
+                    WriteUInt(bufferedStream, compressedFileSize);
 
                     using (XnbBodyWriter xnbBodyWriter = new XnbBodyWriter(bufferedStream))
                     {
@@ -260,7 +260,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     BufferedStream bufferedStream = new BufferedStream(stream);
                     WriteHeader(bufferedStream, targetPlatform, targetProfile, compressContent);
                     long fileSizePos = bufferedStream.Position;
-                    WriteUInt(bufferedStream, (uint)(fileSizePos + sizeof(UInt32) + compressedStream.Length));
+                    uint compressedFileSize = (uint)(fileSizePos + sizeof(UInt32) + compressedStream.Length);
+                    WriteUInt(bufferedStream, compressedFileSize);
 
                     compressedStream.Position = 0;
                     compressedStream.CopyTo(bufferedStream);

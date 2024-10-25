@@ -244,7 +244,7 @@ namespace Microsoft.Xna.Framework.Content
             bool isHiDef = (flags & ContentFlagHiDef) != 0;
 
             // The next int32 is the length of the XNB file
-            int xnbLength = xnbReader.ReadInt32();
+            int compressedFileSize = xnbReader.ReadInt32();
 
             Stream decompressedStream = null;
             if (isCompressedLzx
@@ -256,7 +256,7 @@ namespace Microsoft.Xna.Framework.Content
 
                 if (isCompressedLzx)
                 {
-                    int compressedSize = xnbLength - 14;
+                    int compressedSize = compressedFileSize - 14;
 
                     // LzxDecoderStream require a seekable stream.
                     // Handle the case of Android's BufferedStream assets.
@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             ContentReader reader = new ContentReader(this, decompressedStream,
-                                                     originalAssetName, version, xnbLength, recordDisposableObject);
+                                                     originalAssetName, version, compressedFileSize, recordDisposableObject);
             
             return reader;
         }
