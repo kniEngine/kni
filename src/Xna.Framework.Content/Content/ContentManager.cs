@@ -240,6 +240,7 @@ namespace Microsoft.Xna.Framework.Content
 
             bool isCompressedLzx = (flags & ContentFlagCompressedLzx) == ContentFlagCompressedLzx;
             bool isCompressedLz4 = (flags & ContentFlagCompressedLz4) == ContentFlagCompressedLz4;
+
             bool isHiDef = (flags & ContentFlagHiDef) != 0;
 
             // The next int32 is the length of the XNB file
@@ -250,6 +251,7 @@ namespace Microsoft.Xna.Framework.Content
             ||  isCompressedLz4)
             {
                 // Decompress the xnb
+
                 int decompressedSize = xnbReader.ReadInt32();
 
                 if (isCompressedLzx)
@@ -273,7 +275,7 @@ namespace Microsoft.Xna.Framework.Content
                     decompressedStream = new Lz4DecoderStream(stream);
                 }
             }
-            else
+            else // no compression
             {
                 decompressedStream = stream;
             }
