@@ -248,7 +248,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
                     // Before we write the header, try to compress the body stream.
                     Stream compressedStream = null;
-                    compressedStream = CompressStreamLZ4(bodyStream);
+                    switch (compressContent)
+                    {
+                        case false:
+                            throw new InvalidOperationException();
+                        case true:
+                            compressedStream = CompressStreamLZ4(bodyStream);
+                            break;
+                    }
 
                     if (compressedStream == null || compressedStream.Length >= bodyStream.Length)
                     {
@@ -320,11 +327,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
 
             byte flags = default(byte);
 
-            if (compressContent == true)
+            switch (compressContent)
             {
-                // We cannot use LZX compression, so we use the public domain LZ4 compression.
-                // Use one of the spare bits in the flags byte to specify LZ4.
-                flags |= ContentFlagCompressedLz4;
+                case false:
+                    break;
+                case true:
+                    // We cannot use LZX compression, so we use the public domain LZ4 compression.
+                    // Use one of the spare bits in the flags byte to specify LZ4.
+                    flags |= ContentFlagCompressedLz4;
+                    break;
             }
 
             if (targetProfile == GraphicsProfile.HiDef)
