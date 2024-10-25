@@ -298,12 +298,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             // Compress stream
             int maxLength = LZ4Codec.MaximumOutputLength((int)plainData.Length);
             byte[] outputArray = new byte[maxLength * 2];
-            int resultLength = LZ4Codec.Encode32HC(plainData, 0, (int)plainData.Length, outputArray, 0, maxLength);
-            if (resultLength < 0) // check error
+            int resultLZ4Length = LZ4Codec.Encode32HC(plainData, 0, (int)plainData.Length, outputArray, 0, maxLength);
+            if (resultLZ4Length < 0) // check error
                 return null;
-            compressedStream.Write(outputArray, 0, resultLength);
+            compressedStream.Write(outputArray, 0, resultLZ4Length);
 
-            if (resultLength >= decompressedDataSize)
+            if (compressedStream.Length >= decompressedDataSize)
                 return null;
 
 
