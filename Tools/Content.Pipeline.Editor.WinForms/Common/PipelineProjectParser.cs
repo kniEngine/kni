@@ -104,6 +104,12 @@ namespace Content.Pipeline.Editor
         public bool Compress { set { _project.Compress = value; } }
 
         [CommandLineParameter(
+            Name = "compression",
+            ValueName = "string",
+            Description = "The compression method.")]
+        public CompressionMethod Compression { set { _project.Compression = value; } }
+
+        [CommandLineParameter(
             Name = "importer",
             ValueName = "className",
             Description = "Defines the class name of the content importer for reading source content.")]
@@ -308,6 +314,12 @@ namespace Content.Pipeline.Editor
 
             line = string.Format(lineFormat, "compress", _project.Compress);
             io.WriteLine(line);
+
+            if (_project.Compression != CompressionMethod.Default)
+            {
+                line = string.Format(lineFormat, "compression", _project.Compression);
+                io.WriteLine(line);
+            }
 
             line = FormatDivider("References");
             io.WriteLine(line);

@@ -256,8 +256,29 @@ namespace Microsoft.Xna.Framework.Content
 
                 bool isCompressedLzx = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLzx;
                 bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
+                bool isCompressedExt = (flags & ContentFlagCompressedExt) == ContentFlagCompressedExt;
 
-                if (isCompressedLzx)
+                if (isCompressedExt)
+                {
+                    // read Ext compression header
+                    byte reserved = xnbReader.ReadByte();
+                    if (reserved != 0)
+                        throw new InvalidOperationException("Invalid compression header.");
+                    byte compression = xnbReader.ReadByte();
+
+                    switch (compression)
+                    {
+                        case 0x02: // LX4
+                            {
+                                decompressedStream = new Lz4DecoderStream(stream);
+                            }
+                            break;
+
+                        default:
+                            throw new NotImplementedException("ContentCompression " + compression + " not implemented.");
+                    }
+                }
+                else if (isCompressedLzx)
                 {
                     // LzxDecoderStream require a seekable stream.
                     // Handle the case of Android's BufferedStream assets.

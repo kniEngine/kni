@@ -85,6 +85,15 @@ namespace Content.Pipeline.Editor
             set { _project.Compress = value; }
         }
 
+        [Category("Settings")]
+        [DisplayName("Compression")]
+        [Description("The compression method.")]
+        public CompressionMethod Compression
+        {
+            get { return _project.Compression; }
+            set { _project.Compression = value; }
+        }
+
         [Category("Statistics")]
         [DisplayName("Total Items")]
         [Description("The total amount of content items in the project.")]
