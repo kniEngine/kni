@@ -244,15 +244,15 @@ namespace Microsoft.Xna.Framework.Content
             bool isHiDef = (flags & ContentFlagHiDef) != 0;
 
             // The next int32 is the length of the XNB file
-            int compressedFileSize = xnbReader.ReadInt32();
+            uint compressedFileSize = xnbReader.ReadUInt32();
 
             Stream decompressedStream = null;
             if (isCompressed)
             {
                 // Decompress the xnb
 
-                int decompressedDataSize = xnbReader.ReadInt32();
-                int compressedDataSize = compressedFileSize - 14;
+                uint decompressedDataSize = xnbReader.ReadUInt32();
+                uint compressedDataSize = compressedFileSize - 14;
 
                 bool isCompressedLzx = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLzx;
                 bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
@@ -264,12 +264,12 @@ namespace Microsoft.Xna.Framework.Content
                     Stream compressedStream = stream;
                     if (stream is BufferedStream && !stream.CanSeek)
                     {
-                        compressedStream = new MemoryStream(compressedDataSize);
+                        compressedStream = new MemoryStream((int)compressedDataSize);
                         stream.CopyTo(compressedStream);
                         compressedStream.Seek(0, SeekOrigin.Begin);
                     }
 
-                    decompressedStream = new LzxDecoderStream(compressedStream, decompressedDataSize, compressedDataSize);
+                    decompressedStream = new LzxDecoderStream(compressedStream, (int)decompressedDataSize, (int)compressedDataSize);
                 }
                 else if (isCompressedLz4)
                 {
