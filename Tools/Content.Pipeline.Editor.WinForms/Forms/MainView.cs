@@ -954,12 +954,15 @@ namespace Content.Pipeline.Editor
 
         private void ContextMenu_OpenFile_Click(object sender, EventArgs e)
         {
-            var filePath = (_treeView.SelectedNode.Tag as IProjectItem).OriginalPath;
-            filePath = _controller.GetFullPath(filePath);
+            string filePath = (_treeView.SelectedNode.Tag as IProjectItem).OriginalPath;
+            string absolutePath = _controller.GetFullPath(filePath);
 
-            if (File.Exists(filePath))
+            if (File.Exists(absolutePath))
             {
-                Process.Start(filePath);
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = absolutePath;
+                startInfo.UseShellExecute = true;
+                Process.Start(startInfo);
             }
         }
 
