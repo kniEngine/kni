@@ -365,6 +365,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     }
                     break;
 
+                case ContentCompression.Brotli:
+                    {
+#if NET6_0_OR_GREATER
+                        using (var brotliStream = new System.IO.Compression.BrotliStream(compressedStream,
+                                System.IO.Compression.CompressionLevel.SmallestSize,
+                                true))
+                        {
+                            bodyStream.CopyTo(brotliStream);
+                            brotliStream.Flush();
+                        }
+#else
+                        throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
+#endif
+                    }
+                    break;
+
                 default:
                     throw new NotImplementedException("ContentCompression " + compression + " not implemented.");
             }

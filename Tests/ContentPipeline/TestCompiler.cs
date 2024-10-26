@@ -77,6 +77,9 @@ namespace Kni.Tests.ContentPipeline
             ContentCompression.LegacyLZ4,
             ContentCompression.Uncompressed,
             ContentCompression.LZ4,
+#if NET6_0_OR_GREATER
+            ContentCompression.Brotli,
+#endif
         };
 
         public static void CompileAndLoadAssets<T>(T data, Action<T> validation)
