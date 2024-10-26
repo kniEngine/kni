@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common\Convertors\StringToColorConverter.cs" />
     <Compile Include="Common\ActionStack.cs" />
     <Compile Include="Common\AssemblyAttributes.cs" />
     <Compile Include="Common\CommandLineParser.cs" />
