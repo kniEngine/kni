@@ -275,7 +275,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                             compressedStream = CompressStreamLegacyLZ4(bodyStream);
                             break;
                         default:
-                            throw new NotImplementedException();
+                            compressedStream = CompressStream(bodyStream, compression);
+                            break;
                     }
 
                     if (compressedStream == null || compressedStream.Length >= bodyStream.Length)
@@ -334,6 +335,43 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             return compressedStream;
         }
 
+        private MemoryStream CompressStream(MemoryStream bodyStream, ContentCompression compression)
+        {
+            MemoryStream compressedStream = new MemoryStream();
+            uint decompressedDataSize = (uint)bodyStream.Length;
+            WriteUInt(compressedStream, decompressedDataSize);
+
+            // write Ext compression header
+            compressedStream.WriteByte((byte)0);  // reserved
+            compressedStream.WriteByte((byte)compression);
+
+            bodyStream.Position = 0;
+
+            switch (compression)
+            {
+                case ContentCompression.LZ4:
+                    {
+                        byte[] plainData = new byte[decompressedDataSize];
+                        bodyStream.Position = 0;
+                        bodyStream.Read(plainData, 0, plainData.Length);
+
+                        // Compress stream
+                        int maxLength = LZ4Codec.MaximumOutputLength((int)plainData.Length);
+                        byte[] outputArray = new byte[maxLength * 2];
+                        int resultLZ4Length = LZ4Codec.Encode32HC(plainData, 0, (int)plainData.Length, outputArray, 0, maxLength);
+                        if (resultLZ4Length < 0) // check error
+                            return null;
+                        compressedStream.Write(outputArray, 0, resultLZ4Length);
+                    }
+                    break;
+
+                default:
+                    throw new NotImplementedException("ContentCompression " + compression + " not implemented.");
+            }
+
+            return compressedStream;
+        }
+
         /// <summary>
         /// Write the header to the output stream.
         /// </summary>
@@ -358,7 +396,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
                     flags |= ContentFlagCompressedLz4;
                     break;
                 default:
-                    throw new NotImplementedException();
+                    // Use both LZX & LZ4 bits to specify a compressed content.
+                    // The compression method is specified in the header of the compressed data.
+                    flags |= ContentFlagCompressedExt;
+                    break;
             }
 
             if (targetProfile == GraphicsProfile.HiDef)

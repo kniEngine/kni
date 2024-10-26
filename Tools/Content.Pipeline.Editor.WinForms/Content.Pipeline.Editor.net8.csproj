@@ -38,6 +38,7 @@
     <Compile Include="Common\ActionStack.cs" />
     <Compile Include="Common\AssemblyAttributes.cs" />
     <Compile Include="Common\CommandLineParser.cs" />
+    <Compile Include="Common\CompressionMethod.cs" />
     <Compile Include="Common\ContentFolder.cs" />
     <Compile Include="Common\ContentItem.cs" />
     <Compile Include="Common\ContentItem.Processor.cs" />

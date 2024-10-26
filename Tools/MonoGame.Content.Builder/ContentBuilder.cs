@@ -266,6 +266,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Description = "Compress the XNB files for smaller file sizes.")]
         public bool CompressContent = false;
 
+        [CommandLineParameter(
+            Name = "compression",
+            Description = "The compression method.")]
+        public CompressionMethod Compression = CompressionMethod.Default;
+
         public class ContentItem
         {
             public string SourceFile;
@@ -320,7 +325,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 intermediatePath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, intermediatePath)));
 
             _manager = new PipelineManager(projectDirectory, _responseFilename, outputPath, intermediatePath, this.Quiet);
-            _manager.CompressContent = CompressContent;
+            _manager.CompressContent = this.CompressContent;
+            _manager.Compression = this.Compression;
 
             // Feed all the assembly references to the pipeline manager
             // so it can resolve importers, processors, writers, and types.

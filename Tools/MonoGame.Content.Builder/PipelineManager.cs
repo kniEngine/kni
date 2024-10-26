@@ -87,6 +87,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// </summary>
         public bool CompressContent { get; set; }
 
+        /// <summary>
+        /// Gets or sets the compression method.
+        /// </summary>
+        public CompressionMethod Compression { get; set; }
+
         internal const String DefaultFileCollectionFilename = "assetsdb.kniContent";
 
         public PipelineManager(string projectDir, string responseFilename, string outputDir, string intermediateDir, bool quiet)
@@ -800,10 +805,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (_compiler == null)
                 _compiler = new ContentCompiler();
 
+            ContentCompression compression = ContentCompression.Uncompressed;
+            if (this.CompressContent)
+            {
+                switch (this.Compression)
+                {
+                    case CompressionMethod.Default:
+                        compression = ContentCompression.LegacyLZ4;
+                        break;
+                    case CompressionMethod.LZ4:
+                        compression = ContentCompression.LZ4;
+                        break;
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
+
             // Write the XNB.
-            ContentCompression compression = (CompressContent == true)
-                                           ? ContentCompression.LegacyLZ4
-                                           : ContentCompression.Uncompressed;
             using (Stream stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
                 _compiler.Compile(stream, content, Platform, Profile, compression, OutputDirectory, outputFileDir);
 

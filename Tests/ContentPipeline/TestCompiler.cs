@@ -76,6 +76,7 @@ namespace Kni.Tests.ContentPipeline
         {
             ContentCompression.LegacyLZ4,
             ContentCompression.Uncompressed,
+            ContentCompression.LZ4,
         };
 
         public static void CompileAndLoadAssets<T>(T data, Action<T> validation)

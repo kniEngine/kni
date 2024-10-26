@@ -33,6 +33,8 @@ namespace Content.Pipeline.Editor
 
         public bool Compress { get; set; }
 
+        public CompressionMethod Compression { get; set; }
+
         #region IPipelineItem
 
         public string Name

@@ -6,6 +6,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
     {
         Uncompressed = 0,
         //ZLX        = 1,
+        LZ4          = 2,
         
         LegacyLZ4    = 255,
     }
