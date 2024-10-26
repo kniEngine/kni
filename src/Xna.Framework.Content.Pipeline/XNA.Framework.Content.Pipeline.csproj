@@ -40,6 +40,7 @@
     <Compile Include="Serialization\Compiler\ContentTypeWriterBaseGeneric.cs" />
     <Compile Include="Serialization\Compiler\DictionaryWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentCompiler.cs" />
+    <Compile Include="Serialization\Compiler\ContentCompression.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriter.cs" />
     <Compile Include="Serialization\Compiler\ContentTypeWriterAttribute.cs" />
     <Compile Include="Serialization\Compiler\ContentWriter.cs" />
