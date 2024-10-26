@@ -179,17 +179,17 @@ namespace Microsoft.Xna.Framework.Content
                 
                 return TitleContainer.OpenStream(assetPath);
             }
-            catch (FileNotFoundException fileNotFound)
+            catch (FileNotFoundException fileNotFoundex)
             {
-                throw new ContentLoadException("The content file was not found.", fileNotFound);
+                throw new ContentLoadException("The content file was not found for asset '" + assetName + "'.", fileNotFoundex);
             }
-            catch (DirectoryNotFoundException directoryNotFound)
+            catch (DirectoryNotFoundException directoryNotFoundex)
             {
-                throw new ContentLoadException("The directory was not found.", directoryNotFound);
+                throw new ContentLoadException("The directory was not found for asset '" + assetName + "'.", directoryNotFoundex);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                throw new ContentLoadException("Opening stream error.", exception);
+                throw new ContentLoadException("Opening stream error for asset '" + assetName + "'.", ex);
             }
         }
 
