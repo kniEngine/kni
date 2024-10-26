@@ -7,5 +7,6 @@ namespace Content.Pipeline.Editor
         Default      = 0,
         //ZLX        = 1,
         LZ4          = 2,
+        Brotli       = 3,
     }
 }

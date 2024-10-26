@@ -816,6 +816,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     case CompressionMethod.LZ4:
                         compression = ContentCompression.LZ4;
                         break;
+                    case CompressionMethod.Brotli:
+                        compression = ContentCompression.Brotli;
+                        break;
                     default:
                         throw new InvalidOperationException();
                 }
