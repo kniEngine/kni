@@ -69,7 +69,8 @@ namespace Microsoft.Xna.Platform.Graphics
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = (IntPtr)(dataPtr.ToInt64() + startIndex * elementSizeInByte);
 
                 int rowPitch = this.Format.GetPitch(width);
                 int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.

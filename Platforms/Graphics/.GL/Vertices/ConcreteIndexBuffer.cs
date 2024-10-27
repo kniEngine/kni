@@ -89,7 +89,9 @@ namespace Microsoft.Xna.Platform.Graphics
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = (IntPtr)(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+
                 int bufferSize = IndexCount * base.ElementSizeInBytes;
 
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);

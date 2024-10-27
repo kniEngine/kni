@@ -998,7 +998,8 @@ namespace Microsoft.Xna.Platform.Graphics
             GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
             try
             {
-                IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+                IntPtr vertexAddr = vbHandle.AddrOfPinnedObject();
+                vertexAddr = (IntPtr)(vertexAddr.ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
                 PlatformApplyUserVertexData(vertexDeclaration, vertexAddr);
@@ -1042,7 +1043,8 @@ namespace Microsoft.Xna.Platform.Graphics
             GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
             try
             {
-                IntPtr vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+                IntPtr vertexAddr = vbHandle.AddrOfPinnedObject();
+                vertexAddr = (IntPtr)(vertexAddr.ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
                 // Setup the vertex declaration to point at the VB data.
                 PlatformApplyUserVertexData(vertexDeclaration, vertexAddr);

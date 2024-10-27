@@ -58,7 +58,9 @@ namespace Microsoft.Xna.Platform.Graphics
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                IntPtr dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = (IntPtr)(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
 
                 int subresourceIndex = (int)face * this.LevelCount + level;
