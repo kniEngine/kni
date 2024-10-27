@@ -55,7 +55,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();

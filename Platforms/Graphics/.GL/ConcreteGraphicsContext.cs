@@ -955,7 +955,6 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             _vertexBuffersDirty = true;
 
-            // Pin the buffers.
             GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
             try
             {
@@ -973,7 +972,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                // Release the handles.
                 vbHandle.Free();
             }
         }
@@ -993,7 +991,6 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             _indexBufferDirty = true;
 
-            // Pin the buffers.
             GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
             GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
             try
@@ -1017,7 +1014,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                // Release the handles.
                 ibHandle.Free();
                 vbHandle.Free();
             }
@@ -1038,7 +1034,6 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             _indexBufferDirty = true;
 
-            // Pin the buffers.
             GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
             GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
             try
@@ -1062,7 +1057,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                // Release the handles.
                 ibHandle.Free();
                 vbHandle.Free();
             }

@@ -177,8 +177,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new InvalidOperationException("Invalid DXT surface format!");
             }
 
-            // Do all the calls to the NVTT wrapper within this handler
-            // so we properly clean up if things blow up.
             try
             {
                 var dataPtr = dataHandle.AddrOfPinnedObject();
