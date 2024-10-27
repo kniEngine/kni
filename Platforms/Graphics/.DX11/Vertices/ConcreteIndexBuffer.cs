@@ -141,13 +141,11 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                        // Map the staging resource to a CPU accessible memory
                         DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
 
                         IntPtr srcPtr = dataBox.DataPointer;
                         DX.Utilities.CopyMemory(dataPtr, srcPtr + offsetInBytes, elementCount * TsizeInBytes);
 
-                        // Make sure that we unmap the resource in case of an exception
                         d3dContext.UnmapSubresource(stagingBuffer, 0);
                     }
                 }

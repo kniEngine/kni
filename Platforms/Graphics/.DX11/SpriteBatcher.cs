@@ -233,7 +233,6 @@ namespace Microsoft.Xna.Platform.Graphics
                         *(vertexArrayPtr + 2) = item.vertexBL;
                         *(vertexArrayPtr + 3) = item.vertexBR;
                     }
-                    // unmap and set vertexbuffer
                     d3dContext.UnmapSubresource(((IPlatformVertexBuffer)_vertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0);
                 }
 
