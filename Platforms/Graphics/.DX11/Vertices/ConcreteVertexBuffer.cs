@@ -110,9 +110,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read,
                             D3D11.MapFlags.None);
 
+                            IntPtr dstPtr = dataBox.DataPointer;
                             for (int i = 0; i < elementCount; i++)
                                 DX.Utilities.CopyMemory(
-                                dataBox.DataPointer + i * vertexStride + offsetInBytes,
+                                dstPtr + i * vertexStride + offsetInBytes,
                                 dataPtr + i * elementSizeInBytes, elementSizeInBytes);
 
                             // Make sure that we unmap the resource in case of an exception
@@ -151,14 +152,15 @@ namespace Microsoft.Xna.Platform.Graphics
                         // Map the staging resource to a CPU accessible memory
                         DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
 
+                        IntPtr srcPtr = dataBox.DataPointer;
                         if (vertexStride == TsizeInBytes)
                         {
-                            DX.Utilities.CopyMemory(dataPtr, dataBox.DataPointer + offsetInBytes, vertexStride * elementCount);
+                            DX.Utilities.CopyMemory(dataPtr, srcPtr + offsetInBytes, vertexStride * elementCount);
                         }
                         else
                         {
                             for (int i = 0; i < elementCount; i++)
-                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, dataBox.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
+                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, srcPtr + i * vertexStride + offsetInBytes, TsizeInBytes);
                         }
 
                         // Make sure that we unmap the resource in case of an exception
