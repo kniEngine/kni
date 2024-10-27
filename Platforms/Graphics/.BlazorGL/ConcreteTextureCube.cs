@@ -43,9 +43,6 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-
-                int startBytes = startIndex * elementSizeInByte;
                 if (startIndex != 0 && !_glIsCompressedTexture)
                     throw new NotImplementedException("startIndex");
 

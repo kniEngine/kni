@@ -62,9 +62,6 @@ namespace Microsoft.Xna.Platform.Graphics
             int w, h;
             TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-
-            int startBytes = startIndex * elementSizeInByte;
             if (startIndex != 0 && !_glIsCompressedTexture)
                 throw new NotImplementedException("startIndex");
 
@@ -98,9 +95,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-
-            int startBytes = startIndex * elementSizeInByte;
             if (startIndex != 0)
                 throw new NotImplementedException("startIndex");
 

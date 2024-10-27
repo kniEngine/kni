@@ -56,8 +56,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Use try..finally to make sure dataHandle is freed in case of an error
                 try
                 {
-                    int startBytes = startIndex * elementSizeInByte;
-                    IntPtr dataPtr = new IntPtr(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInByte);
 
                     ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);

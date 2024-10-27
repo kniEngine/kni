@@ -93,8 +93,9 @@ namespace Microsoft.Xna.Platform.Graphics
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                int startBytes = startIndex * elementSizeInByte;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = 0;
                 region.Front = 0;
@@ -127,8 +128,9 @@ namespace Microsoft.Xna.Platform.Graphics
             // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                int startBytes = startIndex * elementSizeInByte;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = checkedRect.Top;
                 region.Front = 0;
