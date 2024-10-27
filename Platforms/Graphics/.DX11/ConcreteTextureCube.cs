@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = (IntPtr) (dataHandle.AddrOfPinnedObject().ToInt64() + startIndex*elementSizeInByte);
-                DX.DataBox box = new DX.DataBox(dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
+                DX.DataBox dataBox = new DX.DataBox(dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
 
                 int subresourceIndex = (int)face * this.LevelCount + level;
 
@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(box, this.GetTexture(), subresourceIndex, region);
+                    d3dContext.UpdateSubresource(dataBox, this.GetTexture(), subresourceIndex, region);
                 }
             }
             finally
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     DX.DataStream stream = null;
                     try
                     {
-                        DX.DataBox databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                        DX.DataBox dataBox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                         int elementSize = this.Format.GetSize();
                         if (this.Format.IsCompressedFormat())
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             rows /= 4;
                         }
                         int rowSize = elementSize * elementsInRow;
-                        if (rowSize == databox.RowPitch)
+                        if (rowSize == dataBox.RowPitch)
                             stream.ReadRange(data, startIndex, elementCount);
                         else
                         {
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Platform.Graphics
                                 if (i >= elementCount)
                                     break;
 
-                                stream.Seek(databox.RowPitch - rowSize, SeekOrigin.Current);
+                                stream.Seek(dataBox.RowPitch - rowSize, SeekOrigin.Current);
                             }
                         }
                     }

@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 DX.DataStream stream = null;
                 try
                 {
-                    DX.DataBox databox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                    DX.DataBox dataBox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                     int elementSize = this.Format.GetSize();
                     if (this.Format.IsCompressedFormat())
@@ -204,7 +204,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         rows /= 4;
                     }
                     int rowSize = elementSize * elementsInRow;
-                    if (rowSize == databox.RowPitch)
+                    if (rowSize == dataBox.RowPitch)
                         stream.ReadRange(data, startIndex, elementCount);
                     else if (level == 0 && arraySlice == 0 &&
                              checkedRect.X == 0 && checkedRect.Y == 0 &&
@@ -220,7 +220,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         for (int row = 0; row < rows; row++)
                         {
                             stream.ReadRange(data, currentIndex, elementsInRow);
-                            stream.Seek((databox.RowPitch - rowSize), SeekOrigin.Current);
+                            stream.Seek((dataBox.RowPitch - rowSize), SeekOrigin.Current);
                             currentIndex += elementsInRow;
                         }
                     }
@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             if (i >= elementCount)
                                 break;
 
-                            stream.Seek(databox.RowPitch - rowSize, SeekOrigin.Current);
+                            stream.Seek(dataBox.RowPitch - rowSize, SeekOrigin.Current);
                         }
                     }
                 }

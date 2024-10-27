@@ -325,7 +325,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         DX.DataStream stream = null;
                         try
                         {
-                            DX.DataBox databox = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                            DX.DataBox dataBox = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
 
                             int elementsInRow, rows;
                             if (rect.HasValue)
@@ -340,7 +340,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             }
                             int elementSize = format.GetSize();
                             int rowSize = elementSize * elementsInRow;
-                            if (rowSize == databox.RowPitch)
+                            if (rowSize == dataBox.RowPitch)
                                 stream.ReadRange(data, startIndex, elementCount);
                             else
                             {
@@ -358,7 +358,7 @@ namespace Microsoft.Xna.Platform.Graphics
                                     if (i >= elementCount)
                                         break;
 
-                                    stream.Seek(databox.RowPitch - rowSize, SeekOrigin.Current);
+                                    stream.Seek(dataBox.RowPitch - rowSize, SeekOrigin.Current);
                                 }
                             }
                         }
