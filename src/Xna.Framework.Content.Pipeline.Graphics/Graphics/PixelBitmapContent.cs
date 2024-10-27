@@ -43,11 +43,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 T[] row = _pixelData[y];
                 GCHandle dataHandle = GCHandle.Alloc(row, GCHandleType.Pinned);
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                try
+                {
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
 
-                Marshal.Copy(dataPtr, outputData, (formatSize * y * Width), (Width * formatSize));
-
-                dataHandle.Free();
+                    Marshal.Copy(dataPtr, outputData, (formatSize * y * Width), (Width * formatSize));
+                }
+                finally
+                {
+                    dataHandle.Free();
+                }
             });
 
             return outputData;
@@ -62,11 +67,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 T[] row = _pixelData[y];
                 GCHandle dataHandle = GCHandle.Alloc(row, GCHandleType.Pinned);
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                try
+                {
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
 
-                Marshal.Copy(sourceData, (y * rowSize), dataPtr, rowSize);
-
-                dataHandle.Free();
+                    Marshal.Copy(sourceData, (y * rowSize), dataPtr, rowSize);
+                }
+                finally
+                {
+                    dataHandle.Free();
+                }
             });
         }
 

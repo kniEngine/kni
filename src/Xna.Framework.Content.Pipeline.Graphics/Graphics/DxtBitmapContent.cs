@@ -141,7 +141,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             var colorBitmap = new PixelBitmapContent<Color>(sourceBitmap.Width, sourceBitmap.Height);
             BitmapContent.Copy(sourceBitmap, colorBitmap);
             var sourceData = colorBitmap.GetPixelData();
-            var dataHandle = GCHandle.Alloc(sourceData, GCHandleType.Pinned);
 
             AlphaMode alphaMode;
             Format outputFormat;
@@ -177,9 +176,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new InvalidOperationException("Invalid DXT surface format!");
             }
 
+            GCHandle dataHandle = GCHandle.Alloc(sourceData, GCHandleType.Pinned);
             try
             {
-                var dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
 
                 var inputOptions = new InputOptions();
                 inputOptions.SetTextureLayout(TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
