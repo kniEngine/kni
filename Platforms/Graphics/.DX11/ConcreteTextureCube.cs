@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Staging;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
+            using (D3D11.Texture2D stagingTexture = new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc))
             {
                 lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                 {
@@ -119,11 +119,11 @@ namespace Microsoft.Xna.Platform.Graphics
                     int elementsInRow = checkedRect.Width;
                     int rows = checkedRect.Height;
                     D3D11.ResourceRegion region = new D3D11.ResourceRegion(checkedRect.Left, checkedRect.Top, 0, checkedRect.Right, checkedRect.Bottom, 1);
-                    d3dContext.CopySubresourceRegion(this.GetTexture(), subresourceIndex, region, stagingTex, 0);
+                    d3dContext.CopySubresourceRegion(this.GetTexture(), subresourceIndex, region, stagingTexture, 0);
 
                     // Copy the data to the array.
                     DX.DataStream stream = null;
-                    DX.DataBox dataBox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
+                    DX.DataBox dataBox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
                     try
                     {
                         int elementSize = this.Format.GetSize();

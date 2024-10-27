@@ -285,7 +285,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 texture2DDesc.Usage = D3D11.ResourceUsage.Staging;
                 texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-                using (D3D11.Texture2D stagingTex = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
+                using (D3D11.Texture2D stagingTexture = new D3D11.Texture2D(this.D3DDevice, texture2DDesc))
                 {
                     lock (((IPlatformGraphicsContext)_mainContext).Strategy.SyncHandle)
                     {
@@ -302,11 +302,11 @@ namespace Microsoft.Xna.Platform.Graphics
                                 {
                                     Rectangle r = rect.Value;
                                     ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopySubresourceRegion(noMsTex, 0,
-                                        new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex,
+                                        new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTexture,
                                         0);
                                 }
                                 else
-                                    ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(noMsTex, stagingTex);
+                                    ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(noMsTex, stagingTexture);
                             }
                         }
                         else
@@ -315,10 +315,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             {
                                 Rectangle r = rect.Value;
                                 ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopySubresourceRegion(backBufferTexture, 0,
-                                    new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTex, 0);
+                                    new D3D11.ResourceRegion(r.Left, r.Top, 0, r.Right, r.Bottom, 1), stagingTexture, 0);
                             }
                             else
-                                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(backBufferTexture, stagingTex);
+                                ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.CopyResource(backBufferTexture, stagingTexture);
                         }
 
                         // Copy the data to the array.
@@ -334,8 +334,8 @@ namespace Microsoft.Xna.Platform.Graphics
                             }
                             else
                             {
-                                elementsInRow = stagingTex.Description.Width;
-                                rows = stagingTex.Description.Height;
+                                elementsInRow = stagingTexture.Description.Width;
+                                rows = stagingTexture.Description.Height;
                             }
                             int elementSize = format.GetSize();
                             int rowSize = elementSize * elementsInRow;
