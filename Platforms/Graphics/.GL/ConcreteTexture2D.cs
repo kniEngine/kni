@@ -189,18 +189,18 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             GL.DeleteFramebuffer(framebufferId);
 #else
-            int tSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
 
             ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);
             GL.CheckGLError();
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-            GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(tSizeInByte, 8));
+            GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
 
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
-                int pixelToT = Format.GetSize() / tSizeInByte;
+                int pixelToT = Format.GetSize() / TsizeInBytes;
                 int tFullWidth = Math.Max(this.Width >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) / 4 * tFullWidth];
                 GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
@@ -215,7 +215,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
 
                 int rowCount = checkedRect.Height / 4;
-                int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / tSizeInByte;
+                int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / TsizeInBytes;
                 for (int r = 0; r < rowCount; r++)
                 {
                     int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
@@ -226,7 +226,7 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 // we need to convert from our format size to the size of T here
-                int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / tSizeInByte;
+                int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / TsizeInBytes;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
                 GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
                 try
@@ -239,7 +239,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     pixelsPtr.Free();
                 }
 
-                int pixelToT = Format.GetSize() / tSizeInByte;
+                int pixelToT = Format.GetSize() / TsizeInBytes;
                 int rowCount = checkedRect.Height;
                 int tRectWidth = checkedRect.Width * pixelToT;
                 for (int r = 0; r < rowCount; r++)
