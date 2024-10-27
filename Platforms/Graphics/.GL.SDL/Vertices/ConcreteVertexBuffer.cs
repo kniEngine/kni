@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
             IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
 
-            ptr = (IntPtr)(ptr.ToInt64() + offsetInBytes);
+            ptr = ptr + offsetInBytes;
 
             if (typeof(T) == typeof(byte) && vertexStride == 1)
             {
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     for (int i = 0; i < elementCount; i++)
                     {
                         data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
-                        tmpPtr = (IntPtr)(tmpPtr.ToInt64() + vertexStride);
+                        tmpPtr = tmpPtr + vertexStride;
                     }
                 }
                 finally

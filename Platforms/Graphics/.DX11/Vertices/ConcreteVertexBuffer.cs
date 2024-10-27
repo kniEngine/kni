@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInBytes);
+                dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                 if (vertexStride == elementSizeInBytes)
                 {
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * TsizeInBytes);
+                dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                 using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
                     lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)

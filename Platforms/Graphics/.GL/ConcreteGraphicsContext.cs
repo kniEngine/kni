@@ -652,7 +652,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             element.VertexAttribPointerType,
                             element.Normalized,
                             vertexStride,
-                            (IntPtr)(vertexOffset.ToInt64() + element.Offset));
+                            vertexOffset + element.Offset);
                         GL.CheckGLError();
 
                         // only set the divisor if instancing is supported
@@ -734,7 +734,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     element.VertexAttribPointerType,
                     element.Normalized,
                     vertexStride,
-                    (IntPtr)(vertexOffset.ToInt64() + element.Offset));
+                    vertexOffset + element.Offset);
                 GL.CheckGLError();
 
 #if DESKTOPGL
@@ -999,7 +999,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr vertexAddr = vbHandle.AddrOfPinnedObject();
-                vertexAddr = (IntPtr)(vertexAddr.ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+                vertexAddr = vertexAddr + vertexDeclaration.VertexStride * vertexOffset;
 
                 // Setup the vertex declaration to point at the VB data.
                 PlatformApplyUserVertexData(vertexDeclaration, vertexAddr);
@@ -1009,7 +1009,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedShort,
-                    (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(short))));
+                    ibHandle.AddrOfPinnedObject() + (indexOffset * sizeof(short)));
                 GL.CheckGLError();
 
                 base.Metrics_AddDrawCount();
@@ -1044,7 +1044,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr vertexAddr = vbHandle.AddrOfPinnedObject();
-                vertexAddr = (IntPtr)(vertexAddr.ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
+                vertexAddr = vertexAddr + vertexDeclaration.VertexStride * vertexOffset;
 
                 // Setup the vertex declaration to point at the VB data.
                 PlatformApplyUserVertexData(vertexDeclaration, vertexAddr);
@@ -1054,7 +1054,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedInt,
-                    (IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(int))));
+                    ibHandle.AddrOfPinnedObject() + (indexOffset * sizeof(int)));
                 GL.CheckGLError();
 
                 base.Metrics_AddDrawCount();

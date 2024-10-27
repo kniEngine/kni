@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);

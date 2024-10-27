@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = 0;
@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = checkedRect.Top;

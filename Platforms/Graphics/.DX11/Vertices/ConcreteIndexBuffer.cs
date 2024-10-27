@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * elementSizeInBytes);
+                dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
 
@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 try
                 {
                     IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                    dataPtr = new IntPtr(dataPtr.ToInt64() + startIndex * TsizeInBytes);
+                    dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                     lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                     {

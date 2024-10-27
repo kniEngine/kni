@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = (IntPtr)(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
 

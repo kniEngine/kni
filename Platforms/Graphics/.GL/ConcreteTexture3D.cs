@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 try
                 {
                     IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                    dataPtr = (IntPtr)(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+                    dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                     ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);

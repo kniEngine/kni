@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform.Graphics
             try
             {
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = (IntPtr)(dataPtr.ToInt64() + startIndex * elementSizeInByte);
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 int bufferSize = IndexCount * base.ElementSizeInBytes;
 
