@@ -55,19 +55,23 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
-
-                IntPtr dstPtr = dataBox.DataPointer;
-                if (vertexStride == elementSizeInBytes)
+                try
                 {
-                    DX.Utilities.Write(dstPtr + offsetInBytes, data, startIndex, elementCount);
+                    IntPtr dstPtr = dataBox.DataPointer;
+                    if (vertexStride == elementSizeInBytes)
+                    {
+                        DX.Utilities.Write(dstPtr + offsetInBytes, data, startIndex, elementCount);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < elementCount; i++)
+                            DX.Utilities.Write(dstPtr + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
+                    }
                 }
-                else
+                finally
                 {
-                    for (int i = 0; i < elementCount; i++)
-                        DX.Utilities.Write(dstPtr + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
+                    d3dContext.UnmapSubresource(_buffer, 0);
                 }
-
-                d3dContext.UnmapSubresource(_buffer, 0);
             }
         }
 

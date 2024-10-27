@@ -58,11 +58,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
-
-                IntPtr dstPtr = dataBox.DataPointer;
-                DX.Utilities.Write(dstPtr + offsetInBytes, data, startIndex,
-                                   elementCount);
-                d3dContext.UnmapSubresource(_buffer, 0);
+                try
+                {
+                    IntPtr dstPtr = dataBox.DataPointer;
+                    DX.Utilities.Write(dstPtr + offsetInBytes, data, startIndex,
+                                       elementCount);
+                }
+                finally
+                {
+                    d3dContext.UnmapSubresource(_buffer, 0);
+                }
             }
         }
 

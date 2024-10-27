@@ -106,16 +106,19 @@ namespace Microsoft.Xna.Platform.Graphics
 
                             d3dContext.CopyResource(_buffer, stagingBuffer);
 
-                            DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read,
-                            D3D11.MapFlags.None);
-
-                            IntPtr dstPtr = dataBox.DataPointer;
-                            for (int i = 0; i < elementCount; i++)
-                                DX.Utilities.CopyMemory(
-                                dstPtr + i * vertexStride + offsetInBytes,
-                                dataPtr + i * elementSizeInBytes, elementSizeInBytes);
-
-                            d3dContext.UnmapSubresource(stagingBuffer, 0);
+                            DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
+                            try
+                            {
+                                IntPtr dstPtr = dataBox.DataPointer;
+                                for (int i = 0; i < elementCount; i++)
+                                    DX.Utilities.CopyMemory(
+                                        dstPtr + i * vertexStride + offsetInBytes,
+                                        dataPtr + i * elementSizeInBytes, elementSizeInBytes);
+                            }
+                            finally
+                            {
+                                d3dContext.UnmapSubresource(stagingBuffer, 0);
+                            }
 
                             // Copy back from staging resource to real buffer.
                             d3dContext.CopyResource(stagingBuffer, _buffer);
@@ -148,19 +151,23 @@ namespace Microsoft.Xna.Platform.Graphics
                         d3dContext.CopyResource(_buffer, stagingBuffer);
 
                         DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
-
-                        IntPtr srcPtr = dataBox.DataPointer;
-                        if (vertexStride == TsizeInBytes)
+                        try
                         {
-                            DX.Utilities.CopyMemory(dataPtr, srcPtr + offsetInBytes, vertexStride * elementCount);
+                            IntPtr srcPtr = dataBox.DataPointer;
+                            if (vertexStride == TsizeInBytes)
+                            {
+                                DX.Utilities.CopyMemory(dataPtr, srcPtr + offsetInBytes, vertexStride * elementCount);
+                            }
+                            else
+                            {
+                                for (int i = 0; i < elementCount; i++)
+                                    DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, srcPtr + i * vertexStride + offsetInBytes, TsizeInBytes);
+                            }
                         }
-                        else
+                        finally
                         {
-                            for (int i = 0; i < elementCount; i++)
-                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, srcPtr + i * vertexStride + offsetInBytes, TsizeInBytes);
+                            d3dContext.UnmapSubresource(stagingBuffer, 0);
                         }
-
-                        d3dContext.UnmapSubresource(stagingBuffer, 0);
                     }
             }
             finally

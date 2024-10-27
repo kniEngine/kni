@@ -323,10 +323,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         // Copy the data to the array.
                         DX.DataStream stream = null;
+                        DX.DataBox dataBox = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
                         try
                         {
-                            DX.DataBox dataBox = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
-
                             int elementsInRow, rows;
                             if (rect.HasValue)
                             {
