@@ -176,15 +176,16 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, 0);
             GL.CheckGLError();
 
-            GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr.AddrOfPinnedObject());
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
                 GL.CheckGLError();
             }
             finally
             {
-                dataPtr.Free();
+                dataHandle.Free();
             }
             GL.DeleteFramebuffer(framebufferId);
 #else
