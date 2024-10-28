@@ -61,8 +61,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                 try
                 {
-                    IntPtr dstPtr = dataBox.DataPointer;
-                    MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes, startIndex, elementCount);
+                    IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
+                    MemCopyHelper.MemoryCopy(data, dstPtr, startIndex, elementCount);
                 }
                 finally
                 {
