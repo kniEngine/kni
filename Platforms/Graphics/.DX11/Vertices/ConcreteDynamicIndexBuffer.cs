@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -61,8 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 try
                 {
                     IntPtr dstPtr = dataBox.DataPointer;
-                    DX.Utilities.Write(dstPtr + offsetInBytes, data, startIndex,
-                                       elementCount);
+                    MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes, startIndex, elementCount);
                 }
                 finally
                 {

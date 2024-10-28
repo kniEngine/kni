@@ -183,6 +183,7 @@
     <Compile Include="Media\WME\ConcreteVideo.cs" />
     <Compile Include="Media\WME\MusicProperties.cs" />
 
+    <Compile Include="Utilities\MemCopyHelper.cs" />
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Utilities\Png\PngCommon.cs" />

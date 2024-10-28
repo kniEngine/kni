@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -60,12 +61,12 @@ namespace Microsoft.Xna.Platform.Graphics
                     IntPtr dstPtr = dataBox.DataPointer;
                     if (vertexStride == elementSizeInBytes)
                     {
-                        DX.Utilities.Write(dstPtr + offsetInBytes, data, startIndex, elementCount);
+                        MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes, startIndex, elementCount);
                     }
                     else
                     {
                         for (int i = 0; i < elementCount; i++)
-                            DX.Utilities.Write(dstPtr + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
+                            MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes + i * vertexStride, startIndex + i, 1);
                     }
                 }
                 finally

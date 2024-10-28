@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -111,9 +112,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             {
                                 IntPtr dstPtr = dataBox.DataPointer;
                                 for (int i = 0; i < elementCount; i++)
-                                    DX.Utilities.CopyMemory(
+                                    MemCopyHelper.MemoryCopy(
+                                        dataPtr + i * elementSizeInBytes,
                                         dstPtr + i * vertexStride + offsetInBytes,
-                                        dataPtr + i * elementSizeInBytes, elementSizeInBytes);
+                                        elementSizeInBytes);
                             }
                             finally
                             {
@@ -156,12 +158,12 @@ namespace Microsoft.Xna.Platform.Graphics
                             IntPtr srcPtr = dataBox.DataPointer;
                             if (vertexStride == TsizeInBytes)
                             {
-                                DX.Utilities.CopyMemory(dataPtr, srcPtr + offsetInBytes, vertexStride * elementCount);
+                                MemCopyHelper.MemoryCopy(srcPtr + offsetInBytes, dataPtr, vertexStride * elementCount);
                             }
                             else
                             {
                                 for (int i = 0; i < elementCount; i++)
-                                    DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, srcPtr + i * vertexStride + offsetInBytes, TsizeInBytes);
+                                    MemCopyHelper.MemoryCopy(srcPtr + i * vertexStride + offsetInBytes, dataPtr + i * TsizeInBytes, TsizeInBytes);
                             }
                         }
                         finally

@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         try
                         {
                             IntPtr srcPtr = dataBox.DataPointer;
-                            DX.Utilities.CopyMemory(dataPtr, srcPtr + offsetInBytes, elementCount * TsizeInBytes);
+                            Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(srcPtr + offsetInBytes, dataPtr, elementCount * TsizeInBytes);
                         }
                         finally
                         {
