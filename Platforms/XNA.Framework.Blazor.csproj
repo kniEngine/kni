@@ -85,6 +85,7 @@
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\Hash.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
 
