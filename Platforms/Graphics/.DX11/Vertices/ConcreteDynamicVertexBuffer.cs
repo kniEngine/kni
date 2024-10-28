@@ -58,15 +58,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
                 try
                 {
-                    IntPtr dstPtr = dataBox.DataPointer;
+                    IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
                     if (vertexStride == elementSizeInBytes)
                     {
-                        MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes, startIndex, elementCount);
+                        MemCopyHelper.MemoryCopy(data, dstPtr, startIndex, elementCount);
                     }
                     else
                     {
                         for (int i = 0; i < elementCount; i++)
-                            MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes + i * vertexStride, startIndex + i, 1);
+                            MemCopyHelper.MemoryCopy(data, dstPtr + i * vertexStride, startIndex + i, 1);
                     }
                 }
                 finally
