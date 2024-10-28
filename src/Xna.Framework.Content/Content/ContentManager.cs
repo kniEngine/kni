@@ -285,7 +285,7 @@ namespace Microsoft.Xna.Framework.Content
                                 }
                                 decompressedStream.Seek(0, SeekOrigin.Begin);
 #else
-                                // throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
+                                throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
 #endif
                             }
                             break;
