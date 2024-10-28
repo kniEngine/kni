@@ -59,13 +59,20 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
+
+                int TsizeInBytes = DX.Utilities.SizeOf<T>();
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    dataPtr = dataPtr + startIndex * TsizeInBytes;
+
                     IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
-                    MemCopyHelper.MemoryCopy(data, dstPtr, startIndex, elementCount);
+                    MemCopyHelper.MemoryCopy(dataPtr, dstPtr, elementCount * TsizeInBytes);
                 }
                 finally
                 {
+                    dataHandle.Free();
                     d3dContext.UnmapSubresource(_buffer, 0);
                 }
             }
