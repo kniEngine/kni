@@ -59,7 +59,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 byte[] buffer = new byte[elementCount * elementSizeInByte];
                 // Copy from the index buffer to the temporary buffer
                 Marshal.Copy(ptr, buffer, 0, buffer.Length);
+
                 // Copy from the temporary buffer to the destination array
+                // TODO: BlockCopy doesn't work with struct arrays. 
+                //       throws ArgumentException: "Object must be an array of primitives. (Parameter 'dst')"
+                //       see: ShouldSetAndGetStructData() test
                 Buffer.BlockCopy(buffer, 0, data, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
             }
             GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
