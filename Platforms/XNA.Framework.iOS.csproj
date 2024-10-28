@@ -89,6 +89,7 @@
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\Hash.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\.iOS\FuncLoader.cs" />
