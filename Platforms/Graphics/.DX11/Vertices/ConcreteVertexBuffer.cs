@@ -110,11 +110,11 @@ namespace Microsoft.Xna.Platform.Graphics
                             DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
                             try
                             {
-                                IntPtr dstPtr = dataBox.DataPointer;
+                                IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
                                 for (int i = 0; i < elementCount; i++)
                                     MemCopyHelper.MemoryCopy(
                                         dataPtr + i * elementSizeInBytes,
-                                        dstPtr + i * vertexStride + offsetInBytes,
+                                        dstPtr + i * vertexStride,
                                         elementSizeInBytes);
                             }
                             finally
@@ -155,15 +155,15 @@ namespace Microsoft.Xna.Platform.Graphics
                         DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
                         try
                         {
-                            IntPtr srcPtr = dataBox.DataPointer;
+                            IntPtr srcPtr = dataBox.DataPointer + offsetInBytes;
                             if (vertexStride == TsizeInBytes)
                             {
-                                MemCopyHelper.MemoryCopy(srcPtr + offsetInBytes, dataPtr, vertexStride * elementCount);
+                                MemCopyHelper.MemoryCopy(srcPtr, dataPtr, vertexStride * elementCount);
                             }
                             else
                             {
                                 for (int i = 0; i < elementCount; i++)
-                                    MemCopyHelper.MemoryCopy(srcPtr + i * vertexStride + offsetInBytes, dataPtr + i * TsizeInBytes, TsizeInBytes);
+                                    MemCopyHelper.MemoryCopy(srcPtr + i * vertexStride, dataPtr + i * TsizeInBytes, TsizeInBytes);
                             }
                         }
                         finally

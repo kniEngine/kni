@@ -56,17 +56,26 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
+
+                int TsizeInBytes = DX.Utilities.SizeOf<T>();
+                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    IntPtr dstPtr = dataBox.DataPointer;
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    dataPtr = dataPtr + startIndex * TsizeInBytes;
+
+                    IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
                     if (vertexStride == elementSizeInBytes)
                     {
-                        MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes, startIndex, elementCount);
+                        MemCopyHelper.MemoryCopy(dataPtr, dstPtr, elementCount * elementSizeInBytes);
                     }
                     else
                     {
                         for (int i = 0; i < elementCount; i++)
-                            MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes + i * vertexStride, startIndex + i, 1);
+                            MemCopyHelper.MemoryCopy(
+                                dataPtr + i * elementSizeInBytes,
+                                dstPtr + i * vertexStride,
+                                elementSizeInBytes);
                     }
                 }
                 finally
