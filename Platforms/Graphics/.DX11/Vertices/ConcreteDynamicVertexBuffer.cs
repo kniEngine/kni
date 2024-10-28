@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -55,17 +56,23 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
-                if (vertexStride == elementSizeInBytes)
+                try
                 {
-                    DX.Utilities.Write(dataBox.DataPointer + offsetInBytes, data, startIndex, elementCount);
+                    IntPtr dstPtr = dataBox.DataPointer;
+                    if (vertexStride == elementSizeInBytes)
+                    {
+                        MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes, startIndex, elementCount);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < elementCount; i++)
+                            MemCopyHelper.MemoryCopy(data, dstPtr + offsetInBytes + i * vertexStride, startIndex + i, 1);
+                    }
                 }
-                else
+                finally
                 {
-                    for (int i = 0; i < elementCount; i++)
-                        DX.Utilities.Write(dataBox.DataPointer + offsetInBytes + i * vertexStride, data, startIndex + i, 1);
+                    d3dContext.UnmapSubresource(_buffer, 0);
                 }
-
-                d3dContext.UnmapSubresource(_buffer, 0);
             }
         }
 

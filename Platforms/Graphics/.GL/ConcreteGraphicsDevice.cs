@@ -65,14 +65,15 @@ namespace Microsoft.Xna.Platform.Graphics
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
             int tSize = ReflectionHelpers.SizeOf<T>();
             int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
-            GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, dataPtr.AddrOfPinnedObject());
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, dataPtr);
             }
             finally
             {
-                dataPtr.Free();
+                dataHandle.Free();
             }
 
             // buffer is returned upside down, so we swap the rows around when copying over

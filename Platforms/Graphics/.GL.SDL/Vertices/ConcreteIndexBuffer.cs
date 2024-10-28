@@ -44,7 +44,8 @@ namespace Microsoft.Xna.Platform.Graphics
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             IntPtr ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             // Pointer to the start of data to read in the index buffer
-            ptr = new IntPtr(ptr.ToInt64() + offsetInBytes);
+            ptr = ptr + offsetInBytes;
+
             if (typeof(T) == typeof(byte))
             {
                 byte[] buffer = data as byte[];

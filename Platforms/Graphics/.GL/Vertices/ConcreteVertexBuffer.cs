@@ -92,7 +92,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInBytes);
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                     GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)(elementSizeInBytes * elementCount), dataPtr);
                     GL.CheckGLError();
@@ -109,7 +110,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 try
                 {
                     int dstOffset = offsetInBytes;
-                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                     for (int i = 0; i < elementCount; i++)
                     {
@@ -117,7 +119,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
 
                         dstOffset += vertexStride;
-                        dataPtr = (IntPtr)(dataPtr.ToInt64() + elementSizeInByte);
+                        dataPtr = dataPtr + elementSizeInByte;
                     }
                 }
                 finally

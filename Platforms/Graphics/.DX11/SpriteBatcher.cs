@@ -219,22 +219,27 @@ namespace Microsoft.Xna.Platform.Graphics
                         _baseQuad = 0;
                     }
                     DX.DataBox dataBox = d3dContext.MapSubresource(((IPlatformVertexBuffer)_vertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0, mode, D3D11.MapFlags.None);
-                    VertexPositionColorTexture* vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
-
-                    // create batch
-                    vertexArrayPtr += _baseQuad * 4;
-                    for (int i = 0; i < numBatchesToProcess; i++, vertexArrayPtr += 4)
+                    try
                     {
-                        SpriteBatchItem item = _batchItemList[batchIndex + i];
+                        VertexPositionColorTexture* vertexArrayPtr = (VertexPositionColorTexture*)dataBox.DataPointer.ToPointer();
 
-                        // store the SpriteBatchItem data in our vertexArray
-                        *(vertexArrayPtr + 0) = item.vertexTL;
-                        *(vertexArrayPtr + 1) = item.vertexTR;
-                        *(vertexArrayPtr + 2) = item.vertexBL;
-                        *(vertexArrayPtr + 3) = item.vertexBR;
+                        // create batch
+                        vertexArrayPtr += _baseQuad * 4;
+                        for (int i = 0; i < numBatchesToProcess; i++, vertexArrayPtr += 4)
+                        {
+                            SpriteBatchItem item = _batchItemList[batchIndex + i];
+
+                            // store the SpriteBatchItem data in our vertexArray
+                            *(vertexArrayPtr + 0) = item.vertexTL;
+                            *(vertexArrayPtr + 1) = item.vertexTR;
+                            *(vertexArrayPtr + 2) = item.vertexBL;
+                            *(vertexArrayPtr + 3) = item.vertexBR;
+                        }
                     }
-                    // unmap and set vertexbuffer
-                    d3dContext.UnmapSubresource(((IPlatformVertexBuffer)_vertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0);
+                    finally
+                    {
+                        d3dContext.UnmapSubresource(((IPlatformVertexBuffer)_vertexBuffer).Strategy.ToConcrete<ConcreteVertexBuffer>().DXVertexBuffer, 0);
+                    }
                 }
 
                 // draw batch

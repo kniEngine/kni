@@ -609,7 +609,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             element.VertexAttribPointerType,
                             element.Normalized,
                             vertexStride,
-                            ((IntPtr)(vertexOffset.ToInt64() + element.Offset)).ToInt32());
+                            (vertexOffset + element.Offset).ToInt32());
                         GL.CheckGLError();
 
                         // only set the divisor if instancing is supported

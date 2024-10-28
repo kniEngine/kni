@@ -66,7 +66,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                     ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);

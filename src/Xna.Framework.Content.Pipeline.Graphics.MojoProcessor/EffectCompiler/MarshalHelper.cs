@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             for (int i = 0; i < count; i++)
             {
                 int offset = i * size;
-				IntPtr structPtr = new IntPtr(ptr.ToInt64() + offset);
+				IntPtr structPtr = ptr + offset;
                 ret[i] = (T)Marshal.PtrToStructure(structPtr, type);
             }
 

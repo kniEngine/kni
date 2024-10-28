@@ -69,11 +69,12 @@ namespace Microsoft.Xna.Platform.Graphics
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 int rowPitch = this.Format.GetPitch(width);
                 int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.
-                DX.DataBox box = new DX.DataBox(dataPtr, rowPitch, slicePitch);
+                DX.DataBox dataBox = new DX.DataBox(dataPtr, rowPitch, slicePitch);
 
                 int subresourceIndex = level;
 
@@ -83,7 +84,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    d3dContext.UpdateSubresource(box, this.GetTexture(), subresourceIndex, region);
+                    d3dContext.UpdateSubresource(dataBox, this.GetTexture(), subresourceIndex, region);
                 }
             }
             finally
@@ -109,21 +110,20 @@ namespace Microsoft.Xna.Platform.Graphics
             texture3DDesc.Usage = D3D11.ResourceUsage.Staging;
             texture3DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            using (D3D11.Texture3D stagingTex = new D3D11.Texture3D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc))
+            using (D3D11.Texture3D stagingTexture = new D3D11.Texture3D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture3DDesc))
             {
                 lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
                 {
                     D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                     // Copy the data from the GPU to the staging texture.
-                    d3dContext.CopySubresourceRegion(this.GetTexture(), level, new D3D11.ResourceRegion(left, top, front, right, bottom, back), stagingTex, 0);
+                    d3dContext.CopySubresourceRegion(this.GetTexture(), level, new D3D11.ResourceRegion(left, top, front, right, bottom, back), stagingTexture, 0);
 
                     // Copy the data to the array.
                     DX.DataStream stream = null;
+                    DX.DataBox dataBox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
                     try
                     {
-                        DX.DataBox databox = d3dContext.MapSubresource(stagingTex, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
-
                         // Some drivers may add pitch to rows or slices.
                         // We need to copy each row separatly and skip trailing zeros.
                         int currentIndex = startIndex;
@@ -135,10 +135,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             for (int row = top; row < bottom; row++)
                             {
                                 stream.ReadRange(data, currentIndex, elementsInRow);
-                                stream.Seek(databox.RowPitch - (elementSize * elementsInRow), SeekOrigin.Current);
+                                stream.Seek(dataBox.RowPitch - (elementSize * elementsInRow), SeekOrigin.Current);
                                 currentIndex += elementsInRow;
                             }
-                            stream.Seek(databox.SlicePitch - (databox.RowPitch * rowsInSlice), SeekOrigin.Current);
+                            stream.Seek(dataBox.SlicePitch - (dataBox.RowPitch * rowsInSlice), SeekOrigin.Current);
                         }
                     }
                     finally

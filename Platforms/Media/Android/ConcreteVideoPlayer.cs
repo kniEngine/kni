@@ -173,15 +173,16 @@ namespace Microsoft.Xna.Platform.Media
                 GL.CheckGLError();
 
                 // Read the pixel data from the framebuffer
-                GCHandle dataPtr = GCHandle.Alloc(_frameData, GCHandleType.Pinned);
+                GCHandle dataHandle = GCHandle.Alloc(_frameData, GCHandleType.Pinned);
                 try
                 {
-                    GL.ReadPixels(0, 0, this.Video.Width, this.Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, dataPtr.AddrOfPinnedObject());
+                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    GL.ReadPixels(0, 0, this.Video.Width, this.Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, dataPtr);
                     GL.CheckGLError();
                 }
                 finally
                 {
-                    dataPtr.Free();
+                    dataHandle.Free();
                 }
 
                 // Dettach framebuffer

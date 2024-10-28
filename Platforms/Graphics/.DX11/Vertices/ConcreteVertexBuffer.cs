@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -75,12 +76,12 @@ namespace Microsoft.Xna.Platform.Graphics
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                int startBytes = startIndex * elementSizeInBytes;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                 if (vertexStride == elementSizeInBytes)
                 {
-                    DX.DataBox box = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
+                    DX.DataBox dataBox = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
 
                     D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                     region.Top = 0;
@@ -94,7 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                        d3dContext.UpdateSubresource(box, _buffer, 0, region);
+                        d3dContext.UpdateSubresource(dataBox, _buffer, 0, region);
                     }
                 }
                 else
@@ -106,17 +107,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
                             d3dContext.CopyResource(_buffer, stagingBuffer);
 
-                            // Map the staging resource to a CPU accessible memory
-                            DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read,
-                            D3D11.MapFlags.None);
-
-                            for (int i = 0; i < elementCount; i++)
-                                DX.Utilities.CopyMemory(
-                                box.DataPointer + i * vertexStride + offsetInBytes,
-                                dataPtr + i * elementSizeInBytes, elementSizeInBytes);
-
-                            // Make sure that we unmap the resource in case of an exception
-                            d3dContext.UnmapSubresource(stagingBuffer, 0);
+                            DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
+                            try
+                            {
+                                IntPtr dstPtr = dataBox.DataPointer;
+                                for (int i = 0; i < elementCount; i++)
+                                    MemCopyHelper.MemoryCopy(
+                                        dataPtr + i * elementSizeInBytes,
+                                        dstPtr + i * vertexStride + offsetInBytes,
+                                        elementSizeInBytes);
+                            }
+                            finally
+                            {
+                                d3dContext.UnmapSubresource(stagingBuffer, 0);
+                            }
 
                             // Copy back from staging resource to real buffer.
                             d3dContext.CopyResource(stagingBuffer, _buffer);
@@ -138,8 +142,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             try
             {
-                int startBytes = startIndex * TsizeInBytes;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                 using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
                     lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
@@ -148,21 +152,24 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         d3dContext.CopyResource(_buffer, stagingBuffer);
 
-                        // Map the staging resource to a CPU accessible memory
-                        DX.DataBox box = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
-
-                        if (vertexStride == TsizeInBytes)
+                        DX.DataBox dataBox = d3dContext.MapSubresource(stagingBuffer, 0, D3D11.MapMode.Read, D3D11.MapFlags.None);
+                        try
                         {
-                            DX.Utilities.CopyMemory(dataPtr, box.DataPointer + offsetInBytes, vertexStride * elementCount);
+                            IntPtr srcPtr = dataBox.DataPointer;
+                            if (vertexStride == TsizeInBytes)
+                            {
+                                MemCopyHelper.MemoryCopy(srcPtr + offsetInBytes, dataPtr, vertexStride * elementCount);
+                            }
+                            else
+                            {
+                                for (int i = 0; i < elementCount; i++)
+                                    MemCopyHelper.MemoryCopy(srcPtr + i * vertexStride + offsetInBytes, dataPtr + i * TsizeInBytes, TsizeInBytes);
+                            }
                         }
-                        else
+                        finally
                         {
-                            for (int i = 0; i < elementCount; i++)
-                                DX.Utilities.CopyMemory(dataPtr + i * TsizeInBytes, box.DataPointer + i * vertexStride + offsetInBytes, TsizeInBytes);
+                            d3dContext.UnmapSubresource(stagingBuffer, 0);
                         }
-
-                        // Make sure that we unmap the resource in case of an exception
-                        d3dContext.UnmapSubresource(stagingBuffer, 0);
                     }
             }
             finally

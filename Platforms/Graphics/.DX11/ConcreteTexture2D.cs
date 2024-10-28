@@ -90,11 +90,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                int startBytes = startIndex * elementSizeInByte;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
+
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = 0;
                 region.Front = 0;
@@ -124,11 +124,11 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            // Use try..finally to make sure dataHandle is freed in case of an error
             try
             {
-                int startBytes = startIndex * elementSizeInByte;
-                IntPtr dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * elementSizeInByte;
+
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
                 region.Top = checkedRect.Top;
                 region.Front = 0;
@@ -191,10 +191,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 // Copy the data to the array.
                 DX.DataStream stream = null;
+                DX.DataBox dataBox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
                 try
                 {
-                    DX.DataBox databox = d3dContext.MapSubresource(stagingTexture, 0, D3D11.MapMode.Read, D3D11.MapFlags.None, out stream);
-
                     int elementSize = this.Format.GetSize();
                     if (this.Format.IsCompressedFormat())
                     {
@@ -204,7 +203,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         rows /= 4;
                     }
                     int rowSize = elementSize * elementsInRow;
-                    if (rowSize == databox.RowPitch)
+                    if (rowSize == dataBox.RowPitch)
                         stream.ReadRange(data, startIndex, elementCount);
                     else if (level == 0 && arraySlice == 0 &&
                              checkedRect.X == 0 && checkedRect.Y == 0 &&
@@ -220,7 +219,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         for (int row = 0; row < rows; row++)
                         {
                             stream.ReadRange(data, currentIndex, elementsInRow);
-                            stream.Seek((databox.RowPitch - rowSize), SeekOrigin.Current);
+                            stream.Seek((dataBox.RowPitch - rowSize), SeekOrigin.Current);
                             currentIndex += elementsInRow;
                         }
                     }
@@ -241,7 +240,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             if (i >= elementCount)
                                 break;
 
-                            stream.Seek(databox.RowPitch - rowSize, SeekOrigin.Current);
+                            stream.Seek(dataBox.RowPitch - rowSize, SeekOrigin.Current);
                         }
                     }
                 }
