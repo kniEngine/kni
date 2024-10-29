@@ -120,6 +120,61 @@ namespace Kni.Tests.Graphics
         }
 
         //[TestCase(true)]
+        [TestCase(false)]
+        public void ShouldSetBytesAndGetBytes(bool dynamic)
+        {
+            VertexBuffer vertexBuffer = (dynamic)
+                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            byte[] savedDataBytes = ArrayUtil.ConvertFrom(savedData);
+            vertexBuffer.SetData(savedDataBytes);
+
+            if (dynamic)
+            {
+                DynamicVertexBuffer dynamicVertexBuffer = vertexBuffer as DynamicVertexBuffer;
+                dynamicVertexBuffer.SetData(savedDataBytes, 0, savedDataBytes.Length, SetDataOptions.None);
+            }
+
+            byte[] readData = new byte[savedDataBytes.Length];
+            vertexBuffer.GetData(readData, 0, readData.Length);
+
+            Assert.AreEqual(savedDataBytes, readData);
+
+            vertexBuffer.Dispose();
+        }
+
+        //[TestCase(true)]
+        [TestCase(false)]
+        public void ShouldSetBytesAndGetStructData(bool dynamic)
+        {
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            byte[] savedDataBytes = new byte[] { 1,2,3,4,5,6,7,8 };
+            vertexBuffer.SetData(savedDataBytes);
+
+            if (dynamic)
+            {
+                DynamicVertexBuffer dynamicVertexBuffer = vertexBuffer as DynamicVertexBuffer;
+                dynamicVertexBuffer.SetData(savedDataBytes, 0, savedDataBytes.Length, SetDataOptions.None);
+            }
+
+            Color[] readData = new Color[2];
+            vertexBuffer.GetData(0, readData, 0, readData.Length, 1);
+
+            Assert.AreEqual(readData[0].R, savedDataBytes[0]);
+            Assert.AreEqual(readData[0].G, savedDataBytes[1]);
+            Assert.AreEqual(readData[0].B, savedDataBytes[2]);
+            Assert.AreEqual(readData[0].A, savedDataBytes[3]);
+            Assert.AreEqual(readData[1].R, savedDataBytes[4]);
+            Assert.AreEqual(readData[1].G, savedDataBytes[5]);
+            Assert.AreEqual(readData[1].B, savedDataBytes[6]);
+            Assert.AreEqual(readData[1].A, savedDataBytes[7]);
+
+            vertexBuffer.Dispose();
+        }
+
+        //[TestCase(true)]
         [TestCase(false, -1, 0, false, typeof(ArgumentOutOfRangeException))]
         [TestCase(false, 0, 0, false, typeof(ArgumentOutOfRangeException))]
         [TestCase(false, 0, 1, true, null)]
