@@ -43,6 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
+            GL.CheckGLError();
             // Pointer to the start of data to read in the index buffer
             srcPtr = srcPtr + offsetInBytes;
 
