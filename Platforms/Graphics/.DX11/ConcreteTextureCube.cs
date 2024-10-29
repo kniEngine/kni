@@ -160,6 +160,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     finally
                     {
                         DX.Utilities.Dispose(ref stream);
+
+                        d3dContext.UnmapSubresource(stagingTexture, 0);
                     }
                 }
             }
