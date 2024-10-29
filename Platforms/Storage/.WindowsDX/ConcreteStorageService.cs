@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 
-#if ANDROID || IOS || TVOS || NETFX_CORE
+#if NETFX_CORE
 using System.Threading.Tasks;
 #endif
 
@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override IAsyncResult BeginShowSelector(PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
-#if ANDROID || IOS || TVOS || NETFX_CORE
+#if NETFX_CORE
             TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
             Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(player, sizeInBytes, directoryCount));
             task.ContinueWith((t) =>
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override IAsyncResult BeginShowSelector(int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
         {
-#if ANDROID || IOS || TVOS || NETFX_CORE
+#if NETFX_CORE
             TaskCompletionSource<StorageDevice> tcs = new TaskCompletionSource<StorageDevice>(state);
             Task<StorageDevice> task = Task.Run<StorageDevice>(() => Show(sizeInBytes, directoryCount));
             task.ContinueWith((t) =>
@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override StorageDevice EndShowSelector(IAsyncResult result)
         {
-#if ANDROID || IOS || TVOS || NETFX_CORE
+#if NETFX_CORE
             try
             {
                 return ((Task<StorageDevice>)result).Result;
