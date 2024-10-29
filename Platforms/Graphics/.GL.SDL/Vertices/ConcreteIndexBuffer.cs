@@ -44,24 +44,17 @@ namespace Microsoft.Xna.Platform.Graphics
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
             IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
-            // Pointer to the start of data to read in the index buffer
             srcPtr = srcPtr + offsetInBytes;
 
             if (typeof(T) == typeof(byte))
             {
                 byte[] buffer = data as byte[];
-                // If data is already a byte[] we can skip the temporary buffer
-                // Copy from the index buffer to the destination array
                 Marshal.Copy(srcPtr, buffer, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
             }
             else
             {
-                // Temporary buffer to store the copied section of data
                 byte[] buffer = new byte[elementCount * elementSizeInByte];
-                // Copy from the index buffer to the temporary buffer
                 Marshal.Copy(srcPtr, buffer, 0, buffer.Length);
-
-                // Copy from the temporary buffer to the destination array
                 // TODO: BlockCopy doesn't work with struct arrays. 
                 //       throws ArgumentException: "Object must be an array of primitives. (Parameter 'dst')"
                 //       see: ShouldSetAndGetStructData() test
