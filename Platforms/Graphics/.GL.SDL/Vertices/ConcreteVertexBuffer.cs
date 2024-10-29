@@ -40,23 +40,23 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
             // Pointer to the start of data in the vertex buffer
-            IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
+            IntPtr srcPtr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
 
-            ptr = ptr + offsetInBytes;
+            srcPtr = srcPtr + offsetInBytes;
 
             if (typeof(T) == typeof(byte) && vertexStride == 1)
             {
                 // If data is already a byte[] and stride is 1 we can skip the temporary buffer
                 byte[] buffer = data as byte[];
-                Marshal.Copy(ptr, buffer, startIndex * vertexStride, elementCount * vertexStride);
+                Marshal.Copy(srcPtr, buffer, startIndex * vertexStride, elementCount * vertexStride);
             }
             else
             {
                 // Temporary buffer to store the copied section of data
                 byte[] tmp = new byte[elementCount * vertexStride];
                 // Copy from the vertex buffer to the temporary buffer
-                Marshal.Copy(ptr, tmp, 0, tmp.Length);
+                Marshal.Copy(srcPtr, tmp, 0, tmp.Length);
 
                 // Copy from the temporary buffer to the destination array
                 GCHandle tmpHandle = GCHandle.Alloc(tmp, GCHandleType.Pinned);

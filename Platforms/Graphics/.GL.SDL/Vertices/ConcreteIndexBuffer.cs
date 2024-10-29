@@ -42,23 +42,23 @@ namespace Microsoft.Xna.Platform.Graphics
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
             int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            IntPtr ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
+            IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             // Pointer to the start of data to read in the index buffer
-            ptr = ptr + offsetInBytes;
+            srcPtr = srcPtr + offsetInBytes;
 
             if (typeof(T) == typeof(byte))
             {
                 byte[] buffer = data as byte[];
                 // If data is already a byte[] we can skip the temporary buffer
                 // Copy from the index buffer to the destination array
-                Marshal.Copy(ptr, buffer, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
+                Marshal.Copy(srcPtr, buffer, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
             }
             else
             {
                 // Temporary buffer to store the copied section of data
                 byte[] buffer = new byte[elementCount * elementSizeInByte];
                 // Copy from the index buffer to the temporary buffer
-                Marshal.Copy(ptr, buffer, 0, buffer.Length);
+                Marshal.Copy(srcPtr, buffer, 0, buffer.Length);
 
                 // Copy from the temporary buffer to the destination array
                 // TODO: BlockCopy doesn't work with struct arrays. 
