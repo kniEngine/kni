@@ -48,25 +48,18 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             srcPtr = srcPtr + offsetInBytes;
 
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                if (typeof(T) == typeof(byte))
-                {
-                    byte[] dataBuffer = data as byte[];
-                    Marshal.Copy(srcPtr, dataBuffer, startIndex * elementSizeInBytes, sizeInBytes);
-                }
-                else
-                {
-                    byte[] tmpBuffer = new byte[sizeInBytes];
-                    Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
-                    // TODO: BlockCopy doesn't work with struct arrays. 
-                    //       throws ArgumentException: "Object must be an array of primitives. (Parameter 'dst')"
-                    //       see: ShouldSetAndGetStructData() test
-                    Buffer.BlockCopy(tmpBuffer, 0, data, startIndex * elementSizeInBytes, sizeInBytes);
-                }
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(srcPtr, dataPtr, sizeInBytes);
             }
             finally
             {
+                dataHandle.Free();
+
                 GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
                 GL.CheckGLError();
             }
