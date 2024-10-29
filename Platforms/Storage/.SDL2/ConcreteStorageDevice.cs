@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Storage
         {
             try
             {
-                OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
+                ConcreteStorageService.OpenContainerAsynchronous AsynchronousOpen = new ConcreteStorageService.OpenContainerAsynchronous(Open);
                 return AsynchronousOpen.BeginInvoke(storageDevice, displayName, callback, state);
             }
             finally
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Platform.Storage
                 AsyncResult asyncResult = result as AsyncResult;
                 if (asyncResult != null)
                 {
-                    OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
+                    ConcreteStorageService.OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as ConcreteStorageService.OpenContainerAsynchronous;
 
                     // Wait for the WaitHandle to become signaled.
                     result.AsyncWaitHandle.WaitOne();

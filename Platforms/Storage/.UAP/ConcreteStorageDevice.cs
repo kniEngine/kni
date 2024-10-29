@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Storage
 #else
             try
             {
-                OpenContainerAsynchronous AsynchronousOpen = new OpenContainerAsynchronous(Open);
+                ConcreteStorageService.OpenContainerAsynchronous AsynchronousOpen = new ConcreteStorageService.OpenContainerAsynchronous(Open);
 #if (UAP || WINUI)
                 _containerDelegate = AsynchronousOpen;
 #endif
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Platform.Storage
             {
 #if (UAP || WINUI)
                 // AsyncResult does not exist in WinRT
-                var asyncResult = _containerDelegate as OpenContainerAsynchronous;
+                ConcreteStorageService.OpenContainerAsynchronous asyncResult = _containerDelegate as ConcreteStorageService.OpenContainerAsynchronous;
                 if (asyncResult != null)
                 {
                     // Wait for the WaitHandle to become signaled.
@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Platform.Storage
                 AsyncResult asyncResult = result as AsyncResult;
                 if (asyncResult != null)
                 {
-                    OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as OpenContainerAsynchronous;
+                    ConcreteStorageService.OpenContainerAsynchronous asyncDelegate = asyncResult.AsyncDelegate as ConcreteStorageService.OpenContainerAsynchronous;
 
                     // Wait for the WaitHandle to become signaled.
                     result.AsyncWaitHandle.WaitOne();
