@@ -364,6 +364,8 @@ namespace Microsoft.Xna.Platform.Graphics
                         finally
                         {
                             DX.Utilities.Dispose( ref stream);
+
+                            ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UnmapSubresource(stagingTexture, 0);
                         }
                     }
                 }
