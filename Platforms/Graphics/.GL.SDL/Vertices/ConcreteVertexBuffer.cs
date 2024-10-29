@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -34,6 +35,8 @@ namespace Microsoft.Xna.Platform.Graphics
             Debug.Assert(GLVertexBuffer != 0);
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
+            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
             GL.CheckGLError();

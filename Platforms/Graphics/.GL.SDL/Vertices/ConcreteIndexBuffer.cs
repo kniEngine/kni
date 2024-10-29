@@ -37,11 +37,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
+            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
             GL.CheckGLError();
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
             IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
             srcPtr = srcPtr + offsetInBytes;
