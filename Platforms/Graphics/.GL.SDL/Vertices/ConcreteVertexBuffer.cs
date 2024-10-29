@@ -43,34 +43,39 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             srcPtr = srcPtr + offsetInBytes;
 
-            if (typeof(T) == typeof(byte) && vertexStride == 1)
+            try
             {
-                byte[] dataBuffer = data as byte[];
-                Marshal.Copy(srcPtr, dataBuffer, startIndex * vertexStride, elementCount * vertexStride);
-            }
-            else
-            {
-                byte[] tmpBuffer = new byte[elementCount * vertexStride];
-                Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
-
-                GCHandle tmpHandle = GCHandle.Alloc(tmpBuffer, GCHandleType.Pinned);
-                try
+                if (typeof(T) == typeof(byte) && vertexStride == 1)
                 {
-                    IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();
-                    for (int i = 0; i < elementCount; i++)
+                    byte[] dataBuffer = data as byte[];
+                    Marshal.Copy(srcPtr, dataBuffer, startIndex * vertexStride, elementCount * vertexStride);
+                }
+                else
+                {
+                    byte[] tmpBuffer = new byte[elementCount * vertexStride];
+                    Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
+
+                    GCHandle tmpHandle = GCHandle.Alloc(tmpBuffer, GCHandleType.Pinned);
+                    try
                     {
-                        data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
-                        tmpPtr = tmpPtr + vertexStride;
+                        IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();
+                        for (int i = 0; i < elementCount; i++)
+                        {
+                            data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
+                            tmpPtr = tmpPtr + vertexStride;
+                        }
+                    }
+                    finally
+                    {
+                        tmpHandle.Free();
                     }
                 }
-                finally
-                {
-                    tmpHandle.Free();
-                }
             }
-
-            GL.UnmapBuffer(BufferTarget.ArrayBuffer);
-            GL.CheckGLError();
+            finally
+            {
+                GL.UnmapBuffer(BufferTarget.ArrayBuffer);
+                GL.CheckGLError();
+            }
         }
     }
 

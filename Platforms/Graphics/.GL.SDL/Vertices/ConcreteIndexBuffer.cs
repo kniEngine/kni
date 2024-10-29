@@ -46,22 +46,28 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             srcPtr = srcPtr + offsetInBytes;
 
-            if (typeof(T) == typeof(byte))
+            try
             {
-                byte[] dataBuffer = data as byte[];
-                Marshal.Copy(srcPtr, dataBuffer, startIndex * elementSizeInBytes, elementCount * elementSizeInBytes);
+                if (typeof(T) == typeof(byte))
+                {
+                    byte[] dataBuffer = data as byte[];
+                    Marshal.Copy(srcPtr, dataBuffer, startIndex * elementSizeInBytes, elementCount * elementSizeInBytes);
+                }
+                else
+                {
+                    byte[] tmpBuffer = new byte[elementCount * elementSizeInBytes];
+                    Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
+                    // TODO: BlockCopy doesn't work with struct arrays. 
+                    //       throws ArgumentException: "Object must be an array of primitives. (Parameter 'dst')"
+                    //       see: ShouldSetAndGetStructData() test
+                    Buffer.BlockCopy(tmpBuffer, 0, data, startIndex * elementSizeInBytes, elementCount * elementSizeInBytes);
+                }
             }
-            else
+            finally
             {
-                byte[] tmpBuffer = new byte[elementCount * elementSizeInBytes];
-                Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
-                // TODO: BlockCopy doesn't work with struct arrays. 
-                //       throws ArgumentException: "Object must be an array of primitives. (Parameter 'dst')"
-                //       see: ShouldSetAndGetStructData() test
-                Buffer.BlockCopy(tmpBuffer, 0, data, startIndex * elementSizeInBytes, elementCount * elementSizeInBytes);
+                GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
+                GL.CheckGLError();
             }
-            GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
-            GL.CheckGLError();
         }
     }
 
