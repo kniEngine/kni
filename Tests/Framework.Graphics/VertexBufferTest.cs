@@ -258,7 +258,7 @@ namespace Kni.Tests.Graphics
         }
 
         [Test]
-        public void BetterGetSetDataVertexStrideTest()
+        public void GetSetDataVertexStrideTest()
         {
             const int size = 5;
             var data = new VertexPositionTexture[size];
