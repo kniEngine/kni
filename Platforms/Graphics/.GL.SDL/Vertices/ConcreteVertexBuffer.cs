@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -35,48 +36,50 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
+            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int sizeInBytes = elementCount * elementSizeInBytes;
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
             GL.CheckGLError();
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
-            // Pointer to the start of data in the vertex buffer
-            IntPtr ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
+            IntPtr srcPtr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
+            srcPtr = srcPtr + offsetInBytes;
 
-            ptr = ptr + offsetInBytes;
-
-            if (typeof(T) == typeof(byte) && vertexStride == 1)
+            try
             {
-                // If data is already a byte[] and stride is 1 we can skip the temporary buffer
-                byte[] buffer = data as byte[];
-                Marshal.Copy(ptr, buffer, startIndex * vertexStride, elementCount * vertexStride);
-            }
-            else
-            {
-                // Temporary buffer to store the copied section of data
-                byte[] tmp = new byte[elementCount * vertexStride];
-                // Copy from the vertex buffer to the temporary buffer
-                Marshal.Copy(ptr, tmp, 0, tmp.Length);
-
-                // Copy from the temporary buffer to the destination array
-                GCHandle tmpHandle = GCHandle.Alloc(tmp, GCHandleType.Pinned);
-                try
+                if (typeof(T) == typeof(byte) && vertexStride == 1)
                 {
-                    IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();
-                    for (int i = 0; i < elementCount; i++)
+                    byte[] dataBuffer = data as byte[];
+                    Marshal.Copy(srcPtr, dataBuffer, startIndex * vertexStride, elementCount * vertexStride);
+                }
+                else
+                {
+                    byte[] tmpBuffer = new byte[elementCount * vertexStride];
+                    Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
+
+                    GCHandle tmpHandle = GCHandle.Alloc(tmpBuffer, GCHandleType.Pinned);
+                    try
                     {
-                        data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
-                        tmpPtr = tmpPtr + vertexStride;
+                        IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();
+                        for (int i = 0; i < elementCount; i++)
+                        {
+                            data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
+                            tmpPtr = tmpPtr + vertexStride;
+                        }
+                    }
+                    finally
+                    {
+                        tmpHandle.Free();
                     }
                 }
-                finally
-                {
-                    tmpHandle.Free();
-                }
             }
-
-            GL.UnmapBuffer(BufferTarget.ArrayBuffer);
-            GL.CheckGLError();
+            finally
+            {
+                GL.UnmapBuffer(BufferTarget.ArrayBuffer);
+                GL.CheckGLError();
+            }
         }
     }
 
