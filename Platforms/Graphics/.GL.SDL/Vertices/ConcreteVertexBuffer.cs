@@ -37,6 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int sizeInBytes = elementCount * elementSizeInBytes;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
             GL.CheckGLError();
