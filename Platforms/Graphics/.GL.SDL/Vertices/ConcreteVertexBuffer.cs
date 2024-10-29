@@ -45,15 +45,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (typeof(T) == typeof(byte) && vertexStride == 1)
             {
-                byte[] buffer = data as byte[];
-                Marshal.Copy(srcPtr, buffer, startIndex * vertexStride, elementCount * vertexStride);
+                byte[] dataBuffer = data as byte[];
+                Marshal.Copy(srcPtr, dataBuffer, startIndex * vertexStride, elementCount * vertexStride);
             }
             else
             {
-                byte[] tmp = new byte[elementCount * vertexStride];
-                Marshal.Copy(srcPtr, tmp, 0, tmp.Length);
+                byte[] tmpBuffer = new byte[elementCount * vertexStride];
+                Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
 
-                GCHandle tmpHandle = GCHandle.Alloc(tmp, GCHandleType.Pinned);
+                GCHandle tmpHandle = GCHandle.Alloc(tmpBuffer, GCHandleType.Pinned);
                 try
                 {
                     IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();

@@ -48,17 +48,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (typeof(T) == typeof(byte))
             {
-                byte[] buffer = data as byte[];
-                Marshal.Copy(srcPtr, buffer, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
+                byte[] dataBuffer = data as byte[];
+                Marshal.Copy(srcPtr, dataBuffer, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
             }
             else
             {
-                byte[] buffer = new byte[elementCount * elementSizeInByte];
-                Marshal.Copy(srcPtr, buffer, 0, buffer.Length);
+                byte[] tmpBuffer = new byte[elementCount * elementSizeInByte];
+                Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
                 // TODO: BlockCopy doesn't work with struct arrays. 
                 //       throws ArgumentException: "Object must be an array of primitives. (Parameter 'dst')"
                 //       see: ShouldSetAndGetStructData() test
-                Buffer.BlockCopy(buffer, 0, data, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
+                Buffer.BlockCopy(tmpBuffer, 0, data, startIndex * elementSizeInByte, elementCount * elementSizeInByte);
             }
             GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
             GL.CheckGLError();
