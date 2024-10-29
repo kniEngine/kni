@@ -47,31 +47,27 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             srcPtr = srcPtr + offsetInBytes;
 
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                if (typeof(T) == typeof(byte) && vertexStride == 1)
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
                 {
-                    byte[] dataBuffer = data as byte[];
-                    Marshal.Copy(srcPtr, dataBuffer, startIndex * vertexStride, elementCount * vertexStride);
+                     Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(
+                        srcPtr,
+                        dataPtr,
+                        sizeInBytes);
                 }
                 else
                 {
-                    byte[] tmpBuffer = new byte[elementCount * vertexStride];
-                    Marshal.Copy(srcPtr, tmpBuffer, 0, tmpBuffer.Length);
-
-                    GCHandle tmpHandle = GCHandle.Alloc(tmpBuffer, GCHandleType.Pinned);
-                    try
+                    for (int i = 0; i < elementCount; i++)
                     {
-                        IntPtr tmpPtr = tmpHandle.AddrOfPinnedObject();
-                        for (int i = 0; i < elementCount; i++)
-                        {
-                            data[startIndex + i] = (T)Marshal.PtrToStructure(tmpPtr, typeof(T));
-                            tmpPtr = tmpPtr + vertexStride;
-                        }
-                    }
-                    finally
-                    {
-                        tmpHandle.Free();
+                         Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(
+                            srcPtr + i * vertexStride,
+                            dataPtr + i * elementSizeInBytes,
+                            sizeInBytes);
                     }
                 }
             }
