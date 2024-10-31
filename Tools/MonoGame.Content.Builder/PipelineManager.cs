@@ -894,9 +894,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 string relativeDestFile = PathHelper.GetRelativePath(ProjectDirectory, fullDestFile);
                 relativeDestFile = PathHelper.Normalize(relativeDestFile);
 
-                if (existingBuildEventDestFile.Equals(relativeDestFile) &&
-                    existingBuildEvent.Importer  == importerName &&
-                    existingBuildEvent.Processor == processorName)
+                if (existingBuildEventDestFile.Equals(relativeDestFile)
+                &&  existingBuildEvent.Importer  == importerName
+                &&  existingBuildEvent.Processor == processorName)
                 {
                     OpaqueDataDictionary defaultValues = GetProcessorDefaultValues(processorName);
                     if (BuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))

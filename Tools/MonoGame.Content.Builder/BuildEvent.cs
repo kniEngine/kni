@@ -168,8 +168,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // This shouldn't happen...  but if the source or dest files changed
             // then force a rebuild.
-            if (cachedEvent.SourceFile != SourceFile ||
-                cachedEvent.DestFile != DestFile)
+            if (cachedEvent.SourceFile != SourceFile
+            ||  cachedEvent.DestFile != DestFile)
                 return true;
 
             // Did the importer change?

@@ -358,9 +358,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // If the target changed in any way then we need to force
             // a full rebuild even under incremental builds.
-            bool targetChanged = previousFileCollection.Config != Config ||
-                                 previousFileCollection.Platform != Platform ||
-                                 previousFileCollection.Profile != Profile;
+            bool targetChanged = previousFileCollection.Config != Config
+                              || previousFileCollection.Platform != Platform
+                              || previousFileCollection.Profile != Profile
+                               ;
 
             // First clean previously built content.
             CleanItems(previousFileCollection, targetChanged);
