@@ -345,7 +345,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             _manager = new PipelineManager(projectDirectory, _responseFilename, outputPath, intermediatePath, this.Quiet);
-            _manager.Compression = compression;
 
             // Feed all the assembly references to the pipeline manager
             // so it can resolve importers, processors, writers, and types.
@@ -361,6 +360,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool targetChanged = previousFileCollection.Config != Config
                               || previousFileCollection.Platform != Platform
                               || previousFileCollection.Profile != Profile
+                              || previousFileCollection.Compression != compression
                                ;
 
             // First clean previously built content.
@@ -374,6 +374,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 Profile = _manager.Profile = Profile,
                 Platform = _manager.Platform = Platform,
+                Compression = _manager.Compression = compression,
                 Config = _manager.Config = Config
             };
             SuccessCount = 0;
