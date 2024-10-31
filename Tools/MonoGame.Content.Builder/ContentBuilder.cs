@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -324,9 +325,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (!Path.IsPathRooted(intermediatePath))
                 intermediatePath = PathHelper.Normalize(Path.GetFullPath(Path.Combine(projectDirectory, intermediatePath)));
 
+            ContentCompression compression = ContentCompression.Uncompressed;
+            if (this.CompressContent)
+            {
+                switch (this.Compression)
+                {
+                    case CompressionMethod.Default:
+                        compression = ContentCompression.LegacyLZ4;
+                        break;
+                    case CompressionMethod.LZ4:
+                        compression = ContentCompression.LZ4;
+                        break;
+                    case CompressionMethod.Brotli:
+                        compression = ContentCompression.Brotli;
+                        break;
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
+
             _manager = new PipelineManager(projectDirectory, _responseFilename, outputPath, intermediatePath, this.Quiet);
-            _manager.CompressContent = this.CompressContent;
-            _manager.Compression = this.Compression;
+            _manager.Compression = compression;
 
             // Feed all the assembly references to the pipeline manager
             // so it can resolve importers, processors, writers, and types.
