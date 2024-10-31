@@ -39,7 +39,6 @@ namespace Microsoft.Xna.Platform.Storage
                     callback(tcs.Task);
             });
             return tcs.Task;
-#endif
         }
 
         public override IAsyncResult BeginShowSelector(int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
@@ -61,7 +60,6 @@ namespace Microsoft.Xna.Platform.Storage
                     callback(tcs.Task);
             });
             return tcs.Task;
-#endif
         }
 
         public override StorageDevice EndShowSelector(IAsyncResult result)
@@ -74,7 +72,6 @@ namespace Microsoft.Xna.Platform.Storage
             {
                 throw;
             }
-#endif
         }
 
         // The MonoTouch AOT cannot deal with nullable types in a delegate
