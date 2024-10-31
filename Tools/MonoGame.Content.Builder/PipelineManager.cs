@@ -83,14 +83,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         public string Config { get; set; }
 
         /// <summary>
-        /// Gets or sets if the content is compressed.
-        /// </summary>
-        public bool CompressContent { get; set; }
-
-        /// <summary>
         /// Gets or sets the compression method.
         /// </summary>
-        public CompressionMethod Compression { get; set; }
+        public ContentCompression Compression { get; set; }
 
         internal const String DefaultFileCollectionFilename = "assetsdb.kniContent";
 
@@ -805,28 +800,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (_compiler == null)
                 _compiler = new ContentCompiler();
 
-            ContentCompression compression = ContentCompression.Uncompressed;
-            if (this.CompressContent)
-            {
-                switch (this.Compression)
-                {
-                    case CompressionMethod.Default:
-                        compression = ContentCompression.LegacyLZ4;
-                        break;
-                    case CompressionMethod.LZ4:
-                        compression = ContentCompression.LZ4;
-                        break;
-                    case CompressionMethod.Brotli:
-                        compression = ContentCompression.Brotli;
-                        break;
-                    default:
-                        throw new InvalidOperationException();
-                }
-            }
-
             // Write the XNB.
             using (Stream stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
-                _compiler.Compile(stream, content, Platform, Profile, compression, OutputDirectory, outputFileDir);
+                _compiler.Compile(stream, content, Platform, Profile, Compression, OutputDirectory, outputFileDir);
 
             // Store the last write time of the output XNB here
             // so we can verify it hasn't been tampered with.
