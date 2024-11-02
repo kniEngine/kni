@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Storage
         StorageServiceStrategy Strategy { get; }
     }
 
-    abstract public class StorageServiceStrategy : IDisposable
+    public abstract class StorageServiceStrategy : IDisposable
     {
         public abstract IAsyncResult BeginShowSelector(PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state);
         public abstract IAsyncResult BeginShowSelector(int sizeInBytes, int directoryCount, AsyncCallback callback, object state);

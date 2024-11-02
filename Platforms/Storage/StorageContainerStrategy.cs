@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Microsoft.Xna.Platform.Storage
 {
-    internal abstract class StorageContainerStrategy : IDisposable
+    public abstract class StorageContainerStrategy : IDisposable
     {
         internal /*readonly*/ string _storagePath;
         private readonly string _name;

@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Storage
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("A title name has to be provided in parameter name.");
 
-            this._strategy = new ConcreteStorageContainer(name, playerIndex);
+            this._strategy = StorageFactory.Current.CreateStorageContainerStrategy(name, playerIndex);
 
             _device = device;
         }

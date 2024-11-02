@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="directoryCount"></param>
         internal StorageDevice(PlayerIndex? player, int sizeInBytes, int directoryCount) 
         {
-            this._strategy = new ConcreteStorageDevice(player, directoryCount);
+            this._strategy = StorageFactory.Current.CreateStorageDeviceStrategy(player, directoryCount);
         }
         
         /// <summary>

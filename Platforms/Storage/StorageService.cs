@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Storage
 
         private StorageService()
         {
-            _strategy = new ConcreteStorageService();
+            _strategy = StorageFactory.Current.CreateStorageServiceStrategy();
         }
 
         public IAsyncResult BeginShowSelector(PlayerIndex player, int sizeInBytes, int directoryCount, AsyncCallback callback, object state)
