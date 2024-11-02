@@ -20,14 +20,14 @@ namespace Microsoft.Xna.Platform.Storage
     //	the content is saved in the Player1, Player2, Player3, or Player4 folder, depending on which PlayerIndex 
     //	was passed to BeginShowSelector.
 
-    internal class ConcreteStorageContainer : StorageContainerStrategy
+    internal sealed class ConcreteStorageContainer : StorageContainerStrategy
     {
         public override string DisplayName
         {
             get { return base.DisplayName; }
         }
 
-        public ConcreteStorageContainer(string name, PlayerIndex? playerIndex) : base(name)
+        internal ConcreteStorageContainer(string name, PlayerIndex? playerIndex) : base(name)
         {
             string saved = "";
 

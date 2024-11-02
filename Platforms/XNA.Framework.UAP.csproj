@@ -211,10 +211,12 @@
     <Compile Include="Storage\StorageContainerStrategy.cs" />
     <Compile Include="Storage\StorageDevice.cs" />
     <Compile Include="Storage\StorageDeviceStrategy.cs" />
+    <Compile Include="Storage\StorageFactory.cs" />
     <Compile Include="Storage\StorageService.cs" />
     <Compile Include="Storage\StorageServiceStrategy.cs" />
     <Compile Include="Storage\.UAP\ConcreteStorageContainer.cs" />
     <Compile Include="Storage\.UAP\ConcreteStorageDevice.cs" />
+    <Compile Include="Storage\.UAP\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.UAP\ConcreteStorageService.cs" />
 
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">

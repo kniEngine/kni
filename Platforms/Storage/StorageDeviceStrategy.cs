@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Microsoft.Xna.Platform.Storage
 {
-    internal abstract class StorageDeviceStrategy
+    public abstract class StorageDeviceStrategy
     {
         internal PlayerIndex? _player;
         int _directoryCount;
