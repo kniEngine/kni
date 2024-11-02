@@ -9,6 +9,9 @@
     <type fullname="Microsoft.Xna.Platform.Devices.ConcreteDevicesFactory">
       <method name=".ctor" />
     </type>
+    <type fullname="Microsoft.Xna.Platform.ConcreteGameFactory">
+      <method name=".ctor" />
+    </type>
     <type fullname="Microsoft.Xna.Platform.Graphics.ConcreteGraphicsFactory" >
       <method name=".ctor" />
     </type>
