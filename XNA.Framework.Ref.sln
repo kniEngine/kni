@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Devices", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Ref", "Platforms\Xna.Framework.Ref.csproj", "{91E64EE8-04D3-4850-A3CA-C4839EF167F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Storage", "src\Xna.Framework.Storage\Xna.Framework.Storage.csproj", "{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,10 +67,6 @@ Global
 		{91E64EE8-04D3-4850-A3CA-C4839EF167F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91E64EE8-04D3-4850-A3CA-C4839EF167F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91E64EE8-04D3-4850-A3CA-C4839EF167F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,7 +81,6 @@ Global
 		{90BBD6EF-F386-4F47-88CD-BF386C7D1705} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
 		{6B3E56F7-C567-463C-9746-0244FD959322} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
 		{91E64EE8-04D3-4850-A3CA-C4839EF167F2} = {9E8F9D1A-DEF1-4FA1-8DE9-0A82B7BC99D9}
-		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0B8E7E4B-7522-4B37-932C-19ACF360618E}

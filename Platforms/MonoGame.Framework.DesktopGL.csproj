@@ -75,11 +75,6 @@
       <Name>Xna.Framework.Devices</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\src\Xna.Framework.Storage\Xna.Framework.Storage.csproj">
-      <Project>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</Project>
-      <Name>Xna.Framework.Storage</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
