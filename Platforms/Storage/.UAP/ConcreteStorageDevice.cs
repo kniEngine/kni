@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Xna.Platform.Storage
 {
-    internal class ConcreteStorageDevice : StorageDeviceStrategy
+    internal sealed class ConcreteStorageDevice : StorageDeviceStrategy
     {
 
         public override long FreeSpace
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Storage
         }
 
 
-        public ConcreteStorageDevice(PlayerIndex? player, int directoryCount) : base(player, directoryCount)
+        internal ConcreteStorageDevice(PlayerIndex? player, int directoryCount) : base(player, directoryCount)
         {
         }
 
