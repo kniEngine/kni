@@ -165,6 +165,18 @@
     <Compile Include="Media\Ref\ConcreteVideo.cs" />
     <Compile Include="Content\.Ref\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.Ref\ConcreteTitleContainerFactory.cs" />
+
+    <Compile Include="Storage\StorageContainer.cs" />
+    <Compile Include="Storage\StorageContainerStrategy.cs" />
+    <Compile Include="Storage\StorageDevice.cs" />
+    <Compile Include="Storage\StorageDeviceStrategy.cs" />
+    <Compile Include="Storage\StorageFactory.cs" />
+    <Compile Include="Storage\StorageService.cs" />
+    <Compile Include="Storage\StorageServiceStrategy.cs" />
+    <Compile Include="Storage\.Ref\ConcreteStorageContainer.cs" />
+    <Compile Include="Storage\.Ref\ConcreteStorageDevice.cs" />
+    <Compile Include="Storage\.Ref\ConcreteStorageFactory.cs" />
+    <Compile Include="Storage\.Ref\ConcreteStorageService.cs" />
   </ItemGroup>
 
   <ItemGroup>
