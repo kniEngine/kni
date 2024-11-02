@@ -25,24 +25,24 @@ namespace Microsoft.Xna.Platform.Storage
 
             string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saved = Path.Combine(root,"SavedGames");
-            _storagePath = Path.Combine(saved, name);
+            StoragePath = Path.Combine(saved, name);
 
             string playerSave = string.Empty;
             if (playerIndex.HasValue)
-                playerSave = Path.Combine(_storagePath, "Player" + (int)playerIndex.Value);
+                playerSave = Path.Combine(StoragePath, "Player" + (int)playerIndex.Value);
             
             if (!string.IsNullOrEmpty(playerSave))
-                _storagePath = Path.Combine(_storagePath, "Player" + (int)playerIndex);
+                StoragePath = Path.Combine(StoragePath, "Player" + (int)playerIndex);
 
-            if (!Directory.Exists(_storagePath))
-                Directory.CreateDirectory(_storagePath);
+            if (!Directory.Exists(StoragePath))
+                Directory.CreateDirectory(StoragePath);
         }
 
 
         public override void CreateDirectory(string directory)
         {
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(StoragePath, directory);
 
             if (!Directory.Exists(dirPath))
             {
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override Stream CreateFile(string file)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             // return A new file with read/write access.
             return File.Create(filePath);
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override void DeleteDirectory(string directory)
         {
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(StoragePath, directory);
 
             // Now let's try to delete it
             Directory.Delete(dirPath);
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override void DeleteFile(string file)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             // Now let's try to delete it
             File.Delete(filePath);
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override bool DirectoryExists(string directory)
         {
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(StoragePath, directory);
 
             return Directory.Exists(dirPath);
         }
@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override bool FileExists(string file)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             // return A new file with read/write access.
             return File.Exists(filePath);
@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override string[] GetDirectoryNames()
         {
-            return Directory.GetDirectories(_storagePath);
+            return Directory.GetDirectories(StoragePath);
         }
 
         public override string[] GetDirectoryNames(string searchPattern)
@@ -106,18 +106,18 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override string[] GetFileNames()
         {
-            return Directory.GetFiles(_storagePath);
+            return Directory.GetFiles(StoragePath);
         }
 
         public override string[] GetFileNames(string searchPattern)
         {
-            return Directory.GetFiles(_storagePath, searchPattern);
+            return Directory.GetFiles(StoragePath, searchPattern);
         }
 
         public override Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             return File.Open(filePath, fileMode, fileAccess, fileShare);
         }

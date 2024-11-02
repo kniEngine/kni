@@ -38,17 +38,17 @@ namespace Microsoft.Xna.Platform.Storage
             string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saved = Path.Combine(root,"SavedGames");
 
-            _storagePath = Path.Combine(saved, name);
+            StoragePath = Path.Combine(saved, name);
 
             string playerSave = string.Empty;
             if (playerIndex.HasValue)
-                playerSave = Path.Combine(_storagePath, "Player" + (int)playerIndex.Value);
+                playerSave = Path.Combine(StoragePath, "Player" + (int)playerIndex.Value);
             
             if (!string.IsNullOrEmpty(playerSave))
-                _storagePath = Path.Combine(_storagePath, "Player" + (int)playerIndex);
+                StoragePath = Path.Combine(StoragePath, "Player" + (int)playerIndex);
 
             StorageFolder folder = ApplicationData.Current.LocalFolder;
-            var task = folder.CreateFolderAsync(_storagePath, CreationCollisionOption.OpenIfExists);
+            var task = folder.CreateFolderAsync(StoragePath, CreationCollisionOption.OpenIfExists);
             task.AsTask().Wait();
         }
 
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override void CreateDirectory(string directory)
         {
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(StoragePath, directory);
 
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             var task = folder.CreateFolderAsync(dirPath, CreationCollisionOption.OpenIfExists);
@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override Stream CreateFile(string file)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             var awaiter = folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter();
@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override void DeleteDirectory(string directory)
         {
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(StoragePath, directory);
 
             // Now let's try to delete it
             StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override void DeleteFile(string file)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             StorageFile deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override bool DirectoryExists(string directory)
         {
             // relative so combine with our path
-            string dirPath = Path.Combine(_storagePath, directory);
+            string dirPath = Path.Combine(StoragePath, directory);
 
             StorageFolder folder = ApplicationData.Current.LocalFolder;
 
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override bool FileExists(string file)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             // GetFile returns an exception if the file doesn't exist, so we catch it here and return the boolean.
@@ -161,7 +161,7 @@ namespace Microsoft.Xna.Platform.Storage
         public override Stream OpenFile(string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
         {
             // relative so combine with our path
-            string filePath = Path.Combine(_storagePath, file);
+            string filePath = Path.Combine(StoragePath, file);
 
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             if (fileMode == FileMode.Create || fileMode == FileMode.CreateNew)
