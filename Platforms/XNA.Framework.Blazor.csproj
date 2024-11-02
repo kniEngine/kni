@@ -180,6 +180,18 @@
     <Compile Include="Media\Blazor\ConcreteVideo.cs" />
     <Compile Include="Content\.Blazor\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.Blazor\ConcreteTitleContainerFactory.cs" />
+
+    <Compile Include="Storage\StorageContainer.cs" />
+    <Compile Include="Storage\StorageContainerStrategy.cs" />
+    <Compile Include="Storage\StorageDevice.cs" />
+    <Compile Include="Storage\StorageDeviceStrategy.cs" />
+    <Compile Include="Storage\StorageFactory.cs" />
+    <Compile Include="Storage\StorageService.cs" />
+    <Compile Include="Storage\StorageServiceStrategy.cs" />
+    <Compile Include="Storage\.Blazor\ConcreteStorageContainer.cs" />
+    <Compile Include="Storage\.Blazor\ConcreteStorageDevice.cs" />
+    <Compile Include="Storage\.Blazor\ConcreteStorageFactory.cs" />
+    <Compile Include="Storage\.Blazor\ConcreteStorageService.cs" />
   </ItemGroup>
   
   <ItemGroup>
