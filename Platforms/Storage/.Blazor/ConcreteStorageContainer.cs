@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Microsoft.Xna.Platform.Storage
 {
-
     internal sealed class ConcreteStorageContainer : StorageContainerStrategy
     {
         public override string DisplayName

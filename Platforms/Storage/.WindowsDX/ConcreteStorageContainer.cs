@@ -33,6 +33,7 @@ namespace Microsoft.Xna.Platform.Storage
 
             string root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saved = Path.Combine(root,"SavedGames");
+
             _storagePath = Path.Combine(saved, name);
 
             string playerSave = string.Empty;
