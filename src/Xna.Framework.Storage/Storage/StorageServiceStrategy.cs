@@ -23,6 +23,10 @@ namespace Microsoft.Xna.Platform.Storage
             return (T)this;
         }
 
+        public StorageDevice CreateStorageDevice(PlayerIndex? player, int sizeInBytes, int directoryCount)
+        {
+            return new StorageDevice(player, sizeInBytes, directoryCount);
+        }
 
         #region IDisposable
         ~StorageServiceStrategy()

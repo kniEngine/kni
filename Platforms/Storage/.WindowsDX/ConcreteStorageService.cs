@@ -69,14 +69,14 @@ namespace Microsoft.Xna.Platform.Storage
         public delegate StorageContainer OpenContainerAsynchronous(StorageDevice storageDevice, string displayName);
 
 
-        private static StorageDevice Show(PlayerIndex player, int sizeInBytes, int directoryCount)
+        private StorageDevice Show(PlayerIndex player, int sizeInBytes, int directoryCount)
         {
-            return new StorageDevice(player, sizeInBytes, directoryCount);
+            return base.CreateStorageDevice(player, sizeInBytes, directoryCount);
         }
 
-        private static StorageDevice Show(int sizeInBytes, int directoryCount)
+        private StorageDevice Show(int sizeInBytes, int directoryCount)
         {
-            return new StorageDevice(null, sizeInBytes, directoryCount);
+            return base.CreateStorageDevice(null, sizeInBytes, directoryCount);
         }
 
 
