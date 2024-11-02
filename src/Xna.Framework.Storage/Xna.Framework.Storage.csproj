@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\kniPackage.props" />
+  <PropertyGroup>
+    <BaseOutputPath>..\..\Artifacts\Xna.Framework.Storage\</BaseOutputPath>
+    
+    <Version>3.14.9001.0</Version>
+    <AssemblyVersion>3.14.9001.0</AssemblyVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
+    <LangVersion>5</LangVersion>
+    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
+    <ProjectGuid>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</ProjectGuid>
+    <AssemblyName>Xna.Framework.Storage</AssemblyName>
+    <RootNamespace>Microsoft.Xna.Framework.Storage</RootNamespace>
+    <DefineConstants></DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>The Storage framework.</Description>
+    <PackageTags>.net core;core;.net standard;standard</PackageTags>
+    <PackageId>nkast.Xna.Framework.Storage</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="NamespaceDoc.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Storage\StorageContainer.cs" />
+    <Compile Include="Storage\StorageContainerStrategy.cs" />
+    <Compile Include="Storage\StorageDevice.cs" />
+    <Compile Include="Storage\StorageDeviceStrategy.cs" />
+    <Compile Include="Storage\StorageFactory.cs" />
+    <Compile Include="Storage\StorageService.cs" />
+    <Compile Include="Storage\StorageServiceStrategy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
+      <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
+      <Name>Xna.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

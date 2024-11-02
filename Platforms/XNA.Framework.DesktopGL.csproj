@@ -84,6 +84,11 @@
       <Name>Xna.Framework.Devices</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Storage\Xna.Framework.Storage.csproj">
+      <Project>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</Project>
+      <Name>Xna.Framework.Storage</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -195,13 +200,6 @@
     <Compile Include="Game\.SDL2\SDLGameWindow.cs" />
     <Compile Include="Game\.SDL2\SDL2.cs" />
 
-    <Compile Include="Storage\StorageContainer.cs" />
-    <Compile Include="Storage\StorageContainerStrategy.cs" />
-    <Compile Include="Storage\StorageDevice.cs" />
-    <Compile Include="Storage\StorageDeviceStrategy.cs" />
-    <Compile Include="Storage\StorageFactory.cs" />
-    <Compile Include="Storage\StorageService.cs" />
-    <Compile Include="Storage\StorageServiceStrategy.cs" />
     <Compile Include="Storage\.SDL2\ConcreteStorageContainer.cs" />
     <Compile Include="Storage\.SDL2\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.SDL2\ConcreteStorageFactory.cs" />
