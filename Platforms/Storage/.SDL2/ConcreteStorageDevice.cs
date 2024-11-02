@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Storage
             {
                 // We may not need to store the StorageContainer in the future
                 // when we get DeviceChanged events working.
-                if (_storageContainer == null)
+                if (StorageContainer == null)
                 {
                     switch (CurrentPlatform.OS)
                     {
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform.Storage
                 }
                 else
                 {
-                    return _storageContainer.Strategy.StoragePath;
+                    return StorageContainer.Strategy.StoragePath;
                 }
             }
         }
@@ -143,8 +143,8 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override StorageContainer Open(StorageDevice storageDevice, string displayName)
         {
-            StorageContainer storageContainer = new StorageContainer(storageDevice, displayName, _player);
-            _storageContainer = storageContainer;
+            StorageContainer storageContainer = new StorageContainer(storageDevice, displayName, Player);
+            StorageContainer = storageContainer;
 
             return storageContainer;
         }

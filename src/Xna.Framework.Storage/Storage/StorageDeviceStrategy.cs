@@ -8,9 +8,22 @@ namespace Microsoft.Xna.Platform.Storage
 {
     public abstract class StorageDeviceStrategy
     {
-        internal PlayerIndex? _player;
-        int _directoryCount;
-        internal StorageContainer _storageContainer;
+        private PlayerIndex? _player;
+        private int _directoryCount;
+        private StorageContainer _storageContainer;
+
+
+        public virtual StorageContainer StorageContainer
+        {
+            get { return _storageContainer; }
+            set { _storageContainer = value; }
+        }
+
+        public virtual PlayerIndex? Player
+        {
+            get { return _player; }
+            set { _player = value; }
+        }
 
         public abstract long FreeSpace { get; }
 
