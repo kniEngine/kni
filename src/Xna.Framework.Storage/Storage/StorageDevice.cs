@@ -2,32 +2,6 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-//using System;
-//
-//namespace Microsoft.Xna.Framework.Storage
-//{
-//    public class StorageDevice
-//    {
-//        public bool IsConnected
-//        {
-//            get
-//            {
-//                return true;
-//            }
-//        }
-//
-//        public StorageContainer OpenContainer(string containerName)
-//        {
-//            return new StorageContainer(this,containerName);
-//        }
-//		
-//		public static StorageDevice ShowStorageDeviceGuide()
-//		{
-//			return new StorageDevice();
-//		}
-//    }
-//}
-
 using System;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
