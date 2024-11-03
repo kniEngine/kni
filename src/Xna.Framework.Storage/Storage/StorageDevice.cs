@@ -37,6 +37,14 @@ using Microsoft.Xna.Platform.Storage;
 using System.Runtime.Remoting.Messaging;
 #endif
 
+namespace Microsoft.Xna.Platform.Storage
+{
+    public interface IPlatformStorageDevice
+    {
+        T GetStrategy<T>() where T : StorageDeviceStrategy;
+    }
+}
+
 namespace Microsoft.Xna.Framework.Storage
 {
         
@@ -44,13 +52,13 @@ namespace Microsoft.Xna.Framework.Storage
     /// Exposes a storage device for storing user data.
     /// </summary>
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx</remarks>
-    public sealed class StorageDevice
+    public sealed class StorageDevice : IPlatformStorageDevice
     {
         private StorageDeviceStrategy _strategy;
 
-        internal StorageDeviceStrategy Strategy
+        T IPlatformStorageDevice.GetStrategy<T>()
         {
-            get { return _strategy; }
+            return (T)_strategy;
         }
 
         /// <summary>

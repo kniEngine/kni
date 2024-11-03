@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Storage
                 }
                 else
                 {
-                    return StorageContainer.Strategy.StoragePath;
+                    return ((IPlatformStorageContainer)StorageContainer).GetStrategy<StorageContainerStrategy>().StoragePath;
                 }
             }
         }
