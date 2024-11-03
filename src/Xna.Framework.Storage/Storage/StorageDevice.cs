@@ -3,13 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Storage;
-
-#if NET4_0_OR_GREATER
-using System.Runtime.Remoting.Messaging;
-#endif
 
 namespace Microsoft.Xna.Platform.Storage
 {
