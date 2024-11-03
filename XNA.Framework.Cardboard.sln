@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Cardboard", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCardboard", "Platforms\Game\.Cardboard\GoogleCardboard\GoogleCardboard.csproj", "{4EAA991B-83C7-41AA-B845-8A13E05E0334}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Storage", "src\Xna.Framework.Storage\Xna.Framework.Storage.csproj", "{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{4EAA991B-83C7-41AA-B845-8A13E05E0334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EAA991B-83C7-41AA-B845-8A13E05E0334}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EAA991B-83C7-41AA-B845-8A13E05E0334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,5 +93,6 @@ Global
 		{6B3E56F7-C567-463C-9746-0244FD959322} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
 		{BF257928-8B5D-4371-BD03-C18DA71918C3} = {9E8F9D1A-DEF1-4FA1-8DE9-0A82B7BC99D9}
 		{4EAA991B-83C7-41AA-B845-8A13E05E0334} = {9E8F9D1A-DEF1-4FA1-8DE9-0A82B7BC99D9}
+		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
 	EndGlobalSection
 EndGlobal

@@ -29,12 +29,12 @@ namespace Microsoft.Xna.Platform.Storage
             throw new NotImplementedException();
         }
 
-        private static StorageDevice Show(PlayerIndex player, int sizeInBytes, int directoryCount)
+        private StorageDevice Show(PlayerIndex player, int sizeInBytes, int directoryCount)
         {
             throw new NotImplementedException();
         }
 
-        private static StorageDevice Show(int sizeInBytes, int directoryCount)
+        private StorageDevice Show(int sizeInBytes, int directoryCount)
         {
             throw new NotImplementedException();
         }

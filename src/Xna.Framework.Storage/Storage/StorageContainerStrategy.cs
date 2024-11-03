@@ -9,12 +9,18 @@ namespace Microsoft.Xna.Platform.Storage
 {
     public abstract class StorageContainerStrategy : IDisposable
     {
-        internal /*readonly*/ string _storagePath;
+        private string _storagePath;
         private readonly string _name;
 
         public virtual string DisplayName
         {
             get { return _name; }
+        }
+
+        public virtual string StoragePath
+        {
+            get { return _storagePath; }
+            set { _storagePath = value; }
         }
 
         public StorageContainerStrategy(string name)

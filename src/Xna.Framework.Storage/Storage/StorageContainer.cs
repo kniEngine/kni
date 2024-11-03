@@ -7,8 +7,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Storage;
 
+
+namespace Microsoft.Xna.Platform.Storage
+{
+    public interface IPlatformStorageContainer
+    {
+        T GetStrategy<T>() where T : StorageContainerStrategy;
+    }
+}
 
 namespace Microsoft.Xna.Framework.Storage
 {
@@ -16,13 +25,13 @@ namespace Microsoft.Xna.Framework.Storage
     /// Contains a logical collection of files used for user-data storage.
     /// </summary>			
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx#ID4EDB</remarks>
-    public class StorageContainer : IDisposable
+    public class StorageContainer : IPlatformStorageContainer, IDisposable
     {
         private StorageContainerStrategy _strategy;
 
-        internal StorageContainerStrategy Strategy
+        T IPlatformStorageContainer.GetStrategy<T>()
         {
-            get { return _strategy; }
+            return (T)_strategy;
         }
 
         bool _isDisposed;
