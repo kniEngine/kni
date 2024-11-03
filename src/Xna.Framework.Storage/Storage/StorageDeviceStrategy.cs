@@ -43,5 +43,10 @@ namespace Microsoft.Xna.Platform.Storage
         public abstract StorageContainer EndOpenContainer(IAsyncResult result);
         public abstract void DeleteContainer(string titleName);
         public abstract StorageContainer Open(StorageDevice storageDevice, string displayName);
+
+        public StorageContainer CreateStorageContainer(StorageDevice storageDevice, string displayName, PlayerIndex? player)
+        {
+            return new StorageContainer(storageDevice, displayName, player);
+        }
     }
 }

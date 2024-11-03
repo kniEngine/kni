@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform.Storage
 
         public override StorageContainer Open(StorageDevice storageDevice, string displayName)
         {
-            StorageContainer storageContainer = new StorageContainer(storageDevice, displayName, Player);
+            StorageContainer storageContainer = base.CreateStorageContainer(storageDevice, displayName, Player);
             StorageContainer = storageContainer;
 
             return storageContainer;
