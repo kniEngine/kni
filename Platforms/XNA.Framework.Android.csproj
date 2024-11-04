@@ -222,7 +222,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="MonoGame.Framework.Android.targets" PackagePath="build" Pack="true" />
+    <None Include="build\.Android\Xna.Framework.Platform.Android.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
 
   <ItemGroup>
