@@ -30,7 +30,7 @@
     
   </metadata>
   <files>
-    <file src="NuGetPackages\build\iOS\MonoGame.Framework.iOS.9000.targets" target="build\MonoGame.Framework.iOS.9000.targets" />
+    <file src="Platforms\build\.iOS\Xna.Framework.Platform.iOS.targets" target="build\Xna.Framework.Platform.iOS.targets" />
     
     <!-- C# Assemblies (.mono) -->
     <file src="Artifacts\Platforms\iOS\Release\xamarinios10\MonoGame.Framework.dll" target="lib\XamariniOS\MonoGame.Framework.dll" />
