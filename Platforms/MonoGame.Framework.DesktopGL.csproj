@@ -266,7 +266,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 
-    <Content Include="MonoGame.Framework.DesktopGL.targets" PackagePath="build" />
+    <Content Include="build\.SDL2\MonoGame.Framework.DesktopGL.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
 
   <ItemGroup>
