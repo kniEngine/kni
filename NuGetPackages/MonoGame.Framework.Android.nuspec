@@ -29,7 +29,7 @@
     
   </metadata>
   <files>
-    <file src="NuGetPackages\build\Android\MonoGame.Framework.Android.9000.targets" target="build\MonoGame.Framework.Android.9000.targets" />
+    <file src="Platforms\build\.Android\Xna.Framework.Platform.Android.targets" target="build\Xna.Framework.Platform.Android.targets" />
     
     <!-- C# Assemblies (.mono) -->
     <file src="Platforms\bin\Android\AnyCPU\Release\MonoGame.Framework.dll" target="lib\MonoAndroid\MonoGame.Framework.dll" />

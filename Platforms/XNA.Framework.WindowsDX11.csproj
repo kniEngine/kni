@@ -287,11 +287,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\NuGetPackages\build\WindowsDX\MonoGame.Framework.WindowsDX.9000.targets" Pack="true">
-      <Link>build\MonoGame.Framework.WindowsDX.9000.targets</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\MonoGame.Framework.WindowsDX.9000.targets</PackagePath>
-    </None>
+    <None Include="build\.WindowsDX\Xna.Framework.Platform.WindowsDX.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.fxo">

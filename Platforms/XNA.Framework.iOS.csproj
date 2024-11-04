@@ -212,7 +212,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="MonoGame.Framework.iOS.targets" PackagePath="build" />
+    <Content Include="build\.iOS\Xna.Framework.Platform.iOS.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
 
   <ItemGroup>

@@ -412,11 +412,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <PackagePath>build\native\libopenal.1.dylib</PackagePath>
     </None>
-    <None Include="..\NuGetPackages\build\DesktopGL\MonoGame.Framework.DesktopGL.9000.targets" Pack="true">
-      <Link>build\MonoGame.Framework.DesktopGL.9000.targets</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\MonoGame.Framework.DesktopGL.9000.targets</PackagePath>
-    </None>
+    <None Include="build\.SDL2\Xna.Framework.Platform.SDL2.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Kni.bmp">
