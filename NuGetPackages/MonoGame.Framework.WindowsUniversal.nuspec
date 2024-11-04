@@ -39,7 +39,7 @@
 
     </metadata>
     <files>
-        <file src="NuGetPackages\build\WindowsUniversal\MonoGame.Framework.WindowsUniversal.9000.targets" target="build\MonoGame.Framework.WindowsUniversal.9000.targets" />
+        <file src="Platforms\build\.UAP\Xna.Framework.Platform.UAP.targets" target="build\Xna.Framework.Platform.UAP.targets" />
                 
         <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.dll"                       target="lib\netcore\MonoGame.Framework.dll" />
         <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.pri"                       target="lib\netcore\MonoGame.Framework.pri" />
