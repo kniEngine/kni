@@ -370,47 +370,64 @@
     <None Include="..\ThirdParty\Dependencies\SDL\Windows\x86\SDL2.dll" Pack="true">
       <Link>x86\SDL2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\x86\SDL2.dll</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\win-x86\native\SDL2.dll</PackagePath>
     </None>
     <None Include="..\ThirdParty\Dependencies\SDL\Windows\x64\SDL2.dll" Pack="true">
       <Link>x64\SDL2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\x64\SDL2.dll</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\win-x64\native\SDL2.dll</PackagePath>
     </None>
     <None Include="..\ThirdParty\Dependencies\openal-soft\Windows\x86\soft_oal.dll" Pack="true">
       <Link>x86\soft_oal.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\x86\soft_oal.dll</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\win-x86\native\soft_oal.dll</PackagePath>
     </None>
     <None Include="..\ThirdParty\Dependencies\openal-soft\Windows\x64\soft_oal.dll" Pack="true">
       <Link>x64\soft_oal.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\x64\soft_oal.dll</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\win-x64\native\soft_oal.dll</PackagePath>
     </None>
+<!--
+    <None Include="..\ThirdParty\Dependencies\\SDL\Linux\x86\libSDL2-2.0.so.0" Pack="true">
+      <Link>x86\libSDL2-2.0.so.0</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\linux-x86\native\libSDL2-2.0.so.0</PackagePath>
+    </None>
+-->	  
     <None Include="..\ThirdParty\Dependencies\SDL\Linux\x64\libSDL2-2.0.so.0" Pack="true">
       <Link>x64\libSDL2-2.0.so.0</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\x64\libSDL2-2.0.so.0</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\linux-x64\native\libSDL2-2.0.so.0</PackagePath>
     </None>
     <None Include="..\ThirdParty\Dependencies\openal-soft\Linux\x86\libopenal.so.1" Pack="true">
       <Link>x86\libopenal.so.1</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\x86\libopenal.so.1</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\linux-x86\native\libopenal.so.1</PackagePath>
     </None>
     <None Include="..\ThirdParty\Dependencies\openal-soft\Linux\x64\libopenal.so.1" Pack="true">
       <Link>x64\libopenal.so.1</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\x64\libopenal.so.1</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\linux-x64\native\libopenal.so.1</PackagePath>
     </None>
     <None Include="..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib" Pack="true">
       <Link>libSDL2.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\libSDL2.dylib</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\osx\native\libSDL2.dylib</PackagePath>
     </None>
     <None Include="..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib" Pack="true">
       <Link>libopenal.1.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackagePath>build\native\libopenal.1.dylib</PackagePath>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <PackagePath>runtimes\osx\native\libopenal.1.dylib</PackagePath>
     </None>
     <None Include="build\.SDL2\Xna.Framework.Platform.SDL2.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
