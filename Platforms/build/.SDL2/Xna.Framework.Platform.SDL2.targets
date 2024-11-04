@@ -6,16 +6,4 @@
     <MonoGamePlatform>DesktopGL</MonoGamePlatform>
   </PropertyGroup>
 
-  <Target Name="CopyDesktopGLNative" AfterTargets="AfterBuild">
-    <ItemGroup>
-      <_main Include="$(MSBuildThisFileDirectory)\native\*.*" />
-      <_x86 Include="$(MSBuildThisFileDirectory)\native\x86\*.*" />
-      <_x64 Include="$(MSBuildThisFileDirectory)\native\x64\*.*" />
-    </ItemGroup>
-  
-    <Copy SourceFiles="@(_main)" DestinationFolder="$(OutDir)" />
-    <Copy SourceFiles="@(_x86)" DestinationFolder="$(OutDir)\x86" />
-    <Copy SourceFiles="@(_x64)" DestinationFolder="$(OutDir)\x64" />
-  </Target>
-
 </Project>
