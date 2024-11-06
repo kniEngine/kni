@@ -4,7 +4,7 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Platform.Graphics.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
