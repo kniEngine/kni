@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using Microsoft.Xna.Platform.Graphics.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -55,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
                 {
-                     Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(
+                     MemCopyHelper.MemoryCopy(
                         srcPtr,
                         dataPtr,
                         sizeInBytes);
@@ -64,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     for (int i = 0; i < elementCount; i++)
                     {
-                         Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(
+                         MemCopyHelper.MemoryCopy(
                             srcPtr + i * vertexStride,
                             dataPtr + i * elementSizeInBytes,
                             sizeInBytes);

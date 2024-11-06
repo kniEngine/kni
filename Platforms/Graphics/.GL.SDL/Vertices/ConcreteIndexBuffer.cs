@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -54,7 +55,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
                 dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
-                Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(srcPtr, dataPtr, sizeInBytes);
+                MemCopyHelper.MemoryCopy(srcPtr, dataPtr, sizeInBytes);
             }
             finally
             {
