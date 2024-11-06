@@ -92,7 +92,6 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\.Android\FuncLoader.cs" />
   </ItemGroup>

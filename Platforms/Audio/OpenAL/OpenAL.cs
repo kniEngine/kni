@@ -799,7 +799,7 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         private void LoadEntryPoints()
         {
-            setBufferMode = ReflectionHelpers.GetDelegateForFunctionPointer<XRamExtension.SetBufferModeDelegate>(_openAL.alGetProcAddress("EAXSetBufferMode"));
+            setBufferMode = InteropHelpers.GetDelegateForFunctionPointer<XRamExtension.SetBufferModeDelegate>(_openAL.alGetProcAddress("EAXSetBufferMode"));
         }
 
         internal bool SetBufferMode(int n, ref int buffer, XRamStorage storage)
@@ -897,19 +897,19 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
 
         private void LoadEntryPoints()
         {
-            alGenEffects = ReflectionHelpers.GetDelegateForFunctionPointer<alGenEffectsDelegate>(_openAL.alGetProcAddress("alGenEffects"));
-            alDeleteEffects = ReflectionHelpers.GetDelegateForFunctionPointer<alDeleteEffectsDelegate>(_openAL.alGetProcAddress("alDeleteEffects"));
-            alEffectf = ReflectionHelpers.GetDelegateForFunctionPointer<alEffectfDelegate>(_openAL.alGetProcAddress("alEffectf"));
-            alEffecti = ReflectionHelpers.GetDelegateForFunctionPointer<alEffectiDelegate>(_openAL.alGetProcAddress("alEffecti"));
-            alGenAuxiliaryEffectSlots = ReflectionHelpers.GetDelegateForFunctionPointer<alGenAuxiliaryEffectSlotsDelegate>(_openAL.alGetProcAddress("alGenAuxiliaryEffectSlots"));
-            alDeleteAuxiliaryEffectSlots = ReflectionHelpers.GetDelegateForFunctionPointer<alDeleteAuxiliaryEffectSlotsDelegate>(_openAL.alGetProcAddress("alDeleteAuxiliaryEffectSlots"));
-            alAuxiliaryEffectSloti = ReflectionHelpers.GetDelegateForFunctionPointer<alAuxiliaryEffectSlotiDelegate>(_openAL.alGetProcAddress("alAuxiliaryEffectSloti"));
-            alAuxiliaryEffectSlotf = ReflectionHelpers.GetDelegateForFunctionPointer<alAuxiliaryEffectSlotfDelegate>(_openAL.alGetProcAddress("alAuxiliaryEffectSlotf"));
+            alGenEffects = InteropHelpers.GetDelegateForFunctionPointer<alGenEffectsDelegate>(_openAL.alGetProcAddress("alGenEffects"));
+            alDeleteEffects = InteropHelpers.GetDelegateForFunctionPointer<alDeleteEffectsDelegate>(_openAL.alGetProcAddress("alDeleteEffects"));
+            alEffectf = InteropHelpers.GetDelegateForFunctionPointer<alEffectfDelegate>(_openAL.alGetProcAddress("alEffectf"));
+            alEffecti = InteropHelpers.GetDelegateForFunctionPointer<alEffectiDelegate>(_openAL.alGetProcAddress("alEffecti"));
+            alGenAuxiliaryEffectSlots = InteropHelpers.GetDelegateForFunctionPointer<alGenAuxiliaryEffectSlotsDelegate>(_openAL.alGetProcAddress("alGenAuxiliaryEffectSlots"));
+            alDeleteAuxiliaryEffectSlots = InteropHelpers.GetDelegateForFunctionPointer<alDeleteAuxiliaryEffectSlotsDelegate>(_openAL.alGetProcAddress("alDeleteAuxiliaryEffectSlots"));
+            alAuxiliaryEffectSloti = InteropHelpers.GetDelegateForFunctionPointer<alAuxiliaryEffectSlotiDelegate>(_openAL.alGetProcAddress("alAuxiliaryEffectSloti"));
+            alAuxiliaryEffectSlotf = InteropHelpers.GetDelegateForFunctionPointer<alAuxiliaryEffectSlotfDelegate>(_openAL.alGetProcAddress("alAuxiliaryEffectSlotf"));
 
-            alGenFilters = ReflectionHelpers.GetDelegateForFunctionPointer<alGenFiltersDelegate>(_openAL.alGetProcAddress("alGenFilters"));
-            alFilteri = ReflectionHelpers.GetDelegateForFunctionPointer<alFilteriDelegate>(_openAL.alGetProcAddress("alFilteri"));
-            alFilterf = ReflectionHelpers.GetDelegateForFunctionPointer<alFilterfDelegate>(_openAL.alGetProcAddress("alFilterf"));
-            alDeleteFilters = ReflectionHelpers.GetDelegateForFunctionPointer<alDeleteFiltersDelegate>(_openAL.alGetProcAddress("alDeleteFilters"));
+            alGenFilters = InteropHelpers.GetDelegateForFunctionPointer<alGenFiltersDelegate>(_openAL.alGetProcAddress("alGenFilters"));
+            alFilteri = InteropHelpers.GetDelegateForFunctionPointer<alFilteriDelegate>(_openAL.alGetProcAddress("alFilteri"));
+            alFilterf = InteropHelpers.GetDelegateForFunctionPointer<alFilterfDelegate>(_openAL.alGetProcAddress("alFilterf"));
+            alDeleteFilters = InteropHelpers.GetDelegateForFunctionPointer<alDeleteFiltersDelegate>(_openAL.alGetProcAddress("alDeleteFilters"));
         }
 
         /*

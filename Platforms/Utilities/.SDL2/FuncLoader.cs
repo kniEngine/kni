@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Platform.Utilities
                 funcAddress = Linux.dlsym(library, function);
 
             if (funcAddress != IntPtr.Zero)
-                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+                return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
             throw new EntryPointNotFoundException(function);
         }
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Platform.Utilities
                 funcAddress = Linux.dlsym(library, function);
 
             if (funcAddress != IntPtr.Zero)
-                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+                return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
             return default(T);
         }

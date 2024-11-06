@@ -67,7 +67,6 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
@@ -115,7 +114,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="Audio\XAudio\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\XAudio\ConcreteAudioService.cs" />
@@ -124,12 +122,10 @@
     <Compile Include="Audio\XAudio\ConcreteSoundEffect.cs" />
     <Compile Include="Audio\XAudio\ConcreteSoundEffectInstance.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="Content\.UAP\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.UAP\ConcreteTitleContainerFactory.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBuffer.cs" />
     <Compile Include="Graphics\.DX11\Shader\ConcreteConstantBufferCollection.cs" />
@@ -168,7 +164,6 @@
     <Compile Include="Graphics\.DX11\IRenderTargetStrategyDX11.cs" />
     <Compile Include="Graphics\.DX11\SharpDXExtensions.cs" />
     <Compile Include="Graphics\.DX11\SpriteBatcher.cs" />
-
     <Compile Include="Input\.UAP\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.UAP\ConcreteGamePad.cs" />
     <Compile Include="Input\.UAP\ConcreteGamePadDevice.cs" />
@@ -187,20 +182,16 @@
     <Compile Include="Media\WME\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WME\ConcreteVideo.cs" />
     <Compile Include="Media\WME\MusicProperties.cs" />
-
     <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Utilities\Png\PngCommon.cs" />
     <Compile Include="Utilities\Png\PngReader.cs" />
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\Png\ZLibStream.cs" />
-
     <Compile Include="Devices\.UAP\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.UAP\ConcreteVibrator.cs" />
     <Compile Include="Devices\.UAP\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.UAP\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.UAP\Sensors\ConcreteSensorService.cs" />
-
     <Compile Include="Game\.UAP\GameFrameworkViewSource.cs" />
     <Compile Include="Game\.UAP\UAPFrameworkView.cs" />
     <Compile Include="Game\.UAP\ConcreteGame.cs" />
@@ -209,12 +200,10 @@
     <Compile Include="Game\.UAP\UAPGameWindow.cs" />
     <Compile Include="Game\.UAP\XamlGame.cs" />
     <Compile Include="Game\.UAP\InputEvents.cs" />
-
     <Compile Include="Storage\.UAP\ConcreteStorageContainer.cs" />
     <Compile Include="Storage\.UAP\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.UAP\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.UAP\ConcreteStorageService.cs" />
-
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">
       <Link>Utilities\StbImageSharp\AnimatedFrameResult.cs</Link>
     </Compile>

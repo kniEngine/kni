@@ -89,7 +89,6 @@
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\Png\ZLibStream.cs" />
     <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
   </ItemGroup>
 
   <ItemGroup>
