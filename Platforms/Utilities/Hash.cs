@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Microsoft.Xna.Platform.Graphics.Utilities
 {
-    internal static class Hash
+    internal static class HashHelper
     {
         /// <summary>
         /// Compute a hash from a byte array.

@@ -498,7 +498,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 // Calculate a hash code from memory stream
                 // and write it to the header.
-                int effectKey = Hash.ComputeHash(memStream);
+                int effectKey = HashHelper.ComputeHash(memStream);
                 writer.Write((Int32)effectKey);
 
                 //write content from memory stream to final stream.

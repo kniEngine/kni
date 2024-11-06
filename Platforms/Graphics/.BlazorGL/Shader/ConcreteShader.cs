@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new Exception("This effect was built for a different platform.");
 
             // TODO: precompute shader's hashKey in the processor.
-            _hashKey = Hash.ComputeHash(shaderBytecode);
+            _hashKey = HashHelper.ComputeHash(shaderBytecode);
         }
 
         internal void CreateShader(GraphicsContextStrategy contextStrategy, WebGLShaderType shaderType, byte[] shaderBytecode)
