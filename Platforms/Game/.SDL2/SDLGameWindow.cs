@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 
 namespace Microsoft.Xna.Framework

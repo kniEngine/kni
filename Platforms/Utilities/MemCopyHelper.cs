@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Platform.Utilities
 {
@@ -15,7 +16,7 @@ namespace Microsoft.Xna.Platform.Utilities
 
         public static void MemoryCopy<T>(T[] data, IntPtr dstPtr, int startIndex, int count) where T : struct
         {
-            int elementSizeInBytes = Microsoft.Xna.Platform.Graphics.Utilities.ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
 
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try

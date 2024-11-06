@@ -7,7 +7,7 @@
 using System;
 using System.Reflection;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Platform.Utilities
 {
     internal static class AssemblyHelper
     {

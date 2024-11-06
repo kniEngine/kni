@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -30,7 +31,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // We need the bytecode later for allocating the
             // input layout from the vertex declaration.
             _shaderBytecode = shaderBytecode;
-            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(_shaderBytecode);
+            // TODO: precompute shader's hashKey in the processor.
+            _hashKey = HashHelper.ComputeHash(_shaderBytecode);
         }
 
 

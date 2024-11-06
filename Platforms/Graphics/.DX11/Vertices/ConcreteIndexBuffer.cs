@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
 using DXGI = SharpDX.DXGI;
@@ -145,7 +146,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         try
                         {
                             IntPtr srcPtr = dataBox.DataPointer + offsetInBytes;
-                            Microsoft.Xna.Platform.Utilities.MemCopyHelper.MemoryCopy(srcPtr, dataPtr, elementCount * TsizeInBytes);
+                            MemCopyHelper.MemoryCopy(srcPtr, dataPtr, elementCount * TsizeInBytes);
                         }
                         finally
                         {

@@ -82,17 +82,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Include="Utilities\Png\PngCommon.cs" />
-    <Compile Include="Utilities\Png\PngReader.cs" />
-    <Compile Include="Utilities\Png\PngWriter.cs" />
-    <Compile Include="Utilities\Png\ZLibStream.cs" />
-    <Compile Include="Utilities\ByteBufferPool.cs" />
-    <Compile Include="Utilities\Hash.cs" />
-    <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="Audio\Blazor\AudioLoader.cs" />
@@ -190,6 +179,14 @@
     <Compile Include="Storage\.Blazor\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.Blazor\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.Blazor\ConcreteStorageService.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Utilities\Png\PngCommon.cs" />
+    <Compile Include="Utilities\Png\PngReader.cs" />
+    <Compile Include="Utilities\Png\PngWriter.cs" />
+    <Compile Include="Utilities\Png\ZLibStream.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
   </ItemGroup>
   
   <ItemGroup>

@@ -51,15 +51,6 @@ namespace Microsoft.Xna.Platform.Graphics.Utilities
 #endif
         }
 
-        public static TDelegate GetDelegateForFunctionPointer<TDelegate>(IntPtr ptr)
-        {
-#if NET40 || NET45 || NET40_OR_GREATER
-            return (TDelegate)(object)Marshal.GetDelegateForFunctionPointer(ptr, typeof(TDelegate));
-#else
-            return Marshal.GetDelegateForFunctionPointer<TDelegate>(ptr);
-#endif
-        }
-
         public static int SizeOf<T>()
         {
             return ManagedSizeOf<T>.Value;

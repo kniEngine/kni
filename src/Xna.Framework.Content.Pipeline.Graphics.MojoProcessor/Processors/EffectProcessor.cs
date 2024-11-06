@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -497,7 +498,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 // Calculate a hash code from memory stream
                 // and write it to the header.
-                int effectKey = MonoGame.Framework.Utilities.Hash.ComputeHash(memStream);
+                int effectKey = HashHelper.ComputeHash(memStream);
                 writer.Write((Int32)effectKey);
 
                 //write content from memory stream to final stream.

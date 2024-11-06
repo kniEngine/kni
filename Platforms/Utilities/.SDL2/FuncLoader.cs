@@ -1,9 +1,8 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Platform.Utilities;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Platform.Utilities
 {
     internal class FuncLoader
     {
@@ -112,7 +111,7 @@ namespace MonoGame.Framework.Utilities
                 funcAddress = Linux.dlsym(library, function);
 
             if (funcAddress != IntPtr.Zero)
-                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+                return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
             throw new EntryPointNotFoundException(function);
         }
@@ -129,7 +128,7 @@ namespace MonoGame.Framework.Utilities
                 funcAddress = Linux.dlsym(library, function);
 
             if (funcAddress != IntPtr.Zero)
-                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+                return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
             return default(T);
         }

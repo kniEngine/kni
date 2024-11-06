@@ -77,17 +77,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Utilities\Png\PngCommon.cs" />
-    <Compile Include="Utilities\Png\PngReader.cs" />
-    <Compile Include="Utilities\Png\PngWriter.cs" />
-    <Compile Include="Utilities\Png\ZLibStream.cs" />
-    <Compile Include="Utilities\ByteBufferPool.cs" />
-    <Compile Include="Utilities\Hash.cs" />
-    <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="P:\MonoGame\Images\Icon.png" />
   </ItemGroup>
 
@@ -175,6 +164,14 @@
     <Compile Include="Storage\.Ref\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.Ref\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.Ref\ConcreteStorageService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Utilities\Png\PngCommon.cs" />
+    <Compile Include="Utilities\Png\PngReader.cs" />
+    <Compile Include="Utilities\Png\PngWriter.cs" />
+    <Compile Include="Utilities\Png\ZLibStream.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>

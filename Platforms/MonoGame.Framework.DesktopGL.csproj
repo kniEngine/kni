@@ -84,24 +84,6 @@
 
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Include="Utilities\Png\PngCommon.cs" />
-    <Compile Include="Utilities\Png\PngReader.cs" />
-    <Compile Include="Utilities\Png\PngWriter.cs" />
-    <Compile Include="Utilities\Png\ZLibStream.cs" />
-    <Compile Include="Utilities\ByteBufferPool.cs" />
-    <Compile Include="Utilities\Hash.cs" />
-    <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
-    <Compile Include="Utilities\AssemblyHelper.cs" />
-    <Compile Include="Utilities\CurrentPlatform.cs" />
-    <Compile Include="Utilities\InteropHelpers.cs" />
-    <Compile Include="Utilities\.SDL2\FuncLoader.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
     <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
     <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
@@ -204,7 +186,21 @@
     <Compile Include="Input\.SDL2\ConcreteKeyboardInput.cs" />
     <Compile Include="Input\.SDL2\ConcreteMessageBox.cs" />
     <Compile Include="Input\.SDL2\KeyboardUtil.cs" />
-    
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="Utilities\.SDL2\FuncLoader.cs" />
+    <Compile Include="Utilities\Png\PngCommon.cs" />
+    <Compile Include="Utilities\Png\PngReader.cs" />
+    <Compile Include="Utilities\Png\PngWriter.cs" />
+    <Compile Include="Utilities\Png\ZLibStream.cs" />
+    <Compile Include="Utilities\AssemblyHelper.cs" />
+    <Compile Include="Utilities\CurrentPlatform.cs" />
+    <Compile Include="Utilities\InteropHelpers.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\ThirdParty\StbImageSharp\src\**\*.cs" LinkBase="Utilities\StbImageSharp" />
     <Compile Include="..\ThirdParty\StbImageWriteSharp\src\**\*.cs" LinkBase="Utilities\StbImageWriteSharp" />
 

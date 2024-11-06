@@ -190,16 +190,6 @@
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
 
-    <Compile Include="Utilities\Hash.cs" />
-    <Compile Include="Utilities\InteropHelpers.cs" />
-    <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.cs" />
-    <Compile Include="Utilities\Png\PngCommon.cs" />
-    <Compile Include="Utilities\Png\PngReader.cs" />
-    <Compile Include="Utilities\Png\PngWriter.cs" />
-    <Compile Include="Utilities\Png\ZLibStream.cs" />
-    <Compile Include="Utilities\ByteBufferPool.cs" />
-    <Compile Include="Utilities\.Android\FuncLoader.cs" />
     <Compile Include="Game\.Android\AndroidCompatibility.cs" />
     <Compile Include="Game\.Android\AndroidGameActivity.cs" />
     <Compile Include="Game\.Android\ConcreteGame.cs" />
@@ -225,7 +215,19 @@
     <Compile Include="Storage\.Android\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.Android\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.Android\ConcreteStorageService.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="Utilities\.Android\FuncLoader.cs" />
+    <Compile Include="Utilities\Png\PngCommon.cs" />
+    <Compile Include="Utilities\Png\PngReader.cs" />
+    <Compile Include="Utilities\Png\PngWriter.cs" />
+    <Compile Include="Utilities\Png\ZLibStream.cs" />
+    <Compile Include="Utilities\InteropHelpers.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">
       <Link>Utilities\StbImageSharp\AnimatedFrameResult.cs</Link>
     </Compile>

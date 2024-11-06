@@ -4,7 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 namespace FreeImageAPI
 {

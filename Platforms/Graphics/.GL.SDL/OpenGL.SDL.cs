@@ -4,7 +4,7 @@
 
 using System;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Platform.Graphics.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {
@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             IntPtr funcAddress = Sdl.Current.OpenGL.GetProcAddress(function);
 
             if (funcAddress != IntPtr.Zero)
-                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+                return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
             throw new EntryPointNotFoundException(function);
         }
@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             IntPtr funcAddress = Sdl.Current.OpenGL.GetProcAddress(function);
 
             if (funcAddress != IntPtr.Zero)
-                return ReflectionHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
+                return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
             return default(T);
         }

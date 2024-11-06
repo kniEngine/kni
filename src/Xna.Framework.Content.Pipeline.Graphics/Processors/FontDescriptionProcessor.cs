@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 using SharpFont;
 
 

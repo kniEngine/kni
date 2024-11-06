@@ -4,10 +4,10 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Platform.Utilities;
 using Android.Opengl;
 using Android.Runtime;
 using Javax.Microedition.Khronos.Egl;
-using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Platform.Graphics.OpenGL
 {

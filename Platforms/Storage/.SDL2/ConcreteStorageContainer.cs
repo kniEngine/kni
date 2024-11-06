@@ -9,8 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
-
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 namespace Microsoft.Xna.Platform.Storage
 {

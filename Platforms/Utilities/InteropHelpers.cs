@@ -6,7 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Platform.Utilities
 {
     internal static class InteropHelpers
     {
@@ -30,6 +30,15 @@ namespace MonoGame.Framework.Utilities
             Marshal.Copy(handle, bytes, 0, bytes.Length);
 
             return Encoding.UTF8.GetString(bytes);
+        }
+
+        internal static TDelegate GetDelegateForFunctionPointer<TDelegate>(IntPtr ptr)
+        {
+#if NET40 || NET45 || NET40_OR_GREATER
+            return (TDelegate)(object)Marshal.GetDelegateForFunctionPointer(ptr, typeof(TDelegate));
+#else
+            return Marshal.GetDelegateForFunctionPointer<TDelegate>(ptr);
+#endif
         }
     }
 }
