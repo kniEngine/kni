@@ -175,13 +175,6 @@
     <Compile Include="Media\WMS\ConcreteVideo.cs" />
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
 
-    <Compile Include="Utilities\AssemblyHelper.cs" />
-    <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\Png\PngCommon.cs" />
-    <Compile Include="Utilities\Png\PngReader.cs" />
-    <Compile Include="Utilities\Png\PngWriter.cs" />
-    <Compile Include="Utilities\Png\ZLibStream.cs" />
-
     <Compile Include="Devices\.WindowsDX\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.WindowsDX\ConcreteVibrator.cs" />
     <Compile Include="Devices\.WindowsDX\Sensors\ConcreteAccelerometer.cs" />
@@ -200,7 +193,18 @@
     <Compile Include="Storage\.WindowsDX\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.WindowsDX\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.WindowsDX\ConcreteStorageService.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="Utilities\Png\PngCommon.cs" />
+    <Compile Include="Utilities\Png\PngReader.cs" />
+    <Compile Include="Utilities\Png\PngWriter.cs" />
+    <Compile Include="Utilities\Png\ZLibStream.cs" />
+    <Compile Include="Utilities\AssemblyHelper.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">
       <Link>Utilities\StbImageSharp\AnimatedFrameResult.cs</Link>
     </Compile>

@@ -162,13 +162,7 @@
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
-    <Compile Include="Utilities\InteropHelpers.cs" />
-    <Compile Include="Utilities\MemCopyHelper.cs" />
-    <Compile Include="Utilities\Png\PngCommon.cs" />
-    <Compile Include="Utilities\Png\PngReader.cs" />
-    <Compile Include="Utilities\Png\PngWriter.cs" />
-    <Compile Include="Utilities\Png\ZLibStream.cs" />
-    <Compile Include="Utilities\.iOS\FuncLoader.cs" />
+
     <Compile Include="Devices\.iOS\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.iOS\ConcreteVibrator.cs" />
     <Compile Include="Devices\.iOS\Sensors\ConcreteAccelerometer.cs" />
@@ -187,7 +181,19 @@
     <Compile Include="Storage\.iOS\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.iOS\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.iOS\ConcreteStorageService.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="Utilities\.iOS\FuncLoader.cs" />
+    <Compile Include="Utilities\Png\PngCommon.cs" />
+    <Compile Include="Utilities\Png\PngReader.cs" />
+    <Compile Include="Utilities\Png\PngWriter.cs" />
+    <Compile Include="Utilities\Png\ZLibStream.cs" />
+    <Compile Include="Utilities\InteropHelpers.cs" />
+    <Compile Include="Utilities\MemCopyHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\ThirdParty\StbImageSharp\src\AnimatedFrameResult.cs">
       <Link>Utilities\StbImageSharp\AnimatedFrameResult.cs</Link>
     </Compile>
