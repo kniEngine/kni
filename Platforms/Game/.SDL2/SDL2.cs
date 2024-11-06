@@ -8,7 +8,6 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Utilities;
-using MonoGame.Framework.Utilities;
 
 internal class Sdl
 {

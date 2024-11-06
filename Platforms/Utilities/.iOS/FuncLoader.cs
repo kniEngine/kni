@@ -1,9 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Platform.Utilities;
 using ObjCRuntime;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Platform.Utilities
 {
     internal class FuncLoader
     {
