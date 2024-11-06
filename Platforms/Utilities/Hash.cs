@@ -6,7 +6,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace MonoGame.Framework.Utilities
+namespace Microsoft.Xna.Platform.Graphics.Utilities
 {
     internal static class Hash
     {

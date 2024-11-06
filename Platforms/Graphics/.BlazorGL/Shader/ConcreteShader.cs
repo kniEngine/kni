@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using nkast.Wasm.Canvas.WebGL;
 
 
@@ -24,7 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new Exception("This effect was built for a different platform.");
 
             // TODO: precompute shader's hashKey in the processor.
-            _hashKey = MonoGame.Framework.Utilities.Hash.ComputeHash(shaderBytecode);
+            _hashKey = Hash.ComputeHash(shaderBytecode);
         }
 
         internal void CreateShader(GraphicsContextStrategy contextStrategy, WebGLShaderType shaderType, byte[] shaderBytecode)
