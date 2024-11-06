@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Windows;
 using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Utilities;
 using SysDrawing = System.Drawing;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Microsoft.Xna.Platform.Graphics;
@@ -136,7 +137,7 @@ namespace Microsoft.Xna.Framework
             ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
 
             SetIcon();
-            Title = MonoGame.Framework.Utilities.AssemblyHelper.GetDefaultWindowTitle();
+            Title = AssemblyHelper.GetDefaultWindowTitle();
 
             Form.MaximizeBox = false;
             Form.FormBorderStyle = FormBorderStyle.FixedSingle;
