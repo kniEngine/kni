@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
-using MonoGame.Framework.Utilities;
 using FreeImageAPI;
 using StbImageSharp;
 

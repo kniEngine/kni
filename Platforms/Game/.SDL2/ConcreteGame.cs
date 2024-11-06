@@ -7,7 +7,7 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 
 namespace Microsoft.Xna.Platform

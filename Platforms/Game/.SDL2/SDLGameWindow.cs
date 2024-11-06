@@ -16,7 +16,6 @@ using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
 using Microsoft.Xna.Platform.Utilities;
-using MonoGame.Framework.Utilities;
 
 
 namespace Microsoft.Xna.Framework
