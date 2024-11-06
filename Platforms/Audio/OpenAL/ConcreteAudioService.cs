@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Platform.Audio.OpenAL;
-using MonoGame.Framework.Utilities;
+using Microsoft.Xna.Platform.Utilities;
 
 #if ANDROID
 using Microsoft.Xna.Framework;
