@@ -177,7 +177,6 @@
 
     <Compile Include="Utilities\AssemblyHelper.cs" />
     <Compile Include="Utilities\CurrentPlatform.cs" />
-    <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\MemCopyHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />

@@ -162,7 +162,6 @@
     <Compile Include="Media\iOS\ConcreteSong.cs" />
     <Compile Include="Media\iOS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\iOS\ConcreteVideo.cs" />
-    <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\MemCopyHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />

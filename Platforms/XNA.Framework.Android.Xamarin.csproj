@@ -190,7 +190,6 @@
     <Compile Include="Media\Android\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\Android\ConcreteVideo.cs" />
 
-    <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\InteropHelpers.cs" />
     <Compile Include="Utilities\MemCopyHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />

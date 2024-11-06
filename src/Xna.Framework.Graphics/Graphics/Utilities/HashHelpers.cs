@@ -8,7 +8,8 @@ using System.IO;
 
 namespace Microsoft.Xna.Platform.Graphics.Utilities
 {
-    internal static class HashHelper
+    // TODO: precompute shader's hashKey in the processor.
+    public static class HashHelper
     {
         /// <summary>
         /// Compute a hash from a byte array.
@@ -17,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics.Utilities
         /// Modified FNV Hash in C#
         /// http://stackoverflow.com/a/468084
         /// </remarks>
-        internal unsafe static int ComputeHash(params byte[] data)
+        public unsafe static int ComputeHash(params byte[] data)
         {
             unchecked
             {
@@ -41,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics.Utilities
                 return hash;
             }
         }
-        
+
         /// <summary>
         /// Compute a hash from the content of a stream and restore the position.
         /// </summary>
@@ -49,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics.Utilities
         /// Modified FNV Hash in C#
         /// http://stackoverflow.com/a/468084
         /// </remarks>
-        internal unsafe static int ComputeHash(Stream stream)
+        public unsafe static int ComputeHash(Stream stream)
         {
             System.Diagnostics.Debug.Assert(stream.CanSeek);
 

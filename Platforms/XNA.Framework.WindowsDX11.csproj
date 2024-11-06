@@ -176,7 +176,6 @@
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
 
     <Compile Include="Utilities\AssemblyHelper.cs" />
-    <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\MemCopyHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
     <Compile Include="Utilities\Png\PngCommon.cs" />

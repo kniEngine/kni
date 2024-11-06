@@ -75,9 +75,6 @@
     <Compile Include="..\..\Platforms\Utilities\CurrentPlatform.cs">
       <Link>Utilities\CurrentPlatform.cs</Link>
     </Compile>
-    <Compile Include="..\..\Platforms\Utilities\Hash.cs">
-      <Link>Utilities\Hash.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\ThirdParty\Dependencies\MojoShader\Windows\libmojoshader_64.dll">
