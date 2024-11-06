@@ -46,7 +46,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Compile Include="Framework\ByteBufferPoolTest.cs" />
     <Compile Include="Framework\BoundingTest.cs" />
     <Compile Include="Framework\ColorTest.cs" />
     <Compile Include="Framework\CurveKeyCollectionTest.cs" />

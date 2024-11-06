@@ -185,7 +185,6 @@
     <Compile Include="Utilities\Png\PngReader.cs" />
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\Png\ZLibStream.cs" />
-    <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\.SDL2\FuncLoader.cs" />
 
     <Compile Include="Devices\.SDL2\ConcreteDevicesFactory.cs" />

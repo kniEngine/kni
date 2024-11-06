@@ -198,7 +198,6 @@
     <Compile Include="Utilities\Png\PngReader.cs" />
     <Compile Include="Utilities\Png\PngWriter.cs" />
     <Compile Include="Utilities\Png\ZLibStream.cs" />
-    <Compile Include="Utilities\ByteBufferPool.cs" />
     <Compile Include="Utilities\.Android\FuncLoader.cs" />
     <Compile Include="Game\.Android\AndroidCompatibility.cs" />
     <Compile Include="Game\.Android\AndroidGameActivity.cs" />
