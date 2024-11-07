@@ -20,7 +20,7 @@
     <RootNamespace>Microsoft.Xna.Framework.Media</RootNamespace>
     <DefineConstants></DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>CS0067;CS1591;CS1574;CS0419</NoWarn>
+    <NoWarn>CS0067;CS1591;CS1574;CS0419;CS8500</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>The Media framework.</Description>
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
