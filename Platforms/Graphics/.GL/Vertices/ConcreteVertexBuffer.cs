@@ -85,47 +85,37 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
             }
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            if (elementSizeInByte == vertexStride || elementSizeInByte % vertexStride == 0)
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
             {
-                // there are no gaps so we can copy in one go
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                try
-                {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
+                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
-                    GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)(elementSizeInBytes * elementCount), dataPtr);
+                if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
+                {
+                    // there are no gaps so we can copy in one go
+                    GL.BufferSubData(BufferTarget.ArrayBuffer, 
+                        (IntPtr)offsetInBytes,
+                        (IntPtr)(elementSizeInBytes * elementCount),
+                        dataPtr);
                     GL.CheckGLError();
                 }
-                finally
+                else
                 {
-                    dataHandle.Free();
-                }
-            }
-            else
-            {
-                // else we must copy each element separately
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                try
-                {
-                    int dstOffset = offsetInBytes;
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                    dataPtr = dataPtr + startIndex * elementSizeInByte;
-
+                    // else we must copy each element separately
                     for (int i = 0; i < elementCount; i++)
                     {
-                        GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)dstOffset, (IntPtr)elementSizeInByte, dataPtr);
+                        GL.BufferSubData(BufferTarget.ArrayBuffer,
+                            (IntPtr)offsetInBytes + i*vertexStride,
+                            (IntPtr)elementSizeInBytes,
+                            dataPtr + i*elementSizeInBytes);
                         GL.CheckGLError();
-
-                        dstOffset += vertexStride;
-                        dataPtr = dataPtr + elementSizeInByte;
                     }
                 }
-                finally
-                {
-                    dataHandle.Free();
-                }
+            }
+            finally
+            {
+                dataHandle.Free();
             }
         }
 
