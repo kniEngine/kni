@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _buffer = new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
         }
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
             Debug.Assert(_buffer != null);
 
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
 
-                int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
+                int TsizeInBytes = sizeof(T);
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {

@@ -58,12 +58,12 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
             var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-            int tSize = ReflectionHelpers.SizeOf<T>();
+            int tSize = sizeof(T);
             int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try

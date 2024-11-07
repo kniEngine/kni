@@ -143,12 +143,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("The data array is too small.");
         }
 
-        private void ValidateParams<T>(int level,
+        private unsafe void ValidateParams<T>(int level,
                                        int left, int top, int right, int bottom, int front, int back,
                                        int elementCount)
             where T : struct
         {
-            int tSize = ReflectionHelpers.SizeOf<T>();
+            int tSize = sizeof(T);
             int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");

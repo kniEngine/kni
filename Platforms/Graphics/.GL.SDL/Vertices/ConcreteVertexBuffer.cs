@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             int sizeInBytes = elementCount * elementSizeInBytes;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);

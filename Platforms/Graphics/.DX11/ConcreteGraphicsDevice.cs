@@ -270,7 +270,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
             // TODO share code with Texture2D.GetData
             // first set up a staging texture
@@ -347,7 +347,7 @@ namespace Microsoft.Xna.Platform.Graphics
                                 // We need to copy each row separately and skip trailing zeroes.
                                 stream.Seek(0, SeekOrigin.Begin);
 
-                                int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                                int elementSizeInByte = sizeof(T);
                                 for (int row = 0; row < rows; row++)
                                 {
                                     int i;

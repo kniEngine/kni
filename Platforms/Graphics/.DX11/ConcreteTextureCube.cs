@@ -50,10 +50,10 @@ namespace Microsoft.Xna.Platform.Graphics
         #region ITextureCubeStrategy
         public int Size { get { return _size; } }
 
-        public void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             // Create a temp staging resource for copying the data.
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             // We need to copy each row separatly and skip trailing zeros.
                             stream.Seek(0, SeekOrigin.Begin);
 
-                            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                            int elementSizeInByte = sizeof(T);
                             for (int row = 0; row < rows; row++)
                             {
                                 int i;

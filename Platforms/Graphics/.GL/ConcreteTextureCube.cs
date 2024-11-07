@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Platform.Graphics
         #region ITextureCubeStrategy
         public int Size { get { return _size; } }
 
-        public void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
 
@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+                int elementSizeInBytes = sizeof(T);
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if OPENGL && DESKTOPGL
             TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
-            int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int TsizeInBytes = sizeof(T);
 
             ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);

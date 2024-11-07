@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Height { get { return _height; } }
         public int Depth { get { return _depth; } }
 
-        public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+        public unsafe void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
                                T[] data, int startIndex, int elementCount)
             where T : struct
         {
@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int height = bottom - top;
             int depth = back - front;
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {

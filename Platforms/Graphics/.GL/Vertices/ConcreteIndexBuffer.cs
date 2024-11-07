@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
         }
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
             int sizeInBytes = elementSizeInByte * elementCount;
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try

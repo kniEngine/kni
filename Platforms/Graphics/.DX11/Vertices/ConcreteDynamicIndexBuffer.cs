@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
             Debug.Assert(_buffer != null);
 
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
 
-                int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
+                int TsizeInBytes = sizeof(T);
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {

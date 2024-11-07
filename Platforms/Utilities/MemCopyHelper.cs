@@ -14,9 +14,9 @@ namespace Microsoft.Xna.Platform.Utilities
         static extern void RtlMoveMemory(IntPtr destination, IntPtr source, uint count);
 #endif
 
-        public static void MemoryCopy<T>(T[] data, IntPtr dstPtr, int startIndex, int count) where T : struct
+        public unsafe static void MemoryCopy<T>(T[] data, IntPtr dstPtr, int startIndex, int count) where T : struct
         {
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
 
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try

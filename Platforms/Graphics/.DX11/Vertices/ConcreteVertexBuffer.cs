@@ -134,11 +134,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             Debug.Assert(_buffer != null);
 
-            int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int TsizeInBytes = sizeof(T);
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
             try

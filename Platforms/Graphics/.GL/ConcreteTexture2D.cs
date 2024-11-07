@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new InvalidOperationException();
         }
 
-        public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
+        public unsafe void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int w, h;
             TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
@@ -113,14 +113,14 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             GL.DeleteFramebuffer(framebufferId);
 #else
-            int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int TsizeInBytes = sizeof(T);
 
             ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
             GL.ActiveTexture(TextureUnit.Texture0 + 0);

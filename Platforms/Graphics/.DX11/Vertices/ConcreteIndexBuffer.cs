@@ -78,11 +78,11 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
             Debug.Assert(_buffer != null);
 
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
             Debug.Assert(_buffer != null);
 
@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.CopyResource(_buffer, stagingBuffer);
                 }
 
-                int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
+                int TsizeInBytes = sizeof(T);
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
