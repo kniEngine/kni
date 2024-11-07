@@ -6,8 +6,8 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
-using NUnit.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NUnit.Framework;
 
 namespace Kni.Tests.Graphics
 {
@@ -26,13 +26,13 @@ namespace Kni.Tests.Graphics
         //[TestCase(true)]
         [TestCase(false)]
         public void ShouldSetAndGetData(bool dynamic)
-        {   
-            var vertexBuffer = (dynamic)
+        {
+            VertexBuffer vertexBuffer = (dynamic)
                 ?new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
                 :new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            var readData = new VertexPositionTexture[4];
+            VertexPositionTexture[] readData = new VertexPositionTexture[4];
             vertexBuffer.GetData(readData, 0, 4);
             Assert.AreEqual(savedData, readData);
 
@@ -43,12 +43,12 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void ShouldSetAndGetData_elementCount(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            var readData = new VertexPositionTexture[4];
+            VertexPositionTexture[] readData = new VertexPositionTexture[4];
             vertexBuffer.GetData(readData, 0, 2);
             Assert.AreEqual(savedData[0], readData[0]);
             Assert.AreEqual(savedData[1], readData[1]);
@@ -62,12 +62,12 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void ShouldSetAndGetData_startIndex(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            var readData = new VertexPositionTexture[4];
+            VertexPositionTexture[] readData = new VertexPositionTexture[4];
             vertexBuffer.GetData(readData, 2, 2);
             Assert.AreEqual(vertexZero, readData[0]);
             Assert.AreEqual(vertexZero, readData[1]);
@@ -81,14 +81,14 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void ShouldSetAndGetData_offsetInBytes(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            var readData = new VertexPositionTexture[2];
-            var vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
-            var offsetInBytes = vertexStride * 2;
+            VertexPositionTexture[] readData = new VertexPositionTexture[2];
+            int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
+            int offsetInBytes = vertexStride * 2;
             vertexBuffer.GetData(offsetInBytes, readData, 0, 2, vertexStride);
             Assert.AreEqual(savedData[2], readData[0]);
             Assert.AreEqual(savedData[3], readData[1]);
@@ -100,19 +100,19 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void ShouldSetAndGetDataBytes(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
-            var savedDataBytes = ArrayUtil.ConvertFrom(savedData);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            byte[] savedDataBytes = ArrayUtil.ConvertFrom(savedData);
             vertexBuffer.SetData(savedDataBytes);
 
             if (dynamic)
             {
-                var dynamicVertexBuffer = vertexBuffer as DynamicVertexBuffer;
+                DynamicVertexBuffer dynamicVertexBuffer = vertexBuffer as DynamicVertexBuffer;
                 dynamicVertexBuffer.SetData(savedDataBytes, 0, savedDataBytes.Length, SetDataOptions.None);
             }
 
-            var readData = new VertexPositionTexture[4];
+            VertexPositionTexture[] readData = new VertexPositionTexture[4];
             vertexBuffer.GetData(readData, 0, 4);
             Assert.AreEqual(savedData, readData);
 
@@ -191,12 +191,10 @@ namespace Kni.Tests.Graphics
         [TestCase(false, 80, 1, false, typeof(ArgumentOutOfRangeException))]
         public void SetDataWithElementCount(bool dynamic, int startIndex, int elementCount, bool shouldSucceed, Type expectedExceptionType)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,
-                    BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,
-                    BufferUsage.None);
-            var savedDataBytes = ArrayUtil.ConvertFrom(savedData);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,BufferUsage.None);
+            byte[] savedDataBytes = ArrayUtil.ConvertFrom(savedData);
 
             if (!shouldSucceed)
                 Assert.Throws(expectedExceptionType, () => vertexBuffer.SetData(savedDataBytes, startIndex, elementCount));
@@ -204,7 +202,7 @@ namespace Kni.Tests.Graphics
             {
                 vertexBuffer.SetData(savedDataBytes, startIndex, elementCount);
 
-                var readDataBytes = new byte[savedDataBytes.Length];
+                byte[] readDataBytes = new byte[savedDataBytes.Length];
                 vertexBuffer.GetData(readDataBytes, startIndex, elementCount);
                 Assert.AreEqual(
                     savedDataBytes.Skip(startIndex).Take(elementCount).ToArray(),
@@ -234,12 +232,10 @@ namespace Kni.Tests.Graphics
 #endif
         public void SetDataWithElementCountAndVertexStride(bool dynamic, int elementCount, int vertexStride, Type expectedExceptionType)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,
-                    BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,
-                    BufferUsage.None);
-            var savedDataBytes = ArrayUtil.ConvertFrom(savedData);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            byte[] savedDataBytes = ArrayUtil.ConvertFrom(savedData);
 
             if (expectedExceptionType != null)
                 Assert.Throws(expectedExceptionType, () => vertexBuffer.SetData(0, savedDataBytes, 0, elementCount, vertexStride));
@@ -247,7 +243,7 @@ namespace Kni.Tests.Graphics
             {
                 vertexBuffer.SetData(0, savedDataBytes, 0, elementCount, vertexStride);
 
-                var readDataBytes = new byte[savedDataBytes.Length];
+                byte[] readDataBytes = new byte[savedDataBytes.Length];
                 vertexBuffer.GetData(0, readDataBytes, 0, elementCount, vertexStride);
                 Assert.AreEqual(
                     savedDataBytes.Take(elementCount).ToArray(), 
@@ -261,39 +257,39 @@ namespace Kni.Tests.Graphics
         public void GetSetDataVertexStrideTest()
         {
             const int size = 5;
-            var data = new VertexPositionTexture[size];
-            for (var i = 0; i < data.Length; i++)
+            VertexPositionTexture[] data = new VertexPositionTexture[size];
+            for (int i = 0; i < data.Length; i++)
             {
                 data[i] = new VertexPositionTexture(
                     new Vector3(i * 3, i * 3 + 1, i * 3 + 2),
                     new Vector2(i * 2 / (float) 10, (i * 2 + 1) / (float) 10));
             }
 
-            var vb = new VertexBuffer(gd, VertexPositionTexture.VertexDeclaration, data.Length, BufferUsage.None);
-            vb.SetData(data);
+            VertexBuffer vertexBuffer = new VertexBuffer(gd, VertexPositionTexture.VertexDeclaration, data.Length, BufferUsage.None);
+            vertexBuffer.SetData(data);
 
-            var textureCoords = new Vector2[2 * size + 1];
+            Vector2[] textureCoords = new Vector2[2 * size + 1];
             textureCoords[0] = new Vector2(-42, 42);
-            vb.GetData(3 * 4, textureCoords, 1, size, 20);
+            vertexBuffer.GetData(3 * 4, textureCoords, 1, size, 20);
 
             // first one should not be overwritten
             Assert.AreEqual(new Vector2(-42, 42), textureCoords[0]);
-            for (var i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
-                var index = i + 1;
-                var expected = new Vector2(i * 2 / (float) 10, (i * 2 + 1) / (float) 10);
+                int index = i + 1;
+                Vector2 expected = new Vector2(i * 2 / (float) 10, (i * 2 + 1) / (float) 10);
                 Assert.AreEqual(expected, textureCoords[index]);
             }
 
-            vb.SetData(3 * 4, textureCoords, 1, size, 20);
-            vb.GetData(3 * 4, textureCoords, 1, size, 20);
+            vertexBuffer.SetData(3 * 4, textureCoords, 1, size, 20);
+            vertexBuffer.GetData(3 * 4, textureCoords, 1, size, 20);
 
             // first one should not be overwritten
             Assert.AreEqual(new Vector2(-42, 42), textureCoords[0]);
-            for (var i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
-                var index = i + 1;
-                var expected = new Vector2(i * 2 / (float) 10, (i * 2 + 1) / (float) 10);
+                int index = i + 1;
+                Vector2 expected = new Vector2(i * 2 / (float) 10, (i * 2 + 1) / (float) 10);
                 Assert.AreEqual(expected, textureCoords[index]);
             }
         }
@@ -307,11 +303,9 @@ namespace Kni.Tests.Graphics
         [TestCase(false, 5, 20, false, typeof(ArgumentOutOfRangeException))]
         public void SetDataStructWithElementCountAndVertexStride(bool dynamic, int elementCount, int vertexStride, bool shouldSucceed, Type expectedExceptionType)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,
-                    BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,
-                    BufferUsage.None);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length,BufferUsage.None);
 
             if (!shouldSucceed)
                 Assert.Throws(expectedExceptionType, () => vertexBuffer.SetData(0, savedData, 0, elementCount, vertexStride));
@@ -319,7 +313,7 @@ namespace Kni.Tests.Graphics
             {
                 vertexBuffer.SetData(0, savedData, 0, elementCount, vertexStride);
 
-                var readData = new VertexPositionTexture[savedData.Length];
+                VertexPositionTexture[] readData = new VertexPositionTexture[savedData.Length];
                 vertexBuffer.GetData(0, readData, 0, elementCount, vertexStride);
                 Assert.AreEqual(
                     savedData.Take(elementCount).ToArray(),
@@ -333,13 +327,13 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void GetPosition(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            var readData = new Vector3[4];
-            var vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
+            Vector3[] readData = new Vector3[4];
+            int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
             vertexBuffer.GetData(0, readData, 0, 4, vertexStride);
             Assert.AreEqual(savedData[0].Position, readData[0]);
             Assert.AreEqual(savedData[1].Position, readData[1]);
@@ -353,20 +347,20 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void SetPosition(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
-            var positions = new[]
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            Vector3[] positions = new Vector3[]
             {
                 savedData[0].Position,
                 savedData[1].Position,
                 savedData[2].Position,
                 savedData[3].Position
             };
-            var vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
+            int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
             vertexBuffer.SetData(0, positions, 0, 4, vertexStride);
 
-            var readData = new Vector3[4];
+            Vector3[] readData = new Vector3[4];
             vertexBuffer.GetData(0, readData, 0, 4, vertexStride);
             Assert.AreEqual(savedData[0].Position, readData[0]);
             Assert.AreEqual(savedData[1].Position, readData[1]);
@@ -380,14 +374,14 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void GetTextureCoordinate(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            var readData = new Vector2[4];
-            var vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;                
-            var offsetInBytes = VertexPositionTexture.VertexDeclaration.GetVertexElements()[1].Offset;
+            Vector2[] readData = new Vector2[4];
+            int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
+            int offsetInBytes = VertexPositionTexture.VertexDeclaration.GetVertexElements()[1].Offset;
             vertexBuffer.GetData(offsetInBytes, readData, 0, 4, vertexStride);
             Assert.AreEqual(savedData[0].TextureCoordinate, readData[0]);
             Assert.AreEqual(savedData[1].TextureCoordinate, readData[1]);
@@ -401,21 +395,21 @@ namespace Kni.Tests.Graphics
         [TestCase(false)]
         public void SetTextureCoordinate(bool dynamic)
         {
-            var vertexBuffer = (dynamic)
-                ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
-                : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
-            var texCoords = new[]
+            VertexBuffer vertexBuffer = (dynamic)
+                                      ? new DynamicVertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None)
+                                      : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
+            Vector2[] texCoords = new Vector2[]
             {
                 savedData[0].TextureCoordinate,
                 savedData[1].TextureCoordinate,
                 savedData[2].TextureCoordinate,
                 savedData[3].TextureCoordinate
             };
-            var vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
-            var offsetInBytes = VertexPositionTexture.VertexDeclaration.GetVertexElements()[1].Offset;
+            int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
+            int offsetInBytes = VertexPositionTexture.VertexDeclaration.GetVertexElements()[1].Offset;
             vertexBuffer.SetData(offsetInBytes, texCoords, 0, 4, vertexStride);
 
-            var readData = new Vector2[4];
+            Vector2[] readData = new Vector2[4];
             vertexBuffer.GetData(offsetInBytes, readData, 0, 4, vertexStride);
             Assert.AreEqual(savedData[0].TextureCoordinate, readData[0]);
             Assert.AreEqual(savedData[1].TextureCoordinate, readData[1]);
@@ -444,12 +438,10 @@ namespace Kni.Tests.Graphics
         [Test]
         public void ShouldSucceedWhenVertexFormatDoesMatchShader()
         {
-            var vertexBuffer = new VertexBuffer(
-                gd, VertexPositionTexture.VertexDeclaration, 3,
-                BufferUsage.None);
+            VertexBuffer vertexBuffer = new VertexBuffer(gd, VertexPositionTexture.VertexDeclaration, 3, BufferUsage.None);
             gd.SetVertexBuffer(vertexBuffer);
 
-            var effect = new BasicEffect(gd);
+            Effect effect = new BasicEffect(gd);
             effect.CurrentTechnique.Passes[0].Apply();
 
             Assert.DoesNotThrow(() => gd.DrawPrimitives(PrimitiveType.TriangleList, 0, 1));
@@ -463,15 +455,13 @@ namespace Kni.Tests.Graphics
 #endif
         public void ShouldThrowHelpfulExceptionWhenVertexFormatDoesNotMatchShader()
         {
-            var vertexBuffer = new VertexBuffer(
-                gd, VertexTextureCoordinateTest.VertexDeclaration, 3,
-                BufferUsage.None);
+            VertexBuffer vertexBuffer = new VertexBuffer(gd, VertexTextureCoordinateTest.VertexDeclaration, 3, BufferUsage.None);
             gd.SetVertexBuffer(vertexBuffer);
 
-            var effect = new BasicEffect(gd);
+            Effect effect = new BasicEffect(gd);
             effect.CurrentTechnique.Passes[0].Apply();
 
-            var ex = Assert.Throws<InvalidOperationException>(() => gd.DrawPrimitives(PrimitiveType.TriangleList, 0, 1));
+            Exception ex = Assert.Throws<InvalidOperationException>(() => gd.DrawPrimitives(PrimitiveType.TriangleList, 0, 1));
 #if XNA
             Assert.That(ex.Message, Is.EqualTo("The current vertex declaration does not include all the elements required by the current vertex shader. Position0 is missing."));
 #else
@@ -489,7 +479,7 @@ namespace Kni.Tests.Graphics
         {
             Assert.Throws<ArgumentNullException>(() => 
             {
-                var vertexBuffer = new VertexBuffer(null, typeof(VertexPositionTexture), 3, BufferUsage.None);
+                VertexBuffer vertexBuffer = new VertexBuffer(null, typeof(VertexPositionTexture), 3, BufferUsage.None);
                 vertexBuffer.Dispose();
             });
             GC.GetTotalMemory(true); // collect uninitialized vertexBuffer
