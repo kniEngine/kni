@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.CopyResource(_buffer, stagingBuffer);
                 }
 
-                int TsizeInBytes = DX.Utilities.SizeOf<T>();
+                int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
                 GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {

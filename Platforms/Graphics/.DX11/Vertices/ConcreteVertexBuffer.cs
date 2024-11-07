@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.Utilities;
 using Microsoft.Xna.Platform.Utilities;
 using DX = SharpDX;
 using D3D11 = SharpDX.Direct3D11;
@@ -137,7 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(_buffer != null);
 
-            int TsizeInBytes = DX.Utilities.SizeOf<T>();
+            int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
             try
