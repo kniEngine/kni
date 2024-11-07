@@ -13,7 +13,7 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
-    <LangVersion>5</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
     <ProjectGuid>{741B4B1E-89E4-434C-8867-6129838AFD51}</ProjectGuid>
     <AssemblyName>Xna.Framework</AssemblyName>

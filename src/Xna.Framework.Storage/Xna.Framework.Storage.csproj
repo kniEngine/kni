@@ -13,7 +13,7 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;netstandard2.0;net8.0</TargetFrameworks>
-    <LangVersion>5</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsTrimmable>
     <ProjectGuid>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</ProjectGuid>
     <AssemblyName>Xna.Framework.Storage</AssemblyName>

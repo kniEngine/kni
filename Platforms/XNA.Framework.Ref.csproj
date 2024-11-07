@@ -14,7 +14,7 @@
 	<EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
-    <LangVersion>5</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>REF</DefineConstants>
