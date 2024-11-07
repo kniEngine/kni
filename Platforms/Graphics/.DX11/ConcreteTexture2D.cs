@@ -211,7 +211,7 @@ namespace Microsoft.Xna.Platform.Graphics
                              startIndex == 0 && elementCount == data.Length)
                     {
                         // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
-                        int elementSize2 = DX.Utilities.SizeOf<T>();
+                        int elementSize2 = ReflectionHelpers.SizeOf<T>();
                         if (elementSize2 == 1) // byte[]
                             elementsInRow = elementsInRow * elementSize;
 
