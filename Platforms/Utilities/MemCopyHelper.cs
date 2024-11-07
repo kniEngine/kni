@@ -18,19 +18,14 @@ namespace Microsoft.Xna.Platform.Utilities
         {
             int elementSizeInBytes = sizeof(T);
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr srcPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr srcPtr = (IntPtr)pData;
                 srcPtr = srcPtr + startIndex * elementSizeInBytes;
 
                 int sizeInBytes = count * elementSizeInBytes;
 
                 MemoryCopy(srcPtr, dstPtr, sizeInBytes);
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 

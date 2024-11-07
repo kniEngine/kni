@@ -57,29 +57,29 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
-
-                int TsizeInBytes = sizeof(T);
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                    dataPtr = dataPtr + startIndex * TsizeInBytes;
+                    fixed (T* pData = &data[0])
+                    {
+                        IntPtr dataPtr = (IntPtr)pData;
+                        dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
-                    IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
-                    if (vertexStride == elementSizeInBytes)
-                    {
-                        MemCopyHelper.MemoryCopy(
-                            dataPtr,
-                            dstPtr,
-                            elementCount * elementSizeInBytes);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < elementCount; i++)
+                        IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
+                        if (vertexStride == elementSizeInBytes)
+                        {
                             MemCopyHelper.MemoryCopy(
-                                dataPtr + i * elementSizeInBytes,
-                                dstPtr  + i * vertexStride,
-                                elementSizeInBytes);
+                                dataPtr,
+                                dstPtr,
+                                elementCount * elementSizeInBytes);
+                        }
+                        else
+                        {
+                            for (int i = 0; i < elementCount; i++)
+                                MemCopyHelper.MemoryCopy(
+                                    dataPtr + i * elementSizeInBytes,
+                                    dstPtr + i * vertexStride,
+                                    elementSizeInBytes);
+                        }
                     }
                 }
                 finally

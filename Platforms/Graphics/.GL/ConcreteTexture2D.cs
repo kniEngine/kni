@@ -80,10 +80,9 @@ namespace Microsoft.Xna.Platform.Graphics
             TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
 
             int elementSizeInByte = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
@@ -107,10 +106,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 GL.CheckGLError();
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
         public unsafe void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
@@ -121,10 +116,9 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int elementSizeInByte = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 System.Diagnostics.Debug.Assert(_glTexture >= 0);
@@ -150,10 +144,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 GL.CheckGLError();
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
         public unsafe void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
@@ -174,16 +164,11 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, 0);
             GL.CheckGLError();
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
                 GL.CheckGLError();
-            }
-            finally
-            {
-                dataHandle.Free();
             }
             GL.DeleteFramebuffer(framebufferId);
 #else
@@ -201,50 +186,62 @@ namespace Microsoft.Xna.Platform.Graphics
                 int pixelToT = Format.GetSize() / TsizeInBytes;
                 int tFullWidth = Math.Max(this.Width >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) / 4 * tFullWidth];
-                GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
                 try
                 {
-                    GL.GetCompressedTexImage(TextureTarget.Texture2D, level, pixelsPtr.AddrOfPinnedObject());
-                    GL.CheckGLError();
+                    fixed (T* pTemp = &temp[0])
+                    {
+                        GL.GetCompressedTexImage(TextureTarget.Texture2D, level, (IntPtr)pTemp);
+                        GL.CheckGLError();
+
+                        int rowCount = checkedRect.Height / 4;
+                        int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / TsizeInBytes;
+                        for (int r = 0; r < rowCount; r++)
+                        {
+                            int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
+                            int dataStart = startIndex + r * tRectWidth;
+                            Array.Copy(
+                                temp, 
+                                tempStart, 
+                                data, 
+                                dataStart,
+                                tRectWidth);
+                        }
+                    }
                 }
                 finally
                 {
-                    pixelsPtr.Free();
-                }
-
-                int rowCount = checkedRect.Height / 4;
-                int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / TsizeInBytes;
-                for (int r = 0; r < rowCount; r++)
-                {
-                    int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
-                    int dataStart = startIndex + r * tRectWidth;
-                    Array.Copy(temp, tempStart, data, dataStart, tRectWidth);
                 }
             }
             else
             {
                 // we need to convert from our format size to the size of T here
+                int pixelToT = Format.GetSize() / TsizeInBytes;
                 int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / TsizeInBytes;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
-                GCHandle pixelsPtr = GCHandle.Alloc(temp, GCHandleType.Pinned);
                 try
                 {
-                    GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, pixelsPtr.AddrOfPinnedObject());
-                    GL.CheckGLError();
+                    fixed (T* pTemp = &temp[0])
+                    {
+                        GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, (IntPtr)pTemp);
+                        GL.CheckGLError();
+
+                        int rowCount = checkedRect.Height;
+                        int tRectWidth = checkedRect.Width * pixelToT;
+                        for (int r = 0; r < rowCount; r++)
+                        {
+                            int tempStart = checkedRect.X * pixelToT + (r + checkedRect.Top) * tFullWidth;
+                            int dataStart = startIndex + r * tRectWidth;
+                            Array.Copy(
+                                temp, 
+                                tempStart, 
+                                data, 
+                                dataStart, 
+                                tRectWidth);
+                        }
+                    }
                 }
                 finally
                 {
-                    pixelsPtr.Free();
-                }
-
-                int pixelToT = Format.GetSize() / TsizeInBytes;
-                int rowCount = checkedRect.Height;
-                int tRectWidth = checkedRect.Width * pixelToT;
-                for (int r = 0; r < rowCount; r++)
-                {
-                    int tempStart = checkedRect.X * pixelToT + (r + checkedRect.Top) * tFullWidth;
-                    int dataStart = startIndex + r * tRectWidth;
-                    Array.Copy(temp, tempStart, data, dataStart, tRectWidth);
                 }
             }
 #endif

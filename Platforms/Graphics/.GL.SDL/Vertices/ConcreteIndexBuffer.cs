@@ -47,23 +47,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
             IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
-            srcPtr = srcPtr + offsetInBytes;
-
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = dataPtr + startIndex * elementSizeInBytes;
+                srcPtr = srcPtr + offsetInBytes;
 
-                MemCopyHelper.MemoryCopy(
-                    srcPtr,
-                    dataPtr,
-                    sizeInBytes);
+                fixed (T* pData = &data[0])
+                {
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                    MemCopyHelper.MemoryCopy(
+                        srcPtr,
+                        dataPtr,
+                        sizeInBytes);
+                }
             }
             finally
             {
-                dataHandle.Free();
-
                 GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
                 GL.CheckGLError();
             }

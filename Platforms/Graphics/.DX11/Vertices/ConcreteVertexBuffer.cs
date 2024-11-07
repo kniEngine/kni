@@ -70,14 +70,13 @@ namespace Microsoft.Xna.Platform.Graphics
             return new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, stagingDesc);
         }
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
             Debug.Assert(_buffer != null);
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                 if (vertexStride == elementSizeInBytes)
@@ -128,10 +127,6 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                 }
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
         public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
@@ -139,11 +134,10 @@ namespace Microsoft.Xna.Platform.Graphics
             Debug.Assert(_buffer != null);
 
             int TsizeInBytes = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                 using (D3D11.Buffer stagingBuffer = CreateStagingBuffer())
@@ -178,10 +172,6 @@ namespace Microsoft.Xna.Platform.Graphics
                             d3dContext.UnmapSubresource(stagingBuffer, 0);
                         }
                     }
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 

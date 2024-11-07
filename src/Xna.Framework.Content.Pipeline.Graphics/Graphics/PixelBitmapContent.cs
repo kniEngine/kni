@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         }
 
-        public override byte[] GetPixelData()
+        public unsafe override byte[] GetPixelData()
         {
             int formatSize = _format.GetSize();
             int dataSize = Width * Height * formatSize;
@@ -42,23 +42,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             Parallel.For(0, Height, (y) =>
             {
                 T[] row = _pixelData[y];
-                GCHandle dataHandle = GCHandle.Alloc(row, GCHandleType.Pinned);
-                try
+                fixed (T* pData = &row[0])
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    IntPtr dataPtr = (IntPtr)pData;
 
                     Marshal.Copy(dataPtr, outputData, (formatSize * y * Width), (Width * formatSize));
-                }
-                finally
-                {
-                    dataHandle.Free();
                 }
             });
 
             return outputData;
         }
 
-        public override void SetPixelData(byte[] sourceData)
+        public unsafe override void SetPixelData(byte[] sourceData)
         {
             int formatSize = _format.GetSize();
             int rowSize = Width * formatSize;
@@ -66,16 +61,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             Parallel.For(0, Height, (y) =>
             {
                 T[] row = _pixelData[y];
-                GCHandle dataHandle = GCHandle.Alloc(row, GCHandleType.Pinned);
-                try
+                fixed (T* pData = &row[0])
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    IntPtr dataPtr = (IntPtr)pData;
 
                     Marshal.Copy(sourceData, (y * rowSize), dataPtr, rowSize);
-                }
-                finally
-                {
-                    dataHandle.Free();
                 }
             });
         }

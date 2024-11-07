@@ -943,7 +943,7 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Metrics_AddPrimitiveCount(primitiveCount * instanceCount);
         }
 
-        public override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration, int vertexCount)
+        public unsafe override void DrawUserPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int primitiveCount, VertexDeclaration vertexDeclaration, int vertexCount)
             //where T : struct
         {
             PlatformApplyState();
@@ -955,11 +955,12 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             _vertexBuffersDirty = true;
 
-            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            try
+            fixed (T* pVertexData = &vertexData[0])
             {
+                IntPtr vertexAddr = (IntPtr)pVertexData;
+
                 // Setup the vertex declaration to point at the VB data.
-                PlatformApplyUserVertexData(vertexDeclaration, vbHandle.AddrOfPinnedObject());
+                PlatformApplyUserVertexData(vertexDeclaration, vertexAddr);
 
                 //Draw
                 GL.DrawArrays(ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
@@ -970,13 +971,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 base.Metrics_AddDrawCount();
                 base.Metrics_AddPrimitiveCount(primitiveCount);
             }
-            finally
-            {
-                vbHandle.Free();
-            }
         }
 
-        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+        public unsafe override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
             //where T : struct
         {
             PlatformApplyState();
@@ -991,11 +988,10 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             _indexBufferDirty = true;
 
-            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
-            try
+            fixed (T* pVertexData = &vertexData[0])
+            fixed (short* pIndexData = &indexData[0])
             {
-                IntPtr vertexAddr = vbHandle.AddrOfPinnedObject();
+                IntPtr vertexAddr = (IntPtr)pVertexData;
                 vertexAddr = vertexAddr + vertexDeclaration.VertexStride * vertexOffset;
 
                 // Setup the vertex declaration to point at the VB data.
@@ -1006,20 +1002,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedShort,
-                    ibHandle.AddrOfPinnedObject() + (indexOffset * sizeof(short)));
+                    (IntPtr)pIndexData + (indexOffset * sizeof(short)));
                 GL.CheckGLError();
 
                 base.Metrics_AddDrawCount();
                 base.Metrics_AddPrimitiveCount(primitiveCount);
             }
-            finally
-            {
-                ibHandle.Free();
-                vbHandle.Free();
-            }
         }
 
-        public override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
+        public unsafe override void DrawUserIndexedPrimitives<T>(PrimitiveType primitiveType, T[] vertexData, int vertexOffset, int numVertices, int[] indexData, int indexOffset, int primitiveCount, VertexDeclaration vertexDeclaration)
             //where T : struct
         {
             PlatformApplyState();
@@ -1034,11 +1025,10 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             _indexBufferDirty = true;
 
-            GCHandle vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
-            GCHandle ibHandle = GCHandle.Alloc(indexData, GCHandleType.Pinned);
-            try
+            fixed (T* pVertexData = &vertexData[0])
+            fixed (int* pIndexData = &indexData[0])
             {
-                IntPtr vertexAddr = vbHandle.AddrOfPinnedObject();
+                IntPtr vertexAddr = (IntPtr)pVertexData;
                 vertexAddr = vertexAddr + vertexDeclaration.VertexStride * vertexOffset;
 
                 // Setup the vertex declaration to point at the VB data.
@@ -1049,16 +1039,11 @@ namespace Microsoft.Xna.Platform.Graphics
                     ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType),
                     GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount),
                     DrawElementsType.UnsignedInt,
-                    ibHandle.AddrOfPinnedObject() + (indexOffset * sizeof(int)));
+                    (IntPtr)pIndexData + (indexOffset * sizeof(int)));
                 GL.CheckGLError();
 
                 base.Metrics_AddDrawCount();
                 base.Metrics_AddPrimitiveCount(primitiveCount);
-            }
-            finally
-            {
-                ibHandle.Free();
-                vbHandle.Free();
             }
         }
 

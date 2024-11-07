@@ -89,10 +89,9 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             int elementSizeInByte = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
@@ -113,20 +112,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, this.Format.GetPitch(w), 0);
                 }
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
         public unsafe void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             int elementSizeInByte = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
@@ -146,10 +140,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
                 }
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 

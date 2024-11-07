@@ -83,10 +83,9 @@ namespace Microsoft.Xna.Platform.Graphics
             Debug.Assert(_buffer != null);
 
             int elementSizeInBytes = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
@@ -105,10 +104,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     d3dContext.UpdateSubresource(dataBox, _buffer, 0, region);
                 }
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 
@@ -132,10 +127,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
 
                 int TsizeInBytes = sizeof(T);
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                try
+                fixed (T* pData = &data[0])
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    IntPtr dataPtr = (IntPtr)pData;
                     dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                     lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
@@ -156,10 +150,6 @@ namespace Microsoft.Xna.Platform.Graphics
                             d3dContext.UnmapSubresource(stagingBuffer, 0);
                         }
                     }
-                }
-                finally
-                {
-                    dataHandle.Free();
                 }
             }
         }

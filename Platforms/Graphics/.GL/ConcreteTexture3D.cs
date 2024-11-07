@@ -63,10 +63,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
                 int elementSizeInByte = sizeof(T);
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                try
+                fixed (T* pData = &data[0])
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    IntPtr dataPtr = (IntPtr)pData;
                     dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                     ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
@@ -77,10 +76,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
                     GL.CheckGLError();
-                }
-                finally
-                {
-                    dataHandle.Free();
                 }
             }
         }

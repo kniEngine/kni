@@ -54,10 +54,9 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             int elementSizeInByte = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
@@ -80,10 +79,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     d3dContext.UpdateSubresource(dataBox, this.GetTexture(), subresourceIndex, region);
                 }
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 

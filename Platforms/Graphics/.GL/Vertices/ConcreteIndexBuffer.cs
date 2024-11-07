@@ -86,10 +86,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int elementSizeInByte = sizeof(T);
             int sizeInBytes = elementSizeInByte * elementCount;
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 int bufferSize = IndexCount * base.ElementSizeInBytes;
@@ -112,10 +111,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)sizeInBytes, dataPtr);
                 GL.CheckGLError();
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 

@@ -66,10 +66,9 @@ namespace Microsoft.Xna.Platform.Graphics
             int depth = back - front;
 
             int elementSizeInByte = sizeof(T);
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 int rowPitch = this.Format.GetPitch(width);
@@ -86,10 +85,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     d3dContext.UpdateSubresource(dataBox, this.GetTexture(), subresourceIndex, region);
                 }
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 
