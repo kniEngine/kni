@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Graphics
                          MemCopyHelper.MemoryCopy(
                             srcPtr  + i * vertexStride,
                             dataPtr + i * elementSizeInBytes,
-                            sizeInBytes);
+                            elementSizeInBytes);
                     }
                 }
             }
