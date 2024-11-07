@@ -19,7 +19,7 @@
     <OutputPath>bin\Windows\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\Windows\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>$(DefineConstants);WINDOWSDX</DefineConstants>
-    <LangVersion>Default</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
 	
