@@ -69,7 +69,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                     IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
-                    MemCopyHelper.MemoryCopy(dataPtr, dstPtr, elementCount * TsizeInBytes);
+                    MemCopyHelper.MemoryCopy(
+                        dataPtr,
+                        dstPtr,
+                        elementCount * TsizeInBytes);
                 }
                 finally
                 {

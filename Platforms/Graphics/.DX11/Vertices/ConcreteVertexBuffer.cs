@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
                                 for (int i = 0; i < elementCount; i++)
                                     MemCopyHelper.MemoryCopy(
                                         dataPtr + i * elementSizeInBytes,
-                                        dstPtr + i * vertexStride,
+                                        dstPtr  + i * vertexStride,
                                         elementSizeInBytes);
                             }
                             finally
@@ -159,12 +159,18 @@ namespace Microsoft.Xna.Platform.Graphics
                             IntPtr srcPtr = dataBox.DataPointer + offsetInBytes;
                             if (vertexStride == TsizeInBytes)
                             {
-                                MemCopyHelper.MemoryCopy(srcPtr, dataPtr, vertexStride * elementCount);
+                                MemCopyHelper.MemoryCopy(
+                                    srcPtr,
+                                    dataPtr,
+                                    vertexStride * elementCount);
                             }
                             else
                             {
                                 for (int i = 0; i < elementCount; i++)
-                                    MemCopyHelper.MemoryCopy(srcPtr + i * vertexStride, dataPtr + i * TsizeInBytes, TsizeInBytes);
+                                    MemCopyHelper.MemoryCopy(
+                                        srcPtr  + i * vertexStride,
+                                        dataPtr + i * TsizeInBytes,
+                                        TsizeInBytes);
                             }
                         }
                         finally

@@ -274,6 +274,9 @@ namespace Kni.Tests.Graphics
 
             // first one should not be overwritten
             Assert.AreEqual(new Vector2(-42, 42), textureCoords[0]);
+            // last should not be overwritten
+            for (int i = 1 + size; i< textureCoords.Length; i++)
+                Assert.AreEqual(Vector2.Zero, textureCoords[i]);
             for (int i = 0; i < size; i++)
             {
                 int index = i + 1;
@@ -286,6 +289,9 @@ namespace Kni.Tests.Graphics
 
             // first one should not be overwritten
             Assert.AreEqual(new Vector2(-42, 42), textureCoords[0]);
+            // last should not be overwritten
+            for (int i = 1 + size; i< textureCoords.Length; i++)
+                Assert.AreEqual(Vector2.Zero, textureCoords[i]);
             for (int i = 0; i < size; i++)
             {
                 int index = i + 1;
@@ -332,13 +338,15 @@ namespace Kni.Tests.Graphics
                                       : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            Vector3[] readData = new Vector3[4];
+            Vector3[] readData = new Vector3[5];
+            readData[4] = new Vector3(42, 42, 42);
             int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
             vertexBuffer.GetData(0, readData, 0, 4, vertexStride);
             Assert.AreEqual(savedData[0].Position, readData[0]);
             Assert.AreEqual(savedData[1].Position, readData[1]);
             Assert.AreEqual(savedData[2].Position, readData[2]);
             Assert.AreEqual(savedData[3].Position, readData[3]);
+            Assert.AreEqual(new Vector3(42, 42, 42), readData[4]); // bound check
 
             vertexBuffer.Dispose();
         }
@@ -360,12 +368,14 @@ namespace Kni.Tests.Graphics
             int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
             vertexBuffer.SetData(0, positions, 0, 4, vertexStride);
 
-            Vector3[] readData = new Vector3[4];
+            Vector3[] readData = new Vector3[5];
+            readData[4] = new Vector3(42, 42, 42);
             vertexBuffer.GetData(0, readData, 0, 4, vertexStride);
             Assert.AreEqual(savedData[0].Position, readData[0]);
             Assert.AreEqual(savedData[1].Position, readData[1]);
             Assert.AreEqual(savedData[2].Position, readData[2]);
             Assert.AreEqual(savedData[3].Position, readData[3]);
+            Assert.AreEqual(new Vector3(42, 42, 42), readData[4]); // bound check
 
             vertexBuffer.Dispose();
         }
@@ -379,7 +389,8 @@ namespace Kni.Tests.Graphics
                                       : new VertexBuffer(gd, typeof(VertexPositionTexture), savedData.Length, BufferUsage.None);
             vertexBuffer.SetData(savedData);
 
-            Vector2[] readData = new Vector2[4];
+            Vector2[] readData = new Vector2[5];
+            readData[4] = new Vector2(42, 42);
             int vertexStride = VertexPositionTexture.VertexDeclaration.VertexStride;
             int offsetInBytes = VertexPositionTexture.VertexDeclaration.GetVertexElements()[1].Offset;
             vertexBuffer.GetData(offsetInBytes, readData, 0, 4, vertexStride);
@@ -387,6 +398,7 @@ namespace Kni.Tests.Graphics
             Assert.AreEqual(savedData[1].TextureCoordinate, readData[1]);
             Assert.AreEqual(savedData[2].TextureCoordinate, readData[2]);
             Assert.AreEqual(savedData[3].TextureCoordinate, readData[3]);
+            Assert.AreEqual(new Vector2(42, 42), readData[4]); // bound check
 
             vertexBuffer.Dispose();
         }
@@ -409,12 +421,14 @@ namespace Kni.Tests.Graphics
             int offsetInBytes = VertexPositionTexture.VertexDeclaration.GetVertexElements()[1].Offset;
             vertexBuffer.SetData(offsetInBytes, texCoords, 0, 4, vertexStride);
 
-            Vector2[] readData = new Vector2[4];
+            Vector2[] readData = new Vector2[5];
+            readData[4] = new Vector2(42, 42);
             vertexBuffer.GetData(offsetInBytes, readData, 0, 4, vertexStride);
             Assert.AreEqual(savedData[0].TextureCoordinate, readData[0]);
             Assert.AreEqual(savedData[1].TextureCoordinate, readData[1]);
             Assert.AreEqual(savedData[2].TextureCoordinate, readData[2]);
             Assert.AreEqual(savedData[3].TextureCoordinate, readData[3]);
+            Assert.AreEqual(new Vector2(42, 42), readData[4]); // bound check
 
             vertexBuffer.Dispose();
         }

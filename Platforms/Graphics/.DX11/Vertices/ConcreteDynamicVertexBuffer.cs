@@ -68,14 +68,17 @@ namespace Microsoft.Xna.Platform.Graphics
                     IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
                     if (vertexStride == elementSizeInBytes)
                     {
-                        MemCopyHelper.MemoryCopy(dataPtr, dstPtr, elementCount * elementSizeInBytes);
+                        MemCopyHelper.MemoryCopy(
+                            dataPtr,
+                            dstPtr,
+                            elementCount * elementSizeInBytes);
                     }
                     else
                     {
                         for (int i = 0; i < elementCount; i++)
                             MemCopyHelper.MemoryCopy(
                                 dataPtr + i * elementSizeInBytes,
-                                dstPtr + i * vertexStride,
+                                dstPtr  + i * vertexStride,
                                 elementSizeInBytes);
                     }
                 }
