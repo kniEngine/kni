@@ -55,7 +55,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
                 dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
-                MemCopyHelper.MemoryCopy(srcPtr, dataPtr, sizeInBytes);
+                MemCopyHelper.MemoryCopy(
+                    srcPtr,
+                    dataPtr,
+                    sizeInBytes);
             }
             finally
             {
