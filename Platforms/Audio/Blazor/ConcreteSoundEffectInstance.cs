@@ -25,7 +25,6 @@ namespace Microsoft.Xna.Platform.Audio
         GainNode _gainNode;
         AudioNode _sourceTarget;
 
-        float _pan = 1f;
         float _volume = 1f;
 
         public override bool IsXAct
@@ -47,7 +46,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pan = value;
 
-                _pan = value;
                 if (_bufferSource != null)
                 {
                     _stereoPannerNode.Pan.SetTargetAtTime(value, 0, 0.05f);
@@ -124,7 +122,7 @@ namespace Microsoft.Xna.Platform.Audio
             _bufferSource.Connect(_sourceTarget);
 
             _gainNode.Gain.SetTargetAtTime(_volume, 0, 0);
-            _stereoPannerNode.Pan.SetTargetAtTime(_pan, 0, 0);
+            _stereoPannerNode.Pan.SetTargetAtTime(base.Pan, 0, 0);
 
             _bufferSource.OnEnded += _bufferSource_OnEnded;
             _bufferSource.Start();

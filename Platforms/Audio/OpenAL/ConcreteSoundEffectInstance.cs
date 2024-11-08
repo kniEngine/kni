@@ -25,7 +25,6 @@ namespace Microsoft.Xna.Platform.Audio
         float frequency;
 
         float _volume = 1f;
-        float _pitch = 0f;
         // emmiter's position/velocity relative to the listener
         Vector3 _relativePosition;
         Vector3 _relativeVelocity;
@@ -89,7 +88,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pitch = value;
 
-                _pitch = value;
                 if (_sourceId != 0)
                 {
                     ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(value));
@@ -187,7 +185,7 @@ namespace Microsoft.Xna.Platform.Audio
             ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, isLooped);
             ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
             // Pitch
-            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(base.Pitch));
             ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
 
             ApplyReverb();
