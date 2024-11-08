@@ -9,6 +9,36 @@ namespace Microsoft.Xna.Platform.Audio
 {
     public class ConcreteSoundEffectInstance : SoundEffectInstanceStrategy
     {
+        public override bool IsXAct
+        {
+            get { return base.IsXAct; }
+            set { base.IsXAct = value; }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set { base.IsLooped = value; }
+        }
+
+        public override float Pan
+        {
+            get { return base.Pan; }
+            set { base.Pan = value; }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set { base.Volume = value; }
+        }
+
+        public override float Pitch
+        {
+            get { return base.Pitch; }
+            set { base.Pitch = value; }
+        }
+
         #region Initialization
 
         internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy)
