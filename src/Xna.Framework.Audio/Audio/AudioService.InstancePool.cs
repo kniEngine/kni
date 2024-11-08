@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Audio
                     SoundEffectInstance inst = node.Value;
                     _pooledInstances.Remove(inst.PooledInstancesNode);
 
-                    inst._isXAct = forXAct;
+                    inst._strategy.IsXAct = forXAct;
                     inst.Reset();
                     return inst;
                 }

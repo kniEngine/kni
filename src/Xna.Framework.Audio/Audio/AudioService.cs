@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Platform.Audio
 
                 // XAct sounds are not controlled by the SoundEffect
                 // master volume, so we can skip them completely.
-                if (inst._isXAct)
+                if (inst._strategy.IsXAct)
                     continue;
 
                 // Re-applying the volume to itself will update
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Platform.Audio
 
                 // Don't consume XACT instances... XACT will
                 // clear this flag when it is done with the wave.
-                if (inst._isXAct)
+                if (inst._strategy.IsXAct)
                     continue;
 
                 System.Diagnostics.Debug.Assert(!inst.IsDisposed);

@@ -9,6 +9,51 @@ namespace Microsoft.Xna.Platform.Audio
 {
     public class ConcreteSoundEffectInstance : SoundEffectInstanceStrategy
     {
+        public override bool IsXAct
+        {
+            get { return base.IsXAct; }
+            set { base.IsXAct = value; }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set { base.IsLooped = value; }
+        }
+
+        public override float Pan
+        {
+            get { return base.Pan; }
+            set
+            {
+                base.Pan = value;
+
+                throw new PlatformNotSupportedException();
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+
+                throw new PlatformNotSupportedException();
+            }
+        }
+
+        public override float Pitch
+        {
+            get { return base.Pitch; }
+            set
+            {
+                base.Pitch = value;
+
+                throw new PlatformNotSupportedException();
+            }
+        }
+
         #region Initialization
 
         internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy)
@@ -56,21 +101,6 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         public override void PlatformSetIsLooped(bool isLooped, SoundState state)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformSetPan(float pan)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformSetPitch(float pitch)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformSetVolume(float volume)
         {
             throw new PlatformNotSupportedException();
         }

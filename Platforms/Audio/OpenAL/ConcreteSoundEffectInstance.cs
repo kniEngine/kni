@@ -25,10 +25,76 @@ namespace Microsoft.Xna.Platform.Audio
         float frequency;
 
         float _volume = 1f;
-        float _pitch = 0f;
         // emmiter's position/velocity relative to the listener
         Vector3 _relativePosition;
         Vector3 _relativeVelocity;
+
+        public override bool IsXAct
+        {
+            get { return base.IsXAct; }
+            set { base.IsXAct = value; }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set { base.IsLooped = value; }
+        }
+
+        public override float Pan
+        {
+            get { return base.Pan; }
+            set
+            {
+                base.Pan = value;
+
+                // OpenAL doesn't support Panning. We emulate it using 3D audio.
+                // If the user set both Pan and Apply3D(), only the last call takes effect.
+                _relativePosition.X = (float)Math.Sin(value * MathHelper.PiOver2) * SoundEffect.DistanceScale;
+                _relativePosition.Y = (float)Math.Cos(value * MathHelper.PiOver2) * SoundEffect.DistanceScale;
+                _relativePosition.Z = 0f;
+
+                if (_sourceId != 0)
+                {
+                    ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
+                    ConcreteAudioService.OpenAL.CheckError("Failed to set source pan.");
+                }
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+
+                // XAct sound effects are not tied to the SoundEffect master volume.
+                float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
+                _volume = value * masterVolume;
+
+                if (_sourceId != 0)
+                {
+                    ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, value * masterVolume);
+                    ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
+                }
+            }
+        }
+
+        public override float Pitch
+        {
+            get { return base.Pitch; }
+            set
+            {
+                base.Pitch = value;
+
+                if (_sourceId != 0)
+                {
+                    ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(value));
+                    ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
+                }
+            }
+        }
 
         #region Initialization
 
@@ -37,6 +103,10 @@ namespace Microsoft.Xna.Platform.Audio
         {
             _audioServiceStrategy = audioServiceStrategy;
             _concreteSoundEffect = (ConcreteSoundEffect)sfxStrategy;
+
+            this.Pan = 0.0f;
+            this.Volume = 1.0f;
+            this.Pitch = 0.0f;
         }
 
         #endregion // Initialization
@@ -115,7 +185,7 @@ namespace Microsoft.Xna.Platform.Audio
             ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, isLooped);
             ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
             // Pitch
-            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(base.Pitch));
             ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
 
             ApplyReverb();
@@ -185,43 +255,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, isLooped);
                 ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
-            }
-        }
-
-        public override void PlatformSetPan(float pan)
-        {
-            // OpenAL doesn't support Panning. We emulate it using 3D audio.
-            // If the user set both Pan and Apply3D(), only the last call takes effect.
-            _relativePosition.X = (float)Math.Sin(pan * MathHelper.PiOver2) * SoundEffect.DistanceScale;
-            _relativePosition.Y = (float)Math.Cos(pan * MathHelper.PiOver2) * SoundEffect.DistanceScale;
-            _relativePosition.Z = 0f;
-
-            if (_sourceId != 0)
-            {
-                ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
-                ConcreteAudioService.OpenAL.CheckError("Failed to set source pan.");
-            }
-        }
-
-        public override void PlatformSetPitch(float pitch)
-        {
-            _pitch = pitch;
-
-            if (_sourceId != 0)
-            {
-                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
-                ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
-            }
-        }
-
-        public override void PlatformSetVolume(float volume)
-        {
-            _volume = volume;
-
-            if (_sourceId != 0)
-            {
-                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, _volume);
-                ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
             }
         }
 

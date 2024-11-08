@@ -26,6 +26,66 @@ namespace Microsoft.Xna.Platform.Audio
         private static float[] _defaultChannelAzimuths = new float[] { 0f, 0f };
         private static readonly float[] _outputMatrix = new float[16];
 
+        public override bool IsXAct
+        {
+            get { return base.IsXAct; }
+            set { base.IsXAct = value; }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set { base.IsLooped = value; }
+        }
+
+        public override float Pan
+        {
+            get { return base.Pan; }
+            set
+            {
+                base.Pan = value;
+
+                if (_voice != null && ConcreteAudioService.MasterVoice != null)
+                {
+                    UpdateOutputMatrix(value);
+                }
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+
+                // XAct sound effects are not tied to the SoundEffect master volume.
+                float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
+
+                if (_voice != null && ConcreteAudioService.MasterVoice != null)
+                {
+                    _voice.SetVolume(value * masterVolume, XAudio2.CommitNow);
+                }
+            }
+        }
+
+        public override float Pitch
+        {
+            get { return base.Pitch; }
+            set
+            {
+                base.Pitch = value;
+
+                if (_voice != null && ConcreteAudioService.MasterVoice != null)
+                {
+                    // NOTE: This is copy of what XAudio2.SemitonesToFrequencyRatio() does
+                    // which avoids the native call and is actually more accurate.
+                    float xapitch = (float)Math.Pow(2.0, value);
+                    _voice.SetFrequencyRatio(xapitch);
+                }
+            }
+        }
+
         #region Initialization
 
         internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy)
@@ -247,14 +307,6 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        public override void PlatformSetPan(float pan)
-        {
-            if (_voice != null && ConcreteAudioService.MasterVoice != null)
-            {
-                UpdateOutputMatrix(pan);
-            }
-        }
-
         private void UpdateOutputMatrix(float pan)
         {
             int srcChannelCount = _voice.VoiceDetails.InputChannelCount;
@@ -311,23 +363,6 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             return outputMatrix;
-        }
-
-        public override void PlatformSetPitch(float pitch)
-        {
-            if (_voice == null || ConcreteAudioService.MasterVoice == null)
-                return;
-
-            // NOTE: This is copy of what XAudio2.SemitonesToFrequencyRatio() does
-            // which avoids the native call and is actually more accurate.
-            float xapitch = (float)Math.Pow(2.0, pitch);
-            _voice.SetFrequencyRatio(xapitch);
-        }
-
-        public override void PlatformSetVolume(float volume)
-        {
-            if (_voice != null && ConcreteAudioService.MasterVoice != null)
-                _voice.SetVolume(volume, XAudio2.CommitNow);
         }
 
         public override void PlatformSetReverbMix(SoundState state, float mix, float pan)

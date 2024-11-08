@@ -25,8 +25,62 @@ namespace Microsoft.Xna.Platform.Audio
         GainNode _gainNode;
         AudioNode _sourceTarget;
 
-        float _pan = 1f;
         float _volume = 1f;
+
+        public override bool IsXAct
+        {
+            get { return base.IsXAct; }
+            set { base.IsXAct = value; }
+        }
+
+        public override bool IsLooped
+        {
+            get { return base.IsLooped; }
+            set { base.IsLooped = value; }
+        }
+
+        public override float Pan
+        {
+            get { return base.Pan; }
+            set
+            {
+                base.Pan = value;
+
+                if (_bufferSource != null)
+                {
+                    _stereoPannerNode.Pan.SetTargetAtTime(value, 0, 0.05f);
+                }
+            }
+        }
+
+        public override float Volume
+        {
+            get { return base.Volume; }
+            set
+            {
+                base.Volume = value;
+
+                // XAct sound effects are not tied to the SoundEffect master volume.
+                float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
+                _volume = value * masterVolume;
+
+                if (_bufferSource != null)
+                {
+                    _gainNode.Gain.SetTargetAtTime(value * masterVolume, 0, 0.05f);
+                }
+            }
+        }
+
+        public override float Pitch
+        {
+            get { return base.Pitch; }
+            set
+            {
+                base.Pitch = value;
+
+                // not implemented.
+            }
+        }
 
         #region Initialization
 
@@ -68,7 +122,7 @@ namespace Microsoft.Xna.Platform.Audio
             _bufferSource.Connect(_sourceTarget);
 
             _gainNode.Gain.SetTargetAtTime(_volume, 0, 0);
-            _stereoPannerNode.Pan.SetTargetAtTime(_pan, 0, 0);
+            _stereoPannerNode.Pan.SetTargetAtTime(base.Pan, 0, 0);
 
             _bufferSource.OnEnded += _bufferSource_OnEnded;
             _bufferSource.Start();
@@ -119,24 +173,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 _bufferSource.Loop = isLooped;
             }
-        }
-
-        public override void PlatformSetPan(float pan)
-        {
-            _pan = pan;
-            if (_bufferSource != null)
-                _stereoPannerNode.Pan.SetTargetAtTime(pan, 0, 0.05f);
-        }
-
-        public override void PlatformSetPitch(float pitch)
-        {
-        }
-
-        public override void PlatformSetVolume(float volume)
-        {
-            _volume = volume;
-            if (_bufferSource != null)
-                _gainNode.Gain.SetTargetAtTime(volume, 0, 0.05f);
         }
 
         public override void PlatformSetReverbMix(SoundState state, float mix, float pan)
