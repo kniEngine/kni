@@ -329,10 +329,10 @@ namespace Microsoft.Xna.Platform.Media
         {
             for (int i = 0; i < samples; i++)
             {
-                int val = (int)(fbuffer[i] * short.MaxValue);
-                val = Math.Min(val, +short.MaxValue);
-                val = Math.Max(val, -short.MaxValue);
-                outBuffer[i] = (short)val;
+                float val = fbuffer[i];
+                if (val > 1f) val = 1f;
+                else if (val < -1f) val = -1f;
+                outBuffer[i] = (short)(val * short.MaxValue);
             }
         }
 
