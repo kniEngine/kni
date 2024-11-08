@@ -47,7 +47,11 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pan = value;
 
-                this.PlatformSetPan(value);
+                _pan = value;
+                if (_bufferSource != null)
+                {
+                    _stereoPannerNode.Pan.SetTargetAtTime(value, 0, 0.05f);
+                }
             }
         }
 
@@ -168,13 +172,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 _bufferSource.Loop = isLooped;
             }
-        }
-
-        public override void PlatformSetPan(float pan)
-        {
-            _pan = pan;
-            if (_bufferSource != null)
-                _stereoPannerNode.Pan.SetTargetAtTime(pan, 0, 0.05f);
         }
 
         public override void PlatformSetVolume(float volume)

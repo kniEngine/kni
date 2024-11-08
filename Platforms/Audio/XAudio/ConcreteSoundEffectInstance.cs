@@ -45,7 +45,10 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pan = value;
 
-                this.PlatformSetPan(value);
+                if (_voice != null && ConcreteAudioService.MasterVoice != null)
+                {
+                    UpdateOutputMatrix(value);
+                }
             }
         }
 
@@ -299,14 +302,6 @@ namespace Microsoft.Xna.Platform.Audio
                     // release loop while sound is playing
                     _voice.ExitLoop();
                 }
-            }
-        }
-
-        public override void PlatformSetPan(float pan)
-        {
-            if (_voice != null && ConcreteAudioService.MasterVoice != null)
-            {
-                UpdateOutputMatrix(pan);
             }
         }
 

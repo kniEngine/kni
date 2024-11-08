@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pan = value;
 
-                this.PlatformSetPan(value);
+                throw new PlatformNotSupportedException();
             }
         }
 
@@ -105,11 +105,6 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         public override void PlatformSetIsLooped(bool isLooped, SoundState state)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformSetPan(float pan)
         {
             throw new PlatformNotSupportedException();
         }
