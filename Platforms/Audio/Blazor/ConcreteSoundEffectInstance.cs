@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pitch = value;
 
-                this.PlatformSetPitch(base.Pitch);
+                // not implemented.
             }
         }
 
@@ -175,10 +175,6 @@ namespace Microsoft.Xna.Platform.Audio
             _pan = pan;
             if (_bufferSource != null)
                 _stereoPannerNode.Pan.SetTargetAtTime(pan, 0, 0.05f);
-        }
-
-        public override void PlatformSetPitch(float pitch)
-        {
         }
 
         public override void PlatformSetVolume(float volume)

@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pitch = value;
 
-                this.PlatformSetPitch(base.Pitch);
+                throw new PlatformNotSupportedException();
             }
         }
 
@@ -110,11 +110,6 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         public override void PlatformSetPan(float pan)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformSetPitch(float pitch)
         {
             throw new PlatformNotSupportedException();
         }

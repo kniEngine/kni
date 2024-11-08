@@ -75,7 +75,12 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pitch = value;
 
-                this.PlatformSetPitch(base.Pitch);
+                _pitch = value;
+                if (_sourceId != 0)
+                {
+                    ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(value));
+                    ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
+                }
             }
         }
 
@@ -253,17 +258,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 ConcreteAudioService.OpenAL.Source(_sourceId, ALSource3f.Position, ref _relativePosition);
                 ConcreteAudioService.OpenAL.CheckError("Failed to set source pan.");
-            }
-        }
-
-        public override void PlatformSetPitch(float pitch)
-        {
-            _pitch = pitch;
-
-            if (_sourceId != 0)
-            {
-                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Pitch, XnaPitchToAlPitch(_pitch));
-                ConcreteAudioService.OpenAL.CheckError("Failed to set source pitch.");
             }
         }
 

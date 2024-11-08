@@ -71,7 +71,13 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pitch = value;
 
-                this.PlatformSetPitch(base.Pitch);
+                if (_voice != null && ConcreteAudioService.MasterVoice != null)
+                {
+                    // NOTE: This is copy of what XAudio2.SemitonesToFrequencyRatio() does
+                    // which avoids the native call and is actually more accurate.
+                    float xapitch = (float)Math.Pow(2.0, value);
+                    _voice.SetFrequencyRatio(xapitch);
+                }
             }
         }
 
@@ -360,17 +366,6 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             return outputMatrix;
-        }
-
-        public override void PlatformSetPitch(float pitch)
-        {
-            if (_voice == null || ConcreteAudioService.MasterVoice == null)
-                return;
-
-            // NOTE: This is copy of what XAudio2.SemitonesToFrequencyRatio() does
-            // which avoids the native call and is actually more accurate.
-            float xapitch = (float)Math.Pow(2.0, pitch);
-            _voice.SetFrequencyRatio(xapitch);
         }
 
         public override void PlatformSetVolume(float volume)
