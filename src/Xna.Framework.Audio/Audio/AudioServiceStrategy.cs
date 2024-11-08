@@ -15,8 +15,8 @@ namespace Microsoft.Xna.Platform.Audio
     abstract public class AudioServiceStrategy : IDisposable
     {
         // factory methods
-        public abstract SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy _strategy, float _pan);
-        public abstract IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels, float pan);
+        public abstract SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy _strategy);
+        public abstract IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels);
 
         public abstract void Suspend();
         public abstract void Resume();
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Platform.Audio
 
     abstract public class SoundEffectInstanceStrategy : IDisposable
     {
-        protected SoundEffectInstanceStrategy(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy, float pan) { }
+        protected SoundEffectInstanceStrategy(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy) { }
 
         public abstract void PlatformApply3D(AudioListener listener, AudioEmitter emitter);
         public abstract void PlatformSetIsLooped(bool isLooped, SoundState state);

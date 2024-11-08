@@ -28,8 +28,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         #region Initialization
 
-        internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy, float pan)
-            : base(audioServiceStrategy, sfxStrategy, pan)
+        internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy)
+            : base(audioServiceStrategy, sfxStrategy)
         {
             _audioServiceStrategy = audioServiceStrategy;
             _concreteSoundEffect = (ConcreteSoundEffect)sfxStrategy;
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Audio
             if (_concreteSoundEffect!=null)
             {
                 _voice = new SourceVoice(ConcreteAudioService.Device, _concreteSoundEffect._format, VoiceFlags.UseFilter, XAudio2.MaximumFrequencyRatio);
-                UpdateOutputMatrix(pan); // Ensure the output matrix is set for this new voice
+                UpdateOutputMatrix(0); // Ensure the output matrix is set for this new voice
             }
         }
 

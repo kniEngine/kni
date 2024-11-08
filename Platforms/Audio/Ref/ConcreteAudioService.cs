@@ -14,14 +14,14 @@ namespace Microsoft.Xna.Platform.Audio
             throw new PlatformNotSupportedException();
         }
 
-        public override SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy sfxStrategy, float pan)
+        public override SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy sfxStrategy)
         {
-            return new ConcreteSoundEffectInstance(this, sfxStrategy, pan);
+            return new ConcreteSoundEffectInstance(this, sfxStrategy);
         }
 
-        public override IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels, float pan)
+        public override IDynamicSoundEffectInstanceStrategy CreateDynamicSoundEffectInstanceStrategy(int sampleRate, int channels)
         {
-            return new ConcreteDynamicSoundEffectInstance(this, sampleRate, channels, pan);
+            return new ConcreteDynamicSoundEffectInstance(this, sampleRate, channels);
         }
 
         public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
