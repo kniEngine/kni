@@ -45,7 +45,12 @@ namespace Microsoft.Xna.Platform.Audio
         public override float Pan
         {
             get { return base.Pan; }
-            set { base.Pan = value; }
+            set
+            {
+                base.Pan = value;
+
+                this.PlatformSetPan(value);
+            }
         }
 
         public override float Volume
