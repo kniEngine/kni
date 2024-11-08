@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             int sizeInBytes = elementCount * elementSizeInBytes;
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
@@ -47,23 +47,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
             IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
-            srcPtr = srcPtr + offsetInBytes;
-
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = dataPtr + startIndex * elementSizeInBytes;
+                srcPtr = srcPtr + offsetInBytes;
 
-                MemCopyHelper.MemoryCopy(
-                    srcPtr,
-                    dataPtr,
-                    sizeInBytes);
+                fixed (T* pData = &data[0])
+                {
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                    MemCopyHelper.MemoryCopy(
+                        srcPtr,
+                        dataPtr,
+                        sizeInBytes);
+                }
             }
             finally
             {
-                dataHandle.Free();
-
                 GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
                 GL.CheckGLError();
             }

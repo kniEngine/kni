@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             int sizeInBytes = elementCount * elementSizeInBytes;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
@@ -46,29 +46,31 @@ namespace Microsoft.Xna.Platform.Graphics
 
             IntPtr srcPtr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
             GL.CheckGLError();
-            srcPtr = srcPtr + offsetInBytes;
-
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             try
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                dataPtr = dataPtr + startIndex * elementSizeInBytes;
+                srcPtr = srcPtr + offsetInBytes;
 
-                if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
+                fixed (T* pData = &data[0])
                 {
-                     MemCopyHelper.MemoryCopy(
-                        srcPtr,
-                        dataPtr,
-                        sizeInBytes);
-                }
-                else
-                {
-                    for (int i = 0; i < elementCount; i++)
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                    if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
                     {
-                         MemCopyHelper.MemoryCopy(
-                            srcPtr  + i * vertexStride,
-                            dataPtr + i * elementSizeInBytes,
-                            elementSizeInBytes);
+                        MemCopyHelper.MemoryCopy(
+                           srcPtr,
+                           dataPtr,
+                           sizeInBytes);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < elementCount; i++)
+                        {
+                            MemCopyHelper.MemoryCopy(
+                               srcPtr + i * vertexStride,
+                               dataPtr + i * elementSizeInBytes,
+                               elementSizeInBytes);
+                        }
                     }
                 }
             }

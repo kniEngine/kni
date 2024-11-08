@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Media
             _surfaceTexture.FrameAvailable += _surfaceTexture_FrameAvailable;
         }
 
-        public override Texture2D PlatformGetTexture()
+        public unsafe override Texture2D PlatformGetTexture()
         {
             if (_lastFrame != null)
             {
@@ -173,16 +173,11 @@ namespace Microsoft.Xna.Platform.Media
                 GL.CheckGLError();
 
                 // Read the pixel data from the framebuffer
-                GCHandle dataHandle = GCHandle.Alloc(_frameData, GCHandleType.Pinned);
-                try
+                fixed (byte* pData = &_frameData[0])
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    IntPtr dataPtr = (IntPtr)pData;
                     GL.ReadPixels(0, 0, this.Video.Width, this.Video.Height, GLPixelFormat.Rgba, PixelType.UnsignedByte, dataPtr);
                     GL.CheckGLError();
-                }
-                finally
-                {
-                    dataHandle.Free();
                 }
 
                 // Dettach framebuffer

@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _buffer = new D3D11.Buffer(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, bufferDesc);
         }
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
             Debug.Assert(_buffer != null);
 
@@ -57,29 +57,29 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
-
-                int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                    dataPtr = dataPtr + startIndex * TsizeInBytes;
+                    fixed (T* pData = &data[0])
+                    {
+                        IntPtr dataPtr = (IntPtr)pData;
+                        dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
-                    IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
-                    if (vertexStride == elementSizeInBytes)
-                    {
-                        MemCopyHelper.MemoryCopy(
-                            dataPtr,
-                            dstPtr,
-                            elementCount * elementSizeInBytes);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < elementCount; i++)
+                        IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
+                        if (vertexStride == elementSizeInBytes)
+                        {
                             MemCopyHelper.MemoryCopy(
-                                dataPtr + i * elementSizeInBytes,
-                                dstPtr  + i * vertexStride,
-                                elementSizeInBytes);
+                                dataPtr,
+                                dstPtr,
+                                elementCount * elementSizeInBytes);
+                        }
+                        else
+                        {
+                            for (int i = 0; i < elementCount; i++)
+                                MemCopyHelper.MemoryCopy(
+                                    dataPtr + i * elementSizeInBytes,
+                                    dstPtr + i * vertexStride,
+                                    elementSizeInBytes);
+                        }
                     }
                 }
                 finally

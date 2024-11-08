@@ -69,13 +69,13 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
         }
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
             Debug.Assert(GLIndexBuffer != null);
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
             int sizeInBytes = elementSizeInByte * elementCount;
 
             int bufferSize = IndexCount * base.ElementSizeInBytes;
@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
             Debug.Assert(GLIndexBuffer != null);
 
@@ -112,7 +112,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
 
             ((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY,
                 offsetInBytes, data, startIndex, elementCount);

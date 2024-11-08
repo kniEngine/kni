@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             Debug.Assert(GLVertexBuffer != null);
 
@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
 
             if (elementSizeInByte == vertexStride || elementSizeInByte % vertexStride == 0)
             {

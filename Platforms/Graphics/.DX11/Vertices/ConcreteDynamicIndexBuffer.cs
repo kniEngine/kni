@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
             Debug.Assert(_buffer != null);
 
@@ -60,23 +60,23 @@ namespace Microsoft.Xna.Platform.Graphics
                 D3D11.DeviceContext d3dContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
                 DX.DataBox dataBox = d3dContext.MapSubresource(_buffer, 0, mode, D3D11.MapFlags.None);
-
-                int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 try
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
-                    dataPtr = dataPtr + startIndex * TsizeInBytes;
+                    int TsizeInBytes = sizeof(T);
+                    fixed (T* pData = &data[0])
+                    {
+                        IntPtr dataPtr = (IntPtr)pData;
+                        dataPtr = dataPtr + startIndex * TsizeInBytes;
 
-                    IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
-                    MemCopyHelper.MemoryCopy(
-                        dataPtr,
-                        dstPtr,
-                        elementCount * TsizeInBytes);
+                        IntPtr dstPtr = dataBox.DataPointer + offsetInBytes;
+                        MemCopyHelper.MemoryCopy(
+                            dataPtr,
+                            dstPtr,
+                            elementCount * TsizeInBytes);
+                    }
                 }
                 finally
                 {
-                    dataHandle.Free();
                     d3dContext.UnmapSubresource(_buffer, 0);
                 }
             }

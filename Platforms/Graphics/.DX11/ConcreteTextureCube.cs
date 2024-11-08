@@ -50,14 +50,13 @@ namespace Microsoft.Xna.Platform.Graphics
         #region ITextureCubeStrategy
         public int Size { get { return _size; } }
 
-        public void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            int elementSizeInByte = sizeof(T);
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
@@ -81,13 +80,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.UpdateSubresource(dataBox, this.GetTexture(), subresourceIndex, region);
                 }
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
-        public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             // Create a temp staging resource for copying the data.
@@ -143,7 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             // We need to copy each row separatly and skip trailing zeros.
                             stream.Seek(0, SeekOrigin.Begin);
 
-                            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                            int elementSizeInByte = sizeof(T);
                             for (int row = 0; row < rows; row++)
                             {
                                 int i;

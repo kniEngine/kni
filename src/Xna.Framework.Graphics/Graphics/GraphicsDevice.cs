@@ -648,7 +648,7 @@ namespace Microsoft.Xna.Framework.Graphics
             GetBackBufferData(null, data, startIndex, elementCount);
         }
 
-        public void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
+        public unsafe void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             if (data == null)
@@ -671,7 +671,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 height = PresentationParameters.BackBufferHeight;
             }
 
-            int tSize = ReflectionHelpers.SizeOf<T>();
+            int tSize = sizeof(T);
             int fSize = PresentationParameters.BackBufferFormat.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");

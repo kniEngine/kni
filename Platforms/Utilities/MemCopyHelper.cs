@@ -14,23 +14,18 @@ namespace Microsoft.Xna.Platform.Utilities
         static extern void RtlMoveMemory(IntPtr destination, IntPtr source, uint count);
 #endif
 
-        public static void MemoryCopy<T>(T[] data, IntPtr dstPtr, int startIndex, int count) where T : struct
+        public unsafe static void MemoryCopy<T>(T[] data, IntPtr dstPtr, int startIndex, int count) where T : struct
         {
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr srcPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr srcPtr = (IntPtr)pData;
                 srcPtr = srcPtr + startIndex * elementSizeInBytes;
 
                 int sizeInBytes = count * elementSizeInBytes;
 
                 MemoryCopy(srcPtr, dstPtr, sizeInBytes);
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 

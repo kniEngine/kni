@@ -78,15 +78,14 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
             Debug.Assert(_buffer != null);
 
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            int elementSizeInBytes = sizeof(T);
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, elementCount * elementSizeInBytes, 0);
@@ -106,13 +105,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.UpdateSubresource(dataBox, _buffer, 0, region);
                 }
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
-        public override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
             Debug.Assert(_buffer != null);
 
@@ -131,11 +126,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.CopyResource(_buffer, stagingBuffer);
                 }
 
-                int TsizeInBytes = ReflectionHelpers.SizeOf<T>();
-                GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                try
+                int TsizeInBytes = sizeof(T);
+                fixed (T* pData = &data[0])
                 {
-                    IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                    IntPtr dataPtr = (IntPtr)pData;
                     dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                     lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
@@ -156,10 +150,6 @@ namespace Microsoft.Xna.Platform.Graphics
                             d3dContext.UnmapSubresource(stagingBuffer, 0);
                         }
                     }
-                }
-                finally
-                {
-                    dataHandle.Free();
                 }
             }
         }

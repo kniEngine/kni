@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             return hasTransparency;
         }
 
-        protected override bool TryCopyFrom(BitmapContent sourceBitmap, Rectangle sourceRegion, Rectangle destinationRegion)
+        protected unsafe override bool TryCopyFrom(BitmapContent sourceBitmap, Rectangle sourceRegion, Rectangle destinationRegion)
         {
             SurfaceFormat sourceFormat;
             if (!sourceBitmap.TryGetFormat(out sourceFormat))
@@ -176,10 +176,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new InvalidOperationException("Invalid DXT surface format!");
             }
 
-            GCHandle dataHandle = GCHandle.Alloc(sourceData, GCHandleType.Pinned);
-            try
+            fixed (byte* pData = &sourceData[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
 
                 var inputOptions = new InputOptions();
                 inputOptions.SetTextureLayout(TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
@@ -206,10 +205,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 var dxtCompressor = new Compressor();
                 dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
-            }
-            finally
-            {
-                dataHandle.Free();
             }
 
             return true;

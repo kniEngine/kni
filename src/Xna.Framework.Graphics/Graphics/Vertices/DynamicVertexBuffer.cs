@@ -35,9 +35,9 @@ namespace Microsoft.Xna.Framework.Graphics
             base.SetDataInternal<T>(offsetInBytes, data, startIndex, elementCount, vertexStride, options);
         }
 
-        public void SetData<T>(T[] data, int startIndex, int elementCount, SetDataOptions options) where T : struct
+        public unsafe void SetData<T>(T[] data, int startIndex, int elementCount, SetDataOptions options) where T : struct
         {
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             base.SetDataInternal<T>(0, data, startIndex, elementCount, elementSizeInBytes, options);
         }
     }

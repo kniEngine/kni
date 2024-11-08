@@ -337,10 +337,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
         }
 
-        private void ValidateParams<T>(int level, Rectangle rect, int elementCount, ref Rectangle textureBounds, out Rectangle checkedRect)
+        private unsafe void ValidateParams<T>(int level, Rectangle rect, int elementCount, ref Rectangle textureBounds, out Rectangle checkedRect)
             where T : struct
         {
-            int tSize = ReflectionHelpers.SizeOf<T>();
+            int tSize = sizeof(T);
             int fSize = Format.GetSize();
             if (tSize > fSize || fSize % tSize != 0)
                 throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");

@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
+        public unsafe void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             int w, h;
@@ -88,11 +88,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 h = (h + 3) & ~3;
             }
 
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            int elementSizeInByte = sizeof(T);
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
@@ -113,20 +112,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, this.Format.GetPitch(w), 0);
                 }
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
-        public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            int elementSizeInByte = sizeof(T);
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 D3D11.ResourceRegion region = new D3D11.ResourceRegion();
@@ -147,13 +141,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     d3dContext.UpdateSubresource(this.GetTexture(), subresourceIndex, region, dataPtr, this.Format.GetPitch(checkedRect.Width), 0);
                 }
             }
-            finally
-            {
-                dataHandle.Free();
-            }
         }
 
-        public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
+        public unsafe void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
             // Create a temp staging resource for copying the data.
@@ -211,7 +201,7 @@ namespace Microsoft.Xna.Platform.Graphics
                              startIndex == 0 && elementCount == data.Length)
                     {
                         // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
-                        int elementSize2 = ReflectionHelpers.SizeOf<T>();
+                        int elementSize2 = sizeof(T);
                         if (elementSize2 == 1) // byte[]
                             elementsInRow = elementsInRow * elementSize;
 
@@ -229,7 +219,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         // We need to copy each row separatly and skip trailing zeros.
                         stream.Seek(0, SeekOrigin.Begin);
 
-                        int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+                        int elementSizeInByte = sizeof(T);
                         for (int row = 0; row < rows; row++)
                         {
                             int i;

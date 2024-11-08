@@ -79,9 +79,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// For vertexStride we pass the size of a <see cref="VertexPositionTexture"/>.
         /// </p>
         /// </remarks>
-        public void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride = 0) where T : struct
+        public unsafe void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride = 0) where T : struct
         {
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             if (vertexStride == 0)
                 vertexStride = elementSizeInBytes;
 
@@ -106,9 +106,9 @@ namespace Microsoft.Xna.Framework.Graphics
             this.GetData<T>(0, data, startIndex, elementCount, 0);
         }
 
-        public void GetData<T>(T[] data) where T : struct
+        public unsafe void GetData<T>(T[] data) where T : struct
         {
-            int elementSizeInByte = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInByte = sizeof(T);
             this.GetData<T>(0, data, 0, data.Length, elementSizeInByte);
         }
 
@@ -172,9 +172,9 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="elementCount">Number of elements to copy from <paramref name="data"/>.
         /// The combination of <paramref name="startIndex"/> and <paramref name="elementCount"/> 
         /// must be within the <paramref name="data"/> array bounds.</param>
-        public void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
+        public unsafe void SetData<T>(T[] data, int startIndex, int elementCount) where T : struct
         {
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             SetDataInternal<T>(0, data, startIndex, elementCount, elementSizeInBytes, SetDataOptions.None);
         }
         
@@ -185,18 +185,18 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <typeparam name="T">Type of elements in the data array.</typeparam>
         /// <param name="data">Data array.</param>
-        public void SetData<T>(T[] data) where T : struct
+        public unsafe void SetData<T>(T[] data) where T : struct
         {
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             SetDataInternal<T>(0, data, 0, data.Length, elementSizeInBytes, SetDataOptions.None);
         }
 
-        protected void SetDataInternal<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options) where T : struct
+        protected unsafe void SetDataInternal<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options) where T : struct
         {
             if (data == null)
                 throw new ArgumentNullException("data");
 
-            int elementSizeInBytes = ReflectionHelpers.SizeOf<T>();
+            int elementSizeInBytes = sizeof(T);
             int bufferSize = VertexCount * VertexDeclaration.VertexStride;
 
             if (vertexStride == 0)

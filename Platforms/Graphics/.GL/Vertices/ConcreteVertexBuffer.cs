@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
         }
 
-        public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
+        public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
 
@@ -85,10 +85,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
             }
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 dataPtr = dataPtr + startIndex * elementSizeInBytes;
 
                 if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
@@ -112,10 +111,6 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
                     }
                 }
-            }
-            finally
-            {
-                dataHandle.Free();
             }
         }
 

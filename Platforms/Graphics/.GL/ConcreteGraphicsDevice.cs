@@ -58,22 +58,17 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
             var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-            int tSize = ReflectionHelpers.SizeOf<T>();
+            int tSize = sizeof(T);
             int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = dataHandle.AddrOfPinnedObject();
+                IntPtr dataPtr = (IntPtr)pData;
                 GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, dataPtr);
-            }
-            finally
-            {
-                dataHandle.Free();
             }
 
             // buffer is returned upside down, so we swap the rows around when copying over
