@@ -345,14 +345,6 @@ namespace Microsoft.Xna.Platform.Audio
             _alSourcesPool.Push(sourceId);
         }
 
-        public double SourceCurrentPosition(int sourceId)
-        {
-            int pos;
-            OpenAL.GetSource(sourceId, ALGetSourcei.SampleOffset, out pos);
-            OpenAL.CheckError("Failed to set source offset.");
-            return pos;
-        }
-
         public override void Suspend()
         {
 #if ANDROID
