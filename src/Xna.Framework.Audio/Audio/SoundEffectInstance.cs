@@ -93,12 +93,6 @@ namespace Microsoft.Xna.Framework.Audio
                     throw new ArgumentOutOfRangeException();
 
                 _strategy.Volume = value;
-
-                // XAct sound effects are not tied to the SoundEffect master volume.
-                if (_strategy.IsXAct)
-                    _strategy.PlatformSetVolume(value);
-                else
-                    _strategy.PlatformSetVolume(value * SoundEffect.MasterVolume);
             }
         }
 

@@ -49,7 +49,16 @@ namespace Microsoft.Xna.Platform.Audio
         public override float Volume
         {
             get { return base.Volume; }
-            set { base.Volume = value; }
+            set
+            {
+                base.Volume = value;
+
+                // XAct sound effects are not tied to the SoundEffect master volume.
+                if (this.IsXAct)
+                    this.PlatformSetVolume(value);
+                else
+                    this.PlatformSetVolume(value * SoundEffect.MasterVolume);
+            }
         }
 
         public override float Pitch
