@@ -205,10 +205,9 @@ namespace Microsoft.Xna.Framework.Audio
                         return;
                     case SoundState.Stopped:
                         {
-                            // For non-XAct sounds we need to be sure the latest
+                            // we need to be sure the latest
                             // master volume level is applied before playback.
-                            if (!_strategy.IsXAct)
-                                _strategy.PlatformSetVolume(_strategy.Volume * SoundEffect.MasterVolume);
+                            _strategy.Volume = _strategy.Volume;
 
                             _strategy.PlatformPlay(_strategy.IsLooped);
                             _state = SoundState.Playing;

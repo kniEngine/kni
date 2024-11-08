@@ -71,10 +71,14 @@ namespace Microsoft.Xna.Platform.Audio
                 base.Volume = value;
 
                 // XAct sound effects are not tied to the SoundEffect master volume.
-                if (this.IsXAct)
-                    this.PlatformSetVolume(value);
-                else
-                    this.PlatformSetVolume(value * SoundEffect.MasterVolume);
+                float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
+                _volume = value * masterVolume;
+
+                if (_sourceId != 0)
+                {
+                    ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, value * masterVolume);
+                    ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
+                }
             }
         }
 
@@ -253,17 +257,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, isLooped);
                 ConcreteAudioService.OpenAL.CheckError("Failed to set source loop state.");
-            }
-        }
-
-        public override void PlatformSetVolume(float volume)
-        {
-            _volume = volume;
-
-            if (_sourceId != 0)
-            {
-                ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, _volume);
-                ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
             }
         }
 

@@ -39,11 +39,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Volume = value;
 
-                // XAct sound effects are not tied to the SoundEffect master volume.
-                if (this.IsXAct)
-                    this.PlatformSetVolume(value);
-                else
-                    this.PlatformSetVolume(value * SoundEffect.MasterVolume);
+                throw new PlatformNotSupportedException();
             }
         }
 
@@ -105,11 +101,6 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         public override void PlatformSetIsLooped(bool isLooped, SoundState state)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        public override void PlatformSetVolume(float volume)
         {
             throw new PlatformNotSupportedException();
         }

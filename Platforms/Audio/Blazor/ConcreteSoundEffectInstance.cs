@@ -63,10 +63,13 @@ namespace Microsoft.Xna.Platform.Audio
                 base.Volume = value;
 
                 // XAct sound effects are not tied to the SoundEffect master volume.
-                if (this.IsXAct)
-                    this.PlatformSetVolume(value);
-                else
-                    this.PlatformSetVolume(value * SoundEffect.MasterVolume);
+                float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
+                _volume = value * masterVolume;
+
+                if (_bufferSource != null)
+                {
+                    _gainNode.Gain.SetTargetAtTime(value * masterVolume, 0, 0.05f);
+                }
             }
         }
 
@@ -172,13 +175,6 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 _bufferSource.Loop = isLooped;
             }
-        }
-
-        public override void PlatformSetVolume(float volume)
-        {
-            _volume = volume;
-            if (_bufferSource != null)
-                _gainNode.Gain.SetTargetAtTime(volume, 0, 0.05f);
         }
 
         public override void PlatformSetReverbMix(SoundState state, float mix, float pan)

@@ -154,7 +154,6 @@ namespace Microsoft.Xna.Platform.Audio
 
         public abstract void PlatformApply3D(AudioListener listener, AudioEmitter emitter);
         public abstract void PlatformSetIsLooped(bool isLooped, SoundState state);
-        public abstract void PlatformSetVolume(float volume);
         public abstract bool PlatformUpdateState(ref SoundState state);
 
         public abstract void PlatformPause();
