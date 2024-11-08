@@ -66,7 +66,12 @@ namespace Microsoft.Xna.Platform.Audio
         public override float Pitch
         {
             get { return base.Pitch; }
-            set { base.Pitch = value; }
+            set
+            {
+                base.Pitch = value;
+
+                this.PlatformSetPitch(base.Pitch);
+            }
         }
 
         #region Initialization

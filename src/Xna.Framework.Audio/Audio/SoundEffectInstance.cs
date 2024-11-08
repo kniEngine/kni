@@ -74,7 +74,6 @@ namespace Microsoft.Xna.Framework.Audio
                     throw new ArgumentOutOfRangeException();
 
                 _strategy.Pitch = value;
-                _strategy.PlatformSetPitch(_strategy.Pitch);
             }
         }
 
