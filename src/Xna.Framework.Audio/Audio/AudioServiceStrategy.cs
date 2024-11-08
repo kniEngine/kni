@@ -112,6 +112,11 @@ namespace Microsoft.Xna.Platform.Audio
         #endregion
     }
 
+    public interface IPlatformSoundEffectInstance
+    {
+        T GetStrategy<T>() where T : SoundEffectInstanceStrategy;
+    }
+
     abstract public class SoundEffectInstanceStrategy : IDisposable
     {
         private bool _isXAct;

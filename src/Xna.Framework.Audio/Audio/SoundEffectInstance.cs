@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Audio
     /// <remarks>
     /// <para>SoundEffectInstances are created through SoundEffect.CreateInstance() and used internally by SoundEffect.Play()</para>
     /// </remarks>
-    public class SoundEffectInstance : IDisposable
+    public class SoundEffectInstance : IPlatformSoundEffectInstance, IDisposable
     {
         internal AudioService _audioService { get; private set; }
         internal SoundEffectInstanceStrategy _strategy;
@@ -109,6 +109,11 @@ namespace Microsoft.Xna.Framework.Audio
 
         /// <summary>Indicates whether the object is disposed.</summary>
         public bool IsDisposed { get { return _isDisposed; } }
+
+        T IPlatformSoundEffectInstance.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
 
         internal SoundEffectInstance(AudioService audioService)
         {
