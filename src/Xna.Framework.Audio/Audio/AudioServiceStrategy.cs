@@ -114,6 +114,42 @@ namespace Microsoft.Xna.Platform.Audio
 
     abstract public class SoundEffectInstanceStrategy : IDisposable
     {
+        private bool _isXAct;
+        private bool _isLooped;
+        private float _pan;
+        private float _volume;
+        private float _pitch;
+
+        public virtual bool IsXAct
+        {
+            get { return _isXAct; }
+            set { _isXAct = value; }
+        }
+
+        public virtual bool IsLooped
+        {
+            get { return _isLooped; }
+            set { _isLooped = value; }
+        }
+
+        public virtual float Pan
+        {
+            get { return _pan; }
+            set { _pan = value; }
+        }
+
+        public virtual float Volume
+        {
+            get { return _volume; }
+            set { _volume = value; }
+        }
+
+        public virtual float Pitch
+        {
+            get { return _pitch; }
+            set { _pitch = value; }
+        }
+
         protected SoundEffectInstanceStrategy(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy) { }
 
         public abstract void PlatformApply3D(AudioListener listener, AudioEmitter emitter);

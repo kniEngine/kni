@@ -37,6 +37,10 @@ namespace Microsoft.Xna.Platform.Audio
         {
             _audioServiceStrategy = audioServiceStrategy;
             _concreteSoundEffect = (ConcreteSoundEffect)sfxStrategy;
+
+            this.Pan = 0.0f;
+            this.Volume = 1.0f;
+            this.Pitch = 0.0f;
         }
 
         #endregion // Initialization

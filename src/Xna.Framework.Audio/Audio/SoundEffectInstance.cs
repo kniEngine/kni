@@ -23,23 +23,18 @@ namespace Microsoft.Xna.Framework.Audio
         internal LinkedListNode<SoundEffectInstance> PooledInstancesNode { get; private set; }
 
         private SoundState _state = SoundState.Stopped;
-        private bool _isLooped = false;
         private bool _isDisposed = false;
-        internal bool _isXAct;
         internal SoundEffect _effect;
-        private float _pan;
-        private float _volume;
-        private float _pitch;
 
 
         /// <summary>Enables or Disables whether the SoundEffectInstance should repeat after playback.</summary>
         /// <remarks>This value has no effect on an already playing sound.</remarks>
         public virtual bool IsLooped
         { 
-            get { return _isLooped; }
+            get { return _strategy.IsLooped; }
             set
             {
-                if (value == _isLooped) return;
+                if (value == _strategy.IsLooped) return;
 
                 //   XNA will throw an InvalidOperationException if you change 'IsLooped'
                 // after the first call to 'Play()'
@@ -47,7 +42,7 @@ namespace Microsoft.Xna.Framework.Audio
                 // it's preferred to throw an exception in 'PlatformSetIsLooped()'
 
                 _strategy.PlatformSetIsLooped(value, State);
-                _isLooped = value;
+                _strategy.IsLooped = value;
             }
         }
 
@@ -56,13 +51,13 @@ namespace Microsoft.Xna.Framework.Audio
         /// <remarks>In OpenAL Panning/3D works only with mono sounds.</remarks>
         public float Pan
         {
-            get { return _pan; } 
+            get { return _strategy.Pan; } 
             set
             {
                 if (value < -1.0f || value > 1.0f)
                     throw new ArgumentOutOfRangeException();
 
-                _pan = value;
+                _strategy.Pan = value;
                 _strategy.PlatformSetPan(value);
             }
         }
@@ -71,15 +66,15 @@ namespace Microsoft.Xna.Framework.Audio
         /// <value>Pitch adjustment, ranging from -1.0 (down an octave) to 0.0 (no change) to 1.0 (up an octave). Values outside of this range will throw an Exception.</value>
         public float Pitch
         {
-            get { return _pitch; }
+            get { return _strategy.Pitch; }
             set
             {
                 // XAct sounds effects don't have pitch limits
-                if (!_isXAct && (value < -1.0f || value > 1.0f))
+                if (!_strategy.IsXAct && (value < -1.0f || value > 1.0f))
                     throw new ArgumentOutOfRangeException();
 
-                _pitch = value;
-                _strategy.PlatformSetPitch(_pitch);
+                _strategy.Pitch = value;
+                _strategy.PlatformSetPitch(_strategy.Pitch);
             }
         }
 
@@ -90,17 +85,17 @@ namespace Microsoft.Xna.Framework.Audio
         /// </remarks>
         public float Volume
         {
-            get { return _volume; }
+            get { return _strategy.Volume; }
             set
             {
                 // XAct sound effects don't have volume limits.
-                if (!_isXAct && (value < 0.0f || value > 1.0f))
+                if (!_strategy.IsXAct && (value < 0.0f || value > 1.0f))
                     throw new ArgumentOutOfRangeException();
 
-                _volume = value;
+                _strategy.Volume = value;
 
                 // XAct sound effects are not tied to the SoundEffect master volume.
-                if (_isXAct)
+                if (_strategy.IsXAct)
                     _strategy.PlatformSetVolume(value);
                 else
                     _strategy.PlatformSetVolume(value * SoundEffect.MasterVolume);
@@ -129,13 +124,8 @@ namespace Microsoft.Xna.Framework.Audio
 
             _audioService = audioService;
             _effect = null;
-            _isXAct = false;
             PlayingInstancesNode = new LinkedListNode<SoundEffectInstance>(this);
             PooledInstancesNode = null;
-
-            _pan = 0.0f;
-            _volume = 1.0f;
-            _pitch = 0.0f;
         }
 
         internal SoundEffectInstance(AudioService audioService, SoundEffect effect, bool isPooled = false, bool isXAct = false)
@@ -145,15 +135,12 @@ namespace Microsoft.Xna.Framework.Audio
 
             _audioService = audioService;
             _effect = effect;
-            _isXAct = isXAct;
             PlayingInstancesNode = new LinkedListNode<SoundEffectInstance>(this);
             PooledInstancesNode = (isPooled) ? new LinkedListNode<SoundEffectInstance>(this) : null;
 
-            _pan = 0.0f;
-            _volume = 1.0f;
-            _pitch = 0.0f;
 
             _strategy = ((IPlatformAudioService)audioService).Strategy.CreateSoundEffectInstanceStrategy(_effect._strategy);
+            _strategy.IsXAct = isXAct;
         }
 
         /// <summary>
@@ -228,10 +215,10 @@ namespace Microsoft.Xna.Framework.Audio
                         {
                             // For non-XAct sounds we need to be sure the latest
                             // master volume level is applied before playback.
-                            if (!_isXAct)
-                                _strategy.PlatformSetVolume(_volume * SoundEffect.MasterVolume);
+                            if (!_strategy.IsXAct)
+                                _strategy.PlatformSetVolume(_strategy.Volume * SoundEffect.MasterVolume);
 
-                            _strategy.PlatformPlay(_isLooped);
+                            _strategy.PlatformPlay(_strategy.IsLooped);
                             _state = SoundState.Playing;
                             _audioService.AddPlayingInstance(this);
                         }
@@ -259,7 +246,7 @@ namespace Microsoft.Xna.Framework.Audio
                         return;
                     case SoundState.Paused:
                         {
-                            _strategy.PlatformResume(_isLooped);
+                            _strategy.PlatformResume(_strategy.IsLooped);
                             _state = SoundState.Playing;
                         }
                         return;
@@ -313,7 +300,7 @@ namespace Microsoft.Xna.Framework.Audio
                         return;
                     case SoundState.Paused:
                     case SoundState.Playing:
-                        _strategy.PlatformRelease(_isLooped);
+                        _strategy.PlatformRelease(_strategy.IsLooped);
                         return;
                 }
             }
@@ -333,7 +320,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal void SetReverbMix(float reverbMix)
         {
-            _strategy.PlatformSetReverbMix(State, reverbMix, _pan);
+            _strategy.PlatformSetReverbMix(State, reverbMix, _strategy.Pan);
         }
         
         internal void SetFilter(FilterMode mode, float filterQ, float frequency)

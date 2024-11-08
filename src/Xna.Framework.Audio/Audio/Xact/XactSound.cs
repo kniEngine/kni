@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.Audio
                     if (_streaming)
                         _wave.Dispose();
                     else
-                        _wave._isXAct = false;					
+                        _wave._strategy.IsXAct = false;					
                     _wave = null;
                 }
 
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.Audio
                     if (_streaming)
                         _wave.Dispose();
                     else
-                        _wave._isXAct = false;					
+                        _wave._strategy.IsXAct = false;					
                     _wave = null;
                 }
             }
@@ -215,7 +215,7 @@ namespace Microsoft.Xna.Framework.Audio
                     if (_streaming)
                         _wave.Dispose();
                     else
-                        _wave._isXAct = false;					
+                        _wave._strategy.IsXAct = false;					
                    _wave = null;
                 }
             }
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework.Audio
                     if (_streaming)
                         _wave.Dispose();
                     else
-                        _wave._isXAct = false;					
+                        _wave._strategy.IsXAct = false;					
                     _wave = null;
                 }
             }
