@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Framework.Audio
             // and it contributes to the playing instances limit, but the source/voice is not owned by the pool.
             DynamicPlayingInstancesNode = new LinkedListNode<DynamicSoundEffectInstance>(this);
 
-            _dynamicStrategy = ((IPlatformAudioService)_audioService).Strategy.CreateDynamicSoundEffectInstanceStrategy(_sampleRate, (int)_channels, Pan);
+            _dynamicStrategy = ((IPlatformAudioService)_audioService).Strategy.CreateDynamicSoundEffectInstanceStrategy(_sampleRate, (int)_channels);
             _strategy = (SoundEffectInstanceStrategy)_dynamicStrategy;
             _dynamicStrategy.DynamicSoundEffectInstance = this;
         }

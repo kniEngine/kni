@@ -32,8 +32,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         #region Initialization
 
-        internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy, float pan)
-            : base(audioServiceStrategy, sfxStrategy, pan)
+        internal ConcreteSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, SoundEffectStrategy sfxStrategy)
+            : base(audioServiceStrategy, sfxStrategy)
         {
             _audioServiceStrategy = audioServiceStrategy;
             _concreteSoundEffect = (ConcreteSoundEffect)sfxStrategy;

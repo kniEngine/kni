@@ -15,8 +15,8 @@ namespace Microsoft.Xna.Platform.Audio
             set { _dynamicSoundEffectInstanceRef.Target = value; }
         }
 
-        internal ConcreteDynamicSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, int sampleRate, int channels, float pan)
-            : base(audioServiceStrategy, null, pan)
+        internal ConcreteDynamicSoundEffectInstance(AudioServiceStrategy audioServiceStrategy, int sampleRate, int channels)
+            : base(audioServiceStrategy, null)
         {
             throw new PlatformNotSupportedException();
         }
