@@ -120,6 +120,13 @@ namespace Microsoft.Xna.Platform.Audio
             return (float)Math.Pow(2, xnaPitch);
         }
 
+        internal int GetSamplePosition()
+        {
+            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.SampleOffset, out int samplePosition);
+            ConcreteAudioService.OpenAL.CheckError("Failed to get sample offset.");
+            return samplePosition;
+        }
+
         public override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
         {
             // set up matrix to transform world space coordinates to listener space coordinates
