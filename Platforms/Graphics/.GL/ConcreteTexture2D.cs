@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
-                T[] temp = new T[h / 4 * (w / 4 * (fSize / TsizeInBytes))];
+                T[] temp = new T[(w / 4 * h / 4 * fSize) / TsizeInBytes];
                 try
                 {
                     fixed (T* pTemp = &temp[0])
@@ -214,7 +214,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                T[] temp = new T[h * (w * fSize / TsizeInBytes)];
+                T[] temp = new T[(w * h * fSize) / TsizeInBytes];
                 try
                 {
                     fixed (T* pTemp = &temp[0])
