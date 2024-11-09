@@ -196,56 +196,52 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
-                    byte[] temp = new byte[w / 4 * h / 4 * fSize];
+                    int bytes = w / 4 * h / 4 * fSize;
+                    IntPtr pTemp = Marshal.AllocHGlobal(bytes);
                     try
                     {
-                        fixed (byte* pTemp = &temp[0])
+                        GL.GetCompressedTexImage(TextureTarget.Texture2D, level, pTemp);
+                        GL.CheckGLError();
+
+                        IntPtr tempPtr = (IntPtr)pTemp;
+                        tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize;
+                        int rowCount = checkedRect.Height / 4;
+                        for (int r = 0; r < rowCount; r++)
                         {
-                            IntPtr tempPtr = (IntPtr)pTemp;
-
-                            GL.GetCompressedTexImage(TextureTarget.Texture2D, level, tempPtr);
-                            GL.CheckGLError();
-
-                            tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize;
-                            int rowCount = checkedRect.Height / 4;
-                            for (int r = 0; r < rowCount; r++)
-                            {
-                                MemCopyHelper.MemoryCopy(
-                                    tempPtr + r * w / 4 * fSize,
-                                    dataPtr + r * checkedRect.Width / 4 * fSize,
-                                    checkedRect.Width / 4 * fSize);
-                            }
+                            MemCopyHelper.MemoryCopy(
+                                tempPtr + r * w / 4 * fSize,
+                                dataPtr + r * checkedRect.Width / 4 * fSize,
+                                checkedRect.Width / 4 * fSize);
                         }
                     }
                     finally
                     {
+                        Marshal.FreeHGlobal(pTemp);
                     }
                 }
                 else
                 {
-                    byte[] temp = new byte[w * h * fSize];
+                    int bytes = w * h * fSize;
+                    IntPtr pTemp = Marshal.AllocHGlobal(bytes);
                     try
                     {
-                        fixed (byte* pTemp = &temp[0])
+                        GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, pTemp);
+                        GL.CheckGLError();
+
+                        IntPtr tempPtr = (IntPtr)pTemp;
+                        tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
+                        int rowCount = checkedRect.Height;
+                        for (int r = 0; r < rowCount; r++)
                         {
-                            IntPtr tempPtr = (IntPtr)pTemp;
-
-                            GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, tempPtr);
-                            GL.CheckGLError();
-
-                            tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
-                            int rowCount = checkedRect.Height;
-                            for (int r = 0; r < rowCount; r++)
-                            {
-                                MemCopyHelper.MemoryCopy(
-                                    tempPtr + r * w * fSize,
-                                    dataPtr + r * checkedRect.Width * fSize,
-                                    checkedRect.Width * fSize);
-                            }
+                            MemCopyHelper.MemoryCopy(
+                                tempPtr + r * w * fSize,
+                                dataPtr + r * checkedRect.Width * fSize,
+                                checkedRect.Width * fSize);
                         }
                     }
                     finally
                     {
+                        Marshal.FreeHGlobal(pTemp);
                     }
                 }
             }
