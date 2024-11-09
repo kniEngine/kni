@@ -111,8 +111,8 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.GetCompressedTexImage(target, level, (IntPtr)pTemp);
                         GL.CheckGLError();
 
-                        int rowCount = checkedRect.Height / 4;
                         int tRectWidth = checkedRect.Width / 4 * fSize / TsizeInBytes;
+                        int rowCount = checkedRect.Height / 4;
                         for (int r = 0; r < rowCount; r++)
                         {
                             int tempStart = checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * (w / 4 * (fSize / TsizeInBytes));
@@ -140,8 +140,8 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.GetTexImage(target, level, _glFormat, _glType, (IntPtr)pTemp);
                         GL.CheckGLError();
 
-                        int rowCount = checkedRect.Height;
                         int tRectWidth = checkedRect.Width * (fSize / TsizeInBytes);
+                        int rowCount = checkedRect.Height;
                         for (int r = 0; r < rowCount; r++)
                         {
                             int tempStart = checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * (w * fSize / TsizeInBytes);
