@@ -201,13 +201,9 @@ namespace Microsoft.Xna.Platform.Graphics
                         int rowCount = checkedRect.Height / 4;
                         for (int r = 0; r < rowCount; r++)
                         {
-                            int tempStart = checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * (w / 4 * (fSize / TsizeInBytes));
-                            int dataStart = startIndex + r * (checkedRect.Width / 4 * fSize / TsizeInBytes);
                             Array.Copy(
-                                temp, 
-                                tempStart, 
-                                data, 
-                                dataStart,
+                                temp, checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * (w / 4 * (fSize / TsizeInBytes)), 
+                                data, startIndex + r * (checkedRect.Width / 4 * fSize / TsizeInBytes),
                                 checkedRect.Width / 4 * fSize / TsizeInBytes);
                         }
                     }
@@ -229,13 +225,9 @@ namespace Microsoft.Xna.Platform.Graphics
                         int rowCount = checkedRect.Height;
                         for (int r = 0; r < rowCount; r++)
                         {
-                            int tempStart = checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * (w * fSize / TsizeInBytes);
-                            int dataStart = startIndex + r * checkedRect.Width * (fSize / TsizeInBytes);
                             Array.Copy(
-                                temp, 
-                                tempStart, 
-                                data, 
-                                dataStart,
+                                temp, checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * (w * fSize / TsizeInBytes), 
+                                data, startIndex + r * checkedRect.Width * (fSize / TsizeInBytes),
                                 checkedRect.Width * (fSize / TsizeInBytes));
                         }
                     }
