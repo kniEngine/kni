@@ -350,6 +350,33 @@ namespace Kni.Tests.Graphics
             t.Dispose();
         }
 
+        [Test, Ignore("Not supported")]
+        public void GetVector4FromVector2FormatTest()
+        {
+            Vector2[] buffer2 = new Vector2[4];
+            buffer2[0] = new Vector2(0.1f, 0.2f);
+            buffer2[1] = new Vector2(0.3f, 0.4f);
+            buffer2[2] = new Vector2(0.5f, 0.6f);
+            buffer2[3] = new Vector2(0.7f, 0.8f);
+
+            Texture2D t = new Texture2D(gd, 4, 1, false, SurfaceFormat.Vector2);
+            t.SetData<Vector2>(buffer2);
+
+            Vector4[] buffer4 = new Vector4[2];
+            buffer4[0] = new Vector4(42, 42, 42, 42);
+            buffer4[1] = new Vector4(42, 42, 42, 42); // bound check
+
+            t.GetData<Vector4>(buffer4, 0, 1);
+                        
+            Assert.AreEqual(buffer4[0].X, 0.1f);
+            Assert.AreEqual(buffer4[0].Y, 0.2f);
+            Assert.AreEqual(buffer4[0].Z, 0.3f);
+            Assert.AreEqual(buffer4[0].W, 0.4f);
+            Assert.AreEqual(buffer4[1].X, 42);
+
+            t.Dispose();
+        }
+
         [TestCase(SurfaceFormat.Color, (long)0)]
         [TestCase(SurfaceFormat.HalfSingle, (float)0)]
         public void SetDataFormatFailingTestTBufferTooLarge<TBuffer>(SurfaceFormat format, TBuffer value) where TBuffer : struct

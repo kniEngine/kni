@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Utilities;
 using GLPixelFormat = Microsoft.Xna.Platform.Graphics.OpenGL.PixelFormat;
 
 
@@ -78,8 +79,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int w, h;
             TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
-
+            int fSize = this.Format.GetSize();
             int elementSizeInByte = sizeof(T);
+
+
             fixed (T* pData = &data[0])
             {
                 IntPtr dataPtr = (IntPtr)pData;
@@ -92,7 +95,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                 GL.CheckGLError();
 
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
@@ -115,7 +118,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
+            int fSize = this.Format.GetSize();
             int elementSizeInByte = sizeof(T);
+
             fixed (T* pData = &data[0])
             {
                 IntPtr dataPtr = (IntPtr)pData;
@@ -128,7 +133,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                 GL.CheckGLError();
 
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
@@ -172,6 +177,10 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             GL.DeleteFramebuffer(framebufferId);
 #else
+            // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
+            int fSize = this.Format.GetSize();
+            int w = Math.Max(this.Width >> level, 1);
+            int h = Math.Max(this.Height >> level, 1);
             int TsizeInBytes = sizeof(T);
 
             ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
@@ -180,68 +189,77 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
             GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
 
-            if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+            fixed (T* pData = &data[0])
             {
-                // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
-                int pixelToT = Format.GetSize() / TsizeInBytes;
-                int tFullWidth = Math.Max(this.Width >> level, 1) / 4 * pixelToT;
-                T[] temp = new T[Math.Max(this.Height >> level, 1) / 4 * tFullWidth];
-                try
+                IntPtr dataPtr = (IntPtr)pData;
+                dataPtr = dataPtr + startIndex * TsizeInBytes;
+
+                if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
-                    fixed (T* pTemp = &temp[0])
+                    w = w / 4;
+                    h = h / 4;
+                    int bytes = w * h * fSize;
+                    IntPtr pTemp = Marshal.AllocHGlobal(bytes);
+                    try
                     {
-                        GL.GetCompressedTexImage(TextureTarget.Texture2D, level, (IntPtr)pTemp);
+                        GL.GetCompressedTexImage(TextureTarget.Texture2D, level, pTemp);
                         GL.CheckGLError();
 
+                        IntPtr tempPtr = (IntPtr)pTemp;
+                        tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w * fSize;
+                        int fWidthSize = w * fSize;
+                        int tRectWidthSize = checkedRect.Width / 4 * fSize;
                         int rowCount = checkedRect.Height / 4;
-                        int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / TsizeInBytes;
                         for (int r = 0; r < rowCount; r++)
                         {
-                            int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
-                            int dataStart = startIndex + r * tRectWidth;
-                            Array.Copy(
-                                temp, 
-                                tempStart, 
-                                data, 
-                                dataStart,
-                                tRectWidth);
+                            MemCopyHelper.MemoryCopy(
+                                tempPtr + r * fWidthSize,
+                                dataPtr + r * tRectWidthSize,
+                                tRectWidthSize);
                         }
                     }
-                }
-                finally
-                {
-                }
-            }
-            else
-            {
-                // we need to convert from our format size to the size of T here
-                int pixelToT = Format.GetSize() / TsizeInBytes;
-                int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / TsizeInBytes;
-                T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
-                try
-                {
-                    fixed (T* pTemp = &temp[0])
+                    finally
                     {
-                        GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, (IntPtr)pTemp);
-                        GL.CheckGLError();
-
-                        int rowCount = checkedRect.Height;
-                        int tRectWidth = checkedRect.Width * pixelToT;
-                        for (int r = 0; r < rowCount; r++)
-                        {
-                            int tempStart = checkedRect.X * pixelToT + (r + checkedRect.Top) * tFullWidth;
-                            int dataStart = startIndex + r * tRectWidth;
-                            Array.Copy(
-                                temp, 
-                                tempStart, 
-                                data, 
-                                dataStart, 
-                                tRectWidth);
-                        }
+                        Marshal.FreeHGlobal(pTemp);
                     }
                 }
-                finally
+                else
                 {
+                    if (level == 0
+                    &&  checkedRect.X == 0 && checkedRect.Y == 0
+                    &&  checkedRect.Width == this.Width && checkedRect.Height == this.Height
+                    &&  startIndex == 0 && elementCount == data.Length)
+                    {
+                        GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, dataPtr);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        int bytes = w * h * fSize;
+                        IntPtr pTemp = Marshal.AllocHGlobal(bytes);
+                        try
+                        {
+                            GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, pTemp);
+                            GL.CheckGLError();
+
+                            IntPtr tempPtr = (IntPtr)pTemp;
+                            tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
+                            int fWidthSize = w * fSize;
+                            int tRectWidthSize = checkedRect.Width * fSize;
+                            int rowCount = checkedRect.Height;
+                            for (int r = 0; r < rowCount; r++)
+                            {
+                                MemCopyHelper.MemoryCopy(
+                                    tempPtr + r * fWidthSize,
+                                    dataPtr + r * tRectWidthSize,
+                                    tRectWidthSize);
+                            }
+                        }
+                        finally
+                        {
+                            Marshal.FreeHGlobal(pTemp);
+                        }
+                    }
                 }
             }
 #endif
