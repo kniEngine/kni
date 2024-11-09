@@ -63,6 +63,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            int fSize = PresentationParameters.BackBufferFormat.GetSize();
             int tSize = sizeof(T);
             int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
             fixed (T* pData = &data[0])
@@ -72,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // buffer is returned upside down, so we swap the rows around when copying over
-            int rowSize = srcRect.Width * PresentationParameters.BackBufferFormat.GetSize() / tSize;
+            int rowSize = srcRect.Width * fSize / tSize;
             T[] row = new T[rowSize];
             for (int dy = 0; dy < srcRect.Height/2; dy++)
             {

@@ -90,6 +90,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if OPENGL && DESKTOPGL
             TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
+            // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
+            int fSize = this.Format.GetSize();
             int TsizeInBytes = sizeof(T);
 
             ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
@@ -99,8 +101,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
-                // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
-                int pixelToT = Format.GetSize() / TsizeInBytes;
+                int pixelToT = fSize / TsizeInBytes;
                 int tFullWidth = Math.Max(this.Size >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Size >> level, 1) / 4 * tFullWidth];
                 try
@@ -111,7 +112,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
 
                         int rowCount = checkedRect.Height / 4;
-                        int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / TsizeInBytes;
+                        int tRectWidth = checkedRect.Width / 4 * fSize / TsizeInBytes;
                         for (int r = 0; r < rowCount; r++)
                         {
                             int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
@@ -132,8 +133,8 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 // we need to convert from our format size to the size of T here
-                int pixelToT = Format.GetSize() / TsizeInBytes;
-                int tFullWidth = Math.Max(this.Size >> level, 1) * Format.GetSize() / TsizeInBytes;
+                int pixelToT = fSize / TsizeInBytes;
+                int tFullWidth = Math.Max(this.Size >> level, 1) * fSize / TsizeInBytes;
                 T[] temp = new T[Math.Max(this.Size >> level, 1) * tFullWidth];
                 try
                 {

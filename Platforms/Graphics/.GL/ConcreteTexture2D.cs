@@ -78,8 +78,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int w, h;
             TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
-
+            int fSize = this.Format.GetSize();
             int elementSizeInByte = sizeof(T);
+
+
             fixed (T* pData = &data[0])
             {
                 IntPtr dataPtr = (IntPtr)pData;
@@ -92,7 +94,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                 GL.CheckGLError();
 
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
@@ -115,7 +117,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
+            int fSize = this.Format.GetSize();
             int elementSizeInByte = sizeof(T);
+
             fixed (T* pData = &data[0])
             {
                 IntPtr dataPtr = (IntPtr)pData;
@@ -128,7 +132,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                 GL.CheckGLError();
 
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(this.Format.GetSize(), 8));
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
@@ -172,6 +176,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             GL.DeleteFramebuffer(framebufferId);
 #else
+            // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
+            int fSize = this.Format.GetSize();
             int TsizeInBytes = sizeof(T);
 
             ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
@@ -182,8 +188,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
-                // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
-                int pixelToT = Format.GetSize() / TsizeInBytes;
+                int pixelToT = fSize / TsizeInBytes;
                 int tFullWidth = Math.Max(this.Width >> level, 1) / 4 * pixelToT;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) / 4 * tFullWidth];
                 try
@@ -194,7 +199,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
 
                         int rowCount = checkedRect.Height / 4;
-                        int tRectWidth = checkedRect.Width / 4 * Format.GetSize() / TsizeInBytes;
+                        int tRectWidth = checkedRect.Width / 4 * fSize / TsizeInBytes;
                         for (int r = 0; r < rowCount; r++)
                         {
                             int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
@@ -215,8 +220,8 @@ namespace Microsoft.Xna.Platform.Graphics
             else
             {
                 // we need to convert from our format size to the size of T here
-                int pixelToT = Format.GetSize() / TsizeInBytes;
-                int tFullWidth = Math.Max(this.Width >> level, 1) * Format.GetSize() / TsizeInBytes;
+                int pixelToT = fSize / TsizeInBytes;
+                int tFullWidth = Math.Max(this.Width >> level, 1) * fSize / TsizeInBytes;
                 T[] temp = new T[Math.Max(this.Height >> level, 1) * tFullWidth];
                 try
                 {
