@@ -225,29 +225,40 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    int bytes = w * h * fSize;
-                    IntPtr pTemp = Marshal.AllocHGlobal(bytes);
-                    try
+                    if (level == 0
+                    &&  checkedRect.X == 0 && checkedRect.Y == 0
+                    &&  checkedRect.Width == this.Width && checkedRect.Height == this.Height
+                    &&  startIndex == 0 && elementCount == data.Length)
                     {
-                        GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, pTemp);
+                        GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, dataPtr);
                         GL.CheckGLError();
-
-                        IntPtr tempPtr = (IntPtr)pTemp;
-                        tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
-                        int fWidthSize = w * fSize;
-                        int tRectWidthSize = checkedRect.Width * fSize;
-                        int rowCount = checkedRect.Height;
-                        for (int r = 0; r < rowCount; r++)
-                        {
-                            MemCopyHelper.MemoryCopy(
-                                tempPtr + r * fWidthSize,
-                                dataPtr + r * tRectWidthSize,
-                                tRectWidthSize);
-                        }
                     }
-                    finally
+                    else
                     {
-                        Marshal.FreeHGlobal(pTemp);
+                        int bytes = w * h * fSize;
+                        IntPtr pTemp = Marshal.AllocHGlobal(bytes);
+                        try
+                        {
+                            GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, pTemp);
+                            GL.CheckGLError();
+
+                            IntPtr tempPtr = (IntPtr)pTemp;
+                            tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
+                            int fWidthSize = w * fSize;
+                            int tRectWidthSize = checkedRect.Width * fSize;
+                            int rowCount = checkedRect.Height;
+                            for (int r = 0; r < rowCount; r++)
+                            {
+                                MemCopyHelper.MemoryCopy(
+                                    tempPtr + r * fWidthSize,
+                                    dataPtr + r * tRectWidthSize,
+                                    tRectWidthSize);
+                            }
+                        }
+                        finally
+                        {
+                            Marshal.FreeHGlobal(pTemp);
+                        }
                     }
                 }
             }
