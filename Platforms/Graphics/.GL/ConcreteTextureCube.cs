@@ -103,8 +103,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
-                int tFullWidth = w / 4 * (fSize / TsizeInBytes);
-                T[] temp = new T[h / 4 * tFullWidth];
+                T[] temp = new T[h / 4 * (w / 4 * (fSize / TsizeInBytes))];
                 try
                 {
                     fixed (T* pTemp = &temp[0])
@@ -116,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         int tRectWidth = checkedRect.Width / 4 * fSize / TsizeInBytes;
                         for (int r = 0; r < rowCount; r++)
                         {
-                            int tempStart = checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * tFullWidth;
+                            int tempStart = checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * (w / 4 * (fSize / TsizeInBytes));
                             int dataStart = startIndex + r * tRectWidth;
                             Array.Copy(
                                 temp,
@@ -133,8 +132,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                int tFullWidth = w * fSize / TsizeInBytes;
-                T[] temp = new T[h * tFullWidth];
+                T[] temp = new T[h * (w * fSize / TsizeInBytes)];
                 try
                 {
                     fixed (T* pTemp = &temp[0])
@@ -146,7 +144,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         int tRectWidth = checkedRect.Width * (fSize / TsizeInBytes);
                         for (int r = 0; r < rowCount; r++)
                         {
-                            int tempStart = checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * tFullWidth;
+                            int tempStart = checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * (w * fSize / TsizeInBytes);
                             int dataStart = startIndex + r * tRectWidth;
                             Array.Copy(
                                 temp, 
