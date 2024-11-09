@@ -206,11 +206,12 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.GetCompressedTexImage(TextureTarget.Texture2D, level, tempPtr);
                             GL.CheckGLError();
 
+                            tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize;
                             int rowCount = checkedRect.Height / 4;
                             for (int r = 0; r < rowCount; r++)
                             {
                                 MemCopyHelper.MemoryCopy(
-                                    tempPtr + checkedRect.X / 4 * fSize + r * w / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize,
+                                    tempPtr + r * w / 4 * fSize,
                                     dataPtr + r * checkedRect.Width / 4 * fSize,
                                     checkedRect.Width / 4 * fSize);
                             }
@@ -232,11 +233,12 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, tempPtr);
                             GL.CheckGLError();
 
+                            tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
                             int rowCount = checkedRect.Height;
                             for (int r = 0; r < rowCount; r++)
                             {
                                 MemCopyHelper.MemoryCopy(
-                                    tempPtr + checkedRect.X * fSize + r * w * fSize + checkedRect.Top * w * fSize,
+                                    tempPtr + r * w * fSize,
                                     dataPtr + r * checkedRect.Width * fSize,
                                     checkedRect.Width * fSize);
                             }
