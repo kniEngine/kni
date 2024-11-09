@@ -92,6 +92,8 @@ namespace Microsoft.Xna.Platform.Graphics
             TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
             // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
             int fSize = this.Format.GetSize();
+            int w = Math.Max(this.Size >> level, 1);
+            int h = Math.Max(this.Size >> level, 1);
             int TsizeInBytes = sizeof(T);
 
             ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
@@ -102,8 +104,8 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
                 int pixelToT = fSize / TsizeInBytes;
-                int tFullWidth = Math.Max(this.Size >> level, 1) / 4 * pixelToT;
-                T[] temp = new T[Math.Max(this.Size >> level, 1) / 4 * tFullWidth];
+                int tFullWidth = w / 4 * pixelToT;
+                T[] temp = new T[h / 4 * tFullWidth];
                 try
                 {
                     fixed (T* pTemp = &temp[0])
@@ -134,8 +136,8 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 // we need to convert from our format size to the size of T here
                 int pixelToT = fSize / TsizeInBytes;
-                int tFullWidth = Math.Max(this.Size >> level, 1) * fSize / TsizeInBytes;
-                T[] temp = new T[Math.Max(this.Size >> level, 1) * tFullWidth];
+                int tFullWidth = w * fSize / TsizeInBytes;
+                T[] temp = new T[h * tFullWidth];
                 try
                 {
                     fixed (T* pTemp = &temp[0])
