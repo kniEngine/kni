@@ -188,6 +188,10 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.BindTexture(TextureTarget.Texture2D, _glTexture);
             GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
 
+            fixed (T* pData = &data[0])
+            {
+                IntPtr dataPtr = (IntPtr)pData;
+
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
                     T[] temp = new T[(w / 4 * h / 4 * fSize) / TsizeInBytes];
@@ -195,7 +199,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         fixed (T* pTemp = &temp[0])
                         {
-                            GL.GetCompressedTexImage(TextureTarget.Texture2D, level, (IntPtr)pTemp);
+                            IntPtr tempPtr = (IntPtr)pTemp;
+
+                            GL.GetCompressedTexImage(TextureTarget.Texture2D, level, tempPtr);
                             GL.CheckGLError();
 
                             int rowCount = checkedRect.Height / 4;
@@ -219,7 +225,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         fixed (T* pTemp = &temp[0])
                         {
-                            GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, (IntPtr)pTemp);
+                            IntPtr tempPtr = (IntPtr)pTemp;
+
+                            GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, tempPtr);
                             GL.CheckGLError();
 
                             int rowCount = checkedRect.Height;
@@ -236,6 +244,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                     }
                 }
+            }
 #endif
         }
 

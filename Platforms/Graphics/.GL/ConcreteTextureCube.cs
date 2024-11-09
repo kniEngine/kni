@@ -101,6 +101,10 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
 
+            fixed (T* pData = &data[0])
+            {
+                IntPtr dataPtr = (IntPtr)pData;
+
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
                     T[] temp = new T[(w / 4 * h / 4 * fSize) / TsizeInBytes];
@@ -108,7 +112,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         fixed (T* pTemp = &temp[0])
                         {
-                            GL.GetCompressedTexImage(target, level, (IntPtr)pTemp);
+                            IntPtr tempPtr = (IntPtr)pTemp;
+
+                            GL.GetCompressedTexImage(target, level, tempPtr);
                             GL.CheckGLError();
 
                             int rowCount = checkedRect.Height / 4;
@@ -132,7 +138,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         fixed (T* pTemp = &temp[0])
                         {
-                            GL.GetTexImage(target, level, _glFormat, _glType, (IntPtr)pTemp);
+                            IntPtr tempPtr = (IntPtr)pTemp;
+
+                            GL.GetTexImage(target, level, _glFormat, _glType, tempPtr);
                             GL.CheckGLError();
 
                             int rowCount = checkedRect.Height;
@@ -149,6 +157,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                     }
                 }
+            }
 #else
             throw new NotImplementedException();
 #endif
