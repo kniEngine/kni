@@ -105,6 +105,7 @@ namespace Microsoft.Xna.Platform.Graphics
             fixed (T* pData = &data[0])
             {
                 IntPtr dataPtr = (IntPtr)pData;
+                dataPtr = dataPtr + startIndex * TsizeInBytes;
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
@@ -123,7 +124,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             {
                                 MemCopyHelper.MemoryCopy(
                                     tempPtr + checkedRect.X / 4 * fSize + r * w / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize,
-                                    dataPtr + startIndex * TsizeInBytes + r * checkedRect.Width / 4 * fSize,
+                                    dataPtr + r * checkedRect.Width / 4 * fSize,
                                     checkedRect.Width / 4 * fSize);
                             }
                         }
@@ -149,7 +150,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             {
                                 MemCopyHelper.MemoryCopy(
                                     tempPtr + checkedRect.X * fSize + r * w * fSize + checkedRect.Top * w * fSize,
-                                    dataPtr + startIndex * TsizeInBytes + r * checkedRect.Width * fSize,
+                                    dataPtr + r * checkedRect.Width * fSize,
                                     checkedRect.Width * fSize);
                             }
                         }
