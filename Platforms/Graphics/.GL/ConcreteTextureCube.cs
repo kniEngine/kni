@@ -118,13 +118,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         IntPtr tempPtr = (IntPtr)pTemp;
                         tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize;
+                        int tRectWidthSize = checkedRect.Width / 4 * fSize;
                         int rowCount = checkedRect.Height / 4;
                         for (int r = 0; r < rowCount; r++)
                         {
                             MemCopyHelper.MemoryCopy(
                                 tempPtr + r * w / 4 * fSize,
-                                dataPtr + r * checkedRect.Width / 4 * fSize,
-                                checkedRect.Width / 4 * fSize);
+                                dataPtr + r * tRectWidthSize,
+                                tRectWidthSize);
                         }
                     }
                     finally
@@ -143,13 +144,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         IntPtr tempPtr = (IntPtr)pTemp;
                         tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
+                        int tRectWidthSize = checkedRect.Width * fSize;
                         int rowCount = checkedRect.Height;
                         for (int r = 0; r < rowCount; r++)
                         {
                             MemCopyHelper.MemoryCopy(
                                 tempPtr + r * w * fSize,
-                                dataPtr + r * checkedRect.Width * fSize,
-                                checkedRect.Width * fSize);
+                                dataPtr + r * tRectWidthSize,
+                                tRectWidthSize);
                         }
                     }
                     finally
