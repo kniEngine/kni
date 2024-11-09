@@ -198,18 +198,17 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.GetCompressedTexImage(TextureTarget.Texture2D, level, (IntPtr)pTemp);
                         GL.CheckGLError();
 
-                        int tRectWidth = checkedRect.Width / 4 * fSize / TsizeInBytes;
                         int rowCount = checkedRect.Height / 4;
                         for (int r = 0; r < rowCount; r++)
                         {
                             int tempStart = checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * (w / 4 * (fSize / TsizeInBytes));
-                            int dataStart = startIndex + r * tRectWidth;
+                            int dataStart = startIndex + r * (checkedRect.Width / 4 * fSize / TsizeInBytes);
                             Array.Copy(
                                 temp, 
                                 tempStart, 
                                 data, 
                                 dataStart,
-                                tRectWidth);
+                                checkedRect.Width / 4 * fSize / TsizeInBytes);
                         }
                     }
                 }
@@ -227,18 +226,17 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, (IntPtr)pTemp);
                         GL.CheckGLError();
 
-                        int tRectWidth = checkedRect.Width * (fSize / TsizeInBytes);
                         int rowCount = checkedRect.Height;
                         for (int r = 0; r < rowCount; r++)
                         {
                             int tempStart = checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * (w * fSize / TsizeInBytes);
-                            int dataStart = startIndex + r * tRectWidth;
+                            int dataStart = startIndex + r * checkedRect.Width * (fSize / TsizeInBytes);
                             Array.Copy(
                                 temp, 
                                 tempStart, 
                                 data, 
-                                dataStart, 
-                                tRectWidth);
+                                dataStart,
+                                checkedRect.Width * (fSize / TsizeInBytes));
                         }
                     }
                 }
