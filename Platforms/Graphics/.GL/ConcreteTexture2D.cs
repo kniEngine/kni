@@ -190,8 +190,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_glFormat == GLPixelFormat.CompressedTextureFormats)
             {
-                int pixelToT = fSize / TsizeInBytes;
-                int tFullWidth = w / 4 * pixelToT;
+                int tFullWidth = w / 4 * (fSize / TsizeInBytes);
                 T[] temp = new T[h / 4 * tFullWidth];
                 try
                 {
@@ -204,7 +203,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         int tRectWidth = checkedRect.Width / 4 * fSize / TsizeInBytes;
                         for (int r = 0; r < rowCount; r++)
                         {
-                            int tempStart = checkedRect.X / 4 * pixelToT + (checkedRect.Top / 4 + r) * tFullWidth;
+                            int tempStart = checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * tFullWidth;
                             int dataStart = startIndex + r * tRectWidth;
                             Array.Copy(
                                 temp, 
@@ -221,8 +220,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                // we need to convert from our format size to the size of T here
-                int pixelToT = fSize / TsizeInBytes;
                 int tFullWidth = w * fSize / TsizeInBytes;
                 T[] temp = new T[h * tFullWidth];
                 try
@@ -233,10 +230,10 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
 
                         int rowCount = checkedRect.Height;
-                        int tRectWidth = checkedRect.Width * pixelToT;
+                        int tRectWidth = checkedRect.Width * (fSize / TsizeInBytes);
                         for (int r = 0; r < rowCount; r++)
                         {
-                            int tempStart = checkedRect.X * pixelToT + (r + checkedRect.Top) * tFullWidth;
+                            int tempStart = checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * tFullWidth;
                             int dataStart = startIndex + r * tRectWidth;
                             Array.Copy(
                                 temp, 
