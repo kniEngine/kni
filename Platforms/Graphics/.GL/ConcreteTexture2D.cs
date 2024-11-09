@@ -196,7 +196,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
-                    int bytes = w / 4 * h / 4 * fSize;
+                    w = w / 4;
+                    h = h / 4;
+                    int bytes = w * h * fSize;
                     IntPtr pTemp = Marshal.AllocHGlobal(bytes);
                     try
                     {
@@ -204,13 +206,13 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
 
                         IntPtr tempPtr = (IntPtr)pTemp;
-                        tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize;
+                        tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w * fSize;
                         int tRectWidthSize = checkedRect.Width / 4 * fSize;
                         int rowCount = checkedRect.Height / 4;
                         for (int r = 0; r < rowCount; r++)
                         {
                             MemCopyHelper.MemoryCopy(
-                                tempPtr + r * w / 4 * fSize,
+                                tempPtr + r * w * fSize,
                                 dataPtr + r * tRectWidthSize,
                                 tRectWidthSize);
                         }
