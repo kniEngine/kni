@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Utilities;
 using GLPixelFormat = Microsoft.Xna.Platform.Graphics.OpenGL.PixelFormat;
 
 
@@ -107,10 +108,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                 {
-                    T[] temp = new T[(w / 4 * h / 4 * fSize) / TsizeInBytes];
+                    byte[] temp = new byte[w / 4 * h / 4 * fSize];
                     try
                     {
-                        fixed (T* pTemp = &temp[0])
+                        fixed (byte* pTemp = &temp[0])
                         {
                             IntPtr tempPtr = (IntPtr)pTemp;
 
@@ -120,10 +121,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             int rowCount = checkedRect.Height / 4;
                             for (int r = 0; r < rowCount; r++)
                             {
-                                Array.Copy(
-                                    temp, (checkedRect.X / 4 * fSize + r * w / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize) / TsizeInBytes,
-                                    data, (startIndex * TsizeInBytes + r * checkedRect.Width / 4 * fSize) / TsizeInBytes,
-                                    (checkedRect.Width / 4 * fSize) / TsizeInBytes);
+                                MemCopyHelper.MemoryCopy(
+                                    tempPtr + checkedRect.X / 4 * fSize + r * w / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize,
+                                    dataPtr + startIndex * TsizeInBytes + r * checkedRect.Width / 4 * fSize,
+                                    checkedRect.Width / 4 * fSize);
                             }
                         }
                     }
@@ -133,10 +134,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    T[] temp = new T[(w * h * fSize) / TsizeInBytes];
+                    byte[] temp = new byte[w * h * fSize];
                     try
                     {
-                        fixed (T* pTemp = &temp[0])
+                        fixed (byte* pTemp = &temp[0])
                         {
                             IntPtr tempPtr = (IntPtr)pTemp;
 
@@ -146,10 +147,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             int rowCount = checkedRect.Height;
                             for (int r = 0; r < rowCount; r++)
                             {
-                                Array.Copy(
-                                    temp, (checkedRect.X * fSize + r * w * fSize + checkedRect.Top * w * fSize) / TsizeInBytes,
-                                    data, (startIndex * TsizeInBytes + r * checkedRect.Width * fSize) / TsizeInBytes,
-                                    (checkedRect.Width * fSize) / TsizeInBytes);
+                                MemCopyHelper.MemoryCopy(
+                                    tempPtr + checkedRect.X * fSize + r * w * fSize + checkedRect.Top * w * fSize,
+                                    dataPtr + startIndex * TsizeInBytes + r * checkedRect.Width * fSize,
+                                    checkedRect.Width * fSize);
                             }
                         }
                     }
