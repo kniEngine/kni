@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         for (int r = 0; r < rowCount; r++)
                         {
                             Array.Copy(
-                                temp, checkedRect.X / 4 * (fSize / TsizeInBytes) + (checkedRect.Top / 4 + r) * (w / 4 * (fSize / TsizeInBytes)),
+                                temp, (checkedRect.X / 4 * fSize + r * w / 4 * fSize + checkedRect.Top / 4 * w / 4 * fSize) / TsizeInBytes,
                                 data, (startIndex * TsizeInBytes + r * checkedRect.Width / 4 * fSize) / TsizeInBytes,
                                 (checkedRect.Width / 4 * fSize) / TsizeInBytes);
                         }
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         for (int r = 0; r < rowCount; r++)
                         {
                             Array.Copy(
-                                temp, checkedRect.X * (fSize / TsizeInBytes) + (r + checkedRect.Top) * (w * fSize / TsizeInBytes), 
+                                temp, (checkedRect.X * fSize + r * w * fSize + checkedRect.Top * w * fSize) / TsizeInBytes,
                                 data, (startIndex * TsizeInBytes + r * checkedRect.Width * fSize) / TsizeInBytes,
                                 (checkedRect.Width * fSize) / TsizeInBytes);
                         }
