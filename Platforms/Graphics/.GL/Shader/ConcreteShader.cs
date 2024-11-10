@@ -36,6 +36,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, byte[] shaderBytecode)
         {
+            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             _shaderHandle = GL.CreateShader(shaderType);
