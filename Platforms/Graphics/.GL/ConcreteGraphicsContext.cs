@@ -133,7 +133,15 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if the code is not currently running on the current thread.</exception>
         internal abstract void EnsureContextCurrentThread();
-        public abstract void BindSharedContext();
+        /// <returns>
+        /// <c>true</c> if the SharedContext is succesfully bound to the thread; 
+        /// <c>false</c> if MainContext is allready bound to the current thread.
+        /// </returns>
+        /// <remarks>
+        /// Call <see cref="UnbindSharedContext"/> immediately after completing all Context operations.
+        /// Nested calls to binding or unbinding methods are not supported.
+        /// </remarks>
+        public abstract bool BindSharedContext();
         public abstract void UnbindSharedContext();
 
 
