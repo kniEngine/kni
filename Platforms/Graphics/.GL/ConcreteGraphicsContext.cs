@@ -133,8 +133,8 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if the code is not currently running on the current thread.</exception>
         internal abstract void EnsureContextCurrentThread();
-        public abstract void BindDisposeContext();
-        public abstract void UnbindDisposeContext();
+        public abstract void BindSharedContext();
+        public abstract void UnbindSharedContext();
 
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
