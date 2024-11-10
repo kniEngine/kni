@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteGraphicsContext(GraphicsContext context)
             : base(context)
         {
-            _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+            _glContextCurrentThreadId = base.ManagedThreadId();
 
             iOSGameWindow gameWindow = iOSGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             iOSGameViewController viewController = gameWindow.ViewController;
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
         
         internal override void EnsureContextCurrentThread()
         {
-            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             throw new InvalidOperationException("Operation not called on main thread.");
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void BindDisposeContext()
         {
-            if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             OpenGLES.EAGLContext.SetCurrentContext(_glSharedContext);
@@ -87,7 +87,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void UnbindDisposeContext()
         {
-            if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             OpenGLES.EAGLContext.SetCurrentContext(null);

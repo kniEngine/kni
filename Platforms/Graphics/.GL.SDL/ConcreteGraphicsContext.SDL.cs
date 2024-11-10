@@ -58,12 +58,12 @@ namespace Microsoft.Xna.Platform.Graphics
         public void MakeCurrent(IntPtr winHandle)
         {
             SDL.OpenGL.MakeCurrent(winHandle, _glContext);
-            _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+            _glContextCurrentThreadId = base.ManagedThreadId();
         }
         
         internal override void EnsureContextCurrentThread()
         {
-            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             throw new InvalidOperationException("Operation not called on main thread.");
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void BindDisposeContext()
         {
-            if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             Sdl.Current.OpenGL.MakeCurrent(this._glSharedContextWindowHandle, this._glSharedContext);
@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void UnbindDisposeContext()
         {
-            if (Thread.CurrentThread.ManagedThreadId == _glContextCurrentThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             Sdl.Current.OpenGL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
