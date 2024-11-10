@@ -119,6 +119,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 this._drawBuffers[i] = (DrawBufferMode)(DrawBufferMode.ColorAttachment0 + i);
         }
 
+        protected int ManagedThreadId()
+        {
+#if NET6_0_OR_GREATER || NETSTANDARD2_0
+            return Environment.CurrentManagedThreadId;
+#else
+            return System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+        }
+
         /// <summary>
         /// Throws an exception if the code is not currently running on the current thread.
         /// </summary>

@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, cgd.EglSurface, cgd.EglSurface, this.EglContext))
                 throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
-            _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+            _glContextCurrentThreadId = base.ManagedThreadId();
 
             // OGL.InitExtensions() must be called while we have a current gl context.
             if (OGL_DROID.Current.Extensions == null)
@@ -158,7 +158,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal override void EnsureContextCurrentThread()
         {
-            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             throw new InvalidOperationException("Operation not called on main thread.");
@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void BindDisposeContext()
         {
-            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
@@ -179,7 +179,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void UnbindDisposeContext()
         {
-            if (_glContextCurrentThreadId == Thread.CurrentThread.ManagedThreadId)
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
             var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if CARDBOARD
                 // Cardboard: EglSurface and EglContext was created by GLSurfaceView.
-                _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+                _glContextCurrentThreadId = base.ManagedThreadId();
 #else
                 cgd.GLCreateSurface();
 
@@ -233,7 +233,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     throw new Exception("Could not make EGL current" + GL.GetEglErrorAsString());
                 }
-                _glContextCurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+                _glContextCurrentThreadId = base.ManagedThreadId();
 #endif
 
                 // Update BackBuffer bounds
