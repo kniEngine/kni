@@ -254,7 +254,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var contextStrategy = ((IPlatformGraphicsContext)this.GraphicsDeviceStrategy.MainContext).Strategy;
 
-            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
@@ -276,7 +276,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
 
             base.Dispose(disposing);

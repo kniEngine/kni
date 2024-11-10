@@ -448,7 +448,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
         {
-            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
@@ -473,7 +473,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
@@ -504,7 +504,7 @@ namespace Microsoft.Xna.Platform.Graphics
             
             if (_glTexture > 0)
             {
-                _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+                _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
                 try
                 {
                     var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
@@ -514,7 +514,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 finally
                 {
-                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
                 }
             }
             _glTexture = -1;

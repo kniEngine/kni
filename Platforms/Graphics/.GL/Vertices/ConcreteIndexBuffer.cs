@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 if (GraphicsDevice != null && !GraphicsDevice.IsDisposed)
                 {
-                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
+                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
                     try
                     {
                         var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     finally
                     {
-                        _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
+                        _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
                     }
                 }
             }

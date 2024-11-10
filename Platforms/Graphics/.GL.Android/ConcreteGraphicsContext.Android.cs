@@ -164,10 +164,10 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new InvalidOperationException("Operation not called on main thread.");
         }
 
-        public override void BindDisposeContext()
+        public override bool BindSharedContext()
         {
             if (_glContextCurrentThreadId == base.ManagedThreadId())
-                return;
+                return false;
 
             var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
             var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
@@ -175,9 +175,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
                 throw new Exception("Could not Bind DisposeContext" + GL.GetEglErrorAsString());
+
+            return true;
         }
 
-        public override void UnbindDisposeContext()
+        public override void UnbindSharedContext()
         {
             if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;

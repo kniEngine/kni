@@ -77,15 +77,17 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new InvalidOperationException("Operation not called on main thread.");
         }
 
-        public override void BindDisposeContext()
+        public override bool BindSharedContext()
         {
             if (_glContextCurrentThreadId == base.ManagedThreadId())
-                return;
+                return false;
 
             OpenGLES.EAGLContext.SetCurrentContext(_glSharedContext);
+
+            return true;
         }
 
-        public override void UnbindDisposeContext()
+        public override void UnbindSharedContext()
         {
             if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
