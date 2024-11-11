@@ -136,62 +136,19 @@ namespace Microsoft.Xna.Platform.Graphics
         internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
             //contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            if (multiSampleCount > 0)
             {
-                WebGLRenderbufferInternalFormat colorInternalFormat = WebGLRenderbufferInternalFormat.RGBA4;
-                bool EXT_sRGB = GL.GetExtension("EXT_sRGB");
-                if (EXT_sRGB)
-                    colorInternalFormat = WebGLRenderbufferInternalFormat.SRGB8_ALPHA8_EXT;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                renderTargetGL.GLColorBuffer = GL.CreateRenderbuffer();
-                GL.CheckGLError();
-                GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
-                GL.CheckGLError();
                 if (multiSampleCount > 0)
                 {
-                    /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, colorInternalFormat, width, height);
+                    WebGLRenderbufferInternalFormat colorInternalFormat = WebGLRenderbufferInternalFormat.RGBA4;
+                    bool EXT_sRGB = GL.GetExtension("EXT_sRGB");
+                    if (EXT_sRGB)
+                        colorInternalFormat = WebGLRenderbufferInternalFormat.SRGB8_ALPHA8_EXT;
+
+                    renderTargetGL.GLColorBuffer = GL.CreateRenderbuffer();
                     GL.CheckGLError();
-                }
-            }
-
-            if (preferredDepthFormat != DepthFormat.None)
-            {
-                WebGLRenderbufferInternalFormat depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
-                WebGLRenderbufferInternalFormat stencilInternalFormat = (WebGLRenderbufferInternalFormat)0;
-                switch (preferredDepthFormat)
-                {
-                    case DepthFormat.None:
-                        break;
-
-                    case DepthFormat.Depth16:
-                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
-                        break;
-
-                    case DepthFormat.Depth24:
-                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
-                        break;
-
-                    case DepthFormat.Depth24Stencil8:
-                        depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_STENCIL;
-                        break;
-
-                    default:
-                        throw new InvalidOperationException("preferredDepthFormat");
-                }
-
-                if (depthInternalFormat != 0)
-                {
-                    renderTargetGL.GLDepthBuffer = GL.CreateRenderbuffer();
-                    GL.CheckGLError();
-                    GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
+                    GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
                     GL.CheckGLError();
                     if (multiSampleCount > 0)
                     {
@@ -200,17 +157,60 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     else
                     {
-                        GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
+                        GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, colorInternalFormat, width, height);
                         GL.CheckGLError();
                     }
+                }
 
-                    if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
+                if (preferredDepthFormat != DepthFormat.None)
+                {
+                    WebGLRenderbufferInternalFormat depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
+                    WebGLRenderbufferInternalFormat stencilInternalFormat = (WebGLRenderbufferInternalFormat)0;
+                    switch (preferredDepthFormat)
                     {
-                        renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
+                        case DepthFormat.None:
+                            break;
+
+                        case DepthFormat.Depth16:
+                            depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
+                            break;
+
+                        case DepthFormat.Depth24:
+                            depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
+                            break;
+
+                        case DepthFormat.Depth24Stencil8:
+                            depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_STENCIL;
+                            break;
+
+                        default:
+                            throw new InvalidOperationException("preferredDepthFormat");
+                    }
+
+                    if (depthInternalFormat != 0)
+                    {
+                        renderTargetGL.GLDepthBuffer = GL.CreateRenderbuffer();
+                        GL.CheckGLError();
+                        GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
+                        GL.CheckGLError();
+                        if (multiSampleCount > 0)
+                        {
+                            /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
+                            throw new NotImplementedException();
+                        }
+                        else
+                        {
+                            GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
+                            GL.CheckGLError();
+                        }
+
+                        if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
+                        {
+                            renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
+                        }
                     }
                 }
             }
-
             return;
         }
 
