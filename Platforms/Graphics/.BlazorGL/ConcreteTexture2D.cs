@@ -79,12 +79,13 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 GL.CompressedTexImage2D(
                         WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, data, startIndex, elementCount);
+                GL.CheckGLError();
             }
             else
             {
                 GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data);
+                GL.CheckGLError();
             }
-            GL.CheckGLError();
 
             //GL.Finish();
             //GL.CheckGLError();
@@ -116,8 +117,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.TexSubImage2D(
                     WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
                     _glFormat, _glType, data);
+                GL.CheckGLError();
             }
-            GL.CheckGLError();
 
             //GL.Finish();
             //GL.CheckGLError();
