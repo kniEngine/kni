@@ -52,21 +52,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformConstructIndexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            {
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            Debug.Assert(_ibo == null);
+                Debug.Assert(_ibo == null);
 
-            int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
+                int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
-            _ibo = GL.CreateBuffer();
-            GL.CheckGLError();
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _ibo);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+                _ibo = GL.CreateBuffer();
+                GL.CheckGLError();
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _ibo);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
-            GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                          sizeInBytes, _usageHint);
-            GL.CheckGLError();
+                GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
+                              sizeInBytes, _usageHint);
+                GL.CheckGLError();
+            }
         }
 
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)

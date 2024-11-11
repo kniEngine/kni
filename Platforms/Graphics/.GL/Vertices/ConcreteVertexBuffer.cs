@@ -42,23 +42,24 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformConstructVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
             contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            {
+                Debug.Assert(_vbo == 0);
 
-            Debug.Assert(_vbo == 0);
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                //this._vao = GLExt.Oes.GenVertexArray();
+                //GLExt.Oes.BindVertexArray(this._vao);
+                this._vbo = GL.GenBuffer();
+                GL.CheckGLError();
+                GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
-            //this._vao = GLExt.Oes.GenVertexArray();
-            //GLExt.Oes.BindVertexArray(this._vao);
-            this._vbo = GL.GenBuffer();
-            GL.CheckGLError();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
-
-            GL.BufferData(BufferTarget.ArrayBuffer,
-                          new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,
-                         _usageHint);
-            GL.CheckGLError();
+                GL.BufferData(BufferTarget.ArrayBuffer,
+                              new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,
+                             _usageHint);
+                GL.CheckGLError();
+            }
         }
 
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)

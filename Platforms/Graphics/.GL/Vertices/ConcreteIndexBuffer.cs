@@ -58,22 +58,23 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformConstructIndexBuffer(GraphicsContextStrategy contextStrategy)
         {
             contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            {
+                Debug.Assert(_ibo == 0);
 
-            Debug.Assert(_ibo == 0);
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
-            int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
+                _ibo = GL.GenBuffer();
+                GL.CheckGLError();
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
-            _ibo = GL.GenBuffer();
-            GL.CheckGLError();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
-
-            GL.BufferData(BufferTarget.ElementArrayBuffer,
-                          (IntPtr)sizeInBytes, IntPtr.Zero, _usageHint);
-            GL.CheckGLError();
+                GL.BufferData(BufferTarget.ElementArrayBuffer,
+                              (IntPtr)sizeInBytes, IntPtr.Zero, _usageHint);
+                GL.CheckGLError();
+            }
         }
 
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)

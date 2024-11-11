@@ -36,20 +36,22 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformConstructVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            Debug.Assert(_vbo == null);
+            {
+                Debug.Assert(_vbo == null);
 
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            _vbo = GL.CreateBuffer();
-            GL.CheckGLError();
-            GL.BindBuffer(WebGLBufferType.ARRAY, _vbo);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
+                _vbo = GL.CreateBuffer();
+                GL.CheckGLError();
+                GL.BindBuffer(WebGLBufferType.ARRAY, _vbo);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
-            GL.BufferData(WebGLBufferType.ARRAY,
-                          (this.VertexDeclaration.VertexStride * this.VertexCount),
-                          _usageHint);
-            GL.CheckGLError();
+                GL.BufferData(WebGLBufferType.ARRAY,
+                              (this.VertexDeclaration.VertexStride * this.VertexCount),
+                              _usageHint);
+                GL.CheckGLError();
+            }
         }
 
 
