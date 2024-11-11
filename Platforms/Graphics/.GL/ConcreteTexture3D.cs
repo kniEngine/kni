@@ -113,10 +113,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
                 GL.CheckGLError();
-            }
 
-            if (mipMap)
-                throw new NotImplementedException("Texture3D does not yet support mipmaps.");
+                if (mipMap)
+                    throw new NotImplementedException("Texture3D does not yet support mipmaps.");
+            }
         }
 
 
