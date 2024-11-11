@@ -73,31 +73,33 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
-            Debug.Assert(GLIndexBuffer != null);
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            int elementSizeInByte = sizeof(T);
-            int sizeInBytes = elementSizeInByte * elementCount;
-
-            int bufferSize = IndexCount * base.ElementSizeInBytes;
-
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
-
-            if (options == SetDataOptions.Discard)
             {
-                // By assigning NULL data to the buffer this gives a hint
-                // to the device to discard the previous content.
+                Debug.Assert(GLIndexBuffer != null);
+
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+                int elementSizeInByte = sizeof(T);
+                int sizeInBytes = elementSizeInByte * elementCount;
+
+                int bufferSize = IndexCount * base.ElementSizeInBytes;
+
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+
+                if (options == SetDataOptions.Discard)
+                {
+                    // By assigning NULL data to the buffer this gives a hint
+                    // to the device to discard the previous content.
                     GL.BufferData(
                         WebGLBufferType.ELEMENT_ARRAY,
                         bufferSize,
                         _usageHint);
-            }
+                }
 
-            GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, startIndex, elementCount);
-            GL.CheckGLError();
+                GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, startIndex, elementCount);
+                GL.CheckGLError();
+            }
         }
 
         public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)

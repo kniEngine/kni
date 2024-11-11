@@ -57,42 +57,44 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
-            Debug.Assert(GLVertexBuffer != null);
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            GL.BindBuffer(WebGLBufferType.ARRAY, GLVertexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
-
-            if (options == SetDataOptions.Discard)
             {
-                // By assigning NULL data to the buffer this gives a hint
-                // to the device to discard the previous content.
-                GL.BufferData(
-                    WebGLBufferType.ARRAY,
-                    bufferSize,
-                    _usageHint);
+                Debug.Assert(GLVertexBuffer != null);
+
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+                GL.BindBuffer(WebGLBufferType.ARRAY, GLVertexBuffer);
                 GL.CheckGLError();
-            }
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
-            if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
-            {
-                // there are no gaps so we can copy in one go
-                GL.BufferSubData<T>(WebGLBufferType.ARRAY, offsetInBytes, data, startIndex, elementCount);
-                GL.CheckGLError();
-            }
-            else
-            {
-                // else we must copy each element separately
-                int dstOffset = offsetInBytes;
-
-                for (int i = 0; i < elementCount; i++)
+                if (options == SetDataOptions.Discard)
                 {
-                    GL.BufferSubData<T>(WebGLBufferType.ARRAY, dstOffset, data, startIndex+i, 1);
+                    // By assigning NULL data to the buffer this gives a hint
+                    // to the device to discard the previous content.
+                    GL.BufferData(
+                        WebGLBufferType.ARRAY,
+                        bufferSize,
+                        _usageHint);
                     GL.CheckGLError();
+                }
 
-                    dstOffset += vertexStride;
+                if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
+                {
+                    // there are no gaps so we can copy in one go
+                    GL.BufferSubData<T>(WebGLBufferType.ARRAY, offsetInBytes, data, startIndex, elementCount);
+                    GL.CheckGLError();
+                }
+                else
+                {
+                    // else we must copy each element separately
+                    int dstOffset = offsetInBytes;
+
+                    for (int i = 0; i < elementCount; i++)
+                    {
+                        GL.BufferSubData<T>(WebGLBufferType.ARRAY, dstOffset, data, startIndex+i, 1);
+                        GL.CheckGLError();
+
+                        dstOffset += vertexStride;
+                    }
                 }
             }
         }

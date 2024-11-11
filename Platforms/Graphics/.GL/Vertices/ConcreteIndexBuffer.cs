@@ -80,38 +80,39 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            Debug.Assert(GLIndexBuffer != 0);
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            int elementSizeInByte = sizeof(T);
-            int sizeInBytes = elementSizeInByte * elementCount;
-            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = (IntPtr)pData;
-                dataPtr = dataPtr + startIndex * elementSizeInByte;
+                Debug.Assert(GLIndexBuffer != 0);
 
-                int bufferSize = IndexCount * base.ElementSizeInBytes;
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
-                GL.CheckGLError();
-                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
-
-                if (options == SetDataOptions.Discard)
+                int elementSizeInByte = sizeof(T);
+                int sizeInBytes = elementSizeInByte * elementCount;
+                fixed (T* pData = &data[0])
                 {
-                    // By assigning NULL data to the buffer this gives a hint
-                    // to the device to discard the previous content.
-                    GL.BufferData(
-                        BufferTarget.ElementArrayBuffer,
-                        (IntPtr)bufferSize,
-                        IntPtr.Zero,
-                        _usageHint);
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * elementSizeInByte;
+
+                    int bufferSize = IndexCount * base.ElementSizeInBytes;
+
+                    GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
+                    GL.CheckGLError();
+                    ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+
+                    if (options == SetDataOptions.Discard)
+                    {
+                        // By assigning NULL data to the buffer this gives a hint
+                        // to the device to discard the previous content.
+                        GL.BufferData(
+                            BufferTarget.ElementArrayBuffer,
+                            (IntPtr)bufferSize,
+                            IntPtr.Zero,
+                            _usageHint);
+                        GL.CheckGLError();
+                    }
+
+                    GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)sizeInBytes, dataPtr);
                     GL.CheckGLError();
                 }
-
-                GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)sizeInBytes, dataPtr);
-                GL.CheckGLError();
             }
         }
 
