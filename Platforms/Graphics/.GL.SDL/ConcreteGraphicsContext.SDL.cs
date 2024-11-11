@@ -70,17 +70,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
-        public override bool BindSharedContext()
+        public override void BindDisposeContext()
         {
             if (_glContextCurrentThreadId == base.ManagedThreadId())
-                return false;
+                return;
 
             Sdl.Current.OpenGL.MakeCurrent(this._glSharedContextWindowHandle, this._glSharedContext);
-
-            return true;
         }
 
-        public override void UnbindSharedContext()
+        public override void UnbindDisposeContext()
         {
             if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;

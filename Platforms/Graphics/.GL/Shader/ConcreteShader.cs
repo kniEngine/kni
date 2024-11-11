@@ -149,7 +149,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_shaderHandle != -1)
             {
-                _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+                _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindDisposeContext();
                 try
                 {
                     var GL = _contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 finally
                 {
-                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+                    _contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindDisposeContext();
                 }
             }
 
