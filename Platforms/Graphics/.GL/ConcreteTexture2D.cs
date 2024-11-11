@@ -73,7 +73,8 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -89,7 +90,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                     System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                    if (!isSharedContext)
+                        ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);
                     GL.CheckGLError();
                     GL.BindTexture(TextureTarget.Texture2D, _glTexture);
@@ -111,12 +113,17 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
             }
+            finally
+            {
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+            }
         }
 
         public unsafe void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -129,7 +136,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                     System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                    if (!isSharedContext)
+                        ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);
                     GL.CheckGLError();
                     GL.BindTexture(TextureTarget.Texture2D, _glTexture);
@@ -152,6 +160,10 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
                     }
                 }
+            }
+            finally
+            {
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
