@@ -137,8 +137,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            // Hardcodes format values not defined in nkast.Wasm.Canvas v6.0.4
-
             if (multiSampleCount > 0)
             {
                 WebGLRenderbufferInternalFormat colorInternalFormat = WebGLRenderbufferInternalFormat.RGBA4;

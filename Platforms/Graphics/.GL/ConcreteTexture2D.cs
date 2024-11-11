@@ -101,13 +101,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     GL.CompressedTexImage2D(
                         TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, elementCount * elementSizeInByte, dataPtr);
+                    GL.CheckGLError();
                 }
                 else
                 {
                     GL.TexImage2D(
                         TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0,_glFormat, _glType, dataPtr);
+                    GL.CheckGLError();
                 }
-                GL.CheckGLError();
             }
         }
 
@@ -140,14 +141,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CompressedTexSubImage2D(
                         TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
                         _glInternalFormat, elementCount * elementSizeInByte, dataPtr);
+                    GL.CheckGLError();
                 }
                 else
                 {
                     GL.TexSubImage2D(
                         TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
                         _glFormat, _glType, dataPtr);
+                    GL.CheckGLError();
                 }
-                GL.CheckGLError();
             }
         }
 
