@@ -30,34 +30,36 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void CreateShader(GraphicsContextStrategy contextStrategy, WebGLShaderType shaderType, byte[] shaderBytecode)
         {
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            _shaderHandle = GL.CreateShader(shaderType);
-            GL.CheckGLError();
-            string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
-
-            if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
-            &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL)
             {
-                // GLES 3.00 is required for dFdx/dFdy
-                glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
-            }
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            GL.ShaderSource(_shaderHandle, glslCode);
-            GL.CheckGLError();
-            GL.CompileShader(_shaderHandle);
-            GL.CheckGLError();
-            bool compiled = false;
-            compiled = GL.GetShaderParameter(_shaderHandle, WebGLShaderStatus.COMPILE);
-            GL.CheckGLError();
-            if (compiled != true)
-            {
-                string log = GL.GetShaderInfoLog(_shaderHandle);
-                _shaderHandle.Dispose();
-                _shaderHandle = null;
+                _shaderHandle = GL.CreateShader(shaderType);
+                GL.CheckGLError();
+                string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
 
-                throw new InvalidOperationException("Shader Compilation Failed."
-                    + Environment.NewLine + log);
+                if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
+                &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL)
+                {
+                    // GLES 3.00 is required for dFdx/dFdy
+                    glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
+                }
+
+                GL.ShaderSource(_shaderHandle, glslCode);
+                GL.CheckGLError();
+                GL.CompileShader(_shaderHandle);
+                GL.CheckGLError();
+                bool compiled = false;
+                compiled = GL.GetShaderParameter(_shaderHandle, WebGLShaderStatus.COMPILE);
+                GL.CheckGLError();
+                if (compiled != true)
+                {
+                    string log = GL.GetShaderInfoLog(_shaderHandle);
+                    _shaderHandle.Dispose();
+                    _shaderHandle = null;
+
+                    throw new InvalidOperationException("Shader Compilation Failed."
+                        + Environment.NewLine + log);
+                }
             }
         }
 
