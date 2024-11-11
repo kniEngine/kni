@@ -13,6 +13,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private int _glContextCurrentThreadId = -1;
         OpenGLES.EAGLContext _glDisposeContext;
+        SemaphoreSlim _sharedContextLock = new SemaphoreSlim(1, 1);
+        OpenGLES.EAGLContext _glSharedContext;
 
         internal ConcreteGraphicsContext(GraphicsContext context)
             : base(context)
@@ -33,6 +35,17 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 // Fall back to GLES 2.0
                 _glDisposeContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES2, viewController.View._eaglContext.ShareGroup);
+            }
+
+            // create _glSharedContext for creating GL objects from working threads.
+            try
+            {
+                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES3, viewController.View._eaglContext.ShareGroup);
+            }
+            catch
+            {
+                // Fall back to GLES 2.0
+                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES2, viewController.View._eaglContext.ShareGroup);
             }
 
 
@@ -95,6 +108,26 @@ namespace Microsoft.Xna.Platform.Graphics
             OpenGLES.EAGLContext.SetCurrentContext(null);
         }
 
+        public override bool BindSharedContext()
+        {
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
+                return false;
+
+            _sharedContextLock.Wait();
+            OpenGLES.EAGLContext.SetCurrentContext(_glSharedContext);
+
+            return true;
+        }
+
+        public override void UnbindSharedContext()
+        {
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
+                return;
+
+            OpenGLES.EAGLContext.SetCurrentContext(null);
+            _sharedContextLock.Release();
+        }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -106,6 +139,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     _glDisposeContext.Dispose();
                     _glDisposeContext = null;
+                }
+
+                if (_glSharedContext != null)
+                {
+                    _glSharedContext.Dispose();
+                    _glSharedContext = null;
                 }
             }
 

@@ -136,6 +136,17 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract void BindDisposeContext();
         public abstract void UnbindDisposeContext();
 
+        /// <returns>
+        /// <c>true</c> if the SharedContext is succesfully bound to the thread; 
+        /// <c>false</c> if MainContext is allready bound to the current thread.
+        /// </returns>
+        /// <remarks>
+        /// Call <see cref="UnbindSharedContext"/> immediately after completing all Context operations.
+        /// Nested calls to binding or unbinding methods are not supported.
+        /// </remarks>
+        public abstract bool BindSharedContext();
+        public abstract void UnbindSharedContext();
+
 
         public override void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
         {

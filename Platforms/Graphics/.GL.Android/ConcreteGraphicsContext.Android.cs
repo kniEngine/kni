@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private GLESVersion _glesVersion;
         private EGLContext _eglContext;
         private EGLContext _glDisposeContext;
+        SemaphoreSlim _sharedContextLock = new SemaphoreSlim(1, 1);
+        private EGLContext _glSharedContext;
 
         internal GLESVersion GLesVersion { get { return _glesVersion; } }
         internal EGLContext EglContext { get { return _eglContext; } }
@@ -62,6 +64,11 @@ namespace Microsoft.Xna.Platform.Graphics
             _glDisposeContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, cgd.EglConfig, this.EglContext, attribs);
             if (_glDisposeContext != null && _glDisposeContext != EGL10.EglNoContext)
                     throw new Exception("Could not create _glDisposeContext" + GL.GetEglErrorAsString());
+
+            // create _glDisposeContext for Disposing GL objects from GC Finalizer thread.
+            _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, cgd.EglConfig, this.EglContext, attribs);
+            if (_glSharedContext != null && _glSharedContext != EGL10.EglNoContext)
+                    throw new Exception("Could not create _glSharedContext" + GL.GetEglErrorAsString());
 
 
             // try getting the context version
@@ -189,6 +196,36 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new Exception("Could not Unbind DisposeContext" + GL.GetEglErrorAsString());
         }
 
+        public override bool BindSharedContext()
+        {
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
+                return false;
+
+            var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+            _sharedContextLock.Wait();
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
+                throw new Exception("Could not Bind DisposeContext" + GL.GetEglErrorAsString());
+
+            return true;
+        }
+
+        public override void UnbindSharedContext()
+        {
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
+                return;
+
+            var gd = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
+            var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
+            var GL = adapter.Ogl;
+
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
+                throw new Exception("Could not Unbind DisposeContext" + GL.GetEglErrorAsString());
+            _sharedContextLock.Release();
+        }
+
 
         private void SurfaceView_SurfaceCreated(object sender, EventArgs e)
         {
@@ -282,6 +319,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 //_egl.EglDestroyContext(_eglDisplay, _glDisposeContext);
             }
             _glDisposeContext = null;
+
+            if (_glSharedContext != null)
+            {
+                //_egl.EglDestroyContext(_eglDisplay, _glSharedContext);
+            }
+            _glSharedContext = null;
 
 
             var gds = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;
