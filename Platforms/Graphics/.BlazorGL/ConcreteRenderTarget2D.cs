@@ -117,10 +117,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
             DepthFormat preferredDepthFormat, int multiSampleCount, bool shared)
         {
-            //contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-            {
-                ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, width, height, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
-            }
+            ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, width, height, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
         }
 
 

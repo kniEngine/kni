@@ -135,6 +135,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
+            //contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             if (multiSampleCount > 0)
