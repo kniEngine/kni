@@ -85,7 +85,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 Debug.Assert(GLIndexBuffer != 0);
 
@@ -102,7 +103,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
                     GL.CheckGLError();
-                    ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+                    if (isSharedContext)
+                        ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
                     if (options == SetDataOptions.Discard)
                     {
@@ -119,6 +121,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BufferSubData(BufferTarget.ElementArrayBuffer, (IntPtr)offsetInBytes, (IntPtr)sizeInBytes, dataPtr);
                     GL.CheckGLError();
                 }
+            }
+            finally
+            {
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
