@@ -52,72 +52,78 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformConstructIndexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            {
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            Debug.Assert(_ibo == null);
+                Debug.Assert(_ibo == null);
 
-            int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
+                int sizeInBytes = this.IndexCount * base.ElementSizeInBytes;
 
-            _ibo = GL.CreateBuffer();
-            GL.CheckGLError();
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _ibo);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+                _ibo = GL.CreateBuffer();
+                GL.CheckGLError();
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, _ibo);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
-            GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
-                          sizeInBytes, _usageHint);
-            GL.CheckGLError();
+                GL.BufferData(WebGLBufferType.ELEMENT_ARRAY,
+                              sizeInBytes, _usageHint);
+                GL.CheckGLError();
+            }
         }
 
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, SetDataOptions options)
         {
-            Debug.Assert(GLIndexBuffer != null);
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            int elementSizeInByte = sizeof(T);
-            int sizeInBytes = elementSizeInByte * elementCount;
-
-            int bufferSize = IndexCount * base.ElementSizeInBytes;
-
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
-
-            if (options == SetDataOptions.Discard)
             {
-                // By assigning NULL data to the buffer this gives a hint
-                // to the device to discard the previous content.
+                Debug.Assert(GLIndexBuffer != null);
+
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+                int elementSizeInByte = sizeof(T);
+                int sizeInBytes = elementSizeInByte * elementCount;
+
+                int bufferSize = IndexCount * base.ElementSizeInBytes;
+
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+
+                if (options == SetDataOptions.Discard)
+                {
+                    // By assigning NULL data to the buffer this gives a hint
+                    // to the device to discard the previous content.
                     GL.BufferData(
                         WebGLBufferType.ELEMENT_ARRAY,
                         bufferSize,
                         _usageHint);
-            }
+                }
 
-            GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, startIndex, elementCount);
-            GL.CheckGLError();
+                GL.BufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY, offsetInBytes, data, startIndex, elementCount);
+                GL.CheckGLError();
+            }
         }
 
         public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
-            Debug.Assert(GLIndexBuffer != null);
+            {
+                Debug.Assert(GLIndexBuffer != null);
 
-            // IWebGL2RenderingContext is required.
-            if (this.GraphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
-                throw new NotSupportedException("GetData() on BlazorGL require HiDef profile or higher.");
+                // IWebGL2RenderingContext is required.
+                if (this.GraphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
+                    throw new NotSupportedException("GetData() on BlazorGL require HiDef profile or higher.");
 
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
-            int elementSizeInByte = sizeof(T);
+                int elementSizeInByte = sizeof(T);
 
-            ((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY,
-                offsetInBytes, data, startIndex, elementCount);
+                ((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY,
+                    offsetInBytes, data, startIndex, elementCount);
 
-            GL.CheckGLError();
+                GL.CheckGLError();
+            }
         }
 
         protected override void PlatformGraphicsContextLost()

@@ -46,9 +46,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe void SetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -86,80 +84,43 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            {
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
 #if OPENGL && DESKTOPGL
-            TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
-            // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
-            int fSize = this.Format.GetSize();
-            int w = Math.Max(this.Size >> level, 1);
-            int h = Math.Max(this.Size >> level, 1);
-            int TsizeInBytes = sizeof(T);
+                TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
+                // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
+                int fSize = this.Format.GetSize();
+                int w = Math.Max(this.Size >> level, 1);
+                int h = Math.Max(this.Size >> level, 1);
+                int TsizeInBytes = sizeof(T);
 
-            ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
-            GL.ActiveTexture(TextureUnit.Texture0 + 0);
-            GL.CheckGLError();
-            GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
+                ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                GL.ActiveTexture(TextureUnit.Texture0 + 0);
+                GL.CheckGLError();
+                GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
 
-            fixed (T* pData = &data[0])
-            {
-                IntPtr dataPtr = (IntPtr)pData;
-                dataPtr = dataPtr + startIndex * TsizeInBytes;
-
-                if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                fixed (T* pData = &data[0])
                 {
-                    w = w / 4;
-                    h = h / 4;
-                    int bytes = w * h * fSize;
-                    IntPtr pTemp = Marshal.AllocHGlobal(bytes);
-                    try
-                    {
-                        GL.GetCompressedTexImage(target, level, pTemp);
-                        GL.CheckGLError();
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * TsizeInBytes;
 
-                        IntPtr tempPtr = (IntPtr)pTemp;
-                        tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w * fSize;
-                        int fWidthSize = w * fSize;
-                        int tRectWidthSize = checkedRect.Width / 4 * fSize;
-                        int rowCount = checkedRect.Height / 4;
-                        for (int r = 0; r < rowCount; r++)
-                        {
-                            MemCopyHelper.MemoryCopy(
-                                tempPtr + r * fWidthSize,
-                                dataPtr + r * tRectWidthSize,
-                                tRectWidthSize);
-                        }
-                    }
-                    finally
+                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
                     {
-                        Marshal.FreeHGlobal(pTemp);
-                    }
-                }
-                else
-                {
-                    if (level == 0
-                    && checkedRect.X == 0 && checkedRect.Y == 0
-                    && checkedRect.Width == this.Size && checkedRect.Height == this.Size
-                    && startIndex == 0 && elementCount == data.Length)
-                    {
-                        GL.GetTexImage(target, level, _glFormat, _glType, dataPtr);
-                        GL.CheckGLError();
-                    }
-                    else
-                    {
+                        w = w / 4;
+                        h = h / 4;
                         int bytes = w * h * fSize;
                         IntPtr pTemp = Marshal.AllocHGlobal(bytes);
                         try
                         {
-                            GL.GetTexImage(target, level, _glFormat, _glType, pTemp);
+                            GL.GetCompressedTexImage(target, level, pTemp);
                             GL.CheckGLError();
 
                             IntPtr tempPtr = (IntPtr)pTemp;
-                            tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
+                            tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w * fSize;
                             int fWidthSize = w * fSize;
-                            int tRectWidthSize = checkedRect.Width * fSize;
-                            int rowCount = checkedRect.Height;
+                            int tRectWidthSize = checkedRect.Width / 4 * fSize;
+                            int rowCount = checkedRect.Height / 4;
                             for (int r = 0; r < rowCount; r++)
                             {
                                 MemCopyHelper.MemoryCopy(
@@ -173,11 +134,49 @@ namespace Microsoft.Xna.Platform.Graphics
                             Marshal.FreeHGlobal(pTemp);
                         }
                     }
+                    else
+                    {
+                        if (level == 0
+                        && checkedRect.X == 0 && checkedRect.Y == 0
+                        && checkedRect.Width == this.Size && checkedRect.Height == this.Size
+                        && startIndex == 0 && elementCount == data.Length)
+                        {
+                            GL.GetTexImage(target, level, _glFormat, _glType, dataPtr);
+                            GL.CheckGLError();
+                        }
+                        else
+                        {
+                            int bytes = w * h * fSize;
+                            IntPtr pTemp = Marshal.AllocHGlobal(bytes);
+                            try
+                            {
+                                GL.GetTexImage(target, level, _glFormat, _glType, pTemp);
+                                GL.CheckGLError();
+
+                                IntPtr tempPtr = (IntPtr)pTemp;
+                                tempPtr = tempPtr + checkedRect.X * fSize + checkedRect.Top * w * fSize;
+                                int fWidthSize = w * fSize;
+                                int tRectWidthSize = checkedRect.Width * fSize;
+                                int rowCount = checkedRect.Height;
+                                for (int r = 0; r < rowCount; r++)
+                                {
+                                    MemCopyHelper.MemoryCopy(
+                                        tempPtr + r * fWidthSize,
+                                        dataPtr + r * tRectWidthSize,
+                                        tRectWidthSize);
+                                }
+                            }
+                            finally
+                            {
+                                Marshal.FreeHGlobal(pTemp);
+                            }
+                        }
+                    }
                 }
-            }
 #else
-            throw new NotImplementedException();
+                throw new NotImplementedException();
 #endif
+            }
         }
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)

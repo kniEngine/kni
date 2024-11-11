@@ -32,52 +32,53 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            Debug.Assert(GLVertexBuffer != 0);
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            int elementSizeInBytes = sizeof(T);
-            int sizeInBytes = elementCount * elementSizeInBytes;
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
-
-            IntPtr srcPtr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
-            GL.CheckGLError();
-            try
             {
-                srcPtr = srcPtr + offsetInBytes;
+                Debug.Assert(GLVertexBuffer != 0);
 
-                fixed (T* pData = &data[0])
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
+                int elementSizeInBytes = sizeof(T);
+                int sizeInBytes = elementCount * elementSizeInBytes;
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
+
+                IntPtr srcPtr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.ReadOnly);
+                GL.CheckGLError();
+                try
                 {
-                    IntPtr dataPtr = (IntPtr)pData;
-                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
+                    srcPtr = srcPtr + offsetInBytes;
 
-                    if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
+                    fixed (T* pData = &data[0])
                     {
-                        MemCopyHelper.MemoryCopy(
-                           srcPtr,
-                           dataPtr,
-                           sizeInBytes);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < elementCount; i++)
+                        IntPtr dataPtr = (IntPtr)pData;
+                        dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                        if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
                         {
                             MemCopyHelper.MemoryCopy(
-                               srcPtr + i * vertexStride,
-                               dataPtr + i * elementSizeInBytes,
-                               elementSizeInBytes);
+                               srcPtr,
+                               dataPtr,
+                               sizeInBytes);
+                        }
+                        else
+                        {
+                            for (int i = 0; i < elementCount; i++)
+                            {
+                                MemCopyHelper.MemoryCopy(
+                                   srcPtr + i * vertexStride,
+                                   dataPtr + i * elementSizeInBytes,
+                                   elementSizeInBytes);
+                            }
                         }
                     }
                 }
-            }
-            finally
-            {
-                GL.UnmapBuffer(BufferTarget.ArrayBuffer);
-                GL.CheckGLError();
+                finally
+                {
+                    GL.UnmapBuffer(BufferTarget.ArrayBuffer);
+                    GL.CheckGLError();
+                }
             }
         }
     }

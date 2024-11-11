@@ -37,45 +37,46 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, byte[] shaderBytecode)
         {
             contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            _shaderHandle = GL.CreateShader(shaderType);
-            GL.CheckGLError();
-
-            if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
-            &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES)
             {
-                string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
-                // GLES 3.00 is required for gl_FragData
-                glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
-                shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glslCode);
-            }
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            GL.ShaderSource(_shaderHandle, shaderBytecode);
-            GL.CheckGLError();
-            GL.CompileShader(_shaderHandle);
-            GL.CheckGLError();
-            int compiled = 0;
-            GL.GetShader(_shaderHandle, ShaderParameter.CompileStatus, out compiled);
-            GL.CheckGLError();
-            if (compiled != (int)Bool.True)
-            {
-                string log = GL.GetShaderInfoLog(_shaderHandle);
-                Debug.WriteLine(log);
+                _shaderHandle = GL.CreateShader(shaderType);
+                GL.CheckGLError();
 
-                if (!GraphicsDevice.IsDisposed)
+                if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
+                &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES)
                 {
-                    if (GL.IsShader(_shaderHandle))
-                    {
-                        GL.DeleteShader(_shaderHandle);
-                        GL.CheckGLError();
-                    }
+                    string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+                    // GLES 3.00 is required for gl_FragData
+                    glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
+                    shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glslCode);
                 }
-                _shaderHandle = -1;
 
-                throw new InvalidOperationException("Shader Compilation Failed."
-                    + Environment.NewLine + log);
+                GL.ShaderSource(_shaderHandle, shaderBytecode);
+                GL.CheckGLError();
+                GL.CompileShader(_shaderHandle);
+                GL.CheckGLError();
+                int compiled = 0;
+                GL.GetShader(_shaderHandle, ShaderParameter.CompileStatus, out compiled);
+                GL.CheckGLError();
+                if (compiled != (int)Bool.True)
+                {
+                    string log = GL.GetShaderInfoLog(_shaderHandle);
+                    Debug.WriteLine(log);
+
+                    if (!GraphicsDevice.IsDisposed)
+                    {
+                        if (GL.IsShader(_shaderHandle))
+                        {
+                            GL.DeleteShader(_shaderHandle);
+                            GL.CheckGLError();
+                        }
+                    }
+                    _shaderHandle = -1;
+
+                    throw new InvalidOperationException("Shader Compilation Failed."
+                        + Environment.NewLine + log);
+                }
             }
         }
 

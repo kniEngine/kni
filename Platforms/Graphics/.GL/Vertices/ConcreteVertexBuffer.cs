@@ -42,73 +42,75 @@ namespace Microsoft.Xna.Platform.Graphics
         internal void PlatformConstructVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
             contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            {
+                Debug.Assert(_vbo == 0);
 
-            Debug.Assert(_vbo == 0);
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                //this._vao = GLExt.Oes.GenVertexArray();
+                //GLExt.Oes.BindVertexArray(this._vao);
+                this._vbo = GL.GenBuffer();
+                GL.CheckGLError();
+                GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
-            //this._vao = GLExt.Oes.GenVertexArray();
-            //GLExt.Oes.BindVertexArray(this._vao);
-            this._vbo = GL.GenBuffer();
-            GL.CheckGLError();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
-
-            GL.BufferData(BufferTarget.ArrayBuffer,
-                          new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,
-                         _usageHint);
-            GL.CheckGLError();
+                GL.BufferData(BufferTarget.ArrayBuffer,
+                              new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,
+                             _usageHint);
+                GL.CheckGLError();
+            }
         }
 
         public unsafe override void SetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride, SetDataOptions options, int bufferSize, int elementSizeInBytes)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            Debug.Assert(GLVertexBuffer != 0);
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
-
-            if (options == SetDataOptions.Discard)
             {
-                // By assigning NULL data to the buffer this gives a hint
-                // to the device to discard the previous content.
-                GL.BufferData(
-                    BufferTarget.ArrayBuffer,
-                    (IntPtr)bufferSize,
-                    IntPtr.Zero,
-                    _usageHint);
+                Debug.Assert(GLVertexBuffer != 0);
+
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, GLVertexBuffer);
                 GL.CheckGLError();
-            }
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
-            fixed (T* pData = &data[0])
-            {
-                IntPtr dataPtr = (IntPtr)pData;
-                dataPtr = dataPtr + startIndex * elementSizeInBytes;
-
-                if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
+                if (options == SetDataOptions.Discard)
                 {
-                    // there are no gaps so we can copy in one go
-                    GL.BufferSubData(BufferTarget.ArrayBuffer, 
-                        (IntPtr)offsetInBytes,
-                        (IntPtr)(elementSizeInBytes * elementCount),
-                        dataPtr);
+                    // By assigning NULL data to the buffer this gives a hint
+                    // to the device to discard the previous content.
+                    GL.BufferData(
+                        BufferTarget.ArrayBuffer,
+                        (IntPtr)bufferSize,
+                        IntPtr.Zero,
+                        _usageHint);
                     GL.CheckGLError();
                 }
-                else
+
+                fixed (T* pData = &data[0])
                 {
-                    // else we must copy each element separately
-                    for (int i = 0; i < elementCount; i++)
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                    if (elementSizeInBytes == vertexStride || elementSizeInBytes % vertexStride == 0)
                     {
-                        GL.BufferSubData(BufferTarget.ArrayBuffer,
-                            (IntPtr)offsetInBytes + i*vertexStride,
-                            (IntPtr)elementSizeInBytes,
-                            dataPtr + i*elementSizeInBytes);
+                        // there are no gaps so we can copy in one go
+                        GL.BufferSubData(BufferTarget.ArrayBuffer, 
+                            (IntPtr)offsetInBytes,
+                            (IntPtr)(elementSizeInBytes * elementCount),
+                            dataPtr);
                         GL.CheckGLError();
+                    }
+                    else
+                    {
+                        // else we must copy each element separately
+                        for (int i = 0; i < elementCount; i++)
+                        {
+                            GL.BufferSubData(BufferTarget.ArrayBuffer,
+                                (IntPtr)offsetInBytes + i*vertexStride,
+                                (IntPtr)elementSizeInBytes,
+                                dataPtr + i*elementSizeInBytes);
+                            GL.CheckGLError();
+                        }
                     }
                 }
             }

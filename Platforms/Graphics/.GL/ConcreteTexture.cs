@@ -327,122 +327,124 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            if (multiSampleCount > 0)
+            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
             {
-                RenderbufferStorage colorInternalFormat = RenderbufferStorage.Rgba8;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
-                GL.CheckGLError();
-                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
-                GL.CheckGLError();
                 if (multiSampleCount > 0)
                 {
-                    System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
-                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
-                    GL.CheckGLError();
-                }
-                else
-                {
-                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, colorInternalFormat, width, height);
-                    GL.CheckGLError();
-                }
-            }
+                    RenderbufferStorage colorInternalFormat = RenderbufferStorage.Rgba8;
 
-            if (preferredDepthFormat != DepthFormat.None)
-            {
-                RenderbufferStorage depthInternalFormat = RenderbufferStorage.DepthComponent16;
-                RenderbufferStorage stencilInternalFormat = (RenderbufferStorage)0;
-                switch (preferredDepthFormat)
-                {
-                    case DepthFormat.None:
-                        break;
+                    renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
+                    GL.CheckGLError();
+                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
+                    GL.CheckGLError();
+                    if (multiSampleCount > 0)
+                    {
+                        System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
+                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, colorInternalFormat, width, height);
+                        GL.CheckGLError();
+                    }
+                }
 
-                    case DepthFormat.Depth16:
-                        depthInternalFormat = RenderbufferStorage.DepthComponent16;
-                        break;
+                if (preferredDepthFormat != DepthFormat.None)
+                {
+                    RenderbufferStorage depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                    RenderbufferStorage stencilInternalFormat = (RenderbufferStorage)0;
+                    switch (preferredDepthFormat)
+                    {
+                        case DepthFormat.None:
+                            break;
+
+                        case DepthFormat.Depth16:
+                            depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                            break;
 
 #if GLES
-                    case DepthFormat.Depth24:
-                        if (contextStrategy.Capabilities.SupportsDepth24)
-                            depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
-                        else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
-                            depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
-                        else
-                            depthInternalFormat = RenderbufferStorage.DepthComponent16;
-                        break;
-
-                    case DepthFormat.Depth24Stencil8:
-                        if (contextStrategy.Capabilities.SupportsPackedDepthStencil)
-                            depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
-                        else
-                        {
+                        case DepthFormat.Depth24:
                             if (contextStrategy.Capabilities.SupportsDepth24)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
                             else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                             else
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16;
-                            stencilInternalFormat = RenderbufferStorage.StencilIndex8;
-                        }
-                        break;
+                            break;
 
-#else
-                    case DepthFormat.Depth24:
-                        depthInternalFormat = RenderbufferStorage.DepthComponent24;
-                        break;
-
-                    case DepthFormat.Depth24Stencil8:
-                        depthInternalFormat = RenderbufferStorage.Depth24Stencil8;
-                        break;
-#endif
-
-                    default:
-                        throw new InvalidOperationException("preferredDepthFormat");
-                }
-
-                if (depthInternalFormat != 0)
-                {
-                    renderTargetGL.GLDepthBuffer = GL.GenRenderbuffer();
-                    GL.CheckGLError();
-                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
-                    GL.CheckGLError();
-                    if (multiSampleCount > 0)
-                    {
-                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, depthInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
-                    else
-                    {
-                        GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
-                    if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
-                    {
-                        renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
-                        if (stencilInternalFormat != 0)
-                        {
-                            renderTargetGL.GLStencilBuffer = GL.GenRenderbuffer();
-                            GL.CheckGLError();
-                            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
-                            GL.CheckGLError();
-                            if (multiSampleCount > 0)
-                            {
-                                System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
-                                GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, stencilInternalFormat, width, height);
-                                GL.CheckGLError();
-                            }
+                        case DepthFormat.Depth24Stencil8:
+                            if (contextStrategy.Capabilities.SupportsPackedDepthStencil)
+                                depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
                             else
                             {
-                                GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
+                                if (contextStrategy.Capabilities.SupportsDepth24)
+                                    depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                                else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
+                                    depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
+                                else
+                                    depthInternalFormat = RenderbufferStorage.DepthComponent16;
+                                stencilInternalFormat = RenderbufferStorage.StencilIndex8;
+                            }
+                            break;
+
+#else
+                        case DepthFormat.Depth24:
+                            depthInternalFormat = RenderbufferStorage.DepthComponent24;
+                            break;
+
+                        case DepthFormat.Depth24Stencil8:
+                            depthInternalFormat = RenderbufferStorage.Depth24Stencil8;
+                            break;
+#endif
+
+                        default:
+                            throw new InvalidOperationException("preferredDepthFormat");
+                    }
+
+                    if (depthInternalFormat != 0)
+                    {
+                        renderTargetGL.GLDepthBuffer = GL.GenRenderbuffer();
+                        GL.CheckGLError();
+                        GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
+                        GL.CheckGLError();
+                        if (multiSampleCount > 0)
+                        {
+                            GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, depthInternalFormat, width, height);
+                            GL.CheckGLError();
+                        }
+                        else
+                        {
+                            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, depthInternalFormat, width, height);
+                            GL.CheckGLError();
+                        }
+                        if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
+                        {
+                            renderTargetGL.GLStencilBuffer = renderTargetGL.GLDepthBuffer;
+                            if (stencilInternalFormat != 0)
+                            {
+                                renderTargetGL.GLStencilBuffer = GL.GenRenderbuffer();
                                 GL.CheckGLError();
+                                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
+                                GL.CheckGLError();
+                                if (multiSampleCount > 0)
+                                {
+                                    System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
+                                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, stencilInternalFormat, width, height);
+                                    GL.CheckGLError();
+                                }
+                                else
+                                {
+                                    GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, stencilInternalFormat, width, height);
+                                    GL.CheckGLError();
+                                }
                             }
                         }
                     }
                 }
             }
-
             return;
         }
 
