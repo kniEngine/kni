@@ -41,7 +41,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformConstructVertexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 Debug.Assert(_vbo == 0);
 
@@ -53,12 +54,17 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
                 GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
                 GL.CheckGLError();
-                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
+                if (!isSharedContext)
+                    ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
 
                 GL.BufferData(BufferTarget.ArrayBuffer,
                               new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,
                              _usageHint);
                 GL.CheckGLError();
+            }
+            finally
+            {
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 

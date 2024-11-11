@@ -57,7 +57,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void PlatformConstructIndexBuffer(GraphicsContextStrategy contextStrategy)
         {
-            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 Debug.Assert(_ibo == 0);
 
@@ -69,11 +70,16 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
                 GL.CheckGLError();
-                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+                if (!isSharedContext)
+                    ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
                 GL.BufferData(BufferTarget.ElementArrayBuffer,
                               (IntPtr)sizeInBytes, IntPtr.Zero, _usageHint);
                 GL.CheckGLError();
+            }
+            finally
+            {
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
