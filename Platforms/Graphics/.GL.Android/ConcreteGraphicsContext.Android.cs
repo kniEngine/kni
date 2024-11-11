@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private GLESVersion _glesVersion;
         private EGLContext _eglContext;
-        private EGLContext _glSharedContext;
+        private EGLContext _glDisposeContext;
 
         internal GLESVersion GLesVersion { get { return _glesVersion; } }
         internal EGLContext EglContext { get { return _eglContext; } }
@@ -60,8 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // create _glSharedContext for Disposing
 
             int[] attribs = this.GLesVersion.GetAttributes();
-            _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, cgd.EglConfig, this.EglContext, attribs);
-            if (_glSharedContext != null && _glSharedContext != EGL10.EglNoContext)
+            _glDisposeContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, cgd.EglConfig, this.EglContext, attribs);
+            if (_glDisposeContext != null && _glDisposeContext != EGL10.EglNoContext)
                     throw new Exception("Could not create _glSharedContext" + GL.GetEglErrorAsString());
 
 
@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var adapter = ((IPlatformGraphicsAdapter)gd.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             var GL = adapter.Ogl;
 
-            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
+            if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glDisposeContext))
                 throw new Exception("Could not Bind DisposeContext" + GL.GetEglErrorAsString());
         }
 
@@ -278,11 +278,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            if (_glSharedContext != null)
+            if (_glDisposeContext != null)
             {
                 //_egl.EglDestroyContext(_eglDisplay, _glSharedContext);
             }
-            _glSharedContext = null;
+            _glDisposeContext = null;
 
 
             var gds = ((IPlatformGraphicsContext)this.Context).DeviceStrategy;

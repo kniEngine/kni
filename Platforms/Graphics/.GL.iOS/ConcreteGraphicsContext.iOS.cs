@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsContext : ConcreteGraphicsContextGL
     {
         private int _glContextCurrentThreadId = -1;
-        OpenGLES.EAGLContext _glSharedContext;
+        OpenGLES.EAGLContext _glDisposeContext;
 
         internal ConcreteGraphicsContext(GraphicsContext context)
             : base(context)
@@ -25,12 +25,12 @@ namespace Microsoft.Xna.Platform.Graphics
             
             try
             {
-                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES3, viewController.View._eaglContext.ShareGroup);
+                _glDisposeContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES3, viewController.View._eaglContext.ShareGroup);
             }
             catch
             {
                 // Fall back to GLES 2.0
-                _glSharedContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES2, viewController.View._eaglContext.ShareGroup);
+                _glDisposeContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES2, viewController.View._eaglContext.ShareGroup);
             }
 
 
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
-            OpenGLES.EAGLContext.SetCurrentContext(_glSharedContext);
+            OpenGLES.EAGLContext.SetCurrentContext(_glDisposeContext);
         }
 
         public override void UnbindDisposeContext()
@@ -100,10 +100,10 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 ThrowIfDisposed();
 
-                if (_glSharedContext != null)
+                if (_glDisposeContext != null)
                 {
-                    _glSharedContext.Dispose();
-                    _glSharedContext = null;
+                    _glDisposeContext.Dispose();
+                    _glDisposeContext = null;
                 }
             }
 
