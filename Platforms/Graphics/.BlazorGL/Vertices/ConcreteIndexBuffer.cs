@@ -104,24 +104,26 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
-            Debug.Assert(GLIndexBuffer != null);
+            {
+                Debug.Assert(GLIndexBuffer != null);
 
-            // IWebGL2RenderingContext is required.
-            if (this.GraphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
-                throw new NotSupportedException("GetData() on BlazorGL require HiDef profile or higher.");
+                // IWebGL2RenderingContext is required.
+                if (this.GraphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
+                    throw new NotSupportedException("GetData() on BlazorGL require HiDef profile or higher.");
 
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+                GL.BindBuffer(WebGLBufferType.ELEMENT_ARRAY, GLIndexBuffer);
+                GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
 
-            int elementSizeInByte = sizeof(T);
+                int elementSizeInByte = sizeof(T);
 
-            ((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY,
-                offsetInBytes, data, startIndex, elementCount);
+                ((IWebGL2RenderingContext)GL).GetBufferSubData<T>(WebGLBufferType.ELEMENT_ARRAY,
+                    offsetInBytes, data, startIndex, elementCount);
 
-            GL.CheckGLError();
+                GL.CheckGLError();
+            }
         }
 
         protected override void PlatformGraphicsContextLost()

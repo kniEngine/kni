@@ -33,39 +33,40 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe override void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount)
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            Debug.Assert(GLIndexBuffer != 0);
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            int elementSizeInBytes = sizeof(T);
-            int sizeInBytes = elementCount * elementSizeInBytes;
-
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
-            GL.CheckGLError();
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
-
-            IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
-            GL.CheckGLError();
-            try
             {
-                srcPtr = srcPtr + offsetInBytes;
+                Debug.Assert(GLIndexBuffer != 0);
 
-                fixed (T* pData = &data[0])
-                {
-                    IntPtr dataPtr = (IntPtr)pData;
-                    dataPtr = dataPtr + startIndex * elementSizeInBytes;
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                    MemCopyHelper.MemoryCopy(
-                        srcPtr,
-                        dataPtr,
-                        sizeInBytes);
-                }
-            }
-            finally
-            {
-                GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
+                int elementSizeInBytes = sizeof(T);
+                int sizeInBytes = elementCount * elementSizeInBytes;
+
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, GLIndexBuffer);
                 GL.CheckGLError();
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+
+                IntPtr srcPtr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.ReadOnly);
+                GL.CheckGLError();
+                try
+                {
+                    srcPtr = srcPtr + offsetInBytes;
+
+                    fixed (T* pData = &data[0])
+                    {
+                        IntPtr dataPtr = (IntPtr)pData;
+                        dataPtr = dataPtr + startIndex * elementSizeInBytes;
+
+                        MemCopyHelper.MemoryCopy(
+                            srcPtr,
+                            dataPtr,
+                            sizeInBytes);
+                    }
+                }
+                finally
+                {
+                    GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
+                    GL.CheckGLError();
+                }
             }
         }
     }
