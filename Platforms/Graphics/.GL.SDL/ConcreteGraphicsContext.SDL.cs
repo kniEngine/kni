@@ -20,8 +20,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private IntPtr _glContext;
 
         private int _glContextCurrentThreadId = -1;
-        private IntPtr _glSharedContext;
-        private IntPtr _glSharedContextWindowHandle;
+        private IntPtr _glDisposeContext;
+        private IntPtr _glDisposeContextWindowHandle;
 
 
         internal IntPtr GlContext { get { return _glContext; } }
@@ -33,8 +33,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, 0);
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
-            _glSharedContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
-            _glSharedContext = SDL.OpenGL.CreateGLContext(_glSharedContextWindowHandle);
+            _glDisposeContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
+            _glDisposeContext = SDL.OpenGL.CreateGLContext(_glDisposeContextWindowHandle);
 
             MakeCurrent(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.PresentationInterval);
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return;
 
-            Sdl.Current.OpenGL.MakeCurrent(this._glSharedContextWindowHandle, this._glSharedContext);
+            Sdl.Current.OpenGL.MakeCurrent(this._glDisposeContextWindowHandle, this._glDisposeContext);
         }
 
         public override void UnbindDisposeContext()
@@ -123,13 +123,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             }
 
-            if (_glSharedContext != IntPtr.Zero)
-                SDL.OpenGL.DeleteContext(_glSharedContext);
-            _glSharedContext = IntPtr.Zero;
+            if (_glDisposeContext != IntPtr.Zero)
+                SDL.OpenGL.DeleteContext(_glDisposeContext);
+            _glDisposeContext = IntPtr.Zero;
 
-            if (_glSharedContextWindowHandle != IntPtr.Zero)
-                SDL.WINDOW.Destroy(_glSharedContextWindowHandle);
-            _glSharedContextWindowHandle = IntPtr.Zero;
+            if (_glDisposeContextWindowHandle != IntPtr.Zero)
+                SDL.WINDOW.Destroy(_glDisposeContextWindowHandle);
+            _glDisposeContextWindowHandle = IntPtr.Zero;
 
             if (_glContext != IntPtr.Zero)
                 SDL.OpenGL.DeleteContext(_glContext);
