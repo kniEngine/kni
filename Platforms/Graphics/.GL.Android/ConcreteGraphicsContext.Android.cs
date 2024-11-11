@@ -57,12 +57,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 OGL_DROID.Current.InitExtensions();
 
 
-            // create _glSharedContext for Disposing
-
+            // create _glDisposeContext for Disposing GL objects from GC Finalizer thread.
             int[] attribs = this.GLesVersion.GetAttributes();
             _glDisposeContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, cgd.EglConfig, this.EglContext, attribs);
             if (_glDisposeContext != null && _glDisposeContext != EGL10.EglNoContext)
-                    throw new Exception("Could not create _glSharedContext" + GL.GetEglErrorAsString());
+                    throw new Exception("Could not create _glDisposeContext" + GL.GetEglErrorAsString());
 
 
             // try getting the context version
@@ -280,7 +279,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_glDisposeContext != null)
             {
-                //_egl.EglDestroyContext(_eglDisplay, _glSharedContext);
+                //_egl.EglDestroyContext(_eglDisplay, _glDisposeContext);
             }
             _glDisposeContext = null;
 

@@ -22,7 +22,9 @@ namespace Microsoft.Xna.Platform.Graphics
             iOSGameWindow gameWindow = iOSGameWindow.FromHandle(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             iOSGameViewController viewController = gameWindow.ViewController;
             iOSGameView view = viewController.View;
-            
+
+
+            // create _glDisposeContext for Disposing GL objects from GC Finalizer thread.
             try
             {
                 _glDisposeContext = new OpenGLES.EAGLContext(OpenGLES.EAGLRenderingAPI.OpenGLES3, viewController.View._eaglContext.ShareGroup);
