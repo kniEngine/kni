@@ -57,64 +57,68 @@ namespace Microsoft.Xna.Platform.Graphics
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            int w, h;
-            TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
-
-            if (startIndex != 0 && !_glIsCompressedTexture)
-                throw new NotImplementedException("startIndex");
-
-            System.Diagnostics.Debug.Assert(_glTexture != null);
-            ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
-            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
-            GL.CheckGLError();
-            GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
-            GL.CheckGLError();
-
-            GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
-            GL.CheckGLError();
-
-            if (_glIsCompressedTexture)
             {
-                GL.CompressedTexImage2D(
-                        WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, data, startIndex, elementCount);
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+                int w, h;
+                TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
+
+                if (startIndex != 0 && !_glIsCompressedTexture)
+                    throw new NotImplementedException("startIndex");
+
+                System.Diagnostics.Debug.Assert(_glTexture != null);
+                ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
                 GL.CheckGLError();
-            }
-            else
-            {
-                GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data);
+                GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
                 GL.CheckGLError();
+
+                GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
+                GL.CheckGLError();
+
+                if (_glIsCompressedTexture)
+                {
+                    GL.CompressedTexImage2D(
+                            WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, data, startIndex, elementCount);
+                    GL.CheckGLError();
+                }
+                else
+                {
+                    GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data);
+                    GL.CheckGLError();
+                }
             }
         }
 
         public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
-
-            if (startIndex != 0)
-                throw new NotImplementedException("startIndex");
-
-            System.Diagnostics.Debug.Assert(_glTexture != null);
-            ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
-            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
-            GL.CheckGLError();
-            GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
-            GL.CheckGLError();
-
-            GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
-
-            if (_glIsCompressedTexture)
             {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                GL.TexSubImage2D(
-                    WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
-                    _glFormat, _glType, data);
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+                if (startIndex != 0)
+                    throw new NotImplementedException("startIndex");
+
+                System.Diagnostics.Debug.Assert(_glTexture != null);
+                ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
                 GL.CheckGLError();
+                GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
+                GL.CheckGLError();
+
+                GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
+
+                if (_glIsCompressedTexture)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    GL.TexSubImage2D(
+                        WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                        _glFormat, _glType, data);
+                    GL.CheckGLError();
+                }
             }
         }
 

@@ -74,40 +74,41 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            int w, h;
-            TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
-            int fSize = this.Format.GetSize();
-            int elementSizeInByte = sizeof(T);
-
-
-            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = (IntPtr)pData;
-                dataPtr = dataPtr + startIndex * elementSizeInByte;
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
-                GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                GL.CheckGLError();
-                GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-                GL.CheckGLError();
+                int w, h;
+                TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
+                int fSize = this.Format.GetSize();
+                int elementSizeInByte = sizeof(T);
 
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
 
-                if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                fixed (T* pData = &data[0])
                 {
-                    GL.CompressedTexImage2D(
-                        TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, elementCount * elementSizeInByte, dataPtr);
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * elementSizeInByte;
+
+                    System.Diagnostics.Debug.Assert(_glTexture >= 0);
+                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                    GL.ActiveTexture(TextureUnit.Texture0 + 0);
                     GL.CheckGLError();
-                }
-                else
-                {
-                    GL.TexImage2D(
-                        TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0,_glFormat, _glType, dataPtr);
+                    GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                     GL.CheckGLError();
+
+                    GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
+
+                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    {
+                        GL.CompressedTexImage2D(
+                            TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, elementCount * elementSizeInByte, dataPtr);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.TexImage2D(
+                            TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, _glFormat, _glType, dataPtr);
+                        GL.CheckGLError();
+                    }
                 }
             }
         }
@@ -116,39 +117,40 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            int fSize = this.Format.GetSize();
-            int elementSizeInByte = sizeof(T);
-
-            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = (IntPtr)pData;
-                dataPtr = dataPtr + startIndex * elementSizeInByte;
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                System.Diagnostics.Debug.Assert(_glTexture >= 0);
-                ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
-                GL.ActiveTexture(TextureUnit.Texture0 + 0);
-                GL.CheckGLError();
-                GL.BindTexture(TextureTarget.Texture2D, _glTexture);
-                GL.CheckGLError();
+                int fSize = this.Format.GetSize();
+                int elementSizeInByte = sizeof(T);
 
-                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
-
-                if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                fixed (T* pData = &data[0])
                 {
-                    GL.CompressedTexSubImage2D(
-                        TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
-                        _glInternalFormat, elementCount * elementSizeInByte, dataPtr);
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * elementSizeInByte;
+
+                    System.Diagnostics.Debug.Assert(_glTexture >= 0);
+                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                    GL.ActiveTexture(TextureUnit.Texture0 + 0);
                     GL.CheckGLError();
-                }
-                else
-                {
-                    GL.TexSubImage2D(
-                        TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
-                        _glFormat, _glType, dataPtr);
+                    GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                     GL.CheckGLError();
+
+                    GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
+
+                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    {
+                        GL.CompressedTexSubImage2D(
+                            TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                            _glInternalFormat, elementCount * elementSizeInByte, dataPtr);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.TexSubImage2D(
+                            TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                            _glFormat, _glType, dataPtr);
+                        GL.CheckGLError();
+                    }
                 }
             }
         }
