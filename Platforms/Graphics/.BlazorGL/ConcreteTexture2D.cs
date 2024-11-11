@@ -86,9 +86,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data);
                 GL.CheckGLError();
             }
-
-            //GL.Finish();
-            //GL.CheckGLError();
         }
 
         public void SetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
@@ -119,9 +116,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     _glFormat, _glType, data);
                 GL.CheckGLError();
             }
-
-            //GL.Finish();
-            //GL.CheckGLError();
         }
 
         public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
