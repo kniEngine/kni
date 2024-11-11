@@ -308,7 +308,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 out _glFormat,
                 out _glType);
 
-            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -316,7 +317,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 _glTexture = GL.GenTexture();
                 GL.CheckGLError();
 
-                ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
+                if (!isSharedContext)
+                    ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
@@ -373,6 +375,10 @@ namespace Microsoft.Xna.Platform.Graphics
                         h = h / 2;
                     ++level;
                 }
+            }
+            finally
+            {
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
