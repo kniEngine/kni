@@ -125,21 +125,23 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            {
+                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            // TODO: check for non renderable formats (formats that can't be attached to FBO)
+                // TODO: check for non renderable formats (formats that can't be attached to FBO)
 
-            WebGLFramebuffer glFramebuffer;
-            glFramebuffer = GL.CreateFramebuffer();
-            GL.CheckGLError();
-            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
-            GL.CheckGLError();
-            GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, WebGLTextureTarget.TEXTURE_2D, _glTexture);
-            GL.CheckGLError();
+                WebGLFramebuffer glFramebuffer;
+                glFramebuffer = GL.CreateFramebuffer();
+                GL.CheckGLError();
+                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+                GL.CheckGLError();
+                GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, WebGLTextureTarget.TEXTURE_2D, _glTexture);
+                GL.CheckGLError();
 
-            GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
-            GL.CheckGLError();
-            glFramebuffer.Dispose();
+                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+                GL.CheckGLError();
+                glFramebuffer.Dispose();
+            }
         }
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
