@@ -36,7 +36,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, byte[] shaderBytecode)
         {
-            contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -77,6 +78,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new InvalidOperationException("Shader Compilation Failed."
                         + Environment.NewLine + log);
                 }
+            }
+            finally
+            {
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
