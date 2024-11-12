@@ -57,7 +57,8 @@ namespace Microsoft.Xna.Platform.Graphics
             int height = bottom - top;
             int depth = back - front;
 
-            ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -67,7 +68,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     IntPtr dataPtr = (IntPtr)pData;
                     dataPtr = dataPtr + startIndex * elementSizeInByte;
 
-                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                    if (!isSharedContext)
+                        ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                     GL.ActiveTexture(TextureUnit.Texture0 + 0);
                     GL.CheckGLError();
                     GL.BindTexture(_glTarget, _glTexture);
@@ -76,6 +78,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
                     GL.CheckGLError();
                 }
+            }
+            finally
+            {
+                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
