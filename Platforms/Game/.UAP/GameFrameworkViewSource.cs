@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Windows.ApplicationModel.Core;
 
 
-namespace MonoGame.Framework
+namespace Microsoft.Xna.Platform
 {
     public class GameFrameworkViewSource<T> : IFrameworkViewSource
         where T : Game, new()

@@ -19,7 +19,7 @@ namespace $ext_safeprojectname$
 
             // Create the game.
             string launchArguments = String.Empty;
-            _game = MonoGame.Framework.XamlGame<$ext_safeprojectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
+            _game = Microsoft.Xna.Platform.XamlGame<$ext_safeprojectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }
 }

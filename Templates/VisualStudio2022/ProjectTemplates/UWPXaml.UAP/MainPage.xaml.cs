@@ -30,7 +30,7 @@ namespace $safeprojectname$
 
             // Create the game.
             string launchArguments = String.Empty;
-            _game = MonoGame.Framework.XamlGame<$safeprojectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
+            _game = Microsoft.Xna.Platform.XamlGame<$safeprojectname$Game>.Create(launchArguments, Window.Current.CoreWindow, swapChainPanel);
         }
     }
 }
