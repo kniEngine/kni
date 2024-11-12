@@ -228,5 +228,40 @@ namespace Microsoft.Xna.Framework
                 result = PlaneIntersectionType.Intersecting;
         }
 
+        internal static void BoundingSphereIntersectsRay(ref BoundingSphere sphere, ref Ray ray, out float? result)
+        {
+            // Find the vector between where the ray starts the the sphere's centre
+            Vector3 difference = sphere.Center - ray.Position;
+
+            float differenceLengthSquared = difference.LengthSquared();
+            float sphereRadiusSquared = sphere.Radius * sphere.Radius;
+
+            float distanceAlongRay;
+
+            // If the distance between the ray start and the sphere's centre is less than
+            // the radius of the sphere, it means we've intersected. N.B. checking the LengthSquared is faster.
+            if (differenceLengthSquared < sphereRadiusSquared)
+            {
+                result = 0.0f;
+                return;
+            }
+
+            Vector3.Dot(ref ray.Direction, ref difference, out distanceAlongRay);
+            // If the ray is pointing away from the sphere then we don't ever intersect
+            if (distanceAlongRay < 0)
+            {
+                result = null;
+                return;
+            }
+
+            // Next we kinda use Pythagoras to check if we are within the bounds of the sphere
+            // if x = radius of sphere
+            // if y = distance between ray position and sphere centre
+            // if z = the distance we've travelled along the ray
+            // if x^2 + z^2 - y^2 < 0, we do not intersect
+            float dist = sphereRadiusSquared + distanceAlongRay * distanceAlongRay - differenceLengthSquared;
+
+            result = (dist < 0) ? null : distanceAlongRay - (float?)Math.Sqrt(dist);
+        }
     }
 }

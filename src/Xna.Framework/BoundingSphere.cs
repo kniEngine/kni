@@ -526,7 +526,9 @@ namespace Microsoft.Xna.Framework
         /// <returns>Distance of ray intersection or <c>null</c> if there is no intersection.</returns>
         public float? Intersects(Ray ray)
         {
-            return ray.Intersects(this);
+            float? result;
+            IntersectsHelper.BoundingSphereIntersectsRay(ref this, ref ray, out result);
+            return result;
         }
 
         /// <summary>
@@ -536,7 +538,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Distance of ray intersection or <c>null</c> if there is no intersection as an output parameter.</param>
         public void Intersects(ref Ray ray, out float? result)
         {
-            ray.Intersects(ref this, out result);
+            IntersectsHelper.BoundingSphereIntersectsRay(ref this, ref ray, out result);
         }
 
         #endregion
