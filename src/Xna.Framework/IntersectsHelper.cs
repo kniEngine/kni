@@ -11,6 +11,24 @@ namespace Microsoft.Xna.Framework
 {
     internal class IntersectsHelper
     {
+        internal static void BoundingBoxIntersectsoundingBox(ref BoundingBox box, ref BoundingBox other, out bool result)
+        {
+            if ((box.Max.X >= other.Min.X) && (box.Min.X <= other.Max.X))
+            {
+                if ((box.Max.Y < other.Min.Y) || (box.Min.Y > other.Max.Y))
+                {
+                    result = false;
+                    return;
+                }
+
+                result = (box.Max.Z >= other.Min.Z) && (box.Min.Z <= other.Max.Z);
+                return;
+            }
+
+            result = false;
+            return;
+        }
+
         internal static void BoundingBoxIntersectsPlane(ref BoundingBox box, ref Plane plane, out PlaneIntersectionType result)
         {
             // See http://zach.in.tu-clausthal.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html

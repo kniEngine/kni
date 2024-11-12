@@ -593,7 +593,7 @@ namespace Microsoft.Xna.Framework
         public bool Intersects(BoundingBox box)
         {
             bool result;
-            Intersects(ref box, out result);
+            IntersectsHelper.BoundingBoxIntersectsoundingBox(ref this, ref box, out result);
             return result;
         }
 
@@ -607,20 +607,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingBox box, out bool result)
         {
-            if ((this.Max.X >= box.Min.X) && (this.Min.X <= box.Max.X))
-            {
-                if ((this.Max.Y < box.Min.Y) || (this.Min.Y > box.Max.Y))
-                {
-                    result = false;
-                    return;
-                }
-
-                result = (this.Max.Z >= box.Min.Z) && (this.Min.Z <= box.Max.Z);
-                return;
-            }
-
-            result = false;
-            return;
+            IntersectsHelper.BoundingBoxIntersectsoundingBox(ref this, ref box, out result);
         }
 
         /// <summary>
