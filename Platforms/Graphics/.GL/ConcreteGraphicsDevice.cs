@@ -60,6 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
+            ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+
             var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
