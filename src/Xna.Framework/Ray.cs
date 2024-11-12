@@ -149,7 +149,7 @@ namespace Microsoft.Xna.Framework
         public float? Intersects(Plane plane)
         {
             float? result;
-            Intersects(ref plane, out result);
+            IntersectsHelper.PlaneIntersectsRay(ref plane, ref this, out result);
             return result;
         }
 
@@ -163,25 +163,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref Plane plane, out float? result)
         {
-            var den = Vector3.Dot(Direction, plane.Normal);
-            if (Math.Abs(den) < 0.00001f)
-            {
-                result = null;
-                return;
-            }
-
-            result = (-plane.D - Vector3.Dot(plane.Normal, Position)) / den;
-
-            if (result < 0.0f)
-            {
-                if (result < -0.00001f)
-                {
-                    result = null;
-                    return;
-                }
-
-                result = 0.0f;
-            }
+            IntersectsHelper.PlaneIntersectsRay(ref plane, ref this, out result);
         }
 
         /// <summary>

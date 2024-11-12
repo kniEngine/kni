@@ -478,9 +478,9 @@ namespace Microsoft.Xna.Framework
 
                     float min = float.MinValue;
                     float max = float.MaxValue;
-                    foreach (Plane plane in this._planes)
+                    for(int p = 0; p < PlaneCount; p++)
                     {
-                        var normal = plane.Normal;
+                        var normal = _planes[p].Normal;
 
                         float result2;
                         Vector3.Dot(ref ray.Direction, ref normal, out result2);
@@ -488,7 +488,7 @@ namespace Microsoft.Xna.Framework
                         float result3;
                         Vector3.Dot(ref ray.Position, ref normal, out result3);
 
-                        result3 += plane.D;
+                        result3 += _planes[p].D;
 
                         if ((double)Math.Abs(result2) < 9.99999974737875E-06)
                         {
@@ -514,7 +514,8 @@ namespace Microsoft.Xna.Framework
                             }
                         }
 
-                        var distance = ray.Intersects(plane);
+                        float? distance;
+                        IntersectsHelper.PlaneIntersectsRay(ref _planes[p], ref ray, out distance);
                         if (distance.HasValue)
                         {
                             min = Math.Min(min, distance.Value);

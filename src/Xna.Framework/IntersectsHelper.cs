@@ -263,5 +263,28 @@ namespace Microsoft.Xna.Framework
 
             result = (dist < 0) ? null : distanceAlongRay - (float?)Math.Sqrt(dist);
         }
+
+        internal static void PlaneIntersectsRay(ref Plane plane, ref Ray ray, out float? result)
+        {
+            float den = Vector3.Dot(ray.Direction, plane.Normal);
+            if (Math.Abs(den) < 0.00001f)
+            {
+                result = null;
+                return;
+            }
+
+            result = (-plane.D - Vector3.Dot(plane.Normal, ray.Position)) / den;
+
+            if (result < 0.0f)
+            {
+                if (result < -0.00001f)
+                {
+                    result = null;
+                    return;
+                }
+
+                result = 0.0f;
+            }
+        }
     }
 }
