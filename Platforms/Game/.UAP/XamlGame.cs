@@ -5,7 +5,6 @@
 using System;
 using Windows.UI.Core;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Platform;
 
 #if UAP
 using Windows.UI.Xaml.Controls;
@@ -15,7 +14,7 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls;
 #endif
 
-namespace MonoGame.Framework
+namespace Microsoft.Xna.Platform
 {
     /// <summary>
     /// Static class for initializing a Game object for a XAML application.

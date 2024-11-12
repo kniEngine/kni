@@ -4,12 +4,12 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.ApplicationModel.Activation;
-using Microsoft.Xna.Platform;
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Platform
 {
     class UAPFrameworkView<T> : IFrameworkView
         where T : Game, new()
