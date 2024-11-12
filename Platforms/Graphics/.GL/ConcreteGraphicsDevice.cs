@@ -61,33 +61,34 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
             ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
-
-            var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
-            int fSize = PresentationParameters.BackBufferFormat.GetSize();
-            int tSize = sizeof(T);
-            int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
-            fixed (T* pData = &data[0])
             {
-                IntPtr dataPtr = (IntPtr)pData;
-                GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, dataPtr);
-            }
+                var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            // buffer is returned upside down, so we swap the rows around when copying over
-            int rowSize = srcRect.Width * fSize / tSize;
-            T[] row = new T[rowSize];
-            for (int dy = 0; dy < srcRect.Height/2; dy++)
-            {
-                int topRow = startIndex + dy*rowSize;
-                int bottomRow = startIndex + (srcRect.Height - dy - 1)*rowSize;
-                // copy the bottom row to buffer
-                Array.Copy(data, bottomRow, row, 0, rowSize);
-                // copy top row to bottom row
-                Array.Copy(data, topRow, data, bottomRow, rowSize);
-                // copy buffer to top row
-                Array.Copy(row, 0, data, topRow, rowSize);
-                elementCount -= rowSize;
+                Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+                int fSize = PresentationParameters.BackBufferFormat.GetSize();
+                int tSize = sizeof(T);
+                int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
+                fixed (T* pData = &data[0])
+                {
+                    IntPtr dataPtr = (IntPtr)pData;
+                    GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, dataPtr);
+                }
+
+                // buffer is returned upside down, so we swap the rows around when copying over
+                int rowSize = srcRect.Width * fSize / tSize;
+                T[] row = new T[rowSize];
+                for (int dy = 0; dy < srcRect.Height/2; dy++)
+                {
+                    int topRow = startIndex + dy*rowSize;
+                    int bottomRow = startIndex + (srcRect.Height - dy - 1)*rowSize;
+                    // copy the bottom row to buffer
+                    Array.Copy(data, bottomRow, row, 0, rowSize);
+                    // copy top row to bottom row
+                    Array.Copy(data, topRow, data, bottomRow, rowSize);
+                    // copy buffer to top row
+                    Array.Copy(row, 0, data, topRow, rowSize);
+                    elementCount -= rowSize;
+                }
             }
         }
 
