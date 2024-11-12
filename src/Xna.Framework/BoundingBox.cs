@@ -647,7 +647,7 @@ namespace Microsoft.Xna.Framework
         public bool Intersects(BoundingSphere sphere)
         {
             bool result;
-            Intersects(ref sphere, out result);
+            IntersectsHelper.BoundingBoxIntersectsBoundingSphere(ref this, ref sphere, out result);
             return result;
         }
 
@@ -661,14 +661,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingSphere sphere, out bool result)
         {
-            double squareDistance = 0.0;
-            if (sphere.Center.X < Min.X) squareDistance += (sphere.Center.X - Min.X) * (sphere.Center.X - Min.X);
-            else if (sphere.Center.X > Max.X) squareDistance += (sphere.Center.X - Max.X) * (sphere.Center.X - Max.X);
-            if (sphere.Center.Y < Min.Y) squareDistance += (sphere.Center.Y - Min.Y) * (sphere.Center.Y - Min.Y);
-            else if (sphere.Center.Y > Max.Y) squareDistance += (sphere.Center.Y - Max.Y) * (sphere.Center.Y - Max.Y);
-            if (sphere.Center.Z < Min.Z) squareDistance += (sphere.Center.Z - Min.Z) * (sphere.Center.Z - Min.Z);
-            else if (sphere.Center.Z > Max.Z) squareDistance += (sphere.Center.Z - Max.Z) * (sphere.Center.Z - Max.Z);
-            result = squareDistance <= sphere.Radius * sphere.Radius;
+            IntersectsHelper.BoundingBoxIntersectsBoundingSphere(ref this, ref sphere, out result);
         }
 
         /// <summary>

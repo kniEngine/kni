@@ -177,5 +177,18 @@ namespace Microsoft.Xna.Framework
             result = tMin;
             return;
         }
+
+        internal static void BoundingBoxIntersectsBoundingSphere(ref BoundingBox box, ref BoundingSphere sphere, out bool result)
+        {
+            double squareDistance = 0.0;
+            if (sphere.Center.X < box.Min.X) squareDistance += (sphere.Center.X - box.Min.X) * (sphere.Center.X - box.Min.X);
+            else if (sphere.Center.X > box.Max.X) squareDistance += (sphere.Center.X - box.Max.X) * (sphere.Center.X - box.Max.X);
+            if (sphere.Center.Y < box.Min.Y) squareDistance += (sphere.Center.Y - box.Min.Y) * (sphere.Center.Y - box.Min.Y);
+            else if (sphere.Center.Y > box.Max.Y) squareDistance += (sphere.Center.Y - box.Max.Y) * (sphere.Center.Y - box.Max.Y);
+            if (sphere.Center.Z < box.Min.Z) squareDistance += (sphere.Center.Z - box.Min.Z) * (sphere.Center.Z - box.Min.Z);
+            else if (sphere.Center.Z > box.Max.Z) squareDistance += (sphere.Center.Z - box.Max.Z) * (sphere.Center.Z - box.Max.Z);
+            result = squareDistance <= sphere.Radius * sphere.Radius;
+        }
+
     }
 }

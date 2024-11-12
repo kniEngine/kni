@@ -452,7 +452,9 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if <see cref="BoundingBox"/> intersects with this sphere; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingBox box)
         {
-            return box.Intersects(this);
+            bool result;
+            IntersectsHelper.BoundingBoxIntersectsBoundingSphere(ref box, ref this, out result);
+            return result;
         }
 
         /// <summary>
@@ -462,7 +464,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if <see cref="BoundingBox"/> intersects with this sphere; <c>false</c> otherwise. As an output parameter.</param>
         public void Intersects(ref BoundingBox box, out bool result)
         {
-            box.Intersects(ref this, out result);
+            IntersectsHelper.BoundingBoxIntersectsBoundingSphere(ref box, ref this, out result);
         }
 
         public bool Intersects(BoundingFrustum frustum)
