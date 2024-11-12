@@ -483,7 +483,7 @@ namespace Microsoft.Xna.Framework
         public bool Intersects(BoundingSphere sphere)
         {
             bool result;
-            Intersects(ref sphere, out result);
+            IntersectsHelper.BoundingSphereIntersectsBoundingSphere(ref this, ref sphere, out result);
             return result;
         }
 
@@ -494,13 +494,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if other <see cref="BoundingSphere"/> intersects with this sphere; <c>false</c> otherwise. As an output parameter.</param>
         public void Intersects(ref BoundingSphere sphere, out bool result)
         {
-            float sqDistance;
-            Vector3.DistanceSquared(ref sphere.Center, ref Center, out sqDistance);
-
-            if (sqDistance > (sphere.Radius + Radius) * (sphere.Radius + Radius))
-                result = false;
-            else
-                result = true;
+            IntersectsHelper.BoundingSphereIntersectsBoundingSphere(ref this, ref sphere, out result);
         }
 
         /// <summary>

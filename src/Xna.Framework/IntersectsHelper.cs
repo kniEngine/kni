@@ -208,5 +208,11 @@ namespace Microsoft.Xna.Framework
             result = squareDistance <= sphere.Radius * sphere.Radius;
         }
 
+        internal static void BoundingSphereIntersectsBoundingSphere(ref BoundingSphere sphere, ref BoundingSphere other, out bool result)
+        {
+            Vector3.DistanceSquared(ref other.Center, ref sphere.Center, out float sqDistance);
+
+            result = (sqDistance <= (other.Radius + sphere.Radius) * (other.Radius + sphere.Radius));
+        }
     }
 }

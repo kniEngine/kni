@@ -400,7 +400,7 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if specified <see cref="BoundingSphere"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingSphere sphere)
         {
-            var result = default(bool);
+            bool result = default(bool);
             this.Intersects(ref sphere, out result);
             return result;
         }
