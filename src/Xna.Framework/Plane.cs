@@ -355,7 +355,9 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public PlaneIntersectionType Intersects(BoundingBox box)
         {
-            return box.Intersects(this);
+            PlaneIntersectionType result;
+            IntersectsHelper.BoundingBoxIntersectsPlane(ref box, ref this, out result);
+            return result;
         }
 
         /// <summary>
@@ -367,7 +369,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingBox box, out PlaneIntersectionType result)
         {
-            box.Intersects (ref this, out result);
+            IntersectsHelper.BoundingBoxIntersectsPlane(ref box, ref this, out result);
         }
 
         /// <summary>

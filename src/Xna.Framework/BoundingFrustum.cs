@@ -193,8 +193,8 @@ namespace Microsoft.Xna.Framework
             var intersects = false;
             for (var i = 0; i < PlaneCount; ++i)
             {
-                var planeIntersectionType = default(PlaneIntersectionType);
-                box.Intersects(ref this._planes[i], out planeIntersectionType);
+                IntersectsHelper.BoundingBoxIntersectsPlane(ref box, ref this._planes[i], out PlaneIntersectionType planeIntersectionType);
+
                 switch (planeIntersectionType)
                 {
                 case PlaneIntersectionType.Front:

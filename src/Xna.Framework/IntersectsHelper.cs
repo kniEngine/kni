@@ -11,6 +11,65 @@ namespace Microsoft.Xna.Framework
 {
     internal class IntersectsHelper
     {
+        internal static void BoundingBoxIntersectsPlane(ref BoundingBox box, ref Plane plane, out PlaneIntersectionType result)
+        {
+            // See http://zach.in.tu-clausthal.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html
+
+            Vector3 positiveVertex;
+            Vector3 negativeVertex;
+
+            if (plane.Normal.X >= 0)
+            {
+                positiveVertex.X = box.Max.X;
+                negativeVertex.X = box.Min.X;
+            }
+            else
+            {
+                positiveVertex.X = box.Min.X;
+                negativeVertex.X = box.Max.X;
+            }
+
+            if (plane.Normal.Y >= 0)
+            {
+                positiveVertex.Y = box.Max.Y;
+                negativeVertex.Y = box.Min.Y;
+            }
+            else
+            {
+                positiveVertex.Y = box.Min.Y;
+                negativeVertex.Y = box.Max.Y;
+            }
+
+            if (plane.Normal.Z >= 0)
+            {
+                positiveVertex.Z = box.Max.Z;
+                negativeVertex.Z = box.Min.Z;
+            }
+            else
+            {
+                positiveVertex.Z = box.Min.Z;
+                negativeVertex.Z = box.Max.Z;
+            }
+
+            // Inline Vector3.Dot(plane.Normal, negativeVertex) + plane.D;
+            var distance = plane.Normal.X * negativeVertex.X + plane.Normal.Y * negativeVertex.Y + plane.Normal.Z * negativeVertex.Z + plane.D;
+            if (distance > 0)
+            {
+                result = PlaneIntersectionType.Front;
+                return;
+            }
+
+            // Inline Vector3.Dot(plane.Normal, positiveVertex) + plane.D;
+            distance = plane.Normal.X * positiveVertex.X + plane.Normal.Y * positiveVertex.Y + plane.Normal.Z * positiveVertex.Z + plane.D;
+            if (distance < 0)
+            {
+                result = PlaneIntersectionType.Back;
+                return;
+            }
+
+            result = PlaneIntersectionType.Intersecting;
+        }
+
         // adapted from http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-box-intersection/
         internal static void BoundingBoxIntersectsRay(ref BoundingBox box, ref Ray ray, out float? result)
         {
