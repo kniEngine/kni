@@ -393,7 +393,9 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public PlaneIntersectionType Intersects(BoundingSphere sphere)
         {
-            return sphere.Intersects(this);
+            PlaneIntersectionType result;
+            IntersectsHelper.BoundingSphereIntersectsPlane(ref sphere, ref this, out result);
+            return result;
         }
 
         /// <summary>
@@ -405,7 +407,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingSphere sphere, out PlaneIntersectionType result)
         {
-            sphere.Intersects(ref this, out result);
+            IntersectsHelper.BoundingSphereIntersectsPlane(ref sphere, ref this, out result);
         }
 
         internal PlaneIntersectionType Intersects(ref Vector3 point)

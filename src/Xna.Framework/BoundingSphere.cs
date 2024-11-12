@@ -504,9 +504,8 @@ namespace Microsoft.Xna.Framework
         /// <returns>Type of intersection.</returns>
         public PlaneIntersectionType Intersects(Plane plane)
         {
-            var result = default(PlaneIntersectionType);
-            // TODO: we might want to inline this for performance reasons
-            this.Intersects(ref plane, out result);
+            PlaneIntersectionType result;
+            IntersectsHelper.BoundingSphereIntersectsPlane(ref this, ref plane, out result);
             return result;
         }
 
@@ -517,16 +516,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Type of intersection as an output parameter.</param>
         public void Intersects(ref Plane plane, out PlaneIntersectionType result)
         {
-            var distance = default(float);
-            // TODO: we might want to inline this for performance reasons
-            Vector3.Dot(ref plane.Normal, ref this.Center, out distance);
-            distance += plane.D;
-            if (distance > this.Radius)
-                result = PlaneIntersectionType.Front;
-            else if (distance < -this.Radius)
-                result = PlaneIntersectionType.Back;
-            else
-                result = PlaneIntersectionType.Intersecting;
+            IntersectsHelper.BoundingSphereIntersectsPlane(ref this, ref plane, out result);
         }
 
         /// <summary>

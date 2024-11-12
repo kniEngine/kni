@@ -257,10 +257,8 @@ namespace Microsoft.Xna.Framework
             var intersects = false;
             for (var i = 0; i < PlaneCount; ++i) 
             {
-                var planeIntersectionType = default(PlaneIntersectionType);
-
                 // TODO: we might want to inline this for performance reasons
-                sphere.Intersects(ref this._planes[i], out planeIntersectionType);
+                IntersectsHelper.BoundingSphereIntersectsPlane(ref sphere, ref this._planes[i], out PlaneIntersectionType planeIntersectionType);
                 switch (planeIntersectionType)
                 {
                 case PlaneIntersectionType.Front:

@@ -214,5 +214,19 @@ namespace Microsoft.Xna.Framework
 
             result = (sqDistance <= (other.Radius + sphere.Radius) * (other.Radius + sphere.Radius));
         }
+
+        internal static void BoundingSphereIntersectsPlane(ref BoundingSphere sphere, ref Plane plane, out PlaneIntersectionType result)
+        {
+            Vector3.Dot(ref plane.Normal, ref sphere.Center, out float distance);
+            distance += plane.D;
+
+            if (distance > sphere.Radius)
+                result = PlaneIntersectionType.Front;
+            else if (distance < -sphere.Radius)
+                result = PlaneIntersectionType.Back;
+            else
+                result = PlaneIntersectionType.Intersecting;
+        }
+
     }
 }
