@@ -22,6 +22,9 @@ namespace Microsoft.Xna.Platform.Graphics
         private int _glContextCurrentThreadId = -1;
         private IntPtr _glDisposeContext;
         private IntPtr _glDisposeContextWindowHandle;
+        SemaphoreSlim _sharedContextLock = new SemaphoreSlim(1, 1);
+        private IntPtr _glSharedContext;
+        private IntPtr _glSharedContextWindowHandle;
 
 
         internal IntPtr GlContext { get { return _glContext; } }
@@ -36,6 +39,12 @@ namespace Microsoft.Xna.Platform.Graphics
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
             _glDisposeContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
             _glDisposeContext = SDL.OpenGL.CreateGLContext(_glDisposeContextWindowHandle);
+
+           // create _glSharedContext for creating GL objects from working threads.
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, 0);
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
+            _glSharedContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
+            _glSharedContext = SDL.OpenGL.CreateGLContext(_glSharedContextWindowHandle);
 
             MakeCurrent(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.PresentationInterval);
@@ -87,6 +96,26 @@ namespace Microsoft.Xna.Platform.Graphics
             Sdl.Current.OpenGL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
         }
 
+        public override bool BindSharedContext()
+        {
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
+                return false;
+
+            _sharedContextLock.Wait();
+            Sdl.Current.OpenGL.MakeCurrent(this._glSharedContextWindowHandle, this._glSharedContext);
+
+            return true;
+        }
+
+        public override void UnbindSharedContext()
+        {
+            if (_glContextCurrentThreadId == base.ManagedThreadId())
+                return;
+
+            Sdl.Current.OpenGL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
+            _sharedContextLock.Release();
+        }
+
         /// <summary>
         /// Converts <see cref="PresentInterval"/> to OpenGL swap interval.
         /// </summary>
@@ -131,6 +160,14 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_glDisposeContextWindowHandle != IntPtr.Zero)
                 SDL.WINDOW.Destroy(_glDisposeContextWindowHandle);
             _glDisposeContextWindowHandle = IntPtr.Zero;
+
+            if (_glSharedContext != IntPtr.Zero)
+                SDL.OpenGL.DeleteContext(_glSharedContext);
+            _glSharedContext = IntPtr.Zero;
+
+            if (_glSharedContextWindowHandle != IntPtr.Zero)
+                SDL.WINDOW.Destroy(_glSharedContextWindowHandle);
+            _glSharedContextWindowHandle = IntPtr.Zero;
 
             if (_glContext != IntPtr.Zero)
                 SDL.OpenGL.DeleteContext(_glContext);

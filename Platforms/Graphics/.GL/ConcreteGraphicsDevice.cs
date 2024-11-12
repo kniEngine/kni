@@ -60,7 +60,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
-            ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
+            bool isSharedContext = ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
             {
                 var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
@@ -78,10 +79,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     T[] row = new T[rowSize];
 
-                    for (int dy = 0; dy < srcRect.Height/2; dy++)
+                    for (int dy = 0; dy < srcRect.Height / 2; dy++)
                     {
-                        int topRow = startIndex + dy*rowSize;
-                        int bottomRow = startIndex + (srcRect.Height - dy - 1)*rowSize;
+                        int topRow = startIndex + dy * rowSize;
+                        int bottomRow = startIndex + (srcRect.Height - dy - 1) * rowSize;
 
                         // copy the bottom row to buffer
                         Array.Copy(data, bottomRow, row, 0, rowSize);
@@ -95,6 +96,10 @@ namespace Microsoft.Xna.Platform.Graphics
                         elementCount -= rowSize;
                     }
                 }
+            }
+            finally
+            {
+                ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
