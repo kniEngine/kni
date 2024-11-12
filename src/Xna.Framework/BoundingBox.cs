@@ -763,7 +763,9 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public Nullable<float> Intersects(Ray ray)
         {
-            return ray.Intersects(this);
+            float? result;
+            IntersectsHelper.BoundingBoxIntersectsRay(ref this, ref ray, out result);
+            return result;
         }
 
         /// <summary>
@@ -776,7 +778,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref Ray ray, out Nullable<float> result)
         {
-            result = Intersects(ray);
+            IntersectsHelper.BoundingBoxIntersectsRay(ref this, ref ray,  out result);
         }
 
         /// <summary>

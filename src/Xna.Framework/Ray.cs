@@ -85,7 +85,6 @@ namespace Microsoft.Xna.Framework
             return Position.GetHashCode() ^ Direction.GetHashCode();
         }
 
-        // adapted from http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-box-intersection/
         /// <summary>
         /// Check if this <see cref="Ray"/> intersects the specified <see cref="BoundingBox"/>.
         /// </summary>
@@ -96,85 +95,9 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public float? Intersects(BoundingBox box)
         {
-            const float Epsilon = 1e-6f;
-
-            float? tMin = null, tMax = null;
-
-            if (Math.Abs(Direction.X) < Epsilon)
-            {
-                if (Position.X < box.Min.X || Position.X > box.Max.X)
-                    return null;
-            }
-            else
-            {
-                tMin = (box.Min.X - Position.X) / Direction.X;
-                tMax = (box.Max.X - Position.X) / Direction.X;
-
-                if (tMin > tMax)
-                {
-                    var temp = tMin;
-                    tMin = tMax;
-                    tMax = temp;
-                }
-            }
-
-            if (Math.Abs(Direction.Y) < Epsilon)
-            {
-                if (Position.Y < box.Min.Y || Position.Y > box.Max.Y)
-                    return null;
-            }
-            else
-            {
-                var tMinY = (box.Min.Y - Position.Y) / Direction.Y;
-                var tMaxY = (box.Max.Y - Position.Y) / Direction.Y;
-
-                if (tMinY > tMaxY)
-                {
-                    var temp = tMinY;
-                    tMinY = tMaxY;
-                    tMaxY = temp;
-                }
-
-                if ((tMin.HasValue && tMin > tMaxY) || (tMax.HasValue && tMinY > tMax))
-                    return null;
-
-                if (!tMin.HasValue || tMinY > tMin) tMin = tMinY;
-                if (!tMax.HasValue || tMaxY < tMax) tMax = tMaxY;
-            }
-
-            if (Math.Abs(Direction.Z) < Epsilon)
-            {
-                if (Position.Z < box.Min.Z || Position.Z > box.Max.Z)
-                    return null;
-            }
-            else
-            {
-                var tMinZ = (box.Min.Z - Position.Z) / Direction.Z;
-                var tMaxZ = (box.Max.Z - Position.Z) / Direction.Z;
-
-                if (tMinZ > tMaxZ)
-                {
-                    var temp = tMinZ;
-                    tMinZ = tMaxZ;
-                    tMaxZ = temp;
-                }
-
-                if ((tMin.HasValue && tMin > tMaxZ) || (tMax.HasValue && tMinZ > tMax))
-                    return null;
-
-                if (!tMin.HasValue || tMinZ > tMin) tMin = tMinZ;
-                if (!tMax.HasValue || tMaxZ < tMax) tMax = tMaxZ;
-            }
-
-            // having a positive tMax and a negative tMin means the ray is inside the box
-            // we expect the intesection distance to be 0 in that case
-            if ((tMin.HasValue && tMin < 0) && tMax > 0) return 0;
-
-            // a negative tMin means that the intersection point is behind the ray's origin
-            // we discard these as not hitting the AABB
-            if (tMin < 0) return null;
-
-            return tMin;
+            float? result;
+            IntersectsHelper.BoundingBoxIntersectsRay(ref box, ref this, out result);
+            return result;
         }
 
         /// <summary>
@@ -187,7 +110,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingBox box, out float? result)
         {
-            result = Intersects(box);
+            IntersectsHelper.BoundingBoxIntersectsRay(ref box, ref this, out result);
         }
 
         public float? Intersects(BoundingFrustum frustum)
