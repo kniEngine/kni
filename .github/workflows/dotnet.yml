@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v4    
       with:
           submodules: recursive
-          
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -26,7 +26,15 @@ jobs:
 
     - name: Install workloads
       run: dotnet workload install android ios
-        
+
+    - name: Cache .NET nuget packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
     - name: Restore dependencies
       run: dotnet restore KNI.sln
       
