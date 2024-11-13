@@ -240,17 +240,6 @@ namespace Content.Pipeline.Editor
                     assemblyPaths.Add(path);                
             }
 
-            List<string> packages = new List<string>();
-            foreach (string packageName in project.PackageReferences)
-            {
-                if (string.IsNullOrEmpty(packageName))
-                    throw new ArgumentException("packageReference cannot be null!");
-
-                // Make sure we're not adding the same assembly twice.
-                if (!packages.Contains(packageName))
-                    packages.Add(packageName);
-            }
-
             ResolveAssemblies(assemblyPaths);
 
             var importerDescriptions = new ImporterTypeDescription[_importers.Count];
@@ -319,6 +308,29 @@ namespace Content.Pipeline.Editor
 
             Processors = processorDescriptions;
             ProcessorsStandardValuesCollection = new TypeConverter.StandardValuesCollection(Processors);
+        }
+
+        private static void ExecuteDotnet(string workingDirectory, string args)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo("dotnet", args);
+            startInfo.CreateNoWindow = true;
+            startInfo.WorkingDirectory = workingDirectory;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+
+            using (Process process = Process.Start(startInfo))
+            {
+                process.WaitForExit();
+                if (process.ExitCode != 0)
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    Console.Write(output);
+                    string error = process.StandardError.ReadToEnd();
+                    Console.Write(error);
+                    throw new PipelineException(output + error);
+                }
+            }
         }
 
         public static void Unload()
