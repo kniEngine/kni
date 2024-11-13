@@ -310,6 +310,29 @@ namespace Content.Pipeline.Editor
             ProcessorsStandardValuesCollection = new TypeConverter.StandardValuesCollection(Processors);
         }
 
+        private static void ExecuteDotnet(string workingDirectory, string args)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo("dotnet", args);
+            startInfo.CreateNoWindow = true;
+            startInfo.WorkingDirectory = workingDirectory;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+
+            using (Process process = Process.Start(startInfo))
+            {
+                process.WaitForExit();
+                if (process.ExitCode != 0)
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    Console.Write(output);
+                    string error = process.StandardError.ReadToEnd();
+                    Console.Write(error);
+                    throw new PipelineException(output + error);
+                }
+            }
+        }
+
         public static void Unload()
         {
             _importers = null;
