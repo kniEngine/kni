@@ -19,13 +19,23 @@ jobs:
       with:
           submodules: recursive
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+   # - name: Setup .NET
+   #   uses: actions/setup-dotnet@v4
+   #   with:
+   #     dotnet-version: 8.0.x
+        
 
-    - name: Install workloads
-      run: dotnet workload install android ios
+   # - name: Cache .NET workloads
+   #   uses: actions/cache@v4
+   #   with:
+   #     path: ~\AppData\Local\Microsoft\dotnet\workloads
+   #     key: ${{ runner.os }}-dotnet-workloads-${{ hashFiles('**/*.csproj') }}
+   #     restore-keys: |
+   #       ${{ runner.os }}-dotnet-workloads-
+
+   # - name: Install workloads
+   #   run: dotnet workload install android ios
+
 
     - name: Cache .NET nuget packages
       uses: actions/cache@v4
