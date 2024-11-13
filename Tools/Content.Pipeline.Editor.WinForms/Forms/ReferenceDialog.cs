@@ -90,7 +90,7 @@ namespace Content.Pipeline.Editor
                     if (svc.ShowDialog(form) == DialogResult.OK)
                     {
                         lines = form.Lines;
-                        MainView._controller.OnProjectModified();
+                        MainView._controller.OnReferencesModified();
                     }
                 }
             }
