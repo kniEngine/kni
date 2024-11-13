@@ -240,17 +240,6 @@ namespace Content.Pipeline.Editor
                     assemblyPaths.Add(path);                
             }
 
-            List<string> packages = new List<string>();
-            foreach (string packageName in project.PackageReferences)
-            {
-                if (string.IsNullOrEmpty(packageName))
-                    throw new ArgumentException("packageReference cannot be null!");
-
-                // Make sure we're not adding the same assembly twice.
-                if (!packages.Contains(packageName))
-                    packages.Add(packageName);
-            }
-
             ResolveAssemblies(assemblyPaths);
 
             var importerDescriptions = new ImporterTypeDescription[_importers.Count];
