@@ -327,7 +327,7 @@ namespace Microsoft.Xna.Platform.Media
 
         static unsafe void ConvertFloat32ToInt16(float* fbuffer, short* outBuffer, int samples)
         {
-            for (int i = 0; i < samples; i++)
+            for (int i = samples - 1; i >= 0; i--)
             {
                 float val = fbuffer[i];
                 if (val >= -1f)
