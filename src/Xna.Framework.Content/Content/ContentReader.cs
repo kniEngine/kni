@@ -122,8 +122,15 @@ namespace Microsoft.Xna.Framework.Content
 
         public T ReadObject<T>(ContentTypeReader typeReader)
         {
-            T result = (T)typeReader.Read(this, default(T));
-            RecordDisposable(result);
+            T result;
+
+            ContentTypeReader<T> typeReaderT = typeReader as ContentTypeReader<T>;
+            if (typeReaderT != null)
+                result = typeReaderT.Read(this, default(T));
+            else
+                result = (T)typeReader.Read(this, default(T));
+
+            RecordDisposable<T>(result);
             return result;
         }
 
