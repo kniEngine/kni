@@ -323,6 +323,8 @@ namespace Microsoft.Xna.Framework.Content
             ContentReader reader = new ContentReader(this, decompressedStream,
                                                      originalAssetName, version, compressedFileSize, recordDisposableObject);
 
+            if (decompressedStream != stream)
+                decompressedStream.Dispose();
             if (decompressBuffer != null)
                 ContentBufferPool.Current.Return(decompressBuffer);
 
