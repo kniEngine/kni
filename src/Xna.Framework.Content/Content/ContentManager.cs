@@ -304,7 +304,7 @@ namespace Microsoft.Xna.Framework.Content
                     decompressedStream = stream;
                 }
 
-                using (ContentReader reader = new ContentReader(this, decompressedStream, assetName, version, compressedFileSize, recordDisposableObject))
+                using (ContentReader reader = new ContentReader(this, decompressedStream, assetName, version, recordDisposableObject))
                 {
                     T result = reader.ReadAsset<T>();
 

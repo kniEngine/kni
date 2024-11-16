@@ -19,21 +19,19 @@ namespace Microsoft.Xna.Framework.Content
         private List<KeyValuePair<int, Action<object>>> _sharedResourceFixups;
         private ContentTypeReader[] _typeReaders;
         internal int _version;
-        internal uint _compressedFileSize;
 
         internal ContentTypeReader[] TypeReaders
         {
             get { return _typeReaders; }
         }
 
-        internal ContentReader(ContentManager manager, Stream stream, string assetName, int version, uint compressedFileSize, Action<IDisposable> recordDisposableObject)
+        internal ContentReader(ContentManager manager, Stream stream, string assetName, int version, Action<IDisposable> recordDisposableObject)
             : base(stream)
         {
             this._recordDisposableObject = recordDisposableObject;
             this._contentManager = manager;
             this._assetName = assetName;
             this._version = version;
-            this._compressedFileSize = compressedFileSize;
         }
 
         public ContentManager ContentManager
