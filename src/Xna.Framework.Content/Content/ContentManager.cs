@@ -199,8 +199,6 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ArgumentNullException("assetName");
             if (_isDisposed)
                 throw new ObjectDisposedException("ContentManager");
-                        
-            string originalAssetName = assetName;
 
             // Try to load as XNB file
             Stream stream = OpenStream(assetName);
@@ -309,7 +307,7 @@ namespace Microsoft.Xna.Framework.Content
                     T result = reader.ReadAsset<T>();
 
                     if (result == null)
-                        throw new ContentLoadException("Could not load " + originalAssetName + " asset!");
+                        throw new ContentLoadException("Could not load " + assetName + " asset!");
 
                     return result;
                 }
