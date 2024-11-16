@@ -310,6 +310,11 @@ namespace Microsoft.Xna.Framework.Content
                     }
                     finally
                     {
+                        if (decompressedStream != null)
+                        {
+                            decompressedStream.Dispose();
+                            decompressedStream = null;
+                        }
                     }
                 }
                 else // no compression
