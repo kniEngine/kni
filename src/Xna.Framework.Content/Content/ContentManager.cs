@@ -230,13 +230,14 @@ namespace Microsoft.Xna.Framework.Content
                 // The next int32 is the length of the XNB file
                 uint compressedFileSize = xnbReader.ReadUInt32();
 
-                Stream decompressedStream = null;
                 if (isCompressed)
                 {
                     // Decompress the xnb
 
                     uint decompressedDataSize = xnbReader.ReadUInt32();
                     uint compressedDataSize = compressedFileSize - 14;
+
+                    Stream decompressedStream = null;
 
                     bool isCompressedLzx = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLzx;
                     bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
@@ -296,20 +297,25 @@ namespace Microsoft.Xna.Framework.Content
                     {
                         decompressedStream = new Lz4DecoderStream(stream);
                     }
+
+                    // create reader from decompressedStream
+                    using (ContentReader reader = new ContentReader(this, decompressedStream, assetName, version, recordDisposableObject))
+                    {
+                        T result = reader.ReadAsset<T>();
+                        if (result == null)
+                            throw new ContentLoadException("Could not load " + assetName + " asset!");
+                        return result;
+                    }
                 }
                 else // no compression
                 {
-                    decompressedStream = stream;
-                }
-
-                using (ContentReader reader = new ContentReader(this, decompressedStream, assetName, version, recordDisposableObject))
-                {
-                    T result = reader.ReadAsset<T>();
-
-                    if (result == null)
-                        throw new ContentLoadException("Could not load " + assetName + " asset!");
-
-                    return result;
+                    using (ContentReader reader = new ContentReader(this, stream, assetName, version, recordDisposableObject))
+                    {
+                        T result = reader.ReadAsset<T>();
+                        if (result == null)
+                            throw new ContentLoadException("Could not load " + assetName + " asset!");
+                        return result;
+                    }
                 }
             }
         }
