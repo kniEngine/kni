@@ -220,108 +220,108 @@ namespace Microsoft.Xna.Framework.Content
 
         private ContentReader GetContentReaderFromXnb(string assetName, Stream stream, BinaryReader xnbReader, Action<IDisposable> recordDisposableObject)
         {
-            // The first 4 bytes should be the "XNB" header. i use that to detect an invalid file
-            byte x = xnbReader.ReadByte();
-            byte n = xnbReader.ReadByte();
-            byte b = xnbReader.ReadByte();
-            byte platform = xnbReader.ReadByte();
+                // The first 4 bytes should be the "XNB" header. i use that to detect an invalid file
+                byte x = xnbReader.ReadByte();
+                byte n = xnbReader.ReadByte();
+                byte b = xnbReader.ReadByte();
+                byte platform = xnbReader.ReadByte();
 
-            if (x != 'X' || n != 'N' || b != 'B')
-                throw new ContentLoadException("Asset does not appear to be a valid XNB file.");
+                if (x != 'X' || n != 'N' || b != 'B')
+                    throw new ContentLoadException("Asset does not appear to be a valid XNB file.");
 
-            if (!_targetPlatformIdentifiers.Contains((char)platform))
-                throw new ContentLoadException("Asset does not appear to target a known platform. Platform Identifier: '" + (char)platform+"'.");
+                if (!_targetPlatformIdentifiers.Contains((char)platform))
+                    throw new ContentLoadException("Asset does not appear to target a known platform. Platform Identifier: '" + (char)platform+"'.");
 
-            byte version = xnbReader.ReadByte();
+                byte version = xnbReader.ReadByte();
 
-            if (version != 5 && version != 4)
-                throw new ContentLoadException("Invalid XNB version");
+                if (version != 5 && version != 4)
+                    throw new ContentLoadException("Invalid XNB version");
 
-            byte flags = xnbReader.ReadByte();
+                byte flags = xnbReader.ReadByte();
 
-            bool isCompressed = (flags & ContentFlagCompressedExt) != 0;
+                bool isCompressed = (flags & ContentFlagCompressedExt) != 0;
 
-            bool isHiDef = (flags & ContentFlagHiDef) != 0;
+                bool isHiDef = (flags & ContentFlagHiDef) != 0;
 
-            // The next int32 is the length of the XNB file
-            uint compressedFileSize = xnbReader.ReadUInt32();
+                // The next int32 is the length of the XNB file
+                uint compressedFileSize = xnbReader.ReadUInt32();
 
-            Stream decompressedStream = null;
-            if (isCompressed)
-            {
-                // Decompress the xnb
-
-                uint decompressedDataSize = xnbReader.ReadUInt32();
-                uint compressedDataSize = compressedFileSize - 14;
-
-                bool isCompressedLzx = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLzx;
-                bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
-                bool isCompressedExt = (flags & ContentFlagCompressedExt) == ContentFlagCompressedExt;
-
-                if (isCompressedExt)
+                Stream decompressedStream = null;
+                if (isCompressed)
                 {
-                    // read Ext compression header
-                    byte reserved = xnbReader.ReadByte();
-                    if (reserved != 0)
-                        throw new InvalidOperationException("Invalid compression header.");
-                    byte compression = xnbReader.ReadByte();
+                    // Decompress the xnb
 
-                    switch (compression)
+                    uint decompressedDataSize = xnbReader.ReadUInt32();
+                    uint compressedDataSize = compressedFileSize - 14;
+
+                    bool isCompressedLzx = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLzx;
+                    bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
+                    bool isCompressedExt = (flags & ContentFlagCompressedExt) == ContentFlagCompressedExt;
+
+                    if (isCompressedExt)
                     {
-                        case 0x02: // LX4
-                            {
-                                decompressedStream = new Lz4DecoderStream(stream);
-                            }
-                            break;
+                        // read Ext compression header
+                        byte reserved = xnbReader.ReadByte();
+                        if (reserved != 0)
+                            throw new InvalidOperationException("Invalid compression header.");
+                        byte compression = xnbReader.ReadByte();
 
-                        case 0x03: // Brotli
-                            {
-#if NET6_0_OR_GREATER
-                                decompressedStream = new MemoryStream((int)decompressedDataSize);
-                                using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true
-                                ))
+                        switch (compression)
+                        {
+                            case 0x02: // LX4
                                 {
-                                    brotliStream.CopyTo(decompressedStream, (int)decompressedDataSize);
+                                    decompressedStream = new Lz4DecoderStream(stream);
                                 }
-                                decompressedStream.Seek(0, SeekOrigin.Begin);
-#else
-                                throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
-#endif
-                            }
-                            break;
+                                break;
 
-                        default:
-                            throw new NotImplementedException("ContentCompression " + compression + " not implemented.");
+                            case 0x03: // Brotli
+                                {
+    #if NET6_0_OR_GREATER
+                                    decompressedStream = new MemoryStream((int)decompressedDataSize);
+                                    using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true
+                                    ))
+                                    {
+                                        brotliStream.CopyTo(decompressedStream, (int)decompressedDataSize);
+                                    }
+                                    decompressedStream.Seek(0, SeekOrigin.Begin);
+    #else
+                                    throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
+    #endif
+                                }
+                                break;
+
+                            default:
+                                throw new NotImplementedException("ContentCompression " + compression + " not implemented.");
+                        }
                     }
-                }
-                else if (isCompressedLzx)
-                {
-                    // LzxDecoderStream require a seekable stream.
-                    // Handle the case of Android's BufferedStream assets.
-                    Stream compressedStream = stream;
-                    if (stream is BufferedStream && !stream.CanSeek)
+                    else if (isCompressedLzx)
                     {
-                        compressedStream = new MemoryStream((int)compressedDataSize);
-                        stream.CopyTo(compressedStream);
-                        compressedStream.Seek(0, SeekOrigin.Begin);
+                        // LzxDecoderStream require a seekable stream.
+                        // Handle the case of Android's BufferedStream assets.
+                        Stream compressedStream = stream;
+                        if (stream is BufferedStream && !stream.CanSeek)
+                        {
+                            compressedStream = new MemoryStream((int)compressedDataSize);
+                            stream.CopyTo(compressedStream);
+                            compressedStream.Seek(0, SeekOrigin.Begin);
+                        }
+
+                        decompressedStream = new LzxDecoderStream(compressedStream, (int)decompressedDataSize, (int)compressedDataSize);
                     }
-
-                    decompressedStream = new LzxDecoderStream(compressedStream, (int)decompressedDataSize, (int)compressedDataSize);
+                    else if (isCompressedLz4)
+                    {
+                        decompressedStream = new Lz4DecoderStream(stream);
+                    }
                 }
-                else if (isCompressedLz4)
+                else // no compression
                 {
-                    decompressedStream = new Lz4DecoderStream(stream);
+                    decompressedStream = stream;
                 }
-            }
-            else // no compression
-            {
-                decompressedStream = stream;
-            }
 
-            ContentReader reader = new ContentReader(this, decompressedStream,
-                                                     assetName, version, compressedFileSize, recordDisposableObject);
+                ContentReader reader = new ContentReader(this, decompressedStream,
+                                                         assetName, version, compressedFileSize, recordDisposableObject);
             
-            return reader;
+                return reader;
         }
 
         internal void RecordDisposable(IDisposable disposable)
