@@ -243,6 +243,8 @@ namespace Microsoft.Xna.Framework.Content
                     bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
                     bool isCompressedExt = (flags & ContentFlagCompressedExt) == ContentFlagCompressedExt;
 
+                    try
+                    {
                         if (isCompressedExt)
                         {
                             // read Ext compression header
@@ -305,6 +307,10 @@ namespace Microsoft.Xna.Framework.Content
                                 throw new ContentLoadException("Could not load " + assetName + " asset!");
                             return result;
                         }
+                    }
+                    finally
+                    {
+                    }
                 }
                 else // no compression
                 {
