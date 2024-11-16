@@ -243,68 +243,68 @@ namespace Microsoft.Xna.Framework.Content
                     bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
                     bool isCompressedExt = (flags & ContentFlagCompressedExt) == ContentFlagCompressedExt;
 
-                    if (isCompressedExt)
-                    {
-                        // read Ext compression header
-                        byte reserved = xnbReader.ReadByte();
-                        if (reserved != 0)
-                            throw new InvalidOperationException("Invalid compression header.");
-                        byte compression = xnbReader.ReadByte();
-
-                        switch (compression)
+                        if (isCompressedExt)
                         {
-                            case 0x02: // LX4
-                                {
-                                    decompressedStream = new Lz4DecoderStream(stream);
-                                }
-                                break;
+                            // read Ext compression header
+                            byte reserved = xnbReader.ReadByte();
+                            if (reserved != 0)
+                                throw new InvalidOperationException("Invalid compression header.");
+                            byte compression = xnbReader.ReadByte();
 
-                            case 0x03: // Brotli
-                                {
-    #if NET6_0_OR_GREATER
-                                    decompressedStream = new MemoryStream((int)decompressedDataSize);
-                                    using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true))
+                            switch (compression)
+                            {
+                                case 0x02: // LX4
                                     {
-                                        brotliStream.CopyTo(decompressedStream, (int)decompressedDataSize);
+                                        decompressedStream = new Lz4DecoderStream(stream);
                                     }
-                                    decompressedStream.Seek(0, SeekOrigin.Begin);
-    #else
-                                    throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
-    #endif
-                                }
-                                break;
+                                    break;
 
-                            default:
-                                throw new NotImplementedException("ContentCompression " + compression + " not implemented.");
+                                case 0x03: // Brotli
+                                    {
+#if NET6_0_OR_GREATER
+                                        decompressedStream = new MemoryStream((int)decompressedDataSize);
+                                        using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true))
+                                        {
+                                            brotliStream.CopyTo(decompressedStream, (int)decompressedDataSize);
+                                        }
+                                        decompressedStream.Seek(0, SeekOrigin.Begin);
+#else
+                                        throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
+#endif
+                                    }
+                                    break;
+
+                                default:
+                                    throw new NotImplementedException("ContentCompression " + compression + " not implemented.");
+                            }
                         }
-                    }
-                    else if (isCompressedLzx)
-                    {
-                        // LzxDecoderStream require a seekable stream.
-                        // Handle the case of Android's BufferedStream assets.
-                        Stream compressedStream = stream;
-                        if (stream is BufferedStream && !stream.CanSeek)
+                        else if (isCompressedLzx)
                         {
-                            compressedStream = new MemoryStream((int)compressedDataSize);
-                            stream.CopyTo(compressedStream);
-                            compressedStream.Seek(0, SeekOrigin.Begin);
+                            // LzxDecoderStream require a seekable stream.
+                            // Handle the case of Android's BufferedStream assets.
+                            Stream compressedStream = stream;
+                            if (stream is BufferedStream && !stream.CanSeek)
+                            {
+                                compressedStream = new MemoryStream((int)compressedDataSize);
+                                stream.CopyTo(compressedStream);
+                                compressedStream.Seek(0, SeekOrigin.Begin);
+                            }
+
+                            decompressedStream = new LzxDecoderStream(compressedStream, (int)decompressedDataSize, (int)compressedDataSize);
+                        }
+                        else if (isCompressedLz4)
+                        {
+                            decompressedStream = new Lz4DecoderStream(stream);
                         }
 
-                        decompressedStream = new LzxDecoderStream(compressedStream, (int)decompressedDataSize, (int)compressedDataSize);
-                    }
-                    else if (isCompressedLz4)
-                    {
-                        decompressedStream = new Lz4DecoderStream(stream);
-                    }
-
-                    // create reader from decompressedStream
-                    using (ContentReader reader = new ContentReader(this, decompressedStream, assetName, version, recordDisposableObject))
-                    {
-                        T result = reader.ReadAsset<T>();
-                        if (result == null)
-                            throw new ContentLoadException("Could not load " + assetName + " asset!");
-                        return result;
-                    }
+                        // create reader from decompressedStream
+                        using (ContentReader reader = new ContentReader(this, decompressedStream, assetName, version, recordDisposableObject))
+                        {
+                            T result = reader.ReadAsset<T>();
+                            if (result == null)
+                                throw new ContentLoadException("Could not load " + assetName + " asset!");
+                            return result;
+                        }
                 }
                 else // no compression
                 {
