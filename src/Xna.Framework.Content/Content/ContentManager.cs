@@ -206,20 +206,6 @@ namespace Microsoft.Xna.Framework.Content
             Stream stream = OpenStream(assetName);
             using (BinaryReader xnbReader = new BinaryReader(stream))
             {
-                using (ContentReader reader = GetContentReaderFromXnb(assetName, stream, xnbReader, recordDisposableObject))
-                {
-                    T result = reader.ReadAsset<T>();
-
-                    if (result == null)
-                        throw new ContentLoadException("Could not load " + originalAssetName + " asset!");
-
-                    return result;
-                }
-            }
-        }
-
-        private ContentReader GetContentReaderFromXnb(string assetName, Stream stream, BinaryReader xnbReader, Action<IDisposable> recordDisposableObject)
-        {
                 // The first 4 bytes should be the "XNB" header. i use that to detect an invalid file
                 byte x = xnbReader.ReadByte();
                 byte n = xnbReader.ReadByte();
@@ -318,10 +304,16 @@ namespace Microsoft.Xna.Framework.Content
                     decompressedStream = stream;
                 }
 
-                ContentReader reader = new ContentReader(this, decompressedStream,
-                                                         assetName, version, compressedFileSize, recordDisposableObject);
-            
-                return reader;
+                using (ContentReader reader = new ContentReader(this, decompressedStream, assetName, version, compressedFileSize, recordDisposableObject))
+                {
+                    T result = reader.ReadAsset<T>();
+
+                    if (result == null)
+                        throw new ContentLoadException("Could not load " + originalAssetName + " asset!");
+
+                    return result;
+                }
+            }
         }
 
         internal void RecordDisposable(IDisposable disposable)
