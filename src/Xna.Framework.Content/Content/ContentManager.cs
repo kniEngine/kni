@@ -263,8 +263,7 @@ namespace Microsoft.Xna.Framework.Content
                                 {
     #if NET6_0_OR_GREATER
                                     decompressedStream = new MemoryStream((int)decompressedDataSize);
-                                    using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true
-                                    ))
+                                    using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true))
                                     {
                                         brotliStream.CopyTo(decompressedStream, (int)decompressedDataSize);
                                     }
