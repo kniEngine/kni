@@ -247,7 +247,6 @@ namespace Microsoft.Xna.Framework.Content
             uint compressedFileSize = xnbReader.ReadUInt32();
 
             Stream decompressedStream = null;
-            byte[] decompressBuffer = null;
             if (isCompressed)
             {
                 // Decompress the xnb
@@ -278,8 +277,7 @@ namespace Microsoft.Xna.Framework.Content
                         case 0x03: // Brotli
                             {
 #if NET6_0_OR_GREATER
-                                decompressBuffer = ContentBufferPool.Current.Get((int)decompressedDataSize);
-                                decompressedStream = new MemoryStream(decompressBuffer);
+                                decompressedStream = new MemoryStream();
                                 using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true
                                 ))
                                 {
@@ -322,10 +320,7 @@ namespace Microsoft.Xna.Framework.Content
 
             ContentReader reader = new ContentReader(this, decompressedStream,
                                                      originalAssetName, version, compressedFileSize, recordDisposableObject);
-
-            if (decompressBuffer != null)
-                ContentBufferPool.Current.Return(decompressBuffer);
-
+            
             return reader;
         }
 
