@@ -238,6 +238,7 @@ namespace Microsoft.Xna.Framework.Content
                     uint compressedDataSize = compressedFileSize - 14;
 
                     Stream decompressedStream = null;
+                    byte[] decompressBuffer = null;
 
                     bool isCompressedLzx = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLzx;
                     bool isCompressedLz4 = (flags & ContentFlagCompressedExt) == ContentFlagCompressedLz4;
@@ -264,7 +265,8 @@ namespace Microsoft.Xna.Framework.Content
                                 case 0x03: // Brotli
                                     {
 #if NET6_0_OR_GREATER
-                                        decompressedStream = new MemoryStream((int)decompressedDataSize);
+                                        decompressBuffer = ContentBufferPool.Current.Get((int)decompressedDataSize);
+                                        decompressedStream = new MemoryStream(decompressBuffer);
                                         using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true))
                                         {
                                             brotliStream.CopyTo(decompressedStream, (int)decompressedDataSize);
@@ -314,6 +316,11 @@ namespace Microsoft.Xna.Framework.Content
                         {
                             decompressedStream.Dispose();
                             decompressedStream = null;
+                        }
+                        if (decompressBuffer != null)
+                        {
+                            ContentBufferPool.Current.Return(decompressBuffer);
+                            decompressBuffer = null;
                         }
                     }
                 }
