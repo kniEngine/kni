@@ -277,7 +277,7 @@ namespace Microsoft.Xna.Framework.Content
                         case 0x03: // Brotli
                             {
 #if NET6_0_OR_GREATER
-                                decompressedStream = new MemoryStream();
+                                decompressedStream = new MemoryStream((int)decompressedDataSize);
                                 using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true
                                 ))
                                 {
