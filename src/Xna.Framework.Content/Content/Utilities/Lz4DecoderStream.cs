@@ -42,6 +42,13 @@ namespace Microsoft.Xna.Framework.Content
         protected override void Dispose(bool disposing)
         {
             this.input = null;
+
+            if (decodeBuffer != null)
+            {
+                ContentBufferPool.Current.Return(decodeBuffer);
+                decodeBuffer = null;
+            }
+
             base.Dispose(disposing);
         }
 
@@ -58,7 +65,7 @@ namespace Microsoft.Xna.Framework.Content
 
         private const int InBufLen = 128;
 
-        private byte[] decodeBuffer = new byte[DecBufLen + InBufLen];
+        private byte[] decodeBuffer = ContentBufferPool.Current.Get(DecBufLen + InBufLen);
         private int decodeBufferPos, inBufPos, inBufEnd;
 
         //we keep track of which phase we're in so that we can jump right back
