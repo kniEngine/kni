@@ -55,7 +55,18 @@ namespace Microsoft.Xna.Platform
             }
             catch (PlatformNotSupportedException e)
             {
-                throw;
+                byte[] compressedBuffer = new byte[compressedDataSize];
+                stream.Read(compressedBuffer);
+
+                byte[] decompressedBuffer = new byte[decompressedDataSize];
+
+                var xhr = new nkast.Wasm.XHR.XMLHttpRequest();
+                xhr.DecompressBrotliStream(
+                    compressedBuffer, compressedDataSize,
+                    decompressedBuffer, decompressedDataSize);
+
+                Stream decompressedStream = new MemoryStream(decompressedBuffer);
+                return decompressedStream;
             }
         }
     }
