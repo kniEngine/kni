@@ -45,6 +45,19 @@ namespace Microsoft.Xna.Platform
                 throw new IOException("HTTP request failed. Status:" + request.Status);
             }
         }
+
+        public override Stream DecompressBrotliStream(Stream stream, uint compressedDataSize, uint decompressedDataSize)
+        {
+            try
+            {
+                Stream decompressedStream = base.DecompressBrotliStream(stream, compressedDataSize, decompressedDataSize);
+                return decompressedStream;
+            }
+            catch (PlatformNotSupportedException e)
+            {
+                throw;
+            }
+        }
     }
 }
 

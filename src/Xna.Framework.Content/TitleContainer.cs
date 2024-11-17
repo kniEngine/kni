@@ -17,7 +17,13 @@ namespace Microsoft.Xna.Platform
         string Location { get; }
 
         TitlePlatform Platform { get; }
+
         Stream OpenStream(string name);
+    }
+
+    public interface IPlatformTitleContainer
+    {
+        T GetStrategy<T>() where T : TitleContainerStrategy;
     }
 }
 
@@ -27,6 +33,7 @@ namespace Microsoft.Xna.Framework
     /// Provides functionality for opening a stream in the title storage area.
     /// </summary>
     public sealed class TitleContainer : ITitleContainer
+        , IPlatformTitleContainer
     {
         private static TitleContainer _current;
 
@@ -66,6 +73,11 @@ namespace Microsoft.Xna.Framework
         }
 
         private TitleContainerStrategy _strategy;
+
+        T IPlatformTitleContainer.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
 
         private TitleContainer()
         {

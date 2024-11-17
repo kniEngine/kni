@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using Microsoft.Xna.Platform;
 
 
 namespace Microsoft.Xna.Framework.Content
@@ -261,16 +262,7 @@ namespace Microsoft.Xna.Framework.Content
 
                             case 0x03: // Brotli
                                 {
-    #if NET6_0_OR_GREATER
-                                    decompressedStream = new MemoryStream((int)decompressedDataSize);
-                                    using (var brotliStream = new System.IO.Compression.BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true))
-                                    {
-                                        brotliStream.CopyTo(decompressedStream, (int)decompressedDataSize);
-                                    }
-                                    decompressedStream.Seek(0, SeekOrigin.Begin);
-    #else
-                                    throw new PlatformNotSupportedException("ContentCompression Brotli not Supported.");
-    #endif
+                                    decompressedStream = ((IPlatformTitleContainer)TitleContainer.Current).GetStrategy<TitleContainerStrategy>().DecompressBrotliStream(stream, compressedDataSize, decompressedDataSize);
                                 }
                                 break;
 
