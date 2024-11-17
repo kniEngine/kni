@@ -246,10 +246,10 @@ namespace Microsoft.Xna.Framework.Content
                     if (isCompressedExt)
                     {
                         // read Ext compression header
-                        byte reserved = xnbReader.ReadByte();
+                        byte reserved = xnbReader.ReadByte(); compressedDataSize -= 1;
                         if (reserved != 0)
                             throw new InvalidOperationException("Invalid compression header.");
-                        byte compression = xnbReader.ReadByte();
+                        byte compression = xnbReader.ReadByte(); compressedDataSize -= 1;
 
                         switch (compression)
                         {
