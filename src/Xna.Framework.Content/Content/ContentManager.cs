@@ -201,6 +201,9 @@ namespace Microsoft.Xna.Framework.Content
             if (_isDisposed)
                 throw new ObjectDisposedException("ContentManager");
 
+            if (recordDisposableObject == null)
+                recordDisposableObject = this.RecordDisposableCallback;
+
             // Try to load as XNB file
             Stream stream = OpenStream(assetName);
             using (BinaryReader xnbReader = new BinaryReader(stream))
@@ -311,7 +314,7 @@ namespace Microsoft.Xna.Framework.Content
             }
         }
 
-        internal void RecordDisposableCallback(IDisposable disposable)
+        private void RecordDisposableCallback(IDisposable disposable)
         {
             Debug.Assert(disposable != null, "The disposable is null.");
 

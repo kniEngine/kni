@@ -105,12 +105,7 @@ namespace Microsoft.Xna.Framework.Content
         {
             IDisposable disposable = result as IDisposable;
             if (disposable != null)
-            {
-                if (_recordDisposableObject != null)
-                    _recordDisposableObject(disposable);
-                else
-                    _contentManager.RecordDisposableCallback(disposable);
-            }
+                _recordDisposableObject(disposable);
         }
 
         public T ReadObject<T>()
