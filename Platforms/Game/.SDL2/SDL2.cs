@@ -307,10 +307,11 @@ internal class Sdl
 
     public IntPtr GetError(IntPtr pointer)
     {
-        if (pointer == IntPtr.Zero)
-            Debug.WriteLine(GetError());
+        if (pointer != IntPtr.Zero)
+            return pointer;
 
-        return pointer;
+        Debug.WriteLine(GetError());
+        return IntPtr.Zero;
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
