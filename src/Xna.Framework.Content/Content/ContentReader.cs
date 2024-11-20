@@ -103,8 +103,7 @@ namespace Microsoft.Xna.Framework.Content
             
         private void ExecuteRecordDisposable<T>(T result)
         {
-            IDisposable disposable = result as IDisposable;
-            if (disposable != null)
+            if (result is IDisposable disposable)
                 _recordDisposableObject(disposable);
         }
 
