@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Framework
             var intersects = false;
             for (var i = 0; i < PlaneCount; ++i)
             {
-                IntersectsHelper.BoundingBoxIntersectsPlane(ref box, ref this._planes[i], out PlaneIntersectionType planeIntersectionType);
+                _planes[i].Intersects(ref box, out PlaneIntersectionType planeIntersectionType);
 
                 switch (planeIntersectionType)
                 {
@@ -258,7 +258,7 @@ namespace Microsoft.Xna.Framework
             for (var i = 0; i < PlaneCount; ++i) 
             {
                 // TODO: we might want to inline this for performance reasons
-                IntersectsHelper.BoundingSphereIntersectsPlane(ref sphere, ref this._planes[i], out PlaneIntersectionType planeIntersectionType);
+                _planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
                 switch (planeIntersectionType)
                 {
                 case PlaneIntersectionType.Front:
@@ -515,7 +515,7 @@ namespace Microsoft.Xna.Framework
                         }
 
                         float? distance;
-                        IntersectsHelper.PlaneIntersectsRay(ref _planes[p], ref ray, out distance);
+                        _planes[p].Intersects(ref ray, out distance);
                         if (distance.HasValue)
                         {
                             min = Math.Min(min, distance.Value);
