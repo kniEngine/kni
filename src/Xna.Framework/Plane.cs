@@ -429,7 +429,6 @@ namespace Microsoft.Xna.Framework
         /// Check if this <see cref="Plane"/> intersects a <see cref="Ray"/>.
         /// </summary>
         /// <param name="ray">The <see cref="Ray"/> to test for intersection.</param>
-        /// <returns>
         /// <param name="result">
         /// The distance along the ray of the intersection or <code>null</code> if the
         /// <see cref="Ray"/> does not intersect this <see cref="Plane"/>.
