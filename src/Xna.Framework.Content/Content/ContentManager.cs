@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Load the asset.
-            result = ReadAsset<T>(assetName, this.RecordDisposable);
+            result = ReadAsset<T>(assetName, this.RecordDisposableCallback);
 
             lock (this.SyncHandle)
             {
@@ -311,7 +311,7 @@ namespace Microsoft.Xna.Framework.Content
             }
         }
 
-        internal void RecordDisposable(IDisposable disposable)
+        internal void RecordDisposableCallback(IDisposable disposable)
         {
             Debug.Assert(disposable != null, "The disposable is null.");
 

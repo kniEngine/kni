@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Framework.Content
                 if (_recordDisposableObject != null)
                     _recordDisposableObject(disposable);
                 else
-                    _contentManager.RecordDisposable(disposable);
+                    _contentManager.RecordDisposableCallback(disposable);
             }
         }
 
