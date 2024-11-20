@@ -100,19 +100,6 @@ namespace Microsoft.Xna.Framework.Content
             return default(T);
         }
 
-            
-        private void RecordDisposable<T>(T result)
-        {
-            IDisposable disposable = result as IDisposable;
-            if (disposable != null)
-            {
-                if (_recordDisposableObject != null)
-                    _recordDisposableObject(disposable);
-                else
-                    _contentManager.RecordDisposable(disposable);
-            }
-        }
-
         public T ReadObject<T>()
         {
             return ReadObject<T>(default(T));
@@ -128,7 +115,9 @@ namespace Microsoft.Xna.Framework.Content
             else
                 result = (T)typeReader.Read(this, default(T));
 
-            RecordDisposable<T>(result);
+            if (result is IDisposable disposable)
+                _recordDisposableObject(disposable);
+
             return result;
         }
 
@@ -144,7 +133,8 @@ namespace Microsoft.Xna.Framework.Content
             ContentTypeReader typeReader = _typeReaders[typeReaderIndex - 1];
             T result = (T)typeReader.Read(this, existingInstance);
 
-            RecordDisposable(result);
+            if (result is IDisposable disposable)
+                _recordDisposableObject(disposable);
 
             return result;
         }
@@ -156,7 +146,8 @@ namespace Microsoft.Xna.Framework.Content
 
             T result = (T)typeReader.Read(this, existingInstance);
 
-            RecordDisposable(result);
+            if (result is IDisposable disposable)
+                _recordDisposableObject(disposable);
 
             return result;
         }

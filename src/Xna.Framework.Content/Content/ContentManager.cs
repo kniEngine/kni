@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework.Content
             }
 
             // Load the asset.
-            result = ReadAsset<T>(assetName, this.RecordDisposable);
+            result = ReadAsset<T>(assetName, this.RecordDisposableCallback);
 
             lock (this.SyncHandle)
             {
@@ -200,6 +200,9 @@ namespace Microsoft.Xna.Framework.Content
                 throw new ArgumentNullException("assetName");
             if (_isDisposed)
                 throw new ObjectDisposedException("ContentManager");
+
+            if (recordDisposableObject == null)
+                recordDisposableObject = this.RecordDisposableCallback;
 
             // Try to load as XNB file
             Stream stream = OpenStream(assetName);
@@ -311,7 +314,7 @@ namespace Microsoft.Xna.Framework.Content
             }
         }
 
-        internal void RecordDisposable(IDisposable disposable)
+        private void RecordDisposableCallback(IDisposable disposable)
         {
             Debug.Assert(disposable != null, "The disposable is null.");
 
