@@ -410,6 +410,35 @@ namespace Microsoft.Xna.Framework
             IntersectsHelper.BoundingSphereIntersectsPlane(ref sphere, ref this, out result);
         }
 
+        /// <summary>
+        /// Check if this <see cref="Plane"/> intersects a <see cref="Ray"/>.
+        /// </summary>
+        /// <param name="ray">The <see cref="Ray"/> to test for intersection.</param>
+        /// <returns>
+        /// The distance along the ray of the intersection or <code>null</code> if the
+        /// <see cref="Ray"/> does not intersect this <see cref="Plane"/>.
+        /// </returns>
+        public float? Intersects(Ray ray)
+        {
+            float? result;
+            IntersectsHelper.PlaneIntersectsRay(ref this, ref ray, out result);
+            return result;
+        }
+
+        /// <summary>
+        /// Check if this <see cref="Plane"/> intersects a <see cref="Ray"/>.
+        /// </summary>
+        /// <param name="ray">The <see cref="Ray"/> to test for intersection.</param>
+        /// <returns>
+        /// <param name="result">
+        /// The distance along the ray of the intersection or <code>null</code> if the
+        /// <see cref="Ray"/> does not intersect this <see cref="Plane"/>.
+        /// </param>
+        public void Intersects(ref Ray ray, out float? result)
+        {
+            IntersectsHelper.PlaneIntersectsRay(ref this, ref ray, out result);
+        }
+
         internal PlaneIntersectionType Intersects(ref Vector3 point)
         {
             float distance;
