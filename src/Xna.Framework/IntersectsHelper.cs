@@ -223,6 +223,21 @@ namespace Microsoft.Xna.Framework
             result = squareDistance <= sphere.Radius * sphere.Radius;
         }
 
+        internal static void BoundingFrustumIntersectsBoundingFrustum(BoundingFrustum frustum, BoundingFrustum other, out bool result)
+        {
+            result = true;
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                other.Intersects(ref frustum._planes[i], out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
+        }
+
         internal static void BoundingSphereIntersectsBoundingSphere(ref BoundingSphere sphere, ref BoundingSphere other, out bool result)
         {
             Vector3.DistanceSquared(ref other.Center, ref sphere.Center, out float sqDistance);

@@ -376,22 +376,13 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="frustum">An other <see cref="BoundingFrustum"/> for intersection test.</param>
         /// <returns><c>true</c> if other <see cref="BoundingFrustum"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise.</returns>
-        public bool Intersects(BoundingFrustum frustum)
+        public bool Intersects(BoundingFrustum frustum)//frustum)
         {
             if (this == frustum)
                 return true;
 
-            for (int i = 0; i < PlaneCount; i++)
-            {
-                frustum.Intersects(ref _planes[i], out PlaneIntersectionType planeIntersectionType);
-                switch (planeIntersectionType)
-                {
-                    case PlaneIntersectionType.Front:
-                        return false;
-                }
-            }
-
-            return true;
+            IntersectsHelper.BoundingFrustumIntersectsBoundingFrustum(this, frustum, out bool result);
+            return result;
         }
 
         /// <summary>
