@@ -297,21 +297,16 @@ internal class Sdl
         return InteropHelpers.Utf8ToString(SDL_GetError());
     }
 
-    public int GetError(int value)
+    public void GetError(int res)
     {
-        if (value < 0)
+        if (res < 0)
             Debug.WriteLine(GetError());
-
-        return value;
     }
 
-    public IntPtr GetError(IntPtr pointer)
+    public void GetError(IntPtr pointer)
     {
-        if (pointer != IntPtr.Zero)
-            return pointer;
-
-        Debug.WriteLine(GetError());
-        return IntPtr.Zero;
+        if (pointer == IntPtr.Zero)
+            Debug.WriteLine(GetError());
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -333,7 +328,9 @@ internal class Sdl
 
     public IntPtr LoadBMP_RW(IntPtr src, int freesrc)
     {
-        return GetError(SDL_LoadBMP_RW(src, freesrc));
+        IntPtr pointer = SDL_LoadBMP_RW(src, freesrc);
+        GetError(pointer);
+        return pointer;
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -342,7 +339,9 @@ internal class Sdl
 
     public IntPtr RwFromMem(byte[] mem, int size)
     {
-        return GetError(SDL_RWFromMem(mem, size));
+        IntPtr pointer = SDL_RWFromMem(mem, size);
+        GetError(pointer);
+        return pointer;
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -471,7 +470,9 @@ internal class Sdl
 
         public IntPtr Create(string title, int x, int y, int w, int h, Sdl.Window.State flags)
         {
-            return _sdl.GetError(SDL_CreateWindow(title, x, y, w, h, (int)flags));
+            IntPtr pointer = SDL_CreateWindow(title, x, y, w, h, (int)flags);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -488,7 +489,9 @@ internal class Sdl
 
         public int GetDisplayIndex(IntPtr window)
         {
-            return _sdl.GetError(SDL_GetWindowDisplayIndex(window));
+            int res = SDL_GetWindowDisplayIndex(window);
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -517,7 +520,8 @@ internal class Sdl
 
         public void SetFullscreen(IntPtr window, Sdl.Window.State flags)
         {
-            _sdl.GetError(SDL_SetWindowFullscreen(window, (int)flags));
+            int res = SDL_SetWindowFullscreen(window, (int)flags);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -606,7 +610,8 @@ internal class Sdl
 
         public void GetBounds(int displayIndex, out Rectangle rect)
         {
-            _sdl.GetError(SDL_GetDisplayBounds(displayIndex, out rect));
+            int res = SDL_GetDisplayBounds(displayIndex, out rect);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -615,7 +620,8 @@ internal class Sdl
 
         public void GetCurrentDisplayMode(int displayIndex, out Mode mode)
         {
-            _sdl.GetError(SDL_GetCurrentDisplayMode(displayIndex, out mode));
+            int res = SDL_GetCurrentDisplayMode(displayIndex, out mode);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -624,7 +630,8 @@ internal class Sdl
 
         public void GetDisplayMode(int displayIndex, int modeIndex, out Mode mode)
         {
-            _sdl.GetError(SDL_GetDisplayMode(displayIndex, modeIndex, out mode));
+            int res = SDL_GetDisplayMode(displayIndex, modeIndex, out mode);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -633,7 +640,8 @@ internal class Sdl
 
         public void GetClosestDisplayMode(int displayIndex, Mode mode, out Mode closest)
         {
-            _sdl.GetError(SDL_GetClosestDisplayMode(displayIndex, mode, out closest));
+            int res = SDL_GetClosestDisplayMode(displayIndex, mode, out closest);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -642,7 +650,9 @@ internal class Sdl
 
         public string GetDisplayName(int index)
         {
-            return InteropHelpers.Utf8ToString(_sdl.GetError(SDL_GetDisplayName(index)));
+            IntPtr pointer = SDL_GetDisplayName(index);
+            _sdl.GetError(pointer);
+            return InteropHelpers.Utf8ToString(pointer);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -651,7 +661,9 @@ internal class Sdl
 
         public int GetNumDisplayModes(int displayIndex)
         {
-            return _sdl.GetError(SDL_GetNumDisplayModes(displayIndex));
+            int res = SDL_GetNumDisplayModes(displayIndex);
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -660,7 +672,9 @@ internal class Sdl
 
         public int GetNumVideoDisplays()
         {
-            return _sdl.GetError(SDL_GetNumVideoDisplays());
+            int res = SDL_GetNumVideoDisplays();
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -669,7 +683,9 @@ internal class Sdl
 
         public int GetWindowDisplayIndex(IntPtr window)
         {
-            return _sdl.GetError(SDL_GetWindowDisplayIndex(window));
+            int res = SDL_GetWindowDisplayIndex(window);
+            _sdl.GetError(res);
+            return res;
         }
 
 
@@ -733,7 +749,9 @@ internal class Sdl
 
         public IntPtr CreateGLContext(IntPtr window)
         {
-            return _sdl.GetError(SDL_GL_CreateContext(window));
+            IntPtr pointer = SDL_GL_CreateContext(window);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -746,7 +764,9 @@ internal class Sdl
 
         public IntPtr GetCurrentContext()
         {
-            return _sdl.GetError(SDL_GL_GetCurrentContext());
+            IntPtr pointer = SDL_GL_GetCurrentContext();
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -767,7 +787,9 @@ internal class Sdl
 
         public int SetAttribute(Attribute attr, int value)
         {
-            return _sdl.GetError(SDL_GL_SetAttribute(attr, value));
+            int res = SDL_GL_SetAttribute(attr, value);
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -863,7 +885,9 @@ internal class Sdl
 
         public IntPtr CreateColorCursor(IntPtr surface, int x, int y)
         {
-            return _sdl.GetError(SDL_CreateColorCursor(surface, x, y));
+            IntPtr pointer = SDL_CreateColorCursor(surface, x, y);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -872,7 +896,9 @@ internal class Sdl
 
         public IntPtr CreateSystemCursor(SystemCursor id)
         {
-            return _sdl.GetError(SDL_CreateSystemCursor(id));
+            IntPtr pointer = SDL_CreateSystemCursor(id);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1035,7 +1061,9 @@ internal class Sdl
 
         public IntPtr FromInstanceID(int joyid)
         {
-            return _sdl.GetError(SDL_JoystickFromInstanceID(joyid));
+            IntPtr pointer = SDL_JoystickFromInstanceID(joyid);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1073,7 +1101,9 @@ internal class Sdl
 
         public IntPtr Open(int deviceIndex)
         {
-            return _sdl.GetError(SDL_JoystickOpen(deviceIndex));
+            IntPtr pointer = SDL_JoystickOpen(deviceIndex);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1082,7 +1112,9 @@ internal class Sdl
 
         public int NumAxes(IntPtr joystick)
         {
-            return _sdl.GetError(SDL_JoystickNumAxes(joystick));
+            int res = SDL_JoystickNumAxes(joystick);
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1091,7 +1123,9 @@ internal class Sdl
 
         public int NumButtons(IntPtr joystick)
         {
-            return _sdl.GetError(SDL_JoystickNumButtons(joystick));
+            int res = SDL_JoystickNumButtons(joystick);
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1100,7 +1134,9 @@ internal class Sdl
 
         public int NumHats(IntPtr joystick)
         {
-            return _sdl.GetError(SDL_JoystickNumHats(joystick));
+            int res = SDL_JoystickNumHats(joystick);
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1109,7 +1145,9 @@ internal class Sdl
 
         public int NumJoysticks()
         {
-            return _sdl.GetError(SDL_NumJoysticks());
+            int res = SDL_NumJoysticks();
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1204,7 +1242,9 @@ internal class Sdl
 
         public IntPtr FromInstanceID(int joyid)
         {
-            return _sdl.GetError(SDL_GameControllerFromInstanceID(joyid));
+            IntPtr pointer = SDL_GameControllerFromInstanceID(joyid);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1221,7 +1261,9 @@ internal class Sdl
 
         public IntPtr GetJoystick(IntPtr gamecontroller)
         {
-            return _sdl.GetError(SDL_GameControllerGetJoystick(gamecontroller));
+            IntPtr pointer = SDL_GameControllerGetJoystick(gamecontroller);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1238,7 +1280,9 @@ internal class Sdl
 
         public IntPtr Open(int joystickIndex)
         {
-            return _sdl.GetError(SDL_GameControllerOpen(joystickIndex));
+            IntPtr pointer = SDL_GameControllerOpen(joystickIndex);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1291,8 +1335,8 @@ internal class Sdl
         private Sdl _sdl;
 
         // For some reason, different game controllers support different maximum values
-        // Also, the closer a given value is to the maximum, the more likely the value will be ignored
-        // Hence, we're setting an arbitrary safe value as a maximum
+        // Also, the closer a given res is to the maximum, the more likely the res will be ignored
+        // Hence, we're setting an arbitrary safe res as a maximum
         public const uint Infinity = 1000000U;
 
         public enum EffectId : ushort
@@ -1340,7 +1384,8 @@ internal class Sdl
 
         public void NewEffect(IntPtr haptic, ref Effect effect)
         {
-            _sdl.GetError(SDL_HapticNewEffect(haptic, ref effect));
+            int res = SDL_HapticNewEffect(haptic, ref effect);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1353,7 +1398,9 @@ internal class Sdl
 
         public IntPtr OpenFromJoystick(IntPtr joystick)
         {
-            return _sdl.GetError(SDL_HapticOpenFromJoystick(joystick));
+            IntPtr pointer = SDL_HapticOpenFromJoystick(joystick);
+            _sdl.GetError(pointer);
+            return pointer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1362,7 +1409,8 @@ internal class Sdl
 
         public void RumbleInit(IntPtr haptic)
         {
-            _sdl.GetError(SDL_HapticRumbleInit(haptic));
+            int res = SDL_HapticRumbleInit(haptic);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1371,7 +1419,8 @@ internal class Sdl
 
         public void RumblePlay(IntPtr haptic, float strength, uint length)
         {
-            _sdl.GetError(SDL_HapticRumblePlay(haptic, strength, length));
+            int res = SDL_HapticRumblePlay(haptic, strength, length);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1380,7 +1429,9 @@ internal class Sdl
 
         public int RumbleSupported(IntPtr haptic)
         {
-            return _sdl.GetError(SDL_HapticRumbleSupported(haptic));
+            int res = SDL_HapticRumbleSupported(haptic);
+            _sdl.GetError(res);
+            return res;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1389,7 +1440,8 @@ internal class Sdl
 
         public void RunEffect(IntPtr haptic, int effect, uint iterations)
         {
-            _sdl.GetError(SDL_HapticRunEffect(haptic, effect, iterations));
+            int res = SDL_HapticRunEffect(haptic, effect, iterations);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1398,7 +1450,8 @@ internal class Sdl
 
         public void StopAll(IntPtr haptic)
         {
-            _sdl.GetError(SDL_HapticStopAll(haptic));
+            int res = SDL_HapticStopAll(haptic);
+            _sdl.GetError(res);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1407,7 +1460,8 @@ internal class Sdl
 
         public void UpdateEffect(IntPtr haptic, int effect, ref Effect data)
         {
-            _sdl.GetError(SDL_HapticUpdateEffect(haptic, effect, ref data));
+            int res = SDL_HapticUpdateEffect(haptic, effect, ref data);
+            _sdl.GetError(res);
         }
 
         private void LoadEntryPoints(IntPtr library)
