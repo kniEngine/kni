@@ -238,6 +238,21 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        internal static void BoundingFrustumIntersectsBoundingSphere(BoundingFrustum frustum, BoundingSphere sphere, out bool result)
+        {
+            result = true;
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                frustum._planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
+        }
+
         internal static void BoundingSphereIntersectsBoundingSphere(ref BoundingSphere sphere, ref BoundingSphere other, out bool result)
         {
             Vector3.DistanceSquared(ref other.Center, ref sphere.Center, out float sqDistance);
