@@ -216,21 +216,20 @@ namespace Microsoft.Xna.Framework
             if (this == frustum)                // We check to see if the two frustums are equal
                 return ContainmentType.Contains;// If they are, there's no need to go any further.
 
-            bool intersects = false;
-            for (int i = 0; i < PlaneCount; ++i)
+            ContainmentType result = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
             {
-                PlaneIntersectionType planeIntersectionType;
-                frustum.Intersects(ref _planes[i], out planeIntersectionType);
+                PlaneIntersectionType planeIntersectionType = _planes[i].Intersects(frustum);
                 switch (planeIntersectionType)
                 {
                     case PlaneIntersectionType.Front:
                         return ContainmentType.Disjoint;
                     case PlaneIntersectionType.Intersecting:
-                        intersects = true;
+                        result = ContainmentType.Intersects;
                         break;
                 }
             }
-            return intersects ? ContainmentType.Intersects : ContainmentType.Contains;
+            return result;
         }
 
         /// <summary>
