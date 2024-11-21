@@ -106,11 +106,13 @@ namespace Kni.Tests.Framework
             var bbox2 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(1000, 1000, 1000));
             var bbox3 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(0, 0, 0));
             var bbox4 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(-500, -500, -500));
+            var bbox5 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(-150, 1000,  -50));
 
             Assert.That(testFrustum.Intersects(bbox1), Is.True);
             Assert.That(testFrustum.Intersects(bbox2), Is.True);
             Assert.That(testFrustum.Intersects(bbox3), Is.True);
             Assert.That(testFrustum.Intersects(bbox4), Is.False);
+            Assert.That(testFrustum.Intersects(bbox5), Is.False);
         }
 
         [Test]
