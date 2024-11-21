@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework
 {
     internal class IntersectsHelper
     {
-        internal static void BoundingBoxIntersectsoundingBox(ref BoundingBox box, ref BoundingBox other, out bool result)
+        internal static void BoundingBoxIntersectsBoundingBox(ref BoundingBox box, ref BoundingBox other, out bool result)
         {
             if ((box.Max.X >= other.Min.X) && (box.Min.X <= other.Max.X))
             {

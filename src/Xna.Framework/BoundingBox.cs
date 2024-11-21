@@ -593,7 +593,7 @@ namespace Microsoft.Xna.Framework
         public bool Intersects(BoundingBox box)
         {
             bool result;
-            IntersectsHelper.BoundingBoxIntersectsoundingBox(ref this, ref box, out result);
+            IntersectsHelper.BoundingBoxIntersectsBoundingBox(ref this, ref box, out result);
             return result;
         }
 
@@ -607,7 +607,7 @@ namespace Microsoft.Xna.Framework
         /// </param>
         public void Intersects(ref BoundingBox box, out bool result)
         {
-            IntersectsHelper.BoundingBoxIntersectsoundingBox(ref this, ref box, out result);
+            IntersectsHelper.BoundingBoxIntersectsBoundingBox(ref this, ref box, out result);
         }
 
         /// <summary>
