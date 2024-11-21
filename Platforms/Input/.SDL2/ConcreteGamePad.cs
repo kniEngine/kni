@@ -308,22 +308,20 @@ namespace Microsoft.Xna.Platform.Input
             return false;
         }
 
-
         private void InitDatabase()
         {
             using (Stream stream = typeof(ConcreteGamePad).Assembly.GetManifestResourceStream("gamecontrollerdb.txt"))
             {
                 if (stream != null)
                 {
-                    using (BinaryReader reader = new BinaryReader(stream))
+                    try
                     {
-                        try
-                        {
-                            IntPtr src = SDL.RwFromMem(reader.ReadBytes((int)stream.Length), (int)stream.Length);
-                            SDL.GAMECONTROLLER.AddMappingFromRw(src, 1);
-                        }
-                        catch { }
+                        byte[] data = new byte[stream.Length];
+                        stream.Read(data, 0, data.Length);
+                        IntPtr src = SDL.RwFromMem(data, data.Length);
+                        SDL.GAMECONTROLLER.AddMappingFromRw(src, 1);
                     }
+                    catch { }
                 }
             }
         }
