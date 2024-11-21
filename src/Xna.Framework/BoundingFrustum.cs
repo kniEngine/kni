@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework
         #region Private Fields
 
         private Matrix _matrix;
-        private readonly Vector3[] _corners = new Vector3[CornerCount];
+        internal readonly Vector3[] _corners = new Vector3[CornerCount];
         internal readonly Plane[] _planes = new Plane[PlaneCount];
 
         #endregion
@@ -413,8 +413,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>A plane intersection type.</returns>
         public PlaneIntersectionType Intersects(Plane plane)
         {
-            PlaneIntersectionType result;
-            Intersects(ref plane, out result);
+            IntersectsHelper.BoundingFrustumIntersectsPlane(this, plane, out PlaneIntersectionType result);
             return result;
         }
 
@@ -425,10 +424,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">A plane intersection type as an output parameter.</param>
         public void Intersects(ref Plane plane, out PlaneIntersectionType result)
         {
-            result = plane.Intersects(ref _corners[0]);
-            for (int i = 1; i < _corners.Length; i++)
-                if (plane.Intersects(ref _corners[i]) != result)
-                    result = PlaneIntersectionType.Intersecting;
+            IntersectsHelper.BoundingFrustumIntersectsPlane(this, plane, out result);
         }
         
         /// <summary>

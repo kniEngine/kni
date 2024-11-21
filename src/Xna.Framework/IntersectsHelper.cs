@@ -238,6 +238,17 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        internal static void BoundingFrustumIntersectsPlane(BoundingFrustum frustum, Plane plane, out PlaneIntersectionType result)
+        {
+            result = plane.Intersects(ref frustum._corners[0]);
+            for (int i = 1; i < frustum._corners.Length; i++)
+            {
+                PlaneIntersectionType planeIntersectionType = plane.Intersects(ref frustum._corners[i]);
+                if (planeIntersectionType != result)
+                    result = PlaneIntersectionType.Intersecting;
+            }
+        }
+
         internal static void BoundingFrustumIntersectsBoundingSphere(BoundingFrustum frustum, BoundingSphere sphere, out bool result)
         {
             result = true;
