@@ -389,7 +389,20 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if other <see cref="BoundingFrustum"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingFrustum frustum)
         {
-            return Contains(frustum) != ContainmentType.Disjoint;
+            if (this == frustum)
+                return true;
+
+            for (int i = 0; i < PlaneCount; i++)
+            {
+                frustum.Intersects(ref _planes[i], out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
