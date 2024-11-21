@@ -190,22 +190,20 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Result of testing for containment between this <see cref="BoundingFrustum"/> and specified <see cref="BoundingBox"/> as an output parameter.</param>
         public void Contains(ref BoundingBox box, out ContainmentType result)
         {
-            bool intersects = false;
-            for (int i = 0; i < PlaneCount; ++i)
+            result = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
             {
                 _planes[i].Intersects(ref box, out PlaneIntersectionType planeIntersectionType);
-
                 switch (planeIntersectionType)
                 {
-                case PlaneIntersectionType.Front:
-                    result = ContainmentType.Disjoint; 
-                    return;
-                case PlaneIntersectionType.Intersecting:
-                    intersects = true;
-                    break;
+                    case PlaneIntersectionType.Front:
+                        result = ContainmentType.Disjoint;
+                        return;
+                    case PlaneIntersectionType.Intersecting:
+                        result = ContainmentType.Intersects;
+                        break;
                 }
             }
-            result = intersects ? ContainmentType.Intersects : ContainmentType.Contains;
         }
 
         /// <summary>
@@ -218,21 +216,20 @@ namespace Microsoft.Xna.Framework
             if (this == frustum)                // We check to see if the two frustums are equal
                 return ContainmentType.Contains;// If they are, there's no need to go any further.
 
-            bool intersects = false;
-            for (int i = 0; i < PlaneCount; ++i)
+            ContainmentType result = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
             {
-                PlaneIntersectionType planeIntersectionType;
-                frustum.Intersects(ref _planes[i], out planeIntersectionType);
+                PlaneIntersectionType planeIntersectionType = _planes[i].Intersects(frustum);
                 switch (planeIntersectionType)
                 {
                     case PlaneIntersectionType.Front:
                         return ContainmentType.Disjoint;
                     case PlaneIntersectionType.Intersecting:
-                        intersects = true;
+                        result = ContainmentType.Intersects;
                         break;
                 }
             }
-            return intersects ? ContainmentType.Intersects : ContainmentType.Contains;
+            return result;
         }
 
         /// <summary>
@@ -254,22 +251,20 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Result of testing for containment between this <see cref="BoundingFrustum"/> and specified <see cref="BoundingSphere"/> as an output parameter.</param>
         public void Contains(ref BoundingSphere sphere, out ContainmentType result)
         {
-            bool intersects = false;
-            for (int i = 0; i < PlaneCount; ++i) 
+            result = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
             {
-                // TODO: we might want to inline this for performance reasons
                 _planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
                 switch (planeIntersectionType)
                 {
-                case PlaneIntersectionType.Front:
-                    result = ContainmentType.Disjoint; 
-                    return;
-                case PlaneIntersectionType.Intersecting:
-                    intersects = true;
-                    break;
+                    case PlaneIntersectionType.Front:
+                        result = ContainmentType.Disjoint;
+                        return;
+                    case PlaneIntersectionType.Intersecting:
+                        result = ContainmentType.Intersects;
+                        break;
                 }
             }
-            result = intersects ? ContainmentType.Intersects : ContainmentType.Contains;
         }
 
         /// <summary>
@@ -291,18 +286,16 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Result of testing for containment between this <see cref="BoundingFrustum"/> and specified <see cref="Vector3"/> as an output parameter.</param>
         public void Contains(ref Vector3 point, out ContainmentType result)
         {
-            float dot;
-            for (int i = 0; i < PlaneCount; ++i)
+            result = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
             {
-                // TODO: we might want to inline this for performance reasons
-                this._planes[i].DotCoordinate(ref point, out dot);
+                this._planes[i].DotCoordinate(ref point, out float dot);
                 if (dot > 0)
                 {   
                     result = ContainmentType.Disjoint;
                     return;
                 }
             }
-            result = ContainmentType.Contains;
         }
 
         #endregion
@@ -376,9 +369,17 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if specified <see cref="BoundingBox"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise as an output parameter.</param>
         public void Intersects(ref BoundingBox box, out bool result)
         {
-            ContainmentType containment = default(ContainmentType);
-            this.Contains(ref box, out containment);
-            result = containment != ContainmentType.Disjoint;
+            result = true;
+            for (int i = 0; i < PlaneCount; i++)
+            {
+                _planes[i].Intersects(ref box, out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
         }
 
         /// <summary>
@@ -388,7 +389,20 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if other <see cref="BoundingFrustum"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingFrustum frustum)
         {
-            return Contains(frustum) != ContainmentType.Disjoint;
+            if (this == frustum)
+                return true;
+
+            for (int i = 0; i < PlaneCount; i++)
+            {
+                frustum.Intersects(ref _planes[i], out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -410,9 +424,17 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if specified <see cref="BoundingSphere"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise as an output parameter.</param>
         public void Intersects(ref BoundingSphere sphere, out bool result)
         {
-            ContainmentType containment = default(ContainmentType);
-            this.Contains(ref sphere, out containment);
-            result = containment != ContainmentType.Disjoint;
+            result = true;
+            for (int i = 0; i < PlaneCount; i++)
+            {
+                _planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
         }
 
         /// <summary>
@@ -459,8 +481,16 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Distance at which ray intersects with this <see cref="BoundingFrustum"/> or null if no intersection happens as an output parameter.</param>
         public void Intersects(ref Ray ray, out float? result)
         {
-            ContainmentType ctype;
-            this.Contains(ref ray.Position, out ctype);
+            ContainmentType ctype = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
+            {
+                this._planes[i].DotCoordinate(ref ray.Position, out float dot);
+                if (dot > 0)
+                {
+                    ctype = ContainmentType.Disjoint;
+                    break;
+                }
+            }
 
             switch (ctype)
             {

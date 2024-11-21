@@ -620,7 +620,8 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public bool Intersects(BoundingFrustum frustum)
         {
-            return frustum.Intersects(this);
+            frustum.Intersects(ref this, out bool result);
+            return result;
         }
 
         /// <summary>
