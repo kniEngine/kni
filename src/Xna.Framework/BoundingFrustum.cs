@@ -424,9 +424,17 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if specified <see cref="BoundingSphere"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise as an output parameter.</param>
         public void Intersects(ref BoundingSphere sphere, out bool result)
         {
-            ContainmentType containment = default(ContainmentType);
-            this.Contains(ref sphere, out containment);
-            result = containment != ContainmentType.Disjoint;
+            result = true;
+            for (int i = 0; i < PlaneCount; i++)
+            {
+                _planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
         }
 
         /// <summary>
