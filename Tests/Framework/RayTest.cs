@@ -6,7 +6,7 @@ namespace Kni.Tests.Framework
     class RayTest
     {
         [Test]
-        public void BoundingBoxIntersects()
+        public void BoundingBoxIntersectsRay()
         {
             // Our test box.
             BoundingBox box;
