@@ -116,11 +116,11 @@ namespace Microsoft.Xna.Framework
         public float? Intersects(BoundingFrustum frustum)
         {
             if (frustum == null)
-            {
                 throw new ArgumentNullException("frustum");
-            }
-            
-            return frustum.Intersects(this);			
+
+            float? result;
+            IntersectsHelper.BoundingFrustumIntersectsRay(frustum, this, out result);
+            return result;
         }
 
         /// <summary>

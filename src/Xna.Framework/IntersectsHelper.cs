@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework
 {
     internal class IntersectsHelper
     {
-        internal static void BoundingBoxIntersectsoundingBox(ref BoundingBox box, ref BoundingBox other, out bool result)
+        internal static void BoundingBoxIntersectsBoundingBox(ref BoundingBox box, ref BoundingBox other, out bool result)
         {
             if ((box.Max.X >= other.Min.X) && (box.Min.X <= other.Max.X))
             {
@@ -27,6 +27,21 @@ namespace Microsoft.Xna.Framework
 
             result = false;
             return;
+        }
+
+        internal static void BoundingBoxIntersectsBoundingFrustum(ref BoundingBox box, BoundingFrustum frustum, out bool result)
+        {
+            result = true;
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                frustum._planes[i].Intersects(ref box, out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
         }
 
         internal static void BoundingBoxIntersectsPlane(ref BoundingBox box, ref Plane plane, out PlaneIntersectionType result)
@@ -208,6 +223,47 @@ namespace Microsoft.Xna.Framework
             result = squareDistance <= sphere.Radius * sphere.Radius;
         }
 
+        internal static void BoundingFrustumIntersectsBoundingFrustum(BoundingFrustum frustum, BoundingFrustum other, out bool result)
+        {
+            result = true;
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                other.Intersects(ref frustum._planes[i], out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
+        }
+
+        internal static void BoundingFrustumIntersectsPlane(BoundingFrustum frustum, Plane plane, out PlaneIntersectionType result)
+        {
+            result = plane.Intersects(ref frustum._corners[0]);
+            for (int i = 1; i < frustum._corners.Length; i++)
+            {
+                PlaneIntersectionType planeIntersectionType = plane.Intersects(ref frustum._corners[i]);
+                if (planeIntersectionType != result)
+                    result = PlaneIntersectionType.Intersecting;
+            }
+        }
+
+        internal static void BoundingFrustumIntersectsBoundingSphere(BoundingFrustum frustum, BoundingSphere sphere, out bool result)
+        {
+            result = true;
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                frustum._planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
+        }
+
         internal static void BoundingSphereIntersectsBoundingSphere(ref BoundingSphere sphere, ref BoundingSphere other, out bool result)
         {
             Vector3.DistanceSquared(ref other.Center, ref sphere.Center, out float sqDistance);
@@ -284,6 +340,93 @@ namespace Microsoft.Xna.Framework
                 }
 
                 result = 0.0f;
+            }
+        }
+
+        internal static void BoundingFrustumIntersectsRay(BoundingFrustum frustum, Ray ray, out float? result)
+        {
+            ContainmentType ctype = ContainmentType.Contains;
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                frustum._planes[i].DotCoordinate(ref ray.Position, out float dot);
+                if (dot > 0)
+                {
+                    ctype = ContainmentType.Disjoint;
+                    break;
+                }
+            }
+
+            switch (ctype)
+            {
+                case ContainmentType.Disjoint:
+                    result = null;
+                    return;
+                case ContainmentType.Contains:
+                    result = 0.0f;
+                    return;
+                case ContainmentType.Intersects:
+
+                    // TODO: Needs additional test for not 0.0 and null results.
+
+                    result = null;
+
+                    float min = float.MinValue;
+                    float max = float.MaxValue;
+                    for (int p = 0; p < BoundingFrustum.PlaneCount; p++)
+                    {
+                        Vector3 normal = frustum._planes[p].Normal;
+
+                        float result2;
+                        Vector3.Dot(ref ray.Direction, ref normal, out result2);
+
+                        float result3;
+                        Vector3.Dot(ref ray.Position, ref normal, out result3);
+
+                        result3 += frustum._planes[p].D;
+
+                        if ((double)Math.Abs(result2) < 9.99999974737875E-06)
+                        {
+                            if ((double)result3 > 0.0)
+                                return;
+                        }
+                        else
+                        {
+                            float result4 = -result3 / result2;
+                            if ((double)result2 < 0.0)
+                            {
+                                if ((double)result4 > (double)max)
+                                    return;
+                                if ((double)result4 > (double)min)
+                                    min = result4;
+                            }
+                            else
+                            {
+                                if ((double)result4 < (double)min)
+                                    return;
+                                if ((double)result4 < (double)max)
+                                    max = result4;
+                            }
+                        }
+
+                        float? distance;
+                        frustum._planes[p].Intersects(ref ray, out distance);
+                        if (distance.HasValue)
+                        {
+                            min = Math.Min(min, distance.Value);
+                            max = Math.Max(max, distance.Value);
+                        }
+                    }
+
+                    float temp = min >= 0.0 ? min : max;
+                    if (temp < 0.0)
+                    {
+                        return;
+                    }
+                    result = temp;
+
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
