@@ -190,22 +190,20 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Result of testing for containment between this <see cref="BoundingFrustum"/> and specified <see cref="BoundingBox"/> as an output parameter.</param>
         public void Contains(ref BoundingBox box, out ContainmentType result)
         {
-            bool intersects = false;
-            for (int i = 0; i < PlaneCount; ++i)
+            result = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
             {
                 _planes[i].Intersects(ref box, out PlaneIntersectionType planeIntersectionType);
-
                 switch (planeIntersectionType)
                 {
-                case PlaneIntersectionType.Front:
-                    result = ContainmentType.Disjoint; 
-                    return;
-                case PlaneIntersectionType.Intersecting:
-                    intersects = true;
-                    break;
+                    case PlaneIntersectionType.Front:
+                        result = ContainmentType.Disjoint;
+                        return;
+                    case PlaneIntersectionType.Intersecting:
+                        result = ContainmentType.Intersects;
+                        break;
                 }
             }
-            result = intersects ? ContainmentType.Intersects : ContainmentType.Contains;
         }
 
         /// <summary>
