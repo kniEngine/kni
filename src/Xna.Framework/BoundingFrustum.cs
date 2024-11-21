@@ -286,18 +286,16 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Result of testing for containment between this <see cref="BoundingFrustum"/> and specified <see cref="Vector3"/> as an output parameter.</param>
         public void Contains(ref Vector3 point, out ContainmentType result)
         {
-            float dot;
-            for (int i = 0; i < PlaneCount; ++i)
+            result = ContainmentType.Contains;
+            for (int i = 0; i < PlaneCount; i++)
             {
-                // TODO: we might want to inline this for performance reasons
-                this._planes[i].DotCoordinate(ref point, out dot);
+                this._planes[i].DotCoordinate(ref point, out float dot);
                 if (dot > 0)
                 {   
                     result = ContainmentType.Disjoint;
                     return;
                 }
             }
-            result = ContainmentType.Contains;
         }
 
         #endregion
