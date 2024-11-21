@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework
 
         private Matrix _matrix;
         private readonly Vector3[] _corners = new Vector3[CornerCount];
-        private readonly Plane[] _planes = new Plane[PlaneCount];
+        internal readonly Plane[] _planes = new Plane[PlaneCount];
 
         #endregion
 
@@ -357,8 +357,7 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if specified <see cref="BoundingBox"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingBox box)
         {
-            bool result = false;
-            this.Intersects(ref box, out result);
+            IntersectsHelper.BoundingBoxIntersectsBoundingFrustum(ref box, this, out bool result);
             return result;
         }
 
@@ -369,17 +368,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if specified <see cref="BoundingBox"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise as an output parameter.</param>
         public void Intersects(ref BoundingBox box, out bool result)
         {
-            result = true;
-            for (int i = 0; i < PlaneCount; i++)
-            {
-                _planes[i].Intersects(ref box, out PlaneIntersectionType planeIntersectionType);
-                switch (planeIntersectionType)
-                {
-                    case PlaneIntersectionType.Front:
-                        result = false;
-                        return;
-                }
-            }
+            IntersectsHelper.BoundingBoxIntersectsBoundingFrustum(ref box, this ,out result);
         }
 
         /// <summary>

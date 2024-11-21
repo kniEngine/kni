@@ -29,6 +29,21 @@ namespace Microsoft.Xna.Framework
             return;
         }
 
+        internal static void BoundingBoxIntersectsBoundingFrustum(ref BoundingBox box, BoundingFrustum frustum, out bool result)
+        {
+            result = true;
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                frustum._planes[i].Intersects(ref box, out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
+        }
+
         internal static void BoundingBoxIntersectsPlane(ref BoundingBox box, ref Plane plane, out PlaneIntersectionType result)
         {
             // See http://zach.in.tu-clausthal.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html
