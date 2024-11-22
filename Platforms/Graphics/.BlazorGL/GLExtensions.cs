@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (error == WebGLErrorCode.NO_ERROR)
                 return;
 
-            string errorMsg = String.Format("GL_ERROR: {0} ({1:4X})", error, (int)error);
+            string errorMsg = String.Format("GL_ERROR: {0} ({1:X4})", error, (int)error);
             Console.WriteLine(errorMsg);
             throw new InvalidOperationException("GL.GetError() returned " + errorMsg);
         }
