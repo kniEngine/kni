@@ -216,10 +216,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="nkast.Wasm.Audio" Version="8.0.2" />
     <PackageReference Include="nkast.Wasm.Canvas" Version="8.0.2" />
     <PackageReference Include="nkast.Wasm.Dom" Version="8.0.2" />
