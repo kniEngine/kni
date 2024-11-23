@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -165,9 +166,17 @@ namespace Microsoft.Xna.Framework
                     {
                         byte[] data = new byte[stream.Length];
                         stream.Read(data, 0, data.Length);
-                        IntPtr pSrc = SDL.RwFromMem(data, data.Length);
-                        IntPtr pIcon = SDL.LoadBMP_RW(pSrc, 1);
-                        return pIcon;
+                        GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                        try
+                        {
+                            IntPtr pRWops = SDL.RwFromMem(data, data.Length);
+                            IntPtr pIcon = SDL.LoadBMP_RW(pRWops, 1);
+                            return pIcon;
+                        }
+                        finally
+                        {
+                            handle.Free();
+                        }
                     }
                 }
             }
