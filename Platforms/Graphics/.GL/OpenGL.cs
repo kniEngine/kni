@@ -274,6 +274,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         MaxSamples = 0x8D57,
         MaxElementsVertices = 0x80E8,
         MaxElementsIndices  = 0x80E9,
+
+        CompressedTextureFormats = 0x86A3,
     }
 
     internal enum StringName
@@ -403,7 +405,6 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         Rgba = 0x1908,
         Rgb = 0x1907,
         Luminance = 0x1909,
-        CompressedTextureFormats = 0x86A3,
         Red = 0x1903,
         Rg = 0x8227,
     }

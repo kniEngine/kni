@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
 
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glIsCompressedTexture)
                     {
                         GL.CompressedTexImage2D(
                             TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, elementCount * elementSizeInByte, dataPtr);
@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
 
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glIsCompressedTexture)
                     {
                         GL.CompressedTexSubImage2D(
                             TextureTarget.Texture2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
@@ -212,7 +212,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     IntPtr dataPtr = (IntPtr)pData;
                     dataPtr = dataPtr + startIndex * TsizeInBytes;
 
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glIsCompressedTexture)
                     {
                         w = w / 4;
                         h = h / 4;
@@ -324,7 +324,8 @@ namespace Microsoft.Xna.Platform.Graphics
             ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                 out _glInternalFormat,
                 out _glFormat,
-                out _glType);
+                out _glType,
+                out _glIsCompressedTexture);
 
             bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
@@ -354,7 +355,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int level = 0;
                 while (true)
                 {
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glIsCompressedTexture)
                     {
                         int imageSize = 0;
                         // PVRTC has explicit calculations for imageSize
