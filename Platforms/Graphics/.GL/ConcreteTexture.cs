@@ -43,7 +43,6 @@ namespace Microsoft.Xna.Platform.Graphics
         internal PixelType _glType;
         internal SamplerState _glLastSamplerState;
 
-        const SurfaceFormat InvalidFormat = (SurfaceFormat)int.MaxValue;
         internal static void ToGLSurfaceFormat(SurfaceFormat format,
             GraphicsContextStrategy contextStrategy,
             out PixelInternalFormat glInternalFormat,
@@ -110,7 +109,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Dxt1:
-                    if (!supportsS3tc) goto case InvalidFormat;
+                    if (!supportsS3tc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbS3tcDxt1Ext;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
@@ -123,13 +122,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Dxt1a:
-                    if (!supportsS3tc) goto case InvalidFormat;
+                    if (!supportsS3tc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbaS3tcDxt1Ext;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Dxt3:
-                    if (!supportsS3tc) goto case InvalidFormat;
+                    if (!supportsS3tc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbaS3tcDxt3Ext;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
@@ -142,7 +141,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Dxt5:
-                    if (!supportsS3tc) goto case InvalidFormat;
+                    if (!supportsS3tc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbaS3tcDxt5Ext;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
@@ -162,14 +161,14 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
 #endif
                 case SurfaceFormat.Single:
-                    if (!supportsFloat) goto case InvalidFormat;
+                    if (!supportsFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.R32f;
                     glFormat              = PixelFormat.Red;
                     glType                = PixelType.Float;
                     break;
 
                 case SurfaceFormat.HalfVector2:
-                    if (!supportsHalfFloat) goto case InvalidFormat;
+                    if (!supportsHalfFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rg16f;
                     glFormat              = PixelFormat.Rg;
                     glType                = PixelType.HalfFloat;
@@ -178,28 +177,28 @@ namespace Microsoft.Xna.Platform.Graphics
                 // HdrBlendable implemented as HalfVector4 (see http://blogs.msdn.com/b/shawnhar/archive/2010/07/09/surfaceformat-hdrblendable.aspx)
                 case SurfaceFormat.HdrBlendable:
                 case SurfaceFormat.HalfVector4:
-                    if (!supportsHalfFloat) goto case InvalidFormat;
+                    if (!supportsHalfFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rgba16f;
                     glFormat              = PixelFormat.Rgba;
                     glType                = PixelType.HalfFloat;
                     break;
 
                 case SurfaceFormat.HalfSingle:
-                    if (!supportsHalfFloat) goto case InvalidFormat;
+                    if (!supportsHalfFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.R16f;
                     glFormat              = PixelFormat.Red;
                     glType                = isGLES2 ? PixelType.HalfFloatOES : PixelType.HalfFloat;
                     break;
 
                 case SurfaceFormat.Vector2:
-                    if (!supportsFloat) goto case InvalidFormat;
+                    if (!supportsFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rg32f;
                     glFormat              = PixelFormat.Rg;
                     glType                = PixelType.Float;
                     break;
 
                 case SurfaceFormat.Vector4:
-                    if (!supportsFloat) goto case InvalidFormat;
+                    if (!supportsFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rgba32f;
                     glFormat              = PixelFormat.Rgba;
                     glType                = PixelType.Float;
@@ -218,98 +217,97 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
 
                 case SurfaceFormat.Rg32:
-                    if (!supportsNormalized) goto case InvalidFormat;
+                    if (!supportsNormalized) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rg16ui;
                     glFormat              = PixelFormat.Rg;
                     glType                = PixelType.UnsignedShort;
                     break;
 
                 case SurfaceFormat.Rgba64:
-                    if (!supportsNormalized) goto case InvalidFormat;
+                    if (!supportsNormalized) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rgba16;
                     glFormat              = PixelFormat.Rgba;
                     glType                = PixelType.UnsignedShort;
                     break;
                 case SurfaceFormat.RgbaAtcExplicitAlpha:
-                    if (!supportsAtitc) goto case InvalidFormat;
+                    if (!supportsAtitc) goto case default;
                     glInternalFormat      = PixelInternalFormat.AtcRgbaExplicitAlphaAmd;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-                    if (!supportsAtitc) goto case InvalidFormat;
+                    if (!supportsAtitc) goto case default;
                     glInternalFormat      = PixelInternalFormat.AtcRgbaInterpolatedAlphaAmd;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.RgbEtc1:
-                    if (!supportsEtc1) goto case InvalidFormat;
+                    if (!supportsEtc1) goto case default;
                     glInternalFormat      = PixelInternalFormat.Etc1; // GL_ETC1_RGB8_OES
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Rgb8Etc2:
-                    if (!supportsEtc2) goto case InvalidFormat;
+                    if (!supportsEtc2) goto case default;
                     glInternalFormat      = PixelInternalFormat.Etc2Rgb8; // GL_COMPRESSED_RGB8_ETC2
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Srgb8Etc2:
-                    if (!supportsEtc2) goto case InvalidFormat;
+                    if (!supportsEtc2) goto case default;
                     glInternalFormat      = PixelInternalFormat.Etc2Srgb8; // GL_COMPRESSED_SRGB8_ETC2
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Rgb8A1Etc2:
-                    if (!supportsEtc2) goto case InvalidFormat;
+                    if (!supportsEtc2) goto case default;
                     glInternalFormat      = PixelInternalFormat.Etc2Rgb8A1; // GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Srgb8A1Etc2:
-                    if (!supportsEtc2) goto case InvalidFormat;
+                    if (!supportsEtc2) goto case default;
                     glInternalFormat      = PixelInternalFormat.Etc2Srgb8A1; // GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.Rgba8Etc2:
-                    if (!supportsEtc2) goto case InvalidFormat;
+                    if (!supportsEtc2) goto case default;
                     glInternalFormat      = PixelInternalFormat.Etc2Rgba8Eac; // GL_COMPRESSED_RGBA8_ETC2_EAC
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.SRgb8A8Etc2:
-                    if (!supportsEtc2) goto case InvalidFormat;
+                    if (!supportsEtc2) goto case default;
                     glInternalFormat      = PixelInternalFormat.Etc2SRgb8A8Eac; // GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.RgbPvrtc2Bpp:
-                    if (!supportsPvrtc) goto case InvalidFormat;
+                    if (!supportsPvrtc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbPvrtc2Bppv1Img;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.RgbPvrtc4Bpp:
-                    if (!supportsPvrtc) goto case InvalidFormat;
+                    if (!supportsPvrtc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbPvrtc4Bppv1Img;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.RgbaPvrtc2Bpp:
-                    if (!supportsPvrtc) goto case InvalidFormat;
+                    if (!supportsPvrtc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbaPvrtc2Bppv1Img;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
                 case SurfaceFormat.RgbaPvrtc4Bpp:
-                    if (!supportsPvrtc) goto case InvalidFormat;
+                    if (!supportsPvrtc) goto case default;
                     glInternalFormat      = PixelInternalFormat.CompressedRgbaPvrtc4Bppv1Img;
                     glFormat              = PixelFormat.CompressedTextureFormats;
                     glType                = PixelType.UnsignedByte;
                     break;
 
-                case InvalidFormat:
                 default:
                     throw new NotSupportedException(string.Format("The requested SurfaceFormat `{0}` is not supported.", format));
             }
