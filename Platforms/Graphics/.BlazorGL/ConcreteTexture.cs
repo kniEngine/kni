@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                     if (multiSampleCount > 0)
                     {
-                        /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
+                        System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
                         throw new NotImplementedException();
                     }
                     else
@@ -195,7 +195,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
                         if (multiSampleCount > 0)
                         {
-                            /* System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null); */
+                            System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
                             throw new NotImplementedException();
                         }
                         else
