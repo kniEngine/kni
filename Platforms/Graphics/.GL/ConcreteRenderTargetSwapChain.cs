@@ -30,7 +30,8 @@ namespace Microsoft.Xna.Platform.Graphics
             ConcreteTexture.ToGLSurfaceFormat(preferredSurfaceFormat, contextStrategy,
                 out _glInternalFormat,
                 out _glFormat,
-                out _glType);
+                out _glType,
+                out _glIsCompressedTexture);
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
             this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);

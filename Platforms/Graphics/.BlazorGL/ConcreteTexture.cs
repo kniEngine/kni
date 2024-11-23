@@ -86,21 +86,21 @@ namespace Microsoft.Xna.Platform.Graphics
                 case SurfaceFormat.Dxt1:
                     if (!supportsS3tc) goto default;
                     glInternalFormat      = WebGLInternalFormat.COMPRESSED_RGB_S3TC_DXT1_EXT;
-                    glFormat              = (WebGLFormat)0x83F0;
+                    glFormat              = (WebGLFormat)glInternalFormat;
                     glType                = WebGLTexelType.UNSIGNED_BYTE;
                     glIsCompressedTexture = true;
                     break;
                 case SurfaceFormat.Dxt3:
                     if (!supportsS3tc) goto default;
                     glInternalFormat      = WebGLInternalFormat.COMPRESSED_RGBA_S3TC_DXT3_EXT;
-                    glFormat              = (WebGLFormat)0x83F2;
+                    glFormat              = (WebGLFormat)glInternalFormat;
                     glType                = WebGLTexelType.UNSIGNED_BYTE;
                     glIsCompressedTexture = true;
                     break;
                 case SurfaceFormat.Dxt5:
                     if (!supportsS3tc) goto default;
                     glInternalFormat      = WebGLInternalFormat.COMPRESSED_RGBA_S3TC_DXT5_EXT;
-                    glFormat              = (WebGLFormat)0x83F3;
+                    glFormat              = (WebGLFormat)glInternalFormat;
                     glType                = WebGLTexelType.UNSIGNED_BYTE;
                     glIsCompressedTexture = true;
                     break;

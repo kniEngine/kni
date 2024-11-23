@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
 
                     TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glIsCompressedTexture)
                     {
                         GL.CompressedTexSubImage2D(
                             target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     IntPtr dataPtr = (IntPtr)pData;
                     dataPtr = dataPtr + startIndex * TsizeInBytes;
 
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glIsCompressedTexture)
                     {
                         w = w / 4;
                         h = h / 4;
@@ -251,13 +251,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                     out _glInternalFormat,
                     out _glFormat,
-                    out _glType);
+                    out _glType,
+                    out _glIsCompressedTexture);
 
                 for (int i = 0; i < 6; i++)
                 {
                     TextureTarget target = ConcreteTextureCube.GetGLCubeFace((CubeMapFace)i);
 
-                    if (_glFormat == GLPixelFormat.CompressedTextureFormats)
+                    if (_glIsCompressedTexture)
                     {
                         int imageSize = 0;
                         switch (format)
