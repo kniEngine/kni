@@ -82,12 +82,13 @@ namespace Microsoft.Xna.Platform.Graphics
             this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
 
             // TODO: check for FramebufferObjectARB
-            //if (this.Capabilities.SupportsFramebufferObjectARB
-            //||  this.Capabilities.SupportsFramebufferObjectEXT)
-            if (true)
+            if ((GL is IWebGL2RenderingContext)
+            //||  this.Capabilities.SupportsFramebufferObjectARB
+            //||  this.Capabilities.SupportsFramebufferObjectEXT
+            )
             {
-                this._supportsBlitFramebuffer = false; // GL.BlitFramebuffer != null;
-                this._supportsInvalidateFramebuffer = false; // GL.InvalidateFramebuffer != null;
+                this._supportsBlitFramebuffer = true;
+                this._supportsInvalidateFramebuffer = true;
             }
             else
             {
