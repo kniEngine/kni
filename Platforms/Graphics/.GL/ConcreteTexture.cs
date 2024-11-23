@@ -160,20 +160,32 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = PixelType.UnsignedInt1010102;
                     break;
 #endif
+
+                // float formats
+                case SurfaceFormat.HalfSingle:
+                    if (!supportsHalfFloat) goto case default;
+                    glInternalFormat      = PixelInternalFormat.R16f;
+                    glFormat              = PixelFormat.Red;
+                    glType                = isGLES2 ? PixelType.HalfFloatOES : PixelType.HalfFloat;
+                    break;
                 case SurfaceFormat.Single:
                     if (!supportsFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.R32f;
                     glFormat              = PixelFormat.Red;
                     glType                = PixelType.Float;
                     break;
-
                 case SurfaceFormat.HalfVector2:
                     if (!supportsHalfFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rg16f;
                     glFormat              = PixelFormat.Rg;
                     glType                = PixelType.HalfFloat;
                     break;
-
+                case SurfaceFormat.Vector2:
+                    if (!supportsFloat) goto case default;
+                    glInternalFormat      = PixelInternalFormat.Rg32f;
+                    glFormat              = PixelFormat.Rg;
+                    glType                = PixelType.Float;
+                    break;
                 // HdrBlendable implemented as HalfVector4 (see http://blogs.msdn.com/b/shawnhar/archive/2010/07/09/surfaceformat-hdrblendable.aspx)
                 case SurfaceFormat.HdrBlendable:
                 case SurfaceFormat.HalfVector4:
@@ -182,21 +194,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     glFormat              = PixelFormat.Rgba;
                     glType                = PixelType.HalfFloat;
                     break;
-
-                case SurfaceFormat.HalfSingle:
-                    if (!supportsHalfFloat) goto case default;
-                    glInternalFormat      = PixelInternalFormat.R16f;
-                    glFormat              = PixelFormat.Red;
-                    glType                = isGLES2 ? PixelType.HalfFloatOES : PixelType.HalfFloat;
-                    break;
-
-                case SurfaceFormat.Vector2:
-                    if (!supportsFloat) goto case default;
-                    glInternalFormat      = PixelInternalFormat.Rg32f;
-                    glFormat              = PixelFormat.Rg;
-                    glType                = PixelType.Float;
-                    break;
-
                 case SurfaceFormat.Vector4:
                     if (!supportsFloat) goto case default;
                     glInternalFormat      = PixelInternalFormat.Rgba32f;

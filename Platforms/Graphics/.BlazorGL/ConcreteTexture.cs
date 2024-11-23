@@ -52,16 +52,16 @@ namespace Microsoft.Xna.Platform.Graphics
 
             switch (format)
             {
-                case SurfaceFormat.Bgr565:
-                    glInternalFormat      = WebGLInternalFormat.RGB;
-                    glFormat              = WebGLFormat.RGB;
-                    glType                = WebGLTexelType.UNSIGNED_SHORT_5_6_5;
-                    glIsCompressedTexture = false;
-                    break;
                 case SurfaceFormat.Color:
                     glInternalFormat      = WebGLInternalFormat.RGBA;
                     glFormat              = WebGLFormat.RGBA;
                     glType                = WebGLTexelType.UNSIGNED_BYTE;
+                    glIsCompressedTexture = false;
+                    break;
+                case SurfaceFormat.Bgr565:
+                    glInternalFormat      = WebGLInternalFormat.RGB;
+                    glFormat              = WebGLFormat.RGB;
+                    glType                = WebGLTexelType.UNSIGNED_SHORT_5_6_5;
                     glIsCompressedTexture = false;
                     break;
                 case SurfaceFormat.Bgra4444:
@@ -104,6 +104,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = WebGLTexelType.UNSIGNED_BYTE;
                     glIsCompressedTexture = true;
                     break;
+
+                // float formats
                 case SurfaceFormat.Single:
                     if (!supportsFloat) goto default;
                     glInternalFormat      = WebGLInternalFormat.R32F;
@@ -111,7 +113,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = WebGLTexelType.FLOAT;
                     glIsCompressedTexture = false;
                     break;
-
                 case SurfaceFormat.Vector2:
                     if (!supportsFloat) goto default;
                     glInternalFormat      = WebGLInternalFormat.RG32F;
@@ -119,7 +120,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = WebGLTexelType.FLOAT;
                     glIsCompressedTexture = false;
                     break;
-
                 case SurfaceFormat.Vector4:
                     if (!supportsFloat) goto default;
                     glInternalFormat      = WebGLInternalFormat.RGBA32F;
