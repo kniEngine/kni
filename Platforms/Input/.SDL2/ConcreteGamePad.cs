@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Platform.Utilities;
@@ -318,8 +319,16 @@ namespace Microsoft.Xna.Platform.Input
                     {
                         byte[] data = new byte[stream.Length];
                         stream.Read(data, 0, data.Length);
-                        IntPtr src = SDL.RwFromMem(data, data.Length);
-                        SDL.GAMECONTROLLER.AddMappingFromRw(src, 1);
+                        GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                        try
+                        {
+                            IntPtr pRWops = SDL.RwFromMem(data, data.Length);
+                            SDL.GAMECONTROLLER.AddMappingFromRw(pRWops, 1);
+                        }
+                        finally
+                        {
+                            handle.Free();
+                        }
                     }
                     catch { }
                 }
