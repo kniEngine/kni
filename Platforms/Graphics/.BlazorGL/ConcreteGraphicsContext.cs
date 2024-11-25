@@ -1140,7 +1140,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-
             }
 
             base.Dispose(disposing);
@@ -1162,7 +1161,60 @@ namespace Microsoft.Xna.Platform.Graphics
             IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
             if (renderTarget.MultiSampleCount > 0)
             {
+                WebGLFramebuffer glResolveFramebuffer = null;
+                if (!_glResolveFramebuffers.TryGetValue(base.CurrentRenderTargetBindings, out glResolveFramebuffer))
+                {
+                    glResolveFramebuffer = GL.CreateFramebuffer();
+                    GL.CheckGLError();
+                    GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glResolveFramebuffer);
+                    GL.CheckGLError();
+
+                    for (int i = 0; i < base.RenderTargetCount; i++)
+                    {
+                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IRenderTarget)base.CurrentRenderTargetBindings[i].RenderTarget).RenderTargetStrategy;
+
+                        WebGLFramebufferAttachmentPoint attachment = WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i;
+                        WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                        throw new NotImplementedException();
+                    }
+                    _glResolveFramebuffers.Add((RenderTargetBinding[])base.CurrentRenderTargetBindings.Clone(), glResolveFramebuffer);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+
+                // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
+                if (_lastRasterizerState.ScissorTestEnable)
+                {
+                    GL.Disable(WebGLCapability.SCISSOR_TEST);
+                    GL.CheckGLError();
+                }
+
+                WebGLFramebuffer glFramebuffer = _glFramebuffers[base.CurrentRenderTargetBindings];
                 throw new NotImplementedException();
+
+                for (int i = 0; i < base.RenderTargetCount; i++)
+                {
+                    renderTargetBinding = base.CurrentRenderTargetBindings[i];
+                    renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+
+                    throw new NotImplementedException();
+                    Debug.Assert(this._supportsBlitFramebuffer);
+                    throw new NotImplementedException();
+                }
+
+                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this._supportsInvalidateFramebuffer)
+                {
+                    Debug.Assert(this._supportsInvalidateFramebuffer);
+                    throw new NotImplementedException();
+                }
+
+                if (_lastRasterizerState.ScissorTestEnable)
+                {
+                    GL.Enable(WebGLCapability.SCISSOR_TEST);
+                    GL.CheckGLError();
+                }
             }
 
             for (int i = 0; i < base.RenderTargetCount; i++)
