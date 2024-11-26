@@ -361,6 +361,33 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     RenderbufferStorage colorInternalFormat = RenderbufferStorage.RGBA8;
 
+                    switch (preferredFormat)
+                    {
+                        case SurfaceFormat.Color:
+                            break;
+                        case SurfaceFormat.Bgr565:
+                            break;
+                        case SurfaceFormat.Bgra4444:
+                            break;
+                        case SurfaceFormat.Bgra5551:
+                            break;
+                        case SurfaceFormat.Single:
+                            break;
+                        case SurfaceFormat.HalfSingle:
+                            break;
+                        case SurfaceFormat.Vector2:
+                            break;
+                        case SurfaceFormat.HalfVector2:
+                            break;
+                        case SurfaceFormat.Vector4:
+                            break;
+                        case SurfaceFormat.HalfVector4:
+                            break;
+
+                        default:
+                            break;
+                    }
+
                     renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
                     GL.CheckGLError();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
