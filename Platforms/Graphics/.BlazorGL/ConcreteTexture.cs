@@ -150,16 +150,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
                     GL.CheckGLError();
-                    if (multiSampleCount > 0)
-                    {
-                        System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, colorInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
+
+                    System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
+                    throw new NotImplementedException();
                 }
 
                 if (preferredDepthFormat != DepthFormat.None)

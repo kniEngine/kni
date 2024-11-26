@@ -365,17 +365,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
                     GL.CheckGLError();
-                    if (multiSampleCount > 0)
-                    {
-                        System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
-                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
-                    else
-                    {
-                        GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, colorInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
+
+                    System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
+                    GL.CheckGLError();
                 }
 
                 if (preferredDepthFormat != DepthFormat.None)
