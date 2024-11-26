@@ -129,6 +129,26 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
+            switch (surfaceFormat)
+            {
+                case SurfaceFormat.Color:
+                case SurfaceFormat.Bgr565:
+                case SurfaceFormat.Bgra4444:
+                case SurfaceFormat.Bgra5551:
+                case SurfaceFormat.Single:
+                case SurfaceFormat.HalfSingle:
+                case SurfaceFormat.Vector2:
+                case SurfaceFormat.HalfVector2:
+                case SurfaceFormat.Vector4:
+                case SurfaceFormat.HalfVector4:
+                    // See: PlatformCreateRenderTarget(...)
+                    // for the supported surface types.
+                    break;
+
+                default:
+                    return 0;
+            }
+
             var contextStrategy = ((IPlatformGraphicsContext)this.MainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>();
             var GL = contextStrategy.GL;
 

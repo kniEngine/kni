@@ -359,29 +359,38 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (multiSampleCount > 0)
                 {
-                    RenderbufferStorage colorInternalFormat = RenderbufferStorage.RGBA8;
-
+                    RenderbufferStorage colorInternalFormat = default;
                     switch (preferredFormat)
                     {
                         case SurfaceFormat.Color:
+                            colorInternalFormat = RenderbufferStorage.RGBA8;
                             break;
                         case SurfaceFormat.Bgr565:
+                            colorInternalFormat = RenderbufferStorage.RGB565;
                             break;
                         case SurfaceFormat.Bgra4444:
+                            colorInternalFormat = RenderbufferStorage.RGBA4;
                             break;
                         case SurfaceFormat.Bgra5551:
+                            colorInternalFormat = RenderbufferStorage.RGB5_A1;
                             break;
                         case SurfaceFormat.Single:
+                            colorInternalFormat = RenderbufferStorage.R32F;
                             break;
                         case SurfaceFormat.HalfSingle:
+                            colorInternalFormat = RenderbufferStorage.R16F;
                             break;
                         case SurfaceFormat.Vector2:
+                            colorInternalFormat = RenderbufferStorage.RG32F;
                             break;
                         case SurfaceFormat.HalfVector2:
+                            colorInternalFormat = RenderbufferStorage.RG16F;
                             break;
                         case SurfaceFormat.Vector4:
+                            colorInternalFormat = RenderbufferStorage.RGBA32F;
                             break;
                         case SurfaceFormat.HalfVector4:
+                            colorInternalFormat = RenderbufferStorage.RGBA16F;
                             break;
 
                         default:
