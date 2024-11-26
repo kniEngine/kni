@@ -151,6 +151,17 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         DepthComponent16NonlinearNv = 0x8E2C,
 
         RGBA8 = 0x8058,
+        RGBA4 = 0x8056,
+        RGB5_A1 = 0x8057,
+        RGB565 = 0x8D62,
+
+        R32F = 0x822E,
+        RG32F = 0x8230,
+        RGBA32F = 0x8814,
+
+        R16F = 0x822D,
+        RG16F = 0x822F,
+        RGBA16F = 0x881A,
     }
 
     internal enum EnableCap : int
