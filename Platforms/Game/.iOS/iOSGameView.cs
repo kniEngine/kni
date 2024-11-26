@@ -243,9 +243,9 @@ namespace Microsoft.Xna.Framework
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _depthbuffer);
                     RenderbufferStorage internalFormat = RenderbufferStorage.DepthComponent16;
                     if (preferredDepthFormat == DepthFormat.Depth24)
-                        internalFormat = RenderbufferStorage.DepthComponent24Oes;
+                        internalFormat = RenderbufferStorage.DepthComponent24oes;
                     else if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
-                        internalFormat = RenderbufferStorage.Depth24Stencil8Oes;
+                        internalFormat = RenderbufferStorage.Depth24Stencil8oes;
                     GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, internalFormat, viewportWidth, viewportHeight);
                     GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, _depthbuffer);
                     if (preferredDepthFormat == DepthFormat.Depth24Stencil8)
