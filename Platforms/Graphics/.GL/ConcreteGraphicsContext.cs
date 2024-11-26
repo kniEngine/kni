@@ -1193,7 +1193,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         static readonly FramebufferAttachment[] InvalidateFramebufferAttachements =
         {
-            FramebufferAttachment.ColorAttachment0,
+            //FramebufferAttachment.ColorAttachment0,
             FramebufferAttachment.DepthAttachment,
             FramebufferAttachment.StencilAttachment,
         };
@@ -1212,7 +1212,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     glResolveFramebuffer = GL.GenFramebuffer();
                     GL.CheckGLError();
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
+                    GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, glResolveFramebuffer);
                     GL.CheckGLError();
 
                     for (int i = 0; i < base.RenderTargetCount; i++)
@@ -1221,14 +1221,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
                         TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
-                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, renderTargetGL.GLTexture, 0);
+                        GL.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, attachement, target, renderTargetGL.GLTexture, 0);
                         GL.CheckGLError();
                     }
                     _glResolveFramebuffers.Add((RenderTargetBinding[])base.CurrentRenderTargetBindings.Clone(), glResolveFramebuffer);
                 }
                 else
                 {
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, glResolveFramebuffer);
+                    GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, glResolveFramebuffer);
                     GL.CheckGLError();
                 }
 
@@ -1241,7 +1241,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 int glFramebuffer = _glFramebuffers[base.CurrentRenderTargetBindings];
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, glFramebuffer);
-                GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, glResolveFramebuffer);
                 GL.CheckGLError();
 
                 for (int i = 0; i < base.RenderTargetCount; i++)
@@ -1258,15 +1257,18 @@ namespace Microsoft.Xna.Platform.Graphics
                                        0, 0, renderTarget.Width, renderTarget.Height,
                                        ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
                     GL.CheckGLError();
-                }
 
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this._supportsInvalidateFramebuffer)
-                {
-#if OPENGL
-                    Debug.Assert(this._supportsInvalidateFramebuffer);
-                    GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer, 3, InvalidateFramebufferAttachements);
-                    GL.CheckGLError();
-#endif
+                    if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents
+                    &&  this._supportsInvalidateFramebuffer)
+                    {
+                        if (i == 0)
+                        {
+                            Debug.Assert(this._supportsInvalidateFramebuffer);
+                            GL.InvalidateFramebuffer(FramebufferTarget.Framebuffer,
+                                InvalidateFramebufferAttachements.Length, InvalidateFramebufferAttachements);
+                            GL.CheckGLError();
+                        }
+                    }
                 }
 
                 if (_lastRasterizerState.ScissorTestEnable)
