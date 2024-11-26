@@ -37,9 +37,6 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
-            if (!contextStrategy.ToConcrete<ConcreteGraphicsContextGL>()._supportsBlitFramebuffer
-            ||  GL.RenderbufferStorageMultisample == null)
-                maxMultiSampleCount = 0;
             this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
