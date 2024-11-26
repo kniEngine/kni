@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
             if (!contextStrategy.ToConcrete<ConcreteGraphicsContextGL>()._supportsBlitFramebuffer
             ||  GL.RenderbufferStorageMultisample == null)
                 maxMultiSampleCount = 0;
