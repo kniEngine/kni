@@ -359,7 +359,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (multiSampleCount > 0)
                 {
-                    RenderbufferStorage colorInternalFormat = RenderbufferStorage.Rgba8;
+                    RenderbufferStorage colorInternalFormat = RenderbufferStorage.RGBA8;
 
                     renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
                     GL.CheckGLError();
