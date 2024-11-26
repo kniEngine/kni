@@ -30,10 +30,6 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
-            if (!contextStrategy.ToConcrete<ConcreteGraphicsContext>()._supportsBlitFramebuffer
-            || !(GL is IWebGL2RenderingContext)) // (GL.RenderbufferStorageMultisample == null)
-                maxMultiSampleCount = 0;
-            maxMultiSampleCount = 0; //TODO: implement multisample
             this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
