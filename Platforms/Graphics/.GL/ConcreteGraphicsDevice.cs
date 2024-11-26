@@ -129,7 +129,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int GetMaxMultiSampleCount(SurfaceFormat surfaceFormat)
         {
-            var GL = ((IPlatformGraphicsContext)this.MainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+            var contextStrategy = ((IPlatformGraphicsContext)this.MainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>();
+            var GL = contextStrategy.GL;
+
+            if (!contextStrategy._supportsBlitFramebuffer
+            ||  GL.RenderbufferStorageMultisample == null)
+                return 0;
 
             int maxMultiSampleCount = 0;
             GL.GetInteger(GetPName.MaxSamples, out maxMultiSampleCount);

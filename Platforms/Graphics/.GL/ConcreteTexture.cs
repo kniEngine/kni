@@ -359,23 +359,43 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (multiSampleCount > 0)
                 {
-                    RenderbufferStorage colorInternalFormat = RenderbufferStorage.Rgba8;
+                    RenderbufferStorage colorInternalFormat = RenderbufferStorage.RGBA8;
+
+                    switch (preferredFormat)
+                    {
+                        case SurfaceFormat.Color:
+                            break;
+                        case SurfaceFormat.Bgr565:
+                            break;
+                        case SurfaceFormat.Bgra4444:
+                            break;
+                        case SurfaceFormat.Bgra5551:
+                            break;
+                        case SurfaceFormat.Single:
+                            break;
+                        case SurfaceFormat.HalfSingle:
+                            break;
+                        case SurfaceFormat.Vector2:
+                            break;
+                        case SurfaceFormat.HalfVector2:
+                            break;
+                        case SurfaceFormat.Vector4:
+                            break;
+                        case SurfaceFormat.HalfVector4:
+                            break;
+
+                        default:
+                            break;
+                    }
 
                     renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
                     GL.CheckGLError();
                     GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
                     GL.CheckGLError();
-                    if (multiSampleCount > 0)
-                    {
-                        System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
-                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
-                    else
-                    {
-                        GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, colorInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
+
+                    System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
+                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
+                    GL.CheckGLError();
                 }
 
                 if (preferredDepthFormat != DepthFormat.None)
@@ -394,7 +414,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #if GLES
                         case DepthFormat.Depth24:
                             if (contextStrategy.Capabilities.SupportsDepth24)
-                                depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                                depthInternalFormat = RenderbufferStorage.DepthComponent24oes;
                             else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                             else
@@ -403,11 +423,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         case DepthFormat.Depth24Stencil8:
                             if (contextStrategy.Capabilities.SupportsPackedDepthStencil)
-                                depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
+                                depthInternalFormat = RenderbufferStorage.Depth24Stencil8oes;
                             else
                             {
                                 if (contextStrategy.Capabilities.SupportsDepth24)
-                                    depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                                    depthInternalFormat = RenderbufferStorage.DepthComponent24oes;
                                 else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
                                     depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                                 else

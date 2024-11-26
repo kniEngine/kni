@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, DepthFormat preferredDepthFormat, int multiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
             //contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
             {
@@ -146,26 +146,46 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (EXT_sRGB)
                         colorInternalFormat = WebGLRenderbufferInternalFormat.SRGB8_ALPHA8_EXT;
 
+                    switch(preferredFormat)
+                    {
+                        case SurfaceFormat.Color:
+                            break;
+                        case SurfaceFormat.Bgr565:
+                            break;
+                        case SurfaceFormat.Bgra4444:
+                            break;
+                        case SurfaceFormat.Bgra5551:
+                            break;
+                        case SurfaceFormat.Single:
+                            break;
+                        case SurfaceFormat.HalfSingle:
+                            break;
+                        case SurfaceFormat.Vector2:
+                            break;
+                        case SurfaceFormat.HalfVector2:
+                            break;
+                        case SurfaceFormat.Vector4:
+                            break;
+                        case SurfaceFormat.HalfVector4:
+                            break;
+
+                        default:
+                            break;
+                    }
+
                     renderTargetGL.GLColorBuffer = GL.CreateRenderbuffer();
                     GL.CheckGLError();
                     GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
                     GL.CheckGLError();
-                    if (multiSampleCount > 0)
-                    {
-                        System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, colorInternalFormat, width, height);
-                        GL.CheckGLError();
-                    }
+
+                    System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
+                    throw new NotImplementedException();
                 }
 
                 if (preferredDepthFormat != DepthFormat.None)
                 {
-                    WebGLRenderbufferInternalFormat depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
-                    WebGLRenderbufferInternalFormat stencilInternalFormat = (WebGLRenderbufferInternalFormat)0;
+                    WebGLRenderbufferInternalFormat depthInternalFormat = default;
+                    WebGLRenderbufferInternalFormat stencilInternalFormat = default;
                     switch (preferredDepthFormat)
                     {
                         case DepthFormat.None:
@@ -200,8 +220,16 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                         else
                         {
-                            GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
-                            GL.CheckGLError();
+                            if (GL is IWebGL2RenderingContext)
+                            {
+                                GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
+                                GL.CheckGLError();
+                            }
+                            else
+                            {
+                                GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
+                                GL.CheckGLError();
+                            }
                         }
 
                         if (preferredDepthFormat == DepthFormat.Depth24Stencil8)

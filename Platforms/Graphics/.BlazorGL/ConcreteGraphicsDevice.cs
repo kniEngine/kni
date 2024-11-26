@@ -80,6 +80,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = ((IPlatformGraphicsContext)CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int maxMultiSampleCount = 0;
+
             return maxMultiSampleCount;
         }
 

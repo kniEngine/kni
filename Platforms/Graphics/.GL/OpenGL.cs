@@ -139,17 +139,29 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum RenderbufferStorage
     {
-        Rgba8 = 0x8058,
-        DepthComponent16 = 0x81a5,
-        DepthComponent24 = 0x81a6,
+        DepthComponent16 = 0x81A5,
+        DepthComponent24 = 0x81A6,
         Depth24Stencil8  = 0x88F0,
 
         // GLES Values
-        DepthComponent24Oes = 0x81A6,
-        Depth24Stencil8Oes  = 0x88F0,
+        DepthComponent24oes = 0x81A6,
+        Depth24Stencil8oes  = 0x88F0,
         StencilIndex8 = 0x8D48,
 
         DepthComponent16NonlinearNv = 0x8E2C,
+
+        RGBA8 = 0x8058,
+        RGBA4 = 0x8056,
+        RGB5_A1 = 0x8057,
+        RGB565 = 0x8D62,
+
+        R32F = 0x822E,
+        RG32F = 0x8230,
+        RGBA32F = 0x8814,
+
+        R16F = 0x822D,
+        RG16F = 0x822F,
+        RGBA16F = 0x881A,
     }
 
     internal enum EnableCap : int

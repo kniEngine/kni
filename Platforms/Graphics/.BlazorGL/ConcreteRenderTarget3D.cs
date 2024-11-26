@@ -29,11 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
-            if (!contextStrategy.ToConcrete<ConcreteGraphicsContext>()._supportsBlitFramebuffer
-            || !(GL is IWebGL2RenderingContext)) // (GL.RenderbufferStorageMultisample == null)
-                maxMultiSampleCount = 0;
-            maxMultiSampleCount = 0; //TODO: implement multisample
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
             this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             PlatformConstructTexture3D_rt(contextStrategy, width, height, depth, mipMap, preferredSurfaceFormat);

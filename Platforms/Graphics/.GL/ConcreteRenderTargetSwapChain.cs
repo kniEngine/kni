@@ -33,7 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 out _glType,
                 out _glIsCompressedTexture);
 
-            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.PresentationParameters.BackBufferFormat);
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
             this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
             PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, false);
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (multiSampleCount > 1)
             {
-                RenderbufferStorage colorInternalFormat = RenderbufferStorage.Rgba8;
+                RenderbufferStorage colorInternalFormat = RenderbufferStorage.RGBA8;
 
                 renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
                 GL.CheckGLError();
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Platform.Graphics
 #if GLES
                     case DepthFormat.Depth24:
                         if (contextStrategy.Capabilities.SupportsDepth24)
-                            depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                            depthInternalFormat = RenderbufferStorage.DepthComponent24oes;
                         else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
                             depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                         else
@@ -116,11 +116,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     case DepthFormat.Depth24Stencil8:
                         if (contextStrategy.Capabilities.SupportsPackedDepthStencil)
-                            depthInternalFormat = RenderbufferStorage.Depth24Stencil8Oes;
+                            depthInternalFormat = RenderbufferStorage.Depth24Stencil8oes;
                         else
                         {
                             if (contextStrategy.Capabilities.SupportsDepth24)
-                                depthInternalFormat = RenderbufferStorage.DepthComponent24Oes;
+                                depthInternalFormat = RenderbufferStorage.DepthComponent24oes;
                             else if (contextStrategy.Capabilities.SupportsDepthNonLinear)
                                 depthInternalFormat = RenderbufferStorage.DepthComponent16NonlinearNv;
                             else
