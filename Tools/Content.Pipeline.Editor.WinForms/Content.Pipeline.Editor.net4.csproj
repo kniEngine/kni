@@ -76,6 +76,8 @@
     <Compile Include="Common\IProjectObserver.cs" />
     <Compile Include="Common\IView.cs" />
     <Compile Include="Common\OutputParser.cs" />
+    <Compile Include="Common\Package.cs" />
+    <Compile Include="Common\PackageReferencesCollection.cs" />
     <Compile Include="Common\PipelineProjectParser.cs" />
     <Compile Include="Common\Util.cs" />
     <Compile Include="Common\StringExtensions.cs" />
@@ -99,12 +101,6 @@
     <Compile Include="Forms\NewContentDialog.Designer.cs">
       <DependentUpon>NewContentDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PackageReferenceDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PackageReferenceDialog.Designer.cs">
-      <DependentUpon>PackageReferenceDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\MultiSelectTreeview.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -122,6 +118,18 @@
     </Compile>
     <Compile Include="Forms\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PackageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PackageDialog.Designer.cs">
+      <DependentUpon>PackageDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PackageReferenceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PackageReferenceDialog.Designer.cs">
+      <DependentUpon>PackageReferenceDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ReferenceDialog.cs">
       <SubType>Form</SubType>
@@ -232,9 +240,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\PackageReferenceDialog.resx">
-      <DependentUpon>PackageReferenceDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TextEditDialog.resx">
       <DependentUpon>TextEditDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -248,6 +253,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PackageDialog.resx">
+      <DependentUpon>PackageDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PackageReferenceDialog.resx">
+      <DependentUpon>PackageReferenceDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ReferenceDialog.resx">
       <DependentUpon>ReferenceDialog.cs</DependentUpon>

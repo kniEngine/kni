@@ -28,14 +28,20 @@ namespace Content.Pipeline.Editor
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            Package package;
-            package.Name = String.Empty;
-            package.Version = String.Empty;
+            Forms.PackageDialog packageDialog = new Forms.PackageDialog();
 
-            if (ShowInputDialog("Package name", ref package) == DialogResult.OK)
+            DialogResult res = packageDialog.ShowDialog(this);
+            if (res == DialogResult.OK)
             {
-                if (String.IsNullOrEmpty(package.Name))
+                string name = packageDialog.tbName.Text.Trim();
+                string version = packageDialog.tbVersion.Text.Trim();
+
+                if (String.IsNullOrWhiteSpace(name))
                     return;
+
+                Package package = Package.Parse(name);
+                if (version != String.Empty)
+                    package.Version = version;
 
                 foreach (Package line in this.Lines)
                 {
@@ -44,7 +50,6 @@ namespace Content.Pipeline.Editor
                 }
 
                 this.Lines.Add(package);
-
                 string[] itemValues = new string[] { package.Name, package.Version };
                 listView1.Items.Add(new ListViewItem(itemValues));
             }
@@ -60,53 +65,6 @@ namespace Content.Pipeline.Editor
                 this.Lines.RemoveAt(index);
 
             }
-        }
-
-        private DialogResult ShowInputDialog(string name, ref Package package)
-        {
-            System.Drawing.Size size = new System.Drawing.Size(400, 80);
-
-            Form inputBox = new Form();
-            inputBox.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            inputBox.ClientSize = size;
-            inputBox.Text = name;
-            inputBox.Parent = this.Parent;
-
-            TextBox textBox = new TextBox();
-            textBox.Size = new System.Drawing.Size(size.Width - 10, 23);
-            textBox.Location = new System.Drawing.Point(5, 5);            
-            textBox.Text = package.ToString();
-            inputBox.Controls.Add(textBox);
-
-            Button okButton = new Button();
-            okButton.DialogResult = DialogResult.OK;
-            okButton.Name = "okButton";
-            okButton.Size = new System.Drawing.Size(75, 25);
-            okButton.Text = "&OK";
-            okButton.Location = new System.Drawing.Point(size.Width - 80 - 80, 39);
-            inputBox.Controls.Add(okButton);
-
-            Button cancelButton = new Button();
-            cancelButton.DialogResult = DialogResult.Cancel;
-            cancelButton.Name = "cancelButton";
-            cancelButton.Size = new System.Drawing.Size(75, 25);
-            cancelButton.Text = "&Cancel";
-            cancelButton.Location = new System.Drawing.Point(size.Width - 80, 39);
-            inputBox.Controls.Add(cancelButton);
-
-            inputBox.AcceptButton = okButton;
-            inputBox.CancelButton = cancelButton;
-
-            DialogResult result = inputBox.ShowDialog(this);
-
-            string packagename = textBox.Text.Trim();
-
-            if (!String.IsNullOrWhiteSpace(packagename))
-            {
-                package = Package.Parse(packagename);
-            }
-
-            return result;
         }
     }
 
