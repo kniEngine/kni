@@ -30,6 +30,8 @@
         {
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.buttonOk = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonRemove = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -53,6 +55,28 @@
             // 
             this.columnHeader1.Text = "Name";
             this.columnHeader1.Width = 460;
+            // 
+            // buttonOk
+            // 
+            this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.buttonOk.Location = new System.Drawing.Point(498, 258);
+            this.buttonOk.Name = "buttonOk";
+            this.buttonOk.Size = new System.Drawing.Size(75, 23);
+            this.buttonOk.TabIndex = 1;
+            this.buttonOk.Text = "Ok";
+            this.buttonOk.UseVisualStyleBackColor = true;
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(498, 287);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 2;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // buttonAdd
             // 
@@ -83,6 +107,8 @@
             this.ClientSize = new System.Drawing.Size(584, 321);
             this.Controls.Add(this.buttonRemove);
             this.Controls.Add(this.buttonAdd);
+            this.Controls.Add(this.buttonOk);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.listView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "PackageReferenceDialog";
@@ -96,6 +122,8 @@
         #endregion
 
         private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.Button buttonOk;
+        private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonAdd;
         private System.Windows.Forms.Button buttonRemove;
         private System.Windows.Forms.ColumnHeader columnHeader1;
