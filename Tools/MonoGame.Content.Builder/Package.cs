@@ -26,5 +26,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             return package;
         }
+
+        public override string ToString()
+        {
+            string result = this.Name;
+            if (this.Version != String.Empty)
+                result += " " + this.Version;
+
+            return result;
+        }
     }
 }

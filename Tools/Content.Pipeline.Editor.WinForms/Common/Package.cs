@@ -1,7 +1,6 @@
 ﻿// Copyright (C)2024 Nick Kastellanos
 
 using System;
-using SharpDX;
 
 namespace Content.Pipeline.Editor
 {
