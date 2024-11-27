@@ -109,11 +109,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             Description = "Adds an assembly reference for resolving content importers, processors, and writers.")]
         public readonly List<string> References = new List<string>();
 
+        private readonly List<Package> _packageReferences = new List<Package>();
+
         [CommandLineParameter(
             Name = "packageReference",
             ValueName = "package",
             Description = "Adds a nuget package reference for resolving content importers, processors, and writers.")]
-        public readonly List<string> PackageReferences = new List<string>();
+        public void SetPackageReference(string packageReference)
+        {
+            Package package = Package.Parse(packageReference);
+            _packageReferences.Add(package);
+        }
 
         [CommandLineParameter(
             Name = "platform",
@@ -351,7 +357,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // so it can resolve importers, processors, writers, and types.
             AddReferences(_manager, projectDirectory, this.References);
 
-            AddPackageReferences(_manager, projectDirectory, this.PackageReferences);
+            AddPackageReferences(_manager, projectDirectory, this._packageReferences);
 
             // Load the previously serialized list of built content.
             SourceFileCollection previousFileCollection = LoadFileCollection(intermediatePath);
@@ -427,7 +433,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        private void AddPackageReferences(PipelineManager manager, string projectDirectory, List<string> packageReferences)
+        private void AddPackageReferences(PipelineManager manager, string projectDirectory, List<Package> packageReferences)
         {
             if (packageReferences.Count == 0)
                 return;
@@ -455,7 +461,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool rebuild = false;
 
             // load db
-            List<string> packages = new List<string>(packageReferences);
+            List<Package> packages = new List<Package>(packageReferences);
             packages.Sort();
             string intermediatePackageCollectionPath = Path.Combine(fullPackageReferencesProjFolder, Path.ChangeExtension(libraryName, PackageReferencesCollection.Extension));
             PackageReferencesCollection previousPackageReferencesCollection = PackageReferencesCollection.LoadBinary(intermediatePackageCollectionPath);
@@ -464,7 +470,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 for (int i = 0; i < packages.Count; i++)
                 {
-                    if (packages[i] != previousPackageReferencesCollection.Packages[i])
+                    if (packages[i].Name != previousPackageReferencesCollection.Packages[i].Name
+                    ||  packages[i].Version != previousPackageReferencesCollection.Packages[i].Version)
                     {
                         rebuild = true;
                         break;
@@ -485,22 +492,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 ExecuteDotnet(fullPackageReferencesFolder, newCmd);
 
 
-                foreach (string packageReference in packageReferences)
+                foreach (Package packageReference in packageReferences)
                 {
-                    string package = packageReference;
-                    string version = String.Empty;
-
-                    string[] split = packageReference.Split(' ');
-                    if (split.Length == 2)
-                    {
-                        package = split[0];
-                        version = split[1];
-                    }
-
-                    string addCmd = String.Format("add {0}.csproj package {1} ", libraryName, package);
+                    string addCmd = String.Format("add {0}.csproj package {1} ", libraryName, packageReference.Name);
                     addCmd += " --no-restore";
-                    if (!String.IsNullOrEmpty(version))
-                        addCmd += " --version " + version;
+                    if (packageReference.Version != String.Empty)
+                        addCmd += " --version " + packageReference.Version;
                     ExecuteDotnet(fullPackageReferencesProjFolder, addCmd);
                 }
 
@@ -513,7 +510,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                 // save db
                 PackageReferencesCollection dbfile = new PackageReferencesCollection();
-                foreach (string package in packages)
+                foreach (Package package in packages)
                     dbfile.AddPackage(package);
                 dbfile.SaveBinary(intermediatePackageCollectionPath);
             }

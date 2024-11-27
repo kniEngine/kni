@@ -23,7 +23,7 @@ namespace Content.Pipeline.Editor
 
         public List<string> References { get; set; }
 
-        public List<string> PackageReferences { get; set; }
+        public List<Package> PackageReferences { get; set; }
 
         public TargetPlatform Platform { get; set; }
 
@@ -72,7 +72,7 @@ namespace Content.Pipeline.Editor
         {
             ContentItems = new List<ContentItem>();
             References = new List<string>();
-            PackageReferences = new List<string>();
+            PackageReferences = new List<Package>();
             OutputDir = "bin";
             IntermediateDir = "obj";
         }

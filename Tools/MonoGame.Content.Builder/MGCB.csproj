@@ -47,6 +47,7 @@
     <Compile Include="ContentBuilder.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="ImporterContext.cs" />
+    <Compile Include="Package.cs" />
     <Compile Include="PackageReferencesCollection.cs" />
     <Compile Include="PathHelper.cs" />
     <Compile Include="PipelineManager.cs" />

@@ -52,7 +52,7 @@ namespace Content.Pipeline.Editor
         }
         [Category("Settings")]
         [Editor(typeof(PackageReferenceListEditor), typeof(UITypeEditor))]
-        public List<string> PackageReferences
+        public List<Package> PackageReferences
         {
             get { return _project.PackageReferences; }
             set { _project.PackageReferences = value; }
