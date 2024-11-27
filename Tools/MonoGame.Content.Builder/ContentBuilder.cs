@@ -542,8 +542,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             startInfo.CreateNoWindow = true;
             startInfo.WorkingDirectory = workingDirectory;
             startInfo.UseShellExecute = false;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.RedirectStandardError = true;
+            startInfo.RedirectStandardOutput = false;
+            startInfo.RedirectStandardError = false;
 
             using (Process process = Process.Start(startInfo))
             {
