@@ -1147,7 +1147,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         static readonly WebGLFramebufferAttachmentPoint[] InvalidateFramebufferAttachements =
         {
-            WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0,
+            //WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0,
             WebGLFramebufferAttachmentPoint.DEPTH_ATTACHMENT,
             WebGLFramebufferAttachmentPoint.STENCIL_ATTACHMENT,
         };
@@ -1202,12 +1202,16 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new NotImplementedException();
                     Debug.Assert(this._supportsBlitFramebuffer);
                     throw new NotImplementedException();
-                }
 
-                if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents && this._supportsInvalidateFramebuffer)
-                {
-                    Debug.Assert(this._supportsInvalidateFramebuffer);
-                    throw new NotImplementedException();
+                    if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents
+                    && this._supportsInvalidateFramebuffer)
+                    {
+                        if (i == 0)
+                        {
+                            Debug.Assert(this._supportsInvalidateFramebuffer);
+                            throw new NotImplementedException();
+                        }
+                    }
                 }
 
                 if (_lastRasterizerState.ScissorTestEnable)
