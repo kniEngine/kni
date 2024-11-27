@@ -103,7 +103,13 @@
     </Compile>
     <Compile Include="Forms\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
-    </Compile>	 
+    </Compile>
+    <Compile Include="Forms\PackageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PackageDialog.Designer.cs">
+      <DependentUpon>PackageDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PackageReferenceDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,6 +239,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PackageDialog.resx">
+      <DependentUpon>PackageDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PackageReferenceDialog.resx">
       <DependentUpon>PackageReferenceDialog.cs</DependentUpon>
