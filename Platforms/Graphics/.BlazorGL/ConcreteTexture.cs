@@ -141,20 +141,19 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (multiSampleCount > 0)
                 {
-                    WebGLRenderbufferInternalFormat colorInternalFormat = WebGLRenderbufferInternalFormat.RGBA4;
-                    bool EXT_sRGB = GL.GetExtension("EXT_sRGB");
-                    if (EXT_sRGB)
-                        colorInternalFormat = WebGLRenderbufferInternalFormat.SRGB8_ALPHA8_EXT;
-
-                    switch(preferredFormat)
+                    WebGLRenderbufferInternalFormat colorInternalFormat = default;
+                    switch (preferredFormat)
                     {
                         case SurfaceFormat.Color:
                             break;
                         case SurfaceFormat.Bgr565:
+                            colorInternalFormat = WebGLRenderbufferInternalFormat.RGB565;
                             break;
                         case SurfaceFormat.Bgra4444:
+                            colorInternalFormat = WebGLRenderbufferInternalFormat.RGBA4;
                             break;
                         case SurfaceFormat.Bgra5551:
+                            colorInternalFormat = WebGLRenderbufferInternalFormat.RGB5_A1;
                             break;
                         case SurfaceFormat.Single:
                             break;
