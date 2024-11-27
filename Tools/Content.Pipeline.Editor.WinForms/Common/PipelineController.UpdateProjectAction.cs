@@ -40,7 +40,7 @@ namespace Content.Pipeline.Editor
                     _referencesChanged = true;
                     break;
                 case "PackageReferences":
-                    _state.PackageReferences = new List<string>((List<string>)previousValue);
+                    _state.PackageReferences = new List<Package>((List<Package>)previousValue);
                     _packageReferencesChanged = true;
                     break;
                 case "Platform":

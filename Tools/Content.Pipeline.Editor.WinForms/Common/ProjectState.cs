@@ -16,7 +16,7 @@ namespace Content.Pipeline.Editor
         public string OutputDir;
         public string IntermediateDir;
         public List<string> References;
-        public List<string> PackageReferences;
+        public List<Package> PackageReferences;
         public TargetPlatform Platform;
         public GraphicsProfile Profile;
         public string Config;
@@ -33,7 +33,7 @@ namespace Content.Pipeline.Editor
                     OutputDir = proj.OutputDir,
                     IntermediateDir = proj.IntermediateDir,
                     References = new List<string>(proj.References),
-                    PackageReferences = new List<string>(proj.PackageReferences),
+                    PackageReferences = new List<Package>(proj.PackageReferences),
                     Platform = proj.Platform,
                     Profile = proj.Profile,
                     Config = proj.Config,        
@@ -50,7 +50,7 @@ namespace Content.Pipeline.Editor
             proj.OutputDir = OutputDir;
             proj.IntermediateDir = IntermediateDir;
             proj.References = new List<string>(this.References);
-            proj.PackageReferences = new List<string>(this.PackageReferences);
+            proj.PackageReferences = new List<Package>(this.PackageReferences);
             proj.Platform = Platform;
             proj.Profile = Profile;
             proj.Config = Config;

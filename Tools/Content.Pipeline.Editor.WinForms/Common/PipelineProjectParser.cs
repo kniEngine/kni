@@ -53,10 +53,10 @@ namespace Content.Pipeline.Editor
             Name = "packageReference",
             ValueName = "package",
             Description = "Adds a nuget package reference for resolving content importers, processors, and writers.")]
-        public List<string> PackageReferences
+        public void SetPackageReference(string packageReference)
         {
-            set { _project.PackageReferences = value; }
-            get { return _project.PackageReferences; }
+            Package package = Package.Parse(packageReference);
+            _project.PackageReferences.Add(package);
         }
 
         [CommandLineParameter(
@@ -330,9 +330,9 @@ namespace Content.Pipeline.Editor
                 io.WriteLine(line);
             }
 
-            foreach (string i in _project.PackageReferences)
+            foreach (Package i in _project.PackageReferences)
             {
-                line = string.Format(lineFormat, "packageReference", i);
+                line = string.Format(lineFormat, "packageReference", i.ToString());
                 io.WriteLine(line);
             }
 

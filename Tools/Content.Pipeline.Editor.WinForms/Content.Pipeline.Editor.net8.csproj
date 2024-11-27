@@ -61,6 +61,7 @@
     <Compile Include="Common\IProjectObserver.cs" />
     <Compile Include="Common\IView.cs" />
     <Compile Include="Common\OutputParser.cs" />
+    <Compile Include="Common\Package.cs" />
     <Compile Include="Common\PackageReferencesCollection.cs" />
     <Compile Include="Common\PipelineProjectParser.cs" />
     <Compile Include="Common\Util.cs" />

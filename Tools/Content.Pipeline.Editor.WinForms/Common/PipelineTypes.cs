@@ -312,7 +312,7 @@ namespace Content.Pipeline.Editor
             ProcessorsStandardValuesCollection = new TypeConverter.StandardValuesCollection(Processors);
         }
 
-        private static void AddPackageReferences(PipelineProject manager, string projectDirectory, List<string> packageReferences, List<string> assemblyPaths)
+        private static void AddPackageReferences(PipelineProject manager, string projectDirectory, List<Package> packageReferences, List<string> assemblyPaths)
         {
             if (packageReferences.Count == 0)
                 return;
@@ -340,7 +340,7 @@ namespace Content.Pipeline.Editor
             bool rebuild = false;
 
             // load db
-            List<string> packages = new List<string>(packageReferences);
+            List<Package> packages = new List<Package>(packageReferences);
             packages.Sort();
             string intermediatePackageCollectionPath = Path.Combine(fullPackageReferencesProjFolder, Path.ChangeExtension(libraryName, PackageReferencesCollection.Extension));
             PackageReferencesCollection previousPackageReferencesCollection = PackageReferencesCollection.LoadBinary(intermediatePackageCollectionPath);
@@ -349,7 +349,8 @@ namespace Content.Pipeline.Editor
             {
                 for (int i = 0; i < packages.Count; i++)
                 {
-                    if (packages[i] != previousPackageReferencesCollection.Packages[i])
+                    if (packages[i].Name != previousPackageReferencesCollection.Packages[i].Name
+                    ||  packages[i].Version != previousPackageReferencesCollection.Packages[i].Version)
                     {
                         rebuild = true;
                         break;
@@ -370,22 +371,12 @@ namespace Content.Pipeline.Editor
                 ExecuteDotnet(fullPackageReferencesFolder, newCmd);
 
 
-                foreach (string packageReference in packageReferences)
+                foreach (Package packageReference in packageReferences)
                 {
-                    string package = packageReference;
-                    string version = String.Empty;
-
-                    string[] split = packageReference.Split(' ');
-                    if (split.Length == 2)
-                    {
-                        package = split[0];
-                        version = split[1];
-                    }
-
-                    string addCmd = String.Format("add {0}.csproj package {1} ", libraryName, package);
+                    string addCmd = String.Format("add {0}.csproj package {1} ", libraryName, packageReference.Name);
                     addCmd += " --no-restore";
-                    if (!String.IsNullOrEmpty(version))
-                        addCmd += " --version " + version;
+                    if (packageReference.Version != String.Empty)
+                        addCmd += " --version " + packageReference.Version;
                     ExecuteDotnet(fullPackageReferencesProjFolder, addCmd);
                 }
 
@@ -398,7 +389,7 @@ namespace Content.Pipeline.Editor
 
                 // save db
                 PackageReferencesCollection dbfile = new PackageReferencesCollection();
-                foreach (string package in packages)
+                foreach (Package package in packages)
                     dbfile.AddPackage(package);
                 dbfile.SaveBinary(intermediatePackageCollectionPath);
             }

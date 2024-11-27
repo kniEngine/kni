@@ -12,12 +12,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
     {
         public const string Extension = ".kniContent";
        
-        public List<string> Packages { get; set; }
+        public List<Package> Packages { get; set; }
 
 
         public PackageReferencesCollection()
         {
-            Packages = new List<string>();
+            Packages = new List<Package>();
         }
 
         public void SaveBinary(string filePath)
@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
         public int PackagesCount { get { return this.Packages.Count; } }
 
-        internal void AddPackage(string package)
+        internal void AddPackage(Package package)
         {
             this.Packages.Add(package);
         }
@@ -81,7 +81,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 WritePackedInt(value.Packages.Count);
                 for (int i = 0; i < value.Packages.Count; i++)
                 {
-                    WriteStringOrNull(value.Packages[i]);
+                    Write(value.Packages[i].Name);
+                    Write(value.Packages[i].Version);
                 }
 
                 return;
@@ -137,11 +138,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
                 int reserved0 = ReadInt32();
 
-                int filesCount = ReadPackedInt();
-                value.Packages = new List<string>(filesCount);
-                for (int i = 0; i < filesCount; i++)
+                int packagesCount = ReadPackedInt();
+                value.Packages = new List<Package>(packagesCount);
+                for (int i = 0; i < packagesCount; i++)
                 {
-                    value.Packages.Add(ReadStringOrNull());
+                    Package package;
+                    package.Name = ReadString();
+                    package.Version = ReadString();
+                    value.Packages.Add(package);
                 }
 
                 return;
