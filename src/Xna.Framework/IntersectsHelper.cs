@@ -42,6 +42,9 @@ namespace Microsoft.Xna.Framework
                         return;
                 }
             }
+
+            BoundingBox fbox = BoundingBox.CreateFromPoints(frustum._corners);
+            box.Intersects(ref fbox, out result);
         }
 
         internal static void BoundingBoxIntersectsPlane(ref BoundingBox box, ref Plane plane, out PlaneIntersectionType result)
