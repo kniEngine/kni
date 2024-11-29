@@ -126,11 +126,15 @@ namespace Kni.Tests.Framework
             var bbox2 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(1000, 1000, 1000));
             var bbox3 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(0, 0, 0));
             var bbox4 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(-500, -500, -500));
+            var bbox5 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(-150, 1000,  -50));
 
             Assert.That(testFrustum.Contains(bbox1), Is.EqualTo(ContainmentType.Contains));
             Assert.That(testFrustum.Contains(bbox2), Is.EqualTo(ContainmentType.Intersects));
             Assert.That(testFrustum.Contains(bbox3), Is.EqualTo(ContainmentType.Intersects));
             Assert.That(testFrustum.Contains(bbox4), Is.EqualTo(ContainmentType.Disjoint));
+#if !XNA    // XNA reports a false Intersects
+            Assert.That(testFrustum.Contains(bbox5), Is.EqualTo(ContainmentType.Disjoint));
+#endif
         }
 
         [Test]
