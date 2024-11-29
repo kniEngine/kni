@@ -239,6 +239,17 @@ namespace Microsoft.Xna.Framework
                         return;
                 }
             }
+
+            for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
+            {
+                frustum.Intersects(ref other._planes[i], out PlaneIntersectionType planeIntersectionType);
+                switch (planeIntersectionType)
+                {
+                    case PlaneIntersectionType.Front:
+                        result = false;
+                        return;
+                }
+            }
         }
 
         internal static void BoundingFrustumIntersectsPlane(BoundingFrustum frustum, ref Plane plane, out PlaneIntersectionType result)
