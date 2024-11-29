@@ -204,6 +204,14 @@ namespace Microsoft.Xna.Framework
                         break;
                 }
             }
+
+            if (result == ContainmentType.Intersects)
+            {
+                BoundingBox fbox = BoundingBox.CreateFromPoints(_corners);
+                box.Intersects(ref fbox, out bool intersects);
+                if (!intersects)
+                    result = ContainmentType.Disjoint;
+            }
         }
 
         /// <summary>
