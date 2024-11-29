@@ -101,18 +101,19 @@ namespace Kni.Tests.Framework
         [Test]
         public void BoundingBoxContainsBoundingSphere()
         {
-            var testSphere = new BoundingSphere(Vector3.Zero, 1);
-            var testBox = new BoundingBox(-Vector3.One, Vector3.One);
+            var bbox1 = new BoundingBox(-Vector3.One, Vector3.One);
+            var bsphere1 = new BoundingSphere(Vector3.Zero, 1);
+            var bsphere2 = new BoundingSphere(-Vector3.One, 1);
+            var bsphere3 = new BoundingSphere(-Vector3.One*2, 1);
+            var bsphere4 = new BoundingSphere(Vector3.Zero, 2);
+            var bsphere5 = new BoundingSphere(-Vector3.One - (Vector3.One / (Vector3.One.Length() - 0.000001f)), 1);
+            var bsphere6 = new BoundingSphere(-Vector3.One - (Vector3.One / (Vector3.One.Length() + 0.000001f)), 1);
 
-            Assert.AreEqual(testBox.Contains(testSphere), ContainmentType.Contains);
-
-            testSphere.Center -= Vector3.One;
-
-            Assert.AreEqual(testBox.Contains(testSphere), ContainmentType.Intersects);
-
-            testSphere.Center -= Vector3.One;
-
-            Assert.AreEqual(testBox.Contains(testSphere), ContainmentType.Disjoint);
+            Assert.AreEqual(bbox1.Contains(bsphere1), ContainmentType.Contains);
+            Assert.AreEqual(bbox1.Contains(bsphere2), ContainmentType.Intersects);
+            Assert.AreEqual(bbox1.Contains(bsphere3), ContainmentType.Disjoint);
+            Assert.AreEqual(bbox1.Contains(bsphere5), ContainmentType.Disjoint);
+            Assert.AreEqual(bbox1.Contains(bsphere6), ContainmentType.Intersects);
         }
 
         [Test]
