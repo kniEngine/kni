@@ -117,6 +117,25 @@ namespace Kni.Tests.Framework
         }
 
         [Test]
+        public void BoundingBoxIntersectsBoundingSphere()
+        {
+            var bbox1 = new BoundingBox(-Vector3.One, Vector3.One);
+            var bsphere1 = new BoundingSphere(Vector3.Zero, 1);
+            var bsphere2 = new BoundingSphere(-Vector3.One, 1);
+            var bsphere3 = new BoundingSphere(-Vector3.One * 2, 1);
+            var bsphere4 = new BoundingSphere(Vector3.Zero, 2);
+            var bsphere5 = new BoundingSphere(-Vector3.One - (Vector3.One / (Vector3.One.Length() - 0.000001f)), 1);
+            var bsphere6 = new BoundingSphere(-Vector3.One - (Vector3.One / (Vector3.One.Length() + 0.000001f)), 1);
+
+            Assert.AreEqual(bbox1.Intersects(bsphere1), true);
+            Assert.AreEqual(bbox1.Intersects(bsphere2), true);
+            Assert.AreEqual(bbox1.Intersects(bsphere3), false);
+            Assert.AreEqual(bbox1.Intersects(bsphere4), true);
+            Assert.AreEqual(bbox1.Intersects(bsphere5), false);
+            Assert.AreEqual(bbox1.Intersects(bsphere6), true);
+        }
+
+        [Test]
         public void BoundingFrustumIntersectsBoundingBoxTests()
         {
             var view = Matrix.CreateLookAt(new Vector3(0, 0, 5), Vector3.Zero, Vector3.Up);
