@@ -266,6 +266,7 @@ namespace Microsoft.Xna.Framework
         internal static void BoundingFrustumIntersectsBoundingSphere(BoundingFrustum frustum, ref BoundingSphere sphere, out bool result)
         {
             result = true;
+            int back = 0;
             for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
             {
                 frustum._planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
@@ -274,8 +275,61 @@ namespace Microsoft.Xna.Framework
                     case PlaneIntersectionType.Front:
                         result = false;
                         return;
+                    case PlaneIntersectionType.Back:
+                        back++;
+                        break;
                 }
             }
+
+            if (back == BoundingFrustum.PlaneCount)
+                return;
+
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[0], ref frustum._corners[1], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[1], ref frustum._corners[2], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[2], ref frustum._corners[3], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[3], ref frustum._corners[0], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[4], ref frustum._corners[5], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[5], ref frustum._corners[6], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[6], ref frustum._corners[7], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[7], ref frustum._corners[4], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[0], ref frustum._corners[4], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[1], ref frustum._corners[5], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[2], ref frustum._corners[6], ref sphere))
+                return;
+            if (SegmentIntersectsBoundingSphere(ref frustum._corners[3], ref frustum._corners[7], ref sphere))
+                return;
+
+            result = false;
+        }
+
+        private static bool SegmentIntersectsBoundingSphere(ref Vector3 pos0, ref Vector3 pos1, ref BoundingSphere sphere)
+        {
+            Vector3 direction = pos1 - pos0;
+            float sqSegmentLength = direction.LengthSquared();
+
+            float segmentLength = (float)Math.Sqrt(sqSegmentLength);
+            Vector3 segmentNormal = direction;
+            segmentNormal.X /= segmentLength;
+            segmentNormal.Y /= segmentLength;
+            segmentNormal.Z /= segmentLength;
+
+            Ray ray = new Ray(pos0, segmentNormal);
+
+            ray.Intersects(ref sphere, out float? result);
+            if (result != null && result < segmentLength)
+                return true;
+
+            return false;
         }
 
         internal static void BoundingSphereIntersectsBoundingSphere(ref BoundingSphere sphere, ref BoundingSphere other, out bool result)
