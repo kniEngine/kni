@@ -323,19 +323,28 @@ namespace Kni.Tests.Framework
         [Test]
         public void BoundingFrustumIntersectsRayTests()
         {
-            var testFrustum =
-                new BoundingFrustum(Matrix.CreateLookAt(new Vector3(0, 1, 1), new Vector3(0, 0, 0), Vector3.Up) *
-                                    Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                        1.3f, 0.1f, 1000.0f));
+            var view = Matrix.CreateLookAt(cameraPosition: new Vector3(0, 0, 1),
+                                           cameraTarget:   new Vector3(0, 0, 0),
+                                           cameraUpVector: Vector3.Up);
+            var projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1f, 1f, 100.0f);
+            var testFrustum = new BoundingFrustum(view * projection);
 
-            Ray ray1 = new Ray(new Vector3(0, 0.5f, 0.5f), new Vector3(0, 0, 0));
-            Ray ray2 = new Ray(new Vector3(0, 1.0f, 1.0f), new Vector3(0, 0, 0));
+            Ray ray1 = new Ray(new Vector3(0, 0, -1), new Vector3( 0, 0,  1));
+            Ray ray2 = new Ray(new Vector3(0, 0,  1), new Vector3( 0, 0, -1));
+            Ray ray3 = new Ray(new Vector3(0, 0,  1), new Vector3( 0, 0,  1));
+            Ray ray4 = new Ray(new Vector3(0, 0,  1), new Vector3(+1, 0,  0));
 
             float? value1 = testFrustum.Intersects(ray1);
             Assert.AreEqual(0.0f, value1);
 
             float? value2 = testFrustum.Intersects(ray2);
-            Assert.AreEqual(null, value2);
+            Assert.AreEqual(1.0f, value2);
+
+            float? value3 = testFrustum.Intersects(ray3);
+            Assert.AreEqual(null, value3);
+
+            float? value4 = testFrustum.Intersects(ray4);
+            Assert.AreEqual(null, value4);
         }
 
         [Test]
