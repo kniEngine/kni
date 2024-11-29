@@ -204,6 +204,14 @@ namespace Microsoft.Xna.Framework
                         break;
                 }
             }
+
+            if (result == ContainmentType.Intersects)
+            {
+                BoundingBox fbox = BoundingBox.CreateFromPoints(_corners);
+                box.Intersects(ref fbox, out bool intersects);
+                if (!intersects)
+                    result = ContainmentType.Disjoint;
+            }
         }
 
         /// <summary>
@@ -216,20 +224,24 @@ namespace Microsoft.Xna.Framework
             if (this == frustum)                // We check to see if the two frustums are equal
                 return ContainmentType.Contains;// If they are, there's no need to go any further.
 
-            ContainmentType result = ContainmentType.Contains;
-            for (int i = 0; i < PlaneCount; i++)
+            int i;
+            for (i = 0; i < BoundingFrustum.CornerCount; i++)
             {
-                PlaneIntersectionType planeIntersectionType = _planes[i].Intersects(frustum);
-                switch (planeIntersectionType)
-                {
-                    case PlaneIntersectionType.Front:
-                        return ContainmentType.Disjoint;
-                    case PlaneIntersectionType.Intersecting:
-                        result = ContainmentType.Intersects;
-                        break;
-                }
+                this.Contains(ref frustum._corners[i], out ContainmentType contained);
+                if (contained != ContainmentType.Contains)
+                    break;
             }
-            return result;
+
+            if (i == BoundingFrustum.CornerCount)
+                return ContainmentType.Contains;
+
+            if (i > 0)
+                return ContainmentType.Intersects;
+
+            if (this.Intersects(frustum))
+                return ContainmentType.Intersects;
+            else
+                return ContainmentType.Disjoint;
         }
 
         /// <summary>
@@ -264,6 +276,13 @@ namespace Microsoft.Xna.Framework
                         result = ContainmentType.Intersects;
                         break;
                 }
+            }
+
+            if (result == ContainmentType.Intersects)
+            {
+                Intersects(ref sphere, out bool intersects);
+                if (!intersects)
+                    result = ContainmentType.Disjoint;
             }
         }
 

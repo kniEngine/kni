@@ -132,30 +132,24 @@ namespace Microsoft.Xna.Framework
         /// <returns>The containment type.</returns>
         public ContainmentType Contains(BoundingFrustum frustum)
         {
-            //check if all corner is in sphere
-            bool inside = true;
-
-            Vector3[] corners = frustum.GetCorners();
-            foreach (Vector3 corner in corners)
+            int i;
+            for (i = 0; i < BoundingFrustum.CornerCount; i++)
             {
-                if (this.Contains(corner) == ContainmentType.Disjoint)
-                {
-                    inside = false;
+                this.Contains(ref frustum._corners[i], out ContainmentType contained);
+                if (contained == ContainmentType.Disjoint)
                     break;
-                }
             }
-            if (inside)
+
+            if (i == BoundingFrustum.CornerCount)
                 return ContainmentType.Contains;
 
-            //check if the distance from sphere center to frustrum face < radius
-            double dmin = 0;
-            //TODO : calcul dmin
-
-            if (dmin <= Radius * Radius)
+            if (i > 0)
                 return ContainmentType.Intersects;
 
-            //else disjoint
-            return ContainmentType.Disjoint;
+            if (this.Intersects(frustum))
+                return ContainmentType.Intersects;
+            else
+                return ContainmentType.Disjoint;
         }
 
         /// <summary>

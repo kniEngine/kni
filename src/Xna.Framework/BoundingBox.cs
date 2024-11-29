@@ -114,41 +114,24 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public ContainmentType Contains(BoundingFrustum frustum)
         {
-            //TODO: bad done here need a fix. 
-            //Because question is not frustum contain box but reverse and this is not the same
             int i;
-            ContainmentType contained;
-            Vector3[] corners = frustum.GetCorners();
-
-            // First we check if frustum is in box
-            for (i = 0; i < corners.Length; i++)
+            for (i = 0; i < BoundingFrustum.CornerCount; i++)
             {
-                this.Contains(ref corners[i], out contained);
-                if (contained == ContainmentType.Disjoint)
+                this.Contains(ref frustum._corners[i], out ContainmentType contained);
+                if (contained != ContainmentType.Contains)
                     break;
             }
 
-            if (i == corners.Length) // This means we checked all the corners and they were all contain or instersect
+            if (i == BoundingFrustum.CornerCount)
                 return ContainmentType.Contains;
 
-            if (i != 0)             // if i is not equal to zero, we can fastpath and say that this box intersects
+            if (i > 0)
                 return ContainmentType.Intersects;
 
-
-            // If we get here, it means the first (and only) point we checked was actually contained in the frustum.
-            // So we assume that all other points will also be contained. If one of the points is disjoint, we can
-            // exit immediately saying that the result is Intersects
-            i++;
-            for (; i < corners.Length; i++)
-            {
-                this.Contains(ref corners[i], out contained);
-                if (contained != ContainmentType.Contains)
-                    return ContainmentType.Intersects;
-
-            }
-
-            // If we get here, then we know all the points were actually contained, therefore result is Contains
-            return ContainmentType.Contains;
+            if (this.Intersects(frustum))
+                return ContainmentType.Intersects;
+            else
+                return ContainmentType.Disjoint;
         }
 
         /// <summary>
