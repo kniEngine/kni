@@ -299,6 +299,28 @@ namespace Kni.Tests.Framework
         }
 
         [Test]
+        public void BoundingFrustumContainsBoundingSphere()
+        {
+            var view = Matrix.CreateLookAt(new Vector3(0, 0, 5), Vector3.Zero, Vector3.Up);
+            var projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1, 1, 100);
+            var testFrustum = new BoundingFrustum(view * projection);
+
+            var bsphere1 = new BoundingSphere(Vector3.Zero, 1);
+            var bsphere2 = new BoundingSphere(-Vector3.One, 1);
+            var bsphere3 = new BoundingSphere(-Vector3.One * 6, 1);
+            var bsphere4 = new BoundingSphere(Vector3.Zero, 200);
+            var bsphere5 = new BoundingSphere(new Vector3(1, 1, 5), 1);
+
+            Assert.AreEqual(testFrustum.Contains(bsphere1), ContainmentType.Contains);
+            Assert.AreEqual(testFrustum.Contains(bsphere2), ContainmentType.Contains);
+            Assert.AreEqual(testFrustum.Contains(bsphere3), ContainmentType.Disjoint);
+            Assert.AreEqual(testFrustum.Contains(bsphere4), ContainmentType.Intersects);
+#if !XNA    // XNA reports a false Intersects
+            Assert.AreEqual(testFrustum.Contains(bsphere5), ContainmentType.Disjoint);
+#endif
+        }
+
+        [Test]
         public void BoundingFrustumIntersectsRayTests()
         {
             var testFrustum =
