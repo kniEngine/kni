@@ -413,89 +413,50 @@ namespace Microsoft.Xna.Framework
 
         internal static void BoundingFrustumIntersectsRay(BoundingFrustum frustum, ref Ray ray, out float? result)
         {
-            ContainmentType ctype = ContainmentType.Contains;
+            // From "Real-Time Collision Detection" (Page 198)
+
+            float tfirst = 0;
+            float tlast = float.MaxValue;
             for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
             {
-                frustum._planes[i].DotCoordinate(ref ray.Position, out float dot);
-                if (dot > 0)
+                float dist  = -(Vector3.Dot(frustum._planes[i].Normal, ray.Position) + frustum._planes[i].D);
+                float denom = Vector3.Dot(frustum._planes[i].Normal, ray.Direction);
+
+                const float epsilon = 1e-6f;
+
+                if (Math.Abs(denom) < epsilon)
                 {
-                    ctype = ContainmentType.Disjoint;
-                    break;
+                    if (dist > 0f) // ray runs parallel to the plane.
+                    {
+                        result = null;
+                        return;
+                    }
+                }
+                else
+                {
+                    float t = dist / denom;
+
+                    if (denom < 0f)
+                    {
+                        if (t > tfirst)
+                            tfirst = t;
+                    }
+                    else
+                    {
+                        if (t < tlast)
+                            tlast = t;
+                    }
+
+                    if (tfirst > tlast)
+                    {
+                        result = null;
+                        return;
+                    }
                 }
             }
 
-            switch (ctype)
-            {
-                case ContainmentType.Disjoint:
-                    result = null;
-                    return;
-                case ContainmentType.Contains:
-                    result = 0.0f;
-                    return;
-                case ContainmentType.Intersects:
-
-                    // TODO: Needs additional test for not 0.0 and null results.
-
-                    result = null;
-
-                    float min = float.MinValue;
-                    float max = float.MaxValue;
-                    for (int p = 0; p < BoundingFrustum.PlaneCount; p++)
-                    {
-                        Vector3 normal = frustum._planes[p].Normal;
-
-                        float result2;
-                        Vector3.Dot(ref ray.Direction, ref normal, out result2);
-
-                        float result3;
-                        Vector3.Dot(ref ray.Position, ref normal, out result3);
-
-                        result3 += frustum._planes[p].D;
-
-                        if ((double)Math.Abs(result2) < 9.99999974737875E-06)
-                        {
-                            if ((double)result3 > 0.0)
-                                return;
-                        }
-                        else
-                        {
-                            float result4 = -result3 / result2;
-                            if ((double)result2 < 0.0)
-                            {
-                                if ((double)result4 > (double)max)
-                                    return;
-                                if ((double)result4 > (double)min)
-                                    min = result4;
-                            }
-                            else
-                            {
-                                if ((double)result4 < (double)min)
-                                    return;
-                                if ((double)result4 < (double)max)
-                                    max = result4;
-                            }
-                        }
-
-                        float? distance;
-                        frustum._planes[p].Intersects(ref ray, out distance);
-                        if (distance.HasValue)
-                        {
-                            min = Math.Min(min, distance.Value);
-                            max = Math.Max(max, distance.Value);
-                        }
-                    }
-
-                    float temp = min >= 0.0 ? min : max;
-                    if (temp < 0.0)
-                    {
-                        return;
-                    }
-                    result = temp;
-
-                    return;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            result = tfirst;
+            return;
         }
     }
 }
