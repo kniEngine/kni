@@ -37,6 +37,26 @@ namespace Kni.Tests.Framework
         }
 
         [Test]
+        public void BoundingBoxContainsBoundingFrustumTests()
+        {
+            var bbox1 = new BoundingBox(new Vector3(0, 0, 0), new Vector3(1, 1, 1));
+            var bbox2 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(1000, 1000, 1000));
+            var bbox3 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(0, 0, 0));
+            var bbox4 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(-500, -500, -500));
+            var bbox5 = new BoundingBox(new Vector3(-1000, -1000, -1000), new Vector3(-150, 1000, -50));
+
+            var view = Matrix.CreateLookAt(new Vector3(0, 0, 5), Vector3.Zero, Vector3.Up);
+            var projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1, 1, 100);
+            var testFrustum = new BoundingFrustum(view * projection);
+
+            Assert.That(bbox1.Contains(testFrustum), Is.EqualTo(ContainmentType.Intersects));
+            Assert.That(bbox2.Contains(testFrustum), Is.EqualTo(ContainmentType.Contains));
+            Assert.That(bbox3.Contains(testFrustum), Is.EqualTo(ContainmentType.Intersects));
+            Assert.That(bbox4.Contains(testFrustum), Is.EqualTo(ContainmentType.Disjoint));
+            Assert.That(bbox5.Contains(testFrustum), Is.EqualTo(ContainmentType.Disjoint));
+        }
+
+        [Test]
         public void BoundingBoxIntersectsRay()
         {
             // Our test box.
