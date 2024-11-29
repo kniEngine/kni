@@ -277,6 +277,26 @@ namespace Kni.Tests.Framework
             Assert.That(testFrustum.Contains(otherFrustum), Is.EqualTo(ContainmentType.Disjoint));
             Assert.That(otherFrustum.Contains(testFrustum), Is.EqualTo(ContainmentType.Disjoint));
         }
+        
+        [Test]
+        public void BoundingFrustumIntersectsBoundingSphere()
+        {
+            var view = Matrix.CreateLookAt(new Vector3(0, 0, 5), Vector3.Zero, Vector3.Up);
+            var projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1, 1, 100);
+            var testFrustum = new BoundingFrustum(view * projection);
+
+            var bsphere1 = new BoundingSphere(Vector3.Zero, 1);
+            var bsphere2 = new BoundingSphere(-Vector3.One, 1);
+            var bsphere3 = new BoundingSphere(-Vector3.One * 6, 1);
+            var bsphere4 = new BoundingSphere(Vector3.Zero, 200);
+            var bsphere5 = new BoundingSphere(new Vector3(1, 1, 5), 1);
+
+            Assert.AreEqual(testFrustum.Intersects(bsphere1), true);
+            Assert.AreEqual(testFrustum.Intersects(bsphere2), true);
+            Assert.AreEqual(testFrustum.Intersects(bsphere3), false);
+            Assert.AreEqual(testFrustum.Intersects(bsphere4), true);
+            Assert.AreEqual(testFrustum.Intersects(bsphere5), false);
+        }
 
         [Test]
         public void BoundingFrustumIntersectsRayTests()
