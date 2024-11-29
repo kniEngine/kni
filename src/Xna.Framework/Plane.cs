@@ -381,7 +381,7 @@ namespace Microsoft.Xna.Framework
         /// </returns>
         public PlaneIntersectionType Intersects(BoundingFrustum frustum)
         {
-            IntersectsHelper.BoundingFrustumIntersectsPlane(frustum, this, out PlaneIntersectionType result);
+            IntersectsHelper.BoundingFrustumIntersectsPlane(frustum, ref this, out PlaneIntersectionType result);
             return result;
         }
 
