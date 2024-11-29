@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal static void BoundingFrustumIntersectsPlane(BoundingFrustum frustum, Plane plane, out PlaneIntersectionType result)
+        internal static void BoundingFrustumIntersectsPlane(BoundingFrustum frustum, ref Plane plane, out PlaneIntersectionType result)
         {
             result = plane.Intersects(ref frustum._corners[0]);
             for (int i = 1; i < frustum._corners.Length; i++)
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal static void BoundingFrustumIntersectsBoundingSphere(BoundingFrustum frustum, BoundingSphere sphere, out bool result)
+        internal static void BoundingFrustumIntersectsBoundingSphere(BoundingFrustum frustum, ref BoundingSphere sphere, out bool result)
         {
             result = true;
             for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
@@ -343,7 +343,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal static void BoundingFrustumIntersectsRay(BoundingFrustum frustum, Ray ray, out float? result)
+        internal static void BoundingFrustumIntersectsRay(BoundingFrustum frustum, ref Ray ray, out float? result)
         {
             ContainmentType ctype = ContainmentType.Contains;
             for (int i = 0; i < BoundingFrustum.PlaneCount; i++)

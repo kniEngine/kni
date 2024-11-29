@@ -472,7 +472,7 @@ namespace Microsoft.Xna.Framework
             if (frustum == null)
                 throw new NullReferenceException();
 
-            IntersectsHelper.BoundingFrustumIntersectsBoundingSphere(frustum, this, out bool result);
+            IntersectsHelper.BoundingFrustumIntersectsBoundingSphere(frustum, ref this, out bool result);
             return result;
         }
 

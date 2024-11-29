@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentNullException("frustum");
 
             float? result;
-            IntersectsHelper.BoundingFrustumIntersectsRay(frustum, this, out result);
+            IntersectsHelper.BoundingFrustumIntersectsRay(frustum, ref this, out result);
             return result;
         }
 

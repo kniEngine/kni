@@ -392,7 +392,7 @@ namespace Microsoft.Xna.Framework
         /// <returns><c>true</c> if specified <see cref="BoundingSphere"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise.</returns>
         public bool Intersects(BoundingSphere sphere)
         {
-            IntersectsHelper.BoundingFrustumIntersectsBoundingSphere(this, sphere, out bool result);
+            IntersectsHelper.BoundingFrustumIntersectsBoundingSphere(this, ref sphere, out bool result);
             return result;
         }
 
@@ -403,7 +403,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result"><c>true</c> if specified <see cref="BoundingSphere"/> intersects with this <see cref="BoundingFrustum"/>; <c>false</c> otherwise as an output parameter.</param>
         public void Intersects(ref BoundingSphere sphere, out bool result)
         {
-            IntersectsHelper.BoundingFrustumIntersectsBoundingSphere(this, sphere, out result);
+            IntersectsHelper.BoundingFrustumIntersectsBoundingSphere(this, ref sphere, out result);
         }
 
         /// <summary>
@@ -413,7 +413,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>A plane intersection type.</returns>
         public PlaneIntersectionType Intersects(Plane plane)
         {
-            IntersectsHelper.BoundingFrustumIntersectsPlane(this, plane, out PlaneIntersectionType result);
+            IntersectsHelper.BoundingFrustumIntersectsPlane(this, ref plane, out PlaneIntersectionType result);
             return result;
         }
 
@@ -424,7 +424,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">A plane intersection type as an output parameter.</param>
         public void Intersects(ref Plane plane, out PlaneIntersectionType result)
         {
-            IntersectsHelper.BoundingFrustumIntersectsPlane(this, plane, out result);
+            IntersectsHelper.BoundingFrustumIntersectsPlane(this, ref plane, out result);
         }
         
         /// <summary>
@@ -435,7 +435,7 @@ namespace Microsoft.Xna.Framework
         public float? Intersects(Ray ray)
         {
             float? result;
-            IntersectsHelper.BoundingFrustumIntersectsRay(this, ray, out result);
+            IntersectsHelper.BoundingFrustumIntersectsRay(this, ref ray, out result);
             return result;
         }
 
@@ -446,7 +446,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">Distance at which ray intersects with this <see cref="BoundingFrustum"/> or null if no intersection happens as an output parameter.</param>
         public void Intersects(ref Ray ray, out float? result)
         {
-            IntersectsHelper.BoundingFrustumIntersectsRay(this, ray, out result);
+            IntersectsHelper.BoundingFrustumIntersectsRay(this, ref ray, out result);
         } 
 
         /// <summary>
