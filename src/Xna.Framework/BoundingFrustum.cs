@@ -277,6 +277,13 @@ namespace Microsoft.Xna.Framework
                         break;
                 }
             }
+
+            if (result == ContainmentType.Intersects)
+            {
+                Intersects(ref sphere, out bool intersects);
+                if (!intersects)
+                    result = ContainmentType.Disjoint;
+            }
         }
 
         /// <summary>
