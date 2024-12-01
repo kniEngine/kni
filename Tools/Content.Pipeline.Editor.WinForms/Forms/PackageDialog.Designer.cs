@@ -30,12 +30,14 @@ namespace Content.Pipeline.Editor.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PackageDialog));
             tbName = new TextBox();
             okButton = new Button();
             cancelButton = new Button();
             label1 = new Label();
             label2 = new Label();
             tbVersion = new TextBox();
+            llSearchNuget = new LinkLabel();
             SuspendLayout();
             // 
             // tbName
@@ -88,17 +90,30 @@ namespace Content.Pipeline.Editor.Forms
             tbVersion.Size = new System.Drawing.Size(125, 27);
             tbVersion.TabIndex = 1;
             // 
+            // llSearchNuget
+            // 
+            llSearchNuget.AutoSize = true;
+            llSearchNuget.Location = new System.Drawing.Point(12, 62);
+            llSearchNuget.Name = "llSearchNuget";
+            llSearchNuget.Size = new System.Drawing.Size(140, 20);
+            llSearchNuget.TabIndex = 5;
+            llSearchNuget.TabStop = true;
+            llSearchNuget.Text = "search on nuget.org";
+            llSearchNuget.LinkClicked += llSearchNuget_LinkClicked;
+            // 
             // PackageDialog
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(514, 135);
+            Controls.Add(llSearchNuget);
             Controls.Add(tbVersion);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(tbName);
             Controls.Add(okButton);
             Controls.Add(cancelButton);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "PackageDialog";
             Text = "Package";
             ResumeLayout(false);
@@ -112,5 +127,6 @@ namespace Content.Pipeline.Editor.Forms
         private Label label2;
         public TextBox tbName;
         public TextBox tbVersion;
+        private LinkLabel llSearchNuget;
     }
 }

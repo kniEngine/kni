@@ -237,10 +237,21 @@ namespace Content.Pipeline.Editor
                 // Make sure we're not adding the same assembly twice.
                 path = PathHelper.Normalize(path);
                 if (!assemblyPaths.Contains(path))
-                    assemblyPaths.Add(path);                
+                    assemblyPaths.Add(path);
             }
 
-            AddPackageReferences(project, projectRoot, project.PackageReferences, assemblyPaths);
+            try
+            {
+                AddPackageReferences(project, projectRoot, project.PackageReferences, assemblyPaths);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(
+                    string.Format("Failed to resolve package references.\n\n {0}.", ex.Message),
+                    "KNI Pipeline - " + Path.GetFileName(project.OriginalPath),
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Error);
+            }
 
             ResolveAssemblies(assemblyPaths);
 
@@ -330,7 +341,7 @@ namespace Content.Pipeline.Editor
             if (!Directory.Exists(fullPackageReferencesFolder))
                 Directory.CreateDirectory(fullPackageReferencesFolder);
 
-            string projFolder = Path.GetFileNameWithoutExtension(manager.Name);
+            string projFolder = manager.Name;
 
             string fullPackageReferencesProjFolder = Path.Combine(fullPackageReferencesFolder, projFolder);
             fullPackageReferencesProjFolder = PathHelper.Normalize(fullPackageReferencesProjFolder);

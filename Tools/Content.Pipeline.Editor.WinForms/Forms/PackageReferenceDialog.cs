@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Windows.Forms.Design;
 using System.Drawing.Design;
+using System.Text.RegularExpressions;
 
 namespace Content.Pipeline.Editor
 {
@@ -21,7 +22,8 @@ namespace Content.Pipeline.Editor
         {
             foreach (Package item in this.Lines)
             {
-                string[] itemValues = new string[] { item.Name, item.Version };
+                string version = (item.Version != String.Empty) ? item.Version : "*";
+                string[] itemValues = new string[] { item.Name, version };
                 listView1.Items.Add(new ListViewItem(itemValues));
             }
         }
@@ -33,15 +35,21 @@ namespace Content.Pipeline.Editor
             DialogResult res = packageDialog.ShowDialog(this);
             if (res == DialogResult.OK)
             {
-                string name = packageDialog.tbName.Text.Trim();
-                string version = packageDialog.tbVersion.Text.Trim();
+                Package package = default;
+                package.Name = packageDialog.tbName.Text.Trim();
+                package.Version = packageDialog.tbVersion.Text.Trim();
 
-                if (String.IsNullOrWhiteSpace(name))
+                if (String.IsNullOrWhiteSpace(package.Name))
                     return;
 
-                Package package = Package.Parse(name);
-                if (version != String.Empty)
-                    package.Version = version;
+                Match match = Regex.Match(package.Name,
+                     @"(dotnet add package )?(?<Name>[^\s]+)(\s+--version)?(\s+(?<VersionNumber>[^\s]+))");
+                if (match.Success)
+                {
+                    package.Name = match.Groups["Name"].Value;
+                    if (package.Version == String.Empty && match.Groups["VersionNumber"].Success)
+                        package.Version = match.Groups["VersionNumber"].Value;
+                }
 
                 foreach (Package line in this.Lines)
                 {
@@ -50,7 +58,9 @@ namespace Content.Pipeline.Editor
                 }
 
                 this.Lines.Add(package);
-                string[] itemValues = new string[] { package.Name, package.Version };
+
+                string version = (package.Version != String.Empty) ? package.Version : "*";
+                string[] itemValues = new string[] { package.Name, version };
                 listView1.Items.Add(new ListViewItem(itemValues));
             }
         }
