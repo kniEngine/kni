@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Oculus;
 using Microsoft.Xna.Framework.XR;
+using Microsoft.Xna.Platform.XR;
 using nkast.LibOVR;
 
 namespace Microsoft.Xna.Platform.Input.Oculus
 {
     public sealed class ConcreteTouchControllerStrategy : IOculusInput
     {
-        private XRDevice _xrDevice;
+        private ConcreteXRDevice _xrDevice;
 
         void IOculusInput.GetCapabilities(TouchControllerType controllerType,
             ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,
@@ -66,7 +67,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
 
         Buttons _virtualButtons;
 
-        public ConcreteTouchControllerStrategy(XRDevice xrDevice)
+        internal ConcreteTouchControllerStrategy(ConcreteXRDevice xrDevice)
         {
             this._xrDevice = xrDevice;
         }

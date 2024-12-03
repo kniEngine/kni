@@ -31,6 +31,7 @@ namespace Microsoft.Xna.Platform.XR
         }
 
         public abstract bool IsConnected { get; }
+        public abstract bool TrackFloorLevelOrigin { get; set; }
 
         public abstract int CreateDevice();
         public abstract int BeginFrame();
