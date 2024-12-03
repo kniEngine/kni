@@ -9,9 +9,9 @@ using Microsoft.Xna.Platform.Input.Oculus;
 using nkast.LibOVR;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Framework.XR
 {
-    public class OvrDevice : IDisposable
+    public class XRDevice : IDisposable
     {
         private IGraphicsDeviceService _graphics;
 
@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }
         }
 
-        public OvrDevice(IGraphicsDeviceService graphics) : base()
+        public XRDevice(IGraphicsDeviceService graphics) : base()
         {
             if (graphics == null)
                 throw new ArgumentNullException("graphics");
@@ -328,7 +328,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         #region IDisposable
-        ~OvrDevice()
+        ~XRDevice()
         {
             Dispose(false);
         }
