@@ -33,6 +33,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="XR\.LibOVR\ConcreteXRDevice.cs" />
     <Compile Include="XR\HandsState.cs" />
     <Compile Include="XR\HeadsetState.cs" />
     <Compile Include="XR\XRDevice.LibOVR.cs" />

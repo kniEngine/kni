@@ -6,13 +6,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Oculus;
 using Microsoft.Xna.Platform.Input.Oculus;
+using Microsoft.Xna.Platform.XR;
 using nkast.LibOVR;
 
 
 namespace Microsoft.Xna.Framework.XR
 {
-    public class XRDevice : IDisposable
+    public class XRDevice : IPlatformXRDevice, IDisposable
     {
+        private XRDeviceStrategy _strategy;
+
+        T IPlatformXRDevice.GetStrategy<T>()
+        {
+            return (T)_strategy;
+        }
+
         private IGraphicsDeviceService _graphics;
 
         public bool IsConnected { get; private set; }
@@ -57,8 +65,11 @@ namespace Microsoft.Xna.Framework.XR
             set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }
         }
 
-        public XRDevice(IGraphicsDeviceService graphics) : base()
+        public XRDevice(IGraphicsDeviceService graphics,
+            XRMode mode = XRMode.VR)
         {
+            _strategy = new ConcreteXRDevice(null, graphics, mode);
+
             if (graphics == null)
                 throw new ArgumentNullException("graphics");
 
@@ -343,6 +354,9 @@ namespace Microsoft.Xna.Framework.XR
         {
             if (disposing)
             {
+                _strategy.Dispose();
+                _strategy = null;
+
                 if (_ovrSession != null)
                     _ovrSession.Dispose();
                 if (_ovrClient != null)
