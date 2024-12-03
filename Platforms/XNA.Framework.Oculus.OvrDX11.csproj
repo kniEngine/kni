@@ -29,10 +29,10 @@
 
   <ItemGroup>
     <Compile Include="Input\Oculus\LibOVR\ConcreteTouchControllerStrategy.cs" />
-    <Compile Include="Graphics\.DX11\ConcreteOvrSwapChainData.cs" />
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="XR\.LibOVR\ConcreteOvrSwapChainData.cs" />
     <Compile Include="XR\.LibOVR\ConcreteXRDevice.cs" />
     <Compile Include="XR\HandsState.cs" />
     <Compile Include="XR\HeadsetState.cs" />
