@@ -32,10 +32,10 @@
     <Compile Include="Input\Oculus\HandsState.cs" />
     <Compile Include="Input\Oculus\HeadsetState.cs" />
     <Compile Include="Graphics\.DX11\ConcreteOvrSwapChainData.cs" />
-    <Compile Include="Graphics\OvrDevice.cs" />
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="XR\XRDevice.LibOVR.cs" />
   </ItemGroup>
 
   <ItemGroup>
