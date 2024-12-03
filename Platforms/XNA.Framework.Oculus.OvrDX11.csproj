@@ -29,13 +29,18 @@
 
   <ItemGroup>
     <Compile Include="Input\Oculus\LibOVR\ConcreteTouchControllerStrategy.cs" />
-    <Compile Include="Input\Oculus\HandsState.cs" />
-    <Compile Include="Input\Oculus\HeadsetState.cs" />
-    <Compile Include="Graphics\.DX11\ConcreteOvrSwapChainData.cs" />
-    <Compile Include="Graphics\OvrDevice.cs" />
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="XR\.LibOVR\ConcreteOvrSwapChainData.cs" />
+    <Compile Include="XR\.LibOVR\ConcreteXRDevice.cs" />
+    <Compile Include="XR\HandsState.cs" />
+    <Compile Include="XR\HeadsetState.cs" />
+    <Compile Include="XR\XRDevice.LibOVR.cs" />
+    <Compile Include="XR\XRDeviceState.cs" />
+    <Compile Include="XR\XRDeviceStrategy.cs" />
+    <Compile Include="XR\XREye.cs" />
+    <Compile Include="XR\XRMode.cs" />
   </ItemGroup>
 
   <ItemGroup>

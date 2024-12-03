@@ -4,13 +4,15 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.XR;
+using Microsoft.Xna.Platform.XR;
 using nkast.LibOVR;
 using D3D11 = SharpDX.Direct3D11;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     // Concrete SharpDX.Direct3D11 
-    internal sealed class ConcreteOvrSwapChainData : OvrDevice.OvrSwapChainDataBase
+    internal sealed class ConcreteOvrSwapChainData : ConcreteXRDevice.OvrSwapChainDataBase
     {
         public readonly static Guid IID_IUnknown = new Guid(0x00000000, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
         public readonly static Guid IID_ID3D11DeviceChild = new Guid(0x1841e5c8, 0x16b0, 0x489b, 0xbc, 0xc8, 0x44, 0xcf, 0xb0, 0xd5, 0xde, 0xae);
@@ -23,16 +25,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override OvrTextureSwapChain SwapChain { get { return _swapChain; } }
 
-        internal override RenderTarget2D GetRenderTarget(int eye)
-        {
-            return _renderTarget;
-        }
-
         internal static int CreateSwapChain(
             GraphicsDevice graphicsDevice, OvrSession ovrSession,
             int w, int h,
             SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount,
-            out OvrDevice.OvrSwapChainDataBase outSwapChainData)
+            out ConcreteXRDevice.OvrSwapChainDataBase outSwapChainData)
         {
             int ovrResult = 0;
 
@@ -83,11 +80,15 @@ namespace Microsoft.Xna.Framework.Graphics
             return 0;
         }
 
+        internal override RenderTarget2D GetRenderTarget(int index)
+        {
+            return _renderTarget;
+        }
+
         internal override int SubmitRenderTarget(GraphicsDevice graphicsDevice, RenderTarget2D rt)
         {   
             int ovrResult;
-            int index = 0;
-            ovrResult = SwapChain.GetCurrentIndex(out index);
+            ovrResult = SwapChain.GetCurrentIndex(out int index);
             if (ovrResult < 0)
                 return ovrResult;
 

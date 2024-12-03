@@ -6,13 +6,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Framework.XR;
+using Microsoft.Xna.Platform.XR;
 using nkast.LibOVR;
 
 namespace Microsoft.Xna.Platform.Input.Oculus
 {
     public sealed class ConcreteTouchControllerStrategy : IOculusInput
     {
-        private OvrDevice _ovrDevice;
+        private ConcreteXRDevice _xrDevice;
 
         void IOculusInput.GetCapabilities(TouchControllerType controllerType,
             ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,
@@ -21,7 +23,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             ref bool hasVoiceSupport
             )
         {
-            var session = _ovrDevice.Session;
+            var session = _xrDevice.Session;
             if (session == null)
             {
                 gamePadType = GamePadType.Unknown;
@@ -65,14 +67,14 @@ namespace Microsoft.Xna.Platform.Input.Oculus
 
         Buttons _virtualButtons;
 
-        public ConcreteTouchControllerStrategy(OvrDevice ovrDevice)
+        internal ConcreteTouchControllerStrategy(ConcreteXRDevice xrDevice)
         {
-            this._ovrDevice = ovrDevice;
+            this._xrDevice = xrDevice;
         }
 
         TouchControllerState IOculusInput.GetState(TouchControllerType controllerType)
         {
-            var session = _ovrDevice.Session;
+            var session = _xrDevice.Session;
             if (session == null)
                 return new TouchControllerState();
 
@@ -215,7 +217,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
 
         bool IOculusInput.SetVibration(TouchControllerType controllerType, float amplitude)
         {
-            var session = _ovrDevice.Session;
+            var session = _xrDevice.Session;
             if (session == null)
                 return false;
 

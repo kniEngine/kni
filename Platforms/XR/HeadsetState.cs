@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Xna.Framework.Input.Oculus
+namespace Microsoft.Xna.Framework.XR
 {
     public struct HeadsetState
     {
