@@ -36,6 +36,10 @@
     <Compile Include="XR\HandsState.cs" />
     <Compile Include="XR\HeadsetState.cs" />
     <Compile Include="XR\XRDevice.LibOVR.cs" />
+    <Compile Include="XR\XRDeviceState.cs" />
+    <Compile Include="XR\XRDeviceStrategy.cs" />
+    <Compile Include="XR\XREye.cs" />
+    <Compile Include="XR\XRMode.cs" />
   </ItemGroup>
 
   <ItemGroup>
