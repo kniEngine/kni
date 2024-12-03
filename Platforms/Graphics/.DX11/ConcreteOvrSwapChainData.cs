@@ -25,11 +25,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal override OvrTextureSwapChain SwapChain { get { return _swapChain; } }
 
-        internal override RenderTarget2D GetRenderTarget(int eye)
-        {
-            return _renderTarget;
-        }
-
         internal static int CreateSwapChain(
             GraphicsDevice graphicsDevice, OvrSession ovrSession,
             int w, int h,
@@ -85,11 +80,15 @@ namespace Microsoft.Xna.Framework.Graphics
             return 0;
         }
 
+        internal override RenderTarget2D GetRenderTarget(int index)
+        {
+            return _renderTarget;
+        }
+
         internal override int SubmitRenderTarget(GraphicsDevice graphicsDevice, RenderTarget2D rt)
         {   
             int ovrResult;
-            int index = 0;
-            ovrResult = SwapChain.GetCurrentIndex(out index);
+            ovrResult = SwapChain.GetCurrentIndex(out int index);
             if (ovrResult < 0)
                 return ovrResult;
 

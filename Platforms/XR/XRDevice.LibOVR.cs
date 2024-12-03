@@ -74,22 +74,19 @@ namespace Microsoft.Xna.Framework.XR
             return _strategy.GetEyes();
         }
 
-        public Matrix CreateProjection(int eye, float znear, float zfar)
+        public Matrix CreateProjection(XREye eye, float znear, float zfar)
         {
-            XREye xrEye = (XREye)(eye+1);
-            return _strategy.CreateProjection(xrEye, znear, zfar);
+            return _strategy.CreateProjection(eye, znear, zfar);
         }
 
-        public RenderTarget2D GetEyeRenderTarget(int eye)
+        public RenderTarget2D GetEyeRenderTarget(XREye eye)
         {
-            XREye xrEye = (XREye)(eye + 1);
-            return _strategy.GetEyeRenderTarget(xrEye);
+            return _strategy.GetEyeRenderTarget(eye);
         }
 
-        public int CommitRenderTarget(int eye, RenderTarget2D rt)
+        public int CommitRenderTarget(XREye eye, RenderTarget2D rt)
         {
-            XREye xrEye = (XREye)(eye + 1);
-            _strategy.CommitRenderTarget(xrEye, rt);
+            _strategy.CommitRenderTarget(eye, rt);
             return 0;
         }
 

@@ -156,16 +156,16 @@ namespace Microsoft.Xna.Platform.XR
 
         public override IEnumerable<XREye> GetEyes()
         {
-            throw new NotImplementedException();
+            yield return XREye.Left;
+            yield return XREye.Right;
         }
 
         public override RenderTarget2D GetEyeRenderTarget(XREye eye)
         {
             int eyeIndex = (int)eye - 1;
 
-            int index;
-            int ovrResult = _swapChainData[eyeIndex].SwapChain.GetCurrentIndex(out index);
-            return _swapChainData[eyeIndex].GetRenderTarget(eyeIndex);
+            int ovrResult = _swapChainData[eyeIndex].SwapChain.GetCurrentIndex(out int index);
+            return _swapChainData[eyeIndex].GetRenderTarget(index);
         }
 
         public override Matrix CreateProjection(XREye eye, float znear, float zfar)
@@ -385,7 +385,7 @@ namespace Microsoft.Xna.Platform.XR
         internal abstract class OvrSwapChainDataBase
         {
             internal abstract OvrTextureSwapChain SwapChain { get; }
-            internal abstract RenderTarget2D GetRenderTarget(int eye);
+            internal abstract RenderTarget2D GetRenderTarget(int index);
             internal abstract int SubmitRenderTarget(GraphicsDevice graphicsDevice, RenderTarget2D rt);
         }
     }
