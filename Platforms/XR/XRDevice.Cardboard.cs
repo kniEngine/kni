@@ -18,8 +18,6 @@ namespace Microsoft.Xna.Framework.XR
             return (T)_strategy;
         }
 
-        internal static GameWindow GameWindow;
-
 
         public XRDeviceState State
         {
@@ -53,7 +51,7 @@ namespace Microsoft.Xna.Framework.XR
         {
             HeadsetState state;
 
-            var window = GameWindow as AndroidGameWindow;
+            var window = ConcreteXRDevice.GameWindow as AndroidGameWindow;
             window.UpdateHeadsetState(out state);
 
             return state;

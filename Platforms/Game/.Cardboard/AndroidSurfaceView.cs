@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework
             if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
                 Holder.SetType(SurfaceType.Gpu);
 
-            Microsoft.Xna.Framework.XR.XRDevice.GameWindow = gameWindow;
+            Microsoft.Xna.Framework.XR.ConcreteXRDevice.GameWindow = gameWindow;
 
             this.Holder.SetFormat(Android.Graphics.Format.Rgba8888);
 

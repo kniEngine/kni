@@ -13,6 +13,9 @@ namespace Microsoft.Xna.Framework.XR
         XRMode _xrMode;
         XRDeviceState _deviceState;
 
+        internal static GameWindow GameWindow;
+
+
         public override XRMode Mode
         {
             get { return _xrMode; }
