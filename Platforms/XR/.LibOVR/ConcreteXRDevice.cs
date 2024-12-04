@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input.Oculus;
 using Microsoft.Xna.Framework.XR;
 using Microsoft.Xna.Platform.Input.Oculus;
 using nkast.LibOVR;
-using static Microsoft.Xna.Framework.XR.XRDevice;
 
 namespace Microsoft.Xna.Platform.XR
 {

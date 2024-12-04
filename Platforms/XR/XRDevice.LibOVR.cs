@@ -74,14 +74,14 @@ namespace Microsoft.Xna.Framework.XR
             return _strategy.GetEyes();
         }
 
-        public Matrix CreateProjection(XREye eye, float znear, float zfar)
-        {
-            return _strategy.CreateProjection(eye, znear, zfar);
-        }
-
         public RenderTarget2D GetEyeRenderTarget(XREye eye)
         {
             return _strategy.GetEyeRenderTarget(eye);
+        }
+
+        public Matrix CreateProjection(XREye eye, float znear, float zfar)
+        {
+            return _strategy.CreateProjection(eye, znear, zfar);
         }
 
         public int CommitRenderTarget(XREye eye, RenderTarget2D rt)
