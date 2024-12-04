@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+	<EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net8.0-android</TargetFramework>
     <LangVersion>Default</LangVersion>
@@ -126,12 +127,6 @@
     <Compile Include="Graphics\.GL.Android\SurfaceConfig.cs" />
     <Compile Include="Graphics\.GL\OpenGL.Common.cs" />
     <Compile Include="Graphics\.Common\SpriteBatcher.cs" />
-
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Input\Cardboard\Headset.cs" />
-    <Compile Include="Input\Cardboard\HeadsetState.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -221,6 +216,12 @@
     <Compile Include="Storage\.Android\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.Android\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.Android\ConcreteStorageService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="XR\XRDevice.Cardboard.cs" />
+    <Compile Include="XR\.Cardboard\HeadsetState.cs" />
+    <Compile Include="XR\.Cardboard\HeadsetState.cs" />
   </ItemGroup>
 
   <ItemGroup>
