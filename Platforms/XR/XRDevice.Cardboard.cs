@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.XR
 {
-    public class Headset
+    public class XRDevice
     {
         internal static GameWindow GameWindow;
 
