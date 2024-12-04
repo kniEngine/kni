@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.XR
 {
-    public class XRDevice
+    public class XRDevice: IDisposable
     {
         internal static GameWindow GameWindow;
 
@@ -20,6 +20,27 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
+        #region IDisposable
+        ~XRDevice()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+            }
+
+        }
+        #endregion
     }
 }
 
