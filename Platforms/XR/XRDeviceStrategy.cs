@@ -15,21 +15,8 @@ namespace Microsoft.Xna.Platform.XR
 
     public abstract class XRDeviceStrategy : IDisposable
     {
-        XRMode _xrMode;
-        XRDeviceState _deviceState;
-
-        public virtual XRMode Mode
-        {
-            get { return _xrMode; }
-            set { _xrMode = value; }
-        }
-
-        public virtual XRDeviceState State
-        {
-            get { return _deviceState; }
-            set { _deviceState = value; }
-        }
-
+        public abstract XRMode Mode { get; }
+        public abstract XRDeviceState State { get; }
         public abstract bool IsConnected { get; }
         public abstract bool TrackFloorLevelOrigin { get; set; }
 

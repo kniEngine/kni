@@ -16,6 +16,8 @@ namespace Microsoft.Xna.Platform.XR
     {
         //Game _game;
         IGraphicsDeviceService _graphics;
+        XRMode _xrMode;
+        XRDeviceState _deviceState;
 
         OvrClient _ovrClient;
         OvrSession _ovrSession;
@@ -35,24 +37,20 @@ namespace Microsoft.Xna.Platform.XR
 
         OvrSwapChainDataBase[] _swapChainData = new OvrSwapChainDataBase[2];
 
-        bool _isConnected;
-
 
         public override XRMode Mode
         {
-            get { return base.Mode; }
-            set { base.Mode = value; }
+            get { return _xrMode; }
         }
 
         public override XRDeviceState State
         {
-            get { return base.State; }
-            set { base.State = value; }
+            get { return _deviceState; }
         }
 
         public override bool IsConnected
         {
-            get { return _isConnected; }
+            get { return (_deviceState == XRDeviceState.Ready); }
         }
 
         public override bool TrackFloorLevelOrigin
@@ -70,13 +68,15 @@ namespace Microsoft.Xna.Platform.XR
 
             //this._game = game;
             this._graphics = graphics;
-            this.Mode = mode;
+            this._xrMode = mode;
 
 
             _graphics = graphics;
             _graphics.DeviceResetting += GraphicsDeviceResetting;
             _graphics.DeviceReset += GraphicsDeviceReset;
             _graphics.DeviceDisposing += GraphicsDeviceDisposing;
+
+            this._deviceState = XRDeviceState.Disabled;
         }
 
         public override int CreateDevice()
@@ -282,7 +282,7 @@ namespace Microsoft.Xna.Platform.XR
                 out _layer);
 
             TouchController.DeviceHandle = new ConcreteTouchControllerStrategy(this);
-            _isConnected = true;
+            this._deviceState = XRDeviceState.Ready;
 
             return 0;
         }
@@ -332,7 +332,8 @@ namespace Microsoft.Xna.Platform.XR
             _ovrSession = null;
             _ovrClient.Dispose();
             _ovrClient = null;
-            _isConnected = false;
+
+            _deviceState = XRDeviceState.Disabled;
         }
 
         private static void CreatePerspectiveFieldOfView(float leftTan, float rightTan, float bottomTan, float topTan, float nearPlaneDistance, float farPlaneDistance, out Matrix result)
