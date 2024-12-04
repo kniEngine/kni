@@ -11,26 +11,30 @@ namespace Microsoft.Xna.Framework.XR
         public Matrix LEyeTransform;
         public Matrix REyeTransform;
 
-        public Matrix GetEyeTransform(int eyeIndex)
+        public Matrix GetEyeTransform(XREye eyeIndex)
         {
             switch (eyeIndex)
             {
-                case 0:
+                case XREye.None:
+                    return HeadTransform;
+                case XREye.Left:
                     return LEyeTransform;
-                case 1:
+                case XREye.Right:
                     return REyeTransform;
                 default:
                     throw new IndexOutOfRangeException();
             }
         }
 
-        public Matrix GetEyeView(int eyeIndex)
+        public Matrix GetEyeView(XREye eyeIndex)
         {
             switch (eyeIndex)
             {
-                case 0:
+                case XREye.None:
+                    return Matrix.Invert(HeadTransform);
+                case XREye.Left:
                     return Matrix.Invert(LEyeTransform);
-                case 1:
+                case XREye.Right:
                     return Matrix.Invert(REyeTransform);
                 default:
                     throw new IndexOutOfRangeException();
