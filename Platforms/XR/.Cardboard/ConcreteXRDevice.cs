@@ -145,7 +145,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override HandsState GetHandsState()
         {
-            throw new System.NotImplementedException();
+            return default(HandsState);
         }
 
         static unsafe Matrix CreateProjection(   float tanAngleLeft, float tanAngleRight,
