@@ -13,7 +13,7 @@
   <PropertyGroup>
 	<EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFramework>net8.0-android</TargetFramework>
+    <TargetFramework>net8.0-android34</TargetFramework>
     <LangVersion>Default</LangVersion>
     <IsTrimmable>True</IsTrimmable>
     <ProjectGuid>{CF09A088-6F64-4FA3-8FF8-E5B39F8BB0E6}</ProjectGuid>
