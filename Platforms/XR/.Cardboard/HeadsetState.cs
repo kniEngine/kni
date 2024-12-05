@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.XR
 {
-    public struct CardboardHeadsetState
+    internal struct CardboardHeadsetState
     {
         public CardboardEyeState LeftEye;
         public CardboardEyeState RightEye;
     }
-        
-    public struct CardboardEyeState
+
+    internal struct CardboardEyeState
     {
         public Matrix View;
         

@@ -47,17 +47,6 @@ namespace Microsoft.Xna.Framework.XR
 
         }
 
-        public CardboardHeadsetState GetState()
-        {
-            CardboardHeadsetState state;
-
-            var window = ((IPlatformXRDevice)this).GetStrategy<ConcreteXRDevice>()._gameWindow as AndroidGameWindow;
-
-            window.UpdateHeadsetState(out state);
-
-            return state;
-        }
-
 
         // the following functions should be called in order
         public int CreateDevice()
