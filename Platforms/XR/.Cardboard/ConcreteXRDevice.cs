@@ -77,7 +77,8 @@ namespace Microsoft.Xna.Framework.XR
 
         public override IEnumerable<XREye> GetEyes()
         {
-            throw new System.NotImplementedException();
+            yield return XREye.Left;
+            yield return XREye.Right;
         }
 
         public override RenderTarget2D GetEyeRenderTarget(XREye eye)
