@@ -20,6 +20,7 @@ using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
+using Android.Runtime;
 
 
 namespace Microsoft.Xna.Framework
@@ -547,7 +548,6 @@ namespace Microsoft.Xna.Framework
 
 
 
-
         Microsoft.Xna.Framework.XR.HeadsetState _hsState;
         private void UpdateLocalHeadsetState(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
         {
@@ -730,7 +730,26 @@ namespace Microsoft.Xna.Framework
         internal void VrRendererOnSurfaceCreated(EGLConfig config)
         {
             _eglConfig = config;
+
+#if DEBUG
+            IEGL10 egl10 = Javax.Microedition.Khronos.Egl.EGLContext.EGL.JavaCast<IEGL10>();
+            _eglDisplay = egl10.EglGetDisplay(EGL10.EglDefaultDisplay);
+            _eglSurface = egl10.EglGetCurrentSurface(EGL10.EglDraw);
+            _eglContext = egl10.EglGetCurrentContext();
+            if (_eglDisplay == EGL10.EglNoDisplay)
+                _eglDisplay = null;
+            if (_eglSurface == EGL10.EglNoSurface)
+                _eglSurface = null;
+            if (_eglContext == EGL10.EglNoContext)
+                _eglContext = null;
+#endif
         }
+
+#if DEBUG
+        private EGLDisplay _eglDisplay;
+        private EGLSurface _eglSurface;
+        private EGLContext _eglContext;
+#endif
 
         #endregion CardboardView.IRenderer
     }
