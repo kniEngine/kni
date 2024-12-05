@@ -104,7 +104,33 @@ namespace Microsoft.Xna.Framework.XR
 
         public override Matrix CreateProjection(XREye eye, float znear, float zfar)
         {
-            throw new System.NotImplementedException();
+            Matrix proj;
+
+            switch (eye)
+            {
+                case XREye.None:
+                    throw new NotImplementedException();
+                case XREye.Left:
+                    proj = _headsetState.LeftEye.Projection;
+                    break;
+                case XREye.Right:
+                    proj = _headsetState.RightEye.Projection;
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            // extract FOV from the proj Matrix
+            float tanAngleLeft   = (1 + proj.M31) / proj.M11;
+            float tanAngleRight  = (1 - proj.M31) / proj.M11;
+            float tanAngleBottom = (1 + proj.M32) / proj.M22;
+            float tanAngleTop    = (1 - proj.M32) / proj.M22;
+
+            //TODO: Get FOV from VRCardboard.EyeParams and create projection with znear/zfar
+            //proj = CreateProjection(tanAngleLeft, tanAngleRight, tanAngleBottom, tanAngleTop, znear, zfar);
+
+            return proj;
         }
 
         public override void CommitRenderTarget(XREye eye, RenderTarget2D rt)
@@ -122,6 +148,27 @@ namespace Microsoft.Xna.Framework.XR
             throw new System.NotImplementedException();
         }
 
+        static unsafe Matrix CreateProjection(   float tanAngleLeft, float tanAngleRight,
+                                                 float tanAngleBottom, float tanAngleTop,
+                                                 float nearZ, float farZ)
+        {
+            float tanAngleWidth = tanAngleLeft + tanAngleRight;
+            float tanAngleHeight = tanAngleBottom + tanAngleTop;
+
+            Matrix result;
+            
+            result.M11 = (2f) / tanAngleWidth;
+            result.M12 = result.M13 = result.M14 = 0;
+            result.M22 = (2f) / tanAngleHeight;
+            result.M21 = result.M23 = result.M24 = 0;
+            result.M31 = -(tanAngleRight - tanAngleLeft) / tanAngleWidth;
+            result.M32 = -(tanAngleTop - tanAngleBottom) / tanAngleHeight;
+            result.M33 = (float)((farZ) / ((double)nearZ - farZ));
+            result.M34 = -1;
+            result.M43 = (float)((farZ * ((double)nearZ)) / ((double)nearZ - farZ));
+            result.M41 = result.M42 = result.M44 = 0;
+            return result;
+        }
 
         protected override void Dispose(bool disposing)
         {
