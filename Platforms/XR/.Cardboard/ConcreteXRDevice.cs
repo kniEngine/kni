@@ -72,7 +72,14 @@ namespace Microsoft.Xna.Framework.XR
 
         public override HeadsetState GetHeadsetState()
         {
-            throw new System.NotImplementedException();
+            HeadsetState headsetState = default;
+
+            //TODO: get HeadTransform from VrRendererOnDrawFrame(VRCardboard.HeadTransform headTransform, ...)
+            headsetState.HeadTransform = Matrix.Identity;
+            headsetState.LEyeTransform = Matrix.Invert(_headsetState.LeftEye.View);
+            headsetState.REyeTransform = Matrix.Invert(_headsetState.RightEye.View);
+
+            return headsetState;
         }
 
         public override IEnumerable<XREye> GetEyes()
