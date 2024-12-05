@@ -60,9 +60,14 @@ namespace Microsoft.Xna.Framework.XR
             return 0;
         }
 
+        HeadsetState _headsetState;
+
         public override int BeginFrame()
         {
-            throw new System.NotImplementedException();
+            var window = _gameWindow as AndroidGameWindow;
+            window.UpdateHeadsetState(out _headsetState);
+
+            return 0;
         }
 
         public override HeadsetState GetHeadsetState()
