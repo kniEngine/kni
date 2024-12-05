@@ -138,6 +138,16 @@ namespace Microsoft.Xna.Platform.Graphics
 
 #if CARDBOARD
             _eglDisplay = _ogl.Egl.EglGetCurrentDisplay();
+
+            _ogl.GetInteger(GetParamName.MajorVersion, out _eglMajorVersion);
+            _ogl.CheckGLError();
+            _ogl.GetInteger(GetParamName.MinorVersion, out _eglMinorVersion);
+            _ogl.CheckGLError();
+            _ogl.GetInteger(GetParamName.MaxTextureSize, out _maxTextureSize);
+            _ogl.CheckGLError();
+            _ogl.GetInteger(GetParamName.MaxVertexAttribs, out _maxVertexBufferSlots);
+            _ogl.CheckGLError();
+            _ogl.GetInteger(GetParamName.MaxSamples, out _maxMultiSampleCount);
 #else
             _eglDisplay = _ogl.Egl.EglGetDisplay(EGL10.EglDefaultDisplay);
             if (_eglDisplay == EGL10.EglNoDisplay)
@@ -146,10 +156,8 @@ namespace Microsoft.Xna.Platform.Graphics
             int[] version = new int[2];
             if (!_ogl.Egl.EglInitialize(_eglDisplay, version))
                 throw new Exception("Could not initialize EGL display" + _ogl.GetEglErrorAsString());
-#endif
 
             InitConfigs();
-
 
             // create a temporary context to query GLES version
             EGLContext eglContext = null;
@@ -195,7 +203,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (eglContext != null)
                     _ogl.Egl.EglDestroyContext(this.EglDisplay, eglContext);
             }
-
+#endif
         }
 
 
