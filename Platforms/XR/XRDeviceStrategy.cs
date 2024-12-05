@@ -25,6 +25,7 @@ namespace Microsoft.Xna.Platform.XR
         public abstract HeadsetState GetHeadsetState();
         public abstract IEnumerable<XREye> GetEyes();
         public abstract RenderTarget2D GetEyeRenderTarget(XREye eye);
+        internal abstract Viewport GetEyeViewport(XREye eye);
         public abstract Matrix CreateProjection(XREye eye, float znear, float zfar);
         public abstract void CommitRenderTarget(XREye eye, RenderTarget2D rt);
         public abstract int EndFrame();

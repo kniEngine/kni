@@ -85,6 +85,11 @@ namespace Microsoft.Xna.Framework.XR
             return _strategy.GetEyeRenderTarget(eye);
         }
 
+        public Viewport GetEyeViewport(XREye eye)
+        {
+            return _strategy.GetEyeViewport(eye);
+        }
+
         public Matrix CreateProjection(XREye eye, float znear, float zfar)
         {
             return _strategy.CreateProjection(eye, znear, zfar);

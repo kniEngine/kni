@@ -86,6 +86,22 @@ namespace Microsoft.Xna.Framework.XR
             return null;
         }
 
+        internal override Viewport GetEyeViewport(XREye eye)
+        {
+            switch (eye)
+            {
+                case XREye.None:
+                    throw new NotImplementedException();
+                case XREye.Left:
+                    return _headsetState.LeftEye.Viewport;
+                case XREye.Right:
+                    return _headsetState.RightEye.Viewport;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
         public override Matrix CreateProjection(XREye eye, float znear, float zfar)
         {
             throw new System.NotImplementedException();
