@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.XR
 {
-    public struct HeadsetState
+    public struct CardboardHeadsetState
     {
         public CardboardEyeState LeftEye;
         public CardboardEyeState RightEye;

@@ -47,9 +47,9 @@ namespace Microsoft.Xna.Framework.XR
 
         }
 
-        public HeadsetState GetState()
+        public CardboardHeadsetState GetState()
         {
-            HeadsetState state;
+            CardboardHeadsetState state;
 
             var window = ((IPlatformXRDevice)this).GetStrategy<ConcreteXRDevice>()._gameWindow as AndroidGameWindow;
 

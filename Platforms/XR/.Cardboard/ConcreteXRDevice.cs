@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.XR
             return 0;
         }
 
-        HeadsetState _headsetState;
+        CardboardHeadsetState _headsetState;
 
         public override int BeginFrame()
         {

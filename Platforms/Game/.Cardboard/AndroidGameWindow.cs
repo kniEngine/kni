@@ -548,7 +548,7 @@ namespace Microsoft.Xna.Framework
 
 
 
-        Microsoft.Xna.Framework.XR.HeadsetState _hsState;
+        Microsoft.Xna.Framework.XR.CardboardHeadsetState _hsState;
         private void UpdateLocalHeadsetState(VRCardboard.HeadTransform headTransform, VRCardboard.EyeParams eyeParams1, VRCardboard.EyeParams eyeParams2)
         {
             Viewport2XNA(eyeParams1.Viewport, ref _hsState.LeftEye.Viewport);
@@ -599,7 +599,7 @@ namespace Microsoft.Xna.Framework
             result.M44 = matrix[15];
         }
 
-        internal void UpdateHeadsetState(out Microsoft.Xna.Framework.XR.HeadsetState state)
+        internal void UpdateHeadsetState(out Microsoft.Xna.Framework.XR.CardboardHeadsetState state)
         {
             state = _hsState;
         }
