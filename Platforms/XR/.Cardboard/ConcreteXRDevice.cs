@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override int EndFrame()
         {
-            throw new System.NotImplementedException();
+            return 0;
         }
 
         public override HandsState GetHandsState()
