@@ -8,11 +8,11 @@ namespace Microsoft.Xna.Framework.XR
 {
     public struct HeadsetState
     {
-        public EyeState LeftEye;
-        public EyeState RightEye;
+        public CardboardEyeState LeftEye;
+        public CardboardEyeState RightEye;
     }
         
-    public struct EyeState
+    public struct CardboardEyeState
     {
         public Matrix View;
         
