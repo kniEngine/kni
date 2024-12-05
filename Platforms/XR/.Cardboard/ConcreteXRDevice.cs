@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override RenderTarget2D GetEyeRenderTarget(XREye eye)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
 
         public override Matrix CreateProjection(XREye eye, float znear, float zfar)
