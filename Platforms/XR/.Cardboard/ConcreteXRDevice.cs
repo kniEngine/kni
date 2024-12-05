@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override bool IsConnected
         {
-            get { throw new System.NotImplementedException(); }
+            get { return (_deviceState == XRDeviceState.Ready); }
         }
 
         public override bool TrackFloorLevelOrigin
