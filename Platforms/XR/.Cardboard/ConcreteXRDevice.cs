@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override void CommitRenderTarget(XREye eye, RenderTarget2D rt)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override int EndFrame()
