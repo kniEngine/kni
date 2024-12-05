@@ -1,5 +1,6 @@
 ﻿// Copyright (C)2024 Nick Kastellanos
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.XR;
@@ -13,7 +14,7 @@ namespace Microsoft.Xna.Framework.XR
         XRMode _xrMode;
         XRDeviceState _deviceState;
 
-        internal static GameWindow GameWindow;
+        internal GameWindow _gameWindow;
 
 
         public override XRMode Mode
@@ -39,14 +40,24 @@ namespace Microsoft.Xna.Framework.XR
 
         public ConcreteXRDevice(Game game, IGraphicsDeviceService graphics, XRMode mode)
         {
+            if (game == null)
+                throw new ArgumentNullException("game");
+            if (mode != XRMode.VR)
+                throw new ArgumentException("mode");
+
             this._game = game;
             this._graphics = graphics;
             this._xrMode = mode;
+
+            this._deviceState = XRDeviceState.Disabled;
         }
 
         public override int CreateDevice()
         {
-            throw new System.NotImplementedException();
+            _gameWindow = _game.Window;
+
+            _deviceState = XRDeviceState.Ready;
+            return 0;
         }
 
         public override int BeginFrame()
@@ -92,6 +103,10 @@ namespace Microsoft.Xna.Framework.XR
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+            }
+
         }
     }
 }

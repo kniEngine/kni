@@ -47,11 +47,12 @@ namespace Microsoft.Xna.Framework.XR
 
         }
 
-        public static HeadsetState GetState()
+        public HeadsetState GetState()
         {
             HeadsetState state;
 
-            var window = ConcreteXRDevice.GameWindow as AndroidGameWindow;
+            var window = ((IPlatformXRDevice)this).GetStrategy<ConcreteXRDevice>()._gameWindow as AndroidGameWindow;
+
             window.UpdateHeadsetState(out state);
 
             return state;
