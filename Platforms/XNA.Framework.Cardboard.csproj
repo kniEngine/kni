@@ -92,7 +92,7 @@
       <Name>Xna.Framework.Devices</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="Game\.Cardboard\GoogleCardboard\GoogleCardboard.csproj">
+    <ProjectReference Include="XR\.CardboardLegacy\GoogleCardboard\GoogleCardboard.csproj">
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Storage\Xna.Framework.Storage.csproj">
       <Project>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</Project>
@@ -159,13 +159,13 @@
     <Compile Include="Devices\.Android\Sensors\SensorListener.cs" />
 
     <Compile Include="Game\.Android\TouchEventListener.cs" />
-    <Compile Include="Game\.Cardboard\AndroidCompatibility.cs" />
-    <Compile Include="Game\.Cardboard\AndroidGameActivity.cs" />
-    <Compile Include="Game\.Cardboard\ConcreteGame.cs" />
-    <Compile Include="Game\.Cardboard\ConcreteGameFactory.cs" />
-    <Compile Include="Game\.Cardboard\ConcreteGraphicsDeviceManager.cs" />
-    <Compile Include="Game\.Cardboard\AndroidGameWindow.cs" />
-    <Compile Include="Game\.Cardboard\AndroidSurfaceView.cs" />
+    <Compile Include="Game\.CardboardLegacy\AndroidCompatibility.cs" />
+    <Compile Include="Game\.CardboardLegacy\AndroidGameActivity.cs" />
+    <Compile Include="Game\.CardboardLegacy\ConcreteGame.cs" />
+    <Compile Include="Game\.CardboardLegacy\ConcreteGameFactory.cs" />
+    <Compile Include="Game\.CardboardLegacy\ConcreteGraphicsDeviceManager.cs" />
+    <Compile Include="Game\.CardboardLegacy\AndroidGameWindow.cs" />
+    <Compile Include="Game\.CardboardLegacy\AndroidSurfaceView.cs" />
     <Compile Include="Game\.Android\ISurfaceView.cs" />
     <Compile Include="Game\.Android\OrientationListener.cs" />
     <Compile Include="Game\.Android\ScreenReceiver.cs" />
@@ -220,11 +220,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="XR\.Cardboard\ConcreteXRDevice.cs" />
-    <Compile Include="XR\.Cardboard\HeadsetState.cs" />
+    <Compile Include="XR\.CardboardLegacy\ConcreteXRDevice.cs" />
+    <Compile Include="XR\.CardboardLegacy\HeadsetState.cs" />
     <Compile Include="XR\HandsState.cs" />
     <Compile Include="XR\HeadsetState.cs" />
-    <Compile Include="XR\XRDevice.Cardboard.cs" />
+    <Compile Include="XR\XRDevice.CardboardLegacy.cs" />
     <Compile Include="XR\XRDeviceState.cs" />
     <Compile Include="XR\XRDeviceStrategy.cs" />
     <Compile Include="XR\XREye.cs" />
