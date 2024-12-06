@@ -33,6 +33,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Cardboard: EglConfig was created by GLSurfaceView.            
             AndroidGameWindow gameWindow = AndroidGameWindow.FromHandle(this.PresentationParameters.DeviceWindowHandle);
             _eglConfig = gameWindow.EglConfig;
+            return;
 #endif
 
             var adapter = ((IPlatformGraphicsAdapter)this.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
@@ -119,6 +120,14 @@ namespace Microsoft.Xna.Platform.Graphics
             System.Diagnostics.Debug.Assert(this.EglSurface == null);
 
             OGL_DROID GL = adapter.Ogl;
+
+#if CARDBOARD
+            // Cardboard: EglSurface and EglContext was created by GLSurfaceView.
+            _eglSurface = GL.Egl.EglGetCurrentSurface(EGL10.EglDraw);
+            if (this.EglSurface == EGL10.EglNoSurface)
+                _eglSurface = null;
+            return;
+#endif
 
             _eglSurface = GL.Egl.EglCreateWindowSurface(adapter.EglDisplay, this.EglConfig, (Java.Lang.Object)gameWindow.GameView.Holder, null);
             if (this.EglSurface == EGL10.EglNoSurface)

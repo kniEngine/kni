@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Devices", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Cardboard", "Platforms\Xna.Framework.Cardboard.csproj", "{BF257928-8B5D-4371-BD03-C18DA71918C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCardboard", "Platforms\Game\.Cardboard\GoogleCardboard\GoogleCardboard.csproj", "{4EAA991B-83C7-41AA-B845-8A13E05E0334}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCardboard", "Platforms\XR\.CardboardLegacy\GoogleCardboard\GoogleCardboard.csproj", "{4EAA991B-83C7-41AA-B845-8A13E05E0334}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Storage", "src\Xna.Framework.Storage\Xna.Framework.Storage.csproj", "{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}"
 EndProject
