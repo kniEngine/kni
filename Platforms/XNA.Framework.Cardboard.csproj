@@ -92,8 +92,6 @@
       <Name>Xna.Framework.Devices</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="XR\.CardboardLegacy\GoogleCardboard\GoogleCardboard.csproj">
-    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Storage\Xna.Framework.Storage.csproj">
       <Project>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</Project>
       <Name>Xna.Framework.Storage</Name>
@@ -220,6 +218,8 @@
   </ItemGroup>
 
   <ItemGroup>
+	<ProjectReference Include="XR\.CardboardLegacy\GoogleCardboard\GoogleCardboard.csproj">
+	</ProjectReference>
     <Compile Include="XR\.CardboardLegacy\ConcreteXRDevice.cs" />
     <Compile Include="XR\.CardboardLegacy\HeadsetState.cs" />
     <Compile Include="XR\HandsState.cs" />
