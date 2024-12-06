@@ -167,12 +167,6 @@ namespace Microsoft.Xna.Platform.XR
             return _swapChainData[eyeIndex].GetRenderTarget(index);
         }
 
-        internal override Viewport GetEyeViewport(XREye eye)
-        {
-            RenderTarget2D rt = GetEyeRenderTarget(eye);
-            return new Viewport(0, 0, rt.Width, rt.Height);
-        }
-
         public override Matrix CreateProjection(XREye eye, float znear, float zfar)
         {
             int eyeIndex = (int)eye - 1;

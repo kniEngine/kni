@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.XR;
 
@@ -88,25 +89,39 @@ namespace Microsoft.Xna.Framework.XR
             yield return XREye.Right;
         }
 
-        public override RenderTarget2D GetEyeRenderTarget(XREye eye)
-        {
-            return null;
-        }
+        RenderTarget2D[] _rt = new RenderTarget2D[2];
 
-        internal override Viewport GetEyeViewport(XREye eye)
+        public override RenderTarget2D GetEyeRenderTarget(XREye xreye)
         {
-            switch (eye)
+            int eye = (int)xreye - 1;
+
+            Viewport vp = default;
+            switch (xreye)
             {
-                case XREye.None:
-                    throw new NotImplementedException();
-                case XREye.Left:
-                    return _headsetState.LeftEye.Viewport;
-                case XREye.Right:
-                    return _headsetState.RightEye.Viewport;
-
-                default:
-                    throw new InvalidOperationException();
+                case XREye.Left: vp = _headsetState.LeftEye.Viewport; break;
+                case XREye.Right: vp = _headsetState.RightEye.Viewport; break;
             }
+            int w = vp.Width;
+            int h = vp.Height;
+
+
+            var gd = _graphics.GraphicsDevice;
+
+            if (_rt[eye] != null
+            && (_rt[eye].Width != w || _rt[eye].Height != h)
+            )
+            {
+                _rt[eye].Dispose();
+                _rt[eye] = null;
+            }
+
+            if (_rt[eye] == null)
+            {
+                _rt[eye] = new RenderTarget2D(_graphics.GraphicsDevice, w, h, false,
+                                              SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 4, RenderTargetUsage.PreserveContents);
+            }
+
+            return _rt[eye];
         }
 
         public override Matrix CreateProjection(XREye eye, float znear, float zfar)
@@ -140,13 +155,31 @@ namespace Microsoft.Xna.Framework.XR
             return proj;
         }
 
-        public override void CommitRenderTarget(XREye eye, RenderTarget2D rt)
+        public override void CommitRenderTarget(XREye xreye, RenderTarget2D rt)
         {
-            
+            int eye = (int)xreye - 1;
+
+            Debug.Assert(_rt[eye] == rt);
         }
 
+
+        SpriteBatch _sb;
         public override int EndFrame()
         {
+            var gd = _graphics.GraphicsDevice;
+
+            if (_sb == null)
+                _sb = new SpriteBatch(_graphics.GraphicsDevice);
+
+            Viewport vp = default;
+
+            _sb.Begin();
+             vp = _headsetState.LeftEye.Viewport;
+            _sb.Draw(_rt[0], new Rectangle(vp.X, vp.Y, vp.Width, vp.Height), Color.White);
+            vp = _headsetState.RightEye.Viewport; 
+            _sb.Draw(_rt[1], new Rectangle(vp.X, vp.Y, vp.Width, vp.Height), Color.White);
+            _sb.End();
+
             return 0;
         }
 
