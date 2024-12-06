@@ -30,12 +30,6 @@ jobs:
      - name: SDK Version     
        run: dotnet --version
 
-     - name: set SDK
-       run: echo ##[set-env name=DOTNET_ROOT;]C:\Program Files\dotnet\sdk\8.0.404
-
-     - name: SDK Version 2
-       run: dotnet --version
-
    # - name: Cache .NET workloads
    #   uses: actions/cache@v4
    #   with:
