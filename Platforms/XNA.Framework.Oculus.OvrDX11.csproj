@@ -26,12 +26,9 @@
     <PackageId>nkast.Xna.Framework.Oculus.OvrDX11</PackageId>
     <PackageOutputPath>..\NuGetPackages\Output</PackageOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="Input\Oculus\LibOVR\ConcreteTouchControllerStrategy.cs" />
-  </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="Input\.WindowsDX\Oculus\ConcreteTouchControllerStrategy.LibOVR.cs" />
     <Compile Include="XR\.LibOVR\ConcreteOvrSwapChainData.cs" />
     <Compile Include="XR\.LibOVR\ConcreteXRDevice.cs" />
     <Compile Include="XR\HandsState.cs" />
