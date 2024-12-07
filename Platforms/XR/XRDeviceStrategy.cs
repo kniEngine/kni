@@ -17,7 +17,6 @@ namespace Microsoft.Xna.Platform.XR
     {
         public abstract XRMode Mode { get; }
         public abstract XRDeviceState State { get; }
-        public abstract bool IsConnected { get; }
         public abstract bool TrackFloorLevelOrigin { get; set; }
 
         public abstract int CreateDevice();

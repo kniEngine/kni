@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Framework.XR
             return (T)_strategy;
         }
 
+
         public XRDeviceState State
         {
             get { return _strategy.State; }
@@ -28,32 +29,25 @@ namespace Microsoft.Xna.Framework.XR
             get { return _strategy.Mode; }
         }
 
-        public bool IsConnected
-        {
-            get { return _strategy.IsConnected; }
-        }
-
         public bool TrackFloorLevelOrigin
         {
             get { return _strategy.TrackFloorLevelOrigin; }
             set { _strategy.TrackFloorLevelOrigin = value; }
         }
 
-        public XRDevice(IGraphicsDeviceService graphics,
-            XRMode mode = XRMode.VR)
+        public XRDevice(string applicationName, IServiceProvider services,
+                        XRMode mode = XRMode.VR)
         {
-            _strategy = new ConcreteXRDevice(null, graphics, mode);
-
+            _strategy = new ConcreteXRDevice(applicationName, services, mode);
         }
 
-        public XRDevice(Game game, IGraphicsDeviceService graphics,
-            XRMode mode = XRMode.VR)
+        public XRDevice(string applicationName, Game game,
+                        XRMode mode = XRMode.VR)
         {
-            _strategy = new ConcreteXRDevice(game, graphics, mode);
-
+            _strategy = new ConcreteXRDevice(applicationName, game, mode);
         }
 
-        // the following functions should be called in order
+
         public int CreateDevice()
         {
             return _strategy.CreateDevice();
@@ -84,10 +78,9 @@ namespace Microsoft.Xna.Framework.XR
             return _strategy.CreateProjection(eye, znear, zfar);
         }
 
-        public int CommitRenderTarget(XREye eye, RenderTarget2D rt)
+        public void CommitRenderTarget(XREye eye, RenderTarget2D rt)
         {
             _strategy.CommitRenderTarget(eye, rt);
-            return 0;
         }
 
         public int EndFrame()

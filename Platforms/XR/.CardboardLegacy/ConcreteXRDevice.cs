@@ -28,29 +28,36 @@ namespace Microsoft.Xna.Framework.XR
             get { return _deviceState; }
         }
 
-        public override bool IsConnected
-        {
-            get { return (_deviceState == XRDeviceState.Ready); }
-        }
-
         public override bool TrackFloorLevelOrigin
         {
             get { throw new System.NotImplementedException(); }
             set { throw new System.NotImplementedException(); }
         }
 
-        public ConcreteXRDevice(Game game, IGraphicsDeviceService graphics, XRMode mode)
+
+        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
+            : this(applicationName, game.Services, mode)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
             if (mode != XRMode.VR)
                 throw new ArgumentException("mode");
 
+            IGraphicsDeviceService graphics = game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+
+            if (graphics == null)
+                throw new ArgumentNullException("graphics");
+
             this._game = game;
             this._graphics = graphics;
             this._xrMode = mode;
 
             this._deviceState = XRDeviceState.Disabled;
+        }
+
+        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        {
+            throw new ArgumentNullException("game");
         }
 
         public override int CreateDevice()
