@@ -36,7 +36,6 @@ namespace Microsoft.Xna.Framework.XR
 
 
         public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
-            : this(applicationName, game.Services, mode)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
