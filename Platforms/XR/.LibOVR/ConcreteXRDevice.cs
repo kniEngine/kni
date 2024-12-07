@@ -48,19 +48,21 @@ namespace Microsoft.Xna.Platform.XR
             get { return _deviceState; }
         }
 
-        public override bool IsConnected
-        {
-            get { return (_deviceState == XRDeviceState.Ready); }
-        }
-
         public override bool TrackFloorLevelOrigin
         {
             get { return _ovrSession.GetTrackingOriginType() == OvrTrackingOrigin.FloorLevel; }
             set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }
         }
 
-        public ConcreteXRDevice(Game game, IGraphicsDeviceService graphics, XRMode mode)
+        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
+            : this(applicationName, game.Services, mode)
         {
+        }
+
+        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        {
+            IGraphicsDeviceService graphics = services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+
             if (graphics == null)
                 throw new ArgumentNullException("graphics");
             if (mode != XRMode.VR)
