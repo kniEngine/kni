@@ -16,8 +16,7 @@ namespace Microsoft.Xna.Platform.Devices
 
         public override void Vibrate(TimeSpan duration)
         {
-            //TODO: implement Navigator.Vibrate(TimeSpan)
-            //Window.Current.Navigator.Vibrate(duration);
+            Window.Current.Navigator.Vibrate(duration);
         }
     }
 }
