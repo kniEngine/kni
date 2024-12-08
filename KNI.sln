@@ -77,6 +77,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WindowsDX11", "Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Storage", "src\Xna.Framework.Storage\Xna.Framework.Storage.csproj", "{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xna.Framework.XR", "src\Xna.Framework.XR\Xna.Framework.XR.csproj", "{6D0D985D-B256-4208-9E78-77897D461698}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,10 @@ Global
 		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D0D985D-B256-4208-9E78-77897D461698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D0D985D-B256-4208-9E78-77897D461698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D0D985D-B256-4208-9E78-77897D461698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D0D985D-B256-4208-9E78-77897D461698}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -243,6 +249,7 @@ Global
 		{DED2DDB6-D4BE-B1B4-2E54-657374732E57} = {94670BA5-3B36-4EBA-A3E0-27912F6BD11A}
 		{DED2DDB6-D4BE-656D-2E54-657374732E57} = {94670BA5-3B36-4EBA-A3E0-27912F6BD11A}
 		{7AE82BAB-5F52-427A-8F6F-DA829261FF9C} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
+		{6D0D985D-B256-4208-9E78-77897D461698} = {A5A52329-49D0-4CE0-BA3E-DBD2BA90988F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {48F20664-456B-4FE0-AE0A-7F5AC695B13C}
