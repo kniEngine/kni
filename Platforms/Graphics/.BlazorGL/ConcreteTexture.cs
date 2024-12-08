@@ -106,6 +106,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
 
                 // float formats
+                case SurfaceFormat.HalfSingle:
+                    if (!supportsFloat) goto default;
+                    glInternalFormat      = WebGLInternalFormat.R16F;
+                    glFormat              = WebGLFormat.RED;
+                    glType                = WebGLTexelType.HALF_FLOAT;
+                    glIsCompressedTexture = false;
+                    break;
                 case SurfaceFormat.Single:
                     if (!supportsFloat) goto default;
                     glInternalFormat      = WebGLInternalFormat.R32F;
@@ -113,11 +120,25 @@ namespace Microsoft.Xna.Platform.Graphics
                     glType                = WebGLTexelType.FLOAT;
                     glIsCompressedTexture = false;
                     break;
+                case SurfaceFormat.HalfVector2:
+                    if (!supportsFloat) goto default;
+                    glInternalFormat      = WebGLInternalFormat.RG16F;
+                    glFormat              = WebGLFormat.RG;
+                    glType                = WebGLTexelType.HALF_FLOAT;
+                    glIsCompressedTexture = false;
+                    break;
                 case SurfaceFormat.Vector2:
                     if (!supportsFloat) goto default;
                     glInternalFormat      = WebGLInternalFormat.RG32F;
                     glFormat              = WebGLFormat.RG;
                     glType                = WebGLTexelType.FLOAT;
+                    glIsCompressedTexture = false;
+                    break;
+                case SurfaceFormat.HalfVector4:
+                    if (!supportsFloat) goto default;
+                    glInternalFormat      = WebGLInternalFormat.RGBA16F;
+                    glFormat              = WebGLFormat.RGBA;
+                    glType                = WebGLTexelType.HALF_FLOAT;
                     glIsCompressedTexture = false;
                     break;
                 case SurfaceFormat.Vector4:
