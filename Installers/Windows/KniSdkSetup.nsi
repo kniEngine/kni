@@ -162,13 +162,6 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   SetOutPath '$INSTDIR\Assemblies\Windows'
   File '..\..\Artifacts\Platforms\WindowsDX\Release\net40\*.dll'
   File '..\..\Artifacts\Platforms\WindowsDX\Release\net40\*.xml'
-  
-  ; Install Oculus Ovr DirectX Assemblies
-  SetOutPath '$INSTDIR\Assemblies\OculusOvrDX11\net40'
-  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.dll'
-  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\Xna.Framework.Oculus.OvrDX11.xml'
-  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\nkast.LibOVR.dll'
-  File '..\..\Artifacts\Platforms\OculusOvrDX11\Release\net40\nkast.LibOVR.Native.dll'  
 
   ; Install Windows 10 UAP Assemblies
   SetOutPath '$INSTDIR\Assemblies\WindowsUniversal'

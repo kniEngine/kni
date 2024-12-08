@@ -24,6 +24,10 @@
     <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Media\Xna.Framework.Media.csproj /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build src\Xna.Framework.Devices\Xna.Framework.Devices.csproj /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build src\Xna.Framework.Game\Xna.Framework.Game.csproj /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build src\Xna.Framework.Input\Xna.Framework.Input.csproj /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build src\Xna.Framework.Storage\Xna.Framework.Storage.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Design\Xna.Framework.Design.csproj /t:Clean /p:Configuration=Release" />
     
     <exec program="dotnet" commandline="build XNA.Framework.Blazor.sln /t:Clean /p:Configuration=Release" />
@@ -98,12 +102,22 @@
       <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:restore" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Media\Xna.Framework.Media.csproj /t:restore" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Devices\Xna.Framework.Devices.csproj /t:restore" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Game\Xna.Framework.Game.csproj /t:restore" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Input\Xna.Framework.Input.csproj /t:restore" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Storage\Xna.Framework.Storage.csproj /t:restore" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Design\Xna.Framework.Design.csproj /t:restore" />
 
       <exec program="dotnet" commandline="build src\Xna.Framework\Xna.Framework.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Content\Xna.Framework.Content.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Audio\Xna.Framework.Audio.csproj /t:Build /p:Configuration=Release" />
       <exec program="dotnet" commandline="build src\Xna.Framework.Media\Xna.Framework.Media.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Devices\Xna.Framework.Devices.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Game\Xna.Framework.Game.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Input\Xna.Framework.Input.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Storage\Xna.Framework.Storage.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build src\Xna.Framework.Design\Xna.Framework.Design.csproj /t:Build /p:Configuration=Release" />
 
   </target>
     
