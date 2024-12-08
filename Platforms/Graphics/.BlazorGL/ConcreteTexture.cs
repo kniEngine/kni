@@ -162,35 +162,42 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (multiSampleCount > 0)
                 {
-                    WebGLRenderbufferInternalFormat colorInternalFormat = default;
+                    WebGL2RenderbufferInternalFormat colorInternalFormat = default;
                     switch (preferredFormat)
                     {
                         case SurfaceFormat.Color:
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RGBA8;
                             break;
                         case SurfaceFormat.Bgr565:
-                            colorInternalFormat = WebGLRenderbufferInternalFormat.RGB565;
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RGB565;
                             break;
                         case SurfaceFormat.Bgra4444:
-                            colorInternalFormat = WebGLRenderbufferInternalFormat.RGBA4;
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RGBA4;
                             break;
                         case SurfaceFormat.Bgra5551:
-                            colorInternalFormat = WebGLRenderbufferInternalFormat.RGB5_A1;
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RGB5_A1;
                             break;
                         case SurfaceFormat.Single:
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.R32F;
                             break;
                         case SurfaceFormat.HalfSingle:
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.R16F;
                             break;
                         case SurfaceFormat.Vector2:
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RG32F;
                             break;
                         case SurfaceFormat.HalfVector2:
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RG16F;
                             break;
                         case SurfaceFormat.Vector4:
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RGBA32F;
                             break;
                         case SurfaceFormat.HalfVector4:
+                            colorInternalFormat = WebGL2RenderbufferInternalFormat.RGBA16F;
                             break;
 
                         default:
-                            break;
+                            throw new InvalidOperationException("format");
                     }
 
                     renderTargetGL.GLColorBuffer = GL.CreateRenderbuffer();
@@ -199,11 +206,13 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
 
                     System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
-                    throw new NotImplementedException();
+                    ((IWebGL2RenderingContext)GL).RenderbufferStorageMultisample(WebGLRenderbufferType.RENDERBUFFER, multiSampleCount, colorInternalFormat, width, height);
+                    GL.CheckGLError();
                 }
 
                 if (preferredDepthFormat != DepthFormat.None)
                 {
+                    WebGL2RenderbufferInternalFormat depthInternalFormat2 = default;
                     WebGLRenderbufferInternalFormat depthInternalFormat = default;
                     WebGLRenderbufferInternalFormat stencilInternalFormat = default;
                     switch (preferredDepthFormat)
@@ -212,14 +221,17 @@ namespace Microsoft.Xna.Platform.Graphics
                             break;
 
                         case DepthFormat.Depth16:
+                            depthInternalFormat2 = WebGL2RenderbufferInternalFormat.DEPTH_COMPONENT16;
                             depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
                             break;
 
                         case DepthFormat.Depth24:
+                            depthInternalFormat2 = WebGL2RenderbufferInternalFormat.DEPTH_COMPONENT24;
                             depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_COMPONENT16;
                             break;
 
                         case DepthFormat.Depth24Stencil8:
+                            depthInternalFormat2 = WebGL2RenderbufferInternalFormat.DEPTH24_STENCIL8;
                             depthInternalFormat = WebGLRenderbufferInternalFormat.DEPTH_STENCIL;
                             break;
 
@@ -236,13 +248,14 @@ namespace Microsoft.Xna.Platform.Graphics
                         if (multiSampleCount > 0)
                         {
                             System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
-                            throw new NotImplementedException();
+                            ((IWebGL2RenderingContext)GL).RenderbufferStorageMultisample(WebGLRenderbufferType.RENDERBUFFER, multiSampleCount, depthInternalFormat2, width, height);
+                            GL.CheckGLError();
                         }
                         else
                         {
                             if (GL is IWebGL2RenderingContext)
                             {
-                                GL.RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat, width, height);
+                                ((IWebGL2RenderingContext)GL).RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER, depthInternalFormat2, width, height);
                                 GL.CheckGLError();
                             }
                             else

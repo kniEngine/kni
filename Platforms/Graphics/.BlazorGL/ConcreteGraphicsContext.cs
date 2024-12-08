@@ -1175,13 +1175,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         WebGLFramebufferAttachmentPoint attachment = WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i;
                         WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
-                        throw new NotImplementedException();
+                        ((IWebGL2RenderingContext)GL).FramebufferTexture2D(WebGL2FramebufferType.DRAW_FRAMEBUFFER, attachment, target, renderTargetGL.GLTexture);
+                        GL.CheckGLError();
                     }
                     _glResolveFramebuffers.Add((RenderTargetBinding[])base.CurrentRenderTargetBindings.Clone(), glResolveFramebuffer);
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    ((IWebGL2RenderingContext)GL).BindFramebuffer(WebGL2FramebufferType.DRAW_FRAMEBUFFER, glResolveFramebuffer);
+                    GL.CheckGLError();
                 }
 
                 // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
@@ -1192,24 +1194,33 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
 
                 WebGLFramebuffer glFramebuffer = _glFramebuffers[base.CurrentRenderTargetBindings];
-                throw new NotImplementedException();
+                ((IWebGL2RenderingContext)GL).BindFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, glFramebuffer);
+                GL.CheckGLError();
 
                 for (int i = 0; i < base.RenderTargetCount; i++)
                 {
                     renderTargetBinding = base.CurrentRenderTargetBindings[i];
                     renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
 
-                    throw new NotImplementedException();
+                    ((IWebGL2RenderingContext)GL).ReadBuffer(WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
+                    GL.CheckGLError();
+                    ((IWebGL2RenderingContext)GL).DrawBuffer(WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
+                    GL.CheckGLError();
                     Debug.Assert(this._supportsBlitFramebuffer);
-                    throw new NotImplementedException();
+                    ((IWebGL2RenderingContext)GL).BlitFramebuffer(
+                        0, 0, renderTarget.Width, renderTarget.Height,
+                        0, 0, renderTarget.Width, renderTarget.Height,
+                        WebGLBufferBits.COLOR, WebGLTexParam.NEAREST);
+                    GL.CheckGLError();
 
                     if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents
-                    && this._supportsInvalidateFramebuffer)
+                    &&  this._supportsInvalidateFramebuffer)
                     {
                         if (i == 0)
                         {
                             Debug.Assert(this._supportsInvalidateFramebuffer);
-                            throw new NotImplementedException();
+                            ((IWebGL2RenderingContext)GL).InvalidateFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, InvalidateFramebufferAttachements);
+                            GL.CheckGLError();
                         }
                     }
                 }
