@@ -17,6 +17,10 @@ namespace Microsoft.Xna.Platform
 
         private BlazorGameWindow _gameWindow;
 
+        // this disable the Tick(), when we are in WebXR mode
+        // and running under XRSession.RequestAnimationFrame.
+        internal bool _suppressTick;
+
         public ConcreteGame(Game game) : base(game)
         {
             _gameWindow = new BlazorGameWindow(this);
@@ -56,6 +60,13 @@ namespace Microsoft.Xna.Platform
                     _gameWindow.MouseVisibleToggled();
                 }
             }
+        }
+        public override void Tick()
+        {
+            if (_suppressTick)
+                return;
+
+            base.Tick();
         }
 
         public override void Exit()

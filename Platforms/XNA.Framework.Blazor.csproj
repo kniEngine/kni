@@ -155,6 +155,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <Compile Include="Input\.Blazor\Oculus\ConcreteTouchController.cs" />
     <Compile Include="Input\.Blazor\Touch\ConcreteTouchPanel.cs" />
     <Compile Include="Input\.Blazor\ConcreteGamePad.cs" />
     <Compile Include="Input\.Blazor\ConcreteGamePadDevice.cs" />
@@ -179,6 +180,15 @@
     <Compile Include="Storage\.Blazor\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.Blazor\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.Blazor\ConcreteStorageService.cs" />
+
+    <Compile Include="XR\HandsState.cs" />
+    <Compile Include="XR\HeadsetState.cs" />
+    <Compile Include="XR\XRDevice.cs" />
+    <Compile Include="XR\XRDeviceState.cs" />
+    <Compile Include="XR\XRDeviceStrategy.cs" />
+    <Compile Include="XR\XREye.cs" />
+    <Compile Include="XR\XRMode.cs" />
+    <Compile Include="XR\.BlazorGL\ConcreteXRDevice.cs" />
   </ItemGroup>
   
   <ItemGroup>
