@@ -79,16 +79,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             switch (surfaceFormat)
             {
-                //case SurfaceFormat.Color:
+                case SurfaceFormat.Color:
                 case SurfaceFormat.Bgr565:
                 case SurfaceFormat.Bgra4444:
                 case SurfaceFormat.Bgra5551:
-                //case SurfaceFormat.Single:
-                //case SurfaceFormat.HalfSingle:
-                //case SurfaceFormat.Vector2:
-                //case SurfaceFormat.HalfVector2:
-                //case SurfaceFormat.Vector4:
-                //case SurfaceFormat.HalfVector4:
+                case SurfaceFormat.Single:
+                case SurfaceFormat.HalfSingle:
+                case SurfaceFormat.Vector2:
+                case SurfaceFormat.HalfVector2:
+                case SurfaceFormat.Vector4:
+                case SurfaceFormat.HalfVector4:
                     // See: PlatformCreateRenderTarget(...)
                     // for the supported surface types.
                     break;
@@ -100,6 +100,8 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = ((IPlatformGraphicsContext)CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             int maxMultiSampleCount = 0;
+            if (GL is IWebGL2RenderingContext)
+                maxMultiSampleCount = ((IWebGL2RenderingContext)GL).GetParameter(WebGL2PNameInteger.MAX_SAMPLES);
 
             return maxMultiSampleCount;
         }
