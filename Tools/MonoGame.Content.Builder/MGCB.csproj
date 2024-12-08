@@ -77,6 +77,36 @@
       <Project>{4B8D3F73-BBD2-4057-B86B-8B73B957DC0F}</Project>
       <Name>Xna.Framework.Graphics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Audio\Xna.Framework.Audio.csproj">
+      <Project>{3F81F76D-F0F3-44FE-A256-40AF153C33F7}</Project>
+      <Name>Xna.Framework.Audio</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Media\Xna.Framework.Media.csproj">
+      <Project>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</Project>
+      <Name>Xna.Framework.Media</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Input\Xna.Framework.Input.csproj">
+      <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
+      <Name>Xna.Framework.Input</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Game\Xna.Framework.Game.csproj">
+      <Project>{90BBD6EF-F386-4F47-88CD-BF386C7D1705}</Project>
+      <Name>Xna.Framework.Game</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
+      <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
+      <Name>Xna.Framework.Devices</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.Storage\Xna.Framework.Storage.csproj">
+      <Project>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</Project>
+      <Name>Xna.Framework.Storage</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
       <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
       <Name>Xna.Framework.Content.Pipeline</Name>
