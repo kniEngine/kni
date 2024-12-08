@@ -107,6 +107,11 @@
       <Name>Xna.Framework.Storage</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Xna.Framework.XR\Xna.Framework.XR.csproj">
+      <Project>{6D0D985D-B256-4208-9E78-77897D461698}</Project>
+      <Name>Xna.Framework.XR</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
       <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
       <Name>Xna.Framework.Content.Pipeline</Name>

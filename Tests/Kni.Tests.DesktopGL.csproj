@@ -1097,6 +1097,11 @@
       <Name>Xna.Framework.Storage</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.XR\Xna.Framework.XR.csproj">
+      <Project>{6D0D985D-B256-4208-9E78-77897D461698}</Project>
+      <Name>Xna.Framework.XR</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Design\Xna.Framework.Design.csproj">
       <Project>{e37f98d7-c4e8-4556-b322-aef99638ece1}</Project>
       <Name>Xna.Framework.Design</Name>

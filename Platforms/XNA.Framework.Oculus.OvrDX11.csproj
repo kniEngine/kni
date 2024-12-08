@@ -31,13 +31,7 @@
     <Compile Include="Input\.WindowsDX\Oculus\ConcreteTouchControllerStrategy.LibOVR.cs" />
     <Compile Include="XR\.LibOVR\ConcreteOvrSwapChainData.cs" />
     <Compile Include="XR\.LibOVR\ConcreteXRDevice.cs" />
-    <Compile Include="XR\HandsState.cs" />
-    <Compile Include="XR\HeadsetState.cs" />
     <Compile Include="XR\XRDevice.cs" />
-    <Compile Include="XR\XRDeviceState.cs" />
-    <Compile Include="XR\XRDeviceStrategy.cs" />
-    <Compile Include="XR\XREye.cs" />
-    <Compile Include="XR\XRMode.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +43,11 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.XR\Xna.Framework.XR.csproj">
+      <Project>{6D0D985D-B256-4208-9E78-77897D461698}</Project>
+      <Name>Xna.Framework.XR</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="XNA.Framework.WindowsDX11.csproj">
