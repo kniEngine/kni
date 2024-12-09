@@ -64,8 +64,6 @@ namespace Microsoft.Xna.Framework.XR
         {
             if (game == null)
                 throw new ArgumentNullException("game");
-            if (mode != XRMode.VR)
-                throw new ArgumentException("mode");
 
             IGraphicsDeviceService graphics = game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
