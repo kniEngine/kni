@@ -81,6 +81,11 @@
       <Name>Xna.Framework.Storage</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.XR\Xna.Framework.XR.csproj">
+      <Project>{6D0D985D-B256-4208-9E78-77897D461698}</Project>
+      <Name>Xna.Framework.XR</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -190,6 +195,9 @@
     <Compile Include="Storage\.iOS\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.iOS\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.iOS\ConcreteStorageService.cs" />
+
+    <Compile Include="XR\.iOS\ConcreteXRDevice.cs" />
+    <Compile Include="XR\.iOS\ConcreteXRFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

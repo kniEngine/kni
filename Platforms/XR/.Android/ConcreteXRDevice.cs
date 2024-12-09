@@ -1,0 +1,158 @@
+﻿// Copyright (C)2024 Nick Kastellanos
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Input.Oculus;
+using Microsoft.Xna.Platform.XR;
+
+namespace Microsoft.Xna.Framework.XR
+{
+    internal class ConcreteXRDevice : XRDeviceStrategy
+    {
+        IGraphicsDeviceService _graphics;
+        XRMode _xrMode;
+
+        HandsState _handsState;
+        HeadsetState _headsetState;
+
+        public override XRMode Mode
+        {
+            get { return _xrMode; }
+        }
+
+        public override XRDeviceState State
+        {
+            get { return XRDeviceState.NotSupported; }
+        }
+
+        public override bool TrackFloorLevelOrigin
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+
+        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
+            : this(applicationName, game.Services, mode)
+        {
+        }
+
+        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        {
+            IGraphicsDeviceService graphics = services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+
+            if (graphics == null)
+                throw new ArgumentNullException("graphics");
+
+            this._graphics = graphics;
+            this._xrMode = mode;
+
+            this._handsState.LGripTransform = Matrix.Identity;
+            this._handsState.RGripTransform = Matrix.Identity;
+            this._handsState.LHandTransform = Matrix.Identity;
+            this._handsState.RHandTransform = Matrix.Identity;
+        }
+
+        public override int CreateDevice()
+        {
+            return -1;
+        }
+
+        public override int BeginFrame()
+        {
+            return 0;
+        }
+
+        public override HeadsetState GetHeadsetState()
+        {
+            return _headsetState;
+        }
+
+        public override IEnumerable<XREye> GetEyes()
+        {
+            yield return XREye.None;
+        }
+
+        public override RenderTarget2D GetEyeRenderTarget(XREye eye)
+        {
+            return null;
+        }
+
+        public override Matrix CreateProjection(XREye eye, float znear, float zfar)
+        {
+            switch (eye)
+            {
+                case XREye.None:
+                case XREye.Left:
+                case XREye.Right:
+                    throw new NotImplementedException();
+
+                default: 
+                    throw new ArgumentException("Eye");
+            }
+        }
+
+        public override void CommitRenderTarget(XREye eye, RenderTarget2D rt)
+        {
+            Debug.Assert(null == rt);
+
+            return;
+        }
+
+        public override int EndFrame()
+        {
+            return 0;
+        }
+
+        public override HandsState GetHandsState()
+        {
+            return _handsState;
+        }
+
+        
+
+        internal void GetCapabilities(TouchControllerType controllerType, ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected, ref Buttons buttons, ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor, ref bool hasVoiceSupport)
+        {
+            controllerType = (TouchControllerType)0;
+            gamePadType = GamePadType.Unknown;
+            displayName = String.Empty;
+            identifier = String.Empty;
+            isConnected = false;
+
+            buttons = default(Buttons);
+            hasLeftVibrationMotor = false;
+            hasRightVibrationMotor = false;
+            hasVoiceSupport = false;
+        }
+
+        internal TouchControllerState GetTouchControllerState(TouchControllerType controllerType)
+        {
+            return default(TouchControllerState);
+        }
+
+        internal bool SetVibration(TouchControllerType controllerType, float amplitude)
+        {
+            bool result = false;
+
+            return result;
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
+
+    }
+}
