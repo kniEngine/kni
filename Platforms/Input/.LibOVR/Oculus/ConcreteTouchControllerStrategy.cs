@@ -8,9 +8,10 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Oculus;
 using Microsoft.Xna.Framework.XR;
 using Microsoft.Xna.Platform.XR;
+using Microsoft.Xna.Platform.XR.LibOVR;
 using nkast.LibOVR;
 
-namespace Microsoft.Xna.Platform.Input.Oculus
+namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
 {
     public sealed class ConcreteTouchControllerStrategy : IOculusInput
     {

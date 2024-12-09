@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.XR;
 using Microsoft.Xna.Platform.XR;
+using Microsoft.Xna.Platform.XR.LibOVR;
 using nkast.LibOVR;
 using D3D11 = SharpDX.Direct3D11;
 

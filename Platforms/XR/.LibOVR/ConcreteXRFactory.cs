@@ -4,7 +4,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.XR;
 
-namespace Microsoft.Xna.Platform.XR
+namespace Microsoft.Xna.Platform.XR.LibOVR
 {
     public sealed class ConcreteXRFactory : XRFactory
     {
