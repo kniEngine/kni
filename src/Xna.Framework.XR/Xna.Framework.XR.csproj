@@ -43,6 +43,7 @@
     <Compile Include="XR\XRDeviceState.cs" />
     <Compile Include="XR\XRDeviceStrategy.cs" />
     <Compile Include="XR\XREye.cs" />
+    <Compile Include="XR\XRFactory.cs" />
     <Compile Include="XR\XRMode.cs" />
   </ItemGroup>
 
@@ -50,6 +51,11 @@
     <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Xna.Framework.Game\Xna.Framework.Game.csproj">
+      <Project>{90BBD6EF-F386-4F47-88CD-BF386C7D1705}</Project>
+      <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
