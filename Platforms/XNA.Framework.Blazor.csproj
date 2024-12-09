@@ -187,7 +187,7 @@
     <Compile Include="Storage\.Blazor\ConcreteStorageService.cs" />
 
     <Compile Include="XR\.BlazorGL\ConcreteXRDevice.cs" />
-    <Compile Include="XR\XRDevice.cs" />
+    <Compile Include="XR\.BlazorGL\ConcreteXRFactory.cs" />
   </ItemGroup>
   
   <ItemGroup>

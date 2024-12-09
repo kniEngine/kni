@@ -31,7 +31,7 @@
     <Compile Include="Input\.WindowsDX\Oculus\ConcreteTouchControllerStrategy.LibOVR.cs" />
     <Compile Include="XR\.LibOVR\ConcreteOvrSwapChainData.cs" />
     <Compile Include="XR\.LibOVR\ConcreteXRDevice.cs" />
-    <Compile Include="XR\XRDevice.cs" />
+    <Compile Include="XR\.LibOVR\ConcreteXRFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +43,11 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.Graphics\Xna.Framework.Graphics.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\src\Xna.Framework.Game\Xna.Framework.Game.csproj">
+      <Project>{90BBD6EF-F386-4F47-88CD-BF386C7D1705}</Project>
+      <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\src\Xna.Framework.XR\Xna.Framework.XR.csproj">
