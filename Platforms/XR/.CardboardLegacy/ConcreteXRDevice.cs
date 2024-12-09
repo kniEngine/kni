@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Framework.XR
         IGraphicsDeviceService _graphics;
         XRMode _xrMode;
         XRDeviceState _deviceState;
+        bool _trackFloorLevelOrigin = false;
 
         GameWindow _gameWindow;
 
@@ -30,8 +31,12 @@ namespace Microsoft.Xna.Framework.XR
 
         public override bool TrackFloorLevelOrigin
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return _trackFloorLevelOrigin; }
+            set
+            {
+                if (value == true)
+                    throw new NotImplementedException();
+            }
         }
 
 
