@@ -38,13 +38,13 @@ namespace Microsoft.Xna.Framework.XR
         public XRDevice(string applicationName, IServiceProvider services,
                         XRMode mode = XRMode.VR)
         {
-            _strategy = new ConcreteXRDevice(applicationName, services, mode);
+            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, services, mode);
         }
 
         public XRDevice(string applicationName, Game game,
                         XRMode mode = XRMode.VR)
         {
-            _strategy = new ConcreteXRDevice(applicationName, game, mode);
+            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, game, mode);
         }
 
 

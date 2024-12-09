@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.XR;
 using Microsoft.Xna.Platform.Input.Oculus;
 using nkast.LibOVR;
 
-namespace Microsoft.Xna.Platform.XR
+namespace Microsoft.Xna.Platform.XR.LibOVR
 {
     internal class ConcreteXRDevice : XRDeviceStrategy
     {
@@ -283,7 +283,7 @@ namespace Microsoft.Xna.Platform.XR
                 4, 1,
                 out _layer);
 
-            TouchController.DeviceHandle = new ConcreteTouchControllerStrategy(this);
+            TouchController.DeviceHandle = new Input.Oculus.LibOVR.ConcreteTouchControllerStrategy(this);
             this._deviceState = XRDeviceState.Ready;
 
             return 0;

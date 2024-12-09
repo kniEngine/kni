@@ -227,7 +227,7 @@
 	</ProjectReference>
     <Compile Include="XR\.CardboardLegacy\ConcreteXRDevice.cs" />
     <Compile Include="XR\.CardboardLegacy\HeadsetState.cs" />
-    <Compile Include="XR\XRDevice.cs" />
+    <Compile Include="XR\.CardboardLegacy\ConcreteXRFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>

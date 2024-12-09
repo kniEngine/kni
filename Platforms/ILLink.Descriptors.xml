@@ -24,6 +24,9 @@
     <type fullname="Microsoft.Xna.Platform.Storage.ConcreteStorageFactory">
       <method name=".ctor" />
     </type>
+    <type fullname="Microsoft.Xna.Platform.XR.ConcreteXRFactory">
+      <method name=".ctor" />
+    </type>
   </assembly>
 </linker>
 
