@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework.XR
             this._xr = XRSystem.FromNavigator(Window.Current.Navigator);
             if (this._xr == null)
             {
-                _deviceState = XRDeviceState.NotSupported;
+                _deviceState = XRDeviceState.Disabled;
                 return;
             }
 
@@ -106,13 +106,7 @@ namespace Microsoft.Xna.Framework.XR
         {
             this._isVRSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRMode.VR));
             this._isARSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRMode.AR));
-
-            if (this._isVRSupported == false && this._isARSupported == false)
-            {
-                this._deviceState = XRDeviceState.NotSupported;
-                return;
-            }
-            
+                        
             this._deviceState = XRDeviceState.Disabled;
         }
 
