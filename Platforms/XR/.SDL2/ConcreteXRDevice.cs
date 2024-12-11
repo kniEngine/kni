@@ -23,6 +23,17 @@ namespace Microsoft.Xna.Framework.XR
         HandsState _handsState;
         HeadsetState _headsetState;
 
+
+        public override bool IsVRSupported
+        {
+            get { return false; }
+        }
+
+        public override bool IsARSupported
+        {
+            get { return false; }
+        }
+
         public override XRMode Mode
         {
             get { return _xrMode; }

@@ -38,6 +38,16 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
         OvrSwapChainDataBase[] _swapChainData = new OvrSwapChainDataBase[2];
 
 
+        public override bool IsVRSupported
+        {
+            get { return true; }
+        }
+
+        public override bool IsARSupported
+        {
+            get { return false; }
+        }
+
         public override XRMode Mode
         {
             get { return _xrMode; }

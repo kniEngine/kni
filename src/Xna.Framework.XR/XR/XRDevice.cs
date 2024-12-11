@@ -19,6 +19,16 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
+        public bool IsVRSupported
+        {
+            get { return _strategy.IsVRSupported; }
+        }
+
+        public bool IsARSupported
+        {
+            get { return _strategy.IsARSupported; }
+        }
+
         public XRDeviceState State
         {
             get { return _strategy.State; }

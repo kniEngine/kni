@@ -13,6 +13,17 @@ namespace Microsoft.Xna.Framework.XR
     internal class ConcreteXRDevice : XRDeviceStrategy
     {
 
+
+        public override bool IsVRSupported
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
+        public override bool IsARSupported
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
         public override XRMode Mode
         {
             get { throw new PlatformNotSupportedException(); }

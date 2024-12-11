@@ -15,6 +15,8 @@ namespace Microsoft.Xna.Platform.XR
 
     public abstract class XRDeviceStrategy : IDisposable
     {
+        public abstract bool IsVRSupported { get; }
+        public abstract bool IsARSupported { get; }
         public abstract XRMode Mode { get; }
         public abstract XRDeviceState State { get; }
         public abstract bool TrackFloorLevelOrigin { get; set; }

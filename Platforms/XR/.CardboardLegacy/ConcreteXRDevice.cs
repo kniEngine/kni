@@ -19,6 +19,17 @@ namespace Microsoft.Xna.Framework.XR
         GameWindow _gameWindow;
 
 
+
+        public override bool IsVRSupported
+        {
+            get { return true; }
+        }
+
+        public override bool IsARSupported
+        {
+            get { return false; }
+        }
+
         public override XRMode Mode
         {
             get { return _xrMode; }

@@ -42,6 +42,16 @@ namespace Microsoft.Xna.Framework.XR
 
         HandsState _handsState;
 
+        public override bool IsVRSupported
+        {
+            get { return _isVRSupported.GetValueOrDefault(); }
+        }
+
+        public override bool IsARSupported
+        {
+            get { return _isARSupported.GetValueOrDefault(); }
+        }
+
         public override XRMode Mode
         {
             get { return _xrMode; }
