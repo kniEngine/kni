@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.XR
 {
     public enum XRMode
     {
-        VR,
-        AR,
+        VR = 1,
+        AR = 2,
     }
 }
