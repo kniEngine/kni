@@ -903,7 +903,7 @@ namespace Microsoft.Xna.Framework.XR
                 touches |= Buttons.B;
             if (_rbuttons != null && _rbuttons.Length >= 3 && _rbuttons[3].Touched)
                 touches |= Buttons.RightStick;
-            if (_rbuttons != null && _rbuttons.Length >= 0 && _rbuttons[0].Touched)
+            if (_rbuttons != null && _rbuttons[0].Touched)
                 touches |= Buttons.RightTrigger;
             if (_rbuttons != null && _rbuttons.Length >= 1 && _rbuttons[1].Touched)
                 touches |= Buttons.RightGrip;
