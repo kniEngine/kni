@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.XR
     internal class ConcreteXRDevice : XRDeviceStrategy
     {
         IGraphicsDeviceService _graphics;
-        XRMode _xrMode;
+        XRSessionMode _xrMode;
 
         HandsState _handsState;
         HeadsetState _headsetState;
@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.XR
             get { return false; }
         }
 
-        public override XRMode Mode
+        public override XRSessionMode SessionMode
         {
             get { return _xrMode; }
         }
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.XR
             this._handsState.RHandTransform = Matrix.Identity;
         }
 
-        public override int BeginSessionAsync(XRMode mode)
+        public override int BeginSessionAsync(XRSessionMode mode)
         {
             return -1;
         }

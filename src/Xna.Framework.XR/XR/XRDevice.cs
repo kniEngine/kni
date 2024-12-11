@@ -34,9 +34,9 @@ namespace Microsoft.Xna.Framework.XR
             get { return _strategy.State; }
         }
 
-        public XRMode Mode
+        public XRSessionMode SessionMode
         {
-            get { return _strategy.Mode; }
+            get { return _strategy.SessionMode; }
         }
 
         public bool TrackFloorLevelOrigin
@@ -58,10 +58,10 @@ namespace Microsoft.Xna.Framework.XR
 
         public int BeginSessionAsync()
         {
-            return _strategy.BeginSessionAsync(XRMode.VR);
+            return _strategy.BeginSessionAsync(XRSessionMode.VR);
         }
 
-        public int BeginSessionAsync(XRMode mode)
+        public int BeginSessionAsync(XRSessionMode mode)
         {
             return _strategy.BeginSessionAsync(mode);
         }

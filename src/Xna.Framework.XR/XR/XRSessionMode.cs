@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Microsoft.Xna.Framework.XR
 {
-    public enum XRMode
+    public enum XRSessionMode
     {
         VR = 1,
         AR = 2,

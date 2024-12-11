@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.XR
     {
         Game _game;
         IGraphicsDeviceService _graphics;
-        XRMode _xrMode;
+        XRSessionMode _xrMode;
         XRDeviceState _deviceState;
         bool _trackFloorLevelOrigin = false;
 
@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.XR
             get { return false; }
         }
 
-        public override XRMode Mode
+        public override XRSessionMode SessionMode
         {
             get { return _xrMode; }
         }
@@ -72,9 +72,9 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException("Cardboard requires a Game reference.");
         }
 
-        public override int BeginSessionAsync(XRMode mode)
+        public override int BeginSessionAsync(XRSessionMode mode)
         {
-            if (mode != XRMode.VR)
+            if (mode != XRSessionMode.VR)
                 throw new ArgumentException("mode");
 
             this._xrMode = mode;

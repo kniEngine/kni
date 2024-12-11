@@ -17,11 +17,11 @@ namespace Microsoft.Xna.Platform.XR
     {
         public abstract bool IsVRSupported { get; }
         public abstract bool IsARSupported { get; }
-        public abstract XRMode Mode { get; }
+        public abstract XRSessionMode SessionMode { get; }
         public abstract XRDeviceState State { get; }
         public abstract bool TrackFloorLevelOrigin { get; set; }
 
-        public abstract int BeginSessionAsync(XRMode mode);
+        public abstract int BeginSessionAsync(XRSessionMode mode);
         public abstract int BeginFrame();
         public abstract HeadsetState GetHeadsetState();
         public abstract IEnumerable<XREye> GetEyes();

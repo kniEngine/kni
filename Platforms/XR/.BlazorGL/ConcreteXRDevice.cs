@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.XR
     {
         Game _game;
         IGraphicsDeviceService _graphics;
-        XRMode _xrMode;
+        XRSessionMode _xrMode;
         XRDeviceState _deviceState;
         bool _trackFloorLevelOrigin = false;
 
@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Framework.XR
             get { return _isARSupported.GetValueOrDefault(); }
         }
 
-        public override XRMode Mode
+        public override XRSessionMode SessionMode
         {
             get { return _xrMode; }
         }
@@ -104,8 +104,8 @@ namespace Microsoft.Xna.Framework.XR
 
         private async void InitXRDeviceAsync()
         {
-            this._isVRSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRMode.VR));
-            this._isARSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRMode.AR));
+            this._isVRSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRSessionMode.VR));
+            this._isARSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRSessionMode.AR));
                         
             this._deviceState = XRDeviceState.Disabled;
         }
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException("WebXR requires a Game reference.");
         }
 
-        public override int BeginSessionAsync(XRMode mode)
+        public override int BeginSessionAsync(XRSessionMode mode)
         {
             if (this.State != XRDeviceState.Disabled
             &&  this.State != XRDeviceState.NoPermissions)
@@ -125,18 +125,18 @@ namespace Microsoft.Xna.Framework.XR
 
             switch (mode)
             {
-                case XRMode.VR:
+                case XRSessionMode.VR:
                     if (_isVRSupported == false)
                         return -1; //throw new NotSupportedException("VR");
                     _deviceState = XRDeviceState.Initializing;
-                    InitXRSessionAsync(XRMode.VR);
+                    InitXRSessionAsync(XRSessionMode.VR);
                     break;
 
-                case XRMode.AR:
+                case XRSessionMode.AR:
                     if (_isARSupported == false)
                         return -1; //throw new NotSupportedException("AR");
                     _deviceState = XRDeviceState.Initializing;
-                    InitXRSessionAsync(XRMode.AR);
+                    InitXRSessionAsync(XRSessionMode.AR);
                     break;
 
                 default:
@@ -350,13 +350,13 @@ namespace Microsoft.Xna.Framework.XR
             _xrsession.End();
         }
 
-        private string ModeToString(XRMode mode)
+        private string ModeToString(XRSessionMode mode)
         {
             switch (mode)
             {
-                case XRMode.VR:
+                case XRSessionMode.VR:
                     return "immersive-vr";
-                case XRMode.AR:
+                case XRSessionMode.AR:
                     return "immersive-ar";
 
                 default:
@@ -365,7 +365,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new NotImplementedException();
         }
 
-        private async void InitXRSessionAsync(XRMode mode)
+        private async void InitXRSessionAsync(XRSessionMode mode)
         {
             try
             {

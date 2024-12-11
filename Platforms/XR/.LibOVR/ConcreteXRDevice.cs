@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
     {
         //Game _game;
         IGraphicsDeviceService _graphics;
-        XRMode _xrMode;
+        XRSessionMode _xrMode;
         XRDeviceState _deviceState;
 
         OvrClient _ovrClient;
@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             get { return false; }
         }
 
-        public override XRMode Mode
+        public override XRSessionMode SessionMode
         {
             get { return _xrMode; }
         }
@@ -88,9 +88,9 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             this._deviceState = XRDeviceState.Disabled;
         }
 
-        public override int BeginSessionAsync(XRMode mode)
+        public override int BeginSessionAsync(XRSessionMode mode)
         {
-            if (mode != XRMode.VR)
+            if (mode != XRSessionMode.VR)
                 throw new ArgumentException("mode");
 
             this._xrMode = mode;
