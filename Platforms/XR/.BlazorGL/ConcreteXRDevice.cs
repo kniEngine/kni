@@ -858,6 +858,10 @@ namespace Microsoft.Xna.Framework.XR
                 buttons |= Buttons.Y;
             if (_lbuttons != null && _lbuttons.Length >= 3 && _lbuttons[3].Pressed)
                 buttons |= Buttons.LeftStick;
+            if (_lbuttons != null && _lbuttons[0].Pressed)
+                buttons |= Buttons.LeftTrigger;
+            if (_lbuttons != null && _lbuttons.Length >= 1 && _lbuttons[1].Pressed)
+                buttons |= Buttons.LeftGrip;
 
             //// right buttons  
             if (_rbuttons != null && _rbuttons.Length >= 4 && _rbuttons[4].Pressed)
@@ -866,6 +870,10 @@ namespace Microsoft.Xna.Framework.XR
                 buttons |= Buttons.B;
             if (_rbuttons != null && _rbuttons.Length >= 3 && _rbuttons[3].Pressed)
                 buttons |= Buttons.RightStick;
+            if (_lbuttons != null && _rbuttons[0].Pressed)
+                buttons |= Buttons.RightTrigger;
+            if (_rbuttons != null && _rbuttons.Length >= 1 && _rbuttons[1].Pressed)
+                buttons |= Buttons.RightGrip;
 
             float TriggerThresholdOn = 0.6f;
             float TriggerThresholdOff = 0.7f;
@@ -895,7 +903,7 @@ namespace Microsoft.Xna.Framework.XR
                 touches |= Buttons.B;
             if (_rbuttons != null && _rbuttons.Length >= 3 && _rbuttons[3].Touched)
                 touches |= Buttons.RightStick;
-            if (_rbuttons != null && _rbuttons.Length >= 0 && _rbuttons[0].Touched)
+            if (_rbuttons != null && _rbuttons[0].Touched)
                 touches |= Buttons.RightTrigger;
             if (_rbuttons != null && _rbuttons.Length >= 1 && _rbuttons[1].Touched)
                 touches |= Buttons.RightGrip;
