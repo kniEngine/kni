@@ -40,12 +40,12 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
-            : this(applicationName, game.Services, mode)
+        public ConcreteXRDevice(string applicationName, Game game)
+            : this(applicationName, game.Services)
         {
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
             IGraphicsDeviceService graphics = services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
@@ -53,7 +53,6 @@ namespace Microsoft.Xna.Framework.XR
                 throw new ArgumentNullException("graphics");
 
             this._graphics = graphics;
-            this._xrMode = mode;
 
             this._handsState.LGripTransform = Matrix.Identity;
             this._handsState.RGripTransform = Matrix.Identity;
@@ -61,7 +60,7 @@ namespace Microsoft.Xna.Framework.XR
             this._handsState.RHandTransform = Matrix.Identity;
         }
 
-        public override int CreateDevice()
+        public override int CreateDevice(XRMode mode)
         {
             return -1;
         }

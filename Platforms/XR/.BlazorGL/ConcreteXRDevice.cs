@@ -29,6 +29,9 @@ namespace Microsoft.Xna.Framework.XR
         XRDeviceState _deviceState;
         bool _trackFloorLevelOrigin = false;
 
+        private bool? _isVRSupported;
+        private bool? _isARSupported;
+
         XRSystem _xr;
         XRSession _xrsession;
         XRReferenceSpace _localspace;
@@ -60,7 +63,7 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
+        public ConcreteXRDevice(string applicationName, Game game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
@@ -72,7 +75,6 @@ namespace Microsoft.Xna.Framework.XR
 
             this._game = game;
             this._graphics = graphics;
-            this._xrMode = mode;
 
             this._handsState.LGripTransform = Matrix.Identity;
             this._handsState.RGripTransform = Matrix.Identity;
@@ -85,27 +87,31 @@ namespace Microsoft.Xna.Framework.XR
                 _deviceState = XRDeviceState.NotSupported;
                 return;
             }
+
             this._deviceState = XRDeviceState.Requesting;
-
-            _xr.IsSessionSupportedAsync(ModeToString(this.Mode))
-                .ContinueWith((supported) =>
-                {
-                    if (supported.Result == false)
-                    {
-                        this._deviceState = XRDeviceState.NotSupported;
-                        return;
-                    }
-
-                    this._deviceState = XRDeviceState.Disabled;
-                });
+            InitXRDeviceAsync();
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        private async void InitXRDeviceAsync()
         {
-            throw new ArgumentNullException("game");
+            this._isVRSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRMode.VR));
+            this._isARSupported = await _xr.IsSessionSupportedAsync(ModeToString(XRMode.AR));
+
+            if (this._isVRSupported == false && this._isARSupported == false)
+            {
+                this._deviceState = XRDeviceState.NotSupported;
+                return;
+            }
+            
+            this._deviceState = XRDeviceState.Disabled;
         }
 
-        public override int CreateDevice()
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
+        {
+            throw new PlatformNotSupportedException("WebXR requires a Game reference.");
+        }
+
+        public override int CreateDevice(XRMode mode)
         {
             if (this.State != XRDeviceState.Disabled
             &&  this.State != XRDeviceState.NoPermissions)
@@ -113,8 +119,25 @@ namespace Microsoft.Xna.Framework.XR
                 return -1;
             }
 
-            _deviceState = XRDeviceState.Initializing;
-            InitXRSessionAsync();
+            switch (mode)
+            {
+                case XRMode.VR:
+                    if (_isVRSupported == false)
+                        return -1; //throw new NotSupportedException("VR");
+                    _deviceState = XRDeviceState.Initializing;
+                    InitXRSessionAsync(XRMode.VR);
+                    break;
+
+                case XRMode.AR:
+                    if (_isARSupported == false)
+                        return -1; //throw new NotSupportedException("AR");
+                    _deviceState = XRDeviceState.Initializing;
+                    InitXRSessionAsync(XRMode.AR);
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
 
             return 0;
         }
@@ -333,14 +356,14 @@ namespace Microsoft.Xna.Framework.XR
             throw new NotImplementedException();
         }
 
-        private async void InitXRSessionAsync()
+        private async void InitXRSessionAsync(XRMode mode)
         {
             try
             {
                 var graphicsDevice = _graphics.GraphicsDevice;
                 var GL = (IWebGL2RenderingContext) ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)graphicsDevice).Strategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                _xrsession = await _xr.RequestSessionAsync(ModeToString(this.Mode));
+                _xrsession = await _xr.RequestSessionAsync(ModeToString(mode));
                 _xrsession.Ended += _xrsession_Ended;
                 _xrsession.InputSourcesChanged += _xrsession_InputSourcesChanged;
                 await GL.MakeXRCompatibleAsync();
@@ -358,6 +381,7 @@ namespace Microsoft.Xna.Framework.XR
 
                 TouchController.DeviceHandle = new ConcreteTouchController(this);
 
+                _xrMode = mode;
                 _deviceState = XRDeviceState.Ready;
                 ((IPlatformGame)_game).GetStrategy<ConcreteGame>()._suppressTick = true;
                 _xrAnimationHandle = _xrsession.RequestAnimationFrame(this.AnimationFrameCallback);

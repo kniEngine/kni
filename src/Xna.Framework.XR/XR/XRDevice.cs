@@ -35,22 +35,25 @@ namespace Microsoft.Xna.Framework.XR
             set { _strategy.TrackFloorLevelOrigin = value; }
         }
 
-        public XRDevice(string applicationName, IServiceProvider services,
-                        XRMode mode = XRMode.VR)
+        public XRDevice(string applicationName, IServiceProvider services)
         {
-            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, services, mode);
+            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, services);
         }
 
-        public XRDevice(string applicationName, Game game,
-                        XRMode mode = XRMode.VR)
+        public XRDevice(string applicationName, Game game)
         {
-            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, game, mode);
+            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, game);
         }
 
 
         public int CreateDevice()
         {
-            return _strategy.CreateDevice();
+            return _strategy.CreateDevice(XRMode.VR);
+        }
+
+        public int CreateDevice(XRMode mode)
+        {
+            return _strategy.CreateDevice(mode);
         }
 
         public int BeginFrame()

@@ -8,14 +8,14 @@ namespace Microsoft.Xna.Platform.XR
 {
     public sealed class ConcreteXRFactory : XRFactory
     {
-        public override XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, IServiceProvider services, XRMode mode)
+        public override XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, IServiceProvider services)
         {
-            return new ConcreteXRDevice(applicationName, services, mode);
+            return new ConcreteXRDevice(applicationName, services);
         }
 
-        public override XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, Game game, XRMode mode)
+        public override XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, Game game)
         {
-            return new ConcreteXRDevice(applicationName, game, mode);
+            return new ConcreteXRDevice(applicationName, game);
         }
     }
 }

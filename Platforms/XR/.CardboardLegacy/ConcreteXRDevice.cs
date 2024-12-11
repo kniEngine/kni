@@ -40,12 +40,10 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
+        public ConcreteXRDevice(string applicationName, Game game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
-            if (mode != XRMode.VR)
-                throw new ArgumentException("mode");
 
             IGraphicsDeviceService graphics = game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
@@ -54,18 +52,21 @@ namespace Microsoft.Xna.Framework.XR
 
             this._game = game;
             this._graphics = graphics;
-            this._xrMode = mode;
 
             this._deviceState = XRDeviceState.Disabled;
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
-            throw new ArgumentNullException("game");
+            throw new PlatformNotSupportedException("Cardboard requires a Game reference.");
         }
 
-        public override int CreateDevice()
+        public override int CreateDevice(XRMode mode)
         {
+            if (mode != XRMode.VR)
+                throw new ArgumentException("mode");
+
+            this._xrMode = mode;
             _gameWindow = _game.Window;
 
             _deviceState = XRDeviceState.Ready;

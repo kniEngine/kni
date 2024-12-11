@@ -30,17 +30,17 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
-            : this(applicationName, game.Services, mode)
+        public ConcreteXRDevice(string applicationName, Game game)
+            : this(applicationName, game.Services)
         {
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
             throw new PlatformNotSupportedException();
         }
 
-        public override int CreateDevice()
+        public override int CreateDevice(XRMode mode)
         {
             throw new PlatformNotSupportedException();
         }

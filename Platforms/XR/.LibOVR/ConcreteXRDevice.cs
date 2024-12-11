@@ -54,23 +54,20 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }
         }
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
-            : this(applicationName, game.Services, mode)
+        public ConcreteXRDevice(string applicationName, Game game)
+            : this(applicationName, game.Services)
         {
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
             IGraphicsDeviceService graphics = services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
             if (graphics == null)
                 throw new ArgumentNullException("graphics");
-            if (mode != XRMode.VR)
-                throw new ArgumentException("mode");
 
             //this._game = game;
             this._graphics = graphics;
-            this._xrMode = mode;
 
 
             _graphics = graphics;
@@ -81,8 +78,13 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             this._deviceState = XRDeviceState.Disabled;
         }
 
-        public override int CreateDevice()
+        public override int CreateDevice(XRMode mode)
         {
+            if (mode != XRMode.VR)
+                throw new ArgumentException("mode");
+
+            this._xrMode = mode;
+
             GraphicsDevice graphicsDevice = _graphics.GraphicsDevice;
             if (graphicsDevice == null)
             {
