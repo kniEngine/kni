@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.XR
             get { return _xrMode; }
         }
 
-        public override XRDeviceState State
+        public override XRDeviceState DeviceState
         {
             get { return _deviceState; }
         }
@@ -117,8 +117,8 @@ namespace Microsoft.Xna.Framework.XR
 
         public override int BeginSessionAsync(XRSessionMode mode)
         {
-            if (this.State != XRDeviceState.Disabled
-            &&  this.State != XRDeviceState.NoPermissions)
+            if (this.DeviceState != XRDeviceState.Disabled
+            &&  this.DeviceState != XRDeviceState.NoPermissions)
             {
                 return -1;
             }

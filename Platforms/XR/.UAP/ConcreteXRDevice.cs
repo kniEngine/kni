@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.XR
             get { return _xrMode; }
         }
 
-        public override XRDeviceState State
+        public override XRDeviceState DeviceState
         {
             get { return XRDeviceState.Disabled; }
         }

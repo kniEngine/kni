@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework.XR
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public override XRDeviceState State
+        public override XRDeviceState DeviceState
         {
             get { throw new PlatformNotSupportedException(); }
         }

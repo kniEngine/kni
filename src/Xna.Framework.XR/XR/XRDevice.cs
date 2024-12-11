@@ -29,9 +29,9 @@ namespace Microsoft.Xna.Framework.XR
             get { return _strategy.IsARSupported; }
         }
 
-        public XRDeviceState State
+        public XRDeviceState DeviceState
         {
-            get { return _strategy.State; }
+            get { return _strategy.DeviceState; }
         }
 
         public XRSessionMode SessionMode
