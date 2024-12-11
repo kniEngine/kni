@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException("WebXR requires a Game reference.");
         }
 
-        public override int CreateDevice(XRMode mode)
+        public override int BeginSessionAsync(XRMode mode)
         {
             if (this.State != XRDeviceState.Disabled
             &&  this.State != XRDeviceState.NoPermissions)
@@ -339,6 +339,11 @@ namespace Microsoft.Xna.Framework.XR
         public override HandsState GetHandsState()
         {
             return _handsState;
+        }
+
+        public override void EndSessionAsync()
+        {
+            _xrsession.End();
         }
 
         private string ModeToString(XRMode mode)

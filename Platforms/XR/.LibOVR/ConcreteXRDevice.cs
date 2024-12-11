@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             this._deviceState = XRDeviceState.Disabled;
         }
 
-        public override int CreateDevice(XRMode mode)
+        public override int BeginSessionAsync(XRMode mode)
         {
             if (mode != XRMode.VR)
                 throw new ArgumentException("mode");
@@ -234,6 +234,11 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
         public override HandsState GetHandsState()
         {
             return _handsState;
+        }
+
+        public override void EndSessionAsync()
+        {
+            throw new NotImplementedException();
         }
 
 

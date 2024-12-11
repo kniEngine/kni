@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException();
         }
 
-        public override int CreateDevice(XRMode mode)
+        public override int BeginSessionAsync(XRMode mode)
         {
             throw new PlatformNotSupportedException();
         }
@@ -81,6 +81,11 @@ namespace Microsoft.Xna.Framework.XR
         }
 
         public override HandsState GetHandsState()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void EndSessionAsync()
         {
             throw new PlatformNotSupportedException();
         }

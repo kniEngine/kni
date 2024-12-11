@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.XR
             this._handsState.RHandTransform = Matrix.Identity;
         }
 
-        public override int CreateDevice(XRMode mode)
+        public override int BeginSessionAsync(XRMode mode)
         {
             return -1;
         }
@@ -116,7 +116,11 @@ namespace Microsoft.Xna.Framework.XR
             return _handsState;
         }
 
-        
+        public override void EndSessionAsync()
+        {
+        }
+
+
 
         internal void GetCapabilities(TouchControllerType controllerType, ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected, ref Buttons buttons, ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor, ref bool hasVoiceSupport)
         {

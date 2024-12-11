@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException("Cardboard requires a Game reference.");
         }
 
-        public override int CreateDevice(XRMode mode)
+        public override int BeginSessionAsync(XRMode mode)
         {
             if (mode != XRMode.VR)
                 throw new ArgumentException("mode");
@@ -198,6 +198,10 @@ namespace Microsoft.Xna.Framework.XR
         public override HandsState GetHandsState()
         {
             return default(HandsState);
+        }
+
+        public override void EndSessionAsync()
+        {
         }
 
         static unsafe Matrix CreateProjection(   float tanAngleLeft, float tanAngleRight,

@@ -46,14 +46,14 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public int CreateDevice()
+        public int BeginSessionAsync()
         {
-            return _strategy.CreateDevice(XRMode.VR);
+            return _strategy.BeginSessionAsync(XRMode.VR);
         }
 
-        public int CreateDevice(XRMode mode)
+        public int BeginSessionAsync(XRMode mode)
         {
-            return _strategy.CreateDevice(mode);
+            return _strategy.BeginSessionAsync(mode);
         }
 
         public int BeginFrame()
@@ -94,6 +94,11 @@ namespace Microsoft.Xna.Framework.XR
         public HandsState GetHandsState()
         {
             return _strategy.GetHandsState();
+        }
+
+        public void EndSessionAsync()
+        {
+            _strategy.EndSessionAsync();
         }
 
 

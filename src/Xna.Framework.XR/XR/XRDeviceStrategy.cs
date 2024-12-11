@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.XR
         public abstract XRDeviceState State { get; }
         public abstract bool TrackFloorLevelOrigin { get; set; }
 
-        public abstract int CreateDevice(XRMode mode);
+        public abstract int BeginSessionAsync(XRMode mode);
         public abstract int BeginFrame();
         public abstract HeadsetState GetHeadsetState();
         public abstract IEnumerable<XREye> GetEyes();
@@ -28,6 +28,7 @@ namespace Microsoft.Xna.Platform.XR
         public abstract void CommitRenderTarget(XREye eye, RenderTarget2D rt);
         public abstract int EndFrame();
         public abstract HandsState GetHandsState();
+        public abstract void EndSessionAsync();
 
 
         #region IDisposable
