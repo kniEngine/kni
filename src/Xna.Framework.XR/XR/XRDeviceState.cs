@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.XR
         InitializingDevice,
         Disabled,
         InitializingSession,
-        Ready,
+        Enabled,
         NoPermissions,
     }
 }

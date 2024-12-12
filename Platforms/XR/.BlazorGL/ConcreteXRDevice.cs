@@ -391,7 +391,7 @@ namespace Microsoft.Xna.Framework.XR
                 TouchController.DeviceHandle = new ConcreteTouchController(this);
 
                 _sessionMode = mode;
-                _deviceState = XRDeviceState.Ready;
+                _deviceState = XRDeviceState.Enabled;
                 ((IPlatformGame)_game).GetStrategy<ConcreteGame>()._suppressTick = true;
                 _xrAnimationHandle = _xrsession.RequestAnimationFrame(this.AnimationFrameCallback);
             }

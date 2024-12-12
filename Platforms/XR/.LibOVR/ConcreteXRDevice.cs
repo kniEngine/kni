@@ -301,7 +301,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
                 out _layer);
 
             TouchController.DeviceHandle = new Input.Oculus.LibOVR.ConcreteTouchControllerStrategy(this);
-            this._deviceState = XRDeviceState.Ready;
+            this._deviceState = XRDeviceState.Enabled;
 
             return 0;
         }

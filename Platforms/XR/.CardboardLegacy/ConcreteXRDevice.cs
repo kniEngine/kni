@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.XR
             this._sessionMode = sessionMode;
             _gameWindow = _game.Window;
 
-            _deviceState = XRDeviceState.Ready;
+            _deviceState = XRDeviceState.Enabled;
             return 0;
         }
 
