@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.XR
 
         XRSystem _xr;
         XRSession _xrsession;
-        XRReferenceSpace _localspace;
+        XRReferenceSpace _localSpace;
         XRWebGLLayer _glLayer;
 
         int _xrAnimationHandle;
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.XR
         {
             if (_currentXRFrame != null)
             {
-                using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localspace))
+                using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localSpace))
                 {
                     if (viewerPose != null)
                     {
@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Framework.XR
 
             XRWebGLLayer glLayer = _currentRenderState.BaseLayer;
 
-            using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localspace))
+            using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localSpace))
             {
                 if (viewerPose != null)
                 {
@@ -257,7 +257,7 @@ namespace Microsoft.Xna.Framework.XR
             XRWebGLLayer glLayer = _currentRenderState.BaseLayer;
 
 
-            using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localspace))
+            using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localSpace))
             {
                 if (viewerPose != null)
                 {
@@ -376,7 +376,7 @@ namespace Microsoft.Xna.Framework.XR
                 _xrsession.Ended += _xrsession_Ended;
                 _xrsession.InputSourcesChanged += _xrsession_InputSourcesChanged;
                 await GL.MakeXRCompatibleAsync();
-                _localspace = await _xrsession.RequestReferenceSpace("local");
+                _localSpace = await _xrsession.RequestReferenceSpace("local");
 
                 XRWebGLLayerOptions glLayerOptions = new XRWebGLLayerOptions();
                 glLayerOptions.Antialias = false;
@@ -420,7 +420,7 @@ namespace Microsoft.Xna.Framework.XR
 
             TouchController.DeviceHandle = null;
             _xrsession = null;
-            _localspace = null;
+            _localSpace = null;
             _glLayer = null;
         }
 
@@ -480,7 +480,7 @@ namespace Microsoft.Xna.Framework.XR
                     SysNumerics.Matrix4x4 gripTranformMtx;
                     if (gripSpace != null)
                     {
-                        using (XRPose grip = _currentXRFrame.GetPose(gripSpace, _localspace))
+                        using (XRPose grip = _currentXRFrame.GetPose(gripSpace, _localSpace))
                         {
                             if (grip != null)
                             {
@@ -495,7 +495,7 @@ namespace Microsoft.Xna.Framework.XR
                     SysNumerics.Matrix4x4 pointerTranformMtx;
                     if (pointerSpace != null)
                     {
-                        using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, _localspace))
+                        using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, _localSpace))
                         {
                             if (pointer != null)
                             {
@@ -523,7 +523,7 @@ namespace Microsoft.Xna.Framework.XR
                     }
                 }
 
-                using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localspace))
+                using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localSpace))
                 {
                     if (viewerPose != null)
                     {
