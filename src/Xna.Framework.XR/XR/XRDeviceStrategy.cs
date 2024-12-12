@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.XR
         public abstract XRDeviceState DeviceState { get; }
         public abstract bool TrackFloorLevelOrigin { get; set; }
 
-        public abstract int BeginSessionAsync(XRSessionMode mode);
+        public abstract int BeginSessionAsync(XRSessionMode sessionMode);
         public abstract int BeginFrame();
         public abstract HeadsetState GetHeadsetState();
         public abstract IEnumerable<XREye> GetEyes();

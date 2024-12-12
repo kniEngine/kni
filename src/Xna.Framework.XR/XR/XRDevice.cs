@@ -61,9 +61,9 @@ namespace Microsoft.Xna.Framework.XR
             return _strategy.BeginSessionAsync(XRSessionMode.VR);
         }
 
-        public int BeginSessionAsync(XRSessionMode mode)
+        public int BeginSessionAsync(XRSessionMode sessionMode)
         {
-            return _strategy.BeginSessionAsync(mode);
+            return _strategy.BeginSessionAsync(sessionMode);
         }
 
         public int BeginFrame()

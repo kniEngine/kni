@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.XR
     {
         Game _game;
         IGraphicsDeviceService _graphics;
-        XRSessionMode _xrMode;
+        XRSessionMode _sessionMode;
         XRDeviceState _deviceState;
         bool _trackFloorLevelOrigin = false;
 
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override XRSessionMode SessionMode
         {
-            get { return _xrMode; }
+            get { return _sessionMode; }
         }
 
         public override XRDeviceState DeviceState
@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException("WebXR requires a Game reference.");
         }
 
-        public override int BeginSessionAsync(XRSessionMode mode)
+        public override int BeginSessionAsync(XRSessionMode sessionMode)
         {
             if (this.DeviceState != XRDeviceState.Disabled
             &&  this.DeviceState != XRDeviceState.NoPermissions)
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.XR
                 return -1;
             }
 
-            switch (mode)
+            switch (sessionMode)
             {
                 case XRSessionMode.VR:
                     if (_isVRSupported == false)
@@ -390,7 +390,7 @@ namespace Microsoft.Xna.Framework.XR
 
                 TouchController.DeviceHandle = new ConcreteTouchController(this);
 
-                _xrMode = mode;
+                _sessionMode = mode;
                 _deviceState = XRDeviceState.Ready;
                 ((IPlatformGame)_game).GetStrategy<ConcreteGame>()._suppressTick = true;
                 _xrAnimationHandle = _xrsession.RequestAnimationFrame(this.AnimationFrameCallback);

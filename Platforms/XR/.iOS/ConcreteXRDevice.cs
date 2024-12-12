@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.XR
             this._handsState.RHandTransform = Matrix.Identity;
         }
 
-        public override int BeginSessionAsync(XRSessionMode mode)
+        public override int BeginSessionAsync(XRSessionMode sessionMode)
         {
             return -1;
         }

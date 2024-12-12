@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException();
         }
 
-        public override int BeginSessionAsync(XRSessionMode mode)
+        public override int BeginSessionAsync(XRSessionMode sessionMode)
         {
             throw new PlatformNotSupportedException();
         }
