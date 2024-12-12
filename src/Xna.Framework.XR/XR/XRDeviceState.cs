@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.XR
     {
         Requesting,
         Disabled,
-        Initializing,
+        InitializingSession,
         Ready,
         NoPermissions,
     }

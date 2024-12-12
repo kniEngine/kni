@@ -128,14 +128,14 @@ namespace Microsoft.Xna.Framework.XR
                 case XRSessionMode.VR:
                     if (_isVRSupported == false)
                         return -1; //throw new NotSupportedException("VR");
-                    _deviceState = XRDeviceState.Initializing;
+                    _deviceState = XRDeviceState.InitializingSession;
                     InitXRSessionAsync(XRSessionMode.VR);
                     break;
 
                 case XRSessionMode.AR:
                     if (_isARSupported == false)
                         return -1; //throw new NotSupportedException("AR");
-                    _deviceState = XRDeviceState.Initializing;
+                    _deviceState = XRDeviceState.InitializingSession;
                     InitXRSessionAsync(XRSessionMode.AR);
                     break;
 
