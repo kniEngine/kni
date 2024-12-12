@@ -15,11 +15,13 @@ namespace Microsoft.Xna.Platform.XR
 
     public abstract class XRDeviceStrategy : IDisposable
     {
-        public abstract XRMode Mode { get; }
-        public abstract XRDeviceState State { get; }
+        public abstract bool IsVRSupported { get; }
+        public abstract bool IsARSupported { get; }
+        public abstract XRSessionMode SessionMode { get; }
+        public abstract XRDeviceState DeviceState { get; }
         public abstract bool TrackFloorLevelOrigin { get; set; }
 
-        public abstract int CreateDevice();
+        public abstract int BeginSessionAsync(XRSessionMode sessionMode);
         public abstract int BeginFrame();
         public abstract HeadsetState GetHeadsetState();
         public abstract IEnumerable<XREye> GetEyes();
@@ -28,6 +30,7 @@ namespace Microsoft.Xna.Platform.XR
         public abstract void CommitRenderTarget(XREye eye, RenderTarget2D rt);
         public abstract int EndFrame();
         public abstract HandsState GetHandsState();
+        public abstract void EndSessionAsync();
 
 
         #region IDisposable

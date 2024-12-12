@@ -18,19 +18,30 @@ namespace Microsoft.Xna.Framework.XR
     internal class ConcreteXRDevice : XRDeviceStrategy
     {
         IGraphicsDeviceService _graphics;
-        XRMode _xrMode;
+        XRSessionMode _xrMode;
 
         HandsState _handsState;
         HeadsetState _headsetState;
 
-        public override XRMode Mode
+
+        public override bool IsVRSupported
+        {
+            get { return false; }
+        }
+
+        public override bool IsARSupported
+        {
+            get { return false; }
+        }
+
+        public override XRSessionMode SessionMode
         {
             get { return _xrMode; }
         }
 
-        public override XRDeviceState State
+        public override XRDeviceState DeviceState
         {
-            get { return XRDeviceState.NotSupported; }
+            get { return XRDeviceState.Disabled; }
         }
 
         public override bool TrackFloorLevelOrigin
@@ -40,12 +51,12 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
-            : this(applicationName, game.Services, mode)
+        public ConcreteXRDevice(string applicationName, Game game)
+            : this(applicationName, game.Services)
         {
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
             IGraphicsDeviceService graphics = services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
@@ -53,7 +64,6 @@ namespace Microsoft.Xna.Framework.XR
                 throw new ArgumentNullException("graphics");
 
             this._graphics = graphics;
-            this._xrMode = mode;
 
             this._handsState.LGripTransform = Matrix.Identity;
             this._handsState.RGripTransform = Matrix.Identity;
@@ -61,7 +71,7 @@ namespace Microsoft.Xna.Framework.XR
             this._handsState.RHandTransform = Matrix.Identity;
         }
 
-        public override int CreateDevice()
+        public override int BeginSessionAsync(XRSessionMode sessionMode)
         {
             return -1;
         }
@@ -117,7 +127,11 @@ namespace Microsoft.Xna.Framework.XR
             return _handsState;
         }
 
-        
+        public override void EndSessionAsync()
+        {
+        }
+
+
 
         internal void GetCapabilities(TouchControllerType controllerType, ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected, ref Buttons buttons, ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor, ref bool hasVoiceSupport)
         {

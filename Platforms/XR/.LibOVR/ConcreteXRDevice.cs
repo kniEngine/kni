@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
     {
         //Game _game;
         IGraphicsDeviceService _graphics;
-        XRMode _xrMode;
+        XRSessionMode _sessionMode;
         XRDeviceState _deviceState;
 
         OvrClient _ovrClient;
@@ -38,12 +38,22 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
         OvrSwapChainDataBase[] _swapChainData = new OvrSwapChainDataBase[2];
 
 
-        public override XRMode Mode
+        public override bool IsVRSupported
         {
-            get { return _xrMode; }
+            get { return true; }
         }
 
-        public override XRDeviceState State
+        public override bool IsARSupported
+        {
+            get { return false; }
+        }
+
+        public override XRSessionMode SessionMode
+        {
+            get { return _sessionMode; }
+        }
+
+        public override XRDeviceState DeviceState
         {
             get { return _deviceState; }
         }
@@ -54,23 +64,20 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }
         }
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
-            : this(applicationName, game.Services, mode)
+        public ConcreteXRDevice(string applicationName, Game game)
+            : this(applicationName, game.Services)
         {
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
             IGraphicsDeviceService graphics = services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
             if (graphics == null)
                 throw new ArgumentNullException("graphics");
-            if (mode != XRMode.VR)
-                throw new ArgumentException("mode");
 
             //this._game = game;
             this._graphics = graphics;
-            this._xrMode = mode;
 
 
             _graphics = graphics;
@@ -81,8 +88,13 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             this._deviceState = XRDeviceState.Disabled;
         }
 
-        public override int CreateDevice()
+        public override int BeginSessionAsync(XRSessionMode sessionMode)
         {
+            if (sessionMode != XRSessionMode.VR)
+                throw new ArgumentException("mode");
+
+            this._sessionMode = sessionMode;
+
             GraphicsDevice graphicsDevice = _graphics.GraphicsDevice;
             if (graphicsDevice == null)
             {
@@ -234,6 +246,11 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             return _handsState;
         }
 
+        public override void EndSessionAsync()
+        {
+            throw new NotImplementedException();
+        }
+
 
         private void GraphicsDeviceCreated(object sender, EventArgs e)
         {
@@ -284,7 +301,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
                 out _layer);
 
             TouchController.DeviceHandle = new Input.Oculus.LibOVR.ConcreteTouchControllerStrategy(this);
-            this._deviceState = XRDeviceState.Ready;
+            this._deviceState = XRDeviceState.Enabled;
 
             return 0;
         }

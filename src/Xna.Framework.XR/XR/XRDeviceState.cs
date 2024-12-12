@@ -8,11 +8,10 @@ namespace Microsoft.Xna.Framework.XR
 {
     public enum XRDeviceState
     {
-        Requesting,
-        NotSupported,
+        InitializingDevice,
         Disabled,
-        Initializing,
-        Ready,
+        InitializingSession,
+        Enabled,
         NoPermissions,
     }
 }

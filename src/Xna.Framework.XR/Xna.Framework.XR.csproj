@@ -45,7 +45,7 @@
     <Compile Include="XR\XRDeviceStrategy.cs" />
     <Compile Include="XR\XREye.cs" />
     <Compile Include="XR\XRFactory.cs" />
-    <Compile Include="XR\XRMode.cs" />
+    <Compile Include="XR\XRSessionMode.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -60,8 +60,8 @@ namespace Microsoft.Xna.Platform.XR
             }
         }
 
-        public abstract XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, IServiceProvider services, XRMode mode);
-        public abstract XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, Game game, XRMode mode);
+        public abstract XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, IServiceProvider services);
+        public abstract XRDeviceStrategy CreateXRDeviceStrategy(string applicationName, Game game);
     }
 
 }

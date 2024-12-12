@@ -12,19 +12,30 @@ namespace Microsoft.Xna.Framework.XR
     {
         Game _game;
         IGraphicsDeviceService _graphics;
-        XRMode _xrMode;
+        XRSessionMode _sessionMode;
         XRDeviceState _deviceState;
         bool _trackFloorLevelOrigin = false;
 
         GameWindow _gameWindow;
 
 
-        public override XRMode Mode
+
+        public override bool IsVRSupported
         {
-            get { return _xrMode; }
+            get { return true; }
         }
 
-        public override XRDeviceState State
+        public override bool IsARSupported
+        {
+            get { return false; }
+        }
+
+        public override XRSessionMode SessionMode
+        {
+            get { return _sessionMode; }
+        }
+
+        public override XRDeviceState DeviceState
         {
             get { return _deviceState; }
         }
@@ -40,12 +51,10 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
+        public ConcreteXRDevice(string applicationName, Game game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");
-            if (mode != XRMode.VR)
-                throw new ArgumentException("mode");
 
             IGraphicsDeviceService graphics = game.Services.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
 
@@ -54,21 +63,24 @@ namespace Microsoft.Xna.Framework.XR
 
             this._game = game;
             this._graphics = graphics;
-            this._xrMode = mode;
 
             this._deviceState = XRDeviceState.Disabled;
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
-            throw new ArgumentNullException("game");
+            throw new PlatformNotSupportedException("Cardboard requires a Game reference.");
         }
 
-        public override int CreateDevice()
+        public override int BeginSessionAsync(XRSessionMode sessionMode)
         {
+            if (sessionMode != XRSessionMode.VR)
+                throw new ArgumentException("mode");
+
+            this._sessionMode = sessionMode;
             _gameWindow = _game.Window;
 
-            _deviceState = XRDeviceState.Ready;
+            _deviceState = XRDeviceState.Enabled;
             return 0;
         }
 
@@ -197,6 +209,10 @@ namespace Microsoft.Xna.Framework.XR
         public override HandsState GetHandsState()
         {
             return default(HandsState);
+        }
+
+        public override void EndSessionAsync()
+        {
         }
 
         static unsafe Matrix CreateProjection(   float tanAngleLeft, float tanAngleRight,

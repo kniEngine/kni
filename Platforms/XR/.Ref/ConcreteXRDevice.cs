@@ -13,12 +13,23 @@ namespace Microsoft.Xna.Framework.XR
     internal class ConcreteXRDevice : XRDeviceStrategy
     {
 
-        public override XRMode Mode
+
+        public override bool IsVRSupported
         {
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public override XRDeviceState State
+        public override bool IsARSupported
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
+        public override XRSessionMode SessionMode
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
+        public override XRDeviceState DeviceState
         {
             get { throw new PlatformNotSupportedException(); }
         }
@@ -30,17 +41,17 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public ConcreteXRDevice(string applicationName, Game game, XRMode mode)
-            : this(applicationName, game.Services, mode)
+        public ConcreteXRDevice(string applicationName, Game game)
+            : this(applicationName, game.Services)
         {
         }
 
-        public ConcreteXRDevice(string applicationName, IServiceProvider services, XRMode mode)
+        public ConcreteXRDevice(string applicationName, IServiceProvider services)
         {
             throw new PlatformNotSupportedException();
         }
 
-        public override int CreateDevice()
+        public override int BeginSessionAsync(XRSessionMode sessionMode)
         {
             throw new PlatformNotSupportedException();
         }
@@ -81,6 +92,11 @@ namespace Microsoft.Xna.Framework.XR
         }
 
         public override HandsState GetHandsState()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void EndSessionAsync()
         {
             throw new PlatformNotSupportedException();
         }

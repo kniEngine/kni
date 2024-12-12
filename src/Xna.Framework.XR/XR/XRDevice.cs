@@ -19,14 +19,24 @@ namespace Microsoft.Xna.Framework.XR
         }
 
 
-        public XRDeviceState State
+        public bool IsVRSupported
         {
-            get { return _strategy.State; }
+            get { return _strategy.IsVRSupported; }
         }
 
-        public XRMode Mode
+        public bool IsARSupported
         {
-            get { return _strategy.Mode; }
+            get { return _strategy.IsARSupported; }
+        }
+
+        public XRDeviceState DeviceState
+        {
+            get { return _strategy.DeviceState; }
+        }
+
+        public XRSessionMode SessionMode
+        {
+            get { return _strategy.SessionMode; }
         }
 
         public bool TrackFloorLevelOrigin
@@ -35,22 +45,25 @@ namespace Microsoft.Xna.Framework.XR
             set { _strategy.TrackFloorLevelOrigin = value; }
         }
 
-        public XRDevice(string applicationName, IServiceProvider services,
-                        XRMode mode = XRMode.VR)
+        public XRDevice(string applicationName, IServiceProvider services)
         {
-            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, services, mode);
+            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, services);
         }
 
-        public XRDevice(string applicationName, Game game,
-                        XRMode mode = XRMode.VR)
+        public XRDevice(string applicationName, Game game)
         {
-            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, game, mode);
+            _strategy = XRFactory.Current.CreateXRDeviceStrategy(applicationName, game);
         }
 
 
-        public int CreateDevice()
+        public int BeginSessionAsync()
         {
-            return _strategy.CreateDevice();
+            return _strategy.BeginSessionAsync(XRSessionMode.VR);
+        }
+
+        public int BeginSessionAsync(XRSessionMode sessionMode)
+        {
+            return _strategy.BeginSessionAsync(sessionMode);
         }
 
         public int BeginFrame()
@@ -91,6 +104,11 @@ namespace Microsoft.Xna.Framework.XR
         public HandsState GetHandsState()
         {
             return _strategy.GetHandsState();
+        }
+
+        public void EndSessionAsync()
+        {
+            _strategy.EndSessionAsync();
         }
 
 
