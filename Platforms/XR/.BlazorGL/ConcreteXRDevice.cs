@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Framework.XR
                 return;
             }
 
-            this._deviceState = XRDeviceState.Requesting;
+            this._deviceState = XRDeviceState.InitializingDevice;
             InitXRDeviceAsync();
         }
 
