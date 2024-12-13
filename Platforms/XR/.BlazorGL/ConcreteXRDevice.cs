@@ -35,6 +35,7 @@ namespace Microsoft.Xna.Framework.XR
         XRSystem _xr;
         XRSession _xrsession;
         XRReferenceSpace _localSpace;
+        XRReferenceSpace _localFloorSpace;
         XRWebGLLayer _glLayer;
 
         int _xrAnimationHandle;
@@ -448,6 +449,8 @@ namespace Microsoft.Xna.Framework.XR
                 _currentRenderState = _currentXRSession.RenderState;
 
                 XRReferenceSpace referenceSpace = _localSpace;
+                if (_trackFloorLevelOrigin == true)
+                    referenceSpace = _localFloorSpace;
 
                 // save Gamepad state
                 _lbuttons = null;
