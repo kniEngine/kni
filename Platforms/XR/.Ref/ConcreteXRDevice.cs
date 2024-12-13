@@ -37,7 +37,6 @@ namespace Microsoft.Xna.Framework.XR
         public override bool IsTrackFloorLevelEnabled
         {
             get { throw new PlatformNotSupportedException(); }
-            set { throw new PlatformNotSupportedException(); }
         }
 
 
@@ -100,6 +99,12 @@ namespace Microsoft.Xna.Framework.XR
         {
             throw new PlatformNotSupportedException();
         }
+
+        public override void TrackFloorLevelAsync(bool enable)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
 
         internal void GetCapabilities(TouchControllerType controllerType, ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected, ref Buttons buttons, ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor, ref bool hasVoiceSupport)
         {

@@ -42,7 +42,6 @@ namespace Microsoft.Xna.Framework.XR
         public bool IsTrackFloorLevelEnabled
         {
             get { return _strategy.IsTrackFloorLevelEnabled; }
-            set { _strategy.IsTrackFloorLevelEnabled = value; }
         }
 
         public XRDevice(string applicationName, IServiceProvider services)
@@ -109,6 +108,11 @@ namespace Microsoft.Xna.Framework.XR
         public void EndSessionAsync()
         {
             _strategy.EndSessionAsync();
+        }
+
+        public void TrackFloorLevelAsync(bool enable)
+        {
+            _strategy.TrackFloorLevelAsync(enable);
         }
 
 

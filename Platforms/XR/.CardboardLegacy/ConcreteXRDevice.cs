@@ -43,11 +43,6 @@ namespace Microsoft.Xna.Framework.XR
         public override bool IsTrackFloorLevelEnabled
         {
             get { return _isTrackFloorLevelEnabled; }
-            set
-            {
-                if (value == true)
-                    throw new NotImplementedException();
-            }
         }
 
 
@@ -214,6 +209,19 @@ namespace Microsoft.Xna.Framework.XR
         public override void EndSessionAsync()
         {
         }
+
+        public override void TrackFloorLevelAsync(bool enable)
+        {
+            if (enable == true)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                _isTrackFloorLevelEnabled = enable;
+            }
+        }
+
 
         static unsafe Matrix CreateProjection(   float tanAngleLeft, float tanAngleRight,
                                                  float tanAngleBottom, float tanAngleTop,

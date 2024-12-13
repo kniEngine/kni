@@ -66,15 +66,6 @@ namespace Microsoft.Xna.Framework.XR
         public override bool IsTrackFloorLevelEnabled
         {
             get { return _isTrackFloorLevelEnabled; }
-            set
-            {
-                if (value == true)
-                {
-                    throw new NotImplementedException();
-                }
-
-                _isTrackFloorLevelEnabled = value;
-            }
         }
 
 
@@ -353,6 +344,18 @@ namespace Microsoft.Xna.Framework.XR
         public override void EndSessionAsync()
         {
             _xrsession.End();
+        }
+
+        public override void TrackFloorLevelAsync(bool enable)
+        {
+            if (enable == true)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                _isTrackFloorLevelEnabled = enable;
+            }
         }
 
         private string ModeToString(XRSessionMode mode)
