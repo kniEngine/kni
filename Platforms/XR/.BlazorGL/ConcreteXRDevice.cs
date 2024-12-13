@@ -481,8 +481,10 @@ namespace Microsoft.Xna.Framework.XR
                         }
                     }
 
-                    XRSpace gripSpace = inputSource.GripSpace;
                     SysNumerics.Matrix4x4 gripTranformMtx;
+                    SysNumerics.Matrix4x4 pointerTranformMtx;
+
+                    XRSpace gripSpace = inputSource.GripSpace;
                     if (gripSpace != null)
                     {
                         using (XRPose grip = _currentXRFrame.GetPose(gripSpace, referenceSpace))
@@ -497,7 +499,6 @@ namespace Microsoft.Xna.Framework.XR
                     }
 
                     XRSpace pointerSpace = inputSource.TargetRaySpace;
-                    SysNumerics.Matrix4x4 pointerTranformMtx;
                     if (pointerSpace != null)
                     {
                         using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, referenceSpace))
