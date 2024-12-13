@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.XR
         IGraphicsDeviceService _graphics;
         XRSessionMode _sessionMode;
         XRDeviceState _deviceState;
-        bool _trackFloorLevelOrigin = false;
+        bool _isTrackFloorLevelEnabled = false;
 
         GameWindow _gameWindow;
 
@@ -40,9 +40,9 @@ namespace Microsoft.Xna.Framework.XR
             get { return _deviceState; }
         }
 
-        public override bool TrackFloorLevelOrigin
+        public override bool IsTrackFloorLevelEnabled
         {
-            get { return _trackFloorLevelOrigin; }
+            get { return _isTrackFloorLevelEnabled; }
             set
             {
                 if (value == true)

@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             get { return _deviceState; }
         }
 
-        public override bool TrackFloorLevelOrigin
+        public override bool IsTrackFloorLevelEnabled
         {
             get { return _ovrSession.GetTrackingOriginType() == OvrTrackingOrigin.FloorLevel; }
             set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }

@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.XR
         public abstract bool IsARSupported { get; }
         public abstract XRSessionMode SessionMode { get; }
         public abstract XRDeviceState DeviceState { get; }
-        public abstract bool TrackFloorLevelOrigin { get; set; }
+        public abstract bool IsTrackFloorLevelEnabled { get; set; }
 
         public abstract int BeginSessionAsync(XRSessionMode sessionMode);
         public abstract int BeginFrame();

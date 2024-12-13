@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework.XR
             get { throw new PlatformNotSupportedException(); }
         }
 
-        public override bool TrackFloorLevelOrigin
+        public override bool IsTrackFloorLevelEnabled
         {
             get { throw new PlatformNotSupportedException(); }
             set { throw new PlatformNotSupportedException(); }

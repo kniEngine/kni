@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.XR
             get { return XRDeviceState.Disabled; }
         }
 
-        public override bool TrackFloorLevelOrigin
+        public override bool IsTrackFloorLevelEnabled
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }

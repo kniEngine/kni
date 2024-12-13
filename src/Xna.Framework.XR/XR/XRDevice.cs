@@ -39,10 +39,10 @@ namespace Microsoft.Xna.Framework.XR
             get { return _strategy.SessionMode; }
         }
 
-        public bool TrackFloorLevelOrigin
+        public bool IsTrackFloorLevelEnabled
         {
-            get { return _strategy.TrackFloorLevelOrigin; }
-            set { _strategy.TrackFloorLevelOrigin = value; }
+            get { return _strategy.IsTrackFloorLevelEnabled; }
+            set { _strategy.IsTrackFloorLevelEnabled = value; }
         }
 
         public XRDevice(string applicationName, IServiceProvider services)
