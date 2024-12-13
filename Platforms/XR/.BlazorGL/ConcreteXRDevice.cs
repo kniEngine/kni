@@ -447,6 +447,8 @@ namespace Microsoft.Xna.Framework.XR
                 _currentXRSession = _currentXRFrame.Session;
                 _currentRenderState = _currentXRSession.RenderState;
 
+                XRReferenceSpace referenceSpace = _localSpace;
+
                 // save Gamepad state
                 _lbuttons = null;
                 _laxes = null;
@@ -480,7 +482,7 @@ namespace Microsoft.Xna.Framework.XR
                     SysNumerics.Matrix4x4 gripTranformMtx;
                     if (gripSpace != null)
                     {
-                        using (XRPose grip = _currentXRFrame.GetPose(gripSpace, _localSpace))
+                        using (XRPose grip = _currentXRFrame.GetPose(gripSpace, referenceSpace))
                         {
                             if (grip != null)
                             {
@@ -495,7 +497,7 @@ namespace Microsoft.Xna.Framework.XR
                     SysNumerics.Matrix4x4 pointerTranformMtx;
                     if (pointerSpace != null)
                     {
-                        using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, _localSpace))
+                        using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, referenceSpace))
                         {
                             if (pointer != null)
                             {
@@ -523,7 +525,7 @@ namespace Microsoft.Xna.Framework.XR
                     }
                 }
 
-                using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(_localSpace))
+                using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(referenceSpace))
                 {
                     if (viewerPose != null)
                     {
