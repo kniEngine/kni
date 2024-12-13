@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.XR
         IGraphicsDeviceService _graphics;
         XRSessionMode _sessionMode;
         XRDeviceState _deviceState;
-        bool _trackFloorLevelOrigin = false;
+        bool _isTrackFloorLevelEnabled = false;
 
         private bool? _isVRSupported;
         private bool? _isARSupported;
@@ -63,18 +63,9 @@ namespace Microsoft.Xna.Framework.XR
             get { return _deviceState; }
         }
 
-        public override bool TrackFloorLevelOrigin
+        public override bool IsTrackFloorLevelEnabled
         {
-            get { return _trackFloorLevelOrigin; }
-            set
-            {
-                if (value == true)
-                {
-                    throw new NotImplementedException();
-                }
-
-                _trackFloorLevelOrigin = value;
-            }
+            get { return _isTrackFloorLevelEnabled; }
         }
 
 
@@ -355,6 +346,18 @@ namespace Microsoft.Xna.Framework.XR
             _xrsession.End();
         }
 
+        public override void TrackFloorLevelAsync(bool enable)
+        {
+            if (enable == true)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                _isTrackFloorLevelEnabled = enable;
+            }
+        }
+
         private string ModeToString(XRSessionMode mode)
         {
             switch (mode)
@@ -453,7 +456,7 @@ namespace Microsoft.Xna.Framework.XR
                 _currentRenderState = _currentXRSession.RenderState;
 
                 XRReferenceSpace referenceSpace = _localSpace;
-                if (_trackFloorLevelOrigin == true)
+                if (_isTrackFloorLevelEnabled == true)
                     referenceSpace = _localFloorSpace;
 
                 // save Gamepad state

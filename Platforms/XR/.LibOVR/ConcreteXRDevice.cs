@@ -58,10 +58,9 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             get { return _deviceState; }
         }
 
-        public override bool TrackFloorLevelOrigin
+        public override bool IsTrackFloorLevelEnabled
         {
             get { return _ovrSession.GetTrackingOriginType() == OvrTrackingOrigin.FloorLevel; }
-            set { _ovrSession.SetTrackingOriginType(value ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel); }
         }
 
         public ConcreteXRDevice(string applicationName, Game game)
@@ -249,6 +248,11 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
         public override void EndSessionAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public override void TrackFloorLevelAsync(bool enable)
+        {
+            _ovrSession.SetTrackingOriginType(enable ? OvrTrackingOrigin.FloorLevel : OvrTrackingOrigin.EyeLevel);
         }
 
 

@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.XR
         IGraphicsDeviceService _graphics;
         XRSessionMode _sessionMode;
         XRDeviceState _deviceState;
-        bool _trackFloorLevelOrigin = false;
+        bool _isTrackFloorLevelEnabled = false;
 
         GameWindow _gameWindow;
 
@@ -40,14 +40,9 @@ namespace Microsoft.Xna.Framework.XR
             get { return _deviceState; }
         }
 
-        public override bool TrackFloorLevelOrigin
+        public override bool IsTrackFloorLevelEnabled
         {
-            get { return _trackFloorLevelOrigin; }
-            set
-            {
-                if (value == true)
-                    throw new NotImplementedException();
-            }
+            get { return _isTrackFloorLevelEnabled; }
         }
 
 
@@ -214,6 +209,19 @@ namespace Microsoft.Xna.Framework.XR
         public override void EndSessionAsync()
         {
         }
+
+        public override void TrackFloorLevelAsync(bool enable)
+        {
+            if (enable == true)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                _isTrackFloorLevelEnabled = enable;
+            }
+        }
+
 
         static unsafe Matrix CreateProjection(   float tanAngleLeft, float tanAngleRight,
                                                  float tanAngleBottom, float tanAngleTop,

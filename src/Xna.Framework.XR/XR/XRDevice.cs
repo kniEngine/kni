@@ -39,10 +39,9 @@ namespace Microsoft.Xna.Framework.XR
             get { return _strategy.SessionMode; }
         }
 
-        public bool TrackFloorLevelOrigin
+        public bool IsTrackFloorLevelEnabled
         {
-            get { return _strategy.TrackFloorLevelOrigin; }
-            set { _strategy.TrackFloorLevelOrigin = value; }
+            get { return _strategy.IsTrackFloorLevelEnabled; }
         }
 
         public XRDevice(string applicationName, IServiceProvider services)
@@ -109,6 +108,11 @@ namespace Microsoft.Xna.Framework.XR
         public void EndSessionAsync()
         {
             _strategy.EndSessionAsync();
+        }
+
+        public void TrackFloorLevelAsync(bool enable)
+        {
+            _strategy.TrackFloorLevelAsync(enable);
         }
 
 
