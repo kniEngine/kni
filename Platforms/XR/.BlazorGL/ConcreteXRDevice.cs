@@ -69,7 +69,11 @@ namespace Microsoft.Xna.Framework.XR
             set
             {
                 if (value == true)
+                {
                     throw new NotImplementedException();
+                }
+
+                _trackFloorLevelOrigin = value;
             }
         }
 
