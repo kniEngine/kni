@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,6 +37,7 @@ namespace Microsoft.Xna.Framework.XR
         XRSession _xrsession;
         XRReferenceSpace _localSpace;
         XRReferenceSpace _localFloorSpace;
+        Task<XRReferenceSpace> _createLocalFloorSpaceTask;
         XRWebGLLayer _glLayer;
 
         int _xrAnimationHandle;
@@ -350,11 +352,35 @@ namespace Microsoft.Xna.Framework.XR
         {
             if (enable == true)
             {
-                throw new NotImplementedException();
+                if (_createLocalFloorSpaceTask == null && _localFloorSpace == null)
+                {
+                    try
+                    {
+                        _createLocalFloorSpaceTask = _currentXRSession.RequestReferenceSpace("local-floor");
+                    }
+                    catch
+                    {
+                        /* local-floor not supported */
+                        _createLocalFloorSpaceTask = null;
+                    }
+                }
+                else
+                {
+                    if (_createLocalFloorSpaceTask.IsCompleted)
+                    {
+                        if (_createLocalFloorSpaceTask.IsCompletedSuccessfully)
+                        {
+                            _localFloorSpace = _createLocalFloorSpaceTask.Result;
+                            _isTrackFloorLevelEnabled = true;
+                        }
+                        _createLocalFloorSpaceTask = null;
+                    }
+                }
             }
             else
             {
                 _isTrackFloorLevelEnabled = enable;
+                _createLocalFloorSpaceTask = null;
             }
         }
 
