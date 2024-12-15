@@ -18,7 +18,8 @@ namespace Microsoft.Xna.Framework.XR
     internal class ConcreteXRDevice : XRDeviceStrategy
     {
         IGraphicsDeviceService _graphics;
-        XRSessionMode _xrMode;
+        XRSessionMode _sessionMode;
+        bool _isTrackFloorLevelEnabled = false;
 
         HandsState _handsState;
         HeadsetState _headsetState;
@@ -36,7 +37,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override XRSessionMode SessionMode
         {
-            get { return _xrMode; }
+            get { return _sessionMode; }
         }
 
         public override XRDeviceState DeviceState
@@ -46,7 +47,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override bool IsTrackFloorLevelEnabled
         {
-            get { throw new NotImplementedException(); }
+            get { return _isTrackFloorLevelEnabled; }
         }
 
 
@@ -132,7 +133,14 @@ namespace Microsoft.Xna.Framework.XR
 
         public override void TrackFloorLevelAsync(bool enable)
         {
-            throw new NotImplementedException();
+            if (enable == true)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                _isTrackFloorLevelEnabled = enable;
+            }
         }
 
 
