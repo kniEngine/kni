@@ -19,6 +19,7 @@ namespace Microsoft.Xna.Framework.XR
     {
         IGraphicsDeviceService _graphics;
         XRSessionMode _sessionMode;
+        bool _isTrackFloorLevelEnabled = false;
 
         HandsState _handsState;
         HeadsetState _headsetState;
@@ -46,7 +47,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override bool IsTrackFloorLevelEnabled
         {
-            get { throw new NotImplementedException(); }
+            get { return _isTrackFloorLevelEnabled; }
         }
 
 
@@ -132,7 +133,14 @@ namespace Microsoft.Xna.Framework.XR
 
         public override void TrackFloorLevelAsync(bool enable)
         {
-            throw new NotImplementedException();
+            if (enable == true)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                _isTrackFloorLevelEnabled = enable;
+            }
         }
 
 
