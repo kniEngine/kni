@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.XR
 
         public override bool IsTrackFloorLevelEnabled
         {
-            get { return _isTrackFloorLevelEnabled; }
+            get { return (_isTrackFloorLevelEnabled && _localFloorSpace != null); }
         }
 
 
@@ -352,35 +352,36 @@ namespace Microsoft.Xna.Framework.XR
         {
             if (enable == true)
             {
-                if (_createLocalFloorSpaceTask == null && _localFloorSpace == null)
+                _isTrackFloorLevelEnabled = enable;
+
+                if (_localFloorSpace == null)
                 {
-                    try
+                    // create _localFloorSpace
+                    if (_createLocalFloorSpaceTask == null)
                     {
-                        _createLocalFloorSpaceTask = _currentXRSession.RequestReferenceSpace("local-floor");
-                    }
-                    catch
-                    {
-                        /* local-floor not supported */
-                        _createLocalFloorSpaceTask = null;
-                    }
-                }
-                else
-                {
-                    if (_createLocalFloorSpaceTask.IsCompleted)
-                    {
-                        if (_createLocalFloorSpaceTask.IsCompletedSuccessfully)
+                        try
                         {
-                            _localFloorSpace = _createLocalFloorSpaceTask.Result;
-                            _isTrackFloorLevelEnabled = true;
+                            _createLocalFloorSpaceTask = _currentXRSession.RequestReferenceSpace("local-floor");
+                            _createLocalFloorSpaceTask.ContinueWith((t) =>
+                            {
+                                if (_createLocalFloorSpaceTask.IsCompletedSuccessfully)
+                                {
+                                    _localFloorSpace = _createLocalFloorSpaceTask.Result;
+                                }
+                                _createLocalFloorSpaceTask = null;
+                            });
                         }
-                        _createLocalFloorSpaceTask = null;
+                        catch
+                        {
+                            /* local-floor not supported */
+                            _createLocalFloorSpaceTask = null;
+                        }
                     }
                 }
             }
             else
             {
                 _isTrackFloorLevelEnabled = enable;
-                _createLocalFloorSpaceTask = null;
             }
         }
 
@@ -482,7 +483,7 @@ namespace Microsoft.Xna.Framework.XR
                 _currentRenderState = _currentXRSession.RenderState;
 
                 XRReferenceSpace referenceSpace = _localSpace;
-                if (_isTrackFloorLevelEnabled == true)
+                if (_isTrackFloorLevelEnabled == true && _localFloorSpace != null)
                     referenceSpace = _localFloorSpace;
 
                 // save Gamepad state
