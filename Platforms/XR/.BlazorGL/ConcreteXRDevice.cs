@@ -407,7 +407,10 @@ namespace Microsoft.Xna.Framework.XR
                 var graphicsDevice = _graphics.GraphicsDevice;
                 var GL = (IWebGL2RenderingContext) ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)graphicsDevice).Strategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                _xrsession = await _xr.RequestSessionAsync(ModeToString(mode));
+                XRSessionOptions sessionOptions = default;
+                sessionOptions.RequiredFeatures |= XRSessionFeatures.Local;
+                sessionOptions.OptionalFeatures |= XRSessionFeatures.LocalFloor;
+                _xrsession = await _xr.RequestSessionAsync(ModeToString(mode), sessionOptions);
                 _xrsession.Ended += _xrsession_Ended;
                 _xrsession.InputSourcesChanged += _xrsession_InputSourcesChanged;
                 await GL.MakeXRCompatibleAsync();
