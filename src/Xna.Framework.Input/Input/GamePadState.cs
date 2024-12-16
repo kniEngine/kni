@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         private Buttons GetVirtualButtons()
         {
-            var result = Buttons._buttons;
+            Buttons result = Buttons._buttons;
 
             result |= ThumbSticks._virtualButtons;
 
@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             unchecked
             {
-                var hash = PacketNumber;
+                int hash = PacketNumber;
                 hash = (hash * 397) ^ Buttons.GetHashCode();
                 hash = (hash * 397) ^ DPad.GetHashCode();
                 hash = (hash * 397) ^ ThumbSticks.GetHashCode();

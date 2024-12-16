@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Input
 
         internal GamePadDPad(params Buttons[] buttons) : this()
         {
-            foreach (var button in buttons)
+            foreach (Buttons button in buttons)
             {
                 ConvertButtonToDirection(button);
             }

@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// </summary>
         private Buttons GetVirtualButtons()
         {
-            var result = TouchButtons._buttons;
+            Buttons result = TouchButtons._buttons;
 
             result |= ThumbSticks._virtualButtons;
 
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         {
             unchecked
             {
-                var hash = PacketNumber;
+                int hash = PacketNumber;
                 hash = (hash * 397) ^ TouchButtons.GetHashCode();
                 hash = (hash * 397) ^ ThumbSticks.GetHashCode();
                 hash = (hash * 397) ^ Triggers.GetHashCode();

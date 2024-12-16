@@ -121,10 +121,10 @@ namespace Microsoft.Xna.Framework.Input
 
         private Vector2 ExcludeCircularDeadZone(Vector2 value, float deadZone)
         {
-            var originalLength = value.Length();
+            float originalLength = value.Length();
             if (originalLength <= deadZone)
                 return Vector2.Zero;
-            var newLength = (originalLength - deadZone) / (1f - deadZone);
+            float newLength = (originalLength - deadZone) / (1f - deadZone);
             return value * (newLength / originalLength);
         }
 
