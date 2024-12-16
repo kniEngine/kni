@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Input
     /// This is implemented as a partial struct to allow for individual platforms
     /// to offer additional data without separate state queries to GamePad.
     /// </summary>
-    public partial struct GamePadState
+    public struct GamePadState
     {
         /// <summary>
         /// Gets a value indicating if the controller is connected.
