@@ -130,12 +130,13 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
         public static bool operator ==(GamePadState left, GamePadState right)
         {
-            return (left.IsConnected == right.IsConnected) &&
-                (left.PacketNumber == right.PacketNumber) &&
-                (left.Buttons == right.Buttons) &&
-                (left.DPad == right.DPad) &&
-                (left.ThumbSticks == right.ThumbSticks) &&
-                (left.Triggers == right.Triggers);
+            return (left.IsConnected == right.IsConnected)
+                && (left.PacketNumber == right.PacketNumber)
+                && (left.Buttons == right.Buttons)
+                && (left.DPad == right.DPad)
+                && (left.ThumbSticks == right.ThumbSticks)
+                && (left.Triggers == right.Triggers)
+                ;
         }
 
         /// <summary>

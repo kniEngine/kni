@@ -96,12 +96,13 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
         public static bool operator ==(TouchControllerState left, TouchControllerState right)
         {
-            return (left.IsConnected == right.IsConnected) &&
-                (left.PacketNumber == right.PacketNumber) &&
-                (left.TouchButtons == right.TouchButtons) &&
-                (left.ThumbSticks == right.ThumbSticks) &&
-                (left.Triggers == right.Triggers) &&
-                (left.Grips == right.Grips);
+            return (left.IsConnected == right.IsConnected)
+                && (left.PacketNumber == right.PacketNumber)
+                && (left.TouchButtons == right.TouchButtons)
+                && (left.ThumbSticks == right.ThumbSticks)
+                && (left.Triggers == right.Triggers)
+                && (left.Grips == right.Grips)
+                ;
         }
 
         /// <summary>
