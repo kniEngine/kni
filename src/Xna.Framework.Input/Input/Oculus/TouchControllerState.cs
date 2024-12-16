@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         public int PacketNumber { get; internal set; }
 
         /// <summary>
-        /// Gets a structure that identifies what buttons on the controller are pressed.
+        /// Gets a structure that identifies what buttons on the controller are pressed or touched.
         /// </summary>
-        /// <value>The buttons structure.</value>
+        /// <value>The TouchButtons structure.</value>
         public TouchButtons TouchButtons { get; internal set; }
 
         /// <summary>

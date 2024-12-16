@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Gets a structure that identifies what buttons on the controller are pressed.
         /// </summary>
-        /// <value>The buttons structure.</value>
+        /// <value>The GamePadButtons structure.</value>
         public GamePadButtons Buttons { get; internal set; }
 
         /// <summary>
