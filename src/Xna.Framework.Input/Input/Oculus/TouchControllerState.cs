@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// Gets a structure that identifies what buttons on the controller are pressed or touched.
         /// </summary>
         /// <value>The TouchButtons structure.</value>
-        public TouchButtons TouchButtons { get; internal set; }
+        public GamePadTouchButtons TouchButtons { get; internal set; }
 
         /// <summary>
         /// Gets a structure that indicates the position of the controller sticks (thumbsticks).
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="triggers">Initial trigger state.</param>
         /// <param name="grips">Initial directional pad state.</param>
         /// <param name="touchButtons">Initial button state.</param>
-        public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, TouchButtons touchButtons) : this()
+        public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, GamePadTouchButtons touchButtons) : this()
         {
             ThumbSticks = thumbSticks;
             Triggers = triggers;
