@@ -4,6 +4,10 @@ using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
+#if NET8_0_OR_GREATER
+using SysNumerics = System.Numerics;
+#endif
+
 
 namespace Microsoft.Xna.Framework
 {
@@ -431,6 +435,23 @@ namespace Microsoft.Xna.Framework
         {
             return left.R != right.R || left.i != right.i;
         }
+
+#if NET8_0_OR_GREATER
+        public static explicit operator Complex(SysNumerics.Complex value)
+        {
+            Complex result;
+            result.R = (float)value.Real;
+            result.i = (float)value.Imaginary;
+            return result;
+        }
+
+        public static explicit operator SysNumerics.Complex(Complex value)
+        {
+            return new SysNumerics.Complex(
+                (double)value.R,
+                (double)value.i);
+        }
+#endif
 
         #endregion
 

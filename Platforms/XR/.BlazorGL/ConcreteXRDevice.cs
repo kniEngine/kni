@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Oculus;
@@ -475,7 +474,7 @@ namespace Microsoft.Xna.Framework.XR
         private Matrix _lproj;
         private Matrix _rproj;
 
-        private unsafe void AnimationFrameCallback(TimeSpan time, XRFrame frame)
+        private void AnimationFrameCallback(TimeSpan time, XRFrame frame)
         {
             //Console.WriteLine("AnimationFrameCallback " + time.TotalSeconds.ToString());
 
@@ -541,21 +540,18 @@ namespace Microsoft.Xna.Framework.XR
                         }
                     }
 
-                    SysNumerics.Matrix4x4 gripTranformMtx = gripTransform.Matrix;
-                    SysNumerics.Matrix4x4 pointerTranformMtx = pointerTransform.Matrix;
-
                     switch (hand)
                     {
                         case XRHandedness.Left:
                             {
-                                _handsState.LGripTransform = Unsafe.AsRef<Matrix>(&gripTranformMtx);
-                                _handsState.LHandTransform = Unsafe.AsRef<Matrix>(&pointerTranformMtx);
+                                _handsState.LGripTransform = (Matrix)gripTransform.Matrix;
+                                _handsState.LHandTransform = (Matrix)pointerTransform.Matrix;
                             }
                             break;
                         case XRHandedness.Right:
                             {
-                                _handsState.RGripTransform = Unsafe.AsRef<Matrix>(&gripTranformMtx);
-                                _handsState.RHandTransform = Unsafe.AsRef<Matrix>(&pointerTranformMtx);
+                                _handsState.RGripTransform = (Matrix)gripTransform.Matrix;
+                                _handsState.RHandTransform = (Matrix)pointerTransform.Matrix;
                             }
                             break;
                     }
@@ -569,7 +565,6 @@ namespace Microsoft.Xna.Framework.XR
                         SysNumerics.Vector4? angularVelocity = viewerPose.AngularVelocity;
                         SysNumerics.Vector4? linearVelocity = viewerPose.LinearVelocity;
                         XRRigidTransform transform = viewerPose.Transform;
-                        SysNumerics.Matrix4x4 tranformMtx = transform.Matrix;
 
                         XRWebGLLayer glLayer = _currentRenderState.BaseLayer;
                         float? depthNear = _currentRenderState.DepthNear;
@@ -588,32 +583,27 @@ namespace Microsoft.Xna.Framework.XR
                             float aspect = (float)xrViewport.Width / (float)xrViewport.Height;
 
                             XRRigidTransform viewTransform = xrView.Transform;
-                            XRRigidTransform invViewTransform = viewTransform.Inverse;
 
-                            SysNumerics.Matrix4x4 vmtx = viewTransform.Matrix;
-                            SysNumerics.Matrix4x4 view = invViewTransform.Matrix;
-                            SysNumerics.Matrix4x4 proj = xrView.ProjectionMatrix;
-
-                            _headsetState.HeadTransform = Unsafe.AsRef<Matrix>(&tranformMtx);
+                            _headsetState.HeadTransform = (Matrix)transform.Matrix;
 
                             switch (eye)
                             {
                                 case WebXREye.None:
                                     {
-                                        _lproj = Unsafe.AsRef<Matrix>(&proj);
-                                        _headsetState.HeadTransform = Unsafe.AsRef<Matrix>(&vmtx);
+                                        _lproj = (Matrix)xrView.ProjectionMatrix;
+                                        _headsetState.HeadTransform = (Matrix)viewTransform.Matrix;
                                     }
                                     break;
                                 case WebXREye.Left:
                                     {
-                                        _lproj = Unsafe.AsRef<Matrix>(&proj);
-                                        _headsetState.LEyeTransform = Unsafe.AsRef<Matrix>(&vmtx);
+                                        _lproj = (Matrix)xrView.ProjectionMatrix;
+                                        _headsetState.LEyeTransform = (Matrix)viewTransform.Matrix;
                                     }
                                     break;
                                 case WebXREye.Right:
                                     {
-                                        _rproj = Unsafe.AsRef<Matrix>(&proj);
-                                        _headsetState.REyeTransform = Unsafe.AsRef<Matrix>(&vmtx);
+                                        _rproj = (Matrix)xrView.ProjectionMatrix;
+                                        _headsetState.REyeTransform = (Matrix)viewTransform.Matrix;
                                     }
                                     break;
                             }

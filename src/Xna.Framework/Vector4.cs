@@ -7,6 +7,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
+#if NET8_0_OR_GREATER
+using System.Runtime.CompilerServices;
+using SysNumerics = System.Numerics;
+#endif
+
 namespace Microsoft.Xna.Framework
 {
     /// <summary>
@@ -1424,6 +1429,18 @@ namespace Microsoft.Xna.Framework
             left.Z *= factor;
             return left;
         }
+
+#if NET8_0_OR_GREATER
+        public static explicit operator Vector4(SysNumerics.Vector4 value)
+        {
+            return Unsafe.BitCast<SysNumerics.Vector4, Vector4>(value);
+        }
+
+        public static explicit operator SysNumerics.Vector4(Vector4 value)
+        {
+            return Unsafe.BitCast<Vector4, SysNumerics.Vector4>(value);
+        }
+#endif
 
         #endregion
     }

@@ -6,6 +6,11 @@ using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
+#if NET8_0_OR_GREATER
+using System.Runtime.CompilerServices;
+using SysNumerics = System.Numerics;
+#endif
+
 namespace Microsoft.Xna.Framework
 {
     /// <summary>
@@ -1136,6 +1141,18 @@ namespace Microsoft.Xna.Framework
             quaternion2.W = -value.W;
             return quaternion2;
         }
+
+#if NET8_0_OR_GREATER
+        public static explicit operator Quaternion(SysNumerics.Quaternion value)
+        {
+            return Unsafe.BitCast<SysNumerics.Quaternion, Quaternion>(value);
+        }
+
+        public static explicit operator SysNumerics.Quaternion(Quaternion value)
+        {
+            return Unsafe.BitCast<Quaternion, SysNumerics.Quaternion>(value);
+        }
+#endif
 
         #endregion
     }
