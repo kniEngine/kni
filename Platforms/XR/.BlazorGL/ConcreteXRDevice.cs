@@ -515,8 +515,8 @@ namespace Microsoft.Xna.Framework.XR
                         }
                     }
 
-                    SysNumerics.Matrix4x4 gripTranformMtx;
-                    SysNumerics.Matrix4x4 pointerTranformMtx;
+                    XRRigidTransform gripTransform = default;
+                    XRRigidTransform pointerTransform = default;
 
                     XRSpace gripSpace = inputSource.GripSpace;
                     if (gripSpace != null)
@@ -524,11 +524,7 @@ namespace Microsoft.Xna.Framework.XR
                         using (XRPose grip = _currentXRFrame.GetPose(gripSpace, referenceSpace))
                         {
                             if (grip != null)
-                            {
-                                XRRigidTransform gripTransform = grip.Transform;
-                                gripTranformMtx = gripTransform.Matrix;
-                                gripTransform.Dispose();
-                            }
+                                gripTransform = grip.Transform;
                         }
                     }
 
@@ -538,13 +534,12 @@ namespace Microsoft.Xna.Framework.XR
                         using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, referenceSpace))
                         {
                             if (pointer != null)
-                            {
-                                XRRigidTransform pointerTransform = pointer.Transform;
-                                pointerTranformMtx = pointerTransform.Matrix;
-                                pointerTransform.Dispose();
-                            }
+                                pointerTransform = pointer.Transform;
                         }
                     }
+
+                    SysNumerics.Matrix4x4 gripTranformMtx = gripTransform.Matrix;
+                    SysNumerics.Matrix4x4 pointerTranformMtx = pointerTransform.Matrix;
 
                     switch (hand)
                     {
@@ -572,7 +567,6 @@ namespace Microsoft.Xna.Framework.XR
                         SysNumerics.Vector4? linearVelocity = viewerPose.LinearVelocity;
                         XRRigidTransform transform = viewerPose.Transform;
                         SysNumerics.Matrix4x4 tranformMtx = transform.Matrix;
-                        transform.Dispose();
 
                         XRWebGLLayer glLayer = _currentRenderState.BaseLayer;
                         float? depthNear = _currentRenderState.DepthNear;
@@ -590,37 +584,37 @@ namespace Microsoft.Xna.Framework.XR
 
                             float aspect = (float)xrViewport.Width / (float)xrViewport.Height;
 
-                            using (XRRigidTransform viewTransform = xrView.Transform)
-                            using (XRRigidTransform invViewTransform = viewTransform.Inverse)
+                            XRRigidTransform viewTransform = xrView.Transform;
+                            XRRigidTransform invViewTransform = viewTransform.Inverse;
+
+                            SysNumerics.Matrix4x4 vmtx = viewTransform.Matrix;
+                            SysNumerics.Matrix4x4 view = invViewTransform.Matrix;
+                            SysNumerics.Matrix4x4 proj = xrView.ProjectionMatrix;
+
+                            _headsetState.HeadTransform = Unsafe.AsRef<Matrix>(&tranformMtx);
+
+                            switch (eye)
                             {
-                                SysNumerics.Matrix4x4 vmtx = viewTransform.Matrix;
-                                SysNumerics.Matrix4x4 view = invViewTransform.Matrix;
-                                SysNumerics.Matrix4x4 proj = xrView.ProjectionMatrix;
-
-                                _headsetState.HeadTransform = Unsafe.AsRef<Matrix>(&tranformMtx);
-
-                                switch (eye)
-                                {
-                                    case WebXREye.None:
-                                        {
-                                            _lproj = Unsafe.AsRef<Matrix>(&proj);
-                                            _headsetState.HeadTransform = Unsafe.AsRef<Matrix>(&vmtx);
-                                        }
-                                        break;
-                                    case WebXREye.Left:
-                                        {
-                                            _lproj = Unsafe.AsRef<Matrix>(&proj);
-                                            _headsetState.LEyeTransform = Unsafe.AsRef<Matrix>(&vmtx);
-                                        }
-                                        break;
-                                    case WebXREye.Right:
-                                        {
-                                            _rproj = Unsafe.AsRef<Matrix>(&proj);
-                                            _headsetState.REyeTransform = Unsafe.AsRef<Matrix>(&vmtx);
-                                        }
-                                        break;
-                                }
+                                case WebXREye.None:
+                                    {
+                                        _lproj = Unsafe.AsRef<Matrix>(&proj);
+                                        _headsetState.HeadTransform = Unsafe.AsRef<Matrix>(&vmtx);
+                                    }
+                                    break;
+                                case WebXREye.Left:
+                                    {
+                                        _lproj = Unsafe.AsRef<Matrix>(&proj);
+                                        _headsetState.LEyeTransform = Unsafe.AsRef<Matrix>(&vmtx);
+                                    }
+                                    break;
+                                case WebXREye.Right:
+                                    {
+                                        _rproj = Unsafe.AsRef<Matrix>(&proj);
+                                        _headsetState.REyeTransform = Unsafe.AsRef<Matrix>(&vmtx);
+                                    }
+                                    break;
                             }
+
                             xrView.Dispose();
                         }
 
