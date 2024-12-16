@@ -6,6 +6,11 @@ using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
+#if NET8_0_OR_GREATER
+using System.Runtime.CompilerServices;
+using SysNumerics = System.Numerics;
+#endif
+
 namespace Microsoft.Xna.Framework
 { 
     /// <summary>
@@ -2312,6 +2317,18 @@ namespace Microsoft.Xna.Framework
             value.M44 = -value.M44;
             return value;
         }
+
+#if NET8_0_OR_GREATER
+        public static explicit operator Matrix(SysNumerics.Matrix4x4 value)
+        {
+            return Unsafe.BitCast<SysNumerics.Matrix4x4,Matrix>(value);
+        }
+
+        public static explicit operator SysNumerics.Matrix4x4(Matrix value)
+        {
+            return Unsafe.BitCast<Matrix, SysNumerics.Matrix4x4>(value);
+        }
+#endif
 
         /// <summary>
         /// Creates a new <see cref="Matrix"/> that contains subtraction of one matrix from another.

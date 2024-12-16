@@ -6,6 +6,11 @@ using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
+#if NET8_0_OR_GREATER
+using System.Runtime.CompilerServices;
+using SysNumerics = System.Numerics;
+#endif
+
 namespace Microsoft.Xna.Framework
 {
     /// <summary>
@@ -287,6 +292,18 @@ namespace Microsoft.Xna.Framework
             result.Normal.Z = value.Normal.Z * factor;
             result.D = value.D * factor;
         }
+
+#if NET8_0_OR_GREATER
+        public static explicit operator Plane(SysNumerics.Plane value)
+        {
+            return Unsafe.BitCast<SysNumerics.Plane, Plane>(value);
+        }
+
+        public static explicit operator SysNumerics.Plane(Plane value)
+        {
+            return Unsafe.BitCast<Plane, SysNumerics.Plane>(value);
+        }
+#endif
 
         /// <summary>
         /// Check if two planes are not equal.
