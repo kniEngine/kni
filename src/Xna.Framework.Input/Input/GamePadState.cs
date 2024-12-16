@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022-2024 Nick Kastellanos
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
@@ -104,7 +106,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Determines whether specified input device buttons are pressed in this GamePadState.
         /// </summary>
-        /// <returns><c>true</c>, if button was pressed, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if button was pressed, <c>false</c> if button was released.</returns>
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {

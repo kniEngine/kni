@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -82,7 +82,12 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             return result;
         }
 
-        public bool IsButtonPressed(Buttons button)
+        /// <summary>
+        /// Determines whether specified input device buttons are pressed in this GamePadState.
+        /// </summary>
+        /// <returns><c>true</c> if button was pressed, <c>false</c> if button was released or touched.</returns>
+        /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
+        public bool IsButtonDown(Buttons button)
         {
             return (GetVirtualButtons() & button) == button;
         }
