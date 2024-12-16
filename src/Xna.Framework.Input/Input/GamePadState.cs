@@ -114,9 +114,9 @@ namespace Microsoft.Xna.Framework.Input
         }
 
         /// <summary>
-        /// Determines whether specified input device buttons are released (not pressed) in this GamePadState.
+        /// Determines whether specified input device buttons are released in this GamePadState.
         /// </summary>
-        /// <returns><c>true</c>, if button was released (not pressed), <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if button was released, <c>false</c> if button was pressed.</returns>
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonUp(Buttons button)
         {

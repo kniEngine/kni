@@ -93,6 +93,16 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
+        /// Determines whether specified input device buttons are released in this GamePadState.
+        /// </summary>
+        /// <returns><c>true</c> if button was released or touched, <c>false</c> if button was pressed.</returns>
+        /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
+        public bool IsButtonUp(Buttons button)
+        {
+            return (GetVirtualButtons() & button) != button;
+        }
+
+        /// <summary>
         /// Determines whether a specified instance of <see cref="Microsoft.Xna.Framework.Input.GamePadState"/> is equal
         /// to another specified <see cref="Microsoft.Xna.Framework.Input.GamePadState"/>.
         /// </summary>
