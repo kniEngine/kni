@@ -21,13 +21,13 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         Released = 0,
 
         /// <summary>
-        /// The button is touched.
-        /// </summary>
-        Touched = 1,
-
-        /// <summary>
         /// The button is pressed.
         /// </summary>
-        Pressed = 2,
+        Pressed = 1,
+
+        /// <summary>
+        /// The button is touched.
+        /// </summary>
+        Touched = 2,
     }
 }
