@@ -49,7 +49,10 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <value>Positions of the triggers.</value>
         public GamePadTriggers Triggers { get; internal set; }
 
-
+        /// <summary>
+        /// Gets a structure that identifies the position of Grips on the controller.
+        /// </summary>
+        /// <value>Positions of the grips.</value>
         public GamePadTriggers Grips { get; internal set; }
 
 
