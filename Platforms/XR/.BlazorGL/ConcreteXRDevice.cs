@@ -972,7 +972,7 @@ namespace Microsoft.Xna.Framework.XR
                 thumbSticks: thumbSticks,
                 triggers: triggers,
                 grips: grips,
-                touchButtons: new TouchButtons(buttons, touches)
+                touchButtons: new GamePadTouchButtons(buttons, touches)
                 );
 
             return _touchControllerState;

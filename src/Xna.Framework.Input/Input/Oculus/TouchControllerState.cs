@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Framework.Input.Oculus
     public struct TouchControllerState
     {
         /// <summary>
-        /// The default initialized gamepad state.
-        /// </summary>
-        public static readonly GamePadState Default = new GamePadState();
-
-        /// <summary>
         /// Gets a value indicating if the controller is connected.
         /// </summary>
         /// <value><c>true</c> if it is connected; otherwise, <c>false</c>.</value>
@@ -39,8 +34,17 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <summary>
         /// Gets a structure that identifies what buttons on the controller are pressed.
         /// </summary>
-        /// <value>The buttons structure.</value>
-        public TouchButtons TouchButtons { get; internal set; }
+        /// <value>The GamePadButtons structure.</value>
+        public GamePadButtons Buttons
+        { 
+            get { return new GamePadButtons(this.TouchButtons._buttons); }
+        }
+
+        /// <summary>
+        /// Gets a structure that identifies what buttons on the controller are pressed or touched.
+        /// </summary>
+        /// <value>The TouchButtons structure.</value>
+        public GamePadTouchButtons TouchButtons { get; internal set; }
 
         /// <summary>
         /// Gets a structure that indicates the position of the controller sticks (thumbsticks).
@@ -54,7 +58,10 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <value>Positions of the triggers.</value>
         public GamePadTriggers Triggers { get; internal set; }
 
-
+        /// <summary>
+        /// Gets a structure that identifies the position of Grips on the controller.
+        /// </summary>
+        /// <value>Positions of the grips.</value>
         public GamePadTriggers Grips { get; internal set; }
 
 
@@ -66,7 +73,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="triggers">Initial trigger state.</param>
         /// <param name="grips">Initial directional pad state.</param>
         /// <param name="touchButtons">Initial button state.</param>
-        public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, TouchButtons touchButtons) : this()
+        public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, GamePadTouchButtons touchButtons) : this()
         {
             ThumbSticks = thumbSticks;
             Triggers = triggers;
@@ -80,16 +87,41 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// </summary>
         private Buttons GetVirtualButtons()
         {
-            var result = TouchButtons._buttons;
+            Buttons result = TouchButtons._buttons;
 
             result |= ThumbSticks._virtualButtons;
 
             return result;
         }
 
-        public bool IsButtonPressed(Buttons button)
+        /// <summary>
+        /// Determines whether specified input device buttons are pressed in this GamePadState.
+        /// </summary>
+        /// <returns><c>true</c> if button was pressed, <c>false</c> if button was released or touched.</returns>
+        /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
+        public bool IsButtonDown(Buttons button)
         {
             return (GetVirtualButtons() & button) == button;
+        }
+
+        /// <summary>
+        /// Determines whether specified input device buttons are released in this GamePadState.
+        /// </summary>
+        /// <returns><c>true</c> if button was released or touched, <c>false</c> if button was pressed.</returns>
+        /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
+        public bool IsButtonUp(Buttons button)
+        {
+            return (GetVirtualButtons() & button) != button;
+        }
+
+        /// <summary>
+        /// Determines whether specified input device buttons are touched in this GamePadState.
+        /// </summary>
+        /// <returns><c>true</c> if button was touched, <c>false</c> if button was released or touched.</returns>
+        /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
+        public bool IsButtonTouched(Buttons button)
+        {
+            return ((TouchButtons._touches & ~TouchButtons._buttons) & button) == button;
         }
 
         /// <summary>
@@ -101,12 +133,13 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
         public static bool operator ==(TouchControllerState left, TouchControllerState right)
         {
-            return (left.IsConnected == right.IsConnected) &&
-                (left.PacketNumber == right.PacketNumber) &&
-                (left.TouchButtons == right.TouchButtons) &&
-                (left.ThumbSticks == right.ThumbSticks) &&
-                (left.Triggers == right.Triggers) &&
-                (left.Grips == right.Grips);
+            return (left.IsConnected == right.IsConnected)
+                && (left.PacketNumber == right.PacketNumber)
+                && (left.TouchButtons == right.TouchButtons)
+                && (left.ThumbSticks == right.ThumbSticks)
+                && (left.Triggers == right.Triggers)
+                && (left.Grips == right.Grips)
+                ;
         }
 
         /// <summary>
@@ -141,7 +174,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         {
             unchecked
             {
-                var hash = PacketNumber;
+                int hash = PacketNumber;
                 hash = (hash * 397) ^ TouchButtons.GetHashCode();
                 hash = (hash * 397) ^ ThumbSticks.GetHashCode();
                 hash = (hash * 397) ^ Triggers.GetHashCode();

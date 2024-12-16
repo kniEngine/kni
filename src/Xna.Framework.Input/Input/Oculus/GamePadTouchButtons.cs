@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2022 Nick Kastellanos
+// Copyright (C)2022-2024 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
     /// <summary>
     /// A struct that represents the current button states for the controller.
     /// </summary>
-    public struct TouchButtons
+    public struct GamePadTouchButtons
     {
         internal readonly Buttons _buttons;
         internal readonly Buttons _touches;
@@ -213,7 +213,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             }
         }
         
-        public TouchButtons(Buttons buttons, Buttons touches)
+        public GamePadTouchButtons(Buttons buttons, Buttons touches)
         {
             _buttons = buttons;
             _touches = touches;
@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
         /// <returns>true if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, false.</returns>
-        public static bool operator ==(TouchButtons left, TouchButtons right)
+        public static bool operator ==(GamePadTouchButtons left, GamePadTouchButtons right)
         {
             return left._buttons == right._buttons && left._touches == right._touches;
         }
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
         /// <returns>true if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, false.</returns>
-        public static bool operator !=(TouchButtons left, TouchButtons right)
+        public static bool operator !=(GamePadTouchButtons left, GamePadTouchButtons right)
         {
             return !(left == right);
         }
@@ -248,7 +248,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <returns>true if <paramref name="obj"/> is a <see cref="GamePadButtons"/> and has the same value as this instance; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            return (obj is TouchButtons) && (this == (TouchButtons)obj);
+            return (obj is GamePadTouchButtons) && (this == (GamePadTouchButtons)obj);
         }
 
         /// <summary>

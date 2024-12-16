@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+// Copyright (C)2022-2024 Nick Kastellanos
+
 namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
@@ -11,7 +13,7 @@ namespace Microsoft.Xna.Framework.Input
     /// This is implemented as a partial struct to allow for individual platforms
     /// to offer additional data without separate state queries to GamePad.
     /// </summary>
-    public partial struct GamePadState
+    public struct GamePadState
     {
         /// <summary>
         /// Gets a value indicating if the controller is connected.
@@ -28,7 +30,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Gets a structure that identifies what buttons on the controller are pressed.
         /// </summary>
-        /// <value>The buttons structure.</value>
+        /// <value>The GamePadButtons structure.</value>
         public GamePadButtons Buttons { get; internal set; }
 
         /// <summary>
@@ -85,7 +87,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         private Buttons GetVirtualButtons()
         {
-            var result = Buttons._buttons;
+            Buttons result = Buttons._buttons;
 
             result |= ThumbSticks._virtualButtons;
 
@@ -104,7 +106,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Determines whether specified input device buttons are pressed in this GamePadState.
         /// </summary>
-        /// <returns><c>true</c>, if button was pressed, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if button was pressed, <c>false</c> if button was released.</returns>
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {
@@ -112,9 +114,9 @@ namespace Microsoft.Xna.Framework.Input
         }
 
         /// <summary>
-        /// Determines whether specified input device buttons are released (not pressed) in this GamePadState.
+        /// Determines whether specified input device buttons are released in this GamePadState.
         /// </summary>
-        /// <returns><c>true</c>, if button was released (not pressed), <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if button was released, <c>false</c> if button was pressed.</returns>
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonUp(Buttons button)
         {
@@ -130,12 +132,13 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
         public static bool operator ==(GamePadState left, GamePadState right)
         {
-            return (left.IsConnected == right.IsConnected) &&
-                (left.PacketNumber == right.PacketNumber) &&
-                (left.Buttons == right.Buttons) &&
-                (left.DPad == right.DPad) &&
-                (left.ThumbSticks == right.ThumbSticks) &&
-                (left.Triggers == right.Triggers);
+            return (left.IsConnected == right.IsConnected)
+                && (left.PacketNumber == right.PacketNumber)
+                && (left.Buttons == right.Buttons)
+                && (left.DPad == right.DPad)
+                && (left.ThumbSticks == right.ThumbSticks)
+                && (left.Triggers == right.Triggers)
+                ;
         }
 
         /// <summary>
@@ -170,7 +173,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             unchecked
             {
-                var hash = PacketNumber;
+                int hash = PacketNumber;
                 hash = (hash * 397) ^ Buttons.GetHashCode();
                 hash = (hash * 397) ^ DPad.GetHashCode();
                 hash = (hash * 397) ^ ThumbSticks.GetHashCode();
