@@ -32,6 +32,15 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         public int PacketNumber { get; internal set; }
 
         /// <summary>
+        /// Gets a structure that identifies what buttons on the controller are pressed.
+        /// </summary>
+        /// <value>The GamePadButtons structure.</value>
+        public GamePadButtons Buttons
+        { 
+            get { return new GamePadButtons(this.TouchButtons._buttons); }
+        }
+
+        /// <summary>
         /// Gets a structure that identifies what buttons on the controller are pressed or touched.
         /// </summary>
         /// <value>The TouchButtons structure.</value>
