@@ -242,6 +242,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
 
             return "[GamePadState: IsConnected=" + (IsConnected ? "1" : "0") +
                    ", PacketNumber=" + PacketNumber.ToString("00000") +
+                   ", Buttons=" + Buttons +
                    ", TouchButtons=" + TouchButtons +
                    ", DPad=" + DPad +
                    ", ThumbSticks=" + ThumbSticks +

@@ -31,7 +31,16 @@ namespace Microsoft.Xna.Framework.Input
         /// Gets a structure that identifies what buttons on the controller are pressed.
         /// </summary>
         /// <value>The GamePadButtons structure.</value>
-        public GamePadButtons Buttons { get; internal set; }
+        public GamePadButtons Buttons
+        { 
+            get { return new GamePadButtons(this.TouchButtons._buttons); }
+        }
+
+        /// <summary>
+        /// Gets a structure that identifies what buttons on the controller are pressed or touched.
+        /// </summary>
+        /// <value>The TouchButtons structure.</value>
+        public GamePadTouchButtons TouchButtons { get; internal set; }
 
         /// <summary>
         /// Gets a structure that identifies what directions of the directional pad on the controller are pressed.
@@ -63,7 +72,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             ThumbSticks = thumbSticks;
             Triggers = triggers;
-            Buttons = buttons;
+            TouchButtons = new GamePadTouchButtons(buttons._buttons, default(Buttons));
             DPad = dPad;
             IsConnected = true;
         }
@@ -79,9 +88,13 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="buttons"> Array or parameter list of Buttons to initialize as pressed.</param>
         public GamePadState(Vector2 leftThumbStick, Vector2 rightThumbStick, float leftTrigger, float rightTrigger, params Buttons[] buttons) : this()
         {
+            Buttons buttonFlags = default;
+            foreach (Buttons b in buttons)
+                buttonFlags |= b;
+
             ThumbSticks = new GamePadThumbSticks(leftThumbStick, rightThumbStick);
             Triggers = new GamePadTriggers(leftTrigger, rightTrigger);
-            Buttons = new GamePadButtons(buttons);
+            TouchButtons = new GamePadTouchButtons(buttonFlags, default(Buttons));
             DPad = new GamePadDPad(buttons);
             IsConnected = true;
         }
@@ -89,11 +102,11 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Determines whether specified input device buttons are pressed in this GamePadState.
         /// </summary>
-        /// <returns><c>true</c> if button was pressed, <c>false</c> if button was released.</returns>
+        /// <returns><c>true</c> if button was pressed, <c>false</c> if button was released or touched.</returns>
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {
-            Buttons virtualButtons = Buttons._buttons
+            Buttons virtualButtons = TouchButtons._buttons
                                    | DPad._buttons
                                    | ThumbSticks._virtualButtons
                                    ;
@@ -103,15 +116,26 @@ namespace Microsoft.Xna.Framework.Input
         /// <summary>
         /// Determines whether specified input device buttons are released in this GamePadState.
         /// </summary>
-        /// <returns><c>true</c> if button was released, <c>false</c> if button was pressed.</returns>
+        /// <returns><c>true</c> if button was released or touched, <c>false</c> if button was pressed.</returns>
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonUp(Buttons button)
         {
-            Buttons virtualButtons = Buttons._buttons
+            Buttons virtualButtons = TouchButtons._buttons
                                    | DPad._buttons
                                    | ThumbSticks._virtualButtons
                                    ;
             return (virtualButtons & button) != button;
+        }
+
+        /// <summary>
+        /// Determines whether specified input device buttons are touched in this GamePadState.
+        /// </summary>
+        /// <returns><c>true</c> if button was touched, <c>false</c> if button was released or touched.</returns>
+        /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
+        public bool IsButtonTouched(Buttons button)
+        {
+            Buttons touchButtons = TouchButtons._touches & ~TouchButtons._buttons;
+            return (touchButtons & button) == button;
         }
 
         /// <summary>
@@ -125,7 +149,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             return (left.IsConnected == right.IsConnected)
                 && (left.PacketNumber == right.PacketNumber)
-                && (left.Buttons == right.Buttons)
+                && (left.TouchButtons == right.TouchButtons)
                 && (left.DPad == right.DPad)
                 && (left.ThumbSticks == right.ThumbSticks)
                 && (left.Triggers == right.Triggers)
@@ -165,7 +189,7 @@ namespace Microsoft.Xna.Framework.Input
             unchecked
             {
                 int hash = PacketNumber;
-                hash = (hash * 397) ^ Buttons.GetHashCode();
+                hash = (hash * 397) ^ TouchButtons.GetHashCode();
                 hash = (hash * 397) ^ DPad.GetHashCode();
                 hash = (hash * 397) ^ ThumbSticks.GetHashCode();
                 hash = (hash * 397) ^ Triggers.GetHashCode();
@@ -185,6 +209,7 @@ namespace Microsoft.Xna.Framework.Input
             return "[GamePadState: IsConnected=" + (IsConnected ? "1" : "0") +
                    ", PacketNumber=" + PacketNumber.ToString("00000") +
                    ", Buttons=" + Buttons +
+                   ", TouchButtons=" + TouchButtons +
                    ", DPad=" + DPad +
                    ", ThumbSticks=" + ThumbSticks +
                    ", Triggers=" + Triggers +
