@@ -226,7 +226,7 @@
 	<ProjectReference Include="XR\.CardboardLegacy\GoogleCardboard\GoogleCardboard.csproj">
 	</ProjectReference>
     <Compile Include="XR\.CardboardLegacy\ConcreteXRDevice.cs" />
-    <Compile Include="XR\.CardboardLegacy\HeadsetState.cs" />
+    <Compile Include="XR\.CardboardLegacy\CardboardHeadsetState.cs" />
     <Compile Include="XR\.CardboardLegacy\ConcreteXRFactory.cs" />
   </ItemGroup>
 
