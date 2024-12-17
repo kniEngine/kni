@@ -87,12 +87,11 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         private Buttons GetVirtualButtons()
         {
-            Buttons result = Buttons._buttons;
-
-            result |= ThumbSticks._virtualButtons;
-            result |= DPad.GetDPadButtons();
-
-            return result;
+            Buttons virtualButtons = Buttons._buttons
+                                   | DPad._buttons
+                                   | ThumbSticks._virtualButtons
+                                   ;
+            return virtualButtons;
         }
 
         /// <summary>
@@ -102,7 +101,8 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {
-            return (GetVirtualButtons() & button) == button;
+            Buttons virtualButtons = GetVirtualButtons();
+            return (virtualButtons & button) == button;
         }
 
         /// <summary>
@@ -112,7 +112,8 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonUp(Buttons button)
         {
-            return (GetVirtualButtons() & button) != button;
+            Buttons virtualButtons = GetVirtualButtons();
+            return (virtualButtons & button) != button;
         }
 
         /// <summary>

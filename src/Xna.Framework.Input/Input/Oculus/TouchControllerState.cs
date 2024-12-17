@@ -87,11 +87,10 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// </summary>
         private Buttons GetVirtualButtons()
         {
-            Buttons result = TouchButtons._buttons;
-
-            result |= ThumbSticks._virtualButtons;
-
-            return result;
+            Buttons virtualButtons = TouchButtons._buttons
+                                   | ThumbSticks._virtualButtons
+                                   ;
+            return virtualButtons;
         }
 
         /// <summary>
@@ -101,7 +100,8 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {
-            return (GetVirtualButtons() & button) == button;
+            Buttons virtualButtons = GetVirtualButtons();
+            return (virtualButtons & button) == button;
         }
 
         /// <summary>
@@ -111,7 +111,8 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonUp(Buttons button)
         {
-            return (GetVirtualButtons() & button) != button;
+            Buttons virtualButtons = GetVirtualButtons();
+            return (virtualButtons & button) != button;
         }
 
         /// <summary>
@@ -121,7 +122,8 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonTouched(Buttons button)
         {
-            return ((TouchButtons._touches & ~TouchButtons._buttons) & button) == button;
+            Buttons touchButtons = TouchButtons._touches & ~TouchButtons._buttons;
+            return (touchButtons & button) == button;
         }
 
         /// <summary>

@@ -6,29 +6,33 @@ namespace Microsoft.Xna.Framework.Input
 {
     public struct GamePadDPad
     {
+        private const Buttons ButtonsMask = (Buttons.DPadUp | Buttons.DPadDown | Buttons.DPadLeft | Buttons.DPadRight);
+
+        internal readonly Buttons _buttons;
+
         /// <summary>
         /// Gets a value indicating whether up is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the up button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Up { get; private set; }
+        public ButtonState Up { get { return (ButtonState)((int)(_buttons & Buttons.DPadUp) >> 0); } }
 
         /// <summary>
         /// Gets a value indicating whether down is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the down button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Down { get; private set; }
+        public ButtonState Down { get { return (ButtonState)((int)(_buttons & Buttons.DPadDown) >> 1); } }
 
         /// <summary>
         /// Gets a value indicating whether left is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the left button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Left { get; private set; }
+        public ButtonState Left { get { return (ButtonState)((int)(_buttons & Buttons.DPadLeft) >> 2); } }
 
         /// <summary>
         /// Gets a value indicating whether right is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the right button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Right { get; private set; }
+        public ButtonState Right { get { return (ButtonState)((int)(_buttons & Buttons.DPadRight) >> 3); } }
 
 
         /// <summary>
@@ -40,41 +44,24 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="rightValue">Current state of directional pad right.</param>
         public GamePadDPad(ButtonState upValue, ButtonState downValue, ButtonState leftValue, ButtonState rightValue) : this()
         {
-            this.Up = upValue;
-            this.Down = downValue;
-            this.Left = leftValue;
-            this.Right = rightValue;
+            int buttons = (int)upValue    << 0
+                        | (int)downValue  << 1
+                        | (int)leftValue  << 2
+                        | (int)rightValue << 3;
+            _buttons = (Buttons)buttons;
         }
 
         internal GamePadDPad(params Buttons[] buttons) : this()
         {
             foreach (Buttons button in buttons)
             {
-                if ((button & Buttons.DPadUp) == Buttons.DPadUp)
-                    this.Up = ButtonState.Pressed;
-                if ((button & Buttons.DPadDown) == Buttons.DPadDown)
-                    this.Down = ButtonState.Pressed;
-                if ((button & Buttons.DPadLeft) == Buttons.DPadLeft)
-                    this.Left = ButtonState.Pressed;
-                if ((button & Buttons.DPadRight) == Buttons.DPadRight)
-                    this.Right = ButtonState.Pressed;
+                _buttons |= button & ButtonsMask;
             }
         }
 
-        internal Buttons GetDPadButtons()
+        internal GamePadDPad(Buttons buttons) : this()
         {
-            Buttons result = default;
-
-            if (this.Up == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadUp;
-            if (this.Down == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadDown;
-            if (this.Left == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadLeft;
-            if (this.Right == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadRight;
-
-            return result;
+            _buttons |= buttons & ButtonsMask;
         }
 
         /// <summary>
@@ -85,11 +72,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <returns>true if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, false.</returns>
         public static bool operator ==(GamePadDPad left, GamePadDPad right)
         {
-            return (left.Up == right.Up)
-                && (left.Down == right.Down)
-                && (left.Left == right.Left)
-                && (left.Right == right.Right)
-                ;
+            return (left._buttons == right._buttons);
         }
 
         /// <summary>
@@ -120,11 +103,7 @@ namespace Microsoft.Xna.Framework.Input
         /// hash table.</returns>
         public override int GetHashCode()
         {
-            return (Up == ButtonState.Pressed    ? 8 : 0)
-                +  (Down == ButtonState.Pressed  ? 1 : 0)
-                +  (Left == ButtonState.Pressed  ? 2 : 0)
-                +  (Right == ButtonState.Pressed ? 4 : 0)
-                ;
+            return (int)_buttons;
         }
 
         /// <summary>
