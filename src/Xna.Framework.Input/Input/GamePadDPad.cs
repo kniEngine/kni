@@ -15,13 +15,6 @@ namespace Microsoft.Xna.Framework.Input
         public ButtonState Up
         {
             get { return ((_buttons & Buttons.DPadUp) == Buttons.DPadUp) ? ButtonState.Pressed : ButtonState.Released; }
-            private set
-            {
-                if (value == ButtonState.Pressed)
-                    _buttons |= Buttons.DPadUp;
-                else
-                    _buttons &= ~Buttons.DPadUp;
-            }
         }
 
         /// <summary>
@@ -31,13 +24,6 @@ namespace Microsoft.Xna.Framework.Input
         public ButtonState Down
         {
             get { return ((_buttons & Buttons.DPadDown) == Buttons.DPadDown) ? ButtonState.Pressed : ButtonState.Released; }
-            private set
-            {
-                if (value == ButtonState.Pressed)
-                    _buttons |= Buttons.DPadDown;
-                else
-                    _buttons &= ~Buttons.DPadDown;
-            }
         }
 
         /// <summary>
@@ -47,13 +33,6 @@ namespace Microsoft.Xna.Framework.Input
         public ButtonState Left
         {
             get { return ((_buttons & Buttons.DPadLeft) == Buttons.DPadLeft) ? ButtonState.Pressed : ButtonState.Released; }
-            private set
-            {
-                if (value == ButtonState.Pressed)
-                    _buttons |= Buttons.DPadLeft;
-                else
-                    _buttons &= ~Buttons.DPadLeft;
-            }
         }
 
         /// <summary>
@@ -63,13 +42,6 @@ namespace Microsoft.Xna.Framework.Input
         public ButtonState Right
         {
             get { return ((_buttons & Buttons.DPadRight) == Buttons.DPadRight) ? ButtonState.Pressed : ButtonState.Released; }
-            private set
-            {
-                if (value == ButtonState.Pressed)
-                    _buttons |= Buttons.DPadRight;
-                else
-                    _buttons &= ~Buttons.DPadRight;
-            }
         }
 
 
@@ -83,13 +55,13 @@ namespace Microsoft.Xna.Framework.Input
         public GamePadDPad(ButtonState upValue, ButtonState downValue, ButtonState leftValue, ButtonState rightValue) : this()
         {
             if (downValue == ButtonState.Pressed)
-                this.Up = ButtonState.Pressed;
+                _buttons |= Buttons.DPadUp;
             if (downValue == ButtonState.Pressed)
-                this.Down = ButtonState.Pressed;
+                _buttons |= Buttons.DPadDown;
             if (leftValue == ButtonState.Pressed)
-                this.Left = ButtonState.Pressed;
+                _buttons |= Buttons.DPadLeft;
             if (rightValue == ButtonState.Pressed)
-                this.Right = ButtonState.Pressed;
+                _buttons |= Buttons.DPadRight;
         }
 
         internal GamePadDPad(params Buttons[] buttons) : this()
@@ -97,13 +69,13 @@ namespace Microsoft.Xna.Framework.Input
             foreach (Buttons button in buttons)
             {
                 if ((button & Buttons.DPadUp) == Buttons.DPadUp)
-                    this.Up = ButtonState.Pressed;
+                    _buttons |= Buttons.DPadUp;
                 if ((button & Buttons.DPadDown) == Buttons.DPadDown)
-                    this.Down = ButtonState.Pressed;
+                    _buttons |= Buttons.DPadDown;
                 if ((button & Buttons.DPadLeft) == Buttons.DPadLeft)
-                    this.Left = ButtonState.Pressed;
+                    _buttons |= Buttons.DPadLeft;
                 if ((button & Buttons.DPadRight) == Buttons.DPadRight)
-                    this.Right = ButtonState.Pressed;
+                    _buttons |= Buttons.DPadRight;
             }
         }
 
