@@ -120,13 +120,14 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="triggers">Initial trigger state.</param>
         /// <param name="grips">Initial directional pad state.</param>
         /// <param name="touchButtons">Initial button state.</param>
-        public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, GamePadTouchButtons touchButtons) : this()
+        /// <param name="dPad">Initial directional pad state.</param>
+        public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, GamePadTouchButtons touchButtons, GamePadDPad dPad) : this()
         {
             ThumbSticks = thumbSticks;
             Triggers = triggers;
             Grips = grips;
             TouchButtons = touchButtons;
-            DPad = default(GamePadDPad);
+            DPad = dPad;
             IsConnected = true;
         }
 

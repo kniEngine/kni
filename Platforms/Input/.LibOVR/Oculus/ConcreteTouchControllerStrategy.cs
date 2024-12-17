@@ -210,7 +210,8 @@ namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
                 thumbSticks: thumbSticks,
                 triggers: triggers,
                 grips: grips,
-                touchButtons: new GamePadTouchButtons(buttons, touches)
+                touchButtons: new GamePadTouchButtons(buttons, touches),
+                dPad: default(GamePadDPad)
                 );
 
             return state;

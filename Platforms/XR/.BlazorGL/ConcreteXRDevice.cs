@@ -972,7 +972,8 @@ namespace Microsoft.Xna.Framework.XR
                 thumbSticks: thumbSticks,
                 triggers: triggers,
                 grips: grips,
-                touchButtons: new GamePadTouchButtons(buttons, touches)
+                touchButtons: new GamePadTouchButtons(buttons, touches),
+                dPad: default(GamePadDPad)
                 );
 
             return _touchControllerState;
