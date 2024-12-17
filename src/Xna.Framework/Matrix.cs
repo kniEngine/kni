@@ -722,6 +722,33 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Creates a new transform <see cref="Matrix"/> from a <see cref="Pose2"/>.
+        /// </summary>
+        /// <param name="pose">The <see cref="Pose2"/>.</param>
+        /// <returns>The transform <see cref="Matrix"/>.</returns>
+        public static Matrix CreateFromPose(Pose2 pose)
+        {
+            Matrix result;
+            result = Matrix.CreateRotationZ(pose.Orientation);
+            result.M41 = pose.Translation.X;
+            result.M42 = pose.Translation.Y;
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a new transform <see cref="Matrix"/> from a <see cref="Pose3"/>.
+        /// </summary>
+        /// <param name="pose">The <see cref="Pose3"/>.</param>
+        /// <returns>The transform <see cref="Matrix"/>.</returns>
+        public static Matrix CreateFromPose(Pose3 pose)
+        {
+            Matrix result;
+            result = Matrix.CreateFromQuaternion(pose.Orientation);
+            result.Translation = pose.Translation;
+            return result;
+        }
+
+        /// <summary>
         /// Creates a new rotation <see cref="Matrix"/> from the specified yaw, pitch and roll values.
         /// </summary>
         /// <param name="yaw">The yaw rotation value in radians.</param>
