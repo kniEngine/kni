@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><see cref="ButtonState.Pressed"/> if the up button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
         public ButtonState Up
         {
-            get { return ((_buttons & Buttons.DPadUp) == Buttons.DPadUp) ? ButtonState.Pressed : ButtonState.Released; }
+            get { return (ButtonState)((int)(_buttons & Buttons.DPadUp) >> 0); } 
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><see cref="ButtonState.Pressed"/> if the down button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
         public ButtonState Down
         {
-            get { return ((_buttons & Buttons.DPadDown) == Buttons.DPadDown) ? ButtonState.Pressed : ButtonState.Released; }
+            get { return (ButtonState)((int)(_buttons & Buttons.DPadDown) >> 1); }
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><see cref="ButtonState.Pressed"/> if the left button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
         public ButtonState Left
         {
-            get { return ((_buttons & Buttons.DPadLeft) == Buttons.DPadLeft) ? ButtonState.Pressed : ButtonState.Released; }
+            get { return (ButtonState)((int)(_buttons & Buttons.DPadLeft) >> 2); }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Input
         /// <value><see cref="ButtonState.Pressed"/> if the right button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
         public ButtonState Right
         {
-            get { return ((_buttons & Buttons.DPadRight) == Buttons.DPadRight) ? ButtonState.Pressed : ButtonState.Released; }
+            get { return (ButtonState)((int)(_buttons & Buttons.DPadRight) >> 3); }
         }
 
 
