@@ -448,6 +448,36 @@ namespace Microsoft.Xna.Framework.Input
         }
 
         /// <summary>
+        /// Gets a value indicating whether the controller has the left grip button.
+        /// </summary>
+        /// <value><c>true</c> if it has the left grip button; otherwise, <c>false</c>.</value>
+        public bool HasLeftGrip
+        {
+            get { return (_hasButtons & Buttons.LeftGrip) == Buttons.LeftGrip; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.LeftGrip)
+                            : (_hasButtons & ~Buttons.LeftGrip);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the controller has the right grip button.
+        /// </summary>
+        /// <value><c>true</c> if it has the right grip button; otherwise, <c>false</c>.</value>
+        public bool HasRightGrip
+        {
+            get { return (_hasButtons & Buttons.RightGrip) == Buttons.RightGrip; }
+            internal set
+            {
+                _hasButtons = (value)
+                            ? (_hasButtons | Buttons.RightGrip)
+                            : (_hasButtons & ~Buttons.RightGrip);
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the controller has the left vibration motor.
         /// </summary>
         /// <value><c>true</c> if it has the left vibration motor; otherwise, <c>false</c>.</value>

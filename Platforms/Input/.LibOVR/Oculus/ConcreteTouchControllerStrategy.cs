@@ -50,6 +50,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
                 buttons |= Buttons.Y;
                 buttons |= Buttons.LeftThumbstickLeft & Buttons.LeftThumbstickRight;
                 buttons |= Buttons.LeftThumbstickDown & Buttons.LeftThumbstickUp;
+                buttons |= Buttons.LeftTrigger & Buttons.LeftGrip;
                 //buttons |= Buttons.LeftStick;
                 //buttons |= Buttons.Start;
             }
@@ -60,6 +61,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
                 buttons |= Buttons.B;
                 buttons |= Buttons.RightThumbstickLeft & Buttons.RightThumbstickRight;
                 buttons |= Buttons.RightThumbstickDown & Buttons.RightThumbstickUp;
+                buttons |= Buttons.RightTrigger & Buttons.RightGrip;
                 //buttons |= Buttons.RightStick;
                 //buttons |= Buttons.Back;
             }
