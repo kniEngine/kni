@@ -776,24 +776,24 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">The viewing <see cref="Matrix"/> as an output parameter.</param>
         public static void CreateLookAt(ref Vector3 cameraPosition, ref Vector3 cameraTarget, ref Vector3 cameraUpVector, out Matrix result)
         {
-            var vector = Vector3.Normalize(cameraPosition - cameraTarget);
-            var vector2 = Vector3.Normalize(Vector3.Cross(cameraUpVector, vector));
-            var vector3 = Vector3.Cross(vector, vector2);
-            result.M11 = vector2.X;
-            result.M12 = vector3.X;
-            result.M13 = vector.X;
+            Vector3 vec3 = Vector3.Normalize(cameraPosition - cameraTarget);
+            Vector3 vec1 = Vector3.Normalize(Vector3.Cross(cameraUpVector, vec3));
+            Vector3 vec2 = Vector3.Cross(vec3, vec1);
+            result.M11 = vec1.X;
+            result.M12 = vec2.X;
+            result.M13 = vec3.X;
             result.M14 = 0f;
-            result.M21 = vector2.Y;
-            result.M22 = vector3.Y;
-            result.M23 = vector.Y;
+            result.M21 = vec1.Y;
+            result.M22 = vec2.Y;
+            result.M23 = vec3.Y;
             result.M24 = 0f;
-            result.M31 = vector2.Z;
-            result.M32 = vector3.Z;
-            result.M33 = vector.Z;
+            result.M31 = vec1.Z;
+            result.M32 = vec2.Z;
+            result.M33 = vec3.Z;
             result.M34 = 0f;
-            result.M41 = -Vector3.Dot(vector2, cameraPosition);
-            result.M42 = -Vector3.Dot(vector3, cameraPosition);
-            result.M43 = -Vector3.Dot(vector, cameraPosition);
+            result.M41 = -Vector3.Dot(vec1, cameraPosition);
+            result.M42 = -Vector3.Dot(vec2, cameraPosition);
+            result.M43 = -Vector3.Dot(vec3, cameraPosition);
             result.M44 = 1f;
         }
 
@@ -985,8 +985,8 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentException("nearPlaneDistance >= farPlaneDistance");
             }
 
-            var yScale = 1.0f / (float)Math.Tan((double)fieldOfView * 0.5f);
-            var xScale = yScale / aspectRatio;
+            float yScale = 1.0f / (float)Math.Tan((double)fieldOfView * 0.5f);
+            float xScale = yScale / aspectRatio;
 
             result.M11 = xScale;
             result.M12 = result.M13 = result.M14 = 0.0f;
@@ -1087,13 +1087,13 @@ namespace Microsoft.Xna.Framework
         {
             result = Matrix.Identity;
 
-            var val1 = (float)Math.Cos(radians);
-            var val2 = (float)Math.Sin(radians);
+            float cos = (float)Math.Cos(radians);
+            float sin = (float)Math.Sin(radians);
             
-            result.M22 = val1;
-            result.M23 = val2;
-            result.M32 = -val2;
-            result.M33 = val1;
+            result.M22 = cos;
+            result.M23 = sin;
+            result.M32 = -sin;
+            result.M33 = cos;
         }
 
         /// <summary>
@@ -1117,13 +1117,13 @@ namespace Microsoft.Xna.Framework
         {
             result = Matrix.Identity;
 
-            var val1 = (float)Math.Cos(radians);
-            var val2 = (float)Math.Sin(radians);
+            float cos = (float)Math.Cos(radians);
+            float sin = (float)Math.Sin(radians);
             
-            result.M11 = val1;
-            result.M13 = -val2;
-            result.M31 = val2;
-            result.M33 = val1;
+            result.M11 = cos;
+            result.M13 = -sin;
+            result.M31 = sin;
+            result.M33 = cos;
         }
 
         /// <summary>
@@ -1147,13 +1147,13 @@ namespace Microsoft.Xna.Framework
         {
             result = Matrix.Identity;
 
-            var val1 = (float)Math.Cos(radians);
-            var val2 = (float)Math.Sin(radians);
+            float cos = (float)Math.Cos(radians);
+            float sin = (float)Math.Sin(radians);
             
-            result.M11 = val1;
-            result.M12 = val2;
-            result.M21 = -val2;
-            result.M22 = val1;
+            result.M11 = cos;
+            result.M12 = sin;
+            result.M21 = -sin;
+            result.M22 = cos;
         }
 
         /// <summary>
