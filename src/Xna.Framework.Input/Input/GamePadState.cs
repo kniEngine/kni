@@ -61,6 +61,13 @@ namespace Microsoft.Xna.Framework.Input
         public GamePadTriggers Triggers { get; internal set; }
 
         /// <summary>
+        /// Gets a structure that identifies the position of Grips on the controller.
+        /// </summary>
+        /// <value>Positions of the grips.</value>
+        public GamePadTriggers Grips { get; internal set; }
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:Microsoft.Xna.Framework.Input.GamePadState"/> struct
         /// using the specified GamePadThumbSticks, GamePadTriggers, GamePadButtons, and GamePadDPad.
         /// </summary>
@@ -72,6 +79,7 @@ namespace Microsoft.Xna.Framework.Input
         {
             ThumbSticks = thumbSticks;
             Triggers = triggers;
+            Grips = default(GamePadTriggers);
             TouchButtons = new GamePadTouchButtons(buttons._buttons, default(Buttons));
             DPad = dPad;
             IsConnected = true;
@@ -94,8 +102,28 @@ namespace Microsoft.Xna.Framework.Input
 
             ThumbSticks = new GamePadThumbSticks(leftThumbStick, rightThumbStick);
             Triggers = new GamePadTriggers(leftTrigger, rightTrigger);
+            Grips = default(GamePadTriggers);
             TouchButtons = new GamePadTouchButtons(buttonFlags, default(Buttons));
             DPad = new GamePadDPad(buttons);
+            IsConnected = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Microsoft.Xna.Framework.Input.GamePadState"/> struct
+        /// using the specified GamePadThumbSticks, GamePadTriggers, GamePadButtons, and GamePadDPad.
+        /// </summary>
+        /// <param name="thumbSticks">Initial thumbstick state.</param>
+        /// <param name="triggers">Initial trigger state.</param>
+        /// <param name="grips">Initial directional pad state.</param>
+        /// <param name="touchButtons">Initial button state.</param>
+        /// <param name="dPad">Initial directional pad state.</param>
+        public GamePadState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, GamePadTouchButtons touchButtons, GamePadDPad dPad) : this()
+        {
+            ThumbSticks = thumbSticks;
+            Triggers = triggers;
+            Grips = grips;
+            TouchButtons = touchButtons;
+            DPad = dPad;
             IsConnected = true;
         }
 
@@ -153,6 +181,7 @@ namespace Microsoft.Xna.Framework.Input
                 && (left.DPad == right.DPad)
                 && (left.ThumbSticks == right.ThumbSticks)
                 && (left.Triggers == right.Triggers)
+                && (left.Grips == right.Grips)
                 ;
         }
 
@@ -193,6 +222,7 @@ namespace Microsoft.Xna.Framework.Input
                 hash = (hash * 397) ^ DPad.GetHashCode();
                 hash = (hash * 397) ^ ThumbSticks.GetHashCode();
                 hash = (hash * 397) ^ Triggers.GetHashCode();
+                hash = (hash * 397) ^ Grips.GetHashCode();
                 return hash;
             }
         }
@@ -213,6 +243,7 @@ namespace Microsoft.Xna.Framework.Input
                    ", DPad=" + DPad +
                    ", ThumbSticks=" + ThumbSticks +
                    ", Triggers=" + Triggers +
+                   ", Grips=" + Grips +
                    "]";
         }
     }
