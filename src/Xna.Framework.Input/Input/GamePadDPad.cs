@@ -14,37 +14,25 @@ namespace Microsoft.Xna.Framework.Input
         /// Gets a value indicating whether up is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the up button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Up
-        {
-            get { return (ButtonState)((int)(_buttons & Buttons.DPadUp) >> 0); } 
-        }
+        public ButtonState Up { get { return (ButtonState)((int)(_buttons & Buttons.DPadUp) >> 0); } }
 
         /// <summary>
         /// Gets a value indicating whether down is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the down button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Down
-        {
-            get { return (ButtonState)((int)(_buttons & Buttons.DPadDown) >> 1); }
-        }
+        public ButtonState Down { get { return (ButtonState)((int)(_buttons & Buttons.DPadDown) >> 1); } }
 
         /// <summary>
         /// Gets a value indicating whether left is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the left button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Left
-        {
-            get { return (ButtonState)((int)(_buttons & Buttons.DPadLeft) >> 2); }
-        }
+        public ButtonState Left { get { return (ButtonState)((int)(_buttons & Buttons.DPadLeft) >> 2); } }
 
         /// <summary>
         /// Gets a value indicating whether right is pressed on the directional pad.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the right button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
-        public ButtonState Right
-        {
-            get { return (ButtonState)((int)(_buttons & Buttons.DPadRight) >> 3); }
-        }
+        public ButtonState Right { get { return (ButtonState)((int)(_buttons & Buttons.DPadRight) >> 3); } }
 
 
         /// <summary>
