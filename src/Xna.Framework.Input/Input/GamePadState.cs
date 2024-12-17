@@ -77,21 +77,13 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="leftTrigger">Left trigger value. This value is clamped between 0.0 and 1.0.</param>
         /// <param name="rightTrigger">Right trigger value. This value is clamped between 0.0 and 1.0.</param>
         /// <param name="buttons"> Array or parameter list of Buttons to initialize as pressed.</param>
-        public GamePadState(Vector2 leftThumbStick, Vector2 rightThumbStick, float leftTrigger, float rightTrigger, params Buttons[] buttons)
-            : this(new GamePadThumbSticks(leftThumbStick, rightThumbStick), new GamePadTriggers(leftTrigger, rightTrigger), new GamePadButtons(buttons), new GamePadDPad(buttons))
+        public GamePadState(Vector2 leftThumbStick, Vector2 rightThumbStick, float leftTrigger, float rightTrigger, params Buttons[] buttons) : this()
         {
-        }
-
-        /// <summary>
-        /// Gets the button mask along with 'virtual buttons' like LeftThumbstickLeft.
-        /// </summary>
-        private Buttons GetVirtualButtons()
-        {
-            Buttons virtualButtons = Buttons._buttons
-                                   | DPad._buttons
-                                   | ThumbSticks._virtualButtons
-                                   ;
-            return virtualButtons;
+            ThumbSticks = new GamePadThumbSticks(leftThumbStick, rightThumbStick);
+            Triggers = new GamePadTriggers(leftTrigger, rightTrigger);
+            Buttons = new GamePadButtons(buttons);
+            DPad = new GamePadDPad(buttons);
+            IsConnected = true;
         }
 
         /// <summary>
@@ -101,7 +93,10 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {
-            Buttons virtualButtons = GetVirtualButtons();
+            Buttons virtualButtons = Buttons._buttons
+                                   | DPad._buttons
+                                   | ThumbSticks._virtualButtons
+                                   ;
             return (virtualButtons & button) == button;
         }
 
@@ -112,7 +107,10 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonUp(Buttons button)
         {
-            Buttons virtualButtons = GetVirtualButtons();
+            Buttons virtualButtons = Buttons._buttons
+                                   | DPad._buttons
+                                   | ThumbSticks._virtualButtons
+                                   ;
             return (virtualButtons & button) != button;
         }
 
