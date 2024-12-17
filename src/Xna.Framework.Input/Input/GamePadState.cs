@@ -90,15 +90,7 @@ namespace Microsoft.Xna.Framework.Input
             Buttons result = Buttons._buttons;
 
             result |= ThumbSticks._virtualButtons;
-
-            if (DPad.Up == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadUp;
-            if (DPad.Down == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadDown;
-            if (DPad.Left == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadLeft;
-            if (DPad.Right == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadRight;
+            result |= DPad.GetDPadButtons();
 
             return result;
         }

@@ -60,6 +60,22 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
+        internal Buttons GetDPadButtons()
+        {
+            Buttons result = default;
+
+            if (this.Up == ButtonState.Pressed)
+                result |= Microsoft.Xna.Framework.Input.Buttons.DPadUp;
+            if (this.Down == ButtonState.Pressed)
+                result |= Microsoft.Xna.Framework.Input.Buttons.DPadDown;
+            if (this.Left == ButtonState.Pressed)
+                result |= Microsoft.Xna.Framework.Input.Buttons.DPadLeft;
+            if (this.Right == ButtonState.Pressed)
+                result |= Microsoft.Xna.Framework.Input.Buttons.DPadRight;
+
+            return result;
+        }
+
         /// <summary>
         /// Determines whether two specified instances of <see cref="GamePadDPad"/> are equal.
         /// </summary>
