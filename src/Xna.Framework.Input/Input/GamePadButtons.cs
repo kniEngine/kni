@@ -96,6 +96,18 @@ namespace Microsoft.Xna.Framework.Input
         }
 
         /// <summary>
+        /// Gets a value indicating if the left grip button is pressed.
+        /// </summary>
+        /// <value><see cref="ButtonState.Pressed"/> if the left grip button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
+        public ButtonState LeftGrip
+        {
+            get
+            {
+                return ((_buttons & Buttons.LeftGrip) == Buttons.LeftGrip) ? ButtonState.Pressed : ButtonState.Released;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating if the left stick button is pressed.
         /// </summary>
         /// <value><see cref="ButtonState.Pressed"/> if the left stick button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
@@ -116,6 +128,18 @@ namespace Microsoft.Xna.Framework.Input
             get
             {
                 return ((_buttons & Buttons.RightShoulder) == Buttons.RightShoulder) ? ButtonState.Pressed : ButtonState.Released;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating if the right grip button is pressed.
+        /// </summary>
+        /// <value><see cref="ButtonState.Pressed"/> if the right grip button is pressed; otherwise, <see cref="ButtonState.Released"/>.</value>
+        public ButtonState RightGrip
+        {
+            get
+            {
+                return ((_buttons & Buttons.RightGrip) == Buttons.RightGrip) ? ButtonState.Pressed : ButtonState.Released;
             }
         }
 
