@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Microsoft.Xna.Framework.Input.Oculus
+namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
     /// A struct that represents the current button states for the controller.
@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         internal readonly Buttons _touches;
 
         /// <summary>
-        /// Gets a value indicating if the button A state.
+        /// Gets a value indicating if the button A is pressed or Touched.
         /// </summary>
         public TouchButtonState A
         {
@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the button B state.
+        /// Gets a value indicating if the button B is pressed or Touched.
         /// </summary>
         public TouchButtonState B
         {
@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the button Back state.
+        /// Gets a value indicating if the button Back is pressed or Touched.
         /// </summary>
         public TouchButtonState Back
         {
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the button X state.
+        /// Gets a value indicating if the button X is pressed or Touched.
         /// </summary>
         public TouchButtonState X
         {
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the button Y state.
+        /// Gets a value indicating if the button Y is pressed or Touched.
         /// </summary>
         public TouchButtonState Y
         {
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the button Start state.
+        /// Gets a value indicating if the button Start is pressed or Touched.
         /// </summary>
         public TouchButtonState Start
         {
@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the left shoulder button state.
+        /// Gets a value indicating if the left shoulder button is pressed or Touched.
         /// </summary>
         public TouchButtonState LeftShoulder
         {
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the left grip button state.
+        /// Gets a value indicating if the left grip button is pressed or Touched.
         /// </summary>
         public TouchButtonState LeftGrip
         {
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the left stick button state.
+        /// Gets a value indicating if the left stick button is pressed or Touched.
         /// </summary>
         public TouchButtonState LeftStick
         {
@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the left trigger button state.
+        /// Gets a value indicating if the left trigger button is pressed or Touched.
         /// </summary>
         public TouchButtonState LeftTrigger
         {
@@ -149,7 +149,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the right shoulder button state.
+        /// Gets a value indicating if the right shoulder button is pressed or Touched.
         /// </summary>
         public TouchButtonState RightShoulder
         {
@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the right grip button state.
+        /// Gets a value indicating if the right grip button is pressed or Touched.
         /// </summary>
         public TouchButtonState RightGrip
         {
@@ -175,7 +175,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the right stick button state.
+        /// Gets a value indicating if the right stick button is pressed or Touched.
         /// </summary>
         public TouchButtonState RightStick
         {
@@ -188,7 +188,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the right trigger button state.
+        /// Gets a value indicating if the right trigger button is pressed or Touched.
         /// </summary>
         public TouchButtonState RightTrigger
         {
@@ -201,7 +201,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets a value indicating if the guide button state.
+        /// Gets a value indicating if the guide button is pressed or Touched.
         /// </summary>
         public TouchButtonState BigButton
         {
@@ -270,15 +270,15 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             return "[GamePadButtons:" +
                 " A=" + (int)A +
                 ", B=" + (int)B +
-                ", Back=" + (int)Back +
                 ", X=" + (int)X +
                 ", Y=" + (int)Y +
                 ", Start=" + (int)Start +
-                ", LeftShoulder=" + (int)LeftShoulder +
-                ", LeftStick=" + (int)LeftStick +
-                ", RightShoulder=" + (int)RightShoulder +
-                ", RightStick=" + (int)RightStick +
+                ", Back=" + (int)Back +
                 ", BigButton=" + (int)BigButton +
+                ", LeftShoulder=" + (int)LeftShoulder +
+                ", RightShoulder=" + (int)RightShoulder +
+                ", LeftStick=" + (int)LeftStick +
+                ", RightStick=" + (int)RightStick +
                 "]";
         }
     }

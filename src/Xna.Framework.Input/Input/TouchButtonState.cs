@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Microsoft.Xna.Framework.Input.Oculus
+namespace Microsoft.Xna.Framework.Input
 {
     /// <summary>
     /// Defines a button state for buttons of mouse, gamepad or joystick.

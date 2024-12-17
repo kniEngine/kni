@@ -767,7 +767,7 @@ namespace Microsoft.Xna.Framework.XR
 
 
 
-        private TouchControllerState _touchControllerState;
+        private GamePadState _gamePadState;
         GamepadButton[] _lbuttons;
         float[] _laxes;
         GamepadButton[] _rbuttons;
@@ -790,6 +790,10 @@ namespace Microsoft.Xna.Framework.XR
                         buttons |= Buttons.Y;
                     if (_lbuttons != null && _lbuttons.Length >= 3)
                         buttons |= Buttons.LeftStick;
+                    if (_lbuttons != null)
+                        buttons |= Buttons.LeftTrigger;
+                    if (_lbuttons != null && _lbuttons.Length >= 1)
+                        buttons |= Buttons.LeftGrip;
                 }
             }
 
@@ -800,12 +804,16 @@ namespace Microsoft.Xna.Framework.XR
                     isConnected = true;
 
                     //// right buttons  
-                    if (_rbuttons != null && _rbuttons.Length >= 4 && _rbuttons[4].Pressed)
+                    if (_rbuttons != null && _rbuttons.Length >= 4)
                         buttons |= Buttons.A;
-                    if (_rbuttons != null && _rbuttons.Length >= 5 && _rbuttons[5].Pressed)
+                    if (_rbuttons != null && _rbuttons.Length >= 5)
                         buttons |= Buttons.B;
-                    if (_rbuttons != null && _rbuttons.Length >= 3 && _rbuttons[3].Pressed)
+                    if (_rbuttons != null && _rbuttons.Length >= 3)
                         buttons |= Buttons.RightStick;
+                    if (_rbuttons != null)
+                        buttons |= Buttons.RightTrigger;
+                    if (_rbuttons != null && _rbuttons.Length >= 1)
+                        buttons |= Buttons.RightGrip;
                 }
             }
 
@@ -822,14 +830,22 @@ namespace Microsoft.Xna.Framework.XR
                         buttons |= Buttons.Y;
                     if (_lbuttons != null && _lbuttons.Length >= 3)
                         buttons |= Buttons.LeftStick;
+                    if (_lbuttons != null)
+                        buttons |= Buttons.LeftTrigger;
+                    if (_lbuttons != null && _lbuttons.Length >= 1)
+                        buttons |= Buttons.LeftGrip;
 
                     //// right buttons  
-                    if (_rbuttons != null && _rbuttons.Length >= 4 && _rbuttons[4].Pressed)
+                    if (_rbuttons != null && _rbuttons.Length >= 4)
                         buttons |= Buttons.A;
-                    if (_rbuttons != null && _rbuttons.Length >= 5 && _rbuttons[5].Pressed)
+                    if (_rbuttons != null && _rbuttons.Length >= 5)
                         buttons |= Buttons.B;
-                    if (_rbuttons != null && _rbuttons.Length >= 3 && _rbuttons[3].Pressed)
+                    if (_rbuttons != null && _rbuttons.Length >= 3)
                         buttons |= Buttons.RightStick;
+                    if (_rbuttons != null)
+                        buttons |= Buttons.RightTrigger;
+                    if (_rbuttons != null && _rbuttons.Length >= 1)
+                        buttons |= Buttons.RightGrip;
                 }
             }
 
@@ -868,7 +884,7 @@ namespace Microsoft.Xna.Framework.XR
             }
         }
 
-        internal TouchControllerState GetTouchControllerState(TouchControllerType controllerType)
+        internal GamePadState GetGamePadState(TouchControllerType controllerType)
         {
             Vector2 leftStick = default;
             Vector2 rightStick = default;
@@ -968,14 +984,15 @@ namespace Microsoft.Xna.Framework.XR
             if (_rbuttons != null && _rbuttons.Length >= 1 && _rbuttons[1].Touched)
                 touches |= Buttons.RightGrip;
 
-            _touchControllerState = new TouchControllerState(
+            _gamePadState = new GamePadState(
                 thumbSticks: thumbSticks,
                 triggers: triggers,
                 grips: grips,
-                touchButtons: new GamePadTouchButtons(buttons, touches)
+                touchButtons: new GamePadTouchButtons(buttons, touches),
+                dPad: default(GamePadDPad)
                 );
 
-            return _touchControllerState;
+            return _gamePadState;
         }
 
         internal bool SetVibration(TouchControllerType controllerType, float amplitude)
