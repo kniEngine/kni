@@ -120,10 +120,10 @@ namespace Microsoft.Xna.Framework.Input
         /// hash table.</returns>
         public override int GetHashCode()
         {
-            return (Up == ButtonState.Pressed    ? 8 : 0)
-                +  (Down == ButtonState.Pressed  ? 1 : 0)
-                +  (Left == ButtonState.Pressed  ? 2 : 0)
-                +  (Right == ButtonState.Pressed ? 4 : 0)
+            return (Up == ButtonState.Pressed    ? 1 : 0)
+                +  (Down == ButtonState.Pressed  ? 2 : 0)
+                +  (Left == ButtonState.Pressed  ? 4 : 0)
+                +  (Right == ButtonState.Pressed ? 8 : 0)
                 ;
         }
 
