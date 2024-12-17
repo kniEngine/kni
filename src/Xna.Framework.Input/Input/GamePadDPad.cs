@@ -49,7 +49,14 @@ namespace Microsoft.Xna.Framework.Input
         {
             foreach (Buttons button in buttons)
             {
-                ConvertButtonToDirection(button);
+                if ((button & Buttons.DPadUp) == Buttons.DPadUp)
+                    this.Up = ButtonState.Pressed;
+                if ((button & Buttons.DPadDown) == Buttons.DPadDown)
+                    this.Down = ButtonState.Pressed;
+                if ((button & Buttons.DPadLeft) == Buttons.DPadLeft)
+                    this.Left = ButtonState.Pressed;
+                if ((button & Buttons.DPadRight) == Buttons.DPadRight)
+                    this.Right = ButtonState.Pressed;
             }
         }
 
@@ -110,18 +117,6 @@ namespace Microsoft.Xna.Framework.Input
         public override string ToString()
         {
             return "" + (int)Left + (int)Up + (int)Right + (int)Down;
-        }
-
-        private void ConvertButtonToDirection(Buttons button)
-        {
-            if ((button & Buttons.DPadUp) == Buttons.DPadUp)
-                Up = ButtonState.Pressed;
-            if ((button & Buttons.DPadDown) == Buttons.DPadDown)
-                Down = ButtonState.Pressed;
-            if ((button & Buttons.DPadLeft) == Buttons.DPadLeft)
-                Left = ButtonState.Pressed;
-            if ((button & Buttons.DPadRight) == Buttons.DPadRight)
-                Right = ButtonState.Pressed;
         }
     }
 }
