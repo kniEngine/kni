@@ -18,9 +18,11 @@ namespace Microsoft.Xna.Framework.XR
             switch (handIndex)
             {
                 case 0:
-                    return LHandTransform;
+                    Matrix lHandTransform = LHandTransform;
+                    return lHandTransform;
                 case 1:
-                    return RHandTransform;
+                    Matrix rHandTransform = RHandTransform;
+                    return rHandTransform;
                 default:
                     throw new IndexOutOfRangeException();
             }
@@ -31,9 +33,11 @@ namespace Microsoft.Xna.Framework.XR
             switch (handIndex)
             {
                 case 0:
-                    return LGripTransform;
+                    Matrix lGripTransform = LGripTransform;
+                    return lGripTransform;
                 case 1:
-                    return RGripTransform;
+                    Matrix rGripTransform = RGripTransform;
+                    return rGripTransform;
                 default:
                     throw new IndexOutOfRangeException();
             }

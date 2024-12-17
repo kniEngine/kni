@@ -16,11 +16,14 @@ namespace Microsoft.Xna.Framework.XR
             switch (eyeIndex)
             {
                 case XREye.None:
-                    return HeadTransform;
+                    Matrix headTransform = HeadTransform;
+                    return headTransform;
                 case XREye.Left:
-                    return LEyeTransform;
+                    Matrix lEyeTransform = LEyeTransform;
+                    return lEyeTransform;
                 case XREye.Right:
-                    return REyeTransform;
+                    Matrix rEyeTransform = REyeTransform;
+                    return rEyeTransform;
                 default:
                     throw new IndexOutOfRangeException();
             }
@@ -31,11 +34,14 @@ namespace Microsoft.Xna.Framework.XR
             switch (eyeIndex)
             {
                 case XREye.None:
-                    return Matrix.Invert(HeadTransform);
+                    Matrix headTransform = HeadTransform;
+                    return Matrix.Invert(headTransform);
                 case XREye.Left:
-                    return Matrix.Invert(LEyeTransform);
+                    Matrix lEyeTransform = LEyeTransform;
+                    return Matrix.Invert(lEyeTransform);
                 case XREye.Right:
-                    return Matrix.Invert(REyeTransform);
+                    Matrix rEyeTransform = REyeTransform;
+                    return Matrix.Invert(rEyeTransform);
                 default:
                     throw new IndexOutOfRangeException();
             }
