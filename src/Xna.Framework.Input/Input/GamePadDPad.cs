@@ -71,6 +71,13 @@ namespace Microsoft.Xna.Framework.Input
             }
         }
 
+        internal GamePadDPad(Buttons buttons) : this()
+        {
+            Buttons mask = (Buttons.DPadUp | Buttons.DPadDown | Buttons.DPadLeft | Buttons.DPadRight);
+
+            _buttons |= buttons & mask;
+        }
+
         /// <summary>
         /// Determines whether two specified instances of <see cref="GamePadDPad"/> are equal.
         /// </summary>
