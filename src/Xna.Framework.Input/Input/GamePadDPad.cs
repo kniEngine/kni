@@ -6,6 +6,8 @@ namespace Microsoft.Xna.Framework.Input
 {
     public struct GamePadDPad
     {
+        private const Buttons ButtonsMask = (Buttons.DPadUp | Buttons.DPadDown | Buttons.DPadLeft | Buttons.DPadRight);
+
         internal readonly Buttons _buttons;
 
         /// <summary>
@@ -63,19 +65,15 @@ namespace Microsoft.Xna.Framework.Input
 
         internal GamePadDPad(params Buttons[] buttons) : this()
         {
-            Buttons mask = (Buttons.DPadUp | Buttons.DPadDown | Buttons.DPadLeft | Buttons.DPadRight);
-
             foreach (Buttons button in buttons)
             {
-                _buttons |= button & mask;
+                _buttons |= button & ButtonsMask;
             }
         }
 
         internal GamePadDPad(Buttons buttons) : this()
         {
-            Buttons mask = (Buttons.DPadUp | Buttons.DPadDown | Buttons.DPadLeft | Buttons.DPadRight);
-
-            _buttons |= buttons & mask;
+            _buttons |= buttons & ButtonsMask;
         }
 
         /// <summary>
