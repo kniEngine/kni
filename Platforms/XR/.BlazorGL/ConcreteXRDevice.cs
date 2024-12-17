@@ -517,8 +517,8 @@ namespace Microsoft.Xna.Framework.XR
                         }
                     }
 
-                    XRRigidTransform gripTransform = default;
-                    XRRigidTransform pointerTransform = default;
+                    XRRigidTransform gripPose = default;
+                    XRRigidTransform pointerPose = default;
 
                     XRSpace gripSpace = inputSource.GripSpace;
                     if (gripSpace != null)
@@ -526,7 +526,7 @@ namespace Microsoft.Xna.Framework.XR
                         using (XRPose grip = _currentXRFrame.GetPose(gripSpace, referenceSpace))
                         {
                             if (grip != null)
-                                gripTransform = grip.Transform;
+                                gripPose = grip.Transform;
                         }
                     }
 
@@ -536,7 +536,7 @@ namespace Microsoft.Xna.Framework.XR
                         using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, referenceSpace))
                         {
                             if (pointer != null)
-                                pointerTransform = pointer.Transform;
+                                pointerPose = pointer.Transform;
                         }
                     }
 
@@ -544,27 +544,27 @@ namespace Microsoft.Xna.Framework.XR
                     {
                         case XRHandedness.Left:
                             {
-                                _handsState.LGripTransform = (Matrix)gripTransform.Matrix;
-                                _handsState.LHandTransform = (Matrix)pointerTransform.Matrix;
+                                _handsState.LGripTransform = (Matrix)gripPose.Matrix;
+                                _handsState.LHandTransform = (Matrix)pointerPose.Matrix;
                             }
                             break;
                         case XRHandedness.Right:
                             {
-                                _handsState.RGripTransform = (Matrix)gripTransform.Matrix;
-                                _handsState.RHandTransform = (Matrix)pointerTransform.Matrix;
+                                _handsState.RGripTransform = (Matrix)gripPose.Matrix;
+                                _handsState.RHandTransform = (Matrix)pointerPose.Matrix;
                             }
                             break;
                     }
                 }
 
-                using (XRViewerPose viewerPose = _currentXRFrame.GetViewerPose(referenceSpace))
+                using (XRViewerPose xrViewerPose = _currentXRFrame.GetViewerPose(referenceSpace))
                 {
-                    if (viewerPose != null)
+                    if (xrViewerPose != null)
                     {
-                        bool emulatedPosition = viewerPose.EmulatedPosition;
-                        SysNumerics.Vector4? angularVelocity = viewerPose.AngularVelocity;
-                        SysNumerics.Vector4? linearVelocity = viewerPose.LinearVelocity;
-                        XRRigidTransform transform = viewerPose.Transform;
+                        bool emulatedPosition = xrViewerPose.EmulatedPosition;
+                        SysNumerics.Vector4? angularVelocity = xrViewerPose.AngularVelocity;
+                        SysNumerics.Vector4? linearVelocity = xrViewerPose.LinearVelocity;
+                        XRRigidTransform viewerPose = xrViewerPose.Transform;
 
                         XRWebGLLayer glLayer = _currentRenderState.BaseLayer;
                         float? depthNear = _currentRenderState.DepthNear;
@@ -574,7 +574,7 @@ namespace Microsoft.Xna.Framework.XR
                         bool ign = glLayer.IgnoreDepthValues;
                         bool antialias = glLayer.Antialias;
 
-                        foreach (XRView xrView in viewerPose.Views)
+                        foreach (XRView xrView in xrViewerPose.Views)
                         {
                             WebXREye eye = xrView.Eye;
 
@@ -582,28 +582,28 @@ namespace Microsoft.Xna.Framework.XR
 
                             float aspect = (float)xrViewport.Width / (float)xrViewport.Height;
 
-                            XRRigidTransform viewTransform = xrView.Transform;
+                            XRRigidTransform viewPose = xrView.Transform;
 
-                            _headsetState.HeadTransform = (Matrix)transform.Matrix;
+                            _headsetState.HeadTransform = (Matrix)viewerPose.Matrix;
 
                             switch (eye)
                             {
                                 case WebXREye.None:
                                     {
                                         _lproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.HeadTransform = (Matrix)viewTransform.Matrix;
+                                        _headsetState.HeadTransform = (Matrix)viewPose.Matrix;
                                     }
                                     break;
                                 case WebXREye.Left:
                                     {
                                         _lproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.LEyeTransform = (Matrix)viewTransform.Matrix;
+                                        _headsetState.LEyeTransform = (Matrix)viewPose.Matrix;
                                     }
                                     break;
                                 case WebXREye.Right:
                                     {
                                         _rproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.REyeTransform = (Matrix)viewTransform.Matrix;
+                                        _headsetState.REyeTransform = (Matrix)viewPose.Matrix;
                                     }
                                     break;
                             }

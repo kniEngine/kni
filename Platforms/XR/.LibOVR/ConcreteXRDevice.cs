@@ -435,5 +435,16 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
                     ovrMatrix4f.M14, ovrMatrix4f.M24, ovrMatrix4f.M34, ovrMatrix4f.M44
                 );
         }
+
+        public static Quaternion ToQuaternion(this OvrQuatf ovrQuatf)
+        {
+            return new Quaternion(ovrQuatf.X, ovrQuatf.Y, ovrQuatf.Z, ovrQuatf.W);
+        }
+
+        public static Vector3 ToVector3(this OvrVector3f ovrVector3f)
+        {
+            return new Vector3(ovrVector3f.X, ovrVector3f.Y, ovrVector3f.Z);
+        }
+
     }
 }
