@@ -90,7 +90,7 @@ namespace Microsoft.Xna.Framework.Input
             Buttons result = Buttons._buttons;
 
             result |= ThumbSticks._virtualButtons;
-            result |= DPad.GetDPadButtons();
+            result |= DPad._buttons;
 
             return result;
         }
