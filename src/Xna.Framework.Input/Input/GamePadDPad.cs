@@ -70,13 +70,13 @@ namespace Microsoft.Xna.Framework.Input
             Buttons result = default;
 
             if (this.Up == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadUp;
+                result |= Buttons.DPadUp;
             if (this.Down == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadDown;
+                result |= Buttons.DPadDown;
             if (this.Left == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadLeft;
+                result |= Buttons.DPadLeft;
             if (this.Right == ButtonState.Pressed)
-                result |= Microsoft.Xna.Framework.Input.Buttons.DPadRight;
+                result |= Buttons.DPadRight;
 
             return result;
         }
