@@ -47,6 +47,12 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         public GamePadTouchButtons TouchButtons { get; internal set; }
 
         /// <summary>
+        /// Gets a structure that identifies what directions of the directional pad on the controller are pressed.
+        /// </summary>
+        /// <value>The directional pad structure.</value>
+        public GamePadDPad DPad { get; internal set; }
+
+        /// <summary>
         /// Gets a structure that indicates the position of the controller sticks (thumbsticks).
         /// </summary>
         /// <value>The thumbsticks position.</value>
@@ -71,6 +77,47 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// </summary>
         /// <param name="thumbSticks">Initial thumbstick state.</param>
         /// <param name="triggers">Initial trigger state.</param>
+        /// <param name="buttons">Initial button state.</param>
+        /// <param name="dPad">Initial directional pad state.</param>
+        public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadButtons buttons, GamePadDPad dPad) : this()
+        {
+            ThumbSticks = thumbSticks;
+            Triggers = triggers;
+            Grips = default(GamePadTriggers);
+            TouchButtons = new GamePadTouchButtons(buttons._buttons, default(Buttons));
+            DPad = dPad;
+            IsConnected = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Microsoft.Xna.Framework.Input.GamePadState"/> struct
+        /// using the specified stick, trigger, and button values.
+        /// </summary>
+        /// <param name="leftThumbStick">Left stick value. Each axis is clamped between −1.0 and 1.0.</param>
+        /// <param name="rightThumbStick">Right stick value. Each axis is clamped between −1.0 and 1.0.</param>
+        /// <param name="leftTrigger">Left trigger value. This value is clamped between 0.0 and 1.0.</param>
+        /// <param name="rightTrigger">Right trigger value. This value is clamped between 0.0 and 1.0.</param>
+        /// <param name="buttons"> Array or parameter list of Buttons to initialize as pressed.</param>
+        public TouchControllerState(Vector2 leftThumbStick, Vector2 rightThumbStick, float leftTrigger, float rightTrigger, params Buttons[] buttons) : this()
+        {
+            Buttons buttonFlags = default;
+            foreach (Buttons b in buttons)
+                buttonFlags |= b;
+
+            ThumbSticks = new GamePadThumbSticks(leftThumbStick, rightThumbStick);
+            Triggers = new GamePadTriggers(leftTrigger, rightTrigger);
+            Grips = default(GamePadTriggers);
+            TouchButtons = new GamePadTouchButtons(buttonFlags, default(Buttons));
+            DPad = new GamePadDPad(buttons);
+            IsConnected = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Microsoft.Xna.Framework.Input.GamePadState"/> struct
+        /// using the specified GamePadThumbSticks, GamePadTriggers, GamePadButtons, and GamePadDPad.
+        /// </summary>
+        /// <param name="thumbSticks">Initial thumbstick state.</param>
+        /// <param name="triggers">Initial trigger state.</param>
         /// <param name="grips">Initial directional pad state.</param>
         /// <param name="touchButtons">Initial button state.</param>
         public TouchControllerState(GamePadThumbSticks thumbSticks, GamePadTriggers triggers, GamePadTriggers grips, GamePadTouchButtons touchButtons) : this()
@@ -79,6 +126,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             Triggers = triggers;
             Grips = grips;
             TouchButtons = touchButtons;
+            DPad = default(GamePadDPad);
             IsConnected = true;
         }
 
@@ -90,6 +138,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         public bool IsButtonDown(Buttons button)
         {
             Buttons virtualButtons = TouchButtons._buttons
+                                   | DPad._buttons
                                    | ThumbSticks._virtualButtons
                                    ;
             return (virtualButtons & button) == button;
@@ -103,6 +152,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         public bool IsButtonUp(Buttons button)
         {
             Buttons virtualButtons = TouchButtons._buttons
+                                   | DPad._buttons
                                    | ThumbSticks._virtualButtons
                                    ;
             return (virtualButtons & button) != button;
@@ -131,6 +181,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             return (left.IsConnected == right.IsConnected)
                 && (left.PacketNumber == right.PacketNumber)
                 && (left.TouchButtons == right.TouchButtons)
+                && (left.DPad == right.DPad)
                 && (left.ThumbSticks == right.ThumbSticks)
                 && (left.Triggers == right.Triggers)
                 && (left.Grips == right.Grips)
@@ -171,6 +222,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             {
                 int hash = PacketNumber;
                 hash = (hash * 397) ^ TouchButtons.GetHashCode();
+                hash = (hash * 397) ^ DPad.GetHashCode();
                 hash = (hash * 397) ^ ThumbSticks.GetHashCode();
                 hash = (hash * 397) ^ Triggers.GetHashCode();
                 hash = (hash * 397) ^ Grips.GetHashCode();
@@ -190,6 +242,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             return "[GamePadState: IsConnected=" + (IsConnected ? "1" : "0") +
                    ", PacketNumber=" + PacketNumber.ToString("00000") +
                    ", TouchButtons=" + TouchButtons +
+                   ", DPad=" + DPad +
                    ", ThumbSticks=" + ThumbSticks +
                    ", Triggers=" + Triggers +
                    ", Grips=" + Grips +
