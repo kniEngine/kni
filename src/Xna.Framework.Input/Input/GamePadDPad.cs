@@ -54,28 +54,20 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="rightValue">Current state of directional pad right.</param>
         public GamePadDPad(ButtonState upValue, ButtonState downValue, ButtonState leftValue, ButtonState rightValue) : this()
         {
-            if (downValue == ButtonState.Pressed)
-                _buttons |= Buttons.DPadUp;
-            if (downValue == ButtonState.Pressed)
-                _buttons |= Buttons.DPadDown;
-            if (leftValue == ButtonState.Pressed)
-                _buttons |= Buttons.DPadLeft;
-            if (rightValue == ButtonState.Pressed)
-                _buttons |= Buttons.DPadRight;
+            int buttons = (int)upValue    << 0
+                        | (int)downValue  << 1
+                        | (int)leftValue  << 2
+                        | (int)rightValue << 3;
+            _buttons = (Buttons)buttons;
         }
 
         internal GamePadDPad(params Buttons[] buttons) : this()
         {
+            Buttons mask = (Buttons.DPadUp | Buttons.DPadDown | Buttons.DPadLeft | Buttons.DPadRight);
+
             foreach (Buttons button in buttons)
             {
-                if ((button & Buttons.DPadUp) == Buttons.DPadUp)
-                    _buttons |= Buttons.DPadUp;
-                if ((button & Buttons.DPadDown) == Buttons.DPadDown)
-                    _buttons |= Buttons.DPadDown;
-                if ((button & Buttons.DPadLeft) == Buttons.DPadLeft)
-                    _buttons |= Buttons.DPadLeft;
-                if ((button & Buttons.DPadRight) == Buttons.DPadRight)
-                    _buttons |= Buttons.DPadRight;
+                _buttons |= button & mask;
             }
         }
 
