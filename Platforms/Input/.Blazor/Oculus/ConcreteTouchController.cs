@@ -35,13 +35,13 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             this._xrDevice = xrDevice;
         }
 
-        TouchControllerState IOculusInput.GetState(TouchControllerType controllerType)
+        GamePadState IOculusInput.GetState(TouchControllerType controllerType)
         {
             var device = _xrDevice;
             if (device != null)
-                return device.GetTouchControllerState(controllerType);
+                return device.GetGamePadState(controllerType);
 
-            return new TouchControllerState();
+            return new GamePadState();
         }
 
         bool IOculusInput.SetVibration(TouchControllerType controllerType, float amplitude)

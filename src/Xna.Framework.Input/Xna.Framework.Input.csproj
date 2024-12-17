@@ -56,7 +56,6 @@
     <Compile Include="Input\GamePadTouchButtons.cs" />
     <Compile Include="Input\TouchButtonState.cs" />
     <Compile Include="Input\Oculus\TouchController.cs" />
-    <Compile Include="Input\Oculus\TouchControllerState.cs" />
     <Compile Include="Input\Oculus\TouchControllerType.cs" />
   </ItemGroup>
 

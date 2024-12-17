@@ -73,18 +73,18 @@ namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
             this._xrDevice = xrDevice;
         }
 
-        TouchControllerState IOculusInput.GetState(TouchControllerType controllerType)
+        GamePadState IOculusInput.GetState(TouchControllerType controllerType)
         {
             var session = _xrDevice.Session;
             if (session == null)
-                return new TouchControllerState();
+                return new GamePadState();
 
             OvrControllerType ovrControllerType = (OvrControllerType)controllerType;
 
             OvrControllerType connectedControllerTypes = session.GetConnectedControllerTypes();
             var isConnected = ((int)connectedControllerTypes & (int)ovrControllerType) != 0;
             if (!isConnected)
-                return new TouchControllerState();
+                return new GamePadState();
 
             OvrInputState ovrInputState;
             var ovrResult = session.GetInputState(ovrControllerType, out ovrInputState);
@@ -206,7 +206,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
                 touches |= Buttons.RightTrigger;
 
 
-            var state = new TouchControllerState(
+            GamePadState state = new GamePadState(
                 thumbSticks: thumbSticks,
                 triggers: triggers,
                 grips: grips,

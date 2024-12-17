@@ -158,9 +158,9 @@ namespace Microsoft.Xna.Framework.XR
             hasVoiceSupport = false;
         }
 
-        internal TouchControllerState GetTouchControllerState(TouchControllerType controllerType)
+        internal GamePadState GetGamePadState(TouchControllerType controllerType)
         {
-            return default(TouchControllerState);
+            return default(GamePadState);
         }
 
         internal bool SetVibration(TouchControllerType controllerType, float amplitude)

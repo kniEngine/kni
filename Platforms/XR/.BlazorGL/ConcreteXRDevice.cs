@@ -767,7 +767,7 @@ namespace Microsoft.Xna.Framework.XR
 
 
 
-        private TouchControllerState _touchControllerState;
+        private GamePadState _gamePadState;
         GamepadButton[] _lbuttons;
         float[] _laxes;
         GamepadButton[] _rbuttons;
@@ -868,7 +868,7 @@ namespace Microsoft.Xna.Framework.XR
             }
         }
 
-        internal TouchControllerState GetTouchControllerState(TouchControllerType controllerType)
+        internal GamePadState GetGamePadState(TouchControllerType controllerType)
         {
             Vector2 leftStick = default;
             Vector2 rightStick = default;
@@ -968,7 +968,7 @@ namespace Microsoft.Xna.Framework.XR
             if (_rbuttons != null && _rbuttons.Length >= 1 && _rbuttons[1].Touched)
                 touches |= Buttons.RightGrip;
 
-            _touchControllerState = new TouchControllerState(
+            _gamePadState = new GamePadState(
                 thumbSticks: thumbSticks,
                 triggers: triggers,
                 grips: grips,
@@ -976,7 +976,7 @@ namespace Microsoft.Xna.Framework.XR
                 dPad: default(GamePadDPad)
                 );
 
-            return _touchControllerState;
+            return _gamePadState;
         }
 
         internal bool SetVibration(TouchControllerType controllerType, float amplitude)

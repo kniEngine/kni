@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Platform.Input
         IOculusInput DeviceHandle { get; set; }
 
         GamePadCapabilities GetCapabilities(TouchControllerType type);
-        TouchControllerState GetState(TouchControllerType type);
+        GamePadState GetState(TouchControllerType type);
         bool SetVibration(TouchControllerType type, float amplitude);
     }
 }
@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             return ((ITouchController)TouchController.Current).GetCapabilities(type);
         }
 
-        public static TouchControllerState GetState(TouchControllerType type)
+        public static GamePadState GetState(TouchControllerType type)
         {
             return ((ITouchController)TouchController.Current).GetState(type);
         }
@@ -128,13 +128,13 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             }
         }
 
-        TouchControllerState ITouchController.GetState(TouchControllerType type)
+        GamePadState ITouchController.GetState(TouchControllerType type)
         {
             IOculusInput device = ((ITouchController)this).DeviceHandle;
             if (device != null)
                 return device.GetState(type);
             else
-                return new TouchControllerState();
+                return new GamePadState();
         }
 
         bool ITouchController.SetVibration(TouchControllerType type, float amplitude)

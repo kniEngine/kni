@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor,
             ref bool hasVoiceSupport
             );
-        TouchControllerState GetState(TouchControllerType type);
+        GamePadState GetState(TouchControllerType type);
         bool SetVibration(TouchControllerType type, float amplitude);
     }
 }

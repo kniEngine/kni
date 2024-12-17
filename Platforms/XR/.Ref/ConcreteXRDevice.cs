@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.XR
             throw new PlatformNotSupportedException();
         }
 
-        internal TouchControllerState GetTouchControllerState(TouchControllerType controllerType)
+        internal GamePadState GetGamePadState(TouchControllerType controllerType)
         {
             throw new PlatformNotSupportedException();
         }
