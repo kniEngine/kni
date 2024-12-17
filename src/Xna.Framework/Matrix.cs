@@ -1157,6 +1157,21 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Creates a new rotation <see cref="Matrix"/> around Z axis.
+        /// </summary>
+        /// <param name="rotation">A normalized Complex number.</param>
+        /// <returns>The rotation <see cref="Matrix"/> around Z axis.</returns>
+        public static Matrix CreateRotationZ(Complex rotation)
+        {
+            Matrix result = Matrix.Identity;
+            result.M11 = rotation.R;
+            result.M12 = rotation.i;
+            result.M21 = -rotation.i;
+            result.M22 = rotation.R;
+            return result;
+        }
+
+        /// <summary>
         /// Creates a new scaling <see cref="Matrix"/>.
         /// </summary>
         /// <param name="scale">Scale value for all three axises.</param>
