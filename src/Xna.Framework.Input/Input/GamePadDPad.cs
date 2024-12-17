@@ -6,7 +6,7 @@ namespace Microsoft.Xna.Framework.Input
 {
     public struct GamePadDPad
     {
-        internal Buttons _buttons;
+        internal readonly Buttons _buttons;
 
         /// <summary>
         /// Gets a value indicating whether up is pressed on the directional pad.
