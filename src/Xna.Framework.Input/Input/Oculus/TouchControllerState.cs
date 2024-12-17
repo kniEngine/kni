@@ -83,24 +83,15 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         }
 
         /// <summary>
-        /// Gets the button mask along with 'virtual buttons' like LeftThumbstickLeft.
-        /// </summary>
-        private Buttons GetVirtualButtons()
-        {
-            Buttons virtualButtons = TouchButtons._buttons
-                                   | ThumbSticks._virtualButtons
-                                   ;
-            return virtualButtons;
-        }
-
-        /// <summary>
         /// Determines whether specified input device buttons are pressed in this GamePadState.
         /// </summary>
         /// <returns><c>true</c> if button was pressed, <c>false</c> if button was released or touched.</returns>
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonDown(Buttons button)
         {
-            Buttons virtualButtons = GetVirtualButtons();
+            Buttons virtualButtons = TouchButtons._buttons
+                                   | ThumbSticks._virtualButtons
+                                   ;
             return (virtualButtons & button) == button;
         }
 
@@ -111,7 +102,9 @@ namespace Microsoft.Xna.Framework.Input.Oculus
         /// <param name="button">Buttons to query. Specify a single button, or combine multiple buttons using a bitwise OR operation.</param>
         public bool IsButtonUp(Buttons button)
         {
-            Buttons virtualButtons = GetVirtualButtons();
+            Buttons virtualButtons = TouchButtons._buttons
+                                   | ThumbSticks._virtualButtons
+                                   ;
             return (virtualButtons & button) != button;
         }
 
