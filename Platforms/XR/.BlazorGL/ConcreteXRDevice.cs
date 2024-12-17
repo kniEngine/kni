@@ -1046,4 +1046,17 @@ namespace Microsoft.Xna.Framework.XR
         }
 
     }
+
+
+    internal static class OvrExtensions
+    {
+        public static Pose3 ToPose3(this XRRigidTransform ovrPosef)
+        {
+            return new Pose3(
+                        (Quaternion)ovrPosef.Orientation,
+                        new Vector3(ovrPosef.Position.X, ovrPosef.Position.Y, ovrPosef.Position.Z)
+                );
+        }
+    }
+
 }

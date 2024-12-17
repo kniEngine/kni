@@ -446,5 +446,13 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             return new Vector3(ovrVector3f.X, ovrVector3f.Y, ovrVector3f.Z);
         }
 
+        public static Pose3 ToPose3(this OvrPosef ovrPosef)
+        {
+            return new Pose3(
+                        ovrPosef.Orientation.ToQuaternion(),
+                        ovrPosef.Position.ToVector3()
+                );
+        }
+
     }
 }
