@@ -159,9 +159,9 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
             _headsetState.REyeTransform = Matrix.CreateFromPose(REyePose);
 
             Pose3 LHandPose = trackingState.HandPoses[0].ThePose.ToPose3();
-            _handsState.LHandTransform = Matrix.CreateFromPose(LHandPose);
+            _handsState.LHandPose = LHandPose;
             Pose3 RHandPose = trackingState.HandPoses[1].ThePose.ToPose3();
-            _handsState.RHandTransform = Matrix.CreateFromPose(RHandPose);
+            _handsState.RHandPose = RHandPose;
 
             return ovrResult;
         }
