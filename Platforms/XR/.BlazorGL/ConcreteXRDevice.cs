@@ -544,14 +544,14 @@ namespace Microsoft.Xna.Framework.XR
                     {
                         case XRHandedness.Left:
                             {
-                                _handsState.LGripTransform = (Matrix)gripPose.Matrix;
-                                _handsState.LHandTransform = (Matrix)pointerPose.Matrix;
+                                _handsState.LGripTransform = Matrix.CreateFromPose(gripPose.ToPose3());
+                                _handsState.LHandTransform = Matrix.CreateFromPose(pointerPose.ToPose3());
                             }
                             break;
                         case XRHandedness.Right:
                             {
-                                _handsState.RGripTransform = (Matrix)gripPose.Matrix;
-                                _handsState.RHandTransform = (Matrix)pointerPose.Matrix;
+                                _handsState.RGripTransform = Matrix.CreateFromPose(gripPose.ToPose3());
+                                _handsState.RHandTransform = Matrix.CreateFromPose(pointerPose.ToPose3());
                             }
                             break;
                     }
@@ -584,26 +584,26 @@ namespace Microsoft.Xna.Framework.XR
 
                             XRRigidTransform viewPose = xrView.Transform;
 
-                            _headsetState.HeadTransform = (Matrix)viewerPose.Matrix;
+                            _headsetState.HeadTransform = Matrix.CreateFromPose(viewerPose.ToPose3());
 
                             switch (eye)
                             {
                                 case WebXREye.None:
                                     {
                                         _lproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.HeadTransform = (Matrix)viewPose.Matrix;
+                                        _headsetState.HeadTransform = Matrix.CreateFromPose(viewPose.ToPose3());
                                     }
                                     break;
                                 case WebXREye.Left:
                                     {
                                         _lproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.LEyeTransform = (Matrix)viewPose.Matrix;
+                                        _headsetState.LEyeTransform = Matrix.CreateFromPose(viewPose.ToPose3());
                                     }
                                     break;
                                 case WebXREye.Right:
                                     {
                                         _rproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.REyeTransform = (Matrix)viewPose.Matrix;
+                                        _headsetState.REyeTransform = Matrix.CreateFromPose(viewPose.ToPose3());
                                     }
                                     break;
                             }
