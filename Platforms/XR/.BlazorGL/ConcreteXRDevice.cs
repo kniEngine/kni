@@ -579,26 +579,26 @@ namespace Microsoft.Xna.Framework.XR
 
                             XRRigidTransform viewPose = xrView.Transform;
 
-                            _headsetState.HeadTransform = Matrix.CreateFromPose(viewerPose.ToPose3());
+                            _headsetState.HeadPose = viewerPose.ToPose3();
 
                             switch (eye)
                             {
                                 case WebXREye.None:
                                     {
                                         _lproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.HeadTransform = Matrix.CreateFromPose(viewPose.ToPose3());
+                                        _headsetState.HeadPose = viewPose.ToPose3();
                                     }
                                     break;
                                 case WebXREye.Left:
                                     {
                                         _lproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.LEyeTransform = Matrix.CreateFromPose(viewPose.ToPose3());
+                                        _headsetState.LEyePose = viewPose.ToPose3();
                                     }
                                     break;
                                 case WebXREye.Right:
                                     {
                                         _rproj = (Matrix)xrView.ProjectionMatrix;
-                                        _headsetState.REyeTransform = Matrix.CreateFromPose(viewPose.ToPose3());
+                                        _headsetState.REyePose = viewPose.ToPose3();
                                     }
                                     break;
                             }

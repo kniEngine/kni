@@ -152,11 +152,11 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
 
             _statusFlags = trackingState.StatusFlags;
             Pose3 HeadPose = trackingState.HeadPose.ThePose.ToPose3();
-            _headsetState.HeadTransform = Matrix.CreateFromPose(HeadPose);
+            _headsetState.HeadPose = HeadPose;
             Pose3 LEyePose = eyePoses[0].ToPose3();
-            _headsetState.LEyeTransform = Matrix.CreateFromPose(LEyePose);
+            _headsetState.LEyePose = LEyePose;
             Pose3 REyePose = eyePoses[1].ToPose3();
-            _headsetState.REyeTransform = Matrix.CreateFromPose(REyePose);
+            _headsetState.REyePose = REyePose;
 
             Pose3 LHandPose = trackingState.HandPoses[0].ThePose.ToPose3();
             _handsState.LHandPose = LHandPose;

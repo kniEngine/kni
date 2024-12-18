@@ -7,22 +7,22 @@ namespace Microsoft.Xna.Framework.XR
 {
     public struct HeadsetState
     {
-        public Matrix HeadTransform;
-        public Matrix LEyeTransform;
-        public Matrix REyeTransform;
+        public Pose3 HeadPose;
+        public Pose3 LEyePose;
+        public Pose3 REyePose;
 
         public Matrix GetEyeTransform(XREye eyeIndex)
         {
             switch (eyeIndex)
             {
                 case XREye.None:
-                    Matrix headTransform = HeadTransform;
+                    Matrix headTransform = Matrix.CreateFromPose(HeadPose);
                     return headTransform;
                 case XREye.Left:
-                    Matrix lEyeTransform = LEyeTransform;
+                    Matrix lEyeTransform = Matrix.CreateFromPose(LEyePose);
                     return lEyeTransform;
                 case XREye.Right:
-                    Matrix rEyeTransform = REyeTransform;
+                    Matrix rEyeTransform = Matrix.CreateFromPose(REyePose);
                     return rEyeTransform;
                 default:
                     throw new IndexOutOfRangeException();
@@ -34,13 +34,13 @@ namespace Microsoft.Xna.Framework.XR
             switch (eyeIndex)
             {
                 case XREye.None:
-                    Matrix headTransform = HeadTransform;
+                    Matrix headTransform = Matrix.CreateFromPose(HeadPose);
                     return Matrix.Invert(headTransform);
                 case XREye.Left:
-                    Matrix lEyeTransform = LEyeTransform;
+                    Matrix lEyeTransform = Matrix.CreateFromPose(LEyePose);
                     return Matrix.Invert(lEyeTransform);
                 case XREye.Right:
-                    Matrix rEyeTransform = REyeTransform;
+                    Matrix rEyeTransform = Matrix.CreateFromPose(REyePose);
                     return Matrix.Invert(rEyeTransform);
                 default:
                     throw new IndexOutOfRangeException();

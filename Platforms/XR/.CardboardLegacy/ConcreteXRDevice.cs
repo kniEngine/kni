@@ -93,10 +93,20 @@ namespace Microsoft.Xna.Framework.XR
         {
             HeadsetState headsetState = default;
 
-            //TODO: get HeadTransform from VrRendererOnDrawFrame(VRCardboard.HeadTransform headTransform, ...)
-            headsetState.HeadTransform = Matrix.Identity;
-            headsetState.LEyeTransform = Matrix.Invert(_headsetState.LeftEye.View);
-            headsetState.REyeTransform = Matrix.Invert(_headsetState.RightEye.View);
+            if (_headsetState.LeftEye.View == default(Matrix))
+                return default(HeadsetState);
+
+            //TODO: get HeadPose from VrRendererOnDrawFrame(VRCardboard.HeadTransform headTransform, ...)
+            headsetState.HeadPose = Pose3.Identity;
+
+            Matrix LEyeTransform = Matrix.Invert(_headsetState.LeftEye.View);
+            Matrix REyeTransform = Matrix.Invert(_headsetState.RightEye.View);
+            Pose3 LEyePose = default;
+            Pose3 REyePose = default;
+            LEyeTransform.Decompose(out _, out LEyePose.Orientation, out LEyePose.Translation);
+            REyeTransform.Decompose(out _, out REyePose.Orientation, out REyePose.Translation);
+            headsetState.LEyePose = LEyePose;
+            headsetState.REyePose = REyePose;
 
             return headsetState;
         }
