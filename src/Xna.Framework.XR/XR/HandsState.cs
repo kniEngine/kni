@@ -18,11 +18,9 @@ namespace Microsoft.Xna.Framework.XR
             switch (handIndex)
             {
                 case 0:
-                    Matrix lHandTransform = Matrix.CreateFromPose(LHandPose);
-                    return lHandTransform;
+                    return Matrix.CreateFromPose(LHandPose);
                 case 1:
-                    Matrix rHandTransform = Matrix.CreateFromPose(RHandPose);
-                    return rHandTransform;
+                    return Matrix.CreateFromPose(RHandPose);
                 default:
                     throw new IndexOutOfRangeException();
             }
@@ -33,11 +31,9 @@ namespace Microsoft.Xna.Framework.XR
             switch (handIndex)
             {
                 case 0:
-                    Matrix lGripTransform = Matrix.CreateFromPose(LGripPose);
-                    return lGripTransform;
+                    return Matrix.CreateFromPose(LGripPose);
                 case 1:
-                    Matrix rGripTransform = Matrix.CreateFromPose(RGripPose);
-                    return rGripTransform;
+                    return Matrix.CreateFromPose(RGripPose);
                 default:
                     throw new IndexOutOfRangeException();
             }

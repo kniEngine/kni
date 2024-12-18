@@ -16,8 +16,7 @@ namespace Microsoft.Xna.Framework.XR
             switch (eyeIndex)
             {
                 case XREye.None:
-                    Matrix headTransform = Matrix.CreateFromPose(HeadPose);
-                    return headTransform;
+                    return Matrix.CreateFromPose(HeadPose);
                 case XREye.Left:
                     Matrix lEyeTransform = Matrix.CreateFromPose(LEyePose);
                     return lEyeTransform;
