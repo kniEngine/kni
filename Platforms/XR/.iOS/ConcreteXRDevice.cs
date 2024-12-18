@@ -65,10 +65,6 @@ namespace Microsoft.Xna.Framework.XR
 
             this._graphics = graphics;
 
-            this._handsState.LGripTransform = Matrix.Identity;
-            this._handsState.RGripTransform = Matrix.Identity;
-            this._handsState.LHandTransform = Matrix.Identity;
-            this._handsState.RHandTransform = Matrix.Identity;
         }
 
         public override int BeginSessionAsync(XRSessionMode sessionMode)

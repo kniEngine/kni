@@ -7,22 +7,20 @@ namespace Microsoft.Xna.Framework.XR
 {
     public struct HandsState
     {
-        public Matrix LHandTransform;
-        public Matrix RHandTransform;
-        
-        public Matrix LGripTransform;
-        public Matrix RGripTransform;
+        public Pose3 LHandPose;
+        public Pose3 RHandPose;
+
+        public Pose3 LGripPose;
+        public Pose3 RGripPose;
 
         public Matrix GetHandTransform(int handIndex)
         {
             switch (handIndex)
             {
                 case 0:
-                    Matrix lHandTransform = LHandTransform;
-                    return lHandTransform;
+                    return Matrix.CreateFromPose(LHandPose);
                 case 1:
-                    Matrix rHandTransform = RHandTransform;
-                    return rHandTransform;
+                    return Matrix.CreateFromPose(RHandPose);
                 default:
                     throw new IndexOutOfRangeException();
             }
@@ -33,11 +31,9 @@ namespace Microsoft.Xna.Framework.XR
             switch (handIndex)
             {
                 case 0:
-                    Matrix lGripTransform = LGripTransform;
-                    return lGripTransform;
+                    return Matrix.CreateFromPose(LGripPose);
                 case 1:
-                    Matrix rGripTransform = RGripTransform;
-                    return rGripTransform;
+                    return Matrix.CreateFromPose(RGripPose);
                 default:
                     throw new IndexOutOfRangeException();
             }
