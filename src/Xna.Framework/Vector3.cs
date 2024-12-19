@@ -1093,6 +1093,20 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Creates a new <see cref="Vector3"/> that contains a transformation of 3d-vector by the specified <see cref="Pose3"/>, representing the rotation and translation.
+        /// </summary>
+        /// <param name="value">Source <see cref="Vector3"/>.</param>
+        /// <param name="pose">The <see cref="Pose3"/> which contains rotation and translation transformation.</param>
+        /// <returns>Transformed <see cref="Vector3"/>.</returns>
+        public static Vector3 Transform(Vector3 value, Pose3 pose)
+        {
+            Vector3 result;
+            Vector3.Transform(ref value, ref pose.Orientation, out result);
+            Vector3.Add(ref result, ref pose.Translation, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Apply transformation on vectors within array of <see cref="Vector3"/> by the specified <see cref="Matrix"/> and places the results in an another array.
         /// </summary>
         /// <param name="sourceArray">Source array.</param>
