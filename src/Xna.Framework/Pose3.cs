@@ -82,6 +82,21 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Creates a new <see cref="Pose3"/> that contains a multiplication of two poses.
+        /// </summary>
+        /// <param name="left">Source <see cref="Pose3"/>.</param>
+        /// <param name="right">Source <see cref="Pose3"/>.</param>
+        /// <returns>The result of the pose multiplication.</returns>
+        public static Pose3 Multiply(Pose3 left, Pose3 right)
+        {
+            Pose3 result;
+            result.Orientation = Quaternion.Multiply(left.Orientation, right.Orientation);
+            result.Translation = Vector3.Transform(left.Translation, right);
+            result._padw = default;
+            return result;
+        }
+
+        /// <summary>
         /// Deconstruction method for <see cref="Pose3"/>.
         /// </summary>
         /// <param name="orientation">The orientation of this <see cref="Pose3" />.</param>
@@ -93,6 +108,19 @@ namespace Microsoft.Xna.Framework
         }
 
         #region Operators
+
+        /// <summary>
+        /// Multiplies two poses.
+        /// </summary>
+        /// <param name="left">Source <see cref="Pose3"/> on the left of the mul sign.</param>
+        /// <param name="right">Source <see cref="Pose3"/> on the right of the mul sign.</param>
+        /// <returns>Result of the poses multiplication.</returns>
+        public static Pose3 operator *(Pose3 left, Pose3 right)
+        {
+            Pose3 result;
+            result = Pose3.Multiply(left, right);
+            return result;
+        }
 
         /// <summary>
         /// Compares whether two <see cref="Pose3"/> instances are equal.

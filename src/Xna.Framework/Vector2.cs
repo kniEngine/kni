@@ -1087,6 +1087,20 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Creates a new <see cref="Vector2"/> that contains a transformation of 2d-vector by the specified <see cref="Pose2"/> number.
+        /// </summary>
+        /// <param name="value">Source <see cref="Vector2"/>.</param>
+        /// <param name="pose">The transformation <see cref="Pose2"/> which contains rotation and translation transformation.</param>
+        /// <returns>Transformed <see cref="Vector2"/>.</returns>
+        public static Vector2 Transform(Vector2 value, Pose2 pose)
+        {
+            Vector2 result;
+            Vector2.Transform(ref value, ref pose.Orientation, out result);
+            Vector2.Add(ref result, ref pose.Translation, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Apply transformation on vectors within array of <see cref="Vector2"/> by the specified <see cref="Matrix"/> and places the results in an another array.
         /// </summary>
         /// <param name="sourceArray">Source array.</param>

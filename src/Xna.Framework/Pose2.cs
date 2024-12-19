@@ -79,6 +79,20 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Creates a new <see cref="Pose2"/> that contains a multiplication of two poses.
+        /// </summary>
+        /// <param name="left">Source <see cref="Pose2"/>.</param>
+        /// <param name="right">Source <see cref="Pose2"/>.</param>
+        /// <returns>The result of the pose multiplication.</returns>
+        public static Pose2 Multiply(Pose2 left, Pose2 right)
+        {
+            Pose2 result;
+            result.Orientation = Complex.Multiply(left.Orientation, right.Orientation);
+            result.Translation = Vector2.Transform(left.Translation, right);
+            return result;
+        }
+
+        /// <summary>
         /// Deconstruction method for <see cref="Pose2"/>.
         /// </summary>
         /// <param name="orientation">The orientation of this <see cref="Pose2" />.</param>
@@ -90,6 +104,19 @@ namespace Microsoft.Xna.Framework
         }
 
         #region Operators
+
+        /// <summary>
+        /// Multiplies two poses.
+        /// </summary>
+        /// <param name="left">Source <see cref="Pose2"/> on the left of the mul sign.</param>
+        /// <param name="right">Source <see cref="Pose2"/> on the right of the mul sign.</param>
+        /// <returns>Result of the poses multiplication.</returns>
+        public static Pose2 operator *(Pose2 left, Pose2 right)
+        {
+            Pose2 result;
+            result = Pose2.Multiply(left, right);
+            return result;
+        }
 
         /// <summary>
         /// Compares whether two <see cref="Pose2"/> instances are equal.
