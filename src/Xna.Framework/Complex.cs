@@ -292,7 +292,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="value">The complex number which values will be used to create the conjugated version.</param>
         /// <param name="result">The conjugated version of the specified complex number as an output parameter.</param>
-        public static void Conjugate(ref Complex value, ref Complex result)
+        public static void Conjugate(ref Complex value, out Complex result)
         {
             result = new Complex(value.R, -value.i);
         }
@@ -312,7 +312,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="value">Source <see cref="Complex"/>.</param>
         /// <param name="result">The result of the complex number negation as an output parameter.</param>
-        public static void Negate(ref Complex value, ref Complex result)
+        public static void Negate(ref Complex value, out Complex result)
         {
             result = new Complex(-value.R, -value.i);
         }
@@ -333,7 +333,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="value">Source <see cref="Complex"/>.</param>
         /// <param name="result">The unit length complex number as an output parameter.</param>
-        public static void Normalize(ref Complex value, ref Complex result)
+        public static void Normalize(ref Complex value, out Complex result)
         {
             float mag = value.Magnitude;
             result = new Complex(value.R / mag, -value.i / mag);
