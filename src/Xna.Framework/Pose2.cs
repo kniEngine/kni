@@ -66,6 +66,19 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Returns the inverse pose, which represents the opposite transformation.
+        /// </summary>
+        /// <param name="value">Source <see cref="Pose2"/>.</param>
+        /// <returns>The inverse pose.</returns>
+        public static Pose2 Inverse(Pose2 value)
+        {
+            Pose2 result;
+            result.Orientation = Complex.Conjugate(value.Orientation);
+            result.Translation = Vector2.Transform(-value.Translation, result.Orientation);
+            return result;
+        }
+
+        /// <summary>
         /// Deconstruction method for <see cref="Pose2"/>.
         /// </summary>
         /// <param name="orientation">The orientation of this <see cref="Pose2" />.</param>
