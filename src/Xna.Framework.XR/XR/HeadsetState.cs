@@ -18,11 +18,9 @@ namespace Microsoft.Xna.Framework.XR
                 case XREye.None:
                     return Matrix.CreateFromPose(HeadPose);
                 case XREye.Left:
-                    Matrix lEyeTransform = Matrix.CreateFromPose(LEyePose);
-                    return lEyeTransform;
+                    return Matrix.CreateFromPose(LEyePose);
                 case XREye.Right:
-                    Matrix rEyeTransform = Matrix.CreateFromPose(REyePose);
-                    return rEyeTransform;
+                    return Matrix.CreateFromPose(REyePose);
                 default:
                     throw new IndexOutOfRangeException();
             }
@@ -33,14 +31,14 @@ namespace Microsoft.Xna.Framework.XR
             switch (eyeIndex)
             {
                 case XREye.None:
-                    Matrix headTransform = Matrix.CreateFromPose(HeadPose);
-                    return Matrix.Invert(headTransform);
+                    Pose3 invhpose = Pose3.Inverse(HeadPose);
+                    return Matrix.CreateFromPose(invhpose);
                 case XREye.Left:
-                    Matrix lEyeTransform = Matrix.CreateFromPose(LEyePose);
-                    return Matrix.Invert(lEyeTransform);
+                    Pose3 invlpose = Pose3.Inverse(LEyePose);
+                    return Matrix.CreateFromPose(invlpose);
                 case XREye.Right:
-                    Matrix rEyeTransform = Matrix.CreateFromPose(REyePose);
-                    return Matrix.Invert(rEyeTransform);
+                    Pose3 invrpose = Pose3.Inverse(REyePose);
+                    return Matrix.CreateFromPose(invrpose);
                 default:
                     throw new IndexOutOfRangeException();
             }
