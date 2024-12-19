@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public void Normalize()
         {
-            var mag = Magnitude;
+            float mag = Magnitude;
             R = R / mag;
             i = i / mag;
         }
@@ -324,7 +324,7 @@ namespace Microsoft.Xna.Framework
         /// <returns>The unit length complex number.</returns>
         public static Complex Normalize(Complex value)
         {
-            var mag = value.Magnitude;
+            float mag = value.Magnitude;
             return new Complex(value.R / mag, -value.i / mag);
         }
 
@@ -335,7 +335,7 @@ namespace Microsoft.Xna.Framework
         /// <param name="result">The unit length complex number as an output parameter.</param>
         public static void Normalize(ref Complex value, ref Complex result)
         {
-            var mag = value.Magnitude;
+            float mag = value.Magnitude;
             result = new Complex(value.R / mag, -value.i / mag);
         }
 
