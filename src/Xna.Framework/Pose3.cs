@@ -68,6 +68,20 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
+        /// Returns the inverse pose, which represents the opposite transformation.
+        /// </summary>
+        /// <param name="value">Source <see cref="Pose3"/>.</param>
+        /// <returns>The inverse pose.</returns>
+        public static Pose3 Inverse(Pose3 value)
+        {
+            Pose3 result;
+            result.Orientation = Quaternion.Inverse(value.Orientation);
+            result.Translation = Vector3.Transform(-value.Translation, result.Orientation);
+            result._padw = default;
+            return result;
+        }
+
+        /// <summary>
         /// Deconstruction method for <see cref="Pose3"/>.
         /// </summary>
         /// <param name="orientation">The orientation of this <see cref="Pose3" />.</param>
