@@ -194,6 +194,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         DebugOutputSynchronous = 0x8242,
         DepthClamp = 0x864F,
         DebugOutput = 0x92E0,
+        FramebufferSRGB = 0x8DB9,
     }
 
     internal enum VertexAttribPointerType
