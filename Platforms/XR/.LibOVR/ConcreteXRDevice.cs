@@ -170,10 +170,16 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
         {
             yield return XREye.Left;
             yield return XREye.Right;
+            yield return XREye.None; // the default backbuffer on the Desktop app.
         }
 
         public override RenderTarget2D GetEyeRenderTarget(XREye eye)
         {
+            if (eye == XREye.None)
+            {
+                return null;
+            }
+
             int eyeIndex = (int)eye - 1;
 
             int ovrResult = _swapChainData[eyeIndex].SwapChain.GetCurrentIndex(out int index);
@@ -182,6 +188,12 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
 
         public override Matrix CreateProjection(XREye eye, float znear, float zfar)
         {
+            if (eye == XREye.None)
+            {
+                Viewport vp = _graphics.GraphicsDevice.Viewport;
+                return Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(60), vp.AspectRatio, znear, zfar);
+            }
+
             int eyeIndex = (int)eye - 1;
 
             OvrFovPort fov = _layer.Fov[eyeIndex];
@@ -199,6 +211,14 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
 
         public override void CommitRenderTarget(XREye eye, RenderTarget2D rt)
         {
+            if (eye == XREye.None)
+            {
+                if (rt != null)
+                    throw new InvalidOperationException();
+
+                return;
+            }
+
             int ovrResult = 0;
 
             int eyeIndex = (int)eye - 1;
