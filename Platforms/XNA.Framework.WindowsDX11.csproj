@@ -83,6 +83,9 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
       <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
       <Name>Xna.Framework.Devices</Name>
@@ -179,13 +182,17 @@
     <Compile Include="Media\WMS\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\WMS\ConcreteVideo.cs" />
     <Compile Include="Media\WMS\VideoSampleGrabber.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Devices\.WindowsDX\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.WindowsDX\ConcreteVibrator.cs" />
     <Compile Include="Devices\.WindowsDX\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.WindowsDX\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.WindowsDX\Sensors\ConcreteSensorService.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
     <Compile Include="Game\.WindowsDX11\WinFormsGameWindow.cs" />
     <Compile Include="Game\.WindowsDX11\WinFormsGameForm.cs" />
     <Compile Include="Game\.WindowsDX11\ConcreteGame.cs" />
@@ -193,12 +200,16 @@
     <Compile Include="Game\.WindowsDX11\KeysHelper.cs" />
     <Compile Include="Game\.WindowsDX11\TimerHelper.cs" />
     <Compile Include="Game\.WindowsDX11\ConcreteGraphicsDeviceManager.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Storage\.WindowsDX\ConcreteStorageContainer.cs" />
     <Compile Include="Storage\.WindowsDX\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.WindowsDX\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.WindowsDX\ConcreteStorageService.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="XR\.WindowsDX\ConcreteXRDevice.cs" />
     <Compile Include="XR\.WindowsDX\ConcreteXRFactory.cs" />
   </ItemGroup>

@@ -79,6 +79,9 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
       <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
       <Name>Xna.Framework.Devices</Name>
@@ -179,24 +182,32 @@
     <Compile Include="Media\DesktopGL\ConcreteSong.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideo.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Devices\.SDL2\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.SDL2\ConcreteVibrator.cs" />
     <Compile Include="Devices\.SDL2\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.SDL2\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.SDL2\Sensors\ConcreteSensorService.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
     <Compile Include="Game\.SDL2\ConcreteGame.cs" />
     <Compile Include="Game\.SDL2\ConcreteGameFactory.cs" />
     <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Game\.SDL2\SDLGameWindow.cs" />
     <Compile Include="Game\.SDL2\SDL2.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Storage\.SDL2\ConcreteStorageContainer.cs" />
     <Compile Include="Storage\.SDL2\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.SDL2\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.SDL2\ConcreteStorageService.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="XR\.SDL2\ConcreteXRDevice.cs" />
     <Compile Include="XR\.SDL2\ConcreteXRFactory.cs" />
   </ItemGroup>

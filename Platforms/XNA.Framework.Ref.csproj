@@ -64,6 +64,9 @@
       <Name>Xna.Framework.Game</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <ProjectReference Include="..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
       <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
       <Name>Xna.Framework.Devices</Name>
@@ -94,13 +97,15 @@
     <Compile Include="Audio\Ref\ConcreteSoundEffectInstance.cs" />
   </ItemGroup>
 	
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Devices\.Ref\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.Ref\ConcreteVibrator.cs" />
     <Compile Include="Devices\.Ref\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.Ref\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.Ref\Sensors\ConcreteSensorService.cs" />
+  </ItemGroup>
 
+  <ItemGroup>
     <Compile Include="Game\.Ref\ConcreteGame.cs" />
     <Compile Include="Game\.Ref\ConcreteGameFactory.cs" />
     <Compile Include="Game\.Ref\ConcreteGraphicsDeviceManager.cs" />
@@ -164,12 +169,16 @@
     <Compile Include="Media\Ref\ConcreteVideo.cs" />
     <Compile Include="Content\.Ref\ConcreteTitleContainer.cs" />
     <Compile Include="Content\.Ref\ConcreteTitleContainerFactory.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Storage\.Ref\ConcreteStorageContainer.cs" />
     <Compile Include="Storage\.Ref\ConcreteStorageDevice.cs" />
     <Compile Include="Storage\.Ref\ConcreteStorageFactory.cs" />
     <Compile Include="Storage\.Ref\ConcreteStorageService.cs" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="XR\.Ref\ConcreteXRDevice.cs" />
     <Compile Include="XR\.Ref\ConcreteXRFactory.cs" />
   </ItemGroup>
