@@ -27,7 +27,7 @@
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <OutputPath>bin\WindowsUniversal\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\WindowsUniversal\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsUniversal\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
+    <DocumentationFile>bin\WindowsUniversal\AnyCPU\Debug\Xna.Platform.xml</DocumentationFile>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;UAP;DIRECTX;DIRECTX11_1;WINDOWS_MEDIA_ENGINE;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -38,7 +38,7 @@
     <DebugType>none</DebugType>
     <OutputPath>bin\WindowsUniversal\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\WindowsUniversal\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
+    <DocumentationFile>bin\WindowsUniversal\AnyCPU\Release\Xna.Platform.xml</DocumentationFile>
     <DefineConstants>TRACE;NETFX_CORE;UAP;DIRECTX;DIRECTX11_1;WINDOWS_MEDIA_ENGINE;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
