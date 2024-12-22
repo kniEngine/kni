@@ -18,7 +18,7 @@
     <LangVersion>Default</LangVersion>
     <IsTrimmable>True</IsTrimmable>
     <ProjectGuid>{D93291EF-3419-412E-BC56-376BD6A02224}</ProjectGuid>
-    <AssemblyName>MonoGame.Framework</AssemblyName>
+    <AssemblyName>Xna.Platform</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>IOS;OPENAL;OPENGL;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

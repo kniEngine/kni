@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Storage
         {
             Console.WriteLine("Registering ConcreteStorageFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.Storage.ConcreteStorageFactory, MonoGame.Framework", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.Storage.ConcreteStorageFactory, Xna.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(StorageFactory)) && !type.IsAbstract)
                     return (StorageFactory)Activator.CreateInstance(type);

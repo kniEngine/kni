@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform
         {
             Console.WriteLine("Registering ConcreteGameFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.ConcreteGameFactory, MonoGame.Framework", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.ConcreteGameFactory, Xna.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(GameFactory)) && !type.IsAbstract)
                     return (GameFactory)Activator.CreateInstance(type);
