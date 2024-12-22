@@ -36,12 +36,12 @@
     <file src="Platforms\build\.iOS\Xna.Framework.Platform.iOS.targets" target="build\Xna.Framework.Platform.iOS.targets" />
     
     <!-- C# Assemblies (.mono) -->
-    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\MonoGame.Framework.dll" target="lib\XamariniOS\MonoGame.Framework.dll" />
-    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\MonoGame.Framework.xml" target="lib\XamariniOS\MonoGame.Framework.xml" />
+    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\Xna.Platform.dll" target="lib\XamariniOS\Xna.Platform.dll" />
+    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\Xna.Platform.xml" target="lib\XamariniOS\Xna.Platform.xml" />
     
     <!-- C# Assemblies (.netcore) -->
-    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\MonoGame.Framework.dll" target="lib\net8.0-ios\MonoGame.Framework.dll" />
-    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\MonoGame.Framework.xml" target="lib\net8.0-ios\MonoGame.Framework.xml" />
+    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\Xna.Platform.dll" target="lib\net8.0-ios\Xna.Platform.dll" />
+    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\Xna.Platform.xml" target="lib\net8.0-ios\Xna.Platform.xml" />
     
     <!-- Nuget Icon -->
     <file src="Images\Icon.png" target="\" />
