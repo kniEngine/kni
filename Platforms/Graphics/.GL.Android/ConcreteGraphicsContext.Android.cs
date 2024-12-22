@@ -198,6 +198,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override bool BindSharedContext()
         {
+#if !ENABLE_SHARED_GL_CONTEXT
+            EnsureContextCurrentThread();
+#endif
+
             if (_glContextCurrentThreadId == base.ManagedThreadId())
                 return false;
 
