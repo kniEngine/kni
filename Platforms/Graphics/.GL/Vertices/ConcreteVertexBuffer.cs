@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindBuffer(BufferTarget.ArrayBuffer, this._vbo);
                 GL.CheckGLError();
                 if (!isSharedContext)
-                    ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._vertexBuffersDirty = true;
+                    contextStrategy._vertexBuffersDirty = true;
 
                 GL.BufferData(BufferTarget.ArrayBuffer,
                               new IntPtr(this.VertexDeclaration.VertexStride * this.VertexCount), IntPtr.Zero,

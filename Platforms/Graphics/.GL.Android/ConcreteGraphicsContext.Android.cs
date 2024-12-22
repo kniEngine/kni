@@ -207,7 +207,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _sharedContextLock.Wait();
             if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, _glSharedContext))
-                throw new Exception("Could not Bind DisposeContext" + GL.GetEglErrorAsString());
+                throw new Exception("Could not Bind SharedContext" + GL.GetEglErrorAsString());
 
             return true;
         }
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = adapter.Ogl;
 
             if (!GL.Egl.EglMakeCurrent(adapter.EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, EGL10.EglNoContext))
-                throw new Exception("Could not Unbind DisposeContext" + GL.GetEglErrorAsString());
+                throw new Exception("Could not Unbind SharedContext" + GL.GetEglErrorAsString());
             _sharedContextLock.Release();
         }
 
