@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, _ibo);
                 GL.CheckGLError();
                 if (!isSharedContext)
-                    ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy._indexBufferDirty = true;
+                    contextStrategy._indexBufferDirty = true;
 
                 GL.BufferData(BufferTarget.ElementArrayBuffer,
                               (IntPtr)sizeInBytes, IntPtr.Zero, _usageHint);

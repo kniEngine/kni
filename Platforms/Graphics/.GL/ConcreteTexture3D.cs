@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
 
                 if (!isSharedContext)
-                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                    ((IPlatformTextureCollection)contextStrategy.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(_glTarget, _glTexture);
