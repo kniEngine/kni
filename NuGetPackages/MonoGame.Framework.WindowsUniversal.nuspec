@@ -20,13 +20,16 @@
 
         <dependencies>
             <group targetFramework=".NETCore0.0">
-                <dependency id="nkast.Xna.Framework" version="3.12.9001" />
-                <dependency id="nkast.Xna.Framework.Content" version="3.12.9001" />
-                <dependency id="nkast.Xna.Framework.Graphics" version="3.12.9001" />
-                <dependency id="nkast.Xna.Framework.Audio" version="3.12.9001" />
-                <dependency id="nkast.Xna.Framework.Media" version="3.12.9001" />
-                <dependency id="nkast.Xna.Framework.Input" version="3.12.9001.1" />
-                <dependency id="nkast.Xna.Framework.Game" version="3.12.9001" />
+                <dependency id="nkast.Xna.Framework" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.Content" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.Graphics" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.Audio" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.Media" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.Input" version="3.14.9001.1" />
+                <dependency id="nkast.Xna.Framework.Game" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.Devices" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.Devices" version="3.14.9001" />
+                <dependency id="nkast.Xna.Framework.XR" version="3.14.9001" />
                 <dependency id="SharpDX" version="4.0.1" />
                 <dependency id="SharpDX.Direct2D1" version="4.0.1" />
                 <dependency id="SharpDX.Direct3D11" version="4.0.1" />
