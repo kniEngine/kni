@@ -15,7 +15,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net8.0-windows</TargetFrameworks>
     <LangVersion>7.3</LangVersion>
-    <AssemblyName>Xna.Framework.Oculus.OvrDX11</AssemblyName>
+    <AssemblyName>Xna.Platform.WindowsDX11.OculusOVR</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>OVR;DIRECTX11;</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

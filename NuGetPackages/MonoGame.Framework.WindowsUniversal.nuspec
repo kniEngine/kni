@@ -44,9 +44,9 @@
     <files>
         <file src="Platforms\build\.UAP\Xna.Framework.Platform.UAP.targets" target="build\Xna.Framework.Platform.UAP.targets" />
                 
-        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.dll"                       target="lib\netcore\MonoGame.Framework.dll" />
-        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.pri"                       target="lib\netcore\MonoGame.Framework.pri" />
-        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\MonoGame.Framework.xml"                       target="lib\netcore\MonoGame.Framework.xml" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Xna.Platform.dll"                       target="lib\netcore\Xna.Platform.dll" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Xna.Platform.pri"                       target="lib\netcore\Xna.Platform.pri" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Xna.Platform.xml"                       target="lib\netcore\Xna.Platform.xml" />
         
         <!-- Nuget Icon -->
         <file src="Images\Icon.png" target="\" />

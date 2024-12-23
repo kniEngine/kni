@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             Console.WriteLine("Registering Concrete MediaFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.Media.ConcreteMediaFactory, MonoGame.Framework", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.Media.ConcreteMediaFactory, Xna.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(MediaFactory)) && !type.IsAbstract)
                     return (MediaFactory)Activator.CreateInstance(type);

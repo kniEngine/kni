@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             Console.WriteLine("Registering ConcreteInputFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.Input.ConcreteInputFactory, MonoGame.Framework", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.Input.ConcreteInputFactory, Xna.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(InputFactory)) && !type.IsAbstract)
                     return (InputFactory)Activator.CreateInstance(type);

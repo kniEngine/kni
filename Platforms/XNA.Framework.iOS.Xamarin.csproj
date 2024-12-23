@@ -12,7 +12,7 @@
     <TargetFramework>xamarinios10</TargetFramework>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <LangVersion>Default</LangVersion>
-    <AssemblyName>MonoGame.Framework</AssemblyName>
+    <AssemblyName>Xna.Platform</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>IOS;GLES;OPENGL;OPENAL;STBSHARP_INTERNAL;XAMARINIOS</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

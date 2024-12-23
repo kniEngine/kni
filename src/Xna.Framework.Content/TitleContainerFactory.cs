@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform
         {
             Console.WriteLine("Registering Concrete TitleContainerFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.ConcreteTitleContainerFactory, MonoGame.Framework", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.ConcreteTitleContainerFactory, Xna.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(TitleContainerFactory)) && !type.IsAbstract)
                     return (TitleContainerFactory)Activator.CreateInstance(type);
