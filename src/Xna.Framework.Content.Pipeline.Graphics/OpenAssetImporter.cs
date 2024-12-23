@@ -906,10 +906,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 string boneName = channelGroup.Key;
                 AnimationChannel channel = new AnimationChannel();
 
-                // Get transformation pivot for current bone.
-                if (!_pivots.TryGetValue(boneName, out FbxPivot pivot))
-                    pivot = new FbxPivot();
-
                 List<VectorKey> scaleKeys = EmptyVectorKeys;
                 List<QuaternionKey> rotationKeys = EmptyQuaternionKeys;
                 List<VectorKey> translationKeys = EmptyVectorKeys;
@@ -920,7 +916,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         scaleKeys = aiChannel.ScalingKeys;
 
-                        Debug.Assert(pivot.Type == FbxPivot.PivotType.Scaling);
                         Debug.Assert(!aiChannel.HasRotationKeys || (aiChannel.RotationKeyCount == 1 && (aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(1, 0, 0, 0) || aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(0, 0, 0, 0))));
                         Debug.Assert(!aiChannel.HasPositionKeys || (aiChannel.PositionKeyCount == 1 && aiChannel.PositionKeys[0].Value == new Vector3D(0, 0, 0)));
                     }
@@ -928,7 +923,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         rotationKeys = aiChannel.RotationKeys;
 
-                        Debug.Assert(pivot.Type == FbxPivot.PivotType.Rotation);
                         Debug.Assert(!aiChannel.HasScalingKeys || (aiChannel.ScalingKeyCount == 1 && aiChannel.ScalingKeys[0].Value == new Vector3D(1, 1, 1)));
                         Debug.Assert(!aiChannel.HasPositionKeys || (aiChannel.PositionKeyCount == 1 && aiChannel.PositionKeys[0].Value == new Vector3D(0, 0, 0)));
                     }
@@ -936,7 +930,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         translationKeys = aiChannel.PositionKeys;
 
-                        Debug.Assert(pivot.Type == FbxPivot.PivotType.Translation);
                         Debug.Assert(!aiChannel.HasScalingKeys || (aiChannel.ScalingKeyCount == 1 && aiChannel.ScalingKeys[0].Value == new Vector3D(1, 1, 1)));
                         Debug.Assert(!aiChannel.HasRotationKeys || (aiChannel.RotationKeyCount == 1 && (aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(1, 0, 0, 0) || aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(0, 0, 0, 0))));
                     }
