@@ -545,10 +545,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     pivot = new FbxPivot();
                     _pivots.Add(originalName, pivot);
                 }
-                pivot.Transform = ToXna(aiNode.Transform);
                 pivot.Type = FbxPivot.GetPivotType(aiNode.Name);
                 if (pivot.Type == FbxPivot.PivotType.Invalid)
                     throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), _identity);
+                pivot.Transform = ToXna(aiNode.Transform);
             }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
@@ -819,10 +819,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The parent offset matrix is missing. :(
                         if (_pivots.TryGetValue(node.Name, out FbxPivot pivot))
                         {
-                            node.Transform = Matrix.Identity;
                             // --> Use transformation pivot.
-                            if (pivot.Type != FbxPivot.PivotType.Invalid)
-                                node.Transform = pivot.Transform;
+                            node.Transform = pivot.Transform;
                         }
                         else
                         {
