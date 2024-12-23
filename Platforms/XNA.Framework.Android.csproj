@@ -25,7 +25,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>KNI backend for Android platform (GLES).</Description>
     <PackageTags>KNI;monogame;.net core;core;.net standard;standard;android</PackageTags>
-    <PackageId>MonoGame.Framework.Android</PackageId>
+    <PackageId>nkast.Xna.Platform.Android</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

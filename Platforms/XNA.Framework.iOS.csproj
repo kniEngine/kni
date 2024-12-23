@@ -26,7 +26,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>KNI backend for iOS platform (GLES).</Description>
     <PackageTags>KNI;monogame;.net core;core;.net standard;standard;ios</PackageTags>
-    <PackageId>MonoGame.Framework.iOS</PackageId>
+    <PackageId>nkast.Xna.Platform.iOS</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

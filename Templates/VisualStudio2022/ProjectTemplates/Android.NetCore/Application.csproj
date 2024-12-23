@@ -35,7 +35,7 @@
     <PackageReference Include="nkast.Xna.Framework.Game" Version="3.14.9001" />
     <PackageReference Include="nkast.Xna.Framework.Devices" Version="3.14.9001" />
     <PackageReference Include="nkast.Xna.Framework.Storage" Version="3.14.9001" />
-    <PackageReference Include="MonoGame.Framework.Android.9000" Version="3.14.9001" />
+    <PackageReference Include="nkast.Xna.Platform.Android" Version="3.14.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="3.14.9001" />
   </ItemGroup>
   <ItemGroup>

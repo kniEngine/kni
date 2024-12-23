@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>MonoGame.Framework.WindowsUniversal.9000</id>
+        <id>nkast.Xna.Platform.UAP</id>
         <version>0.0.0.0</version>
-        <title>MonoGame.Framework.WindowsUniversal.9000</title>
+        <title>nkast.Xna.Platform.UAP</title>
         <authors>Kastellanos Nikos, MonoGame Team</authors>
         <owners>Kastellanos Nikos</owners>
         <licenseUrl>https://github.com/kniEngine/kni/blob/develop/LICENSE.txt</licenseUrl>
