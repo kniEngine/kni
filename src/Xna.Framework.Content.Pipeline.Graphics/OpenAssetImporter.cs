@@ -550,8 +550,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 //   PostRotation, RotationPivotInverse, ScalingOffset, ScalingPivot,
                 //   Scaling, ScalingPivotInverse
                 string originalName = GetNodeName(aiNode.Name);
-                FbxPivot pivot;
-                if (!_pivots.TryGetValue(originalName, out pivot))
+                if (!_pivots.TryGetValue(originalName, out FbxPivot pivot))
                 {
                     pivot = new FbxPivot();
                     _pivots.Add(originalName, pivot);
@@ -825,8 +824,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         // The current bone is the first in the chain.
                         // The parent offset matrix is missing. :(
-                        FbxPivot pivot;
-                        if (_pivots.TryGetValue(node.Name, out pivot))
+                        if (_pivots.TryGetValue(node.Name, out FbxPivot pivot))
                         {
                             // --> Use transformation pivot.
                             node.Transform = pivot.GetTransform();
@@ -908,8 +906,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 AnimationChannel channel = new AnimationChannel();
 
                 // Get transformation pivot for current bone.
-                FbxPivot pivot;
-                if (!_pivots.TryGetValue(boneName, out pivot))
+                if (!_pivots.TryGetValue(boneName, out FbxPivot pivot))
                     pivot = new FbxPivot();
 
                 List<VectorKey> scaleKeys = EmptyVectorKeys;
