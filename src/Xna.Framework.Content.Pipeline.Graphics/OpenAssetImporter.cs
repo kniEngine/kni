@@ -211,42 +211,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 else
                     return Matrix.Identity;
             }
-
-            public Matrix GetTransform(Vector3 scale, Quaternion rotation, Vector3 translation)
-            {
-                Matrix result = Matrix.Identity;
-
-                if (this.Type == PivotType.GeometricScaling
-                ||  this.Type == PivotType.GeometricRotation
-                ||  this.Type == PivotType.GeometricTranslation
-                ||  this.Type == PivotType.ScalingPivotInverse)
-                    result = result * this.Transform;
-
-                result = result * Matrix.CreateScale(scale);
-                if (this.Type == PivotType.Scaling)
-                    result = result * this.Transform;
-
-                if (this.Type == PivotType.ScalingPivot
-                ||  this.Type == PivotType.ScalingOffset
-                ||  this.Type == PivotType.RotationPivotInverse
-                ||  this.Type == PivotType.PostRotation)
-                    result = result * this.Transform;
-
-                result = result * Matrix.CreateFromQuaternion(rotation);
-                if (this.Type == PivotType.Rotation)
-                    result = result * this.Transform;
-
-                if (this.Type == PivotType.PreRotation
-                ||  this.Type == PivotType.RotationPivot
-                ||  this.Type == PivotType.RotationOffset)
-                    result = result * this.Transform;
-
-                result = result * Matrix.CreateTranslation(translation);
-                if (this.Type == PivotType.Translation)
-                    result = result * this.Transform;
-
-                return result;
-            }
         }
         #endregion
 
@@ -301,6 +265,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             using (AssimpContext importer = new AssimpContext())
             {
+                // TODO: check if we can set FBXPreservePivotsConfig(false) and clean up the code.
+
                 // FBXPreservePivotsConfig(false) can be set to remove transformation
                 // pivots. However, Assimp does not automatically correct animations!
                 // --> Leave default settings, handle transformation pivots explicitly.
@@ -1088,19 +1054,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         }
                     }
 
-                    // Apply transformation pivot.
-                    //if (scale.HasValue)
-                    //    scale = Vector3.One;
-                    //if (rotation.HasValue)
-                    //    rotation = Quaternion.Identity;
-                    //if (translation.HasValue)
-                    //    translation = Vector3.Zero;
-                    //Matrix transform = pivot.GetTransform(scale.Value, rotation.Value, translation.Value);
-
                     // Apply transformation.
-                    // Assimp now seems to fix animation by default. pivot transformation
-                    // doesn't seem to be needed.
-                    // TODO: check if we can set FBXPreservePivotsConfig(false) and clean up the code.
                     Matrix transform = Matrix.Identity;
                     if (scale.HasValue)
                         transform *= Matrix.CreateScale(scale.Value);
