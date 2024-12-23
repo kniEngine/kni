@@ -144,8 +144,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <seealso href="http://area.autodesk.com/forum/autodesk-fbx/fbx-sdk/the-makeup-of-the-local-matrix-of-an-kfbxnode/"/>
         private class FbxPivot
         {
-            public static readonly FbxPivot Default = new FbxPivot();
-
             public enum PivotType
             {
                 Invalid,
@@ -912,7 +910,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // Get transformation pivot for current bone.
                 FbxPivot pivot;
                 if (!_pivots.TryGetValue(boneName, out pivot))
-                    pivot = FbxPivot.Default;
+                    pivot = new FbxPivot();
 
                 List<VectorKey> scaleKeys = EmptyVectorKeys;
                 List<QuaternionKey> rotationKeys = EmptyQuaternionKeys;
