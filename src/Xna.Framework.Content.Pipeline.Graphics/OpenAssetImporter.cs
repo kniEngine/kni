@@ -199,14 +199,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 else
                     return PivotType.Invalid;
             }
-
-            public Matrix GetTransform()
-            {
-                if (this.Type != PivotType.Invalid)
-                    return this.Transform;
-                else
-                    return Matrix.Identity;
-            }
         }
         #endregion
 
@@ -827,8 +819,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The parent offset matrix is missing. :(
                         if (_pivots.TryGetValue(node.Name, out FbxPivot pivot))
                         {
+                            node.Transform = Matrix.Identity;
                             // --> Use transformation pivot.
-                            node.Transform = pivot.GetTransform();
+                            if (pivot.Type != FbxPivot.PivotType.Invalid)
+                                node.Transform = pivot.Transform;
                         }
                         else
                         {
