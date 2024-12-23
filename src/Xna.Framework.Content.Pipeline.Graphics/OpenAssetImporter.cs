@@ -214,7 +214,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private Dictionary<string, Matrix> _deformationBones;   // The names and offset matrices of all deformation bones.
         private Node _rootBone;                                 // The node that represents the root bone.
         private List<Node> _bones = new List<Node>();           // All nodes attached to the root bone.
-        private Dictionary<string, FbxPivot> _pivots;           // The transformation pivots.
 
 
         /// <summary>
@@ -491,7 +490,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </summary>
         private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, List<MaterialContent> materials)
         {
-            _pivots = new Dictionary<string, FbxPivot>();
             NodeContent rootNode = ImportNodes(context, aiScene, aiScene.RootNode, materials, null,  null);
             return rootNode;
         }
@@ -539,16 +537,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 //   Translation, RotationOffset, RotationPivot, PreRotation, Rotation,
                 //   PostRotation, RotationPivotInverse, ScalingOffset, ScalingPivot,
                 //   Scaling, ScalingPivotInverse
-                string originalName = GetNodeName(aiNode.Name);
-                if (!_pivots.TryGetValue(originalName, out FbxPivot pivot))
-                {
-                    pivot = new FbxPivot();
-                    _pivots.Add(originalName, pivot);
-                }
-                pivot.Type = FbxPivot.GetPivotType(aiNode.Name);
-                if (pivot.Type == FbxPivot.PivotType.Invalid)
-                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), _identity);
-                pivot.Transform = aiNode.Transform;
             }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
@@ -817,16 +805,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     {
                         // The current bone is the first in the chain.
                         // The parent offset matrix is missing. :(
-                        if (_pivots.TryGetValue(node.Name, out FbxPivot pivot))
-                        {
-                            // --> Use transformation pivot.
-                            node.Transform = ToXna(pivot.Transform);
-                        }
-                        else
-                        {
-                            // --> Let's assume that parent's transform is Identity.
-                            node.Transform = Matrix.Invert(offsetMatrix);
-                        }
+                       
+                        // --> Let's assume that parent's transform is Identity.
+                        node.Transform = Matrix.Invert(offsetMatrix);
                     }
                     else if (isOffsetMatrixValid && aiParent == _rootBone)
                     {
