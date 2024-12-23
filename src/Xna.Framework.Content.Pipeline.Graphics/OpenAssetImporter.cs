@@ -169,37 +169,43 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             public void Update(Node aiNode, ContentIdentity identity)
             {
                 this.Transform = ToXna(aiNode.Transform);
+                this.Type = FbxPivot.GetPivotType(aiNode.Name);
+                if (this.Type == PivotType.Invalid)
+                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), identity);)
+            }
 
-                if (aiNode.Name.EndsWith("_Translation"))
-                    Type = PivotType.Translation;
-                else if (aiNode.Name.EndsWith("_RotationOffset"))
-                    Type = PivotType.RotationOffset;
-                else if (aiNode.Name.EndsWith("_RotationPivot"))
-                    Type = PivotType.RotationPivot;
-                else if (aiNode.Name.EndsWith("_PreRotation"))
-                    Type = PivotType.PreRotation;
-                else if (aiNode.Name.EndsWith("_Rotation"))
-                    Type = PivotType.Rotation;
-                else if (aiNode.Name.EndsWith("_PostRotation"))
-                    Type = PivotType.PostRotation;
-                else if (aiNode.Name.EndsWith("_RotationPivotInverse"))
-                    Type = PivotType.RotationPivotInverse;
-                else if (aiNode.Name.EndsWith("_ScalingOffset"))
-                    Type = PivotType.ScalingOffset;
-                else if (aiNode.Name.EndsWith("_ScalingPivot"))
-                    Type = PivotType.ScalingPivot;
-                else if (aiNode.Name.EndsWith("_Scaling"))
-                    Type = PivotType.Scaling;
-                else if (aiNode.Name.EndsWith("_ScalingPivotInverse"))
-                    Type = PivotType.ScalingPivotInverse;
-                else if (aiNode.Name.EndsWith("_GeometricTranslation"))
-                    Type = PivotType.GeometricTranslation;
-                else if (aiNode.Name.EndsWith("_GeometricRotation"))
-                    Type = PivotType.GeometricRotation;
-                else if (aiNode.Name.EndsWith("_GeometricScaling"))
-                    Type = PivotType.GeometricScaling;
+            public static PivotType GetPivotType(string nodeName)
+            {
+                if (nodeName.EndsWith("_Translation"))
+                    return PivotType.Translation;
+                else if (nodeName.EndsWith("_RotationOffset"))
+                    return PivotType.RotationOffset;
+                else if (nodeName.EndsWith("_RotationPivot"))
+                    return PivotType.RotationPivot;
+                else if (nodeName.EndsWith("_PreRotation"))
+                    return PivotType.PreRotation;
+                else if (nodeName.EndsWith("_Rotation"))
+                    return PivotType.Rotation;
+                else if (nodeName.EndsWith("_PostRotation"))
+                    return PivotType.PostRotation;
+                else if (nodeName.EndsWith("_RotationPivotInverse"))
+                    return PivotType.RotationPivotInverse;
+                else if (nodeName.EndsWith("_ScalingOffset"))
+                    return PivotType.ScalingOffset;
+                else if (nodeName.EndsWith("_ScalingPivot"))
+                    return PivotType.ScalingPivot;
+                else if (nodeName.EndsWith("_Scaling"))
+                    return PivotType.Scaling;
+                else if (nodeName.EndsWith("_ScalingPivotInverse"))
+                    return PivotType.ScalingPivotInverse;
+                else if (nodeName.EndsWith("_GeometricTranslation"))
+                    return PivotType.GeometricTranslation;
+                else if (nodeName.EndsWith("_GeometricRotation"))
+                    return PivotType.GeometricRotation;
+                else if (nodeName.EndsWith("_GeometricScaling"))
+                    return PivotType.GeometricScaling;
                 else
-                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), identity);
+                    return PivotType.Invalid;
             }
 
             public Matrix GetTransform()
