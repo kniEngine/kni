@@ -26,6 +26,9 @@
         <dependency id="nkast.Xna.Framework.Media" version="3.14.9001" />
         <dependency id="nkast.Xna.Framework.Input" version="3.14.9001.1" />
         <dependency id="nkast.Xna.Framework.Game" version="3.14.9001" />
+        <dependency id="nkast.Xna.Framework.Devices" version="3.14.9001" />
+        <dependency id="nkast.Xna.Framework.Storage" version="3.14.9001" />
+        <dependency id="nkast.Xna.Framework.XR" version="3.14.9001" />
     </dependencies>
     
   </metadata>
