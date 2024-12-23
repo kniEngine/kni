@@ -164,15 +164,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
 
             public PivotType Type;
-            Matrix Transform;
-
-            public void Update(Node aiNode, ContentIdentity identity)
-            {
-                this.Transform = ToXna(aiNode.Transform);
-                this.Type = FbxPivot.GetPivotType(aiNode.Name);
-                if (this.Type == PivotType.Invalid)
-                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), identity);)
-            }
+            public Matrix Transform;
 
             public static PivotType GetPivotType(string nodeName)
             {
@@ -561,7 +553,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     pivot = new FbxPivot();
                     _pivots.Add(originalName, pivot);
                 }
-                pivot.Update(aiNode, _identity);
+                pivot.Transform = ToXna(aiNode.Transform);
+                pivot.Type = FbxPivot.GetPivotType(aiNode.Name);
+                if (pivot.Type == FbxPivot.PivotType.Invalid)
+                    throw new InvalidContentException(String.Format("Unknown $AssimpFbx$ node: \"{0}\"", aiNode.Name), _identity);
             }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
