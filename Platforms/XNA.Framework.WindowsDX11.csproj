@@ -25,7 +25,7 @@
     <DefineConstants>$(DefineConstants);WINDOWSDX;DIRECTX;WINDOWS_MEDIA_SESSION;STBSHARP_INTERNAL</DefineConstants>
     <Description>KNI backend for Windows Desktop platform (DirectX11).</Description>
     <PackageTags>KNI;</PackageTags>
-    <PackageId>MonoGame.Framework.WindowsDX.9000</PackageId>
+    <PackageId>nkast.Xna.Platform.WindowsDX11</PackageId>
     <Product>Xna.Framework</Product>
     <Company>Kastellanos Nikos</Company>
   </PropertyGroup>
