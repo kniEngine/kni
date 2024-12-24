@@ -965,15 +965,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             // Get transform of node relative to ancestor.
             Matrix4x4 transform = node.Transform;
-            Node parent = node.Parent;
-            while (parent != null && parent != ancestorNode)
+            for (Node parent = node.Parent; parent != ancestorNode; parent = parent.Parent)
             {
-                transform = transform * parent.Transform;
-                parent = parent.Parent;
-            }
+                if (parent == null)
+                {
+                    if (ancestorNode != null)
+                        throw new ArgumentException(String.Format("Node \"{0}\" is not an ancestor of \"{1}\".", ancestorNode.Name, node.Name));
+                    break;
+                }
 
-            if (parent == null && ancestorNode != null)
-                throw new ArgumentException(String.Format("Node \"{0}\" is not an ancestor of \"{1}\".", ancestorNode.Name, node.Name));
+                transform = transform * parent.Transform;
+            }
 
             return transform;
         }
