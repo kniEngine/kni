@@ -53,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xna.Framework.Android.Xamar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Blazor", "Platforms\Xna.Framework.Blazor.csproj", "{E442B4FA-5F28-40AC-92C2-2979786418D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Cardboard", "Platforms\Xna.Framework.Cardboard.csproj", "{BF257928-8B5D-4371-BD03-C18DA71918C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Cardboard.GL", "Platforms\Kni.Platform.Cardboard.GL.csproj", "{BF257928-8B5D-4371-BD03-C18DA71918C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.SDL2.GL", "Platforms\Kni.Platform.SDL2.GL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
 EndProject
