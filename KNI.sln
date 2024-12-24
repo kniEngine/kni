@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS", "Platfo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS.Xamarin", "Platforms\Xna.Framework.iOS.Xamarin.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Ref", "Platforms\Xna.Framework.Ref.csproj", "{2ACF610C-9188-4F16-A611-577C1223DD90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Ref", "Platforms\Kni.Platform.Ref.csproj", "{2ACF610C-9188-4F16-A611-577C1223DD90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kni.Platform.UAP.DX11", "Platforms\Kni.Platform.UAP.DX11.csproj", "{09C41A48-7BF3-4A46-9EB8-CE95B4C27CA9}"
 EndProject

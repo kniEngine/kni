@@ -70,7 +70,7 @@
 
     <exec program="dotnet" commandline="pack src\Xna.Framework\Xna.Framework.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.Ref.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.Ref.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
@@ -126,8 +126,8 @@
     
   <target name="build_ref" description="Build reference">
 
-      <exec program="dotnet" commandline="build Platforms\Xna.Framework.Ref.csproj /t:restore" />
-      <exec program="dotnet" commandline="build Platforms\Xna.Framework.Ref.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.Ref.csproj /t:restore" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.Ref.csproj /t:Build /p:Configuration=Release" />
 
   </target>
   
