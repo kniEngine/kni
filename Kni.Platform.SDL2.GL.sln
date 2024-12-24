@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Design", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.SDL2.GL", "Platforms\Kni.Platform.SDL2.GL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.SDL2.GL", "Tests\Kni.Tests.SDL2.GL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content.Pipeline", "Content.Pipeline", "{28AEF6DE-B48A-4EA8-9262-B91E48544888}"
 EndProject

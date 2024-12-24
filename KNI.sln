@@ -75,7 +75,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGCB", "Tools\MonoGame.Cont
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Pipeline.Editor.net8", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net8.csproj", "{5212C44E-1573-43C2-85E8-5751A12FBBFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.SDL2.GL", "Tests\Kni.Tests.SDL2.GL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WindowsDX11", "Tests\Kni.Tests.WindowsDX11.csproj", "{DED2DDB6-D4BE-656D-2E54-657374732E57}"
 EndProject
