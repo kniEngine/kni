@@ -954,26 +954,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// Gets the transform of node relative to a specific ancestor node.
         /// </summary>
         /// <param name="node">The node.</param>
-        /// <param name="ancestor">The ancestor node. Can be <see langword="null"/>.</param>
+        /// <param name="ancestorNode">The ancestor node. Can be <see langword="null"/>.</param>
         /// <returns>
-        /// The relative transform. If <paramref name="ancestor"/> is <see langword="null"/> the
+        /// The relative transform. If <paramref name="ancestorNode"/> is <see langword="null"/> the
         /// absolute transform of <paramref name="node"/> is returned.
         /// </returns>
-        private static Matrix4x4 GetRelativeTransform(Node node, Node ancestor)
+        private static Matrix4x4 GetRelativeTransform(Node node, Node ancestorNode)
         {
             Debug.Assert(node != null);
 
             // Get transform of node relative to ancestor.
             Matrix4x4 transform = node.Transform;
-            Node parent = node.Parent;
-            while (parent != null && parent != ancestor)
+            for (Node parent = node.Parent; parent != ancestorNode; parent = parent.Parent)
             {
-                transform = transform * parent.Transform;
-                parent = parent.Parent;
-            }
+                if (parent == null)
+                {
+                    if (ancestorNode != null)
+                        throw new ArgumentException(String.Format("Node \"{0}\" is not an ancestor of \"{1}\".", ancestorNode.Name, node.Name));
+                    break;
+                }
 
-            if (parent == null && ancestor != null)
-                throw new ArgumentException(String.Format("Node \"{0}\" is not an ancestor of \"{1}\".", ancestor.Name, node.Name));
+                transform = transform * parent.Transform;
+            }
 
             return transform;
         }
