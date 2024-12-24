@@ -85,7 +85,7 @@
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.iOS.nuspec			-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
 
     <exec program="dotnet" commandline="pack Platforms\Kni.Platform.WinForms.DX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.DesktopGL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.SDL2.GL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Kni.Platform.Blazor.GL.sln --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Platforms\Kni.Platform.WinForms.DX11.OculusOVR.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
@@ -147,8 +147,8 @@
   
   <target name="build_desktopGL" description="Build DesktopGL">
 
-      <exec program="dotnet" commandline="build Platforms\XNA.Framework.DesktopGL.csproj /t:restore" />
-      <exec program="dotnet" commandline="build Platforms\XNA.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.SDL2.GL.csproj /t:restore" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.SDL2.GL.csproj /t:Build /p:Configuration=Release" />
       
   </target>
 
