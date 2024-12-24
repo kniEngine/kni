@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Storage", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xna.Framework.XR", "src\Xna.Framework.XR\Xna.Framework.XR.csproj", "{6D0D985D-B256-4208-9E78-77897D461698}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS.Xamarin", "Platforms\Xna.Framework.iOS.Xamarin.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.iOS.GL.Xamarin", "Platforms\Kni.Platform.iOS.GL.Xamarin.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
