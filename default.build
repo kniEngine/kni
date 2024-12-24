@@ -191,8 +191,8 @@
   <target name="build_windowsUAP10" description="Build Windows 10 UAP">
 
       <!--
-      <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /p:Configuration=Release' />
       -->
       <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Restore /p:Configuration=Release' />
       <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
