@@ -47,27 +47,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline.Media", "src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj", "{63486463-8AEE-483E-862A-7720CD62B4DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Android", "Platforms\Xna.Framework.Android.csproj", "{CF09A088-6F64-4FA3-8FF8-E5B39F8BB0E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Android.GL", "Platforms\Kni.Platform.Android.GL.csproj", "{CF09A088-6F64-4FA3-8FF8-E5B39F8BB0E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xna.Framework.Android.Xamarin", "Platforms\Xna.Framework.Android.Xamarin.csproj", "{BA9476CF-99BA-4D03-92F2-73D2C5E58883}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kni.Platform.Android.GL.Xamarin", "Platforms\Kni.Platform.Android.GL.Xamarin.csproj", "{BA9476CF-99BA-4D03-92F2-73D2C5E58883}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Blazor", "Platforms\Xna.Framework.Blazor.csproj", "{E442B4FA-5F28-40AC-92C2-2979786418D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Blazor.GL", "Platforms\Kni.Platform.Blazor.GL.csproj", "{E442B4FA-5F28-40AC-92C2-2979786418D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Cardboard", "Platforms\Xna.Framework.Cardboard.csproj", "{BF257928-8B5D-4371-BD03-C18DA71918C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Cardboard.GL", "Platforms\Kni.Platform.Cardboard.GL.csproj", "{BF257928-8B5D-4371-BD03-C18DA71918C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.DesktopGL", "Platforms\Xna.Framework.DesktopGL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.SDL2.GL", "Platforms\Kni.Platform.SDL2.GL.csproj", "{6D75E618-19CA-4C51-9546-F10965FBC0B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS", "Platforms\Xna.Framework.iOS.csproj", "{D93291EF-3419-412E-BC56-376BD6A02224}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.iOS.GL", "Platforms\Kni.Platform.iOS.GL.csproj", "{D93291EF-3419-412E-BC56-376BD6A02224}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.iOS.Xamarin", "Platforms\Xna.Framework.iOS.Xamarin.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.iOS.GL.Xamarin", "Platforms\Kni.Platform.iOS.GL.Xamarin.csproj", "{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Ref", "Platforms\Xna.Framework.Ref.csproj", "{2ACF610C-9188-4F16-A611-577C1223DD90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Ref", "Platforms\Kni.Platform.Ref.csproj", "{2ACF610C-9188-4F16-A611-577C1223DD90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xna.Framework.UAP", "Platforms\Xna.Framework.UAP.csproj", "{09C41A48-7BF3-4A46-9EB8-CE95B4C27CA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kni.Platform.UAP.DX11", "Platforms\Kni.Platform.UAP.DX11.csproj", "{09C41A48-7BF3-4A46-9EB8-CE95B4C27CA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.WindowsDX11", "Platforms\Xna.Framework.WindowsDX11.csproj", "{7DE47032-A904-4C29-BD22-2D235E8D91BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.WinForms.DX11", "Platforms\Kni.Platform.WinForms.DX11.csproj", "{7DE47032-A904-4C29-BD22-2D235E8D91BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Oculus.OvrDX11", "Platforms\Xna.Framework.Oculus.OvrDX11.csproj", "{9DE8C1A3-25EB-4FD7-A0B6-34720AD48B47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.WinForms.DX11.OculusOVR", "Platforms\Kni.Platform.WinForms.DX11.OculusOVR.csproj", "{9DE8C1A3-25EB-4FD7-A0B6-34720AD48B47}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EffectCompiler", "Tools\EffectCompiler\EffectCompiler.csproj", "{46474D32-2E58-6957-6E64-6F7773324D47}"
 EndProject
@@ -75,9 +75,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGCB", "Tools\MonoGame.Cont
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Pipeline.Editor.net8", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net8.csproj", "{5212C44E-1573-43C2-85E8-5751A12FBBFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.DesktopGL", "Tests\Kni.Tests.DesktopGL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.SDL2.GL", "Tests\Kni.Tests.SDL2.GL.csproj", "{DED2DDB6-D4BE-B1B4-2E54-657374732E57}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WindowsDX11", "Tests\Kni.Tests.WindowsDX11.csproj", "{DED2DDB6-D4BE-656D-2E54-657374732E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WinForms.DX11", "Tests\Kni.Tests.WinForms.DX11.csproj", "{DED2DDB6-D4BE-656D-2E54-657374732E57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

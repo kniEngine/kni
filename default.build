@@ -70,7 +70,7 @@
 
     <exec program="dotnet" commandline="pack src\Xna.Framework\Xna.Framework.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack src\Xna.Framework.Design\Xna.Framework.Design.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.Ref.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.Ref.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack src\Xna.Framework.Content.Pipeline.Audio\Xna.Framework.Content.Pipeline.Audio.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
@@ -84,12 +84,12 @@
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.Android.nuspec		-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.iOS.nuspec			-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
 
-    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.WindowsDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.DesktopGL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.WinForms.DX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.SDL2.GL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Kni.Platform.Blazor.GL.sln --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack Platforms\XNA.Framework.Oculus.OvrDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.WinForms.DX11.OculusOVR.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
-    <exec program="dotnet" commandline="pack Platforms\Xna.Framework.Cardboard.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.Cardboard.GL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
   </target>
 
@@ -126,8 +126,8 @@
     
   <target name="build_ref" description="Build reference">
 
-      <exec program="dotnet" commandline="build Platforms\Xna.Framework.Ref.csproj /t:restore" />
-      <exec program="dotnet" commandline="build Platforms\Xna.Framework.Ref.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.Ref.csproj /t:restore" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.Ref.csproj /t:Build /p:Configuration=Release" />
 
   </target>
   
@@ -147,8 +147,8 @@
   
   <target name="build_desktopGL" description="Build DesktopGL">
 
-      <exec program="dotnet" commandline="build Platforms\XNA.Framework.DesktopGL.csproj /t:restore" />
-      <exec program="dotnet" commandline="build Platforms\XNA.Framework.DesktopGL.csproj /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.SDL2.GL.csproj /t:restore" />
+      <exec program="dotnet" commandline="build Platforms\Kni.Platform.SDL2.GL.csproj /t:Build /p:Configuration=Release" />
       
   </target>
 
@@ -191,8 +191,8 @@
   <target name="build_windowsUAP10" description="Build Windows 10 UAP">
 
       <!--
-      <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /p:Configuration=Release' />
       -->
       <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Restore /p:Configuration=Release' />
       <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />

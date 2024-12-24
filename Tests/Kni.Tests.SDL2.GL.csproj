@@ -1126,7 +1126,7 @@
       <Project>{63486463-8aee-483e-862a-7720cd62b4df}</Project>
       <Name>Xna.Framework.Content.Pipeline.Media</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Platforms\XNA.Framework.DesktopGL.csproj">
+    <ProjectReference Include="..\Platforms\Kni.Platform.SDL2.GL.csproj">
       <Project>{6D75E618-19CA-4C51-9546-F10965FBC0B8}</Project>
       <Name>XNA.Framework.DesktopGL</Name>
     </ProjectReference>

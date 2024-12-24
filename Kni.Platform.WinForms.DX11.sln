@@ -44,9 +44,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Content.Pipeline.Media", "src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipeline.Media.csproj", "{63486463-8AEE-483E-862A-7720CD62B4DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.WindowsDX11", "Platforms\Xna.Framework.WindowsDX11.csproj", "{7DE47032-A904-4C29-BD22-2D235E8D91BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.WinForms.DX11", "Platforms\Kni.Platform.WinForms.DX11.csproj", "{7DE47032-A904-4C29-BD22-2D235E8D91BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Oculus.OvrDX11", "Platforms\Xna.Framework.Oculus.OvrDX11.csproj", "{9DE8C1A3-25EB-4FD7-A0B6-34720AD48B47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.WinForms.DX11.OculusOVR", "Platforms\Kni.Platform.WinForms.DX11.OculusOVR.csproj", "{9DE8C1A3-25EB-4FD7-A0B6-34720AD48B47}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EffectCompiler", "Tools\EffectCompiler\EffectCompiler.csproj", "{46474D32-2E58-6957-6E64-6F7773324D47}"
 EndProject
@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGCB", "Tools\MonoGame.Cont
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Pipeline.Editor.net8", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net8.csproj", "{5212C44E-1573-43C2-85E8-5751A12FBBFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WindowsDX11", "Tests\Kni.Tests.WindowsDX11.csproj", "{DED2DDB6-D4BE-656D-2E54-657374732E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WinForms.DX11", "Tests\Kni.Tests.WinForms.DX11.csproj", "{DED2DDB6-D4BE-656D-2E54-657374732E57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

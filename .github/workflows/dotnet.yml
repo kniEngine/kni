@@ -51,7 +51,7 @@ jobs:
    # - name: Build
    #   run: dotnet build KNI.sln --no-restore --property:WarningLevel=1
     - name: Build Ref
-      run: dotnet build Platforms\Xna.Framework.Ref.csproj --property:WarningLevel=1
+      run: dotnet build Platforms\Kni.Platform.Ref.csproj --property:WarningLevel=1
     - name: Build Blazor.GL
       run: dotnet build Kni.Platform.Blazor.GL.sln --property:WarningLevel=1
     - name: Build WinForms.DX11

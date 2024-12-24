@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Storage", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xna.Framework.XR", "src\Xna.Framework.XR\Xna.Framework.XR.csproj", "{6D0D985D-B256-4208-9E78-77897D461698}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xna.Framework.Ref", "Platforms\Xna.Framework.Ref.csproj", "{91E64EE8-04D3-4850-A3CA-C4839EF167F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Ref", "Platforms\Kni.Platform.Ref.csproj", "{91E64EE8-04D3-4850-A3CA-C4839EF167F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
