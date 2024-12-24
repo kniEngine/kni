@@ -31,21 +31,21 @@
     <exec program="dotnet" commandline="build src\Xna.Framework.XR\Xna.Framework.XR.csproj /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build src\Xna.Framework.Design\Xna.Framework.Design.csproj /t:Clean /p:Configuration=Release" />
     
-    <exec program="dotnet" commandline="build Xna.Platform.Blazor.GL.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build Kni.Platform.Blazor.GL.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="dotnet" commandline="build Xna.Platform.WinForms.DX11.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build Kni.Platform.WinForms.DX11.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild17}" commandline='Xna.Platform.UAP.DX11.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
+    <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
     
-    <exec program="dotnet" commandline="build Xna.Platform.SDL2.GL.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build Kni.Platform.SDL2.GL.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="dotnet" commandline="build Xna.Platform.Android.GL.sln /t:Clean /p:Configuration=Release" />
-    <exec program="dotnet" commandline="build Xna.Platform.Cardboard.GL.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build Kni.Platform.Android.GL.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build Kni.Platform.Cardboard.GL.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="dotnet" commandline="build Xna.Platform.iOS.GL.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build Kni.Platform.iOS.GL.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild17}" commandline="Xna.Platform.Android.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
-    <exec program="${msbuild17}" commandline="Xna.Platform.iOS.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="Kni.Platform.Android.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
+    <exec program="${msbuild17}" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
     
   </target>
   
@@ -86,7 +86,7 @@
 
     <exec program="dotnet" commandline="pack Platforms\Xna.Framework.WindowsDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Platforms\Xna.Framework.DesktopGL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack Xna.Platform.Blazor.GL.sln --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Kni.Platform.Blazor.GL.sln --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Platforms\XNA.Framework.Oculus.OvrDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
     <exec program="dotnet" commandline="pack Platforms\Xna.Framework.Cardboard.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
@@ -133,15 +133,15 @@
   
   <target name="build_blazorGL" description="Build BlazorGL">
 
-      <exec program="dotnet" commandline="build Xna.Platform.Blazor.GL.sln /t:restore" />
-      <exec program="dotnet" commandline="build Xna.Platform.Blazor.GL.sln /t:Build /p:Configuration=Release" />
+      <exec program="dotnet" commandline="build Kni.Platform.Blazor.GL.sln /t:restore" />
+      <exec program="dotnet" commandline="build Kni.Platform.Blazor.GL.sln /t:Build /p:Configuration=Release" />
       
   </target>
   
   <target name="build_windows" description="Build Windows">
 
-      <exec program="dotnet" commandline="build Xna.Platform.WinForms.DX11.sln /t:restore" />
-      <exec program="dotnet" commandline="build Xna.Platform.WinForms.DX11.sln /t:Build /p:Configuration=Release /m" />
+      <exec program="dotnet" commandline="build Kni.Platform.WinForms.DX11.sln /t:restore" />
+      <exec program="dotnet" commandline="build Kni.Platform.WinForms.DX11.sln /t:Build /p:Configuration=Release /m" />
       
   </target>
   
@@ -158,34 +158,34 @@
     <if test="${os == 'MacOS'}">
       <if test="${file::exists('/Developer/MonoTouch/MSBuild/Xamarin.ObjcBinding.CSharp.targets') 
                or file::exists('/Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Xamarin.ObjcBinding.CSharp.targets')}">
-        <exec program="msbuild" commandline="Xna.Platform.iOS.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
-        <exec program="msbuild" commandline="Xna.Platform.iOS.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
+        <exec program="msbuild" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
+        <exec program="msbuild" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
       </if>
     </if>
     -->
 
-      <exec program="${msbuild17}" commandline="Xna.Platform.iOS.GL.Xamarin.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="Xna.Platform.iOS.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
+      <exec program="${msbuild17}" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:restore" />
+      <exec program="${msbuild17}" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
 
-      <exec program="dotnet" commandline='build Xna.Platform.iOS.GL.sln /t:Restore /p:Configuration=Release' />
-      <exec program="dotnet" commandline='build Xna.Platform.iOS.GL.sln /t:Build /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build Kni.Platform.iOS.GL.sln /t:Restore /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build Kni.Platform.iOS.GL.sln /t:Build /p:Configuration=Release' />
 
   </target>
 
   <target name="build_android" description="Build Android">
 
       <if test="${file::exists('C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Novell\Novell.MonoDroid.CSharp.targets')}">
-        <exec program="${msbuild17}" commandline="Xna.Platform.Android.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
+        <exec program="${msbuild17}" commandline="Kni.Platform.Android.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
       </if>
 
-      <exec program="dotnet" commandline='build Xna.Platform.Android.GL.sln /t:Restore /p:Configuration=Release' />
-      <exec program="dotnet" commandline='build Xna.Platform.Android.GL.sln /t:Build /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build Kni.Platform.Android.GL.sln /t:Restore /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build Kni.Platform.Android.GL.sln /t:Build /p:Configuration=Release' />
 
   </target>
   
   <target name="build_cardboard" description="Build Cardboard">
-      <exec program="dotnet" commandline='build Xna.Platform.Cardboard.GL.sln /t:Restore /p:Configuration=Release' />
-      <exec program="dotnet" commandline='build Xna.Platform.Cardboard.GL.sln /t:Build /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build Kni.Platform.Cardboard.GL.sln /t:Restore /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build Kni.Platform.Cardboard.GL.sln /t:Build /p:Configuration=Release' />
   </target>
 
   <target name="build_windowsUAP10" description="Build Windows 10 UAP">
@@ -194,8 +194,8 @@
       <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /t:Restore /p:Configuration=Release' />
       <exec program="${msbuild17}" commandline='Platforms\XNA.Framework.UAP.csproj /p:Configuration=Release' />
       -->
-      <exec program="${msbuild17}" commandline='Xna.Platform.UAP.DX11.sln /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild17}" commandline='Xna.Platform.UAP.DX11.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
+      <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
 
   </target>
 
