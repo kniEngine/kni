@@ -152,12 +152,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             using (AssimpContext importer = new AssimpContext())
             {
-                // TODO: check if we can set FBXPreservePivotsConfig(false) and clean up the code.
-
                 // FBXPreservePivotsConfig(false) can be set to remove transformation
-                // pivots. However, Assimp does not automatically correct animations!
-                // --> Leave default settings, handle transformation pivots explicitly.
-                //importer.SetConfig(new Assimp.Configs.FBXPreservePivotsConfig(false));
+                // pivots.
+                importer.SetConfig(new Assimp.Configs.FBXPreservePivotsConfig(false));
 
                 // Set flag to remove degenerate faces (points and lines).
                 // This flag is very important when PostProcessSteps.FindDegenerates is used
@@ -429,15 +426,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 node = mesh;
             }
-            else if (aiNode.Name.Contains("_$AssimpFbx$"))
-            {
-                // This is a transformation pivot.
-                //   <OriginalName>_$AssimpFbx$_<TransformName>
-                // where <TransformName> is one of
-                //   Translation, RotationOffset, RotationPivot, PreRotation, Rotation,
-                //   PostRotation, RotationPivotInverse, ScalingOffset, ScalingPivot,
-                //   Scaling, ScalingPivotInverse
-            }
             else if (!_bones.Contains(aiNode)) // Ignore bones.
             {
                 node = new NodeContent();
@@ -608,10 +596,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Node rootBone = node;
             while (node != aiScene.RootNode && !node.HasMeshes)
             {
-                // Only when FBXPreservePivotsConfig(true):
-                // The FBX path likes to put these extra preserve pivot nodes in here.
-                if (!node.Name.Contains("$AssimpFbx$"))
-                    rootBone = node;
+                rootBone = node;
 
                 node = node.Parent;
             }
@@ -655,19 +640,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(aiParent != null);
 
             NodeContent node = null;
-            if (!aiNode.Name.Contains("_$AssimpFbx$")) // Ignore pivot nodes
             {
-                const string mangling = "_$AssimpFbxNull$"; // Null leaf nodes are helpers
-
-                if (aiNode.Name.Contains(mangling))
-                {
-                    // Null leaf node
-                    node = new NodeContent();
-                    node.Name = aiNode.Name.Replace(mangling, string.Empty);
-                    node.Identity = _identity;
-                    node.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
-                }
-                else if (_bones.Contains(aiNode))
+                if (_bones.Contains(aiNode))
                 {
                     // Bone
                     node = new BoneContent();
@@ -752,26 +726,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private AnimationContent ImportAnimation(Animation aiAnimation, string nodeName = null)
         {
             AnimationContent animation = new AnimationContent();
-            animation.Name = GetAnimationName(aiAnimation.Name);
+            animation.Name = aiAnimation.Name.Replace("AnimStack::", string.Empty);
             animation.Identity = _identity;
             animation.Duration = TimeSpan.FromSeconds(aiAnimation.DurationInTicks / aiAnimation.TicksPerSecond);
 
             // In Assimp animation channels may be split into separate channels.
-            //   "nodeXyz" --> "nodeXyz_$AssimpFbx$_Translation",
-            //                 "nodeXyz_$AssimpFbx$_Rotation",
-            //                 "nodeXyz_$AssimpFbx$_Scaling"
-            // Group animation channels by name (strip the "_$AssimpFbx$" part).
+            // Group animation channels by name.
             IEnumerable<IGrouping<string,NodeAnimationChannel>> channelGroups;
             if (nodeName != null)
             {
                 channelGroups = aiAnimation.NodeAnimationChannels
-                                           .Where(channel => nodeName == GetNodeName(channel.NodeName))
-                                           .GroupBy(channel => GetNodeName(channel.NodeName));
+                                           .Where(channel => nodeName == channel.NodeName)
+                                           .GroupBy(channel => channel.NodeName);
             }
             else
             {
                 channelGroups = aiAnimation.NodeAnimationChannels
-                                           .GroupBy(channel => GetNodeName(channel.NodeName));
+                                           .GroupBy(channel => channel.NodeName);
             }
 
             foreach (IGrouping<string,NodeAnimationChannel> channelGroup in channelGroups)
@@ -785,33 +756,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
                 foreach (NodeAnimationChannel aiChannel in channelGroup)
                 {
-                    if (aiChannel.NodeName.EndsWith("_$AssimpFbx$_Scaling"))
-                    {
-                        scaleKeys = aiChannel.ScalingKeys;
-
-                        Debug.Assert(!aiChannel.HasRotationKeys || (aiChannel.RotationKeyCount == 1 && (aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(1, 0, 0, 0) || aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(0, 0, 0, 0))));
-                        Debug.Assert(!aiChannel.HasPositionKeys || (aiChannel.PositionKeyCount == 1 && aiChannel.PositionKeys[0].Value == new Vector3D(0, 0, 0)));
-                    }
-                    else if (aiChannel.NodeName.EndsWith("_$AssimpFbx$_Rotation"))
-                    {
-                        rotationKeys = aiChannel.RotationKeys;
-
-                        Debug.Assert(!aiChannel.HasScalingKeys || (aiChannel.ScalingKeyCount == 1 && aiChannel.ScalingKeys[0].Value == new Vector3D(1, 1, 1)));
-                        Debug.Assert(!aiChannel.HasPositionKeys || (aiChannel.PositionKeyCount == 1 && aiChannel.PositionKeys[0].Value == new Vector3D(0, 0, 0)));
-                    }
-                    else if (aiChannel.NodeName.EndsWith("_$AssimpFbx$_Translation"))
-                    {
-                        translationKeys = aiChannel.PositionKeys;
-
-                        Debug.Assert(!aiChannel.HasScalingKeys || (aiChannel.ScalingKeyCount == 1 && aiChannel.ScalingKeys[0].Value == new Vector3D(1, 1, 1)));
-                        Debug.Assert(!aiChannel.HasRotationKeys || (aiChannel.RotationKeyCount == 1 && (aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(1, 0, 0, 0) || aiChannel.RotationKeys[0].Value == new Assimp.Quaternion(0, 0, 0, 0))));
-                    }
-                    else
-                    {
-                        scaleKeys = aiChannel.ScalingKeys;
-                        rotationKeys = aiChannel.RotationKeys;
-                        translationKeys = aiChannel.PositionKeys;
-                    }
+                    scaleKeys = aiChannel.ScalingKeys;
+                    rotationKeys = aiChannel.RotationKeys;
+                    translationKeys = aiChannel.PositionKeys;
                 }
 
                 int scaleIndex = -1;
@@ -978,27 +925,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
 
             return transform;
-        }
-
-        /// <summary>
-        /// Gets the animation name without the "AnimStack::" part.
-        /// </summary>
-        /// <param name="name">The mangled animation name.</param>
-        /// <returns>The original animation name.</returns>
-        private static string GetAnimationName(string name)
-        {
-            return name.Replace("AnimStack::", string.Empty);
-        }
-
-        /// <summary>
-        /// Gets the node name without the "_$AssimpFbx$" part.
-        /// </summary>
-        /// <param name="name">The mangled node name.</param>
-        /// <returns>The original node name.</returns>
-        private static string GetNodeName(string name)
-        {
-            int index = name.IndexOf("_$AssimpFbx$", StringComparison.Ordinal);
-            return (index >= 0) ? name.Remove(index) : name;
         }
 
         private static void ImportMetadata(Scene _scene, NodeContent rootNode)
