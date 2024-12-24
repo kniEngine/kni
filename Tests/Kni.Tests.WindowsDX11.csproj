@@ -1203,7 +1203,7 @@
       <Project>{63486463-8aee-483e-862a-7720cd62b4df}</Project>
       <Name>Xna.Framework.Content.Pipeline.Media</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Platforms\XNA.Framework.WindowsDX11.csproj">
+    <ProjectReference Include="..\Platforms\Kni.Platform.WinForms.DX11.csproj">
       <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
       <Name>XNA.Framework.WindowsDX11</Name>
     </ProjectReference>

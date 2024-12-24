@@ -55,7 +55,7 @@
       <Name>Xna.Framework.XR</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="XNA.Framework.WindowsDX11.csproj">
+    <ProjectReference Include="Kni.Platform.WinForms.DX11.csproj">
       <Private>False</Private>
     </ProjectReference>
     <PackageReference Include="nkast.LibOVR" Version="2.2.0" />
