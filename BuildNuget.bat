@@ -26,7 +26,7 @@ dotnet pack Platforms\Kni.Platform.WinForms.DX11.csproj --output NuGetPackages\O
 dotnet pack Platforms\Xna.Framework.DesktopGL.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack Kni.Platform.Blazor.GL.sln --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
 dotnet pack Platforms\Kni.Platform.Ref.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
-dotnet pack Platforms\XNA.Framework.Oculus.OvrDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
+dotnet pack Platforms\Kni.Platform.WinForms.DX11.OculusOVR.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
 
 dotnet pack Platforms\Xna.Framework.Cardboard.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 

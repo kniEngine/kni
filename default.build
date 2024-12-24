@@ -87,7 +87,7 @@
     <exec program="dotnet" commandline="pack Platforms\Kni.Platform.WinForms.DX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Platforms\Xna.Framework.DesktopGL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Kni.Platform.Blazor.GL.sln --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
-    <exec program="dotnet" commandline="pack Platforms\XNA.Framework.Oculus.OvrDX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.WinForms.DX11.OculusOVR.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
     <exec program="dotnet" commandline="pack Platforms\Xna.Framework.Cardboard.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 
