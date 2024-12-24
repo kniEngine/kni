@@ -13,7 +13,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <LangVersion>7.3</LangVersion>
     <AssemblyName>Xna.Platform.WindowsDX11.OculusOVR</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>

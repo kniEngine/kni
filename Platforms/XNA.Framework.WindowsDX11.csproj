@@ -9,7 +9,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFrameworks>net40;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net40;net48;net8.0-windows</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>7.3</LangVersion>
     <ProjectGuid>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</ProjectGuid>
