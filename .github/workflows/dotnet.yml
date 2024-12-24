@@ -52,20 +52,20 @@ jobs:
    #   run: dotnet build KNI.sln --no-restore --property:WarningLevel=1
     - name: Build Ref
       run: dotnet build Platforms\Xna.Framework.Ref.csproj --property:WarningLevel=1
-    - name: Build BlazorGL
-      run: dotnet build XNA.Framework.Blazor.sln --property:WarningLevel=1
-    - name: Build WindowsDX11
-      run: dotnet build XNA.Framework.WindowsDX11.sln --property:WarningLevel=1     
-    - name: Build DesktopGL
-      run: dotnet build XNA.Framework.DesktopGL.sln --property:WarningLevel=1  
-    - name: Build iOS
-      run: dotnet build XNA.Framework.iOS.sln --property:WarningLevel=1
-    - name: Build Android
-      run: dotnet build XNA.Framework.Android.sln --property:WarningLevel=1
-   # - name: Build Cardboard
-   #   run: dotnet build XNA.Framework.Cardboard.sln --property:WarningLevel=1
-   # - name: Build Windows UAP10
-   #   run: dotnet msbuild XNA.Framework.UAP.sln --property:WarningLevel=1
+    - name: Build Blazor.GL
+      run: dotnet build Xna.Platform.Blazor.GL.sln --property:WarningLevel=1
+    - name: Build WinForms.DX11
+      run: dotnet build Xna.Platform.WinForms.DX11.sln --property:WarningLevel=1     
+    - name: Build SDL2.GL
+      run: dotnet build Xna.Platform.SDL2.GL.sln --property:WarningLevel=1  
+    - name: Build iOS.GL
+      run: dotnet build Xna.Platform.iOS.GL.sln --property:WarningLevel=1
+    - name: Build Android.GL
+      run: dotnet build Xna.Platform.Android.GL.sln --property:WarningLevel=1
+   # - name: Build Cardboard.GL
+   #   run: dotnet build Xna.Platform.Cardboard.GL.sln --property:WarningLevel=1
+   # - name: Build Windows UAP.DX11
+   #   run: dotnet msbuild Xna.Platform.UAP.DX11.sln --property:WarningLevel=1
 
    # - name: Test
    #   run: dotnet test --no-build --verbosity normal
