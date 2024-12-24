@@ -24,7 +24,7 @@ dotnet pack src\Xna.Framework.Content.Pipeline.Media\Xna.Framework.Content.Pipel
 
 dotnet pack Platforms\Xna.Framework.WindowsDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
 dotnet pack Platforms\Xna.Framework.DesktopGL.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release
-dotnet pack Xna.Platform.Blazor.GL.sln --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
+dotnet pack Kni.Platform.Blazor.GL.sln --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
 dotnet pack Platforms\Xna.Framework.Ref.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
 dotnet pack Platforms\XNA.Framework.Oculus.OvrDX11.csproj --output NuGetPackages\Output\ /t:Build /p:Configuration=Release 
 
