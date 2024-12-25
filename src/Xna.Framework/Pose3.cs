@@ -2,12 +2,14 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework
 {
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
+    [StructLayout(LayoutKind.Sequential, Size = 32)]
     public struct Pose3 : IEquatable<Pose3>
     {
         #region Private Fields
@@ -30,7 +32,6 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         [DataMember]
         public Vector3 Translation;
-        private float _padw;
 
         #endregion
 
@@ -64,7 +65,6 @@ namespace Microsoft.Xna.Framework
         {
             this.Orientation = orientation;
             this.Translation = translation;
-            this._padw = default;
         }
 
         /// <summary>
@@ -77,7 +77,6 @@ namespace Microsoft.Xna.Framework
             Pose3 result;
             result.Orientation = Quaternion.Inverse(value.Orientation);
             result.Translation = Vector3.Transform(-value.Translation, result.Orientation);
-            result._padw = default;
             return result;
         }
 
@@ -92,7 +91,6 @@ namespace Microsoft.Xna.Framework
             Pose3 result;
             result.Orientation = Quaternion.Multiply(left.Orientation, right.Orientation);
             result.Translation = Vector3.Transform(left.Translation, right);
-            result._padw = default;
             return result;
         }
 
