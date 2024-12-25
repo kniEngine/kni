@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.XR
         {
             Console.WriteLine("Registering ConcreteXRFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.XR.ConcreteXRFactory, Xna.Platform", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.XR.ConcreteXRFactory, Kni.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(XRFactory)) && !type.IsAbstract)
                     return (XRFactory)Activator.CreateInstance(type);

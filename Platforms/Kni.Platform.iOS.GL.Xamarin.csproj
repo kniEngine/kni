@@ -12,7 +12,7 @@
     <TargetFramework>xamarinios10</TargetFramework>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <LangVersion>Default</LangVersion>
-    <AssemblyName>Xna.Platform</AssemblyName>
+    <AssemblyName>Kni.Platform</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>IOS;GLES;OPENGL;OPENAL;STBSHARP_INTERNAL;XAMARINIOS</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

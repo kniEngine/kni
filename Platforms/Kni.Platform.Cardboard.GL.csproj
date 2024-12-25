@@ -18,7 +18,7 @@
     <LangVersion>Default</LangVersion>
     <IsTrimmable>True</IsTrimmable>
     <ProjectGuid>{BF257928-8B5D-4371-BD03-C18DA71918C3}</ProjectGuid>
-    <AssemblyName>Xna.Platform</AssemblyName>
+    <AssemblyName>Kni.Platform</AssemblyName>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <DefineConstants>ANDROID;CARDBOARD;OPENAL;OPENGL;GLES;STBSHARP_INTERNAL</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

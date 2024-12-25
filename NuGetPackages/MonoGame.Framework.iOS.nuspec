@@ -36,12 +36,12 @@
     <file src="Platforms\build\.iOS\Xna.Framework.Platform.iOS.targets" target="build\Xna.Framework.Platform.iOS.targets" />
     
     <!-- C# Assemblies (.mono) -->
-    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\Xna.Platform.dll" target="lib\XamariniOS\Xna.Platform.dll" />
-    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\Xna.Platform.xml" target="lib\XamariniOS\Xna.Platform.xml" />
+    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\Kni.Platform.dll" target="lib\XamariniOS\Kni.Platform.dll" />
+    <file src="Artifacts\Platforms\iOS\Release\xamarinios10\Kni.Platform.xml" target="lib\XamariniOS\Kni.Platform.xml" />
     
     <!-- C# Assemblies (.netcore) -->
-    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\Xna.Platform.dll" target="lib\net8.0-ios\Xna.Platform.dll" />
-    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\Xna.Platform.xml" target="lib\net8.0-ios\Xna.Platform.xml" />
+    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\Kni.Platform.dll" target="lib\net8.0-ios\Kni.Platform.dll" />
+    <file src="Artifacts\Platforms\iOS\Release\net8.0-ios\Kni.Platform.xml" target="lib\net8.0-ios\Kni.Platform.xml" />
     
     <!-- Nuget Icon -->
     <file src="Images\Icon.png" target="\" />

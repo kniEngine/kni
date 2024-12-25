@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Audio
         {
             Console.WriteLine("Registering Concrete AudioFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.Audio.ConcreteAudioFactory, Xna.Platform", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.Audio.ConcreteAudioFactory, Kni.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(AudioFactory)) && !type.IsAbstract)
                     return (AudioFactory)Activator.CreateInstance(type);

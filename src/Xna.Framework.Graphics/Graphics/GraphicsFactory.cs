@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Console.WriteLine("Registering Concrete GraphicsFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsFactory, Xna.Platform", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.Graphics.ConcreteGraphicsFactory, Kni.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(GraphicsFactory)) && !type.IsAbstract)
                     return (GraphicsFactory)Activator.CreateInstance(type);

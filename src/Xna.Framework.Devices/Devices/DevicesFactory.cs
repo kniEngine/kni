@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Devices
         {
             Console.WriteLine("Registering ConcreteDevicesFactoryStrategy through reflection.");
 
-            Type type = Type.GetType("Microsoft.Xna.Platform.Devices.ConcreteDevicesFactory, Xna.Platform", false);
+            Type type = Type.GetType("Microsoft.Xna.Platform.Devices.ConcreteDevicesFactory, Kni.Platform", false);
             if (type != null)
                 if (type.IsSubclassOf(typeof(DevicesFactory)) && !type.IsAbstract)
                     return (DevicesFactory)Activator.CreateInstance(type);
