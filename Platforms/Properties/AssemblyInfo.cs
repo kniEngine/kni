@@ -9,7 +9,7 @@ using System.Resources;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MonoGame.Framework")]
+[assembly: AssemblyProduct("Kni.Platform")]
 [assembly: AssemblyCopyright("Copyright ©2009-2022 MonoGame Team, ©2022 Nick Kastellanos")]
 [assembly: AssemblyCulture("")]
 
@@ -18,8 +18,8 @@ using System.Resources;
 
 // Allow the content pipeline assembly to access
 // some of our internal helper methods that it needs.
-//[assembly: InternalsVisibleTo("MonoGame.Framework.Content.Pipeline")]
-[assembly: InternalsVisibleTo("MonoGame.Framework.Net")]
+//[assembly: InternalsVisibleTo("Xna.Framework.Content.Pipeline")]
+[assembly: InternalsVisibleTo("Xna.Framework.Net")]
 
 //Tests projects need access too
 [assembly: InternalsVisibleTo("Kni.Tests")]
