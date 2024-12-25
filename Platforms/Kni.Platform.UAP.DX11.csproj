@@ -9,7 +9,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
-    <AssemblyName>Xna.Platform</AssemblyName>
+    <AssemblyName>Kni.Platform</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>CS0067;CS1591;CS1574;CS0419;CS8500</NoWarn>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
