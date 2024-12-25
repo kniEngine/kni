@@ -23,7 +23,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Ovr Oculus library for the KNI Framework (DirectX 11).</Description>
     <PackageTags>KNI;XNA;MonoGame</PackageTags>
-    <PackageId>nkast.Xna.Platform.WindowsDX11.OculusOVR</PackageId>
+    <PackageId>nkast.Kni.Platform.WinForms.DX11.OculusOVR</PackageId>
     <PackageOutputPath>..\NuGetPackages\Output</PackageOutputPath>
   </PropertyGroup>
   

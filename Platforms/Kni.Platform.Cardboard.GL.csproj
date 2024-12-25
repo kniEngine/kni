@@ -42,7 +42,7 @@
     
     </Description>
     <PackageTags>KNI;android</PackageTags>
-    <PackageId>nkast.Xna.Platform.Cardboard</PackageId>
+    <PackageId>nkast.Kni.Platform.Cardboard.GL</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
-    <id>nkast.Xna.Platform.Android</id>
+    <id>nkast.Kni.Platform.Android.GL</id>
     <version>0.0.0.0</version>
-    <title>nkast.Xna.Platform.Android</title>
+    <title>nkast.Kni.Platform.Android</title>
     <authors>Kastellanos Nikos, MonoGame Team</authors>
     <owners>Kastellanos Nikos</owners>
     <licenseUrl>https://github.com/kniEngine/kni/blob/develop/LICENSE.txt</licenseUrl>

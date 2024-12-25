@@ -25,7 +25,7 @@
     <DefineConstants>$(DefineConstants);OPENGL;OPENAL;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL</DefineConstants>
     <Description>KNI backend for SDL Desktop Platforms (OpenGL)</Description>
     <PackageTags>KNI;</PackageTags>
-    <PackageId>nkast.Xna.Platform.DesktopGL</PackageId>
+    <PackageId>nkast.Kni.Platform.SDL2.GL</PackageId>
     <Product>Xna.Framework</Product>
     <Company>Kastellanos Nikos</Company>
   </PropertyGroup>

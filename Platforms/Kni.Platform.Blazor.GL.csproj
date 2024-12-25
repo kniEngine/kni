@@ -24,7 +24,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>KNI backend for WebAssembly platform (WebGL).</Description>
     <PackageTags>KNI;monogame;.net core;core;.net standard;standard;Blazor;webassembly</PackageTags>
-    <PackageId>nkast.Xna.Platform.BlazorGL</PackageId>
+    <PackageId>nkast.Kni.Platform.Blazor.GL</PackageId>
     <Product>Xna.Framework</Product>
     <Company>MonoGame Team, Kastellanos Nikos</Company>
   </PropertyGroup>

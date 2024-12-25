@@ -23,7 +23,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Reference KNI backend for libraries.</Description>
     <PackageTags>KNI;monogame;.net core;core;.net standard;standard;Reference;</PackageTags>
-    <PackageId>nkast.Xna.Platform.Ref</PackageId>
+    <PackageId>nkast.Kni.Platform.Ref</PackageId>
     <Product>Xna.Framework</Product>
     <Company>MonoGame Team, Kastellanos Nikos</Company>
   </PropertyGroup>
