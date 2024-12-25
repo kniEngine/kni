@@ -219,7 +219,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="build\.iOS\Xna.Framework.Platform.iOS.targets" PackagePath="build\" Pack="true" />
+    <Content Include="build\.iOS\Kni.Platform.iOS.GL.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
 
   <ItemGroup>

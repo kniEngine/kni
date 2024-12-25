@@ -449,7 +449,7 @@
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
       <PackagePath>runtimes\osx\native\libopenal.1.dylib</PackagePath>
     </None>
-    <None Include="build\.SDL2\Xna.Framework.Platform.SDL2.targets" PackagePath="build\" Pack="true" />
+    <None Include="build\.SDL2\Kni.Platform.SDL2.GL.targets" PackagePath="build\" Pack="true" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Kni.bmp">
