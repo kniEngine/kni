@@ -30,7 +30,7 @@
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
     <OutputPath>bin\Android\AnyCPU\Debug</OutputPath>
     <IntermediateOutputPath>obj\Android\AnyCPU\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\Android\AnyCPU\Debug\Xna.Platform.xml</DocumentationFile>
+    <DocumentationFile>bin\Android\AnyCPU\Debug\Kni.Platform.xml</DocumentationFile>
     <DefineConstants>DEBUG;OPENGL;OPENAL;TRACE;ANDROID;GLES;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,7 +43,7 @@
     <DebugType>none</DebugType>
     <OutputPath>bin\Android\AnyCPU\Release</OutputPath>
     <IntermediateOutputPath>obj\Android\AnyCPU\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\Android\AnyCPU\Release\Xna.Platform.xml</DocumentationFile>
+    <DocumentationFile>bin\Android\AnyCPU\Release\Kni.Platform.xml</DocumentationFile>
     <DefineConstants>OPENGL;OPENAL;TRACE;ANDROID;GLES;STBSHARP_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
