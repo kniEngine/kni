@@ -44,9 +44,9 @@
     <files>
         <file src="Platforms\build\.UAP\Xna.Framework.Platform.UAP.targets" target="build\Xna.Framework.Platform.UAP.targets" />
                 
-        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Xna.Platform.dll"                       target="lib\netcore\Xna.Platform.dll" />
-        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Xna.Platform.pri"                       target="lib\netcore\Xna.Platform.pri" />
-        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Xna.Platform.xml"                       target="lib\netcore\Xna.Platform.xml" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Kni.Platform.dll"                       target="lib\netcore\Kni.Platform.dll" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Kni.Platform.pri"                       target="lib\netcore\Kni.Platform.pri" />
+        <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Kni.Platform.xml"                       target="lib\netcore\Kni.Platform.xml" />
         
         <!-- Nuget Icon -->
         <file src="Images\Icon.png" target="\" />
