@@ -42,7 +42,7 @@
 
     </metadata>
     <files>
-        <file src="Platforms\build\.UAP\Xna.Framework.Platform.UAP.targets" target="build\Xna.Framework.Platform.UAP.targets" />
+        <file src="Platforms\build\.UAP\Kni.Platform.UAP.DX11.targets" target="build\Kni.Platform.UAP.DX11.targets" />
                 
         <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Kni.Platform.dll"                       target="lib\netcore\Kni.Platform.dll" />
         <file src="Platforms\bin\WindowsUniversal\AnyCPU\Release\Kni.Platform.pri"                       target="lib\netcore\Kni.Platform.pri" />
