@@ -45,7 +45,6 @@
     <exec program="dotnet" commandline="build Kni.Platform.iOS.GL.sln /t:Clean /p:Configuration=Release" />
     
     <exec program="${msbuild17}" commandline="Kni.Platform.Android.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
-    <exec program="${msbuild17}" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
     
   </target>
   
@@ -153,19 +152,6 @@
   </target>
 
   <target name="build_ios" description="Build iOS">
-
-    <!--
-    <if test="${os == 'MacOS'}">
-      <if test="${file::exists('/Developer/MonoTouch/MSBuild/Xamarin.ObjcBinding.CSharp.targets') 
-               or file::exists('/Library/Frameworks/Mono.framework/External/xbuild/Xamarin/Xamarin.ObjcBinding.CSharp.targets')}">
-        <exec program="msbuild" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Clean /p:Configuration=Release" />
-        <exec program="msbuild" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
-      </if>
-    </if>
-    -->
-
-      <exec program="${msbuild17}" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:restore" />
-      <exec program="${msbuild17}" commandline="Kni.Platform.iOS.GL.Xamarin.sln /t:Build /p:Configuration=Release" />
 
       <exec program="dotnet" commandline='build Kni.Platform.iOS.GL.sln /t:Restore /p:Configuration=Release' />
       <exec program="dotnet" commandline='build Kni.Platform.iOS.GL.sln /t:Build /p:Configuration=Release' />
