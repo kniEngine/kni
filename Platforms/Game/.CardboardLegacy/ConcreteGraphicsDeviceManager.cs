@@ -220,13 +220,16 @@ namespace Microsoft.Xna.Platform
 
         public override void EndDraw()
         {
+#if CARDBOARD
+            return; // On Cardboard, surface is presented by IRenderer.OnFinishFrame(...).
+#endif
+
             //base.EndDraw();
 
             GraphicsDevice device = this.GraphicsDevice;
             if (device != null)
             {
-                // // Surface is presented by OnFinishFrame.
-                //device.Present();
+                device.Present();
             }
         }
 
