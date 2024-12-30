@@ -165,32 +165,26 @@
     <ProjectReference Include="..\..\src\Xna.Framework.Media\Xna.Framework.Media.csproj">
       <Project>{6E0E6284-13FF-4DC7-8FC2-B6D756EAF1FD}</Project>
       <Name>Xna.Framework.Media</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Input\Xna.Framework.Input.csproj">
       <Project>{8FB8B257-C091-4C41-B221-75C37B68CD8F}</Project>
       <Name>Xna.Framework.Input</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Game\Xna.Framework.Game.csproj">
       <Project>{90BBD6EF-F386-4F47-88CD-BF386C7D1705}</Project>
       <Name>Xna.Framework.Game</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Devices\Xna.Framework.Devices.csproj">
       <Project>{6B3E56F7-C567-463C-9746-0244FD959322}</Project>
       <Name>Xna.Framework.Devices</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Storage\Xna.Framework.Storage.csproj">
       <Project>{7AE82BAB-5F52-427A-8F6F-DA829261FF9C}</Project>
       <Name>Xna.Framework.Storage</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.XR\Xna.Framework.XR.csproj">
       <Project>{6D0D985D-B256-4208-9E78-77897D461698}</Project>
       <Name>Xna.Framework.XR</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Xna.Framework.Content.Pipeline\Xna.Framework.Content.Pipeline.csproj">
       <Project>{73509f44-3566-4b79-bb47-c7c6e2aa2351}</Project>
@@ -334,13 +328,6 @@
     <EmbeddedResource Include="Icons\Toolbar\FilterOutput.png">
       <LogicalName>Toolbar.FilterOutput.png</LogicalName>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
 
   <PropertyGroup>
