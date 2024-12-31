@@ -13,6 +13,22 @@ namespace Microsoft.Xna.Framework.XR
         public Pose3 LGripPose;
         public Pose3 RGripPose;
 
+        public Vector3 LHandLinearVelocity;
+        public Vector3 RHandLinearVelocity;
+
+        public Vector3 GetLinearVelocity(int handIndex)
+        {
+            switch (handIndex)
+            {
+                case 0:
+                    return LHandLinearVelocity;
+                case 1:
+                    return RHandLinearVelocity;
+                default:
+                    throw new IndexOutOfRangeException();
+            }
+        }
+
         public Matrix GetHandTransform(int handIndex)
         {
             switch (handIndex)

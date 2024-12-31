@@ -514,6 +514,7 @@ namespace Microsoft.Xna.Framework.XR
 
                     XRRigidTransform gripPose = default;
                     XRRigidTransform pointerPose = default;
+                    Vector4 pointerLinearVelocity = default;
 
                     XRSpace gripSpace = inputSource.GripSpace;
                     if (gripSpace != null)
@@ -521,7 +522,9 @@ namespace Microsoft.Xna.Framework.XR
                         using (XRPose grip = _currentXRFrame.GetPose(gripSpace, referenceSpace))
                         {
                             if (grip != null)
+                            {
                                 gripPose = grip.Transform;
+                            }
                         }
                     }
 
@@ -531,7 +534,10 @@ namespace Microsoft.Xna.Framework.XR
                         using (XRPose pointer = _currentXRFrame.GetPose(pointerSpace, referenceSpace))
                         {
                             if (pointer != null)
+                            {
                                 pointerPose = pointer.Transform;
+                                pointerLinearVelocity = (Vector4)pointer.LinearVelocity.GetValueOrDefault();
+                            }
                         }
                     }
 
@@ -541,12 +547,14 @@ namespace Microsoft.Xna.Framework.XR
                             {
                                 _handsState.LGripPose = gripPose.ToPose3();
                                 _handsState.LHandPose = pointerPose.ToPose3();
+                                _handsState.LHandLinearVelocity = new Vector3(pointerLinearVelocity.X, pointerLinearVelocity.Y, pointerLinearVelocity.Z);
                             }
                             break;
                         case XRHandedness.Right:
                             {
                                 _handsState.RGripPose = gripPose.ToPose3();
                                 _handsState.RHandPose = pointerPose.ToPose3();
+                                _handsState.RHandLinearVelocity = new Vector3(pointerLinearVelocity.X, pointerLinearVelocity.Y, pointerLinearVelocity.Z);
                             }
                             break;
                     }
