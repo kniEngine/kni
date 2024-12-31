@@ -7,7 +7,7 @@
   <property name="msbuild17" value="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe" />
 
   <property name="nugetPath" value="C:\Program Files (x86)\NuGet3\nuget.exe" />
-  <property name="nugetPackageVersion" value="3.14.9001" />
+  <property name="nugetPackageVersion" value="4.0.9001" />
   
   <!-- Helper default target. -->
   <target   name="build" 
