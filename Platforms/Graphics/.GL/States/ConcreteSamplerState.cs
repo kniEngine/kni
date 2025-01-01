@@ -43,7 +43,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
                 case TextureFilter.Linear:
                     textureMaxAnisotropy = 1.0f;
-                    if (cgraphicsContext.Capabilities.SupportsTextureFilterAnisotropic)
                     textureMinFilter = (useMipmaps ? TextureMinFilter.LinearMipmapLinear : TextureMinFilter.Linear);
                     textureMaxFilter = TextureMagFilter.Linear;
                     break;
