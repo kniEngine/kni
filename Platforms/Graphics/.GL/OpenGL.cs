@@ -1492,7 +1492,12 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             DrawElements = LoadFunctionOrNull<DrawElementsDelegate>("glDrawElements");
             DrawArrays = LoadFunctionOrNull<DrawArraysDelegate>("glDrawArrays");
 
+            // OpenGL >= 2.0, GLES >= 3.0
             DrawRangeElements = LoadFunctionOrNull<DrawRangeElementsDelegate>("glDrawRangeElements");
+
+            // OpenGL >= 3.2, GLES >= 3.2 or GL_ARB_draw_elements_base_vertex
+            DrawElementsBaseVertex = LoadFunctionOrNull<DrawElementsBaseVertexDelegate>("glDrawElementsBaseVertex");
+            DrawRangeElementsBaseVertex = LoadFunctionOrNull<DrawRangeElementsBaseVertexDelegate>("glDrawRangeElementsBaseVertex");
 
             // uniforms OpenGL Version >= 2.0
             Uniform1i = LoadFunctionOrNull<Uniform1iDelegate>("glUniform1i");
@@ -1719,9 +1724,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             if (BlendEquationSeparatei == null && Extensions.Contains("GL_ARB_draw_buffers_blend"))
                 BlendEquationSeparatei = LoadFunctionOrNull<OGL.BlendEquationSeparateiDelegate>("BlendEquationSeparateiARB");
 
-            //if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
+            if (DrawElementsBaseVertex == null && Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
                 DrawElementsBaseVertex = LoadFunctionOrNull<DrawElementsBaseVertexDelegate>("glDrawElementsBaseVertex");
-            //if (Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
+            if (DrawRangeElementsBaseVertex == null && Extensions.Contains("GL_ARB_draw_elements_base_vertex"))
                 DrawRangeElementsBaseVertex = LoadFunctionOrNull<DrawRangeElementsBaseVertexDelegate>("glDrawRangeElementsBaseVertex");
         }
 
