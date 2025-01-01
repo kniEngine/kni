@@ -91,7 +91,7 @@ namespace Microsoft.Xna.Platform.Graphics
             this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
 
             if (((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectARB
-            || ((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectEXT)
+            ||  ((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectEXT)
             {
                 this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
                 this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
