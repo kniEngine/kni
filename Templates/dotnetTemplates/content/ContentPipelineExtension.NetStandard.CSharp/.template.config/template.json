@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "KNI Engine",
+  "classifications": [ "Common", "Console" ],
+  "identity": "nkast.Kni.ContentPipelineExtension.CSharp",
+  "name": "KNI Content Pipeline Extension Project (.NetStandard)",
+  "shortName": "KniContentPipelineExtensionNetStandard",
+  "sourceName": "KniContentPipelineExtension",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "icon": "TemplateIcon.png"
+}
