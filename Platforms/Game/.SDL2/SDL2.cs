@@ -753,6 +753,12 @@ internal class Sdl
             ResetIsolation    = 8,
         }
 
+        public enum ContextReleaseBehaviour : int
+        {
+            None  = 0,
+            Flush = 1,
+        }
+
         public GL(Sdl sdl, IntPtr library)
         {
             _sdl = sdl;
