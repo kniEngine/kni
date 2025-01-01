@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
 #if DEBUG
             // create debug context, so we get better error messages (glDebugMessageCallback)
-            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextFlags, 1); // 1 = SDL_GL_CONTEXT_DEBUG_FLAG
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextFlags, (int)Sdl.GL.ContextFlag.Debug);
 #endif
 
             return new ConcreteGraphicsContext(context);

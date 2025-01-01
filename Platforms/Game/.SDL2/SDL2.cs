@@ -735,6 +735,23 @@ internal class Sdl
             ContextReleaseBehaviour,
         }
 
+        public enum ContextProfile : int
+        {
+            /// <summary>leaves the choice of profile up to SDL</summary>
+            Default = 0,
+            Core = 1,
+            Compatibility = 2,
+            ES = 3,
+        }
+
+        [Flags]
+        public enum ContextFlag : int
+        {
+            Debug             = 1,
+            ForwardCompatible = 2,
+            RobustAccess      = 4,
+            ResetIsolation    = 8,
+        }
 
         public GL(Sdl sdl, IntPtr library)
         {
