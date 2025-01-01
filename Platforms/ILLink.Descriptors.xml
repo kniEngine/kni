@@ -1,5 +1,5 @@
 <linker>
-  <assembly fullname="MonoGame.Framework" >
+  <assembly fullname="Kni.Platform" >
     <type fullname="Microsoft.Xna.Platform.Audio.ConcreteAudioFactory" >
       <method name=".ctor" />
     </type>
