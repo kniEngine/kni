@@ -1806,7 +1806,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         {
             int length = 0;
             GetProgram(programId, GetProgramParameterName.LogLength, out length);
-            StringBuilder sb = new StringBuilder(length, length);
+            StringBuilder sb = new StringBuilder(length, Math.Max(length, 1));
             GetProgramInfoLogInternal(programId, length, IntPtr.Zero, sb);
             return sb.ToString();
         }
@@ -1815,7 +1815,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         {
             int length = 0;
             GetShader(shaderId, ShaderParameter.LogLength, out length);
-            StringBuilder sb = new StringBuilder(length, length);
+            StringBuilder sb = new StringBuilder(length, Math.Max(length, 1));
             GetShaderInfoLogInternal(shaderId, length, IntPtr.Zero, sb);
             return sb.ToString();
         }
