@@ -11,8 +11,6 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
-using ExtTextureFilterAnisotropic = Microsoft.Xna.Platform.Graphics.OpenGL.TextureParameterName;
-
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -20,10 +18,6 @@ namespace Microsoft.Xna.Platform.Graphics
     internal class ConcreteSamplerState : ResourceSamplerStateStrategy
     {
         private readonly float[] _openGLBorderColor = new float[4];
-
-        internal const TextureParameterName TextureParameterNameTextureMaxAnisotropy = (TextureParameterName)ExtTextureFilterAnisotropic.TextureMaxAnisotropyExt;
-        internal const TextureParameterName TextureParameterNameTextureMaxLevel = TextureParameterName.TextureMaxLevel;
-
 
         internal ConcreteSamplerState(GraphicsContextStrategy contextStrategy, ISamplerStateStrategy source)
             : base(contextStrategy, source)
@@ -94,7 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             if (cgraphicsContext.Capabilities.SupportsTextureFilterAnisotropic)
             {
-                GL.TexParameter(target, TextureParameterNameTextureMaxAnisotropy, textureMaxAnisotropy);
+                GL.TexParameter(target, TextureParameterName.TextureMaxAnisotropyExt, textureMaxAnisotropy);
                 GL.CheckGLError();
             }
             GL.TexParameter(target, TextureParameterName.TextureMinFilter, (int)textureMinFilter);
@@ -143,7 +137,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int textureMaxLevel = 1000;
                 if (this.MaxMipLevel > 0)
                     textureMaxLevel = this.MaxMipLevel;
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterNameTextureMaxLevel, textureMaxLevel);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, textureMaxLevel);
                 GL.CheckGLError();
             }
         }
