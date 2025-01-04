@@ -77,6 +77,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.SDL2.GL", "Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WinForms.DX11", "Tests\Kni.Tests.WinForms.DX11.csproj", "{DED2DDB6-D4BE-656D-2E54-657374732E57}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Platform.Oculus.GL", "Platforms\Kni.Platform.Oculus.GL.csproj", "{3472997A-CD26-4D0D-B64A-795F913E6777}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,10 @@ Global
 		{DED2DDB6-D4BE-656D-2E54-657374732E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DED2DDB6-D4BE-656D-2E54-657374732E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DED2DDB6-D4BE-656D-2E54-657374732E57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3472997A-CD26-4D0D-B64A-795F913E6777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3472997A-CD26-4D0D-B64A-795F913E6777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3472997A-CD26-4D0D-B64A-795F913E6777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3472997A-CD26-4D0D-B64A-795F913E6777}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -243,6 +249,7 @@ Global
 		{5212C44E-1573-43C2-85E8-5751A12FBBFD} = {753EFCC6-42AB-433E-A013-B7B5D1FE50E0}
 		{DED2DDB6-D4BE-B1B4-2E54-657374732E57} = {94670BA5-3B36-4EBA-A3E0-27912F6BD11A}
 		{DED2DDB6-D4BE-656D-2E54-657374732E57} = {94670BA5-3B36-4EBA-A3E0-27912F6BD11A}
+		{3472997A-CD26-4D0D-B64A-795F913E6777} = {9E8F9D1A-DEF1-4FA1-8DE9-0A82B7BC99D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {48F20664-456B-4FE0-AE0A-7F5AC695B13C}
