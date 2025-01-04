@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Framework.Input.XR;
 using Microsoft.Xna.Framework.XR;
 using Microsoft.Xna.Platform.XR;
 using Microsoft.Xna.Platform.XR.LibOVR;
 using nkast.LibOVR;
 
-namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
+namespace Microsoft.Xna.Platform.Input.XR.LibOVR
 {
-    public sealed class ConcreteTouchControllerStrategy : IOculusInput
+    public sealed class ConcreteTouchControllerStrategy : ITouchControllerInput
     {
         private ConcreteXRDevice _xrDevice;
 
-        void IOculusInput.GetCapabilities(TouchControllerType controllerType,
+        void ITouchControllerInput.GetCapabilities(TouchControllerType controllerType,
             ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,
             ref Buttons buttons,
             ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor,
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
             this._xrDevice = xrDevice;
         }
 
-        GamePadState IOculusInput.GetState(TouchControllerType controllerType)
+        GamePadState ITouchControllerInput.GetState(TouchControllerType controllerType)
         {
             var session = _xrDevice.Session;
             if (session == null)
@@ -219,7 +219,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
             return state;
         }
 
-        bool IOculusInput.SetVibration(TouchControllerType controllerType, float amplitude)
+        bool ITouchControllerInput.SetVibration(TouchControllerType controllerType, float amplitude)
         {
             var session = _xrDevice.Session;
             if (session == null)

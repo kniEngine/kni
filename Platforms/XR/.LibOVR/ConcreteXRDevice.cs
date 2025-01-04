@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Framework.Input.XR;
 using Microsoft.Xna.Framework.XR;
-using Microsoft.Xna.Platform.Input.Oculus;
+using Microsoft.Xna.Platform.Input.XR;
 using nkast.LibOVR;
 
 namespace Microsoft.Xna.Platform.XR.LibOVR
@@ -324,7 +324,7 @@ namespace Microsoft.Xna.Platform.XR.LibOVR
                 4, 1,
                 out _layer);
 
-            TouchController.DeviceHandle = new Input.Oculus.LibOVR.ConcreteTouchControllerStrategy(this);
+            TouchController.DeviceHandle = new Input.XR.LibOVR.ConcreteTouchControllerStrategy(this);
             this._deviceState = XRDeviceState.Enabled;
 
             return 0;

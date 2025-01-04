@@ -28,7 +28,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="Input\.LibOVR\Oculus\ConcreteTouchControllerStrategy.cs" />
+    <Compile Include="Input\.LibOVR\XR\ConcreteTouchControllerStrategy.cs" />
     <Compile Include="XR\.LibOVR\ConcreteOvrSwapChainData.cs" />
     <Compile Include="XR\.LibOVR\ConcreteXRDevice.cs" />
     <Compile Include="XR\.LibOVR\ConcreteXRFactory.cs" />

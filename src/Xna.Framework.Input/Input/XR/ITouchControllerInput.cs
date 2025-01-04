@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Framework.Input.XR;
 
 
-namespace Microsoft.Xna.Platform.Input.Oculus
+namespace Microsoft.Xna.Platform.Input.XR
 {
-    public interface IOculusInput
+    public interface ITouchControllerInput
     {
         void GetCapabilities(TouchControllerType type,
             ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,

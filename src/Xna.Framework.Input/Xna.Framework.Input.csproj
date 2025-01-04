@@ -52,11 +52,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Input\Oculus\IOculusInput.cs" />
-    <Compile Include="Input\GamePadTouchButtons.cs" />
-    <Compile Include="Input\TouchButtonState.cs" />
-    <Compile Include="Input\Oculus\TouchController.cs" />
-    <Compile Include="Input\Oculus\TouchControllerType.cs" />
+    <Compile Include="Input\XR\ITouchControllerInput.cs" />
+    <Compile Include="Input\XR\TouchController.cs" />
+    <Compile Include="Input\XR\TouchControllerType.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +68,7 @@
     <Compile Include="Input\GamePadDPad.cs" />
     <Compile Include="Input\GamePadState.cs" />
     <Compile Include="Input\GamePadThumbSticks.cs" />
+    <Compile Include="Input\GamePadTouchButtons.cs" />
     <Compile Include="Input\GamePadTriggers.cs" />
     <Compile Include="Input\GamePadType.cs" />
     <Compile Include="Input\InputFactory.cs" />
@@ -94,6 +93,7 @@
     <Compile Include="Input\MouseCursorStrategy.cs" />
     <Compile Include="Input\MouseState.cs" />
     <Compile Include="Input\TextInputEventArgs.cs" />
+    <Compile Include="Input\TouchButtonState.cs" />
   </ItemGroup>
 
   <ItemGroup>
