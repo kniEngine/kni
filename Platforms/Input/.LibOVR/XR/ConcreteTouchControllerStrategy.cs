@@ -11,7 +11,7 @@ using Microsoft.Xna.Platform.XR;
 using Microsoft.Xna.Platform.XR.LibOVR;
 using nkast.LibOVR;
 
-namespace Microsoft.Xna.Platform.Input.Oculus.LibOVR
+namespace Microsoft.Xna.Platform.Input.XR.LibOVR
 {
     public sealed class ConcreteTouchControllerStrategy : ITouchControllerInput
     {

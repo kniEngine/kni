@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Oculus;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
-using Microsoft.Xna.Platform.Input.Oculus;
+using Microsoft.Xna.Platform.Input.XR;
 using Microsoft.Xna.Platform.XR;
 
 namespace Microsoft.Xna.Framework.XR

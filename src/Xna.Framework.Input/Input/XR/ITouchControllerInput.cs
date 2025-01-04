@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Oculus;
 
 
-namespace Microsoft.Xna.Platform.Input.Oculus
+namespace Microsoft.Xna.Platform.Input.XR
 {
     public interface ITouchControllerInput
     {

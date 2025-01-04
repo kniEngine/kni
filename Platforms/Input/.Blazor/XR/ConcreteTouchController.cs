@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input.Oculus;
 using Microsoft.Xna.Framework.XR;
 using nkast.Wasm;
 
-namespace Microsoft.Xna.Platform.Input.Oculus
+namespace Microsoft.Xna.Platform.Input.XR
 {
     public sealed class ConcreteTouchController : ITouchControllerInput
     {
