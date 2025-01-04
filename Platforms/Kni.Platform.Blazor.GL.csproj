@@ -160,8 +160,8 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Compile Include="Input\.Blazor\Oculus\ConcreteTouchController.cs" />
     <Compile Include="Input\.Blazor\Touch\ConcreteTouchPanel.cs" />
+    <Compile Include="Input\.Blazor\XR\ConcreteTouchController.cs" />
     <Compile Include="Input\.Blazor\ConcreteGamePad.cs" />
     <Compile Include="Input\.Blazor\ConcreteGamePadDevice.cs" />
     <Compile Include="Input\.Blazor\ConcreteInputFactory.cs" />
