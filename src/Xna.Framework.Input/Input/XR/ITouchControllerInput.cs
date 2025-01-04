@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input.Oculus;
 
 namespace Microsoft.Xna.Platform.Input.Oculus
 {
-    public interface IOculusInput
+    public interface ITouchControllerInput
     {
         void GetCapabilities(TouchControllerType type,
             ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,

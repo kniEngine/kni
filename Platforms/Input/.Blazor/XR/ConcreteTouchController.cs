@@ -10,11 +10,11 @@ using nkast.Wasm;
 
 namespace Microsoft.Xna.Platform.Input.Oculus
 {
-    public sealed class ConcreteTouchController : IOculusInput
+    public sealed class ConcreteTouchController : ITouchControllerInput
     {
         private ConcreteXRDevice _xrDevice;
 
-        unsafe void IOculusInput.GetCapabilities(TouchControllerType controllerType,
+        unsafe void ITouchControllerInput.GetCapabilities(TouchControllerType controllerType,
             ref GamePadType gamePadType, ref string displayName, ref string identifier, ref bool isConnected,
             ref Buttons buttons,
             ref bool hasLeftVibrationMotor, ref bool hasRightVibrationMotor,
@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             this._xrDevice = xrDevice;
         }
 
-        GamePadState IOculusInput.GetState(TouchControllerType controllerType)
+        GamePadState ITouchControllerInput.GetState(TouchControllerType controllerType)
         {
             var device = _xrDevice;
             if (device != null)
@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Input.Oculus
             return new GamePadState();
         }
 
-        bool IOculusInput.SetVibration(TouchControllerType controllerType, float amplitude)
+        bool ITouchControllerInput.SetVibration(TouchControllerType controllerType, float amplitude)
         {
             var device = _xrDevice;
             if (device != null)

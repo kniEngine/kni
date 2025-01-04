@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Input
 {
     public interface ITouchController
     {
-        IOculusInput DeviceHandle { get; set; }
+        ITouchControllerInput DeviceHandle { get; set; }
 
         GamePadCapabilities GetCapabilities(TouchControllerType type);
         GamePadState GetState(TouchControllerType type);
@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
             }
         }
 
-        public static IOculusInput DeviceHandle
+        public static ITouchControllerInput DeviceHandle
         {
             get { return ((ITouchController)TouchController.Current).DeviceHandle; }
             set { ((ITouchController)TouchController.Current).DeviceHandle = value; }
@@ -74,14 +74,14 @@ namespace Microsoft.Xna.Framework.Input.Oculus
 
         #region ITouchController
 
-        IOculusInput ITouchController.DeviceHandle
+        ITouchControllerInput ITouchController.DeviceHandle
         {
             get; set;
         }
 
         GamePadCapabilities ITouchController.GetCapabilities(TouchControllerType type)
         {
-            IOculusInput device = ((ITouchController)this).DeviceHandle;
+            ITouchControllerInput device = ((ITouchController)this).DeviceHandle;
             if (device != null)
             {
                 //--
@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
 
         GamePadState ITouchController.GetState(TouchControllerType type)
         {
-            IOculusInput device = ((ITouchController)this).DeviceHandle;
+            ITouchControllerInput device = ((ITouchController)this).DeviceHandle;
             if (device != null)
                 return device.GetState(type);
             else
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework.Input.Oculus
 
         bool ITouchController.SetVibration(TouchControllerType type, float amplitude)
         {
-            IOculusInput device = ((ITouchController)this).DeviceHandle;
+            ITouchControllerInput device = ((ITouchController)this).DeviceHandle;
             if (device != null)
                 return device.SetVibration(type, amplitude);
             else
