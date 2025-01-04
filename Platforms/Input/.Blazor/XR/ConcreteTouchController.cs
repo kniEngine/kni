@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Framework.Input.XR;
 using Microsoft.Xna.Framework.XR;
 using nkast.Wasm;
 

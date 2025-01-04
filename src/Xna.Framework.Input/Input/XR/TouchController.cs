@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Framework.Input.XR;
 using Microsoft.Xna.Platform.Input;
 using Microsoft.Xna.Platform.Input.XR;
 
@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform.Input
     }
 }
 
-namespace Microsoft.Xna.Framework.Input.Oculus
+namespace Microsoft.Xna.Framework.Input.XR
 {
     public class TouchController : ITouchController
     {

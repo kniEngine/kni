@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Oculus;
+using Microsoft.Xna.Framework.Input.XR;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input.XR;
