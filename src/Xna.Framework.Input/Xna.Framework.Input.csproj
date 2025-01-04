@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Input\XR\IOculusInput.cs" />
+    <Compile Include="Input\XR\ITouchControllerInput.cs" />
     <Compile Include="Input\XR\TouchController.cs" />
     <Compile Include="Input\XR\TouchControllerType.cs" />
   </ItemGroup>
