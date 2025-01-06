@@ -25,6 +25,7 @@ set username=username
 "C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Kni.Platform.UAP.DX11                   3.14.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
 "C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Kni.Platform.SDL2.GL                    3.14.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
 "C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Kni.Platform.Android.GL                 3.14.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
+"C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Kni.Platform.Oculus.GL                  3.14.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
 
 "C:\Program Files (x86)\nuget\nuget.exe" delete nkast.Kni.Platform.WinForms.DX11.OculusOVR    3.14.9001 -Source "C:\Users\%username%\.nuget\localPackages" -NonInteractive
 
@@ -54,6 +55,7 @@ set username=username
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.UAP.DX11.3.14.9001.nupkg              -Source "C:\Users\%username%\.nuget\localPackages"
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.SDL2.GL.3.14.9001.nupkg               -Source "C:\Users\%username%\.nuget\localPackages"
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.Android.GL.3.14.9001.nupkg            -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.Oculus.GL.3.14.9001.nupkg             -Source "C:\Users\%username%\.nuget\localPackages"
 
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.WinForms.DX11.OculusOVR.3.14.9001.nupkg -Source "C:\Users\%username%\.nuget\localPackages"
 

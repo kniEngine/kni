@@ -40,6 +40,7 @@
     <exec program="dotnet" commandline="build Kni.Platform.SDL2.GL.sln /t:Clean /p:Configuration=Release" />
     
     <exec program="dotnet" commandline="build Kni.Platform.Android.GL.sln /t:Clean /p:Configuration=Release" />
+    <exec program="dotnet" commandline="build Kni.Platform.Oculus.GL.sln /t:Clean /p:Configuration=Release" />
     <exec program="dotnet" commandline="build Kni.Platform.Cardboard.GL.sln /t:Clean /p:Configuration=Release" />
     
     <exec program="dotnet" commandline="build Kni.Platform.iOS.GL.sln /t:Clean /p:Configuration=Release" />
@@ -58,6 +59,7 @@
     <call target="build_windowsUAP10" />
     <call target="build_desktopGL"/>
     <call target="build_android" />
+    <call target="build_oculus" />
     <call target="build_cardboard" />
     <call target="build_ios" />
   </target>
@@ -82,6 +84,7 @@
     <exec program="${nugetPath}" commandline="pack NuGetPackages/MonoGame.Framework.WindowsUniversal.nuspec	-OutputDirectory ${project::get-base-directory()}\Artifacts\Packages\  -BasePath .  -Version ${nugetPackageVersion}  -Properties Configuration=Release" />
 
     <exec program="dotnet" commandline="pack Platforms\Kni.Platform.Android.GL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
+    <exec program="dotnet" commandline="pack Platforms\Kni.Platform.Oculus.GL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Platforms\Kni.Platform.iOS.GL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Platforms\Kni.Platform.WinForms.DX11.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
     <exec program="dotnet" commandline="pack Platforms\Kni.Platform.SDL2.GL.csproj --output ${project::get-base-directory()}\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
@@ -169,6 +172,11 @@
 
   </target>
   
+  <target name="build_oculus" description="Build Oculus">
+      <exec program="dotnet" commandline='build Kni.Platform.Oculus.GL.sln /t:Restore /p:Configuration=Release' />
+      <exec program="dotnet" commandline='build Kni.Platform.Oculus.GL.sln /t:Build /p:Configuration=Release' />
+  </target>
+
   <target name="build_cardboard" description="Build Cardboard">
       <exec program="dotnet" commandline='build Kni.Platform.Cardboard.GL.sln /t:Restore /p:Configuration=Release' />
       <exec program="dotnet" commandline='build Kni.Platform.Cardboard.GL.sln /t:Build /p:Configuration=Release' />

@@ -20,7 +20,8 @@ We support a growing list of platforms across the desktop, mobile, and console s
 
  * Windows 8.1 and up (OpenGL & DirectX)
  * Windows Store Apps (UWP)
- * Oculus VR (OvrPC/DirectX)
+ * Oculus VR (OvrPC/DirectX/meta link)
+ * Oculus VR/AR (native/OpenGL)
  * Linux (OpenGL)
  * macOS 10.15 and up (OpenGL)
  * Android 6.0 and up (OpenGL)

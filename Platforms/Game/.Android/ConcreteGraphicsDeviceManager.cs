@@ -220,6 +220,10 @@ namespace Microsoft.Xna.Platform
 
         public override void EndDraw()
         {
+#if OCULUS
+            return; // On Oculus, do not Present() the backbuffer.
+#endif
+
             //base.EndDraw();
 
             GraphicsDevice device = this.GraphicsDevice;

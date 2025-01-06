@@ -62,6 +62,8 @@ jobs:
       run: dotnet build Kni.Platform.iOS.GL.sln --property:WarningLevel=1
     - name: Build Android.GL
       run: dotnet build Kni.Platform.Android.GL.sln --property:WarningLevel=1
+   # - name: Build Oculus.GL
+   #   run: dotnet build Kni.Platform.Oculus.GL.sln --property:WarningLevel=1
    # - name: Build Cardboard.GL
    #   run: dotnet build Kni.Platform.Cardboard.GL.sln --property:WarningLevel=1
    # - name: Build Windows UAP.DX11
