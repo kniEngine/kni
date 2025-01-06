@@ -49,13 +49,13 @@ set username=username
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Framework.Content.Pipeline.Builder.3.14.9001.nupkg  -Source "C:\Users\%username%\.nuget\localPackages"
 "C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Framework.Content.Pipeline.Builder.Windows.3.14.9001.nupkg -Source "C:\Users\%username%\.nuget\localPackages"
 
-"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Platform.Blazor.GL.3.14.9001.nupkg             -Source "C:\Users\%username%\.nuget\localPackages"
-"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Platform.WinForms.DX11.3.14.9001.nupkg         -Source "C:\Users\%username%\.nuget\localPackages"
-"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Platform.UAP.DX11.3.14.9001.nupkg              -Source "C:\Users\%username%\.nuget\localPackages"
-"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Platform.SDL2.GL.3.14.9001.nupkg               -Source "C:\Users\%username%\.nuget\localPackages"
-"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Platform.Android.GL.3.14.9001.nupkg            -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.Blazor.GL.3.14.9001.nupkg             -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.WinForms.DX11.3.14.9001.nupkg         -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.UAP.DX11.3.14.9001.nupkg              -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.SDL2.GL.3.14.9001.nupkg               -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.Android.GL.3.14.9001.nupkg            -Source "C:\Users\%username%\.nuget\localPackages"
 
-"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Xna.Platform.WinForms.DX11.OculusOVR.3.14.9001.nupkg -Source "C:\Users\%username%\.nuget\localPackages"
+"C:\Program Files (x86)\nuget\nuget.exe" add output\nkast.Kni.Platform.WinForms.DX11.OculusOVR.3.14.9001.nupkg -Source "C:\Users\%username%\.nuget\localPackages"
 
 
 @pause
