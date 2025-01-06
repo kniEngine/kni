@@ -11,8 +11,9 @@ namespace $safeprojectname$
         , Theme = "@style/Theme.Splash"
         , AlwaysRetainTaskState = true
         , LaunchMode = LaunchMode.SingleInstance
+        , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout | ConfigChanges.UiMode | ConfigChanges.SmallestScreenSize
         , ScreenOrientation = ScreenOrientation.FullSensor
-        , ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize | ConfigChanges.ScreenLayout | ConfigChanges.UiMode | ConfigChanges.SmallestScreenSize)]
+    )]
     public class $safeprojectname$Activity : Microsoft.Xna.Framework.AndroidGameActivity
     {
         protected override void OnCreate(Bundle bundle)
