@@ -97,6 +97,10 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   ; Install the assemblies for all the platforms we can 
   ; target from a Windows desktop system.
 
+  ; Install framework packages
+  SetOutPath '$INSTDIR\Packages\'
+  File '..\..\Artifacts\Packages\*.*'
+  
   ; Install framework Assemblies
   SetOutPath '$INSTDIR\Assemblies\Framework\net40'
   File '..\..\Artifacts\Xna.Framework\Release\net40\*.*'
@@ -118,6 +122,7 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File '..\..\Artifacts\Xna.Framework.Game\Release\netstandard2.0\*.*'
   File '..\..\Artifacts\Xna.Framework.Devices\Release\netstandard2.0\*.*'
   File '..\..\Artifacts\Xna.Framework.Storage\Release\netstandard2.0\*.*'
+    
   
   ; Install Reference Assemblies
   SetOutPath '$INSTDIR\Assemblies\Ref\net40'
