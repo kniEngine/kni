@@ -76,10 +76,6 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright © Kni framewo
 Section "Kni Core Components" CoreComponents ;No components page, name is not important
   SectionIn RO
   
-  ; Install the VS support files.
-  SetOutPath ${MSBuildInstallDir}
-  File '..\..\Tools\Build.Targets\Kni.Content.Builder.targets'
-
   ; Install the Kni tools to a single shared folder.
   SetOutPath ${MSBuildInstallDir}\Tools
   File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.exe'
