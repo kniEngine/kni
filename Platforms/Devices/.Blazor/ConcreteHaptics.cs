@@ -7,10 +7,10 @@ using nkast.Wasm.Dom;
 
 namespace Microsoft.Xna.Platform.Devices
 {
-    public sealed class ConcreteVibrator : VibratorStrategy
+    public sealed class ConcreteHaptics : HapticsStrategy
     {
 
-        public ConcreteVibrator()
+        public ConcreteHaptics()
         {
         }
 

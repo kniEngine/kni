@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Devices
             }
         }
 
-        public abstract VibratorStrategy CreateVibratorStrategy();
+        public abstract HapticsStrategy CreateConcreteHapticsStrategy();
 
         public abstract SensorServiceStrategy CreateSensorServiceStrategy();
         public abstract AccelerometerStrategy CreateAccelerometerStrategy();

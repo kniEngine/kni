@@ -189,7 +189,7 @@
     <Compile Include="Media\WME\MusicProperties.cs" />
 
     <Compile Include="Devices\.UAP\ConcreteDevicesFactory.cs" />
-    <Compile Include="Devices\.UAP\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.UAP\ConcreteHaptics.cs" />
     <Compile Include="Devices\.UAP\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.UAP\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.UAP\Sensors\ConcreteSensorService.cs" />

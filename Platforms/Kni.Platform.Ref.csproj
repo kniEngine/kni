@@ -99,7 +99,7 @@
 	
   <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Devices\.Ref\ConcreteDevicesFactory.cs" />
-    <Compile Include="Devices\.Ref\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.Ref\ConcreteHaptics.cs" />
     <Compile Include="Devices\.Ref\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.Ref\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.Ref\Sensors\ConcreteSensorService.cs" />

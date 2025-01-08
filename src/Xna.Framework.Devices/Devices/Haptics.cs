@@ -6,53 +6,53 @@ using Microsoft.Xna.Platform.Devices;
 
 namespace Microsoft.Xna.Platform.Devices
 {
-    public interface IPlatformVibrator
+    public interface IPlatformHaptics
     {
-        T GetStrategy<T>() where T : VibratorStrategy;
+        T GetStrategy<T>() where T : HapticsStrategy;
     }
 }
 
 namespace Microsoft.Xna.Framework.Devices
 {
-    public sealed class Vibrator : IPlatformVibrator
+    public sealed class Haptics : IPlatformHaptics
     {
-        private static Vibrator _current;
+        private static Haptics _current;
 
         /// <summary>
         /// Returns the current Vibrator instance.
         /// </summary> 
-        public static Vibrator Current
+        public static Haptics Current
         {
             get
             {
                 if (_current != null)
                     return _current;
 
-                lock (typeof(Vibrator))
+                lock (typeof(Haptics))
                 {
                     if (_current == null)
-                        _current = new Vibrator();
+                        _current = new Haptics();
 
                     return _current;
                 }
             }
         }
 
-        private VibratorStrategy _strategy;
+        private HapticsStrategy _strategy;
 
-        T IPlatformVibrator.GetStrategy<T>()
+        T IPlatformHaptics.GetStrategy<T>()
         {
             return (T)_strategy;
         }
 
-        private Vibrator()
+        private Haptics()
         {
-            _strategy = DevicesFactory.Current.CreateVibratorStrategy();
+            _strategy = DevicesFactory.Current.CreateConcreteHapticsStrategy();
         }
 
         public void Vibrate(TimeSpan duration)
         {
-            lock (typeof(Vibrator))
+            lock (typeof(Haptics))
             {
                 _strategy.Vibrate(duration);
             }

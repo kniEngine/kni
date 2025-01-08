@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework.Devices;
 
 namespace Microsoft.Xna.Platform.Devices
 {
-    public sealed class ConcreteVibrator : VibratorStrategy
+    public sealed class ConcreteHaptics : HapticsStrategy
     {
         Android.OS.Vibrator _nativeVibrator;
         private bool _hasVibrator = true;
 
-        public ConcreteVibrator()
+        public ConcreteHaptics()
         {
             _nativeVibrator = (Android.OS.Vibrator)Android.App.Application.Context.GetSystemService(Android.Content.Context.VibratorService);
             try

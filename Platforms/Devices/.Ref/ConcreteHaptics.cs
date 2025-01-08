@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework.Devices;
 
 namespace Microsoft.Xna.Platform.Devices
 {
-    public sealed class ConcreteVibrator : VibratorStrategy
+    public sealed class ConcreteHaptics : HapticsStrategy
     {
 
-        public ConcreteVibrator()
+        public ConcreteHaptics()
         {
             throw new PlatformNotSupportedException();
         }

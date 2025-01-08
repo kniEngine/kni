@@ -186,7 +186,7 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Devices\.SDL2\ConcreteDevicesFactory.cs" />
-    <Compile Include="Devices\.SDL2\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.SDL2\ConcreteHaptics.cs" />
     <Compile Include="Devices\.SDL2\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.SDL2\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.SDL2\Sensors\ConcreteSensorService.cs" />
