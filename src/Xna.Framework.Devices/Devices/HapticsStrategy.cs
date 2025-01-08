@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Devices;
 
 namespace Microsoft.Xna.Platform.Devices
 {
-    public abstract class VibratorStrategy
+    public abstract class HapticsStrategy
     {
         public abstract void Vibrate(TimeSpan duration);
     }

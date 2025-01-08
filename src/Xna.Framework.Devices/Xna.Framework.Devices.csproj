@@ -39,8 +39,8 @@
 
   <ItemGroup>
     <Compile Include="Devices\DevicesFactory.cs" />
-    <Compile Include="Devices\Vibrator.cs" />
-    <Compile Include="Devices\VibratorStrategy.cs" />
+    <Compile Include="Devices\Haptics.cs" />
+    <Compile Include="Devices\HapticsStrategy.cs" />
   </ItemGroup>
 
   <ItemGroup>

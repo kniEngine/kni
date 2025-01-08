@@ -125,7 +125,7 @@
     <Compile Include="Game\.Android\AndroidGameWindow.cs" />
 
     <Compile Include="Devices\.Android\ConcreteDevicesFactory.cs" />
-    <Compile Include="Devices\.Android\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.Android\ConcreteHaptics.cs" />
     <Compile Include="Devices\.Android\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.Android\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.Android\Sensors\ConcreteSensorService.cs" />

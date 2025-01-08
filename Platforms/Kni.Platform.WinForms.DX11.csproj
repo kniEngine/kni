@@ -186,7 +186,7 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Devices\.WindowsDX\ConcreteDevicesFactory.cs" />
-    <Compile Include="Devices\.WindowsDX\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.WindowsDX\ConcreteHaptics.cs" />
     <Compile Include="Devices\.WindowsDX\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.WindowsDX\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.WindowsDX\Sensors\ConcreteSensorService.cs" />

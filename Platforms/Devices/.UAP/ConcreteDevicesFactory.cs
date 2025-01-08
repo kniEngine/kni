@@ -9,9 +9,9 @@ namespace Microsoft.Xna.Platform.Devices
     public sealed class ConcreteDevicesFactory : DevicesFactory
     {
 
-        public override VibratorStrategy CreateVibratorStrategy()
+        public override HapticsStrategy CreateConcreteHapticsStrategy()
         {
-            return new ConcreteVibrator();
+            return new ConcreteHaptics();
         }
 
         public override SensorServiceStrategy CreateSensorServiceStrategy()

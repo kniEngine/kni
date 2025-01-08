@@ -106,7 +106,7 @@
 
   <ItemGroup>
     <Compile Include="Devices\.iOS\ConcreteDevicesFactory.cs" />
-    <Compile Include="Devices\.iOS\ConcreteVibrator.cs" />
+    <Compile Include="Devices\.iOS\ConcreteHaptics.cs" />
     <Compile Include="Devices\.iOS\Sensors\ConcreteAccelerometer.cs" />
     <Compile Include="Devices\.iOS\Sensors\ConcreteCompass.cs" />
     <Compile Include="Devices\.iOS\Sensors\ConcreteSensorService.cs" />
