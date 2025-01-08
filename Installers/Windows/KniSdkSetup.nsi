@@ -95,8 +95,8 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   !insertmacro APP_ASSOCIATE 'mgcb' 'MonoGame.ContentBuilderFile' 'A MonoGame content builder project.' '$INSTDIR\Tools\PipelineEditor.exe,0' 'Open with PipelineEditor' '$INSTDIR\Tools\PipelineEditor.exe "%1"'
 
   ; Install framework packages
-  SetOutPath '$INSTDIR\Packages\'
-  File '..\..\Artifacts\Packages\*.*'
+  ;SetOutPath '$INSTDIR\Packages\'
+  ;File '..\..\Artifacts\Packages\*.*'
   
   End32Bitvs64BitCheck:
   ; Add remote programs
