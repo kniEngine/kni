@@ -2,7 +2,7 @@ SetCompressor /SOLID /FINAL lzma
 
 !include "header.nsh"
 !include "LogicLib.nsh"
-!define APPNAME "MonoGame"
+!define APPNAME "KNI"
 
 ;Include Modern UI
 
