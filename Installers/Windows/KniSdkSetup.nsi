@@ -94,97 +94,10 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '15.0' 'mgcb' '$INSTDIR\Tools\PipelineEditor.exe'
   !insertmacro APP_ASSOCIATE 'mgcb' 'MonoGame.ContentBuilderFile' 'A MonoGame content builder project.' '$INSTDIR\Tools\PipelineEditor.exe,0' 'Open with PipelineEditor' '$INSTDIR\Tools\PipelineEditor.exe "%1"'
 
-  ; Install the assemblies for all the platforms we can 
-  ; target from a Windows desktop system.
-
   ; Install framework packages
   SetOutPath '$INSTDIR\Packages\'
   File '..\..\Artifacts\Packages\*.*'
   
-  ; Install framework Assemblies
-  SetOutPath '$INSTDIR\Assemblies\Framework\net40'
-  File '..\..\Artifacts\Xna.Framework\Release\net40\*.*'
-  File '..\..\Artifacts\Xna.Framework.Design\Release\net40\*.*'
-  File '..\..\Artifacts\Xna.Framework.Content\Release\net40\*.*'
-  File '..\..\Artifacts\Xna.Framework.Graphics\Release\net40\*.*'
-  File '..\..\Artifacts\Xna.Framework.Audio\Release\net40\*.*'
-  File '..\..\Artifacts\Xna.Framework.Media\Release\net40\*.*'
-  File '..\..\Artifacts\Xna.Framework.Input\Release\net40\*.*'
-  File '..\..\Artifacts\Xna.Framework.Game\Release\net40\*.*'
-  SetOutPath '$INSTDIR\Assemblies\Framework\netstandard2.0'
-  File '..\..\Artifacts\Xna.Framework\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Content\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Graphics\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Audio\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Media\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Input\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Game\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Devices\Release\netstandard2.0\*.*'
-  File '..\..\Artifacts\Xna.Framework.Storage\Release\netstandard2.0\*.*'
-    
-  
-  ; Install Reference Assemblies
-  SetOutPath '$INSTDIR\Assemblies\Ref\net40'
-  File '..\..\Artifacts\Platforms\Ref\Release\net40\*.*'
-  SetOutPath '$INSTDIR\Assemblies\Ref\netstandard2.0'
-  File '..\..\Artifacts\Platforms\Ref\Release\netstandard2.0\*.*'
-  
-  ; Install Android Assemblies
-  SetOutPath '$INSTDIR\Assemblies\Android'
-  File '..\..\Platforms\bin\Android\AnyCPU\Release\*.dll'
-  File '..\..\Platforms\bin\Android\AnyCPU\Release\*.xml'
-  
-  ; Install DesktopGL Assemblies
-  SetOutPath '$INSTDIR\Assemblies\DesktopGL'
-  File /nonfatal '..\..\Artifacts\Platforms\DesktopGL\Release\net40\*.dll'
-  File /nonfatal '..\..\Artifacts\Platforms\DesktopGL\Release\net40\*.xml'
-  File '..\..\ThirdParty\Dependencies\SDL\MacOS\Universal\libSDL2.dylib'
-  File '..\..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib'
-  File '..\..\ThirdParty\Dependencies\MonoGame.Framework.dll.config'
-  
-  ; Install x86 DesktopGL Dependencies
-  SetOutPath '$INSTDIR\Assemblies\DesktopGL\x86'
-  File '..\..\ThirdParty\Dependencies\SDL\Windows\x86\SDL2.dll'
-  File '..\..\ThirdParty\Dependencies\openal-soft\Windows\x86\soft_oal.dll'
-  File '..\..\ThirdParty\Dependencies\openal-soft\Linux\x86\libopenal.so.1'
-  
-  ; Install x64 DesktopGL Dependencies
-  SetOutPath '$INSTDIR\Assemblies\DesktopGL\x64'
-  File '..\..\ThirdParty\Dependencies\SDL\Windows\x64\SDL2.dll'
-  File '..\..\ThirdParty\Dependencies\openal-soft\Windows\x64\soft_oal.dll'
-  File '..\..\ThirdParty\Dependencies\SDL\Linux\x64\libSDL2-2.0.so.0'
-  File '..\..\ThirdParty\Dependencies\openal-soft\Linux\x64\libopenal.so.1'
-  
-  ; Install Windows Desktop DirectX Assemblies
-  SetOutPath '$INSTDIR\Assemblies\Windows'
-  File '..\..\Artifacts\Platforms\WindowsDX\Release\net40\*.dll'
-  File '..\..\Artifacts\Platforms\WindowsDX\Release\net40\*.xml'
-
-  ; Install Windows 10 UAP Assemblies
-  SetOutPath '$INSTDIR\Assemblies\WindowsUniversal'
-  ;File '..\..\Platforms\bin\WindowsUniversal\Release\uap10.0\*.dll'
-  ;File '..\..\Platforms\bin\WindowsUniversal\Release\uap10.0\*.xml' 
-  File '..\..\Platforms\bin\WindowsUniversal\AnyCPU\Release\*.dll'
-  File '..\..\Platforms\bin\WindowsUniversal\AnyCPU\Release\*.xml'
-
-  ; Install iOS Assemblies
-  IfFileExists `$PROGRAMFILES\MSBuild\Xamarin\iOS\*.*` InstalliOSAssemblies SkipiOSAssemblies
-  InstalliOSAssemblies:
-  ;SetOutPath '$INSTDIR\Assemblies\iOS'
-  ;File '..\..\Artifacts\Platforms\iOS\Release\xamarinios10\*.dll'
-  ;File '..\..\Artifacts\Platforms\iOS\Release\xamarinios10\*.xml'
-  SkipiOSAssemblies:
-
-  WriteRegStr HKLM 'SOFTWARE\Microsoft\MonoAndroid\v2.3\AssemblyFoldersEx\${APPNAME} for Android' '' '$INSTDIR\Assemblies\Android'
-  WriteRegStr HKLM 'SOFTWARE\Microsoft\MonoTouch\v1.0\AssemblyFoldersEx\${APPNAME} for iOS' '' '$INSTDIR\Assemblies\iOS'
-
-  IfFileExists $WINDIR\SYSWOW64\*.* Is64bit Is32bit
-  Is32bit:
-    GOTO End32Bitvs64BitCheck
-  Is64bit:
-    WriteRegStr HKLM 'SOFTWARE\Wow6432Node\Microsoft\MonoTouch\v1.0\AssemblyFoldersEx\${APPNAME} for iOS' '' '$INSTDIR\Assemblies\iOS'
-
   End32Bitvs64BitCheck:
   ; Add remote programs
   WriteRegStr HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}' 'DisplayName' '${APPNAME} SDK'
@@ -302,33 +215,11 @@ FunctionEnd
 Section "Uninstall"
 
   DeleteRegKey HKLM 'Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}'
-  DeleteRegKey HKLM 'SOFTWARE\Microsoft\MonoAndroid\v2.3\AssemblyFoldersEx\${APPNAME} for Android'
-  DeleteRegKey HKLM 'SOFTWARE\Microsoft\MonoTouch\v1.0\AssemblyFoldersEx\${APPNAME} for iOS'
 
   ;DeleteRegKey HKCU 'Software\Microsoft\VisualStudio\12.0\Default Editors\mgcb'
 
   DeleteRegKey HKCR '.mgcb'
   DeleteRegKey HKCR 'MonoGame.ContentBuilderFile'
-
-  IfFileExists $WINDIR\SYSWOW64\*.* Is64bit Is32bit
-  Is32bit:
-    GOTO End32Bitvs64BitCheck
-  Is64bit:
-    DeleteRegKey HKLM 'SOFTWARE\Wow6432Node\Microsoft\MonoAndroid\v2.3\AssemblyFoldersEx\${APPNAME} for Android'
-	DeleteRegKey HKLM 'SOFTWARE\Wow6432Node\Microsoft\MonoTouch\v1.0\AssemblyFoldersEx\${APPNAME} for iOS'
-
-
-  End32Bitvs64BitCheck:
-
-  ReadRegStr $0 HKLM 'SOFTWARE\Wow6432Node\Xamarin\MonoDevelop' "Path"
-  ${If} $0 == "" ; check on 32 bit machines just in case
-  ReadRegStr $0 HKLM 'SOFTWARE\Xamarin\MonoDevelop' "Path"
-  ${EndIf}
-
-  ${If} $0 == ""
-  ${Else}
-  RMDir /r "$0\AddIns\MonoDevelop.MonoGame"
-  ${EndIf}
   
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
