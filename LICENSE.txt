@@ -1,5 +1,5 @@
 ﻿Microsoft Public License (Ms-PL)
-Kni - Copyright © 2014-2023 Nick Kastellanos
+Kni - Copyright © 2014-2025 Nick Kastellanos
 
 -------------------------------------------------------------------------------
 
