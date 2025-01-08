@@ -45,7 +45,6 @@ Page Custom SponsorPage SponsorPageLeave
 Name '${APPNAME} SDK ${INSTALLERVERSION}'
 OutFile 'KniSdkSetup.exe'
 InstallDir '$PROGRAMFILES\${APPNAME}\v${VERSION}'
-!define MSBuildInstallDir '$PROGRAMFILES32\MSBuild\${APPNAME}\v${VERSION}'
 VIProductVersion "${INSTALLERVERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${APPNAME} SDK"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "Kni framework"
@@ -77,7 +76,7 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   SectionIn RO
   
   ; Install the Kni tools to a single shared folder.
-  SetOutPath ${MSBuildInstallDir}\Tools
+  SetOutPath '$INSTDIR\Tools'
   File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.exe'
   File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.runtimeconfig.json'
   File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.dll'
@@ -92,8 +91,8 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.dll'
 
   ; Associate .mgcb files open in the Pipeline tool.
-  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '15.0' 'mgcb' '${MSBuildInstallDir}\Tools\PipelineEditor.exe'
-  !insertmacro APP_ASSOCIATE 'mgcb' 'MonoGame.ContentBuilderFile' 'A MonoGame content builder project.' '${MSBuildInstallDir}\Tools\PipelineEditor.exe,0' 'Open with PipelineEditor' '${MSBuildInstallDir}\Tools\PipelineEditor.exe "%1"'
+  !insertmacro VS_ASSOCIATE_EDITOR 'MonoGame Pipeline' '15.0' 'mgcb' '$INSTDIR\Tools\PipelineEditor.exe'
+  !insertmacro APP_ASSOCIATE 'mgcb' 'MonoGame.ContentBuilderFile' 'A MonoGame content builder project.' '$INSTDIR\Tools\PipelineEditor.exe,0' 'Open with PipelineEditor' '$INSTDIR\Tools\PipelineEditor.exe "%1"'
 
   ; Install the assemblies for all the platforms we can 
   ; target from a Windows desktop system.
@@ -228,8 +227,8 @@ Section "Start Menu Shortcuts" Menu
 	CreateDirectory $SMPROGRAMS\${APPNAME}
 	SetOutPath "$INSTDIR"
 	CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall MonoGame.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-	SetOutPath "${MSBuildInstallDir}\Tools"
-	CreateShortCut "$SMPROGRAMS\${APPNAME}\Kni PipelineEditor.lnk" "${MSBuildInstallDir}\Tools\PipelineEditor.exe" "" "${MSBuildInstallDir}\Tools\PipelineEditor.exe" 0
+	SetOutPath "$INSTDIR\Tools"
+	CreateShortCut "$SMPROGRAMS\${APPNAME}\Kni PipelineEditor.lnk" "$INSTDIR\Tools\PipelineEditor.exe" "" "$INSTDIR\Tools\PipelineEditor.exe" 0
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Website.url" "InternetShortcut" "URL" "http://www.monogame.net"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Website.url" "InternetShortcut" "IconFile" "$INSTDIR\Kni.ico"
 	WriteINIStr "$SMPROGRAMS\${APPNAME}\MonoGame Website.url" "InternetShortcut" "IconIndex" "0"
@@ -332,7 +331,6 @@ Section "Uninstall"
   RMDir /r "$DOCUMENTS\Visual Studio 2019\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
-  RMDir /r "${MSBuildInstallDir}"
   RMDir /r "$SMPROGRAMS\${APPNAME}"
 
   Delete "$INSTDIR\Uninstall.exe"
