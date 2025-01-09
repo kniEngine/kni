@@ -4,7 +4,7 @@
     <PackageProjectUrl>https://github.com/kniengine/kni/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kniengine/kni/</RepositoryUrl>
     <Authors>Kastellanos Nikos, MonoGame Team</Authors>
-    <copyright>©2013-2023 Kastellanos Nikos,
+    <copyright>©2013-2025 Kastellanos Nikos,
                 ©2009-2022 The MonoGame Team</copyright>
     <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
   </PropertyGroup>
