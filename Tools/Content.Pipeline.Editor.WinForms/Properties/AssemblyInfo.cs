@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("KNI Pipeline Tool")]
-[assembly: AssemblyCopyright("Copyright ©2022 Nick Kastellanos, Copyright © MonoGameTeam 2016")]
+[assembly: AssemblyCopyright("Copyright ©2025 Nick Kastellanos, Copyright © MonoGameTeam 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

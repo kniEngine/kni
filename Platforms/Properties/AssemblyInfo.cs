@@ -10,7 +10,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Kni.Platform")]
-[assembly: AssemblyCopyright("Copyright ©2009-2022 MonoGame Team, ©2022 Nick Kastellanos")]
+[assembly: AssemblyCopyright("Copyright ©2009-2022 MonoGame Team, ©2025 Nick Kastellanos")]
 [assembly: AssemblyCulture("")]
 
 // Mark the assembly as CLS compliant so it can be safely used in other .NET languages

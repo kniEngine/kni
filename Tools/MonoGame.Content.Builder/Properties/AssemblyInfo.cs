@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MGCB")]
-[assembly: AssemblyCopyright("Copyright ©2022 MonoGame Team, ©2022 Nick Kastellanos")]
+[assembly: AssemblyCopyright("Copyright ©2025 MonoGame Team, ©2022 Nick Kastellanos")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
