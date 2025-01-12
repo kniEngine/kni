@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override TimeSpan PlatformPlayPosition
         {
-            get { throw new NotImplementedException(); }
+            get { return _webPlayer.CurrentTime; }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
