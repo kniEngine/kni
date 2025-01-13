@@ -64,8 +64,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0 && !(CurrentRenderTargetBindings[0].RenderTarget is RenderTargetSwapChain)); } }
 
-        internal int _glMajorVersion = 0;
-        internal int _glMinorVersion = 0;
+        internal GLVersion _glVersion;
 
 
         public override Viewport Viewport

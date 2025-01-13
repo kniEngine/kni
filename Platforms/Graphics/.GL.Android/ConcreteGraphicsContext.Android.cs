@@ -86,20 +86,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 else // if it fails, we assume to be on a 1.1 context
                     version = "1.1";
 
-                _glMajorVersion = Convert.ToInt32(version.Substring(0, 1));
-                _glMinorVersion = Convert.ToInt32(version.Substring(2, 1));
+                _glVersion.Major = Convert.ToInt16(version.Substring(0, 1));
+                _glVersion.Minor = Convert.ToInt16(version.Substring(2, 1));
             }
             catch (FormatException)
             {
                 // if it fails, we assume to be on a 1.1 context
-                _glMajorVersion = 1;
-                _glMinorVersion = 1;
+                _glVersion = new GLVersion(1,1);
             }
 
             base._capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
                  this, ((IPlatformGraphicsContext)this.Context).DeviceStrategy,
-                _glMajorVersion, _glMinorVersion);
+                _glVersion);
 
             base.Initialize(this.Capabilities);
 

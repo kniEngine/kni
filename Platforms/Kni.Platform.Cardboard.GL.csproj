@@ -211,6 +211,7 @@
     <Compile Include="Graphics\.GL\ConcreteSamplerStateCollection.cs" />
     <Compile Include="Graphics\.GL\ConcreteTextureCollection.cs" />
     <Compile Include="Graphics\.GL\GLExtensions.cs" />
+    <Compile Include="Graphics\.GL\GLVersion.cs" />
     <Compile Include="Graphics\.GL\IRenderTargetStrategyGL.cs" />
     <Compile Include="Graphics\.GL\OpenGL.cs" />
 
