@@ -890,7 +890,7 @@ namespace Microsoft.Xna.Platform.Graphics
                                   baseVertex);
                 GL.CheckGLError();
             }
-            else if (GL.DrawRangeElements != null)
+            else if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsDrawRangeElements)
             {
                 PlatformApplyVertexBuffers(baseVertex);
 

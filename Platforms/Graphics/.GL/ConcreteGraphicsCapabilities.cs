@@ -30,6 +30,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal bool SupportsFramebufferObjectIMG { get; private set; }
 
         internal bool SupportsBaseVertex { get; private set; }
+        internal bool SupportsDrawRangeElements { get; private set; }
 
         private int _maxDrawBuffers;
 
@@ -166,6 +167,8 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
 
             SupportsBaseVertex = version >= new GLVersion(3,2) || GL.Extensions.Contains("GL_ARB_framebuffer_object");
+            SupportsDrawRangeElements = (GL.BoundApi == OGL.RenderApi.GL && version >= new GLVersion(2, 0))
+                                     || (GL.BoundApi == OGL.RenderApi.ES && version >= new GLVersion(3, 0));
 
             GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
             GL.CheckGLError();
