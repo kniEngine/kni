@@ -29,6 +29,8 @@ namespace Microsoft.Xna.Platform.Graphics
         /// </summary>
         internal bool SupportsFramebufferObjectIMG { get; private set; }
 
+        internal bool SupportsBaseVertex { get; private set; }
+
         private int _maxDrawBuffers;
 
         internal int MaxDrawBuffers { get { return _maxDrawBuffers; } }
@@ -162,6 +164,8 @@ namespace Microsoft.Xna.Platform.Graphics
 #elif DESKTOPGL
             SupportsSeparateBlendStates = version >= new GLVersion(4,0) || GL.Extensions.Contains("GL_ARB_draw_buffers_blend");
 #endif
+
+            SupportsBaseVertex = version >= new GLVersion(3,2) || GL.Extensions.Contains("GL_ARB_framebuffer_object");
 
             GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
             GL.CheckGLError();

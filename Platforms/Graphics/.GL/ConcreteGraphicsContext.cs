@@ -877,7 +877,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             GLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            if (baseVertex > 0 && GL.DrawRangeElementsBaseVertex != null)
+            if (baseVertex > 0 && ((ConcreteGraphicsCapabilities)this.Capabilities).SupportsBaseVertex)
             {
                 PlatformApplyVertexBuffers(0);
 
