@@ -52,13 +52,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // get the GL version.
-            _glMajorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMajorVersion;
-            _glMinorVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glMinorVersion;
+            _glVersion = ((IPlatformGraphicsAdapter)GraphicsAdapter.DefaultAdapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>().glVersion;
 
             base._capabilities = new ConcreteGraphicsCapabilities();
             ((ConcreteGraphicsCapabilities)base._capabilities).PlatformInitialize(
                 this, ((IPlatformGraphicsContext)this.Context).DeviceStrategy,
-                _glMajorVersion, _glMinorVersion);
+                _glVersion);
 
             base.Initialize(this.Capabilities);
 

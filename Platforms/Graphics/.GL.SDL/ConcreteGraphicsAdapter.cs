@@ -139,8 +139,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private OGL _gl;
         private string _version;
-        private int _glMajorVersion = 0;
-        private int _glMinorVersion = 0;
+        private GLVersion _glVersion;
 
         int _capMaxTextureSize;
         int _capMaxMultiSampleCount;
@@ -150,8 +149,7 @@ namespace Microsoft.Xna.Platform.Graphics
         int _capMaxDrawBuffers;
 
         internal OGL GL { get { return _gl; } }
-        internal int glMajorVersion { get { return _glMajorVersion; } }
-        internal int glMinorVersion { get { return _glMinorVersion; } }
+        internal GLVersion glVersion { get { return _glVersion; } }
 
 
         internal ConcreteGraphicsAdapter()
@@ -192,14 +190,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     // for OpenGL, the GL_VERSION string always starts with the version number in the "major.minor" format,
                     // optionally followed by multiple vendor specific characters
-                    _glMajorVersion = Convert.ToInt32(_version.Substring(0, 1));
-                    _glMinorVersion = Convert.ToInt32(_version.Substring(2, 1));
+                    _glVersion.Major = Convert.ToInt16(_version.Substring(0, 1));
+                    _glVersion.Minor = Convert.ToInt16(_version.Substring(2, 1));
                 }
                 catch (FormatException)
                 {
                     // if it fails, we assume to be on a 1.1 context
-                    _glMajorVersion = 1;
-                    _glMinorVersion = 1;
+                    _glVersion = new GLVersion(1, 1);
                 }
 
                 _description = _gl.GetString(StringName.Renderer);

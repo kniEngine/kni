@@ -118,8 +118,7 @@ namespace Microsoft.Xna.Platform.Graphics
         EGLDisplay _eglDisplay;
         EGLConfig[] _eglConfigs;
 
-        int _eglMajorVersion;
-        int _eglMinorVersion;
+        GLVersion _eglVersion;
         int _maxTextureSize;
         int _maxVertexBufferSlots;
         int _maxMultiSampleCount;
@@ -139,10 +138,12 @@ namespace Microsoft.Xna.Platform.Graphics
 #if CARDBOARD
             _eglDisplay = _ogl.Egl.EglGetCurrentDisplay();
 
-            _ogl.GetInteger(GetParamName.MajorVersion, out _eglMajorVersion);
+            _ogl.GetInteger(GetParamName.MajorVersion, out int eglMajorVersion);
             _ogl.CheckGLError();
-            _ogl.GetInteger(GetParamName.MinorVersion, out _eglMinorVersion);
+            _ogl.GetInteger(GetParamName.MinorVersion, out int eglMinorVersion);
             _ogl.CheckGLError();
+            _eglVersion = new GLVersion(eglMajorVersion, eglMinorVersion);
+
             _ogl.GetInteger(GetParamName.MaxTextureSize, out _maxTextureSize);
             _ogl.CheckGLError();
             _ogl.GetInteger(GetParamName.MaxVertexAttribs, out _maxVertexBufferSlots);
@@ -185,10 +186,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 _ogl.Egl.EglMakeCurrent(EglDisplay, EGL10.EglNoSurface, EGL10.EglNoSurface, eglContext);
                 _ogl.CheckGLError();
 
-                _ogl.GetInteger(GetParamName.MajorVersion, out _eglMajorVersion);
+                _ogl.GetInteger(GetParamName.MajorVersion, out int eglMajorVersion);
                 _ogl.CheckGLError();
-                _ogl.GetInteger(GetParamName.MinorVersion, out _eglMinorVersion);
+                _ogl.GetInteger(GetParamName.MinorVersion, out int eglMinorVersion);
                 _ogl.CheckGLError();
+                _eglVersion = new GLVersion(eglMajorVersion, eglMinorVersion);
+
                 _ogl.GetInteger(GetParamName.MaxTextureSize, out _maxTextureSize);
                 _ogl.CheckGLError();
                 _ogl.GetInteger(GetParamName.MaxVertexAttribs, out _maxVertexBufferSlots);
