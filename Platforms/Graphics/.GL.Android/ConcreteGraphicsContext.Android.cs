@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_glDisposeContext != null && _glDisposeContext != EGL10.EglNoContext)
                     throw new Exception("Could not create _glDisposeContext" + GL.GetEglErrorAsString());
 
-            // create _glDisposeContext for Disposing GL objects from GC Finalizer thread.
+            // create _glSharedContext for creating and setting data on buffers and textures from threads.
             _glSharedContext = GL.Egl.EglCreateContext(EGL10.EglNoDisplay, cgd.EglConfig, this.EglContext, attribs);
             if (_glSharedContext != null && _glSharedContext != EGL10.EglNoContext)
                     throw new Exception("Could not create _glSharedContext" + GL.GetEglErrorAsString());
