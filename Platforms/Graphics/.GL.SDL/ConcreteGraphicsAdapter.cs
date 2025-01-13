@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         private OGL _gl;
-        private string _glVersion;
+        private string _version;
         private int _glMajorVersion = 0;
         private int _glMinorVersion = 0;
 
@@ -186,14 +186,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string.
                 try
                 {
-                    _glVersion = _gl.GetString(StringName.Version);
-                    if (string.IsNullOrEmpty(_glVersion))
+                    _version = _gl.GetString(StringName.Version);
+                    if (string.IsNullOrEmpty(_version))
                         throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
 
                     // for OpenGL, the GL_VERSION string always starts with the version number in the "major.minor" format,
                     // optionally followed by multiple vendor specific characters
-                    _glMajorVersion = Convert.ToInt32(_glVersion.Substring(0, 1));
-                    _glMinorVersion = Convert.ToInt32(_glVersion.Substring(2, 1));
+                    _glMajorVersion = Convert.ToInt32(_version.Substring(0, 1));
+                    _glMinorVersion = Convert.ToInt32(_version.Substring(2, 1));
                 }
                 catch (FormatException)
                 {
