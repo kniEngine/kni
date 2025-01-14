@@ -4,7 +4,7 @@
   <property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
 
   <!-- The build version number we can get from the environment variable -->
-  <property name="buildNumber" value="3.14.9001.0"/>
+  <property name="buildNumber" value="4.0.9001.0"/>
   <if test="${environment::variable-exists('BUILD_NUMBER')}">
     <property name="buildNumber" value="${environment::get-variable('BUILD_NUMBER')}"/>
   </if>
@@ -27,7 +27,7 @@
     <if test="${file::exists('C:\Program Files (x86)\NSIS\makensis.exe')}">
       <echo append="false" file="Windows/header.nsh">
 !define FrameworkPath "${project::get-base-directory()}"
-!define VERSION "3.14"
+!define VERSION "4.0"
 !define INSTALLERVERSION "${buildNumber}"
       </echo>
       <exec program="makensis" workingdir="Windows" basedir="C:\Program Files (x86)\NSIS">

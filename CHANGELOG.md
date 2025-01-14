@@ -1,5 +1,74 @@
 ﻿# Changelog
 
+## 4.0.9001 Release - January 14, 2025
+
+### Fixed
+ - fixed SensorBase.Dispose() #1925
+ - fixed sensor Dispose/finalize #1929
+ - fix TestContentManager usage #1955
+ - fix PipelineEditor OpenFile #1964
+ - fix SDL IndexBuffer ShouldSetAndGetStructData #1974
+ - fix SDL VertexBuffer ShouldSetAndGetStructData #1974, #2000
+ - rebuild Assets when compression method changed #1980
+ - fix DesktopGL native runtimes #1992
+ - fix IFrame event capture #1993
+ - fix DesktopGL MediaPlayer.Position #2006
+ - fix PipelineEditor OnReferencesModified #2026
+ - fix BoundingFrustrum Intersects & Contains #2052, #2073, #2074
+ - fix CheckGLError(...) #2055
+ - [SDL2] pin buffer to avoid access to invalid memory #2058
+ - [OpenGL] fix Discard rendertargets #2062
+ - [OpenGL] fix multisample surface types #2063
+ - fix Complex out parameters #2125
+ - fix GL TextureFilter.Linear #2165
+ - fix GetInfoLog() #2166
+ - fix DrawRangeElementsBaseVertex #2187, #2181
+
+### Performance
+ - optimize DX VertexBuffer Get/Set Data #1967
+ - optimize SDL IndexBuffer GetData #1974
+ - optimize SDL VertexBuffer GetData #1974, #2000
+ - perf ConvertFloat32ToInt16() #2008, #2009, #2028
+ - perf DesktopGL Texture GetData(...) #2011
+ - perf use Environment.CurrentManagedThreadId #2013
+ - perf use generic ContentTypeReaderT, avoid boxing for value types #2029
+ - optimize GamePadDPad #2114
+
+### Changed
+ - remove MaxSensorCount limit #1928
+ - rename Sensors namespace #1942
+   Microsoft.Devices.Sensors -> Microsoft.Xna.Framework.Devices.Sensors
+ - The library MonoGame.Framework is split into Xna.Framework.Devices, and Xna.Framework.Storage #1947, #1988.
+ - ContentLoadException message include assetName #1963
+ - throw 'Operation not called on main thread' for VertexShader/PixelShader #2014
+ - throw 'Operation not called on main thread' for GetBackBufferData(...) #2020
+ - [PipelineEditor] resize dialogs #2066, #2067
+ - Rename Platform assembly #2136, #2146, #2147
+ - rename Platform packages #2137, #2150, #2156
+
+### Added
+ - Vibrator class #1941, #2089
+ - implement UAP Accelerometer #1948
+ - XNB compression extension #1961, #2039
+ - Brotli XNB compression #1962, #1966, #2033, #2040, #2041
+ - /packageReference option in .mgcb to consume importers & processors from nuget #2027, #2068, #2069, #2070, #2075
+ - added Plane.Intersects(Ray) #2044, #2046
+ - added XR library, and unify LibOVR.
+ - implement XR for BlazorGL platform #2090
+ - [WebGL] implement half-float surface formats #2042
+ - [WebGL] implement multisampling in rendertargets #2088
+ - System.Numerics explicit conversion #2110
+ - Matrix.CreateRotationZ(Complex) #2120
+ - Pose3 and Pose2 structs #2121
+ - windowsDX11 net4.8 #2142, #2152
+ - tools net4.8 #2151
+ - Oculus native backend #2174
+ - [Blazor] implement MediaPlayer.PlayPosition and VideoPlayer.PlayPosition #2184
+
+### Removed
+ - drop net6.0 from WindowsDX & BlazorGL #2086
+ - xamarin .nuspec #2154
+ - Xamarin iOS project #2155
 
 ## 3.14.9001 Release - September 23, 2024
 
