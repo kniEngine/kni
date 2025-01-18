@@ -2,8 +2,8 @@
 
   <Import Project="..\kniPackage.props" />
   <PropertyGroup>
-    <Version>4.0.9001.0</Version>
-    <AssemblyVersion>4.0.9001.0</AssemblyVersion>
+    <Version>4.0.9001.1</Version>
+    <AssemblyVersion>4.0.9001.1</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>
