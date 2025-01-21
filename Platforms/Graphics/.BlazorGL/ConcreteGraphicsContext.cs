@@ -25,6 +25,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal ShaderProgram _shaderProgram = null;
 
+        internal bool _supportsInvalidateFramebuffer;
+        internal bool _supportsBlitFramebuffer;
+
         private Vector4 _posFixup;
 
         internal BufferBindingInfo[] _bufferBindingInfos;
@@ -77,6 +80,22 @@ namespace Microsoft.Xna.Platform.Graphics
         {
 
             this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
+
+            // TODO: check for FramebufferObjectARB
+            if ((GL is IWebGL2RenderingContext)
+            //||  this.Capabilities.SupportsFramebufferObjectARB
+            //||  this.Capabilities.SupportsFramebufferObjectEXT
+            )
+            {
+                this._supportsBlitFramebuffer = true;
+                this._supportsInvalidateFramebuffer = true;
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+                    "Try updating your graphics drivers.");
+            }
 
             this._bufferBindingInfos = new BufferBindingInfo[base.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < this._bufferBindingInfos.Length; i++)
@@ -1187,16 +1206,19 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                     ((IWebGL2RenderingContext)GL).DrawBuffer(WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
                     GL.CheckGLError();
+                    Debug.Assert(this._supportsBlitFramebuffer);
                     ((IWebGL2RenderingContext)GL).BlitFramebuffer(
                         0, 0, renderTarget.Width, renderTarget.Height,
                         0, 0, renderTarget.Width, renderTarget.Height,
                         WebGLBufferBits.COLOR, WebGLTexParam.NEAREST);
                     GL.CheckGLError();
 
-                    if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents)
+                    if (renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents
+                    &&  this._supportsInvalidateFramebuffer)
                     {
                         if (i == 0)
                         {
+                            Debug.Assert(this._supportsInvalidateFramebuffer);
                             ((IWebGL2RenderingContext)GL).InvalidateFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, InvalidateFramebufferAttachements);
                             GL.CheckGLError();
                         }

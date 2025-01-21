@@ -89,16 +89,18 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             this._newEnabledVertexAttributes = new bool[base.Capabilities.MaxVertexBufferSlots];
 
-            if (!((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectARB
-            &&  !((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectEXT)
+            if (((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectARB
+            ||  ((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectEXT)
+            {
+                this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
+                this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
+            }
+            else
             {
                 throw new PlatformNotSupportedException(
                     "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
                     "Try updating your graphics drivers.");
             }
-
-            this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
-            this._supportsInvalidateFramebuffer = GL.InvalidateFramebuffer != null;
 
             this._bufferBindingInfos = new BufferBindingInfo[base.Capabilities.MaxVertexBufferSlots];
             for (int i = 0; i < this._bufferBindingInfos.Length; i++)
@@ -838,7 +840,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
             GLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
 
-            if (((ConcreteGraphicsCapabilities)this.Capabilities).SupportsBaseVertex)
+            if (GL.DrawElementsBaseVertex != null)
             {
                 PlatformApplyVertexBuffers(0);
 
