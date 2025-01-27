@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsSeparateBlendStates = version >= new GLVersion(4,0) || GL.Extensions.Contains("GL_ARB_draw_buffers_blend");
 #endif
 
-            SupportsBaseVertex = version >= new GLVersion(3,2) || GL.Extensions.Contains("GL_ARB_framebuffer_object");
+            SupportsBaseVertex = version >= new GLVersion(3,2) || GL.Extensions.Contains("GL_ARB_draw_elements_base_vertex");
             SupportsDrawRangeElements = (GL.BoundApi == OGL.RenderApi.GL && version >= new GLVersion(2, 0))
                                      || (GL.BoundApi == OGL.RenderApi.ES && version >= new GLVersion(3, 0));
 
