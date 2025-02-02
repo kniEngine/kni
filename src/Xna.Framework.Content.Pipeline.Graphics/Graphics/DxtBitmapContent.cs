@@ -5,7 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
-using Nvidia.TextureTools;
+using NVTT = Nvidia.TextureTools;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -142,8 +142,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             BitmapContent.Copy(sourceBitmap, colorBitmap);
             byte[] sourceData = colorBitmap.GetPixelData();
 
-            AlphaMode alphaMode;
-            Format outputFormat;
+            NVTT.AlphaMode alphaMode;
+            NVTT.Format outputFormat;
             bool alphaDither = false;
             switch (format)
             {
@@ -151,8 +151,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 case SurfaceFormat.Dxt1SRgb:
                 {
                     bool hasTransparency = PrepareNVTT_DXT1(sourceData);
-                    outputFormat = hasTransparency ? Format.DXT1a : Format.DXT1;
-                    alphaMode = hasTransparency ? AlphaMode.Transparency : AlphaMode.None;
+                    outputFormat = hasTransparency ? NVTT.Format.DXT1a : NVTT.Format.DXT1;
+                    alphaMode = hasTransparency ? NVTT.AlphaMode.Transparency : NVTT.AlphaMode.None;
                     alphaDither = true;
                     break;
                 }
@@ -160,16 +160,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 case SurfaceFormat.Dxt3SRgb:
                 {
                     PrepareNVTT(sourceData);
-                    outputFormat = Format.DXT3;
-                    alphaMode = AlphaMode.Transparency;
+                    outputFormat = NVTT.Format.DXT3;
+                    alphaMode = NVTT.AlphaMode.Transparency;
                     break;
                 }
                 case SurfaceFormat.Dxt5:
                 case SurfaceFormat.Dxt5SRgb:
                 {
                     PrepareNVTT(sourceData);
-                    outputFormat = Format.DXT5;
-                    alphaMode = AlphaMode.Transparency;
+                    outputFormat = NVTT.Format.DXT5;
+                    alphaMode = NVTT.AlphaMode.Transparency;
                     break;
                 }
                 default:
@@ -180,16 +180,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 IntPtr dataPtr = (IntPtr)pData;
 
-                InputOptions inputOptions = new InputOptions();
-                inputOptions.SetTextureLayout(TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
+                NVTT.InputOptions inputOptions = new NVTT.InputOptions();
+                inputOptions.SetTextureLayout(NVTT.TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
                 inputOptions.SetMipmapData(dataPtr, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
                 inputOptions.SetMipmapGeneration(false);
                 inputOptions.SetGamma(1.0f, 1.0f);
                 inputOptions.SetAlphaMode(alphaMode);
 
-                CompressionOptions compressionOptions = new CompressionOptions();
+                NVTT.CompressionOptions compressionOptions = new NVTT.CompressionOptions();
                 compressionOptions.SetFormat(outputFormat);
-                compressionOptions.SetQuality(Quality.Normal);
+                compressionOptions.SetQuality(NVTT.Quality.Normal);
 
                 // TODO: This isn't working which keeps us from getting the
                 //       same alpha dither behavior on DXT1 as XNA.
@@ -197,11 +197,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 //if (alphaDither)
                 //    compressionOptions.SetQuantization(false, false, true);
 
-                OutputOptions outputOptions = new OutputOptions();
+                NVTT.OutputOptions outputOptions = new NVTT.OutputOptions();
                 outputOptions.SetOutputHeader(false);
                 outputOptions.SetOutputOptionsOutputHandler(NvttBeginImageCallback, NvttWriteImageCallback, NvttEndImageCallback);
 
-                Compressor dxtCompressor = new Compressor();
+                NVTT.Compressor dxtCompressor = new NVTT.Compressor();
                 dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
             }
 
