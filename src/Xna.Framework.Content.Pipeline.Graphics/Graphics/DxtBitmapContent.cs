@@ -192,12 +192,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 compressionOptions.SetQuality(Quality.Normal);
 
                 // TODO: This isn't working which keeps us from getting the
-                // same alpha dither behavior on DXT1 as XNA.
-                //
-                // See https://github.com/MonoGame/MonoGame/issues/6259
-                //
+                //       same alpha dither behavior on DXT1 as XNA.
+                //       See: https://github.com/MonoGame/MonoGame/issues/6259
                 //if (alphaDither)
-                    //compressionOptions.SetQuantization(false, false, true);
+                //    compressionOptions.SetQuantization(false, false, true);
 
                 OutputOptions outputOptions = new OutputOptions();
                 outputOptions.SetOutputHeader(false);
