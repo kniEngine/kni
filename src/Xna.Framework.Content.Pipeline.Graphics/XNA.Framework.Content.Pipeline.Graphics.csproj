@@ -59,8 +59,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Reference Include="Nvidia.TextureTools">
-      <HintPath>..\..\ThirdParty\Dependencies\NVTT\Nvidia.TextureTools.dll</HintPath>
+    <Reference Include="Nvidia.TextureTools" Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net8.0' ">
+      <HintPath>..\..\ThirdParty\Dependencies\NVTT\lib\\netstandard2.0\Nvidia.TextureTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Nvidia.TextureTools" Condition="'$(TargetFramework)' == 'net40' ">
+      <HintPath>..\..\ThirdParty\Dependencies\NVTT\lib\\net40\Nvidia.TextureTools.dll</HintPath>
     </Reference>
     <Reference Include="ATI.TextureConverter">
       <HintPath>..\..\ThirdParty\Dependencies\ATI.TextureConverter\ATI.TextureConverter.dll</HintPath>
@@ -231,7 +234,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <NativeBinary>True</NativeBinary>
     </None>
-    <None Include="..\..\ThirdParty\Dependencies\NVTT\Windows\nvtt.dll">
+    <None Include="..\..\ThirdParty\Dependencies\NVTT\runtimes\win-x64\nvtt.dll">
       <Link>nvtt.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <NativeBinary>True</NativeBinary>
