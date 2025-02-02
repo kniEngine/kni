@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net8.0</TargetFrameworks>
     <LangVersion>Default</LangVersion>
