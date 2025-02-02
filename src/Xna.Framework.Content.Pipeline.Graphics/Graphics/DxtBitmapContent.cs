@@ -176,33 +176,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new InvalidOperationException("Invalid DXT surface format!");
             }
 
-            fixed (byte* pData = &sourceData[0])
+            try
             {
-                IntPtr dataPtr = (IntPtr)pData;
+                fixed (byte* pData = &sourceData[0])
+                {
+                    IntPtr dataPtr = (IntPtr)pData;
 
-                NVTT.InputOptions inputOptions = new NVTT.InputOptions();
-                inputOptions.SetTextureLayout(NVTT.TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
-                inputOptions.SetMipmapData(dataPtr, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
-                inputOptions.SetMipmapGeneration(false);
-                inputOptions.SetGamma(1.0f, 1.0f);
-                inputOptions.SetAlphaMode(alphaMode);
+                    NVTT.InputOptions inputOptions = new NVTT.InputOptions();
+                    inputOptions.SetTextureLayout(NVTT.TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
+                    inputOptions.SetMipmapData(dataPtr, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
+                    inputOptions.SetMipmapGeneration(false);
+                    inputOptions.SetGamma(1.0f, 1.0f);
+                    inputOptions.SetAlphaMode(alphaMode);
 
-                NVTT.CompressionOptions compressionOptions = new NVTT.CompressionOptions();
-                compressionOptions.SetFormat(outputFormat);
-                compressionOptions.SetQuality(NVTT.Quality.Normal);
+                    NVTT.CompressionOptions compressionOptions = new NVTT.CompressionOptions();
+                    compressionOptions.SetFormat(outputFormat);
+                    compressionOptions.SetQuality(NVTT.Quality.Normal);
 
-                // TODO: This isn't working which keeps us from getting the
-                //       same alpha dither behavior on DXT1 as XNA.
-                //       See: https://github.com/MonoGame/MonoGame/issues/6259
-                //if (alphaDither)
-                //    compressionOptions.SetQuantization(false, false, true);
+                    // TODO: This isn't working which keeps us from getting the
+                    //       same alpha dither behavior on DXT1 as XNA.
+                    //       See: https://github.com/MonoGame/MonoGame/issues/6259
+                    //if (alphaDither)
+                    //    compressionOptions.SetQuantization(false, false, true);
 
-                NVTT.OutputOptions outputOptions = new NVTT.OutputOptions();
-                outputOptions.SetOutputHeader(false);
-                outputOptions.SetOutputOptionsOutputHandler(NvttBeginImageCallback, NvttWriteImageCallback, NvttEndImageCallback);
+                    NVTT.OutputOptions outputOptions = new NVTT.OutputOptions();
+                    outputOptions.SetOutputHeader(false);
+                    outputOptions.SetOutputOptionsOutputHandler(NvttBeginImageCallback, NvttWriteImageCallback, NvttEndImageCallback);
 
-                NVTT.Compressor dxtCompressor = new NVTT.Compressor();
-                dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
+                    NVTT.Compressor dxtCompressor = new NVTT.Compressor();
+                    dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
+                }
+            }
+            finally
+            {
             }
 
             return true;
