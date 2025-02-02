@@ -3,9 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Framework.Graphics;
-using Nvidia.TextureTools;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework.Graphics;
+using NVTT = Nvidia.TextureTools;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 {
@@ -42,20 +42,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             _bitmapData = sourceData;
         }
 
-        private void NvttBeginImage(int size, int width, int height, int depth, int face, int miplevel)
+        private void NvttBeginImageCallback(int size, int width, int height, int depth, int face, int miplevel)
         {
             _bitmapData = new byte[size];
             _nvttWriteOffset = 0;
         }
 
-        private bool NvttWriteImage(IntPtr data, int length)
+        private bool NvttWriteImageCallback(IntPtr data, int length)
         {
             Marshal.Copy(data, _bitmapData, _nvttWriteOffset, length);
             _nvttWriteOffset += length;
             return true;
         }
 
-        private void NvttEndImage()
+        private void NvttEndImageCallback()
         {
         }
         
@@ -64,12 +64,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             fixed (byte* pdata = data)
             {
                 int count = data.Length / 4;
-                for (var x = 0; x < count; x++)
+                for (int x = 0; x < count; x++)
                 {
                     // NVTT wants BGRA where our source is RGBA so
                     // we swap the red and blue channels.
-                    var r = pdata[x*4+0];
-                    var b = pdata[x*4+2];
+                    byte r = pdata[x*4+0];
+                    byte b = pdata[x*4+2];
                     pdata[x*4+0] = b;
                     pdata[x*4+2] = r;
                 }
@@ -83,12 +83,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             fixed (byte* pdata = data)
             {
                 int count = data.Length/4;
-                for (var x = 0; x < count; x++)
+                for (int x = 0; x < count; x++)
                 {
                     // NVTT wants BGRA where our source is RGBA so
                     // we swap the red and blue channels.
-                    var r = pdata[x*4+0];
-                    var b = pdata[x*4+2];
+                    byte r = pdata[x*4+0];
+                    byte b = pdata[x*4+2];
                     pdata[x*4+0] = b;
                     pdata[x*4+2] = r;
 
@@ -138,21 +138,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // NVTT wants 8bit data in BGRA format.
-            var colorBitmap = new PixelBitmapContent<Color>(sourceBitmap.Width, sourceBitmap.Height);
+            PixelBitmapContent<Color> colorBitmap = new PixelBitmapContent<Color>(sourceBitmap.Width, sourceBitmap.Height);
             BitmapContent.Copy(sourceBitmap, colorBitmap);
-            var sourceData = colorBitmap.GetPixelData();
+            byte[] sourceData = colorBitmap.GetPixelData();
 
-            AlphaMode alphaMode;
-            Format outputFormat;
-            var alphaDither = false;
+            NVTT.AlphaMode alphaMode;
+            NVTT.Format outputFormat;
+            bool alphaDither = false;
             switch (format)
             {
                 case SurfaceFormat.Dxt1:
                 case SurfaceFormat.Dxt1SRgb:
                 {
                     bool hasTransparency = PrepareNVTT_DXT1(sourceData);
-                    outputFormat = hasTransparency ? Format.DXT1a : Format.DXT1;
-                    alphaMode = hasTransparency ? AlphaMode.Transparency : AlphaMode.None;
+                    outputFormat = hasTransparency ? NVTT.Format.DXT1a : NVTT.Format.DXT1;
+                    alphaMode = hasTransparency ? NVTT.AlphaMode.Transparency : NVTT.AlphaMode.None;
                     alphaDither = true;
                     break;
                 }
@@ -160,51 +160,53 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 case SurfaceFormat.Dxt3SRgb:
                 {
                     PrepareNVTT(sourceData);
-                    outputFormat = Format.DXT3;
-                    alphaMode = AlphaMode.Transparency;
+                    outputFormat = NVTT.Format.DXT3;
+                    alphaMode = NVTT.AlphaMode.Transparency;
                     break;
                 }
                 case SurfaceFormat.Dxt5:
                 case SurfaceFormat.Dxt5SRgb:
                 {
                     PrepareNVTT(sourceData);
-                    outputFormat = Format.DXT5;
-                    alphaMode = AlphaMode.Transparency;
+                    outputFormat = NVTT.Format.DXT5;
+                    alphaMode = NVTT.AlphaMode.Transparency;
                     break;
                 }
                 default:
                     throw new InvalidOperationException("Invalid DXT surface format!");
             }
 
-            fixed (byte* pData = &sourceData[0])
+            try
             {
-                IntPtr dataPtr = (IntPtr)pData;
+                fixed (byte* pData = &sourceData[0])
+                {
+                    NVTT.InputOptions inputOptions = new NVTT.InputOptions();
+                    inputOptions.SetTextureLayout(NVTT.TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
+                    inputOptions.SetMipmapData((IntPtr)pData, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
+                    inputOptions.SetMipmapGeneration(false);
+                    inputOptions.SetGamma(1.0f, 1.0f);
+                    inputOptions.SetAlphaMode(alphaMode);
 
-                var inputOptions = new InputOptions();
-                inputOptions.SetTextureLayout(TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
-                inputOptions.SetMipmapData(dataPtr, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
-                inputOptions.SetMipmapGeneration(false);
-                inputOptions.SetGamma(1.0f, 1.0f);
-                inputOptions.SetAlphaMode(alphaMode);
+                    NVTT.CompressionOptions compressionOptions = new NVTT.CompressionOptions();
+                    compressionOptions.SetFormat(outputFormat);
+                    compressionOptions.SetQuality(NVTT.Quality.Normal);
 
-                var compressionOptions = new CompressionOptions();
-                compressionOptions.SetFormat(outputFormat);
-                compressionOptions.SetQuality(Quality.Normal);
+                    // TODO: This isn't working which keeps us from getting the
+                    //       same alpha dither behavior on DXT1 as XNA.
+                    //       See: https://github.com/MonoGame/MonoGame/issues/6259
+                    //if (alphaDither)
+                    //    compressionOptions.SetQuantization(false, false, true);
 
-                // TODO: This isn't working which keeps us from getting the
-                // same alpha dither behavior on DXT1 as XNA.
-                //
-                // See https://github.com/MonoGame/MonoGame/issues/6259
-                //
-                //if (alphaDither)
-                    //compressionOptions.SetQuantization(false, false, true);
+                    NVTT.OutputOptions outputOptions = new NVTT.OutputOptions();
+                    outputOptions.SetOutputHeader(false);
+                    outputOptions.SetOutputOptionsOutputHandler(NvttBeginImageCallback, NvttWriteImageCallback, NvttEndImageCallback);
 
-                var outputOptions = new OutputOptions();
-                outputOptions.SetOutputHeader(false);
-                outputOptions.SetOutputOptionsOutputHandler(NvttBeginImage, NvttWriteImage, NvttEndImage);
-
-                var dxtCompressor = new Compressor();
-                dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
+                    NVTT.Compressor dxtCompressor = new NVTT.Compressor();
+                    dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
+                }
+            }
+            finally
+            {
             }
 
             return true;
@@ -220,7 +222,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             TryGetFormat(out format);
 
             // A shortcut for copying the entire bitmap to another bitmap of the same type and format
-            var fullRegion = new Rectangle(0, 0, Width, Height);
+            Rectangle fullRegion = new Rectangle(0, 0, Width, Height);
             if ((format == destinationFormat) && (sourceRegion == fullRegion) && (sourceRegion == destinationRegion))
             {
                 destinationBitmap.SetPixelData(GetPixelData());
