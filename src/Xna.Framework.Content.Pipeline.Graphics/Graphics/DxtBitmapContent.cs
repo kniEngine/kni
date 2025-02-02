@@ -180,11 +180,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 fixed (byte* pData = &sourceData[0])
                 {
-                    IntPtr dataPtr = (IntPtr)pData;
-
                     NVTT.InputOptions inputOptions = new NVTT.InputOptions();
                     inputOptions.SetTextureLayout(NVTT.TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
-                    inputOptions.SetMipmapData(dataPtr, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
+                    inputOptions.SetMipmapData((IntPtr)pData, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
                     inputOptions.SetMipmapGeneration(false);
                     inputOptions.SetGamma(1.0f, 1.0f);
                     inputOptions.SetAlphaMode(alphaMode);
