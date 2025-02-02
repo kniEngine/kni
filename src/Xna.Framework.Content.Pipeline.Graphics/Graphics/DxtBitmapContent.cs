@@ -64,12 +64,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             fixed (byte* pdata = data)
             {
                 int count = data.Length / 4;
-                for (var x = 0; x < count; x++)
+                for (int x = 0; x < count; x++)
                 {
                     // NVTT wants BGRA where our source is RGBA so
                     // we swap the red and blue channels.
-                    var r = pdata[x*4+0];
-                    var b = pdata[x*4+2];
+                    byte r = pdata[x*4+0];
+                    byte b = pdata[x*4+2];
                     pdata[x*4+0] = b;
                     pdata[x*4+2] = r;
                 }
@@ -83,12 +83,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             fixed (byte* pdata = data)
             {
                 int count = data.Length/4;
-                for (var x = 0; x < count; x++)
+                for (int x = 0; x < count; x++)
                 {
                     // NVTT wants BGRA where our source is RGBA so
                     // we swap the red and blue channels.
-                    var r = pdata[x*4+0];
-                    var b = pdata[x*4+2];
+                    byte r = pdata[x*4+0];
+                    byte b = pdata[x*4+2];
                     pdata[x*4+0] = b;
                     pdata[x*4+2] = r;
 
@@ -138,13 +138,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
 
             // NVTT wants 8bit data in BGRA format.
-            var colorBitmap = new PixelBitmapContent<Color>(sourceBitmap.Width, sourceBitmap.Height);
+            PixelBitmapContent<Color> colorBitmap = new PixelBitmapContent<Color>(sourceBitmap.Width, sourceBitmap.Height);
             BitmapContent.Copy(sourceBitmap, colorBitmap);
-            var sourceData = colorBitmap.GetPixelData();
+            byte[] sourceData = colorBitmap.GetPixelData();
 
             AlphaMode alphaMode;
             Format outputFormat;
-            var alphaDither = false;
+            bool alphaDither = false;
             switch (format)
             {
                 case SurfaceFormat.Dxt1:
@@ -180,14 +180,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             {
                 IntPtr dataPtr = (IntPtr)pData;
 
-                var inputOptions = new InputOptions();
+                InputOptions inputOptions = new InputOptions();
                 inputOptions.SetTextureLayout(TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
                 inputOptions.SetMipmapData(dataPtr, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
                 inputOptions.SetMipmapGeneration(false);
                 inputOptions.SetGamma(1.0f, 1.0f);
                 inputOptions.SetAlphaMode(alphaMode);
 
-                var compressionOptions = new CompressionOptions();
+                CompressionOptions compressionOptions = new CompressionOptions();
                 compressionOptions.SetFormat(outputFormat);
                 compressionOptions.SetQuality(Quality.Normal);
 
@@ -199,11 +199,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 //if (alphaDither)
                     //compressionOptions.SetQuantization(false, false, true);
 
-                var outputOptions = new OutputOptions();
+                OutputOptions outputOptions = new OutputOptions();
                 outputOptions.SetOutputHeader(false);
                 outputOptions.SetOutputOptionsOutputHandler(NvttBeginImage, NvttWriteImage, NvttEndImage);
 
-                var dxtCompressor = new Compressor();
+                Compressor dxtCompressor = new Compressor();
                 dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
             }
 
@@ -220,7 +220,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             TryGetFormat(out format);
 
             // A shortcut for copying the entire bitmap to another bitmap of the same type and format
-            var fullRegion = new Rectangle(0, 0, Width, Height);
+            Rectangle fullRegion = new Rectangle(0, 0, Width, Height);
             if ((format == destinationFormat) && (sourceRegion == fullRegion) && (sourceRegion == destinationRegion))
             {
                 destinationBitmap.SetPixelData(GetPixelData());
