@@ -42,20 +42,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             _bitmapData = sourceData;
         }
 
-        private void NvttBeginImage(int size, int width, int height, int depth, int face, int miplevel)
+        private void NvttBeginImageCallback(int size, int width, int height, int depth, int face, int miplevel)
         {
             _bitmapData = new byte[size];
             _nvttWriteOffset = 0;
         }
 
-        private bool NvttWriteImage(IntPtr data, int length)
+        private bool NvttWriteImageCallback(IntPtr data, int length)
         {
             Marshal.Copy(data, _bitmapData, _nvttWriteOffset, length);
             _nvttWriteOffset += length;
             return true;
         }
 
-        private void NvttEndImage()
+        private void NvttEndImageCallback()
         {
         }
         
@@ -201,7 +201,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 OutputOptions outputOptions = new OutputOptions();
                 outputOptions.SetOutputHeader(false);
-                outputOptions.SetOutputOptionsOutputHandler(NvttBeginImage, NvttWriteImage, NvttEndImage);
+                outputOptions.SetOutputOptionsOutputHandler(NvttBeginImageCallback, NvttWriteImageCallback, NvttEndImageCallback);
 
                 Compressor dxtCompressor = new Compressor();
                 dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
