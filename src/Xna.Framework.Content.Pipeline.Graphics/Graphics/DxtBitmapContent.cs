@@ -176,20 +176,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     throw new InvalidOperationException("Invalid DXT surface format!");
             }
 
-            try
+            using (NVTT.Compressor dxtCompressor = new NVTT.Compressor())
             {
                 fixed (byte* pData = &sourceData[0])
                 {
-                    NVTT.InputOptions inputOptions = new NVTT.InputOptions();
-                    inputOptions.SetTextureLayout(NVTT.TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
-                    inputOptions.SetMipmapData((IntPtr)pData, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
-                    inputOptions.SetMipmapGeneration(false);
-                    inputOptions.SetGamma(1.0f, 1.0f);
-                    inputOptions.SetAlphaMode(alphaMode);
+                    dxtCompressor.InputOptions.SetTextureLayout(NVTT.TextureType.Texture2D, colorBitmap.Width, colorBitmap.Height, 1);
+                    dxtCompressor.InputOptions.SetMipmapData((IntPtr)pData, colorBitmap.Width, colorBitmap.Height, 1, 0, 0);
+                    dxtCompressor.InputOptions.SetMipmapGeneration(false);
+                    dxtCompressor.InputOptions.SetGamma(1.0f, 1.0f);
+                    dxtCompressor.InputOptions.SetAlphaMode(alphaMode);
 
-                    NVTT.CompressionOptions compressionOptions = new NVTT.CompressionOptions();
-                    compressionOptions.SetFormat(outputFormat);
-                    compressionOptions.SetQuality(NVTT.Quality.Normal);
+                    dxtCompressor.CompressionOptions.SetFormat(outputFormat);
+                    dxtCompressor.CompressionOptions.SetQuality(NVTT.Quality.Normal);
 
                     // TODO: This isn't working which keeps us from getting the
                     //       same alpha dither behavior on DXT1 as XNA.
@@ -197,16 +195,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                     //if (alphaDither)
                     //    compressionOptions.SetQuantization(false, false, true);
 
-                    NVTT.OutputOptions outputOptions = new NVTT.OutputOptions();
-                    outputOptions.SetOutputHeader(false);
-                    outputOptions.SetOutputOptionsOutputHandler(NvttBeginImageCallback, NvttWriteImageCallback, NvttEndImageCallback);
+                    NVTT.OutputOptions.BeginImageDelegate beginImageDelegate = new NVTT.OutputOptions.BeginImageDelegate(NvttBeginImageCallback);
+                    NVTT.OutputOptions.WriteDataDelegate  outputDelegate = new NVTT.OutputOptions.WriteDataDelegate(NvttWriteImageCallback);
+                    NVTT.OutputOptions.EndImageDelegate   endImageDelegate = new NVTT.OutputOptions.EndImageDelegate(NvttEndImageCallback);
+                    GCHandle beginImageHandle = GCHandle.Alloc(beginImageDelegate);
+                    GCHandle writeHandle      = GCHandle.Alloc(outputDelegate);
+                    GCHandle endImageHandle   = GCHandle.Alloc(endImageDelegate);
+                    try
+                    {
+                        dxtCompressor.OutputOptions.SetOutputHeader(false);
+                        dxtCompressor.OutputOptions.SetOutputOptionsOutputHandler(beginImageDelegate, outputDelegate, endImageDelegate);
 
-                    NVTT.Compressor dxtCompressor = new NVTT.Compressor();
-                    dxtCompressor.Compress(inputOptions, compressionOptions, outputOptions);
+                        dxtCompressor.Compress();
+                    }
+                    finally
+                    {
+                        beginImageHandle.Free();
+                        writeHandle.Free();
+                        endImageHandle.Free();
+                    }
                 }
-            }
-            finally
-            {
             }
 
             return true;
