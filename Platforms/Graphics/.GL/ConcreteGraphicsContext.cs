@@ -93,8 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
             &&  !((ConcreteGraphicsCapabilities)base.Capabilities).SupportsFramebufferObjectEXT)
             {
                 throw new PlatformNotSupportedException(
-                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object." +
-                    "Try updating your graphics drivers.");
+                    "GraphicsDevice requires either ARB_framebuffer_object or EXT_framebuffer_object.");
             }
 
             this._supportsBlitFramebuffer = GL.BlitFramebuffer != null;
