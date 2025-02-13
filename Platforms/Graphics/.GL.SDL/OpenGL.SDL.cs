@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             if (funcAddress != IntPtr.Zero)
                 return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
-            throw new EntryPointNotFoundException(function);
+            throw new EntryPointNotFoundException("Entry point not found for function '" + function + "'.");
         }
 
         protected override T LoadFunctionOrNull<T>(string function)
