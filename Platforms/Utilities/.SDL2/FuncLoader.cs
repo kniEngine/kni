@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Platform.Utilities
             if (funcAddress != IntPtr.Zero)
                 return InteropHelpers.GetDelegateForFunctionPointer<T>(funcAddress);
 
-            throw new EntryPointNotFoundException(function);
+            throw new EntryPointNotFoundException("Entry point not found for function '" + function + "'.");
         }
 
         public static T LoadFunctionOrNull<T>(IntPtr library, string function)

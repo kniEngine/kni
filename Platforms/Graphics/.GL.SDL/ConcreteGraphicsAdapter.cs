@@ -173,9 +173,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     OGL_SDL.Current.InitExtensions();
                     _gl = OGL.Current;
                 }
-                catch (EntryPointNotFoundException)
+                catch (EntryPointNotFoundException epnfex)
                 {
                     throw new PlatformNotSupportedException(
+                        epnfex.Message + "\n" +
                         "KNI requires OpenGL 3.0 compatible drivers, or either ARB_framebuffer_object or EXT_framebuffer_object extensions.");
                 }
 
