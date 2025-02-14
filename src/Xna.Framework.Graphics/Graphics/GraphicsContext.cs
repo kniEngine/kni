@@ -178,9 +178,9 @@ namespace Microsoft.Xna.Framework.Graphics
             return _strategy.GetRenderTargets();
         }
 
-        public void GetRenderTargets(RenderTargetBinding[] bindings)
+        public int GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            _strategy.GetRenderTargets(bindings);
+            return _strategy.GetRenderTargets(bindings);
         }
 
         public void SetRenderTarget(RenderTarget2D renderTarget)

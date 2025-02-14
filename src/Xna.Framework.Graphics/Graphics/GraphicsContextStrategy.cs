@@ -508,9 +508,12 @@ namespace Microsoft.Xna.Platform.Graphics
             return bindings;
         }
 
-        internal void GetRenderTargets(RenderTargetBinding[] bindings)
+        internal int GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            Array.Copy(_currentRenderTargetBindings, bindings, _currentRenderTargetCount);
+            int renderTargetCount = _currentRenderTargetCount;
+
+            Array.Copy(_currentRenderTargetBindings, bindings, renderTargetCount);
+            return renderTargetCount;
         }
 
         protected internal static int GetElementCountArray(PrimitiveType primitiveType, int primitiveCount)

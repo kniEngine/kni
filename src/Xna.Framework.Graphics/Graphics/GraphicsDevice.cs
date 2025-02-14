@@ -403,9 +403,9 @@ namespace Microsoft.Xna.Framework.Graphics
             return CurrentContext.GetRenderTargets();
         }
 
-        public void GetRenderTargets(RenderTargetBinding[] bindings)
+        public int GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            CurrentContext.GetRenderTargets(bindings);
+            return CurrentContext.GetRenderTargets(bindings);
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
