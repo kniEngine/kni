@@ -173,14 +173,28 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _strategy.PixelShader = value; }
         }
 
+        /// <summary>
+        /// Retrieves the currently bound render targets as an array.
+        /// </summary>
+        /// <returns>An array of <see cref="RenderTargetBinding"/> representing the current render targets.</returns>
         internal RenderTargetBinding[] GetRenderTargets()
         {
             return _strategy.GetRenderTargets();
         }
 
-        public void GetRenderTargets(RenderTargetBinding[] bindings)
+        /// <summary>
+        /// Copies the currently bound render targets into the provided array.
+        /// </summary>
+        /// <param name="bindings">The array to store the current render targets.
+        /// GraphicsProfile.Reach supports a maximum of 1 simultaneous rendertargets.
+        /// GraphicsProfile.HiDef supports a maximum of 4 simultaneous rendertargets.
+        /// GraphicsProfile.FL10_0 supports a maximum of 8 simultaneous rendertargets.
+        /// </param>
+        /// <returns>The number of render targets copied.</returns>
+        /// <remarks>This is a MonoGame extension</remarks>
+        public int GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            _strategy.GetRenderTargets(bindings);
+            return _strategy.GetRenderTargets(bindings);
         }
 
         public void SetRenderTarget(RenderTarget2D renderTarget)

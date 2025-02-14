@@ -398,14 +398,28 @@ namespace Microsoft.Xna.Framework.Graphics
             CurrentContext.SetRenderTargets(renderTargets);
         }
 
+        /// <summary>
+        /// Retrieves the currently bound render targets as an array.
+        /// </summary>
+        /// <returns>An array of <see cref="RenderTargetBinding"/> representing the current render targets.</returns>
         public RenderTargetBinding[] GetRenderTargets()
         {
             return CurrentContext.GetRenderTargets();
         }
 
-        public void GetRenderTargets(RenderTargetBinding[] bindings)
+        /// <summary>
+        /// Copies the currently bound render targets into the provided array.
+        /// </summary>
+        /// <param name="bindings">The array to store the current render targets.
+        /// Reach profile supports a maximum of 1 simultaneous rendertargets.
+        /// HiDef profile supports a maximum of 4 simultaneous rendertargets.
+        /// FL10_0 profile supports a maximum of 8 simultaneous rendertargets.
+        /// </param>
+        /// <returns>The number of render targets copied.</returns>
+        /// <remarks>This is a MonoGame extension</remarks>
+        public int GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            CurrentContext.GetRenderTargets(bindings);
+            return CurrentContext.GetRenderTargets(bindings);
         }
 
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
