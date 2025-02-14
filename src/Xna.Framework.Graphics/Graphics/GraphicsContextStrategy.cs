@@ -497,8 +497,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal void GetRenderTargets(RenderTargetBinding[] bindings)
         {
-            Debug.Assert(bindings.Length == _currentRenderTargetCount, "Invalid bindings array length!");
-
             Array.Copy(_currentRenderTargetBindings, bindings, _currentRenderTargetCount);
         }
 
