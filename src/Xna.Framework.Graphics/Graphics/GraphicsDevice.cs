@@ -400,9 +400,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public RenderTargetBinding[] GetRenderTargets()
         {
-            RenderTargetBinding[] bindings = new RenderTargetBinding[((IPlatformGraphicsContext)CurrentContext).Strategy.RenderTargetCount];
-            GetRenderTargets(bindings);
-            return bindings;
+            return CurrentContext.GetRenderTargets();
         }
 
         public void GetRenderTargets(RenderTargetBinding[] bindings)

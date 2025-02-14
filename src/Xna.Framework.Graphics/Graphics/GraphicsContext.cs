@@ -173,6 +173,11 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _strategy.PixelShader = value; }
         }
 
+        internal RenderTargetBinding[] GetRenderTargets()
+        {
+            return _strategy.GetRenderTargets();
+        }
+
         public void GetRenderTargets(RenderTargetBinding[] bindings)
         {
             _strategy.GetRenderTargets(bindings);
