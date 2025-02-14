@@ -96,6 +96,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[8];
         protected int _currentRenderTargetCount;
+        private static RenderTargetBinding[] _emptyRenderTargetBindings = new RenderTargetBinding[0];
 
         private Color _discardColor = new Color(68, 34, 136, 255);
 
@@ -498,6 +499,9 @@ namespace Microsoft.Xna.Platform.Graphics
         internal RenderTargetBinding[] GetRenderTargets()
         {
             int renderTargetCount = _currentRenderTargetCount;
+
+            if (renderTargetCount == 0)
+                return _emptyRenderTargetBindings;
 
             RenderTargetBinding[] bindings = new RenderTargetBinding[renderTargetCount];
             Array.Copy(_currentRenderTargetBindings, bindings, _currentRenderTargetCount);
