@@ -226,14 +226,15 @@ namespace Microsoft.Xna.Platform.Audio
         public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
         {
             if (!OpenAL.ALC.IsExtensionPresent(_device, "ALC_EXT_CAPTURE"))
+            {
                 return;
+            }
 
             // default device
-            string defaultDevice = OpenAL.ALC.GetString(IntPtr.Zero, AlcGetString.CaptureDefaultDeviceSpecifier);
+            string defaultDevice = OpenAL.ALC.GetString(_device, AlcGetString.CaptureDefaultDeviceSpecifier);
 
-#if true //DESKTOPGL
             // enumerating capture devices
-            IntPtr deviceList = OpenAL.ALC.alcGetString(IntPtr.Zero, (int)AlcGetString.CaptureDeviceSpecifier);
+            IntPtr deviceList = OpenAL.ALC.alcGetString(_device, (int)AlcGetString.CaptureDeviceSpecifier);
 
             // Marshal native UTF-8 character array to .NET string
             // The native string is a null-char separated list of known capture device specifiers ending with an empty string
@@ -253,7 +254,12 @@ namespace Microsoft.Xna.Platform.Audio
                 // increase the offset, add one extra for the terminator
                 deviceList += deviceIdentifier.Length + 1;
             }
-#else
+
+            // set the default Microphone if defaultDevice was Empty.
+            if (defaultMicrophone == null && microphones.Count > 0)
+                defaultMicrophone = microphones[0];
+
+#if (false)
             // Xamarin platforms don't provide an handle to alGetString that allow to marshal string arrays
             // so we're basically only adding the default microphone
             Microphone microphone = base.CreateMicrophone(defaultDevice);
