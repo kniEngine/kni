@@ -396,7 +396,6 @@ namespace Microsoft.Xna.Framework
                 int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
                 if (sdkVer >= 10)
                 {
-                    // Check if the requested orientation is supported. Default means all are supported.
                     if ((supported & value) != 0)
                     {
                         didOrientationChange = true;
@@ -424,7 +423,6 @@ namespace Microsoft.Xna.Framework
                 }
                 else
                 {
-                    // Check if the requested orientation is either of the landscape orientations and any landscape orientation is supported.
                     if (value == DisplayOrientation.LandscapeLeft || value == DisplayOrientation.LandscapeRight)
                     {
                         didOrientationChange = true;
@@ -432,7 +430,6 @@ namespace Microsoft.Xna.Framework
                         requestedOrientation = ScreenOrientation.Landscape;
                         requestPortrait = false;
                     }
-                    // Check if the requested orientation is either of the portrain orientations and any portrait orientation is supported.
                     else if (value == DisplayOrientation.Portrait || value == DisplayOrientation.PortraitDown)
                     {
                         didOrientationChange = true;
