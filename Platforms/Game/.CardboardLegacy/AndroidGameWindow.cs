@@ -387,7 +387,6 @@ namespace Microsoft.Xna.Framework
             if (value != _currentOrientation)
             {
                 DisplayOrientation supported = GetEffectiveSupportedOrientations();
-                ScreenOrientation requestedOrientation = ScreenOrientation.Unspecified;
 
                 // Android 2.3 and above support reverse orientations
                 int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
@@ -404,6 +403,7 @@ namespace Microsoft.Xna.Framework
                 if ((supported & value) != 0)
                 {
                     _currentOrientation = value;
+                    ScreenOrientation requestedOrientation = ScreenOrientation.Unspecified;
                     switch (value)
                     {
                         case DisplayOrientation.LandscapeLeft:
