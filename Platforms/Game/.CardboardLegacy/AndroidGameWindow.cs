@@ -390,8 +390,8 @@ namespace Microsoft.Xna.Framework
                 ScreenOrientation requestedOrientation = ScreenOrientation.Unspecified;
                 bool wasPortrait = _currentOrientation == DisplayOrientation.Portrait || _currentOrientation == DisplayOrientation.PortraitDown;
                 bool requestPortrait = false;
-
                 bool didOrientationChange = false;
+
                 // Android 2.3 and above support reverse orientations
                 int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
                 if (sdkVer >= 10)
