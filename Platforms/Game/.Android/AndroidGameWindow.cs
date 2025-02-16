@@ -402,30 +402,28 @@ namespace Microsoft.Xna.Framework
                         value = DisplayOrientation.PortraitDown;
                 }
 
+                if ((supported & value) != 0)
                 {
-                    if ((supported & value) != 0)
+                    didOrientationChange = true;
+                    _currentOrientation = value;
+                    switch (value)
                     {
-                        didOrientationChange = true;
-                        _currentOrientation = value;
-                        switch (value)
-                        {
-                            case DisplayOrientation.LandscapeLeft:
-                                requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Landscape;
-                                requestPortrait = false;
-                                break;
-                            case DisplayOrientation.LandscapeRight:
-                                requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReverseLandscape;
-                                requestPortrait = false;
-                                break;
-                            case DisplayOrientation.Portrait:
-                                requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Portrait;
-                                requestPortrait = true;
-                                break;
-                            case DisplayOrientation.PortraitDown:
-                                requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReversePortrait;
-                                requestPortrait = true;
-                                break;
-                        }
+                        case DisplayOrientation.LandscapeLeft:
+                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Landscape;
+                            requestPortrait = false;
+                            break;
+                        case DisplayOrientation.LandscapeRight:
+                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReverseLandscape;
+                            requestPortrait = false;
+                            break;
+                        case DisplayOrientation.Portrait:
+                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Portrait;
+                            requestPortrait = true;
+                            break;
+                        case DisplayOrientation.PortraitDown:
+                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReversePortrait;
+                            requestPortrait = true;
+                            break;
                     }
                 }
 
