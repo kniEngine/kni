@@ -389,7 +389,6 @@ namespace Microsoft.Xna.Framework
                 DisplayOrientation supported = GetEffectiveSupportedOrientations();
                 ScreenOrientation requestedOrientation = ScreenOrientation.Unspecified;
                 bool wasPortrait = _currentOrientation == DisplayOrientation.Portrait || _currentOrientation == DisplayOrientation.PortraitDown;
-                bool requestPortrait = false;
 
                 // Android 2.3 and above support reverse orientations
                 int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
@@ -408,24 +407,21 @@ namespace Microsoft.Xna.Framework
                     {
                         case DisplayOrientation.LandscapeLeft:
                             requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Landscape;
-                            requestPortrait = false;
                             break;
                         case DisplayOrientation.LandscapeRight:
                             requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReverseLandscape;
-                            requestPortrait = false;
                             break;
                         case DisplayOrientation.Portrait:
                             requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Portrait;
-                            requestPortrait = true;
                             break;
                         case DisplayOrientation.PortraitDown:
                             requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReversePortrait;
-                            requestPortrait = true;
                             break;
                     }
 
                     // Android doesn't fire Released events for existing touches
                     // so we need to clear them out.
+                    bool requestPortrait = (value == DisplayOrientation.Portrait || value == DisplayOrientation.PortraitDown);
                     if (wasPortrait != requestPortrait)
                     {
                         ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
