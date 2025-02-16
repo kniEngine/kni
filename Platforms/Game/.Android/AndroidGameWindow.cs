@@ -403,22 +403,7 @@ namespace Microsoft.Xna.Framework
                 if ((supported & value) != 0)
                 {
                     _currentOrientation = value;
-                    ScreenOrientation requestedOrientation = ScreenOrientation.Unspecified;
-                    switch (value)
-                    {
-                        case DisplayOrientation.LandscapeLeft:
-                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Landscape;
-                            break;
-                        case DisplayOrientation.LandscapeRight:
-                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReverseLandscape;
-                            break;
-                        case DisplayOrientation.Portrait:
-                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.Portrait;
-                            break;
-                        case DisplayOrientation.PortraitDown:
-                            requestedOrientation = (ScreenOrientation)ScreenOrientationAll.ReversePortrait;
-                            break;
-                    }
+                    ScreenOrientation requestedOrientation = XnaOrientationToAndroid(value);
 
                     // Android doesn't fire Released events for existing touches
                     // so we need to clear them out.
@@ -435,6 +420,23 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        private static ScreenOrientation XnaOrientationToAndroid(DisplayOrientation value)
+        {
+            switch (value)
+            {
+                case DisplayOrientation.LandscapeLeft:
+                    return (ScreenOrientation)ScreenOrientationAll.Landscape;
+                case DisplayOrientation.LandscapeRight:
+                    return (ScreenOrientation)ScreenOrientationAll.ReverseLandscape;
+                case DisplayOrientation.Portrait:
+                    return (ScreenOrientation)ScreenOrientationAll.Portrait;
+                case DisplayOrientation.PortraitDown:
+                    return (ScreenOrientation)ScreenOrientationAll.ReversePortrait;
+
+                default:
+                    return ScreenOrientation.Unspecified;
+            }
+        }
 
         public void Dispose()
         {
