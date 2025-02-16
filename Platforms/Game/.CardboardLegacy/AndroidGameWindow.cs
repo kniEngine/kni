@@ -426,7 +426,7 @@ namespace Microsoft.Xna.Framework
                 {
                     // Check if the requested orientation is either of the landscape orientations and any landscape orientation is supported.
                     if ((value == DisplayOrientation.LandscapeLeft || value == DisplayOrientation.LandscapeRight) &&
-                        ((supported & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)) != 0))
+                        true)
                     {
                         didOrientationChange = true;
                         _currentOrientation = DisplayOrientation.LandscapeLeft;
@@ -435,7 +435,7 @@ namespace Microsoft.Xna.Framework
                     }
                     // Check if the requested orientation is either of the portrain orientations and any portrait orientation is supported.
                     else if ((value == DisplayOrientation.Portrait || value == DisplayOrientation.PortraitDown) &&
-                            ((supported & (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown)) != 0))
+                            true)
                     {
                         didOrientationChange = true;
                         _currentOrientation = DisplayOrientation.Portrait;
