@@ -390,7 +390,6 @@ namespace Microsoft.Xna.Framework
                 ScreenOrientation requestedOrientation = ScreenOrientation.Unspecified;
                 bool wasPortrait = _currentOrientation == DisplayOrientation.Portrait || _currentOrientation == DisplayOrientation.PortraitDown;
                 bool requestPortrait = false;
-                bool didOrientationChange = false;
 
                 // Android 2.3 and above support reverse orientations
                 int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
@@ -404,7 +403,6 @@ namespace Microsoft.Xna.Framework
 
                 if ((supported & value) != 0)
                 {
-                    didOrientationChange = true;
                     _currentOrientation = value;
                     switch (value)
                     {
@@ -425,10 +423,7 @@ namespace Microsoft.Xna.Framework
                             requestPortrait = true;
                             break;
                     }
-                }
 
-                if (didOrientationChange)
-                {
                     // Android doesn't fire Released events for existing touches
                     // so we need to clear them out.
                     if (wasPortrait != requestPortrait)
