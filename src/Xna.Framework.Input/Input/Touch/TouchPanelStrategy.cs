@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return this.LegacyReadGesture();
         }
 
-        public abstract void AddEvent(int id, TouchLocationState state, Vector2 position);
+        public abstract void AddEvent(int nativeTouchId, TouchLocationState state, Vector2 position);
 
         /// <summary>
         /// This will invalidate the touch panel state.

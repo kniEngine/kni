@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return base.ReadGesture();
         }
 
-        public override void AddEvent(int id, TouchLocationState state, Vector2 position)
+        public override void AddEvent(int nativeTouchId, TouchLocationState state, Vector2 position)
         {
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
@@ -84,7 +84,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 Rectangle windowsBounds = gameWindow.ClientBounds;
 
                 Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
-                base.LegacyAddEvent(id, state, position, winSize);
+                base.LegacyAddEvent(nativeTouchId, state, position, winSize);
             }
         }
 
