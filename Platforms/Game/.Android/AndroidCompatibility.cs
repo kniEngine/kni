@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Framework
         [CLSCompliant(false)]
         public DisplayOrientation GetAbsoluteOrientation(Activity activity)
         {
-            var orientation = activity.WindowManager.DefaultDisplay.Rotation;
+            SurfaceOrientation orientation = activity.WindowManager.DefaultDisplay.Rotation;
 
             switch (orientation)
             {
