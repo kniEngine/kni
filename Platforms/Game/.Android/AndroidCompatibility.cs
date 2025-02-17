@@ -86,23 +86,20 @@ namespace Microsoft.Xna.Framework
             degrees = ( ((degrees + 22) / 45) * 45) % 360;
 
             // Surprisingly 90 degree is landscape right, except on Kindle devices
-            var disporientation = DisplayOrientation.Unknown;
             switch (degrees)
             {
-                case 90: disporientation = FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                    break;
-                case 270: disporientation = FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                    break;
-                case 0: disporientation = DisplayOrientation.Portrait;
-                    break;
-                case 180: disporientation = DisplayOrientation.PortraitDown;
-                    break;
-                default:
-                    disporientation = DisplayOrientation.Unknown;
-                    break;
-            }
+                case 90:
+                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                case 270:
+                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                case 0:
+                    return DisplayOrientation.Portrait;
+                case 180:
+                    return DisplayOrientation.PortraitDown;
 
-            return disporientation;
+                default:
+                    return DisplayOrientation.Unknown;
+            }
         }
 
         /// <summary>
