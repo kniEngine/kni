@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return base.ReadGesture();
         }
 
-        public override void AddEvent(int nativeTouchId, TouchLocationState state, Vector2 position)
+        public override void AddPressedEvent(int nativeTouchId, Vector2 position)
         {
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
@@ -80,24 +80,45 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 Rectangle windowsBounds = gameWindow.ClientBounds;
                 Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
 
-                switch (state)
-                {
-                    case TouchLocationState.Pressed:
-                        base.AddPressedEvent(nativeTouchId, position, winSize);
-                        break;
+                base.AddPressedEvent(nativeTouchId, position, winSize);
+            }
+        }
+        
+        public override void AddMovedEvent(int nativeTouchId, Vector2 position)
+        {
+            IntPtr wndHandle = this.WindowHandle;
+            if (wndHandle != IntPtr.Zero)
+            {
+                GameWindow gameWindow = BlazorGameWindow.FromHandle(wndHandle);
+                Rectangle windowsBounds = gameWindow.ClientBounds;
+                Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
 
-                    case TouchLocationState.Moved:
-                        base.AddMovedEvent(nativeTouchId, position, winSize);
-                        break;
+                base.AddMovedEvent(nativeTouchId, position, winSize);
+            }
+        }
 
-                    case TouchLocationState.Released:
-                        base.AddReleasedEvent(nativeTouchId, position, winSize);
-                        break;
+        public override void AddReleasedEvent(int nativeTouchId, Vector2 position)
+        {
+            IntPtr wndHandle = this.WindowHandle;
+            if (wndHandle != IntPtr.Zero)
+            {
+                GameWindow gameWindow = BlazorGameWindow.FromHandle(wndHandle);
+                Rectangle windowsBounds = gameWindow.ClientBounds;
+                Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
 
-                    case TouchLocationState.Invalid:
-                    default:
-                        throw new InvalidOperationException();
-                }
+                base.AddReleasedEvent(nativeTouchId, position, winSize);
+            }
+        }
+        public override void AddCanceledEvent(int nativeTouchId, Vector2 position)
+        {
+            IntPtr wndHandle = this.WindowHandle;
+            if (wndHandle != IntPtr.Zero)
+            {
+                GameWindow gameWindow = BlazorGameWindow.FromHandle(wndHandle);
+                Rectangle windowsBounds = gameWindow.ClientBounds;
+                Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
+
+                base.AddReleasedEvent(nativeTouchId, position, winSize);
             }
         }
 
