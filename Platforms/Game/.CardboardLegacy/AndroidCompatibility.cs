@@ -86,23 +86,20 @@ namespace Microsoft.Xna.Framework
             degrees = ( ((degrees + 22) / 45) * 45) % 360;
 
             // Surprisingly 90 degree is landscape right, except on Kindle devices
-            var disporientation = DisplayOrientation.Unknown;
             switch (degrees)
             {
-                case 90: disporientation = FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                    break;
-                case 270: disporientation = FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                    break;
-                case 0: disporientation = DisplayOrientation.Portrait;
-                    break;
-                case 180: disporientation = DisplayOrientation.PortraitDown;
-                    break;
-                default:
-                    disporientation = DisplayOrientation.Unknown;
-                    break;
-            }
+                case 90:
+                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                case 270:
+                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                case 0:
+                    return DisplayOrientation.Portrait;
+                case 180:
+                    return DisplayOrientation.PortraitDown;
 
-            return disporientation;
+                default:
+                    return DisplayOrientation.Unknown;
+            }
         }
 
         /// <summary>
@@ -112,28 +109,57 @@ namespace Microsoft.Xna.Framework
         [CLSCompliant(false)]
         public DisplayOrientation GetAbsoluteOrientation(Activity activity)
         {
-            var orientation = activity.WindowManager.DefaultDisplay.Rotation;
+            SurfaceOrientation orientation = activity.WindowManager.DefaultDisplay.Rotation;
 
-            // Landscape degrees (provided by the OrientationListener) are swapped by default
-            // Since we use the code used by OrientationListener, we have to swap manually
-            int degrees;
             switch (orientation)
             {
                 case SurfaceOrientation.Rotation90:
-                    degrees = 270;
-                    break;
+                    {
+                        if (NaturalOrientation == Orientation.Landscape)
+                        {
+                            return DisplayOrientation.PortraitDown;
+                        }
+                        else
+                        {
+                            return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                        }
+                    }
                 case SurfaceOrientation.Rotation180:
-                    degrees = 180;
-                    break;
+                    {
+                        if (NaturalOrientation == Orientation.Landscape)
+                        {
+                            return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                        }
+                        else
+                        {
+                            return DisplayOrientation.PortraitDown;
+                        }
+                    }
                 case SurfaceOrientation.Rotation270:
-                    degrees = 90;
-                    break;
-                default:
-                    degrees = 0;
-                    break;
-            }
+                    {
+                        if (NaturalOrientation == Orientation.Landscape)
+                        {
+                            return DisplayOrientation.Portrait;
+                        }
+                        else
+                        {
+                            return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                        }
+                    }
 
-            return GetAbsoluteOrientation(degrees);
+                case SurfaceOrientation.Rotation0:
+                default:
+                    {
+                        if (NaturalOrientation == Orientation.Landscape)
+                        {
+                            return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                        }
+                        else
+                        {
+                            return DisplayOrientation.Portrait;
+                        }
+                    }
+            }
         }
     }
 }

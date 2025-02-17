@@ -123,16 +123,20 @@ namespace Microsoft.Xna.Platform
             switch (activity.Resources.Configuration.Orientation)
             {
                 case Android.Content.Res.Orientation.Portrait:
-                    gameWindow.SetOrientation((currentOrientation == DisplayOrientation.PortraitDown)
-                                                    ? DisplayOrientation.PortraitDown
-                                                    : DisplayOrientation.Portrait,
-                                                    false);
+                    {
+                        DisplayOrientation orientation = (currentOrientation == DisplayOrientation.PortraitDown)
+                                                       ? DisplayOrientation.PortraitDown
+                                                       : DisplayOrientation.Portrait;
+                        gameWindow.SetOrientation(orientation, false);
+                    }
                     break;
                 default:
-                    gameWindow.SetOrientation((currentOrientation == DisplayOrientation.LandscapeRight)
-                                                    ? DisplayOrientation.LandscapeRight
-                                                    : DisplayOrientation.LandscapeLeft,
-                                                    false);
+                    {
+                        DisplayOrientation orientation = (currentOrientation == DisplayOrientation.LandscapeRight)
+                                                       ? DisplayOrientation.LandscapeRight
+                                                       : DisplayOrientation.LandscapeLeft;
+                        gameWindow.SetOrientation(orientation, false);
+                    }
                     break;
             }
 
