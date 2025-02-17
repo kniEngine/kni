@@ -122,17 +122,8 @@ namespace Microsoft.Xna.Framework
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (180)
                             {
-                                case 90:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                                case 270:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
                                 case 180:
                                     return DisplayOrientation.PortraitDown;
-
-                                default:
-                                    return DisplayOrientation.Unknown;
                             }
                         }
                         else
@@ -140,17 +131,8 @@ namespace Microsoft.Xna.Framework
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (270)
                             {
-                                case 90:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
                                 case 270:
                                     return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
-                                case 180:
-                                    return DisplayOrientation.PortraitDown;
-
-                                default:
-                                    return DisplayOrientation.Unknown;
                             }
                         }
                     }
@@ -163,15 +145,6 @@ namespace Microsoft.Xna.Framework
                             {
                                 case 90:
                                     return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                                case 270:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
-                                case 180:
-                                    return DisplayOrientation.PortraitDown;
-
-                                default:
-                                    return DisplayOrientation.Unknown;
                             }
                         }
                         else
@@ -179,17 +152,8 @@ namespace Microsoft.Xna.Framework
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (180)
                             {
-                                case 90:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                                case 270:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
                                 case 180:
                                     return DisplayOrientation.PortraitDown;
-
-                                default:
-                                    return DisplayOrientation.Unknown;
                             }
                         }
                     }
@@ -200,15 +164,6 @@ namespace Microsoft.Xna.Framework
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (0)
                             {
-                                case 90:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                                case 270:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
-                                case 180:
-                                    return DisplayOrientation.PortraitDown;
-
                                 default:
                                     return DisplayOrientation.Unknown;
                             }
@@ -220,15 +175,6 @@ namespace Microsoft.Xna.Framework
                             {
                                 case 90:
                                     return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                                case 270:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
-                                case 180:
-                                    return DisplayOrientation.PortraitDown;
-
-                                default:
-                                    return DisplayOrientation.Unknown;
                             }
                         }
                     }
@@ -240,17 +186,8 @@ namespace Microsoft.Xna.Framework
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (270)
                             {
-                                case 90:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
                                 case 270:
                                     return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
-                                case 180:
-                                    return DisplayOrientation.PortraitDown;
-
-                                default:
-                                    return DisplayOrientation.Unknown;
                             }
                         }
                         else
@@ -258,15 +195,6 @@ namespace Microsoft.Xna.Framework
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (0)
                             {
-                                case 90:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                                case 270:
-                                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                                case 0:
-                                    return DisplayOrientation.Portrait;
-                                case 180:
-                                    return DisplayOrientation.PortraitDown;
-
                                 default:
                                     return DisplayOrientation.Unknown;
                             }
