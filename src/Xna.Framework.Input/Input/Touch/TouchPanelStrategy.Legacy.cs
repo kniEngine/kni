@@ -323,6 +323,18 @@ namespace Microsoft.Xna.Platform.Input.Touch
             _touchIdsMap.Remove(nativeTouchId);
         }
 
+        protected void AddCanceledEvent(int nativeTouchId, Vector2 position, Point winSize)
+        {
+            int touchId;
+            if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
+            {
+                System.Diagnostics.Debug.Assert(false);
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
         private int FindTouchStateIndex(int touchId)
         {
             for (int tidx = 0; tidx < _touchStates.Count; tidx++)
