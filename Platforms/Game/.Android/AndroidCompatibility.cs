@@ -122,8 +122,7 @@ namespace Microsoft.Xna.Framework
                         {
                             // Orientation is reported by the device in degrees compared to the natural orientation
                             // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
+                            degrees += 270;
 
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
@@ -146,11 +145,6 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            // Orientation is reported by the device in degrees compared to the natural orientation
-                            // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
-
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
 
@@ -178,8 +172,7 @@ namespace Microsoft.Xna.Framework
                         {
                             // Orientation is reported by the device in degrees compared to the natural orientation
                             // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
+                            degrees += 270;
 
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
@@ -202,11 +195,6 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            // Orientation is reported by the device in degrees compared to the natural orientation
-                            // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
-
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
 
@@ -234,8 +222,7 @@ namespace Microsoft.Xna.Framework
                         {
                             // Orientation is reported by the device in degrees compared to the natural orientation
                             // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
+                            degrees += 270;
 
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
@@ -258,11 +245,6 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            // Orientation is reported by the device in degrees compared to the natural orientation
-                            // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
-
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
 
@@ -291,8 +273,7 @@ namespace Microsoft.Xna.Framework
                         {
                             // Orientation is reported by the device in degrees compared to the natural orientation
                             // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
+                            degrees += 270;
 
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
@@ -315,11 +296,6 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            // Orientation is reported by the device in degrees compared to the natural orientation
-                            // Some tablets have a natural landscape orientation, which we need to account for
-                            if (NaturalOrientation == Orientation.Landscape)
-                                degrees += 270;
-
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
                             degrees = (((degrees + 22) / 45) * 45) % 360;
 
