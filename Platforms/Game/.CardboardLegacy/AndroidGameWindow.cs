@@ -398,10 +398,10 @@ namespace Microsoft.Xna.Framework
                         value = DisplayOrientation.PortraitDown;
                 }
 
-                bool wasPortrait = (_currentOrientation == DisplayOrientation.Portrait || _currentOrientation == DisplayOrientation.PortraitDown);
-
                 if ((supported & value) != 0)
                 {
+                    bool wasPortrait = (_currentOrientation == DisplayOrientation.Portrait || _currentOrientation == DisplayOrientation.PortraitDown);
+
                     _currentOrientation = value;
                     ScreenOrientation requestedOrientation = XnaOrientationToAndroid(value);
 
