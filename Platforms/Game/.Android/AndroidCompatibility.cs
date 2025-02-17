@@ -111,20 +111,16 @@ namespace Microsoft.Xna.Framework
         {
             var orientation = activity.WindowManager.DefaultDisplay.Rotation;
 
-            // Landscape degrees (provided by the OrientationListener) are swapped by default
-            // Since we use the code used by OrientationListener, we have to swap manually
             switch (orientation)
             {
                 case SurfaceOrientation.Rotation90:
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return DisplayOrientation.PortraitDown;
                         }
                         else
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
                         }
                     }
@@ -132,12 +128,10 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
                         }
                         else
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return DisplayOrientation.PortraitDown;
                         }
                     }
@@ -145,12 +139,10 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return DisplayOrientation.Unknown;
                         }
                         else
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
                         }
                     }
@@ -159,12 +151,10 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
                         }
                         else
                         {
-                            // Surprisingly 90 degree is landscape right, except on Kindle devices
                             return DisplayOrientation.Unknown;
                         }
                     }
