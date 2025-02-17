@@ -147,6 +147,7 @@ namespace Microsoft.Xna.Framework
                         }
                     }
 
+                case SurfaceOrientation.Rotation0:
                 default:
                     {
                         if (NaturalOrientation == Orientation.Landscape)
