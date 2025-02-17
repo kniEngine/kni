@@ -116,24 +116,30 @@ namespace Microsoft.Xna.Framework
 
             // Landscape degrees (provided by the OrientationListener) are swapped by default
             // Since we use the code used by OrientationListener, we have to swap manually
-            int degrees;
             switch (orientation)
             {
                 case SurfaceOrientation.Rotation90:
-                    degrees = 270;
-                    break;
+                    {
+                        int degrees = 270;
+                        return GetAbsoluteOrientation(degrees);
+                    }
                 case SurfaceOrientation.Rotation180:
-                    degrees = 180;
-                    break;
+                    {
+                        int degrees = 180;
+                        return GetAbsoluteOrientation(degrees);
+                    }
                 case SurfaceOrientation.Rotation270:
-                    degrees = 90;
-                    break;
-                default:
-                    degrees = 0;
-                    break;
-            }
+                    {
+                        int degrees = 90;
+                        return GetAbsoluteOrientation(degrees);
+                    }
 
-            return GetAbsoluteOrientation(degrees);
+                default:
+                    {
+                        int degrees = 0;
+                        return GetAbsoluteOrientation(degrees);
+                    }
+            }
         }
     }
 }
