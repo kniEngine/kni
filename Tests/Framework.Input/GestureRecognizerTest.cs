@@ -64,13 +64,13 @@ namespace Kni.Tests.Input
             TouchPanel.EnabledGestures = GestureType.Tap;
             var pos = new Vector2(100, 150);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -96,13 +96,13 @@ namespace Kni.Tests.Input
             var pos = new Vector2(100, 150);
 
             //Do a first tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -122,7 +122,7 @@ namespace Kni.Tests.Input
             }
 
             //Now do the second tap in the same location, this will make a double tap on press (but no tap)
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -134,7 +134,7 @@ namespace Kni.Tests.Input
             Assert.AreEqual(pos, gesture.Position);
 
             //This release should make no gestures
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(2, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -151,18 +151,18 @@ namespace Kni.Tests.Input
             var pos2 = new Vector2(100, 150 + TouchPanelStrategy.TapJitterTolerance + 1);
 
             //Do a first tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos1);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos1);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             //Now do the second tap in a different location
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos2);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -183,27 +183,27 @@ namespace Kni.Tests.Input
             var pos = new Vector2(100, 150);
 
             //Place a finger down, this finger will never be released
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, new Vector2(10));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, new Vector2(10));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Place a new finger down for a tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release it, should not make a tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(2, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Press the finger down again, should not make a double tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(3, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(3, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -218,13 +218,13 @@ namespace Kni.Tests.Input
             var pos = new Vector2(100, 150);
 
             //Do a first tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -236,7 +236,7 @@ namespace Kni.Tests.Input
                 Assert.False(TouchPanel.IsGestureAvailable);
             }
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -251,7 +251,7 @@ namespace Kni.Tests.Input
             var pos = new Vector2(100, 150);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
 
             //We shouldn't generate the hold until the required time has passed
             TimeSpan gt = TimeSpan.Zero;
@@ -284,13 +284,13 @@ namespace Kni.Tests.Input
             var pos = new Vector2(100, 100);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release it, should make a tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.True(TouchPanel.IsGestureAvailable);
@@ -300,7 +300,7 @@ namespace Kni.Tests.Input
             Assert.AreEqual(GestureType.Tap, gesture.GestureType);
 
             //Place finger again, should make a double tap
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.True(TouchPanel.IsGestureAvailable);
@@ -347,7 +347,7 @@ namespace Kni.Tests.Input
                 diffVec = new Vector2(1, -10);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -361,7 +361,7 @@ namespace Kni.Tests.Input
                 diff ++;
                 frame++;
 
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + diff * diffVec);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + diff * diffVec);
                 Thread.Sleep(GameTimeForFrame(1));
                 FrameworkDispatcher.Update();
             }
@@ -383,7 +383,7 @@ namespace Kni.Tests.Input
 
             //If all gestures are enabled (DragComplete is enabled), releasing our touch will generate a DragComplete gesture
             frame++;
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + diff * diffVec);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + diff * diffVec);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -413,7 +413,7 @@ namespace Kni.Tests.Input
             var startPos = new Vector2(200, 200);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -427,7 +427,7 @@ namespace Kni.Tests.Input
                 diff += 5;
                 frame++;
 
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(diff));
                 Thread.Sleep(GameTimeForFrame(1));
                 FrameworkDispatcher.Update();
             }
@@ -445,7 +445,7 @@ namespace Kni.Tests.Input
 
             //If DragComplete is enabled, releasing our touch will generate a DragComplete gesture
             frame++;
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(diff));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + new Vector2(diff));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -472,7 +472,7 @@ namespace Kni.Tests.Input
             var startPos = new Vector2(200, 200);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -486,7 +486,7 @@ namespace Kni.Tests.Input
                 diff += 5;
                 frame++;
 
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff, 0));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(diff, 0));
                 Thread.Sleep(GameTimeForFrame(1));
                 FrameworkDispatcher.Update();
             }
@@ -512,13 +512,13 @@ namespace Kni.Tests.Input
 
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Drag it, should get a drag
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(40, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(40, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -530,14 +530,14 @@ namespace Kni.Tests.Input
             //Disable gestures
             TouchPanel.EnabledGestures = GestureType.None;
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release that touch, should make no gesture
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
@@ -546,12 +546,12 @@ namespace Kni.Tests.Input
             //Enable both gestures again, just place the finger down and release it
             //Should make no gesture
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(2, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
@@ -566,13 +566,13 @@ namespace Kni.Tests.Input
 
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Drag it, should get a drag
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(40, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(40, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -584,7 +584,7 @@ namespace Kni.Tests.Input
             //Disable gestures
             TouchPanel.EnabledGestures = GestureType.None;
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -594,7 +594,7 @@ namespace Kni.Tests.Input
             TouchPanel.EnabledGestures = GestureType.FreeDrag | GestureType.DragComplete;
 
             //Release that touch, should make no gesture
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -613,13 +613,13 @@ namespace Kni.Tests.Input
             var startPos = new Vector2(200, 200);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Drag it, should get a drag
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(40, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(40, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -631,19 +631,19 @@ namespace Kni.Tests.Input
             //Disable gestures
             TouchPanel.EnabledGestures = GestureType.None;
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Release the finger, should make no gesture (gestures are disabled)
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Press it down again
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
@@ -652,7 +652,7 @@ namespace Kni.Tests.Input
             TouchPanel.EnabledGestures = GestureType.FreeDrag | GestureType.DragComplete;
 
             //Release the second touch, should make no gesture
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, startPos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(2, startPos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -667,18 +667,18 @@ namespace Kni.Tests.Input
             
             var pos = new Vector2(10, 10);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             //Drag it a bit
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos + new Vector2(40, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos + new Vector2(40, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             TouchPanel.EnabledGestures = GestureType.Tap;
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos + new Vector2(80, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos + new Vector2(80, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -692,7 +692,7 @@ namespace Kni.Tests.Input
             var startPos = new Vector2(200, 200);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -706,7 +706,7 @@ namespace Kni.Tests.Input
                 diff += 30;
                 frame++;
 
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff, 0));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(diff, 0));
                 Thread.Sleep(GameTimeForFrame(1));
                 FrameworkDispatcher.Update();
             }
@@ -714,7 +714,7 @@ namespace Kni.Tests.Input
 
             //Now release
             frame++;
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(diff, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + new Vector2(diff, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -736,12 +736,12 @@ namespace Kni.Tests.Input
             var startPos = new Vector2(200, 200);
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
             //Then release it at the edge of the detection size
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(TouchPanelStrategy.TapJitterTolerance, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + new Vector2(TouchPanelStrategy.TapJitterTolerance, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -760,7 +760,7 @@ namespace Kni.Tests.Input
             GestureSample gesture;
 
             //Place the finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, startPos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, startPos);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -772,7 +772,7 @@ namespace Kni.Tests.Input
                 diff += 40;
                 frame++;
 
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, startPos + new Vector2(diff, 0));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, startPos + new Vector2(diff, 0));
                 Thread.Sleep(GameTimeForFrame(1));
                 FrameworkDispatcher.Update();
 
@@ -788,7 +788,7 @@ namespace Kni.Tests.Input
 
             //Now release
             frame++;
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, startPos + new Vector2(diff, 0));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, startPos + new Vector2(diff, 0));
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -821,13 +821,13 @@ namespace Kni.Tests.Input
             var pos2 = new Vector2(400, 200);
 
             //Place a finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos1);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             Assert.False(TouchPanel.IsGestureAvailable);
 
             //Place the other finger down
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos2);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -846,7 +846,7 @@ namespace Kni.Tests.Input
 
             //But if we move a finger, we should get an updated pinch
             pos2 += new Vector2(50, 0);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Moved, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(2, pos2);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 
@@ -859,7 +859,7 @@ namespace Kni.Tests.Input
 
             //Now releasing one of the fingers should make a pinch complete event
             pos1 -= new Vector2(0, 50);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos1);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
 

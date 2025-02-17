@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Framework.Windows
                         var position = m.GetPointerLocation();
                         position = PointToClient(position);
                         Vector2 vec = new Vector2(position.X, position.Y);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Pressed, vec);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(id, vec);
                     }
                     break;
                 case WM_POINTERUPDATE:
@@ -207,7 +207,7 @@ namespace Microsoft.Xna.Framework.Windows
                         var position = m.GetPointerLocation();
                         position = PointToClient(position);
                         Vector2 vec = new Vector2(position.X, position.Y);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Moved, vec);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(id, vec);
                     }
                     break;
                 case WM_POINTERUP:
@@ -216,7 +216,7 @@ namespace Microsoft.Xna.Framework.Windows
                         var position = m.GetPointerLocation();
                         position = PointToClient(position);
                         Vector2 vec = new Vector2(position.X, position.Y);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, vec);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(id, vec);
                     }
                     break;
 

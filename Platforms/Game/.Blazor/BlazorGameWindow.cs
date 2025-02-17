@@ -133,15 +133,15 @@ namespace Microsoft.Xna.Framework
                 TouchPanel.WindowHandle = this.Handle;
             _window.OnTouchStart += (object sender, float x, float y, int identifier) =>
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(identifier, TouchLocationState.Pressed, new Vector2(x, y));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(identifier, new Vector2(x, y));
             };
             _window.OnTouchMove += (object sender, float x, float y, int identifier) =>
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(identifier, TouchLocationState.Moved, new Vector2(x, y));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(identifier, new Vector2(x, y));
             };
             _window.OnTouchEnd += (object sender, float x, float y, int identifier) =>
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(identifier, TouchLocationState.Released, new Vector2(x, y));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(identifier, new Vector2(x, y));
             };
             _window.OnTouchCancel += (object sender) =>
             {

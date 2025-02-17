@@ -85,22 +85,56 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return base.ReadGesture();
         }
 
-        public override void AddEvent(int id, TouchLocationState state, Vector2 position)
+        public override void AddPressedEvent(int nativeTouchId, Vector2 position)
         {
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
             {
                 GameWindow gameWindow = UAPGameWindow.FromHandle(wndHandle);
                 Rectangle windowsBounds = gameWindow.ClientBounds;
-
                 Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
-                base.LegacyAddEvent(id, state, position, winSize);
+
+                base.AddPressedEvent(nativeTouchId, position, winSize);
             }
         }
 
-        public override void InvalidateTouches()
+        public override void AddMovedEvent(int nativeTouchId, Vector2 position)
         {
-            base.InvalidateTouches();
+            IntPtr wndHandle = this.WindowHandle;
+            if (wndHandle != IntPtr.Zero)
+            {
+                GameWindow gameWindow = UAPGameWindow.FromHandle(wndHandle);
+                Rectangle windowsBounds = gameWindow.ClientBounds;
+                Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
+
+                base.AddMovedEvent(nativeTouchId, position, winSize);
+            }
+        }
+
+        public override void AddReleasedEvent(int nativeTouchId, Vector2 position)
+        {
+            IntPtr wndHandle = this.WindowHandle;
+            if (wndHandle != IntPtr.Zero)
+            {
+                GameWindow gameWindow = UAPGameWindow.FromHandle(wndHandle);
+                Rectangle windowsBounds = gameWindow.ClientBounds;
+                Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
+
+                base.AddReleasedEvent(nativeTouchId, position, winSize);
+            }
+        }
+
+        public override void AddCanceledEvent(int nativeTouchId, Vector2 position)
+        {
+            IntPtr wndHandle = this.WindowHandle;
+            if (wndHandle != IntPtr.Zero)
+            {
+                GameWindow gameWindow = UAPGameWindow.FromHandle(wndHandle);
+                Rectangle windowsBounds = gameWindow.ClientBounds;
+                Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
+
+                base.AddReleasedEvent(nativeTouchId, position, winSize);
+            }
         }
 
     }

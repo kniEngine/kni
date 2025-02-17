@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // DOWN
                 case MotionEventActions.Down:
                 case MotionEventActions.PointerDown:
-                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Pressed, position);
+                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(id, position);
                     break;
 
                 // MOVE
@@ -44,14 +44,14 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         id = e.GetPointerId(i);
                         position.X = e.GetX(i);
                         position.Y = e.GetY(i);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Moved, position);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(id, position);
                     }
                     break;
 
                 // UP
                 case MotionEventActions.Up:
                 case MotionEventActions.PointerUp:
-                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
+                    ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(id, position);
                     break;
 
                 // OUTSIDE
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     for (int i = 0; i < e.PointerCount; i++)
                     {
                         id = e.GetPointerId(i);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(id, position);
                     }
                     break;
 
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     for (int i = 0; i < e.PointerCount; i++)
                     {
                         id = e.GetPointerId(i);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddEvent(id, TouchLocationState.Released, position);
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddCanceledEvent(id, position);
                     }
                     break;
             }

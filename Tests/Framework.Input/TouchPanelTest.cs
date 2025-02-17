@@ -51,7 +51,7 @@ namespace Kni.Tests.Input
         public void PressedStartsATouch()
         {
             var pos = new Vector2(100, 50);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
 
             var state = TouchPanel.GetState();
 
@@ -69,8 +69,8 @@ namespace Kni.Tests.Input
         {
             var pos = new Vector2(101, 50);
             var pos2 = new Vector2(101, 100);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos2);
 
             var state = TouchPanel.GetState();
 
@@ -83,12 +83,31 @@ namespace Kni.Tests.Input
 
         [Test]
         [Order(3)]
-        [TestCase(TouchLocationState.Invalid)]
-        [TestCase(TouchLocationState.Moved)]
-        [TestCase(TouchLocationState.Released)]
-        public void NonPressedDoesntStartATouch(TouchLocationState providedState)
+        public void MovedDoesntStartATouch(TouchLocationState providedState)
         {
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, providedState, new Vector2(102, 50));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, new Vector2(102, 50));
+
+            var state = TouchPanel.GetState();
+
+            Assert.AreEqual(0, state.Count);
+        }
+
+        [Test]
+        [Order(3)]
+        public void ReleasedDoesntStartATouch()
+        {
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, new Vector2(102, 50));
+
+            var state = TouchPanel.GetState();
+
+            Assert.AreEqual(0, state.Count);
+        }
+
+        [Test]
+        [Order(3)]
+        public void CanceledDoesntStartATouch()
+        {
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddCanceledEvent(1, new Vector2(102, 50));
 
             var state = TouchPanel.GetState();
 
@@ -100,7 +119,7 @@ namespace Kni.Tests.Input
         public void PressedAgesToMovedAfterGetState()
         {
             var pos = new Vector2(103, 50);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
 
             var initialState = TouchPanel.GetState();
             var initialTouch = initialState[0];
@@ -120,7 +139,7 @@ namespace Kni.Tests.Input
         public void MovingTouchUpdatesPosition()
         {
             var pos1 = new Vector2(104, 50);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos1);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos1);
 
             var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -130,7 +149,7 @@ namespace Kni.Tests.Input
             Assert.AreEqual(pos1, touch.Position);
 
             var pos2 = new Vector2(104, 50);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos2);
 
             state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -148,7 +167,7 @@ namespace Kni.Tests.Input
         {
             //Touch the screen, we should get one touch with the given location in the pressed state
             var pos = new Vector2(105, 50);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             
             var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -161,7 +180,7 @@ namespace Kni.Tests.Input
             if (moveInBetween)
             {
                 var pos2 = new Vector2(105, 100);
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos2);
 
                 var movedState = TouchPanel.GetState();
                 Assert.AreEqual(1, movedState.Count);
@@ -174,7 +193,7 @@ namespace Kni.Tests.Input
 
             //Release the touch, it should then show up as released touch
             var pos3 = new Vector2(105, 150);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos3);
 
             var endState = TouchPanel.GetState();
             Assert.AreEqual(1, endState.Count);
@@ -200,17 +219,17 @@ namespace Kni.Tests.Input
             var pos2 = new Vector2(106, 150);
             int frame = 0;
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
             {
                 Thread.Sleep(GameTimeForFrame(1));
                 FrameworkDispatcher.Update();
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos2);
             }
 
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos2);
 
             var state = TouchPanel.GetState();
             Assert.AreEqual(0, state.Count); //Should miss the touch that happened between
@@ -227,10 +246,10 @@ namespace Kni.Tests.Input
         {
             var pos = new Vector2(107, 50);
             var pos2 = new Vector2(107, 150);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos2);
 
             var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count); //Should get the touch that happened between
@@ -272,10 +291,10 @@ namespace Kni.Tests.Input
         {
             var pos = new Vector2(108, 50);
             var pos2 = new Vector2(108, 150);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
             if (moveInBetween) //Moving shouldn't change the behavior
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos2);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos2);
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos2);
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             var state = TouchPanel.GetState();
@@ -289,7 +308,7 @@ namespace Kni.Tests.Input
         {
             //Start with one touch
             var pos = new Vector2(109, 50);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
 
             var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -301,7 +320,7 @@ namespace Kni.Tests.Input
 
             //Start a second touch
             var pos2 = new Vector2(150, 100);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos2);
 
             state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
@@ -319,7 +338,7 @@ namespace Kni.Tests.Input
 
             //Move the second touch
             var pos3 = new Vector2(150, 150);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Moved, pos3);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(2, pos3);
             
             state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
@@ -337,7 +356,7 @@ namespace Kni.Tests.Input
 
             //Release the second touch
             var pos4 = new Vector2(150, 200);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Released, pos4);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(2, pos4);
 
             state = TouchPanel.GetState();
             Assert.AreEqual(2, state.Count);
@@ -355,7 +374,7 @@ namespace Kni.Tests.Input
 
             //Move the first touch, second touch shouldn't be there any more
             var pos5 = new Vector2(100, 200);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Moved, pos5);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(1, pos5);
 
             state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -370,7 +389,7 @@ namespace Kni.Tests.Input
 
             //Release the first touch
             var pos6 = new Vector2(100, 250);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos6);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos6);
 
             state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -397,7 +416,7 @@ namespace Kni.Tests.Input
 
             //Start a touch
             var pos = new Vector2(1);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
 
             var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -408,11 +427,11 @@ namespace Kni.Tests.Input
 
 
             //Release the touch, make a new one and move it around lots
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Released, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddReleasedEvent(1, pos);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, new Vector2(2));
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, new Vector2(2));
             for (var i = 3; i < 200; i++)
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Moved, new Vector2(i));
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddMovedEvent(2, new Vector2(i));
 
             //We should now have the first touch in the release state and the second touch in the pressed state at 199,199
             state = TouchPanel.GetState();
@@ -438,7 +457,7 @@ namespace Kni.Tests.Input
             //Start a touch
             Vector2 pos = new Vector2(2);
             Vector2 pos2 = new Vector2(3);
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(1, TouchLocationState.Pressed, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
 
             var state = TouchPanel.GetState();
             Assert.AreEqual(1, state.Count);
@@ -447,7 +466,7 @@ namespace Kni.Tests.Input
             Assert.AreEqual(TouchLocationState.Pressed, initialTouch.State);
             Assert.AreEqual(pos, initialTouch.Position);
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddEvent(2, TouchLocationState.Pressed, pos2);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos2);
 
             if (testBetween)
             {

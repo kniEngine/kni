@@ -82,7 +82,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return this.LegacyReadGesture();
         }
 
-        public abstract void AddEvent(int id, TouchLocationState state, Vector2 position);
+        public abstract void AddPressedEvent(int nativeTouchId, Vector2 position);
+        public abstract void AddMovedEvent(int nativeTouchId, Vector2 position);
+        public abstract void AddReleasedEvent(int nativeTouchId, Vector2 position);
+        public abstract void AddCanceledEvent(int nativeTouchId, Vector2 position);
 
         /// <summary>
         /// This will invalidate the touch panel state.
@@ -90,7 +93,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <remarks>
         /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
         /// </remarks>
-        public virtual void InvalidateTouches()
+        public void InvalidateTouches()
         {
             // store enabled gesture types
             GestureType enabledGestures = this.EnabledGestures;
@@ -111,8 +114,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
                     for (int i = 0; i < nativeTouchIdsCount; i++)
                     {
-                        // submit a fake Released event for each touch Id
-                        AddEvent(nativeTouchIds[i], TouchLocationState.Released, Vector2.Zero);
+                        // submit a fake Canceled event for each touch Id
+                        AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
                     }
                 }
 

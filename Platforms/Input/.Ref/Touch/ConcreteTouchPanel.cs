@@ -60,12 +60,22 @@ namespace Microsoft.Xna.Platform.Input.Touch
             throw new PlatformNotSupportedException();
         }
 
-        public override void AddEvent(int id, TouchLocationState state, Vector2 position)
+        public override void AddPressedEvent(int nativeTouchId, Vector2 position)
         {
             throw new PlatformNotSupportedException();
         }
 
-        public override void InvalidateTouches()
+        public override void AddMovedEvent(int nativeTouchId, Vector2 position)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void AddReleasedEvent(int nativeTouchId, Vector2 position)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
+        public override void AddCanceledEvent(int nativeTouchId, Vector2 position)
         {
             throw new PlatformNotSupportedException();
         }
