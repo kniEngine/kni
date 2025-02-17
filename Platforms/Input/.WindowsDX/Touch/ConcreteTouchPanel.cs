@@ -82,9 +82,26 @@ namespace Microsoft.Xna.Platform.Input.Touch
             {
                 GameWindow gameWindow = WinFormsGameWindow.FromHandle(wndHandle);
                 Rectangle windowsBounds = gameWindow.ClientBounds;
-
                 Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
-                base.LegacyAddEvent(nativeTouchId, state, position, winSize);
+
+                switch (state)
+                {
+                    case TouchLocationState.Pressed:
+                        base.AddPressedEvent(nativeTouchId, position, winSize);
+                        break;
+
+                    case TouchLocationState.Moved:
+                        base.AddMovedEvent(nativeTouchId, position, winSize);
+                        break;
+
+                    case TouchLocationState.Released:
+                        base.AddReleasedEvent(nativeTouchId, position, winSize);
+                        break;
+
+                    case TouchLocationState.Invalid:
+                    default:
+                        throw new InvalidOperationException();
+                }
             }
         }
 
