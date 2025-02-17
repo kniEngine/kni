@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            return DisplayOrientation.Unknown;
+                            return DisplayOrientation.Portrait;
                         }
                         else
                         {
@@ -156,7 +156,7 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            return DisplayOrientation.Unknown;
+                            return DisplayOrientation.Portrait;
                         }
                     }
             }
