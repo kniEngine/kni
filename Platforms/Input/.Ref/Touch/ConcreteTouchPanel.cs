@@ -80,10 +80,5 @@ namespace Microsoft.Xna.Platform.Input.Touch
             throw new PlatformNotSupportedException();
         }
 
-        public override void InvalidateTouches()
-        {
-            throw new PlatformNotSupportedException();
-        }
-
     }
 }

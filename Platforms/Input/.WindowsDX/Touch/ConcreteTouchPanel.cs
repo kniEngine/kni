@@ -127,12 +127,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
-        public override void InvalidateTouches()
-        {
-            base.InvalidateTouches();
-        }
-
-
         const int SM_MAXIMUMTOUCHES = 95;
 
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]

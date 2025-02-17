@@ -136,10 +136,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 base.AddReleasedEvent(nativeTouchId, position, winSize);
             }
         }
-        public override void InvalidateTouches()
-        {
-            base.InvalidateTouches();
-        }
 
     }
 }

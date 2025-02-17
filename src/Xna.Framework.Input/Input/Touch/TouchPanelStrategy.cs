@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <remarks>
         /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
         /// </remarks>
-        public virtual void InvalidateTouches()
+        public void InvalidateTouches()
         {
             // store enabled gesture types
             GestureType enabledGestures = this.EnabledGestures;

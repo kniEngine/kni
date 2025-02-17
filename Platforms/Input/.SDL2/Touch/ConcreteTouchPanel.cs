@@ -121,10 +121,5 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
-        public override void InvalidateTouches()
-        {
-            base.InvalidateTouches();
-        }
-
     }
 }
