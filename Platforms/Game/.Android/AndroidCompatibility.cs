@@ -118,23 +118,111 @@ namespace Microsoft.Xna.Framework
                 case SurfaceOrientation.Rotation90:
                     {
                         int degrees = 270;
-                        return GetAbsoluteOrientation(degrees);
+                        // Orientation is reported by the device in degrees compared to the natural orientation
+                        // Some tablets have a natural landscape orientation, which we need to account for
+                        if (NaturalOrientation == Orientation.Landscape)
+                            degrees += 270;
+
+                        // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
+                        degrees = (((degrees + 22) / 45) * 45) % 360;
+
+                        // Surprisingly 90 degree is landscape right, except on Kindle devices
+                        switch (degrees)
+                        {
+                            case 90:
+                                return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                            case 270:
+                                return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                            case 0:
+                                return DisplayOrientation.Portrait;
+                            case 180:
+                                return DisplayOrientation.PortraitDown;
+
+                            default:
+                                return DisplayOrientation.Unknown;
+                        }
                     }
                 case SurfaceOrientation.Rotation180:
                     {
                         int degrees = 180;
-                        return GetAbsoluteOrientation(degrees);
+                        // Orientation is reported by the device in degrees compared to the natural orientation
+                        // Some tablets have a natural landscape orientation, which we need to account for
+                        if (NaturalOrientation == Orientation.Landscape)
+                            degrees += 270;
+
+                        // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
+                        degrees = (((degrees + 22) / 45) * 45) % 360;
+
+                        // Surprisingly 90 degree is landscape right, except on Kindle devices
+                        switch (degrees)
+                        {
+                            case 90:
+                                return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                            case 270:
+                                return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                            case 0:
+                                return DisplayOrientation.Portrait;
+                            case 180:
+                                return DisplayOrientation.PortraitDown;
+
+                            default:
+                                return DisplayOrientation.Unknown;
+                        }
                     }
                 case SurfaceOrientation.Rotation270:
                     {
                         int degrees = 90;
-                        return GetAbsoluteOrientation(degrees);
+                        // Orientation is reported by the device in degrees compared to the natural orientation
+                        // Some tablets have a natural landscape orientation, which we need to account for
+                        if (NaturalOrientation == Orientation.Landscape)
+                            degrees += 270;
+
+                        // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
+                        degrees = (((degrees + 22) / 45) * 45) % 360;
+
+                        // Surprisingly 90 degree is landscape right, except on Kindle devices
+                        switch (degrees)
+                        {
+                            case 90:
+                                return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                            case 270:
+                                return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                            case 0:
+                                return DisplayOrientation.Portrait;
+                            case 180:
+                                return DisplayOrientation.PortraitDown;
+
+                            default:
+                                return DisplayOrientation.Unknown;
+                        }
                     }
 
                 default:
                     {
                         int degrees = 0;
-                        return GetAbsoluteOrientation(degrees);
+                        // Orientation is reported by the device in degrees compared to the natural orientation
+                        // Some tablets have a natural landscape orientation, which we need to account for
+                        if (NaturalOrientation == Orientation.Landscape)
+                            degrees += 270;
+
+                        // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
+                        degrees = (((degrees + 22) / 45) * 45) % 360;
+
+                        // Surprisingly 90 degree is landscape right, except on Kindle devices
+                        switch (degrees)
+                        {
+                            case 90:
+                                return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
+                            case 270:
+                                return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                            case 0:
+                                return DisplayOrientation.Portrait;
+                            case 180:
+                                return DisplayOrientation.PortraitDown;
+
+                            default:
+                                return DisplayOrientation.Unknown;
+                        }
                     }
             }
         }
