@@ -119,9 +119,8 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 270 + 270;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((540 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -141,9 +140,8 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            int degrees = 270;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((270 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -166,9 +164,8 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 180 + 270;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((450 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -188,9 +185,8 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            int degrees = 180;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((180 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -213,9 +209,8 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 90 + 270;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((360 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -235,9 +230,8 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            int degrees = 90;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((90 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -261,9 +255,8 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 0 + 270;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((270 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -283,9 +276,8 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            int degrees = 0;
                             // Round orientation into one of 8 positions, either 0, 45, 90, 135, 180, 225, 270, 315. 
-                            degrees = (((degrees + 22) / 45) * 45) % 360;
+                            int degrees = (((0 + 22) / 45) * 45) % 360;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
