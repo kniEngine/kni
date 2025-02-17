@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 540 % 360;
+                            int degrees = 180;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -139,7 +139,7 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            int degrees = 270 % 360;
+                            int degrees = 270;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -162,7 +162,7 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 450 % 360;
+                            int degrees = 90;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -182,7 +182,7 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            int degrees = 180 % 360;
+                            int degrees = 180;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 360 % 360;
+                            int degrees = 0;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -225,7 +225,7 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         { 
-                            int degrees = 90 % 360;
+                            int degrees = 90;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -249,7 +249,7 @@ namespace Microsoft.Xna.Framework
                     {
                         if (NaturalOrientation == Orientation.Landscape)
                         {
-                            int degrees = 270 % 360;
+                            int degrees = 270;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
@@ -269,7 +269,7 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            int degrees = 0 % 360;
+                            int degrees = 0;
 
                             // Surprisingly 90 degree is landscape right, except on Kindle devices
                             switch (degrees)
