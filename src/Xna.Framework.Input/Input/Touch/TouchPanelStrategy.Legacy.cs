@@ -135,7 +135,11 @@ namespace Microsoft.Xna.Platform.Input.Touch
         {
             // Register touchId.
             int touchId;
-            if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
+            if (_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
+            {
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId already registered.");
+            }
+            else
             {
                 touchId = _nextTouchId;
                 _touchIdsMap[nativeTouchId] = touchId;
@@ -144,10 +148,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     _nextTouchId++;
                 else
                     _nextTouchId = StartingTouchId;
-            }
-            else
-            {
-                System.Diagnostics.Debug.Assert(false, "nativeTouchId already registered.");
             }
 
             // scale position
