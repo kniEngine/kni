@@ -47,18 +47,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal int Framestamp { get { return _framestamp; } }
 
 
-
-        internal TouchLocation TouchLocation
-        {
-            get
-            {
-                return new TouchLocation(this._id,
-                                         this._state, this._position,
-                                         this._previousState, this._previousPosition);
-            }
-        }
-
-
         internal GestureLocationData(int id, TouchLocationState state, Vector2 position, TimeSpan timestamp, int framestamp)
         {
             _id = id;
