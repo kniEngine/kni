@@ -133,8 +133,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddPressedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
+            // Register touchId.
             int touchId;
-            // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
                 touchId = _nextTouchId;
@@ -170,8 +170,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddMovedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
+            // Find touchId.
             int touchId;
-            // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
                 System.Diagnostics.Debug.Assert(false);
@@ -223,8 +223,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddReleasedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
+            // Find touchId.
             int touchId;
-            // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
                 System.Diagnostics.Debug.Assert(false);
@@ -301,6 +301,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddCanceledEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
+            // Find touchId.
             int touchId;
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
