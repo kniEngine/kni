@@ -29,11 +29,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// </summary>
         internal bool SameFrameReleased;
 
-        /// <summary>
-        /// Helper for assigning an invalid touch location.
-        /// </summary>
-        internal static readonly GestureLocationData Invalid = new GestureLocationData();
-
         internal int Id { get { return _id; } }
         internal TouchLocationState State { get { return _state; } }
         internal Vector2 Position { get { return _position; } }

@@ -389,8 +389,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                                             Vector2.Zero, Vector2.Zero));
 
                                 _pinchGestureStarted = false;
-                                _pinchTouch[0] = GestureLocationData.Invalid;
-                                _pinchTouch[1] = GestureLocationData.Invalid;
+                                _pinchTouch[0] = new GestureLocationData();
+                                _pinchTouch[1] = new GestureLocationData();
                                 break;
                             }
 
@@ -451,8 +451,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // Make sure a partial pinch state 
                 // is not left hanging around.
                 _pinchGestureStarted = false;
-                _pinchTouch[0] = GestureLocationData.Invalid;
-                _pinchTouch[1] = GestureLocationData.Invalid;
+                _pinchTouch[0] = new GestureLocationData();
+                _pinchTouch[1] = new GestureLocationData();
             }
 
             // If all points are released then clear some states.
