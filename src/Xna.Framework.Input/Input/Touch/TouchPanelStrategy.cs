@@ -95,24 +95,18 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// </remarks>
         public void InvalidateTouches()
         {
-            try
+            if (_touchIdsMap.Count > 0)
             {
-                if (_touchIdsMap.Count > 0)
-                {
-                    // local copy of touchStates
-                    int nativeTouchIdsCount = _touchIdsMap.Count;
-                    int[] nativeTouchIds = new int[nativeTouchIdsCount];
-                    _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+                // local copy of touchStates
+                int nativeTouchIdsCount = _touchIdsMap.Count;
+                int[] nativeTouchIds = new int[nativeTouchIdsCount];
+                _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
 
-                    for (int i = 0; i < nativeTouchIdsCount; i++)
-                    {
-                        // submit a fake Canceled event for each touch Id
-                        AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
-                    }
+                for (int i = 0; i < nativeTouchIdsCount; i++)
+                {
+                    // submit a fake Canceled event for each touch Id
+                    AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
                 }
-            }
-            finally
-            {
             }
         }
 
