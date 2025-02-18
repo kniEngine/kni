@@ -95,7 +95,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// </remarks>
         public void BlazorCancelAllTouches()
         {
-            if (_touchIdsMap.Count > 0)
             {
                 // local copy of touchStates
                 int nativeTouchIdsCount = _touchIdsMap.Count;
@@ -110,7 +109,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public void TestReleaseAllTouches()
         {
-            if (_touchIdsMap.Count > 0)
             {
                 // local copy of touchStates
                 int nativeTouchIdsCount = _touchIdsMap.Count;
