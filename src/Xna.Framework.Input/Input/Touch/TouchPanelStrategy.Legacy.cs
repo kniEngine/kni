@@ -49,6 +49,18 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <summary>
         /// The mapping between platform specific touch ids
         /// and the touch ids we assign to touch locations.
+        /// 
+        /// Different platforms return different touch identifiers
+        /// based on the specifics of their implementation and the
+        /// system drivers.
+        ///
+        /// Sometimes these ids are suitable for our use, but other
+        /// times it can recycle ids or do cute things like return
+        /// the same id for double tap events.
+        ///
+        /// We instead provide consistent ids by generating them
+        /// ourselves on the press and looking them up on move 
+        /// and release events.
         /// </summary>
         private readonly Dictionary<int, int> _touchIdsMap = new Dictionary<int, int>();
 
@@ -121,21 +133,13 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddPressedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Different platforms return different touch identifiers
-            // based on the specifics of their implementation and the
-            // system drivers.
-            //
-            // Sometimes these ids are suitable for our use, but other
-            // times it can recycle ids or do cute things like return
-            // the same id for double tap events.
-            //
-            // We instead provide consistent ids by generating them
-            // ourselves on the press and looking them up on move 
-            // and release events.
-            // 
+            // Register touchId.
             int touchId;
-            // Try to find the touch id.
-            if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
+            if (_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
+            {
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId already registered.");
+            }
+            else
             {
                 touchId = _nextTouchId;
                 _touchIdsMap[nativeTouchId] = touchId;
@@ -144,11 +148,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     _nextTouchId++;
                 else
                     _nextTouchId = StartingTouchId;
-            }
-            else
-            {
-                System.Diagnostics.Debug.Assert(false);
-                // did we miss some event to clear old events?
             }
 
             // scale position
@@ -170,26 +169,11 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddMovedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Different platforms return different touch identifiers
-            // based on the specifics of their implementation and the
-            // system drivers.
-            //
-            // Sometimes these ids are suitable for our use, but other
-            // times it can recycle ids or do cute things like return
-            // the same id for double tap events.
-            //
-            // We instead provide consistent ids by generating them
-            // ourselves on the press and looking them up on move 
-            // and release events.
-            // 
+            // Find touchId.
             int touchId;
-            // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                System.Diagnostics.Debug.Assert(false);
-                // If we got here that means either the device is sending
-                // us bad, out of order, or old touch events.
-                // In any case just ignore them.
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId not found.");
                 return;
             }
 
@@ -235,28 +219,14 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddReleasedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Different platforms return different touch identifiers
-            // based on the specifics of their implementation and the
-            // system drivers.
-            //
-            // Sometimes these ids are suitable for our use, but other
-            // times it can recycle ids or do cute things like return
-            // the same id for double tap events.
-            //
-            // We instead provide consistent ids by generating them
-            // ourselves on the press and looking them up on move 
-            // and release events.
-            // 
+            // Find and unregister touchId.
             int touchId;
-            // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                System.Diagnostics.Debug.Assert(false);
-                // If we got here that means either the device is sending
-                // us bad, out of order, or old touch events.
-                // In any case just ignore them.
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId not found.");
                 return;
             }
+            _touchIdsMap.Remove(nativeTouchId);
 
             // scale position
             position.X = position.X * DisplayWidth / winSize.X;
@@ -318,19 +288,18 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // If we have gestures enabled then collect events for those too.
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
             GesturesAddReleasedEvent(touchId, position, currentTimestamp, currentFramestamp);
-
-            // unmap the hardware id.
-            _touchIdsMap.Remove(nativeTouchId);
         }
 
         protected void AddCanceledEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
+            // Find and unregister touchId.
             int touchId;
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                System.Diagnostics.Debug.Assert(false);
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId not found.");
                 return;
             }
+            _touchIdsMap.Remove(nativeTouchId);
 
             throw new NotImplementedException();
         }
