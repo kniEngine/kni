@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <remarks>
         /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
         /// </remarks>
-        public void InvalidateTouches()
+        public void BlazorCancelAllTouches()
         {
             if (_touchIdsMap.Count > 0)
             {
