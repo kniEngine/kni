@@ -48,6 +48,7 @@
     <Compile Include="Input\Touch\TouchPanel.cs" />
     <Compile Include="Input\Touch\TouchPanelStrategy.cs" />
     <Compile Include="Input\Touch\TouchPanelStrategy.Legacy.cs" />
+    <Compile Include="Input\Touch\TouchPanelStrategy.LegacyGesture.cs" />
     <Compile Include="Input\Touch\TouchPanelCapabilities.cs" />
   </ItemGroup>
 
