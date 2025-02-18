@@ -179,9 +179,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     // Set the new state.
                     existingTouch._position = position;
 
-                    // Update the velocity.
-                    UpdateVelocity(currentTimestamp, ref existingTouch);
-
                     // Set the new timestamp.
                     existingTouch._timestamp = currentTimestamp;
                     existingTouch._framestamp = currentFramestamp;
@@ -240,9 +237,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                         existingTouch._state = TouchLocationState.Released;
                         existingTouch._position = position;
 
-                        // Update the velocity.
-                        UpdateVelocity(currentTimestamp, ref existingTouch);
-
                         //Going straight from pressed to released on the same frame
                         if (existingTouch._previousState == TouchLocationState.Pressed)
                         {
@@ -290,19 +284,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     return tidx;
             }
             return -1;
-        }
-
-        private static void UpdateVelocity(TimeSpan currentTimestamp, ref TouchLocationData existingTouch)
-        {
-            TimeSpan elapsed = currentTimestamp - existingTouch.Timestamp;
-            // If time has elapsed then update the velocity.
-            if (elapsed > TimeSpan.Zero)
-            {
-                // Use a simple low pass filter to accumulate velocity.
-                Vector2 delta = existingTouch.Position - existingTouch._previousPosition;
-                Vector2 velocity = delta / (float)elapsed.TotalSeconds;
-                existingTouch._velocity += (velocity - existingTouch.Velocity) * 0.45f;
-            }
         }
 
     }

@@ -17,7 +17,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
 
         // Used for gesture recognition.
-        internal Vector2 _velocity;
         private Vector2 _pressPosition;
         private TimeSpan _pressTimestamp;
         internal TimeSpan _timestamp;
@@ -40,7 +39,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal TouchLocationState State { get { return _state; } }
         internal Vector2 Position { get { return _position; } }
 
-        internal Vector2 Velocity { get { return _velocity; } }
         internal Vector2 PressPosition { get { return _pressPosition; } }
         internal TimeSpan PressTimestamp { get { return _pressTimestamp; } }
         internal TimeSpan Timestamp { get { return _timestamp; } }
@@ -70,7 +68,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
             _timestamp = timestamp;
             _framestamp = framestamp;
-            _velocity = Vector2.Zero;
 
             // If this is a pressed location then store the 
             // current position and timestamp as pressed.
@@ -101,7 +98,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 aPreviousLocation._framestamp = 0;
                 aPreviousLocation._pressPosition = Vector2.Zero;
                 aPreviousLocation._pressTimestamp = TimeSpan.Zero;
-                aPreviousLocation._velocity = Vector2.Zero;
                 aPreviousLocation.SameFrameReleased = false;
                 return false;
             }
@@ -115,7 +111,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
             aPreviousLocation._framestamp = _framestamp;
             aPreviousLocation._pressPosition = _pressPosition;
             aPreviousLocation._pressTimestamp = _pressTimestamp;
-            aPreviousLocation._velocity = _velocity;
             aPreviousLocation.SameFrameReleased = SameFrameReleased;
 
             return true;
