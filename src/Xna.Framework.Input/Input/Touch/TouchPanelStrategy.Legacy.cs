@@ -147,8 +147,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
             else
             {
-                System.Diagnostics.Debug.Assert(false);
-                // did we miss some event to clear old events?
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId already registered.");
             }
 
             // scale position
@@ -174,10 +173,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int touchId;
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                System.Diagnostics.Debug.Assert(false);
-                // If we got here that means either the device is sending
-                // us bad, out of order, or old touch events.
-                // In any case just ignore them.
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId not found.");
                 return;
             }
 
@@ -227,10 +223,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int touchId;
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                System.Diagnostics.Debug.Assert(false);
-                // If we got here that means either the device is sending
-                // us bad, out of order, or old touch events.
-                // In any case just ignore them.
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId not found.");
                 return;
             }
             _touchIdsMap.Remove(nativeTouchId);
@@ -303,7 +296,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int touchId;
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
-                System.Diagnostics.Debug.Assert(false);
+                System.Diagnostics.Debug.Assert(false, "nativeTouchId not found.");
                 return;
             }
             _touchIdsMap.Remove(nativeTouchId);
