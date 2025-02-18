@@ -95,16 +95,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// </remarks>
         public void InvalidateTouches()
         {
-            // store enabled gesture types
-            GestureType enabledGestures = this.EnabledGestures;
-
             try
             {
-                // Invalidate Gestures
-                // this should remove all pending gestures
-                // we don't want the released touches to triger any gestures (tap, hold, etc ...)
-                this.EnabledGestures = GestureType.None;
-
                 if (_touchIdsMap.Count > 0)
                 {
                     // local copy of touchStates
@@ -127,8 +119,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
             finally
             {
-                // restore enabled gesture types
-                this.EnabledGestures = enabledGestures;
             }
         }
 
