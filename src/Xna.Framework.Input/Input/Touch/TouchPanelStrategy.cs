@@ -93,33 +93,25 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <remarks>
         /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
         /// </remarks>
-        public void InvalidateTouches()
+        public void BlazorCancelAllTouches()
         {
-            try
-            {
-                if (_touchIdsMap.Count > 0)
-                {
-                    // local copy of touchStates
-                    int nativeTouchIdsCount = _touchIdsMap.Count;
-                    int[] nativeTouchIds = new int[nativeTouchIdsCount];
-                    _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+            // local copy of touchStates
+            int[] nativeTouchIds = new int[_touchIdsMap.Count];
+            _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
 
-                    for (int i = 0; i < nativeTouchIdsCount; i++)
-                    {
-                        // submit a fake Canceled event for each touch Id
-                        AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
-                    }
-                }
+            // submit a Canceled event for each touch Id
+            for (int i = 0; i < nativeTouchIds.Length; i++)
+                AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
+        }
 
-                _touchIdsMap.Clear();
-                GestureList.Clear();
-                _touchStates.Clear();
-                _gestureStates.Clear();
-                _lastTap = default(GestureLocationData);
-            }
-            finally
-            {
-            }
+        public void TestReleaseAllTouches()
+        {
+            // local copy of touchStates
+            int[] nativeTouchIds = new int[_touchIdsMap.Count];
+            _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+
+            for (int i = 0; i < nativeTouchIds.Length; i++)
+                AddReleasedEvent(nativeTouchIds[i], Vector2.Zero);
         }
 
         protected TouchPanelCapabilities CreateTouchPanelCapabilities(int maximumTouchCount, bool isConnected, bool hasPressure)

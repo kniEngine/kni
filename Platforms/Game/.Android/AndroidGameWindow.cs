@@ -400,20 +400,8 @@ namespace Microsoft.Xna.Framework
 
                 if ((supported & value) != 0)
                 {
-                    bool wasPortrait = (_currentOrientation == DisplayOrientation.Portrait || _currentOrientation == DisplayOrientation.PortraitDown);
-
                     _currentOrientation = value;
-                    ScreenOrientation requestedOrientation = XnaOrientationToAndroid(value);
-
-                    // Android doesn't fire Released events for existing touches
-                    // so we need to clear them out.
-                    bool requestPortrait = (value == DisplayOrientation.Portrait || value == DisplayOrientation.PortraitDown);
-                    if (wasPortrait != requestPortrait)
-                    {
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
-                    }
-
-                    _activity.RequestedOrientation = requestedOrientation;
+                    _activity.RequestedOrientation = XnaOrientationToAndroid(value);
 
                     OnOrientationChanged();
                 }

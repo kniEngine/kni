@@ -30,7 +30,7 @@ namespace Kni.Tests.Input
         [TearDown]
         public void TearDown()
         {
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().TestReleaseAllTouches();
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             TouchPanel.GetState();
@@ -479,8 +479,9 @@ namespace Kni.Tests.Input
                 Assert.AreEqual(TouchLocationState.Pressed, touch2.State);
             }
 
-            // Invalidate touches
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+            // Release touches
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(1, pos);
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().AddPressedEvent(2, pos2);
 
             //If we saw the second touch happen then we should see it be released, otherwise it will be in pressed, then in released next time
             state = TouchPanel.GetState();

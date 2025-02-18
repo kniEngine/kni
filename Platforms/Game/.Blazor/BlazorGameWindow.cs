@@ -145,7 +145,10 @@ namespace Microsoft.Xna.Framework
             };
             _window.OnTouchCancel += (object sender) =>
             {
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+                // TODO: Implement TouchEvent.ChangedTouches and call TouchPanelStrategy.AddCanceledEvent(...)
+                //       instead of InvalidateTouches().
+                //       see: https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent/changedTouches
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().BlazorCancelAllTouches();
             };
 
             // keyboard events
