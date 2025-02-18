@@ -102,11 +102,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 int[] nativeTouchIds = new int[nativeTouchIdsCount];
                 _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
 
+                // submit a fake Canceled event for each touch Id
                 for (int i = 0; i < nativeTouchIdsCount; i++)
-                {
-                    // submit a fake Canceled event for each touch Id
                     AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
-                }
             }
         }
 
