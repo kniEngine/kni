@@ -15,8 +15,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal TouchLocationState _previousState;
         internal Vector2 _previousPosition;
 
-
-        // Used for gesture recognition.
         internal TimeSpan _timestamp;
 
         internal int _framestamp;
