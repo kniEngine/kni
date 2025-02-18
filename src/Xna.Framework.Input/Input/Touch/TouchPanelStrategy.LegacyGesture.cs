@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <summary>
         /// The current gesture state.
         /// </summary>
-        private readonly List<TouchLocationData> _gestureStates = new List<TouchLocationData>();
+        private readonly List<GestureLocationData> _gestureStates = new List<GestureLocationData>();
 
 
         internal readonly Queue<GestureSample> GestureList = new Queue<GestureSample>();
@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return -1;
         }
 
-        private static void UpdateGestureVelocity(TimeSpan currentTimestamp, ref TouchLocationData existingTouch)
+        private static void UpdateGestureVelocity(TimeSpan currentTimestamp, ref GestureLocationData existingTouch)
         {
             TimeSpan elapsed = currentTimestamp - existingTouch.Timestamp;
             // If time has elapsed then update the velocity.
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         {
             if (EnabledGestures != GestureType.None || _gestureStates.Count > 0)
             {
-                TouchLocationData evt = new TouchLocationData(touchId, TouchLocationState.Pressed, position, currentTimestamp, currentFramestamp);
+                GestureLocationData evt = new GestureLocationData(touchId, TouchLocationState.Pressed, position, currentTimestamp, currentFramestamp);
                 _gestureStates.Add(evt);
 
                 if (EnabledGestures != GestureType.None)
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
                 for (int i = _gestureStates.Count - 1; i >= 0; i--)
                 {
-                    TouchLocationData touch = _gestureStates[i];
+                    GestureLocationData touch = _gestureStates[i];
                     switch (touch.State)
                     {
                         case TouchLocationState.Pressed:
@@ -114,11 +114,11 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int gidx = FindGestureStateIndex(touchId);
             if (gidx != -1)
             {
-                TouchLocationData existingTouch = _gestureStates[gidx];
+                GestureLocationData existingTouch = _gestureStates[gidx];
                 {
                     // Update the touch based on the new one
                     System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+                    System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our GestureLocationData.");
 
                     // Store the current state as the previous one.
                     existingTouch._previousPosition = existingTouch.Position;
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
                 for (int i = _gestureStates.Count - 1; i >= 0; i--)
                 {
-                    TouchLocationData touch = _gestureStates[i];
+                    GestureLocationData touch = _gestureStates[i];
                     switch (touch.State)
                     {
                         case TouchLocationState.Pressed:
@@ -177,7 +177,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             int gidx = FindGestureStateIndex(touchId);
             if (gidx != -1)
             {
-                TouchLocationData existingTouch = _gestureStates[gidx];
+                GestureLocationData existingTouch = _gestureStates[gidx];
                 {
                     //If we are moving straight from Pressed to Released and we've existed for multiple frames,
                     // that means we've never been seen, so just get rid of us
@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                     {
                         //Otherwise update the touch based on the new one
                         System.Diagnostics.Debug.Assert(existingTouch.State != TouchLocationState.Released, "We shouldn't be changing state on a released location.");
-                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our TouchLocationData.");
+                        System.Diagnostics.Debug.Assert(existingTouch.Timestamp <= currentTimestamp, "The currentTimestamp is older than our GestureLocationData.");
 
                         // Store the current state as the previous one.
                         existingTouch._previousPosition = existingTouch.Position;
@@ -231,7 +231,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // Age all the touches, so any that were Pressed become Moved, and any that were Released are removed
                 for (int i = _gestureStates.Count - 1; i >= 0; i--)
                 {
-                    TouchLocationData touch = _gestureStates[i];
+                    GestureLocationData touch = _gestureStates[i];
                     switch (touch.State)
                     {
                         case TouchLocationState.Pressed:
@@ -267,7 +267,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <summary>
         /// The pinch touch locations.
         /// </summary>
-        private readonly TouchLocationData[] _pinchTouch = new TouchLocationData[2];
+        private readonly GestureLocationData[] _pinchTouch = new GestureLocationData[2];
 
         /// <summary>
         /// If true the pinch touch locations are valid and
@@ -308,7 +308,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // First get a count of touch locations which 
             // are not in the released state.
             int heldLocations = 0;
-            foreach (TouchLocationData touch in _gestureStates)
+            foreach (GestureLocationData touch in _gestureStates)
                 heldLocations += touch.State != TouchLocationState.Released ? 1 : 0;
 
             // As soon as we have more than one held point then 
@@ -323,7 +323,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // Process the touch locations for gestures.
             for (int i = 0; i < _gestureStates.Count; i++)
             {
-                TouchLocationData touch = _gestureStates[i];
+                GestureLocationData touch = _gestureStates[i];
                 switch (touch.State)
                 {
                     case TouchLocationState.Pressed:
@@ -389,8 +389,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                                             Vector2.Zero, Vector2.Zero));
 
                                 _pinchGestureStarted = false;
-                                _pinchTouch[0] = TouchLocationData.Invalid;
-                                _pinchTouch[1] = TouchLocationData.Invalid;
+                                _pinchTouch[0] = GestureLocationData.Invalid;
+                                _pinchTouch[1] = GestureLocationData.Invalid;
                                 break;
                             }
 
@@ -451,8 +451,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // Make sure a partial pinch state 
                 // is not left hanging around.
                 _pinchGestureStarted = false;
-                _pinchTouch[0] = TouchLocationData.Invalid;
-                _pinchTouch[1] = TouchLocationData.Invalid;
+                _pinchTouch[0] = GestureLocationData.Invalid;
+                _pinchTouch[1] = GestureLocationData.Invalid;
             }
 
             // If all points are released then clear some states.
@@ -464,7 +464,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
-        private void ProcessHold(TimeSpan currentTimestamp, ref TouchLocationData touch)
+        private void ProcessHold(TimeSpan currentTimestamp, ref GestureLocationData touch)
         {
             if (!IsGestureEnabled(GestureType.Hold) || _holdDisabled)
                 return;
@@ -482,7 +482,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     Vector2.Zero, Vector2.Zero));
         }
 
-        private bool ProcessDoubleTap(ref TouchLocationData touch)
+        private bool ProcessDoubleTap(ref GestureLocationData touch)
         {
             if (!IsGestureEnabled(GestureType.DoubleTap)
             || _tapDisabled
@@ -512,9 +512,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return true;
         }
 
-        private TouchLocationData _lastTap;
+        private GestureLocationData _lastTap;
 
-        private void ProcessTap(TimeSpan currentTimestamp, ref TouchLocationData touch)
+        private void ProcessTap(TimeSpan currentTimestamp, ref GestureLocationData touch)
         {
             if (_tapDisabled)
                 return;
@@ -548,7 +548,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         private GestureType _dragGestureStarted = GestureType.None;
 
-        private void ProcessDrag(ref TouchLocationData touch)
+        private void ProcessDrag(ref GestureLocationData touch)
         {
             bool dragH = IsGestureEnabled(GestureType.HorizontalDrag);
             bool dragV = IsGestureEnabled(GestureType.VerticalDrag);
@@ -559,7 +559,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
             // Make sure this is a move event and that we have
             // a previous touch location.
-            TouchLocationData prevTouch;
+            GestureLocationData prevTouch;
             if (touch.State != TouchLocationState.Moved
             || !touch.TryGetPreviousLocationData(out prevTouch))
                 return;
@@ -616,10 +616,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
                                     delta, Vector2.Zero));
         }
 
-        private void ProcessPinch(TouchLocationData[] touches)
+        private void ProcessPinch(GestureLocationData[] touches)
         {
-            TouchLocationData prevPos0;
-            TouchLocationData prevPos1;
+            GestureLocationData prevPos0;
+            GestureLocationData prevPos1;
 
             if (!touches[0].TryGetPreviousLocationData(out prevPos0))
                 prevPos0 = touches[0];
