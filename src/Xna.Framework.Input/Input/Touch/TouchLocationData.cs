@@ -17,7 +17,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
 
         // Used for gesture recognition.
-        private Vector2 _pressPosition;
         private TimeSpan _pressTimestamp;
         internal TimeSpan _timestamp;
 
@@ -39,7 +38,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal TouchLocationState State { get { return _state; } }
         internal Vector2 Position { get { return _position; } }
 
-        internal Vector2 PressPosition { get { return _pressPosition; } }
         internal TimeSpan PressTimestamp { get { return _pressTimestamp; } }
         internal TimeSpan Timestamp { get { return _timestamp; } }
         internal int Framestamp { get { return _framestamp; } }
@@ -73,12 +71,10 @@ namespace Microsoft.Xna.Framework.Input.Touch
             // current position and timestamp as pressed.
             if (state == TouchLocationState.Pressed)
             {
-                _pressPosition = position;
                 _pressTimestamp = timestamp;
             }
             else
             {
-                _pressPosition = Vector2.Zero;
                 _pressTimestamp = TimeSpan.Zero;
             }
 
@@ -96,7 +92,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 aPreviousLocation._previousPosition = Vector2.Zero;
                 aPreviousLocation._timestamp = TimeSpan.Zero;
                 aPreviousLocation._framestamp = 0;
-                aPreviousLocation._pressPosition = Vector2.Zero;
                 aPreviousLocation._pressTimestamp = TimeSpan.Zero;
                 aPreviousLocation.SameFrameReleased = false;
                 return false;
@@ -109,7 +104,6 @@ namespace Microsoft.Xna.Framework.Input.Touch
             aPreviousLocation._previousPosition = Vector2.Zero;
             aPreviousLocation._timestamp = _timestamp;
             aPreviousLocation._framestamp = _framestamp;
-            aPreviousLocation._pressPosition = _pressPosition;
             aPreviousLocation._pressTimestamp = _pressTimestamp;
             aPreviousLocation.SameFrameReleased = SameFrameReleased;
 
