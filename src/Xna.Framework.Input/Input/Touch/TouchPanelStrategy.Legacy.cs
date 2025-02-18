@@ -49,6 +49,18 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// <summary>
         /// The mapping between platform specific touch ids
         /// and the touch ids we assign to touch locations.
+        /// 
+        /// Different platforms return different touch identifiers
+        /// based on the specifics of their implementation and the
+        /// system drivers.
+        ///
+        /// Sometimes these ids are suitable for our use, but other
+        /// times it can recycle ids or do cute things like return
+        /// the same id for double tap events.
+        ///
+        /// We instead provide consistent ids by generating them
+        /// ourselves on the press and looking them up on move 
+        /// and release events.
         /// </summary>
         private readonly Dictionary<int, int> _touchIdsMap = new Dictionary<int, int>();
 
@@ -121,18 +133,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddPressedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Different platforms return different touch identifiers
-            // based on the specifics of their implementation and the
-            // system drivers.
-            //
-            // Sometimes these ids are suitable for our use, but other
-            // times it can recycle ids or do cute things like return
-            // the same id for double tap events.
-            //
-            // We instead provide consistent ids by generating them
-            // ourselves on the press and looking them up on move 
-            // and release events.
-            // 
             int touchId;
             // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
@@ -170,18 +170,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddMovedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Different platforms return different touch identifiers
-            // based on the specifics of their implementation and the
-            // system drivers.
-            //
-            // Sometimes these ids are suitable for our use, but other
-            // times it can recycle ids or do cute things like return
-            // the same id for double tap events.
-            //
-            // We instead provide consistent ids by generating them
-            // ourselves on the press and looking them up on move 
-            // and release events.
-            // 
             int touchId;
             // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
@@ -235,18 +223,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddReleasedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Different platforms return different touch identifiers
-            // based on the specifics of their implementation and the
-            // system drivers.
-            //
-            // Sometimes these ids are suitable for our use, but other
-            // times it can recycle ids or do cute things like return
-            // the same id for double tap events.
-            //
-            // We instead provide consistent ids by generating them
-            // ourselves on the press and looking them up on move 
-            // and release events.
-            // 
             int touchId;
             // Try to find the touch id.
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
