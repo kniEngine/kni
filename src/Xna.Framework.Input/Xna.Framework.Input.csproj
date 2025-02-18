@@ -45,6 +45,7 @@
     <Compile Include="Input\Touch\TouchLocation.cs" />
     <Compile Include="Input\Touch\TouchLocationData.cs" />
     <Compile Include="Input\Touch\TouchLocationState.cs" />
+    <Compile Include="Input\Touch\GestureLocationData.cs" />
     <Compile Include="Input\Touch\TouchPanel.cs" />
     <Compile Include="Input\Touch\TouchPanelStrategy.cs" />
     <Compile Include="Input\Touch\TouchPanelStrategy.Legacy.cs" />
