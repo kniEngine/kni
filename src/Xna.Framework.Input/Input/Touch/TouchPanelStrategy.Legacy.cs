@@ -223,7 +223,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected void AddReleasedEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Find touchId.
+            // Find and unregister touchId.
             int touchId;
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
@@ -233,6 +233,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 // In any case just ignore them.
                 return;
             }
+            _touchIdsMap.Remove(nativeTouchId);
 
             // scale position
             position.X = position.X * DisplayWidth / winSize.X;
@@ -294,20 +295,18 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // If we have gestures enabled then collect events for those too.
             // We also have to keep tracking any touches while we know about touches so we don't miss releases even if gesture recognition is disabled
             GesturesAddReleasedEvent(touchId, position, currentTimestamp, currentFramestamp);
-
-            // unmap the hardware id.
-            _touchIdsMap.Remove(nativeTouchId);
         }
 
         protected void AddCanceledEvent(int nativeTouchId, Vector2 position, Point winSize)
         {
-            // Find touchId.
+            // Find and unregister touchId.
             int touchId;
             if (!_touchIdsMap.TryGetValue(nativeTouchId, out touchId))
             {
                 System.Diagnostics.Debug.Assert(false);
                 return;
             }
+            _touchIdsMap.Remove(nativeTouchId);
 
             throw new NotImplementedException();
         }
