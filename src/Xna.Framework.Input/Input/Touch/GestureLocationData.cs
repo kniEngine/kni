@@ -1,6 +1,7 @@
 // Copyright (C)2025 Nick Kastellanos
 
 using System;
+using System.Diagnostics;
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
@@ -53,18 +54,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
             _framestamp = framestamp;
             _velocity = Vector2.Zero;
 
-            // If this is a pressed location then store the 
-            // current position and timestamp as pressed.
-            if (state == TouchLocationState.Pressed)
-            {
-                _pressPosition = position;
-                _pressTimestamp = timestamp;
-            }
-            else
-            {
-                _pressPosition = Vector2.Zero;
-                _pressTimestamp = TimeSpan.Zero;
-            }
+            Debug.Assert(state == TouchLocationState.Pressed);
+            _pressPosition = position;
+            _pressTimestamp = timestamp;
 
             SameFrameReleased = false;
         }
