@@ -39,7 +39,7 @@ namespace Kni.Tests.Input
         {
             TouchPanel.EnabledGestures = GestureType.None;
 
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().TestReleaseAllTouches();
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             TouchPanel.GetState();

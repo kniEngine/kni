@@ -30,7 +30,7 @@ namespace Kni.Tests.Input
         [TearDown]
         public void TearDown()
         {
-            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().InvalidateTouches();
+            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().TestReleaseAllTouches();
             Thread.Sleep(GameTimeForFrame(1));
             FrameworkDispatcher.Update();
             TouchPanel.GetState();
