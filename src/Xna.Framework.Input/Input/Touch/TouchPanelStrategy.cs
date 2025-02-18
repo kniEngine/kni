@@ -96,23 +96,21 @@ namespace Microsoft.Xna.Platform.Input.Touch
         public void BlazorCancelAllTouches()
         {
             // local copy of touchStates
-            int nativeTouchIdsCount = _touchIdsMap.Count;
-            int[] nativeTouchIds = new int[nativeTouchIdsCount];
+            int[] nativeTouchIds = new int[_touchIdsMap.Count];
             _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
 
-            // submit a fake Canceled event for each touch Id
-            for (int i = 0; i < nativeTouchIdsCount; i++)
+            // submit a Canceled event for each touch Id
+            for (int i = 0; i < nativeTouchIds.Length; i++)
                 AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
         }
 
         public void TestReleaseAllTouches()
         {
             // local copy of touchStates
-            int nativeTouchIdsCount = _touchIdsMap.Count;
-            int[] nativeTouchIds = new int[nativeTouchIdsCount];
+            int[] nativeTouchIds = new int[_touchIdsMap.Count];
             _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
 
-            for (int i = 0; i < nativeTouchIdsCount; i++)
+            for (int i = 0; i < nativeTouchIds.Length; i++)
                 AddReleasedEvent(nativeTouchIds[i], Vector2.Zero);
         }
 
