@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 GestureList.Clear();
                 _touchStates.Clear();
                 _gestureStates.Clear();
-                _lastTap = default(TouchLocationData);
+                _lastTap = default(GestureLocationData);
             }
             finally
             {

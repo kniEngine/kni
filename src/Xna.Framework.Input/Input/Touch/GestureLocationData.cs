@@ -1,11 +1,12 @@
-// Copyright (C)2024 Nick Kastellanos
+// Copyright (C)2025 Nick Kastellanos
 
 using System;
+using System.Diagnostics;
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
 
-    internal struct TouchLocationData : IEquatable<TouchLocationData>
+    internal struct GestureLocationData : IEquatable<GestureLocationData>
     {
         private int _id;
 
@@ -15,6 +16,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal TouchLocationState _previousState;
         internal Vector2 _previousPosition;
 
+        internal Vector2 _velocity;
+        private Vector2 _pressPosition;
+        private TimeSpan _pressTimestamp;
         internal TimeSpan _timestamp;
 
         internal int _framestamp;
@@ -30,23 +34,14 @@ namespace Microsoft.Xna.Framework.Input.Touch
         internal TouchLocationState State { get { return _state; } }
         internal Vector2 Position { get { return _position; } }
 
+        internal Vector2 Velocity { get { return _velocity; } }
+        internal Vector2 PressPosition { get { return _pressPosition; } }
+        internal TimeSpan PressTimestamp { get { return _pressTimestamp; } }
         internal TimeSpan Timestamp { get { return _timestamp; } }
         internal int Framestamp { get { return _framestamp; } }
 
 
-
-        internal TouchLocation TouchLocation
-        {
-            get
-            {
-                return new TouchLocation(this._id,
-                                         this._state, this._position,
-                                         this._previousState, this._previousPosition);
-            }
-        }
-
-
-        internal TouchLocationData(int id, TouchLocationState state, Vector2 position, TimeSpan timestamp, int framestamp)
+        internal GestureLocationData(int id, TouchLocationState state, Vector2 position, TimeSpan timestamp, int framestamp)
         {
             _id = id;
             _state = state;
@@ -57,11 +52,16 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
             _timestamp = timestamp;
             _framestamp = framestamp;
+            _velocity = Vector2.Zero;
+
+            Debug.Assert(state == TouchLocationState.Pressed);
+            _pressPosition = position;
+            _pressTimestamp = timestamp;
 
             SameFrameReleased = false;
         }
 
-        public bool TryGetPreviousLocationData(out TouchLocationData aPreviousLocation)
+        public bool TryGetPreviousLocationData(out GestureLocationData aPreviousLocation)
         {
             if (_previousState == TouchLocationState.Invalid)
             {
@@ -72,6 +72,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 aPreviousLocation._previousPosition = Vector2.Zero;
                 aPreviousLocation._timestamp = TimeSpan.Zero;
                 aPreviousLocation._framestamp = 0;
+                aPreviousLocation._pressPosition = Vector2.Zero;
+                aPreviousLocation._pressTimestamp = TimeSpan.Zero;
+                aPreviousLocation._velocity = Vector2.Zero;
                 aPreviousLocation.SameFrameReleased = false;
                 return false;
             }
@@ -83,6 +86,9 @@ namespace Microsoft.Xna.Framework.Input.Touch
             aPreviousLocation._previousPosition = Vector2.Zero;
             aPreviousLocation._timestamp = _timestamp;
             aPreviousLocation._framestamp = _framestamp;
+            aPreviousLocation._pressPosition = _pressPosition;
+            aPreviousLocation._pressTimestamp = _pressTimestamp;
+            aPreviousLocation._velocity = _velocity;
             aPreviousLocation.SameFrameReleased = SameFrameReleased;
 
             return true;
@@ -95,20 +101,20 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         public override bool Equals(object obj)
         {
-            if (obj is TouchLocationData)
-                return Equals((TouchLocationData)obj);
+            if (obj is GestureLocationData)
+                return Equals((GestureLocationData)obj);
 
             return false;
         }
 
-        public bool Equals(TouchLocationData other)
+        public bool Equals(GestureLocationData other)
         {
             return _id.Equals(other._id)
                 && _position.Equals(other._position)
                 && _previousPosition.Equals(other._previousPosition);
         }
 
-        public static bool operator !=(TouchLocationData left, TouchLocationData right)
+        public static bool operator !=(GestureLocationData left, GestureLocationData right)
         {
             return left._id != right._id
                 || left._state != right._state
@@ -117,7 +123,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 || left._previousPosition != right._previousPosition;
         }
 
-        public static bool operator ==(TouchLocationData left, TouchLocationData right)
+        public static bool operator ==(GestureLocationData left, GestureLocationData right)
         {
             return left._id == right._id
                 && left._state == right._state
