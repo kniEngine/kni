@@ -260,22 +260,18 @@ namespace Microsoft.Xna.Framework
             if (_supportedOrientations == DisplayOrientation.Default)
             {
                 GraphicsDeviceManager deviceManager = (_game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
-                if (deviceManager == null)
-                    return DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
-
-                if (deviceManager.PreferredBackBufferWidth > deviceManager.PreferredBackBufferHeight)
+                if (deviceManager != null)
                 {
-                    return DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+                    if (deviceManager.PreferredBackBufferWidth > deviceManager.PreferredBackBufferHeight)
+                        return (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                    else
+                        return (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
                 }
-                else
-                {
-                    return DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
-                }
+                
+                return (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
             }
-            else
-            {
-                return _supportedOrientations;
-            }
+            
+            return _supportedOrientations;
         }
 
         /// <summary>
