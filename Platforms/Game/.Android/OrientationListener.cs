@@ -44,11 +44,11 @@ namespace Microsoft.Xna.Framework
             if (_gameWindow._screenReceiver.IsScreenLocked)
                 return;
 
-            DisplayOrientation disporientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
+            DisplayOrientation absOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
-            if ((_gameWindow.GetEffectiveSupportedOrientations() & disporientation) == 0
-            ||  disporientation == _gameWindow.CurrentOrientation
-            ||  disporientation == DisplayOrientation.Unknown
+            if ((_gameWindow.GetEffectiveSupportedOrientations() & absOrientation) == 0
+            ||  absOrientation == _gameWindow.CurrentOrientation
+            ||  absOrientation == DisplayOrientation.Unknown
                )
             {
                 targetOrientation = DisplayOrientation.Unknown;
@@ -57,9 +57,9 @@ namespace Microsoft.Xna.Framework
             }
 
             // Delay changing of Orientation. Filter random shocks.
-            if (targetOrientation != disporientation)
+            if (targetOrientation != absOrientation)
             {
-                targetOrientation = disporientation;
+                targetOrientation = absOrientation;
                 elapsed = TimeSpan.Zero;
             }
 
