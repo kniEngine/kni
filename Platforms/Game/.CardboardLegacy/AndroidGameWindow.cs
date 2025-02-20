@@ -296,7 +296,29 @@ namespace Microsoft.Xna.Framework
 
             DisplayOrientation oldOrientation = CurrentOrientation;
 
-            SetDisplayOrientation(newOrientation);
+            if (newOrientation != _currentOrientation)
+            {
+                DisplayOrientation supported2 = GetEffectiveSupportedOrientations();
+
+                // Android 2.3 and above support reverse orientations
+                int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
+                if (sdkVer < 10)
+                {
+                    if (newOrientation == DisplayOrientation.LandscapeRight)
+                        newOrientation = DisplayOrientation.LandscapeLeft;
+                    if (newOrientation == DisplayOrientation.PortraitDown)
+                        newOrientation = DisplayOrientation.PortraitDown;
+                }
+
+                if ((supported2 & newOrientation) != 0)
+                {
+                    _currentOrientation = newOrientation;
+                    _activity.RequestedOrientation = XnaOrientationToAndroid(newOrientation);
+
+                    OnOrientationChanged();
+                }
+            }
+
             TouchPanel.DisplayOrientation = newOrientation;
 
             if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
@@ -374,33 +396,6 @@ namespace Microsoft.Xna.Framework
             get
             {
                 return _currentOrientation;
-            }
-        }
-
-        
-        private void SetDisplayOrientation(DisplayOrientation newOrientation)
-        {
-            if (newOrientation != _currentOrientation)
-            {
-                DisplayOrientation supported2 = GetEffectiveSupportedOrientations();
-
-                // Android 2.3 and above support reverse orientations
-                int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
-                if (sdkVer < 10)
-                {
-                    if (newOrientation == DisplayOrientation.LandscapeRight)
-                        newOrientation = DisplayOrientation.LandscapeLeft;
-                    if (newOrientation == DisplayOrientation.PortraitDown)
-                        newOrientation = DisplayOrientation.PortraitDown;
-                }
-
-                if ((supported2 & newOrientation) != 0)
-                {
-                    _currentOrientation = newOrientation;
-                    _activity.RequestedOrientation = XnaOrientationToAndroid(newOrientation);
-
-                    OnOrientationChanged();
-                }
             }
         }
 
