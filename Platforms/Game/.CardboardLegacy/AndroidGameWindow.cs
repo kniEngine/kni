@@ -306,22 +306,22 @@ namespace Microsoft.Xna.Framework
                         newOrientation = DisplayOrientation.PortraitDown;
                 }
 
-                DisplayOrientation oldOrientation = CurrentOrientation;
                 if ((supported & newOrientation) != 0)
                 {
+                    DisplayOrientation oldOrientation = CurrentOrientation;
                     _currentOrientation = newOrientation;
                     _activity.RequestedOrientation = XnaOrientationToAndroid(newOrientation);
 
                     OnOrientationChanged();
-                }
 
-                TouchPanel.DisplayOrientation = newOrientation;
+                    TouchPanel.DisplayOrientation = newOrientation;
 
-                if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
-                {
-                    GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                    if (gdm != null)
-                        gdm.ApplyChanges();
+                    if (applyGraphicsChanges && (oldOrientation != newOrientation))
+                    {
+                        GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                        if (gdm != null)
+                            gdm.ApplyChanges();
+                    }
                 }
             }
         }
