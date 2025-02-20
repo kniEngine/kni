@@ -378,26 +378,26 @@ namespace Microsoft.Xna.Framework
         }
 
         
-        private void SetDisplayOrientation(DisplayOrientation value)
+        private void SetDisplayOrientation(DisplayOrientation newOrientation)
         {
-            if (value != _currentOrientation)
+            if (newOrientation != _currentOrientation)
             {
-                DisplayOrientation supported = GetEffectiveSupportedOrientations();
+                DisplayOrientation supported2 = GetEffectiveSupportedOrientations();
 
                 // Android 2.3 and above support reverse orientations
                 int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
                 if (sdkVer < 10)
                 {
-                    if (value == DisplayOrientation.LandscapeRight)
-                        value = DisplayOrientation.LandscapeLeft;
-                    if (value == DisplayOrientation.PortraitDown)
-                        value = DisplayOrientation.PortraitDown;
+                    if (newOrientation == DisplayOrientation.LandscapeRight)
+                        newOrientation = DisplayOrientation.LandscapeLeft;
+                    if (newOrientation == DisplayOrientation.PortraitDown)
+                        newOrientation = DisplayOrientation.PortraitDown;
                 }
 
-                if ((supported & value) != 0)
+                if ((supported2 & newOrientation) != 0)
                 {
-                    _currentOrientation = value;
-                    _activity.RequestedOrientation = XnaOrientationToAndroid(value);
+                    _currentOrientation = newOrientation;
+                    _activity.RequestedOrientation = XnaOrientationToAndroid(newOrientation);
 
                     OnOrientationChanged();
                 }
