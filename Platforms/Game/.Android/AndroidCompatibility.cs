@@ -110,54 +110,36 @@ namespace Microsoft.Xna.Framework
         public DisplayOrientation GetAbsoluteOrientation(Activity activity)
         {
             SurfaceOrientation orientation = activity.WindowManager.DefaultDisplay.Rotation;
-
             switch (orientation)
             {
                 case SurfaceOrientation.Rotation90:
                     {
                         if (NaturalOrientation == Orientation.Landscape)
-                        {
                             return DisplayOrientation.PortraitDown;
-                        }
                         else
-                        {
-                            return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                        }
+                            return (FlipLandscape) ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
                     }
                 case SurfaceOrientation.Rotation180:
                     {
                         if (NaturalOrientation == Orientation.Landscape)
-                        {
-                            return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                        }
+                            return (FlipLandscape) ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
                         else
-                        {
                             return DisplayOrientation.PortraitDown;
-                        }
                     }
                 case SurfaceOrientation.Rotation270:
                     {
                         if (NaturalOrientation == Orientation.Landscape)
-                        {
                             return DisplayOrientation.Portrait;
-                        }
                         else
-                        {
-                            return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                        }
+                            return (FlipLandscape) ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
                     }
-
                 case SurfaceOrientation.Rotation0:
                 default:
                     {
                         if (NaturalOrientation == Orientation.Landscape)
-                        {
-                            return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                        }
+                            return (FlipLandscape) ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
                         else
-                        {
                             return DisplayOrientation.Portrait;
-                        }
                     }
             }
         }
