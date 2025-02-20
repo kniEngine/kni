@@ -267,15 +267,11 @@ namespace Microsoft.Xna.Framework
                     else
                         return (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
                 }
-                else
-                {
-                    return (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-                }
+                
+                return (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
             }
-            else
-            {
-                return _supportedOrientations;
-            }
+            
+            return _supportedOrientations;
         }
 
         /// <summary>
