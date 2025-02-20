@@ -294,8 +294,6 @@ namespace Microsoft.Xna.Framework
                     newOrientation = DisplayOrientation.PortraitDown;
             }
 
-            DisplayOrientation oldOrientation = CurrentOrientation;
-
             if (newOrientation != _currentOrientation)
             {
                 // Android 2.3 and above support reverse orientations
@@ -308,6 +306,7 @@ namespace Microsoft.Xna.Framework
                         newOrientation = DisplayOrientation.PortraitDown;
                 }
 
+                DisplayOrientation oldOrientation = CurrentOrientation;
                 if ((supported & newOrientation) != 0)
                 {
                     _currentOrientation = newOrientation;
@@ -315,15 +314,15 @@ namespace Microsoft.Xna.Framework
 
                     OnOrientationChanged();
                 }
-            }
 
-            TouchPanel.DisplayOrientation = newOrientation;
+                TouchPanel.DisplayOrientation = newOrientation;
 
-            if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
-            {
-                GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                if (gdm != null)
-                    gdm.ApplyChanges();
+                if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
+                {
+                    GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
+                    if (gdm != null)
+                        gdm.ApplyChanges();
+                }
             }
         }
 
