@@ -263,13 +263,9 @@ namespace Microsoft.Xna.Framework
                 if (deviceManager != null)
                 {
                     if (deviceManager.PreferredBackBufferWidth > deviceManager.PreferredBackBufferHeight)
-                    {
                         return DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
-                    }
                     else
-                    {
                         return DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
-                    }
                 }
                 else
                 {
