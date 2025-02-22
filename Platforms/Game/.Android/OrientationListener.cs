@@ -46,7 +46,17 @@ namespace Microsoft.Xna.Framework
 
             DisplayOrientation absOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
-            if ((_gameWindow.GetEffectiveSupportedOrientations() & absOrientation) == 0
+            DisplayOrientation supported = _gameWindow._supportedOrientations;
+            if (supported == DisplayOrientation.Default)
+            {
+                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+
+                GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
+                if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+            }
+
+            if ((supported & absOrientation) == 0
             ||  absOrientation == _gameWindow.CurrentOrientation
             ||  absOrientation == DisplayOrientation.Unknown
                )

@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework
         internal AndroidSurfaceView GameView { get; private set; }
 
         internal AndroidGameActivity _activity;
-        private readonly Game _game;
+        internal readonly Game _game;
         private bool _isActivated = false;
         private AndroidGameWindow.AppState _appState = AndroidGameWindow.AppState.Exited;
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
@@ -279,7 +279,15 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         internal void SetOrientation(DisplayOrientation newOrientation, bool applyGraphicsChanges)
         {
-            DisplayOrientation supported = GetEffectiveSupportedOrientations();
+            DisplayOrientation supported = this._supportedOrientations;
+            if (supported == DisplayOrientation.Default)
+            {
+                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+
+                GraphicsDeviceManager deviceManager = (_game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
+                if (deviceManager != null &&  deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+            }
 
             // If the new orientation is not supported, force a supported orientation
             if ((supported & newOrientation) == 0)
