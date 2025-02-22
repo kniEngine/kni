@@ -87,13 +87,13 @@ namespace Microsoft.Xna.Platform
             pp.BackBufferWidth = 800;
             pp.BackBufferHeight = 480;
 
-            // Set "full screen"  as default
+            // force "full screen" as default on Android
             pp.IsFullScreen = true;
             
             pp.DeviceWindowHandle = this.Game.Window.Handle;
 
             GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
-            gdi.GraphicsProfile = this.GraphicsProfile; // Microsoft defaults this to Reach.
+            gdi.GraphicsProfile = this.GraphicsProfile;
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.PresentationParameters = pp;
             var pe = new PreparingDeviceSettingsEventArgs(gdi);
@@ -103,15 +103,12 @@ namespace Microsoft.Xna.Platform
             pp = gdi.PresentationParameters;
             this.GraphicsProfile = gdi.GraphicsProfile;
 
-            // Needs to be before ApplyChanges()
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
             this.ApplyChanges();
 
-            // Set the new display size on the touch panel.
-            // TODO: In XNA this seems to be done as part of the 
-            // GraphicsDevice.DeviceReset event... we need to get 
-            // those working.
+            // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
+            //       we need to get those working.
             TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
 
             this.OnDeviceCreated(EventArgs.Empty);
@@ -132,7 +129,6 @@ namespace Microsoft.Xna.Platform
                 base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
                 base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
 
-                // Set the viewport from PresentationParameters
                 if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
                 {
                     PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
@@ -140,7 +136,6 @@ namespace Microsoft.Xna.Platform
                     base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
                 }
 
-                // Set the new display size on the touch panel.
                 TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
                 TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
             }
@@ -158,10 +153,8 @@ namespace Microsoft.Xna.Platform
             // Trigger a change in orientation in case the supported orientations have changed
             ((AndroidGameWindow)base.Game.Window).SetOrientation(base.Game.Window.CurrentOrientation, false);
 
-            // Ensure the presentation parameter orientation and buffer size matches the window
             base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
-            // Set the presentation parameters' actual buffer size to match the orientation
             bool isLandscape = (0 != (base.Game.Window.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)));
             int w = PreferredBackBufferWidth;
             int h = PreferredBackBufferHeight;
@@ -179,7 +172,6 @@ namespace Microsoft.Xna.Platform
                 base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
                 base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
 
-                // Set the viewport from PresentationParameters
                 if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
                 {
                     PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
@@ -187,7 +179,6 @@ namespace Microsoft.Xna.Platform
                     base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
                 }
 
-                // Set the new display size on the touch panel.
                 TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
                 TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
             }

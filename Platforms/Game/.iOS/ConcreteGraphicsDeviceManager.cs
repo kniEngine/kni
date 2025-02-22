@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform
                 pp.BackBufferHeight = height;
             }
 
-            // Set "full screen"  as default
+            // force "full screen" as default on iOS
             pp.IsFullScreen = true;
             UIKit.UIApplication.SharedApplication.StatusBarHidden = pp.IsFullScreen;
 
@@ -108,15 +108,12 @@ namespace Microsoft.Xna.Platform
             pp = gdi.PresentationParameters;
             this.GraphicsProfile = gdi.GraphicsProfile;
 
-            // Needs to be before ApplyChanges()
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
             this.ApplyChanges();
 
-            // Set the new display size on the touch panel.
-            // TODO: In XNA this seems to be done as part of the 
-            // GraphicsDevice.DeviceReset event... we need to get 
-            // those working.
+            // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
+            //       we need to get those working.
             TouchPanel.DisplayWidth = this.GraphicsDevice.PresentationParameters.BackBufferWidth;
             TouchPanel.DisplayHeight = this.GraphicsDevice.PresentationParameters.BackBufferHeight;
             TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
@@ -138,10 +135,8 @@ namespace Microsoft.Xna.Platform
                 return;
             }
 
-            // Ensure the presentation parameter orientation and buffer size matches the window
             base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
-            // Set the presentation parameters' actual buffer size to match the orientation
             bool isLandscape = (0 != (base.Game.Window.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)));
             int w = PreferredBackBufferWidth;
             int h = PreferredBackBufferHeight;
@@ -149,15 +144,10 @@ namespace Microsoft.Xna.Platform
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = isLandscape ? Math.Max(w, h) : Math.Min(w, h);
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = isLandscape ? Math.Min(w, h) : Math.Max(w, h);
 
-            // Set the new display size on the touch panel.
-            //
-            // TODO: In XNA this seems to be done as part of the 
-            // GraphicsDevice.DeviceReset event... we need to get 
-            // those working.
-            //
+            // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
+            //       we need to get those working.
             TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
             TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
-
         }
 
 
