@@ -62,10 +62,8 @@ namespace Microsoft.Xna.Framework
             if (screenOrientation != Android.Content.PM.ScreenOrientation.FullSensor)
                 throw new InvalidOperationException("NaturalOrientation detection failed. Set ScreenOrientation in MainActivity to FullSensor.");
 
-            if (((rotation == SurfaceOrientation.Rotation0 || rotation == SurfaceOrientation.Rotation180) &&
-                orientation == Orientation.Landscape)
-                || ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) &&
-                orientation == Orientation.Portrait))
+            if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && orientation == Orientation.Landscape)
+            ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && orientation == Orientation.Portrait))
             {
                 return Orientation.Landscape;
             }
@@ -88,14 +86,18 @@ namespace Microsoft.Xna.Framework
             // Surprisingly 90 degree is landscape right, except on Kindle devices
             switch (degrees)
             {
-                case 90:
-                    return FlipLandscape ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                case 270:
-                    return FlipLandscape ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
                 case 0:
                     return DisplayOrientation.Portrait;
                 case 180:
                     return DisplayOrientation.PortraitDown;
+                case 90:
+                    if (FlipLandscape)
+                        return DisplayOrientation.LandscapeLeft;
+                    return DisplayOrientation.LandscapeRight;
+                case 270:
+                    if (FlipLandscape)
+                        return DisplayOrientation.LandscapeRight;
+                    return DisplayOrientation.LandscapeLeft;
 
                 default:
                     return DisplayOrientation.Unknown;
@@ -109,38 +111,61 @@ namespace Microsoft.Xna.Framework
         [CLSCompliant(false)]
         public DisplayOrientation GetAbsoluteOrientation(Activity activity)
         {
-            SurfaceOrientation orientation = activity.WindowManager.DefaultDisplay.Rotation;
+            Orientation orientation = activity.Resources.Configuration.Orientation;
+            SurfaceOrientation rotation = activity.WindowManager.DefaultDisplay.Rotation;
+
             switch (orientation)
             {
-                case SurfaceOrientation.Rotation90:
+                case Orientation.Portrait:
                     {
-                        if (NaturalOrientation == Orientation.Landscape)
-                            return DisplayOrientation.PortraitDown;
-                        else
-                            return (FlipLandscape) ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
+                        switch (rotation)
+                        {
+                            case SurfaceOrientation.Rotation0:
+                            default:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation != Orientation.Landscape);
+                                return DisplayOrientation.Portrait;
+                            case SurfaceOrientation.Rotation180:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation != Orientation.Landscape);
+                                return DisplayOrientation.PortraitDown;
+                            case SurfaceOrientation.Rotation90:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation == Orientation.Landscape);
+                                return DisplayOrientation.PortraitDown;
+                            case SurfaceOrientation.Rotation270:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation == Orientation.Landscape);
+                                return DisplayOrientation.Portrait;
+                        }
                     }
-                case SurfaceOrientation.Rotation180:
-                    {
-                        if (NaturalOrientation == Orientation.Landscape)
-                            return (FlipLandscape) ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                        else
-                            return DisplayOrientation.PortraitDown;
-                    }
-                case SurfaceOrientation.Rotation270:
-                    {
-                        if (NaturalOrientation == Orientation.Landscape)
-                            return DisplayOrientation.Portrait;
-                        else
-                            return (FlipLandscape) ? DisplayOrientation.LandscapeLeft : DisplayOrientation.LandscapeRight;
-                    }
-                case SurfaceOrientation.Rotation0:
+                    break;
+
+                case Android.Content.Res.Orientation.Landscape:
                 default:
                     {
-                        if (NaturalOrientation == Orientation.Landscape)
-                            return (FlipLandscape) ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft;
-                        else
-                            return DisplayOrientation.Portrait;
+                        switch (rotation)
+                        {
+                            case SurfaceOrientation.Rotation0:
+                            default:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation == Orientation.Landscape);
+                                if (AndroidCompatibility.Current.FlipLandscape)
+                                    return DisplayOrientation.LandscapeRight;
+                                return DisplayOrientation.LandscapeLeft;
+                            case SurfaceOrientation.Rotation180:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation == Orientation.Landscape);
+                                if (AndroidCompatibility.Current.FlipLandscape)
+                                    return DisplayOrientation.LandscapeLeft;
+                                return DisplayOrientation.LandscapeRight;
+                            case SurfaceOrientation.Rotation90:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation != Orientation.Landscape);
+                                if (AndroidCompatibility.Current.FlipLandscape)
+                                    return DisplayOrientation.LandscapeRight;
+                                return DisplayOrientation.LandscapeLeft;
+                            case SurfaceOrientation.Rotation270:
+                                System.Diagnostics.Debug.Assert(AndroidCompatibility.Current.NaturalOrientation != Orientation.Landscape);
+                                if (AndroidCompatibility.Current.FlipLandscape)
+                                    return DisplayOrientation.LandscapeLeft;
+                                return DisplayOrientation.LandscapeRight;
+                        }
                     }
+                    break;
             }
         }
     }

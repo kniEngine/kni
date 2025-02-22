@@ -120,25 +120,7 @@ namespace Microsoft.Xna.Platform
 
             Android.App.Activity activity = AndroidGameWindow.Activity;
             DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
-            switch (activity.Resources.Configuration.Orientation)
-            {
-                case Android.Content.Res.Orientation.Portrait:
-                    {
-                        DisplayOrientation orientation = (currentOrientation == DisplayOrientation.PortraitDown)
-                                                       ? DisplayOrientation.PortraitDown
-                                                       : DisplayOrientation.Portrait;
-                        gameWindow.SetOrientation(orientation, false);
-                    }
-                    break;
-                default:
-                    {
-                        DisplayOrientation orientation = (currentOrientation == DisplayOrientation.LandscapeRight)
-                                                       ? DisplayOrientation.LandscapeRight
-                                                       : DisplayOrientation.LandscapeLeft;
-                        gameWindow.SetOrientation(orientation, false);
-                    }
-                    break;
-            }
+            gameWindow.SetOrientation(currentOrientation, false);
 
             // ResetClientBounds
             {
