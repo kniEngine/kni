@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Platform
 
                 // Flip the dimensions if we need to.
                 if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft
-                || TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
+                ||  TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
                 {
                     width = height;
                     height = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
