@@ -120,24 +120,22 @@ namespace Microsoft.Xna.Platform
             DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
             androidGameWindow.SetOrientation(currentOrientation, false);
 
-            // ResetClientBounds
+            // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
+            View view = androidGameWindow.GameView;
+
+            base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
+            base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
+
+            if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
-                // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-                View view = androidGameWindow.GameView;
-
-                base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
-                base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
-
-                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
-                {
-                    PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
-                    base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-                    base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-                }
-
-                TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
+                PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
+                base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
             }
+
+            TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
+            TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
+
         }
 
         public override void ApplyChanges()
@@ -156,24 +154,21 @@ namespace Microsoft.Xna.Platform
 
             base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
-            // ResetClientBounds
+            // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
+            View view = androidGameWindow.GameView;
+
+            base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
+            base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
+
+            if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
-                // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-                View view = androidGameWindow.GameView;
-
-                base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
-                base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
-
-                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
-                {
-                    PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
-                    base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-                    base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-                }
-
-                TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
+                PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
+                base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
             }
+
+            TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
+            TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
 
         }
 
