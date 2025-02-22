@@ -252,18 +252,8 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Updates the screen orientation. Filters out requests for unsupported orientations.
         /// </summary>
-        internal void SetOrientation(DisplayOrientation newOrientation, bool applyGraphicsChanges)
+        internal void SetOrientation(DisplayOrientation newOrientation, DisplayOrientation supported, bool applyGraphicsChanges)
         {
-            DisplayOrientation supported = this._supportedOrientations;
-            if (supported == DisplayOrientation.Default)
-            {
-                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-
-                GraphicsDeviceManager deviceManager = (_game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
-                if (deviceManager != null &&  deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
-                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
-            }
-
             // If the new orientation is not supported, force a supported orientation
             if ((supported & newOrientation) == 0)
             {

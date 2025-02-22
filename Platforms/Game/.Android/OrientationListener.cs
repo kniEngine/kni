@@ -96,7 +96,17 @@ namespace Microsoft.Xna.Framework
                     // orientation must be stable for 0.5 seconds before changing.
                     if (elapsed.TotalSeconds > 0.5)
                     {
-                        _gameWindow.SetOrientation(targetOrientation, true);
+                        DisplayOrientation supported = _gameWindow._supportedOrientations;
+                        if (supported == DisplayOrientation.Default)
+                        {
+                            supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+
+                            GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
+                            if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                                supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                        }
+                        _gameWindow.SetOrientation(targetOrientation, supported, true);
+
                         targetOrientation = DisplayOrientation.Unknown;
                         elapsed = TimeSpan.Zero;
                     }
