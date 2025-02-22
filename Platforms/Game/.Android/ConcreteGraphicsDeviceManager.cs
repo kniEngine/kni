@@ -104,6 +104,7 @@ namespace Microsoft.Xna.Platform
             this.GraphicsProfile = gdi.GraphicsProfile;
 
             AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
+            View surfaceView = androidGameWindow.GameView;
 
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
@@ -121,10 +122,8 @@ namespace Microsoft.Xna.Platform
             androidGameWindow.SetOrientation(currentOrientation, false);
 
             // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-            View view = androidGameWindow.GameView;
-
-            base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
-            base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
+            base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
+            base.GraphicsDevice.PresentationParameters.BackBufferHeight = surfaceView.Height;
 
             if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
@@ -148,17 +147,16 @@ namespace Microsoft.Xna.Platform
             }
 
             AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
+            View surfaceView = androidGameWindow.GameView;
 
             // Trigger a change in orientation in case the supported orientations have changed
             androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, false);
 
             base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
-            // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-            View view = androidGameWindow.GameView;
-
-            base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
-            base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
+            // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop
+            base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
+            base.GraphicsDevice.PresentationParameters.BackBufferHeight = surfaceView.Height;
 
             if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
