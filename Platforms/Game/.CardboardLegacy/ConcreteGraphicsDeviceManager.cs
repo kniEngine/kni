@@ -124,11 +124,9 @@ namespace Microsoft.Xna.Platform
             {
                 // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
                 View view = androidGameWindow.GameView;
-                int viewWidth = view.Width;
-                int viewHeight = view.Height;
 
-                base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
-                base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
+                base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
+                base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
 
                 if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
                 {
@@ -162,11 +160,9 @@ namespace Microsoft.Xna.Platform
             {
                 // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
                 View view = androidGameWindow.GameView;
-                int viewWidth = view.Width;
-                int viewHeight = view.Height;
 
-                base.GraphicsDevice.PresentationParameters.BackBufferWidth = viewWidth;
-                base.GraphicsDevice.PresentationParameters.BackBufferHeight = viewHeight;
+                base.GraphicsDevice.PresentationParameters.BackBufferWidth = view.Width;
+                base.GraphicsDevice.PresentationParameters.BackBufferHeight = view.Height;
 
                 if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
                 {
