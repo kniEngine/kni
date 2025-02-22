@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Platform
 
             base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
-            bool isLandscape = (0 != (base.Game.Window.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)));
+            bool isLandscape = ((base.Game.Window.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)) != 0);
             int w = PreferredBackBufferWidth;
             int h = PreferredBackBufferHeight;
 
