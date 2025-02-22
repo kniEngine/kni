@@ -250,31 +250,6 @@ namespace Microsoft.Xna.Framework
         }
 
         /// <summary>
-        /// In Xna, setting SupportedOrientations = DisplayOrientation.Default (which is the default value)
-        /// has the effect of setting SupportedOrientations to landscape only or portrait only, based on the
-        /// aspect ratio of PreferredBackBufferWidth / PreferredBackBufferHeight
-        /// </summary>
-        /// <returns></returns>
-        internal DisplayOrientation GetEffectiveSupportedOrientations()
-        {
-            if (_supportedOrientations == DisplayOrientation.Default)
-            {
-                GraphicsDeviceManager deviceManager = (_game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
-                if (deviceManager != null)
-                {
-                    if (deviceManager.PreferredBackBufferWidth > deviceManager.PreferredBackBufferHeight)
-                        return (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-                    else
-                        return (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
-                }
-                
-                return (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-            }
-            
-            return _supportedOrientations;
-        }
-
-        /// <summary>
         /// Updates the screen orientation. Filters out requests for unsupported orientations.
         /// </summary>
         internal void SetOrientation(DisplayOrientation newOrientation, bool applyGraphicsChanges)
