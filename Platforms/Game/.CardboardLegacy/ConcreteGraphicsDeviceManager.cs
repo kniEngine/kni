@@ -103,6 +103,8 @@ namespace Microsoft.Xna.Platform
             pp = gdi.PresentationParameters;
             this.GraphicsProfile = gdi.GraphicsProfile;
 
+            AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
+
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
             this.ApplyChanges();
@@ -113,16 +115,15 @@ namespace Microsoft.Xna.Platform
 
             this.OnDeviceCreated(EventArgs.Empty);
 
-            AndroidGameWindow gameWindow = (AndroidGameWindow)Game.Window;
 
             Android.App.Activity activity = AndroidGameWindow.Activity;
             DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
-            gameWindow.SetOrientation(currentOrientation, false);
+            androidGameWindow.SetOrientation(currentOrientation, false);
 
             // ResetClientBounds
             {
                 // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-                View view = ((AndroidGameWindow)base.Game.Window).GameView;
+                View view = androidGameWindow.GameView;
                 int viewWidth = view.Width;
                 int viewHeight = view.Height;
 
@@ -150,15 +151,17 @@ namespace Microsoft.Xna.Platform
                 return;
             }
 
+            AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
+
             // Trigger a change in orientation in case the supported orientations have changed
-            ((AndroidGameWindow)base.Game.Window).SetOrientation(base.Game.Window.CurrentOrientation, false);
+            androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, false);
 
             base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
             // ResetClientBounds
             {
                 // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
-                View view = ((AndroidGameWindow)base.Game.Window).GameView;
+                View view = androidGameWindow.GameView;
                 int viewWidth = view.Width;
                 int viewHeight = view.Height;
 
