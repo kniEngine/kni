@@ -128,9 +128,9 @@ namespace Microsoft.Xna.Platform
 
             if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
             {
-                PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
-                base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                PresentationParameters pp3 = this.GraphicsDevice.PresentationParameters;
+                base.GraphicsDevice.Viewport = new Viewport(0, 0, pp3.BackBufferWidth, pp3.BackBufferHeight);
+                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp3.BackBufferWidth, pp3.BackBufferHeight);
             }
 
             TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;

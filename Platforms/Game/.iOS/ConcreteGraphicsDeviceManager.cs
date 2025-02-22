@@ -122,8 +122,8 @@ namespace Microsoft.Xna.Platform
 
             ((iOSGameWindow)Game.Window).ViewController.View.LayoutSubviews();
 
-            PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
-            this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
+            PresentationParameters pp3 = this.GraphicsDevice.PresentationParameters;
+            this.GraphicsDevice.Viewport = new Viewport(0, 0, pp3.BackBufferWidth, pp3.BackBufferHeight);
         }
 
         public override void ApplyChanges()
