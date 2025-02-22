@@ -120,11 +120,6 @@ namespace Microsoft.Xna.Platform
 
                 base.GraphicsDevice.PresentationParameters.BackBufferWidth = isLandscape ? Math.Max(w, h) : Math.Min(w, h);
                 base.GraphicsDevice.PresentationParameters.BackBufferHeight = isLandscape ? Math.Min(w, h) : Math.Max(w, h);
-
-                // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
-                //       we need to get those working.
-                TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
             }
 
             // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
