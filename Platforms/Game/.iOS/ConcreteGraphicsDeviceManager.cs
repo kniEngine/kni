@@ -140,7 +140,8 @@ namespace Microsoft.Xna.Platform
         {
             if (base.GraphicsDevice == null)
             {
-                // TODO: Calling ApplyChanges() before Game Initialize should create the device.
+                // TODO: Calling ApplyChanges() before Game.Initialize() should create the device.
+                System.Diagnostics.Debug.Assert(false);
                 //this.CreateDevice();
                 return;
             }
