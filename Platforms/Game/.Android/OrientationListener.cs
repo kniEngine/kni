@@ -46,6 +46,7 @@ namespace Microsoft.Xna.Framework
 
             DisplayOrientation absOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
+
             DisplayOrientation supported = _gameWindow._supportedOrientations;
             if (supported == DisplayOrientation.Default)
             {
@@ -56,8 +57,14 @@ namespace Microsoft.Xna.Framework
                     supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
             }
 
-            if ((supported & absOrientation) == 0
-            ||  absOrientation == _gameWindow.CurrentOrientation
+            if ((supported & absOrientation) == 0)
+            {
+                targetOrientation = DisplayOrientation.Unknown;
+                elapsed = TimeSpan.Zero;
+                return;
+            }
+
+            if (absOrientation == _gameWindow.CurrentOrientation
             ||  absOrientation == DisplayOrientation.Unknown
                )
             {
