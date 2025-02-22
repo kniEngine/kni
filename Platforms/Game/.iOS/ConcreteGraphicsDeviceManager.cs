@@ -110,7 +110,17 @@ namespace Microsoft.Xna.Platform
 
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
-            this.ApplyChanges();
+            // ApplyChanges
+            {
+                base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
+
+                bool isLandscape = ((base.Game.Window.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)) != 0);
+                int w = PreferredBackBufferWidth;
+                int h = PreferredBackBufferHeight;
+
+                base.GraphicsDevice.PresentationParameters.BackBufferWidth = isLandscape ? Math.Max(w, h) : Math.Min(w, h);
+                base.GraphicsDevice.PresentationParameters.BackBufferHeight = isLandscape ? Math.Min(w, h) : Math.Max(w, h);
+            }
 
             // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
             //       we need to get those working.
@@ -130,7 +140,8 @@ namespace Microsoft.Xna.Platform
         {
             if (base.GraphicsDevice == null)
             {
-                // TODO: Calling ApplyChanges() before Game Initialize should create the device.
+                // TODO: Calling ApplyChanges() before Game.Initialize() should create the device.
+                System.Diagnostics.Debug.Assert(false);
                 //this.CreateDevice();
                 return;
             }

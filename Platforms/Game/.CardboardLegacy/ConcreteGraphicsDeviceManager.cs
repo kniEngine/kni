@@ -108,7 +108,27 @@ namespace Microsoft.Xna.Platform
 
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
-            this.ApplyChanges();
+            // ApplyChanges
+            {
+                // Trigger a change in orientation in case the supported orientations have changed
+                androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, false);
+
+                base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
+
+                // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop
+                base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
+                base.GraphicsDevice.PresentationParameters.BackBufferHeight = surfaceView.Height;
+
+                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
+                {
+                    PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
+                    base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                    base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
+                }
+
+                TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
+                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
+            }
 
             // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
             //       we need to get those working.
@@ -141,7 +161,8 @@ namespace Microsoft.Xna.Platform
         {
             if (base.GraphicsDevice == null)
             {
-                // TODO: Calling ApplyChanges() before Game Initialize should create the device.
+                // TODO: Calling ApplyChanges() before Game.Initialize() should create the device.
+                System.Diagnostics.Debug.Assert(false);
                 //this.CreateDevice();
                 return;
             }
