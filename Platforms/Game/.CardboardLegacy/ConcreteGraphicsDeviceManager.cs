@@ -109,6 +109,9 @@ namespace Microsoft.Xna.Platform
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
             this.ApplyChanges();
+            // ApplyChanges
+            {
+            }
 
             // TODO: In XNA this seems to be done as part of the GraphicsDevice.DeviceReset event...
             //       we need to get those working.
