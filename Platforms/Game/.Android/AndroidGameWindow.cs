@@ -254,7 +254,7 @@ namespace Microsoft.Xna.Framework
         internal void SetOrientation(DisplayOrientation newOrientation, DisplayOrientation supported, bool applyGraphicsChanges)
         {
             // If the new orientation is not supported, force a supported orientation
-            if ((supported & newOrientation) == 0)
+            if ((newOrientation & supported) == 0)
             {
                 if ((supported & DisplayOrientation.LandscapeLeft) != 0)
                     newOrientation = DisplayOrientation.LandscapeLeft;
@@ -278,7 +278,7 @@ namespace Microsoft.Xna.Framework
                         newOrientation = DisplayOrientation.PortraitDown;
                 }
 
-                if ((supported & newOrientation) != 0)
+                if ((newOrientation & supported) != 0)
                 {
                     DisplayOrientation oldOrientation = CurrentOrientation;
                     _currentOrientation = newOrientation;
@@ -288,7 +288,7 @@ namespace Microsoft.Xna.Framework
 
                     TouchPanel.DisplayOrientation = newOrientation;
 
-                    if (applyGraphicsChanges && (oldOrientation != newOrientation))
+                    if ((newOrientation != oldOrientation) && applyGraphicsChanges)
                     {
                         GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
                         if (gdm != null)
