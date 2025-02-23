@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework
             }
             else
             {
-                DisplayOrientation supported = _gameWindow._supportedOrientations;
+                DisplayOrientation supported = DisplayOrientation.Default;
                 if (supported == DisplayOrientation.Default)
                 {
                     supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            DisplayOrientation supported = _gameWindow._supportedOrientations;
+                            DisplayOrientation supported = DisplayOrientation.Default;
                             if (supported == DisplayOrientation.Default)
                             {
                                 supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
