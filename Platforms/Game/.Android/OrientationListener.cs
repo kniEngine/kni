@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework
             GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
             if (deviceManager != null)
             {
-                DisplayOrientation supported = _gameWindow._supportedOrientations;
+                DisplayOrientation supported = deviceManager.SupportedOrientations;
                 if (supported == DisplayOrientation.Default)
                 {
                     supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework
                         GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
                         if (deviceManager != null)
                         {
-                            DisplayOrientation supported = _gameWindow._supportedOrientations;
+                            DisplayOrientation supported = deviceManager.SupportedOrientations;
                             if (supported == DisplayOrientation.Default)
                             {
                                 supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
