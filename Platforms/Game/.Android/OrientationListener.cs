@@ -47,20 +47,41 @@ namespace Microsoft.Xna.Framework
             DisplayOrientation absOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
             GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
-            DisplayOrientation supported = _gameWindow._supportedOrientations;
-            if (supported == DisplayOrientation.Default)
+            if (deviceManager != null)
             {
-                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                DisplayOrientation supported = _gameWindow._supportedOrientations;
+                if (supported == DisplayOrientation.Default)
+                {
+                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
 
-                if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
-                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                    if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                        supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                }
+
+                if ((supported & absOrientation) == 0)
+                {
+                    targetOrientation = DisplayOrientation.Unknown;
+                    elapsed = TimeSpan.Zero;
+                    return;
+                }
             }
-
-            if ((supported & absOrientation) == 0)
+            else
             {
-                targetOrientation = DisplayOrientation.Unknown;
-                elapsed = TimeSpan.Zero;
-                return;
+                DisplayOrientation supported = _gameWindow._supportedOrientations;
+                if (supported == DisplayOrientation.Default)
+                {
+                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+
+                    if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                        supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                }
+
+                if ((supported & absOrientation) == 0)
+                {
+                    targetOrientation = DisplayOrientation.Unknown;
+                    elapsed = TimeSpan.Zero;
+                    return;
+                }
             }
 
             if (absOrientation == _gameWindow.CurrentOrientation
@@ -103,18 +124,36 @@ namespace Microsoft.Xna.Framework
                     if (elapsed.TotalSeconds > 0.5)
                     {
                         GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
-                        DisplayOrientation supported = _gameWindow._supportedOrientations;
-                        if (supported == DisplayOrientation.Default)
+                        if (deviceManager != null)
                         {
-                            supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                            DisplayOrientation supported = _gameWindow._supportedOrientations;
+                            if (supported == DisplayOrientation.Default)
+                            {
+                                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
 
-                            if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
-                                supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                                if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                            }
+                            _gameWindow.SetOrientation(targetOrientation, supported, true);
+
+                            targetOrientation = DisplayOrientation.Unknown;
+                            elapsed = TimeSpan.Zero;
                         }
-                        _gameWindow.SetOrientation(targetOrientation, supported, true);
+                        else
+                        {
+                            DisplayOrientation supported = _gameWindow._supportedOrientations;
+                            if (supported == DisplayOrientation.Default)
+                            {
+                                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
 
-                        targetOrientation = DisplayOrientation.Unknown;
-                        elapsed = TimeSpan.Zero;
+                                if (deviceManager != null && deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                            }
+                            _gameWindow.SetOrientation(targetOrientation, supported, true);
+
+                            targetOrientation = DisplayOrientation.Unknown;
+                            elapsed = TimeSpan.Zero;
+                        }
                     }
                 }
             }
