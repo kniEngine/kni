@@ -50,7 +50,6 @@ namespace Microsoft.Xna.Framework
         MediaState _mediaPlayer_PrevState = MediaState.Stopped;
 
         private Rectangle _clientBounds;
-        internal DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
 
         private OrientationListener _orientationListener;
