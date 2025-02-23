@@ -52,10 +52,10 @@ namespace Microsoft.Xna.Framework
                 DisplayOrientation supported = deviceManager.SupportedOrientations;
                 if (supported == DisplayOrientation.Default)
                 {
-                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-
                     if (deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
                         supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                    else
+                        supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
                 }
 
                 if ((supported & absOrientation) == 0)
@@ -122,10 +122,10 @@ namespace Microsoft.Xna.Framework
                             DisplayOrientation supported = deviceManager.SupportedOrientations;
                             if (supported == DisplayOrientation.Default)
                             {
-                                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-
                                 if (deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
                                     supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                                else
+                                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
                             }
                             _gameWindow.SetOrientation(targetOrientation, supported, true);
 
