@@ -111,10 +111,10 @@ namespace Microsoft.Xna.Platform
                 DisplayOrientation supported = this.SupportedOrientations;
                 if (supported == DisplayOrientation.Default)
                 {
-                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-
                     if (this.PreferredBackBufferWidth <= this.PreferredBackBufferHeight)
                         supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                    else
+                        supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
                 }
                 androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, supported, false);
 
@@ -144,10 +144,10 @@ namespace Microsoft.Xna.Platform
             DisplayOrientation supported2 = this.SupportedOrientations;
             if (supported2 == DisplayOrientation.Default)
             {
-                supported2 = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-
                 if (this.PreferredBackBufferWidth <= this.PreferredBackBufferHeight)
                     supported2 = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                else
+                    supported2 = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
             }
             androidGameWindow.SetOrientation(currentOrientation, supported2, false);
 
@@ -181,10 +181,10 @@ namespace Microsoft.Xna.Platform
             DisplayOrientation supported = this.SupportedOrientations;
             if (supported == DisplayOrientation.Default)
             {
-                supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-
                 if (this.PreferredBackBufferWidth <= this.PreferredBackBufferHeight)
                     supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                else
+                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
             }
             androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, supported, false);
 
