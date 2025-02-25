@@ -33,6 +33,9 @@ namespace Content.Pipeline.Editor
         {
             try
             {
+                if (!File.Exists(filePath))
+                    return null;
+
                 using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
                 using (var writer = new PackageReferencesCollectionBinaryReader(stream))
                 {
