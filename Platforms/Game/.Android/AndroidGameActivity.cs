@@ -20,6 +20,7 @@ namespace Microsoft.Xna.Framework
 
         internal event EventHandler WindowFocused;
         internal event EventHandler WindowUnfocused;
+        internal event EventHandler<AndroidConfigChangedOrientationEventArgs> WindowOrientationChanged;
 
         public event EventHandler Paused;
         public event EventHandler Resumed;
@@ -49,8 +50,18 @@ namespace Microsoft.Xna.Framework
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
         {
-            // we need to refresh the viewport here.
             base.OnConfigurationChanged(newConfig);
+
+            Android.Content.PM.ConfigChanges changes = (Android.Content.PM.ConfigChanges)newConfig.UpdateFrom(Resources.Configuration);
+            
+            if ((changes & Android.Content.PM.ConfigChanges.Orientation) != 0)
+            {
+                Android.Content.Res.Orientation newOrientation = newConfig.Orientation;
+
+                var handler = WindowOrientationChanged;
+                if (handler != null)
+                    handler(this, new AndroidConfigChangedOrientationEventArgs(newConfig, newOrientation));
+            }
         }
 
         protected override void OnPause()

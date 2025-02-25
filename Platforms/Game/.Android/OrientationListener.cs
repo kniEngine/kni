@@ -46,8 +46,38 @@ namespace Microsoft.Xna.Framework
 
             DisplayOrientation absOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(orientation);
 
-            if ((_gameWindow.GetEffectiveSupportedOrientations() & absOrientation) == 0
-            ||  absOrientation == _gameWindow.CurrentOrientation
+            GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
+            if (deviceManager != null)
+            {
+                DisplayOrientation supported = deviceManager.SupportedOrientations;
+                if (supported == DisplayOrientation.Default)
+                {
+                    if (deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                        supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                    else
+                        supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                }
+
+                if ((supported & absOrientation) == 0)
+                {
+                    targetOrientation = DisplayOrientation.Unknown;
+                    elapsed = TimeSpan.Zero;
+                    return;
+                }
+            }
+            else
+            {
+                DisplayOrientation supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+
+                if ((supported & absOrientation) == 0)
+                {
+                    targetOrientation = DisplayOrientation.Unknown;
+                    elapsed = TimeSpan.Zero;
+                    return;
+                }
+            }
+
+            if (absOrientation == _gameWindow.CurrentOrientation
             ||  absOrientation == DisplayOrientation.Unknown
                )
             {
@@ -86,9 +116,30 @@ namespace Microsoft.Xna.Framework
                     // orientation must be stable for 0.5 seconds before changing.
                     if (elapsed.TotalSeconds > 0.5)
                     {
-                        _gameWindow.SetOrientation(targetOrientation, true);
-                        targetOrientation = DisplayOrientation.Unknown;
-                        elapsed = TimeSpan.Zero;
+                        GraphicsDeviceManager deviceManager = (_gameWindow._game.Services.GetService(typeof(IGraphicsDeviceManager)) as GraphicsDeviceManager);
+                        if (deviceManager != null)
+                        {
+                            DisplayOrientation supported = deviceManager.SupportedOrientations;
+                            if (supported == DisplayOrientation.Default)
+                            {
+                                if (deviceManager.PreferredBackBufferWidth <= deviceManager.PreferredBackBufferHeight)
+                                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                                else
+                                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                            }
+                            _gameWindow.SetOrientation(targetOrientation, supported, true);
+
+                            targetOrientation = DisplayOrientation.Unknown;
+                            elapsed = TimeSpan.Zero;
+                        }
+                        else
+                        {
+                            DisplayOrientation supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                            _gameWindow.SetOrientation(targetOrientation, supported, true);
+
+                            targetOrientation = DisplayOrientation.Unknown;
+                            elapsed = TimeSpan.Zero;
+                        }
                     }
                 }
             }

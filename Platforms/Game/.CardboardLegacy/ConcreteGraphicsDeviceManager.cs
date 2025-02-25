@@ -66,9 +66,6 @@ namespace Microsoft.Xna.Platform
             set
             {
                 base.SupportedOrientations = value;
-
-                if (base.Game.Window != null)
-                    ((AndroidGameWindow)base.Game.Window)._supportedOrientations = base.SupportedOrientations;
             }
         }
 
@@ -111,7 +108,15 @@ namespace Microsoft.Xna.Platform
             // ApplyChanges
             {
                 // Trigger a change in orientation in case the supported orientations have changed
-                androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, false);
+                DisplayOrientation supported = this.SupportedOrientations;
+                if (supported == DisplayOrientation.Default)
+                {
+                    if (this.PreferredBackBufferWidth <= this.PreferredBackBufferHeight)
+                        supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                    else
+                        supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                }
+                androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, supported, false);
 
                 base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
@@ -136,7 +141,15 @@ namespace Microsoft.Xna.Platform
 
             Android.App.Activity activity = AndroidGameWindow.Activity;
             DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
-            androidGameWindow.SetOrientation(currentOrientation, false);
+            DisplayOrientation supported2 = this.SupportedOrientations;
+            if (supported2 == DisplayOrientation.Default)
+            {
+                if (this.PreferredBackBufferWidth <= this.PreferredBackBufferHeight)
+                    supported2 = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                else
+                    supported2 = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+            }
+            androidGameWindow.SetOrientation(currentOrientation, supported2, false);
 
             // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
@@ -165,7 +178,15 @@ namespace Microsoft.Xna.Platform
             View surfaceView = androidGameWindow.GameView;
 
             // Trigger a change in orientation in case the supported orientations have changed
-            androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, false);
+            DisplayOrientation supported = this.SupportedOrientations;
+            if (supported == DisplayOrientation.Default)
+            {
+                if (this.PreferredBackBufferWidth <= this.PreferredBackBufferHeight)
+                    supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
+                else
+                    supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+            }
+            androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, supported, false);
 
             base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
 
