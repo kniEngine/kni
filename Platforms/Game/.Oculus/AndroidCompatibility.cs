@@ -66,33 +66,55 @@ namespace Microsoft.Xna.Framework
             {
                 case Orientation.Portrait:
                     {
-                        if (rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270)
+                        switch (rotation)
                         {
-                            return Orientation.Landscape;
-                        }
-                        else
-                        {
-                            return Orientation.Portrait;
+                            case SurfaceOrientation.Rotation0:
+                            case SurfaceOrientation.Rotation180:
+                                return Orientation.Portrait;
+
+                            case SurfaceOrientation.Rotation90:
+                            case SurfaceOrientation.Rotation270:
+                                return Orientation.Landscape;
+
+                            default:
+                                return Orientation.Portrait;
                         }
                     }
                     break;
 
                 case Orientation.Landscape:
                     {
-                        if (rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180)
+                        switch (rotation)
                         {
-                            return Orientation.Landscape;
-                        }
-                        else
-                        {
-                            return Orientation.Portrait;
+                            case SurfaceOrientation.Rotation0:
+                            case SurfaceOrientation.Rotation180:
+                                return Orientation.Landscape;
+
+                            case SurfaceOrientation.Rotation90:
+                            case SurfaceOrientation.Rotation270:
+                                return Orientation.Portrait;
+
+                            default:
+                                return Orientation.Portrait;
                         }
                     }
                     break;
 
                 default:
                     {
-                        return Orientation.Portrait;
+                        switch (rotation)
+                        {
+                            case SurfaceOrientation.Rotation0:
+                            case SurfaceOrientation.Rotation180:
+                                return Orientation.Portrait;
+
+                            case SurfaceOrientation.Rotation90:
+                            case SurfaceOrientation.Rotation270:
+                                return Orientation.Portrait;
+
+                            default: 
+                                return Orientation.Portrait;
+                        }
                     }
                     break;
             }
