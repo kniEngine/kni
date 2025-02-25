@@ -62,17 +62,49 @@ namespace Microsoft.Xna.Framework
             Orientation orientation = activity.Resources.Configuration.Orientation;
             SurfaceOrientation rotation = activity.WindowManager.DefaultDisplay.Rotation;
 
-            if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && orientation == Orientation.Landscape)
-            ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && orientation == Orientation.Portrait))
+            switch (orientation)
             {
-                return Orientation.Landscape;
-            }
-            else
-            {
-                return Orientation.Portrait;
-            }
-        }
+                case Orientation.Portrait:
+                    {
+                        if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && false)
+                        ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && true))
+                        {
+                            return Orientation.Landscape;
+                        }
+                        else
+                        {
+                            return Orientation.Portrait;
+                        }
+                    }
+                    break;
 
+                case Orientation.Landscape:
+                    {
+                        if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && true)
+                        ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && false))
+                        {
+                            return Orientation.Landscape;
+                        }
+                        else
+                        {
+                            return Orientation.Portrait;
+                        }
+                    }
+                    break;
+
+                default:
+                    {
+                        if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && false)
+                        ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && false))
+                        {
+                            return Orientation.Landscape;
+                        }
+                        else
+                        {
+                            return Orientation.Portrait;
+                        }
+                    }
+                    break;
             }
         }
 
