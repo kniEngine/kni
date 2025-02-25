@@ -54,11 +54,11 @@ namespace Microsoft.Xna.Framework
 
         private Orientation GetDeviceNaturalOrientation(Activity activity)
         {
-            var orientation = activity.Resources.Configuration.Orientation;
+            Orientation orientation = activity.Resources.Configuration.Orientation;
             SurfaceOrientation rotation = activity.WindowManager.DefaultDisplay.Rotation;
 
             // check if MainActivity setup is correct. 
-            var screenOrientation = activity.RequestedOrientation;
+            Android.Content.PM.ScreenOrientation screenOrientation = activity.RequestedOrientation;
             if (screenOrientation != Android.Content.PM.ScreenOrientation.FullSensor)
                 throw new InvalidOperationException("NaturalOrientation detection failed. Set ScreenOrientation in MainActivity to FullSensor.");
 
@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework
                     }
                     break;
 
-                case Android.Content.Res.Orientation.Landscape:
+                case Orientation.Landscape:
                 default:
                     {
                         switch (rotation)
