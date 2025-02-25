@@ -66,8 +66,7 @@ namespace Microsoft.Xna.Framework
             {
                 case Orientation.Portrait:
                     {
-                        if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && false)
-                        ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && true))
+                        if (rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270)
                         {
                             return Orientation.Landscape;
                         }
@@ -80,8 +79,7 @@ namespace Microsoft.Xna.Framework
 
                 case Orientation.Landscape:
                     {
-                        if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && true)
-                        ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && false))
+                        if (rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180)
                         {
                             return Orientation.Landscape;
                         }
@@ -94,15 +92,7 @@ namespace Microsoft.Xna.Framework
 
                 default:
                     {
-                        if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && false)
-                        ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && false))
-                        {
-                            return Orientation.Landscape;
-                        }
-                        else
-                        {
-                            return Orientation.Portrait;
-                        }
+                        return Orientation.Portrait;
                     }
                     break;
             }
