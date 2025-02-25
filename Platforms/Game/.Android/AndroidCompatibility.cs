@@ -54,13 +54,13 @@ namespace Microsoft.Xna.Framework
 
         private Orientation GetDeviceNaturalOrientation(Activity activity)
         {
-            Orientation orientation = activity.Resources.Configuration.Orientation;
-            SurfaceOrientation rotation = activity.WindowManager.DefaultDisplay.Rotation;
-
             // check if MainActivity setup is correct. 
             Android.Content.PM.ScreenOrientation screenOrientation = activity.RequestedOrientation;
             if (screenOrientation != Android.Content.PM.ScreenOrientation.FullSensor)
                 throw new InvalidOperationException("NaturalOrientation detection failed. Set ScreenOrientation in MainActivity to FullSensor.");
+
+            Orientation orientation = activity.Resources.Configuration.Orientation;
+            SurfaceOrientation rotation = activity.WindowManager.DefaultDisplay.Rotation;
 
             if (((rotation == SurfaceOrientation.Rotation0  || rotation == SurfaceOrientation.Rotation180) && orientation == Orientation.Landscape)
             ||  ((rotation == SurfaceOrientation.Rotation90 || rotation == SurfaceOrientation.Rotation270) && orientation == Orientation.Portrait))
