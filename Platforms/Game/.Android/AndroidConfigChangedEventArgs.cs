@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform
 
         public AndroidConfigChangedEventArgs(Android.Content.Res.Configuration newConfig)
         {
-            NewConfig = newConfig;
+            this.NewConfig = newConfig;
         }
     }
 

@@ -26,6 +26,8 @@ namespace Microsoft.Xna.Framework
         public event EventHandler Resumed;
         internal event EventHandler Destroyed;
 
+        private Android.Content.Res.Orientation _currentOrientation;
+
         /// <summary>
         /// OnCreate called when the activity is launched from cold or after the app
         /// has been killed due to a higher priority app needing the memory
@@ -35,6 +37,8 @@ namespace Microsoft.Xna.Framework
         /// </param>
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            _currentOrientation = Resources.Configuration.Orientation;
+
             // Detection of NaturalOrientation. This must happend as soon as possible at start up.
             AndroidCompatibility.Initialize(this);
             
@@ -52,11 +56,12 @@ namespace Microsoft.Xna.Framework
         {
             base.OnConfigurationChanged(newConfig);
 
-            Android.Content.PM.ConfigChanges changes = (Android.Content.PM.ConfigChanges)newConfig.UpdateFrom(Resources.Configuration);
-            
-            if ((changes & Android.Content.PM.ConfigChanges.Orientation) != 0)
+            Android.Content.Res.Orientation newOrientation = newConfig.Orientation;
+            if (newOrientation != _currentOrientation)
             {
-                Android.Content.Res.Orientation newOrientation = newConfig.Orientation;
+                Android.Util.Log.Debug("AndroidGameActivity", "newOrientation " + _currentOrientation + " -> "+ newOrientation);
+
+                _currentOrientation = newOrientation;
 
                 var handler = WindowOrientationChanged;
                 if (handler != null)
