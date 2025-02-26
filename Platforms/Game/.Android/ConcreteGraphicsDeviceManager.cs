@@ -63,10 +63,7 @@ namespace Microsoft.Xna.Platform
         public override DisplayOrientation SupportedOrientations
         {
             get { return base.SupportedOrientations; }
-            set
-            {
-                base.SupportedOrientations = value;
-            }
+            set { base.SupportedOrientations = value; }
         }
 
         public override void ToggleFullScreen()
