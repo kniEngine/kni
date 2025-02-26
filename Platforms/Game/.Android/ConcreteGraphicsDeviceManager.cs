@@ -100,31 +100,15 @@ namespace Microsoft.Xna.Platform
             AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
             View surfaceView = androidGameWindow.GameView;
 
+            pp.DisplayOrientation = base.Game.Window.CurrentOrientation;
+
+            pp.BackBufferWidth = surfaceView.Width;
+            pp.BackBufferHeight = surfaceView.Height;
+
             this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
 
             // ApplyChanges
             {
-                // Trigger a change in orientation in case the supported orientations have changed
-                DisplayOrientation supported = this.SupportedOrientations;
-                if (supported == DisplayOrientation.Default)
-                {
-                    if (this.PreferredBackBufferWidth <= this.PreferredBackBufferHeight)
-                        supported = (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown);
-                    else
-                        supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-                }
-                androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, supported, false);
-
-                base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
-
-                // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop
-                base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
-                base.GraphicsDevice.PresentationParameters.BackBufferHeight = surfaceView.Height;
-
-                PresentationParameters pp2 = this.GraphicsDevice.PresentationParameters;
-                base.GraphicsDevice.Viewport = new Viewport(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-                base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp2.BackBufferWidth, pp2.BackBufferHeight);
-
                 TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
                 TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
             }
@@ -148,7 +132,8 @@ namespace Microsoft.Xna.Platform
             }
             androidGameWindow.SetOrientation(currentOrientation, supported2, false);
 
-            // TODO: check if the PreferredBackBufferWidth/Hight is supported and throw an error similar to fullscreen Windows Desktop.
+            base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
+
             base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
             base.GraphicsDevice.PresentationParameters.BackBufferHeight = surfaceView.Height;
 
