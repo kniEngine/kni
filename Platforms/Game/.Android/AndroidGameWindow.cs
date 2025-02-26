@@ -87,6 +87,20 @@ namespace Microsoft.Xna.Framework
             }
 
             _clientBounds = new Rectangle(0, 0, size.X, size.Y);
+
+            // init _currentOrientation
+            DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
+            // Android 2.3 and above support reverse orientations
+            int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
+            if (sdkVer < 10)
+            {
+                if (currentOrientation == DisplayOrientation.LandscapeRight)
+                    currentOrientation = DisplayOrientation.LandscapeLeft;
+                if (currentOrientation == DisplayOrientation.PortraitDown)
+                    currentOrientation = DisplayOrientation.PortraitDown;
+            }
+            _currentOrientation = currentOrientation;
+            _activity.RequestedOrientation = XnaOrientationToAndroid(currentOrientation);
             
             GameView = new AndroidSurfaceView(activity);
             GameView.LayoutChange += GameView_LayoutChange;
