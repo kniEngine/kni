@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework
                                 else
                                     supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
                             }
-                            _gameWindow.SetOrientation(targetOrientation, supported, true);
+                            _gameWindow.SetOrientation(targetOrientation, supported);
 
                             targetOrientation = DisplayOrientation.Unknown;
                             elapsed = TimeSpan.Zero;
@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Framework
                             DisplayOrientation supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)
                                                          | (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown)
                                                          ;
-                            _gameWindow.SetOrientation(targetOrientation, supported, true);
+                            _gameWindow.SetOrientation(targetOrientation, supported);
 
                             targetOrientation = DisplayOrientation.Unknown;
                             elapsed = TimeSpan.Zero;
