@@ -67,6 +67,8 @@ namespace Microsoft.Xna.Framework
             Android.Content.Res.Orientation newOrientation = newConfig.Orientation;
             if (newOrientation != _currentOrientation)
             {
+                Android.Util.Log.Debug("AndroidGameActivity", "newOrientation " + _currentOrientation + " -> "+ newOrientation);
+
                 _currentOrientation = newOrientation;
 
                 var handler = WindowOrientationChanged;
