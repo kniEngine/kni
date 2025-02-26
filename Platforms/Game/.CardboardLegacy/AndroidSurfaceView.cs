@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework
 
         public override void SurfaceCreated(ISurfaceHolder holder)
         {
-            Log.Debug("AndroidGameView", "SurfaceCreated");
+            Log.Debug("AndroidSurfaceView", "SurfaceCreated");
 
             _isAndroidSurfaceAvailable = true;
 
@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework
 
         public override void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
         {
-            Log.Debug("AndroidGameView", "SurfaceChanged: width=" + width + ", width=" + height + ", format=" + format.ToString());
+            Log.Debug("AndroidSurfaceView", "SurfaceChanged: width=" + width + ", height=" + height + ", format=" + format.ToString());
 
             var handler = _surfaceChangedEvent;
             if (handler != null)
@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework
 
         public override void SurfaceDestroyed(ISurfaceHolder holder)
         {
-            Log.Debug("AndroidGameView", "SurfaceDestroyed");
+            Log.Debug("AndroidSurfaceView", "SurfaceDestroyed");
 
             _isAndroidSurfaceAvailable = false;
 
