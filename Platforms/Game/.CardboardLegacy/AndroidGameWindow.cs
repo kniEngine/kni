@@ -408,8 +408,8 @@ namespace Microsoft.Xna.Framework
                 _activity.Resumed -= Activity_Resumed;
                 _activity.Destroyed -= Activity_Destroyed;
 
-                _activity.WindowFocused += Activity_WindowFocused;
-                _activity.WindowUnfocused += Activity_WindowUnfocused;
+                _activity.WindowFocused -= Activity_WindowFocused;
+                _activity.WindowUnfocused -= Activity_WindowUnfocused;
 
                 _activity = null;
             }
