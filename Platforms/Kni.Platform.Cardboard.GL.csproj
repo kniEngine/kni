@@ -162,7 +162,6 @@
     <Compile Include="Devices\.Android\Sensors\SensorListener.cs" />
 
     <Compile Include="Game\.Android\TouchEventListener.cs" />
-    <Compile Include="Game\.Android\AndroidConfigChangedEventArgs.cs" />
     <Compile Include="Game\.CardboardLegacy\AndroidCompatibility.cs" />
     <Compile Include="Game\.CardboardLegacy\AndroidGameActivity.cs" />
     <Compile Include="Game\.CardboardLegacy\ConcreteGame.cs" />

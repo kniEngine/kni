@@ -20,13 +20,11 @@ namespace Microsoft.Xna.Framework
 
         internal event EventHandler WindowFocused;
         internal event EventHandler WindowUnfocused;
-        internal event EventHandler<AndroidConfigChangedOrientationEventArgs> WindowOrientationChanged;
 
         public event EventHandler Paused;
         public event EventHandler Resumed;
         internal event EventHandler Destroyed;
 
-        private Android.Content.Res.Orientation _currentOrientation;
 
         /// <summary>
         /// OnCreate called when the activity is launched from cold or after the app
@@ -37,8 +35,6 @@ namespace Microsoft.Xna.Framework
         /// </param>
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            _currentOrientation = Resources.Configuration.Orientation;
-
             // Detection of NaturalOrientation. This must happend as soon as possible at start up.
             AndroidCompatibility.Initialize(this);
             
@@ -55,18 +51,6 @@ namespace Microsoft.Xna.Framework
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
         {
             base.OnConfigurationChanged(newConfig);
-
-            Android.Content.Res.Orientation newOrientation = newConfig.Orientation;
-            if (newOrientation != _currentOrientation)
-            {
-                Android.Util.Log.Debug("AndroidGameActivity", "newOrientation " + _currentOrientation + " -> "+ newOrientation);
-
-                _currentOrientation = newOrientation;
-
-                var handler = WindowOrientationChanged;
-                if (handler != null)
-                    handler(this, new AndroidConfigChangedOrientationEventArgs(newConfig, newOrientation));
-            }
         }
 
         protected override void OnPause()
