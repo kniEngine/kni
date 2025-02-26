@@ -69,7 +69,6 @@ namespace Microsoft.Xna.Framework
 
             _activity.WindowFocused += Activity_WindowFocused;
             _activity.WindowUnfocused += Activity_WindowUnfocused;
-            _activity.WindowOrientationChanged += Activity_WindowOrientationChanged;
 
             Point size;
             // GetRealSize() was defined in JellyBeanMr1 / API 17 / Android 4.2
@@ -250,12 +249,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private void Activity_WindowOrientationChanged(object sender, AndroidConfigChangedOrientationEventArgs e)
-        {
-            Android.Content.Res.Orientation NewOrientation = e.NewOrientation;
-
-        }
-
         internal void ForceSetFullScreen(bool _isFullScreen)
         {
             if (_isFullScreen)
@@ -417,7 +410,6 @@ namespace Microsoft.Xna.Framework
 
                 _activity.WindowFocused += Activity_WindowFocused;
                 _activity.WindowUnfocused += Activity_WindowUnfocused;
-                _activity.WindowOrientationChanged += Activity_WindowOrientationChanged;
 
                 _activity = null;
             }

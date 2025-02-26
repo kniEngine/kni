@@ -118,7 +118,6 @@
 
   <ItemGroup>
     <Compile Include="Game\.Android\AndroidCompatibility.cs" />
-    <Compile Include="Game\.Android\AndroidConfigChangedEventArgs.cs" />
     <Compile Include="Game\.Android\AndroidGameActivity.cs" />
     <Compile Include="Game\.Android\ConcreteGame.cs" />
     <Compile Include="Game\.Android\ConcreteGameFactory.cs" />
