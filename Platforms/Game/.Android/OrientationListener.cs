@@ -65,17 +65,6 @@ namespace Microsoft.Xna.Framework
                     return;
                 }
             }
-            else
-            {
-                DisplayOrientation supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
-
-                if ((supported & absOrientation) == 0)
-                {
-                    targetOrientation = DisplayOrientation.Unknown;
-                    elapsed = TimeSpan.Zero;
-                    return;
-                }
-            }
 
             if (absOrientation == _gameWindow.CurrentOrientation
             ||  absOrientation == DisplayOrientation.Unknown
@@ -134,7 +123,9 @@ namespace Microsoft.Xna.Framework
                         }
                         else
                         {
-                            DisplayOrientation supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
+                            DisplayOrientation supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)
+                                                         | (DisplayOrientation.Portrait | DisplayOrientation.PortraitDown)
+                                                         ;
                             _gameWindow.SetOrientation(targetOrientation, supported, true);
 
                             targetOrientation = DisplayOrientation.Unknown;
