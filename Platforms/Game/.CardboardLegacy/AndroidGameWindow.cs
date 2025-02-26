@@ -265,7 +265,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// Updates the screen orientation. Filters out requests for unsupported orientations.
         /// </summary>
-        internal void SetOrientation(DisplayOrientation newOrientation, DisplayOrientation supported, bool applyGraphicsChanges)
+        internal void SetOrientation(DisplayOrientation newOrientation, DisplayOrientation supported)
         {
             // If the new orientation is not supported, force a supported orientation
             if ((newOrientation & supported) == 0)
@@ -294,20 +294,10 @@ namespace Microsoft.Xna.Framework
 
                 if ((newOrientation & supported) != 0)
                 {
-                    DisplayOrientation oldOrientation = CurrentOrientation;
                     _currentOrientation = newOrientation;
                     _activity.RequestedOrientation = XnaOrientationToAndroid(newOrientation);
 
                     OnOrientationChanged();
-
-                    TouchPanel.DisplayOrientation = newOrientation;
-
-                    if ((newOrientation != oldOrientation) && applyGraphicsChanges)
-                    {
-                        GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<ConcreteGame>().GraphicsDeviceManager;
-                        if (gdm != null)
-                            gdm.ApplyChanges();
-                    }
                 }
             }
         }
