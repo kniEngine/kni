@@ -281,7 +281,7 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            if (back == BoundingFrustum.PlaneCount)
+            if (back >= (BoundingFrustum.PlaneCount - 1))
                 return;
 
             if (SegmentIntersectsBoundingSphere(ref frustum._corners[0], ref frustum._corners[1], ref sphere))
