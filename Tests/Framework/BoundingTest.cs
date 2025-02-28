@@ -290,12 +290,14 @@ namespace Kni.Tests.Framework
             var bsphere3 = new BoundingSphere(-Vector3.One * 6, 1);
             var bsphere4 = new BoundingSphere(Vector3.Zero, 200);
             var bsphere5 = new BoundingSphere(new Vector3(1, 1, 5), 1);
+            var bsphere6 = new BoundingSphere(new Vector3(0, 0, -95), 1);
 
             Assert.AreEqual(testFrustum.Intersects(bsphere1), true);
             Assert.AreEqual(testFrustum.Intersects(bsphere2), true);
             Assert.AreEqual(testFrustum.Intersects(bsphere3), false);
             Assert.AreEqual(testFrustum.Intersects(bsphere4), true);
             Assert.AreEqual(testFrustum.Intersects(bsphere5), false);
+            Assert.AreEqual(testFrustum.Intersects(bsphere6), true);
         }
 
         [Test]
@@ -310,6 +312,7 @@ namespace Kni.Tests.Framework
             var bsphere3 = new BoundingSphere(-Vector3.One * 6, 1);
             var bsphere4 = new BoundingSphere(Vector3.Zero, 200);
             var bsphere5 = new BoundingSphere(new Vector3(1, 1, 5), 1);
+            var bsphere6 = new BoundingSphere(new Vector3(0, 0, -95), 1);
 
             Assert.AreEqual(testFrustum.Contains(bsphere1), ContainmentType.Contains);
             Assert.AreEqual(testFrustum.Contains(bsphere2), ContainmentType.Contains);
@@ -318,6 +321,7 @@ namespace Kni.Tests.Framework
 #if !XNA    // XNA reports a false Intersects
             Assert.AreEqual(testFrustum.Contains(bsphere5), ContainmentType.Disjoint);
 #endif
+            Assert.AreEqual(testFrustum.Contains(bsphere6), ContainmentType.Intersects);
         }
 
         [Test]
