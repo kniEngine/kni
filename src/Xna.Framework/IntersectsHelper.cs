@@ -284,6 +284,10 @@ namespace Microsoft.Xna.Framework
             if (back >= (BoundingFrustum.PlaneCount - 1))
                 return;
 
+            ContainmentType fcc = frustum.Contains(sphere.Center);
+            if (fcc == ContainmentType.Contains)
+                return;
+
             if (SegmentIntersectsBoundingSphere(ref frustum._corners[0], ref frustum._corners[1], ref sphere))
                 return;
             if (SegmentIntersectsBoundingSphere(ref frustum._corners[1], ref frustum._corners[2], ref sphere))
