@@ -293,6 +293,8 @@ namespace Kni.Tests.Framework
             var bsphere6 = new BoundingSphere(new Vector3(0, 0, -95), 1);
             var bsphere7 = new BoundingSphere(new Vector3(0, 0, -50), 21f);
             var bsphere8 = new BoundingSphere(new Vector3(0, 0, -50), 22f);
+            var bsphere10 = new BoundingSphere(new Vector3(0, 0, 5), 0.95f);
+            var bsphere11 = new BoundingSphere(new Vector3(0, 0, 5), 1.05f);
 
             Assert.AreEqual(testFrustum.Intersects(bsphere1), true);
             Assert.AreEqual(testFrustum.Intersects(bsphere2), true);
@@ -302,6 +304,8 @@ namespace Kni.Tests.Framework
             Assert.AreEqual(testFrustum.Intersects(bsphere6), true);
             Assert.AreEqual(testFrustum.Intersects(bsphere7), true);
             Assert.AreEqual(testFrustum.Intersects(bsphere8), true);
+            Assert.AreEqual(testFrustum.Intersects(bsphere10), false);
+            Assert.AreEqual(testFrustum.Intersects(bsphere11), true);
         }
 
         [Test]
@@ -319,6 +323,8 @@ namespace Kni.Tests.Framework
             var bsphere6 = new BoundingSphere(new Vector3(0, 0, -95), 1);
             var bsphere7 = new BoundingSphere(new Vector3(0, 0, -50), 21f);
             var bsphere8 = new BoundingSphere(new Vector3(0, 0, -50), 22f);
+            var bsphere10 = new BoundingSphere(new Vector3(0, 0, 5), 0.95f);
+            var bsphere11 = new BoundingSphere(new Vector3(0, 0, 5), 1);
 
             Assert.AreEqual(testFrustum.Contains(bsphere1), ContainmentType.Contains);
             Assert.AreEqual(testFrustum.Contains(bsphere2), ContainmentType.Contains);
@@ -330,6 +336,8 @@ namespace Kni.Tests.Framework
             Assert.AreEqual(testFrustum.Contains(bsphere6), ContainmentType.Intersects);
             Assert.AreEqual(testFrustum.Contains(bsphere7), ContainmentType.Contains);
             Assert.AreEqual(testFrustum.Contains(bsphere8), ContainmentType.Intersects);
+            Assert.AreEqual(testFrustum.Contains(bsphere10), ContainmentType.Disjoint);
+            Assert.AreEqual(testFrustum.Contains(bsphere11), ContainmentType.Intersects);
         }
 
         [Test]
