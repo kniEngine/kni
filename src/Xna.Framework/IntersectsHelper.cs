@@ -313,7 +313,88 @@ namespace Microsoft.Xna.Framework
             if (SegmentIntersectsBoundingSphere(ref frustum._corners[3], ref frustum._corners[7], ref sphere))
                 return;
 
+            Vector3 pt0 = sphere.Center - (frustum._planes[0].DotCoordinate(sphere.Center) * frustum._planes[0].Normal);
+            if (PointInPolygon(ref pt0, new FixedPolygon4(frustum._corners, 1, 0, 3, 2)))
+                return;
+            Vector3 pt1 = sphere.Center - (frustum._planes[1].DotCoordinate(sphere.Center) * frustum._planes[1].Normal);
+            if (PointInPolygon(ref pt1, new FixedPolygon4(frustum._corners, 4, 5, 6, 7)))
+                return;
+            Vector3 pt2 = sphere.Center - (frustum._planes[2].DotCoordinate(sphere.Center) * frustum._planes[2].Normal);
+            if (PointInPolygon(ref pt2, new FixedPolygon4(frustum._corners, 3, 0, 7, 4)))
+                return;
+            Vector3 pt3 = sphere.Center - (frustum._planes[3].DotCoordinate(sphere.Center) * frustum._planes[3].Normal);
+            if (PointInPolygon(ref pt3, new FixedPolygon4(frustum._corners, 1, 2, 5, 6)))
+                return;
+            Vector3 pt4 = sphere.Center - (frustum._planes[4].DotCoordinate(sphere.Center) * frustum._planes[4].Normal);
+            if (PointInPolygon(ref pt4, new FixedPolygon4(frustum._corners, 0, 1, 4, 5)))
+                return;
+            Vector3 pt5 = sphere.Center - (frustum._planes[5].DotCoordinate(sphere.Center) * frustum._planes[5].Normal);
+            if (PointInPolygon(ref pt5, new FixedPolygon4(frustum._corners, 2, 3, 6, 7)))
+                return;
+
             result = false;
+        }
+
+        private struct FixedPolygon4
+        {
+            private Vector3[] _corners;
+            private int _v0, _v1,_v2,_v3;
+
+            internal FixedPolygon4(Vector3[] corners, int v0, int v1, int v2, int v3)
+            {
+                this._corners = corners;
+                this._v0 = v0;
+                this._v1 = v1;
+                this._v2 = v2;
+                this._v3 = v3;
+            }
+
+            public Vector3 this[int idx]
+            {
+                get
+                {
+                    switch (idx)
+                    {
+                        case 0: return _corners[_v0];
+                        case 1: return _corners[_v1];
+                        case 2: return _corners[_v2];
+                        case 3: return _corners[_v3];
+
+                        default:
+                            throw new InvalidOperationException("idx");
+                    }
+                }
+            }
+        }
+
+        private static bool PointInPolygon(ref Vector3 pt, FixedPolygon4 p)
+        {
+            int low = 0, high = 4;
+            do
+            {
+                int mid = (low + high) / 2;
+
+                Vector3 vZero = p[0];
+                Vector3 vMid  = p[mid];
+                if (TriangleIsCCW(ref vZero, ref vMid, ref pt))
+                    low = mid;
+                else
+                    high = mid;
+            } 
+            while ((low + 1) < high);
+
+            if (low == 0 || high == 4)
+                return false;
+
+            Vector3 vLow  = p[low];
+            Vector3 vHigh = p[high];
+            return TriangleIsCCW(ref vLow, ref vHigh, ref pt);
+        }
+
+        private static bool TriangleIsCCW(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2)
+        {
+            float b = (v1.X - v0.X) * (v2.Y - v0.Y) - (v1.Y - v0.Y) * (v2.X - v0.X);
+            return (b > 0);
         }
 
         private static bool SegmentIntersectsBoundingSphere(ref Vector3 pos0, ref Vector3 pos1, ref BoundingSphere sphere)
