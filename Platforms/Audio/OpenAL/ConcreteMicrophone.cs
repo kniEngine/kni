@@ -41,7 +41,11 @@ namespace Microsoft.Xna.Platform.Audio
         {
             int sampleSizeInBytes = GetSampleSizeInBytes(BufferDuration) * 2;
             _captureDevice = OpenAL.ALC.CaptureOpenDevice(deviceName, checked((uint)SampleRate), ALFormat.Mono16, sampleSizeInBytes);
-            CheckALCError("Failed to open capture device.");
+            if (_captureDevice == IntPtr.Zero)
+            {
+                CheckALCError("Failed to open capture device '"+ deviceName + "'.");
+                throw new NoMicrophoneConnectedException("Failed to open capture device'"+ deviceName + "'.");
+            }
 
             OpenAL.ALC.CaptureStart(_captureDevice);
             CheckALCError("Failed to start capture.");
