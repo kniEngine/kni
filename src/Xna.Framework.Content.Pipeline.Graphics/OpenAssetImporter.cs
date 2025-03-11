@@ -546,7 +546,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             // Walk the tree upwards to find the root bones.
             HashSet<Node> rootBones = new HashSet<Node>();
             foreach (string boneName in _deformationBones.Keys)
-                rootBones.Add(FindRootBone(aiScene, boneName));
+            {
+                Node aiRootBone = FindRootBone(aiScene, boneName);
+                rootBones.Add(aiRootBone);
+            }
 
             if (rootBones.Count > 1)
                 throw new InvalidContentException("Multiple skeletons found. Please ensure that the model does not contain more that one skeleton.", _identity);
