@@ -671,21 +671,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     // => bindPoseRel = bindPoseAbs * inverse(parentBindPoseAbs)
                     //                = inverse(offsetMatrix) * parentOffsetMatrix
 
+                    _deformationBones.TryGetValue(aiNode.Name, out Bone bone);
+                    _deformationBones.TryGetValue(aiParent.Name, out Bone parentBone);
+
                     Matrix parentOffsetMatrix = default;
-                    bool isParentOffsetMatrixValid = _deformationBones.ContainsKey(aiParent.Name);
-                    if (isParentOffsetMatrixValid)
-                        parentOffsetMatrix = ToXna(_deformationBones[aiParent.Name].OffsetMatrix);
+                    if (parentBone != null)
+                        parentOffsetMatrix = ToXna(parentBone.OffsetMatrix);
 
                     Matrix offsetMatrix = default;
-                    bool isOffsetMatrixValid = _deformationBones.ContainsKey(aiNode.Name);
-                    if (isOffsetMatrixValid)
-                        offsetMatrix = ToXna(_deformationBones[aiNode.Name].OffsetMatrix);
+                    if (bone != null)
+                        offsetMatrix = ToXna(bone.OffsetMatrix);
 
-                    if (isOffsetMatrixValid && isParentOffsetMatrixValid)
+                    if (bone != null && parentBone != null)
                     {
                         node.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
                     }
-                    else if (isOffsetMatrixValid && aiNode == _rootBone)
+                    else if (bone != null && aiNode == _rootBone)
                     {
                         // The current bone is the first in the chain.
                         // The parent offset matrix is missing. :(
@@ -693,7 +694,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // --> Let's assume that parent's transform is Identity.
                         node.Transform = Matrix.Invert(offsetMatrix);
                     }
-                    else if (isOffsetMatrixValid && aiParent == _rootBone)
+                    else if (bone != null && aiParent == _rootBone)
                     {
                         // The current bone is the second bone in the chain.
                         // The parent offset matrix is missing. :(
