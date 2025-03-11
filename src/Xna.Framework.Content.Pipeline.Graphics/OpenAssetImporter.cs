@@ -688,8 +688,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The current bone is the second bone in the chain.
                         // The parent offset matrix is missing. :(
                         // --> Derive matrix from parent bone, which is the root bone.
-                        parentOffsetMatrix = parent.Transform;
-                        node.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parentOffsetMatrix);
+                        node.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parent.Transform);
                     }
                     else
                     {
