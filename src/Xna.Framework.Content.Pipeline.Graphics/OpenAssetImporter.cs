@@ -674,13 +674,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     _deformationBones.TryGetValue(aiNode.Name, out Bone bone);
                     _deformationBones.TryGetValue(aiParent.Name, out Bone parentBone);
 
-                    Matrix offsetMatrix = default;
-                    if (bone != null)
-                        offsetMatrix = ToXna(bone.OffsetMatrix);
-
                     if (bone != null && parentBone != null)
                     {
-                        node.Transform = Matrix.Invert(offsetMatrix) * ToXna(parentBone.OffsetMatrix);
+                        node.Transform = Matrix.Invert(ToXna(bone.OffsetMatrix)) * ToXna(parentBone.OffsetMatrix);
                     }
                     else if (bone != null && aiNode == _rootBone)
                     {
@@ -688,14 +684,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The parent offset matrix is missing. :(
                        
                         // --> Let's assume that parent's transform is Identity.
-                        node.Transform = Matrix.Invert(offsetMatrix);
+                        node.Transform = Matrix.Invert(ToXna(bone.OffsetMatrix));
                     }
                     else if (bone != null && aiParent == _rootBone)
                     {
                         // The current bone is the second bone in the chain.
                         // The parent offset matrix is missing. :(
                         // --> Derive matrix from parent bone, which is the root bone.
-                        node.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parent.Transform);
+                        node.Transform = Matrix.Invert(ToXna(bone.OffsetMatrix)) * Matrix.Invert(parent.Transform);
                     }
                     else
                     {
