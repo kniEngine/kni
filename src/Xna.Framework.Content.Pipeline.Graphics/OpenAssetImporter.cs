@@ -671,27 +671,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     // => bindPoseRel = bindPoseAbs * inverse(parentBindPoseAbs)
                     //                = inverse(offsetMatrix) * parentOffsetMatrix
 
-                    _deformationBones.TryGetValue(aiNode.Name, out Bone bone);
-                    _deformationBones.TryGetValue(aiParent.Name, out Bone parentBone);
+                    _deformationBones.TryGetValue(aiNode.Name, out Bone aiBone);
+                    _deformationBones.TryGetValue(aiParent.Name, out Bone aiParentBone);
 
-                    if (bone != null && parentBone != null)
+                    if (aiBone != null && aiParentBone != null)
                     {
-                        node.Transform = Matrix.Invert(ToXna(bone.OffsetMatrix)) * ToXna(parentBone.OffsetMatrix);
+                        node.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * ToXna(aiParentBone.OffsetMatrix);
                     }
-                    else if (bone != null && aiNode == _rootBone)
+                    else if (aiBone != null && aiNode == _rootBone)
                     {
                         // The current bone is the first in the chain.
                         // The parent offset matrix is missing. :(
                        
                         // --> Let's assume that parent's transform is Identity.
-                        node.Transform = Matrix.Invert(ToXna(bone.OffsetMatrix));
+                        node.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix));
                     }
-                    else if (bone != null && aiParent == _rootBone)
+                    else if (aiBone != null && aiParent == _rootBone)
                     {
                         // The current bone is the second bone in the chain.
                         // The parent offset matrix is missing. :(
                         // --> Derive matrix from parent bone, which is the root bone.
-                        node.Transform = Matrix.Invert(ToXna(bone.OffsetMatrix)) * Matrix.Invert(parent.Transform);
+                        node.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * Matrix.Invert(parent.Transform);
                     }
                     else
                     {
