@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private ContentIdentity _identity;
 
         // Assimp scene
-        private Dictionary<string, Matrix> _deformationBones;   // The names and offset matrices of all deformation bones.
+        private Dictionary<string, Bone> _deformationBones;     // The names of all deformation bones.
         private Node _rootBone;                                 // The node that represents the root bone.
         private List<Node> _bones = new List<Node>();           // All nodes attached to the root bone.
 
@@ -565,17 +565,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </summary>
         /// <param name="aiScene">The scene.</param>
         /// <returns>A dictionary of all deformation bones and their offset matrices.</returns>
-        private static Dictionary<string, Matrix> FindDeformationBones(Scene aiScene)
+        private static Dictionary<string, Bone> FindDeformationBones(Scene aiScene)
         {
             Debug.Assert(aiScene != null);
 
-            Dictionary<string, Matrix> deformationBones = new Dictionary<string, Matrix>();
+            Dictionary<string, Bone> deformationBones = new Dictionary<string, Bone>();
             if (aiScene.HasMeshes)
                 foreach (Mesh aiMesh in aiScene.Meshes)
                     if (aiMesh.HasBones)
                         foreach (Bone aiBone in aiMesh.Bones)
                             if (!deformationBones.ContainsKey(aiBone.Name))
-                                deformationBones[aiBone.Name] = ToXna(aiBone.OffsetMatrix);
+                                deformationBones[aiBone.Name] = aiBone;
 
             return deformationBones;
         }
@@ -670,27 +670,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     // => bindPoseRel = bindPoseAbs * inverse(parentBindPoseAbs)
                     //                = inverse(offsetMatrix) * parentOffsetMatrix
 
-                    bool isOffsetMatrixValid = _deformationBones.TryGetValue(aiNode.Name, out Matrix offsetMatrix);
-                    bool isParentOffsetMatrixValid = _deformationBones.TryGetValue(aiParent.Name, out Matrix parentOffsetMatrix);
+                    _deformationBones.TryGetValue(aiNode.Name, out Bone aiBone);
+                    _deformationBones.TryGetValue(aiParent.Name, out Bone aiParentBone);
 
-                    if (isOffsetMatrixValid && isParentOffsetMatrixValid)
+                    if (aiBone != null && aiParentBone != null)
                     {
-                        bone.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
+                        bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * ToXna(aiParentBone.OffsetMatrix);
                     }
-                    else if (isOffsetMatrixValid && aiNode == _rootBone)
+                    else if (aiBone != null && aiNode == _rootBone)
                     {
                         // The current bone is the first in the chain.
                         // The parent offset matrix is missing. :(
                        
                         // --> Let's assume that parent's transform is Identity.
-                        bone.Transform = Matrix.Invert(offsetMatrix);
+                        bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix));
                     }
-                    else if (isOffsetMatrixValid && aiParent == _rootBone)
+                    else if (aiBone != null && aiParent == _rootBone)
                     {
                         // The current bone is the second bone in the chain.
                         // The parent offset matrix is missing. :(
                         // --> Derive matrix from parent bone, which is the root bone.
-                        bone.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parentBone.Transform);
+                        bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * Matrix.Invert(parentBone.Transform);
                     }
                     else
                     {
