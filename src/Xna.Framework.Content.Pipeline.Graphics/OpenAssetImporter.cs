@@ -547,7 +547,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             HashSet<Node> rootBones = new HashSet<Node>();
             foreach (string boneName in _deformationBones.Keys)
             {
-                Node aiRootBone = FindRootBone(aiScene, boneName);
+                Debug.Assert(aiScene != null);
+                Debug.Assert(!string.IsNullOrEmpty(boneName));
+
+                // Start with the specified bone.
+                Node aiNode = aiScene.RootNode.FindNode(boneName);
+                Debug.Assert(aiNode != null, "Node referenced by mesh not found in model.");
+
+                Node aiRootBone = FindRootBone(aiScene, ref aiNode);
+
                 rootBones.Add(aiRootBone);
             }
 
@@ -578,24 +586,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                                 deformationBones[aiBone.Name] = ToXna(aiBone.OffsetMatrix);
 
             return deformationBones;
-        }
-
-        /// <summary>
-        /// Finds the root bone of a specific bone in the skeleton.
-        /// </summary>
-        /// <param name="aiScene">The scene.</param>
-        /// <param name="boneName">The name of a bone in the skeleton.</param>
-        /// <returns>The root bone.</returns>
-        private static Node FindRootBone(Scene aiScene, string boneName)
-        {
-            Debug.Assert(aiScene != null);
-            Debug.Assert(!string.IsNullOrEmpty(boneName));
-
-            // Start with the specified bone.
-            Node aiNode = aiScene.RootNode.FindNode(boneName);
-            Debug.Assert(aiNode != null, "Node referenced by mesh not found in model.");
-
-            return FindRootBone(aiScene, ref aiNode);
         }
 
         /// <summary>
