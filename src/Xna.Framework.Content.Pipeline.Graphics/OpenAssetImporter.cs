@@ -111,7 +111,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private ContentIdentity _identity;
 
         // Assimp scene
-        private Dictionary<string, Matrix> _deformationBones;   // The names and offset matrices of all deformation bones.
+        private Dictionary<string, Matrix4x4> _deformationBones;// The names and offset matrices of all deformation bones.
         private Node _rootBone;                                 // The node that represents the root bone.
         private List<Node> _bones = new List<Node>();           // All nodes attached to the root bone.
 
@@ -573,17 +573,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </summary>
         /// <param name="aiScene">The scene.</param>
         /// <returns>A dictionary of all deformation bones and their offset matrices.</returns>
-        private static Dictionary<string, Matrix> FindDeformationBones(Scene aiScene)
+        private static Dictionary<string, Matrix4x4> FindDeformationBones(Scene aiScene)
         {
             Debug.Assert(aiScene != null);
 
-            Dictionary<string, Matrix> deformationBones = new Dictionary<string, Matrix>();
+            Dictionary<string, Matrix4x4> deformationBones = new Dictionary<string, Matrix4x4>();
             if (aiScene.HasMeshes)
                 foreach (Mesh aiMesh in aiScene.Meshes)
                     if (aiMesh.HasBones)
                         foreach (Bone aiBone in aiMesh.Bones)
                             if (!deformationBones.ContainsKey(aiBone.Name))
-                                deformationBones[aiBone.Name] = ToXna(aiBone.OffsetMatrix);
+                                deformationBones[aiBone.Name] = aiBone.OffsetMatrix;
 
             return deformationBones;
         }
@@ -674,12 +674,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     Matrix parentOffsetMatrix = default;
                     bool isParentOffsetMatrixValid = _deformationBones.ContainsKey(aiParent.Name);
                     if (isParentOffsetMatrixValid)
-                        parentOffsetMatrix = _deformationBones[aiParent.Name];
+                        parentOffsetMatrix = ToXna(_deformationBones[aiParent.Name]);
 
                     Matrix offsetMatrix = default;
                     bool isOffsetMatrixValid = _deformationBones.ContainsKey(aiNode.Name);
                     if (isOffsetMatrixValid)
-                        offsetMatrix = _deformationBones[aiNode.Name];
+                        offsetMatrix = ToXna(_deformationBones[aiNode.Name]);
 
                     if (isOffsetMatrixValid && isParentOffsetMatrixValid)
                     {
