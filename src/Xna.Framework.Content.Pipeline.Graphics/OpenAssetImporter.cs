@@ -674,17 +674,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     _deformationBones.TryGetValue(aiNode.Name, out Bone bone);
                     _deformationBones.TryGetValue(aiParent.Name, out Bone parentBone);
 
-                    Matrix parentOffsetMatrix = default;
-                    if (parentBone != null)
-                        parentOffsetMatrix = ToXna(parentBone.OffsetMatrix);
-
                     Matrix offsetMatrix = default;
                     if (bone != null)
                         offsetMatrix = ToXna(bone.OffsetMatrix);
 
                     if (bone != null && parentBone != null)
                     {
-                        node.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
+                        node.Transform = Matrix.Invert(offsetMatrix) * ToXna(parentBone.OffsetMatrix);
                     }
                     else if (bone != null && aiNode == _rootBone)
                     {
