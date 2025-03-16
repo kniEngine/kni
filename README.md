@@ -5,7 +5,7 @@ Kni is a simple and powerful .NET framework for creating games for desktop PCs, 
 It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://en.wikipedia.org/wiki/Microsoft_XNA).
 Kni is a derivative of [MonoGame & XNA Touch](https://github.com/MonoGame/MonoGame).
 
-[![Join the chat at https://discord.gg/monogame](https://img.shields.io/discord/355231098122272778?color=%237289DA&label=MonoGame&logo=discord&logoColor=white)](https://discord.gg/monogame)
+![Join the chat at Discord](https://img.shields.io/discord/1350735302011912192?logo=discord&label=KNI&link=https%3A%2F%2Fdiscord.gg%2FaTe3W2J4YF)
 
 * [Build Status](#build-status)
 * [Supported Platforms](#supported-platforms)
@@ -62,12 +62,14 @@ A high level breakdown of the components of the framework:
 
 ## Helpful Links
 
-* [monogame.net](http://www.monogame.net).
 * Our [issue tracker](https://github.com/kniengine/kni/issues) is on GitHub.
 * Use [discussions forums](https://github.com/kniEngine/kni/discussions) for support questions.
-* You can [join the Discord server](https://discord.gg/monogame) and chat live with the core developers and other users.
-* The [MonoGame documentation](http://www.monogame.net/documentation/).
+* You can join the [Discord server](https://discord.gg/aTe3W2J4YF) and chat live with the core developers and other users.
 * Download release and development tools [Releases](https://github.com/kniEngine/kni/releases).
+* The [XNAGameStudio](https://github.com/kniEngine/XNAGameStudio) repo, contain XNA samples ported to KNI.
+* The [MonoGame documentation](http://www.monogame.net/documentation/).
+* Join the [MonoGame Discord server](https://discord.gg/monogame) and the [FNA Discord server](https://discord.gg/fna-xna) and chat live with other users from the community.
+* If you requre modern shader features, check out the [MonoGame Compute Fork](https://github.com/cpt-max/MonoGame).
 
 ## License
 
