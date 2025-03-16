@@ -69,7 +69,7 @@ A high level breakdown of the components of the framework:
 * The [XNAGameStudio](https://github.com/kniEngine/XNAGameStudio) repo, contain XNA samples ported to KNI.
 * The [MonoGame documentation](http://www.monogame.net/documentation/).
 * Join the [MonoGame Discord server](https://discord.gg/monogame) and the [FNA Discord server](https://discord.gg/fna-xna) and chat live with other users from the community.
-* If you requre modern shader features, check out the [MonoGame Compute Fork](https://github.com/cpt-max/MonoGame).
+* If you require modern shader features, check out the [MonoGame Compute Fork](https://github.com/cpt-max/MonoGame).
 
 ## License
 
