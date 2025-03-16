@@ -32,7 +32,7 @@ We support a growing list of platforms across the desktop, mobile, and VR/AR spa
 
 If you think you have found a bug or have a feature request, use our [issue tracker](https://github.com/kniengine/kni/issues). Before opening a new issue, please search to see if your problem has already been reported.  Try to be as detailed as possible in your issue reports.
 
-If you need help using Kni or have other questions we suggest you post on our [community forums](http://community.monogame.net).  Please do not use the GitHub issue tracker for personal support requests.
+If you need help using Kni or have other questions we suggest you post on our [discussions forums](https://github.com/kniEngine/kni/discussions).  Please do not use the GitHub issue tracker for personal support requests.
 
 If you are interested in contributing fixes or features to Kni, please read our [contributors guide](CONTRIBUTING.md) first.
 
@@ -64,7 +64,7 @@ A high level breakdown of the components of the framework:
 
 * [monogame.net](http://www.monogame.net).
 * Our [issue tracker](https://github.com/kniengine/kni/issues) is on GitHub.
-* Use [community forums](http://community.monogame.net/) for support questions.
+* Use [discussions forums](https://github.com/kniEngine/kni/discussions) for support questions.
 * You can [join the Discord server](https://discord.gg/monogame) and chat live with the core developers and other users.
 * The [MonoGame documentation](http://www.monogame.net/documentation/).
 * Download release and development tools [Releases](https://github.com/kniEngine/kni/releases).
