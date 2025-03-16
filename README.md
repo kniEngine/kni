@@ -2,7 +2,7 @@
 
 Kni is a simple and powerful .NET framework for creating games for desktop PCs, and mobile devices, Virual Reality headsets and the Web, using [dotnet](https://dotnet.microsoft.com/) framework & the C# programming language. 
 
-It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://msdn.microsoft.com/en-us/library/bb200104.aspx).
+It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://en.wikipedia.org/wiki/Microsoft_XNA).
 Kni is a derivative of [MonoGame & XNA Touch](https://github.com/MonoGame/MonoGame).
 
 [![Join the chat at https://discord.gg/monogame](https://img.shields.io/discord/355231098122272778?color=%237289DA&label=MonoGame&logo=discord&logoColor=white)](https://discord.gg/monogame)
