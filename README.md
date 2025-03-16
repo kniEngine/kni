@@ -1,11 +1,11 @@
 ﻿# Kni
 
-Kni is a simple and powerful .NET framework for creating games for desktop PCs, and mobile devices using the C# programming language. 
+Kni is a simple and powerful .NET framework for creating games for desktop PCs, and mobile devices, Virual Reality headsets and the Web, using [dotnet](https://dotnet.microsoft.com/) framework & the C# programming language. 
 
-It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://msdn.microsoft.com/en-us/library/bb200104.aspx).
+It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://en.wikipedia.org/wiki/Microsoft_XNA).
 Kni is a derivative of [MonoGame & XNA Touch](https://github.com/MonoGame/MonoGame).
 
-[![Join the chat at https://discord.gg/monogame](https://img.shields.io/discord/355231098122272778?color=%237289DA&label=MonoGame&logo=discord&logoColor=white)](https://discord.gg/monogame)
+![Join the chat at Discord](https://img.shields.io/discord/1350735302011912192?logo=discord&label=KNI&link=https%3A%2F%2Fdiscord.gg%2FaTe3W2J4YF)
 
 * [Build Status](#build-status)
 * [Supported Platforms](#supported-platforms)
@@ -16,23 +16,23 @@ Kni is a derivative of [MonoGame & XNA Touch](https://github.com/MonoGame/MonoGa
 
 ## Supported Platforms
 
-We support a growing list of platforms across the desktop, mobile, and console space.  If there is a platform we don't support, please [make a request](https://github.com/MonoGame/MonoGame/issues) or [come help us](CONTRIBUTING.md) add it.
+We support a growing list of platforms across the desktop, mobile, and VR/AR space.  If there is a platform we don't support, please [make a request](https://github.com/MonoGame/MonoGame/issues) or [come help us](CONTRIBUTING.md) add it.
 
- * Windows 8.1 and up (OpenGL & DirectX)
- * Windows Store Apps (UWP)
- * Oculus VR (OvrPC/DirectX/meta link)
+ * Windows 8.1 and up (OpenGL & DirectX11)
+ * Windows Store Apps (UAP)
+ * Oculus VR (OvrPC/DirectX11/meta link)
  * Oculus VR/AR (native/OpenGL)
  * Linux (OpenGL)
  * macOS 10.15 and up (OpenGL)
  * Android 6.0 and up (OpenGL)
  * iPhone/iPad 10.0 and up (OpenGL)
- * Web Browsers (WebGL)
+ * Web Browsers & WebXR (WebGL)
 
 ## Support and Contributions
 
 If you think you have found a bug or have a feature request, use our [issue tracker](https://github.com/kniengine/kni/issues). Before opening a new issue, please search to see if your problem has already been reported.  Try to be as detailed as possible in your issue reports.
 
-If you need help using Kni or have other questions we suggest you post on our [community forums](http://community.monogame.net).  Please do not use the GitHub issue tracker for personal support requests.
+If you need help using Kni or have other questions we suggest you post on our [discussions forums](https://github.com/kniEngine/kni/discussions).  Please do not use the GitHub issue tracker for personal support requests.
 
 If you are interested in contributing fixes or features to Kni, please read our [contributors guide](CONTRIBUTING.md) first.
 
@@ -49,10 +49,10 @@ For the prerequisites for building from source, please look at the [Requirements
 
 A high level breakdown of the components of the framework:
 
-* The game framework is found in [MonoGame.Framework](MonoGame.Framework).
-* The core math types are located in [src/Xna.Framework](src/Xna.Framework).
+* The core framework libraries are located in [src](src).
+* The base content pipeline library is located in [src/Xna.Framework.Content.Pipeline](src/Xna.Framework.Content.Pipeline).
 * The Design converters are located in [src/Xna.Framework.Design](src/Xna.Framework.Design).
-* The content pipeline is located in [src/Xna.Framework.Content.Pipeline](src/Xna.Framework.Content.Pipeline).
+* The platform backend implementations are found in [Platforms](Platforms).
 * Project templates are in [Templates](Templates).
 * See [Tests](Tests) for the framework unit tests.
 * See [Tools/Tests](Tools/MonoGame.Tools.Tests) for the content pipeline and other tool tests.
@@ -62,12 +62,14 @@ A high level breakdown of the components of the framework:
 
 ## Helpful Links
 
-* [monogame.net](http://www.monogame.net).
 * Our [issue tracker](https://github.com/kniengine/kni/issues) is on GitHub.
-* Use [community forums](http://community.monogame.net/) for support questions.
-* You can [join the Discord server](https://discord.gg/monogame) and chat live with the core developers and other users.
-* The [MonoGame documentation](http://www.monogame.net/documentation/).
+* Use [discussions forums](https://github.com/kniEngine/kni/discussions) for support questions.
+* You can join the [Discord server](https://discord.gg/aTe3W2J4YF) and chat live with the core developers and other users.
 * Download release and development tools [Releases](https://github.com/kniEngine/kni/releases).
+* The [XNAGameStudio](https://github.com/kniEngine/XNAGameStudio) repo, contain XNA samples ported to KNI.
+* The [MonoGame documentation](http://www.monogame.net/documentation/).
+* Join the [MonoGame Discord server](https://discord.gg/monogame) and the [FNA Discord server](https://discord.gg/fna-xna) and chat live with other users from the community.
+* If you requre modern shader features, check out the [MonoGame Compute Fork](https://github.com/cpt-max/MonoGame).
 
 ## License
 
