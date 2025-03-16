@@ -1,6 +1,6 @@
 ﻿# Kni
 
-Kni is a simple and powerful .NET framework for creating games for desktop PCs, and mobile devices using the C# programming language. 
+Kni is a simple and powerful .NET framework for creating games for desktop PCs, and mobile devices, Virual Reality headsets and the Web, using [dotnet](https://dotnet.microsoft.com/) framework & the C# programming language. 
 
 It is an open-source re-implementation of the discontinued [Microsoft's XNA Framework](https://msdn.microsoft.com/en-us/library/bb200104.aspx).
 Kni is a derivative of [MonoGame & XNA Touch](https://github.com/MonoGame/MonoGame).
@@ -16,17 +16,17 @@ Kni is a derivative of [MonoGame & XNA Touch](https://github.com/MonoGame/MonoGa
 
 ## Supported Platforms
 
-We support a growing list of platforms across the desktop, mobile, and console space.  If there is a platform we don't support, please [make a request](https://github.com/MonoGame/MonoGame/issues) or [come help us](CONTRIBUTING.md) add it.
+We support a growing list of platforms across the desktop, mobile, and VR/AR space.  If there is a platform we don't support, please [make a request](https://github.com/MonoGame/MonoGame/issues) or [come help us](CONTRIBUTING.md) add it.
 
- * Windows 8.1 and up (OpenGL & DirectX)
- * Windows Store Apps (UWP)
- * Oculus VR (OvrPC/DirectX/meta link)
+ * Windows 8.1 and up (OpenGL & DirectX11)
+ * Windows Store Apps (UAP)
+ * Oculus VR (OvrPC/DirectX11/meta link)
  * Oculus VR/AR (native/OpenGL)
  * Linux (OpenGL)
  * macOS 10.15 and up (OpenGL)
  * Android 6.0 and up (OpenGL)
  * iPhone/iPad 10.0 and up (OpenGL)
- * Web Browsers (WebGL)
+ * Web Browsers & WebXR (WebGL)
 
 ## Support and Contributions
 
