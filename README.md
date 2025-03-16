@@ -49,10 +49,10 @@ For the prerequisites for building from source, please look at the [Requirements
 
 A high level breakdown of the components of the framework:
 
-* The game framework is found in [MonoGame.Framework](MonoGame.Framework).
-* The core math types are located in [src/Xna.Framework](src/Xna.Framework).
+* The core framework libraries are located in [src](src).
+* The base content pipeline library is located in [src/Xna.Framework.Content.Pipeline](src/Xna.Framework.Content.Pipeline).
 * The Design converters are located in [src/Xna.Framework.Design](src/Xna.Framework.Design).
-* The content pipeline is located in [src/Xna.Framework.Content.Pipeline](src/Xna.Framework.Content.Pipeline).
+* The platform backend implementations are found in [Platforms](Platforms).
 * Project templates are in [Templates](Templates).
 * See [Tests](Tests) for the framework unit tests.
 * See [Tools/Tests](Tools/MonoGame.Tools.Tests) for the content pipeline and other tool tests.
