@@ -1,4 +1,4 @@
-# Migrating from MonoGame 3.8.1 to KNI 3.14
+# Migrating from MonoGame 3.8.1 to KNI 4.0
 
 
 ## Migrating Framework
