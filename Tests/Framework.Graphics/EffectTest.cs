@@ -328,6 +328,82 @@ namespace Kni.Tests.Graphics
         }
 
         [Test]
+        public void OldSyntaxEffectPassShouldSetTexturesAndNotSamplers2()
+        {
+            GraphicsDevice device = game.GraphicsDevice;
+
+            // Reset Samplers and Textures
+            for (int i = 0; i < 16; i++)
+            {
+                device.Textures[i] = null;
+                device.SamplerStates[i] = SamplerState.LinearWrap;
+            }
+
+            Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            texture0.Name = "texture0";
+            texture1.Name = "texture1";
+            texture0.SetData(new Color[] { new Color(0f, 0f, 1f, 1f) });
+            texture1.SetData(new Color[] { new Color(0f, 1f, 0f, 1f) });
+
+            SamplerState sampler0 = SamplerState.LinearWrap;
+            SamplerState sampler1 = SamplerState.LinearWrap;
+
+            string effectName = "OldSyntax_t1t0";
+
+#if WINDOWSDX || DESKTOPGL
+            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+#else
+            Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
+#endif
+
+            effect.Parameters["Texture0"].SetValue(texture0);
+            effect.Parameters["Texture1"].SetValue(texture1);
+
+            BasicEffect basicEffect = new BasicEffect(device);
+            basicEffect.World = Matrix.Identity;
+            basicEffect.View = Matrix.Identity;
+            basicEffect.Projection = Matrix.Identity;
+            basicEffect.CurrentTechnique.Passes[0].Apply(); // apply basic VertexShader
+
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
+            effectPass.Apply();
+
+            Assert.That(device.Textures[0], Is.SameAs(texture0));
+            Assert.That(device.Textures[1], Is.SameAs(texture1));
+            Assert.That(device.Textures[2], Is.Null);
+
+            Assert.That(IsSamplerEqual(device.SamplerStates[0], sampler0));
+            Assert.That(IsSamplerEqual(device.SamplerStates[1], sampler1));
+            Assert.That(device.SamplerStates[2], Is.SameAs(SamplerState.LinearWrap));
+
+
+            RenderTarget2D rt = new RenderTarget2D(device, 1, 1);
+            device.SetRenderTarget(rt);
+            device.Clear(Color.Black);
+            VertexPosition[] vertices = new VertexPosition[4];
+            vertices[0].Position = new Vector3(-1, -1, 0);
+            vertices[1].Position = new Vector3( 1, -1, 0);
+            vertices[2].Position = new Vector3(-1,  1, 0);
+            vertices[3].Position = new Vector3( 1,  1, 0);
+            device.BlendState = BlendState.Opaque;
+            device.DepthStencilState = DepthStencilState.None;
+            device.RasterizerState = RasterizerState.CullNone;
+            device.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, 2);
+            device.SetRenderTarget(null);
+            Color[] data = new Color[1];
+            rt.GetData(data);
+            //TODO: this currently fails on DX11. The order of texture slots has to be swapped.
+            Assert.That(data[0] == new Color(0f, 0.5f, 1f, 1f));
+            rt.Dispose();
+
+
+            effect.Dispose();
+            texture1.Dispose();
+            texture0.Dispose();
+        }
+
+        [Test]
         public void OldSyntaxEffectPassShouldSetTexturesAndSamplers()
         {
             GraphicsDevice device = game.GraphicsDevice;
