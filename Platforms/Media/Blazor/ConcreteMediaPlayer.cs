@@ -15,12 +15,15 @@ namespace Microsoft.Xna.Platform.Media
     {
         WasmDom.Audio _webPlayer;
         private Song _playingSong;
+        bool _isFirstLoop;
+        TimeSpan _prevCurrentTime;
 
         internal ConcreteMediaPlayerStrategy()
         {
             _webPlayer = new WasmDom.Audio();
             _webPlayer.OnEnded += WebPlayer_OnEnded;
             _webPlayer.OnPlaying += WebPlayer_OnPlaying;
+            _webPlayer.OnTimeUpdate += _webPlayer_OnTimeUpdate;
         }
 
         #region Properties
@@ -90,6 +93,8 @@ namespace Microsoft.Xna.Platform.Media
                 _webPlayer.Loop = this.PlatformIsRepeating;
                 _playingSong = song;
 
+                _isFirstLoop = true;
+                _prevCurrentTime = TimeSpan.Zero;
                 _webPlayer.Play();
                 ((IPlatformSong)song).Strategy.PlayCount++;
             }
@@ -129,6 +134,39 @@ namespace Microsoft.Xna.Platform.Media
 
         private void WebPlayer_OnPlaying(object sender, EventArgs e)
         {
+            WasmDom.Audio webPlayer = (WasmDom.Audio)sender;
+
+            if (_isFirstLoop)
+            {
+                // ignore first OnPlaying event.
+                _isFirstLoop = false;
+                return;
+            }
+
+            // detect looping.
+            if (this.PlatformIsRepeating)
+            {
+                if (this.State == MediaState.Playing)
+                {
+                    // ignore OnPlaying event due to streaming pause.
+                    if (_prevCurrentTime != TimeSpan.Zero)
+                        return;
+
+                    Song activeSong = this.Queue.ActiveSong;
+
+                    ((IPlatformSong)_playingSong).Strategy.PlayCount++;
+
+                    base.OnPlatformMediaStateChanged();
+                    // check if user changed the state during the MediaStateChanged event.
+                    if (this.State != MediaState.Playing
+                    ||  this.Queue.ActiveSong != activeSong)
+                    {
+                        return;
+                    }
+
+                    base.OnPlatformActiveSongChanged();
+                }
+            }
         }
 
         private void WebPlayer_OnEnded(object sender, EventArgs e)
@@ -138,6 +176,14 @@ namespace Microsoft.Xna.Platform.Media
                 _playingSong = null;
                 base.OnSongFinishedPlaying();
             }
+        }
+
+        private void _webPlayer_OnTimeUpdate(object sender, EventArgs e)
+        {
+            WasmDom.Audio webPlayer = (WasmDom.Audio)sender;
+            TimeSpan currentTime = webPlayer.CurrentTime;
+
+            _prevCurrentTime = currentTime;
         }
 
 
