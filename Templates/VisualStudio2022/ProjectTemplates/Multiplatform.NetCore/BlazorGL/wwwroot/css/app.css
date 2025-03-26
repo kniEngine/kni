@@ -81,6 +81,9 @@ a, .btn-link
     right: 0px;
     bottom: 0px;
     left: 0px;
+
+    /* Disable text highlighting and magnifying glass on iPhone/webkit */
+    -webkit-user-select: none;
 }
 
 
