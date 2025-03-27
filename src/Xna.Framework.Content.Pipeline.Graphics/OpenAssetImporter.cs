@@ -546,7 +546,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             // Walk the tree upwards to find the root bones.
             HashSet<Node> rootBones = new HashSet<Node>();
             foreach (string boneName in _deformationBones.Keys)
-                rootBones.Add(FindRootBone(aiScene, boneName));
+            {
+                Node aiRootBone = FindRootBone(aiScene, boneName);
+                rootBones.Add(aiRootBone);
+            }
 
             if (rootBones.Count > 1)
                 throw new InvalidContentException("Multiple skeletons found. Please ensure that the model does not contain more that one skeleton.", _identity);
@@ -589,16 +592,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(!string.IsNullOrEmpty(boneName));
 
             // Start with the specified bone.
-            Node node = aiScene.RootNode.FindNode(boneName);
-            Debug.Assert(node != null, "Node referenced by mesh not found in model.");
+            Node aiNode = aiScene.RootNode.FindNode(boneName);
+            Debug.Assert(aiNode != null, "Node referenced by mesh not found in model.");
 
             // Walk all the way up to the scene root or the mesh node.
-            Node rootBone = node;
-            while (node != aiScene.RootNode && !node.HasMeshes)
+            Node rootBone = aiNode;
+            while (aiNode != aiScene.RootNode && !aiNode.HasMeshes)
             {
-                rootBone = node;
+                rootBone = aiNode;
 
-                node = node.Parent;
+                aiNode = aiNode.Parent;
             }
 
             return rootBone;
@@ -613,7 +616,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 return;
 
             // Convert nodes to bones and attach to root node.
-            BoneContent rootBoneContent = (BoneContent)ImportBones(_rootBone, _rootBone.Parent, null);
+            BoneContent rootBoneContent = ImportBones(_rootBone, _rootBone.Parent, null);
             rootNode.Children.Add(rootBoneContent);
 
             if (!aiScene.HasAnimations)
@@ -632,21 +635,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </summary>
         /// <param name="aiNode">The node.</param>
         /// <param name="aiParent">The parent node.</param>
-        /// <param name="parent">The <paramref name="aiParent"/> node converted to XNA.</param>
+        /// <param name="parentBone">The <paramref name="aiParent"/> node converted to XNA.</param>
         /// <returns>The XNA <see cref="NodeContent"/>.</returns>
-        private NodeContent ImportBones(Node aiNode, Node aiParent, NodeContent parent)
+        private BoneContent ImportBones(Node aiNode, Node aiParent, BoneContent parentBone)
         {
             Debug.Assert(aiNode != null);
             Debug.Assert(aiParent != null);
 
-            NodeContent node = null;
+            BoneContent bone = null;
             {
                 if (_bones.Contains(aiNode))
                 {
                     // Bone
-                    node = new BoneContent();
-                    node.Name = aiNode.Name;
-                    node.Identity = _identity;
+                    bone = new BoneContent();
+                    bone.Name = aiNode.Name;
+                    bone.Identity = _identity;
 
                     // node.Transform is irrelevant for bones. This transform is just the
                     // pose of the node at the time of the export. This could, for example,
@@ -673,7 +676,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     bool isParentOffsetMatrixValid = _deformationBones.TryGetValue(aiParent.Name, out parentOffsetMatrix);
                     if (isOffsetMatrixValid && isParentOffsetMatrixValid)
                     {
-                        node.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
+                        bone.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
                     }
                     else if (isOffsetMatrixValid && aiNode == _rootBone)
                     {
@@ -681,40 +684,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The parent offset matrix is missing. :(
                        
                         // --> Let's assume that parent's transform is Identity.
-                        node.Transform = Matrix.Invert(offsetMatrix);
+                        bone.Transform = Matrix.Invert(offsetMatrix);
                     }
                     else if (isOffsetMatrixValid && aiParent == _rootBone)
                     {
                         // The current bone is the second bone in the chain.
                         // The parent offset matrix is missing. :(
                         // --> Derive matrix from parent bone, which is the root bone.
-                        parentOffsetMatrix = parent.Transform;
-                        node.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parentOffsetMatrix);
+                        bone.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parentBone.Transform);
                     }
                     else
                     {
                         // Offset matrices are not provided by Assimp. :(
                         // Let's hope that the skeleton was exported in bind pose.
                         // (Otherwise we are just importing garbage.)
-                        node.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
+                        bone.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
                     }
                 }
             }
 
-            if (node != null)
+            if (bone != null)
             {
-                if (parent != null)
-                    parent.Children.Add(node);
+                if (parentBone != null)
+                    parentBone.Children.Add(bone);
 
                 // For the children, this is the new parent.
                 aiParent = aiNode;
-                parent = node;
+                parentBone = bone;
             }
 
             foreach (Node aiChild in aiNode.Children)
-                ImportBones(aiChild, aiParent, parent);
+                ImportBones(aiChild, aiParent, parentBone);
 
-            return node;
+            return bone;
         }
 
         /// <summary>
