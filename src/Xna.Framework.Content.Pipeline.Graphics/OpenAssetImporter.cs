@@ -592,16 +592,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(!string.IsNullOrEmpty(boneName));
 
             // Start with the specified bone.
-            Node node = aiScene.RootNode.FindNode(boneName);
-            Debug.Assert(node != null, "Node referenced by mesh not found in model.");
+            Node aiNode = aiScene.RootNode.FindNode(boneName);
+            Debug.Assert(aiNode != null, "Node referenced by mesh not found in model.");
 
             // Walk all the way up to the scene root or the mesh node.
-            Node rootBone = node;
-            while (node != aiScene.RootNode && !node.HasMeshes)
+            Node rootBone = aiNode;
+            while (aiNode != aiScene.RootNode && !aiNode.HasMeshes)
             {
-                rootBone = node;
+                rootBone = aiNode;
 
-                node = node.Parent;
+                aiNode = aiNode.Parent;
             }
 
             return rootBone;
