@@ -642,14 +642,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(aiNode != null);
             Debug.Assert(aiParent != null);
 
-            NodeContent node = null;
+            NodeContent bone = null;
             {
                 if (_bones.Contains(aiNode))
                 {
                     // Bone
-                    node = new BoneContent();
-                    node.Name = aiNode.Name;
-                    node.Identity = _identity;
+                    bone = new BoneContent();
+                    bone.Name = aiNode.Name;
+                    bone.Identity = _identity;
 
                     // node.Transform is irrelevant for bones. This transform is just the
                     // pose of the node at the time of the export. This could, for example,
@@ -676,7 +676,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     bool isParentOffsetMatrixValid = _deformationBones.TryGetValue(aiParent.Name, out parentOffsetMatrix);
                     if (isOffsetMatrixValid && isParentOffsetMatrixValid)
                     {
-                        node.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
+                        bone.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
                     }
                     else if (isOffsetMatrixValid && aiNode == _rootBone)
                     {
@@ -684,7 +684,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The parent offset matrix is missing. :(
                        
                         // --> Let's assume that parent's transform is Identity.
-                        node.Transform = Matrix.Invert(offsetMatrix);
+                        bone.Transform = Matrix.Invert(offsetMatrix);
                     }
                     else if (isOffsetMatrixValid && aiParent == _rootBone)
                     {
@@ -692,32 +692,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The parent offset matrix is missing. :(
                         // --> Derive matrix from parent bone, which is the root bone.
                         parentOffsetMatrix = parent.Transform;
-                        node.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parentOffsetMatrix);
+                        bone.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parentOffsetMatrix);
                     }
                     else
                     {
                         // Offset matrices are not provided by Assimp. :(
                         // Let's hope that the skeleton was exported in bind pose.
                         // (Otherwise we are just importing garbage.)
-                        node.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
+                        bone.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
                     }
                 }
             }
 
-            if (node != null)
+            if (bone != null)
             {
                 if (parent != null)
-                    parent.Children.Add(node);
+                    parent.Children.Add(bone);
 
                 // For the children, this is the new parent.
                 aiParent = aiNode;
-                parent = node;
+                parent = bone;
             }
 
             foreach (Node aiChild in aiNode.Children)
                 ImportBones(aiChild, aiParent, parent);
 
-            return node;
+            return bone;
         }
 
         /// <summary>
