@@ -635,9 +635,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </summary>
         /// <param name="aiNode">The node.</param>
         /// <param name="aiParent">The parent node.</param>
-        /// <param name="parent">The <paramref name="aiParent"/> node converted to XNA.</param>
+        /// <param name="parentBone">The <paramref name="aiParent"/> node converted to XNA.</param>
         /// <returns>The XNA <see cref="NodeContent"/>.</returns>
-        private NodeContent ImportBones(Node aiNode, Node aiParent, NodeContent parent)
+        private NodeContent ImportBones(Node aiNode, Node aiParent, NodeContent parentBone)
         {
             Debug.Assert(aiNode != null);
             Debug.Assert(aiParent != null);
@@ -691,7 +691,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         // The current bone is the second bone in the chain.
                         // The parent offset matrix is missing. :(
                         // --> Derive matrix from parent bone, which is the root bone.
-                        parentOffsetMatrix = parent.Transform;
+                        parentOffsetMatrix = parentBone.Transform;
                         bone.Transform = Matrix.Invert(offsetMatrix) * Matrix.Invert(parentOffsetMatrix);
                     }
                     else
@@ -706,16 +706,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             if (bone != null)
             {
-                if (parent != null)
-                    parent.Children.Add(bone);
+                if (parentBone != null)
+                    parentBone.Children.Add(bone);
 
                 // For the children, this is the new parent.
                 aiParent = aiNode;
-                parent = bone;
+                parentBone = bone;
             }
 
             foreach (Node aiChild in aiNode.Children)
-                ImportBones(aiChild, aiParent, parent);
+                ImportBones(aiChild, aiParent, parentBone);
 
             return bone;
         }
