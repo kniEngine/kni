@@ -670,10 +670,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     // => bindPoseRel = bindPoseAbs * inverse(parentBindPoseAbs)
                     //                = inverse(offsetMatrix) * parentOffsetMatrix
 
-                    Matrix offsetMatrix;
-                    Matrix parentOffsetMatrix;
-                    bool isOffsetMatrixValid = _deformationBones.TryGetValue(aiNode.Name, out offsetMatrix);
-                    bool isParentOffsetMatrixValid = _deformationBones.TryGetValue(aiParent.Name, out parentOffsetMatrix);
+                    bool isOffsetMatrixValid = _deformationBones.TryGetValue(aiNode.Name, out Matrix offsetMatrix);
+                    bool isParentOffsetMatrixValid = _deformationBones.TryGetValue(aiParent.Name, out Matrix parentOffsetMatrix);
+
                     if (isOffsetMatrixValid && isParentOffsetMatrixValid)
                     {
                         bone.Transform = Matrix.Invert(offsetMatrix) * parentOffsetMatrix;
