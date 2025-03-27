@@ -616,7 +616,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 return;
 
             // Convert nodes to bones and attach to root node.
-            BoneContent rootBoneContent = (BoneContent)ImportBones(_rootBone, _rootBone.Parent, null);
+            BoneContent rootBoneContent = ImportBones(_rootBone, _rootBone.Parent, null);
             rootNode.Children.Add(rootBoneContent);
 
             if (!aiScene.HasAnimations)
@@ -637,12 +637,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <param name="aiParent">The parent node.</param>
         /// <param name="parentBone">The <paramref name="aiParent"/> node converted to XNA.</param>
         /// <returns>The XNA <see cref="NodeContent"/>.</returns>
-        private NodeContent ImportBones(Node aiNode, Node aiParent, NodeContent parentBone)
+        private BoneContent ImportBones(Node aiNode, Node aiParent, BoneContent parentBone)
         {
             Debug.Assert(aiNode != null);
             Debug.Assert(aiParent != null);
 
-            NodeContent bone = null;
+            BoneContent bone = null;
             {
                 if (_bones.Contains(aiNode))
                 {
