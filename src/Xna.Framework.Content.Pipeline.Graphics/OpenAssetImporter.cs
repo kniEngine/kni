@@ -285,8 +285,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (aiMaterial.HasColorSpecular)
                     material.SpecularColor = ToXna(aiMaterial.ColorSpecular);
 
-                if (aiMaterial.HasShininessStrength)
-                    material.SpecularPower = aiMaterial.ShininessStrength; // aiMaterial.Shininess; // TNC: maintain backward compatibility. Should this be (ShininessStrength*Shininess)?
+                if (aiMaterial.HasShininess)
+                    material.SpecularPower = aiMaterial.Shininess;
                 
                 materials.Add(material);
             }
