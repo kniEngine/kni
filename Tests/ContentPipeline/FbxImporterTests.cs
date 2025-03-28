@@ -144,6 +144,7 @@ namespace Kni.Tests.ContentPipeline
             Assert.AreEqual(new Vector3(0.8f, 0.8f, 0.8f), materials["character_anim:pantsM"].DiffuseColor);
             Assert.AreEqual(new Vector3(1.0f, 1.0f, 1.0f), materials["character_anim:upBodyM"].DiffuseColor);
             Assert.AreEqual(new Vector3(1.0f, 1.0f, 1.0f), materials["character_anim:eyeBallM"].DiffuseColor);
+
             Assert.AreEqual(1.24573088f, materials["character_anim:headM"].SpecularPower, 0.00001f);
             Assert.AreEqual(1.24573088f, materials["character_anim:jacketM"].SpecularPower, 0.00001f);
             Assert.AreEqual(1.24573088f, materials["character_anim:pantsM"].SpecularPower, 0.00001f);
@@ -222,11 +223,9 @@ namespace Kni.Tests.ContentPipeline
             foreach (var c in animationContent.Channels.Values)
                 Assert.Greater(c.Count, 0);
 
-            // I think in this case the old XNA FBX importer was bugged and
-            // returned a bigger animation duration that is correct.  Looking
-            // at the content of the FBX ascii i can see the math is:
+            // Looking at the content of the FBX ASCII I can see the math is:
             // 
-            //  (57732697500 - 1924423250) / 46186158000 = 1.208 seconds
+            //  (57732697500 - 1924423250) / 46186158000 = 1.2083333 seconds
             //
             // Which is the correct result and what our FBX importer returns.
             // I highly suspect that XNA was wrong.
@@ -236,7 +235,7 @@ namespace Kni.Tests.ContentPipeline
 #if XNA
             Assert.AreEqual(12670000, animationContent.Duration.Ticks);
 #else
-            Assert.AreEqual(12080000, animationContent.Duration.Ticks);            
+            Assert.AreEqual(12083333, animationContent.Duration.Ticks);
 #endif
 
             // TODO: XNA assigns the identity to null on all NodeContent

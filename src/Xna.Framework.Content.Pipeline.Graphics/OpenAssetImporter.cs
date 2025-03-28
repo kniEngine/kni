@@ -729,7 +729,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             AnimationContent animation = new AnimationContent();
             animation.Name = aiAnimation.Name.Replace("AnimStack::", string.Empty);
             animation.Identity = _identity;
-            animation.Duration = TimeSpan.FromSeconds(aiAnimation.DurationInTicks / aiAnimation.TicksPerSecond);
+            animation.Duration = TimeSpan.FromTicks((long)(aiAnimation.DurationInTicks * TimeSpan.TicksPerSecond / aiAnimation.TicksPerSecond));
 
             // In Assimp animation channels may be split into separate channels.
             // Group animation channels by name.
