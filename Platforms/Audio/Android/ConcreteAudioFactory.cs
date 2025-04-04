@@ -1,4 +1,4 @@
-﻿// Copyright (C)2022 Nick Kastellanos
+﻿// Copyright (C)2022-2025 Nick Kastellanos
 
 namespace Microsoft.Xna.Platform.Audio
 {
@@ -6,7 +6,7 @@ namespace Microsoft.Xna.Platform.Audio
     {
         public override AudioServiceStrategy CreateAudioServiceStrategy()
         {
-            return new ConcreteAudioService();
+            return new ConcreteAudioServiceDroid();
         }
 
         public override MicrophoneStrategy CreateMicrophoneStrategy()
