@@ -6,15 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Audio;
-
-#if OPENAL
 using Microsoft.Xna.Platform.Audio.OpenAL;
-#endif
-#if OPENAL && (IOS || TVOS)
-using AudioToolbox;
-using AudioUnit;
-using AVFoundation;
-#endif
 
 namespace Microsoft.Xna.Platform.Audio
 {
