@@ -25,6 +25,47 @@ namespace Microsoft.Xna.Platform.Audio
         {
         }
 
+        public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
+        {
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
+            {
+                Context appContext = Android.App.Application.Context;
+
+                AudioManager audioManager = appContext.GetSystemService(Context.AudioService) as AudioManager;
+                if (audioManager != null)
+                {
+                    AudioDeviceInfo[] devices = audioManager.GetDevices(GetDevicesTargets.Inputs);
+                    foreach (var device in devices)
+                    {
+                        if (device.Type == AudioDeviceType.BuiltinMic
+                        ||  device.Type == AudioDeviceType.WiredHeadset
+                        ||  device.Type == AudioDeviceType.UsbDevice
+                        ||  device.Type == AudioDeviceType.BluetoothSco
+                        )
+                        {
+                            string deviceIdentifier = device.ProductName;
+                            if (!String.IsNullOrWhiteSpace(device.Address))
+                                deviceIdentifier = deviceIdentifier + "_" + device.Address;
+                            Microphone microphone = base.CreateMicrophone(deviceIdentifier);
+                            microphones.Add(microphone);
+                        }
+                    }
+                }
+
+                // set the default Microphone
+                if (microphones.Count > 0)
+                {
+                    defaultMicrophone = base.CreateMicrophone("Default");
+                    microphones.Insert(0, defaultMicrophone);
+                }
+            }
+            else
+            {
+                // falback to OpenAL Mic
+                base.PlatformPopulateCaptureDevices(microphones, ref defaultMicrophone);
+            }
+        }
+
         public override int PlatformGetMaxPlayingInstances()
         {
             return 32;
