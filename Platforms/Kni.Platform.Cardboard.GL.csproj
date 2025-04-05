@@ -109,7 +109,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Audio\OpenAL\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\Android\ConcreteAudioFactory.cs" />
+    <Compile Include="Audio\Android\ConcreteAudioServiceDroid.cs" />
     <Compile Include="Audio\OpenAL\ConcreteAudioService.cs" />
     <Compile Include="Audio\OpenAL\ConcreteDynamicSoundEffectInstance.cs" />
     <Compile Include="Audio\OpenAL\ConcreteMicrophone.cs" />

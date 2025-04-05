@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-// Copyright (C)2021 Nick Kastellanos
+// Copyright (C)2021-2025 Nick Kastellanos
 
 using System;
 using System.Collections.Generic;
@@ -52,6 +52,8 @@ namespace Microsoft.Xna.Platform.Audio
         public int Filter { get; private set; }
 
         internal AL OpenAL { get { return AL.Current; } }
+
+        protected IntPtr ALDevice { get {return _device; } }
 
         internal ConcreteAudioService()
         {
@@ -276,9 +278,8 @@ namespace Microsoft.Xna.Platform.Audio
 #elif IOS || TVOS
             // Reference: http://stackoverflow.com/questions/3894044/maximum-number-of-openal-sound-buffers-on-iphone
             return 32;
-#elif ANDROID
-            // Set to the same as OpenAL on iOS
-            return 32;
+#else
+            throw new InvalidOperationException();
 #endif
         }
 
@@ -353,18 +354,10 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void Suspend()
         {
-#if ANDROID
-            // Pause all currently playing sounds by pausing the mixer
-            OpenAL.ALC.DevicePause(_device);
-#endif
         }
 
         public override void Resume()
         {
-#if ANDROID
-            // Resume all sounds that were playing when the activity was paused
-            OpenAL.ALC.DeviceResume(_device);
-#endif
         }
 
         protected override void Dispose(bool disposing)
