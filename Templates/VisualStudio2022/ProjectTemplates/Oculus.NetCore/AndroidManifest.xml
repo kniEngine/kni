@@ -11,4 +11,5 @@
 	<application android:label="$projectname$">
 	    <meta-data android:name="com.oculus.vr.focusaware" android:value="true"/>
 	</application>
+	<uses-sdk android:minSdkVersion="32" android:targetSdkVersion="32" />
 </manifest>
