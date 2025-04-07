@@ -21,7 +21,7 @@ namespace EffectCompiler
         [CommandLineParser.Name("Platform", "\t - Specify the shader target Platform.")]
         public TargetPlatform Platform = (TargetPlatform)(-1);
 
-        [CommandLineParser.Name("Config", "\t\t - BuildConfiguration. Set to 'Debug' to include extra debug information in the compiled effect.")]
+        [CommandLineParser.Name("Config", "\t - BuildConfiguration. Set to 'Debug' to include extra debug information in the compiled effect.")]
         public string Config;
 
         [CommandLineParser.Name("Defines", "\t - Semicolon-delimited define assignments")]
