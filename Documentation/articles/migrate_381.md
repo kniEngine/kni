@@ -1,4 +1,4 @@
-# Migrating from MonoGame 3.8.1 to KNI 4.0
+# Migrating from MonoGame 3.8.1 to KNI 4.1
 
 
 ## Migrating Framework
@@ -12,17 +12,17 @@ Edit your .csproj file of the main project and replace:
 to:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.0.9001" />
-    <PackageReference Include="nkast.Kni.Platform.{Platform}" Version="4.0.9001" />
+    <PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.1.9001" />
+    <PackageReference Include="nkast.Kni.Platform.{Platform}" Version="4.1.9001" />
 ```
 
 where {Platform} maps as follows.
@@ -41,16 +41,16 @@ For libraries, edit your .csproj file and replace:
 to:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.0.9001" />
+    <PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.1.9001" />
 ```
 
 ### Migrating Framework (Android)
@@ -89,7 +89,7 @@ Then replace:
 With:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.0.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.1.9001" />
 ```
 
 Then rename 'MonoGameContentReference':
