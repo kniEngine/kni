@@ -18,7 +18,7 @@ namespace EffectCompiler
         [CommandLineParser.Required]
         public string OutputFile = string.Empty;
 
-        [CommandLineParser.Name("Platform", "\t - Specify the shader target Platform.")]
+        [CommandLineParser.Name("Platform", "\t - Specify the shader target Platform. Allowed values: (Windows,WindowsStoreApp,DesktopGL,Android,iOS,BlazorGL).")]
         public TargetPlatform Platform = (TargetPlatform)(-1);
 
         [CommandLineParser.Name("Config", "\t - BuildConfiguration. Set to 'Debug' to include extra debug information in the compiled effect.")]
