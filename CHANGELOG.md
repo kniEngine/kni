@@ -1,5 +1,35 @@
 ﻿# Changelog
 
+
+## 4.1.9001 Release - April 08, 2025
+
+### Fixed
+ - [GL] fix DrawRangeElementsBaseVertex and DrawElementsBaseVertex #2191
+ - [BlazorGL] fix Reach profile #2192
+ - [Content.Pipeline] fix Nvidia.TextureTools 'exited with code (0xc0000409)' #2206
+ - fix AboutAssets.txt templates typo #2195
+ - [Android] initialize AndroidGameWindow.CurrentOrientation #2222
+ - [Android] fix AndroidGameWindow Dispose #2242
+ - fix build targets #2244
+ - fix BoundingFrustumIntersectsBoundingSphere #2245, #2246, #2247
+ - [BlazorGL] disable webkit text highlighting #2259
+ - [Content.Pipeline] fix assimp SpecularPower #2264
+ - [Android] fix ConcreteMicrophone #2269
+ - [Oculus] fix .net9 build and target SDK 32 #2275,#2276
+
+### Performance
+ - reduce GetRenderTargets() allocations #2212
+
+### Changed
+ - [GL] improve PlatformNotSupportedException error messages #2209
+ - return the number of render targets from GetRenderTargets() #2213
+ - improve KNIFXC help output #2277, #2281
+
+### Added
+ - [BlazorGL] implemented MediaPlayer.MediaStateChanged #2258
+
+### Removed
+
 ## 4.0.9001 Release - January 14, 2025
 
 ### Fixed
