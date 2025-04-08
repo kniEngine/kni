@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, name, parameters, offsets, sizeInBytes, profile)
         {
             if (profile != ShaderProfileType.DirectX_11)
-                throw new Exception("This effect was built for a different platform.");
+                throw new Exception("Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
 
             _cbuffer = CreateD3D11Buffer();
         }
