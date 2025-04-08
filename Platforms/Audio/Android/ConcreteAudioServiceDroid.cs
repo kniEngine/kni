@@ -27,6 +27,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
         {
+#if !XAMARIN
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
             {
                 Context appContext = Android.App.Application.Context;
@@ -58,12 +59,12 @@ namespace Microsoft.Xna.Platform.Audio
                     defaultMicrophone = base.CreateMicrophone("Default");
                     microphones.Insert(0, defaultMicrophone);
                 }
-            }
-            else
-            {
-                // falback to OpenAL Mic
-                base.PlatformPopulateCaptureDevices(microphones, ref defaultMicrophone);
-            }
+                return;
+            }            
+#endif
+
+            // falback to OpenAL Mic
+            base.PlatformPopulateCaptureDevices(microphones, ref defaultMicrophone);
         }
 
         public override int PlatformGetMaxPlayingInstances()

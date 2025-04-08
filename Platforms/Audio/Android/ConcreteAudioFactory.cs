@@ -11,10 +11,12 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override MicrophoneStrategy CreateMicrophoneStrategy()
         {
+#if !XAMARIN
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
             {
                 return new ConcreteMicrophoneDroid();
             }
+#endif
 
             // falback to OpenAL Mic
             return new ConcreteMicrophone();
