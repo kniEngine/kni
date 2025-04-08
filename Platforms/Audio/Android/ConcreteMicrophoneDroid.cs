@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Audio;
 using Android.Media;
-using Android.Media.Projection;
 using Android.Runtime;
 
 namespace Microsoft.Xna.Platform.Audio
@@ -31,7 +30,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformStart(string deviceName)
         {
-
+#if !XAMARIN
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
             {
                 // Calculate the buffer size
@@ -71,6 +70,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 throw new InvalidOperationException();
             }
+#endif
         }
 
         public override void PlatformStop()
