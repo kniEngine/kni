@@ -604,7 +604,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
                         {
                             if (vertexBufferBinding.InstanceFrequency > 0)
-                                throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics drivers.");
+                                throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2.");
                         }
                     }
 
@@ -810,7 +810,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public override void DrawInstancedPrimitives(PrimitiveType primitiveType, int baseVertex, int startIndex, int primitiveCount, int baseInstance, int instanceCount)
         {
             if (!base.Capabilities.SupportsInstancing)
-                throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2. Try upgrading your graphics card drivers.");
+                throw new PlatformNotSupportedException("Instanced geometry drawing requires at least OpenGL 3.2 or GLES 3.2.");
 
             PlatformApplyState();
             PlatformApplyIndexBuffer();
