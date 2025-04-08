@@ -6,6 +6,14 @@
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<!-- By setting TargetPlatformVersionSupported
+	       we disable _CheckForInvalidTargetPlatformVersion check.
+	       This let us target android SDK 32 under .net9.
+	  -->
+		<TargetPlatformVersionSupported>true</TargetPlatformVersionSupported>
+	</PropertyGroup>
+	
   <ItemGroup>
     <AndroidLibrary Include="Jars\cardboard.jar" />
   </ItemGroup>
