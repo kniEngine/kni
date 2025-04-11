@@ -16,7 +16,6 @@ using MediaFoundation = SharpDX.MediaFoundation;
 namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
-        , MediaFoundation.IAsyncCallback
     {
         private MediaFoundation.MediaSession _session;
         private MediaFoundation.AudioStreamVolume _volumeController;
@@ -34,6 +33,23 @@ namespace Microsoft.Xna.Platform.Media
         private readonly Variant _positionCurrent = new Variant();
         private readonly Variant _positionBeginning = new Variant { ElementType = VariantElementType.Long, Value = 0L };
 
+        private Callback _callback;
+
+        internal sealed class Callback : MediaFoundation.AsyncCallbackBase
+        {
+            private readonly ConcreteMediaPlayerStrategy _player;
+
+            public Callback(ConcreteMediaPlayerStrategy concreteMediaPlayer)
+            {
+                this._player = concreteMediaPlayer;
+            }
+
+            public override void Invoke(MediaFoundation.AsyncResult asyncResult)
+            {
+                _player.Invoke(asyncResult);
+            }
+        }
+
 
         internal ConcreteMediaPlayerStrategy()
         {
@@ -43,26 +59,24 @@ namespace Microsoft.Xna.Platform.Media
             MediaFoundation.MediaManager.Startup(true);
             MediaFoundation.MediaFactory.CreateMediaSession(null, out _session);
 
-            _session.BeginGetEvent(this, null);
+            _callback = new Callback(this);
+            _session.BeginGetEvent(_callback, null);
 
             _clock = _session.Clock.QueryInterface<MediaFoundation.PresentationClock>();
         }
 
-        #region IAsyncCallback
-
         protected override void Dispose(bool disposing)
         {
-
             MediaFoundation.MediaManager.Shutdown();
 
             base.Dispose(disposing);
         }
 
-        public IDisposable Shadow { get; set; }
+        #region IAsyncCallback
 
-        public void Invoke(MediaFoundation.AsyncResult asyncResultRef)
+        internal void Invoke(MediaFoundation.AsyncResult asyncResult)
         {
-            using (MediaFoundation.MediaEvent mediaEvent = _session.EndGetEvent(asyncResultRef))
+            using (MediaFoundation.MediaEvent mediaEvent = _session.EndGetEvent(asyncResult))
             {
                 switch (mediaEvent.TypeInfo)
                 {
@@ -86,11 +100,8 @@ namespace Microsoft.Xna.Platform.Media
                     evValue.Dispose();
             }
 
-            _session.BeginGetEvent(this, null);
+            _session.BeginGetEvent(_callback, null);
         }
-
-        public MediaFoundation.AsyncCallbackFlags Flags { get; private set; }
-        public MediaFoundation.WorkQueueId WorkQueueId { get; private set; }
 
         #endregion IAsyncCallback
 
