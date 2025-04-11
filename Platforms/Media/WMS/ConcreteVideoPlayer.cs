@@ -38,31 +38,7 @@ namespace Microsoft.Xna.Platform.Media
 
             public void Invoke(MediaFoundation.AsyncResult asyncResult)
             {
-                using (MediaFoundation.MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResult))
-                {
-                    switch (mediaEvent.TypeInfo)
-                    {
-                        case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
-                            // Trigger an "on Video Ended" event here if needed
-                            if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
-                                _player.OnTopologyReady();
-                            break;
-
-                        case MediaFoundation.MediaEventTypes.SessionEnded:
-                            _player.OnMediaEngineEvent(mediaEvent);
-                            break;
-
-                        case MediaFoundation.MediaEventTypes.SessionStopped:
-                            _player.OnMediaEngineEvent(mediaEvent);
-                            break;
-                    }
-
-                    IDisposable evValue = mediaEvent.Value.Value as IDisposable;
-                    if (evValue != null)
-                        evValue.Dispose();
-                }
-
-                _player._session.BeginGetEvent(this, null);
+                _player.Invoke(asyncResult);
             }
 
             public IDisposable Shadow { get; set; }
@@ -119,6 +95,38 @@ namespace Microsoft.Xna.Platform.Media
             MediaFoundation.MediaFactory.CreateMediaSession(null, out _session);
         }
 
+        #region IAsyncCallback
+
+        internal void Invoke(MediaFoundation.AsyncResult asyncResult)
+        {
+            using (MediaFoundation.MediaEvent mediaEvent = _session.EndGetEvent(asyncResult))
+            {
+                switch (mediaEvent.TypeInfo)
+                {
+                    case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
+                        // Trigger an "on Video Ended" event here if needed
+                        if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
+                            OnTopologyReady();
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionEnded:
+                        OnMediaEngineEvent(mediaEvent);
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionStopped:
+                        OnMediaEngineEvent(mediaEvent);
+                        break;
+                }
+
+                IDisposable evValue = mediaEvent.Value.Value as IDisposable;
+                if (evValue != null)
+                    evValue.Dispose();
+            }
+
+            _session.BeginGetEvent(_callback, null);
+        }
+
+        #endregion IAsyncCallback
 
         private void OnMediaEngineEvent(MediaFoundation.MediaEvent mediaEvent)
         {
