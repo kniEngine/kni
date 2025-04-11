@@ -57,9 +57,9 @@ namespace Microsoft.Xna.Platform.Media
 
         #region IAsyncCallback
 
-        public void Invoke(MediaFoundation.AsyncResult asyncResultRef)
+        public void Invoke(MediaFoundation.AsyncResult asyncResult)
         {
-            using (MediaFoundation.MediaEvent mediaEvent = _session.EndGetEvent(asyncResultRef))
+            using (MediaFoundation.MediaEvent mediaEvent = _session.EndGetEvent(asyncResult))
             {
                 switch (mediaEvent.TypeInfo)
                 {
