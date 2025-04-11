@@ -440,10 +440,10 @@ namespace Microsoft.Xna.Platform.Media
                 string filename = streamSource.OriginalString;
 
                 MediaFoundation.SourceResolver resolver = new MediaFoundation.SourceResolver();
-                DX.ComObject source = resolver.CreateObjectFromURL(filename, MediaFoundation.SourceResolverFlags.MediaSource);
-                mediaSource = source.QueryInterface<SharpDX.MediaFoundation.MediaSource>();
+                DX.IUnknown sourceUnknown = resolver.CreateObjectFromURL(filename, MediaFoundation.SourceResolverFlags.MediaSource);
+                mediaSource = DX.ComObject.QueryInterface<MediaFoundation.MediaSource>(sourceUnknown);
                 resolver.Dispose();
-                source.Dispose();
+                sourceUnknown.Release();//Dispose();
             }
 
             MediaFoundation.PresentationDescriptor presDesc;

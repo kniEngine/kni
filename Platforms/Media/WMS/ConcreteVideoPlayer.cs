@@ -380,8 +380,9 @@ namespace Microsoft.Xna.Platform.Media
                         _mediaType.Set(MediaFoundation.MediaTypeAttributeKeys.Subtype, new Guid("00000016-0000-0010-8000-00AA00389B71"));
 
                         _sampleGrabber = new VideoSampleGrabber();
+                        DX.ComObject _sampleGrabberObj = DX.ComObject.As<DX.ComObject>(_sampleGrabber);
                         MediaFoundation.Activate activate;
-                        MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
+                        MediaFoundation.MediaFactory.CreateWMVEncoderActivate(_mediaType, _sampleGrabberObj, out activate);
                         outputNode.Object = activate;
                     }
 
