@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Platform.Media
 
         private Callback _callback;
 
-        internal sealed class Callback : MediaFoundation.IAsyncCallback
+        internal sealed class Callback : MediaFoundation.AsyncCallbackBase
         {
             private readonly ConcreteMediaPlayerStrategy _player;
 
@@ -44,18 +44,10 @@ namespace Microsoft.Xna.Platform.Media
                 this._player = concreteMediaPlayer;
             }
 
-            public void Invoke(MediaFoundation.AsyncResult asyncResult)
+            public override void Invoke(MediaFoundation.AsyncResult asyncResult)
             {
                 _player.Invoke(asyncResult);
             }
-
-            public IDisposable Shadow { get; set; }
-            public MediaFoundation.AsyncCallbackFlags Flags { get; private set; }
-            public MediaFoundation.WorkQueueId WorkQueueId { get; private set; }
-            public void Dispose()
-            {
-            }
-
         }
 
 
