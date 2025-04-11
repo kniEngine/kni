@@ -36,9 +36,9 @@ namespace Microsoft.Xna.Platform.Media
                 _player = player;
             }
 
-            public void Invoke(MediaFoundation.AsyncResult asyncResultRef)
+            public void Invoke(MediaFoundation.AsyncResult asyncResult)
             {
-                using (MediaFoundation.MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResultRef))
+                using (MediaFoundation.MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResult))
                 {
                     switch (mediaEvent.TypeInfo)
                     {
