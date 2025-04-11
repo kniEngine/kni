@@ -402,11 +402,27 @@ namespace Microsoft.Xna.Platform.Media
             mediaSource.Dispose();
         }
 
+        [DllImport("mf.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "MFCreateSampleGrabberSinkActivate")]
+        private unsafe static extern int MFCreateSampleGrabberSinkActivate(void* pMediaType, void* pCallback, void* pActivateOut);
+
         private unsafe static MediaFoundation.Activate CreateSampleGrabberSinkActivate(MediaFoundation.MediaType mediaType, MediaFoundation.SampleGrabberSinkCallback callback)
         {
             MediaFoundation.Activate activate = null;
+            IntPtr activatePtr = IntPtr.Zero;
+            IntPtr callbackPtr = DX.CppObject.ToCallbackPtr<MediaFoundation.SampleGrabberSinkCallback>(callback);
 
-            MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(mediaType, callback, out activate);
+            // CreateSampleGrabberSinkActivate(...) was removed in 'Use SharpGenTools.Sdk for Codegen #988'
+            // https://github.com/sharpdx/SharpDX/pull/988
+            //MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
+            DX.Result result = MFCreateSampleGrabberSinkActivate(
+                (void*)mediaType.NativePointer,
+                (void*)callbackPtr,
+                &activatePtr);
+
+            if (activatePtr != IntPtr.Zero)
+                activate = new MediaFoundation.Activate(activatePtr);
+
+            result.CheckError();
 
             return activate;
         }
