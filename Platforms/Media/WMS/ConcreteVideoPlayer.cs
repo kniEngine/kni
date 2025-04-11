@@ -36,11 +36,6 @@ namespace Microsoft.Xna.Platform.Media
                 _player = player;
             }
 
-            public void Dispose()
-            {
-            }
-
-            public IDisposable Shadow { get; set; }
             public void Invoke(MediaFoundation.AsyncResult asyncResultRef)
             {
                 using (MediaFoundation.MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResultRef))
@@ -70,8 +65,12 @@ namespace Microsoft.Xna.Platform.Media
                 _player._session.BeginGetEvent(this, null);
             }
 
+            public IDisposable Shadow { get; set; }
             public MediaFoundation.AsyncCallbackFlags Flags { get; private set; }
             public MediaFoundation.WorkQueueId WorkQueueId { get; private set; }
+            public void Dispose()
+            {
+            }
         }
 
         public override MediaState State

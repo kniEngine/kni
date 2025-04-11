@@ -48,17 +48,14 @@ namespace Microsoft.Xna.Platform.Media
             _clock = _session.Clock.QueryInterface<MediaFoundation.PresentationClock>();
         }
 
-        #region IAsyncCallback
-
         protected override void Dispose(bool disposing)
         {
-
             MediaFoundation.MediaManager.Shutdown();
 
             base.Dispose(disposing);
         }
 
-        public IDisposable Shadow { get; set; }
+        #region IAsyncCallback
 
         public void Invoke(MediaFoundation.AsyncResult asyncResultRef)
         {
@@ -89,6 +86,7 @@ namespace Microsoft.Xna.Platform.Media
             _session.BeginGetEvent(this, null);
         }
 
+        public IDisposable Shadow { get; set; }
         public MediaFoundation.AsyncCallbackFlags Flags { get; private set; }
         public MediaFoundation.WorkQueueId WorkQueueId { get; private set; }
 
