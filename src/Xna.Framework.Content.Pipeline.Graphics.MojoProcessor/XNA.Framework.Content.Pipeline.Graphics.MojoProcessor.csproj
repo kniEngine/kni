@@ -21,28 +21,20 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net40' ">
-    <Reference Include="SharpDX">
-      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\net40\SharpDX.D3DCompiler.dll</HintPath>
-    </Reference>
     <Reference Include="CppNet">
       <HintPath>..\..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net8.0' ">
-    <Reference Include="SharpDX">
-      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\netstandard1.3\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\..\ThirdParty\SharpDX\4.0.1\netstandard1.3\SharpDX.D3DCompiler.dll</HintPath>
-    </Reference>
     <Reference Include="CppNet">
       <HintPath>..\..\ThirdParty\CppNet\net40\CppNet.dll</HintPath>
     </Reference>
-
+  </ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Version="4.0.1" Include="SharpDX" />
+    <PackageReference Version="4.0.1" Include="SharpDX.D3DCompiler" />
   </ItemGroup>
 
   <ItemGroup>
