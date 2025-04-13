@@ -75,11 +75,6 @@
       <NativeBinary>True</NativeBinary>
     </None>
   </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="SharpDX" Version="4.0.1" />
-    <PackageReference Include="SharpDX.D3DCompiler" Version="4.0.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Xna.Framework\Xna.Framework.csproj">
