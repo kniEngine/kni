@@ -152,10 +152,10 @@ namespace Content.Pipeline.Editor
             Description = "Build the content source file using the previously set switches and options.")]
         public void OnBuild(string sourceFile)
         {
-            AddContent(sourceFile, false);
+            AddContent(sourceFile, skipDuplicates: false, inorder: false, out int index);
         }
 
-        public bool AddContent(string sourceFile, bool skipDuplicates)
+        public bool AddContent(string sourceFile, bool skipDuplicates, bool inorder, out int index)
         {
             string link = null;
             if (sourceFile.Contains(";"))
@@ -180,7 +180,10 @@ namespace Content.Pipeline.Editor
             if (previous != -1)
             {
                 if (skipDuplicates)
+                {
+                    index = previous;
                     return false;
+                }
 
                 // Replace the duplicate.
                 _project.ContentItems.RemoveAt(previous);
@@ -197,7 +200,14 @@ namespace Content.Pipeline.Editor
                 ProcessorParams = new OpaqueDataDictionary(),
                 Exists = File.Exists(projectDir + sourceFile)
             };
-            _project.ContentItems.Add(item);
+            index = _project.ContentItems.Count;
+            if (inorder)
+            {
+                index = _project.ContentItems.BinarySearch(item, new ContentItemPathComparer());
+                if (index < 0)
+                    index = ~index;
+            }
+            _project.ContentItems.Insert(index, item);
 
             // Copy the current processor parameters blind as we
             // will validate and remove invalid parameters during

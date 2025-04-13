@@ -69,10 +69,10 @@ namespace Content.Pipeline.Editor
                     }
 
                     var f = _files[i];
-                    if (!parser.AddContent(f, skipduplicate))
+                    if (!parser.AddContent(f, skipDuplicates: skipduplicate, inorder: true, out int index))
                         continue;
 
-                    var item = _con._project.ContentItems.Last();
+                    var item = _con._project.ContentItems[index];
                     item.Observer = _con;
                     item.ResolveTypes();
 
