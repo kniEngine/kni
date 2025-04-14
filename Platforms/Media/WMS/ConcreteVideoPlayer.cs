@@ -96,10 +96,19 @@ namespace Microsoft.Xna.Platform.Media
             {
                 switch (mediaEvent.TypeInfo)
                 {
+                    case MediaFoundation.MediaEventTypes.SessionTopologySet:
+                        break;
+
                     case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
                         // Trigger an "on Video Ended" event here if needed
                         if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
                             OnTopologyReady();
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionNotifyPresentationTime:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionStarted:
                         break;
 
                     case MediaFoundation.MediaEventTypes.SessionEnded:
@@ -108,6 +117,12 @@ namespace Microsoft.Xna.Platform.Media
 
                     case MediaFoundation.MediaEventTypes.SessionStopped:
                         OnMediaEngineEvent(mediaEvent);
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionCapabilitiesChanged:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.EndOfPresentation:
                         break;
                 }
 

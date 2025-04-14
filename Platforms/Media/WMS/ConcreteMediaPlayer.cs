@@ -80,9 +80,18 @@ namespace Microsoft.Xna.Platform.Media
             {
                 switch (mediaEvent.TypeInfo)
                 {
+                    case MediaFoundation.MediaEventTypes.SessionTopologySet:
+                        break;
+
                     case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
                         if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
                             OnTopologyReady();
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionNotifyPresentationTime:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionStarted:
                         break;
 
                     case MediaFoundation.MediaEventTypes.SessionEnded:
@@ -92,6 +101,12 @@ namespace Microsoft.Xna.Platform.Media
 
                     case MediaFoundation.MediaEventTypes.SessionStopped:
                         OnSessionStopped();
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionCapabilitiesChanged:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.EndOfPresentation:
                         break;
                 }
 
