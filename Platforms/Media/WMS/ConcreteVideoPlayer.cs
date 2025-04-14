@@ -111,11 +111,13 @@ namespace Microsoft.Xna.Platform.Media
                         break;
 
                     case MediaFoundation.MediaEventTypes.SessionEnded:
-                        OnMediaEngineEvent(mediaEvent);
+                        if (IsLooped)
+                        {
+                            _session.Start(null, _positionBeginning);
+                        }
                         break;
 
                     case MediaFoundation.MediaEventTypes.SessionStopped:
-                        OnMediaEngineEvent(mediaEvent);
                         break;
 
                     case MediaFoundation.MediaEventTypes.SessionCapabilitiesChanged:
@@ -134,20 +136,6 @@ namespace Microsoft.Xna.Platform.Media
         }
 
         #endregion IAsyncCallback
-
-        private void OnMediaEngineEvent(MediaFoundation.MediaEvent mediaEvent)
-        {
-            switch (mediaEvent.TypeInfo)
-            {
-                case MediaFoundation.MediaEventTypes.SessionEnded:
-                    if (IsLooped)
-                    {
-                        _session.Start(null, _positionBeginning);
-                        return;
-                    }
-                    break;
-            }
-        }
 
         public override Texture2D PlatformGetTexture()
         {
