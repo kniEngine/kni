@@ -139,18 +139,12 @@ namespace Microsoft.Xna.Platform.Media
         {
             switch (mediaEvent.TypeInfo)
             {
-                case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
-                    break;
-
                 case MediaFoundation.MediaEventTypes.SessionEnded:
                     if (IsLooped)
                     {
                         _session.Start(null, _positionBeginning);
                         return;
                     }
-                    break;
-
-                case MediaFoundation.MediaEventTypes.SessionStopped:
                     break;
             }
         }
