@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Media
 
         private Callback _callback;
 
-        private class Callback : MediaFoundation.IAsyncCallback
+        private class Callback : MediaFoundation.AsyncCallbackBase
         {
             private ConcreteVideoPlayerStrategy _player;
 
@@ -36,42 +36,10 @@ namespace Microsoft.Xna.Platform.Media
                 _player = player;
             }
 
-            public void Dispose()
+            public override void Invoke(MediaFoundation.AsyncResult asyncResult)
             {
+                _player.Invoke(asyncResult);
             }
-
-            public IDisposable Shadow { get; set; }
-            public void Invoke(MediaFoundation.AsyncResult asyncResultRef)
-            {
-                using (MediaFoundation.MediaEvent mediaEvent = _player._session.EndGetEvent(asyncResultRef))
-                {
-                    switch (mediaEvent.TypeInfo)
-                    {
-                        case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
-                            // Trigger an "on Video Ended" event here if needed
-                            if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
-                                _player.OnTopologyReady();
-                            break;
-
-                        case MediaFoundation.MediaEventTypes.SessionEnded:
-                            _player.OnMediaEngineEvent(mediaEvent);
-                            break;
-
-                        case MediaFoundation.MediaEventTypes.SessionStopped:
-                            _player.OnMediaEngineEvent(mediaEvent);
-                            break;
-                    }
-
-                    IDisposable evValue = mediaEvent.Value.Value as IDisposable;
-                    if (evValue != null)
-                        evValue.Dispose();
-                }
-
-                _player._session.BeginGetEvent(this, null);
-            }
-
-            public MediaFoundation.AsyncCallbackFlags Flags { get; private set; }
-            public MediaFoundation.WorkQueueId WorkQueueId { get; private set; }
         }
 
         public override MediaState State
@@ -120,26 +88,54 @@ namespace Microsoft.Xna.Platform.Media
             MediaFoundation.MediaFactory.CreateMediaSession(null, out _session);
         }
 
+        #region IAsyncCallback
 
-        private void OnMediaEngineEvent(MediaFoundation.MediaEvent mediaEvent)
+        internal void Invoke(MediaFoundation.AsyncResult asyncResult)
         {
-            switch (mediaEvent.TypeInfo)
+            using (MediaFoundation.MediaEvent mediaEvent = _session.EndGetEvent(asyncResult))
             {
-                case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
-                    break;
+                switch (mediaEvent.TypeInfo)
+                {
+                    case MediaFoundation.MediaEventTypes.SessionTopologySet:
+                        break;
 
-                case MediaFoundation.MediaEventTypes.SessionEnded:
-                    if (IsLooped)
-                    {
-                        _session.Start(null, _positionBeginning);
-                        return;
-                    }
-                    break;
+                    case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
+                        if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
+                            OnTopologyReady();
+                        break;
 
-                case MediaFoundation.MediaEventTypes.SessionStopped:
-                    break;
+                    case MediaFoundation.MediaEventTypes.SessionNotifyPresentationTime:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionStarted:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionEnded:
+                        if (IsLooped)
+                        {
+                            _session.Start(null, _positionBeginning);
+                        }
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionStopped:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.SessionCapabilitiesChanged:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.EndOfPresentation:
+                        break;
+                }
+
+                IDisposable evValue = mediaEvent.Value.Value as IDisposable;
+                if (evValue != null)
+                    evValue.Dispose();
             }
+
+            _session.BeginGetEvent(_callback, null);
         }
+
+        #endregion IAsyncCallback
 
         public override Texture2D PlatformGetTexture()
         {

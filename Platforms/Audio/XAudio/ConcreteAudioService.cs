@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         private X3DAudio _device3D;
         private bool _device3DDirty = true;
-        private Speakers _speakers = Speakers.Stereo;
+        private Speakers _speakers = Speakers.FrontLeft | Speakers.FrontRight; // Stereo
 
 
         // XNA does not expose this, but it exists in X3DAudio.
@@ -232,7 +232,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             _device3DDirty = true;
-            _speakers = Speakers.Stereo;
+            _speakers = Speakers.FrontLeft | Speakers.FrontRight; // Stereo
         }
     }
 }
