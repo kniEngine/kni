@@ -100,7 +100,6 @@ namespace Microsoft.Xna.Platform.Media
                         break;
 
                     case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
-                        // Trigger an "on Video Ended" event here if needed
                         if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
                             OnTopologyReady();
                         break;
