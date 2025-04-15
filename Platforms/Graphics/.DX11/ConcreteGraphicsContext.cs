@@ -313,11 +313,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (samplerSlot == 255)
                     samplerSlot = textureSlot;
 
-                Texture texture = ctextureCollection[textureSlot];
-                SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[samplerSlot];
-
                 if (graphicsProfile == GraphicsProfile.Reach)
                 {
+                    Texture texture = ctextureCollection[textureSlot];
+                    SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[samplerSlot];
+
                     Texture2D texture2D = texture as Texture2D;
                     if (texture2D != null)
                     {
@@ -326,13 +326,8 @@ namespace Microsoft.Xna.Platform.Graphics
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
-            }
 
-            int texturesCount = ctextureCollection.Length;
-
-            // Apply Textures
-            for (int textureSlot = 0; ctextureCollection.InternalDirty != 0 && textureSlot < texturesCount; textureSlot++)
-            {
+                // Apply Textures
                 uint textureMask = ((uint)1) << textureSlot;
                 if ((ctextureCollection.InternalDirty & textureMask) != 0)
                 {
@@ -349,11 +344,8 @@ namespace Microsoft.Xna.Platform.Graphics
                         this.Metrics_AddTextureCount();
                     }
                 }
-            }
 
-            // Apply Samplers
-            for (int samplerSlot = 0; csamplerStateCollection.InternalD3dDirty != 0 && samplerSlot < texturesCount; samplerSlot++)
-            {
+                // Apply Samplers
                 uint samplerMask = ((uint)1) << samplerSlot;
                 if ((csamplerStateCollection.InternalD3dDirty & samplerMask) != 0)
                 {
@@ -371,6 +363,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
             }
+
+            int texturesCount = ctextureCollection.Length;
 
             // Clear Textures
             for (int textureSlot = 0; ctextureCollection.InternalDirty != 0 && textureSlot < texturesCount; textureSlot++)
