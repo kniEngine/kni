@@ -301,6 +301,29 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // NOTE: We make the assumption here that the caller has locked the d3dContext for us to use.
 
+            // Check Samplers
+            GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
+            if (graphicsProfile == GraphicsProfile.Reach)
+            {
+                for (int i = 0; i < cshader.Samplers.Length; i++)
+                {
+                    int textureSlot = cshader.Samplers[i].textureSlot;
+                    int samplerSlot = cshader.Samplers[i].samplerSlot;
+
+                    // Debug.Assert(samplerSlot != 255);
+                    if (samplerSlot == 255)
+                        samplerSlot = textureSlot;
+
+                    Texture2D texture2D = ctextureCollection[textureSlot] as Texture2D;
+                    if (texture2D != null)
+                    {
+                        if (this.SamplerStates[samplerSlot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
+                        ||  this.SamplerStates[samplerSlot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
+                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
+                    }
+                }
+            }
+
             int texturesCount = ctextureCollection.Length;
 
             // Apply Textures
@@ -323,29 +346,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     // clear texture bit
                     ctextureCollection.InternalDirty &= ~mask;
-                }
-            }
-
-            // Check Samplers
-            GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
-            if (graphicsProfile == GraphicsProfile.Reach)
-            {
-                for (int i = 0; i < cshader.Samplers.Length; i++)
-                {
-                    int textureSlot = cshader.Samplers[i].textureSlot;
-                    int samplerSlot = cshader.Samplers[i].samplerSlot;
-
-                    // Debug.Assert(samplerSlot != 255);
-                    if (samplerSlot == 255)
-                        samplerSlot = textureSlot;
-
-                    Texture2D texture2D = ctextureCollection[textureSlot] as Texture2D;
-                    if (texture2D != null)
-                    {
-                        if (this.SamplerStates[samplerSlot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
-                        ||  this.SamplerStates[samplerSlot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
-                            throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
-                    }
                 }
             }
 
