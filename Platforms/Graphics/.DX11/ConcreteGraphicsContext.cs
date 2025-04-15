@@ -303,7 +303,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
 
-            // Check Samplers
             for (int i = 0; i < cshader.Samplers.Length; i++)
             {
                 int textureSlot = cshader.Samplers[i].textureSlot;
@@ -313,6 +312,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (samplerSlot == 255)
                     samplerSlot = textureSlot;
 
+                // Check Samplers
                 if (graphicsProfile == GraphicsProfile.Reach)
                 {
                     Texture texture = ctextureCollection[textureSlot];
