@@ -314,7 +314,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     samplerSlot = textureSlot;
 
                 Texture texture = ctextureCollection[textureSlot];
-                SamplerState samplerState = this.SamplerStates[samplerSlot];
+                SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[samplerSlot];
 
                 if (graphicsProfile == GraphicsProfile.Reach)
                 {
