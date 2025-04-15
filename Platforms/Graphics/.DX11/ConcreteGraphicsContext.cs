@@ -339,16 +339,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         D3D11.ShaderResourceView resourceView = ctexture.GetShaderResourceView();
                         dxShaderStage.SetShaderResource(slot, resourceView);
+                        // clear texture bit
+                        ctextureCollection.InternalDirty &= ~mask;
 
                         this.Metrics_AddTextureCount();
                     }
                     else
                     {
                         dxShaderStage.SetShaderResource(slot, null);
+                        // clear texture bit
+                        ctextureCollection.InternalDirty &= ~mask;
                     }
-
-                    // clear texture bit
-                    ctextureCollection.InternalDirty &= ~mask;
                 }
             }
 
@@ -367,14 +368,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         D3D11.SamplerState state = csamplerState.GetDxState();
                         dxShaderStage.SetSampler(slot, state);
+                        // clear sampler bit
+                        csamplerStateCollection.InternalD3dDirty &= ~mask;
                     }
                     else
                     {
                         dxShaderStage.SetSampler(slot, null);
+                        // clear sampler bit
+                        csamplerStateCollection.InternalD3dDirty &= ~mask;
                     }
-
-                    // clear sampler bit
-                    csamplerStateCollection.InternalD3dDirty &= ~mask;
                 }
             }
         }
