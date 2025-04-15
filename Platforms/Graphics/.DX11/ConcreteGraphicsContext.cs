@@ -357,12 +357,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 uint mask = ((uint)1) << slot;
                 if ((csamplerStateCollection.InternalD3dDirty & mask) != 0)
                 {
-                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
-                    if (sampler != null)
+                    SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[slot];
+                    if (samplerState != null)
                     {
-                        Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
+                        Debug.Assert(samplerState.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
 
-                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
+                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)samplerState).GetStrategy<ConcreteSamplerState>();
 
                         D3D11.SamplerState state = csamplerState.GetDxState();
                         dxShaderStage.SetSampler(slot, state);
@@ -394,8 +394,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 uint mask = ((uint)1) << slot;
                 if ((csamplerStateCollection.InternalD3dDirty & mask) != 0)
                 {
-                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
-                    if (sampler == null)
+                    SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[slot];
+                    if (samplerState == null)
                     {
                         dxShaderStage.SetSampler(slot, null);
                         // clear sampler bit
