@@ -376,8 +376,7 @@ namespace Microsoft.Xna.Platform.Media
                         _mediaType.Set(MediaFoundation.MediaTypeAttributeKeys.Subtype, new Guid("00000016-0000-0010-8000-00AA00389B71"));
 
                         _sampleGrabber = new VideoSampleGrabber();
-                        MediaFoundation.Activate activate;
-                        MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber, out activate);
+                        MediaFoundation.Activate activate = CreateSampleGrabberSinkActivate(_mediaType, _sampleGrabber);
                         outputNode.Object = activate;
                     }
 
@@ -401,6 +400,15 @@ namespace Microsoft.Xna.Platform.Media
 
             presDesc.Dispose();
             mediaSource.Dispose();
+        }
+
+        private unsafe static MediaFoundation.Activate CreateSampleGrabberSinkActivate(MediaFoundation.MediaType mediaType, MediaFoundation.SampleGrabberSinkCallback callback)
+        {
+            MediaFoundation.Activate activate = null;
+
+            MediaFoundation.MediaFactory.CreateSampleGrabberSinkActivate(mediaType, callback, out activate);
+
+            return activate;
         }
 
 
