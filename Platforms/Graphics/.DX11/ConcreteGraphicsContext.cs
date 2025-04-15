@@ -301,76 +301,92 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // NOTE: We make the assumption here that the caller has locked the d3dContext for us to use.
 
-            int texturesCount = ctextureCollection.Length;
-
-            // Apply Textures
-            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < texturesCount; slot++)
-            {
-                uint mask = ((uint)1) << slot;
-                if ((ctextureCollection.InternalDirty & mask) != 0)
-                {
-                    Texture texture = ctextureCollection[slot];
-
-                    if (texture != null && !texture.IsDisposed)
-                    {
-                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                        dxShaderStage.SetShaderResource(slot, ctexture.GetShaderResourceView());
-
-                        this.Metrics_AddTextureCount();
-                    }
-                    else
-                        dxShaderStage.SetShaderResource(slot, null);
-
-                    // clear texture bit
-                    ctextureCollection.InternalDirty &= ~mask;
-                }
-            }
-
-            // Check Samplers
             GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
-            if (graphicsProfile == GraphicsProfile.Reach)
+
+            for (int i = 0; i < cshader.Samplers.Length; i++)
             {
-                for (int i = 0; i < cshader.Samplers.Length; i++)
+                int textureSlot = cshader.Samplers[i].textureSlot;
+                int samplerSlot = cshader.Samplers[i].samplerSlot;
+
+                // Debug.Assert(samplerSlot != 255);
+                if (samplerSlot == 255)
+                    samplerSlot = textureSlot;
+
+                // Check Samplers
+                if (graphicsProfile == GraphicsProfile.Reach)
                 {
-                    int textureSlot = cshader.Samplers[i].textureSlot;
-                    int samplerSlot = cshader.Samplers[i].samplerSlot;
+                    Texture texture = ctextureCollection[textureSlot];
+                    SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[samplerSlot];
 
-                    // Debug.Assert(samplerSlot != 255);
-                    if (samplerSlot == 255)
-                        samplerSlot = textureSlot;
-
-                    Texture2D texture2D = ctextureCollection[textureSlot] as Texture2D;
+                    Texture2D texture2D = texture as Texture2D;
                     if (texture2D != null)
                     {
-                        if (this.SamplerStates[samplerSlot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
-                        ||  this.SamplerStates[samplerSlot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
+                        if (samplerState.AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
+                        ||  samplerState.AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
+
+                // Apply Samplers
+                uint samplerMask = ((uint)1) << samplerSlot;
+                if ((csamplerStateCollection.InternalD3dDirty & samplerMask) != 0)
+                {
+                    SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[samplerSlot];
+                    if (samplerState != null)
+                    {
+                        Debug.Assert(samplerState.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
+
+                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)samplerState).GetStrategy<ConcreteSamplerState>();
+                        dxShaderStage.SetSampler(samplerSlot, csamplerState.GetDxState());
+                        csamplerStateCollection.InternalD3dDirty &= ~samplerMask;
+                    }
+                }
+
+                // Apply Textures
+                uint textureMask = ((uint)1) << textureSlot;
+                if ((ctextureCollection.InternalDirty & textureMask) != 0)
+                {
+                    Texture texture = ctextureCollection[textureSlot];
+                    if (texture != null && !texture.IsDisposed)
+                    {
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                        dxShaderStage.SetShaderResource(textureSlot, ctexture.GetShaderResourceView());
+                        ctextureCollection.InternalDirty &= ~textureMask;
+
+                        this.Metrics_AddTextureCount();
+                    }
+                }
             }
 
-            // Apply Samplers
-            for (int slot = 0; csamplerStateCollection.InternalD3dDirty != 0 && slot < texturesCount; slot++)
+            int texturesCount = ctextureCollection.Length;
+
+            // Clear Samplers
+            for (int samplerSlot = 0; csamplerStateCollection.InternalD3dDirty != 0 && samplerSlot < texturesCount; samplerSlot++)
             {
-                uint mask = ((uint)1) << slot;
-                if ((csamplerStateCollection.InternalD3dDirty & mask) != 0)
+                uint samplerMask = ((uint)1) << samplerSlot;
+                if ((csamplerStateCollection.InternalD3dDirty & samplerMask) != 0)
                 {
-                    D3D11.SamplerState state = null;
-
-                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
-                    if (sampler != null)
+                    SamplerState samplerState = csamplerStateCollection.InternalActualSamplers[samplerSlot];
+                    if (samplerState == null)
                     {
-                        Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
-               
-                        ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
-
-                        state = csamplerState.GetDxState();
+                        dxShaderStage.SetSampler(samplerSlot, null);
+                        csamplerStateCollection.InternalD3dDirty &= ~samplerMask;
                     }
+                }
+            }
 
-                    dxShaderStage.SetSampler(slot, state);
-
-                    // clear sampler bit
-                    csamplerStateCollection.InternalD3dDirty &= ~mask;
+            // Clear Textures
+            for (int textureSlot = 0; ctextureCollection.InternalDirty != 0 && textureSlot < texturesCount; textureSlot++)
+            {
+                uint textureMask = ((uint)1) << textureSlot;
+                if ((ctextureCollection.InternalDirty & textureMask) != 0)
+                {
+                    Texture texture = ctextureCollection[textureSlot];
+                    if (texture == null || texture.IsDisposed)
+                    {
+                        dxShaderStage.SetShaderResource(textureSlot, null);
+                        ctextureCollection.InternalDirty &= ~textureMask;
+                    }
                 }
             }
         }
