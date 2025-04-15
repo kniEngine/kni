@@ -301,24 +301,28 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             // NOTE: We make the assumption here that the caller has locked the d3dContext for us to use.
 
-            // Check Samplers
             GraphicsProfile graphicsProfile = ((IPlatformGraphicsContext)this.Context).DeviceStrategy.GraphicsProfile;
-            if (graphicsProfile == GraphicsProfile.Reach)
+
+            // Check Samplers
+            for (int i = 0; i < cshader.Samplers.Length; i++)
             {
-                for (int i = 0; i < cshader.Samplers.Length; i++)
+                int textureSlot = cshader.Samplers[i].textureSlot;
+                int samplerSlot = cshader.Samplers[i].samplerSlot;
+
+                // Debug.Assert(samplerSlot != 255);
+                if (samplerSlot == 255)
+                    samplerSlot = textureSlot;
+
+                Texture texture = ctextureCollection[textureSlot];
+                SamplerState samplerState = this.SamplerStates[samplerSlot];
+
+                if (graphicsProfile == GraphicsProfile.Reach)
                 {
-                    int textureSlot = cshader.Samplers[i].textureSlot;
-                    int samplerSlot = cshader.Samplers[i].samplerSlot;
-
-                    // Debug.Assert(samplerSlot != 255);
-                    if (samplerSlot == 255)
-                        samplerSlot = textureSlot;
-
-                    Texture2D texture2D = ctextureCollection[textureSlot] as Texture2D;
+                    Texture2D texture2D = texture as Texture2D;
                     if (texture2D != null)
                     {
-                        if (this.SamplerStates[samplerSlot].AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
-                        ||  this.SamplerStates[samplerSlot].AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
+                        if (samplerState.AddressU != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Width)
+                        ||  samplerState.AddressV != TextureAddressMode.Clamp && !MathHelper.IsPowerOfTwo(texture2D.Height))
                             throw new NotSupportedException("Reach profile support only Clamp mode for non-power of two Textures.");
                     }
                 }
