@@ -335,9 +335,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     if (texture != null && !texture.IsDisposed)
                     {
                         ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-
-                        D3D11.ShaderResourceView resourceView = ctexture.GetShaderResourceView();
-                        dxShaderStage.SetShaderResource(textureSlot, resourceView);
+                        dxShaderStage.SetShaderResource(textureSlot, ctexture.GetShaderResourceView());
                         ctextureCollection.InternalDirty &= ~textureMask;
 
                         this.Metrics_AddTextureCount();
@@ -354,9 +352,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         Debug.Assert(samplerState.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
 
                         ConcreteSamplerState csamplerState = ((IPlatformSamplerState)samplerState).GetStrategy<ConcreteSamplerState>();
-
-                        D3D11.SamplerState state = csamplerState.GetDxState();
-                        dxShaderStage.SetSampler(samplerSlot, state);
+                        dxShaderStage.SetSampler(samplerSlot, csamplerState.GetDxState());
                         csamplerStateCollection.InternalD3dDirty &= ~samplerMask;
                     }
                 }
