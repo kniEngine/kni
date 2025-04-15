@@ -327,21 +327,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
 
-                // Apply Textures
-                uint textureMask = ((uint)1) << textureSlot;
-                if ((ctextureCollection.InternalDirty & textureMask) != 0)
-                {
-                    Texture texture = ctextureCollection[textureSlot];
-                    if (texture != null && !texture.IsDisposed)
-                    {
-                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                        dxShaderStage.SetShaderResource(textureSlot, ctexture.GetShaderResourceView());
-                        ctextureCollection.InternalDirty &= ~textureMask;
-
-                        this.Metrics_AddTextureCount();
-                    }
-                }
-
                 // Apply Samplers
                 uint samplerMask = ((uint)1) << samplerSlot;
                 if ((csamplerStateCollection.InternalD3dDirty & samplerMask) != 0)
@@ -356,24 +341,24 @@ namespace Microsoft.Xna.Platform.Graphics
                         csamplerStateCollection.InternalD3dDirty &= ~samplerMask;
                     }
                 }
-            }
 
-            int texturesCount = ctextureCollection.Length;
-
-            // Clear Textures
-            for (int textureSlot = 0; ctextureCollection.InternalDirty != 0 && textureSlot < texturesCount; textureSlot++)
-            {
+                // Apply Textures
                 uint textureMask = ((uint)1) << textureSlot;
                 if ((ctextureCollection.InternalDirty & textureMask) != 0)
                 {
                     Texture texture = ctextureCollection[textureSlot];
-                    if (texture == null || texture.IsDisposed)
+                    if (texture != null && !texture.IsDisposed)
                     {
-                        dxShaderStage.SetShaderResource(textureSlot, null);
+                        ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
+                        dxShaderStage.SetShaderResource(textureSlot, ctexture.GetShaderResourceView());
                         ctextureCollection.InternalDirty &= ~textureMask;
+
+                        this.Metrics_AddTextureCount();
                     }
                 }
             }
+
+            int texturesCount = ctextureCollection.Length;
 
             // Clear Samplers
             for (int samplerSlot = 0; csamplerStateCollection.InternalD3dDirty != 0 && samplerSlot < texturesCount; samplerSlot++)
@@ -386,6 +371,21 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         dxShaderStage.SetSampler(samplerSlot, null);
                         csamplerStateCollection.InternalD3dDirty &= ~samplerMask;
+                    }
+                }
+            }
+
+            // Clear Textures
+            for (int textureSlot = 0; ctextureCollection.InternalDirty != 0 && textureSlot < texturesCount; textureSlot++)
+            {
+                uint textureMask = ((uint)1) << textureSlot;
+                if ((ctextureCollection.InternalDirty & textureMask) != 0)
+                {
+                    Texture texture = ctextureCollection[textureSlot];
+                    if (texture == null || texture.IsDisposed)
+                    {
+                        dxShaderStage.SetShaderResource(textureSlot, null);
+                        ctextureCollection.InternalDirty &= ~textureMask;
                     }
                 }
             }
