@@ -344,7 +344,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         this.Metrics_AddTextureCount();
                     }
-                    else
+                    if (texture == null || texture.IsDisposed)
                     {
                         dxShaderStage.SetShaderResource(slot, null);
                         // clear texture bit
@@ -371,7 +371,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         // clear sampler bit
                         csamplerStateCollection.InternalD3dDirty &= ~mask;
                     }
-                    else
+                    if (sampler == null)
                     {
                         dxShaderStage.SetSampler(slot, null);
                         // clear sampler bit
