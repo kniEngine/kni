@@ -58,10 +58,12 @@
     <Compile Include="Common\ContentItem.cs" />
     <Compile Include="Common\ContentItem.Processor.cs" />
     <Compile Include="Common\ContentItem.Importer.cs" />
+    <Compile Include="Common\ContentItemPathComparer.cs" />
     <Compile Include="Common\ContentItemTemplate.cs" />
     <Compile Include="Common\ContentItemState.cs" />
     <Compile Include="Common\FileType.cs" />
     <Compile Include="Common\Selection.cs" />
+    <Compile Include="Common\PathComparer.cs" />
     <Compile Include="Common\PathHelper.cs" />
     <Compile Include="Common\ProjectState.cs" />
     <Compile Include="Common\PipelineController.MoveAction.cs" />

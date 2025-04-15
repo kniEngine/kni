@@ -44,9 +44,9 @@ namespace Content.Pipeline.Editor
 
                 _con.Selection.Clear(_con);
 
-                if (parser.AddContent(fullpath, true))
+                if (parser.AddContent(fullpath, skipDuplicates: true, inorder: true, out int index))
                 {
-                    var item = _con._project.ContentItems.Last();
+                    var item = _con._project.ContentItems[index];
                     item.Observer = _con;
                     item.ImporterName = _template.ImporterName;
                     item.ProcessorName = _template.ProcessorName;
