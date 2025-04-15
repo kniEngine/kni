@@ -340,7 +340,7 @@ namespace Microsoft.Xna.Platform.Media
                 MediaFoundation.SourceResolver resolver = new MediaFoundation.SourceResolver();
 
                 MediaFoundation.ObjectType otype;
-                DX.ComObject source = resolver.CreateObjectFromURL(filename, MediaFoundation.SourceResolverFlags.MediaSource, null, out otype);
+                DX.ComObject source = (DX.ComObject)resolver.CreateObjectFromURL(filename, MediaFoundation.SourceResolverFlags.MediaSource, null, out otype);
                 mediaSource = source.QueryInterface<MediaFoundation.MediaSource>();
                 resolver.Dispose();
                 source.Dispose();
