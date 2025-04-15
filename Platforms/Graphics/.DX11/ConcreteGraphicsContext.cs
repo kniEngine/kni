@@ -333,16 +333,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 if ((ctextureCollection.InternalDirty & mask) != 0)
                 {
                     Texture texture = ctextureCollection[slot];
-
                     if (texture != null && !texture.IsDisposed)
                     {
                         ConcreteTexture ctexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>();
-                        dxShaderStage.SetShaderResource(slot, ctexture.GetShaderResourceView());
+
+                        D3D11.ShaderResourceView resourceView = ctexture.GetShaderResourceView();
+                        dxShaderStage.SetShaderResource(slot, resourceView);
 
                         this.Metrics_AddTextureCount();
                     }
                     else
+                    {
                         dxShaderStage.SetShaderResource(slot, null);
+                    }
 
                     // clear texture bit
                     ctextureCollection.InternalDirty &= ~mask;
@@ -355,19 +358,20 @@ namespace Microsoft.Xna.Platform.Graphics
                 uint mask = ((uint)1) << slot;
                 if ((csamplerStateCollection.InternalD3dDirty & mask) != 0)
                 {
-                    D3D11.SamplerState state = null;
-
                     SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
                     if (sampler != null)
                     {
                         Debug.Assert(sampler.GraphicsDevice == ((IPlatformGraphicsContext)this.Context).DeviceStrategy.Device, "The state was created for a different device!");
-               
+
                         ConcreteSamplerState csamplerState = ((IPlatformSamplerState)sampler).GetStrategy<ConcreteSamplerState>();
 
-                        state = csamplerState.GetDxState();
+                        D3D11.SamplerState state = csamplerState.GetDxState();
+                        dxShaderStage.SetSampler(slot, state);
                     }
-
-                    dxShaderStage.SetSampler(slot, state);
+                    else
+                    {
+                        dxShaderStage.SetSampler(slot, null);
+                    }
 
                     // clear sampler bit
                     csamplerStateCollection.InternalD3dDirty &= ~mask;
