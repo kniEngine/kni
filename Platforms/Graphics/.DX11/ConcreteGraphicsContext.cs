@@ -344,12 +344,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         this.Metrics_AddTextureCount();
                     }
-                    if (texture == null || texture.IsDisposed)
-                    {
-                        dxShaderStage.SetShaderResource(slot, null);
-                        // clear texture bit
-                        ctextureCollection.InternalDirty &= ~mask;
-                    }
                 }
             }
 
@@ -371,6 +365,32 @@ namespace Microsoft.Xna.Platform.Graphics
                         // clear sampler bit
                         csamplerStateCollection.InternalD3dDirty &= ~mask;
                     }
+                }
+            }
+
+            // Clear Textures
+            for (int slot = 0; ctextureCollection.InternalDirty != 0 && slot < texturesCount; slot++)
+            {
+                uint mask = ((uint)1) << slot;
+                if ((ctextureCollection.InternalDirty & mask) != 0)
+                {
+                    Texture texture = ctextureCollection[slot];
+                    if (texture == null || texture.IsDisposed)
+                    {
+                        dxShaderStage.SetShaderResource(slot, null);
+                        // clear texture bit
+                        ctextureCollection.InternalDirty &= ~mask;
+                    }
+                }
+            }
+
+            // Clear Samplers
+            for (int slot = 0; csamplerStateCollection.InternalD3dDirty != 0 && slot < texturesCount; slot++)
+            {
+                uint mask = ((uint)1) << slot;
+                if ((csamplerStateCollection.InternalD3dDirty & mask) != 0)
+                {
+                    SamplerState sampler = csamplerStateCollection.InternalActualSamplers[slot];
                     if (sampler == null)
                     {
                         dxShaderStage.SetSampler(slot, null);
