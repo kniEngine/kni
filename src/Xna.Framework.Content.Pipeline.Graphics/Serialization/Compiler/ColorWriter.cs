@@ -25,5 +25,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
             output.Write(value.B);
             output.Write(value.A);
         }
+
+        /// <inheritdoc/>
+        public override string GetRuntimeType(TargetPlatform targetPlatform)
+        {
+            string typeNamespace = "Microsoft.Xna.Framework"; // Color namespace is not 'Microsoft.Xna.Framework.Graphics'
+            string typeName = TargetType.Name;
+            string typeAssembly = TargetType.Assembly.FullName;
+
+            if (typeAssembly.StartsWith("Xna.Framework.Graphics,"))
+                typeAssembly = "Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553";
+
+            string runtimeType = typeNamespace + "." + typeName + ", " + typeAssembly;
+            return runtimeType;
+        }
     }
 }
