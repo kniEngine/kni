@@ -383,26 +383,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     SamplerInfo samplerInfo = shader._samplers[s];
 
-                    int match = parameters.FindIndex((paramContent) => paramContent.name == samplerInfo.textureName);
-                    if (match == -1)
+                    int textureParameterIdx = parameters.FindIndex((paramContent) => paramContent.name == samplerInfo.textureName);
+                    if (textureParameterIdx != -1)
                     {
-                        // Store the index for runtime lookup.
-                        shader._samplers[s].textureParameter = parameters.Count;
-
+                        // TODO: Make sure the type and size of
+                        // the parameter match up!
+                        shader._samplers[s].textureParameter = textureParameterIdx;
+                    }
+                    else
+                    {
                         EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
                         param.class_ = EffectObject.PARAMETER_CLASS.OBJECT;
                         param.name = samplerInfo.textureName;
                         param.semantic = string.Empty;
                         param.type = SamplerTypeToParameterType(samplerInfo.type);
-
                         parameters.Add(param);
-                    }
-                    else
-                    {
-                        // TODO: Make sure the type and size of 
-                        // the parameter match up!
 
-                        shader._samplers[s].textureParameter = match;
+                        // Store the index for runtime lookup.
+                        textureParameterIdx = parameters.Count-1;
+                        shader._samplers[s].textureParameter = textureParameterIdx;
                     }
                 }
             }
