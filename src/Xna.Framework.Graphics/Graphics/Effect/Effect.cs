@@ -14,40 +14,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Effect : GraphicsResource
     {
-        struct MGFXHeader 
-        {
-            /// <summary>
-            /// The MonoGame Effect file format header identifier ("MGFX"). 
-            /// </summary>
-            public static readonly int MGFXSignature = (BitConverter.IsLittleEndian) ? 0x5846474D: 0x4D474658;
-
-            /// <summary>
-            /// The current MonoGame Effect file format versions
-            /// used to detect old packaged content.
-            /// </summary>
-            /// <remarks>
-            /// We should avoid supporting old versions for very long if at all 
-            /// as users should be rebuilding content when packaging their game.
-            /// </remarks>
-            public const int MGFXVersion = 10;
-
-            public readonly int Signature;
-            public readonly int Version;
-            public readonly ShaderProfileType Profile;
-            public readonly int EffectKey;
-            public readonly int HeaderSize;
-
-            public MGFXHeader(byte[] effectCode, int index)
-            {
-                int offset = 0;
-                Signature = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
-                Version = (int)effectCode[index + offset]; offset += 1;
-                Profile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
-                EffectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
-                HeaderSize = offset;
-            }
-        }
-
         public EffectParameterCollection Parameters { get; private set; }
 
         public EffectTechniqueCollection Techniques { get; private set; }
@@ -99,58 +65,51 @@ namespace Microsoft.Xna.Framework.Graphics
             // shared constant buffers as 'new' should return unique
             // effects without any shared instance state.
  
-            //Read the header
-            MGFXHeader header = new MGFXHeader(effectCode, index);
-            if (header.Signature != MGFXHeader.MGFXSignature)
-                throw new Exception("This does not appear to be an MGFX effect file.");
-            if (header.Version > MGFXHeader.MGFXVersion)
-                throw new Exception("This effect seems to be for a newer version of KNI.");
-            if (header.Version == 8) // fallback to version 8
-            {    System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt."); }
-            else if (header.Version == 9) // fallback to version 9
-            { }
-            else
-            if (header.Version < MGFXHeader.MGFXVersion)
-                throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
-
-            // First look for it in the cache.
-            //
-            Effect effect;
-            lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+            //Read the mgfx header
+            MGFXHeader mgfxheader = new MGFXHeader(effectCode, index);
+            if (mgfxheader.Signature == MGFXHeader.MGFXSignature)
             {
-                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(header.EffectKey, out effect))
+                Effect effect;
+                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                 {
-                    using (Stream stream = new MemoryStream(effectCode, index + header.HeaderSize, count - header.HeaderSize, false))
+                    // First look for it in the cache.
+                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
                     {
-                        if (header.Version == 8 || header.Version == 9)
+                        using (Stream stream = new MemoryStream(effectCode, index + mgfxheader.HeaderSize, count - mgfxheader.HeaderSize, false))
                         {
-                            using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, header))
+                            switch (mgfxheader.Version)
                             {
-                                // Create Effect.
-                                effect = reader.ReadEffect();
+                                case 8: // fallback to version 8
+                                case 9: // fallback to version 9
+                                    System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt.");
+                                    using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
+                                        effect = reader.ReadEffect();
+                                    break;
 
-                                // Cache the effect for later in its original unmodified state.
-                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(header.EffectKey, effect);
-                            }
-                        }
-                        else
-                        {
-                            using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, header))
-                            {
-                                // Create Effect.
-                                effect = reader.ReadEffect();
+                                case 10:
+                                    using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
+                                        effect = reader.ReadEffect();
+                                    break;
 
-                                // Cache the effect for later in its original unmodified state.
-                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(header.EffectKey, effect);
+                                default:
+                                    if (mgfxheader.Version > MGFXHeader.MGFXVersion)
+                                        throw new Exception("This effect seems to be for a newer version of KNI.");
+                                    if (mgfxheader.Version < MGFXHeader.MGFXVersion)
+                                        throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
+                                    break;
                             }
+                            // Cache the effect for later in its original unmodified state.
+                            ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
                         }
                     }
                 }
+
+                // Clone it.
+                _isClone = true;
+                Clone(effect);
             }
 
-            // Clone it.
-            _isClone = true;
-            Clone(effect);
+            throw new Exception("This does not appear to be an MGFX effect file.");
         }
 
         /// <summary>
