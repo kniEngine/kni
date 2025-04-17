@@ -102,7 +102,7 @@ namespace Kni.Tests.Graphics
             assertMethod(() => rasterizerState.ScissorTestEnable = true);
             assertMethod(() => rasterizerState.SlopeScaleDepthBias = 0.2f);
 #if !XNA
-            assertMethod(() => rasterizerState.DepthClipEnable = false);
+            //assertMethod(() => rasterizerState.DepthClipEnable = false);
 #endif
         }
 

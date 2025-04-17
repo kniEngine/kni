@@ -21,7 +21,7 @@ namespace Kni.Tests.Graphics
         [Test]
         public void ShouldNotBeAbleToMutateStateObjectAfterBindingToGraphicsDevice()
         {
-            var blendState = new BlendState();
+            BlendState blendState = new BlendState();
 
             // Can mutate before binding.
             DoAsserts(blendState, Assert.DoesNotThrow);
@@ -59,24 +59,23 @@ namespace Kni.Tests.Graphics
             assertMethod(() => blendState.ColorWriteChannels1 = ColorWriteChannels.All);
             assertMethod(() => blendState.ColorWriteChannels2 = ColorWriteChannels.All);
             assertMethod(() => blendState.ColorWriteChannels3 = ColorWriteChannels.All);
-// The Mac build bot GL driver does not support independent blend states
-#if !XNA && !DESKTOPGL
-            assertMethod(() => blendState.IndependentBlendEnable = true);
-#endif
             assertMethod(() => blendState.MultiSampleMask = 0);
 
-#if !XNA
-            for (var i = 0; i < 4; i++)
-            {
-                assertMethod(() => blendState[0].AlphaBlendFunction = BlendFunction.Add);
-                assertMethod(() => blendState[0].AlphaDestinationBlend = Blend.BlendFactor);
-                assertMethod(() => blendState[0].AlphaSourceBlend = Blend.BlendFactor);
-                assertMethod(() => blendState[0].ColorBlendFunction = BlendFunction.Add);
-                assertMethod(() => blendState[0].ColorDestinationBlend = Blend.BlendFactor);
-                assertMethod(() => blendState[0].ColorSourceBlend = Blend.BlendFactor);
-                assertMethod(() => blendState[0].ColorWriteChannels = ColorWriteChannels.All);
-            }
+#if WINDOWSDX
+            // that is invalid for Reach profile
+            //assertMethod(() => blendState.IndependentBlendEnable = true);
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    assertMethod(() => blendState[0].AlphaBlendFunction = BlendFunction.Add);
+            //    assertMethod(() => blendState[0].AlphaDestinationBlend = Blend.BlendFactor);
+            //    assertMethod(() => blendState[0].AlphaSourceBlend = Blend.BlendFactor);
+            //    assertMethod(() => blendState[0].ColorBlendFunction = BlendFunction.Add);
+            //    assertMethod(() => blendState[0].ColorDestinationBlend = Blend.BlendFactor);
+            //    assertMethod(() => blendState[0].ColorSourceBlend = Blend.BlendFactor);
+            //    assertMethod(() => blendState[0].ColorWriteChannels = ColorWriteChannels.All);
+            //}
 #endif
+
         }
 
         [Test]
