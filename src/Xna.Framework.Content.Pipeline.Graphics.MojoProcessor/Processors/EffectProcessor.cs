@@ -505,8 +505,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
         {
             // Write a very simple header for identification and versioning.
-            writer.Write(MGFXWriter10.MGFXSignature.ToCharArray());
-            writer.Write((byte)MGFXWriter10.Version);
+            writer.Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
+            writer.Write((byte)KNIFXWriter11.Version);
 
             // Write an simple identifier for DX11 vs GLSL
             // so we can easily detect the correct shader type.
@@ -514,7 +514,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (MGFXWriter10 memWriter = new MGFXWriter10(memStream, profileType))
+            using (KNIFXWriter11 memWriter = new KNIFXWriter11(memStream, profileType))
             {
                 memWriter.WriteEffect(effect);
 
