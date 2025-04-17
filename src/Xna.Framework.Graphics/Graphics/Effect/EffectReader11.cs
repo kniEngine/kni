@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private ConstantBuffer[] ReadConstantBuffers()
             {
-                int buffersCount = ReadInt32();
+                int buffersCount = ReadPackedInt();
                 ConstantBuffer[] constantBuffers = new ConstantBuffer[buffersCount];
                 for (int c = 0; c < buffersCount; c++)
                     constantBuffers[c] = ReadConstantBuffer();
@@ -67,14 +67,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 string name = ReadString();
 
                 // Create the backing system memory buffer.
-                int sizeInBytes = (int)ReadInt16();
+                int sizeInBytes = ReadPackedInt();
 
                 // Read the parameter index values.
-                int[] parameters = new int[ReadInt32()];
+                int[] parameters = new int[ReadPackedInt()];
                 int[] offsets = new int[parameters.Length];
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    parameters[i] = ReadInt32();
+                    parameters[i] = ReadPackedInt();
                     offsets[i]    = (int)ReadUInt16();
                 }
 
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private Shader[] ReadShaders()
             {
-                int shadersCount = ReadInt32();
+                int shadersCount = ReadPackedInt();
                 Shader[] shaders = new Shader[shadersCount];
                 for (int s = 0; s < shadersCount; s++)
                     shaders[s] = ReadShader();
@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 int shaderLength = ReadInt32();
                 byte[] shaderBytecode = ReadBytes(shaderLength);
 
-                int samplerCount = (int)ReadByte();
+                int samplerCount = ReadPackedInt();
                 SamplerInfo[] samplers = new SamplerInfo[samplerCount];
                 for (int s = 0; s < samplerCount; s++)
                 {
@@ -118,23 +118,21 @@ namespace Microsoft.Xna.Framework.Graphics
                         samplers[s].state = ReadSamplerState();
 
                     samplers[s].GLsamplerName = ReadString();
-                    samplers[s].textureParameter = ReadByte();
-                    if (samplers[s].textureParameter == 255)
-                        samplers[s].textureParameter = -1;
+                    samplers[s].textureParameter = ReadPackedInt();
                 }
 
-                int cbufferCount = (int)ReadByte();
+                int cbufferCount = ReadPackedInt();
                 int[] cBuffers = new int[cbufferCount];
                 for (int c = 0; c < cbufferCount; c++)
-                    cBuffers[c] = ReadByte();
+                    cBuffers[c] = ReadPackedInt();
 
-                int attributeCount = (int)ReadByte();
+                int attributeCount = ReadPackedInt();
                 VertexAttribute[] attributes = new VertexAttribute[attributeCount];
                 for (int a = 0; a < attributeCount; a++)
                 {
                     attributes[a].name = ReadString();
                     attributes[a].usage = (VertexElementUsage)ReadByte();
-                    attributes[a].index = ReadByte();
+                    attributes[a].index = ReadPackedInt();
                     attributes[a].location = ReadInt16();
                 }
 
@@ -168,15 +166,15 @@ namespace Microsoft.Xna.Framework.Graphics
                     ReadByte(),
                     ReadByte());
                 state.Filter = (TextureFilter)ReadByte();
-                state.MaxAnisotropy = ReadInt32();
-                state.MaxMipLevel = ReadInt32();
+                state.MaxAnisotropy = ReadPackedInt();
+                state.MaxMipLevel = ReadPackedInt();
                 state.MipMapLevelOfDetailBias = ReadSingle();
                 return state;
             }
 
             private EffectParameterCollection ReadParameters()
             {
-                int count = ReadInt32();
+                int count = ReadPackedInt();
 
                 if (count == 0)
                     return EffectParameterCollection.Empty;
@@ -271,7 +269,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)
             {
-                int techniqueCount = ReadInt32();
+                int techniqueCount = ReadPackedInt();
 
                 EffectTechnique[] techniques = new EffectTechnique[techniqueCount];
                 for (int t = 0; t < techniqueCount; t++)
@@ -287,7 +285,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectPassCollection ReadPasses(Effect effect)
             {
-                int passesCount = ReadInt32();
+                int passesCount = ReadPackedInt();
                 EffectPass[] passes = new EffectPass[passesCount];
                 for (int i = 0; i < passesCount; i++)
                     ReadEffectPass(effect, passes, i);
@@ -303,8 +301,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 VertexShader vertexShader = null;
                 PixelShader pixelShader = null;
                 {
-                    int vertexShaderIndex = ReadInt32();
-                    int pixelShaderIndex  = ReadInt32();
+                    int vertexShaderIndex = ReadPackedInt();
+                    int pixelShaderIndex  = ReadPackedInt();
                     if (vertexShaderIndex >= 0)
                         vertexShader = (VertexShader)effect._shaders[vertexShaderIndex];
                     if (pixelShaderIndex >= 0)
@@ -375,7 +373,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectAnnotationCollection ReadAnnotations()
             {
-                int count = (int)ReadInt32();
+                int count = ReadPackedInt();
                 if (count == 0)
                     return EffectAnnotationCollection.Empty;
 
