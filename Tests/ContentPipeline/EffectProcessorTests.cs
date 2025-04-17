@@ -81,34 +81,34 @@ namespace Kni.Tests.ContentPipeline
         [TestCase("Assets/Effects/ParserTest.fx")]
         public void TestParser(string effectFile)
         {
-            BuildEffect(effectFile, TargetPlatform.Windows);
+            BuildEffect(effectFile, TargetPlatform.Windows, optimize: false);
         }
 
         [Test]
         public void TestDefines()
         {
-            Assert.DoesNotThrow(() => BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows, "MACRO_DEFINE_TEST=3"));
+            Assert.DoesNotThrow(() => BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows, optimize: false, "MACRO_DEFINE_TEST=3"));
             Assert.Throws<InvalidContentException>(() =>
-                BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows, "MACRO_DEFINE_TEST=4"));
+                BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows, optimize: false, "MACRO_DEFINE_TEST=4"));
             Assert.Throws<InvalidContentException>(() =>
-                BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows));
+                BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows, optimize: false));
             Assert.Throws<InvalidContentException>(() =>
-                BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows, "INVALID_SYNTAX;ANOTHER_MACRO;MACRO_DEFINE_TEST=3"));
+                BuildEffect("Assets/Effects/DefinesTest.fx", TargetPlatform.Windows, optimize: false, "INVALID_SYNTAX;ANOTHER_MACRO;MACRO_DEFINE_TEST=3"));
         }
 
         [Test]
-        [TestCase("Assets/Effects/Stock/AlphaTestEffect.fx")]
-        [TestCase("Assets/Effects/Stock/BasicEffect.fx")]
-        [TestCase("Assets/Effects/Stock/DualTextureEffect.fx")]
-        [TestCase("Assets/Effects/Stock/EnvironmentMapEffect.fx")]
-        [TestCase("Assets/Effects/Stock/SkinnedEffect.fx")]
-        [TestCase("Assets/Effects/Stock/SpriteEffect.fx")]
-        public void BuildStockEffect(string effectFile)
+        [TestCase("Assets/Effects/Stock/AlphaTestEffect.fx", false)]
+        [TestCase("Assets/Effects/Stock/BasicEffect.fx", false)]
+        [TestCase("Assets/Effects/Stock/DualTextureEffect.fx", false)]
+        [TestCase("Assets/Effects/Stock/EnvironmentMapEffect.fx", false)]
+        [TestCase("Assets/Effects/Stock/SkinnedEffect.fx", false)]
+        [TestCase("Assets/Effects/Stock/SpriteEffect.fx", false)]
+        public void BuildStockEffect(string effectFile, bool optimize)
         {
-            BuildEffect(effectFile, TargetPlatform.Windows);
+            BuildEffect(effectFile, TargetPlatform.Windows, optimize: optimize);
         }
 
-        private void BuildEffect(string effectFile, TargetPlatform targetPlatform, string defines = null)
+        private void BuildEffect(string effectFile, TargetPlatform targetPlatform, bool optimize, string defines = null)
         {
             var importerContext = new ImporterContext();
             var importer = new EffectImporter();
@@ -118,6 +118,8 @@ namespace Kni.Tests.ContentPipeline
 
             var processorContext = new TestProcessorContext(targetPlatform, Path.ChangeExtension(effectFile, ".xnb"));
             var processor = new EffectProcessor { Defines = defines };
+            if (optimize == true)
+                processor.DebugMode = EffectProcessorDebugMode.Optimize;
             var output = processor.Process(input, processorContext);
 
             Assert.NotNull(output);
