@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
             catch (Exception ex)
             {
-                // TODO: Extract good line numbers from mgfx parser!
+                // TODO: Extract good line numbers from fx parser!
                 throw new InvalidContentException(ex.Message, input.Identity, ex);
             }
 
@@ -408,7 +408,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // TODO: Annotations are part of the .FX format and
             // not a part of shaders... we need to implement them
-            // in our mgfx parser if we want them back.
+            // in our fx parser if we want them back.
 
             effect.Parameters = parameters.ToArray();
 
@@ -473,7 +473,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
 
 
-        private const string MGFXHeader = "MGFX";
+        private const string MGFXSignature = "MGFX";
         private const int Version = 10;
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
         {
             // Write a very simple header for identification and versioning.
-            writer.Write(MGFXHeader.ToCharArray());
+            writer.Write(MGFXSignature.ToCharArray());
             writer.Write((byte)Version);
 
             // Write an simple identifier for DX11 vs GLSL
@@ -506,7 +506,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write a tail to be used by the reader for validation.
             if (Version >= 10)
-                writer.Write(MGFXHeader.ToCharArray());
+                writer.Write(MGFXSignature.ToCharArray());
         }
 
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)
