@@ -79,11 +79,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (mgfxheader.Version < MGFXHeader.MGFXVersion)
                     throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
 
-                // First look for it in the cache.
-                //
                 Effect effect;
                 lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                 {
+                    // First look for it in the cache.
                     if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
                     {
                         using (Stream stream = new MemoryStream(effectCode, index + mgfxheader.HeaderSize, count - mgfxheader.HeaderSize, false))
@@ -91,25 +90,15 @@ namespace Microsoft.Xna.Framework.Graphics
                             if (mgfxheader.Version == 8 || mgfxheader.Version == 9)
                             {
                                 using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
-                                {
-                                    // Create Effect.
                                     effect = reader.ReadEffect();
-
-                                    // Cache the effect for later in its original unmodified state.
-                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
-                                }
                             }
                             else
                             {
                                 using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
-                                {
-                                    // Create Effect.
                                     effect = reader.ReadEffect();
-
-                                    // Cache the effect for later in its original unmodified state.
-                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
-                                }
                             }
+                            // Cache the effect for later in its original unmodified state.
+                            ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
                         }
                     }
                 }
