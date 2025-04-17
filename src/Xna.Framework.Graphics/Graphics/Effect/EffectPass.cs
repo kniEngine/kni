@@ -120,6 +120,7 @@ namespace Microsoft.Xna.Framework.Graphics
             for (int i = 0; i < samplers.Length; i++)
             {
                 // Set Texture
+                if (samplers[i].textureParameter != -1)
                 {
                     EffectParameter param = _effect.Parameters[samplers[i].textureParameter];
                     textures[samplers[i].textureSlot] = param.Data as Texture;

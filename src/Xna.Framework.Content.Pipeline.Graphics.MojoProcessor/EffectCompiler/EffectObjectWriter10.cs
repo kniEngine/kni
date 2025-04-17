@@ -107,7 +107,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                 Write(sampler.GLsamplerName);
 
-                Write((byte)sampler.textureParameter);
+                if (sampler.textureParameter != -1)
+                    Write((byte)sampler.textureParameter);
+                else
+                    Write((byte)255);
             }
 
             Write((byte)shader._cbuffers.Length);
