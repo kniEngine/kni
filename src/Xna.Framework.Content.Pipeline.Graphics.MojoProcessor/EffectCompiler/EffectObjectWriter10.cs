@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    class EffectObjectWriter : BinaryWriter
+    class EffectObjectWriter10 : BinaryWriter
     {
         private readonly int Version;
         private readonly ShaderProfileType _profile;
 
-        public EffectObjectWriter(Stream output, int version, ShaderProfileType profileType) : base(output)
+        public EffectObjectWriter10(Stream output, int version, ShaderProfileType profileType) : base(output)
         {
             System.Diagnostics.Debug.Assert(version == 10);
             this.Version = version;
