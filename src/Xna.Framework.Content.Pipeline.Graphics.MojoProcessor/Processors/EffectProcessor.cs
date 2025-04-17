@@ -492,7 +492,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (EffectObjectWriter memWriter = new EffectObjectWriter(memStream, Version, profileType))
+            using (EffectObjectWriter10 memWriter = new EffectObjectWriter10(memStream, Version, profileType))
             {
                 memWriter.WriteEffect(effect);
 
