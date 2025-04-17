@@ -65,6 +65,42 @@ namespace Microsoft.Xna.Framework.Graphics
             // shared constant buffers as 'new' should return unique
             // effects without any shared instance state.
  
+            //Read the KNI fx header
+            KNIFXHeader fxHeader = new KNIFXHeader(effectCode, index);
+            if (fxHeader.Signature == KNIFXHeader.KNIFXSignature)
+            {
+                Effect effect;
+                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+                {
+                    // First look for it in the cache.
+                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(fxHeader.EffectKey, out effect))
+                    {
+                        using (Stream stream = new MemoryStream(effectCode, index + fxHeader.HeaderSize, count - fxHeader.HeaderSize, false))
+                        {
+                            switch (fxHeader.Version)
+                            {
+                                case 11:
+                                    using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, fxHeader))
+                                        effect = reader.ReadEffect();
+                                    break;
+
+                                default:
+                                    if (fxHeader.Version > KNIFXHeader.CurrentKNIFXVersion)
+                                        throw new Exception("This effect seems to be for a newer version of KNI.");
+                                    if (fxHeader.Version < KNIFXHeader.CurrentKNIFXVersion)
+                                        throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                // Clone it.
+                _isClone = true;
+                Clone(effect);
+                return;
+            }
+
             //Read the mgfx header
             MGFXHeader mgfxheader = new MGFXHeader(effectCode, index);
             if (mgfxheader.Signature == MGFXHeader.MGFXSignature)

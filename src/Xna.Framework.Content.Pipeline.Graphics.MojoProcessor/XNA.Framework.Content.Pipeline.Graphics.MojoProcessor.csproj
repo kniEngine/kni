@@ -47,6 +47,7 @@
     <Compile Include="EffectCompiler\ConstantBufferData.cs" />
     <Compile Include="EffectCompiler\EffectObject.cs" />
     <Compile Include="EffectCompiler\MGFXWriter10.cs" />
+    <Compile Include="EffectCompiler\KNIFXWriter11.cs" />
     <Compile Include="EffectCompiler\MarshalHelper.cs" />
     <Compile Include="EffectCompiler\SamplerInfo.cs" />
     <Compile Include="EffectCompiler\ShaderCompilerException.cs" />
