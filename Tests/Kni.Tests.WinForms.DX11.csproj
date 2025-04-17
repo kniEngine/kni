@@ -34,8 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Version="4.0.1" Include="SharpDX" />
-    <PackageReference Version="4.0.1" Include="SharpDX.DXGI" />
+    <PackageReference Version="4.2.0" Include="SharpDX" />
+    <PackageReference Version="4.2.0" Include="SharpDX.DXGI" />
   </ItemGroup>
 	
   <ItemGroup>
