@@ -107,6 +107,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Clone it.
                 _isClone = true;
                 Clone(effect);
+                return;
             }
 
             throw new Exception("This does not appear to be an MGFX effect file.");
