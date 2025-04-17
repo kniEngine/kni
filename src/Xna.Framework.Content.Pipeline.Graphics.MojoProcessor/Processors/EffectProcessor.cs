@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
             catch (Exception ex)
             {
-                // TODO: Extract good line numbers from mgfx parser!
+                // TODO: Extract good line numbers from fx parser!
                 throw new InvalidContentException(ex.Message, input.Identity, ex);
             }
 
@@ -408,7 +408,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // TODO: Annotations are part of the .FX format and
             // not a part of shaders... we need to implement them
-            // in our mgfx parser if we want them back.
+            // in our fx parser if we want them back.
 
             effect.Parameters = parameters.ToArray();
 
