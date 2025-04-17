@@ -65,18 +65,18 @@ namespace Microsoft.Xna.Framework.Graphics
             // shared constant buffers as 'new' should return unique
             // effects without any shared instance state.
  
-            //Read the header
-            MGFXHeader header = new MGFXHeader(effectCode, index);
-            if (header.Signature != MGFXHeader.MGFXSignature)
+            //Read the mgfx header
+            MGFXHeader mgfxheader = new MGFXHeader(effectCode, index);
+            if (mgfxheader.Signature != MGFXHeader.MGFXSignature)
                 throw new Exception("This does not appear to be an MGFX effect file.");
-            if (header.Version > MGFXHeader.MGFXVersion)
+            if (mgfxheader.Version > MGFXHeader.MGFXVersion)
                 throw new Exception("This effect seems to be for a newer version of KNI.");
-            if (header.Version == 8) // fallback to version 8
+            if (mgfxheader.Version == 8) // fallback to version 8
             {    System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt."); }
-            else if (header.Version == 9) // fallback to version 9
+            else if (mgfxheader.Version == 9) // fallback to version 9
             { }
             else
-            if (header.Version < MGFXHeader.MGFXVersion)
+            if (mgfxheader.Version < MGFXHeader.MGFXVersion)
                 throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
 
             // First look for it in the cache.
@@ -84,30 +84,30 @@ namespace Microsoft.Xna.Framework.Graphics
             Effect effect;
             lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
             {
-                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(header.EffectKey, out effect))
+                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
                 {
-                    using (Stream stream = new MemoryStream(effectCode, index + header.HeaderSize, count - header.HeaderSize, false))
+                    using (Stream stream = new MemoryStream(effectCode, index + mgfxheader.HeaderSize, count - mgfxheader.HeaderSize, false))
                     {
-                        if (header.Version == 8 || header.Version == 9)
+                        if (mgfxheader.Version == 8 || mgfxheader.Version == 9)
                         {
-                            using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, header))
+                            using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
                             {
                                 // Create Effect.
                                 effect = reader.ReadEffect();
 
                                 // Cache the effect for later in its original unmodified state.
-                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(header.EffectKey, effect);
+                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
                             }
                         }
                         else
                         {
-                            using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, header))
+                            using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
                             {
                                 // Create Effect.
                                 effect = reader.ReadEffect();
 
                                 // Cache the effect for later in its original unmodified state.
-                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(header.EffectKey, effect);
+                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
                             }
                         }
                     }
