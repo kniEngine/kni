@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    class EffectObjectWriter : BinaryWriter
+    class EffectObjectWriter09 : BinaryWriter
     {
         private readonly int Version;
         private readonly Options options;
 
-        public EffectObjectWriter(Stream output, int version, Options options) : base(output)
+        public EffectObjectWriter09(Stream output, int version, Options options) : base(output)
         {
             System.Diagnostics.Debug.Assert(version == 9);
             this.Version = version;
