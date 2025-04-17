@@ -473,7 +473,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
 
 
-        private const string MGFXHeader = "MGFX";
+        private const string MGFXSignature = "MGFX";
         private const int Version = 10;
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
         {
             // Write a very simple header for identification and versioning.
-            writer.Write(MGFXHeader.ToCharArray());
+            writer.Write(MGFXSignature.ToCharArray());
             writer.Write((byte)Version);
 
             // Write an simple identifier for DX11 vs GLSL
@@ -506,7 +506,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write a tail to be used by the reader for validation.
             if (Version >= 10)
-                writer.Write(MGFXHeader.ToCharArray());
+                writer.Write(MGFXSignature.ToCharArray());
         }
 
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)
