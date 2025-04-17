@@ -19,12 +19,10 @@ namespace Microsoft.Xna.Platform.Graphics
         private SamplerInfo[] _samplers;
         private int[] _CBuffers;
         private VertexAttribute[] _attributes;
-        protected int _hashKey;
 
         public SamplerInfo[] Samplers { get { return _samplers; } }
         public int[] CBuffers { get { return _CBuffers; } }
         public VertexAttribute[] Attributes { get { return _attributes; } }
-        public int HashKey { get { return _hashKey; } }
 
 
         protected ShaderStrategy(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
