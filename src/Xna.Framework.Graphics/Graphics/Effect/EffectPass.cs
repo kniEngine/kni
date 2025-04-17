@@ -119,17 +119,15 @@ namespace Microsoft.Xna.Framework.Graphics
             SamplerInfo[] samplers = shader.Samplers;
             for (int i = 0; i < samplers.Length; i++)
             {
-                SamplerInfo samplerInfo = samplers[i];
-
                 // Set Texture
                 {
-                    EffectParameter param = _effect.Parameters[samplerInfo.textureParameter];
-                    textures[samplerInfo.textureSlot] = param.Data as Texture;
+                    EffectParameter param = _effect.Parameters[samplers[i].textureParameter];
+                    textures[samplers[i].textureSlot] = param.Data as Texture;
                 }
 
                 // Set SamplerState
-                if (samplerInfo.state != null)
-                    samplerStates[samplerInfo.samplerSlot] = samplerInfo.state;
+                if (samplers[i].state != null)
+                    samplerStates[samplers[i].samplerSlot] = samplers[i].state;
             }
         }
     }
