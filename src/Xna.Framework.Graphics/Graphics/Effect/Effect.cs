@@ -67,56 +67,59 @@ namespace Microsoft.Xna.Framework.Graphics
  
             //Read the mgfx header
             MGFXHeader mgfxheader = new MGFXHeader(effectCode, index);
-            if (mgfxheader.Signature != MGFXHeader.MGFXSignature)
-                throw new Exception("This does not appear to be an MGFX effect file.");
-            if (mgfxheader.Version > MGFXHeader.MGFXVersion)
-                throw new Exception("This effect seems to be for a newer version of KNI.");
-            if (mgfxheader.Version == 8) // fallback to version 8
-            {    System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt."); }
-            else if (mgfxheader.Version == 9) // fallback to version 9
-            { }
-            else
-            if (mgfxheader.Version < MGFXHeader.MGFXVersion)
-                throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
-
-            // First look for it in the cache.
-            //
-            Effect effect;
-            lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+            if (mgfxheader.Signature == MGFXHeader.MGFXSignature)
             {
-                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
+                if (mgfxheader.Version > MGFXHeader.MGFXVersion)
+                    throw new Exception("This effect seems to be for a newer version of KNI.");
+                if (mgfxheader.Version == 8) // fallback to version 8
+                { System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt."); }
+                else if (mgfxheader.Version == 9) // fallback to version 9
+                { }
+                else
+                if (mgfxheader.Version < MGFXHeader.MGFXVersion)
+                    throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
+
+                // First look for it in the cache.
+                //
+                Effect effect;
+                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                 {
-                    using (Stream stream = new MemoryStream(effectCode, index + mgfxheader.HeaderSize, count - mgfxheader.HeaderSize, false))
+                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
                     {
-                        if (mgfxheader.Version == 8 || mgfxheader.Version == 9)
+                        using (Stream stream = new MemoryStream(effectCode, index + mgfxheader.HeaderSize, count - mgfxheader.HeaderSize, false))
                         {
-                            using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
+                            if (mgfxheader.Version == 8 || mgfxheader.Version == 9)
                             {
-                                // Create Effect.
-                                effect = reader.ReadEffect();
+                                using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
+                                {
+                                    // Create Effect.
+                                    effect = reader.ReadEffect();
 
-                                // Cache the effect for later in its original unmodified state.
-                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
+                                    // Cache the effect for later in its original unmodified state.
+                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
+                                }
                             }
-                        }
-                        else
-                        {
-                            using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
+                            else
                             {
-                                // Create Effect.
-                                effect = reader.ReadEffect();
+                                using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
+                                {
+                                    // Create Effect.
+                                    effect = reader.ReadEffect();
 
-                                // Cache the effect for later in its original unmodified state.
-                                ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
+                                    // Cache the effect for later in its original unmodified state.
+                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
+                                }
                             }
                         }
                     }
                 }
+
+                // Clone it.
+                _isClone = true;
+                Clone(effect);
             }
 
-            // Clone it.
-            _isClone = true;
-            Clone(effect);
+            throw new Exception("This does not appear to be an MGFX effect file.");
         }
 
         /// <summary>
