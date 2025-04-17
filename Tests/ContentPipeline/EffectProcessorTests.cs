@@ -98,10 +98,10 @@ namespace Kni.Tests.ContentPipeline
 
         [Test]
         [TestCase("Assets/Effects/Stock/AlphaTestEffect.fx", false)]
-        [TestCase("Assets/Effects/Stock/BasicEffect.fx", false)]
+        [TestCase("Assets/Effects/Stock/BasicEffect.fx", true)]
         [TestCase("Assets/Effects/Stock/DualTextureEffect.fx", false)]
         [TestCase("Assets/Effects/Stock/EnvironmentMapEffect.fx", false)]
-        [TestCase("Assets/Effects/Stock/SkinnedEffect.fx", false)]
+        [TestCase("Assets/Effects/Stock/SkinnedEffect.fx", true)]
         [TestCase("Assets/Effects/Stock/SpriteEffect.fx", false)]
         public void BuildStockEffect(string effectFile, bool optimize)
         {
