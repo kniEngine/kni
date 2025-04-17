@@ -116,14 +116,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void SetShaderSamplers(Shader shader, TextureCollection textures, SamplerStateCollection samplerStates)
         {
-            foreach (SamplerInfo samplerInfo in shader.Samplers)
+            SamplerInfo[] samplers = shader.Samplers;
+            for (int i = 0; i < samplers.Length; i++)
             {
-                EffectParameter param = _effect.Parameters[samplerInfo.textureParameter];
-                Texture texture = param.Data as Texture;
+                SamplerInfo samplerInfo = samplers[i];
 
-                textures[samplerInfo.textureSlot] = texture;
+                // Set Texture
+                {
+                    EffectParameter param = _effect.Parameters[samplerInfo.textureParameter];
+                    textures[samplerInfo.textureSlot] = param.Data as Texture;
+                }
 
-                // If there is a sampler state set it.
+                // Set SamplerState
                 if (samplerInfo.state != null)
                     samplerStates[samplerInfo.samplerSlot] = samplerInfo.state;
             }
