@@ -119,6 +119,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     samplers[s].GLsamplerName = ReadString();
                     samplers[s].textureParameter = ReadByte();
+                    if (samplers[s].textureParameter == 255)
+                        samplers[s].textureParameter = -1;
                 }
 
                 int cbufferCount = (int)ReadByte();
