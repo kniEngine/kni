@@ -390,7 +390,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         // the parameter match up!
                         shader._samplers[s].textureParameter = textureParameterIdx;
                     }
-                    else
+                    else // if (samplerInfo.textureName != null)
                     {
                         EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
                         param.class_ = EffectObject.PARAMETER_CLASS.OBJECT;
