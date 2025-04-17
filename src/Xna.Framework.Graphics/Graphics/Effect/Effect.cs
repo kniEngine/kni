@@ -69,16 +69,6 @@ namespace Microsoft.Xna.Framework.Graphics
             MGFXHeader mgfxheader = new MGFXHeader(effectCode, index);
             if (mgfxheader.Signature == MGFXHeader.MGFXSignature)
             {
-                if (mgfxheader.Version > MGFXHeader.MGFXVersion)
-                    throw new Exception("This effect seems to be for a newer version of KNI.");
-                if (mgfxheader.Version == 8) // fallback to version 8
-                { System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt."); }
-                else if (mgfxheader.Version == 9) // fallback to version 9
-                { }
-                else
-                if (mgfxheader.Version < MGFXHeader.MGFXVersion)
-                    throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
-
                 Effect effect;
                 lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                 {
@@ -87,15 +77,26 @@ namespace Microsoft.Xna.Framework.Graphics
                     {
                         using (Stream stream = new MemoryStream(effectCode, index + mgfxheader.HeaderSize, count - mgfxheader.HeaderSize, false))
                         {
-                            if (mgfxheader.Version == 8 || mgfxheader.Version == 9)
+                            switch (mgfxheader.Version)
                             {
-                                using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
-                                    effect = reader.ReadEffect();
-                            }
-                            else
-                            {
-                                using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
-                                    effect = reader.ReadEffect();
+                                case 8: // fallback to version 8
+                                case 9: // fallback to version 9
+                                    System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt.");
+                                    using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
+                                        effect = reader.ReadEffect();
+                                    break;
+
+                                case 10:
+                                    using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
+                                        effect = reader.ReadEffect();
+                                    break;
+
+                                default:
+                                    if (mgfxheader.Version > MGFXHeader.MGFXVersion)
+                                        throw new Exception("This effect seems to be for a newer version of KNI.");
+                                    if (mgfxheader.Version < MGFXHeader.MGFXVersion)
+                                        throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
+                                    break;
                             }
                             // Cache the effect for later in its original unmodified state.
                             ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
