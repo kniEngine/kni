@@ -12,36 +12,45 @@ namespace Kni.Tests.ContentPipeline
 {
     class FontDescriptionProcessorTests
     {
-        static object[] textureFormats = new object[] {
-            new object[] {
+        static object[] textureFormats = new object[]
+        {
+            new object[]
+            {
                 TargetPlatform.DesktopGL,
                 TextureProcessorOutputFormat.Color,
             },
-            new object[] {
+            new object[] 
+            {
                 TargetPlatform.DesktopGL,
                 TextureProcessorOutputFormat.Color16Bit,
             },
-            new object[] {
+            new object[]
+            {
                 TargetPlatform.DesktopGL,
                 TextureProcessorOutputFormat.Compressed,
             },
-            new object[] {
+            new object[] 
+            {
                 TargetPlatform.Android,
                 TextureProcessorOutputFormat.Etc1Compressed,
             },
-            new object[] {
+            new object[] 
+            {
                 TargetPlatform.iOS,
                 TextureProcessorOutputFormat.PvrCompressed,
             },
-            new object[] {
+            new object[] 
+            {
                 TargetPlatform.iOS,
                 TextureProcessorOutputFormat.Compressed,
             },
-            new object[] {
+            new object[]
+            {
                 TargetPlatform.Android,
                 TextureProcessorOutputFormat.Compressed,
             },
-            new object[] {
+            new object[]
+            {
                 TargetPlatform.Windows,
                 TextureProcessorOutputFormat.Compressed,
             },
@@ -49,25 +58,23 @@ namespace Kni.Tests.ContentPipeline
 
         [Test]
         [TestCaseSource("textureFormats")]
-        public void BuildLocalizedFont (TargetPlatform platform, TextureProcessorOutputFormat format)
+        public void BuildLocalizedFont(TargetPlatform platform, TextureProcessorOutputFormat format)
         {
-            var context = new TestProcessorContext(platform, "Localized.xnb");
-            var processor = new LocalizedFontProcessor()
-            {
-                TextureFormat = format,
-                PremultiplyAlpha = true,
-            };
+            TestProcessorContext context = new TestProcessorContext(platform, "Localized.xnb");
+            LocalizedFontProcessor processor = new LocalizedFontProcessor();
+            processor.TextureFormat = format;
+            processor.PremultiplyAlpha = true;
 
             LocalizedFontDescription fontDescription = null;
-            using (var fs = File.OpenRead(Path.Combine("Assets", "Fonts", "Localized.spritefont")))
-            using (var input = XmlReader.Create(new StreamReader(fs)))
+            using (FileStream fs = File.OpenRead(Path.Combine("Assets", "Fonts", "Localized.spritefont")))
+            using (XmlReader input = XmlReader.Create(new StreamReader(fs)))
                 fontDescription = IntermediateSerializer.Deserialize<LocalizedFontDescription>(input, "");
             fontDescription.Identity = new ContentIdentity("Localized.spritefont");
 
-            var output = processor.Process(fontDescription, context);
+            SpriteFontContent output = processor.Process(fontDescription, context);
             Assert.IsNotNull(output, "output should not be null");
             Assert.IsNotNull(output.Texture, "output.Texture should not be null");
-            var textureType = output.Texture.Faces[0][0].GetType();
+            Type textureType = output.Texture.Faces[0][0].GetType();
             switch (format)
             {
                 case TextureProcessorOutputFormat.Color:
@@ -107,25 +114,23 @@ namespace Kni.Tests.ContentPipeline
 
         [Test]
         [TestCaseSource("textureFormats")]
-        public void BuildFontFromDescription (TargetPlatform platform, TextureProcessorOutputFormat format)
+        public void BuildFontFromDescription(TargetPlatform platform, TextureProcessorOutputFormat format)
         {
-            var context = new TestProcessorContext(platform, "Arial.xnb");
-            var processor = new FontDescriptionProcessor()
-            {
-                TextureFormat = format,
-                PremultiplyAlpha = true,
-            };
+            TestProcessorContext context = new TestProcessorContext(platform, "Arial.xnb");
+            FontDescriptionProcessor processor = new FontDescriptionProcessor();
+            processor.TextureFormat = format;
+            processor.PremultiplyAlpha = true;
 
             FontDescription fontDescription = null;
 
-            using (var input = XmlReader.Create(new StringReader (ArialFont)))
+            using (XmlReader input = XmlReader.Create(new StringReader(ArialFont)))
                 fontDescription = IntermediateSerializer.Deserialize<FontDescription>(input, "");
             fontDescription.Identity = new ContentIdentity("Arial.spritefont");
 
-            var output = processor.Process(fontDescription, context);
+            SpriteFontContent output = processor.Process(fontDescription, context);
             Assert.IsNotNull(output, "output should not be null");
             Assert.IsNotNull(output.Texture, "output.Texture should not be null");
-            var textureType = output.Texture.Faces[0][0].GetType();
+            Type textureType = output.Texture.Faces[0][0].GetType();
             switch (format)
             {
                 case TextureProcessorOutputFormat.Color:
