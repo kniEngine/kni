@@ -132,7 +132,8 @@ namespace Kni.Tests.ContentPipeline
                     Assert.IsTrue(textureType == typeof(PixelBitmapContent<Color>));
                     break;
                 case TextureProcessorOutputFormat.Color16Bit:
-                    Assert.IsTrue(textureType == typeof(PixelBitmapContent<Microsoft.Xna.Framework.Graphics.PackedVector.Bgr565>));
+                    // because the font has Alpha we should use Brga4444
+                    Assert.IsTrue(textureType == typeof(PixelBitmapContent<Microsoft.Xna.Framework.Graphics.PackedVector.Bgra4444>));
                     break;
                 case TextureProcessorOutputFormat.Compressed:
                     switch (platform)
