@@ -30,10 +30,10 @@ namespace Kni.Tests.ContentPipeline
 
         private static void SerializeAndAssert<T>(string file, T value)
         {
-            var filePath = Paths.Xml(file);
-            var expectedXml = File.ReadAllText(filePath);
+            string filePath = Paths.Xml(file);
+            string expectedXml = File.ReadAllText(filePath);
 
-            var actualXml = Serialize(filePath, value);
+            string actualXml = Serialize(filePath, value);
 
             // Normalize line endings - git on build server seems to set
             // core.autocrlf to false.
@@ -49,17 +49,17 @@ namespace Kni.Tests.ContentPipeline
 
             // Note: Can't use StringBuilder here because it is always UTF-16,
             // while our test XML files use a UTF-8 encoding.
-            var memoryStream = new MemoryStream();
-            var xmlWriterSettings = new XmlWriterSettings
+            MemoryStream memoryStream = new MemoryStream();
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings
             {
                 Encoding = Encoding.UTF8,
                 Indent = true
             };
-            using (var writer = XmlWriter.Create(memoryStream, xmlWriterSettings))
+            using (XmlWriter writer = XmlWriter.Create(memoryStream, xmlWriterSettings))
                 IntermediateSerializer.Serialize(writer, value, referenceRelocationPath);
 
             memoryStream.Position = 0;
-            var actualXml = new StreamReader(memoryStream).ReadToEnd();
+            string actualXml = new StreamReader(memoryStream).ReadToEnd();
 
             return actualXml;
         }
@@ -67,7 +67,7 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void TheBasics()
         {
-            var nestedObject = new NestedClass
+            NestedClass nestedObject = new NestedClass
             {
                 Name = "Shawn",
                 IsEnglish = true
@@ -110,13 +110,12 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void RenamingXmlElements()
         {
-            var value = new RenamingXmlElements
-            {
-                hello = "world",
-                elf = 23,
-                speed = 80.2f,
-                isOrganic = true
-            };
+            RenamingXmlElements value = new RenamingXmlElements();
+            value.hello = "world";
+            value.elf = 23;
+            value.speed = 80.2f;
+            value.isOrganic = true;
+
             value.SetDimensions(new Vector2(32, 32));
             SerializeAndAssert("05_RenamingXmlElements.xml", value);
         }
@@ -284,9 +283,9 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void CircularReferences()
         {
-            var resource1 = new CircularLinked();
-            var resource2 = new CircularLinked();
-            var resource3 = new CircularLinked();
+            CircularLinked resource1 = new CircularLinked();
+            CircularLinked resource2 = new CircularLinked();
+            CircularLinked resource3 = new CircularLinked();
 
             resource1.Next = resource2;
             resource2.Next = resource3;
@@ -302,17 +301,17 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void SharedResources()
         {
-            var resource1 = new Linked { Value = 1 };
-            var resource2 = new Linked { Value = 2 };
-            var resource3 = new Linked { Value = 3 };
+            Linked resource1 = new Linked { Value = 1 };
+            Linked resource2 = new Linked { Value = 2 };
+            Linked resource3 = new Linked { Value = 3 };
 
             resource1.Next = resource2;
             resource2.Next = resource3;
             resource3.Next = resource1;
 
-            var resourceArray1 = new Linked2();
-            var resourceArray2 = new Linked2();
-            var resourceArray3 = new Linked2();
+            Linked2 resourceArray1 = new Linked2();
+            Linked2 resourceArray2 = new Linked2();
+            Linked2 resourceArray3 = new Linked2();
             resourceArray1.Next = new[] { resourceArray2, resourceArray3 };
             resourceArray2.Next = new[] { resourceArray1 };
 
@@ -330,7 +329,7 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void ExternalReferences()
         {
-            var grassExternalReference = new ExternalReference<Texture2D>(Path.GetFullPath("Assets/Xml/grass.tga"));
+            ExternalReference<Texture2D> grassExternalReference = new ExternalReference<Texture2D>(Path.GetFullPath("Assets/Xml/grass.tga"));
             SerializeAndAssert("17_ExternalReferences.xml", new ExternalReferences
             {
                 Texture = grassExternalReference,
@@ -365,7 +364,7 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void FontDescription()
         {
-            var fontDescription = new ExtendedFontDescription
+            ExtendedFontDescription fontDescription = new ExtendedFontDescription
             {
                 FontName = "Foo",
                 Size = 30,
@@ -376,7 +375,7 @@ namespace Kni.Tests.ContentPipeline
                 ExtendedListProperty = { "item0", "item1", "item2" }
             };
 
-            for (var i = 32; i <= 126; i++)
+            for (int i = 32; i <= 126; i++)
                 fontDescription.Characters.Add((char) i);
             fontDescription.Characters.Add(WebUtility.HtmlDecode("&#916;")[0]);
             fontDescription.Characters.Add(WebUtility.HtmlDecode("&#176;")[0]);
@@ -399,7 +398,7 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void GetterOnlyProperties()
         {
-            var value = new GetterOnlyProperties();
+            GetterOnlyProperties value = new GetterOnlyProperties();
             value.IntList.Add(1);
             value.IntList.Add(2);
             value.IntList.Add(3);
@@ -415,7 +414,7 @@ namespace Kni.Tests.ContentPipeline
         [Test]
         public void GetterOnlyPolymorphicArrayProperties()
         {
-            var value = new GetterOnlyPolymorphicArrayProperties();
+            GetterOnlyPolymorphicArrayProperties value = new GetterOnlyPolymorphicArrayProperties();
             SerializeAndAssert("23_GetterOnlyPolymorphicArrayProperties.xml", value);
         }
 

@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,8 +20,8 @@ namespace Kni.Tests.ContentPipeline
         private readonly TestContentBuildLogger _logger;
         internal readonly List<string> _dependencies = new List<string>();
 
-        public TestProcessorContext(    TargetPlatform targetPlatform,
-                                        string outputFilename)
+        public TestProcessorContext(TargetPlatform targetPlatform,
+                                    string outputFilename)
         {
             _targetPlatform = targetPlatform;
             _outputFilename = outputFilename;
@@ -94,12 +95,16 @@ namespace Kni.Tests.ContentPipeline
             if (typeof(TOutput) == typeof(MaterialContent) && typeof(TInput).IsAssignableFrom(typeof(MaterialContent)))
                 return (TOutput)((object)input);
 
-            var processor = (ContentProcessor<TInput, TOutput>)typeof(ContentProcessor<TInput, TOutput>).Assembly.CreateInstance("Microsoft.Xna.Framework.Content.Pipeline.Processors."+ processorName);
-            if (processor != null) {
-                var type = processor.GetType();
+            Assembly asm = typeof(ContentProcessor<TInput, TOutput>).Assembly;
+            string typeName = "Microsoft.Xna.Framework.Content.Pipeline.Processors." + processorName;
+            object processorInstance = asm.CreateInstance(typeName);
+            ContentProcessor<TInput, TOutput> processor = (ContentProcessor<TInput, TOutput>)processorInstance;
+            if (processor != null)
+            {
+                Type type = processor.GetType();
                 foreach (var kvp in processorParameters)
                 {
-                    var property = type.GetProperty(kvp.Key);
+                    PropertyInfo property = type.GetProperty(kvp.Key);
                     if (property == null)
                         continue;
                     property.SetValue(processor, kvp.Value, null);
