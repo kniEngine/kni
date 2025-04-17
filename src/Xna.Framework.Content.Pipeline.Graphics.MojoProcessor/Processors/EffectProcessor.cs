@@ -482,8 +482,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
 
 
-        private const string MGFXSignature = "MGFX";
-        private const int Version = 10;
+        private const string KNIFXSignature = "KNIF";
+        private const int Version = 11;
 
         /// <summary>
         /// Writes the effect for loading later.
@@ -491,7 +491,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
         {
             // Write a very simple header for identification and versioning.
-            writer.Write(MGFXSignature.ToCharArray());
+            writer.Write(KNIFXSignature.ToCharArray());
             writer.Write((byte)Version);
 
             // Write an simple identifier for DX11 vs GLSL
@@ -500,7 +500,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (MGFXWriter10 memWriter = new MGFXWriter10(memStream, Version, profileType))
+            using (KNIFXWriter11 memWriter = new KNIFXWriter11(memStream, Version, profileType))
             {
                 memWriter.WriteEffect(effect);
 
@@ -515,7 +515,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write a tail to be used by the reader for validation.
             if (Version >= 10)
-                writer.Write(MGFXSignature.ToCharArray());
+                writer.Write(KNIFXSignature.ToCharArray());
         }
 
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)

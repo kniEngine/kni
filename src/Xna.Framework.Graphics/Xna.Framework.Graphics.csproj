@@ -87,6 +87,7 @@
     <Compile Include="Graphics\Effect\Effect.cs" />
     <Compile Include="Graphics\Effect\MGFXReader09.cs" />
     <Compile Include="Graphics\Effect\MGFXReader10.cs" />
+    <Compile Include="Graphics\Effect\KNIFXReader11.cs" />
     <Compile Include="Graphics\Effect\EffectAnnotation.cs" />
     <Compile Include="Graphics\Effect\EffectAnnotationCollection.cs" />
     <Compile Include="Graphics\Effect\EffectHelpers.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Graphics\Effect\IEffectFog.cs" />
     <Compile Include="Graphics\Effect\IEffectLights.cs" />
     <Compile Include="Graphics\Effect\IEffectMatrices.cs" />
+    <Compile Include="Graphics\Effect\KNIFXHeader.cs" />
     <Compile Include="Graphics\Effect\MGFXHeader.cs" />
     <Compile Include="Graphics\Effect\SkinnedEffect.cs" />
     <Compile Include="Graphics\Effect\SpriteEffect.cs" />
