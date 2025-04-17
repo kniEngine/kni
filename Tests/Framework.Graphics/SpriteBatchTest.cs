@@ -17,8 +17,8 @@ namespace Kni.Tests.Graphics
         private Texture2D _texture;
         private Texture2D _texture2;
         private Texture2D _texture3;
-        private BasicEffect _effect;
-        private Effect _effect2;
+        private BasicEffect _basicEffect;
+        private Effect _grayscaleEffect;
 
         [SetUp]
         public override void SetUp()
@@ -29,14 +29,13 @@ namespace Kni.Tests.Graphics
             _texture = content.Load<Texture2D>(Paths.Texture("MonoGameIcon"));
             _texture2 = content.Load<Texture2D>(Paths.Texture("Surge"));
             _texture3 = content.Load<Texture2D>(Paths.Texture("lines-64"));
-            _effect = new BasicEffect(gd)
-            {
-                VertexColorEnabled = true,
-                TextureEnabled = true,
-                View = Matrix.Identity,
-                World = Matrix.Identity
-            };
-            _effect2 = content.Load<Effect>(Paths.CompiledEffect("Grayscale"));
+            _basicEffect = new BasicEffect(gd);
+            _basicEffect.VertexColorEnabled = true;
+            _basicEffect.TextureEnabled = true;
+            _basicEffect.View = Matrix.Identity;
+            _basicEffect.World = Matrix.Identity;
+
+            _grayscaleEffect = content.Load<Effect>(Paths.CompiledEffect("Grayscale"));
         }
 
         [TearDown]
@@ -46,8 +45,8 @@ namespace Kni.Tests.Graphics
             _texture.Dispose();
             _texture2.Dispose();
             _texture3.Dispose();
-            _effect.Dispose();
-            _effect2.Dispose();
+            _basicEffect.Dispose();
+            _grayscaleEffect.Dispose();
 
             base.TearDown();
         }
@@ -458,10 +457,10 @@ namespace Kni.Tests.Graphics
                 halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 #endif
 
-            _effect.Projection = halfPixelOffset * Matrix.CreateOrthographicOffCenter(0, gd.Viewport.Width, gd.Viewport.Height, 0, 0, 1);
+            _basicEffect.Projection = halfPixelOffset * Matrix.CreateOrthographicOffCenter(0, gd.Viewport.Width, gd.Viewport.Height, 0, 0, 1);
 
             gd.Viewport = rvp;
-            _spriteBatch.Begin(sortMode, BlendState.AlphaBlend, null, null, null, _effect);
+            _spriteBatch.Begin(sortMode, BlendState.AlphaBlend, null, null, null, _basicEffect);
             _spriteBatch.Draw(_texture, new Vector2(10, 110), null, Color.White);
             gd.Viewport = mvp;
             _spriteBatch.Draw(_texture2, new Vector2(70, 110), null, Color.White);
@@ -474,21 +473,21 @@ namespace Kni.Tests.Graphics
             // Test BasicEffect (Vertex & Pixel shader)
             // re-apply projection when viewport dimensions change
             gd.Viewport = rvp;
-            _effect.Projection = halfPixelOffset * Matrix.CreateOrthographicOffCenter(0, gd.Viewport.Width, gd.Viewport.Height, 0, 0, 1);
-            _spriteBatch.Begin(sortMode, BlendState.AlphaBlend, null, null, null, _effect);
+            _basicEffect.Projection = halfPixelOffset * Matrix.CreateOrthographicOffCenter(0, gd.Viewport.Width, gd.Viewport.Height, 0, 0, 1);
+            _spriteBatch.Begin(sortMode, BlendState.AlphaBlend, null, null, null, _basicEffect);
             _spriteBatch.Draw(_texture, new Vector2(10, 210), null, Color.White);
             gd.Viewport = mvp;
             _spriteBatch.Draw(_texture2, new Vector2(70, 210), null, Color.White);
             gd.Viewport = lvp;
             _spriteBatch.Draw(_texture3, new Vector2(130, 210), null, Color.White);
             gd.Viewport = vp;
-            _effect.Projection = halfPixelOffset * Matrix.CreateOrthographicOffCenter(0, gd.Viewport.Width, gd.Viewport.Height, 0, 0, 1);
+            _basicEffect.Projection = halfPixelOffset * Matrix.CreateOrthographicOffCenter(0, gd.Viewport.Width, gd.Viewport.Height, 0, 0, 1);
             _spriteBatch.Draw(_texture2, new Vector2(190, 210), null, Color.White);
             _spriteBatch.End();
 
             // TODO: test custom Effect with no Vertex shader
             gd.Viewport = rvp;
-            _spriteBatch.Begin(sortMode, BlendState.AlphaBlend, null, null, null, _effect2);
+            _spriteBatch.Begin(sortMode, BlendState.AlphaBlend, null, null, null, _grayscaleEffect);
             _spriteBatch.Draw(_texture, new Vector2(10, 310), null, Color.White);
             gd.Viewport = mvp;
             _spriteBatch.Draw(_texture2, new Vector2(70, 310), null, Color.White);
