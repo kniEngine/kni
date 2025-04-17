@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<XnaContent xmlns:ContentPipeline="MonoGame.Tests.ContentPipeline" xmlns:Framework="Microsoft.Xna.Framework" xmlns:Graphics="Microsoft.Xna.Framework.Graphics" xmlns:Nested="MonoGame.Tests.ContentPipeline.Nested" xmlns:ContentPipeline2="MonoGame.Tests.ContentPipeline.Nested.ContentPipeline2">
+<XnaContent xmlns:ContentPipeline="Kni.Tests.ContentPipeline" xmlns:Framework="Microsoft.Xna.Framework" xmlns:Graphics="Microsoft.Xna.Framework.Graphics" xmlns:Nested="Kni.Tests.ContentPipeline.Nested" xmlns:ContentPipeline2="Kni.Tests.ContentPipeline.Nested.ContentPipeline2">
   <Asset Type="ContentPipeline:NamespaceClass">
     <A Type="ContentPipeline:NamespaceHelper">
       <Value>true</Value>
@@ -15,7 +15,7 @@
     <F Type="ContentPipeline2:ClassInsideNestedUnambiguousNamespace">
       <Value>true</Value>
     </F>
-    <G Type="MonoGame.Tests.SomethingElse.ContentPipeline.ClassInsideAmbiguousNamespace">
+    <G Type="Kni.Tests.SomethingElse.ContentPipeline.ClassInsideAmbiguousNamespace">
       <Value>true</Value>
     </G>
     <H Null="true" />
