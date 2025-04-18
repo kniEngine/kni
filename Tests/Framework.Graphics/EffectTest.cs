@@ -163,6 +163,8 @@ namespace Kni.Tests.Graphics
 
             Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            texture0.Name = "texture0";
+            texture1.Name = "texture1";
 
             SamplerState sampler0 = SamplerState.LinearClamp;
             SamplerState sampler1 = SamplerState.PointClamp;
@@ -214,6 +216,8 @@ namespace Kni.Tests.Graphics
 
             Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            texture0.Name = "texture0";
+            texture1.Name = "texture1";
 
             SamplerState sampler0 = SamplerState.PointWrap;
             SamplerState sampler1 = SamplerState.PointClamp;
@@ -369,9 +373,20 @@ namespace Kni.Tests.Graphics
             EffectPass effectPass = effect.CurrentTechnique.Passes[0];
             effectPass.Apply();
 
-            Assert.That(device.Textures[0], Is.SameAs(texture0));
-            Assert.That(device.Textures[1], Is.SameAs(texture1));
-            Assert.That(device.Textures[2], Is.Null);
+            int t0 = 0;
+            int t1 = 1;
+            int t2 = 2;
+#if KNI
+            //if (device.Adapter.Backend == GraphicsBackend.DirectX11)
+            //{   
+            //    t0 = 1;
+            //    t1 = 0;
+            //}
+#endif
+
+            Assert.That(device.Textures[t0], Is.SameAs(texture0));
+            Assert.That(device.Textures[t1], Is.SameAs(texture1));
+            Assert.That(device.Textures[t2], Is.Null);
 
             Assert.That(IsSamplerEqual(device.SamplerStates[0], sampler0));
             Assert.That(IsSamplerEqual(device.SamplerStates[1], sampler1));
@@ -417,6 +432,8 @@ namespace Kni.Tests.Graphics
 
             Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            texture0.Name = "texture0";
+            texture1.Name = "texture1";
 
             SamplerState sampler0 = SamplerState.PointWrap;
             SamplerState sampler1 = SamplerState.PointClamp;
@@ -466,6 +483,8 @@ namespace Kni.Tests.Graphics
 
             Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            texture0.Name = "texture0";
+            texture1.Name = "texture1";
 
             SamplerState sampler0 = SamplerState.LinearWrap;
             SamplerState sampler1 = SamplerState.LinearWrap;
@@ -488,9 +507,21 @@ namespace Kni.Tests.Graphics
             EffectPass effectPass = effect.CurrentTechnique.Passes[0];
             effectPass.Apply();
 
-            Assert.That(device.Textures[0], Is.SameAs(texture0));
-            Assert.That(device.Textures[1], Is.SameAs(texture1));
-            Assert.That(device.Textures[2], Is.Null);
+            int t0 = 0;
+            int t1 = 1;
+            int t2 = 2;
+#if KNI
+            //if (device.Adapter.Backend == GraphicsBackend.DirectX11)
+            //{
+            //    t0 = 3;
+            //    t1 = 4;
+            //    t1 = 5;
+            //}
+#endif
+
+            Assert.That(device.Textures[t0], Is.SameAs(texture0));
+            Assert.That(device.Textures[t1], Is.SameAs(texture1));
+            Assert.That(device.Textures[t2], Is.Null);
 
             Assert.That(IsSamplerEqual(device.SamplerStates[0], sampler0));
             Assert.That(IsSamplerEqual(device.SamplerStates[1], sampler1));
@@ -517,6 +548,8 @@ namespace Kni.Tests.Graphics
 
             Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            texture0.Name = "texture0";
+            texture1.Name = "texture1";
 
             SamplerState sampler0 = SamplerState.LinearWrap;
             SamplerState sampler1 = SamplerState.LinearWrap;
@@ -562,6 +595,8 @@ namespace Kni.Tests.Graphics
 
             Texture2D texture0 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
             Texture2D texture1 = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
+            texture0.Name = "texture0";
+            texture1.Name = "texture1";
 
             SamplerState sampler0 = SamplerState.PointWrap;
             SamplerState sampler1 = SamplerState.PointClamp;
