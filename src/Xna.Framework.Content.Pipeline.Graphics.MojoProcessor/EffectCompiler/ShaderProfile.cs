@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros();
 
-        internal abstract void ValidateShaderModels(PassInfo pass);
+        internal abstract void ValidateShaderModels(PassInfo pass, string shaderFunction, string shaderModel, ShaderStage shaderStage, ShaderVersion shaderVersion);
 
         internal abstract ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings);
 
