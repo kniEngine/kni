@@ -24,8 +24,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.VertexShader DXVertexShader { get { return _vertexShader; } }
 
 
-        internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
+        internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
                 CreateVertexShader();
         }

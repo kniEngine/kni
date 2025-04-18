@@ -13,12 +13,13 @@ namespace Microsoft.Xna.Platform.Graphics
     public sealed class PixelShader : Shader
     {
         internal PixelShader(GraphicsDevice graphicsDevice,
+            ShaderVersion shaderVersion,
             byte[] shaderBytecode,
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
             ShaderProfileType profile)
             : base()
         {
-            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreatePixelShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreatePixelShaderStrategy(shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

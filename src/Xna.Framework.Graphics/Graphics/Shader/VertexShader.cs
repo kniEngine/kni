@@ -13,12 +13,13 @@ namespace Microsoft.Xna.Platform.Graphics
     public sealed class VertexShader : Shader
     {
         internal VertexShader(GraphicsDevice graphicsDevice,
+            ShaderVersion shaderVersion,
             byte[] shaderBytecode,
             SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
             ShaderProfileType profile)
             : base()
         {
-            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateVertexShaderStrategy(shaderBytecode, samplers, cBuffers, attributes, profile);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateVertexShaderStrategy(shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

@@ -17,8 +17,8 @@ namespace Microsoft.Xna.Platform.Graphics
     public sealed class ConcretePixelShader : ConcreteShader
     {
 
-        internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, shaderBytecode, samplers, cBuffers, attributes, profile)
+        internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
             base.CreateShader(contextStrategy, ShaderType.FragmentShader, shaderBytecode);
         }

@@ -99,6 +99,7 @@ namespace Microsoft.Xna.Framework.Graphics
             private Shader ReadShader()
             {
                 ShaderStage shaderStage = (ShaderStage)ReadByte();
+                ShaderVersion shaderVersion = ReadShaderVersion();
 
                 int shaderLength = ReadInt32();
                 byte[] shaderBytecode = ReadBytes(shaderLength);
@@ -140,11 +141,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     case ShaderStage.Vertex:
                         return new VertexShader(_graphicsDevice,
+                            shaderVersion,
                             shaderBytecode,
                             samplers, cBuffers, attributes,
                             _header.Profile);
                     case ShaderStage.Pixel:
                         return new PixelShader(_graphicsDevice,
+                            shaderVersion,
                             shaderBytecode,
                             samplers, cBuffers, attributes,
                             _header.Profile);
@@ -152,6 +155,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     default:
                         throw new InvalidOperationException("stage");
                 }
+            }
+
+            private ShaderVersion ReadShaderVersion()
+            {
+                int major = ReadPackedInt();
+                int minor = ReadPackedInt();
+                return new ShaderVersion(major, minor);
             }
 
             private SamplerState ReadSamplerState()
