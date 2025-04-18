@@ -66,6 +66,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private void WriteShader(ShaderData shader)
         {
             Write((byte)shader.Stage);
+            WriteShaderVersion(shader.ShaderVersion);
 
             Write(shader.ShaderCode.Length);
             Write(shader.ShaderCode);
@@ -133,6 +134,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 WritePackedInt(attrib.index);
                 Write((short)attrib.location);
             }
+        }
+
+        private void WriteShaderVersion(ShaderVersion shaderVersion)
+        {
+            WritePackedInt(checked((ushort)shaderVersion.Major));
+            WritePackedInt(checked((ushort)shaderVersion.Minor));
         }
 
         private void WriteSamplerState(SamplerState state)
