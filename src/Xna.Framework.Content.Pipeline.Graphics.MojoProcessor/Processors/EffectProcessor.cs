@@ -326,18 +326,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     pass.state_count = 0;
                     EffectObject.EffectStateContent[] tempstate = new EffectObject.EffectStateContent[2];
 
-                    shaderProfile.ValidateShaderModels(pinfo);
-
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
+                        ShaderVersion psShaderVersion = ShaderVersion.ParsePixelShaderModel(pinfo.psModel);
+                        shaderProfile.ValidateShaderModels(pinfo, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, psShaderVersion);
+
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, psShaderVersion, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
                     {
+                        ShaderVersion vsShaderVersion = ShaderVersion.ParseVertexShaderModel(pinfo.vsModel);
+                        shaderProfile.ValidateShaderModels(pinfo, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Pixel, vsShaderVersion);
+
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, vsShaderVersion, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectObject.EffectStateContent[pass.state_count];
@@ -436,7 +440,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        internal static EffectObject.EffectStateContent CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        internal static EffectObject.EffectStateContent CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ShaderVersion shaderVersion, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
 
@@ -448,6 +452,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 ShaderData shaderData = shaderProfile.CreateShader(input, context, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, ref errorsAndWarnings);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;
+                shaderData.ShaderVersion = shaderVersion;
 
                 sharedIndex = effect.Shaders.Count;
                 effect.Shaders.Add(shaderData);

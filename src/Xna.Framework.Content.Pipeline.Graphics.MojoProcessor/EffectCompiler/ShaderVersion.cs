@@ -59,9 +59,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return ParseShaderModel(vsModel, VertexShaderRegex);
         }
 
-        internal static ShaderVersion ParsePixelShaderModel(string vsModel)
+        internal static ShaderVersion ParsePixelShaderModel(string psModel)
         {
-            return ParseShaderModel(vsModel, PixelShaderRegex);
+            return ParseShaderModel(psModel, PixelShaderRegex);
         }
 
         public override string ToString()

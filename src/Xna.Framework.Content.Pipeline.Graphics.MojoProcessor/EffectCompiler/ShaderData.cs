@@ -49,6 +49,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public string ShaderFunctionName { get; set; }
 
         public string ShaderProfile { get; set; }
+        public ShaderVersion ShaderVersion { get; internal set; }
 
 #endregion // Non-Serialized Stuff
 
