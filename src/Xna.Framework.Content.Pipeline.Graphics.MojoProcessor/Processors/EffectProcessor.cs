@@ -439,14 +439,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         internal static EffectObject.EffectStateContent CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
-            ShaderData shaderData = effect.Shaders.Find(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfileName);
-            if (shaderData == null)
+
+            // The index of the shader in the shared list.
+            int sharedIndex = effect.Shaders.FindIndex(shader => shader.ShaderFunctionName == shaderFunction && shader.ShaderProfile == shaderProfileName);
+            if (sharedIndex == -1)
             {
                 // Compile and create the shader.
-                shaderData = shaderProfile.CreateShader(input, context, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, ref errorsAndWarnings);
-                effect.Shaders.Add(shaderData);
+                ShaderData shaderData = shaderProfile.CreateShader(input, context, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, ref errorsAndWarnings);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;
+
+                sharedIndex = effect.Shaders.Count;
+                effect.Shaders.Add(shaderData);
             }
 
             EffectObject.EffectStateContent state = new EffectObject.EffectStateContent();
@@ -465,7 +469,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                  : EffectObject.PARAMETER_TYPE.PIXELSHADER;
             state.parameter.rows = 0;
             state.parameter.columns = 0;
-            state.parameter.data = shaderData.SharedIndex;
+            state.parameter.data = sharedIndex;
 
             return state;
         }

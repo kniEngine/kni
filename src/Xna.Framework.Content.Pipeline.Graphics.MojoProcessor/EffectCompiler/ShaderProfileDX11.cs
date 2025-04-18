@@ -65,14 +65,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             dx11ShaderProfileName = dx11ShaderProfileName.Replace("s_3_0", "s_4_0_level_9_3");
             using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx11ShaderProfileName, true, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(input, context, shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, effect.Shaders.Count, debugMode);
+                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(input, context, shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, debugMode);
                 return shaderDataDX11;
             }
         }
 
-        private static ShaderData CreateHLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, int sharedIndex, EffectProcessorDebugMode debugMode)
+        private static ShaderData CreateHLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, EffectProcessorDebugMode debugMode)
         {
-            ShaderData dxshader = new ShaderData(shaderStage, sharedIndex);
+            ShaderData dxshader = new ShaderData(shaderStage);
             dxshader._attributes = new ShaderData.Attribute[0];
 
             // Strip the bytecode we're gonna save!
