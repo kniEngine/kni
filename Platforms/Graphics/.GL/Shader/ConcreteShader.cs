@@ -30,8 +30,6 @@ namespace Microsoft.Xna.Platform.Graphics
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
 
-            // TODO: precompute shader's hashKey in the processor.
-            _hashKey = HashHelper.ComputeHash(shaderBytecode);
          }
 
         internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, byte[] shaderBytecode)

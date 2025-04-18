@@ -31,8 +31,6 @@ namespace Microsoft.Xna.Platform.Graphics
             // We need the bytecode later for allocating the
             // input layout from the vertex declaration.
             _shaderBytecode = shaderBytecode;
-            // TODO: precompute shader's hashKey in the processor.
-            _hashKey = HashHelper.ComputeHash(_shaderBytecode);
         }
 
 

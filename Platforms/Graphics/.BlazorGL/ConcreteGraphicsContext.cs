@@ -410,7 +410,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Lookup the shader program.
             ShaderProgram shaderProgram;
-            int shaderProgramHash = (cvertexShader.HashKey ^ cpixelShader.HashKey);
+            int shaderProgramHash = (cvertexShader.GetHashCode() ^ cpixelShader.GetHashCode());
             if (!deviceStrategy.ProgramCache.TryGetValue(shaderProgramHash, out shaderProgram))
             {
                 // the key does not exist so we need to link the programs
