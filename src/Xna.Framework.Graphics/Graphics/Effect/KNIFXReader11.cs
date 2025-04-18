@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Graphics
             private Shader ReadShader()
             {
                 ShaderStage shaderStage = (ShaderStage)ReadByte();
-                ShaderVersion shaderVersion = default;
+                ShaderVersion shaderVersion = ReadShaderVersion();
 
                 int shaderLength = ReadInt32();
                 byte[] shaderBytecode = ReadBytes(shaderLength);
@@ -155,6 +155,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     default:
                         throw new InvalidOperationException("stage");
                 }
+            }
+
+            private ShaderVersion ReadShaderVersion()
+            {
+                ushort major = checked((ushort)ReadPackedInt());
+                ushort minor = checked((ushort)ReadPackedInt());
+                return new ShaderVersion(major, minor);
             }
 
             private SamplerState ReadSamplerState()
