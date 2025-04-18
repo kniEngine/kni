@@ -16,10 +16,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		public ShaderStage Stage { get { return _shaderStage; } }
 
 
-        public ShaderData(ShaderStage shaderStage, int sharedIndex)
+        public ShaderData(ShaderStage shaderStage)
 		{
             _shaderStage = shaderStage;
-			SharedIndex = sharedIndex;
 		}
 
 		public struct Attribute
@@ -46,9 +45,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 
 #region Non-Serialized Stuff
-
-		// The index of the shader in the shared list.
-		public int SharedIndex { get; private set; }
 
         public string ShaderFunctionName { get; set; }
 
