@@ -60,10 +60,12 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 uint mask = ((uint)1) << slot;
 
-                ConstantBuffer buffer = _buffers[slot];
-                if (buffer != null && !buffer.IsDisposed)
+                ConstantBuffer constantBuffer = _buffers[slot];
+                if (constantBuffer != null && !constantBuffer.IsDisposed)
                 {
-                    ((IPlatformConstantBuffer)buffer).Strategy.ToConcrete<ConcreteConstantBuffer>().PlatformApply(contextStrategy, slot);
+                    ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
+
+                    constantBufferStrategy.PlatformApply(contextStrategy, slot);
                 }
 
                 // clear buffer bit
