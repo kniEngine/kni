@@ -500,6 +500,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderProgram = shaderProgram;
             }
 
+            ApplyPosFixup(_shaderProgram);
+        }
+
+        private void ApplyPosFixup(ShaderProgram shaderProgram)
+        {
             int posFixupLoc = this.GetUniformLocation(shaderProgram, "posFixup");
             if (posFixupLoc == -1)
                 return;
