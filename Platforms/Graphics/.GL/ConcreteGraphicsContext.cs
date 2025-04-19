@@ -338,6 +338,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_vertexShaderDirty || _pixelShaderDirty)
             {
                 ActivateShaderProgram(cvertexShader, cpixelShader);
+                ApplyPosFixup(_shaderProgram);
 
                 if (_vertexShaderDirty)
                 {
@@ -500,7 +501,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderProgram = shaderProgram;
             }
 
-            ApplyPosFixup(_shaderProgram);
         }
 
         private void ApplyPosFixup(ShaderProgram shaderProgram)
