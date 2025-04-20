@@ -52,7 +52,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContextStrategy contextStrategy)
+        internal void Apply(ConcreteGraphicsContextGL ccontextStrategy)
         {
             uint validMask = _valid;
 
@@ -65,7 +65,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
 
-                    constantBufferStrategy.PlatformApply(contextStrategy, slot);
+                    constantBufferStrategy.PlatformApply(ccontextStrategy, slot);
                 }
 
                 // clear buffer bit

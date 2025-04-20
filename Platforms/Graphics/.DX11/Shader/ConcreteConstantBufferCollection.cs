@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _valid = 0;
         }
 
-        internal void Apply(GraphicsContextStrategy contextStrategy, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
+        internal void Apply(ConcreteGraphicsContext ccontextStrategy, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
         {
             // NOTE: We make the assumption here that the caller has
             // locked the CurrentD3DContext for us to use.
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // Update the hardware buffer.
                     if (constantBufferStrategy.Dirty)
                     {
-                        contextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext.UpdateSubresource(constantBufferStrategy.BufferData, constantBufferStrategy.DXcbuffer);
+                        ccontextStrategy.D3dContext.UpdateSubresource(constantBufferStrategy.BufferData, constantBufferStrategy.DXcbuffer);
 
                         constantBufferStrategy.Dirty = false;
                     }
