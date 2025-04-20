@@ -301,7 +301,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            cconstantBufferCollection.Apply(this);
+            ConcreteConstantBufferCollection.Apply(this, cconstantBufferCollection);
         }
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)

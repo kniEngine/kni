@@ -301,7 +301,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, D3D11.CommonShaderStage shaderStage, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            cconstantBufferCollection.Apply(this, shaderStrategy, shaderStage);
+            ConcreteConstantBufferCollection.Apply(this, cconstantBufferCollection, shaderStrategy, shaderStage);
         }
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
