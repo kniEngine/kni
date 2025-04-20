@@ -285,9 +285,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, cvertexShader, this.D3dContext.VertexShader);
-            ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, cpixelShader, this.D3dContext.PixelShader);
-
+            PlatformApplyConstantBuffers(cvertexShader, this.D3dContext.VertexShader,
+                ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
+            PlatformApplyConstantBuffers(cpixelShader, this.D3dContext.PixelShader,
+                ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
+  
             // Apply Shader Texture and SamplersSamplers
             PlatformApplyTexturesAndSamplers(cvertexShader, this.D3dContext.VertexShader,
                 ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
@@ -295,6 +297,11 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyTexturesAndSamplers(cpixelShader, this.D3dContext.PixelShader,
                 ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
                 ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+        }
+
+        private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, D3D11.CommonShaderStage shaderStage, ConcreteConstantBufferCollection cconstantBufferCollection)
+        {
+            cconstantBufferCollection.Apply(this, shaderStrategy, shaderStage);
         }
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)

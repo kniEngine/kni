@@ -356,8 +356,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
-            ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
+            PlatformApplyConstantBuffers(cvertexShader,
+                ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
+            PlatformApplyConstantBuffers(cpixelShader,
+                ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
 
             // Apply Shader Texture and Samplers
             PlatformApplyTexturesAndSamplers(cvertexShader,
@@ -366,6 +368,11 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyTexturesAndSamplers(cpixelShader,
                 ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
                 ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+        }
+
+        private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
+        {
+            cconstantBufferCollection.Apply(this);
         }
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
