@@ -59,10 +59,11 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // If the shader program is the same, the effect may still be different and have different values in the buffer
-            if (!Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied))
-                Dirty = true;
+            bool isLastConstantBufferApplied = Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied);
 
-            if (Dirty)
+            if (base.Dirty
+            ||  !isLastConstantBufferApplied
+            )
             {
                 fixed (void* bytePtr = this.BufferData)
                 {
@@ -75,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                 }
 
-                Dirty = false;
+               base.Dirty = false;
                 ConcreteConstantBuffer._lastConstantBufferApplied = this;
             }
         }
