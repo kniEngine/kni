@@ -372,7 +372,28 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            ConcreteConstantBufferCollection.Apply(this, cconstantBufferCollection);
+            ConcreteGraphicsContextGL.Apply(this, cconstantBufferCollection);
+        }
+
+        private static void Apply(ConcreteGraphicsContextGL ccontextStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
+        {
+            uint validMask = cconstantBufferCollection.InternalValid;
+
+            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)
+            {
+                uint mask = ((uint)1) << slot;
+
+                ConstantBuffer constantBuffer = cconstantBufferCollection[slot];
+                if (constantBuffer != null && !constantBuffer.IsDisposed)
+                {
+                    ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
+
+                    constantBufferStrategy.PlatformApply(ccontextStrategy, slot);
+                }
+
+                // clear buffer bit
+                validMask &= ~mask;
+            }
         }
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)

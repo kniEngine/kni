@@ -55,26 +55,5 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _valid = 0;
         }
-
-        internal static void Apply(ConcreteGraphicsContext ccontextStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
-        {
-            uint validMask = cconstantBufferCollection.InternalValid;
-
-            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)
-            {
-                uint mask = ((uint)1) << slot;
-
-                ConstantBuffer constantBuffer = cconstantBufferCollection[slot];
-                if (constantBuffer != null && !constantBuffer.IsDisposed)
-                {
-                    ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
-
-                    constantBufferStrategy.PlatformApply(ccontextStrategy, slot);
-                }
-
-                // clear buffer bit
-                validMask &= ~mask;
-            }
-        }
     }
 }

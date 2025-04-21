@@ -301,7 +301,44 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, D3D11.CommonShaderStage shaderStage, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            ConcreteConstantBufferCollection.Apply(this, cconstantBufferCollection, shaderStrategy, shaderStage);
+            ConcreteGraphicsContext.Apply(this, cconstantBufferCollection, shaderStrategy, shaderStage);
+        }
+
+        private static void Apply(ConcreteGraphicsContext ccontextStrategy, ConcreteConstantBufferCollection cconstantBufferCollection, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
+        {
+            // NOTE: We make the assumption here that the caller has
+            // locked the CurrentD3DContext for us to use.
+
+            uint validMask = cconstantBufferCollection.InternalValid;
+
+            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)
+            {
+                uint mask = ((uint)1) << slot;
+
+                ConstantBuffer constantBuffer = cconstantBufferCollection[slot];
+                if (constantBuffer != null && !constantBuffer.IsDisposed)
+                {
+                    ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
+
+                    // Update the hardware buffer.
+                    if (constantBufferStrategy.Dirty)
+                    {
+                        ccontextStrategy.D3dContext.UpdateSubresource(constantBufferStrategy.BufferData, constantBufferStrategy.DXcbuffer);
+
+                        constantBufferStrategy.Dirty = false;
+                    }
+
+                    // Set the buffer to the shader stage.
+                    if ((cconstantBufferCollection.InternalDirty & mask) != 0)
+                    {
+                        shaderStage.SetConstantBuffer(slot, constantBufferStrategy.DXcbuffer);
+                        cconstantBufferCollection.InternalDirty &= ~mask;
+                    }
+                }
+
+                // clear buffer bit
+                validMask &= ~mask;
+            }
         }
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
