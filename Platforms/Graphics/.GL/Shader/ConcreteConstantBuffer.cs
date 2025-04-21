@@ -43,8 +43,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
-            var GL = ccontextStrategy.GL;
-
             // If the program changed then lookup the uniform again and apply the state.
             bool isSameShaderProgram = _shaderProgram == shaderProgram;
             if (!isSameShaderProgram)
@@ -63,6 +61,8 @@ namespace Microsoft.Xna.Platform.Graphics
             ||  !Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied)
             )
             {
+                var GL = ccontextStrategy.GL;
+
                 fixed (void* bytePtr = this.BufferData)
                 {
                     // TODO: We need to know the type of buffer float/int/bool
