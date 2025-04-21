@@ -301,10 +301,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, D3D11.CommonShaderStage shaderStage, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            ConcreteGraphicsContext.Apply(this, cconstantBufferCollection, shaderStrategy, shaderStage);
+            this.Apply(cconstantBufferCollection, shaderStrategy, shaderStage);
         }
 
-        private static void Apply(ConcreteGraphicsContext ccontextStrategy, ConcreteConstantBufferCollection cconstantBufferCollection, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
+        private void Apply(ConcreteConstantBufferCollection cconstantBufferCollection, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
         {
             // NOTE: We make the assumption here that the caller has
             // locked the CurrentD3DContext for us to use.
@@ -323,7 +323,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     // Update the hardware buffer.
                     if (constantBufferStrategy.Dirty)
                     {
-                        ccontextStrategy.D3dContext.UpdateSubresource(constantBufferStrategy.BufferData, constantBufferStrategy.DXcbuffer);
+                        this.D3dContext.UpdateSubresource(constantBufferStrategy.BufferData, constantBufferStrategy.DXcbuffer);
 
                         constantBufferStrategy.Dirty = false;
                     }

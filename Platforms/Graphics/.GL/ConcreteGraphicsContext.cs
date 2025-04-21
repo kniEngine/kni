@@ -372,10 +372,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            ConcreteGraphicsContextGL.Apply(this, cconstantBufferCollection);
+            this.Apply(cconstantBufferCollection);
         }
 
-        private static void Apply(ConcreteGraphicsContextGL ccontextStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
+        private void Apply(ConcreteConstantBufferCollection cconstantBufferCollection)
         {
             uint validMask = cconstantBufferCollection.InternalValid;
 
@@ -388,7 +388,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
 
-                    constantBufferStrategy.PlatformApply(ccontextStrategy, slot);
+                    constantBufferStrategy.PlatformApply(this, slot);
                 }
 
                 // clear buffer bit
