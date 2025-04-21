@@ -40,10 +40,10 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
-            // If the program changed then lookup the uniform again and apply the state.
             bool isSameShaderProgram = _shaderProgram == shaderProgram;
             if (!isSameShaderProgram)
             {
+                // If the program changed then lookup the uniform location again.
                 WebGLUniformLocation location = ccontextStrategy.GetUniformLocation(shaderProgram, Name);
                 if (location == null)
                     return;
@@ -53,6 +53,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             if (base.Dirty
+            // If the shader program changed then apply the buffer.
             ||  !isSameShaderProgram
             // If the shader program is the same, the effect may still be different and have different values in the buffer
             ||  !Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied)
