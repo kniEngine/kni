@@ -301,11 +301,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            this.Apply(cconstantBufferCollection);
-        }
-
-        private void Apply(ConcreteConstantBufferCollection cconstantBufferCollection)
-        {
             uint validMask = cconstantBufferCollection.InternalValid;
 
             for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)

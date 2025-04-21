@@ -301,11 +301,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, D3D11.CommonShaderStage shaderStage, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            this.Apply(cconstantBufferCollection, shaderStrategy, shaderStage);
-        }
-
-        private void Apply(ConcreteConstantBufferCollection cconstantBufferCollection, ShaderStrategy shaderStrategy, D3D11.CommonShaderStage shaderStage)
-        {
             // NOTE: We make the assumption here that the caller has
             // locked the CurrentD3DContext for us to use.
 
