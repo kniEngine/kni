@@ -42,9 +42,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = ccontextStrategy.GL;
 
-            // If the program changed then lookup the
-            // uniform again and apply the state.
-            if (_shaderProgram != shaderProgram)
+            // If the program changed then lookup the uniform again and apply the state.
+            bool isSameShaderProgram = _shaderProgram == shaderProgram;
+            if (!isSameShaderProgram)
             {
                 WebGLUniformLocation location = ccontextStrategy.GetUniformLocation(shaderProgram, Name);
                 if (location == null)
@@ -52,13 +52,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 _shaderProgram = shaderProgram;
                 _location = location;
-                Dirty = true;
             }
 
             // If the shader program is the same, the effect may still be different and have different values in the buffer
             bool isLastConstantBufferApplied = Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied);
          
             if (base.Dirty
+            ||  !isSameShaderProgram
             ||  !isLastConstantBufferApplied
             )
             {
