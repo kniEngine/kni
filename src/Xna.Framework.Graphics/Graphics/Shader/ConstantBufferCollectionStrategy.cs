@@ -11,14 +11,20 @@ namespace Microsoft.Xna.Platform.Graphics
 
     public abstract class ConstantBufferCollectionStrategy
     {
+        private readonly ConstantBuffer[] _buffers;
+
+        public int Length { get { return _buffers.Length; } }
+
+
         protected ConstantBufferCollectionStrategy(int capacity)
         {
+            _buffers = new ConstantBuffer[capacity];
         }
 
-        public abstract ConstantBuffer this[int index]
+        public virtual ConstantBuffer this[int index]
         {
-            get;
-            set;
+            get { return _buffers[index]; }
+            set { _buffers[index] = value; }
         }
 
         public abstract void Clear();

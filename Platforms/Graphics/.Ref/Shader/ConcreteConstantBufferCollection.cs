@@ -12,10 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal sealed class ConcreteConstantBufferCollection : ConstantBufferCollectionStrategy
     {
-        private readonly ConstantBuffer[] _buffers;
         private uint _valid;
-
-        public int Length { get { return _buffers.Length; } }
 
         internal uint InternalValid { get { return this._valid; } }
 
@@ -26,19 +23,18 @@ namespace Microsoft.Xna.Platform.Graphics
             if (capacity > 32)
                 throw new ArgumentOutOfRangeException("capacity");
 
-            _buffers = new ConstantBuffer[capacity];
             _valid = 0;
         }
 
         public override ConstantBuffer this[int index]
         {
-            get { return _buffers[index]; }
+            get { return base[index]; }
             set
             {
-                if (_buffers[index] != value)
+                if (base[index] != value)
                 {
                     uint mask = ((uint)1) << index;
-                    _buffers[index] = value;
+                    base[index] = value;
 
                     if (value != null)
                         _valid |= mask;
@@ -50,8 +46,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override void Clear()
         {
-            for (int slot = 0; slot < _buffers.Length; slot++)
-                _buffers[slot] = null;
+            for (int slot = 0; slot < base.Length; slot++)
+                base[slot] = null;
 
             _valid = 0;
         }
