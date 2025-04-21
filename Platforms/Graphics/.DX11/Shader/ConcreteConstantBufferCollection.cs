@@ -17,6 +17,16 @@ namespace Microsoft.Xna.Platform.Graphics
         private uint _valid;
         private uint _dirty;
 
+        public int Length { get { return _buffers.Length; } }
+
+        internal uint InternalValid { get { return this._valid; } }
+
+        internal uint InternalDirty
+        {
+            get { return this._dirty; }
+            set { this._dirty = value; }
+        }
+
         internal ConcreteConstantBufferCollection(int capacity)
             : base(capacity)
         {
@@ -61,13 +71,13 @@ namespace Microsoft.Xna.Platform.Graphics
             // NOTE: We make the assumption here that the caller has
             // locked the CurrentD3DContext for us to use.
 
-            uint validMask = cconstantBufferCollection._valid;
+            uint validMask = cconstantBufferCollection.InternalValid;
 
-            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection._buffers.Length; slot++)
+            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)
             {
                 uint mask = ((uint)1) << slot;
 
-                ConstantBuffer constantBuffer = cconstantBufferCollection._buffers[slot];
+                ConstantBuffer constantBuffer = cconstantBufferCollection[slot];
                 if (constantBuffer != null && !constantBuffer.IsDisposed)
                 {
                     ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
@@ -81,10 +91,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
 
                     // Set the buffer to the shader stage.
-                    if ((cconstantBufferCollection._dirty & mask) != 0)
+                    if ((cconstantBufferCollection.InternalDirty & mask) != 0)
                     {
                         shaderStage.SetConstantBuffer(slot, constantBufferStrategy.DXcbuffer);
-                        cconstantBufferCollection._dirty &= ~mask;
+                        cconstantBufferCollection.InternalDirty &= ~mask;
                     }
                 }
 

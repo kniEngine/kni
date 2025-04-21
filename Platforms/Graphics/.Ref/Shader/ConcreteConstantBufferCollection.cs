@@ -15,6 +15,10 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly ConstantBuffer[] _buffers;
         private uint _valid;
 
+        public int Length { get { return _buffers.Length; } }
+
+        internal uint InternalValid { get { return this._valid; } }
+
         internal ConcreteConstantBufferCollection(int capacity)
             : base(capacity)
         {
@@ -54,13 +58,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal static void Apply(ConcreteGraphicsContext ccontextStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
-            uint validMask = cconstantBufferCollection._valid;
+            uint validMask = cconstantBufferCollection.InternalValid;
 
-            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection._buffers.Length; slot++)
+            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)
             {
                 uint mask = ((uint)1) << slot;
 
-                ConstantBuffer constantBuffer = cconstantBufferCollection._buffers[slot];
+                ConstantBuffer constantBuffer = cconstantBufferCollection[slot];
                 if (constantBuffer != null && !constantBuffer.IsDisposed)
                 {
                     ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
