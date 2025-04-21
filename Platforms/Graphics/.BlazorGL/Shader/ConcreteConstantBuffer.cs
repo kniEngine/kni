@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             // If the shader program is the same, the effect may still be different and have different values in the buffer
-            if (!Object.ReferenceEquals(this, _lastConstantBufferApplied))
+            if (!Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied))
                 Dirty = true;
 
             // If the buffer content hasn't changed then we're
@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // Clear the dirty flag.
             Dirty = false;
 
-            _lastConstantBufferApplied = this;
+            ConcreteConstantBuffer._lastConstantBufferApplied = this;
         }
 
         public override void PlatformContextLost()
