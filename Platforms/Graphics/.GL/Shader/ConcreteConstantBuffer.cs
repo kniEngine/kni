@@ -39,25 +39,21 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteConstantBuffer(this);
         }
 
-        internal unsafe void PlatformApply(ConcreteGraphicsContextGL ccontextStrategy, int slot)
+        internal unsafe void PlatformApply(ConcreteGraphicsContextGL ccontextStrategy, ShaderProgram shaderProgram, int slot)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
             var GL = ccontextStrategy.GL;
 
-            // NOTE: We assume here the program has
-            // already been set on the device.
-            ShaderProgram program = ccontextStrategy.ShaderProgram;
-
             // If the program changed then lookup the
             // uniform again and apply the state.
-            if (_shaderProgram != program)
+            if (_shaderProgram != shaderProgram)
             {
-                int location = ccontextStrategy.GetUniformLocation(program, Name);
+                int location = ccontextStrategy.GetUniformLocation(shaderProgram, Name);
                 if (location == -1)
                     return;
 
-                _shaderProgram = program;
+                _shaderProgram = shaderProgram;
                 _location = location;
                 Dirty = true;
             }

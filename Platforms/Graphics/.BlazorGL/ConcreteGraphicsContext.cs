@@ -40,8 +40,6 @@ namespace Microsoft.Xna.Platform.Graphics
         // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
 
-        internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
-
         internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0); } }
 
         internal IWebGLRenderingContext GlContext { get { return _glContext; } }
@@ -285,9 +283,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            PlatformApplyConstantBuffers(cvertexShader,
+            PlatformApplyConstantBuffers(cvertexShader, _shaderProgram,
                 ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
-            PlatformApplyConstantBuffers(cpixelShader, 
+            PlatformApplyConstantBuffers(cpixelShader, _shaderProgram,
                 ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
 
             // Apply Shader Texture and Samplers
@@ -299,7 +297,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
         }
 
-        private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ConcreteConstantBufferCollection cconstantBufferCollection)
+        private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ShaderProgram shaderProgram, ConcreteConstantBufferCollection cconstantBufferCollection)
         {
             uint validMask = cconstantBufferCollection.InternalValid;
 
@@ -312,7 +310,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
 
-                    constantBufferStrategy.PlatformApply(this, slot);
+                    constantBufferStrategy.PlatformApply(this, shaderProgram, slot);
                 }
 
                 // clear buffer bit
