@@ -59,26 +59,22 @@ namespace Microsoft.Xna.Platform.Graphics
             if (!Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied))
                 Dirty = true;
 
-            // If the buffer content hasn't changed then we're
-            // done... use the previously set uniform state.
-            if (!Dirty)
-                return;
-
-            fixed (void* bytePtr = this.BufferData)
+            if (base.Dirty)
             {
-                // TODO: We need to know the type of buffer float/int/bool
-                // and cast this correctly... else it doesn't work as i guess
-                // GL is checking the type of the uniform.
+                fixed (void* bytePtr = this.BufferData)
+                {
+                    // TODO: We need to know the type of buffer float/int/bool
+                    // and cast this correctly... else it doesn't work as i guess
+                    // GL is checking the type of the uniform.
 
-                System.Diagnostics.Debug.Assert((this.BufferData.Length % 16) == 0);
-                GL.Uniform4fv(_location, this.BufferData);
-                GL.CheckGLError();
+                    System.Diagnostics.Debug.Assert((this.BufferData.Length % 16) == 0);
+                    GL.Uniform4fv(_location, this.BufferData);
+                    GL.CheckGLError();
+                }
+
+                base.Dirty = false;
+                ConcreteConstantBuffer._lastConstantBufferApplied = this;
             }
-
-            // Clear the dirty flag.
-            Dirty = false;
-
-            ConcreteConstantBuffer._lastConstantBufferApplied = this;
         }
 
         public override void PlatformContextLost()
