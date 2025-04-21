@@ -54,12 +54,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 _location = location;
             }
 
-            // If the shader program is the same, the effect may still be different and have different values in the buffer
-            bool isLastConstantBufferApplied = Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied);
-         
             if (base.Dirty
             ||  !isSameShaderProgram
-            ||  !isLastConstantBufferApplied
+            // If the shader program is the same, the effect may still be different and have different values in the buffer
+            ||  !Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied)
             )
             {
                 fixed (void* bytePtr = this.BufferData)
