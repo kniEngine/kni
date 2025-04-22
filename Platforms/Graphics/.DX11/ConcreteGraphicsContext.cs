@@ -285,9 +285,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, cvertexShader, this.D3dContext.VertexShader);
-            ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this, cpixelShader, this.D3dContext.PixelShader);
-
+            PlatformApplyConstantBuffers(cvertexShader, this.D3dContext.VertexShader,
+                ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
+            PlatformApplyConstantBuffers(cpixelShader, this.D3dContext.PixelShader,
+                ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
+  
             // Apply Shader Texture and SamplersSamplers
             PlatformApplyTexturesAndSamplers(cvertexShader, this.D3dContext.VertexShader,
                 ((IPlatformTextureCollection)this.VertexTextures).Strategy.ToConcrete<ConcreteTextureCollection>(),
@@ -295,6 +297,43 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyTexturesAndSamplers(cpixelShader, this.D3dContext.PixelShader,
                 ((IPlatformTextureCollection)this.Textures).Strategy.ToConcrete<ConcreteTextureCollection>(),
                 ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
+        }
+
+        private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, D3D11.CommonShaderStage shaderStage, ConcreteConstantBufferCollection cconstantBufferCollection)
+        {
+            // NOTE: We make the assumption here that the caller has
+            // locked the CurrentD3DContext for us to use.
+
+            uint validMask = cconstantBufferCollection.InternalValid;
+
+            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)
+            {
+                uint mask = ((uint)1) << slot;
+
+                ConstantBuffer constantBuffer = cconstantBufferCollection[slot];
+                if (constantBuffer != null && !constantBuffer.IsDisposed)
+                {
+                    ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
+
+                    // Update the hardware buffer.
+                    if (constantBufferStrategy.Dirty)
+                    {
+                        this.D3dContext.UpdateSubresource(constantBufferStrategy.BufferData, constantBufferStrategy.DXcbuffer);
+
+                        constantBufferStrategy.Dirty = false;
+                    }
+
+                    // Set the buffer to the shader stage.
+                    if ((cconstantBufferCollection.InternalDirty & mask) != 0)
+                    {
+                        shaderStage.SetConstantBuffer(slot, constantBufferStrategy.DXcbuffer);
+                        cconstantBufferCollection.InternalDirty &= ~mask;
+                    }
+                }
+
+                // clear buffer bit
+                validMask &= ~mask;
+            }
         }
 
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, D3D11.CommonShaderStage dxShaderStage, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)

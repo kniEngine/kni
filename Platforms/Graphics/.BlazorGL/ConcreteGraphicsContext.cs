@@ -40,8 +40,6 @@ namespace Microsoft.Xna.Platform.Graphics
         // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
 
-        internal ShaderProgram ShaderProgram { get { return _shaderProgram; } }
-
         internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0); } }
 
         internal IWebGLRenderingContext GlContext { get { return _glContext; } }
@@ -267,6 +265,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (_vertexShaderDirty || _pixelShaderDirty)
             {
                 ActivateShaderProgram(cvertexShader, cpixelShader);
+                ApplyPosFixup(_shaderProgram);
 
                 if (_vertexShaderDirty)
                 {
@@ -284,8 +283,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
             // Apply Constant Buffers
-            ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
-            ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>().Apply(this);
+            PlatformApplyConstantBuffers(cvertexShader, _shaderProgram,
+                ((IPlatformConstantBufferCollection)_vertexConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
+            PlatformApplyConstantBuffers(cpixelShader, _shaderProgram,
+                ((IPlatformConstantBufferCollection)_pixelConstantBuffers).Strategy.ToConcrete<ConcreteConstantBufferCollection>());
 
             // Apply Shader Texture and Samplers
             PlatformApplyTexturesAndSamplers(cvertexShader,
@@ -296,6 +297,26 @@ namespace Microsoft.Xna.Platform.Graphics
                 ((IPlatformSamplerStateCollection)this.SamplerStates).Strategy.ToConcrete<ConcreteSamplerStateCollection>());
         }
 
+        private void PlatformApplyConstantBuffers(ConcreteShader shaderStrategy, ShaderProgram shaderProgram, ConcreteConstantBufferCollection cconstantBufferCollection)
+        {
+            uint validMask = cconstantBufferCollection.InternalValid;
+
+            for (int slot = 0; validMask != 0 && slot < cconstantBufferCollection.Length; slot++)
+            {
+                uint mask = ((uint)1) << slot;
+
+                ConstantBuffer constantBuffer = cconstantBufferCollection[slot];
+                if (constantBuffer != null && !constantBuffer.IsDisposed)
+                {
+                    ConcreteConstantBuffer constantBufferStrategy = ((IPlatformConstantBuffer)constantBuffer).Strategy.ToConcrete<ConcreteConstantBuffer>();
+
+                    constantBufferStrategy.PlatformApply(this, shaderProgram, slot);
+                }
+
+                // clear buffer bit
+                validMask &= ~mask;
+            }
+        }
         private void PlatformApplyTexturesAndSamplers(ConcreteShader cshader, ConcreteTextureCollection ctextureCollection, ConcreteSamplerStateCollection csamplerStateCollection)
         {
             int texturesCount = ctextureCollection.Length;
@@ -430,6 +451,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderProgram = shaderProgram;
             }
 
+        }
+
+        private void ApplyPosFixup(ShaderProgram shaderProgram)
+        {
             WebGLUniformLocation posFixupLoc = this.GetUniformLocation(shaderProgram, "posFixup");
             if (posFixupLoc == null)
                 return;

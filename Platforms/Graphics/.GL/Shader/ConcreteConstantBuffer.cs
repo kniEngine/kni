@@ -39,53 +39,45 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteConstantBuffer(this);
         }
 
-        internal unsafe void PlatformApply(GraphicsContextStrategy contextStrategy, int slot)
+        internal unsafe void PlatformApply(ConcreteGraphicsContextGL ccontextStrategy, ShaderProgram shaderProgram, int slot)
         {
             System.Diagnostics.Debug.Assert(slot == 0);
 
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-            // NOTE: We assume here the program has
-            // already been set on the device.
-            ShaderProgram program = contextStrategy.ToConcrete<ConcreteGraphicsContext>().ShaderProgram;
-
-            // If the program changed then lookup the
-            // uniform again and apply the state.
-            if (_shaderProgram != program)
+            bool isSameShaderProgram = _shaderProgram == shaderProgram;
+            if (!isSameShaderProgram)
             {
-                int location = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GetUniformLocation(program, Name);
+                // If the program changed then lookup the uniform location again.
+                int location = ccontextStrategy.GetUniformLocation(shaderProgram, Name);
                 if (location == -1)
                     return;
 
-                _shaderProgram = program;
+                _shaderProgram = shaderProgram;
                 _location = location;
-                Dirty = true;
             }
 
+            if (base.Dirty
+            // If the shader program changed then apply the buffer.
+            ||  !isSameShaderProgram
             // If the shader program is the same, the effect may still be different and have different values in the buffer
-            if (!Object.ReferenceEquals(this, _lastConstantBufferApplied))
-                Dirty = true;
-
-            // If the buffer content hasn't changed then we're
-            // done... use the previously set uniform state.
-            if (!Dirty)
-                return;
-
-            fixed (void* bytePtr = this.BufferData)
+            ||  !Object.ReferenceEquals(this, ConcreteConstantBuffer._lastConstantBufferApplied)
+            )
             {
-                // TODO: We need to know the type of buffer float/int/bool
-                // and cast this correctly... else it doesn't work as i guess
-                // GL is checking the type of the uniform.
+                var GL = ccontextStrategy.GL;
 
-                System.Diagnostics.Debug.Assert((this.BufferData.Length % 16) == 0);
-                GL.Uniform4(_location, this.BufferData.Length >> 4, (Vector4*)bytePtr);
-                GL.CheckGLError();
+                fixed (void* bytePtr = this.BufferData)
+                {
+                    // TODO: We need to know the type of buffer float/int/bool
+                    // and cast this correctly... else it doesn't work as i guess
+                    // GL is checking the type of the uniform.
+
+                    System.Diagnostics.Debug.Assert((this.BufferData.Length % 16) == 0);
+                    GL.Uniform4(_location, this.BufferData.Length >> 4, (Vector4*)bytePtr);
+                    GL.CheckGLError();
+                }
+
+               base.Dirty = false;
+                ConcreteConstantBuffer._lastConstantBufferApplied = this;
             }
-
-            // Clear the dirty flag.
-            Dirty = false;
-
-            _lastConstantBufferApplied = this;
         }
 
         public override void PlatformContextLost()

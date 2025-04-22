@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
-        internal unsafe void PlatformApply(GraphicsContextStrategy contextStrategy, int slot)
+        internal unsafe void PlatformApply(ConcreteGraphicsContext ccontextStrategy, int slot)
         {
             throw new PlatformNotSupportedException();
         }
