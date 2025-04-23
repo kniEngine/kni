@@ -175,25 +175,25 @@ namespace Microsoft.Xna.Platform.Graphics
             else if (rows == 1 || (rows == 4 && columns == 4))
             {
                 Array src = data as Array;
-                int stride = (columns * ElementSize);
-                Buffer.BlockCopy(src, 0, this.BufferData, offset, stride * rows);
+                int srcStride = (columns * ElementSize);
+                Buffer.BlockCopy(src, 0, this.BufferData, offset, srcStride * rows);
             }
             // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
             else if (rows == 3 && (columns == 3 || columns == 4))
             {
                 Array src = data as Array;
-                int stride = (columns * ElementSize);
-                Buffer.BlockCopy(src, stride * 0, this.BufferData, offset + (RowSize * 0), stride);
-                Buffer.BlockCopy(src, stride * 1, this.BufferData, offset + (RowSize * 1), stride);
-                Buffer.BlockCopy(src, stride * 2, this.BufferData, offset + (RowSize * 2), stride);
+                int srcStride = (columns * ElementSize);
+                Buffer.BlockCopy(src, srcStride * 0, this.BufferData, offset + (RowSize * 0), srcStride);
+                Buffer.BlockCopy(src, srcStride * 1, this.BufferData, offset + (RowSize * 1), srcStride);
+                Buffer.BlockCopy(src, srcStride * 2, this.BufferData, offset + (RowSize * 2), srcStride);
             }
             else
             {
                 Array src = data as Array;
-                int stride = (columns * ElementSize);
+                int srcStride = (columns * ElementSize);
                 for (int y = 0; y < rows; y++)
                 {
-                    Buffer.BlockCopy(src, stride * y, this.BufferData, offset + (RowSize * y), stride);
+                    Buffer.BlockCopy(src, srcStride * y, this.BufferData, offset + (RowSize * y), srcStride);
                 }
             }
         }
