@@ -164,14 +164,14 @@ namespace Microsoft.Xna.Platform.Graphics
             // Take care of the single copy case!
             else if (rows == 1 || (rows == 4 && columns == 4))
             {
-                Array src = data as Array;
+                Array src = (Array)data;
                 int srcStride = (columns * ElementSize);
                 Buffer.BlockCopy(src, 0, this.BufferData, offset, srcStride * rows);
             }
             // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
             else if (rows == 3 && (columns == 3 || columns == 4))
             {
-                Array src = data as Array;
+                Array src = (Array)data;
                 int srcStride = (columns * ElementSize);
                 Buffer.BlockCopy(src, srcStride * 0, this.BufferData, offset + (RowSize * 0), srcStride);
                 Buffer.BlockCopy(src, srcStride * 1, this.BufferData, offset + (RowSize * 1), srcStride);
@@ -179,7 +179,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             else
             {
-                Array src = data as Array;
+                Array src = (Array)data;
                 int srcStride = (columns * ElementSize);
                 for (int r = 0; r < rows; r++)
                     Buffer.BlockCopy(src, srcStride * r, this.BufferData, offset + (RowSize * r), srcStride);
