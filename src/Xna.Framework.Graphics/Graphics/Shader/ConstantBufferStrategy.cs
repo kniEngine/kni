@@ -158,10 +158,8 @@ namespace Microsoft.Xna.Platform.Graphics
             // Take care of a single element.
             if (rows == 1 && columns == 1)
             {
-                {
-                    Array src = (Array)data;
-                    Buffer.BlockCopy(src, 0, this.BufferData, offset, ElementSize);
-                }
+                Array src = (Array)data;
+                Buffer.BlockCopy(src, 0, this.BufferData, offset, ElementSize);
             }
             // Take care of the single copy case!
             else if (rows == 1 || (rows == 4 && columns == 4))
