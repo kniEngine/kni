@@ -161,8 +161,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 // EffectParameter stores all values in arrays by default.
                 if (data is Array)
                 {
-                    Array source = data as Array;
-                    Buffer.BlockCopy(source, 0, this.BufferData, offset, ElementSize);
+                    Array src = data as Array;
+                    Buffer.BlockCopy(src, 0, this.BufferData, offset, ElementSize);
                 }
                 else
                 {
@@ -174,26 +174,26 @@ namespace Microsoft.Xna.Platform.Graphics
             // Take care of the single copy case!
             else if (rows == 1 || (rows == 4 && columns == 4))
             {
-                Array source = data as Array;
+                Array src = data as Array;
                 int stride = (columns * ElementSize);
-                Buffer.BlockCopy(source, 0, this.BufferData, offset, rows * stride);
+                Buffer.BlockCopy(src, 0, this.BufferData, offset, stride * rows);
             }
             // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
             else if (rows == 3 && (columns == 3 || columns == 4))
             {
-                Array source = data as Array;
+                Array src = data as Array;
                 int stride = (columns * ElementSize);
-                Buffer.BlockCopy(source, stride * 0, this.BufferData, offset + (RowSize * 0), stride);
-                Buffer.BlockCopy(source, stride * 1, this.BufferData, offset + (RowSize * 1), stride);
-                Buffer.BlockCopy(source, stride * 2, this.BufferData, offset + (RowSize * 2), stride);
+                Buffer.BlockCopy(src, stride * 0, this.BufferData, offset + (RowSize * 0), stride);
+                Buffer.BlockCopy(src, stride * 1, this.BufferData, offset + (RowSize * 1), stride);
+                Buffer.BlockCopy(src, stride * 2, this.BufferData, offset + (RowSize * 2), stride);
             }
             else
             {
-                Array source = data as Array;
+                Array src = data as Array;
                 int stride = (columns * ElementSize);
                 for (int y = 0; y < rows; y++)
                 {
-                    Buffer.BlockCopy(source, stride * y, this.BufferData, offset + (RowSize * y), stride);
+                    Buffer.BlockCopy(src, stride * y, this.BufferData, offset + (RowSize * y), stride);
                 }
             }
         }
