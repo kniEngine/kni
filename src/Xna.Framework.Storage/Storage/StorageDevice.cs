@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
         /// <param name="displayName">A constant human-readable string that names the file.</param>
         /// <param name="callback">An AsyncCallback that represents the method called when the operation is complete.</param>
-        /// <param name="state"A user-created object used to uniquely identify the request, or null.</param>
+        /// <param name="state">A user-created object used to uniquely identify the request, or null.</param>
         public IAsyncResult BeginOpenContainer(string displayName, AsyncCallback callback, object state)
         {
             return _strategy.BeginOpenContainer(this, displayName, callback, state);
