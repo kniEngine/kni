@@ -192,9 +192,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 Array src = data as Array;
                 int srcStride = (columns * ElementSize);
                 for (int r = 0; r < rows; r++)
-                {
                     Buffer.BlockCopy(src, srcStride * r, this.BufferData, offset + (RowSize * r), srcStride);
-                }
             }
         }
 
