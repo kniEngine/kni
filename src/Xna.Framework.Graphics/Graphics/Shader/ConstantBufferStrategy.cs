@@ -104,9 +104,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private int SetParameter(EffectParameter param, int offset)
         {
-            const int elementSize = 4;
-            const int rowSize = elementSize * 4;
-
             EffectParameterCollection elements = param.Elements;
             if (elements.Count <= 0)
             {
@@ -122,12 +119,12 @@ namespace Microsoft.Xna.Platform.Graphics
                             if (param.ParameterClass == EffectParameterClass.Matrix)
                             {
                                 SetData(offset, param.ColumnCount, param.RowCount, param.Data);
-                                return (param.ColumnCount * rowSize);
+                                return (param.ColumnCount * RowSize);
                             }
                             else
                             {
                                 SetData(offset, param.RowCount, param.ColumnCount, param.Data);
-                                return (param.RowCount * rowSize);
+                                return (param.RowCount * RowSize);
                             }
                         default:
                             throw new NotSupportedException("Not supported!");
@@ -150,53 +147,39 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        // Shader registers are always 4 bytes and all the
+        // incoming data objects should be 4 bytes per element.
+        const int ElementSize = 4;
+        const int RowSize = (ElementSize * 4);
+
         private void SetData(int offset, int rows, int columns, object data)
         {
-            // Shader registers are always 4 bytes and all the
-            // incoming data objects should be 4 bytes per element.
-            const int elementSize = 4;
-            const int rowSize = elementSize * 4;
+            Array src = (Array)data;
 
             // Take care of a single element.
             if (rows == 1 && columns == 1)
             {
-                // EffectParameter stores all values in arrays by default.
-                if (data is Array)
-                {
-                    Array source = data as Array;
-                    Buffer.BlockCopy(source, 0, this.BufferData, offset, elementSize);
-                }
-                else
-                {
-                    // TODO: When we eventually expose the internal Shader 
-                    // API then we will need to deal with non-array elements.
-                    throw new NotImplementedException();
-                }
+                Buffer.BlockCopy(src, 0, this.BufferData, offset, ElementSize);
             }
             // Take care of the single copy case!
             else if (rows == 1 || (rows == 4 && columns == 4))
             {
-                Array source = data as Array;
-                int stride = (columns * elementSize);
-                Buffer.BlockCopy(source, 0, this.BufferData, offset, rows * stride);
+                int srcStride = (columns * ElementSize);
+                Buffer.BlockCopy(src, 0, this.BufferData, offset, srcStride * rows);
             }
             // Take care of Matrix3x3 and Matrix4x3. (unroll loop)
             else if (rows == 3 && (columns == 3 || columns == 4))
             {
-                Array source = data as Array;
-                int stride = (columns * elementSize);
-                Buffer.BlockCopy(source, stride * 0, this.BufferData, offset + (rowSize * 0), stride);
-                Buffer.BlockCopy(source, stride * 1, this.BufferData, offset + (rowSize * 1), stride);
-                Buffer.BlockCopy(source, stride * 2, this.BufferData, offset + (rowSize * 2), stride);
+                int srcStride = (columns * ElementSize);
+                Buffer.BlockCopy(src, srcStride * 0, this.BufferData, offset + (RowSize * 0), srcStride);
+                Buffer.BlockCopy(src, srcStride * 1, this.BufferData, offset + (RowSize * 1), srcStride);
+                Buffer.BlockCopy(src, srcStride * 2, this.BufferData, offset + (RowSize * 2), srcStride);
             }
             else
             {
-                Array source = data as Array;
-                int stride = (columns * elementSize);
-                for (int y = 0; y < rows; y++)
-                {
-                    Buffer.BlockCopy(source, stride * y, this.BufferData, offset + (rowSize * y), stride);
-                }
+                int srcStride = (columns * ElementSize);
+                for (int r = 0; r < rows; r++)
+                    Buffer.BlockCopy(src, srcStride * r, this.BufferData, offset + (RowSize * r), srcStride);
             }
         }
 
