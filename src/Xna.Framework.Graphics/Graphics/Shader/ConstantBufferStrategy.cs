@@ -158,17 +158,9 @@ namespace Microsoft.Xna.Platform.Graphics
             // Take care of a single element.
             if (rows == 1 && columns == 1)
             {
-                // EffectParameter stores all values in arrays by default.
-                if (data is Array)
                 {
-                    Array src = data as Array;
+                    Array src = (Array)data;
                     Buffer.BlockCopy(src, 0, this.BufferData, offset, ElementSize);
-                }
-                else
-                {
-                    // TODO: When we eventually expose the internal Shader 
-                    // API then we will need to deal with non-array elements.
-                    throw new NotImplementedException();
                 }
             }
             // Take care of the single copy case!
