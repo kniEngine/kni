@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
                     if (textureName != null)
                         samplerInfo.textureName = textureName;
-                    else if (state.TextureName != null)
+                    else
                         samplerInfo.textureName = state.TextureName;
                 }
 

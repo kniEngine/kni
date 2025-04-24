@@ -184,8 +184,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     {
                         if (textureInfo.textureName == samplers[s].GLsamplerName)
                         {
-                            if (samplers[s].textureName != null)
-                                textureInfo.textureName = samplers[s].textureName;
+                            textureInfo.textureName = samplers[s].textureName;
 
                             textureInfo.samplerSlot = samplers[s].samplerSlot;
                             if (samplers[s].state != null)
