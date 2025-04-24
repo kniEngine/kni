@@ -378,7 +378,7 @@ namespace Kni.Tests.Graphics
             int t2 = 2;
 #if KNI
             //if (device.Adapter.Backend == GraphicsBackend.DirectX11)
-            //{   
+            //{
             //    t0 = 1;
             //    t1 = 0;
             //}
@@ -515,7 +515,7 @@ namespace Kni.Tests.Graphics
             //{
             //    t0 = 3;
             //    t1 = 4;
-            //    t1 = 5;
+            //    t2 = 5;
             //}
 #endif
 
