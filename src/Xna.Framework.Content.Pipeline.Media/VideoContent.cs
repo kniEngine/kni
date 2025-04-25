@@ -85,7 +85,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         break;
 
                     case "bit_rate":
-                        _bitsPerSecond = int.Parse(value, CultureInfo.InvariantCulture);
+                        if (value != "N/A")
+                            _bitsPerSecond = int.Parse(value, CultureInfo.InvariantCulture);
                         break;
 
                     case "width":
