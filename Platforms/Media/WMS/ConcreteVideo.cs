@@ -38,5 +38,4 @@ namespace Microsoft.Xna.Platform.Media
             base.Dispose(disposing);
         }
     }
-
 }
