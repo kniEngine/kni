@@ -80,6 +80,8 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+        #region IAsyncCallback
+
         private void OnMediaEngineEvent(MediaFoundation.MediaEngineEvent mediaEvent, long param1, int param2)
         {
             if (!_mediaEngine.HasVideo())
@@ -100,6 +102,8 @@ namespace Microsoft.Xna.Platform.Media
                     break;
             }
         }
+
+        #endregion IAsyncCallback
 
         public override Texture2D PlatformGetTexture()
         {
@@ -132,7 +136,7 @@ namespace Microsoft.Xna.Platform.Media
         protected override void PlatformUpdateState(ref MediaState state)
         {
         }
-        
+
         public override void PlatformPlay(Video video)
         {
             base.Video = video;
@@ -156,7 +160,6 @@ namespace Microsoft.Xna.Platform.Media
             State = MediaState.Playing;
         }
 
-
         public override void PlatformStop()
         {
             _mediaEngine.Pause();
@@ -169,6 +172,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             _mediaEngine.Volume = base.Volume;
         }
+
 
         protected override void Dispose(bool disposing)
         {

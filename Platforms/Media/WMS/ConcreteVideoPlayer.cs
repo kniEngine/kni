@@ -100,7 +100,8 @@ namespace Microsoft.Xna.Platform.Media
                         break;
 
                     case MediaFoundation.MediaEventTypes.SessionTopologyStatus:
-                        if (mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus) == MediaFoundation.TopologyStatus.Ready)
+                        MediaFoundation.TopologyStatus topologyStatus = mediaEvent.Get(MediaFoundation.EventAttributeKeys.TopologyStatus);
+                        if (topologyStatus == MediaFoundation.TopologyStatus.Ready)
                             OnTopologyReady();
                         break;
 
@@ -124,6 +125,10 @@ namespace Microsoft.Xna.Platform.Media
                         break;
 
                     case MediaFoundation.MediaEventTypes.EndOfPresentation:
+                        break;
+
+                    case MediaFoundation.MediaEventTypes.Error:
+                        DX.Result status = mediaEvent.Status;
                         break;
                 }
 
@@ -303,6 +308,7 @@ namespace Microsoft.Xna.Platform.Media
 
             SetChannelVolumes();
         }
+
 
         protected override void Dispose(bool disposing)
         {
