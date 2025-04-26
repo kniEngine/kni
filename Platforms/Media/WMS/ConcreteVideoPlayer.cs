@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.Video = video;
 
-            // Cleanup the last song first.
+            // Cleanup the last video first.
             if (State != MediaState.Stopped)
             {
                 _session.Stop();
