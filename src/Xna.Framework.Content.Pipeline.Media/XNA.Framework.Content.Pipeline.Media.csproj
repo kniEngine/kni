@@ -31,6 +31,7 @@
   <ItemGroup>
     <Compile Include="Processors\SongProcessor.cs" />
     <Compile Include="Processors\VideoProcessor.cs" />
+    <Compile Include="Processors\VideoProcessorOutputFormat.cs" />
     <Compile Include="Serialization\Compiler\SongWriter.cs" />
     <Compile Include="Serialization\Compiler\VideoWriter.cs" />
     <Compile Include="SongContent.cs" />
