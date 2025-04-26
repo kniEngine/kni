@@ -52,10 +52,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     return null;
 
                 using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
-                using (var writer = new SourceFileCollectionBinaryReader(stream))
+                using (var reader = new SourceFileCollectionBinaryReader(stream))
                 {
                     SourceFileCollection result = new SourceFileCollection();
-                    writer.Read(result);
+                    reader.Read(result);
                     return result;
                 }
             }

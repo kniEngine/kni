@@ -37,10 +37,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     return null;
 
                 using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
-                using (var writer = new PackageReferencesCollectionBinaryReader(stream))
+                using (var reader = new PackageReferencesCollectionBinaryReader(stream))
                 {
                     PackageReferencesCollection result = new PackageReferencesCollection();
-                    writer.Read(result);
+                    reader.Read(result);
                     return result;
                 }
             }
