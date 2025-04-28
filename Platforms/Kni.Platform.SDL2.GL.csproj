@@ -199,6 +199,7 @@
     <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Game\.SDL2\SDLGameWindow.cs" />
     <Compile Include="Game\.SDL2\SDL2.cs" />
+    <Compile Include="Media\DesktopGL\PipeBinaryReader.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
