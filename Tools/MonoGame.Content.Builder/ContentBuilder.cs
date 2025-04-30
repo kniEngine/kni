@@ -397,7 +397,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 {
                     BuildEvent buildEvent = _manager.CreateBuildEvent(contentItem.SourceFile, contentItem.OutputFile, contentItem.Importer, contentItem.Processor, contentItem.ProcessorParams);
                     OpaqueDataDictionary processorDefaultValues = _manager.GetProcessorDefaultValues(buildEvent.Processor);
-                    _manager.TrackBuildEvent(buildEvent, processorDefaultValues);
+                    PipelineManager.TrackBuildEvent(_manager._buildEventsMap, buildEvent, processorDefaultValues);
                 }
                 catch { /* Ignore exception */ }
             }
