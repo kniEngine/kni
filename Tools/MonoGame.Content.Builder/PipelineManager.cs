@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         //   Value = list of build events
         // (Note: When using external references, an asset may be built multiple times
         // with different parameters.)
-        private readonly Dictionary<string, List<BuildEvent>> _buildEventsMap;
+        internal readonly Dictionary<string, List<BuildEvent>> _buildEventsMap;
 
         // Store default values for content processor parameters. (Necessary to compare processor
         // parameters. See PipelineBuildEvent.AreParametersEqual.)
@@ -595,7 +595,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             OpaqueDataDictionary processorDefaultValues = GetProcessorDefaultValues(buildEvent.Processor);
 
             // Keep track of all build events. (Required to resolve automatic names "AssetName_n".)
-            TrackBuildEvent(buildEvent, processorDefaultValues);
+            TrackBuildEvent(_buildEventsMap, buildEvent, processorDefaultValues);
 
             bool building = RegisterBuildEvent(buildEvent);
             bool rebuild = buildEvent.NeedsRebuild(this, cachedBuildEvent);
@@ -821,15 +821,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// Stores the pipeline build event (in memory) if no matching event is found.
         /// </summary>
         /// <param name="buildEvent">The pipeline build event.</param>
-        internal void TrackBuildEvent(BuildEvent buildEvent, OpaqueDataDictionary processorDefaultValues)
+        internal static void TrackBuildEvent(Dictionary<string, List<BuildEvent>> buildEventsMap, BuildEvent buildEvent, OpaqueDataDictionary processorDefaultValues)
         {
-            lock (_buildEventsMap)
+            lock (buildEventsMap)
             {
-                List<BuildEvent> buildEvents;
-                if (!_buildEventsMap.TryGetValue(buildEvent.SourceFile, out buildEvents))
+                if (!buildEventsMap.TryGetValue(buildEvent.SourceFile, out List<BuildEvent> buildEvents))
                 {
                     buildEvents = new List<BuildEvent>(1);
-                    _buildEventsMap.Add(buildEvent.SourceFile, buildEvents);
+                    buildEventsMap.Add(buildEvent.SourceFile, buildEvents);
                 }
 
                 BuildEvent matchedBuildEvent = FindMatchingEvent(buildEvents, buildEvent.DestFile, buildEvent.Importer, buildEvent.Processor, buildEvent.Parameters, processorDefaultValues);
@@ -926,7 +925,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         /// <returns>
         /// The matching pipeline build event, or <see langword="null"/>.
         /// </returns>
-        private BuildEvent FindMatchingEvent(List<BuildEvent> pipelineBuildEvents, string destFile, string importerName, string processorName, OpaqueDataDictionary processorParameters, OpaqueDataDictionary processorDefaultValues)
+        private static BuildEvent FindMatchingEvent(List<BuildEvent> pipelineBuildEvents, string destFile, string importerName, string processorName, OpaqueDataDictionary processorParameters, OpaqueDataDictionary processorDefaultValues)
         {
             foreach (BuildEvent existingBuildEvent in pipelineBuildEvents)
             {
