@@ -640,7 +640,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (rebuild)
                 {
                     // Import and process the content.
-                    object processedObject = ProcessContent(logger, buildEvent);
+                    object importedObject = ImportContent(logger, buildEvent);
+                    object processedObject = ProcessContent(logger, buildEvent, importedObject);
 
                     // Write the content to disk.
                     WriteXnb(processedObject, buildEvent);
@@ -674,7 +675,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return true;
         }
 
-        public object ProcessContent(ConsoleLogger logger, BuildEvent buildEvent)
+        public object ImportContent(ConsoleLogger logger, BuildEvent buildEvent)
         {
             if (!File.Exists(buildEvent.SourceFile))
                 throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
@@ -703,6 +704,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", buildEvent.Importer), inner);
             }
 
+            return importedObject;
+        }
+
+        public object ProcessContent(ConsoleLogger logger, BuildEvent buildEvent, object importedObject)
+        {
             // The pipelineEvent.Processor can be null or empty. In this case the
             // asset should be imported but not processed.
             if (string.IsNullOrEmpty(buildEvent.Processor))
