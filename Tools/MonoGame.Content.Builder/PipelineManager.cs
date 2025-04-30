@@ -424,14 +424,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (processorName == null)
                 processorName = string.Empty;
 
-            OpaqueDataDictionary defaultValues;
+            OpaqueDataDictionary processorDefaultValues;
 
             lock (_processorDefaultValues)
             {
-                if (!_processorDefaultValues.TryGetValue(processorName, out defaultValues))
+                if (!_processorDefaultValues.TryGetValue(processorName, out processorDefaultValues))
                 {
                     // Create the content processor instance and read the default values.
-                    defaultValues = new OpaqueDataDictionary();
+                    processorDefaultValues = new OpaqueDataDictionary();
                     var processorType = GetProcessorType(processorName);
                     if (processorType != null)
                     {
@@ -440,7 +440,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                             var processor = (IContentProcessor)Activator.CreateInstance(processorType);
                             var properties = processorType.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance);
                             foreach (var property in properties)
-                                defaultValues.Add(property.Name, property.GetValue(processor, null));
+                                processorDefaultValues.Add(property.Name, property.GetValue(processor, null));
                         }
                         catch
                         {
@@ -448,11 +448,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         }
                     }
 
-                    _processorDefaultValues.Add(processorName, defaultValues);
+                    _processorDefaultValues.Add(processorName, processorDefaultValues);
                 }
             }
 
-            return defaultValues;
+            return processorDefaultValues;
         }
 
         public DateTime GetProcessorAssemblyTimestamp(string name)
@@ -898,8 +898,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 &&  existingBuildEvent.Importer  == importerName
                 &&  existingBuildEvent.Processor == processorName)
                 {
-                    OpaqueDataDictionary defaultValues = GetProcessorDefaultValues(processorName);
-                    if (BuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
+                    OpaqueDataDictionary processorDefaultValues = GetProcessorDefaultValues(processorName);
+                    if (BuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, processorDefaultValues))
                         return destFile;
                 }
             }
@@ -924,8 +924,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 &&  existingBuildEvent.Importer == importerName
                 &&  existingBuildEvent.Processor == processorName)
                 {
-                    OpaqueDataDictionary defaultValues = GetProcessorDefaultValues(processorName);
-                    if (BuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, defaultValues))
+                    OpaqueDataDictionary processorDefaultValues = GetProcessorDefaultValues(processorName);
+                    if (BuildEvent.AreParametersEqual(existingBuildEvent.Parameters, processorParameters, processorDefaultValues))
                     {
                         return existingBuildEvent;
                     }

@@ -194,16 +194,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return true;
 
             // Did the parameters change?
-            OpaqueDataDictionary defaultValues = manager.GetProcessorDefaultValues(Processor);
-            if (!AreParametersEqual(cachedEvent.Parameters, Parameters, defaultValues))
+            OpaqueDataDictionary processorDefaultValues = manager.GetProcessorDefaultValues(Processor);
+            if (!AreParametersEqual(cachedEvent.Parameters, Parameters, processorDefaultValues))
                 return true;
 
             return false;
         }
 
-        internal static bool AreParametersEqual(OpaqueDataDictionary parameters0, OpaqueDataDictionary parameters1, OpaqueDataDictionary defaultValues)
+        internal static bool AreParametersEqual(OpaqueDataDictionary parameters0, OpaqueDataDictionary parameters1, OpaqueDataDictionary processorDefaultValues)
         {
-            Debug.Assert(defaultValues != null, "defaultValues must not be empty.");
+            Debug.Assert(processorDefaultValues != null, "processorDefaultValues must not be empty.");
             Debug.Assert(EmptyParameters != null && EmptyParameters.Count == 0);
 
             // Same reference or both null?
@@ -228,28 +228,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 parameters1 = dummy;
             }
 
-            // Compare parameters0 with parameters1 or defaultValues.
+            // Compare parameters0 with parameters1 or processorDefaultValues.
             foreach (KeyValuePair<string, object> pair in parameters0)
             {
                 object value0 = pair.Value;
                 object value1;
 
                 // Search for matching parameter.
-                if (!parameters1.TryGetValue(pair.Key, out value1) && !defaultValues.TryGetValue(pair.Key, out value1))
+                if (!parameters1.TryGetValue(pair.Key, out value1) && !processorDefaultValues.TryGetValue(pair.Key, out value1))
                     return false;
 
                 if (!AreEqual(value0, value1))
                     return false;
             }
 
-            // Compare parameters which are only in parameters1 with defaultValues.
+            // Compare parameters which are only in parameters1 with processorDefaultValues.
             foreach (KeyValuePair<string, object> pair in parameters1)
             {
                 if (parameters0.ContainsKey(pair.Key))
                     continue;
 
                 object defaultValue;
-                if (!defaultValues.TryGetValue(pair.Key, out defaultValue))
+                if (!processorDefaultValues.TryGetValue(pair.Key, out defaultValue))
                     return false;
 
                 if (!AreEqual(pair.Value, defaultValue))
