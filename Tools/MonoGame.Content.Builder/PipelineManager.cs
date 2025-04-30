@@ -760,7 +760,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                         // Remove asset (.xnb file) from output folder.
                         FileHelper.DeleteIfExists(asset);
 
-                        // Remove event file (.mgcontent file) from intermediate folder.
+                        // Remove event file (.kniContent file) from intermediate folder.
                         DeleteBuildEvent(asset);
                         continue;
                     }
@@ -781,7 +781,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Remove asset (.xnb file) from output folder.
             FileHelper.DeleteIfExists(outputFilepath);
 
-            // Remove event file (.mgcontent file) from intermediate folder.
+            // Remove event file (.kniContent file) from intermediate folder.
             DeleteBuildEvent(outputFilepath);
 
             lock (_buildEventsMap)
@@ -872,7 +872,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // No pipeline build event with matching settings found.
-            // Get default asset name by searching the existing .mgcontent files.
+            // Get default asset name by searching the existing .kniContent files.
             string directoryName = Path.GetDirectoryName(relativeSourceFileName);
             string fileName = Path.GetFileNameWithoutExtension(relativeSourceFileName);
             string assetName = Path.Combine(directoryName, fileName);
