@@ -360,21 +360,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             AddPackageReferences(_manager, projectDirectory, this._packageReferences);
 
             // Load the previously serialized list of built content.
+            bool targetChanged = false;
             SourceFileCollection previousFileCollection = LoadFileCollection(intermediatePath);
-            if (previousFileCollection == null)
-                previousFileCollection = new SourceFileCollection();
+            if (previousFileCollection != null)
+            {
+                // If the target changed in any way then we need to force
+                // a full rebuild even under incremental builds.
+                targetChanged = previousFileCollection.Config != Config
+                             || previousFileCollection.Platform != Platform
+                             || previousFileCollection.Profile != Profile
+                             || previousFileCollection.Compression != compression
+                              ;
 
-            // If the target changed in any way then we need to force
-            // a full rebuild even under incremental builds.
-            bool targetChanged = previousFileCollection.Config != Config
-                              || previousFileCollection.Platform != Platform
-                              || previousFileCollection.Profile != Profile
-                              || previousFileCollection.Compression != compression
-                               ;
-
-            // First clean previously built content.
-            CleanItems(previousFileCollection, targetChanged);
-            // TODO: Should we be cleaning copy items?  I think maybe we should.
+                // First clean previously built content.
+                CleanItems(previousFileCollection, targetChanged);
+                // TODO: Should we be cleaning copy items?  I think maybe we should.
+            }
 
             if (Clean)
                 return;
@@ -570,10 +571,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 string prevSourceFile = previousFileCollection.SourceFiles[i];
 
                 bool inContent = _contentItemsMap.ContainsKey(prevSourceFile.ToLowerInvariant());
-                bool cleanOldContent = !inContent && !Incremental;
-                bool cleanRebuiltContent = inContent && cleanOrRebuild;
-                if (cleanRebuiltContent || cleanOldContent || targetChanged)
-                    _manager.CleanContent(prevSourceFile, previousFileCollection.DestFiles[i]);
+                bool cleanOldContent     = !inContent && !Incremental;
+                bool cleanRebuiltContent =  inContent && cleanOrRebuild;
+                if (targetChanged || cleanRebuiltContent || cleanOldContent)
+                {
+                    string prevDestFile = previousFileCollection.DestFiles[i];
+                    _manager.ResolveOutputFilepath(prevSourceFile, ref prevDestFile);
+                    _manager.CleanContent( prevDestFile);
+                    lock (_manager._buildEventsMap)
+                    {
+                        _manager._buildEventsMap.Remove(prevSourceFile);
+                    }
+                }
             }
         }
 
