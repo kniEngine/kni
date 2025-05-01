@@ -873,7 +873,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 dbname = PipelineManager.DefaultFileCollectionFilename;
 
             string intermediateFileCollectionPath = Path.Combine(intermediatePath, Path.ChangeExtension(dbname, SourceFileCollection.Extension));
-            FileHelper.DeleteIfExists(intermediateFileCollectionPath);
+            if (File.Exists(intermediateFileCollectionPath))
+                File.Delete(intermediateFileCollectionPath);
         }
 
         private void SaveFileCollection(string intermediatePath, SourceFileCollection fileCollection)
