@@ -537,7 +537,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             string relativeEventPath = Path.ChangeExtension(PathHelper.GetRelativePath(OutputDirectory, destFile), BuildEvent.Extension);
             string intermediateEventPath = Path.Combine(IntermediateDirectory, Path.GetFileNameWithoutExtension(dbname), relativeEventPath);
-            FileHelper.DeleteIfExists(intermediateEventPath);
+            if (File.Exists(intermediateEventPath))
+                File.Delete(intermediateEventPath);
         }
 
         private void SaveBuildEvent(string destFile, BuildEvent buildEvent)
@@ -759,7 +760,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 {
                     Logger.LogMessage("Cleaning {0}", asset);
                     // Remove file (non .xnb file) from output folder.
-                    FileHelper.DeleteIfExists(asset);
+                    if (File.Exists(asset))
+                        File.Delete(asset);
                 }
 
                 // Recursively clean additional (nested) assets.
@@ -776,7 +778,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     
                     Logger.LogMessage("Cleaning {0}", asset);
                     // Remove asset (.xnb file) from output folder.
-                    FileHelper.DeleteIfExists(asset);
+                    if (File.Exists(asset))
+                        File.Delete(asset);
                     // Remove event file (.kniContent file) from intermediate folder.
                     DeleteBuildEvent(asset);
                 }
@@ -784,7 +787,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             Logger.LogMessage("Cleaning {0}", outputFilepath);
             // Remove asset (.xnb file) from output folder.
-            FileHelper.DeleteIfExists(outputFilepath);
+            if (File.Exists(outputFilepath))
+                File.Delete(outputFilepath);
             // Remove event file (.kniContent file) from intermediate folder.
             DeleteBuildEvent(outputFilepath);
         }

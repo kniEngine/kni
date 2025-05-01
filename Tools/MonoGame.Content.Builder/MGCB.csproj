@@ -45,7 +45,6 @@
     <Compile Include="ConsoleAsyncLogger.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="ContentBuilder.cs" />
-    <Compile Include="FileHelper.cs" />
     <Compile Include="ImporterContext.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="PackageReferencesCollection.cs" />
