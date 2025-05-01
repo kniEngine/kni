@@ -501,7 +501,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return result;
         }
 
-        private void ResolveOutputFilepath(string sourceFilepath, ref string outputFilepath)
+        internal void ResolveOutputFilepath(string sourceFilepath, ref string outputFilepath)
         {
             // If the output path is null... build it from the source file path.
             if (string.IsNullOrEmpty(outputFilepath))
@@ -748,54 +748,45 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return processedObject;
         }
 
-        public void CleanContent(string sourceFilepath, string outputFilepath)
+        public void CleanContent(string outputFilepath)
         {
             // First try to load the event file.
-            ResolveOutputFilepath(sourceFilepath, ref outputFilepath);
             BuildEvent cachedBuildEvent = LoadBuildEvent(outputFilepath);
-
             if (cachedBuildEvent != null)
             {
-                // Recursively clean additional (nested) assets.
-                foreach (string asset in cachedBuildEvent.BuildAsset)
-                {
-                    BuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
-
-                    if (assetCachedBuildEvent == null)
-                    {
-                        Logger.LogMessage("Cleaning {0}", asset);
-
-                        // Remove asset (.xnb file) from output folder.
-                        FileHelper.DeleteIfExists(asset);
-
-                        // Remove event file (.kniContent file) from intermediate folder.
-                        DeleteBuildEvent(asset);
-                        continue;
-                    }
-
-                    CleanContent(string.Empty, asset);
-                }
-
                 // Remove related output files (non-XNB files) that were copied to the output folder.
                 foreach (var asset in cachedBuildEvent.BuildOutput)
                 {
                     Logger.LogMessage("Cleaning {0}", asset);
+                    // Remove file (non .xnb file) from output folder.
                     FileHelper.DeleteIfExists(asset);
+                }
+
+                // Recursively clean additional (nested) assets.
+                foreach (string asset in cachedBuildEvent.BuildAsset)
+                {
+                    BuildEvent assetCachedBuildEvent = LoadBuildEvent(asset);
+                    if (assetCachedBuildEvent != null)
+                    {
+                        string assetOutputFilepath = asset;
+                        ResolveOutputFilepath(string.Empty, ref assetOutputFilepath);
+                        CleanContent(assetOutputFilepath);
+                        continue;
+                    }
+                    
+                    Logger.LogMessage("Cleaning {0}", asset);
+                    // Remove asset (.xnb file) from output folder.
+                    FileHelper.DeleteIfExists(asset);
+                    // Remove event file (.kniContent file) from intermediate folder.
+                    DeleteBuildEvent(asset);
                 }
             }
 
             Logger.LogMessage("Cleaning {0}", outputFilepath);
-
             // Remove asset (.xnb file) from output folder.
             FileHelper.DeleteIfExists(outputFilepath);
-
             // Remove event file (.kniContent file) from intermediate folder.
             DeleteBuildEvent(outputFilepath);
-
-            lock (_buildEventsMap)
-            {
-                _buildEventsMap.Remove(sourceFilepath);
-            }
         }
 
         private void WriteXnb(object content, BuildEvent buildEvent)
