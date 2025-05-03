@@ -307,6 +307,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             get { return _contentItems.Count > 0 || _copyItems.Count > 0 || Clean; }    
         }
 
+        public ContentBuilder()
+        {
+            AttachAssertListener(new AssertListener());
+        }
+
+        [Conditional("DEBUG")]
+        public static void AttachAssertListener(TraceListener traceListener)
+        {
+            if (!Debugger.IsAttached
+            && Trace.Listeners.Count == 1
+            && Trace.Listeners[0].GetType() == typeof(DefaultTraceListener))
+            {
+                Trace.Listeners.Clear();
+                Trace.Listeners.Add(traceListener);
+            }
+        }
+
         string ReplaceSymbols(string parameter)
         {
             if (string.IsNullOrWhiteSpace(parameter))
