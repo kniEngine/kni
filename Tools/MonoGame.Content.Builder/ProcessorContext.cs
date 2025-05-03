@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -85,9 +86,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             bool processAsset = !string.IsNullOrEmpty(processorName);
             _manager.ResolveImporterAndProcessor(sourceFilepath, ref importerName, ref processorName);
 
+            // Make sure the source file is absolute.
+            string sourceFile = sourceAsset.Filename;
+            if (!Path.IsPathRooted(sourceFile))
+                sourceFile = Path.Combine(_manager.ProjectDirectory, sourceFile);
+            sourceFile = PathHelper.Normalize(sourceFile);
+
             BuildEvent buildEvent = new BuildEvent
             { 
-                SourceFile = sourceFilepath,
+                SourceFile = sourceFile,
                 Importer = importerName,
                 Processor = processAsset ? processorName : null,
                 Parameters = _manager.ValidateProcessorParameters(processorName, processorParameters),
@@ -112,8 +119,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (string.IsNullOrEmpty(assetName))
                 assetName = _manager.GetAssetName(sourceAsset.Filename, importerName, processorName, processorParameters, this._logger);
 
+            // Make sure the source file is absolute.
+            string sourceFile = sourceAsset.Filename;
+            if (!Path.IsPathRooted(sourceFile))
+                sourceFile = Path.Combine(_manager.ProjectDirectory, sourceFile);
+            sourceFile = PathHelper.Normalize(sourceFile);
+
             // Build the content.
-            BuildEvent buildEvent = _manager.CreateBuildEvent(sourceAsset.Filename, assetName, importerName, processorName, processorParameters);
+            BuildEvent buildEvent = _manager.CreateBuildEvent(sourceFile, assetName, importerName, processorName, processorParameters);
             BuildEvent cachedBuildEvent = _manager.LoadBuildEvent(buildEvent.DestFile);
             _manager.BuildContent(this._logger, buildEvent, cachedBuildEvent, buildEvent.DestFile);
 
