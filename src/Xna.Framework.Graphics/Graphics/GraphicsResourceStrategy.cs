@@ -34,7 +34,11 @@ namespace Microsoft.Xna.Platform.Graphics
         GraphicsResource IGraphicsResourceStrategy.GraphicsResource
         {
             get { return _graphicsResourceRef.Target as GraphicsResource;}
-            set { _graphicsResourceRef.Target = value; }
+            set 
+            {
+                if (_graphicsResourceRef.Target != null || value != null)
+                    _graphicsResourceRef.Target = value;
+            }
         }
 
         internal GraphicsResourceStrategy()
