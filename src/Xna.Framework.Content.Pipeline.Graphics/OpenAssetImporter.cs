@@ -478,7 +478,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             if (aiMesh.HasBones)
             {
                 int vertexCount = geometry.Vertices.VertexCount;
-                bool missingBoneWeights = false;
                 BoneWeightCollection[] weights = new BoneWeightCollection[vertexCount];
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                     weights[vertexIndex] = new BoneWeightCollection();
@@ -498,6 +497,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     }
                 }
 
+                bool missingBoneWeights = false;
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                 {
                     if (weights[vertexIndex].Count == 0)
