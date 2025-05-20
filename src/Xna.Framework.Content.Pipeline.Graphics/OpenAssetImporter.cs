@@ -480,7 +480,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 List<BoneWeightCollection> xnaWeights = new List<BoneWeightCollection>();
                 int vertexCount = geometry.Vertices.VertexCount;
                 bool missingBoneWeights = false;
-                for (int i = 0; i < vertexCount; i++)
+                for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                 {
                     BoneWeightCollection list = new BoneWeightCollection();
                     for (int boneIndex = 0; boneIndex < aiMesh.BoneCount; boneIndex++)
@@ -488,7 +488,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         Bone aiBone = aiMesh.Bones[boneIndex];
                         foreach (VertexWeight aiWeight in aiBone.VertexWeights)
                         {
-                            if (aiWeight.VertexID != i)
+                            if (aiWeight.VertexID != vertexIndex)
                                 continue;
 
                             list.Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
