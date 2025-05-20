@@ -483,7 +483,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                 {
                     weights[vertexIndex] = new BoneWeightCollection();
+                }
 
+                for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
+                {
                     for (int boneIndex = 0; boneIndex < aiMesh.BoneCount; boneIndex++)
                     {
                         Bone aiBone = aiMesh.Bones[boneIndex];
@@ -495,7 +498,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                             weights[vertexIndex].Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
                         }
                     }
+                }
 
+                for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
+                {
                     if (weights[vertexIndex].Count == 0)
                     {
                         // No bone weights found for vertex. Use bone 0 as fallback.
