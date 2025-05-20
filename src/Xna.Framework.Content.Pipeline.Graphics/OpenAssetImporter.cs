@@ -481,9 +481,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 bool missingBoneWeights = false;
                 BoneWeightCollection[] weights = new BoneWeightCollection[vertexCount];
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
-                {
                     weights[vertexIndex] = new BoneWeightCollection();
-                }
 
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                 {
