@@ -477,12 +477,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             if (aiMesh.HasBones)
             {
-                List<BoneWeightCollection> xnaWeights = new List<BoneWeightCollection>();
                 int vertexCount = geometry.Vertices.VertexCount;
                 bool missingBoneWeights = false;
+                BoneWeightCollection[] weights = new BoneWeightCollection[vertexCount];
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
                 {
-                    BoneWeightCollection list = new BoneWeightCollection();
+                    weights[vertexIndex] = new BoneWeightCollection();
+
                     for (int boneIndex = 0; boneIndex < aiMesh.BoneCount; boneIndex++)
                     {
                         Bone aiBone = aiMesh.Bones[boneIndex];
@@ -491,24 +492,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                             if (aiWeight.VertexID != vertexIndex)
                                 continue;
 
-                            list.Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
+                            weights[vertexIndex].Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
                         }
                     }
 
-                    if (list.Count == 0)
+                    if (weights[vertexIndex].Count == 0)
                     {
                         // No bone weights found for vertex. Use bone 0 as fallback.
                         missingBoneWeights = true;
-                        list.Add(new BoneWeight(aiMesh.Bones[0].Name, 1));
+                        weights[vertexIndex].Add(new BoneWeight(aiMesh.Bones[0].Name, 1));
                     }
-
-                        xnaWeights.Add(list);
                 }
 
                 if (missingBoneWeights)
                     context.Logger.LogWarning(string.Empty, _identity, "No bone weights found for one or more vertices of skinned mesh '{0}'.", aiMesh.Name);
 
-                geometry.Vertices.Channels.Add(VertexChannelNames.Weights(0), xnaWeights);
+                geometry.Vertices.Channels.Add(VertexChannelNames.Weights(0), weights);
             }
 
             // Individual channels go here
