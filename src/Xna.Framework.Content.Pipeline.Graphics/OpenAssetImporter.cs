@@ -506,13 +506,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 }
 
                 if (missingBoneWeights)
-                {
-                    context.Logger.LogWarning(
-                        string.Empty, 
-                        _identity, 
-                        "No bone weights found for one or more vertices of skinned mesh '{0}'.",
-                        aiMesh.Name);
-                }
+                    context.Logger.LogWarning(string.Empty, _identity, "No bone weights found for one or more vertices of skinned mesh '{0}'.", aiMesh.Name);
 
                 geometry.Vertices.Channels.Add(VertexChannelNames.Weights(0), xnaWeights);
             }
