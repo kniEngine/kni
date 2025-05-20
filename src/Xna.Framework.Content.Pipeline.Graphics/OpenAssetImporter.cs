@@ -490,7 +490,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         foreach (VertexWeight aiWeight in aiBone.VertexWeights)
                         {
                             if (aiWeight.VertexID == vertexIndex)
-                                weights[vertexIndex].Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
+                                weights[aiWeight.VertexID].Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
                         }
                     }
                 }
