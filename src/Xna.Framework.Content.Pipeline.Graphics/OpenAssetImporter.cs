@@ -489,10 +489,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                         Bone aiBone = aiMesh.Bones[boneIndex];
                         foreach (VertexWeight aiWeight in aiBone.VertexWeights)
                         {
-                            if (aiWeight.VertexID != vertexIndex)
-                                continue;
-
-                            weights[vertexIndex].Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
+                            if (aiWeight.VertexID == vertexIndex)
+                                weights[vertexIndex].Add(new BoneWeight(aiBone.Name, aiWeight.Weight));
                         }
                     }
                 }
