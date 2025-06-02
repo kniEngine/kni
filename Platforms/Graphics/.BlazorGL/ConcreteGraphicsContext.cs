@@ -622,9 +622,8 @@ namespace Microsoft.Xna.Platform.Graphics
                         // only set the divisor if instancing is supported
                         if (base.Capabilities.SupportsInstancing)
                         {
-                            throw new NotImplementedException();
-                            //GL2.VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
-                            //GL.CheckGLError();
+                            ((IWebGL2RenderingContext)GL).VertexAttribDivisor(element.AttributeLocation, vertexBufferBinding.InstanceFrequency);
+                            GL.CheckGLError();
                         }
                         else // If instancing is not supported, but InstanceFrequency of the buffer is not zero, throw an exception
                         {
@@ -841,7 +840,19 @@ namespace Microsoft.Xna.Platform.Graphics
             PlatformApplyIndexBuffer();
             PlatformApplyShaders();
 
-            throw new NotImplementedException();
+            WebGLDataType indexElementType = ((IPlatformIndexBuffer)Indices).Strategy.ToConcrete<ConcreteIndexBuffer>().DrawElementsType;
+            int indexOffsetInBytes = (startIndex * ((IPlatformIndexBuffer)Indices).Strategy.ElementSizeInBytes);
+            int indexElementCount = GraphicsContextStrategy.GetElementCountArray(primitiveType, primitiveCount);
+            WebGLPrimitiveType target = ConcreteGraphicsContext.PrimitiveTypeGL(primitiveType);
+
+            PlatformApplyVertexBuffers(baseVertex);
+
+            ((IWebGL2RenderingContext)GL).DrawElementsInstanced(target,
+                                                                indexElementCount,
+                                                                indexElementType,
+                                                                indexOffsetInBytes,
+                                                                instanceCount);
+            GL.CheckGLError();
 
             base.Metrics_AddDrawCount();
             base.Metrics_AddPrimitiveCount(primitiveCount * instanceCount);
