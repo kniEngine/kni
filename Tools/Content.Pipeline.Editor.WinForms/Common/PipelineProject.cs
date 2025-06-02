@@ -55,8 +55,7 @@ namespace Content.Pipeline.Editor
                 if (string.IsNullOrEmpty(OriginalPath))
                     return "";
 
-                var idx = OriginalPath.LastIndexOfAny(new char[] {Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar}, OriginalPath.Length - 1);
-                return OriginalPath.Remove(idx);
+                return Path.GetDirectoryName(OriginalPath);
             }
         }
 
