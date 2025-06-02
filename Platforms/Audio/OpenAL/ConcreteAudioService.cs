@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Platform.Audio
             string defaultDevice = OpenAL.ALC.GetString(_device, AlcGetString.CaptureDefaultDeviceSpecifier);
 
             // enumerating capture devices
-            IntPtr deviceList = OpenAL.ALC.alcGetString(_device, (int)AlcGetString.CaptureDeviceSpecifier);
+            IntPtr deviceList = OpenAL.ALC.alcGetString(IntPtr.Zero, (int)AlcGetString.CaptureDeviceSpecifier);
 
             // Marshal native UTF-8 character array to .NET string
             // The native string is a null-char separated list of known capture device specifiers ending with an empty string
