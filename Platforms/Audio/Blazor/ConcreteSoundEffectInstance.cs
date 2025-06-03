@@ -21,9 +21,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         AudioBufferSourceNode _bufferSource;
         bool _ended;
-        StereoPannerNode _stereoPannerNode;
-        GainNode _gainNode;
-        AudioNode _sourceTarget;
+        protected StereoPannerNode _stereoPannerNode;
+        protected GainNode _gainNode;
+        protected AudioNode _sourceTarget;
 
         float _volume = 1f;
 
