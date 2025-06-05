@@ -124,18 +124,15 @@ namespace Microsoft.Xna.Platform.Audio
 
             unsafe
             {
-                // TODO: Fix submitting 2-channel buffer.
                 fixed (void* pBuffer = buffer)
                 {
                     short* pBuffer16 = (short*)pBuffer;
                     int destLength = count / 2;
                     var dest = new float[destLength];
-                    for (int c = 0; c < _channels; c++)
+                    
+                    for (int i = 0; i < destLength; i++)
                     {
-                        for (int i = 0; i < destLength; i++)
-                        {
-                            dest[i] = ((float)pBuffer16[i * _channels] / (float)short.MaxValue) * 2 - 1;
-                        }
+                        dest[i] = ((float)pBuffer16[i] / (float)short.MaxValue) * 2 - 1;
                     }
 
                     _dynamicSoundEffectNode.SubmitBuffer(dest);
