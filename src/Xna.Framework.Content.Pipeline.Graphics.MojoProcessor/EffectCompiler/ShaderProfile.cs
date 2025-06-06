@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public abstract string Name { get; }
 
         /// <summary>
-        /// Returns the format identifier used in the MGFX file format.
+        /// Returns the format identifier used in the FX file format.
         /// </summary>
         public abstract ShaderProfileType ProfileType { get; }
 

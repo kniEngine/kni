@@ -16,20 +16,23 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         protected readonly GraphicsContextStrategy _contextStrategy;
 
+        ShaderVersion _shaderVersion;
         private SamplerInfo[] _samplers;
         private int[] _CBuffers;
         private VertexAttribute[] _attributes;
 
+        public ShaderVersion ShaderModelVersion { get { return _shaderVersion; } }
         public SamplerInfo[] Samplers { get { return _samplers; } }
         public int[] CBuffers { get { return _CBuffers; } }
         public VertexAttribute[] Attributes { get { return _attributes; } }
 
 
-        protected ShaderStrategy(GraphicsContextStrategy contextStrategy, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        protected ShaderStrategy(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy)
         {
             _contextStrategy = contextStrategy;
 
+            this._shaderVersion = shaderVersion;
             this._samplers = samplers;
             this._CBuffers = cBuffers;
             this._attributes = attributes;

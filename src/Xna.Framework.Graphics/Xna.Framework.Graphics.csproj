@@ -118,6 +118,7 @@
     <Compile Include="Graphics\Shader\ShaderStrategy.cs" />
     <Compile Include="Graphics\Shader\ShaderProfileType.cs" />
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
+    <Compile Include="Graphics\Shader\ShaderVersion.cs" />
     <Compile Include="Graphics\Shader\VertexAttribute.cs" />
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
