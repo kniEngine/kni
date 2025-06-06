@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         ShaderStrategy IPlatformShader.Strategy { get { return _strategy; } }
         
+        public ShaderVersion ShaderModelVersion { get { return _strategy.ShaderModelVersion; } }
         public SamplerInfo[] Samplers { get { return _strategy.Samplers; } }
 
         public int[] CBuffers { get { return _strategy.CBuffers; } }

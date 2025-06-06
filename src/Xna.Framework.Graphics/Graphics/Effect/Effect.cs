@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return;
             }
 
-            throw new Exception("This does not appear to be an MGFX effect file.");
+            throw new Exception("This does not appear to be an FX effect file.");
         }
 
         /// <summary>
