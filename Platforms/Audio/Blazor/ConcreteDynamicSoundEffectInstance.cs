@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Audio
                     
                     for (int i = 0; i < destLength; i++)
                     {
-                        dest[i] = ((float)pBuffer16[i] / (float)short.MaxValue) * 2 - 1;
+                        dest[i] = pBuffer16[i] / (float)short.MaxValue;
                     }
 
                     _dynamicSoundEffectNode.SubmitBuffer(dest);
