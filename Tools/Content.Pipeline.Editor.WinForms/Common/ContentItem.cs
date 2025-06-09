@@ -38,6 +38,9 @@ namespace Content.Pipeline.Editor
         { 
             get
             {
+                if (OutputFile != null)
+                    return System.IO.Path.GetFileName(OutputFile);
+
                 return System.IO.Path.GetFileName(OriginalPath);
             }
         }
