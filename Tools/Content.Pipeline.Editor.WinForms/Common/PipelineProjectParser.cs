@@ -195,6 +195,7 @@ namespace Content.Pipeline.Editor
                 Observer = _observer,
                 BuildAction = BuildAction.Build,
                 OriginalPath = sourceFile,
+                OutputFile = link,
                 ImporterName = Importer,
                 ProcessorName = Processor,
                 ProcessorParams = new OpaqueDataDictionary(),
@@ -252,6 +253,7 @@ namespace Content.Pipeline.Editor
             {
                 BuildAction = BuildAction.Copy,
                 OriginalPath = sourceFile,
+                OutputFile = link,
                 ProcessorParams = new OpaqueDataDictionary(),
                 Exists = File.Exists(projectDir + sourceFile)
             };
@@ -362,7 +364,10 @@ namespace Content.Pipeline.Editor
 
                 if (i.BuildAction == BuildAction.Copy)
                 {
-                    line = string.Format(lineFormat, "copy", i.OriginalPath);
+                    string buildValue = i.OriginalPath;
+                    if (i.OutputFile != null)
+                        buildValue += ";" + i.OutputFile;
+                    line = string.Format(lineFormat, "copy", buildValue);
                     io.WriteLine(line);
                     io.WriteLine();
                 }
@@ -415,7 +420,10 @@ namespace Content.Pipeline.Editor
                         }
                     }
 
-                    line = string.Format(lineFormat, "build", i.OriginalPath);
+                    string buildValue = i.OriginalPath;
+                    if (i.OutputFile != null)
+                        buildValue += ";" + i.OutputFile;
+                    line = string.Format(lineFormat, "build", buildValue);
                     io.WriteLine(line);
                     io.WriteLine();
                 }

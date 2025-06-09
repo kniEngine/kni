@@ -30,6 +30,7 @@ namespace Content.Pipeline.Editor
 
         [Browsable(false)]
         public string OriginalPath { get; set; }
+        public string OutputFile; // This refers to the "Link" which can override the default output location
 
         [Category("Common")]
         [Description("The file name of this item.")]
