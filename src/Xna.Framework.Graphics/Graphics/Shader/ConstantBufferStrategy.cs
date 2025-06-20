@@ -92,10 +92,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (param.StateKey < this.StateKey)
                     continue;
-
-                int offset = this.Offsets[p];
                 this.Dirty = true;
 
+                int offset = this.Offsets[p];
                 this.SetParameter(param, offset);
             }
 
