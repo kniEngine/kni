@@ -17,16 +17,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
     public sealed class SpriteFont 
     {
-        private readonly char[] _characters;
-        private readonly Glyph[] _glyphs;
+        private readonly ReadOnlyCollection<char> _readOnlyKeys;
         private readonly CharacterRegion[] _regions;
+        private readonly Texture2D _texture;
         private char? _defaultCharacter;
         private int _defaultGlyphIndex = -1;
-        
-        private readonly Texture2D _texture;
+
+        private readonly Glyph[] _glyphs;
 
         ///<remarks>SpriteBatcher need direct accest to the Glyph array</remarks>
         internal Glyph[] InternalGlyphs { get { return _glyphs; } }
+
 
         class CharComparer: IEqualityComparer<char>
         {
@@ -61,30 +62,14 @@ namespace Microsoft.Xna.Framework.Graphics
             _texture = texture;
             LineSpacing = lineSpacing;
             Spacing = spacing;
+            DefaultCharacter = defaultCharacter;
 
-            _characters = characters.ToArray();
-            _glyphs = new Glyph[characters.Count];
+            _readOnlyKeys = new ReadOnlyCollection<char>(characters);
+
+            // create regions
             var regions = new Stack<CharacterRegion>();
-
             for (int i = 0; i < characters.Count; i++) 
-            {
-                _glyphs[i] = new Glyph 
-                {
-                    BoundsInTexture = glyphBounds[i],
-                    Cropping = cropping[i],
-
-                    LeftSideBearing = kerning[i].X,
-                    Width = kerning[i].Y,
-                    RightSideBearing = kerning[i].Z,
-
-                    WidthIncludingBearings = kerning[i].X + kerning[i].Y + kerning[i].Z,
-                    
-                    TexCoordTL = new Vector2( glyphBounds[i].X * _texture.TexelWidth, 
-                                              glyphBounds[i].Y * _texture.TexelHeight),
-                    TexCoordBR = new Vector2( (glyphBounds[i].X + glyphBounds[i].Width) * _texture.TexelWidth, 
-                                              (glyphBounds[i].Y + glyphBounds[i].Height) * _texture.TexelHeight),
-                };
-                
+            {                
                 if(regions.Count == 0 || characters[i] > (regions.Peek().End+1))
                 {
                     // Start a new region
@@ -102,13 +87,18 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new InvalidOperationException("Invalid SpriteFont. Character map must be in ascending order.");
                 }
             }
-
             _regions = regions.ToArray();
             Array.Reverse(_regions);
 
-            Glyphs = new GlyphCollection(this);
+            // create Glyphs
+            _glyphs = new Glyph[characters.Count];
+            for (int i = 0; i < characters.Count; i++)
+            {
+                _glyphs[i] = new Glyph(glyphBounds[i], cropping[i], kerning[i], _texture);
+            }
 
-            DefaultCharacter = defaultCharacter;
+            Glyphs = new GlyphCollection(this, _readOnlyKeys);
+
         }
 
         /// <summary>
@@ -120,10 +110,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets a collection of the characters in the font.
         /// </summary>
-        public ReadOnlyCollection<char> Characters
-        {
-            get { return (ReadOnlyCollection<char>)((IDictionary<char, Glyph>)Glyphs).Keys; }
-        }
+        public ReadOnlyCollection<char> Characters { get { return _readOnlyKeys; } }
 
         /// <summary>
         /// The glyphs in this SpriteFont.
@@ -373,6 +360,23 @@ namespace Microsoft.Xna.Framework.Graphics
 
             public static readonly Glyph Empty = new Glyph();
 
+            public Glyph(Rectangle glyphBounds, Rectangle cropping, Vector3 kerning, Texture2D texture) : this()
+            {
+                BoundsInTexture = glyphBounds;
+                Cropping = cropping;
+
+                LeftSideBearing = kerning.X;
+                Width = kerning.Y;
+                RightSideBearing = kerning.Z;
+
+                WidthIncludingBearings = kerning.X + kerning.Y + kerning.Z;
+
+                TexCoordTL = new Vector2(glyphBounds.X * texture.TexelWidth,
+                                         glyphBounds.Y * texture.TexelHeight);
+                TexCoordBR = new Vector2((glyphBounds.X + glyphBounds.Width) * texture.TexelWidth,
+                                         (glyphBounds.Y + glyphBounds.Height) * texture.TexelHeight);
+            }
+
             public override string ToString ()
             {
                 return "Glyph=" + BoundsInTexture + ", Cropping=" + Cropping + ", Kerning=" + LeftSideBearing + "," + Width + "," + RightSideBearing;
@@ -397,12 +401,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             private readonly SpriteFont _spriteFont;
             private readonly ReadOnlyCollection<char> _keys;
-            private readonly ReadOnlyCollection<Glyph> _values;
+            private readonly ICollection<Glyph> _values;
 
-            internal GlyphCollection(SpriteFont spriteFont)
+            internal GlyphCollection(SpriteFont spriteFont, ReadOnlyCollection<char> keys)
             {
                 _spriteFont = spriteFont;
-                _keys = new ReadOnlyCollection<char>(_spriteFont._characters);
+                _keys = keys;
                 _values = new ReadOnlyCollection<Glyph>(_spriteFont._glyphs);
             }
 
@@ -410,16 +414,18 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 get
                 {
-                    int glyphIdx;
-                    if (_spriteFont.TryGetGlyphIndex(key, out glyphIdx))
-                        return _spriteFont._glyphs[glyphIdx];
+                    if (_spriteFont.TryGetGlyphIndex(key, out int glyphIdx))
+                    {
+                        Glyph glyph = _spriteFont._glyphs[glyphIdx];
+                        return glyph;
+                    }
                     else
                         throw new KeyNotFoundException();
                 }
                 set { throw new NotSupportedException(); }
             }
 
-            public int Count { get { return _spriteFont._glyphs.Length; } }
+            public int Count { get { return _keys.Count; } }
 
             public bool IsReadOnly { get { return true; } }
 
@@ -429,16 +435,21 @@ namespace Microsoft.Xna.Framework.Graphics
 
             public bool ContainsKey(char key)
             {
-                int glyphIdx;
-                return _spriteFont.TryGetGlyphIndex(key, out glyphIdx);
+                return _spriteFont.TryGetGlyphIndex(key, out int glyphIdx);
             }
 
             public bool TryGetValue(char key, out Glyph value)
             {
-                int glyphIdx;
-                bool isFound = _spriteFont.TryGetGlyphIndex(key, out glyphIdx);
-                value = (isFound) ? _spriteFont._glyphs[glyphIdx] : default(Glyph);
-                return isFound;
+                if (_spriteFont.TryGetGlyphIndex(key, out int glyphIdx))
+                {
+                    value = _spriteFont._glyphs[glyphIdx];
+                    return true;
+                }
+                else
+                {
+                    value = default(Glyph);
+                    return false;
+                }
             }
 
             bool ICollection<KeyValuePair<char, Glyph>>.Contains(KeyValuePair<char, Glyph> item)
@@ -454,7 +465,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             IEnumerator<KeyValuePair<char, Glyph>> IEnumerable<KeyValuePair<char, Glyph>>.GetEnumerator()
             {
-                return new CharGlyphPairEnumerator(this, _keys);
+                return new CharGlyphPairEnumerator(_keys, this);
             }
 
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -489,15 +500,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
             public struct CharGlyphPairEnumerator : IEnumerator<KeyValuePair<char, Glyph>>
             {
-                private GlyphCollection _collection;
-                private ReadOnlyCollection<char> _keys;
                 private int i;
+                private ReadOnlyCollection<char> _keys;
+                private GlyphCollection _collection;
 
-                public CharGlyphPairEnumerator(GlyphCollection collection, ReadOnlyCollection<char> keys)
+                public CharGlyphPairEnumerator( ReadOnlyCollection<char> keys, GlyphCollection collection)
                 {
-                    _collection = collection;
-                    _keys = keys;
                     i = -1;
+                    _keys = keys;
+                    _collection = collection;
                 }
 
                 #region IEnumerator<KeyValuePair<char, Glyph>>
@@ -507,7 +518,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     get
                     {
                         char key = _keys[i];
-                        return new KeyValuePair<char, Glyph>(key, _collection[key]);
+                        Glyph glyph = _collection[key];
+                        return new KeyValuePair<char, Glyph>(key, glyph);
                     }
                 }
 
@@ -525,7 +537,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     get
                     {
                         char key = _keys[i];
-                        return new KeyValuePair<char, Glyph>(key, _collection[key]);
+                        Glyph glyph = _collection[key];
+                        return new KeyValuePair<char, Glyph>(key, glyph);
                     }
                 }
 
