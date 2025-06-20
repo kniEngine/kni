@@ -87,6 +87,7 @@
       <Name>Xna.Framework.XR</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\nkast\Wasm\Wasm.JSInterop\Wasm.JSInterop.csproj" />
     <ProjectReference Include="P:\nkast\Wasm\Wasm.Audio\Wasm.Audio.csproj" />
     <ProjectReference Include="P:\nkast\Wasm\Wasm.Canvas\Wasm.Canvas.csproj" />
     <ProjectReference Include="P:\nkast\Wasm\Wasm.Dom\Wasm.Dom.csproj" />
