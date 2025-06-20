@@ -26,6 +26,15 @@ namespace Microsoft.Xna.Platform.Graphics
         public int[] CBuffers { get { return _CBuffers; } }
         public VertexAttribute[] Attributes { get { return _attributes; } }
 
+        protected static readonly Dictionary<GraphicsProfile, ShaderVersion> MaxShaderVersions = new Dictionary<GraphicsProfile, ShaderVersion>()
+        {
+            { GraphicsProfile.Reach,   new ShaderVersion(2, 0) },
+            { GraphicsProfile.HiDef,   new ShaderVersion(3, 0) },
+            { GraphicsProfile.FL10_0,  new ShaderVersion(4, 0) },
+            { GraphicsProfile.FL10_1,  new ShaderVersion(4, 1) },
+            { GraphicsProfile.FL11_0,  new ShaderVersion(5, 0) },
+            { GraphicsProfile.FL11_1,  new ShaderVersion(5, 0) },
+        };
 
         protected ShaderStrategy(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy)
