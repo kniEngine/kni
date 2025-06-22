@@ -500,7 +500,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (EffectObjectWriter10 memWriter = new EffectObjectWriter10(memStream, Version, profileType))
+            using (MGFXWriter10 memWriter = new MGFXWriter10(memStream, Version, profileType))
             {
                 memWriter.WriteEffect(effect);
 

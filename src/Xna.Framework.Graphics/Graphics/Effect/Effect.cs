@@ -82,12 +82,12 @@ namespace Microsoft.Xna.Framework.Graphics
                                 case 8: // fallback to version 8
                                 case 9: // fallback to version 9
                                     System.Diagnostics.Debug.WriteLine("This effect is for an older version of KNI and needs to be rebuilt.");
-                                    using (EffectReader09 reader = new EffectReader09(stream, graphicsDevice, mgfxheader))
+                                    using (MGFXReader09 reader = new MGFXReader09(stream, graphicsDevice, mgfxheader))
                                         effect = reader.ReadEffect();
                                     break;
 
                                 case 10:
-                                    using (EffectReader10 reader = new EffectReader10(stream, graphicsDevice, mgfxheader))
+                                    using (MGFXReader10 reader = new MGFXReader10(stream, graphicsDevice, mgfxheader))
                                         effect = reader.ReadEffect();
                                     break;
 

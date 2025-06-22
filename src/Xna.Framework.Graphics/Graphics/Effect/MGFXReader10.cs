@@ -13,12 +13,12 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Effect
     {
-        private class EffectReader09 : BinaryReader
+        private class MGFXReader10 : BinaryReader
         {
             private readonly GraphicsDevice _graphicsDevice;
             private readonly MGFXHeader _header;
 
-            public EffectReader09(Stream stream, GraphicsDevice graphicsDevice, MGFXHeader header) : base(stream)
+            public MGFXReader10(Stream stream, GraphicsDevice graphicsDevice, MGFXHeader header) : base(stream)
             {
                 this._header = header;
                 this._graphicsDevice = graphicsDevice;
@@ -45,12 +45,17 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 effect.CurrentTechnique = effect.Techniques[0];
 
+                // Check file tail to ensure we parsed the content correctly.
+                int tail = ReadInt32();
+                if (tail != MGFXHeader.MGFXSignature)
+                    throw new ArgumentException("The MGFX effect code was not parsed correctly.", "effectCode");
+
                 return effect;
             }
 
             private ConstantBuffer[] ReadConstantBuffers()
             {
-                int buffersCount = (int)ReadByte();
+                int buffersCount = ReadInt32();
                 ConstantBuffer[] constantBuffers = new ConstantBuffer[buffersCount];
                 for (int c = 0; c < buffersCount; c++)
                     constantBuffers[c] = ReadConstantBuffer();
@@ -65,26 +70,26 @@ namespace Microsoft.Xna.Framework.Graphics
                 int sizeInBytes = (int)ReadInt16();
 
                 // Read the parameter index values.
-                int[] parameters = new int[(int)ReadByte()];
+                int[] parameters = new int[ReadInt32()];
                 int[] offsets = new int[parameters.Length];
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    parameters[i] = (int)ReadByte();
+                    parameters[i] = ReadInt32();
                     offsets[i]    = (int)ReadUInt16();
                 }
 
                 ConstantBuffer buffer = new ConstantBuffer(_graphicsDevice,
-                                                           name,
-                                                           parameters,
-                                                           offsets,
-                                                           sizeInBytes,
-                                                           _header.Profile);
+                                                name,
+                                                parameters,
+                                                offsets,
+                                                sizeInBytes,
+                                                _header.Profile);
                 return buffer;
             }
 
             private Shader[] ReadShaders()
             {
-                int shadersCount = (int)ReadByte();
+                int shadersCount = ReadInt32();
                 Shader[] shaders = new Shader[shadersCount];
                 for (int s = 0; s < shadersCount; s++)
                     shaders[s] = ReadShader();
@@ -107,11 +112,16 @@ namespace Microsoft.Xna.Framework.Graphics
                     samplers[s].textureSlot = ReadByte();
                     samplers[s].samplerSlot = ReadByte();
 
+                    if (samplers[s].samplerSlot == 255)
+                        samplers[s].samplerSlot = samplers[s].textureSlot;
+
                     if (ReadBoolean())
                         samplers[s].state = ReadSamplerState();
 
                     samplers[s].GLsamplerName = ReadString();
                     samplers[s].textureParameter = ReadByte();
+                    if (samplers[s].textureParameter == 255)
+                        samplers[s].textureParameter = -1;
                 }
 
                 int cbufferCount = (int)ReadByte();
@@ -133,16 +143,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     case ShaderStage.Vertex:
                         return new VertexShader(_graphicsDevice,
-                                  shaderVersion,
-                                  shaderBytecode,
-                                  samplers, cBuffers, attributes,
-                                  _header.Profile);
+                            shaderVersion,
+                            shaderBytecode,
+                            samplers, cBuffers, attributes,
+                            _header.Profile);
                     case ShaderStage.Pixel:
                         return new PixelShader(_graphicsDevice,
-                                  shaderVersion,
-                                  shaderBytecode,
-                                  samplers, cBuffers, attributes,
-                                  _header.Profile);
+                            shaderVersion,
+                            shaderBytecode,
+                            samplers, cBuffers, attributes,
+                            _header.Profile);
 
                     default:
                         throw new InvalidOperationException("stage");
@@ -169,10 +179,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectParameterCollection ReadParameters()
             {
-                // fallback to version 8
-                int count = (_header.Version == 8)
-                          ? (int)ReadByte()
-                          : Read7BitEncodedInt();
+                int count = ReadInt32();
 
                 if (count == 0)
                     return EffectParameterCollection.Empty;
@@ -187,7 +194,7 @@ namespace Microsoft.Xna.Framework.Graphics
             private EffectParameter ReadParameter()
             {
                 EffectParameterClass class_ = (EffectParameterClass)ReadByte();
-                EffectParameterType type    = (EffectParameterType)ReadByte();
+                EffectParameterType type = (EffectParameterType)ReadByte();
                 string name = ReadString();
                 string semantic = ReadString();
                 EffectAnnotationCollection annotations = ReadAnnotations();
@@ -267,7 +274,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)
             {
-                int techniqueCount = (int)ReadByte();
+                int techniqueCount = ReadInt32();
 
                 EffectTechnique[] techniques = new EffectTechnique[techniqueCount];
                 for (int t = 0; t < techniqueCount; t++)
@@ -283,7 +290,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectPassCollection ReadPasses(Effect effect)
             {
-                int passesCount = (int)ReadByte();
+                int passesCount = ReadInt32();
                 EffectPass[] passes = new EffectPass[passesCount];
                 for (int i = 0; i < passesCount; i++)
                     ReadEffectPass(effect, passes, i);
@@ -299,11 +306,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 VertexShader vertexShader = null;
                 PixelShader pixelShader = null;
                 {
-                    int vertexShaderIndex = (int)ReadByte();
-                    int pixelShaderIndex  = (int)ReadByte();
-                    if (vertexShaderIndex != 255)
+                    int vertexShaderIndex = ReadInt32();
+                    int pixelShaderIndex  = ReadInt32();
+                    if (vertexShaderIndex >= 0)
                         vertexShader = (VertexShader)effect._shaders[vertexShaderIndex];
-                    if (pixelShaderIndex != 255)
+                    if (pixelShaderIndex >= 0)
                         pixelShader = (PixelShader)effect._shaders[pixelShaderIndex];
                 }
 
@@ -325,7 +332,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     ColorBlendFunction = (BlendFunction)ReadByte(),
                     ColorDestinationBlend = (Blend)ReadByte(),
                     ColorSourceBlend = (Blend)ReadByte(),
-                    ColorWriteChannels  = (ColorWriteChannels)ReadByte(),
+                    ColorWriteChannels = (ColorWriteChannels)ReadByte(),
                     ColorWriteChannels1 = (ColorWriteChannels)ReadByte(),
                     ColorWriteChannels2 = (ColorWriteChannels)ReadByte(),
                     ColorWriteChannels3 = (ColorWriteChannels)ReadByte(),
@@ -371,7 +378,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             private EffectAnnotationCollection ReadAnnotations()
             {
-                int count = (int)ReadByte();
+                int count = (int)ReadInt32();
                 if (count == 0)
                     return EffectAnnotationCollection.Empty;
 

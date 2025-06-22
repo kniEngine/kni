@@ -46,7 +46,7 @@
     <Compile Include="Processors\EffectProcessorDebugMode.cs" />
     <Compile Include="EffectCompiler\ConstantBufferData.cs" />
     <Compile Include="EffectCompiler\EffectObject.cs" />
-    <Compile Include="EffectCompiler\EffectObjectWriter10.cs" />
+    <Compile Include="EffectCompiler\MGFXWriter10.cs" />
     <Compile Include="EffectCompiler\MarshalHelper.cs" />
     <Compile Include="EffectCompiler\SamplerInfo.cs" />
     <Compile Include="EffectCompiler\ShaderCompilerException.cs" />
