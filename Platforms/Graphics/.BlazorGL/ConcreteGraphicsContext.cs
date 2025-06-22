@@ -108,16 +108,21 @@ namespace Microsoft.Xna.Platform.Graphics
             // So overwrite these states with what is needed to perform
             // the clear correctly and restore it afterwards.
             //
-            Rectangle prevScissorRect = this.ScissorRectangle;
             DepthStencilState prevDepthStencilState = this.DepthStencilState;
             BlendState prevBlendState = this.BlendState;
-            this.ScissorRectangle = _viewport.Bounds;
             // DepthStencilState.Default has the Stencil Test disabled; 
             // make sure stencil test is enabled before we clear since
             // some drivers won't clear with stencil test disabled
             this.DepthStencilState = _clearDepthStencilState;
             this.BlendState = BlendState.Opaque;
             PlatformApplyState();
+
+            if (_lastRasterizerState.ScissorTestEnable)
+            {
+                GL.Disable(WebGLCapability.SCISSOR_TEST);
+                GL.CheckGLError();
+                _lastRasterizerState.ScissorTestEnable = false;
+            }
 
             WebGLBufferBits bb = default(WebGLBufferBits);
             if ((options & ClearOptions.Target) != 0)
@@ -145,7 +150,6 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Metrics_AddClearCount();
 
             // Restore the previous render state.
-            ScissorRectangle = prevScissorRect;
             DepthStencilState = prevDepthStencilState;
             BlendState = prevBlendState;
         }
