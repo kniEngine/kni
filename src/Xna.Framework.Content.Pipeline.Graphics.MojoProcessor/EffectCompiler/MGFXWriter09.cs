@@ -2,22 +2,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
+using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    class EffectObjectWriter10 : BinaryWriter
+    class MGFXWriter09 : BinaryWriter
     {
         private readonly int Version;
-        private readonly ShaderProfileType _profile;
+        private readonly Options options;
 
-        public EffectObjectWriter10(Stream output, int version, ShaderProfileType profileType) : base(output)
+        public MGFXWriter09(Stream output, int version, Options options) : base(output)
         {
-            System.Diagnostics.Debug.Assert(version == 10);
+            System.Diagnostics.Debug.Assert(version == 9);
             this.Version = version;
-            this._profile = profileType;
+            this.options = options;
         }
 
         protected void WritePackedInt(int value)
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private void WriteConstantBuffers(ICollection<ConstantBufferData> constantBuffers)
         {
-            Write(constantBuffers.Count);
+            Write((byte)constantBuffers.Count);
             foreach (ConstantBufferData cbuffer in constantBuffers)
                 WriteConstantBuffer(cbuffer);
         }
@@ -48,17 +48,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             Write((ushort)cbuffer.Size);
 
-            Write(cbuffer.ParameterIndex.Count);
+            Write((byte)cbuffer.ParameterIndex.Count);
             for (int i = 0; i < cbuffer.ParameterIndex.Count; i++)
             {
-                Write(cbuffer.ParameterIndex[i]);
+                Write((byte)cbuffer.ParameterIndex[i]);
                 Write((ushort)cbuffer.ParameterOffset[i]);
             }
         }
 
         private void WriteShaders(ICollection<ShaderData> shaders)
         {
-            Write(shaders.Count);
+            Write((byte)shaders.Count);
             foreach (ShaderData shader in shaders)
                 WriteShader(shader);
         }
@@ -70,28 +70,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Write(shader.ShaderCode.Length);
             Write(shader.ShaderCode);
 
-            Debug.WriteLine("Write Samplers ("+ shader._samplers.Length + ")");
-            foreach (SamplerInfo sampler in shader._samplers)
-            {
-                Debug.WriteLine(" ");
-                Debug.WriteLine(" GLsamplerName: " + sampler.GLsamplerName);
-                Debug.WriteLine(" textureName: //" + sampler.textureName);
-                Debug.WriteLine(" type: " + sampler.type);
-                Debug.WriteLine(" textureSlot: #" + sampler.textureSlot);
-                Debug.WriteLine(" samplerSlot: #" + sampler.samplerSlot);
-                bool hasState = sampler.state != null;
-                Debug.WriteLine(" hasState: " + hasState);
-                if (hasState)
-                {
-                    Debug.WriteLine("  Filter: " + sampler.state.Filter);
-                    Debug.WriteLine("  AddressU: " + sampler.state.AddressU);
-                    Debug.WriteLine("  AddressV: " + sampler.state.AddressV);
-                }
-            }
-            Debug.WriteLine("");
-
             Write((byte)shader._samplers.Length);
-            foreach (SamplerInfo sampler in shader._samplers)
+            foreach (ShaderData.Sampler sampler in shader._samplers)
             {
                 Write((byte)sampler.type);
                 Write((byte)sampler.textureSlot);
@@ -105,28 +85,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 else
                     Write(false);
 
-                Write(sampler.GLsamplerName);
+                Write(sampler.samplerName);
 
-                if (sampler.textureParameter != -1)
-                    Write((byte)sampler.textureParameter);
-                else
-                    Write((byte)255);
+                Write((byte)sampler.parameter);
             }
 
             Write((byte)shader._cbuffers.Length);
             foreach (int cb in shader._cbuffers)
                 Write((byte)cb);
-
-
-            Debug.WriteLine("Write _attributes (" + shader._attributes.Length + ")");
-            foreach (ShaderData.Attribute attrib in shader._attributes)
-            {
-                Debug.WriteLine(" ");
-                Debug.WriteLine(" name: " + attrib.name);
-                Debug.WriteLine(" usage: " + attrib.usage);
-                Debug.WriteLine(" index: " + attrib.index);
-                Debug.WriteLine(" location: " + attrib.location);
-            }
 
             Write((byte)shader._attributes.Length);
             foreach (ShaderData.Attribute attrib in shader._attributes)
@@ -155,17 +121,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private void WriteParameters(EffectObject.EffectParameterContent[] parameters, int count)
         {
-            Write(count);
+            Write7BitEncodedInt(count);
             for (int i = 0; i < count; i++)
                 WriteParameter(parameters[i]);
         }
 
         private void WriteParameter(EffectObject.EffectParameterContent param)
         {
-            EffectParameterClass paramClass = EffectObject.ToXNAParameterClass(param.class_);
-            EffectParameterType paramType = EffectObject.ToXNAParameterType(param.type);
-            Write((byte)paramClass);
-            Write((byte)paramType);
+            EffectParameterClass class_ = EffectObject.ToXNAParameterClass(param.class_);
+            EffectParameterTypeContent type = EffectObject.ToXNAParameterType(param.type);
+            Write((byte)class_);
+            Write((byte)type);
 
             Write(param.name);
             Write(param.semantic);
@@ -180,12 +146,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             if (param.element_count == 0 && param.member_count == 0)
             {
-                switch (paramType)
+                switch (type)
                 {
-                    case EffectParameterType.Bool:
-                    case EffectParameterType.Int32:
-                    case EffectParameterType.Single:
-                        Write((byte[])param.data);
+                    case EffectParameterTypeContent.Bool:
+                    case EffectParameterTypeContent.Int32:
+                    case EffectParameterTypeContent.Single:
+                        writer.Write((byte[])param.data);
                         break;
                 }
             }
@@ -193,7 +159,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private void WriteTechniques(EffectObject.EffectTechniqueContent[] techniques)
         {
-            Write(techniques.Length);
+            Write((byte)techniques.Length);
             foreach (EffectObject.EffectTechniqueContent technique in techniques)
             {
                 Write(technique.name);
@@ -206,7 +172,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private void WritePasses(EffectObject.EffectTechniqueContent technique)
         {
-            Write((int)technique.pass_count);
+            Write((byte)technique.pass_count);
             for (int p = 0; p < technique.pass_count; p++)
             {
                 EffectObject.EffectPassContent pass = technique.pass_handles[p];
@@ -222,8 +188,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Write the index for the vertex and pixel shaders.
             int vertexShaderIndex = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.VERTEXSHADER, pass.states);
             int pixelShaderIndex  = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.PIXELSHADER, pass.states);
-            Write(vertexShaderIndex);
-            Write(pixelShaderIndex);
+            Write((byte)vertexShaderIndex);
+            Write((byte)pixelShaderIndex);
 
             // Write the state objects too!
             if (pass.blendState != null)
@@ -303,10 +269,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         private void WriteAnnotations(EffectObject.EffectParameterContent[] annotations)
         {
             int count = annotations == null ? 0 : annotations.Length;
-            Write(count);
+            Write((byte)count);
 
             // TODO: Annotations are not implemented!
-            System.Diagnostics.Debug.Assert(count == 0);
+            System.Diagnostics.Debug.Assert(count > 0);
 
             //for (int i = 0; i < count; i++)
             //    WriteParameter(writer, annotations[i]);
