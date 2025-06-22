@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         }
 
-        internal void CreateShader(GraphicsContextStrategy contextStrategy, WebGLShaderType shaderType, byte[] shaderBytecode)
+        internal void CreateShader(GraphicsContextStrategy contextStrategy, WebGLShaderType shaderType, ShaderVersion shaderVersion, byte[] shaderBytecode)
         {
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
