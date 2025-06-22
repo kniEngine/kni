@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-            base.CreateShader(contextStrategy, WebGLShaderType.FRAGMENT, shaderBytecode);
+            base.CreateShader(contextStrategy, WebGLShaderType.FRAGMENT, shaderVersion, shaderBytecode);
         }
 
         protected override void PlatformGraphicsContextLost()

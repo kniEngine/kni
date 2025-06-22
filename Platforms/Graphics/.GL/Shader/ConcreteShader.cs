@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
          }
 
-        internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, byte[] shaderBytecode)
+        internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, ShaderVersion shaderVersion, byte[] shaderBytecode)
         {
             bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
