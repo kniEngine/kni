@@ -62,7 +62,6 @@ namespace Microsoft.Xna.Framework.Graphics
             _texture = texture;
             LineSpacing = lineSpacing;
             Spacing = spacing;
-            DefaultCharacter = defaultCharacter;
 
             _readOnlyKeys = new ReadOnlyCollection<char>(characters);
 
@@ -99,6 +98,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             Glyphs = new GlyphCollection(this, _readOnlyKeys);
 
+            DefaultCharacter = defaultCharacter;
         }
 
         /// <summary>
