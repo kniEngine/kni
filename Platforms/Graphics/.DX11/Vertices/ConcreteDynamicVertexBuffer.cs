@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // We assume discard by default.
             D3D11.MapMode mode = D3D11.MapMode.WriteDiscard;
-            if ((options & SetDataOptions.NoOverwrite) == SetDataOptions.NoOverwrite)
+            if (options == SetDataOptions.NoOverwrite)
                 mode = D3D11.MapMode.WriteNoOverwrite;
 
             lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
