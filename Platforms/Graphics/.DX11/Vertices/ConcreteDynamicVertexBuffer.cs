@@ -47,10 +47,23 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             Debug.Assert(_buffer != null);
 
-            // We assume discard by default.
-            D3D11.MapMode mode = D3D11.MapMode.WriteDiscard;
-            if (options == SetDataOptions.NoOverwrite)
-                mode = D3D11.MapMode.WriteNoOverwrite;
+            D3D11.MapMode mode;
+            switch (options)
+            {
+                case SetDataOptions.None:
+                    // We assume discard by default.
+                    mode = D3D11.MapMode.WriteDiscard;
+                    break;
+                case SetDataOptions.Discard:
+                    mode = D3D11.MapMode.WriteDiscard;
+                    break;
+                case SetDataOptions.NoOverwrite:
+                    mode = D3D11.MapMode.WriteNoOverwrite;
+                    break;
+
+                default:
+                    throw new InvalidOperationException("options");
+            }
 
             lock (((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.SyncHandle)
             {
