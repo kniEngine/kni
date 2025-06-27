@@ -78,7 +78,12 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pitch = value;
 
-                // not implemented.
+                if (_bufferSource != null)
+                {
+                    float wapitch = (float)Math.Pow(2, value);
+                    //TODO: implement Pitch
+                    //_bufferSource.PlaybackRate.SetTargetAtTime(wapitch, 0, 0.05f);
+                }
             }
         }
 
