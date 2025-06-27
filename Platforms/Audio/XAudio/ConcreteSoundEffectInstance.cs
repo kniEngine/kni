@@ -99,6 +99,10 @@ namespace Microsoft.Xna.Platform.Audio
                 _voice = new SourceVoice(ConcreteAudioService.Device, _concreteSoundEffect._format, VoiceFlags.UseFilter, XAudio2.MaximumFrequencyRatio);
                 UpdateOutputMatrix(0); // Ensure the output matrix is set for this new voice
             }
+
+            this.Volume = 1.0f;
+            this.Pan = 0.0f;
+            this.Pitch = 0.0f;
         }
 
         #endregion // Initialization
