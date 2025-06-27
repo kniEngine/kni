@@ -99,6 +99,9 @@ namespace Microsoft.Xna.Platform.Audio
             //_stereoPannerNode.Connect(_sourceTarget); _sourceTarget = _stereoPannerNode;
             _gainNode.Connect(_sourceTarget); _sourceTarget = _gainNode;
 
+            this.Volume = 1.0f;
+            this.Pan = 0.0f;
+            this.Pitch = 0.0f;
         }
 
         #endregion // Initialization
