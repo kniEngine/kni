@@ -97,7 +97,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             _sourceTarget = context.Destination;
             //_stereoPannerNode.Connect(_sourceTarget); _sourceTarget = _stereoPannerNode;
-            _gainNode.Connect(context.Destination); _sourceTarget = _gainNode;
+            _gainNode.Connect(_sourceTarget); _sourceTarget = _gainNode;
 
         }
 
