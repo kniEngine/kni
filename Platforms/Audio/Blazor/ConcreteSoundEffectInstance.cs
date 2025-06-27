@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Platform.Audio
             _gainNode = ConcreteAudioService.Context.CreateGain();
 
             _sourceTarget = context.Destination;
-            //_stereoPannerNode.Connect(_sourceTarget); _sourceTarget = _stereoPannerNode;
+            _stereoPannerNode.Connect(_sourceTarget); _sourceTarget = _stereoPannerNode;
             _gainNode.Connect(_sourceTarget); _sourceTarget = _gainNode;
 
             this.Volume = 1.0f;
