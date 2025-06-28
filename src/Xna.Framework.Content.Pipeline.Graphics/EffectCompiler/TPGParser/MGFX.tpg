@@ -260,14 +260,14 @@ CmpFunc -> (CmpFunc_Never|CmpFunc_Less|CmpFunc_Equal|CmpFunc_LessEqual|CmpFunc_G
 	return	$CmpFunc_Never ?? $CmpFunc_Less ?? $CmpFunc_Equal ?? $CmpFunc_LessEqual ?? $CmpFunc_Greater ?? $CmpFunc_NotEqual ?? $CmpFunc_GreaterEqual ?? $CmpFunc_Always;
 };
 
-StencilOp_Keep -> Keep { return StencilOperation.Keep; };
-StencilOp_Zero -> Zero { return StencilOperation.Zero; };
-StencilOp_Replace -> Replace { return StencilOperation.Replace; };
-StencilOp_IncrSat -> IncrSat { return StencilOperation.IncrementSaturation; };
-StencilOp_DecrSat -> DecrSat { return StencilOperation.DecrementSaturation; };
-StencilOp_Invert -> Invert { return StencilOperation.Invert; };
-StencilOp_Incr -> Incr { return StencilOperation.Increment; };
-StencilOp_Decr -> Decr { return StencilOperation.Decrement; };
+StencilOp_Keep -> Keep { return StencilOperationContent.Keep; };
+StencilOp_Zero -> Zero { return StencilOperationContent.Zero; };
+StencilOp_Replace -> Replace { return StencilOperationContent.Replace; };
+StencilOp_IncrSat -> IncrSat { return StencilOperationContent.IncrementSaturation; };
+StencilOp_DecrSat -> DecrSat { return StencilOperationContent.DecrementSaturation; };
+StencilOp_Invert -> Invert { return StencilOperationContent.Invert; };
+StencilOp_Incr -> Incr { return StencilOperationContent.Increment; };
+StencilOp_Decr -> Decr { return StencilOperationContent.Decrement; };
 StencilOp -> (StencilOp_Keep|StencilOp_Zero|StencilOp_Replace|StencilOp_IncrSat|StencilOp_DecrSat|StencilOp_Invert|StencilOp_Incr|StencilOp_Decr)
 {
 	return	$StencilOp_Keep ?? $StencilOp_Zero ?? $StencilOp_Replace ?? $StencilOp_IncrSat ?? $StencilOp_DecrSat ?? $StencilOp_Invert ?? $StencilOp_Incr ?? $StencilOp_Decr;
@@ -289,13 +289,13 @@ Render_State_ZFunc -> ZFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo
 Render_State_MultiSampleAntiAlias -> MultiSampleAntiAlias Equals Boolean Semicolon { (paramlist[0] as PassInfo).MultiSampleAntiAlias = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_ScissorTestEnable -> ScissorTestEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).ScissorTestEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_StencilEnable -> StencilEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).StencilEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
-Render_State_StencilFail -> StencilFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilFail = (StencilOperation)$StencilOp; return null; };
+Render_State_StencilFail -> StencilFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilFail = (StencilOperationContent)$StencilOp; return null; };
 Render_State_StencilFunc -> StencilFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo).StencilFunc = (CompareFunctionContent)$CmpFunc; return null; };
 Render_State_StencilMask -> StencilMask Equals Number Semicolon { (paramlist[0] as PassInfo).StencilMask = ParseTreeTools.ParseInt((string)$Number); return null; };
-Render_State_StencilPass -> StencilPass Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilPass = (StencilOperation)$StencilOp; return null; };
+Render_State_StencilPass -> StencilPass Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilPass = (StencilOperationContent)$StencilOp; return null; };
 Render_State_StencilRef -> StencilRef Equals Number Semicolon { (paramlist[0] as PassInfo).StencilRef = ParseTreeTools.ParseInt((string)$Number); return null; };
 Render_State_StencilWriteMask -> StencilWriteMask Equals Number Semicolon { (paramlist[0] as PassInfo).StencilWriteMask = ParseTreeTools.ParseInt((string)$Number); return null; };
-Render_State_StencilZFail -> StencilZFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilZFail = (StencilOperation)$StencilOp; return null; };
+Render_State_StencilZFail -> StencilZFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilZFail = (StencilOperationContent)$StencilOp; return null; };
 
 
 Render_State_Expression ->	

@@ -140,13 +140,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public StencilOperation StencilFail
+        public StencilOperationContent StencilFail
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.StencilFail = value;
+                depthStencilState.StencilFail = (StencilOperation)value;
             }
         }
 
@@ -170,13 +170,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public StencilOperation StencilPass
+        public StencilOperationContent StencilPass
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.StencilPass = value;
+                depthStencilState.StencilPass = (StencilOperation)value;
             }
         }
 
@@ -200,13 +200,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public StencilOperation StencilZFail
+        public StencilOperationContent StencilZFail
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.StencilDepthBufferFail = value;
+                depthStencilState.StencilDepthBufferFail = (StencilOperation)value;
             }
         }
 
@@ -271,5 +271,45 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
                 rasterizerState.SlopeScaleDepthBias = value;
             }
         }
+    }
+
+
+    /// <summary>
+    /// Defines stencil buffer operations.
+    /// </summary>
+    public enum StencilOperationContent
+    {
+        /// <summary>
+        /// Does not update the stencil buffer entry.
+        /// </summary>
+        Keep,
+        /// <summary>
+        /// Sets the stencil buffer entry to 0.
+        /// </summary>
+        Zero,
+        /// <summary>
+        /// Replaces the stencil buffer entry with a reference value.
+        /// </summary>
+        Replace,
+        /// <summary>
+        /// Increments the stencil buffer entry, wrapping to 0 if the new value exceeds the maximum value.
+        /// </summary>
+        Increment,
+        /// <summary>
+        /// Decrements the stencil buffer entry, wrapping to the maximum value if the new value is less than 0.
+        /// </summary>
+        Decrement,
+        /// <summary>
+        /// Increments the stencil buffer entry, clamping to the maximum value.
+        /// </summary>
+        IncrementSaturation,
+        /// <summary>
+        /// Decrements the stencil buffer entry, clamping to 0.
+        /// </summary>
+        DecrementSaturation,
+        /// <summary>
+        /// Inverts the bits in the stencil buffer entry.
+        /// </summary>
+        Invert
     }
 }

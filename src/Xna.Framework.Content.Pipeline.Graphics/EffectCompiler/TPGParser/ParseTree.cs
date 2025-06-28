@@ -773,42 +773,42 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalStencilOp_Keep(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Keep;
+            return StencilOperationContent.Keep;
         }
 
         protected virtual object EvalStencilOp_Zero(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Zero;
+            return StencilOperationContent.Zero;
         }
 
         protected virtual object EvalStencilOp_Replace(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Replace;
+            return StencilOperationContent.Replace;
         }
 
         protected virtual object EvalStencilOp_IncrSat(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.IncrementSaturation;
+            return StencilOperationContent.IncrementSaturation;
         }
 
         protected virtual object EvalStencilOp_DecrSat(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.DecrementSaturation;
+            return StencilOperationContent.DecrementSaturation;
         }
 
         protected virtual object EvalStencilOp_Invert(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Invert;
+            return StencilOperationContent.Invert;
         }
 
         protected virtual object EvalStencilOp_Incr(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Increment;
+            return StencilOperationContent.Increment;
         }
 
         protected virtual object EvalStencilOp_Decr(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Decrement;
+            return StencilOperationContent.Decrement;
         }
 
         protected virtual object EvalStencilOp(ParseTree tree, params object[] paramlist)
@@ -893,7 +893,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_StencilFail(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).StencilFail = (StencilOperation)this.GetValue(tree, TokenType.StencilOp, 0); return null;
+            (paramlist[0] as PassInfo).StencilFail = (StencilOperationContent)this.GetValue(tree, TokenType.StencilOp, 0); return null;
         }
 
         protected virtual object EvalRender_State_StencilFunc(ParseTree tree, params object[] paramlist)
@@ -908,7 +908,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_StencilPass(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).StencilPass = (StencilOperation)this.GetValue(tree, TokenType.StencilOp, 0); return null;
+            (paramlist[0] as PassInfo).StencilPass = (StencilOperationContent)this.GetValue(tree, TokenType.StencilOp, 0); return null;
         }
 
         protected virtual object EvalRender_State_StencilRef(ParseTree tree, params object[] paramlist)
@@ -923,7 +923,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_StencilZFail(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).StencilZFail = (StencilOperation)this.GetValue(tree, TokenType.StencilOp, 0); return null;
+            (paramlist[0] as PassInfo).StencilZFail = (StencilOperationContent)this.GetValue(tree, TokenType.StencilOp, 0); return null;
         }
 
         protected virtual object EvalRender_State_Expression(ParseTree tree, params object[] paramlist)
