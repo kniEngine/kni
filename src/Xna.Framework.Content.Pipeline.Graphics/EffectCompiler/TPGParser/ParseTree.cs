@@ -626,67 +626,67 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalBlend_Zero(ParseTree tree, params object[] paramlist)
         {
-            return Blend.Zero;
+            return BlendContent.Zero;
         }
 
         protected virtual object EvalBlend_One(ParseTree tree, params object[] paramlist)
         {
-            return Blend.One;
+            return BlendContent.One;
         }
 
         protected virtual object EvalBlend_SrcColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.SourceColor;
+            return BlendContent.SourceColor;
         }
 
         protected virtual object EvalBlend_InvSrcColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseSourceColor;
+            return BlendContent.InverseSourceColor;
         }
 
         protected virtual object EvalBlend_SrcAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.SourceAlpha;
+            return BlendContent.SourceAlpha;
         }
 
         protected virtual object EvalBlend_InvSrcAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseSourceAlpha;
+            return BlendContent.InverseSourceAlpha;
         }
 
         protected virtual object EvalBlend_DestAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.DestinationAlpha;
+            return BlendContent.DestinationAlpha;
         }
 
         protected virtual object EvalBlend_InvDestAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseDestinationAlpha;
+            return BlendContent.InverseDestinationAlpha;
         }
 
         protected virtual object EvalBlend_DestColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.DestinationColor;
+            return BlendContent.DestinationColor;
         }
 
         protected virtual object EvalBlend_InvDestColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseDestinationColor;
+            return BlendContent.InverseDestinationColor;
         }
 
         protected virtual object EvalBlend_SrcAlphaSat(ParseTree tree, params object[] paramlist)
         {
-            return Blend.SourceAlphaSaturation;
+            return BlendContent.SourceAlphaSaturation;
         }
 
         protected virtual object EvalBlend_BlendFactor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.BlendFactor;
+            return BlendContent.BlendFactor;
         }
 
         protected virtual object EvalBlend_InvBlendFactor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseBlendFactor;
+            return BlendContent.InverseBlendFactor;
         }
 
         protected virtual object EvalBlends(ParseTree tree, params object[] paramlist)
@@ -833,12 +833,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_SrcBlend(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).SrcBlend = (Blend)this.GetValue(tree, TokenType.Blends, 0); return null;
+            (paramlist[0] as PassInfo).SrcBlend = (BlendContent)this.GetValue(tree, TokenType.Blends, 0); return null;
         }
 
         protected virtual object EvalRender_State_DestBlend(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).DestBlend = (Blend)this.GetValue(tree, TokenType.Blends, 0); return null;
+            (paramlist[0] as PassInfo).DestBlend = (BlendContent)this.GetValue(tree, TokenType.Blends, 0); return null;
         }
 
         protected virtual object EvalRender_State_BlendOp(ParseTree tree, params object[] paramlist)

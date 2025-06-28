@@ -215,19 +215,19 @@ ColorsMasks -> Colors (Or Colors)? (Or Colors)? (Or Colors)?
 			(ColorWriteChannels)($Colors[3] ?? 0);
 };
 
-Blend_Zero -> Zero { return Blend.Zero; };
-Blend_One -> One { return Blend.One; };
-Blend_SrcColor -> SrcColor { return Blend.SourceColor; };
-Blend_InvSrcColor -> InvSrcColor { return Blend.InverseSourceColor; };
-Blend_SrcAlpha -> SrcAlpha { return Blend.SourceAlpha; };
-Blend_InvSrcAlpha -> InvSrcAlpha { return Blend.InverseSourceAlpha; };
-Blend_DestAlpha -> DestAlpha { return Blend.DestinationAlpha; };
-Blend_InvDestAlpha -> InvDestAlpha { return Blend.InverseDestinationAlpha; };
-Blend_DestColor -> DestColor { return Blend.DestinationColor; };
-Blend_InvDestColor -> InvDestColor { return Blend.InverseDestinationColor; };
-Blend_SrcAlphaSat -> SrcAlphaSat { return Blend.SourceAlphaSaturation; };
-Blend_BlendFactor -> BlendFactor { return Blend.BlendFactor; };
-Blend_InvBlendFactor -> InvBlendFactor { return Blend.InverseBlendFactor; };
+Blend_Zero -> Zero { return BlendContent.Zero; };
+Blend_One -> One { return BlendContent.One; };
+Blend_SrcColor -> SrcColor { return BlendContent.SourceColor; };
+Blend_InvSrcColor -> InvSrcColor { return BlendContent.InverseSourceColor; };
+Blend_SrcAlpha -> SrcAlpha { return BlendContent.SourceAlpha; };
+Blend_InvSrcAlpha -> InvSrcAlpha { return BlendContent.InverseSourceAlpha; };
+Blend_DestAlpha -> DestAlpha { return BlendContent.DestinationAlpha; };
+Blend_InvDestAlpha -> InvDestAlpha { return BlendContent.InverseDestinationAlpha; };
+Blend_DestColor -> DestColor { return BlendContent.DestinationColor; };
+Blend_InvDestColor -> InvDestColor { return BlendContent.InverseDestinationColor; };
+Blend_SrcAlphaSat -> SrcAlphaSat { return BlendContent.SourceAlphaSaturation; };
+Blend_BlendFactor -> BlendFactor { return BlendContent.BlendFactor; };
+Blend_InvBlendFactor -> InvBlendFactor { return BlendContent.InverseBlendFactor; };
 Blends -> (	Blend_Zero|Blend_One|Blend_SrcColor|Blend_InvSrcColor|Blend_SrcAlpha|Blend_InvSrcAlpha|
 			Blend_DestAlpha|Blend_InvDestAlpha|Blend_DestColor|Blend_InvDestColor|Blend_SrcAlphaSat|
 			Blend_BlendFactor|Blend_InvBlendFactor)
@@ -277,8 +277,8 @@ StencilOp -> (StencilOp_Keep|StencilOp_Zero|StencilOp_Replace|StencilOp_IncrSat|
 Render_State_CullMode -> CullMode Equals CullModes Semicolon { (paramlist[0] as PassInfo).CullMode = (CullMode)$CullModes; return null; };
 Render_State_FillMode -> FillMode Equals FillModes Semicolon { (paramlist[0] as PassInfo).FillMode = (FillMode)$FillModes; return null; };
 Render_State_AlphaBlendEnable -> AlphaBlendEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).AlphaBlendEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
-Render_State_SrcBlend -> SrcBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).SrcBlend = (Blend)$Blends; return null; };
-Render_State_DestBlend -> DestBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).DestBlend = (Blend)$Blends; return null; };
+Render_State_SrcBlend -> SrcBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).SrcBlend = (BlendContent)$Blends; return null; };
+Render_State_DestBlend -> DestBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).DestBlend = (BlendContent)$Blends; return null; };
 Render_State_BlendOp -> BlendOp Equals BlendOps Semicolon { (paramlist[0] as PassInfo).BlendOp = (BlendFunction)$BlendOps; return null; };
 Render_State_ColorWriteEnable -> ColorWriteEnable Equals ColorsMasks Semicolon { (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannels)$ColorsMasks; return null; };
 Render_State_DepthBias -> DepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).DepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
