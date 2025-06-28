@@ -424,6 +424,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
                 case TokenType.PixelShader_Pass_Expression:
                     Value = EvalPixelShader_Pass_Expression(tree, paramlist);
                     break;
+                case TokenType.ComputeShader_Pass_Expression:
+                    Value = EvalComputeShader_Pass_Expression(tree, paramlist);
+                    break;
                 case TokenType.AddressMode_Clamp:
                     Value = EvalAddressMode_Clamp(tree, paramlist);
                     break;
@@ -940,8 +943,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
            foreach (var node in Nodes)
               node.Eval(tree, pass);
         
-           // We need to have a pixel or vertex shader to keep this pass.
-           if (!string.IsNullOrEmpty(pass.psFunction) || !string.IsNullOrEmpty(pass.vsFunction))
+           // We need to have at least one shader to keep this pass.
+           if (!string.IsNullOrEmpty(pass.psFunction)
+           ||  !string.IsNullOrEmpty(pass.vsFunction)
+           ||  !string.IsNullOrEmpty(pass.csFunction))
            {
               var technique = paramlist[0] as TechniqueInfo;
               technique.Passes.Add(pass);
@@ -963,6 +968,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             var pass = paramlist[0] as PassInfo;
            pass.psModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
            pass.psFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           return null;
+        }
+
+        protected virtual object EvalComputeShader_Pass_Expression(ParseTree tree, params object[] paramlist)
+        {
+            var pass = paramlist[0] as PassInfo;
+           pass.csModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
+           pass.csFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
            return null;
         }
 

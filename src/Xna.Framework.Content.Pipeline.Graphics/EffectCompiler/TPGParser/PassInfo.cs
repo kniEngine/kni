@@ -13,6 +13,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
         public string psModel;
         public string psFunction;
 
+        public string csModel;
+        public string csFunction;
+
         public BlendState blendState;
         public RasterizerState rasterizerState;
         public DepthStencilState depthStencilState;

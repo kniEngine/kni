@@ -18,6 +18,7 @@
 [IgnoreCase] SamplerState -> @"sampler_state";
 [IgnoreCase] VertexShader -> @"VertexShader";
 [IgnoreCase] PixelShader -> @"PixelShader";
+[IgnoreCase] ComputeShader -> @"ComputeShader";
 [IgnoreCase] Register -> @"register";
 [IgnoreCase] Boolean -> @"true|false|0|1";
 Number -> @"[+-]? ?[0-9]?\.?[0-9]+[fF]?";
@@ -322,7 +323,7 @@ Render_State_Expression ->
 				Render_State_StencilWriteMask |
 				Render_State_StencilZFail;
 
-Pass_Declaration ->	Pass Identifier? OpenBracket (VertexShader_Pass_Expression | PixelShader_Pass_Expression | Render_State_Expression)* CloseBracket 
+Pass_Declaration ->	Pass Identifier? OpenBracket (VertexShader_Pass_Expression | PixelShader_Pass_Expression | ComputeShader_Pass_Expression | Render_State_Expression)* CloseBracket 
 { 
    var pass = new PassInfo();
    pass.name = $Identifier as string ?? string.Empty;
@@ -330,8 +331,10 @@ Pass_Declaration ->	Pass Identifier? OpenBracket (VertexShader_Pass_Expression |
    foreach (var node in Nodes)
       node.Eval(tree, pass);
 
-   // We need to have a pixel or vertex shader to keep this pass.
-   if (!string.IsNullOrEmpty(pass.psFunction) || !string.IsNullOrEmpty(pass.vsFunction))
+   // We need to have at least one shader to keep this pass.
+   if (!string.IsNullOrEmpty(pass.psFunction)
+   ||  !string.IsNullOrEmpty(pass.vsFunction)
+   ||  !string.IsNullOrEmpty(pass.csFunction))
    {
       var technique = paramlist[0] as TechniqueInfo;
       technique.Passes.Add(pass);
@@ -353,6 +356,14 @@ PixelShader_Pass_Expression -> PixelShader Equals Compile ShaderModel Identifier
    var pass = paramlist[0] as PassInfo;
    pass.psModel = $ShaderModel as string;
    pass.psFunction = $Identifier as string;
+   return null;
+};
+
+ComputeShader_Pass_Expression -> ComputeShader Equals Compile ShaderModel Identifier OpenParenthesis CloseParenthesis Semicolon
+{
+   var pass = paramlist[0] as PassInfo;
+   pass.csModel = $ShaderModel as string;
+   pass.csFunction = $Identifier as string;
    return null;
 };
 
