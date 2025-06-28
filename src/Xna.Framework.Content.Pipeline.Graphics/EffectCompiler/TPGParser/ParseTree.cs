@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 {
@@ -543,12 +542,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalFillMode_Solid(ParseTree tree, params object[] paramlist)
         {
-            return FillMode.Solid;
+            return FillModeContent.Solid;
         }
 
         protected virtual object EvalFillMode_WireFrame(ParseTree tree, params object[] paramlist)
         {
-            return FillMode.WireFrame;
+            return FillModeContent.WireFrame;
         }
 
         protected virtual object EvalFillModes(ParseTree tree, params object[] paramlist)
@@ -558,17 +557,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalCullMode_None(ParseTree tree, params object[] paramlist)
         {
-            return CullMode.None;
+            return CullModeContent.None;
         }
 
         protected virtual object EvalCullMode_Cw(ParseTree tree, params object[] paramlist)
         {
-            return CullMode.CullClockwiseFace;
+            return CullModeContent.CullClockwiseFace;
         }
 
         protected virtual object EvalCullMode_Ccw(ParseTree tree, params object[] paramlist)
         {
-            return CullMode.CullCounterClockwiseFace;
+            return CullModeContent.CullCounterClockwiseFace;
         }
 
         protected virtual object EvalCullModes(ParseTree tree, params object[] paramlist)
@@ -578,37 +577,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalColors_None(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.None;
+            return ColorWriteChannelsContent.None;
         }
 
         protected virtual object EvalColors_Red(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Red;
+            return ColorWriteChannelsContent.Red;
         }
 
         protected virtual object EvalColors_Green(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Green;
+            return ColorWriteChannelsContent.Green;
         }
 
         protected virtual object EvalColors_Blue(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Blue;
+            return ColorWriteChannelsContent.Blue;
         }
 
         protected virtual object EvalColors_Alpha(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Alpha;
+            return ColorWriteChannelsContent.Alpha;
         }
 
         protected virtual object EvalColors_All(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.All;
+            return ColorWriteChannelsContent.All;
         }
 
         protected virtual object EvalColors_Boolean(ParseTree tree, params object[] paramlist)
         {
-            return ParseTreeTools.ParseBool((string)this.GetValue(tree, TokenType.Boolean, 0)) ?  ColorWriteChannels.All : ColorWriteChannels.None;
+            return ParseTreeTools.ParseBool((string)this.GetValue(tree, TokenType.Boolean, 0)) ?  ColorWriteChannelsContent.All : ColorWriteChannelsContent.None;
         }
 
         protected virtual object EvalColors(ParseTree tree, params object[] paramlist)
@@ -618,75 +617,75 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalColorsMasks(ParseTree tree, params object[] paramlist)
         {
-            return	(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 0) ?? 0) | 
-        			(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 1) ?? 0) | 
-        			(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 2) ?? 0) | 
-        			(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 3) ?? 0);
+            return	(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 0) ?? 0) | 
+        			(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 1) ?? 0) | 
+        			(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 2) ?? 0) | 
+        			(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 3) ?? 0);
         }
 
         protected virtual object EvalBlend_Zero(ParseTree tree, params object[] paramlist)
         {
-            return Blend.Zero;
+            return BlendContent.Zero;
         }
 
         protected virtual object EvalBlend_One(ParseTree tree, params object[] paramlist)
         {
-            return Blend.One;
+            return BlendContent.One;
         }
 
         protected virtual object EvalBlend_SrcColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.SourceColor;
+            return BlendContent.SourceColor;
         }
 
         protected virtual object EvalBlend_InvSrcColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseSourceColor;
+            return BlendContent.InverseSourceColor;
         }
 
         protected virtual object EvalBlend_SrcAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.SourceAlpha;
+            return BlendContent.SourceAlpha;
         }
 
         protected virtual object EvalBlend_InvSrcAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseSourceAlpha;
+            return BlendContent.InverseSourceAlpha;
         }
 
         protected virtual object EvalBlend_DestAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.DestinationAlpha;
+            return BlendContent.DestinationAlpha;
         }
 
         protected virtual object EvalBlend_InvDestAlpha(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseDestinationAlpha;
+            return BlendContent.InverseDestinationAlpha;
         }
 
         protected virtual object EvalBlend_DestColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.DestinationColor;
+            return BlendContent.DestinationColor;
         }
 
         protected virtual object EvalBlend_InvDestColor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseDestinationColor;
+            return BlendContent.InverseDestinationColor;
         }
 
         protected virtual object EvalBlend_SrcAlphaSat(ParseTree tree, params object[] paramlist)
         {
-            return Blend.SourceAlphaSaturation;
+            return BlendContent.SourceAlphaSaturation;
         }
 
         protected virtual object EvalBlend_BlendFactor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.BlendFactor;
+            return BlendContent.BlendFactor;
         }
 
         protected virtual object EvalBlend_InvBlendFactor(ParseTree tree, params object[] paramlist)
         {
-            return Blend.InverseBlendFactor;
+            return BlendContent.InverseBlendFactor;
         }
 
         protected virtual object EvalBlends(ParseTree tree, params object[] paramlist)
@@ -698,27 +697,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalBlendOp_Add(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Add;
+            return BlendFunctionContent.Add;
         }
 
         protected virtual object EvalBlendOp_Subtract(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Subtract;
+            return BlendFunctionContent.Subtract;
         }
 
         protected virtual object EvalBlendOp_RevSubtract(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.ReverseSubtract;
+            return BlendFunctionContent.ReverseSubtract;
         }
 
         protected virtual object EvalBlendOp_Min(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Min;
+            return BlendFunctionContent.Min;
         }
 
         protected virtual object EvalBlendOp_Max(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Max;
+            return BlendFunctionContent.Max;
         }
 
         protected virtual object EvalBlendOps(ParseTree tree, params object[] paramlist)
@@ -773,42 +772,42 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalStencilOp_Keep(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Keep;
+            return StencilOperationContent.Keep;
         }
 
         protected virtual object EvalStencilOp_Zero(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Zero;
+            return StencilOperationContent.Zero;
         }
 
         protected virtual object EvalStencilOp_Replace(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Replace;
+            return StencilOperationContent.Replace;
         }
 
         protected virtual object EvalStencilOp_IncrSat(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.IncrementSaturation;
+            return StencilOperationContent.IncrementSaturation;
         }
 
         protected virtual object EvalStencilOp_DecrSat(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.DecrementSaturation;
+            return StencilOperationContent.DecrementSaturation;
         }
 
         protected virtual object EvalStencilOp_Invert(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Invert;
+            return StencilOperationContent.Invert;
         }
 
         protected virtual object EvalStencilOp_Incr(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Increment;
+            return StencilOperationContent.Increment;
         }
 
         protected virtual object EvalStencilOp_Decr(ParseTree tree, params object[] paramlist)
         {
-            return StencilOperation.Decrement;
+            return StencilOperationContent.Decrement;
         }
 
         protected virtual object EvalStencilOp(ParseTree tree, params object[] paramlist)
@@ -818,12 +817,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_CullMode(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).CullMode = (CullMode)this.GetValue(tree, TokenType.CullModes, 0); return null;
+            (paramlist[0] as PassInfo).CullMode = (CullModeContent)this.GetValue(tree, TokenType.CullModes, 0); return null;
         }
 
         protected virtual object EvalRender_State_FillMode(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).FillMode = (FillMode)this.GetValue(tree, TokenType.FillModes, 0); return null;
+            (paramlist[0] as PassInfo).FillMode = (FillModeContent)this.GetValue(tree, TokenType.FillModes, 0); return null;
         }
 
         protected virtual object EvalRender_State_AlphaBlendEnable(ParseTree tree, params object[] paramlist)
@@ -833,22 +832,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_SrcBlend(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).SrcBlend = (Blend)this.GetValue(tree, TokenType.Blends, 0); return null;
+            (paramlist[0] as PassInfo).SrcBlend = (BlendContent)this.GetValue(tree, TokenType.Blends, 0); return null;
         }
 
         protected virtual object EvalRender_State_DestBlend(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).DestBlend = (Blend)this.GetValue(tree, TokenType.Blends, 0); return null;
+            (paramlist[0] as PassInfo).DestBlend = (BlendContent)this.GetValue(tree, TokenType.Blends, 0); return null;
         }
 
         protected virtual object EvalRender_State_BlendOp(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).BlendOp = (BlendFunction)this.GetValue(tree, TokenType.BlendOps, 0); return null;
+            (paramlist[0] as PassInfo).BlendOp = (BlendFunctionContent)this.GetValue(tree, TokenType.BlendOps, 0); return null;
         }
 
         protected virtual object EvalRender_State_ColorWriteEnable(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannels)this.GetValue(tree, TokenType.ColorsMasks, 0); return null;
+            (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannelsContent)this.GetValue(tree, TokenType.ColorsMasks, 0); return null;
         }
 
         protected virtual object EvalRender_State_DepthBias(ParseTree tree, params object[] paramlist)
@@ -893,7 +892,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_StencilFail(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).StencilFail = (StencilOperation)this.GetValue(tree, TokenType.StencilOp, 0); return null;
+            (paramlist[0] as PassInfo).StencilFail = (StencilOperationContent)this.GetValue(tree, TokenType.StencilOp, 0); return null;
         }
 
         protected virtual object EvalRender_State_StencilFunc(ParseTree tree, params object[] paramlist)
@@ -908,7 +907,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_StencilPass(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).StencilPass = (StencilOperation)this.GetValue(tree, TokenType.StencilOp, 0); return null;
+            (paramlist[0] as PassInfo).StencilPass = (StencilOperationContent)this.GetValue(tree, TokenType.StencilOp, 0); return null;
         }
 
         protected virtual object EvalRender_State_StencilRef(ParseTree tree, params object[] paramlist)
@@ -923,7 +922,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_StencilZFail(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).StencilZFail = (StencilOperation)this.GetValue(tree, TokenType.StencilOp, 0); return null;
+            (paramlist[0] as PassInfo).StencilZFail = (StencilOperationContent)this.GetValue(tree, TokenType.StencilOp, 0); return null;
         }
 
         protected virtual object EvalRender_State_Expression(ParseTree tree, params object[] paramlist)

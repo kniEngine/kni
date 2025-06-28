@@ -17,20 +17,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
         public RasterizerState rasterizerState;
         public DepthStencilState depthStencilState;
 		
-        private static Blend ToAlphaBlend(Blend blend)
+        private static Blend ToAlphaBlend(BlendContent blend)
         {
             switch (blend)
             {
-                case Blend.SourceColor:
+                case BlendContent.SourceColor:
                     return Blend.SourceAlpha;
-                case Blend.InverseSourceColor:
+                case BlendContent.InverseSourceColor:
                     return Blend.InverseSourceAlpha;
-                case Blend.DestinationColor:
+                case BlendContent.DestinationColor:
                     return Blend.DestinationAlpha;
-                case Blend.InverseDestinationColor:
+                case BlendContent.InverseDestinationColor:
                     return Blend.InverseDestinationAlpha;
             }
-            return blend;
+            return (Blend)blend;
         }
 
         public bool AlphaBlendEnable
@@ -60,23 +60,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public FillMode FillMode
+        public FillModeContent FillMode
         {
             set
             {
                 if (rasterizerState == null)
                     rasterizerState = new RasterizerState();
-                rasterizerState.FillMode = value;             
+                rasterizerState.FillMode = (FillMode)value;             
             }
         }
 
-        public CullMode CullMode
+        public CullModeContent CullMode
         {
             set
             {
                 if (rasterizerState == null)
                     rasterizerState = new RasterizerState();
-                rasterizerState.CullMode = value;
+                rasterizerState.CullMode = (CullMode)value;
             }
         }
 
@@ -140,13 +140,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public StencilOperation StencilFail
+        public StencilOperationContent StencilFail
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.StencilFail = value;
+                depthStencilState.StencilFail = (StencilOperation)value;
             }
         }
 
@@ -170,13 +170,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public StencilOperation StencilPass
+        public StencilOperationContent StencilPass
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.StencilPass = value;
+                depthStencilState.StencilPass = (StencilOperation)value;
             }
         }
 
@@ -200,55 +200,55 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public StencilOperation StencilZFail
+        public StencilOperationContent StencilZFail
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.StencilDepthBufferFail = value;
+                depthStencilState.StencilDepthBufferFail = (StencilOperation)value;
             }
         }
 
-        public Blend SrcBlend
+        public BlendContent SrcBlend
         {
             set
             {
                 if (blendState == null)
                     blendState = new BlendState();
-                blendState.ColorSourceBlend = value;
+                blendState.ColorSourceBlend = (Blend)value;
                 blendState.AlphaSourceBlend = ToAlphaBlend(value);
             }
         }
 
-        public Blend DestBlend
+        public BlendContent DestBlend
         {
             set
             {
                 if (blendState == null)
                     blendState = new BlendState();
-                blendState.ColorDestinationBlend = value;
+                blendState.ColorDestinationBlend = (Blend)value;
                 blendState.AlphaDestinationBlend = ToAlphaBlend(value);
             }
         }
 
-        public BlendFunction BlendOp
+        public BlendFunctionContent BlendOp
         {
             set
             {
                 if (blendState == null)
                     blendState = new BlendState();
-                blendState.AlphaBlendFunction = value;
+                blendState.AlphaBlendFunction = (BlendFunction)value;
             }
         }
 
-        public ColorWriteChannels ColorWriteEnable
+        public ColorWriteChannelsContent ColorWriteEnable
         {
             set
             {
                 if (blendState == null)
                     blendState = new BlendState();
-                blendState.ColorWriteChannels = value;
+                blendState.ColorWriteChannels = (ColorWriteChannels)value;
             }    
         }
 
@@ -271,5 +271,207 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
                 rasterizerState.SlopeScaleDepthBias = value;
             }
         }
+    }
+
+
+    /// <summary>
+    /// Defines stencil buffer operations.
+    /// </summary>
+    public enum StencilOperationContent
+    {
+        /// <summary>
+        /// Does not update the stencil buffer entry.
+        /// </summary>
+        Keep,
+        /// <summary>
+        /// Sets the stencil buffer entry to 0.
+        /// </summary>
+        Zero,
+        /// <summary>
+        /// Replaces the stencil buffer entry with a reference value.
+        /// </summary>
+        Replace,
+        /// <summary>
+        /// Increments the stencil buffer entry, wrapping to 0 if the new value exceeds the maximum value.
+        /// </summary>
+        Increment,
+        /// <summary>
+        /// Decrements the stencil buffer entry, wrapping to the maximum value if the new value is less than 0.
+        /// </summary>
+        Decrement,
+        /// <summary>
+        /// Increments the stencil buffer entry, clamping to the maximum value.
+        /// </summary>
+        IncrementSaturation,
+        /// <summary>
+        /// Decrements the stencil buffer entry, clamping to 0.
+        /// </summary>
+        DecrementSaturation,
+        /// <summary>
+        /// Inverts the bits in the stencil buffer entry.
+        /// </summary>
+        Invert
+    }
+
+    /// <summary>
+    /// Defines a blend mode.
+    /// </summary>
+    public enum BlendContent
+    {
+        /// <summary>
+        /// Each component of the color is multiplied by {1, 1, 1, 1}.
+        /// </summary>
+        One,
+        /// <summary>
+        /// Each component of the color is multiplied by {0, 0, 0, 0}.
+        /// </summary>
+        Zero,
+        /// <summary>
+        /// Each component of the color is multiplied by the source color. 
+        /// {Rs, Gs, Bs, As}, where Rs, Gs, Bs, As are color source values.
+        /// </summary>
+        SourceColor,
+        /// <summary>
+        /// Each component of the color is multiplied by the inverse of the source color.
+        ///  {1 − Rs, 1 − Gs, 1 − Bs, 1 − As}, where Rs, Gs, Bs, As are color source values.
+        /// </summary>
+        InverseSourceColor,
+        /// <summary>
+        /// Each component of the color is multiplied by the alpha value of the source. 
+        /// {As, As, As, As}, where As is the source alpha value.
+        /// </summary>
+        SourceAlpha,
+        /// <summary>
+        /// Each component of the color is multiplied by the inverse of the alpha value of the source. 
+        /// {1 − As, 1 − As, 1 − As, 1 − As}, where As is the source alpha value.
+        /// </summary>
+        InverseSourceAlpha,
+        /// <summary>
+        /// Each component color is multiplied by the destination color. 
+        /// {Rd, Gd, Bd, Ad}, where Rd, Gd, Bd, Ad are color destination values.
+        /// </summary>
+        DestinationColor,
+        /// <summary>
+        /// Each component of the color is multiplied by the inversed destination color. 
+        /// {1 − Rd, 1 − Gd, 1 − Bd, 1 − Ad}, where Rd, Gd, Bd, Ad are color destination values.
+        /// </summary>
+        InverseDestinationColor,
+        /// <summary>
+        /// Each component of the color is multiplied by the alpha value of the destination.
+        /// {Ad, Ad, Ad, Ad}, where Ad is the destination alpha value.
+        /// </summary>
+        DestinationAlpha,
+        /// <summary>
+        /// Each component of the color is multiplied by the inversed alpha value of the destination. 
+        /// {1 − Ad, 1 − Ad, 1 − Ad, 1 − Ad}, where Ad is the destination alpha value.
+        /// </summary>
+        InverseDestinationAlpha,
+        /// <summary>
+        /// Each component of the color is multiplied by a constant in the <see cref="P:Microsoft.Xna.Framework.Graphics.GraphicsDevice.BlendFactor"/>.
+        /// </summary>
+        BlendFactor,
+        /// <summary>
+        /// Each component of the color is multiplied by a inversed constant in the <see cref="P:Microsoft.Xna.Framework.Graphics.GraphicsDevice.BlendFactor"/>.
+        /// </summary>
+        InverseBlendFactor,
+        /// <summary>
+        /// Each component of the color is multiplied by either the alpha of the source color, or the inverse of the alpha of the source color, whichever is greater. 
+        /// {f, f, f, 1}, where f = min(As, 1 − As), where As is the source alpha value.
+        /// </summary>
+        SourceAlphaSaturation
+    }
+
+    /// <summary>
+    /// Defines a function for color blending.
+    /// </summary>
+    public enum BlendFunctionContent
+    {
+        /// <summary>
+        /// The function will adds destination to the source. (srcColor * srcBlend) + (destColor * destBlend)
+        /// </summary>
+        Add,
+        /// <summary>
+        /// The function will subtracts destination from source. (srcColor * srcBlend) − (destColor * destBlend)
+        /// </summary>
+        Subtract,
+        /// <summary>
+        /// The function will subtracts source from destination. (destColor * destBlend) - (srcColor * srcBlend) 
+        /// </summary>
+        ReverseSubtract,
+        /// <summary>
+        /// The function will extracts minimum of the source and destination. min((srcColor * srcBlend),(destColor * destBlend))
+        /// </summary>
+        Min,
+        /// <summary>
+        /// The function will extracts maximum of the source and destination. max((srcColor * srcBlend),(destColor * destBlend))
+        /// </summary>
+        Max
+    }
+
+    /// <summary>
+    /// Defines the color channels for render target blending operations.
+    /// </summary>
+    [Flags]
+    public enum ColorWriteChannelsContent
+    {
+        /// <summary>
+        /// No channels selected.
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Red channel selected.
+        /// </summary>
+        Red = 1,
+        /// <summary>
+        /// Green channel selected.
+        /// </summary>
+        Green = 2,
+        /// <summary>
+        /// Blue channel selected.
+        /// </summary>
+        Blue = 4,
+        /// <summary>
+        /// Alpha channel selected.
+        /// </summary>
+        Alpha = 8,
+        /// <summary>
+        /// All channels selected.
+        /// </summary>
+        All = 15
+    }
+
+    /// <summary>
+    /// Defines options for filling the primitive.
+    /// </summary>
+    public enum FillModeContent
+    {
+        /// <summary>
+        /// Draw solid faces for each primitive.
+        /// </summary>
+        Solid,
+        /// <summary>
+        /// Draw lines for each primitive.
+        /// </summary>
+        WireFrame
+    }
+
+
+    /// <summary>
+    /// Defines a culling mode for faces in rasterization process.
+    /// </summary>
+    public enum CullModeContent
+    {
+        /// <summary>
+        /// Do not cull faces.
+        /// </summary>
+        None,
+        /// <summary>
+        /// Cull faces with clockwise order.
+        /// </summary>
+        CullClockwiseFace,
+        /// <summary>
+        /// Cull faces with counter clockwise order.
+        /// </summary>
+        CullCounterClockwiseFace
     }
 }

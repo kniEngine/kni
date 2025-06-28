@@ -1,7 +1,7 @@
-// MonoGame Effect Parser
+// KNI Effect Parser
 //
 // For use with our fork of the "Tiny Parser Generator"
-// https://github.com/SickheadGames/TinyPG
+// https://github.com/kniEngine/TinyPG
 //
 
 <% @TinyPG Namespace="Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser" Language="C#"%>
@@ -181,53 +181,53 @@ Technique_Declaration -> Technique Identifier? OpenBracket Pass_Declaration+ Clo
    return null;
 };
 
-FillMode_Solid -> Solid { return FillMode.Solid; };
-FillMode_WireFrame -> WireFrame { return FillMode.WireFrame; };
+FillMode_Solid -> Solid { return FillModeContent.Solid; };
+FillMode_WireFrame -> WireFrame { return FillModeContent.WireFrame; };
 FillModes -> (FillMode_Solid|FillMode_WireFrame)
 {
 	return $FillMode_Solid ?? $FillMode_WireFrame;
 };
 
-CullMode_None -> None { return CullMode.None; };
-CullMode_Cw -> Cw { return CullMode.CullClockwiseFace; };
-CullMode_Ccw -> Ccw { return CullMode.CullCounterClockwiseFace; };
+CullMode_None -> None { return CullModeContent.None; };
+CullMode_Cw -> Cw { return CullModeContent.CullClockwiseFace; };
+CullMode_Ccw -> Ccw { return CullModeContent.CullCounterClockwiseFace; };
 CullModes -> (CullMode_None|CullMode_Cw|CullMode_Ccw)
 {
 	return $CullMode_None ?? $CullMode_Cw ?? $CullMode_Ccw;
 };
 
-Colors_None -> None { return ColorWriteChannels.None; };
-Colors_Red -> Red { return ColorWriteChannels.Red; };
-Colors_Green -> Green { return ColorWriteChannels.Green; };
-Colors_Blue -> Blue { return ColorWriteChannels.Blue; };
-Colors_Alpha -> Alpha { return ColorWriteChannels.Alpha; };
-Colors_All -> All { return ColorWriteChannels.All; };
-Colors_Boolean -> Boolean { return ParseTreeTools.ParseBool((string)$Boolean) ?  ColorWriteChannels.All : ColorWriteChannels.None; };
+Colors_None -> None { return ColorWriteChannelsContent.None; };
+Colors_Red -> Red { return ColorWriteChannelsContent.Red; };
+Colors_Green -> Green { return ColorWriteChannelsContent.Green; };
+Colors_Blue -> Blue { return ColorWriteChannelsContent.Blue; };
+Colors_Alpha -> Alpha { return ColorWriteChannelsContent.Alpha; };
+Colors_All -> All { return ColorWriteChannelsContent.All; };
+Colors_Boolean -> Boolean { return ParseTreeTools.ParseBool((string)$Boolean) ?  ColorWriteChannelsContent.All : ColorWriteChannelsContent.None; };
 Colors -> (Colors_Red|Colors_Green|Colors_Blue|Colors_Alpha|Colors_None|Colors_All|Colors_Boolean)
 {
 	return $Colors_Red ?? $Colors_Green ?? $Colors_Blue ?? $Colors_Alpha ?? $Colors_None ?? $Colors_All ?? $Colors_Boolean;
 };
 ColorsMasks -> Colors (Or Colors)? (Or Colors)? (Or Colors)?
 {
-	return	(ColorWriteChannels)($Colors[0] ?? 0) | 
-			(ColorWriteChannels)($Colors[1] ?? 0) | 
-			(ColorWriteChannels)($Colors[2] ?? 0) | 
-			(ColorWriteChannels)($Colors[3] ?? 0);
+	return	(ColorWriteChannelsContent)($Colors[0] ?? 0) | 
+			(ColorWriteChannelsContent)($Colors[1] ?? 0) | 
+			(ColorWriteChannelsContent)($Colors[2] ?? 0) | 
+			(ColorWriteChannelsContent)($Colors[3] ?? 0);
 };
 
-Blend_Zero -> Zero { return Blend.Zero; };
-Blend_One -> One { return Blend.One; };
-Blend_SrcColor -> SrcColor { return Blend.SourceColor; };
-Blend_InvSrcColor -> InvSrcColor { return Blend.InverseSourceColor; };
-Blend_SrcAlpha -> SrcAlpha { return Blend.SourceAlpha; };
-Blend_InvSrcAlpha -> InvSrcAlpha { return Blend.InverseSourceAlpha; };
-Blend_DestAlpha -> DestAlpha { return Blend.DestinationAlpha; };
-Blend_InvDestAlpha -> InvDestAlpha { return Blend.InverseDestinationAlpha; };
-Blend_DestColor -> DestColor { return Blend.DestinationColor; };
-Blend_InvDestColor -> InvDestColor { return Blend.InverseDestinationColor; };
-Blend_SrcAlphaSat -> SrcAlphaSat { return Blend.SourceAlphaSaturation; };
-Blend_BlendFactor -> BlendFactor { return Blend.BlendFactor; };
-Blend_InvBlendFactor -> InvBlendFactor { return Blend.InverseBlendFactor; };
+Blend_Zero -> Zero { return BlendContent.Zero; };
+Blend_One -> One { return BlendContent.One; };
+Blend_SrcColor -> SrcColor { return BlendContent.SourceColor; };
+Blend_InvSrcColor -> InvSrcColor { return BlendContent.InverseSourceColor; };
+Blend_SrcAlpha -> SrcAlpha { return BlendContent.SourceAlpha; };
+Blend_InvSrcAlpha -> InvSrcAlpha { return BlendContent.InverseSourceAlpha; };
+Blend_DestAlpha -> DestAlpha { return BlendContent.DestinationAlpha; };
+Blend_InvDestAlpha -> InvDestAlpha { return BlendContent.InverseDestinationAlpha; };
+Blend_DestColor -> DestColor { return BlendContent.DestinationColor; };
+Blend_InvDestColor -> InvDestColor { return BlendContent.InverseDestinationColor; };
+Blend_SrcAlphaSat -> SrcAlphaSat { return BlendContent.SourceAlphaSaturation; };
+Blend_BlendFactor -> BlendFactor { return BlendContent.BlendFactor; };
+Blend_InvBlendFactor -> InvBlendFactor { return BlendContent.InverseBlendFactor; };
 Blends -> (	Blend_Zero|Blend_One|Blend_SrcColor|Blend_InvSrcColor|Blend_SrcAlpha|Blend_InvSrcAlpha|
 			Blend_DestAlpha|Blend_InvDestAlpha|Blend_DestColor|Blend_InvDestColor|Blend_SrcAlphaSat|
 			Blend_BlendFactor|Blend_InvBlendFactor)
@@ -237,11 +237,11 @@ Blends -> (	Blend_Zero|Blend_One|Blend_SrcColor|Blend_InvSrcColor|Blend_SrcAlpha
 			$Blend_BlendFactor ?? $Blend_InvBlendFactor;
 };
 
-BlendOp_Add -> Add { return BlendFunction.Add; };
-BlendOp_Subtract -> Subtract { return BlendFunction.Subtract; };
-BlendOp_RevSubtract -> RevSubtract { return BlendFunction.ReverseSubtract; };
-BlendOp_Min -> Min { return BlendFunction.Min; };
-BlendOp_Max -> Max { return BlendFunction.Max; };
+BlendOp_Add -> Add { return BlendFunctionContent.Add; };
+BlendOp_Subtract -> Subtract { return BlendFunctionContent.Subtract; };
+BlendOp_RevSubtract -> RevSubtract { return BlendFunctionContent.ReverseSubtract; };
+BlendOp_Min -> Min { return BlendFunctionContent.Min; };
+BlendOp_Max -> Max { return BlendFunctionContent.Max; };
 BlendOps -> (BlendOp_Add|BlendOp_Subtract|BlendOp_RevSubtract|BlendOp_Min|BlendOp_Max)
 {
 	return	$BlendOp_Add ?? $BlendOp_Subtract ?? $BlendOp_RevSubtract ?? $BlendOp_Min ?? $BlendOp_Max;
@@ -260,27 +260,27 @@ CmpFunc -> (CmpFunc_Never|CmpFunc_Less|CmpFunc_Equal|CmpFunc_LessEqual|CmpFunc_G
 	return	$CmpFunc_Never ?? $CmpFunc_Less ?? $CmpFunc_Equal ?? $CmpFunc_LessEqual ?? $CmpFunc_Greater ?? $CmpFunc_NotEqual ?? $CmpFunc_GreaterEqual ?? $CmpFunc_Always;
 };
 
-StencilOp_Keep -> Keep { return StencilOperation.Keep; };
-StencilOp_Zero -> Zero { return StencilOperation.Zero; };
-StencilOp_Replace -> Replace { return StencilOperation.Replace; };
-StencilOp_IncrSat -> IncrSat { return StencilOperation.IncrementSaturation; };
-StencilOp_DecrSat -> DecrSat { return StencilOperation.DecrementSaturation; };
-StencilOp_Invert -> Invert { return StencilOperation.Invert; };
-StencilOp_Incr -> Incr { return StencilOperation.Increment; };
-StencilOp_Decr -> Decr { return StencilOperation.Decrement; };
+StencilOp_Keep -> Keep { return StencilOperationContent.Keep; };
+StencilOp_Zero -> Zero { return StencilOperationContent.Zero; };
+StencilOp_Replace -> Replace { return StencilOperationContent.Replace; };
+StencilOp_IncrSat -> IncrSat { return StencilOperationContent.IncrementSaturation; };
+StencilOp_DecrSat -> DecrSat { return StencilOperationContent.DecrementSaturation; };
+StencilOp_Invert -> Invert { return StencilOperationContent.Invert; };
+StencilOp_Incr -> Incr { return StencilOperationContent.Increment; };
+StencilOp_Decr -> Decr { return StencilOperationContent.Decrement; };
 StencilOp -> (StencilOp_Keep|StencilOp_Zero|StencilOp_Replace|StencilOp_IncrSat|StencilOp_DecrSat|StencilOp_Invert|StencilOp_Incr|StencilOp_Decr)
 {
 	return	$StencilOp_Keep ?? $StencilOp_Zero ?? $StencilOp_Replace ?? $StencilOp_IncrSat ?? $StencilOp_DecrSat ?? $StencilOp_Invert ?? $StencilOp_Incr ?? $StencilOp_Decr;
 };
 
 // Render states
-Render_State_CullMode -> CullMode Equals CullModes Semicolon { (paramlist[0] as PassInfo).CullMode = (CullMode)$CullModes; return null; };
-Render_State_FillMode -> FillMode Equals FillModes Semicolon { (paramlist[0] as PassInfo).FillMode = (FillMode)$FillModes; return null; };
+Render_State_CullMode -> CullMode Equals CullModes Semicolon { (paramlist[0] as PassInfo).CullMode = (CullModeContent)$CullModes; return null; };
+Render_State_FillMode -> FillMode Equals FillModes Semicolon { (paramlist[0] as PassInfo).FillMode = (FillModeContent)$FillModes; return null; };
 Render_State_AlphaBlendEnable -> AlphaBlendEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).AlphaBlendEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
-Render_State_SrcBlend -> SrcBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).SrcBlend = (Blend)$Blends; return null; };
-Render_State_DestBlend -> DestBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).DestBlend = (Blend)$Blends; return null; };
-Render_State_BlendOp -> BlendOp Equals BlendOps Semicolon { (paramlist[0] as PassInfo).BlendOp = (BlendFunction)$BlendOps; return null; };
-Render_State_ColorWriteEnable -> ColorWriteEnable Equals ColorsMasks Semicolon { (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannels)$ColorsMasks; return null; };
+Render_State_SrcBlend -> SrcBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).SrcBlend = (BlendContent)$Blends; return null; };
+Render_State_DestBlend -> DestBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).DestBlend = (BlendContent)$Blends; return null; };
+Render_State_BlendOp -> BlendOp Equals BlendOps Semicolon { (paramlist[0] as PassInfo).BlendOp = (BlendFunctionContent)$BlendOps; return null; };
+Render_State_ColorWriteEnable -> ColorWriteEnable Equals ColorsMasks Semicolon { (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannelsContent)$ColorsMasks; return null; };
 Render_State_DepthBias -> DepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).DepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
 Render_State_SlopeScaleDepthBias -> SlopeScaleDepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).SlopeScaleDepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
 Render_State_ZEnable -> ZEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).ZEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
@@ -289,13 +289,13 @@ Render_State_ZFunc -> ZFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo
 Render_State_MultiSampleAntiAlias -> MultiSampleAntiAlias Equals Boolean Semicolon { (paramlist[0] as PassInfo).MultiSampleAntiAlias = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_ScissorTestEnable -> ScissorTestEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).ScissorTestEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_StencilEnable -> StencilEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).StencilEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
-Render_State_StencilFail -> StencilFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilFail = (StencilOperation)$StencilOp; return null; };
+Render_State_StencilFail -> StencilFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilFail = (StencilOperationContent)$StencilOp; return null; };
 Render_State_StencilFunc -> StencilFunc Equals CmpFunc Semicolon { (paramlist[0] as PassInfo).StencilFunc = (CompareFunctionContent)$CmpFunc; return null; };
 Render_State_StencilMask -> StencilMask Equals Number Semicolon { (paramlist[0] as PassInfo).StencilMask = ParseTreeTools.ParseInt((string)$Number); return null; };
-Render_State_StencilPass -> StencilPass Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilPass = (StencilOperation)$StencilOp; return null; };
+Render_State_StencilPass -> StencilPass Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilPass = (StencilOperationContent)$StencilOp; return null; };
 Render_State_StencilRef -> StencilRef Equals Number Semicolon { (paramlist[0] as PassInfo).StencilRef = ParseTreeTools.ParseInt((string)$Number); return null; };
 Render_State_StencilWriteMask -> StencilWriteMask Equals Number Semicolon { (paramlist[0] as PassInfo).StencilWriteMask = ParseTreeTools.ParseInt((string)$Number); return null; };
-Render_State_StencilZFail -> StencilZFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilZFail = (StencilOperation)$StencilOp; return null; };
+Render_State_StencilZFail -> StencilZFail Equals StencilOp Semicolon { (paramlist[0] as PassInfo).StencilZFail = (StencilOperationContent)$StencilOp; return null; };
 
 
 Render_State_Expression ->	
