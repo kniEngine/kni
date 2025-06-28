@@ -1,7 +1,7 @@
-// MonoGame Effect Parser
+// KNI Effect Parser
 //
 // For use with our fork of the "Tiny Parser Generator"
-// https://github.com/SickheadGames/TinyPG
+// https://github.com/kniEngine/TinyPG
 //
 
 <% @TinyPG Namespace="Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser" Language="C#"%>
