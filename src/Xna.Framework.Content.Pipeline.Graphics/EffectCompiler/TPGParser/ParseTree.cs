@@ -873,7 +873,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_ZFunc(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).DepthBufferFunction = (CompareFunction)this.GetValue(tree, TokenType.CmpFunc, 0); return null;
+            (paramlist[0] as PassInfo).DepthBufferFunction = (CompareFunctionContent)this.GetValue(tree, TokenType.CmpFunc, 0); return null;
         }
 
         protected virtual object EvalRender_State_MultiSampleAntiAlias(ParseTree tree, params object[] paramlist)
@@ -898,7 +898,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_StencilFunc(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).StencilFunc = (CompareFunction)this.GetValue(tree, TokenType.CmpFunc, 0); return null;
+            (paramlist[0] as PassInfo).StencilFunc = (CompareFunctionContent)this.GetValue(tree, TokenType.CmpFunc, 0); return null;
         }
 
         protected virtual object EvalRender_State_StencilMask(ParseTree tree, params object[] paramlist)
