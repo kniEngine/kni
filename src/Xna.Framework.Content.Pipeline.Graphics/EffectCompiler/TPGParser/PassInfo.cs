@@ -70,13 +70,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public CullMode CullMode
+        public CullModeContent CullMode
         {
             set
             {
                 if (rasterizerState == null)
                     rasterizerState = new RasterizerState();
-                rasterizerState.CullMode = value;
+                rasterizerState.CullMode = (CullMode)value;
             }
         }
 
@@ -453,5 +453,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
         /// Draw lines for each primitive.
         /// </summary>
         WireFrame
+    }
+
+
+    /// <summary>
+    /// Defines a culling mode for faces in rasterization process.
+    /// </summary>
+    public enum CullModeContent
+    {
+        /// <summary>
+        /// Do not cull faces.
+        /// </summary>
+        None,
+        /// <summary>
+        /// Cull faces with clockwise order.
+        /// </summary>
+        CullClockwiseFace,
+        /// <summary>
+        /// Cull faces with counter clockwise order.
+        /// </summary>
+        CullCounterClockwiseFace
     }
 }

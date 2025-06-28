@@ -558,17 +558,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalCullMode_None(ParseTree tree, params object[] paramlist)
         {
-            return CullMode.None;
+            return CullModeContent.None;
         }
 
         protected virtual object EvalCullMode_Cw(ParseTree tree, params object[] paramlist)
         {
-            return CullMode.CullClockwiseFace;
+            return CullModeContent.CullClockwiseFace;
         }
 
         protected virtual object EvalCullMode_Ccw(ParseTree tree, params object[] paramlist)
         {
-            return CullMode.CullCounterClockwiseFace;
+            return CullModeContent.CullCounterClockwiseFace;
         }
 
         protected virtual object EvalCullModes(ParseTree tree, params object[] paramlist)
@@ -818,7 +818,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_CullMode(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).CullMode = (CullMode)this.GetValue(tree, TokenType.CullModes, 0); return null;
+            (paramlist[0] as PassInfo).CullMode = (CullModeContent)this.GetValue(tree, TokenType.CullModes, 0); return null;
         }
 
         protected virtual object EvalRender_State_FillMode(ParseTree tree, params object[] paramlist)
