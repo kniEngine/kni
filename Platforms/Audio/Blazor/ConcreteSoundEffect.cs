@@ -61,10 +61,7 @@ namespace Microsoft.Xna.Platform.Audio
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
 
                     {
-                        //InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
-                        buffer = AudioLoader.ConvertFloatTo16(buffer, bufferOffset, bufferSize);
-                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
-
+                        InitializeIeeeFloat(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                     }
                     break;
                 case AudioLoader.FormatMsAdpcm:
@@ -119,6 +116,12 @@ namespace Microsoft.Xna.Platform.Audio
                     }
                     break;
 
+                case FormatIeee:
+                    {
+                        this.InitializeIeeeFloat(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+                    }
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
@@ -152,6 +155,47 @@ namespace Microsoft.Xna.Platform.Audio
                                 for (int i = 0; i < loopLength; i++)
                                 {
                                     dest[i] = (float)pBuffer16[i * numOfChannels] / (float)short.MaxValue;
+                                }
+                                _audioBuffer.CopyToChannel(dest, c);
+                            }                           
+                            break;
+
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }
+            }
+
+        }
+
+        public void InitializeIeeeFloat(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
+        {
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
+
+            if (index != 0)
+                throw new NotImplementedException();
+            if (loopStart != 0)
+                throw new NotImplementedException();
+
+            int numOfChannels = (int)channels;
+            
+            _audioBuffer = concreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
+
+            // set data for each channel.
+            unsafe
+            {
+                fixed (void* pBuffer = buffer)
+                {
+                    switch (sampleBits)
+                    {
+                        case 32:
+                            float* pBuffer32f = (float*)pBuffer;
+                            float[] dest = new float[loopLength];
+                            for (int c = 0; c < numOfChannels; c++)
+                            {
+                                for (int i = 0; i < loopLength; i++)
+                                {
+                                    dest[i] = pBuffer32f[i * numOfChannels];
                                 }
                                 _audioBuffer.CopyToChannel(dest, c);
                             }                           
