@@ -543,12 +543,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalFillMode_Solid(ParseTree tree, params object[] paramlist)
         {
-            return FillMode.Solid;
+            return FillModeContent.Solid;
         }
 
         protected virtual object EvalFillMode_WireFrame(ParseTree tree, params object[] paramlist)
         {
-            return FillMode.WireFrame;
+            return FillModeContent.WireFrame;
         }
 
         protected virtual object EvalFillModes(ParseTree tree, params object[] paramlist)
@@ -823,7 +823,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_FillMode(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).FillMode = (FillMode)this.GetValue(tree, TokenType.FillModes, 0); return null;
+            (paramlist[0] as PassInfo).FillMode = (FillModeContent)this.GetValue(tree, TokenType.FillModes, 0); return null;
         }
 
         protected virtual object EvalRender_State_AlphaBlendEnable(ParseTree tree, params object[] paramlist)

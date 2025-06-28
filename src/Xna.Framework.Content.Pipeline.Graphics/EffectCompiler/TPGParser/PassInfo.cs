@@ -60,13 +60,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public FillMode FillMode
+        public FillModeContent FillMode
         {
             set
             {
                 if (rasterizerState == null)
                     rasterizerState = new RasterizerState();
-                rasterizerState.FillMode = value;             
+                rasterizerState.FillMode = (FillMode)value;             
             }
         }
 
@@ -438,5 +438,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
         /// All channels selected.
         /// </summary>
         All = 15
+    }
+
+    /// <summary>
+    /// Defines options for filling the primitive.
+    /// </summary>
+    public enum FillModeContent
+    {
+        /// <summary>
+        /// Draw solid faces for each primitive.
+        /// </summary>
+        Solid,
+        /// <summary>
+        /// Draw lines for each primitive.
+        /// </summary>
+        WireFrame
     }
 }

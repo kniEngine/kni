@@ -181,8 +181,8 @@ Technique_Declaration -> Technique Identifier? OpenBracket Pass_Declaration+ Clo
    return null;
 };
 
-FillMode_Solid -> Solid { return FillMode.Solid; };
-FillMode_WireFrame -> WireFrame { return FillMode.WireFrame; };
+FillMode_Solid -> Solid { return FillModeContent.Solid; };
+FillMode_WireFrame -> WireFrame { return FillModeContent.WireFrame; };
 FillModes -> (FillMode_Solid|FillMode_WireFrame)
 {
 	return $FillMode_Solid ?? $FillMode_WireFrame;
@@ -275,7 +275,7 @@ StencilOp -> (StencilOp_Keep|StencilOp_Zero|StencilOp_Replace|StencilOp_IncrSat|
 
 // Render states
 Render_State_CullMode -> CullMode Equals CullModes Semicolon { (paramlist[0] as PassInfo).CullMode = (CullMode)$CullModes; return null; };
-Render_State_FillMode -> FillMode Equals FillModes Semicolon { (paramlist[0] as PassInfo).FillMode = (FillMode)$FillModes; return null; };
+Render_State_FillMode -> FillMode Equals FillModes Semicolon { (paramlist[0] as PassInfo).FillMode = (FillModeContent)$FillModes; return null; };
 Render_State_AlphaBlendEnable -> AlphaBlendEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).AlphaBlendEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_SrcBlend -> SrcBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).SrcBlend = (BlendContent)$Blends; return null; };
 Render_State_DestBlend -> DestBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).DestBlend = (BlendContent)$Blends; return null; };
