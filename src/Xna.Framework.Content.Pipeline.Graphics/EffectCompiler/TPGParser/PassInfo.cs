@@ -100,13 +100,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public CompareFunction DepthBufferFunction
+        public CompareFunctionContent DepthBufferFunction
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.DepthBufferFunction = value;
+                depthStencilState.DepthBufferFunction = (CompareFunction)value;
             }
         }
 
@@ -150,13 +150,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public CompareFunction StencilFunc
+        public CompareFunctionContent StencilFunc
         {
             set
             {
                 if (depthStencilState == null)
                     depthStencilState = new DepthStencilState();
-                depthStencilState.StencilFunction = value;
+                depthStencilState.StencilFunction = (CompareFunction)value;
             }
         }
 
