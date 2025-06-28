@@ -18,7 +18,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal ConcreteAudioService()
         {
-            Context = new AudioContext();
+            // Hardcode sample rate to 44,100Hz for now.
+            Context = new AudioContext(sampleRate: 44_100);
         }
 
         public override SoundEffectInstanceStrategy CreateSoundEffectInstanceStrategy(SoundEffectStrategy sfxStrategy)
