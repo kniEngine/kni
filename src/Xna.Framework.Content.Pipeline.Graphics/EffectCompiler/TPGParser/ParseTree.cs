@@ -698,27 +698,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalBlendOp_Add(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Add;
+            return BlendFunctionContent.Add;
         }
 
         protected virtual object EvalBlendOp_Subtract(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Subtract;
+            return BlendFunctionContent.Subtract;
         }
 
         protected virtual object EvalBlendOp_RevSubtract(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.ReverseSubtract;
+            return BlendFunctionContent.ReverseSubtract;
         }
 
         protected virtual object EvalBlendOp_Min(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Min;
+            return BlendFunctionContent.Min;
         }
 
         protected virtual object EvalBlendOp_Max(ParseTree tree, params object[] paramlist)
         {
-            return BlendFunction.Max;
+            return BlendFunctionContent.Max;
         }
 
         protected virtual object EvalBlendOps(ParseTree tree, params object[] paramlist)
@@ -843,7 +843,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_BlendOp(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).BlendOp = (BlendFunction)this.GetValue(tree, TokenType.BlendOps, 0); return null;
+            (paramlist[0] as PassInfo).BlendOp = (BlendFunctionContent)this.GetValue(tree, TokenType.BlendOps, 0); return null;
         }
 
         protected virtual object EvalRender_State_ColorWriteEnable(ParseTree tree, params object[] paramlist)

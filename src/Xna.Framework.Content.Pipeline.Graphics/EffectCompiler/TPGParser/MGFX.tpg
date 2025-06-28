@@ -237,11 +237,11 @@ Blends -> (	Blend_Zero|Blend_One|Blend_SrcColor|Blend_InvSrcColor|Blend_SrcAlpha
 			$Blend_BlendFactor ?? $Blend_InvBlendFactor;
 };
 
-BlendOp_Add -> Add { return BlendFunction.Add; };
-BlendOp_Subtract -> Subtract { return BlendFunction.Subtract; };
-BlendOp_RevSubtract -> RevSubtract { return BlendFunction.ReverseSubtract; };
-BlendOp_Min -> Min { return BlendFunction.Min; };
-BlendOp_Max -> Max { return BlendFunction.Max; };
+BlendOp_Add -> Add { return BlendFunctionContent.Add; };
+BlendOp_Subtract -> Subtract { return BlendFunctionContent.Subtract; };
+BlendOp_RevSubtract -> RevSubtract { return BlendFunctionContent.ReverseSubtract; };
+BlendOp_Min -> Min { return BlendFunctionContent.Min; };
+BlendOp_Max -> Max { return BlendFunctionContent.Max; };
 BlendOps -> (BlendOp_Add|BlendOp_Subtract|BlendOp_RevSubtract|BlendOp_Min|BlendOp_Max)
 {
 	return	$BlendOp_Add ?? $BlendOp_Subtract ?? $BlendOp_RevSubtract ?? $BlendOp_Min ?? $BlendOp_Max;
@@ -279,7 +279,7 @@ Render_State_FillMode -> FillMode Equals FillModes Semicolon { (paramlist[0] as 
 Render_State_AlphaBlendEnable -> AlphaBlendEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).AlphaBlendEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };
 Render_State_SrcBlend -> SrcBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).SrcBlend = (BlendContent)$Blends; return null; };
 Render_State_DestBlend -> DestBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).DestBlend = (BlendContent)$Blends; return null; };
-Render_State_BlendOp -> BlendOp Equals BlendOps Semicolon { (paramlist[0] as PassInfo).BlendOp = (BlendFunction)$BlendOps; return null; };
+Render_State_BlendOp -> BlendOp Equals BlendOps Semicolon { (paramlist[0] as PassInfo).BlendOp = (BlendFunctionContent)$BlendOps; return null; };
 Render_State_ColorWriteEnable -> ColorWriteEnable Equals ColorsMasks Semicolon { (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannels)$ColorsMasks; return null; };
 Render_State_DepthBias -> DepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).DepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
 Render_State_SlopeScaleDepthBias -> SlopeScaleDepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).SlopeScaleDepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
