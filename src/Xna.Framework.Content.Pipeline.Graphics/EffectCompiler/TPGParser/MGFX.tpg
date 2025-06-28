@@ -196,23 +196,23 @@ CullModes -> (CullMode_None|CullMode_Cw|CullMode_Ccw)
 	return $CullMode_None ?? $CullMode_Cw ?? $CullMode_Ccw;
 };
 
-Colors_None -> None { return ColorWriteChannels.None; };
-Colors_Red -> Red { return ColorWriteChannels.Red; };
-Colors_Green -> Green { return ColorWriteChannels.Green; };
-Colors_Blue -> Blue { return ColorWriteChannels.Blue; };
-Colors_Alpha -> Alpha { return ColorWriteChannels.Alpha; };
-Colors_All -> All { return ColorWriteChannels.All; };
-Colors_Boolean -> Boolean { return ParseTreeTools.ParseBool((string)$Boolean) ?  ColorWriteChannels.All : ColorWriteChannels.None; };
+Colors_None -> None { return ColorWriteChannelsContent.None; };
+Colors_Red -> Red { return ColorWriteChannelsContent.Red; };
+Colors_Green -> Green { return ColorWriteChannelsContent.Green; };
+Colors_Blue -> Blue { return ColorWriteChannelsContent.Blue; };
+Colors_Alpha -> Alpha { return ColorWriteChannelsContent.Alpha; };
+Colors_All -> All { return ColorWriteChannelsContent.All; };
+Colors_Boolean -> Boolean { return ParseTreeTools.ParseBool((string)$Boolean) ?  ColorWriteChannelsContent.All : ColorWriteChannelsContent.None; };
 Colors -> (Colors_Red|Colors_Green|Colors_Blue|Colors_Alpha|Colors_None|Colors_All|Colors_Boolean)
 {
 	return $Colors_Red ?? $Colors_Green ?? $Colors_Blue ?? $Colors_Alpha ?? $Colors_None ?? $Colors_All ?? $Colors_Boolean;
 };
 ColorsMasks -> Colors (Or Colors)? (Or Colors)? (Or Colors)?
 {
-	return	(ColorWriteChannels)($Colors[0] ?? 0) | 
-			(ColorWriteChannels)($Colors[1] ?? 0) | 
-			(ColorWriteChannels)($Colors[2] ?? 0) | 
-			(ColorWriteChannels)($Colors[3] ?? 0);
+	return	(ColorWriteChannelsContent)($Colors[0] ?? 0) | 
+			(ColorWriteChannelsContent)($Colors[1] ?? 0) | 
+			(ColorWriteChannelsContent)($Colors[2] ?? 0) | 
+			(ColorWriteChannelsContent)($Colors[3] ?? 0);
 };
 
 Blend_Zero -> Zero { return BlendContent.Zero; };
@@ -280,7 +280,7 @@ Render_State_AlphaBlendEnable -> AlphaBlendEnable Equals Boolean Semicolon { (pa
 Render_State_SrcBlend -> SrcBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).SrcBlend = (BlendContent)$Blends; return null; };
 Render_State_DestBlend -> DestBlend Equals Blends Semicolon { (paramlist[0] as PassInfo).DestBlend = (BlendContent)$Blends; return null; };
 Render_State_BlendOp -> BlendOp Equals BlendOps Semicolon { (paramlist[0] as PassInfo).BlendOp = (BlendFunctionContent)$BlendOps; return null; };
-Render_State_ColorWriteEnable -> ColorWriteEnable Equals ColorsMasks Semicolon { (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannels)$ColorsMasks; return null; };
+Render_State_ColorWriteEnable -> ColorWriteEnable Equals ColorsMasks Semicolon { (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannelsContent)$ColorsMasks; return null; };
 Render_State_DepthBias -> DepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).DepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
 Render_State_SlopeScaleDepthBias -> SlopeScaleDepthBias Equals Number Semicolon { (paramlist[0] as PassInfo).SlopeScaleDepthBias = ParseTreeTools.ParseFloat((string)$Number); return null; };
 Render_State_ZEnable -> ZEnable Equals Boolean Semicolon { (paramlist[0] as PassInfo).ZEnable = ParseTreeTools.ParseBool((string)$Boolean); return null; };

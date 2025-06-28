@@ -242,13 +242,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
         }
 
-        public ColorWriteChannels ColorWriteEnable
+        public ColorWriteChannelsContent ColorWriteEnable
         {
             set
             {
                 if (blendState == null)
                     blendState = new BlendState();
-                blendState.ColorWriteChannels = value;
+                blendState.ColorWriteChannels = (ColorWriteChannels)value;
             }    
         }
 
@@ -406,5 +406,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
         /// The function will extracts maximum of the source and destination. max((srcColor * srcBlend),(destColor * destBlend))
         /// </summary>
         Max
+    }
+
+    /// <summary>
+    /// Defines the color channels for render target blending operations.
+    /// </summary>
+    [Flags]
+    public enum ColorWriteChannelsContent
+    {
+        /// <summary>
+        /// No channels selected.
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Red channel selected.
+        /// </summary>
+        Red = 1,
+        /// <summary>
+        /// Green channel selected.
+        /// </summary>
+        Green = 2,
+        /// <summary>
+        /// Blue channel selected.
+        /// </summary>
+        Blue = 4,
+        /// <summary>
+        /// Alpha channel selected.
+        /// </summary>
+        Alpha = 8,
+        /// <summary>
+        /// All channels selected.
+        /// </summary>
+        All = 15
     }
 }

@@ -578,37 +578,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalColors_None(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.None;
+            return ColorWriteChannelsContent.None;
         }
 
         protected virtual object EvalColors_Red(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Red;
+            return ColorWriteChannelsContent.Red;
         }
 
         protected virtual object EvalColors_Green(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Green;
+            return ColorWriteChannelsContent.Green;
         }
 
         protected virtual object EvalColors_Blue(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Blue;
+            return ColorWriteChannelsContent.Blue;
         }
 
         protected virtual object EvalColors_Alpha(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.Alpha;
+            return ColorWriteChannelsContent.Alpha;
         }
 
         protected virtual object EvalColors_All(ParseTree tree, params object[] paramlist)
         {
-            return ColorWriteChannels.All;
+            return ColorWriteChannelsContent.All;
         }
 
         protected virtual object EvalColors_Boolean(ParseTree tree, params object[] paramlist)
         {
-            return ParseTreeTools.ParseBool((string)this.GetValue(tree, TokenType.Boolean, 0)) ?  ColorWriteChannels.All : ColorWriteChannels.None;
+            return ParseTreeTools.ParseBool((string)this.GetValue(tree, TokenType.Boolean, 0)) ?  ColorWriteChannelsContent.All : ColorWriteChannelsContent.None;
         }
 
         protected virtual object EvalColors(ParseTree tree, params object[] paramlist)
@@ -618,10 +618,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalColorsMasks(ParseTree tree, params object[] paramlist)
         {
-            return	(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 0) ?? 0) | 
-        			(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 1) ?? 0) | 
-        			(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 2) ?? 0) | 
-        			(ColorWriteChannels)(this.GetValue(tree, TokenType.Colors, 3) ?? 0);
+            return	(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 0) ?? 0) | 
+        			(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 1) ?? 0) | 
+        			(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 2) ?? 0) | 
+        			(ColorWriteChannelsContent)(this.GetValue(tree, TokenType.Colors, 3) ?? 0);
         }
 
         protected virtual object EvalBlend_Zero(ParseTree tree, params object[] paramlist)
@@ -848,7 +848,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
         protected virtual object EvalRender_State_ColorWriteEnable(ParseTree tree, params object[] paramlist)
         {
-            (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannels)this.GetValue(tree, TokenType.ColorsMasks, 0); return null;
+            (paramlist[0] as PassInfo).ColorWriteEnable = (ColorWriteChannelsContent)this.GetValue(tree, TokenType.ColorsMasks, 0); return null;
         }
 
         protected virtual object EvalRender_State_DepthBias(ParseTree tree, params object[] paramlist)
