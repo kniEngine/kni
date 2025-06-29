@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.Audio;
-using Microsoft.Xna.Framework.Content.Pipeline.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -61,7 +60,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (quality != finalQuality)
                 context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", quality, finalQuality);
 
-            return new SoundEffectContent(input.Format.NativeWaveFormat.ToArray(), input.Data.ToArray(), input.LoopStart, input.LoopLength, (int)input.Duration.TotalMilliseconds);
+            return new SoundEffectContent(input.Format.RawNativeWaveFormat, input.RawData, input.LoopStart, input.LoopLength, (int)input.Duration.TotalMilliseconds);
         }
     }
 }
