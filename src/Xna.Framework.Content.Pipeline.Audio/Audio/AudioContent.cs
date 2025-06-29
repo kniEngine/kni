@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                 audioFileName = Path.GetFullPath(audioFileName);
 
                 // Use probe to get the details of the file.
-                DefaultAudioProfile.ProbeFormat(audioFileName, out _fileType, out _format, out _duration, out _loopStart, out _loopLength);
+                AudioProfile.ProbeFormat(audioFileName, out _fileType, out _format, out _duration, out _loopStart, out _loopLength);
 
                 // Looks like XNA only cares about type mismatch when
                 // the type is WAV... else it is ok.
@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                     }
 
                     AudioFormat riffAudioFormat;
-                    var stripped = DefaultAudioProfile.StripRiffWaveHeader(rawData, out riffAudioFormat);
+                    byte[] stripped = AudioProfile.StripRiffWaveHeader(rawData, out riffAudioFormat);
 
                     if (riffAudioFormat != null)
                     {
@@ -150,8 +150,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         /// </param>
         public void ConvertFormat(ConversionFormat formatType, ConversionQuality quality, string saveToFile)
         {
-            // Call the legacy conversion code.
-            DefaultAudioProfile.ConvertToFormat(this, formatType, quality, saveToFile);
+            //TODO: inline AudioProfile.ConvertFormat(...)
+            AudioProfile.ConvertFormat(this, formatType, quality, saveToFile);
         }
 
         public void SetData(byte[] data, AudioFormat format, TimeSpan duration, int loopStart, int loopLength)

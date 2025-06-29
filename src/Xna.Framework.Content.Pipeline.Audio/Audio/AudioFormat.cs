@@ -80,14 +80,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
             this.format = format;
             this.sampleRate = sampleRate;
 
-            this.nativeWaveFormat = this.ConstructNativeWaveFormat();
+            this.nativeWaveFormat = this.ConstructNativeWaveFormat().ToList();
         }
 
-        private List<byte> ConstructNativeWaveFormat()
+        private byte[] ConstructNativeWaveFormat()
         {
-            using (var memory = new MemoryStream())
+            using (MemoryStream memory = new MemoryStream())
             {
-                using (var writer = new BinaryWriter(memory))
+                using (BinaryWriter writer = new BinaryWriter(memory))
                 {
                     writer.Write((short)this.format);
                     writer.Write((short)this.channelCount);
@@ -97,10 +97,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                     writer.Write((short)this.bitsPerSample);
                     writer.Write((short)0);
 
-                    var bytes = new byte[memory.Position];
+                    byte[] bytes = new byte[memory.Position];
                     memory.Seek(0, SeekOrigin.Begin);
                     memory.Read(bytes, 0, bytes.Length);
-                    return bytes.ToList();
+                    return bytes;
                 }
             }
         }

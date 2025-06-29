@@ -5,7 +5,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 {
@@ -14,11 +13,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     /// </summary>
     public sealed class SoundEffectContent
     {
-        internal byte[] format;
-        internal byte[] data;
-        internal int loopStart;
-        internal int loopLength;
-        internal int duration;
+        internal byte[] _format;
+        internal byte[] _data;
+        internal int _loopStart;
+        internal int _loopLength;
+        internal int _duration;
 
         /// <summary>
         /// Initializes a new instance of the SoundEffectContent class.
@@ -28,13 +27,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// <param name="loopStart">The start of the loop segment (must be block aligned).</param>
         /// <param name="loopLength">The length of the loop segment (must be block aligned).</param>
         /// <param name="duration">The duration of the wave file in milliseconds.</param>
-        internal SoundEffectContent(IEnumerable<byte> format, IEnumerable<byte> data, int loopStart, int loopLength, int duration)
+        internal SoundEffectContent(byte[] format, byte[] data, int loopStart, int loopLength, int duration)
         {
-            this.format = format.ToArray();
-            this.data = data.ToArray();
-            this.loopStart = loopStart;
-            this.loopLength = loopLength;
-            this.duration = duration;
+            this._format = format;
+            this._data = data;
+            this._loopStart = loopStart;
+            this._loopLength = loopLength;
+            this._duration = duration;
         }
     }
 }
