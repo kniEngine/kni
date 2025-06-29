@@ -199,6 +199,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			SAMPLERCUBE,
 			PIXELSHADER,
 			VERTEXSHADER,
+			COMPUTESHADER,
 			PIXELFRAGMENT,
 			VERTEXFRAGMENT,
 			UNSUPPORTED,
@@ -240,6 +241,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 		    TRANSFORM,
 		    VERTEXSHADER,
 		    SHADERCONST,
+		    COMPUTESHADER,
 		    UNKNOWN,
 		};
 
@@ -532,6 +534,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 			new state_info(STATE_CLASS.VERTEXSHADER, 0, "Vertexshader"),
 			/* Pixelshader */
 			new state_info(STATE_CLASS.PIXELSHADER, 0, "Pixelshader"),
+            /* ComputerShader */
+            new state_info(STATE_CLASS.COMPUTESHADER, 0, "ComputeShader"),
 			/* Shader constants */
 			new state_info(STATE_CLASS.SHADERCONST, (uint)SHADER_CONSTANT_TYPE.VSFLOAT, "VertexShaderConstantF"),
 			new state_info(STATE_CLASS.SHADERCONST, (uint)SHADER_CONSTANT_TYPE.VSBOOL, "VertexShaderConstantB"),

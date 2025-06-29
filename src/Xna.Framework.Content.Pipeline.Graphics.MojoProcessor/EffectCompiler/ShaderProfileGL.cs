@@ -59,6 +59,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 if (shaderVersion.Major > MojoMaxShaderVersion)
                     throw new Exception(String.Format("Invalid profile '{0}'. Pixel shader '{1}' must be SM 3.0 or lower.", shaderModel, shaderFunction));
             }
+
+            if (shaderStage == ShaderStage.Compute)
+            {
+                if (shaderVersion.Major == -1)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Compute shader '{1}'.", shaderModel, shaderFunction));
+                if (shaderVersion.Major < 5)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Compute shader '{1}' must be at least SM 5.0.", shaderModel, shaderFunction));
+                if (shaderVersion.Major > MojoMaxShaderVersion)
+                    throw new Exception(String.Format("Invalid profile '{0}'. Compute shader '{1}' must be SM 3.0 or lower.", shaderModel, shaderFunction));
+            }
         }
 
         internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
