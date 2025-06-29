@@ -19,11 +19,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         private bool _isDisposed;
         private readonly string _fileName;
         private readonly AudioFileType _fileType;
-        private ReadOnlyCollection<byte> _data;
+        private byte[] _data; 
         private TimeSpan _duration;
         private AudioFormat _format;
         private int _loopStart;
         private int _loopLength;
+
+        private ReadOnlyCollection<byte> _readOnlyData;
 
         /// <summary>
         /// The name of the original source audio file.
@@ -47,10 +49,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         {
             get
             {
-                if (_isDisposed || _data == null)                
+                if (_isDisposed || _data == null)
                     throw new InvalidContentException("Could not read the audio data from file \"" + Path.GetFileName(_fileName) + "\".");
-                return _data;
+
+                if (_readOnlyData == null)
+                    _readOnlyData = new ReadOnlyCollection<byte>(_data);
+
+                return _readOnlyData;
             }
+        }
+
+        internal byte[] RawData
+        {
+            get { return _data; }
         }
 
         /// <summary>
@@ -128,7 +139,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
                             throw new InvalidOperationException("Probed sample rate does not match RIFF: " + _format.SampleRate + ", " + riffAudioFormat.SampleRate);
                     }
 
-                    _data = Array.AsReadOnly(stripped);
+                    _data = stripped;
                 }
             }
             catch (Exception ex)
@@ -161,7 +172,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
             if (format == null)
                 throw new ArgumentNullException("format");
 
-            _data = Array.AsReadOnly(data);
+            _data = data;
             _format = format;
             _duration = duration;
             _loopStart = loopStart;
@@ -171,6 +182,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         public void Dispose()
         {
             _data = null;
+            _readOnlyData = null;
 
             _isDisposed = true;
         }

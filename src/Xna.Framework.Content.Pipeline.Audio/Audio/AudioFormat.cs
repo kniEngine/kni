@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         int blockAlign;
         int channelCount;
         int format;
-        List<byte> nativeWaveFormat;
+        byte[] nativeWaveFormat;
         int sampleRate;
 
         /// <summary>
@@ -57,7 +57,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
         /// Gets the raw byte buffer for the format. For non-PCM formats, this buffer contains important format-specific information beyond the basic format information exposed in other properties of the AudioFormat type.
         /// </summary>
         /// <value>The raw byte buffer represented in a collection.</value>
-        public ReadOnlyCollection<byte> NativeWaveFormat { get { return nativeWaveFormat.AsReadOnly(); } }
+        public ReadOnlyCollection<byte> NativeWaveFormat { get { return new ReadOnlyCollection<byte>(nativeWaveFormat); } }
+
+        internal byte[] RawNativeWaveFormat { get { return nativeWaveFormat; } }
 
         /// <summary>
         /// Gets the sample rate of the audio content.
@@ -80,7 +82,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Audio
             this.format = format;
             this.sampleRate = sampleRate;
 
-            this.nativeWaveFormat = this.ConstructNativeWaveFormat().ToList();
+            this.nativeWaveFormat = this.ConstructNativeWaveFormat();
         }
 
         private byte[] ConstructNativeWaveFormat()
