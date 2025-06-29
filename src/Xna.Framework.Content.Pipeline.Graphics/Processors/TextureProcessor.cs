@@ -107,9 +107,65 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     input.ConvertBitmapType(originalType);
             }
 
-            // Get the texture profile for the platform and let it convert the texture.
-            var texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
-            texProfile.ConvertTexture(context, input, TextureFormat, false);	
+            try
+            {
+                TextureProcessorOutputFormat textureFormat = GraphicsUtil.GetTextureFormatForPlatform(TextureFormat, context.TargetPlatform);
+
+                switch (textureFormat)
+                {
+                    case TextureProcessorOutputFormat.NoChange:
+                        // We do nothing in this case.
+                        break;
+                    case TextureProcessorOutputFormat.Color:
+                        // If this is color just make sure the format is right and return it.
+                        input.ConvertBitmapType(typeof(PixelBitmapContent<Color>));
+                        break;
+                    case TextureProcessorOutputFormat.Color16Bit:
+                        // Handle this common compression format.
+                        GraphicsUtil.CompressColor16Bit(input);
+                        break;
+
+                    case TextureProcessorOutputFormat.AtcCompressed:
+                        {
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressAti(input);
+                        }
+                        break;
+                    case TextureProcessorOutputFormat.DxtCompressed:
+                        {
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressDxt(input, context);
+                        }
+                        break;
+                    case TextureProcessorOutputFormat.Etc1Compressed:
+                        {
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressEtc1(input, context);
+                        }
+                        break;
+                    case TextureProcessorOutputFormat.PvrCompressed:
+                        {
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressPvrtc(input, context);
+                        }
+                        break;
+                }
+            }
+            catch (EntryPointNotFoundException ex)
+            {
+                context.Logger.LogImportantMessage("Could not find the entry point to compress the texture. " + ex.ToString());
+                throw;
+            }
+            catch (DllNotFoundException ex)
+            {
+                context.Logger.LogImportantMessage("Could not compress texture. Required shared lib is missing. " + ex.ToString());
+                throw;
+            }
+            catch (Exception ex)
+            {
+                context.Logger.LogImportantMessage("Could not convert texture. " + ex.ToString());
+                throw;
+            }
 
             return input;
         }

@@ -61,12 +61,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             foreach (FontGlyph glyph in glyphs.Values)
                 output.VerticalLineSpacing = Math.Max(output.VerticalLineSpacing, glyph.Subrect.Height);
 
-            // Get the platform specific texture profile.
-            TextureProfile texProfile = TextureProfile.ForPlatform(context.TargetPlatform);
-
             // We need to know how to pack the glyphs.
-            bool requiresPot, requiresSquare;
-            texProfile.Requirements(context, TextureFormat, out requiresPot, out requiresSquare);
+            TextureProcessorOutputFormat format = TextureFormat;
+            if (format == TextureProcessorOutputFormat.Compressed)
+                format = GraphicsUtil.GetTextureFormatForPlatform(format, context.TargetPlatform);
+            bool requiresPot = GraphicsUtil.RequiresPowerOfTwo(format, context.TargetPlatform, context.TargetProfile);
+            bool requiresSquare = GraphicsUtil.RequiresSquare(format, context.TargetPlatform);
 
             BitmapContent glyphAtlas = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
 
@@ -95,7 +95,73 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             output.Texture.Faces[0].Add(glyphAtlas);
 
             // Perform the final texture conversion.
-            texProfile.ConvertTexture(context, output.Texture, TextureFormat, true);
+            try
+            {
+                TextureProcessorOutputFormat textureFormat = GraphicsUtil.GetTextureFormatForPlatform(TextureFormat, context.TargetPlatform);
+
+                switch (textureFormat)
+                {
+                    case TextureProcessorOutputFormat.NoChange:
+                        // We do nothing in this case.
+                        break;
+                    case TextureProcessorOutputFormat.Color:
+                        // If this is color just make sure the format is right and return it.
+                        input.ConvertBitmapType(typeof(PixelBitmapContent<Color>));
+                        break;
+                    case TextureProcessorOutputFormat.Color16Bit:
+                        // Handle this common compression format.
+                        GraphicsUtil.CompressColor16Bit(input);
+                        break;
+
+                    case TextureProcessorOutputFormat.AtcCompressed:
+                        {
+                            // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressColor16Bit(input);
+                            //GraphicsUtil.CompressAti(input);
+                        }
+                        break;
+                    case TextureProcessorOutputFormat.DxtCompressed:
+                        {
+                            // Compress the greyscale font texture page using a specially-formulated DXT3 mode
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressFontDXT3(input, context);
+                            //GraphicsUtil.CompressDxt(input, context);
+                        }
+                        break;
+                    case TextureProcessorOutputFormat.Etc1Compressed:
+                        {
+                            // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressColor16Bit(input);
+                            //GraphicsUtil.CompressEtc1(input, context);
+                        }
+                        break;
+                    case TextureProcessorOutputFormat.PvrCompressed:
+                        {
+                            // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
+                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressColor16Bit(input);
+                            //GraphicsUtil.CompressPvrtc(input, context);
+                        }
+                        break;
+                }
+            }
+            catch (EntryPointNotFoundException ex)
+            {
+                context.Logger.LogImportantMessage("Could not find the entry point to compress the texture. " + ex.ToString());
+                throw ex;
+            }
+            catch (DllNotFoundException ex)
+            {
+                context.Logger.LogImportantMessage("Could not compress texture. Required shared lib is missing. " + ex.ToString());
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                context.Logger.LogImportantMessage("Could not convert texture. " + ex.ToString());
+                throw ex;
+            }
 
             return output;
         }

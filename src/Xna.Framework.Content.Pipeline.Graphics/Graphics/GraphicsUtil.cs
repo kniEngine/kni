@@ -8,6 +8,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using FreeImageAPI;
+using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
@@ -158,50 +159,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
         }
 
-        public static void CompressPvrtc(ContentProcessorContext context, TextureContent content, bool isSpriteFont)
+        public static void CompressPvrtc(TextureContent input, ContentProcessorContext context)
         {
-            // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
-            if (isSpriteFont)
-            {
-                CompressColor16Bit(context, content);
-                return;
-            }
-
             // Calculate number of mip levels
-            var width = content.Faces[0][0].Height;
-            var height = content.Faces[0][0].Width;
+            var width = input.Faces[0][0].Height;
+            var height = input.Faces[0][0].Width;
 
 			if (!IsPowerOfTwo(width) || !IsPowerOfTwo(height) || (width != height))
             {
-                context.Logger.LogWarning(null, content.Identity, "PVR compression requires width and height to be powers of two and equal. Falling back to 16-bit color.");
-                CompressColor16Bit(context, content);
+                context.Logger.LogWarning(null, input.Identity, "PVR compression requires width and height to be powers of two and equal. Falling back to 16-bit color.");
+                GraphicsUtil.CompressColor16Bit(input);
                 return;
             }
 
-            var face = content.Faces[0][0];
+            BitmapContent face = input.Faces[0][0];
 
             AlphaRange alphaRange = CalculateAlphaRange(face);
 
             if (alphaRange == AlphaRange.Opaque)
-                content.ConvertBitmapType(typeof(PvrtcRgb4BitmapContent));
+                input.ConvertBitmapType(typeof(PvrtcRgb4BitmapContent));
             else
-                content.ConvertBitmapType(typeof(PvrtcRgba4BitmapContent));
+                input.ConvertBitmapType(typeof(PvrtcRgba4BitmapContent));
         }
 
-        public static void CompressDxt(ContentProcessorContext context, TextureContent content, bool isSpriteFont)
+        public static void CompressDxt(TextureContent input, ContentProcessorContext context)
         {
-            var face = content.Faces[0][0];
+            BitmapContent face = input.Faces[0][0];
 
             if (context.TargetProfile == GraphicsProfile.Reach)
             {
                 if (!IsPowerOfTwo(face.Width) || !IsPowerOfTwo(face.Height))
                     throw new PipelineException("DXT compression requires width and height must be powers of two in Reach graphics profile.");                
-            }
-
-            if (isSpriteFont)
-            {
-                CompressFontDXT3(content);
-                return;
             }
 
             // Test the alpha channel to figure out if we have alpha.
@@ -223,13 +211,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             switch (alphaRange)
             {
                 case AlphaRange.Opaque:
-                    content.ConvertBitmapType(typeof(Dxt1BitmapContent));
+                    input.ConvertBitmapType(typeof(Dxt1BitmapContent));
                     break;
                 case AlphaRange.Cutout:
-                    content.ConvertBitmapType(typeof(Dxt3BitmapContent));
+                    input.ConvertBitmapType(typeof(Dxt3BitmapContent));
                     break;
                 case AlphaRange.Full:
-                    content.ConvertBitmapType(typeof(Dxt5BitmapContent));
+                    input.ConvertBitmapType(typeof(Dxt5BitmapContent));
                     break;
 
                 default:
@@ -237,39 +225,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             }
         }
 
-        static public void CompressAti(ContentProcessorContext context, TextureContent content, bool isSpriteFont)
+        static public void CompressAti(TextureContent input)
         {
-            // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
-            if (isSpriteFont)
-            {
-                CompressColor16Bit(context, content);
-                return;
-            }
-
-            var face = content.Faces[0][0];
+            BitmapContent face = input.Faces[0][0];
             AlphaRange alphaRange = CalculateAlphaRange(face);
 
             if (alphaRange == AlphaRange.Full)
-                content.ConvertBitmapType(typeof(AtcExplicitBitmapContent));
+                input.ConvertBitmapType(typeof(AtcExplicitBitmapContent));
             else
-                content.ConvertBitmapType(typeof(AtcInterpolatedBitmapContent));
+                input.ConvertBitmapType(typeof(AtcInterpolatedBitmapContent));
         }
 
-        static public void CompressEtc1(ContentProcessorContext context, TextureContent content, bool isSpriteFont)
+        static public void CompressEtc1(TextureContent input, ContentProcessorContext context)
         {
-            // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
-            if (isSpriteFont)
-            {
-                CompressColor16Bit(context, content);
-                return;
-            }
-
-            var face = content.Faces[0][0];
+            BitmapContent face = input.Faces[0][0];
             AlphaRange alphaRange = CalculateAlphaRange(face);
 
             // Use BGRA4444 for textures with non-opaque alpha values
             if (alphaRange != AlphaRange.Opaque)
-                content.ConvertBitmapType(typeof(PixelBitmapContent<Bgra4444>));
+                input.ConvertBitmapType(typeof(PixelBitmapContent<Bgra4444>));
             else
             {
                 // PVR SGX does not handle non-POT ETC1 textures.
@@ -277,37 +251,43 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
                 // Since we already enforce POT for PVR and DXT in Reach, we will also enforce POT for ETC1
                 if (!IsPowerOfTwo(face.Width) || !IsPowerOfTwo(face.Height))
                 {
-                    context.Logger.LogWarning(null, content.Identity, "ETC1 compression requires width and height to be powers of two due to hardware restrictions on some devices. Falling back to BGR565.");
-                    content.ConvertBitmapType(typeof(PixelBitmapContent<Bgr565>));
+                    context.Logger.LogWarning(null, input.Identity, "ETC1 compression requires width and height to be powers of two due to hardware restrictions on some devices. Falling back to BGR565.");
+                    input.ConvertBitmapType(typeof(PixelBitmapContent<Bgr565>));
                 }
                 else
-                    content.ConvertBitmapType(typeof(Etc1BitmapContent));
+                    input.ConvertBitmapType(typeof(Etc1BitmapContent));
             }
         }
 
-        static public void CompressColor16Bit(ContentProcessorContext context, TextureContent content)
+        static public void CompressColor16Bit(TextureContent input)
         {
-            var face = content.Faces[0][0];
+            BitmapContent face = input.Faces[0][0];
             AlphaRange alphaRange = CalculateAlphaRange(face);
 
             if (alphaRange == AlphaRange.Opaque)
-                content.ConvertBitmapType(typeof(PixelBitmapContent<Bgr565>));
+                input.ConvertBitmapType(typeof(PixelBitmapContent<Bgr565>));
             else if (alphaRange == AlphaRange.Cutout)
-                content.ConvertBitmapType(typeof(PixelBitmapContent<Bgra5551>));
+                input.ConvertBitmapType(typeof(PixelBitmapContent<Bgra5551>));
             else
-                content.ConvertBitmapType(typeof(PixelBitmapContent<Bgra4444>));
+                input.ConvertBitmapType(typeof(PixelBitmapContent<Bgra4444>));
         }
 
         // Compress the greyscale font texture page using a specially-formulated DXT3 mode
-        static unsafe void CompressFontDXT3(TextureContent content)
+        internal static unsafe void CompressFontDXT3(TextureContent input, ContentProcessorContext context)
         {
-            if (content.Faces.Count > 1)
+            if (input.Faces.Count > 1)
                 throw new PipelineException("Font textures should only have one face");
 
-            var block = new Vector4[16];
-            for (int i = 0; i < content.Faces[0].Count; ++i)
+            if (context.TargetProfile == GraphicsProfile.Reach)
             {
-                var face = content.Faces[0][i];
+                if (!IsPowerOfTwo(input.Faces[0][0].Width) || !IsPowerOfTwo(input.Faces[0][0].Height))
+                    throw new PipelineException("DXT compression requires width and height must be powers of two in Reach graphics profile.");
+            }
+
+            var block = new Vector4[16];
+            for (int i = 0; i < input.Faces[0].Count; ++i)
+            {
+                var face = input.Faces[0][i];
                 var xBlocks = (face.Width + 3) / 4;
                 var yBlocks = (face.Height + 3) / 4;
                 var dxt3Size = xBlocks * yBlocks * 16;
@@ -423,7 +403,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
                 var dxt3 = new Dxt3BitmapContent(face.Width, face.Height);
                 dxt3.SetPixelData(buffer);
-                content.Faces[0][i] = dxt3;
+                input.Faces[0][i] = dxt3;
             }
         }
 
@@ -532,6 +512,86 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             buffer[offset + 13] = (byte)((dxt3Map[a7 >> 2] << 6) | (dxt3Map[a6 >> 2] << 4) | (dxt3Map[a5 >> 2] << 2) | dxt3Map[a4 >> 2]);
             buffer[offset + 14] = (byte)((dxt3Map[a11 >> 2] << 6) | (dxt3Map[a10 >> 2] << 4) | (dxt3Map[a9 >> 2] << 2) | dxt3Map[a8 >> 2]);
             buffer[offset + 15] = (byte)((dxt3Map[a15 >> 2] << 6) | (dxt3Map[a14 >> 2] << 4) | (dxt3Map[a13 >> 2] << 2) | dxt3Map[a12 >> 2]);
+        }
+
+        internal static TextureProcessorOutputFormat GetTextureFormatForPlatform(TextureProcessorOutputFormat format, TargetPlatform platform)
+        {
+            // Select the default texture compression format for the target platform
+            if (format == TextureProcessorOutputFormat.Compressed)
+            {
+                switch (platform)
+                {
+                    case TargetPlatform.iOS:
+                        format = TextureProcessorOutputFormat.PvrCompressed;
+                        break;
+                    case TargetPlatform.Android:
+                        format = TextureProcessorOutputFormat.Etc1Compressed;
+                        break;
+
+                    default:
+                        format = TextureProcessorOutputFormat.DxtCompressed;
+                        break;
+                }
+            }
+            
+            // Is Compressed TextureFormat ?
+            if (format == TextureProcessorOutputFormat.AtcCompressed
+            ||  format == TextureProcessorOutputFormat.DxtCompressed
+            ||  format == TextureProcessorOutputFormat.Etc1Compressed
+            ||  format == TextureProcessorOutputFormat.PvrCompressed)
+            {
+                // Make sure the target platform supports the selected texture compression format
+                switch (platform)
+                {
+                    case TargetPlatform.iOS:
+                        if (format != TextureProcessorOutputFormat.PvrCompressed)
+                            throw new PlatformNotSupportedException("iOS platform only supports PVR texture compression");
+                        break;
+
+                    case TargetPlatform.Windows:
+                    case TargetPlatform.WindowsStoreApp:
+                    case TargetPlatform.DesktopGL:
+                    case TargetPlatform.MacOSX:
+                    case TargetPlatform.NativeClient:
+                    case TargetPlatform.BlazorGL:
+                        if (format != TextureProcessorOutputFormat.DxtCompressed)
+                            throw new PlatformNotSupportedException(platform + " platform only supports DXT texture compression");
+                        break;
+                }
+            }
+
+            return format;
+        }
+
+        internal static bool RequiresPowerOfTwo(TextureProcessorOutputFormat format, TargetPlatform targetPlatform, GraphicsProfile targetProfile)
+        {
+            // Does it require POT textures?
+            switch (format)
+            {
+                case TextureProcessorOutputFormat.DxtCompressed:
+                    return (targetProfile == GraphicsProfile.Reach);
+
+                case TextureProcessorOutputFormat.PvrCompressed:
+                case TextureProcessorOutputFormat.Etc1Compressed:
+                    return true;
+
+                default:
+                    return false;
+                    break;
+            }
+        }
+
+        internal static bool RequiresSquare(TextureProcessorOutputFormat format, TargetPlatform targetPlatform)
+        {
+            // Does it require square textures?
+            switch (format)
+            {
+                case TextureProcessorOutputFormat.PvrCompressed:
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }
