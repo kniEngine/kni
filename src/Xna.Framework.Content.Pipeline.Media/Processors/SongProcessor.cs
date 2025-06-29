@@ -75,10 +75,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Make sure the output folder for the file exists.
             Directory.CreateDirectory(Path.GetDirectoryName(songFileName));
-
-            ConversionQuality finalQuality = AudioProfile.ConvertFormat(input, targetFormat, quality, songFileName);
-            if (_quality != finalQuality)
-                context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", _quality, finalQuality);
+            input.ConvertFormat(targetFormat, quality, songFileName);
 
             // Let the pipeline know about the song file so it can clean things up.
             context.AddOutputFile(songFileName);

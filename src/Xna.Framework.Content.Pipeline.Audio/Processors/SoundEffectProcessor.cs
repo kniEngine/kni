@@ -56,9 +56,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     targetFormat = ConversionFormat.Adpcm;
             }
 
-            ConversionQuality finalQuality = AudioProfile.ConvertFormat(input, targetFormat, quality, null);
-            if (quality != finalQuality)
-                context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", quality, finalQuality);
+            input.ConvertFormat(targetFormat, quality, null);
 
             return new SoundEffectContent(input.Format.RawNativeWaveFormat, input.RawData, input.LoopStart, input.LoopLength, (int)input.Duration.TotalMilliseconds);
         }
