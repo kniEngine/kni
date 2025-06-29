@@ -220,8 +220,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             WriteAnnotations(pass.annotation_handles);
 
             // Write the index for the vertex and pixel shaders.
-            int vertexShaderIndex = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.VERTEXSHADER, pass.states);
-            int pixelShaderIndex  = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.PIXELSHADER, pass.states);
+            int vertexShaderIndex  = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.VERTEXSHADER, pass.states);
+            int pixelShaderIndex   = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.PIXELSHADER, pass.states);
             Write(vertexShaderIndex);
             Write(pixelShaderIndex);
 

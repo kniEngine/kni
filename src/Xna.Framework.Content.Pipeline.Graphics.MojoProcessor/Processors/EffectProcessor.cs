@@ -324,7 +324,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     pass.rasterizerState = pinfo.rasterizerState;
 
                     pass.state_count = 0;
-                    EffectObject.EffectStateContent[] tempstate = new EffectObject.EffectStateContent[2];
+                    EffectObject.EffectStateContent[] tempstate = new EffectObject.EffectStateContent[3];
 
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
@@ -342,6 +342,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                         pass.state_count += 1;
                         tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, vsShaderVersion, ref errorsAndWarnings);
+                    }
+
+                    if (!string.IsNullOrEmpty(pinfo.csFunction))
+                    {
+                        ShaderVersion csShaderVersion = ShaderVersion.ParseComputeShaderModel(pinfo.csModel);
+                        shaderProfile.ValidateShaderModels(pinfo, pinfo.csFunction, pinfo.csModel, ShaderStage.Compute, csShaderVersion);
+
+                        pass.state_count += 1;
+                        tempstate[pass.state_count - 1] = EffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.csFunction, pinfo.csModel, ShaderStage.Compute, csShaderVersion, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectObject.EffectStateContent[pass.state_count];
@@ -477,6 +486,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 case ShaderStage.Pixel:
                     state.operation = (uint)147;
                     state.parameter.type = EffectObject.PARAMETER_TYPE.PIXELSHADER;
+                    break;
+                case ShaderStage.Compute:
+                    state.operation = (uint)148;
+                    state.parameter.type = EffectObject.PARAMETER_TYPE.COMPUTESHADER;
                     break;
                 default:
                     throw new InvalidOperationException("Unsupported shader stage: " + shaderStage);

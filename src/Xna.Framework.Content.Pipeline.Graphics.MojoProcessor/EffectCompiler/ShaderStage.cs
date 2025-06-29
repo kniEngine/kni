@@ -7,7 +7,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     internal enum ShaderStage : byte
     {
-        Pixel  = 0,
-        Vertex = 1,
+        Pixel   = 0,
+        Vertex  = 1,
+        Compute = 5,
     }
 }

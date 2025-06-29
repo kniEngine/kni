@@ -12,8 +12,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         public readonly int Major;
         public readonly int Minor;
 
-        private static readonly Regex VertexShaderRegex = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(?<level>9_1|9_3))?$", RegexOptions.Compiled);
-        private static readonly Regex PixelShaderRegex  = new Regex(@"^ps_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(?<level>9_1|9_3))?$", RegexOptions.Compiled);
+        private static readonly Regex VertexShaderRegex  = new Regex(@"^vs_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(?<level>9_1|9_3))?$", RegexOptions.Compiled);
+        private static readonly Regex PixelShaderRegex   = new Regex(@"^ps_(?<major>1|2|3|4|5)_(?<minor>0|1|)(_level_(?<level>9_1|9_3))?$", RegexOptions.Compiled);
+        private static readonly Regex ComputeShaderRegex = new Regex(@"^cs_(?<major>1|2|3|4|5)_(?<minor>0|1|)?$", RegexOptions.Compiled);
         
 
         public ShaderVersion(int major, int minor)
@@ -62,6 +63,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         internal static ShaderVersion ParsePixelShaderModel(string psModel)
         {
             return ParseShaderModel(psModel, PixelShaderRegex);
+        }
+
+        internal static ShaderVersion ParseComputeShaderModel(string csModel)
+        {
+            return ParseShaderModel(csModel, ComputeShaderRegex);
         }
 
         public override string ToString()
