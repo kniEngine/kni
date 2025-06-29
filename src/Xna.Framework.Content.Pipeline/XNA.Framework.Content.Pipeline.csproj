@@ -30,7 +30,6 @@
   
   <ItemGroup>
     <Compile Include="Processors\PassThroughProcessor.cs" />
-    <Compile Include="LoadedTypeCollection.cs" />
     <Compile Include="XmlImporter.cs" />
   </ItemGroup>
   
