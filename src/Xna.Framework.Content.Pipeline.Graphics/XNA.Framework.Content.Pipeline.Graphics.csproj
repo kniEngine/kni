@@ -112,7 +112,6 @@
     <Compile Include="Graphics\BoneContent.cs" />
     <Compile Include="Graphics\BoneWeight.cs" />
     <Compile Include="Graphics\BoneWeightCollection.cs" />
-    <Compile Include="Graphics\DefaultTextureProfile.cs" />
     <Compile Include="Graphics\DualTextureMaterialContent.cs" />
     <Compile Include="Graphics\Dxt1BitmapContent.cs" />
     <Compile Include="Graphics\Dxt3BitmapContent.cs" />
@@ -150,7 +149,6 @@
     <Compile Include="Graphics\Texture3DContent.cs" />
     <Compile Include="Graphics\TextureContent.cs" />
     <Compile Include="Graphics\TextureCubeContent.cs" />
-    <Compile Include="Graphics\TextureProfile.cs" />
     <Compile Include="Graphics\TextureReferenceDictionary.cs" />
     <Compile Include="Graphics\VectorConverter.cs" />
     <Compile Include="Graphics\VertexChannel.cs" />
