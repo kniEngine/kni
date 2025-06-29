@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Framework
         /// This event also supports key repeat.
         /// </summary>
         /// <remarks>
-        /// This event is only supported on desktop platforms.
+        /// This event is only supported on desktop/browser platforms.
         /// </remarks>
         public event EventHandler<TextInputEventArgs> TextInput;
 

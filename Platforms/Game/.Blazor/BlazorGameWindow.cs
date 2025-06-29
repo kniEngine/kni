@@ -173,6 +173,23 @@ namespace Microsoft.Xna.Framework
 
                 if (!_keys.Contains(xnakey))
                     _keys.Add(xnakey);
+
+                if (IsTextInputAttached())
+                {
+                    bool controlKeyBlocksTextInput = false;
+                    for (int i = 0; i < _keys.Count; i++)
+                    {
+                        Keys keyToCheck = _keys[i];
+                        if (keyToCheck == Keys.LeftControl || keyToCheck == Keys.RightControl || keyToCheck == Keys.LeftAlt)
+                        {
+                            controlKeyBlocksTextInput = true;
+                            break;
+                        }
+                    }
+
+                    if (key != '\0' && !controlKeyBlocksTextInput)
+                        OnTextInput(key, xnakey);
+                }
             };
             _window.OnKeyUp += (object sender, char key, int keyCode, int location) =>
             {
