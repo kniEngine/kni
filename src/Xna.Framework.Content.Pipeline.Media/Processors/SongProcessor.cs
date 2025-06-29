@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline.Audio;
 using Microsoft.Xna.Framework.Content.Pipeline.Utilities;
@@ -46,17 +47,75 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string songFileName = context.OutputFilename;
 
             // Convert and write out the song media file.
-            AudioProfile profile = AudioProfile.ForPlatform(context.TargetPlatform);
-            ConversionQuality finalQuality = profile.ConvertStreamingAudio(context.TargetPlatform, _quality, input, ref songFileName);
+            ConversionQuality quality = _quality;
+
+            // Use AAC ("m4a") by default
+            ConversionFormat targetFormat = ConversionFormat.Aac;
+            switch (context.TargetPlatform)
+            {
+                case TargetPlatform.Windows:
+                case TargetPlatform.WindowsStoreApp:
+                    targetFormat = ConversionFormat.WindowsMedia;
+                    break;
+                case TargetPlatform.DesktopGL:
+                    targetFormat = ConversionFormat.Vorbis;
+                    break;
+                case TargetPlatform.BlazorGL:
+                    targetFormat = ConversionFormat.Mp3;
+                    break;
+
+                default:
+                    // Use AAC ("m4a") by default
+                    targetFormat = ConversionFormat.Aac;
+                    break;
+            }
+
+            // Get the song output path with the target format extension.
+            songFileName = Path.ChangeExtension(songFileName, SongProcessor.GetExtension(targetFormat));
+
+            // Make sure the output folder for the file exists.
+            Directory.CreateDirectory(Path.GetDirectoryName(songFileName));
+
+            ConversionQuality finalQuality = AudioProfile.ConvertFormat(input, targetFormat, quality, songFileName);
+            if (_quality != finalQuality)
+                context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", _quality, finalQuality);
 
             // Let the pipeline know about the song file so it can clean things up.
             context.AddOutputFile(songFileName);
-            if (_quality != finalQuality)
-                context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", _quality, finalQuality);
 
             // Return the XNB song content.
             string relativeMediaPath = PathHelper.GetRelativePath(Path.GetDirectoryName(context.OutputFilename) + Path.DirectorySeparatorChar, songFileName);
             return new SongContent(relativeMediaPath, input.Duration);
+        }
+
+        /// <summary>
+        /// Gets the file extension for an audio format.
+        /// </summary>
+        /// <param name="format">The conversion format</param>
+        /// <returns>The file extension for the given conversion format.</returns>
+        static public string GetExtension(ConversionFormat format)
+        {
+            switch (format)
+            {
+                case ConversionFormat.Adpcm:
+                case ConversionFormat.Pcm:
+                    return "wav";
+                case ConversionFormat.WindowsMedia:
+                    return "wma";
+                case ConversionFormat.Xma:
+                    return "xma";
+                case ConversionFormat.ImaAdpcm:
+                    return "wav";
+                case ConversionFormat.Aac:
+                    return "m4a";
+                case ConversionFormat.Vorbis:
+                    return "ogg";
+                case ConversionFormat.Mp3:
+                    return "mp3";
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(format), format, null);
+            }
         }
     }
 }

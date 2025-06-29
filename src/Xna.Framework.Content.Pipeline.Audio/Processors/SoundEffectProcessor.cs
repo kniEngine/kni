@@ -3,7 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework.Content.Pipeline.Audio;
 using Microsoft.Xna.Framework.Content.Pipeline.Utilities;
 
@@ -43,12 +45,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            var profile = AudioProfile.ForPlatform(context.TargetPlatform);
-            var finalQuality = profile.ConvertAudio(context.TargetPlatform, quality, input);
+            TargetPlatform platform = context.TargetPlatform;
+
+            // Default to PCM data, or ADPCM if the source is ADPCM.
+            ConversionFormat targetFormat = ConversionFormat.Pcm;
+            if (quality != ConversionQuality.Best || input.Format.Format == 2 || input.Format.Format == 17)
+            {
+                if (platform == TargetPlatform.iOS || platform == TargetPlatform.MacOSX || platform == TargetPlatform.DesktopGL)
+                    targetFormat = ConversionFormat.ImaAdpcm;
+                else
+                    targetFormat = ConversionFormat.Adpcm;
+            }
+
+            ConversionQuality finalQuality = AudioProfile.ConvertFormat(input, targetFormat, quality, null);
             if (quality != finalQuality)
                 context.Logger.LogMessage("Failed to convert using \"{0}\" quality, used \"{1}\" quality", quality, finalQuality);
 
-            return new SoundEffectContent(input.Format.NativeWaveFormat, input.Data, input.LoopStart, input.LoopLength, (int)input.Duration.TotalMilliseconds);
+            return new SoundEffectContent(input.Format.NativeWaveFormat.ToArray(), input.Data.ToArray(), input.LoopStart, input.LoopLength, (int)input.Duration.TotalMilliseconds);
         }
     }
 }

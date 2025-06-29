@@ -17,15 +17,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler
         /// <param name="value">The value to write to the output.</param>
         protected override void Write(ContentWriter output, SoundEffectContent value)
         {
-            output.Write(value.format.Length);
-            output.Write(value.format);
+            output.Write(value._format.Length);
+            output.Write(value._format);
 
-            output.Write(value.data.Length);
-            output.Write(value.data);
+            output.Write(value._data.Length);
+            output.Write(value._data);
 
-            output.Write(value.loopStart);
-            output.Write(value.loopLength);
-            output.Write(value.duration);
+            output.Write(value._loopStart);
+            output.Write(value._loopLength);
+            output.Write(value._duration);
         }
 
         /// <inheritdoc/>
