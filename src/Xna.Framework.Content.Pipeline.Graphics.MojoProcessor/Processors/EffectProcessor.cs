@@ -461,20 +461,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             EffectObject.EffectStateContent state = new EffectObject.EffectStateContent();
             state.index = 0;
             state.type = EffectObject.STATE_TYPE.CONSTANT;
-            state.operation = (shaderStage== ShaderStage.Vertex)
-                            ? (uint)146
-                            : (uint)147;
-
             state.parameter = new EffectObject.EffectParameterContent();
             state.parameter.name = string.Empty;
             state.parameter.semantic = string.Empty;
             state.parameter.class_ = EffectObject.PARAMETER_CLASS.OBJECT;
-            state.parameter.type = (shaderStage == ShaderStage.Vertex)
-                                 ? EffectObject.PARAMETER_TYPE.VERTEXSHADER
-                                 : EffectObject.PARAMETER_TYPE.PIXELSHADER;
             state.parameter.rows = 0;
             state.parameter.columns = 0;
             state.parameter.data = sharedIndex;
+            switch (shaderStage)
+            {
+                case ShaderStage.Vertex:
+                    state.operation = (uint)146;
+                    state.parameter.type = EffectObject.PARAMETER_TYPE.VERTEXSHADER;
+                    break;
+                case ShaderStage.Pixel:
+                    state.operation = (uint)147;
+                    state.parameter.type = EffectObject.PARAMETER_TYPE.PIXELSHADER;
+                    break;
+                default:
+                    throw new InvalidOperationException("Unsupported shader stage: " + shaderStage);
+            }
 
             return state;
         }
