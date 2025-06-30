@@ -24,6 +24,19 @@ namespace Microsoft.Xna.Platform.Audio
         private const int AUDIORECORD_ERROR_BAD_VALUE = -2;
         private const int AUDIORECORD_ERROR = -1;
 
+
+        public override TimeSpan BufferDuration
+        {
+            get { return base.BufferDuration; }
+            set { base.BufferDuration = value; }
+        }
+
+        public override MicrophoneState State
+        {
+            get { return base.State; }
+            set { base.State = value; }
+        }
+
         public ConcreteMicrophoneDroid() : base()
         {
         }
