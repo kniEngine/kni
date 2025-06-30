@@ -42,6 +42,7 @@
         <Folder Name="js" TargetFolderName="js">
             <ProjectItem ReplaceParameters="false" TargetFileName="decode.min.js">decode.min.js</ProjectItem>
             <ProjectItem ReplaceParameters="false" TargetFileName="streamProcessor.js">streamProcessor.js</ProjectItem>
+            <ProjectItem ReplaceParameters="false" TargetFileName="micProcessor.js">micProcessor.js</ProjectItem>
         </Folder>
         <ProjectItem ReplaceParameters="false" TargetFileName="favicon.ico">favicon.ico</ProjectItem>
         <ProjectItem ReplaceParameters="false" TargetFileName="kni.png">kni.png</ProjectItem>
