@@ -55,6 +55,7 @@ namespace Microsoft.Xna.Platform.Audio
     {
         private int _sampleRate = 44100;
         private TimeSpan _bufferDuration = TimeSpan.FromMilliseconds(1000.0);
+        private MicrophoneState _state = MicrophoneState.Stopped;
 
         public int SampleRate { get { return _sampleRate; } }
 
@@ -64,6 +65,11 @@ namespace Microsoft.Xna.Platform.Audio
             set { _bufferDuration = value; }
         }
 
+        public virtual MicrophoneState State
+        {
+            get { return _state; }
+            set { _state = value; }
+        }
 
         public abstract void PlatformStart(string deviceName);
         public abstract void PlatformStop();

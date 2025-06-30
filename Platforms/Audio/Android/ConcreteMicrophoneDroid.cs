@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Audio
                     throw new NotImplementedException();
                 }
 
-                if (_audioRecord.State != State.Initialized)
+                if (_audioRecord.State != Android.Media.State.Initialized)
                     throw new Exception("AudioRecord initialization failed!");
 
                 _audioRecord.SetNotificationMarkerPosition(_bufferSize);
