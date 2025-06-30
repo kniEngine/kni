@@ -19,6 +19,18 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal AL OpenAL { get { return AL.Current; } }
 
+        public override TimeSpan BufferDuration
+        {
+            get { return base.BufferDuration; }
+            set { base.BufferDuration = value; }
+        }
+
+
+        internal ConcreteMicrophone()
+            : base()
+        {
+        }
+
         private void CheckALCError(string operation)
         {
             AlcError error = OpenAL.ALC.GetErrorForDevice(_captureDevice);

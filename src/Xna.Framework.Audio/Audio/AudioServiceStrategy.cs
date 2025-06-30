@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public int SampleRate { get { return _sampleRate; } }
 
-        public TimeSpan BufferDuration
+        public virtual TimeSpan BufferDuration
         {
             get { return _bufferDuration; }
             set { _bufferDuration = value; }
