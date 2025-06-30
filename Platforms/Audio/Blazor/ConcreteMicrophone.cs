@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
+using nkast.Wasm.Audio;
 
 namespace Microsoft.Xna.Platform.Audio
 {
@@ -11,6 +12,7 @@ namespace Microsoft.Xna.Platform.Audio
     /// </summary>
     public sealed class ConcreteMicrophone : MicrophoneStrategy
     {
+        AudioContext _ac;
 
         public override TimeSpan BufferDuration
         {
@@ -28,6 +30,8 @@ namespace Microsoft.Xna.Platform.Audio
         internal ConcreteMicrophone()
             : base()
         {
+            _ac = new AudioContext();
+            base.SampleRate = _ac.SampleRate;
         }
 
         public override void PlatformStart(string deviceName)
