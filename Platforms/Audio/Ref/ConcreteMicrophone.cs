@@ -12,6 +12,19 @@ namespace Microsoft.Xna.Platform.Audio
     public sealed class ConcreteMicrophone : MicrophoneStrategy
     {
 
+        public override TimeSpan BufferDuration
+        {
+            get { return base.BufferDuration; }
+            set { base.BufferDuration = value; }
+        }
+
+
+        internal ConcreteMicrophone()
+            : base()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public override void PlatformStart(string deviceName)
         {
             throw new PlatformNotSupportedException();
