@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Audio
                 // set the default Microphone
                 if (microphones.Count > 0)
                 {
-                    defaultMicrophone = base.CreateMicrophone("Default");
+                    defaultMicrophone = base.CreateMicrophone("DefaultMicrophone");
                     microphones.Insert(0, defaultMicrophone);
                 }
                 return;
