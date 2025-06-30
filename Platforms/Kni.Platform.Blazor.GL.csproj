@@ -37,10 +37,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\..\..\nkast\Wasm\Wasm.Audio\Wasm.Audio.csproj" />
-    <ProjectReference Include="..\..\..\nkast\Wasm\Wasm.Canvas\Wasm.Canvas.csproj" />
-    <ProjectReference Include="..\..\..\nkast\Wasm\Wasm.Dom\Wasm.Dom.csproj" />
-    <ProjectReference Include="..\..\..\nkast\Wasm\Wasm.XHR\Wasm.XHR.csproj" />
     <ProjectReference Include="..\src\Xna.Framework\Xna.Framework.csproj">
       <Project>{741B4B1E-89E4-434C-8867-6129838AFD51}</Project>
       <Name>Xna.Framework</Name>
@@ -91,6 +87,13 @@
       <Name>Xna.Framework.XR</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="P:\nkast\Wasm\Wasm.JSInterop\Wasm.JSInterop.csproj" />
+    <ProjectReference Include="P:\nkast\Wasm\Wasm.Clipboard\Wasm.Clipboard.csproj" />
+    <ProjectReference Include="P:\nkast\Wasm\Wasm.Audio\Wasm.Audio.csproj" />
+    <ProjectReference Include="P:\nkast\Wasm\Wasm.Canvas\Wasm.Canvas.csproj" />
+    <ProjectReference Include="P:\nkast\Wasm\Wasm.Dom\Wasm.Dom.csproj" />
+    <ProjectReference Include="P:\nkast\Wasm\Wasm.XHR\Wasm.XHR.csproj" />
+    <ProjectReference Include="P:\nkast\Wasm\Wasm.XR\Wasm.XR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
