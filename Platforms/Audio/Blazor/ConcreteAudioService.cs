@@ -33,6 +33,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
         {
+            // set the default Microphone
+            defaultMicrophone = base.CreateMicrophone("DefaultMicrophone");
+            microphones.Insert(0, defaultMicrophone);
         }
 
         public override int PlatformGetMaxPlayingInstances()
