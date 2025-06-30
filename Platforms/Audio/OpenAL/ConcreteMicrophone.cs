@@ -25,6 +25,12 @@ namespace Microsoft.Xna.Platform.Audio
             set { base.BufferDuration = value; }
         }
 
+        public override MicrophoneState State
+        {
+            get { return base.State; }
+            set { base.State = value; }
+        }
+
 
         internal ConcreteMicrophone()
             : base()

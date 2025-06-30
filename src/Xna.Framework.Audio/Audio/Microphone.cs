@@ -85,14 +85,12 @@ namespace Microsoft.Xna.Framework.Audio
             get { return _strategy.SampleRate; }
         }
 
-        private MicrophoneState _state = MicrophoneState.Stopped;
-
         /// <summary>
         /// Returns the state of the Microphone. 
         /// </summary>
         public MicrophoneState State
         {
-            get { return _state; }
+            get { return _strategy.State; }
         }
 
         #endregion
@@ -161,7 +159,7 @@ namespace Microsoft.Xna.Framework.Audio
                 case MicrophoneState.Stopped:
                     {
                         _strategy.PlatformStart(Name);
-                        _state = MicrophoneState.Started;
+                        _strategy.State = MicrophoneState.Started;
                     }
                     return;
             }
@@ -178,7 +176,7 @@ namespace Microsoft.Xna.Framework.Audio
                 case MicrophoneState.Started:
                     {
                         _strategy.PlatformStop();
-                        _state = MicrophoneState.Stopped;
+                        _strategy.State = MicrophoneState.Stopped;
                     }
                     return;
                 case MicrophoneState.Stopped:
@@ -205,7 +203,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// <returns>The buffer size, in bytes, of the captured data.</returns>
         public int GetData(byte[] buffer, int offset, int count)
         {
-            if (_state == MicrophoneState.Stopped || BufferReady == null)
+            if (State == MicrophoneState.Stopped || BufferReady == null)
                 return 0;
 
             return _strategy.PlatformGetData(buffer, offset, count);
@@ -225,7 +223,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal void UpdateBuffer()
         {
-            MicrophoneState state = _state;
+            MicrophoneState state = State;
             switch (state)
             {
                 case MicrophoneState.Started:

@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Platform.Audio;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Microsoft.Xna.Platform.Audio
 {
@@ -16,6 +16,12 @@ namespace Microsoft.Xna.Platform.Audio
         {
             get { return base.BufferDuration; }
             set { base.BufferDuration = value; }
+        }
+
+        public override MicrophoneState State
+        {
+            get { return base.State; }
+            set { base.State = value; }
         }
 
 
