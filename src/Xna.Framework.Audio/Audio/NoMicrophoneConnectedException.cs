@@ -14,6 +14,11 @@ namespace Microsoft.Xna.Framework.Audio
     [DataContract]
     public sealed class NoMicrophoneConnectedException : Exception
     {
+        public NoMicrophoneConnectedException()
+            : base()
+        {
+        }
+
         /// <param name="msg">A message describing the error.</param>
         public NoMicrophoneConnectedException(string msg)
             : base(msg)
