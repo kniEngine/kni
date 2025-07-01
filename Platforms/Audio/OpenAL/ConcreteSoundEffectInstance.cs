@@ -24,7 +24,6 @@ namespace Microsoft.Xna.Platform.Audio
         float filterQ;
         float frequency;
 
-        float _volume = 1f;
         // emmiter's position/velocity relative to the listener
         Vector3 _relativePosition;
         Vector3 _relativeVelocity;
@@ -69,12 +68,10 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Volume = value;
 
-                // XAct sound effects are not tied to the SoundEffect master volume.
-                float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
-                _volume = value * masterVolume;
-
                 if (_sourceId != 0)
                 {
+                    // XAct sound effects are not tied to the SoundEffect master volume.
+                    float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
                     ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, value * masterVolume);
                     ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
                 }
@@ -186,7 +183,9 @@ namespace Microsoft.Xna.Platform.Audio
             ConcreteAudioService.OpenAL.DopplerFactor(SoundEffect.DopplerScale);
             ConcreteAudioService.OpenAL.CheckError("Failed to set Doppler scale.");
             // Volume
-            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, _volume);
+            // XAct sound effects are not tied to the SoundEffect master volume.
+            float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcef.Gain, base.Volume * masterVolume);
             ConcreteAudioService.OpenAL.CheckError("Failed to set source volume.");
             // Looping
             ConcreteAudioService.OpenAL.Source(_sourceId, ALSourceb.Looping, isLooped);

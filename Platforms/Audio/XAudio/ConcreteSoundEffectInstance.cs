@@ -59,11 +59,11 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Volume = value;
 
-                // XAct sound effects are not tied to the SoundEffect master volume.
-                float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
 
                 if (_voice != null && ConcreteAudioService.MasterVoice != null)
                 {
+                    // XAct sound effects are not tied to the SoundEffect master volume.
+                    float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
                     _voice.SetVolume(value * masterVolume, XAudio2.CommitNow);
                 }
             }
