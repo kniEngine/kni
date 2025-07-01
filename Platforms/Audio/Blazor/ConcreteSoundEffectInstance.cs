@@ -25,8 +25,6 @@ namespace Microsoft.Xna.Platform.Audio
         GainNode _gainNode;
         AudioNode _sourceTarget;
 
-        float _volume = 1f;
-
         public override bool IsXAct
         {
             get { return base.IsXAct; }
@@ -62,7 +60,6 @@ namespace Microsoft.Xna.Platform.Audio
 
                 // XAct sound effects are not tied to the SoundEffect master volume.
                 float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
-                _volume = value * masterVolume;
 
                 if (_bufferSource != null)
                 {
@@ -129,7 +126,9 @@ namespace Microsoft.Xna.Platform.Audio
             _bufferSource.Buffer = _concreteSoundEffect.GetAudioBuffer();
             _bufferSource.Connect(_sourceTarget);
 
-            _gainNode.Gain.SetTargetAtTime(_volume, 0, 0);
+            // XAct sound effects are not tied to the SoundEffect master volume.
+            float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
+            _gainNode.Gain.SetTargetAtTime(base.Volume * masterVolume, 0, 0);
             _stereoPannerNode.Pan.SetTargetAtTime(base.Pan, 0, 0);
 
             _bufferSource.OnEnded += _bufferSource_OnEnded;
