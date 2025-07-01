@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
 using nkast.Wasm.Audio;
+using nkast.Wasm.ChannelMessaging;
 using nkast.Wasm.Dom;
 using nkast.Wasm.Media;
 
@@ -67,6 +68,20 @@ namespace Microsoft.Xna.Platform.Audio
             throw new NotImplementedException();
         }
 
+        private void OnMicMessage(object sender, MessageEventArgs e)
+        {
+            if (e.DataByteArray != null)
+            {
+                JSUInt8Array data = e.DataByteArray;
+
+            }
+            else
+            {
+                double msg = e.DataFloat64;
+
+            }
+        }
+
         private async Task InitMicrophoneDeviceAsync()
         {
             _micInitCts = new CancellationTokenSource();
@@ -79,6 +94,7 @@ namespace Microsoft.Xna.Platform.Audio
                 if (token.IsCancellationRequested) return;
 
                 _micWorkletNode = _ac.CreateWorklet("mic-processor");
+                _micWorkletNode.Port.Message += OnMicMessage;
 
                 // init and start Microphone
                 MediaDevices md = MediaDevices.FromNavigator(Window.Current.Navigator);
@@ -115,6 +131,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (_micWorkletNode != null)
             {
+                _micWorkletNode.Port.Message-= OnMicMessage;
                 _micWorkletNode.Dispose();
                 _micWorkletNode = null;
             }
