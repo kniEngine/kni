@@ -21,9 +21,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         AudioBufferSourceNode _bufferSource;
         bool _ended;
-        StereoPannerNode _stereoPannerNode;
-        GainNode _gainNode;
-        AudioNode _sourceTarget;
+        protected StereoPannerNode _stereoPannerNode;
+        protected GainNode _gainNode;
+        protected AudioNode _sourceTarget;
 
         public override bool IsXAct
         {
@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 base.Pan = value;
 
-                if (_bufferSource != null)
+                if (_stereoPannerNode != null)
                 {
                     _stereoPannerNode.Pan.SetTargetAtTime(value, 0, 0.05f);
                 }
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Audio
                 // XAct sound effects are not tied to the SoundEffect master volume.
                 float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
 
-                if (_bufferSource != null)
+                if (_gainNode != null)
                 {
                     _gainNode.Gain.SetTargetAtTime(value * masterVolume, 0, 0.05f);
                 }
