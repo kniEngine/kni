@@ -79,6 +79,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     return ConvertToWmv(input);
                 case VideoProcessorOutputFormat.MP4:
                     return ConvertToMP4(input);
+                case VideoProcessorOutputFormat.WebM:
+                    return ConvertToWebM(input);
 
                 default:
                     throw new InvalidOperationException("Unsupported video format: " + videoFormat);
