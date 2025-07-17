@@ -96,14 +96,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             string tmpPath = Path.GetTempPath();
             string tmpFilename = Path.GetRandomFileName();
-            string tmpOutput = Path.Combine(tmpPath, tmpFilename + "."+ffmpegContainerName);
+            string saveToFile = Path.Combine(tmpPath, tmpFilename + "."+ffmpegContainerName);
 
             string args = string.Format(
                     "-y -i \"{0}\" -c:v {1} -c:a {2} -movflags +faststart \"{3}\"",
                     input.Filename,
                     ffmpegVCodecName,
                     ffmpegACodecName,
-                    tmpOutput);
+                    saveToFile);
 
             string ffmpegStdout, ffmpegStderr;
             int ffmpegExitCode;
@@ -113,7 +113,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (ffmpegExitCode != 0)
                 throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
 
-            return new VideoContent(tmpOutput);
+            return new VideoContent(saveToFile);
         }
 
         private VideoContent ConvertToMP4(VideoContent input)
@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             string tmpPath = Path.GetTempPath();
             string tmpFilename = Path.GetRandomFileName();
-            string tmpOutput = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
+            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
 
             string args = string.Format(
                     //"-y -i \"{0}\" -c:v {1} -profile:v baseline -level 3.0 -c:a {2} -strict -2 -movflags +faststart \"{3}\"",
@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     input.Filename,
                     ffmpegVCodecName,
                     ffmpegACodecName,
-                    tmpOutput);
+                    saveToFile);
 
             string ffmpegStdout, ffmpegStderr;
             int ffmpegExitCode;
@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (ffmpegExitCode != 0)
                 throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
 
-            return new VideoContent(tmpOutput);
+            return new VideoContent(saveToFile);
         }
 
         private VideoContent ConvertToWebM(VideoContent input)
@@ -155,14 +155,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             string tmpPath = Path.GetTempPath();
             string tmpFilename = Path.GetRandomFileName();
-            string tmpOutput = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
+            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
 
             string args = string.Format(
                     "-y -i \"{0}\" -c:v {1} -b:v 0 -crf 30 -c:a {2} -movflags +faststart -fflags +bitexact \"{3}\"",
                     input.Filename,
                     ffmpegVCodecName,
                     ffmpegACodecName,
-                    tmpOutput);
+                    saveToFile);
 
             string ffmpegStdout, ffmpegStderr;
             int ffmpegExitCode;
@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (ffmpegExitCode != 0)
                 throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
 
-            return new VideoContent(tmpOutput);
+            return new VideoContent(saveToFile);
         }
     }
 }
