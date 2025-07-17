@@ -51,31 +51,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             else
             {
                 if (videoFormat == VideoProcessorOutputFormat.Default)
-                {
-                    switch (context.TargetPlatform)
-                    {
-                        case TargetPlatform.Windows:
-                        case TargetPlatform.WindowsStoreApp:
-                            videoFormat = VideoProcessorOutputFormat.WMV;
-                            break;
-                        case TargetPlatform.iOS:
-                            videoFormat = VideoProcessorOutputFormat.MP4;
-                            break;
-                        case TargetPlatform.Android:
-                            videoFormat = VideoProcessorOutputFormat.MP4;
-                            break;
-                        case TargetPlatform.BlazorGL:
-                            videoFormat = VideoProcessorOutputFormat.MP4;
-                            break;
-                        case TargetPlatform.DesktopGL:
-                            videoFormat = VideoProcessorOutputFormat.MP4;
-                            break;
-
-                        default:
-                            videoFormat = VideoProcessorOutputFormat.MP4;
-                            break;
-                    }
-                }
+                    videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
 
                 switch (videoFormat)
                 {
@@ -107,6 +83,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     default:
                         throw new InvalidOperationException("Unsupported video format: " + videoFormat);
                 }
+            }
+        }
+
+        private static VideoProcessorOutputFormat GetDefaultOutputFormat(TargetPlatform targetPlatform)
+        {
+            switch (targetPlatform)
+            {
+                case TargetPlatform.Windows:
+                case TargetPlatform.WindowsStoreApp:
+                    return VideoProcessorOutputFormat.WMV;
+                case TargetPlatform.iOS:
+                    return VideoProcessorOutputFormat.MP4;
+                case TargetPlatform.Android:
+                    return VideoProcessorOutputFormat.MP4;
+                case TargetPlatform.BlazorGL:
+                    return VideoProcessorOutputFormat.MP4;
+                case TargetPlatform.DesktopGL:
+                    return VideoProcessorOutputFormat.MP4;
+
+                default:
+                    return VideoProcessorOutputFormat.MP4;
             }
         }
 
