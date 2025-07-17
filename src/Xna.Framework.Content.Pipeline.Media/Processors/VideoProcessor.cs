@@ -55,27 +55,17 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 string tmpPath = Path.GetTempPath();
                 string tmpFilename = Path.GetRandomFileName();
+                string containerName = VideoProcessor.GetExtension(videoFormat);
+                string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
 
                 switch (videoFormat)
                 {
                     case VideoProcessorOutputFormat.WMV:
-                        {
-                            string containerName = "wmv";
-                            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
                             return ConvertToWmv(input, saveToFile);
-                        }
                     case VideoProcessorOutputFormat.MP4:
-                        {
-                            string containerName = "mp4";
-                            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
                             return ConvertToMP4(input, saveToFile);
-                        }
                     case VideoProcessorOutputFormat.WebM:
-                        {
-                            string containerName = "webm";
-                            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
                             return ConvertToWebM(input, saveToFile);
-                        }
 
                     default:
                         throw new InvalidOperationException("Unsupported video format: " + videoFormat);
@@ -101,6 +91,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                 default:
                     return VideoProcessorOutputFormat.MP4;
+            }
+        }
+
+        private static string GetExtension(VideoProcessorOutputFormat videoFormat)
+        {
+            switch (videoFormat)
+            {
+                case VideoProcessorOutputFormat.WMV:
+                        return "wmv";
+                case VideoProcessorOutputFormat.MP4:
+                        return "mp4";
+                case VideoProcessorOutputFormat.WebM:
+                        return "webm";
+
+                default:
+                    throw new InvalidOperationException("Unsupported video format: " + videoFormat);
             }
         }
 
