@@ -53,28 +53,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 if (videoFormat == VideoProcessorOutputFormat.Default)
                     videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
 
+                string tmpPath = Path.GetTempPath();
+                string tmpFilename = Path.GetRandomFileName();
+
                 switch (videoFormat)
                 {
                     case VideoProcessorOutputFormat.WMV:
                         {
-                            string tmpPath = Path.GetTempPath();
-                            string tmpFilename = Path.GetRandomFileName();
                             string containerName = "wmv";
                             string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
                             return ConvertToWmv(input, saveToFile);
                         }
                     case VideoProcessorOutputFormat.MP4:
                         {
-                            string tmpPath = Path.GetTempPath();
-                            string tmpFilename = Path.GetRandomFileName();
                             string containerName = "mp4";
                             string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
                             return ConvertToMP4(input, saveToFile);
                         }
                     case VideoProcessorOutputFormat.WebM:
                         {
-                            string tmpPath = Path.GetTempPath();
-                            string tmpFilename = Path.GetRandomFileName();
                             string containerName = "webm";
                             string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
                             return ConvertToWebM(input, saveToFile);
