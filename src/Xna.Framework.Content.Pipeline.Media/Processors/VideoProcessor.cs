@@ -49,29 +49,29 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 case VideoProcessorOutputFormat.NoChange:
                     return input;
                 case VideoProcessorOutputFormat.WMV:
-                    return ConvertToWmv(input, context);
+                    return ConvertToWmv(input);
                 case VideoProcessorOutputFormat.MP4:
-                    return ConvertToMP4(input, context);
+                    return ConvertToMP4(input);
             }
 
             switch (context.TargetPlatform)
             {
                 case TargetPlatform.Windows:
                 case TargetPlatform.WindowsStoreApp:
-                    return ConvertToWmv(input, context);
+                    return ConvertToWmv(input);
 
                 case TargetPlatform.iOS:
                 case TargetPlatform.Android:
                 case TargetPlatform.BlazorGL:
                 case TargetPlatform.DesktopGL:
-                    return ConvertToMP4(input, context);
+                    return ConvertToMP4(input);
 
                 default:
-                    return ConvertToMP4(input, context);
+                    return ConvertToMP4(input);
             }
         }
 
-        private VideoContent ConvertToWmv(VideoContent input, ContentProcessorContext context)
+        private VideoContent ConvertToWmv(VideoContent input)
         {
             string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
             ffmpegVCodecName = "wmv2";
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return new VideoContent(tmpOutput);
         }
 
-        private VideoContent ConvertToMP4(VideoContent input, ContentProcessorContext context)
+        private VideoContent ConvertToMP4(VideoContent input)
         {
             string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
             ffmpegVCodecName = "libx264";
@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return new VideoContent(tmpOutput);
         }
 
-        private VideoContent ConvertToWebM(VideoContent input, ContentProcessorContext context)
+        private VideoContent ConvertToWebM(VideoContent input)
         {
             string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
             ffmpegVCodecName = "libvpx-vp9";
