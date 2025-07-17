@@ -76,27 +76,40 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 case VideoProcessorOutputFormat.NoChange:
                     return input;
                 case VideoProcessorOutputFormat.WMV:
-                    return ConvertToWmv(input);
+                    {
+                        string tmpPath = Path.GetTempPath();
+                        string tmpFilename = Path.GetRandomFileName();
+                        string containerName = "wmv";
+                        string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+                        return ConvertToWmv(input, saveToFile);
+                    }
                 case VideoProcessorOutputFormat.MP4:
-                    return ConvertToMP4(input);
+                    {
+                        string tmpPath = Path.GetTempPath();
+                        string tmpFilename = Path.GetRandomFileName();
+                        string containerName = "mp4";
+                        string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+                        return ConvertToMP4(input, saveToFile);
+                    }
                 case VideoProcessorOutputFormat.WebM:
-                    return ConvertToWebM(input);
+                    {
+                        string tmpPath = Path.GetTempPath();
+                        string tmpFilename = Path.GetRandomFileName();
+                        string containerName = "webm";
+                        string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+                        return ConvertToWebM(input, saveToFile);
+                    }
 
                 default:
                     throw new InvalidOperationException("Unsupported video format: " + videoFormat);
             }
         }
 
-        private VideoContent ConvertToWmv(VideoContent input)
+        private VideoContent ConvertToWmv(VideoContent input, string saveToFile)
         {
-            string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
+            string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "wmv2";
             ffmpegACodecName = "wmav2";
-            ffmpegContainerName = "wmv";
-
-            string tmpPath = Path.GetTempPath();
-            string tmpFilename = Path.GetRandomFileName();
-            string saveToFile = Path.Combine(tmpPath, tmpFilename + "."+ffmpegContainerName);
 
             string args = string.Format(
                     "-y -i \"{0}\" -c:v {1} -c:a {2} -movflags +faststart \"{3}\"",
@@ -116,16 +129,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return new VideoContent(saveToFile);
         }
 
-        private VideoContent ConvertToMP4(VideoContent input)
+        private VideoContent ConvertToMP4(VideoContent input, string saveToFile)
         {
-            string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
+            string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "libx264";
             ffmpegACodecName = "aac";
-            ffmpegContainerName = "mp4";
-
-            string tmpPath = Path.GetTempPath();
-            string tmpFilename = Path.GetRandomFileName();
-            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
 
             string args = string.Format(
                     //"-y -i \"{0}\" -c:v {1} -profile:v baseline -level 3.0 -c:a {2} -strict -2 -movflags +faststart \"{3}\"",
@@ -146,16 +154,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return new VideoContent(saveToFile);
         }
 
-        private VideoContent ConvertToWebM(VideoContent input)
+        private VideoContent ConvertToWebM(VideoContent input, string saveToFile)
         {
-            string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
+            string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "libvpx-vp9";
             ffmpegACodecName = "libopus";
-            ffmpegContainerName = "webm";
-
-            string tmpPath = Path.GetTempPath();
-            string tmpFilename = Path.GetRandomFileName();
-            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
 
             string args = string.Format(
                     "-y -i \"{0}\" -c:v {1} -b:v 0 -crf 30 -c:a {2} -movflags +faststart -fflags +bitexact \"{3}\"",
