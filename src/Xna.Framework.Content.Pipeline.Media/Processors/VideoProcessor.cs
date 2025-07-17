@@ -44,64 +44,69 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private VideoContent ConvertFormat(VideoContent input, ContentProcessorContext context, VideoProcessorOutputFormat videoFormat)
         {
-            if (videoFormat == VideoProcessorOutputFormat.Default)
+            if (videoFormat == VideoProcessorOutputFormat.NoChange)
             {
-                switch (context.TargetPlatform)
+                return input;
+            }
+            else
+            {
+                if (videoFormat == VideoProcessorOutputFormat.Default)
                 {
-                    case TargetPlatform.Windows:
-                    case TargetPlatform.WindowsStoreApp:
-                        videoFormat = VideoProcessorOutputFormat.WMV;
-                        break;
-                    case TargetPlatform.iOS:
-                        videoFormat = VideoProcessorOutputFormat.MP4;
-                        break;
-                    case TargetPlatform.Android:
-                        videoFormat = VideoProcessorOutputFormat.MP4;
-                        break;
-                    case TargetPlatform.BlazorGL:
-                        videoFormat = VideoProcessorOutputFormat.MP4;
-                        break;
-                    case TargetPlatform.DesktopGL:
-                        videoFormat = VideoProcessorOutputFormat.MP4;
-                        break;
+                    switch (context.TargetPlatform)
+                    {
+                        case TargetPlatform.Windows:
+                        case TargetPlatform.WindowsStoreApp:
+                            videoFormat = VideoProcessorOutputFormat.WMV;
+                            break;
+                        case TargetPlatform.iOS:
+                            videoFormat = VideoProcessorOutputFormat.MP4;
+                            break;
+                        case TargetPlatform.Android:
+                            videoFormat = VideoProcessorOutputFormat.MP4;
+                            break;
+                        case TargetPlatform.BlazorGL:
+                            videoFormat = VideoProcessorOutputFormat.MP4;
+                            break;
+                        case TargetPlatform.DesktopGL:
+                            videoFormat = VideoProcessorOutputFormat.MP4;
+                            break;
+
+                        default:
+                            videoFormat = VideoProcessorOutputFormat.MP4;
+                            break;
+                    }
+                }
+
+                switch (videoFormat)
+                {
+                    case VideoProcessorOutputFormat.WMV:
+                        {
+                            string tmpPath = Path.GetTempPath();
+                            string tmpFilename = Path.GetRandomFileName();
+                            string containerName = "wmv";
+                            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+                            return ConvertToWmv(input, saveToFile);
+                        }
+                    case VideoProcessorOutputFormat.MP4:
+                        {
+                            string tmpPath = Path.GetTempPath();
+                            string tmpFilename = Path.GetRandomFileName();
+                            string containerName = "mp4";
+                            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+                            return ConvertToMP4(input, saveToFile);
+                        }
+                    case VideoProcessorOutputFormat.WebM:
+                        {
+                            string tmpPath = Path.GetTempPath();
+                            string tmpFilename = Path.GetRandomFileName();
+                            string containerName = "webm";
+                            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+                            return ConvertToWebM(input, saveToFile);
+                        }
 
                     default:
-                        videoFormat = VideoProcessorOutputFormat.MP4;
-                        break;
+                        throw new InvalidOperationException("Unsupported video format: " + videoFormat);
                 }
-            }
-
-            switch (videoFormat)
-            {
-                case VideoProcessorOutputFormat.NoChange:
-                    return input;
-                case VideoProcessorOutputFormat.WMV:
-                    {
-                        string tmpPath = Path.GetTempPath();
-                        string tmpFilename = Path.GetRandomFileName();
-                        string containerName = "wmv";
-                        string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
-                        return ConvertToWmv(input, saveToFile);
-                    }
-                case VideoProcessorOutputFormat.MP4:
-                    {
-                        string tmpPath = Path.GetTempPath();
-                        string tmpFilename = Path.GetRandomFileName();
-                        string containerName = "mp4";
-                        string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
-                        return ConvertToMP4(input, saveToFile);
-                    }
-                case VideoProcessorOutputFormat.WebM:
-                    {
-                        string tmpPath = Path.GetTempPath();
-                        string tmpFilename = Path.GetRandomFileName();
-                        string containerName = "webm";
-                        string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
-                        return ConvertToWebM(input, saveToFile);
-                    }
-
-                default:
-                    throw new InvalidOperationException("Unsupported video format: " + videoFormat);
             }
         }
 
