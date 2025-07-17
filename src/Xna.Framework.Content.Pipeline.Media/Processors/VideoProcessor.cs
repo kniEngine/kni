@@ -44,6 +44,33 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private VideoContent ConvertFormat(VideoContent input, ContentProcessorContext context, VideoProcessorOutputFormat videoFormat)
         {
+            if (videoFormat == VideoProcessorOutputFormat.Default)
+            {
+                switch (context.TargetPlatform)
+                {
+                    case TargetPlatform.Windows:
+                    case TargetPlatform.WindowsStoreApp:
+                        videoFormat = VideoProcessorOutputFormat.WMV;
+                        break;
+                    case TargetPlatform.iOS:
+                        videoFormat = VideoProcessorOutputFormat.MP4;
+                        break;
+                    case TargetPlatform.Android:
+                        videoFormat = VideoProcessorOutputFormat.MP4;
+                        break;
+                    case TargetPlatform.BlazorGL:
+                        videoFormat = VideoProcessorOutputFormat.MP4;
+                        break;
+                    case TargetPlatform.DesktopGL:
+                        videoFormat = VideoProcessorOutputFormat.MP4;
+                        break;
+
+                    default:
+                        videoFormat = VideoProcessorOutputFormat.MP4;
+                        break;
+                }
+            }
+
             switch (videoFormat)
             {
                 case VideoProcessorOutputFormat.NoChange:
@@ -52,22 +79,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     return ConvertToWmv(input);
                 case VideoProcessorOutputFormat.MP4:
                     return ConvertToMP4(input);
-            }
-
-            switch (context.TargetPlatform)
-            {
-                case TargetPlatform.Windows:
-                case TargetPlatform.WindowsStoreApp:
-                    return ConvertToWmv(input);
-
-                case TargetPlatform.iOS:
-                case TargetPlatform.Android:
-                case TargetPlatform.BlazorGL:
-                case TargetPlatform.DesktopGL:
-                    return ConvertToMP4(input);
 
                 default:
-                    return ConvertToMP4(input);
+                    throw new InvalidOperationException("Unsupported video format: " + videoFormat);
             }
         }
 
