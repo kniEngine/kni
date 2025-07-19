@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     return VideoProcessorOutputFormat.MP4;
 
                 default:
-                    return VideoProcessorOutputFormat.MP4;
+                    return VideoProcessorOutputFormat.WebM;
             }
         }
 

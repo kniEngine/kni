@@ -49,8 +49,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Convert and write out the song media file.
             ConversionQuality quality = _quality;
 
-            // Use AAC ("m4a") by default
-            ConversionFormat targetFormat = ConversionFormat.Aac;
+            ConversionFormat targetFormat;
             switch (context.TargetPlatform)
             {
                 case TargetPlatform.Windows:
@@ -63,10 +62,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 case TargetPlatform.BlazorGL:
                     targetFormat = ConversionFormat.Mp3;
                     break;
+                case TargetPlatform.Android:
+                    targetFormat = ConversionFormat.Aac;
+                    break;
+                case TargetPlatform.iOS:
+                    targetFormat = ConversionFormat.Aac;
+                    break;
 
                 default:
-                    // Use AAC ("m4a") by default
-                    targetFormat = ConversionFormat.Aac;
+                    targetFormat = ConversionFormat.Mp3;
                     break;
             }
 
