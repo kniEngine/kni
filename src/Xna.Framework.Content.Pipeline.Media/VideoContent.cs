@@ -118,25 +118,34 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
         }
 
-        public VideoContent ConvertFormat(string saveToFile)
+        public void ConvertFormat(string saveToFile)
         {
             string containerExt = Path.GetExtension(saveToFile).ToLower();
 
             switch (containerExt)
             {
                 case ".wmv":
-                    return this.ConvertToWmv(saveToFile);
+                    this.ConvertToWmv(saveToFile);
+                    VideoContent.ProbeFormat(saveToFile, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+                    this.Filename = saveToFile;
+                    break;
                 case ".mp4":
-                    return this.ConvertToMP4(saveToFile);
+                    this.ConvertToMP4(saveToFile);
+                    VideoContent.ProbeFormat(saveToFile, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+                    this.Filename = saveToFile;
+                    break;
                 case ".webm":
-                    return this.ConvertToWebM(saveToFile);
+                    this.ConvertToWebM(saveToFile);
+                    VideoContent.ProbeFormat(saveToFile, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+                    this.Filename = saveToFile;
+                    break;
 
                 default:
                     throw new InvalidOperationException("Unsupported video format: " + containerExt);
             }
         }
 
-        private VideoContent ConvertToWmv(string saveToFile)
+        private void ConvertToWmv(string saveToFile)
         {
             string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "wmv2";
@@ -156,11 +165,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             if (ffmpegExitCode != 0)
                 throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
-
-            return new VideoContent(saveToFile);
         }
 
-        private VideoContent ConvertToMP4(string saveToFile)
+        private void ConvertToMP4(string saveToFile)
         {
             string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "libx264";
@@ -181,11 +188,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
 
             if (ffmpegExitCode != 0)
                 throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
-
-            return new VideoContent(saveToFile);
         }
 
-        private VideoContent ConvertToWebM(string saveToFile)
+        private void ConvertToWebM(string saveToFile)
         {
             string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "libvpx-vp9";
@@ -204,8 +209,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             ffmpegExitCode = ExternalTool.Run("ffmpeg", args, out ffmpegStdout, out ffmpegStderr);
             if (ffmpegExitCode != 0)
                 throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
-
-            return new VideoContent(saveToFile);
         }
 
         ~VideoContent()

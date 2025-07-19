@@ -28,15 +28,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Make sure the output folder for the video exists.
             Directory.CreateDirectory(Path.GetDirectoryName(absVideoPath));
 
-            VideoContent output;
-
             VideoProcessorOutputFormat videoFormat = VideoFormat;
             if (videoFormat == VideoProcessorOutputFormat.NoChange)
             {
-                output = input;
-
                 // Copy the already encoded video file over
-                File.Copy(output.Filename, absVideoPath, true);
+                File.Copy(input.Filename, absVideoPath, true);
                 context.AddOutputFile(absVideoPath);
             }
             else
@@ -47,15 +43,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 string containerExt = VideoProcessor.GetExtension(videoFormat);
                 absVideoPath = Path.ChangeExtension(absVideoPath, containerExt);
 
-                output = input.ConvertFormat(absVideoPath);
+                input.ConvertFormat(absVideoPath);
                 context.AddOutputFile(absVideoPath);
             }
 
             // Fixup relative path
             string relativeMediaPath = PathHelper.GetRelativePath(context.OutputFilename, absVideoPath);
-            output.Filename = relativeMediaPath;
+            input.Filename = relativeMediaPath;
 
-            return output;
+            return input;
         }
 
         public static VideoProcessorOutputFormat GetDefaultOutputFormat(TargetPlatform targetPlatform)
