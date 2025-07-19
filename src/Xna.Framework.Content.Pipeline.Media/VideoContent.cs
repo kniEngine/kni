@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Globalization;
+using System.IO;
 using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline
@@ -66,9 +67,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             Filename = filename;
 
+            VideoContent.ProbeFormat(filename, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+        }
+
+        private static void ProbeFormat(string sourceFile, out int width, out int height, out TimeSpan duration, out int bitsPerSecond, out float framesPerSecond)
+        {
+            // Set default values if information is not available.
+            width = 0;
+            height = 0;
+            duration = TimeSpan.Zero;
+            bitsPerSecond = 0;
+            framesPerSecond = 0.0f;
+
             string stdout, stderr;
             var result = ExternalTool.Run("ffprobe",
-                string.Format("-i \"{0}\" -show_format -select_streams v -show_streams -print_format ini", Filename), out stdout, out stderr);
+                string.Format("-i \"{0}\" -show_format -select_streams v -show_streams -print_format ini", sourceFile), out stdout, out stderr);
 
             var lines = stdout.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
@@ -81,28 +94,121 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 switch (key)
                 {
                     case "duration":
-                        _duration = TimeSpan.FromSeconds(double.Parse(value, CultureInfo.InvariantCulture));
+                        duration = TimeSpan.FromSeconds(double.Parse(value, CultureInfo.InvariantCulture));
                         break;
 
                     case "bit_rate":
                         if (value != "N/A")
-                            _bitsPerSecond = int.Parse(value, CultureInfo.InvariantCulture);
+                            bitsPerSecond = int.Parse(value, CultureInfo.InvariantCulture);
                         break;
 
                     case "width":
-                        _width = int.Parse(value, CultureInfo.InvariantCulture);
+                        width = int.Parse(value, CultureInfo.InvariantCulture);
                         break;
 
                     case "height":
-                        _height = int.Parse(value, CultureInfo.InvariantCulture);
+                        height = int.Parse(value, CultureInfo.InvariantCulture);
                         break;
 
                     case "r_frame_rate":
                         var frac = value.Split('/');
-                        _framesPerSecond = float.Parse(frac[0], CultureInfo.InvariantCulture) / float.Parse(frac[1], CultureInfo.InvariantCulture);
+                        framesPerSecond = float.Parse(frac[0], CultureInfo.InvariantCulture) / float.Parse(frac[1], CultureInfo.InvariantCulture);
                         break;
                 }
             }
+        }
+
+        public void ConvertFormat(string saveToFile)
+        {
+            string containerExt = Path.GetExtension(saveToFile).ToLower();
+
+            switch (containerExt)
+            {
+                case ".wmv":
+                    this.ConvertToWmv(saveToFile);
+                    VideoContent.ProbeFormat(saveToFile, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+                    this.Filename = saveToFile;
+                    break;
+                case ".mp4":
+                    this.ConvertToMP4(saveToFile);
+                    VideoContent.ProbeFormat(saveToFile, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+                    this.Filename = saveToFile;
+                    break;
+                case ".webm":
+                    this.ConvertToWebM(saveToFile);
+                    VideoContent.ProbeFormat(saveToFile, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+                    this.Filename = saveToFile;
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Unsupported video format: " + containerExt);
+            }
+        }
+
+        private void ConvertToWmv(string saveToFile)
+        {
+            string ffmpegVCodecName, ffmpegACodecName;
+            ffmpegVCodecName = "wmv2";
+            ffmpegACodecName = "wmav2";
+
+            string args = string.Format(
+                    "-y -i \"{0}\" -c:v {1} -c:a {2} -movflags +faststart \"{3}\"",
+                    this.Filename,
+                    ffmpegVCodecName,
+                    ffmpegACodecName,
+                    saveToFile);
+
+            string ffmpegStdout, ffmpegStderr;
+            int ffmpegExitCode;
+
+            ffmpegExitCode = ExternalTool.Run("ffmpeg", args, out ffmpegStdout, out ffmpegStderr);
+
+            if (ffmpegExitCode != 0)
+                throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
+        }
+
+        private void ConvertToMP4(string saveToFile)
+        {
+            string ffmpegVCodecName, ffmpegACodecName;
+            ffmpegVCodecName = "libx264";
+            ffmpegACodecName = "aac";
+
+            string args = string.Format(
+                    //"-y -i \"{0}\" -c:v {1} -profile:v baseline -level 3.0 -c:a {2} -strict -2 -movflags +faststart \"{3}\"",
+                    "-y -i \"{0}\" -c:v {1} -profile:v main -c:a {2} -strict -2 -movflags +faststart \"{3}\"",
+                    this.Filename,
+                    ffmpegVCodecName,
+                    ffmpegACodecName,
+                    saveToFile);
+
+            string ffmpegStdout, ffmpegStderr;
+            int ffmpegExitCode;
+
+            ffmpegExitCode = ExternalTool.Run("ffmpeg", args, out ffmpegStdout, out ffmpegStderr);
+
+            if (ffmpegExitCode != 0)
+                throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
+        }
+
+        private void ConvertToWebM(string saveToFile)
+        {
+            string ffmpegVCodecName, ffmpegACodecName;
+            ffmpegVCodecName = "libvpx-vp9";
+            ffmpegACodecName = "libopus";
+
+            string args = string.Format(
+                    "-y -i \"{0}\" -c:v {1} -b:v 0 -crf 30 -c:a {2} -movflags +faststart -fflags +bitexact \"{3}\"",
+                    this.Filename,
+                    ffmpegVCodecName,
+                    ffmpegACodecName,
+                    saveToFile);
+
+            string ffmpegStdout, ffmpegStderr;
+            int ffmpegExitCode;
+
+            ffmpegExitCode = ExternalTool.Run("ffmpeg", args, out ffmpegStdout, out ffmpegStderr);
+            if (ffmpegExitCode != 0)
+                throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
         }
 
         ~VideoContent()

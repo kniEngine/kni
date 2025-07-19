@@ -28,134 +28,67 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Make sure the output folder for the video exists.
             Directory.CreateDirectory(Path.GetDirectoryName(absVideoPath));
 
-            VideoContent output = ConvertFormat(input, context, VideoFormat);
-            absVideoPath = Path.ChangeExtension(absVideoPath, Path.GetExtension(output.Filename));
+            VideoProcessorOutputFormat videoFormat = VideoFormat;
+            if (videoFormat == VideoProcessorOutputFormat.NoChange)
+            {
+                // Copy the already encoded video file over
+                File.Copy(input.Filename, absVideoPath, true);
+                context.AddOutputFile(absVideoPath);
+            }
+            else
+            {
+                if (videoFormat == VideoProcessorOutputFormat.Default)
+                    videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
 
-            // Copy the already encoded video file over
-            File.Copy(output.Filename, absVideoPath, true);
-            context.AddOutputFile(absVideoPath);
+                string containerExt = VideoProcessor.GetExtension(videoFormat);
+                absVideoPath = Path.ChangeExtension(absVideoPath, containerExt);
+
+                input.ConvertFormat(absVideoPath);
+                context.AddOutputFile(absVideoPath);
+            }
 
             // Fixup relative path
             string relativeMediaPath = PathHelper.GetRelativePath(context.OutputFilename, absVideoPath);
-            output.Filename = relativeMediaPath;
+            input.Filename = relativeMediaPath;
 
-            return output;
+            return input;
         }
 
-        private VideoContent ConvertFormat(VideoContent input, ContentProcessorContext context, VideoProcessorOutputFormat videoFormat)
+        public static VideoProcessorOutputFormat GetDefaultOutputFormat(TargetPlatform targetPlatform)
         {
-            switch (videoFormat)
-            {
-                case VideoProcessorOutputFormat.NoChange:
-                    return input;
-                case VideoProcessorOutputFormat.WMV:
-                    return ConvertToWmv(input, context);
-                case VideoProcessorOutputFormat.MP4:
-                    return ConvertToMP4(input, context);
-            }
-
-            switch (context.TargetPlatform)
+            switch (targetPlatform)
             {
                 case TargetPlatform.Windows:
                 case TargetPlatform.WindowsStoreApp:
-                    return ConvertToWmv(input, context);
-
+                    return VideoProcessorOutputFormat.WMV;
                 case TargetPlatform.iOS:
+                    return VideoProcessorOutputFormat.MP4;
                 case TargetPlatform.Android:
+                    return VideoProcessorOutputFormat.MP4;
                 case TargetPlatform.BlazorGL:
+                    return VideoProcessorOutputFormat.MP4;
                 case TargetPlatform.DesktopGL:
-                    return ConvertToMP4(input, context);
+                    return VideoProcessorOutputFormat.MP4;
 
                 default:
-                    return ConvertToMP4(input, context);
+                    return VideoProcessorOutputFormat.MP4;
             }
         }
 
-        private VideoContent ConvertToWmv(VideoContent input, ContentProcessorContext context)
+        public static string GetExtension(VideoProcessorOutputFormat videoFormat)
         {
-            string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
-            ffmpegVCodecName = "wmv2";
-            ffmpegACodecName = "wmav2";
-            ffmpegContainerName = "wmv";
+            switch (videoFormat)
+            {
+                case VideoProcessorOutputFormat.WMV:
+                        return ".wmv";
+                case VideoProcessorOutputFormat.MP4:
+                        return ".mp4";
+                case VideoProcessorOutputFormat.WebM:
+                        return ".webm";
 
-            string tmpPath = Path.GetTempPath();
-            string tmpFilename = Path.GetRandomFileName();
-            string tmpOutput = Path.Combine(tmpPath, tmpFilename + "."+ffmpegContainerName);
-
-            string args = string.Format(
-                    "-y -i \"{0}\" -c:v {1} -c:a {2} -movflags +faststart \"{3}\"",
-                    input.Filename,
-                    ffmpegVCodecName,
-                    ffmpegACodecName,
-                    tmpOutput);
-
-            string ffmpegStdout, ffmpegStderr;
-            int ffmpegExitCode;
-
-            ffmpegExitCode = ExternalTool.Run("ffmpeg", args, out ffmpegStdout, out ffmpegStderr);
-
-            if (ffmpegExitCode != 0)
-                throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
-
-            return new VideoContent(tmpOutput);
-        }
-
-        private VideoContent ConvertToMP4(VideoContent input, ContentProcessorContext context)
-        {
-            string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
-            ffmpegVCodecName = "libx264";
-            ffmpegACodecName = "aac";
-            ffmpegContainerName = "mp4";
-
-            string tmpPath = Path.GetTempPath();
-            string tmpFilename = Path.GetRandomFileName();
-            string tmpOutput = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
-
-            string args = string.Format(
-                    //"-y -i \"{0}\" -c:v {1} -profile:v baseline -level 3.0 -c:a {2} -strict -2 -movflags +faststart \"{3}\"",
-                    "-y -i \"{0}\" -c:v {1} -profile:v main -c:a {2} -strict -2 -movflags +faststart \"{3}\"",
-                    input.Filename,
-                    ffmpegVCodecName,
-                    ffmpegACodecName,
-                    tmpOutput);
-
-            string ffmpegStdout, ffmpegStderr;
-            int ffmpegExitCode;
-
-            ffmpegExitCode = ExternalTool.Run("ffmpeg", args, out ffmpegStdout, out ffmpegStderr);
-
-            if (ffmpegExitCode != 0)
-                throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
-
-            return new VideoContent(tmpOutput);
-        }
-
-        private VideoContent ConvertToWebM(VideoContent input, ContentProcessorContext context)
-        {
-            string ffmpegVCodecName, ffmpegACodecName, ffmpegContainerName;
-            ffmpegVCodecName = "libvpx-vp9";
-            ffmpegACodecName = "libopus";
-            ffmpegContainerName = "webm";
-
-            string tmpPath = Path.GetTempPath();
-            string tmpFilename = Path.GetRandomFileName();
-            string tmpOutput = Path.Combine(tmpPath, tmpFilename + "." + ffmpegContainerName);
-
-            string args = string.Format(
-                    "-y -i \"{0}\" -c:v {1} -b:v 0 -crf 30 -c:a {2} -movflags +faststart -fflags +bitexact \"{3}\"",
-                    input.Filename,
-                    ffmpegVCodecName,
-                    ffmpegACodecName,
-                    tmpOutput);
-
-            string ffmpegStdout, ffmpegStderr;
-            int ffmpegExitCode;
-
-            ffmpegExitCode = ExternalTool.Run("ffmpeg", args, out ffmpegStdout, out ffmpegStderr);            
-            if (ffmpegExitCode != 0)
-                throw new InvalidOperationException("ffmpeg exited with non-zero exit code: \n" + ffmpegStdout + "\n" + ffmpegStderr);
-
-            return new VideoContent(tmpOutput);
+                default:
+                    throw new InvalidOperationException("Unsupported video format: " + videoFormat);
+            }
         }
     }
 }

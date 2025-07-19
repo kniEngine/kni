@@ -8,5 +8,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         NoChange = 1,
         WMV      = 2,
         MP4      = 3,
+        WebM     = 4,
     }
 }
