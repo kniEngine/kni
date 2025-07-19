@@ -62,13 +62,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 case TargetPlatform.WindowsStoreApp:
                     return VideoProcessorOutputFormat.WMV;
                 case TargetPlatform.iOS:
-                    return VideoProcessorOutputFormat.MP4;
+                    return VideoProcessorOutputFormat.WebM;
                 case TargetPlatform.Android:
-                    return VideoProcessorOutputFormat.MP4;
+                    return VideoProcessorOutputFormat.WebM;
                 case TargetPlatform.BlazorGL:
-                    return VideoProcessorOutputFormat.MP4;
+                    return VideoProcessorOutputFormat.WebM;
                 case TargetPlatform.DesktopGL:
-                    return VideoProcessorOutputFormat.MP4;
+                    return VideoProcessorOutputFormat.WebM;
 
                 default:
                     return VideoProcessorOutputFormat.WebM;
