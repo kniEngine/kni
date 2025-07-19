@@ -29,13 +29,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             Directory.CreateDirectory(Path.GetDirectoryName(absVideoPath));
 
             VideoContent output;
-            if (VideoFormat == VideoProcessorOutputFormat.NoChange)
+            VideoProcessorOutputFormat videoFormat = VideoFormat;
+
+            if (videoFormat == VideoProcessorOutputFormat.NoChange)
             {
                 output = input;
             }
             else
             {
-                output = ConvertFormat(input, context, VideoFormat);
+                if (videoFormat == VideoProcessorOutputFormat.Default)
+                    videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
+
+                string tmpPath = Path.GetTempPath();
+                string tmpFilename = Path.GetRandomFileName();
+                string containerName = VideoProcessor.GetExtension(videoFormat);
+                string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+
+                output = ConvertFormat(input, videoFormat, saveToFile);
                 absVideoPath = Path.ChangeExtension(absVideoPath, Path.GetExtension(output.Filename));
             }
 
@@ -50,16 +60,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private VideoContent ConvertFormat(VideoContent input, ContentProcessorContext context, VideoProcessorOutputFormat videoFormat)
+        private VideoContent ConvertFormat(VideoContent input, VideoProcessorOutputFormat videoFormat, string saveToFile)
         {
-            if (videoFormat == VideoProcessorOutputFormat.Default)
-                videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
-
-            string tmpPath = Path.GetTempPath();
-            string tmpFilename = Path.GetRandomFileName();
-            string containerName = VideoProcessor.GetExtension(videoFormat);
-            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
-
             switch (videoFormat)
             {
                 case VideoProcessorOutputFormat.WMV:
