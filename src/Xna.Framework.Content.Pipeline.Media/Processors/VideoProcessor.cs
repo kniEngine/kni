@@ -34,6 +34,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (videoFormat == VideoProcessorOutputFormat.NoChange)
             {
                 output = input;
+
+                // Copy the already encoded video file over
+                File.Copy(output.Filename, absVideoPath, true);
+                context.AddOutputFile(absVideoPath);
             }
             else
             {
@@ -48,11 +52,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 string saveToFile = Path.Combine(tmpPath, tmpFilename + containerExt);
 
                 output = input.ConvertFormat(saveToFile);
-            }
 
-            // Copy the already encoded video file over
-            File.Copy(output.Filename, absVideoPath, true);
-            context.AddOutputFile(absVideoPath);
+                // Copy the already encoded video file over
+                File.Copy(output.Filename, absVideoPath, true);
+                context.AddOutputFile(absVideoPath);
+            }
 
             // Fixup relative path
             string relativeMediaPath = PathHelper.GetRelativePath(context.OutputFilename, absVideoPath);
