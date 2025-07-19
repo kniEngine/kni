@@ -94,7 +94,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 switch (key)
                 {
                     case "duration":
-                        duration = TimeSpan.FromSeconds(double.Parse(value, CultureInfo.InvariantCulture));
+                        if (value != "N/A")
+                            duration = TimeSpan.FromSeconds(double.Parse(value, CultureInfo.InvariantCulture));
                         break;
 
                     case "bit_rate":
