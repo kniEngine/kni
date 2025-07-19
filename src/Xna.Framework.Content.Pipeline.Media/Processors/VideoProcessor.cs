@@ -41,13 +41,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
 
                 string containerExt = VideoProcessor.GetExtension(videoFormat);
+                absVideoPath = Path.ChangeExtension(absVideoPath, containerExt);
 
                 string tmpPath = Path.GetTempPath();
                 string tmpFilename = Path.GetRandomFileName();
                 string saveToFile = Path.Combine(tmpPath, tmpFilename + containerExt);
 
                 output = input.ConvertFormat(saveToFile);
-                absVideoPath = Path.ChangeExtension(absVideoPath, containerExt);
             }
 
             // Copy the already encoded video file over
