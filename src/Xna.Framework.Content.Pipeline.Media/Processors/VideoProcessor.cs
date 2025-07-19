@@ -28,8 +28,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Make sure the output folder for the video exists.
             Directory.CreateDirectory(Path.GetDirectoryName(absVideoPath));
 
-            VideoContent output = ConvertFormat(input, context, VideoFormat);
-            absVideoPath = Path.ChangeExtension(absVideoPath, Path.GetExtension(output.Filename));
+            VideoContent output;
+            if (VideoFormat == VideoProcessorOutputFormat.NoChange)
+            {
+                output = input;
+            }
+            else
+            {
+                output = ConvertFormat(input, context, VideoFormat);
+                absVideoPath = Path.ChangeExtension(absVideoPath, Path.GetExtension(output.Filename));
+            }
 
             // Copy the already encoded video file over
             File.Copy(output.Filename, absVideoPath, true);
@@ -44,32 +52,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         private VideoContent ConvertFormat(VideoContent input, ContentProcessorContext context, VideoProcessorOutputFormat videoFormat)
         {
-            if (videoFormat == VideoProcessorOutputFormat.NoChange)
+            if (videoFormat == VideoProcessorOutputFormat.Default)
+                videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
+
+            string tmpPath = Path.GetTempPath();
+            string tmpFilename = Path.GetRandomFileName();
+            string containerName = VideoProcessor.GetExtension(videoFormat);
+            string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+
+            switch (videoFormat)
             {
-                return input;
-            }
-            else
-            {
-                if (videoFormat == VideoProcessorOutputFormat.Default)
-                    videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
+                case VideoProcessorOutputFormat.WMV:
+                    return ConvertToWmv(input, saveToFile);
+                case VideoProcessorOutputFormat.MP4:
+                    return ConvertToMP4(input, saveToFile);
+                case VideoProcessorOutputFormat.WebM:
+                    return ConvertToWebM(input, saveToFile);
 
-                string tmpPath = Path.GetTempPath();
-                string tmpFilename = Path.GetRandomFileName();
-                string containerName = VideoProcessor.GetExtension(videoFormat);
-                string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
-
-                switch (videoFormat)
-                {
-                    case VideoProcessorOutputFormat.WMV:
-                            return ConvertToWmv(input, saveToFile);
-                    case VideoProcessorOutputFormat.MP4:
-                            return ConvertToMP4(input, saveToFile);
-                    case VideoProcessorOutputFormat.WebM:
-                            return ConvertToWebM(input, saveToFile);
-
-                    default:
-                        throw new InvalidOperationException("Unsupported video format: " + videoFormat);
-                }
+                default:
+                    throw new InvalidOperationException("Unsupported video format: " + videoFormat);
             }
         }
 
