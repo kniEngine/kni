@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private static VideoProcessorOutputFormat GetDefaultOutputFormat(TargetPlatform targetPlatform)
+        public static VideoProcessorOutputFormat GetDefaultOutputFormat(TargetPlatform targetPlatform)
         {
             switch (targetPlatform)
             {
@@ -79,7 +79,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private static string GetExtension(VideoProcessorOutputFormat videoFormat)
+        public static string GetExtension(VideoProcessorOutputFormat videoFormat)
         {
             switch (videoFormat)
             {
