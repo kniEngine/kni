@@ -67,9 +67,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         {
             Filename = filename;
 
+            VideoContent.ProbeFormat(filename, out _width, out _height, out _duration, out _bitsPerSecond, out _framesPerSecond);
+        }
+
+        private static void ProbeFormat(string sourceFile, out int width, out int height, out TimeSpan duration, out int bitsPerSecond, out float framesPerSecond)
+        {
+            // Set default values if information is not available.
+            width = 0;
+            height = 0;
+            duration = TimeSpan.Zero;
+            bitsPerSecond = 0;
+            framesPerSecond = 0.0f;
+
             string stdout, stderr;
             var result = ExternalTool.Run("ffprobe",
-                string.Format("-i \"{0}\" -show_format -select_streams v -show_streams -print_format ini", Filename), out stdout, out stderr);
+                string.Format("-i \"{0}\" -show_format -select_streams v -show_streams -print_format ini", sourceFile), out stdout, out stderr);
 
             var lines = stdout.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
@@ -82,25 +94,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 switch (key)
                 {
                     case "duration":
-                        _duration = TimeSpan.FromSeconds(double.Parse(value, CultureInfo.InvariantCulture));
+                        duration = TimeSpan.FromSeconds(double.Parse(value, CultureInfo.InvariantCulture));
                         break;
 
                     case "bit_rate":
                         if (value != "N/A")
-                            _bitsPerSecond = int.Parse(value, CultureInfo.InvariantCulture);
+                            bitsPerSecond = int.Parse(value, CultureInfo.InvariantCulture);
                         break;
 
                     case "width":
-                        _width = int.Parse(value, CultureInfo.InvariantCulture);
+                        width = int.Parse(value, CultureInfo.InvariantCulture);
                         break;
 
                     case "height":
-                        _height = int.Parse(value, CultureInfo.InvariantCulture);
+                        height = int.Parse(value, CultureInfo.InvariantCulture);
                         break;
 
                     case "r_frame_rate":
                         var frac = value.Split('/');
-                        _framesPerSecond = float.Parse(frac[0], CultureInfo.InvariantCulture) / float.Parse(frac[1], CultureInfo.InvariantCulture);
+                        framesPerSecond = float.Parse(frac[0], CultureInfo.InvariantCulture) / float.Parse(frac[1], CultureInfo.InvariantCulture);
                         break;
                 }
             }
