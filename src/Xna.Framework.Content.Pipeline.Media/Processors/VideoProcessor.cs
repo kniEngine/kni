@@ -29,8 +29,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             Directory.CreateDirectory(Path.GetDirectoryName(absVideoPath));
 
             VideoContent output;
-            VideoProcessorOutputFormat videoFormat = VideoFormat;
 
+            VideoProcessorOutputFormat videoFormat = VideoFormat;
             if (videoFormat == VideoProcessorOutputFormat.NoChange)
             {
                 output = input;
