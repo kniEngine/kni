@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using System.Globalization;
+using System.IO;
 using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline
@@ -105,7 +106,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
         }
 
-        internal VideoContent ConvertToWmv(string saveToFile)
+        public VideoContent ConvertFormat(string saveToFile)
+        {
+            string containerExt = Path.GetExtension(saveToFile).ToLower();
+
+            switch (containerExt)
+            {
+                case ".wmv":
+                    return this.ConvertToWmv(saveToFile);
+                case ".mp4":
+                    return this.ConvertToMP4(saveToFile);
+                case ".webm":
+                    return this.ConvertToWebM(saveToFile);
+
+                default:
+                    throw new InvalidOperationException("Unsupported video format: " + containerExt);
+            }
+        }
+
+        private VideoContent ConvertToWmv(string saveToFile)
         {
             string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "wmv2";
@@ -129,7 +148,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             return new VideoContent(saveToFile);
         }
 
-        internal VideoContent ConvertToMP4(string saveToFile)
+        private VideoContent ConvertToMP4(string saveToFile)
         {
             string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "libx264";
@@ -154,7 +173,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             return new VideoContent(saveToFile);
         }
 
-        internal VideoContent ConvertToWebM(string saveToFile)
+        private VideoContent ConvertToWebM(string saveToFile)
         {
             string ffmpegVCodecName, ffmpegACodecName;
             ffmpegVCodecName = "libvpx-vp9";

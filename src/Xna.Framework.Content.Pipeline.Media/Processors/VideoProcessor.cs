@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 string tmpFilename = Path.GetRandomFileName();
                 string saveToFile = Path.Combine(tmpPath, tmpFilename + containerExt);
 
-                output = ConvertFormat(input, saveToFile);
+                output = input.ConvertFormat(saveToFile);
                 absVideoPath = Path.ChangeExtension(absVideoPath, containerExt);
             }
 
@@ -59,24 +59,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             output.Filename = relativeMediaPath;
 
             return output;
-        }
-
-        private VideoContent ConvertFormat(VideoContent input, string saveToFile)
-        {
-            string containerExt = Path.GetExtension(saveToFile).ToLower();
-
-            switch (containerExt)
-            {
-                case ".wmv":
-                    return input.ConvertToWmv(saveToFile);
-                case ".mp4":
-                    return input.ConvertToMP4(saveToFile);
-                case ".webm":
-                    return input.ConvertToWebM(saveToFile);
-
-                default:
-                    throw new InvalidOperationException("Unsupported video format: " + containerExt);
-            }
         }
 
         private static VideoProcessorOutputFormat GetDefaultOutputFormat(TargetPlatform targetPlatform)
