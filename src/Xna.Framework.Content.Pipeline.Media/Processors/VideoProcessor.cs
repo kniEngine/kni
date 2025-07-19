@@ -40,13 +40,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 if (videoFormat == VideoProcessorOutputFormat.Default)
                     videoFormat = VideoProcessor.GetDefaultOutputFormat(context.TargetPlatform);
 
+                string containerExt = VideoProcessor.GetExtension(videoFormat);
+
                 string tmpPath = Path.GetTempPath();
                 string tmpFilename = Path.GetRandomFileName();
-                string containerName = VideoProcessor.GetExtension(videoFormat);
-                string saveToFile = Path.Combine(tmpPath, tmpFilename + "." + containerName);
+                string saveToFile = Path.Combine(tmpPath, tmpFilename + containerExt);
 
-                output = ConvertFormat(input, videoFormat, saveToFile);
-                absVideoPath = Path.ChangeExtension(absVideoPath, Path.GetExtension(output.Filename));
+                output = ConvertFormat(input, saveToFile);
+                absVideoPath = Path.ChangeExtension(absVideoPath, containerExt);
             }
 
             // Copy the already encoded video file over
@@ -60,19 +61,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return output;
         }
 
-        private VideoContent ConvertFormat(VideoContent input, VideoProcessorOutputFormat videoFormat, string saveToFile)
+        private VideoContent ConvertFormat(VideoContent input, string saveToFile)
         {
-            switch (videoFormat)
+            string containerExt = Path.GetExtension(saveToFile).ToLower();
+
+            switch (containerExt)
             {
-                case VideoProcessorOutputFormat.WMV:
+                case ".wmv":
                     return input.ConvertToWmv(saveToFile);
-                case VideoProcessorOutputFormat.MP4:
+                case ".mp4":
                     return input.ConvertToMP4(saveToFile);
-                case VideoProcessorOutputFormat.WebM:
+                case ".webm":
                     return input.ConvertToWebM(saveToFile);
 
                 default:
-                    throw new InvalidOperationException("Unsupported video format: " + videoFormat);
+                    throw new InvalidOperationException("Unsupported video format: " + containerExt);
             }
         }
 
@@ -102,11 +105,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             switch (videoFormat)
             {
                 case VideoProcessorOutputFormat.WMV:
-                        return "wmv";
+                        return ".wmv";
                 case VideoProcessorOutputFormat.MP4:
-                        return "mp4";
+                        return ".mp4";
                 case VideoProcessorOutputFormat.WebM:
-                        return "webm";
+                        return ".webm";
 
                 default:
                     throw new InvalidOperationException("Unsupported video format: " + videoFormat);
