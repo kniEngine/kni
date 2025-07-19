@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             ffmpegACodecName = "libopus";
 
             string args = string.Format(
-                    "-y -i \"{0}\" -c:v {1} -b:v 0 -crf 30 -c:a {2} -movflags +faststart -fflags +bitexact \"{3}\"",
+                    "-y -i \"{0}\" -c:v {1} -b:v 0 -crf 30 -c:a {2} -fflags +bitexact \"{3}\"",
                     this.Filename,
                     ffmpegVCodecName,
                     ffmpegACodecName,
