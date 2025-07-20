@@ -101,7 +101,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             ImporterContext importContext = new ImporterContext(_manager, _logger, buildEvent);
-            object importedObject = _manager.ImportContent(buildEvent.Importer, importContext, buildEvent.SourceFile, buildEvent);
+            if (!File.Exists(buildEvent.SourceFile))
+                throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
+            // Store the last write time of the source file so we can detect if it has been changed.
+            buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
+            object importedObject = _manager.ImportContent(buildEvent.Importer, importContext, buildEvent.SourceFile);
             ContentProcessorContext processContext = new ProcessorContext(_manager, _logger, buildEvent);
             object processedObject = _manager.ProcessContent(buildEvent.Processor, processContext, importedObject);
 
