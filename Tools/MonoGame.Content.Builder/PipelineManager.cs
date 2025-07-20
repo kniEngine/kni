@@ -692,11 +692,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Try importing the content.
             object importedObject;
-
             try
             {
                 ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
                 importedObject = importer.Import(buildEvent.SourceFile, importContext);
+                return importedObject;
             }
             catch (PipelineException) { throw; }
             catch (InvalidContentException) { throw; }
@@ -704,8 +704,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", buildEvent.Importer), inner);
             }
-
-            return importedObject;
         }
 
         public object ProcessContent(ConsoleLogger logger, BuildEvent buildEvent, object importedObject)
@@ -730,12 +728,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
 
             // Process the imported object.
-
             object processedObject;
             try
             {
                 ProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
                 processedObject = processor.Process(importedObject, processContext);
+                return processedObject;
             }
             catch (PipelineException) { throw; }
             catch (InvalidContentException) { throw; }
@@ -743,8 +741,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             {
                 throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", buildEvent.Processor), inner);
             }
-
-            return processedObject;
         }
 
         public void CleanContent(string outputFilepath)
