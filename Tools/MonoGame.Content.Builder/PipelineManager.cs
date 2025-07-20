@@ -286,7 +286,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return types.ToArray();
         }
 
-        public IContentImporter CreateImporter(string name)
+        private IContentImporter CreateImporter(string importerName)
         {
             if (_importers == null)
                 ResolveAssemblies();
@@ -294,11 +294,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Search for the importer.
             foreach (var info in _importers)
             {
-                if (info.type.Name.Equals(name))
+                if (info.type.Name.Equals(importerName))
                     return Activator.CreateInstance(info.type) as IContentImporter;
             }
 
-            return null;
+            throw new PipelineException("Failed to create importer '{0}'", importerName);
         }
 
         public string FindImporterByExtension(string ext)
@@ -689,8 +689,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // Make sure we can find the importer and processor.
             IContentImporter importer = CreateImporter(buildEvent.Importer);
-            if (importer == null)
-                throw new PipelineException("Failed to create importer '{0}'", buildEvent.Importer);
 
             // Try importing the content.
             object importedObject;
