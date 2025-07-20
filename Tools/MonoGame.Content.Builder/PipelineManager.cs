@@ -643,9 +643,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (rebuild)
                 {
                     // Import and process the content.
-                    ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
+                    ContentImporterContext importContext = new ImporterContext(this, logger, buildEvent);
                     object importedObject = ImportContent(buildEvent, importContext);
-                    object processedObject = ProcessContent(logger, buildEvent, importedObject);
+                    ContentProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
+                    object processedObject = ProcessContent(buildEvent, processContext, importedObject);
 
                     // Write the content to disk.
                     WriteXnb(processedObject, buildEvent);
@@ -679,7 +680,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return true;
         }
 
-        public object ImportContent(BuildEvent buildEvent, ImporterContext importContext)
+        public object ImportContent(BuildEvent buildEvent, ContentImporterContext importContext)
         {
             if (!File.Exists(buildEvent.SourceFile))
                 throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
@@ -705,7 +706,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        public object ProcessContent(ConsoleLogger logger, BuildEvent buildEvent, object importedObject)
+        public object ProcessContent(BuildEvent buildEvent, ContentProcessorContext processContext, object importedObject)
         {
             // The pipelineEvent.Processor can be null or empty. In this case the
             // asset should be imported but not processed.
@@ -713,7 +714,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 return importedObject;
 
             IContentProcessor processor = CreateProcessor2(buildEvent.Processor, buildEvent.Parameters, importedObject.GetType());
-            ProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
 
             // Process the imported object.
             object processedObject;
