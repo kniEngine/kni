@@ -644,7 +644,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 {
                     // Import and process the content.
                     ContentImporterContext importContext = new ImporterContext(this, logger, buildEvent);
-                    object importedObject = ImportContent(buildEvent, importContext);
+                    object importedObject = ImportContent(buildEvent.Importer, buildEvent, importContext);
                     ContentProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
                     object processedObject = ProcessContent(buildEvent.Processor, processContext, importedObject);
 
@@ -682,7 +682,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return true;
         }
 
-        public object ImportContent(BuildEvent buildEvent, ContentImporterContext importContext)
+        public object ImportContent(string importerName, BuildEvent buildEvent, ContentImporterContext importContext)
         {
             if (!File.Exists(buildEvent.SourceFile))
                 throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
@@ -691,7 +691,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // so we can detect if it has been changed.
             buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
 
-            IContentImporter importer = CreateImporter(buildEvent.Importer);
+            IContentImporter importer = CreateImporter(importerName);
 
             // Try importing the content.
             object importedObject;
@@ -704,7 +704,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             catch (InvalidContentException) { throw; }
             catch (Exception inner)
             {
-                throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", buildEvent.Importer), inner);
+                throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", importerName), inner);
             }
         }
 

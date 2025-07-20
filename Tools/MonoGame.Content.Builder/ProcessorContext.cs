@@ -101,7 +101,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             };
 
             ImporterContext importContext = new ImporterContext(_manager, _logger, buildEvent);
-            object importedObject = _manager.ImportContent(buildEvent, importContext);
+            object importedObject = _manager.ImportContent(buildEvent.Importer, buildEvent, importContext);
             ContentProcessorContext processContext = new ProcessorContext(_manager, _logger, buildEvent);
             object processedObject = _manager.ProcessContent(buildEvent.Processor, processContext, importedObject);
 
