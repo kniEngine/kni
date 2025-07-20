@@ -777,7 +777,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
         private void WriteXnb(object content, ContentProcessorContext processContext, BuildEvent buildEvent)
         {
             // Make sure the output directory exists.
-            string outputFileDir = Path.GetDirectoryName(buildEvent.DestFile);
+            string outputFileDir = Path.GetDirectoryName(processContext.OutputFilename);
 
             Directory.CreateDirectory(outputFileDir);
 
@@ -785,12 +785,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 _compiler = new ContentCompiler();
 
             // Write the XNB.
-            using (Stream stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (Stream stream = new FileStream(processContext.OutputFilename, FileMode.Create, FileAccess.Write, FileShare.None))
                 _compiler.Compile(stream, content, Platform, Profile, Compression, OutputDirectory, outputFileDir);
 
             // Store the last write time of the output XNB here
             // so we can verify it hasn't been tampered with.
-            buildEvent.DestTime = File.GetLastWriteTime(buildEvent.DestFile);
+            buildEvent.DestTime = File.GetLastWriteTime(processContext.OutputFilename);
         }
 
         private IContentProcessor CreateProcessor2(string processorName, OpaqueDataDictionary processorParameters, Type importedObjectType)
