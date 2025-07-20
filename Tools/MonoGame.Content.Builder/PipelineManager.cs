@@ -644,7 +644,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 {
                     // Import and process the content.
                     ContentImporterContext importContext = new ImporterContext(this, logger, buildEvent);
-                    object importedObject = ImportContent(buildEvent.Importer, buildEvent, importContext);
+                    object importedObject = ImportContent(buildEvent.Importer, importContext, buildEvent.SourceFile, buildEvent);
                     ContentProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
                     object processedObject = ProcessContent(buildEvent.Processor, processContext, importedObject);
 
@@ -682,7 +682,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return true;
         }
 
-        public object ImportContent(string importerName, BuildEvent buildEvent, ContentImporterContext importContext)
+        public object ImportContent(string importerName, ContentImporterContext importContext, string sourceFile, BuildEvent buildEvent)
         {
             if (!File.Exists(buildEvent.SourceFile))
                 throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
@@ -697,7 +697,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             object importedObject;
             try
             {
-                importedObject = importer.Import(buildEvent.SourceFile, importContext);
+                importedObject = importer.Import(sourceFile, importContext);
                 return importedObject;
             }
             catch (PipelineException) { throw; }
