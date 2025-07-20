@@ -646,7 +646,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     ContentImporterContext importContext = new ImporterContext(this, logger, buildEvent);
                     object importedObject = ImportContent(buildEvent, importContext);
                     ContentProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
-                    object processedObject = ProcessContent(buildEvent, processContext, importedObject);
+                    object processedObject = ProcessContent(buildEvent.Processor, processContext, importedObject);
 
                     // Write the content to disk.
                     WriteXnb(processedObject, processContext);
@@ -708,14 +708,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             }
         }
 
-        public object ProcessContent(BuildEvent buildEvent, ContentProcessorContext processContext, object importedObject)
+        public object ProcessContent(string processorName, ContentProcessorContext processContext, object importedObject)
         {
             // The pipelineEvent.Processor can be null or empty. In this case the
             // asset should be imported but not processed.
-            if (string.IsNullOrEmpty(buildEvent.Processor))
+            if (string.IsNullOrEmpty(processorName))
                 return importedObject;
 
-            IContentProcessor processor = CreateProcessor2(buildEvent.Processor, processContext.Parameters, importedObject.GetType());
+            IContentProcessor processor = CreateProcessor2(processorName, processContext.Parameters, importedObject.GetType());
 
             // Process the imported object.
             object processedObject;
@@ -728,7 +728,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             catch (InvalidContentException) { throw; }
             catch (Exception inner)
             {
-                throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", buildEvent.Processor), inner);
+                throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", processorName), inner);
             }
         }
 
