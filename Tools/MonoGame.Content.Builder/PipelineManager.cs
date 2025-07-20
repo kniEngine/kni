@@ -649,8 +649,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     object processedObject = ProcessContent(buildEvent, processContext, importedObject);
 
                     // Write the content to disk.
-                    WriteXnb(processedObject, processContext, buildEvent);
+                    WriteXnb(processedObject, processContext);
 
+                    // Store the last write time of the output XNB here so we can verify it hasn't been tampered with.
+                    buildEvent.DestTime = File.GetLastWriteTime(processContext.OutputFilename);
                     // Store the timestamp of the DLLs containing the importer and processor.
                     buildEvent.ImporterTime = GetImporterAssemblyTimestamp(buildEvent.Importer);
                     buildEvent.ProcessorTime = GetProcessorAssemblyTimestamp(buildEvent.Processor);
@@ -774,7 +776,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             DeleteBuildEvent(outputFilepath);
         }
 
-        private void WriteXnb(object content, ContentProcessorContext processContext, BuildEvent buildEvent)
+        private void WriteXnb(object content, ContentProcessorContext processContext)
         {
             // Make sure the output directory exists.
             string outputFileDir = Path.GetDirectoryName(processContext.OutputFilename);
@@ -787,10 +789,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Write the XNB.
             using (Stream stream = new FileStream(processContext.OutputFilename, FileMode.Create, FileAccess.Write, FileShare.None))
                 _compiler.Compile(stream, content, Platform, Profile, Compression, OutputDirectory, outputFileDir);
-
-            // Store the last write time of the output XNB here
-            // so we can verify it hasn't been tampered with.
-            buildEvent.DestTime = File.GetLastWriteTime(processContext.OutputFilename);
         }
 
         private IContentProcessor CreateProcessor2(string processorName, OpaqueDataDictionary processorParameters, Type importedObjectType)
