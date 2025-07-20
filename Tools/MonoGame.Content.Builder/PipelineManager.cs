@@ -687,7 +687,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // so we can detect if it has been changed.
             buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
 
-            // Make sure we can find the importer and processor.
             IContentImporter importer = CreateImporter(buildEvent.Importer);
 
             // Try importing the content.
