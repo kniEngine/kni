@@ -649,7 +649,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     object processedObject = ProcessContent(buildEvent, processContext, importedObject);
 
                     // Write the content to disk.
-                    WriteXnb(processedObject, buildEvent);
+                    WriteXnb(processedObject, processContext, buildEvent);
 
                     // Store the timestamp of the DLLs containing the importer and processor.
                     buildEvent.ImporterTime = GetImporterAssemblyTimestamp(buildEvent.Importer);
@@ -774,7 +774,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             DeleteBuildEvent(outputFilepath);
         }
 
-        private void WriteXnb(object content, BuildEvent buildEvent)
+        private void WriteXnb(object content, ContentProcessorContext processContext, BuildEvent buildEvent)
         {
             // Make sure the output directory exists.
             string outputFileDir = Path.GetDirectoryName(buildEvent.DestFile);
