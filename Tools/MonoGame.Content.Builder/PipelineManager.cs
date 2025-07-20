@@ -712,20 +712,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (string.IsNullOrEmpty(buildEvent.Processor))
                 return importedObject;
 
-            IContentProcessor processor = CreateProcessor(buildEvent.Processor, buildEvent.Parameters);
-            if (processor == null)
-                throw new PipelineException("Failed to create processor '{0}'", buildEvent.Processor);
-
-            // Make sure the input type is valid.
-            if (!processor.InputType.IsAssignableFrom(importedObject.GetType()))
-            {
-                throw new PipelineException(
-                    string.Format("The type '{0}' cannot be processed by {1} as a {2}!",
-                    importedObject.GetType().FullName,
-                    buildEvent.Processor,
-                    processor.InputType.FullName));
-            }
-
+            IContentProcessor processor = CreateProcessor2(buildEvent.Processor, buildEvent.Parameters, importedObject.GetType());
             ProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
 
             // Process the imported object.
@@ -804,6 +791,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Store the last write time of the output XNB here
             // so we can verify it hasn't been tampered with.
             buildEvent.DestTime = File.GetLastWriteTime(buildEvent.DestFile);
+        }
+
+        private IContentProcessor CreateProcessor2(string processorName, OpaqueDataDictionary processorParameters, Type importedObjectType)
+        {
+            IContentProcessor processor = CreateProcessor(processorName, processorParameters);
+            if (processor == null)
+                throw new PipelineException("Failed to create processor '{0}'", processorName);
+
+            // Make sure the input type is valid.
+            if (!processor.InputType.IsAssignableFrom(importedObjectType))
+            {
+                throw new PipelineException(
+                    string.Format("The type '{0}' cannot be processed by {1} as a {2}!",
+                    importedObjectType.FullName,
+                    processorName,
+                    processor.InputType.FullName));
+            }
+
+            return processor;
         }
 
         /// <summary>
