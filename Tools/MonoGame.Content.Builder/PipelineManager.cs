@@ -643,7 +643,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (rebuild)
                 {
                     // Import and process the content.
-                    object importedObject = ImportContent(logger, buildEvent);
+                    ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
+                    object importedObject = ImportContent(buildEvent, importContext);
                     object processedObject = ProcessContent(logger, buildEvent, importedObject);
 
                     // Write the content to disk.
@@ -678,7 +679,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return true;
         }
 
-        public object ImportContent(ConsoleLogger logger, BuildEvent buildEvent)
+        public object ImportContent(BuildEvent buildEvent, ImporterContext importContext)
         {
             if (!File.Exists(buildEvent.SourceFile))
                 throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
@@ -688,7 +689,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
 
             IContentImporter importer = CreateImporter(buildEvent.Importer);
-            ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
 
             // Try importing the content.
             object importedObject;

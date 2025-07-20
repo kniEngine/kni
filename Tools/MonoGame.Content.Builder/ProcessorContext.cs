@@ -100,7 +100,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Parameters = _manager.ValidateProcessorParameters(processorName, processorParameters),
             };
 
-            object importedObject = _manager.ImportContent(this._logger, buildEvent);
+            ImporterContext importContext = new ImporterContext(_manager, _logger, buildEvent);
+            object importedObject = _manager.ImportContent(buildEvent, importContext);
             object processedObject = _manager.ProcessContent(this._logger, buildEvent, importedObject);
 
             // Record that we processed this dependent asset.
