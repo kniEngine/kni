@@ -688,12 +688,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
 
             IContentImporter importer = CreateImporter(buildEvent.Importer);
+            ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
 
             // Try importing the content.
             object importedObject;
             try
             {
-                ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
                 importedObject = importer.Import(buildEvent.SourceFile, importContext);
                 return importedObject;
             }
@@ -726,11 +726,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                     processor.InputType.FullName));
             }
 
+            ProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
+
             // Process the imported object.
             object processedObject;
             try
             {
-                ProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
                 processedObject = processor.Process(importedObject, processContext);
                 return processedObject;
             }
