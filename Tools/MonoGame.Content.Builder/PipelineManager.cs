@@ -713,7 +713,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             if (string.IsNullOrEmpty(buildEvent.Processor))
                 return importedObject;
 
-            IContentProcessor processor = CreateProcessor2(buildEvent.Processor, buildEvent.Parameters, importedObject.GetType());
+            IContentProcessor processor = CreateProcessor2(buildEvent.Processor, processContext.Parameters, importedObject.GetType());
 
             // Process the imported object.
             object processedObject;
