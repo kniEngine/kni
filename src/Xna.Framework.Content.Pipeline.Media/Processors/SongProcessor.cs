@@ -63,10 +63,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     targetFormat = ConversionFormat.Mp3;
                     break;
                 case TargetPlatform.Android:
-                    targetFormat = ConversionFormat.Aac;
+                    targetFormat = ConversionFormat.Mp3;
                     break;
                 case TargetPlatform.iOS:
-                    targetFormat = ConversionFormat.Aac;
+                    targetFormat = ConversionFormat.Mp3;
                     break;
 
                 default:
