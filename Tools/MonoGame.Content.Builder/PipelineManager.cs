@@ -286,7 +286,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return types.ToArray();
         }
 
-        public IContentImporter CreateImporter(string name)
+        private IContentImporter CreateImporter(string importerName)
         {
             if (_importers == null)
                 ResolveAssemblies();
@@ -294,11 +294,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             // Search for the importer.
             foreach (var info in _importers)
             {
-                if (info.type.Name.Equals(name))
+                if (info.type.Name.Equals(importerName))
                     return Activator.CreateInstance(info.type) as IContentImporter;
             }
 
-            return null;
+            throw new PipelineException("Failed to create importer '{0}'", importerName);
         }
 
         public string FindImporterByExtension(string ext)
@@ -643,12 +643,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 if (rebuild)
                 {
                     // Import and process the content.
-                    object importedObject = ImportContent(logger, buildEvent);
-                    object processedObject = ProcessContent(logger, buildEvent, importedObject);
+                    ContentImporterContext importContext = new ImporterContext(this, logger, buildEvent);
+                    if (!File.Exists(buildEvent.SourceFile))
+                        throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
+                    // Store the last write time of the source file so we can detect if it has been changed.
+                    buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
+                    object importedObject = ImportContent(buildEvent.Importer, importContext, buildEvent.SourceFile);
+                    ContentProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
+                    object processedObject = ProcessContent(buildEvent.Processor, processContext, importedObject);
 
                     // Write the content to disk.
-                    WriteXnb(processedObject, buildEvent);
+                    WriteXnb(processedObject, processContext);
 
+                    // Store the last write time of the output XNB here so we can verify it hasn't been tampered with.
+                    buildEvent.DestTime = File.GetLastWriteTime(processContext.OutputFilename);
                     // Store the timestamp of the DLLs containing the importer and processor.
                     buildEvent.ImporterTime = GetImporterAssemblyTimestamp(buildEvent.Importer);
                     buildEvent.ProcessorTime = GetProcessorAssemblyTimestamp(buildEvent.Processor);
@@ -678,75 +686,47 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             return true;
         }
 
-        public object ImportContent(ConsoleLogger logger, BuildEvent buildEvent)
+        public object ImportContent(string importerName, ContentImporterContext importContext, string sourceFile)
         {
-            if (!File.Exists(buildEvent.SourceFile))
-                throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
-
-            // Store the last write time of the source file
-            // so we can detect if it has been changed.
-            buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
-
-            // Make sure we can find the importer and processor.
-            IContentImporter importer = CreateImporter(buildEvent.Importer);
-            if (importer == null)
-                throw new PipelineException("Failed to create importer '{0}'", buildEvent.Importer);
+            IContentImporter importer = CreateImporter(importerName);
 
             // Try importing the content.
             object importedObject;
-
             try
             {
-                ImporterContext importContext = new ImporterContext(this, logger, buildEvent);
-                importedObject = importer.Import(buildEvent.SourceFile, importContext);
+                importedObject = importer.Import(sourceFile, importContext);
+                return importedObject;
             }
             catch (PipelineException) { throw; }
             catch (InvalidContentException) { throw; }
             catch (Exception inner)
             {
-                throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", buildEvent.Importer), inner);
+                throw new PipelineException(string.Format("Importer '{0}' had unexpected failure!", importerName), inner);
             }
-
-            return importedObject;
         }
 
-        public object ProcessContent(ConsoleLogger logger, BuildEvent buildEvent, object importedObject)
+        public object ProcessContent(string processorName, ContentProcessorContext processContext, object importedObject)
         {
             // The pipelineEvent.Processor can be null or empty. In this case the
             // asset should be imported but not processed.
-            if (string.IsNullOrEmpty(buildEvent.Processor))
+            if (string.IsNullOrEmpty(processorName))
                 return importedObject;
 
-            IContentProcessor processor = CreateProcessor(buildEvent.Processor, buildEvent.Parameters);
-            if (processor == null)
-                throw new PipelineException("Failed to create processor '{0}'", buildEvent.Processor);
-
-            // Make sure the input type is valid.
-            if (!processor.InputType.IsAssignableFrom(importedObject.GetType()))
-            {
-                throw new PipelineException(
-                    string.Format("The type '{0}' cannot be processed by {1} as a {2}!",
-                    importedObject.GetType().FullName,
-                    buildEvent.Processor,
-                    processor.InputType.FullName));
-            }
+            IContentProcessor processor = CreateProcessor2(processorName, processContext.Parameters, importedObject.GetType());
 
             // Process the imported object.
-
             object processedObject;
             try
             {
-                ProcessorContext processContext = new ProcessorContext(this, logger, buildEvent);
                 processedObject = processor.Process(importedObject, processContext);
+                return processedObject;
             }
             catch (PipelineException) { throw; }
             catch (InvalidContentException) { throw; }
             catch (Exception inner)
             {
-                throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", buildEvent.Processor), inner);
+                throw new PipelineException(string.Format("Processor '{0}' had unexpected failure!", processorName), inner);
             }
-
-            return processedObject;
         }
 
         public void CleanContent(string outputFilepath)
@@ -793,10 +773,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
             DeleteBuildEvent(outputFilepath);
         }
 
-        private void WriteXnb(object content, BuildEvent buildEvent)
+        private void WriteXnb(object content, ContentProcessorContext processContext)
         {
             // Make sure the output directory exists.
-            string outputFileDir = Path.GetDirectoryName(buildEvent.DestFile);
+            string outputFileDir = Path.GetDirectoryName(processContext.OutputFilename);
 
             Directory.CreateDirectory(outputFileDir);
 
@@ -804,12 +784,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 _compiler = new ContentCompiler();
 
             // Write the XNB.
-            using (Stream stream = new FileStream(buildEvent.DestFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (Stream stream = new FileStream(processContext.OutputFilename, FileMode.Create, FileAccess.Write, FileShare.None))
                 _compiler.Compile(stream, content, Platform, Profile, Compression, OutputDirectory, outputFileDir);
+        }
 
-            // Store the last write time of the output XNB here
-            // so we can verify it hasn't been tampered with.
-            buildEvent.DestTime = File.GetLastWriteTime(buildEvent.DestFile);
+        private IContentProcessor CreateProcessor2(string processorName, OpaqueDataDictionary processorParameters, Type importedObjectType)
+        {
+            IContentProcessor processor = CreateProcessor(processorName, processorParameters);
+            if (processor == null)
+                throw new PipelineException("Failed to create processor '{0}'", processorName);
+
+            // Make sure the input type is valid.
+            if (!processor.InputType.IsAssignableFrom(importedObjectType))
+            {
+                throw new PipelineException(
+                    string.Format("The type '{0}' cannot be processed by {1} as a {2}!",
+                    importedObjectType.FullName,
+                    processorName,
+                    processor.InputType.FullName));
+            }
+
+            return processor;
         }
 
         /// <summary>

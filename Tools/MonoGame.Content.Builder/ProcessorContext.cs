@@ -100,8 +100,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
                 Parameters = _manager.ValidateProcessorParameters(processorName, processorParameters),
             };
 
-            object importedObject = _manager.ImportContent(this._logger, buildEvent);
-            object processedObject = _manager.ProcessContent(this._logger, buildEvent, importedObject);
+            ImporterContext importContext = new ImporterContext(_manager, _logger, buildEvent);
+            if (!File.Exists(buildEvent.SourceFile))
+                throw new PipelineException("The source file '{0}' does not exist!", buildEvent.SourceFile);
+            // Store the last write time of the source file so we can detect if it has been changed.
+            buildEvent.SourceTime = File.GetLastWriteTime(buildEvent.SourceFile);
+            object importedObject = _manager.ImportContent(buildEvent.Importer, importContext, buildEvent.SourceFile);
+            ContentProcessorContext processContext = new ProcessorContext(_manager, _logger, buildEvent);
+            object processedObject = _manager.ProcessContent(buildEvent.Processor, processContext, importedObject);
 
             // Record that we processed this dependent asset.
             if (!_buildEvent.Dependencies.Contains(sourceFilepath))
