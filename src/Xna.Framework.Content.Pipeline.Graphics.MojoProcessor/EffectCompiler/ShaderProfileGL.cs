@@ -261,6 +261,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             AddConstantBuffers(cbuffers, dxshader, symbols, dx11CBuffersData);
 
             string glsl110Code = parseData.output;
+            glsl110Code = glsl110Code.Replace("\r\n", "\n");
 
             string glsCode = ConvertGLSL110ToGLSL(dxshader, glsl110Code);
 
@@ -276,23 +277,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // code valid for GLES out of the box?
 
             // GLES platforms do not like this.
-            glslCode = glslCode.Replace("#version 110", "");
+            glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
 
-            string floatPrecision = dxshader.Stage == ShaderStage.Vertex ? "precision highp float;\r\n" : "precision mediump float;\r\n";
+            string floatPrecision = (dxshader.Stage == ShaderStage.Vertex) 
+                                  ? "precision highp float;\n" 
+                                  : "precision mediump float;\n";
 
-            glslCode = "#ifdef GL_ES\r\n" +
-                 floatPrecision +
-                "precision mediump int;\r\n" +
-                "#endif\r\n" +
-                glslCode;
+            glslCode = "#ifdef GL_ES\n" 
+                     + floatPrecision
+                     + "precision mediump int;\n" 
+                     + "#endif\n"
+                     + "\n" 
+                     + glslCode;
 
             // Enable standard derivatives extension as necessary
             if (glslCode.IndexOf("dFdx", StringComparison.InvariantCulture) >= 0
-            || glslCode.IndexOf("dFdy", StringComparison.InvariantCulture) >= 0)
+            ||  glslCode.IndexOf("dFdy", StringComparison.InvariantCulture) >= 0)
             {
-                glslCode = "#extension GL_OES_standard_derivatives : enable\r\n" + glslCode;
+                glslCode = "#extension GL_OES_standard_derivatives : enable\n" + glslCode;
             }
 
             return glslCode;
