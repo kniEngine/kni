@@ -42,16 +42,19 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 _shaderHandle = GL.CreateShader(shaderType);
                 GL.CheckGLError();
-                string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+
+                string shaderBytecodeStr = System.Text.Encoding.ASCII.GetString(shaderBytecode);
 
                 if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
                 &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL)
                 {
+                    string glslCode = shaderBytecodeStr;
                     // GLES 3.00 is required for dFdx/dFdy
-                    glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
+                    string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
+                    shaderBytecodeStr = glsl300esCode;
                 }
 
-                GL.ShaderSource(_shaderHandle, glslCode);
+                GL.ShaderSource(_shaderHandle, shaderBytecodeStr);
                 GL.CheckGLError();
                 GL.CompileShader(_shaderHandle);
                 GL.CheckGLError();
@@ -85,7 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
         static Regex rgxTexture = new Regex(
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
 
-        private string ConvertGLES100ToGLES300(WebGLShaderType shaderType, string glslCode)
+        private string ConvertGLSLToGLSL300es(WebGLShaderType shaderType, string glslCode)
         {
             switch (shaderType)
             {

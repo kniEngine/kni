@@ -260,8 +260,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Gather all the parameters used by this shader.
             AddConstantBuffers(cbuffers, dxshader, symbols, dx11CBuffersData);
 
-            string glslCode = parseData.output;
+            string glsl110Code = parseData.output;
 
+            string glsCode = ConvertGLSL110ToGLSL(dxshader, glsl110Code);
+
+            // Store the code for serialization.
+            dxshader.ShaderCode = Encoding.ASCII.GetBytes(glsCode);
+
+            return dxshader;
+        }
+
+        private static string ConvertGLSL110ToGLSL(ShaderData dxshader, string glslCode)
+        {
             // TODO: This sort of sucks... why does MojoShader not produce
             // code valid for GLES out of the box?
 
@@ -285,10 +295,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 glslCode = "#extension GL_OES_standard_derivatives : enable\r\n" + glslCode;
             }
 
-            // Store the code for serialization.
-            dxshader.ShaderCode = Encoding.ASCII.GetBytes(glslCode);
-
-            return dxshader;
+            return glslCode;
         }
 
         private static void AddConstantBuffers(List<ConstantBufferData> cbuffers, ShaderData dxshader, MojoShader.Symbol[] symbols, ConstantBufferData[] dx11CBuffersData)

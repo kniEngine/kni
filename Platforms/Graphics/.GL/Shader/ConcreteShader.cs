@@ -56,8 +56,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
                     // GLES 3.00 is required for gl_FragData
-                    glslCode = ConvertGLES100ToGLES300(shaderType, glslCode);
-                    shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glslCode);
+                    string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
+                    shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glsl300esCode);
                 }
 
                 GL.ShaderSource(_shaderHandle, shaderBytecode);
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Platform.Graphics
         static Regex rgxTexture = new Regex(
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
 
-        private string ConvertGLES100ToGLES300(ShaderType shaderType, string glslCode)
+        private string ConvertGLSLToGLSL300es(ShaderType shaderType, string glslCode)
         {
             switch (shaderType)
             {
