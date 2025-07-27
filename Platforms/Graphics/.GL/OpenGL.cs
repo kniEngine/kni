@@ -1820,10 +1820,15 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             return sb.ToString();
         }
 
-        internal unsafe void ShaderSource(int shaderId, byte[] shaderBytecode)
+        internal void ShaderSource(int shaderId, byte[] shaderBytecode)
+        {
+            ShaderSource(shaderId, shaderBytecode, 0, shaderBytecode.Length);
+        }
+
+        internal unsafe void ShaderSource(int shaderId, byte[] shaderBytecode, int index, int count)
         {
             int codeLength = shaderBytecode.Length;
-            fixed (void* pData = shaderBytecode)
+            fixed (void* pData = &shaderBytecode[index])
             {
                 void** ppData = &pData;
                 ShaderSourceInternal(shaderId, 1, new IntPtr(&pData), &codeLength);
