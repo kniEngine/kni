@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         static Regex rgxOES = new Regex(
-                @"^#extension GL_OES_standard_derivatives : enable", RegexOptions.Multiline);
+                @"^#extension GL_OES_standard_derivatives : enable\n", RegexOptions.Multiline);
         static Regex rgxPrecision = new Regex(
                 @"precision mediump (float|int);", RegexOptions.Multiline);
         static Regex rgxAttribute = new Regex(
@@ -131,7 +131,8 @@ namespace Microsoft.Xna.Platform.Graphics
             glslCode = rgxAttribute.Replace(glslCode, "in");
             glslCode = rgxTexture.Replace(glslCode, "texture");
 
-            glslCode = "#version 300 es" + '\n' + glslCode;
+            glslCode = "#version 300 es\n" 
+                     + glslCode;
 
             return glslCode;
         }
