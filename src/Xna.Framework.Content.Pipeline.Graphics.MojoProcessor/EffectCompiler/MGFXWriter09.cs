@@ -10,13 +10,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     class MGFXWriter09 : BinaryWriter
     {
-        private readonly int Version;
+        internal const string MGFXSignature = "MGFX";
+        internal const int Version = 9;
+
         private readonly Options options;
 
-        public MGFXWriter09(Stream output, int version, Options options) : base(output)
+        public MGFXWriter09(Stream output, Options options) : base(output)
         {
-            System.Diagnostics.Debug.Assert(version == 9);
-            this.Version = version;
             this.options = options;
         }
 
