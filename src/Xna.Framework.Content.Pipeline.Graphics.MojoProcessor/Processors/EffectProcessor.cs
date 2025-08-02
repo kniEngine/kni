@@ -497,12 +497,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             return state;
         }
-       
 
-
-
-        private const string MGFXSignature = "MGFX";
-        private const int Version = 10;
 
         /// <summary>
         /// Writes the effect for loading later.
@@ -510,8 +505,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
         {
             // Write a very simple header for identification and versioning.
-            writer.Write(MGFXSignature.ToCharArray());
-            writer.Write((byte)Version);
+            writer.Write(MGFXWriter10.MGFXSignature.ToCharArray());
+            writer.Write((byte)MGFXWriter10.Version);
 
             // Write an simple identifier for DX11 vs GLSL
             // so we can easily detect the correct shader type.
@@ -519,7 +514,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (MGFXWriter10 memWriter = new MGFXWriter10(memStream, Version, profileType))
+            using (MGFXWriter10 memWriter = new MGFXWriter10(memStream, profileType))
             {
                 memWriter.WriteEffect(effect);
 
@@ -531,10 +526,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 //write content from memory stream to final stream.
                 memStream.WriteTo(writer.BaseStream);
             }
-
-            // Write a tail to be used by the reader for validation.
-            if (Version >= 10)
-                writer.Write(MGFXSignature.ToCharArray());
         }
 
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)

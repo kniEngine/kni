@@ -10,13 +10,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     class MGFXWriter10 : BinaryWriter
     {
-        private readonly int Version;
+        internal const string MGFXSignature = "MGFX";
+        internal const int Version = 10;
+
         private readonly ShaderProfileType _profile;
 
-        public MGFXWriter10(Stream output, int version, ShaderProfileType profileType) : base(output)
+        public MGFXWriter10(Stream output, ShaderProfileType profileType) : base(output)
         {
-            System.Diagnostics.Debug.Assert(version == 10);
-            this.Version = version;
             this._profile = profileType;
         }
 
@@ -33,6 +33,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             WriteShaders(effectObject.Shaders);
             WriteParameters(effectObject.Parameters, effectObject.Parameters.Length);
             WriteTechniques(effectObject.Techniques);
+
+            // Write a tail to be used by the reader for validation.
+            Write(MGFXWriter10.MGFXSignature.ToCharArray());
         }
 
         private void WriteConstantBuffers(ICollection<ConstantBufferData> constantBuffers)
