@@ -33,9 +33,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             WriteShaders(effectObject.Shaders);
             WriteParameters(effectObject.Parameters, effectObject.Parameters.Length);
             WriteTechniques(effectObject.Techniques);
-
-            // Write a tail to be used by the reader for validation.
-            Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
         }
 
         private void WriteConstantBuffers(ICollection<ConstantBufferData> constantBuffers)

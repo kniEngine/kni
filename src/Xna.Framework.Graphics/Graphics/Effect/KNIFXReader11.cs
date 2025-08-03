@@ -45,11 +45,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 effect.CurrentTechnique = effect.Techniques[0];
 
-                // Check file tail to ensure we parsed the content correctly.
-                int tail = ReadInt32();
-                if (tail != KNIFXHeader.KNIFXSignature)
-                    throw new ArgumentException("The KNIFX effect code was not parsed correctly.", "effectCode");
-
                 return effect;
             }
 
