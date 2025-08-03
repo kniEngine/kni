@@ -22,7 +22,7 @@ namespace Kni.Tests.ContentPipeline
 #if WINDOWSDX
             GraphicsDevice gd = ((IGraphicsDeviceService)content.ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice;
             
-            Effect effect = AssetTestUtility.CompileEffect(gd, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(gd, Paths.RawEffect(effectName));
             return effect;
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
@@ -30,7 +30,13 @@ namespace Kni.Tests.ContentPipeline
 #endif
         }
 
-        public static Effect CompileEffect(GraphicsDevice graphicsDevice, string effectPath)
+        public static Effect CompileAndLoadEffect(GraphicsDevice graphicsDevice, string effectPath)
+        {
+            byte[] effectCode = CompileEffect(graphicsDevice, effectPath);
+            return new Effect(graphicsDevice, effectCode);
+        }
+
+        public static byte[] CompileEffect(GraphicsDevice graphicsDevice, string effectPath)
         {
 #if WINDOWSDX || DESKTOPGL || XNA
 
@@ -47,7 +53,7 @@ namespace Kni.Tests.ContentPipeline
 
             CompiledEffectContent compiledEffect = effectProcessor.Process(effectContent, context);
             byte[] effectCode = compiledEffect.GetEffectCode();
-            return new Effect(graphicsDevice, effectCode);
+            return effectCode;
 #else // OpenGL
             throw new NotImplementedException();
 #endif

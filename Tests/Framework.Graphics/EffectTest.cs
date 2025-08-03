@@ -175,7 +175,7 @@ namespace Kni.Tests.Graphics
             string effectName = "OldSyntax_x";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
@@ -229,7 +229,7 @@ namespace Kni.Tests.Graphics
             string effectName = "OldSyntax_s0s1";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
@@ -281,7 +281,7 @@ namespace Kni.Tests.Graphics
             string effectName = "OldSyntax_t0t1";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
@@ -356,7 +356,7 @@ namespace Kni.Tests.Graphics
             string effectName = "OldSyntax_t1t0";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
@@ -445,7 +445,7 @@ namespace Kni.Tests.Graphics
             string effectName = "OldSyntax_s0s1t0t1";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
@@ -496,7 +496,7 @@ namespace Kni.Tests.Graphics
             string effectName = "DeferredBasicEffect";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
@@ -557,7 +557,7 @@ namespace Kni.Tests.Graphics
             string effectName = "NewSyntax_t0t1";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
@@ -608,7 +608,7 @@ namespace Kni.Tests.Graphics
             string effectName = "NewSyntax_s0s1t0t1";
 
 #if WINDOWSDX || DESKTOPGL
-            Effect effect = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
 #else
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
