@@ -43,19 +43,45 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderHandle = GL.CreateShader(shaderType);
                 GL.CheckGLError();
 
-                string shaderBytecodeStr = System.Text.Encoding.ASCII.GetString(shaderBytecode);
-
-                if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
-                &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL)
+                if (shaderVersion == default) // Handle legacy MGFX
                 {
-                    string glslCode = shaderBytecodeStr;
-                    // GLES 3.00 is required for dFdx/dFdy
-                    string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
-                    shaderBytecodeStr = glsl300esCode;
+                    if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL
+                    &&  this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
+                    {
+                        string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+                        // GLES 3.00 is required for dFdx/dFdy
+                        string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
+
+                        GL.ShaderSource(_shaderHandle, glsl300esCode);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+                        GL.ShaderSource(_shaderHandle, glslCode);
+                        GL.CheckGLError();
+                    }
+                }
+                else // Handle KNIFX
+                {
+                    if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL
+                    &&  this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
+                    {
+                        string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode, 0, shaderBytecode.Length);
+                        // GLES 3.00 is required for dFdx/dFdy
+                        string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
+
+                        GL.ShaderSource(_shaderHandle, glsl300esCode);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode, 0, shaderBytecode.Length);
+                        GL.ShaderSource(_shaderHandle, glslCode);
+                        GL.CheckGLError();
+                    }
                 }
 
-                GL.ShaderSource(_shaderHandle, shaderBytecodeStr);
-                GL.CheckGLError();
                 GL.CompileShader(_shaderHandle);
                 GL.CheckGLError();
                 bool compiled = false;
