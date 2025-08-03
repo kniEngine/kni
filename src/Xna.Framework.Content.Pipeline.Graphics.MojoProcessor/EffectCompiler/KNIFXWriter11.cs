@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
     class KNIFXWriter11 : BinaryWriter
     {
-        private const string KNIFXSignature = "KNIF";
+        internal const string KNIFXSignature = "KNIF";
         internal const int Version = 11;
 
         private readonly ShaderProfileType _profile;
@@ -226,8 +226,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Write the index for the vertex and pixel shaders.
             int vertexShaderIndex  = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.VERTEXSHADER, pass.states);
             int pixelShaderIndex   = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.PIXELSHADER, pass.states);
+            int computeShaderIndex = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.COMPUTESHADER, pass.states);
             WritePackedInt(vertexShaderIndex);
             WritePackedInt(pixelShaderIndex);
+            WritePackedInt(computeShaderIndex);
 
             // Write the state objects too!
             if (pass.blendState != null)

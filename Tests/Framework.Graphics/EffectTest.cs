@@ -631,6 +631,19 @@ namespace Kni.Tests.Graphics
             texture1.Dispose();
             texture0.Dispose();
         }
+
+        [Test]
+        public void ShouldCompileComputeShader()
+        {
+            GraphicsDevice device = game.GraphicsDevice;
+
+            string effectName = "ComputeShader";
+
+            byte[] effectCode = AssetTestUtility.CompileEffect(device, Paths.RawEffect(effectName));
+
+            Effect effect =new Effect(device, effectCode);
+
+        }
 #endif
 
     }

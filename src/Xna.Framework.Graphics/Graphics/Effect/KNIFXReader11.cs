@@ -305,13 +305,18 @@ namespace Microsoft.Xna.Framework.Graphics
                 // Get the vertex and pixel shader.
                 VertexShader vertexShader = null;
                 PixelShader pixelShader = null;
+                //ComputeShader computeShader = null;
                 {
-                    int vertexShaderIndex = ReadPackedInt();
-                    int pixelShaderIndex  = ReadPackedInt();
+                    int vertexShaderIndex  = ReadPackedInt();
+                    int pixelShaderIndex   = ReadPackedInt();
+                    int computeShaderIndex = ReadPackedInt();
                     if (vertexShaderIndex >= 0)
                         vertexShader = (VertexShader)effect._shaders[vertexShaderIndex];
                     if (pixelShaderIndex >= 0)
                         pixelShader = (PixelShader)effect._shaders[pixelShaderIndex];
+                    if (computeShaderIndex >= 0)
+                        throw new NotImplementedException("Compute shaders are not implemented in this version of KNI.");
+                        //computeShader = (ComputeShader)effect._shaders[computeShaderIndex];
                 }
 
                 BlendState blend = ReadBoolean() ? ReadBlendState() : null;
