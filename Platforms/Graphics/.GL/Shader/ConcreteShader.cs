@@ -51,17 +51,45 @@ namespace Microsoft.Xna.Platform.Graphics
                 _shaderHandle = GL.CreateShader(shaderType);
                 GL.CheckGLError();
 
-                if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef
-                &&  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES)
+                if (shaderVersion == default) // Handle legacy MGFX
                 {
-                    string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
-                    // GLES 3.00 is required for gl_FragData
-                    string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
-                    shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glsl300esCode);
+                    if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES
+                    &&  this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
+                    {
+                        string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+                        // GLES 3.00 is required for gl_FragData
+                        string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
+                        shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glsl300esCode);
+
+                        GL.ShaderSource(_shaderHandle, shaderBytecode);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.ShaderSource(_shaderHandle, shaderBytecode);
+                        GL.CheckGLError();
+                    }
+                }
+                else // Handle KNIFX
+                {
+                    if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES
+                    &&  this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
+                    {
+                        string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
+                        // GLES 3.00 is required for gl_FragData
+                        string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
+                        shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glsl300esCode);
+
+                        GL.ShaderSource(_shaderHandle, shaderBytecode, 0, shaderBytecode.Length);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.ShaderSource(_shaderHandle, shaderBytecode, 0, shaderBytecode.Length);
+                        GL.CheckGLError();
+                    }
                 }
 
-                GL.ShaderSource(_shaderHandle, shaderBytecode);
-                GL.CheckGLError();
                 GL.CompileShader(_shaderHandle);
                 GL.CheckGLError();
                 int compiled = 0;
