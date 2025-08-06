@@ -1827,11 +1827,10 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         internal unsafe void ShaderSource(int shaderId, byte[] shaderBytecode, int index, int count)
         {
-            int codeLength = shaderBytecode.Length;
             fixed (void* pData = &shaderBytecode[index])
             {
                 void** ppData = &pData;
-                ShaderSourceInternal(shaderId, 1, new IntPtr(&pData), &codeLength);
+                ShaderSourceInternal(shaderId, 1, new IntPtr(&pData), &count);
             }
         }
 
