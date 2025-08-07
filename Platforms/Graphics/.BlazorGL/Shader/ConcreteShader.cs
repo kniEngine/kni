@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Platform.Graphics
             GraphicsProfile graphicsProfile = this.GraphicsDeviceStrategy.GraphicsProfile;
             ShaderVersion maxVersion = MaxShaderVersions[graphicsProfile];
             if (shaderVersion != default
-            && shaderVersion > maxVersion)
+            &&  shaderVersion > maxVersion)
             {
                 throw new NotSupportedException(
                     $"Shader model {shaderVersion} is not supported by the current graphics profile '{graphicsProfile}'.");
