@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Platform.Graphics
             glslCode = rgxAttribute.Replace(glslCode, "in");
             glslCode = rgxTexture.Replace(glslCode, "texture");
 
-            glslCode = "#version 300 es\n" 
+            glslCode = "#version 300 es\n"
                      + glslCode;
 
             return glslCode;
