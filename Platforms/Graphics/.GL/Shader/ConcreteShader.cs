@@ -72,22 +72,22 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else // Handle KNIFX
                 {
+                    int bytecodeOffset, bytecodeLength;
+
                     if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES
                     &&  this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
                     {
-                        string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode);
-                        // GLES 3.00 is required for gl_FragData
-                        string glsl300esCode = ConvertGLSLToGLSL300es(shaderType, glslCode);
-                        shaderBytecode = System.Text.Encoding.ASCII.GetBytes(glsl300esCode);
-
-                        GL.ShaderSource(_shaderHandle, shaderBytecode, 0, shaderBytecode.Length);
-                        GL.CheckGLError();
+                        FindShaderByteCode(shaderBytecode, major:3, minor:0, es:true,
+                            out bytecodeOffset, out bytecodeLength);
                     }
                     else
                     {
-                        GL.ShaderSource(_shaderHandle, shaderBytecode, 0, shaderBytecode.Length);
-                        GL.CheckGLError();
+                        FindShaderByteCode(shaderBytecode, major:0, minor:0, es:false,
+                            out bytecodeOffset, out bytecodeLength);
                     }
+
+                    GL.ShaderSource(_shaderHandle, shaderBytecode, bytecodeOffset, bytecodeLength);
+                    GL.CheckGLError();
                 }
 
                 GL.CompileShader(_shaderHandle);
@@ -118,6 +118,37 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
+        }
+
+        private void FindShaderByteCode(byte[] shaderBytecode, int major, int minor, bool es, out int bytecodeOffset, out int bytecodeLength)
+        {
+            int pos = 0;
+            
+            short reserved0 = BitConverter.ToInt16(shaderBytecode, pos); pos += 2;
+            if (reserved0 != 0)
+                throw new Exception("Invalid shader bytecode");
+
+            short count = BitConverter.ToInt16(shaderBytecode, pos); pos += 2;
+
+            for (int i = 0; i < count; i++)
+            {
+                int major0 = shaderBytecode[pos]; pos += 1;
+                int minor0 = shaderBytecode[pos]; pos += 1;
+                bool es0 = BitConverter.ToBoolean(shaderBytecode, pos); pos += 1;
+                int bytecodeOffset0 = BitConverter.ToInt32(shaderBytecode, pos); pos += 4;
+                int bytecodeLength0 = BitConverter.ToInt32(shaderBytecode, pos); pos += 4;
+
+                if (major == major0
+                &&  minor == minor0
+                &&  es == es0)
+                {
+                    bytecodeOffset = bytecodeOffset0;
+                    bytecodeLength = bytecodeLength0;
+                    return;
+                }
+            }
+
+            throw new InvalidOperationException("GLSL bytecode not found.");
         }
 
         static Regex rgxOES = new Regex(

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -266,8 +267,43 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             string glslCode = ConvertGLSL110ToGLSL(dxshader.Stage, glsl110Code);
             byte[] glslByteCode = Encoding.ASCII.GetBytes(glslCode);
 
-            // Store the code for serialization.
-            dxshader.ShaderCode = glslByteCode;
+            // GLES 3.00 is required for dFdx/dFdy/gl_FragData
+            string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glsl110Code);
+            byte[] glsl300esByteCode = Encoding.ASCII.GetBytes(glsl300esCode);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            using (BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.ASCII))
+            {
+                writer.Write((short)0); // Reserved
+
+                // write directory
+                writer.Write((short)2); // count
+
+                int offset0 = 26;
+
+                writer.Write((byte)0); // glsl major
+                writer.Write((byte)0); // glsl minor
+                writer.Write(false); // es
+                writer.Write((int)offset0);
+                writer.Write((int)glslByteCode.Length);
+
+                int offset1 = offset0 + glslByteCode.Length;
+
+                writer.Write((byte)3); // glsl major
+                writer.Write((byte)0); // glsl minor
+                writer.Write(true); // es
+                writer.Write((int)offset1);
+                writer.Write((int)glsl300esByteCode.Length);
+
+                // write bytecodes
+                Debug.Assert(memoryStream.Position == (offset0));
+                writer.Write(glslByteCode);
+                Debug.Assert(memoryStream.Position == (offset1));
+                writer.Write(glsl300esByteCode);
+
+                // Store the code for serialization.
+                dxshader.ShaderCode = memoryStream.ToArray();
+            }
 
             return dxshader;
         }
@@ -311,6 +347,53 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 glslCode = "#extension GL_OES_standard_derivatives : enable\n" + glslCode;
             }
+
+            return glslCode;
+        }
+
+        static Regex rgxAttribute = new Regex(
+                @"^attribute(?=\s)", RegexOptions.Multiline);
+        static Regex rgxVarying = new Regex(
+                @"^varying(?=\s)", RegexOptions.Multiline);
+        static Regex rgxFragColor = new Regex(
+                @"^#define (\w+) gl_FragColor", RegexOptions.Multiline);
+        static Regex rgxFragData = new Regex(
+                @"^#define (\w+) gl_FragData\[(\d+)\]", RegexOptions.Multiline);
+        static Regex rgxTexture = new Regex(
+                @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
+
+        private static string ConvertGLSL110ToGLSL300es(ShaderStage shaderStage, string glslCode)
+        {
+            glslCode = glslCode.Replace("#version 110\n", "");
+
+            // Add the required precision specifiers for GLES.
+            glslCode = "precision highp float;\n"
+                     + "precision highp int;\n"
+                     + "\n"
+                     + glslCode;
+
+            glslCode = "#version 300 es\n"
+                     + glslCode;
+
+            switch (shaderStage)
+            {
+                case ShaderStage.Vertex:
+                    {
+                        glslCode = rgxVarying.Replace(glslCode, "out");
+                    }
+                    break;
+
+                case ShaderStage.Pixel:
+                    {
+                        glslCode = rgxVarying.Replace(glslCode, "in");
+                        glslCode = rgxFragColor.Replace(glslCode, "out vec4 $1;");
+                        glslCode = rgxFragData.Replace(glslCode, "layout(location=$2) out vec4 $1;");
+                    }
+                    break;
+            }
+
+            glslCode = rgxAttribute.Replace(glslCode, "in");
+            glslCode = rgxTexture.Replace(glslCode, "texture");
 
             return glslCode;
         }
