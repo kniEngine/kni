@@ -263,15 +263,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             string glsl110Code = parseData.output;
             glsl110Code = glsl110Code.Replace("\r\n", "\n");
 
-            string glsCode = ConvertGLSL110ToGLSL(dxshader, glsl110Code);
+            string glslCode = ConvertGLSL110ToGLSL(dxshader.Stage, glsl110Code);
+            byte[] glslByteCode = Encoding.ASCII.GetBytes(glslCode);
 
             // Store the code for serialization.
-            dxshader.ShaderCode = Encoding.ASCII.GetBytes(glsCode);
+            dxshader.ShaderCode = glslByteCode;
 
             return dxshader;
         }
 
-        private static string ConvertGLSL110ToGLSL(ShaderData dxshader, string glslCode)
+        private static string ConvertGLSL110ToGLSL(ShaderStage shaderStage, string glslCode)
         {
             // TODO: This sort of sucks... why does MojoShader not produce
             // code valid for GLES out of the box?
@@ -280,14 +281,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
+            string glesFloatPrecision;
+            switch (shaderStage)
+            {
+                case ShaderStage.Pixel:
+                    glesFloatPrecision = "precision mediump float;\n";
+                    break;
+                case ShaderStage.Vertex:
+                    glesFloatPrecision = "precision highp float;\n";
+                    break;
+                case ShaderStage.Compute:
+                    glesFloatPrecision = "precision highp float;\n";
+                    break;
 
-            string floatPrecision = (dxshader.Stage == ShaderStage.Vertex) 
-                                  ? "precision highp float;\n" 
-                                  : "precision mediump float;\n";
+                default:
+                    throw new InvalidOperationException();
+            }
 
             glslCode = "#ifdef GL_ES\n" 
-                     + floatPrecision
-                     + "precision mediump int;\n" 
+                     + glesFloatPrecision
+                     + "precision mediump int;\n"
                      + "#endif\n"
                      + "\n" 
                      + glslCode;
