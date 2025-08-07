@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (profile != ShaderProfileType.OpenGL_Mojo)
                 throw new Exception("Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
-            
+
             GraphicsProfile graphicsProfile = this.GraphicsDeviceStrategy.GraphicsProfile;
             ShaderVersion maxVersion = MaxShaderVersions[graphicsProfile];
             if (shaderVersion != default
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     $"Shader model {shaderVersion} is not supported by the current graphics profile '{graphicsProfile}'.");
             }
 
-         }
+        }
 
         internal void CreateShader(GraphicsContextStrategy contextStrategy, ShaderType shaderType, ShaderVersion shaderVersion, byte[] shaderBytecode)
         {
