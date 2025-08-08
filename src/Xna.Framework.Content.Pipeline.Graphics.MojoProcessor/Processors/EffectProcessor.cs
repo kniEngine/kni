@@ -22,20 +22,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     [ContentProcessor(DisplayName = "Effect - KNI")]
     public class EffectProcessor : ContentProcessor<EffectContent, CompiledEffectContent>
     {
-        EffectProcessorDebugMode debugMode;
-        string defines;
+        private EffectProcessorDebugMode _debugMode;
+        private string _defines;
 
         /// <summary>
         /// The debug mode for compiling effects.
         /// </summary>
         /// <value>The debug mode to use when compiling effects.</value>
-        public virtual EffectProcessorDebugMode DebugMode { get { return debugMode; } set { debugMode = value; } }
+        public virtual EffectProcessorDebugMode DebugMode { get { return _debugMode; } set { _debugMode = value; } }
 
         /// <summary>
         /// Define assignments for the effect.
         /// </summary>
         /// <value>A list of define assignments delimited by semicolons.</value>
-        public virtual string Defines { get { return defines; } set { defines = value; } }
+        public virtual string Defines { get { return _defines; } set { _defines = value; } }
         
 
         /// <summary>
