@@ -198,8 +198,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 string name = ReadString();
                 string semantic = ReadString();
                 EffectAnnotationCollection annotations = ReadAnnotations();
-                int rowCount    = (int)ReadByte();
-                int columnCount = (int)ReadByte();
+                int rowCount     = (int)ReadByte();
+                int columnCount  = (int)ReadByte();
+                int columnCount2 = (int)ReadByte();
 
                 EffectParameterCollection elements = ReadParameters();
                 EffectParameterCollection structMembers = ReadParameters();
