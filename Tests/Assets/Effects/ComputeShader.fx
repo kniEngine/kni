@@ -1,4 +1,7 @@
-﻿struct Input
+﻿// code from @cpt-max Compute fork.
+// https://github.com/cpt-max/MonoGame/commit/eebfda5246bed106618c17eca416aae548547c04
+
+struct Input
 {
     float2 pos;
 };
