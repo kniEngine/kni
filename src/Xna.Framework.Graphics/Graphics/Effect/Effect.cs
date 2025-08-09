@@ -69,76 +69,81 @@ namespace Microsoft.Xna.Framework.Graphics
             KNIFXHeader fxHeader = new KNIFXHeader(effectCode, index);
             if (fxHeader.Signature == KNIFXHeader.KNIFXSignature)
             {
-                Effect effect;
-                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+                switch (fxHeader.Version)
                 {
-                    // First look for it in the cache.
-                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(fxHeader.EffectKey, out effect))
-                    {
-                        using (Stream stream = new MemoryStream(effectCode, index + fxHeader.HeaderSize, count - fxHeader.HeaderSize, false))
+                    case 11:
                         {
-                            switch (fxHeader.Version)
+                            int offset = fxHeader.HeaderSize;
+
+                            ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
+                            int effectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
+                            int length = count - offset;
+
+                            Effect effect;
+                            lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                             {
-                                case 11:
-                                    using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, fxHeader))
-                                        effect = reader.ReadEffect();
-                                    break;
+                                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(effectKey, out effect))
+                                {
+                                    using (Stream stream = new MemoryStream(effectCode, index + offset, length, false))
+                                    using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, shaderProfile))
+                                            effect = reader.ReadEffect();
 
-                                default:
-                                    if (fxHeader.Version > KNIFXHeader.CurrentKNIFXVersion)
-                                        throw new Exception("This effect seems to be for a newer version of KNI.");
-                                    if (fxHeader.Version < KNIFXHeader.CurrentKNIFXVersion)
-                                        throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
-                                    break;
+                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(effectKey, effect);
+                                }
                             }
-                            // Cache the effect for later in its original unmodified state.
-                            ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(fxHeader.EffectKey, effect);
-                        }
-                    }
-                }
 
-                // Clone it.
-                _isClone = true;
-                Clone(effect);
-                return;
+                            // Clone it.
+                            _isClone = true;
+                            Clone(effect);
+                            return;
+                        }
+
+                    default:
+                        if (fxHeader.Version > KNIFXHeader.CurrentKNIFXVersion)
+                            throw new Exception("This effect seems to be for a newer version of KNI.");
+                        if (fxHeader.Version < KNIFXHeader.CurrentKNIFXVersion)
+                            throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
+                        break;
+                }
             }
 
             //Read the mgfx header
             MGFXHeader mgfxheader = new MGFXHeader(effectCode, index);
             if (mgfxheader.Signature == MGFXHeader.MGFXSignature)
             {
-                Effect effect;
-                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+                switch (mgfxheader.Version)
                 {
-                    // First look for it in the cache.
-                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
-                    {
-                        using (Stream stream = new MemoryStream(effectCode, index + mgfxheader.HeaderSize, count - mgfxheader.HeaderSize, false))
+                    case 10:
                         {
-                            switch (mgfxheader.Version)
+                            int offset = mgfxheader.HeaderSize;
+                            int length = count - offset;
+
+                            Effect effect;
+                            lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                             {
-                                case 10:
-                                    using (MGFXReader10 reader = new MGFXReader10(stream, graphicsDevice, mgfxheader))
+                                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
+                                {
+                                    using (Stream stream = new MemoryStream(effectCode, index + offset, length, false))
+                                    using (MGFXReader10 reader = new MGFXReader10(stream, graphicsDevice, mgfxheader.Profile))
                                         effect = reader.ReadEffect();
-                                    break;
 
-                                default:
-                                    if (mgfxheader.Version > MGFXHeader.MGFXVersion)
-                                        throw new Exception("This effect seems to be for a newer version of KNI.");
-                                    if (mgfxheader.Version < MGFXHeader.MGFXVersion)
-                                        throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
-                                    break;
+                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
+                                }
                             }
-                            // Cache the effect for later in its original unmodified state.
-                            ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);
-                        }
-                    }
-                }
 
-                // Clone it.
-                _isClone = true;
-                Clone(effect);
-                return;
+                            // Clone it.
+                            _isClone = true;
+                            Clone(effect);
+                            return;
+                        }
+
+                    default:
+                        if (mgfxheader.Version > MGFXHeader.MGFXVersion)
+                            throw new Exception("This effect seems to be for a newer version of KNI.");
+                        if (mgfxheader.Version < MGFXHeader.MGFXVersion)
+                            throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
+                        break;
+                }
             }
 
             throw new Exception("This does not appear to be an FX effect file.");

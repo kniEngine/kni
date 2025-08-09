@@ -136,7 +136,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int minor0 = shaderBytecode[pos]; pos += 1;
                 bool es0 = BitConverter.ToBoolean(shaderBytecode, pos); pos += 1;
                 int bytecodeOffset0 = BitConverter.ToInt32(shaderBytecode, pos); pos += 4;
-                int bytecodeLength0 = BitConverter.ToInt32(shaderBytecode, pos); pos += 4;
+                int bytecodeLength0 = BitConverter.ToInt16(shaderBytecode, pos); pos += 2;
 
                 if (major == major0
                 &&  minor == minor0

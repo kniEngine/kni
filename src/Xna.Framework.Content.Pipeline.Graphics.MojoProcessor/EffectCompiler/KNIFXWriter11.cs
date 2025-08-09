@@ -13,11 +13,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         internal const string KNIFXSignature = "KNIF";
         internal const int Version = 11;
 
-        private readonly ShaderProfileType _profile;
-
-        public KNIFXWriter11(Stream output, ShaderProfileType profileType) : base(output)
+        public KNIFXWriter11(Stream output) : base(output)
         {
-            this._profile = profileType;
         }
 
         protected void WritePackedInt(int value)
