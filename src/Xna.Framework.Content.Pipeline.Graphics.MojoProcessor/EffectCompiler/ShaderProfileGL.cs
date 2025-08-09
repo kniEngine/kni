@@ -454,6 +454,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                             {
                                 Array.Copy(dx11paramArray, paramArray, paramArray.Length);
                             }
+                            if (paramArray.Length < dx11paramArray.Length)
+                            {
+                                Array.Copy(dx11paramArray, paramArray, paramArray.Length);
+                            }
                             else
                             {
                                 Debug.Assert(paramArray.Length == dx11paramArray.Length);
