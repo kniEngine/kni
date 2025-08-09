@@ -88,14 +88,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             try
             {
                 using (MemoryStream stream = new MemoryStream())
+                using (BinaryWriter writer = new BinaryWriter(stream))
                 {
-                    using (BinaryWriter writer = new BinaryWriter(stream))
-                    {
-                        Write(effectObject, writer, shaderProfile.ProfileType);
-                        byte[] effectBytecode = stream.ToArray();
-                        CompiledEffectContent result = new CompiledEffectContent(effectBytecode);
-                        return result;
-                    }
+                    // Write a very simple header for identification and versioning.
+                    writer.Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
+                    writer.Write((byte)KNIFXWriter11.Version);
+
+                    // Write an simple identifier for DX11 vs GLSL
+                    // so we can easily detect the correct shader type.
+                    writer.Write((byte)shaderProfile.ProfileType);
+
+                    Write(writer, effectObject);
+
+                    byte[] effectBytecode = stream.ToArray();
+                    return new CompiledEffectContent(effectBytecode);
                 }
             }
             catch (Exception ex)
@@ -498,23 +504,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             return state;
         }
 
-
         /// <summary>
         /// Writes the effect for loading later.
         /// </summary>
-        private void Write(EffectObject effect, BinaryWriter writer, ShaderProfileType profileType)
+        private void Write(BinaryWriter writer, EffectObject effect)
         {
-            // Write a very simple header for identification and versioning.
-            writer.Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
-            writer.Write((byte)KNIFXWriter11.Version);
-
-            // Write an simple identifier for DX11 vs GLSL
-            // so we can easily detect the correct shader type.
-            writer.Write((byte)profileType);
-
             // Write the rest to a memory stream.
             using (MemoryStream memStream = new MemoryStream())
-            using (KNIFXWriter11 memWriter = new KNIFXWriter11(memStream, profileType))
+            using (KNIFXWriter11 memWriter = new KNIFXWriter11(memStream))
             {
                 memWriter.WriteEffect(effect);
 

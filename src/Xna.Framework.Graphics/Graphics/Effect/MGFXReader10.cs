@@ -16,12 +16,12 @@ namespace Microsoft.Xna.Framework.Graphics
         private class MGFXReader10 : BinaryReader
         {
             private readonly GraphicsDevice _graphicsDevice;
-            private readonly MGFXHeader _header;
+            ShaderProfileType _shaderProfile;
 
-            public MGFXReader10(Stream stream, GraphicsDevice graphicsDevice, MGFXHeader header) : base(stream)
+            public MGFXReader10(Stream stream, GraphicsDevice graphicsDevice, ShaderProfileType shaderProfile) : base(stream)
             {
-                this._header = header;
                 this._graphicsDevice = graphicsDevice;
+                this._shaderProfile = shaderProfile;
             }
 
             private int ReadPackedInt()
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                                 parameters,
                                                 offsets,
                                                 sizeInBytes,
-                                                _header.Profile);
+                                                _shaderProfile);
                 return buffer;
             }
 
@@ -146,13 +146,13 @@ namespace Microsoft.Xna.Framework.Graphics
                             shaderVersion,
                             shaderBytecode,
                             samplers, cBuffers, attributes,
-                            _header.Profile);
+                            _shaderProfile);
                     case ShaderStage.Pixel:
                         return new PixelShader(_graphicsDevice,
                             shaderVersion,
                             shaderBytecode,
                             samplers, cBuffers, attributes,
-                            _header.Profile);
+                            _shaderProfile);
 
                     default:
                         throw new InvalidOperationException("stage");
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     switch (type)
                     {
                         case EffectParameterType.Bool:
-                            if (_header.Profile == ShaderProfileType.OpenGL_Mojo)
+                            if (_shaderProfile == ShaderProfileType.OpenGL_Mojo)
                             {
                                 // MojoShader stores Booleans in a float type.
                                 float[] buffer = new float[rowCount * columnCount];
@@ -229,7 +229,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             break;
 
                         case EffectParameterType.Int32:
-                            if (_header.Profile == ShaderProfileType.OpenGL_Mojo)
+                            if (_shaderProfile == ShaderProfileType.OpenGL_Mojo)
                             {
                                 // MojoShader stores Integers in a float type.
                                 float[] buffer = new float[rowCount * columnCount];
@@ -269,7 +269,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return new EffectParameter(
                     class_, type, name, rowCount, columnCount, semantic,
-                    annotations, elements, structMembers, data, _header.Profile);
+                    annotations, elements, structMembers, data, _shaderProfile);
             }
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)
