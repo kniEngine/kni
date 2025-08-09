@@ -91,6 +91,8 @@ namespace Microsoft.Xna.Framework.Graphics
                                         throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
                                     break;
                             }
+                            // Cache the effect for later in its original unmodified state.
+                            ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(fxHeader.EffectKey, effect);
                         }
                     }
                 }
