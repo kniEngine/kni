@@ -644,6 +644,41 @@ namespace Kni.Tests.Graphics
             Effect effect =new Effect(device, effectCode);
 
         }
+
+
+        [Test]
+        public void ShouldSetAndGetOptimizedMatrix()
+        {
+            GraphicsDevice device = game.GraphicsDevice;
+
+            string effectName = "OptimizedMatrix";
+
+#if WINDOWSDX || DESKTOPGL
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
+#else
+            Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
+#endif
+
+            //EffectPass effectPass = effect.CurrentTechnique.Passes[0];
+            //effectPass.Apply();
+
+            Matrix mtx = new Matrix(
+                11, 12, 13, 14,
+                21, 22, 23, 24,
+                31, 32, 33, 34,
+                41, 42, 43, 44
+            );
+
+            EffectParameter colorMatrixParam = effect.Parameters["ColorMatrix"];
+
+            colorMatrixParam.SetValue(mtx);
+
+            Matrix mtx2 = colorMatrixParam.GetValueMatrix();
+
+            Assert.That(mtx2, Is.EqualTo(mtx));
+            
+            effect.Dispose();
+        }
 #endif
 
     }
