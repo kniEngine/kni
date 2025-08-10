@@ -94,19 +94,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     writer.Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
                     writer.Write((byte)KNIFXWriter11.Version);
 
+                    // write fxCount
+                    writer.Write((short)1);
+
                     // Write an simple identifier for DX11 vs GLSL
                     // so we can easily detect the correct shader type.
-                    writer.Write((byte)shaderProfile.ProfileType);
+                    writer.Write((short)shaderProfile.ProfileType);
 
                     using (MemoryStream fxStream = new MemoryStream())
                     using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
                     {
                         fxWriter.WriteEffect(effectObject);
 
+                        int effectLength = (int)fxStream.Length;
+
                         // Calculate a hash code from memory stream and write it to the header.
                         int effectKey = HashHelper.ComputeHash(fxStream);
                         writer.Write((Int32)effectKey);
+                        // write fxOffset
+                        writer.Write((Int32)stream.Position+4);
 
+                        // write the length of the memory stream.
+                        writer.Write((Int32)effectLength);
                         //write content from memory stream to final stream.
                         fxStream.WriteTo(writer.BaseStream);
                     }

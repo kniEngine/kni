@@ -64,20 +64,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else // Handle KNIFX
                 {
-                    int bytecodeOffset, bytecodeLength;
+                    int bytecodeOffset;
 
                     if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL
                     &&  this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
                     {
-                        FindShaderByteCode(shaderBytecode, major:3, minor:0, es:true,
-                            out bytecodeOffset, out bytecodeLength);
+                        bytecodeOffset = FindShaderByteCode(shaderBytecode, major:3, minor:0, es:true);
                     }
                     else
                     {
-                        FindShaderByteCode(shaderBytecode, major:0, minor:0, es:false,
-                            out bytecodeOffset, out bytecodeLength);
+                        bytecodeOffset = FindShaderByteCode(shaderBytecode, major:0, minor:0, es:false);
                     }
 
+                    int bytecodeLength = BitConverter.ToInt16(shaderBytecode, bytecodeOffset); bytecodeOffset += 2;
                     string glslCode = System.Text.Encoding.ASCII.GetString(shaderBytecode, bytecodeOffset, bytecodeLength);
                     GL.ShaderSource(_shaderHandle, glslCode);
                     GL.CheckGLError();
@@ -100,7 +99,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private void FindShaderByteCode(byte[] shaderBytecode, int major, int minor, bool es, out int bytecodeOffset, out int bytecodeLength)
+        private int FindShaderByteCode(byte[] shaderBytecode, int major, int minor, bool es)
         {
             int pos = 0;
             
@@ -116,15 +115,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 int minor0 = shaderBytecode[pos]; pos += 1;
                 bool es0 = BitConverter.ToBoolean(shaderBytecode, pos); pos += 1;
                 int bytecodeOffset0 = BitConverter.ToInt32(shaderBytecode, pos); pos += 4;
-                int bytecodeLength0 = BitConverter.ToInt16(shaderBytecode, pos); pos += 2;
 
                 if (major == major0
                 &&  minor == minor0
                 &&  es == es0)
                 {
-                    bytecodeOffset = bytecodeOffset0;
-                    bytecodeLength = bytecodeLength0;
-                    return;
+                    return bytecodeOffset0;
                 }
             }
 

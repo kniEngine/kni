@@ -73,29 +73,38 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     case 11:
                         {
-                            int offset = fxHeader.HeaderSize;
+                            int headerOffset = fxHeader.HeaderSize;
 
-                            ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
-                            int effectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
-                            int length = count - offset;
+                            int fxCount = BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
+                            Debug.Assert(fxCount == 1);
 
-                            Effect effect;
-                            lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+                            for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
                             {
-                                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(effectKey, out effect))
+                                ShaderProfileType shaderProfile = (ShaderProfileType)BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
+                                int effectKey = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
+                                int fxOffset = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
+
+                                Effect effect;
+                                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                                 {
-                                    using (Stream stream = new MemoryStream(effectCode, index + offset, length, false))
-                                    using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, shaderProfile))
+                                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(effectKey, out effect))
+                                    {
+                                        int effectLength = BitConverter.ToInt32(effectCode, index + fxOffset); fxOffset += 4;
+                                        using (Stream stream = new MemoryStream(effectCode, index + fxOffset, effectLength, false))
+                                        using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, shaderProfile))
                                             effect = reader.ReadEffect();
 
-                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(effectKey, effect);
+                                        ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(effectKey, effect);
+                                    }
                                 }
+
+                                // Clone it.
+                                _isClone = true;
+                                Clone(effect);
+                                return;
                             }
 
-                            // Clone it.
-                            _isClone = true;
-                            Clone(effect);
-                            return;
+                            throw new Exception("Effect profile is not compatible with the graphics backend '" + graphicsDevice.Adapter.Backend + "'.");
                         }
 
                     default:
@@ -115,15 +124,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     case 10:
                         {
-                            int offset = mgfxheader.HeaderSize;
-                            int length = count - offset;
+                            int headerOffset = mgfxheader.HeaderSize;
+                            int fxOffset = headerOffset;
 
                             Effect effect;
                             lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                             {
                                 if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
                                 {
-                                    using (Stream stream = new MemoryStream(effectCode, index + offset, length, false))
+                                    int length = count - fxOffset;
+                                    using (Stream stream = new MemoryStream(effectCode, index + fxOffset, length, false))
                                     using (MGFXReader10 reader = new MGFXReader10(stream, graphicsDevice, mgfxheader.Profile))
                                         effect = reader.ReadEffect();
 
