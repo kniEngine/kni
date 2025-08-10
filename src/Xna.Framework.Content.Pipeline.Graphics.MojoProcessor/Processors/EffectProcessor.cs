@@ -107,6 +107,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         int effectKey = HashHelper.ComputeHash(fxStream);
                         writer.Write((Int32)effectKey);
 
+                        // write the length of the memory stream.
+                        writer.Write((Int32)fxStream.Position);
                         //write content from memory stream to final stream.
                         fxStream.WriteTo(writer.BaseStream);
                     }

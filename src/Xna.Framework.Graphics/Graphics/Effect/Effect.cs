@@ -77,14 +77,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
                             ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
                             int effectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
-                            int length = count - offset;
 
                             Effect effect;
                             lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                             {
                                 if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(effectKey, out effect))
-                                {
-                                    using (Stream stream = new MemoryStream(effectCode, index + offset, length, false))
+                                {   
+                                    int effectLength = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
+                                    using (Stream stream = new MemoryStream(effectCode, index + offset, effectLength, false))
                                     using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, shaderProfile))
                                             effect = reader.ReadEffect();
 
@@ -116,13 +116,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     case 10:
                         {
                             int offset = mgfxheader.HeaderSize;
-                            int length = count - offset;
 
                             Effect effect;
                             lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                             {
                                 if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(mgfxheader.EffectKey, out effect))
                                 {
+                                    int length = count - offset;
                                     using (Stream stream = new MemoryStream(effectCode, index + offset, length, false))
                                     using (MGFXReader10 reader = new MGFXReader10(stream, graphicsDevice, mgfxheader.Profile))
                                         effect = reader.ReadEffect();
