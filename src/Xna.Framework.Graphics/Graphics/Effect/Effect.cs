@@ -82,7 +82,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             {
                                 ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + headerOffset]; headerOffset += 1;
                                 int effectKey = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
-                                int fxOffset = headerOffset;
+                                int fxOffset = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
 
                                 Effect effect;
                                 lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)

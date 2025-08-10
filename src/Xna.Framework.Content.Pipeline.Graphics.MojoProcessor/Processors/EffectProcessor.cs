@@ -106,12 +106,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     {
                         fxWriter.WriteEffect(effectObject);
 
+                        int effectLength = (int)fxStream.Length;
+
                         // Calculate a hash code from memory stream and write it to the header.
                         int effectKey = HashHelper.ComputeHash(fxStream);
                         writer.Write((Int32)effectKey);
+                        // write fxOffset
+                        writer.Write((Int32)stream.Position+4);
 
                         // write the length of the memory stream.
-                        writer.Write((Int32)fxStream.Position);
+                        writer.Write((Int32)effectLength);
                         //write content from memory stream to final stream.
                         fxStream.WriteTo(writer.BaseStream);
                     }
