@@ -78,27 +78,32 @@ namespace Microsoft.Xna.Framework.Graphics
                             int fxCount = BitConverter.ToInt16(effectCode, index + offset); offset += 2;
                             Debug.Assert(fxCount == 1);
 
-                            ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
-                            int effectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
-
-                            Effect effect;
-                            lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+                            for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
                             {
-                                if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(effectKey, out effect))
-                                {   
-                                    int effectLength = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
-                                    using (Stream stream = new MemoryStream(effectCode, index + offset, effectLength, false))
-                                    using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, shaderProfile))
+                                ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
+                                int effectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
+
+                                Effect effect;
+                                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+                                {
+                                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(effectKey, out effect))
+                                    {
+                                        int effectLength = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
+                                        using (Stream stream = new MemoryStream(effectCode, index + offset, effectLength, false))
+                                        using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, shaderProfile))
                                             effect = reader.ReadEffect();
 
-                                    ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(effectKey, effect);
+                                        ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(effectKey, effect);
+                                    }
                                 }
+
+                                // Clone it.
+                                _isClone = true;
+                                Clone(effect);
+                                return;
                             }
 
-                            // Clone it.
-                            _isClone = true;
-                            Clone(effect);
-                            return;
+                            throw new Exception("Effect profile is not compatible with the graphics backend '" + graphicsDevice.Adapter.Backend + "'.");
                         }
 
                     default:
