@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                     // Write an simple identifier for DX11 vs GLSL
                     // so we can easily detect the correct shader type.
-                    writer.Write((byte)shaderProfile.ProfileType);
+                    writer.Write((short)shaderProfile.ProfileType);
 
                     using (MemoryStream fxStream = new MemoryStream())
                     using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))

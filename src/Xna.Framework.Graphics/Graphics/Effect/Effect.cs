@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                             for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
                             {
-                                ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + headerOffset]; headerOffset += 1;
+                                ShaderProfileType shaderProfile = (ShaderProfileType)BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
                                 int effectKey = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
                                 int fxOffset = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
 
