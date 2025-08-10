@@ -261,16 +261,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\armeabi-v7a\libopenal32.so">
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-arm\native\libopenal32.so">
       <Link>libs\armeabi-v7a\libopenal32.so</Link>
     </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\arm64-v8a\libopenal32.so">
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-arm64\native\libopenal32.so">
       <Link>libs\arm64-v8a\libopenal32.so</Link>
     </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\x86\libopenal32.so">
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-x86\native\libopenal32.so">
       <Link>libs\x86\libopenal32.so</Link>
     </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\libs\x86_64\libopenal32.so">
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-x64\native\libopenal32.so">
       <Link>libs\x86_64\libopenal32.so</Link>
     </EmbeddedNativeLibrary>
   </ItemGroup>
