@@ -279,26 +279,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 // write directory
                 writer.Write((short)2); // count
 
-                int offset0 = 22;
+                int offset0 = 18;
 
                 writer.Write((byte)0); // glsl major
                 writer.Write((byte)0); // glsl minor
                 writer.Write(false); // es
                 writer.Write((int)offset0);
-                writer.Write((short)glslByteCode.Length);
 
-                int offset1 = offset0 + glslByteCode.Length;
+                int offset1 = offset0 + glslByteCode.Length + 2;
 
                 writer.Write((byte)3); // glsl major
                 writer.Write((byte)0); // glsl minor
                 writer.Write(true); // es
                 writer.Write((int)offset1);
-                writer.Write((short)glsl300esByteCode.Length);
 
                 // write bytecodes
                 Debug.Assert(memoryStream.Position == (offset0));
+                writer.Write((short)glslByteCode.Length);
                 writer.Write(glslByteCode);
                 Debug.Assert(memoryStream.Position == (offset1));
+                writer.Write((short)glsl300esByteCode.Length);
                 writer.Write(glsl300esByteCode);
 
                 // Store the code for serialization.
