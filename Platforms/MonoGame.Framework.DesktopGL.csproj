@@ -227,7 +227,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(CopyContentFiles)' == 'True'">
-    <Content Include="..\ThirdParty\Dependencies\openal-soft\Windows\x86\soft_oal.dll">
+    <Content Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\win-x86\native\soft_oal.dll">
       <Link>x86\soft_oal.dll</Link>
       <PackagePath>runtimes\win-x86\native</PackagePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -238,7 +238,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 
-    <Content Include="..\ThirdParty\Dependencies\openal-soft\Windows\x64\soft_oal.dll">
+    <Content Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\win-x64\native\soft_oal.dll">
       <Link>x64\soft_oal.dll</Link>
       <PackagePath>runtimes\win-x64\native</PackagePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -249,7 +249,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 
-    <Content Include="..\ThirdParty\Dependencies\openal-soft\Linux\x64\libopenal.so.1">
+    <Content Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\linux-x64\native\libopenal.so.1">
       <Link>x64\libopenal.so.1</Link>
       <PackagePath>runtimes\linux-x64\native</PackagePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -260,7 +260,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 
-    <Content Include="..\ThirdParty\Dependencies\openal-soft\MacOS\Universal\libopenal.1.dylib">
+    <Content Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\osx\native\libopenal.1.dylib">
       <Link>libopenal.1.dylib</Link>
       <PackagePath>runtimes\osx\native</PackagePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
