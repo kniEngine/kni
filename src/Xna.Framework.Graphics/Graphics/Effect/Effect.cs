@@ -75,6 +75,9 @@ namespace Microsoft.Xna.Framework.Graphics
                         {
                             int offset = fxHeader.HeaderSize;
 
+                            int fxCount = BitConverter.ToInt16(effectCode, index + offset); offset += 2;
+                            Debug.Assert(fxCount == 1);
+
                             ShaderProfileType shaderProfile = (ShaderProfileType)effectCode[index + offset]; offset += 1;
                             int effectKey = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
 

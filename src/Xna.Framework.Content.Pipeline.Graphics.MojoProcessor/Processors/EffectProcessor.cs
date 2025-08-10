@@ -94,6 +94,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     writer.Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
                     writer.Write((byte)KNIFXWriter11.Version);
 
+                    // write fxCount
+                    writer.Write((short)1);
+
                     // Write an simple identifier for DX11 vs GLSL
                     // so we can easily detect the correct shader type.
                     writer.Write((byte)shaderProfile.ProfileType);
