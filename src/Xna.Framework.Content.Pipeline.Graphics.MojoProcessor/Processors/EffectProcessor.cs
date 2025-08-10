@@ -98,7 +98,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     // so we can easily detect the correct shader type.
                     writer.Write((byte)shaderProfile.ProfileType);
 
-                    Write(writer, effectObject);
+                    using (MemoryStream fxStream = new MemoryStream())
+                    using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
+                    {
+                        fxWriter.WriteEffect(effectObject);
+
+                        // Calculate a hash code from memory stream and write it to the header.
+                        int effectKey = HashHelper.ComputeHash(fxStream);
+                        writer.Write((Int32)effectKey);
+
+                        //write content from memory stream to final stream.
+                        fxStream.WriteTo(writer.BaseStream);
+                    }
 
                     byte[] effectBytecode = stream.ToArray();
                     return new CompiledEffectContent(effectBytecode);
@@ -502,27 +513,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             return state;
-        }
-
-        /// <summary>
-        /// Writes the effect for loading later.
-        /// </summary>
-        private void Write(BinaryWriter writer, EffectObject effect)
-        {
-            // Write the rest to a memory stream.
-            using (MemoryStream memStream = new MemoryStream())
-            using (KNIFXWriter11 memWriter = new KNIFXWriter11(memStream))
-            {
-                memWriter.WriteEffect(effect);
-
-                // Calculate a hash code from memory stream
-                // and write it to the header.
-                int effectKey = HashHelper.ComputeHash(memStream);
-                writer.Write((Int32)effectKey);
-
-                //write content from memory stream to final stream.
-                memStream.WriteTo(writer.BaseStream);
-            }
         }
 
         private static void ProcessErrorsAndWarnings(bool buildFailed, string shaderErrorsAndWarnings, EffectContent input, ContentProcessorContext context)
