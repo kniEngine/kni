@@ -502,6 +502,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             state.parameter.class_ = EffectObject.PARAMETER_CLASS.OBJECT;
             state.parameter.rows = 0;
             state.parameter.columns = 0;
+            state.parameter.columnsActual = 0;
             state.parameter.data = sharedIndex;
             switch (shaderStage)
             {

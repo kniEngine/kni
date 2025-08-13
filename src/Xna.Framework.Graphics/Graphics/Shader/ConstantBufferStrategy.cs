@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Platform.Graphics
                             // TODO: HLSL can be told to use row-major. We should handle that too.
                             if (param.ParameterClass == EffectParameterClass.Matrix)
                             {
-                                SetData(offset, param.ColumnCount, param.RowCount, param.Data);
+                                SetData(offset, param.ColumnCountActual, param.RowCount, param.Data);
                                 return (param.ColumnCount * RowSize);
                             }
                             else

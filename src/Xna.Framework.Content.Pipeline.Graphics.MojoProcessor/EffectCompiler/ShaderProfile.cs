@@ -288,6 +288,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
             param.rows = (uint)type.Description.RowCount;
             param.columns = (uint)type.Description.ColumnCount;
+            param.columnsActual = (uint)type.Description.ColumnCount;
             param.name = type.Description.Name ?? string.Empty;
             param.semantic = string.Empty;
             param.bufferOffset = type.Description.Offset;
@@ -354,6 +355,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     mparam.class_ = param.class_;
                     mparam.rows = param.rows;
                     mparam.columns = param.columns;
+                    mparam.columnsActual = param.columnsActual;
                     mparam.data = new byte[param.columns * param.rows * 4];
 
                     param.member_handles[i] = mparam;

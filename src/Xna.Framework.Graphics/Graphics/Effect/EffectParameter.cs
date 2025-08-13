@@ -28,6 +28,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public int RowCount { get; private set; }
 
         public int ColumnCount { get; private set; }
+        
+        internal int ColumnCountActual { get; private set; }
 
         public EffectParameterCollection Elements { get; private set; }
 
@@ -55,6 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                     string name,
                                     int rowCount,
                                     int columnCount,
+                                    int columnCountActual,
                                     string semantic,
                                     EffectAnnotationCollection annotations,
                                     EffectParameterCollection elements,
@@ -71,6 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             RowCount = rowCount;
             ColumnCount = columnCount;
+            ColumnCountActual = columnCountActual;
 
             Elements = elements;
             StructureMembers = structMembers;
@@ -91,6 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Annotations = cloneSource.Annotations;
             RowCount = cloneSource.RowCount;
             ColumnCount = cloneSource.ColumnCount;
+            ColumnCountActual = cloneSource.ColumnCountActual;
 
             // Clone the mutable types.
             Elements = cloneSource.Elements.Clone();

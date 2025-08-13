@@ -200,7 +200,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 EffectAnnotationCollection annotations = ReadAnnotations();
                 int rowCount     = (int)ReadByte();
                 int columnCount  = (int)ReadByte();
-                int columnCount2 = (int)ReadByte();
+                int columnCountActual = (int)ReadByte();
 
                 EffectParameterCollection elements = ReadParameters();
                 EffectParameterCollection structMembers = ReadParameters();
@@ -269,7 +269,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 return new EffectParameter(
-                    class_, type, name, rowCount, columnCount, semantic,
+                    class_, type, name, rowCount, columnCount, columnCountActual, semantic,
                     annotations, elements, structMembers, data, _shaderProfile);
             }
 

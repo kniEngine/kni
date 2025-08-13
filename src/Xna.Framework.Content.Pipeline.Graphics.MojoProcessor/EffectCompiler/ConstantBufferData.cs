@@ -57,6 +57,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 if (    p1.name != p2.name ||
                         p1.rows != p2.rows ||
                         p1.columns != p2.columns ||
+                        p1.columnsActual != p2.columnsActual ||
                         p1.class_ != p2.class_ ||
                         p1.type != p2.type ||
                         p1.bufferOffset != p2.bufferOffset)
