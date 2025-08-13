@@ -268,7 +268,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 return new EffectParameter(
-                    class_, type, name, rowCount, columnCount, semantic,
+                    class_, type, name, rowCount, columnCount, columnCount, semantic,
                     annotations, elements, structMembers, data, _shaderProfile);
             }
 

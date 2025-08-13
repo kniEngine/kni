@@ -298,6 +298,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             public PARAMETER_TYPE  type;
             public uint rows;
             public uint columns;
+            // MojoShader optimizes matrices to occupy less registers.
+            // columnsActual store the actual number of columns.
+            public uint columnsActual;
             public uint element_count;
             public uint annotation_count = 0;
             public uint member_count;

@@ -513,6 +513,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
             param.rows = symbol.info.rows;
             param.columns = symbol.info.columns;
+            param.columnsActual = symbol.info.columns;
             param.name = symbol.name ?? string.Empty;
             param.semantic = string.Empty; // TODO: How do i do this with only MojoShader?
 
@@ -534,8 +535,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
 
                     // MojoShader optimizes matrices to occupy less registers.
-                    // This effectively convert a Matrix4x4 into Matrix4x3, Matrix4x2 or Matrix4x1.
-                    param.columns = Math.Min(param.columns, symbol.register_count);
+                    param.columnsActual = Math.Min(param.columnsActual, symbol.register_count);
 
                     break;
 
@@ -561,7 +561,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     throw new Exception("Unsupported parameter type!");
             }
 
-            // HACK: We don't have real default parameters from mojoshader! 
             param.data = new byte[param.rows * param.columns * 4];
 
             param.member_count = symbol.info.member_count;
@@ -593,6 +592,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     mparam.class_ = param.class_;
                     mparam.rows = param.rows;
                     mparam.columns = param.columns;
+                    mparam.columnsActual = param.columnsActual;
                     mparam.data = new byte[param.columns * param.rows * 4];
 
                     param.member_handles[i] = mparam;

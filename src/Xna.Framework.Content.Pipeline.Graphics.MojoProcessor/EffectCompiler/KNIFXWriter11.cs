@@ -174,7 +174,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             Write((byte)param.rows);
             Write((byte)param.columns);
-            Write((byte)param.columns);
+            Write((byte)param.columnsActual);
 
             // Write the elements or struct members.
             WriteParameters(param.member_handles, (int)param.element_count);
