@@ -3,8 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-	internal class MarshalHelper
-	{
+    internal class MarshalHelper
+    {
         public static T Unmarshal<T>(IntPtr ptr)
         {
             Type type = typeof(T);
@@ -12,21 +12,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return result;
         }
 
-		public static T[] UnmarshalArray<T>(IntPtr ptr, int count) 
+        public static T[] UnmarshalArray<T>(IntPtr ptr, int count) 
         {
-			Type type = typeof(T);
+            Type type = typeof(T);
             int size = Marshal.SizeOf(type);            
             T[] ret = new T[count];
 
             for (int i = 0; i < count; i++)
             {
                 int offset = i * size;
-				IntPtr structPtr = ptr + offset;
+                IntPtr structPtr = ptr + offset;
                 ret[i] = (T)Marshal.PtrToStructure(structPtr, type);
             }
 
-			return ret;
-		}
+            return ret;
+        }
 
         public static byte[] UnmarshalArray(IntPtr ptr, int count)
         {
@@ -34,6 +34,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Marshal.Copy(ptr, result, 0, count);
             return result;
         }	
-	}
+    }
 }
 
