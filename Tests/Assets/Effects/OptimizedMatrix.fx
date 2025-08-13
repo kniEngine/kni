@@ -1,5 +1,11 @@
 
-float4x4 ColorMatrix;
+float4x4 ColorMatrix =
+{
+    11, 21, 31, 41,
+    12, 22, 32, 42,
+    13, 23, 33, 43,
+    14, 24, 34, 44
+};
 
 float4 PS_Main(float4 inPosition : SV_Position,
                float4 inColor : COLOR0
