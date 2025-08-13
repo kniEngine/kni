@@ -6,12 +6,12 @@ using System;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-	public class ShaderCompilerException : Exception
-	{
-	    public ShaderCompilerException()
-	        : base("A shader failed to compile!")
-	    {	        
-	    }
-	}
+    public class ShaderCompilerException : Exception
+    {
+        public ShaderCompilerException()
+            : base("A shader failed to compile!")
+        {	        
+        }
+    }
 }
 

@@ -9,39 +9,39 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-	internal class ShaderData
-	{
+    internal class ShaderData
+    {
         private readonly ShaderStage _shaderStage;
 
-		public ShaderStage Stage { get { return _shaderStage; } }
+        public ShaderStage Stage { get { return _shaderStage; } }
 
 
         public ShaderData(ShaderStage shaderStage)
-		{
+        {
             _shaderStage = shaderStage;
-		}
+        }
 
-		public struct Attribute
-		{
+        public struct Attribute
+        {
             public string name;
             public VertexElementUsage usage;
-			public int index;
+            public int index;
 #pragma warning disable 649
             public int location;
 #pragma warning restore 649
         }
 
-		/// <summary>
-		/// The index to the constant buffers which are 
-		/// required by this shader at runtime.
-		/// </summary>
-		public int[] _cbuffers;
+        /// <summary>
+        /// The index to the constant buffers which are 
+        /// required by this shader at runtime.
+        /// </summary>
+        public int[] _cbuffers;
 
-		public SamplerInfo[] _samplers;
+        public SamplerInfo[] _samplers;
 
-		public ShaderData.Attribute[] _attributes;
+        public ShaderData.Attribute[] _attributes;
 
-		public byte[] ShaderCode { get; set; }
+        public byte[] ShaderCode { get; set; }
 
 
 #region Non-Serialized Stuff
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
 #endregion // Non-Serialized Stuff
 
-	}
+    }
 
 }
 
