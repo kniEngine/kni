@@ -659,24 +659,32 @@ namespace Kni.Tests.Graphics
             Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
 #endif
 
-            //EffectPass effectPass = effect.CurrentTechnique.Passes[0];
-            //effectPass.Apply();
+            EffectParameter colorMatrixParam = effect.Parameters["ColorMatrix"];
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
 
-            Matrix mtx = new Matrix(
+            effectPass.Apply();
+
+            Matrix mtx1 = new Matrix(
                 11, 12, 13, 14,
                 21, 22, 23, 24,
                 31, 32, 33, 34,
                 41, 42, 43, 44
             );
 
-            EffectParameter colorMatrixParam = effect.Parameters["ColorMatrix"];
-
-            colorMatrixParam.SetValue(mtx);
-
             Matrix mtx2 = colorMatrixParam.GetValueMatrix();
+            Assert.That(mtx2, Is.EqualTo(mtx1));
 
-            Assert.That(mtx2, Is.EqualTo(mtx));
-            
+            Matrix mtx3 = new Matrix(
+                211, 212, 213, 214,
+                221, 222, 223, 224,
+                231, 232, 233, 234,
+                241, 242, 243, 244
+            );
+
+            colorMatrixParam.SetValue(mtx3);
+            Matrix mtx4 = colorMatrixParam.GetValueMatrix();
+            Assert.That(mtx4, Is.EqualTo(mtx3));
+
             effect.Dispose();
         }
 #endif
