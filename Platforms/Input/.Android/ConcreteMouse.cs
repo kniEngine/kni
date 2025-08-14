@@ -80,6 +80,31 @@ namespace Microsoft.Xna.Platform.Input
             return false;
         }
 
+        internal bool OnTouchEvent(MotionEvent e)
+        {
+            switch (e.ActionMasked)
+            {
+                case MotionEventActions.Down:
+                case MotionEventActions.Move:
+                case MotionEventActions.Up:
+                    {
+                        MotionEventButtonState buttonState = e.ButtonState;
+                        int id = e.GetPointerId(0);
+
+                        _leftButton   = e.IsButtonPressed(MotionEventButtonState.Primary) 
+                                      ? ButtonState.Pressed : ButtonState.Released;
+                        _rightButton  = e.IsButtonPressed(MotionEventButtonState.Secondary)
+                                      ? ButtonState.Pressed : ButtonState.Released;
+                        _middleButton = e.IsButtonPressed(MotionEventButtonState.Tertiary)
+                                      ? ButtonState.Pressed : ButtonState.Released;
+                    }
+                    return true;
+
+            }
+
+            return false;
+        }
+
         public override void PlatformSetPosition(int x, int y)
         {
             throw new PlatformNotSupportedException();
