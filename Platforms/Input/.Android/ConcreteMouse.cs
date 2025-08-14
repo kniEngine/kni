@@ -7,6 +7,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Android.Views;
 
 namespace Microsoft.Xna.Platform.Input
 {
@@ -50,6 +51,33 @@ namespace Microsoft.Xna.Platform.Input
                     );
 
             return mouseState;
+        }
+
+        internal bool OnGenericMotionEvent(MotionEvent e)
+        {
+            switch (e.ActionMasked)
+            {
+                case MotionEventActions.HoverMove:
+                    {
+                        _pos.X = (int)e.GetX();
+                        _pos.Y = (int)e.GetY();
+                    }
+                    return true;
+
+                case MotionEventActions.Scroll:
+                    {
+                        _pos.X = (int)e.GetX();
+                        _pos.Y = (int)e.GetY();
+
+                        float vScroll = e.GetAxisValue(Axis.Vscroll);
+                        float hScroll = e.GetAxisValue(Axis.Hscroll);
+                        _scrollY += (int)vScroll;
+                        _scrollX += (int)hScroll;
+                    }
+                    return true;
+            }
+
+            return false;
         }
 
         public override void PlatformSetPosition(int x, int y)

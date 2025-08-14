@@ -129,6 +129,12 @@ namespace Microsoft.Xna.Framework
             if (((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().OnGenericMotionEvent(e))
                 return true;
 
+            if ((e.Source & InputSourceType.Mouse) == InputSourceType.Mouse)
+            {
+                if (((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().OnGenericMotionEvent(e))
+                    return true;
+            }
+
             return base.OnGenericMotionEvent(e);
         }
 
