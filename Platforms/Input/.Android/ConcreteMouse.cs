@@ -112,7 +112,30 @@ namespace Microsoft.Xna.Platform.Input
 
         public override void PlatformSetCursor(MouseCursor cursor)
         {
-            throw new PlatformNotSupportedException();
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+            {
+                if (_wndHandle != IntPtr.Zero)
+                {
+                    AndroidGameWindow droidWindow = AndroidGameWindow.FromHandle(_wndHandle);
+                    View view = droidWindow.GameView;
+
+                    PointerIcon pointerIcon = null;
+                    if (cursor != null)
+                    {
+                        pointerIcon = ((IPlatformMouseCursor)cursor).GetStrategy<ConcreteMouseCursor>().PointerIcon;
+                    }
+
+                    if (view.PointerIcon != pointerIcon)
+                        view.PointerIcon = pointerIcon;
+                }
+            }
+            else
+            {
+                if (cursor != null)
+                {
+                    throw new PlatformNotSupportedException();
+                }
+            }
         }
     }
 }

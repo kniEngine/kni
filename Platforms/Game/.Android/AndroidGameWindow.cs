@@ -12,6 +12,7 @@ using Android.OS;
 using Android.Views;
 using Android.Util;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Input.Touch;
@@ -126,6 +127,8 @@ namespace Microsoft.Xna.Framework
             _touchEventListener = new TouchEventListener();
             _touchEventListener.SetTouchListener(this);
 
+            if (Mouse.WindowHandle == IntPtr.Zero)
+                Mouse.WindowHandle = this.Handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = this.Handle;
         }
@@ -408,6 +411,8 @@ namespace Microsoft.Xna.Framework
 
             if (GameView != null)
             {
+                if (Mouse.WindowHandle == this.Handle)
+                    Mouse.WindowHandle = IntPtr.Zero;
                 if (TouchPanel.WindowHandle == this.Handle)
                     TouchPanel.WindowHandle = IntPtr.Zero;
 
