@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Platform.Input
         private int _scrollX, _scrollY;
         private int _rawX, _rawY;
         private ButtonState _leftButton, _rightButton, _middleButton;
+        private ButtonState _xButton1, _xButton2;
 
 
         public override IntPtr PlatformGetWindowHandle()
@@ -44,8 +45,8 @@ namespace Microsoft.Xna.Platform.Input
                     leftButton: _leftButton,
                     middleButton: _middleButton,
                     rightButton: _rightButton,
-                    xButton1: ButtonState.Released,
-                    xButton2: ButtonState.Released
+                    xButton1: _xButton1,
+                    xButton2: _xButton2
                     );
 
             return mouseState;
