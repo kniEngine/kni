@@ -53,8 +53,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override void PlatformSetPosition(int x, int y)
         {
-            _pos.X = x;
-            _pos.Y = y;
+            throw new PlatformNotSupportedException();
         }
 
         public override void PlatformSetCursor(MouseCursor cursor)
