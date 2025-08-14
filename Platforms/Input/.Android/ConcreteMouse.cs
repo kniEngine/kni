@@ -7,6 +7,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Android.Views;
 
 namespace Microsoft.Xna.Platform.Input
 {
@@ -18,6 +19,7 @@ namespace Microsoft.Xna.Platform.Input
         private int _scrollX, _scrollY;
         private int _rawX, _rawY;
         private ButtonState _leftButton, _rightButton, _middleButton;
+        private ButtonState _xButton1, _xButton2;
 
 
         public override IntPtr PlatformGetWindowHandle()
@@ -44,22 +46,96 @@ namespace Microsoft.Xna.Platform.Input
                     leftButton: _leftButton,
                     middleButton: _middleButton,
                     rightButton: _rightButton,
-                    xButton1: ButtonState.Released,
-                    xButton2: ButtonState.Released
+                    xButton1: _xButton1,
+                    xButton2: _xButton2
                     );
 
             return mouseState;
         }
 
+        internal bool OnGenericMotionEvent(MotionEvent e)
+        {
+            switch (e.ActionMasked)
+            {
+                case MotionEventActions.HoverMove:
+                    {
+                        _pos.X = (int)e.GetX();
+                        _pos.Y = (int)e.GetY();
+                    }
+                    return true;
+
+                case MotionEventActions.Scroll:
+                    {
+                        _pos.X = (int)e.GetX();
+                        _pos.Y = (int)e.GetY();
+
+                        float vScroll = e.GetAxisValue(Axis.Vscroll);
+                        float hScroll = e.GetAxisValue(Axis.Hscroll);
+                        _scrollY += (int)vScroll;
+                        _scrollX += (int)hScroll;
+                    }
+                    return true;
+            }
+
+            return false;
+        }
+
+        internal bool OnTouchEvent(MotionEvent e)
+        {
+            switch (e.ActionMasked)
+            {
+                case MotionEventActions.Down:
+                case MotionEventActions.Move:
+                case MotionEventActions.Up:
+                    {
+                        MotionEventButtonState buttonState = e.ButtonState;
+                        int id = e.GetPointerId(0);
+
+                        _leftButton   = e.IsButtonPressed(MotionEventButtonState.Primary) 
+                                      ? ButtonState.Pressed : ButtonState.Released;
+                        _rightButton  = e.IsButtonPressed(MotionEventButtonState.Secondary)
+                                      ? ButtonState.Pressed : ButtonState.Released;
+                        _middleButton = e.IsButtonPressed(MotionEventButtonState.Tertiary)
+                                      ? ButtonState.Pressed : ButtonState.Released;
+                    }
+                    return true;
+
+            }
+
+            return false;
+        }
+
         public override void PlatformSetPosition(int x, int y)
         {
-            _pos.X = x;
-            _pos.Y = y;
+            throw new PlatformNotSupportedException();
         }
 
         public override void PlatformSetCursor(MouseCursor cursor)
         {
-            throw new PlatformNotSupportedException();
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+            {
+                if (_wndHandle != IntPtr.Zero)
+                {
+                    AndroidGameWindow droidWindow = AndroidGameWindow.FromHandle(_wndHandle);
+                    View view = droidWindow.GameView;
+
+                    PointerIcon pointerIcon = null;
+                    if (cursor != null)
+                    {
+                        pointerIcon = ((IPlatformMouseCursor)cursor).GetStrategy<ConcreteMouseCursor>().PointerIcon;
+                    }
+
+                    if (view.PointerIcon != pointerIcon)
+                        view.PointerIcon = pointerIcon;
+                }
+            }
+            else
+            {
+                if (cursor != null)
+                {
+                    throw new PlatformNotSupportedException();
+                }
+            }
         }
     }
 }

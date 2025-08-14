@@ -29,6 +29,11 @@ namespace Microsoft.Xna.Platform.Input.Touch
             position.Y = e.GetY(e.ActionIndex);
             int id = e.GetPointerId(e.ActionIndex);
 
+            if ((e.Source & InputSourceType.Mouse) == InputSourceType.Mouse)
+            {
+                ((IPlatformMouse)Framework.Input.Mouse.Current).GetStrategy<ConcreteMouse>().OnTouchEvent(e);
+            }
+
             switch (e.ActionMasked)
             {
                 // DOWN
