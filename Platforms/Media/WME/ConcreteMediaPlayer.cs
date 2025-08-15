@@ -60,12 +60,14 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.PlatformVolume = value;
+
                 _mediaEngineEx.Volume = value;
             }
         }
 
         public override bool PlatformIsMuted
         {
+            get { return base.PlatformIsMuted; }
             set
             {
                 base.PlatformIsMuted = value;
@@ -76,12 +78,19 @@ namespace Microsoft.Xna.Platform.Media
 
         public override bool PlatformIsRepeating
         {
+            get { return base.PlatformIsRepeating; }
             set
             {
                 base.PlatformIsRepeating = value;
 
                 _mediaEngineEx.Loop = value;
             }
+        }
+
+        public override bool PlatformIsShuffled
+        {
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
         }
 
         public override bool PlatformGameHasControl

@@ -26,6 +26,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override float PlatformVolume
         {
+            get { return base.PlatformVolume; }
             set
             {
                 base.PlatformVolume = value;
@@ -37,6 +38,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override bool PlatformIsMuted
         {
+            get { return base.PlatformIsMuted; }
             set
             {
                 base.PlatformIsMuted = value;
@@ -44,6 +46,21 @@ namespace Microsoft.Xna.Platform.Media
                 if (base.Queue.Count > 0)
                     SetChannelVolumes();
             }
+        }
+
+        public override bool PlatformIsRepeating
+        {
+            get { return base.PlatformIsRepeating; }
+            set
+            {
+                base.PlatformIsRepeating = value;
+            }
+        }
+
+        public override bool PlatformIsShuffled
+        {
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
         }
 
         public override bool PlatformGameHasControl

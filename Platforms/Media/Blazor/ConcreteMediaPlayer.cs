@@ -34,6 +34,7 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.PlatformVolume = value;
+
                 _webPlayer.Volume = value;
             }
         }
@@ -44,6 +45,7 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.PlatformIsMuted = value;
+
                 _webPlayer.Muted = value;
             }
         }
@@ -54,6 +56,7 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.PlatformIsRepeating = value;
+
                 _webPlayer.Loop = value;
             }
         }
@@ -71,7 +74,10 @@ namespace Microsoft.Xna.Platform.Media
 
         public override TimeSpan PlatformPlayPosition
         {
-            get { return _webPlayer.CurrentTime; }
+            get
+            {
+                return _webPlayer.CurrentTime; 
+            }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)
