@@ -89,14 +89,15 @@ namespace Microsoft.Xna.Platform.Input
                 case MotionEventActions.Up:
                     {
                         MotionEventButtonState buttonState = e.ButtonState;
-                        int id = e.GetPointerId(0);
 
+#if !XAMARIN
                         _leftButton   = e.IsButtonPressed(MotionEventButtonState.Primary) 
                                       ? ButtonState.Pressed : ButtonState.Released;
                         _rightButton  = e.IsButtonPressed(MotionEventButtonState.Secondary)
                                       ? ButtonState.Pressed : ButtonState.Released;
                         _middleButton = e.IsButtonPressed(MotionEventButtonState.Tertiary)
                                       ? ButtonState.Pressed : ButtonState.Released;
+#endif
                     }
                     return true;
 
@@ -112,6 +113,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public override void PlatformSetCursor(MouseCursor cursor)
         {
+#if !XAMARIN
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
             {
                 if (_wndHandle != IntPtr.Zero)
@@ -128,14 +130,12 @@ namespace Microsoft.Xna.Platform.Input
                     if (view.PointerIcon != pointerIcon)
                         view.PointerIcon = pointerIcon;
                 }
+                return;
             }
-            else
-            {
-                if (cursor != null)
-                {
-                    throw new PlatformNotSupportedException();
-                }
-            }
+#endif
+
+            if (cursor != null)
+                throw new PlatformNotSupportedException();
         }
     }
 }
