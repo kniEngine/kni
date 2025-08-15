@@ -88,4 +88,3 @@ namespace Microsoft.Xna.Platform.Media
         }
     }
 }
-
