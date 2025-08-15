@@ -60,28 +60,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     DebugMode = EffectProcessorDebugMode.Debug;
             }
 
-            ShaderProfile shaderProfile = EffectProcessor.FromPlatform(context.TargetPlatform);
-            if (shaderProfile == null)
-                throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
-            
-            EffectObject effectObject;
-            try
+            List<ShaderProfile> shaderProfiles = new List<ShaderProfile>();
             {
-                string fullFilePath = Path.GetFullPath(input.Identity.SourceFilename);
-
-                // Preprocess the FX file expanding includes and macros.
-                string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
-
-                effectObject = ProcessTechniques(input, context, shaderProfile, fullFilePath, effectCode);
-            }
-            catch (InvalidContentException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                // TODO: Extract good line numbers from fx parser!
-                throw new InvalidContentException(ex.Message, input.Identity, ex);
+                ShaderProfile shaderProfile = EffectProcessor.FromPlatform(context.TargetPlatform);
+                if (shaderProfile == null)
+                    throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
+                shaderProfiles.Add(shaderProfile);
             }
 
             // Write out the effect to a runtime format.
@@ -95,29 +79,53 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     writer.Write((byte)KNIFXWriter11.Version);
 
                     // write fxCount
-                    writer.Write((short)1);
-
-                    // Write an simple identifier for DX11 vs GLSL
-                    // so we can easily detect the correct shader type.
-                    writer.Write((short)shaderProfile.ProfileType);
-
-                    using (MemoryStream fxStream = new MemoryStream())
-                    using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
+                    writer.Write((short)shaderProfiles.Count);
+                    for (int shaderProfileIdx = 0; shaderProfileIdx < shaderProfiles.Count; shaderProfileIdx++)
                     {
-                        fxWriter.WriteEffect(effectObject);
+                        ShaderProfile shaderProfile = shaderProfiles[shaderProfileIdx];
 
-                        int effectLength = (int)fxStream.Length;
+                        EffectObject effectObject;
+                        try
+                        {
+                            string fullFilePath = Path.GetFullPath(input.Identity.SourceFilename);
 
-                        // Calculate a hash code from memory stream and write it to the header.
-                        int effectKey = HashHelper.ComputeHash(fxStream);
-                        writer.Write((Int32)effectKey);
-                        // write fxOffset
-                        writer.Write((Int32)stream.Position+4);
+                            // Preprocess the FX file expanding includes and macros.
+                            string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
 
-                        // write the length of the memory stream.
-                        writer.Write((Int32)effectLength);
-                        //write content from memory stream to final stream.
-                        fxStream.WriteTo(writer.BaseStream);
+                            effectObject = ProcessTechniques(input, context, shaderProfile, fullFilePath, effectCode);
+                        }
+                        catch (InvalidContentException)
+                        {
+                            throw;
+                        }
+                        catch (Exception ex)
+                        {
+                            // TODO: Extract good line numbers from fx parser!
+                            throw new InvalidContentException(ex.Message, input.Identity, ex);
+                        }
+
+                        // Write an simple identifier for DX11 vs GLSL
+                        // so we can easily detect the correct shader type.
+                        writer.Write((short)shaderProfile.ProfileType);
+
+                        using (MemoryStream fxStream = new MemoryStream())
+                        using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
+                        {
+                            fxWriter.WriteEffect(effectObject);
+
+                            int effectLength = (int)fxStream.Length;
+
+                            // Calculate a hash code from memory stream and write it to the header.
+                            int effectKey = HashHelper.ComputeHash(fxStream);
+                            writer.Write((Int32)effectKey);
+                            // write fxOffset
+                            writer.Write((Int32)stream.Position + 4);
+
+                            // write the length of the memory stream.
+                            writer.Write((Int32)effectLength);
+                            //write content from memory stream to final stream.
+                            fxStream.WriteTo(writer.BaseStream);
+                        }
                     }
 
                     byte[] effectBytecode = stream.ToArray();
