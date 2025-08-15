@@ -5,6 +5,7 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
@@ -24,8 +25,8 @@ namespace Microsoft.Xna.Platform.Graphics
         public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
             : base(contextStrategy, name, parameters, offsets, sizeInBytes, profile)
         {
-            if (profile != ShaderProfileType.OpenGL_Mojo)
-                throw new Exception("Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
+            Debug.Assert(profile == ShaderProfileType.OpenGL_Mojo,
+                "Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
 
         }
 

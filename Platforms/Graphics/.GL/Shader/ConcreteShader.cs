@@ -27,8 +27,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-            if (profile != ShaderProfileType.OpenGL_Mojo)
-                throw new Exception("Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
+            Debug.Assert(profile == ShaderProfileType.OpenGL_Mojo,
+                "Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
 
             GraphicsProfile graphicsProfile = this.GraphicsDeviceStrategy.GraphicsProfile;
             ShaderVersion maxVersion = MaxShaderVersions[graphicsProfile];

@@ -87,6 +87,18 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return GraphicsBackend.WebGL; }
         }
 
+        public override bool Platform_IsShaderProfileSupported(ShaderProfileType shaderProfile)
+        {
+            switch (shaderProfile)
+            {
+                case ShaderProfileType.OpenGL_Mojo:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal ConcreteGraphicsAdapter()
         {
             _currentDisplayMode = base.CreateDisplayMode(800, 600, SurfaceFormat.Color);
