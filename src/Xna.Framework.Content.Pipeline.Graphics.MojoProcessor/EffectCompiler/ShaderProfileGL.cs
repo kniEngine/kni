@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         internal override void ValidateShaderModels(PassInfo pass, string shaderFunction, string shaderModel, ShaderStage shaderStage, ShaderVersion shaderVersion)
         {
-            const int MojoMaxShaderVersion = 3;
+            const int MojoMaxShaderVersion = 4;
 
             if (shaderStage == ShaderStage.Vertex)
             {
@@ -93,6 +93,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             string dx9ShaderProfileName = shaderProfileName;
             dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0_level_9_1", "s_2_0");
             dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0_level_9_3", "s_3_0");
+            dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0", "s_3_0");
             using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx9ShaderProfileName, false, ref errorsAndWarnings))
             {
                 ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, shaderInfo, shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, debugMode, dx11CBuffersData);

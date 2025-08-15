@@ -120,7 +120,13 @@ namespace Microsoft.Xna.Platform.Graphics
                         return (webgl2 != null);
                     }
                 case GraphicsProfile.FL10_0:
-                    return false;
+                    using (OffscreenCanvas oc = new OffscreenCanvas(1, 1))
+                    {
+                        IWebGL2RenderingContext webgl2 = oc.GetContext<IWebGL2RenderingContext>();
+                        if (webgl2 == null) return false;
+                        // TODO: add more Feature Level 10.0 checks
+                        return true;
+                    }
                 case GraphicsProfile.FL10_1:
                     return false;
                 case GraphicsProfile.FL11_0:
