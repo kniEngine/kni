@@ -26,7 +26,8 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 int offset = 0;
                 Signature = BitConverter.ToInt32(effectCode, index + offset); offset += 4;
-                Version = (int)effectCode[index + offset]; offset += 1;
+                Version = (int)BitConverter.ToInt16(effectCode, index + offset); offset += 2;
+                short reserved0 = BitConverter.ToInt16(effectCode, index + offset); offset += 2;
 
                 HeaderSize = offset;
             }

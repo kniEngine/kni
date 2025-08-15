@@ -76,7 +76,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 {
                     // Write a very simple header for identification and versioning.
                     writer.Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
-                    writer.Write((byte)KNIFXWriter11.Version);
+                    writer.Write((short)KNIFXWriter11.Version);
+                    writer.Write((short)0); // reserved
 
                     // write fxCount
                     writer.Write((short)shaderProfiles.Count);
