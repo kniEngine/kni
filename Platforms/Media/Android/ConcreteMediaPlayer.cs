@@ -130,7 +130,7 @@ namespace Microsoft.Xna.Platform.Media
                 }
 
                 _androidPlayer.Prepare();
-                _androidPlayer.Looping = MediaPlayer.IsRepeating;
+                _androidPlayer.Looping = this.PlatformIsRepeating;
                 _playingSong = song;
 
                 _androidPlayer.Start();
