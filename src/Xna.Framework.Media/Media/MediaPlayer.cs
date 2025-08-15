@@ -249,8 +249,8 @@ namespace Microsoft.Xna.Framework.Media
                 throw new ArgumentNullException("song", "This method does not accept null for this parameter.");
 
             Song previousSong = _strategy.Queue.Count > 0
-                             ? _strategy.Queue[0]
-                             : null;
+                              ? _strategy.Queue[0]
+                              : null;
 
             _strategy.PlatformClearQueue();
             _strategy.Queue.Add(song);
