@@ -13,6 +13,7 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteMouseCursor : MouseCursorStrategy
     {
+#if !XAMARIN
         PointerIconType _androidCursor;
         PointerIcon _pointerIcon;
 
@@ -39,15 +40,19 @@ namespace Microsoft.Xna.Platform.Input
                 return _pointerIcon;
             }
         }
+#endif
 
         public ConcreteMouseCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
             this._cursorType = cursorType;
             this._handle = IntPtr.Zero;
 
+#if !XAMARIN
             _androidCursor = CursorTypeToAndroidCursor(cursorType);
+#endif
         }
 
+#if !XAMARIN
         private PointerIconType CursorTypeToAndroidCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
@@ -88,7 +93,7 @@ namespace Microsoft.Xna.Platform.Input
                 return (PointerIconType)0;
             }
         }
-
+#endif
 
         public ConcreteMouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
