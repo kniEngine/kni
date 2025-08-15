@@ -166,11 +166,6 @@ namespace Microsoft.Xna.Platform.Media
             get { return true; }
         }
 
-        protected override bool PlatformUpdateState(ref MediaState state)
-        {
-            return false;
-        }
-
         public override float PlatformVolume
         {
             set
@@ -178,6 +173,11 @@ namespace Microsoft.Xna.Platform.Media
                 base.PlatformVolume = value;
                 SetChannelVolumes();
             }
+        }
+
+        protected override bool PlatformUpdateState(ref MediaState state)
+        {
+            return false;
         }
 
         #endregion

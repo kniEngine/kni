@@ -50,11 +50,6 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        protected override bool PlatformUpdateState(ref MediaState state)
-        {
-            return false;
-        }
-
         public override float PlatformVolume
         {
             set
@@ -69,6 +64,11 @@ namespace Microsoft.Xna.Platform.Media
         public override bool PlatformGameHasControl
         {
             get { return true; }
+        }
+
+        protected override bool PlatformUpdateState(ref MediaState state)
+        {
+            return false;
         }
 
         #endregion

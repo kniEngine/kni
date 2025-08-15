@@ -39,11 +39,6 @@ namespace Microsoft.Xna.Platform.Media
             get { throw new PlatformNotSupportedException(); }
         }
 
-        protected override bool PlatformUpdateState(ref MediaState state)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
         public override float PlatformVolume
         {
             get { throw new PlatformNotSupportedException(); }
@@ -53,6 +48,11 @@ namespace Microsoft.Xna.Platform.Media
         public override bool PlatformGameHasControl
         {
             get { throw new PlatformNotSupportedException(); }
+        }
+
+        protected override bool PlatformUpdateState(ref MediaState state)
+        {
+            throw new PlatformNotSupportedException();
         }
 
         #endregion
