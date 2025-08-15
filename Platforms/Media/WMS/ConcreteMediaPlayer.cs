@@ -65,13 +65,6 @@ namespace Microsoft.Xna.Platform.Media
             _clock = _session.Clock.QueryInterface<MediaFoundation.PresentationClock>();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            MediaFoundation.MediaManager.Shutdown();
-
-            base.Dispose(disposing);
-        }
-
         #region IAsyncCallback
 
         internal void Invoke(MediaFoundation.AsyncResult asyncResult)
@@ -430,6 +423,18 @@ namespace Microsoft.Xna.Platform.Media
 
                 _nextSong = null;
             }
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            MediaFoundation.MediaManager.Shutdown();
+
+            base.Dispose(disposing);
         }
     }
 

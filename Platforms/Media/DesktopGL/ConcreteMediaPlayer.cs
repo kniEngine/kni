@@ -178,33 +178,6 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        #region IDisposable Members
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_player != null)
-                {
-                    _player.BufferNeeded -= this.sfxi_BufferNeeded;
-                    _player.Dispose();
-                }
-                _player = null;
-
-                if (_reader != null)
-                    _reader.Dispose();
-                _reader = null;
-
-                _sampleBuffer = null;
-                _dataBuffer = null;
-
-            }
-
-            base.Dispose(disposing);
-        }
-
-        #endregion
-
         struct BufferInfo
         {
             public int BufferBytes;
@@ -342,6 +315,29 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_player != null)
+                {
+                    _player.BufferNeeded -= this.sfxi_BufferNeeded;
+                    _player.Dispose();
+                }
+                _player = null;
+
+                if (_reader != null)
+                    _reader.Dispose();
+                _reader = null;
+
+                _sampleBuffer = null;
+                _dataBuffer = null;
+
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
 

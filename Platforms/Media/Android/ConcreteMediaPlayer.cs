@@ -177,5 +177,15 @@ namespace Microsoft.Xna.Platform.Media
                 base.OnSongFinishedPlaying();
             }
         }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
