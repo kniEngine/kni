@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
@@ -25,8 +26,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
             : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
         {
-            if (profile != ShaderProfileType.DirectX_11)
-                throw new Exception("Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
+            Debug.Assert(profile == ShaderProfileType.DirectX_11,
+                "Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
 
             GraphicsProfile graphicsProfile = this.GraphicsDeviceStrategy.GraphicsProfile;
             ShaderVersion maxVersion = MaxShaderVersions[graphicsProfile];

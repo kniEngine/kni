@@ -35,6 +35,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public abstract bool Platform_IsProfileSupported(GraphicsProfile graphicsProfile);
 
+        public abstract bool Platform_IsShaderProfileSupported(ShaderProfileType shaderProfile);
+
         public abstract bool Platform_QueryBackBufferFormat(
             GraphicsProfile graphicsProfile,
             SurfaceFormat format, DepthFormat depthFormat, int multiSampleCount,

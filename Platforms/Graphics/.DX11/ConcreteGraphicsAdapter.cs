@@ -43,6 +43,18 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return GraphicsBackend.DirectX11; }
         }
 
+        public override bool Platform_IsShaderProfileSupported(ShaderProfileType shaderProfile)
+        {
+            switch (shaderProfile)
+            {
+                case ShaderProfileType.DirectX_11:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         private static readonly Dictionary<DXGI.Format, SurfaceFormat> FormatTranslations = new Dictionary<DXGI.Format, SurfaceFormat>
         {
             { DXGI.Format.R8G8B8A8_UNorm, SurfaceFormat.Color },

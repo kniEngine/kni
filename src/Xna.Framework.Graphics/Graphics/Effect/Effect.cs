@@ -5,6 +5,7 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Platform.Graphics;
@@ -84,6 +85,9 @@ namespace Microsoft.Xna.Framework.Graphics
                                 int effectKey = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
                                 int fxOffset = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
 
+                                if (!((IPlatformGraphicsAdapter)graphicsDevice.Adapter).Strategy.Platform_IsShaderProfileSupported(shaderProfile))
+                                    continue;
+
                                 Effect effect;
                                 lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
                                 {
@@ -104,7 +108,15 @@ namespace Microsoft.Xna.Framework.Graphics
                                 return;
                             }
 
-                            throw new Exception("Effect profile is not compatible with the graphics backend '" + graphicsDevice.Adapter.Backend + "'.");
+                            headerOffset = fxHeader.HeaderSize;
+                            String[] shaderProfiles = new string[fxCount];
+                            for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
+                            {
+                                ShaderProfileType shaderProfile = (ShaderProfileType)BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
+                                headerOffset += 8;
+                                shaderProfiles[fxIdx] = shaderProfile.ToString();
+                            }
+                            throw new Exception("Effect profile '" + String.Join(",", shaderProfiles) + "' is not compatible with the graphics backend '" + graphicsDevice.Adapter.Backend + "'.");
                         }
 
                     default:
@@ -124,8 +136,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     case 10:
                         {
+                            ShaderProfileType shaderProfile = mgfxheader.Profile;
                             int headerOffset = mgfxheader.HeaderSize;
                             int fxOffset = headerOffset;
+
+                            if (!((IPlatformGraphicsAdapter)graphicsDevice.Adapter).Strategy.Platform_IsShaderProfileSupported(shaderProfile))
+                                throw new Exception("Effect profile '" + shaderProfile + "' is not compatible with the graphics backend '" + graphicsDevice.Adapter.Backend + "'.");
 
                             Effect effect;
                             lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
@@ -134,7 +150,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                 {
                                     int length = count - fxOffset;
                                     using (Stream stream = new MemoryStream(effectCode, index + fxOffset, length, false))
-                                    using (MGFXReader10 reader = new MGFXReader10(stream, graphicsDevice, mgfxheader.Profile))
+                                    using (MGFXReader10 reader = new MGFXReader10(stream, graphicsDevice, shaderProfile))
                                         effect = reader.ReadEffect();
 
                                     ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(mgfxheader.EffectKey, effect);

@@ -136,6 +136,17 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return GraphicsBackend.OpenGL; }
         }
 
+        public override bool Platform_IsShaderProfileSupported(ShaderProfileType shaderProfile)
+        {
+            switch (shaderProfile)
+            {
+                case ShaderProfileType.OpenGL_Mojo:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         private OGL _gl;
         private string _version;
