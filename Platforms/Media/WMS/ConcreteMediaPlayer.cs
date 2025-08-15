@@ -115,6 +115,15 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            set
+            {
+                base.PlatformVolume = value;
+                SetChannelVolumes();
+            }
+        }
+
         public override bool PlatformIsMuted
         {
             set
@@ -123,6 +132,11 @@ namespace Microsoft.Xna.Platform.Media
 
                 SetChannelVolumes();
             }
+        }
+
+        public override bool PlatformGameHasControl
+        {
+            get { return true; }
         }
 
         public override TimeSpan PlatformPlayPosition
@@ -158,20 +172,6 @@ namespace Microsoft.Xna.Platform.Media
                     default:
                         throw new InvalidOperationException();
                 }
-            }
-        }
-
-        public override bool PlatformGameHasControl
-        {
-            get { return true; }
-        }
-
-        public override float PlatformVolume
-        {
-            set
-            {
-                base.PlatformVolume = value;
-                SetChannelVolumes();
             }
         }
 

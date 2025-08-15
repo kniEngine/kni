@@ -24,6 +24,17 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            set
+            {
+                base.PlatformVolume = value;
+
+                if (base.Queue.ActiveSong != null)
+                    SetChannelVolumes();
+            }
+        }
+
         public override bool PlatformIsMuted
         {
             set
@@ -33,6 +44,11 @@ namespace Microsoft.Xna.Platform.Media
                 if (base.Queue.Count > 0)
                     SetChannelVolumes();
             }
+        }
+
+        public override bool PlatformGameHasControl
+        {
+            get { return !AVAudioSession.SharedInstance().OtherAudioPlaying; }
         }
 
         public override TimeSpan PlatformPlayPosition
@@ -60,22 +76,6 @@ namespace Microsoft.Xna.Platform.Media
                 AVPlayer player = mediaPlatformStream.Player;
                 player.Seek(CMTime.FromSeconds(value.TotalSeconds, 1000));
             }
-        }
-
-        public override float PlatformVolume
-        {
-            set
-            {
-                base.PlatformVolume = value;
-
-                if (base.Queue.ActiveSong != null)
-                    SetChannelVolumes();
-            }
-        }
-
-        public override bool PlatformGameHasControl
-        {
-            get { return !AVAudioSession.SharedInstance().OtherAudioPlaying; }
         }
 
         protected override bool PlatformUpdateState(ref MediaState state)

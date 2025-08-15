@@ -54,6 +54,16 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+                _mediaEngineEx.Volume = value;
+            }
+        }
+
         public override bool PlatformIsMuted
         {
             set
@@ -74,29 +84,18 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public override TimeSpan PlatformPlayPosition
-        {
-            get { return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime); }
-        }
-
         public override bool PlatformGameHasControl
         {
             get { return true; }
         }
 
+        public override TimeSpan PlatformPlayPosition
+        {
+            get { return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime); }
+        }
         protected override bool PlatformUpdateState(ref MediaState state)
         {
             return false;
-        }
-
-        public override float PlatformVolume
-        {
-            get { return base.PlatformVolume; }
-            set
-            {
-                base.PlatformVolume = value;
-                _mediaEngineEx.Volume = value;
-            }
         }
 
         #endregion
