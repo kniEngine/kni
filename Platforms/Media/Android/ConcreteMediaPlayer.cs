@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (_playingSong != null)
             {
-                 _playingSong = null;
+                _playingSong = null;
                 base.OnSongFinishedPlaying();
             }
         }
