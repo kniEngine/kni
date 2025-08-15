@@ -24,8 +24,21 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+
+                if (base.Queue.ActiveSong != null)
+                    SetChannelVolumes();
+            }
+        }
+
         public override bool PlatformIsMuted
         {
+            get { return base.PlatformIsMuted; }
             set
             {
                 base.PlatformIsMuted = value;
@@ -33,6 +46,26 @@ namespace Microsoft.Xna.Platform.Media
                 if (base.Queue.Count > 0)
                     SetChannelVolumes();
             }
+        }
+
+        public override bool PlatformIsRepeating
+        {
+            get { return base.PlatformIsRepeating; }
+            set
+            {
+                base.PlatformIsRepeating = value;
+            }
+        }
+
+        public override bool PlatformIsShuffled
+        {
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
+        }
+
+        public override bool PlatformGameHasControl
+        {
+            get { return true; }
         }
 
         public override TimeSpan PlatformPlayPosition
@@ -53,22 +86,6 @@ namespace Microsoft.Xna.Platform.Media
         protected override bool PlatformUpdateState(ref MediaState state)
         {
             return false;
-        }
-
-        public override float PlatformVolume
-        {
-            set
-            {
-                base.PlatformVolume = value;
-
-                if (base.Queue.ActiveSong != null)
-                    SetChannelVolumes();
-            }
-        }
-
-        public override bool PlatformGameHasControl
-        {
-            get { return true; }
         }
 
         #endregion
@@ -113,7 +130,7 @@ namespace Microsoft.Xna.Platform.Media
                 }
 
                 _androidPlayer.Prepare();
-                _androidPlayer.Looping = MediaPlayer.IsRepeating;
+                _androidPlayer.Looping = this.PlatformIsRepeating;
                 _playingSong = song;
 
                 _androidPlayer.Start();
@@ -173,9 +190,19 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (_playingSong != null)
             {
-                 _playingSong = null;
+                _playingSong = null;
                 base.OnSongFinishedPlaying();
             }
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

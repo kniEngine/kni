@@ -16,6 +16,12 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            get { throw new PlatformNotSupportedException(); }
+            set { throw new PlatformNotSupportedException(); }
+        }
+
         public override bool PlatformIsMuted
         {
             get { throw new PlatformNotSupportedException(); }
@@ -34,6 +40,11 @@ namespace Microsoft.Xna.Platform.Media
             set { throw new PlatformNotSupportedException(); }
         }
 
+        public override bool PlatformGameHasControl
+        {
+            get { throw new PlatformNotSupportedException(); }
+        }
+
         public override TimeSpan PlatformPlayPosition
         {
             get { throw new PlatformNotSupportedException(); }
@@ -42,17 +53,6 @@ namespace Microsoft.Xna.Platform.Media
         protected override bool PlatformUpdateState(ref MediaState state)
         {
             throw new PlatformNotSupportedException();
-        }
-
-        public override float PlatformVolume
-        {
-            get { throw new PlatformNotSupportedException(); }
-            set { throw new PlatformNotSupportedException(); }
-        }
-
-        public override bool PlatformGameHasControl
-        {
-            get { throw new PlatformNotSupportedException(); }
         }
 
         #endregion
@@ -77,6 +77,14 @@ namespace Microsoft.Xna.Platform.Media
             throw new PlatformNotSupportedException();
         }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
-

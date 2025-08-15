@@ -54,8 +54,20 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+
+                _mediaEngineEx.Volume = value;
+            }
+        }
+
         public override bool PlatformIsMuted
         {
+            get { return base.PlatformIsMuted; }
             set
             {
                 base.PlatformIsMuted = value;
@@ -66,6 +78,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override bool PlatformIsRepeating
         {
+            get { return base.PlatformIsRepeating; }
             set
             {
                 base.PlatformIsRepeating = value;
@@ -74,9 +87,10 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public override TimeSpan PlatformPlayPosition
+        public override bool PlatformIsShuffled
         {
-            get { return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime); }
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
         }
 
         public override bool PlatformGameHasControl
@@ -84,19 +98,13 @@ namespace Microsoft.Xna.Platform.Media
             get { return true; }
         }
 
+        public override TimeSpan PlatformPlayPosition
+        {
+            get { return TimeSpan.FromSeconds(_mediaEngineEx.CurrentTime); }
+        }
         protected override bool PlatformUpdateState(ref MediaState state)
         {
             return false;
-        }
-
-        public override float PlatformVolume
-        {
-            get { return base.PlatformVolume; }
-            set
-            {
-                base.PlatformVolume = value;
-                _mediaEngineEx.Volume = value;
-            }
         }
 
         #endregion
@@ -135,6 +143,14 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
-

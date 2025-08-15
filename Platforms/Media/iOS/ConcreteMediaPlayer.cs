@@ -24,8 +24,21 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+
+                if (base.Queue.ActiveSong != null)
+                    SetChannelVolumes();
+            }
+        }
+
         public override bool PlatformIsMuted
         {
+            get { return base.PlatformIsMuted; }
             set
             {
                 base.PlatformIsMuted = value;
@@ -33,6 +46,26 @@ namespace Microsoft.Xna.Platform.Media
                 if (base.Queue.Count > 0)
                     SetChannelVolumes();
             }
+        }
+
+        public override bool PlatformIsRepeating
+        {
+            get { return base.PlatformIsRepeating; }
+            set
+            {
+                base.PlatformIsRepeating = value;
+            }
+        }
+
+        public override bool PlatformIsShuffled
+        {
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
+        }
+
+        public override bool PlatformGameHasControl
+        {
+            get { return !AVAudioSession.SharedInstance().OtherAudioPlaying; }
         }
 
         public override TimeSpan PlatformPlayPosition
@@ -65,22 +98,6 @@ namespace Microsoft.Xna.Platform.Media
         protected override bool PlatformUpdateState(ref MediaState state)
         {
             return false;
-        }
-
-        public override float PlatformVolume
-        {
-            set
-            {
-                base.PlatformVolume = value;
-
-                if (base.Queue.ActiveSong != null)
-                    SetChannelVolumes();
-            }
-        }
-
-        public override bool PlatformGameHasControl
-        {
-            get { return !AVAudioSession.SharedInstance().OtherAudioPlaying; }
         }
 
         #endregion
@@ -203,6 +220,15 @@ namespace Microsoft.Xna.Platform.Media
             //base.ClearQueue();
         }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
     }
 
     internal sealed class MediaPlatformStream : IDisposable
@@ -282,4 +308,3 @@ namespace Microsoft.Xna.Platform.Media
         #endregion
     }
 }
-

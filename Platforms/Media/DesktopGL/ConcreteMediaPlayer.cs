@@ -28,8 +28,21 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+
+                if (base.Queue.ActiveSong != null)
+                    SetChannelVolumes();
+            }
+        }
+
         public override bool PlatformIsMuted
         {
+            get { return base.PlatformIsMuted; }
             set
             {
                 base.PlatformIsMuted = value;
@@ -37,6 +50,26 @@ namespace Microsoft.Xna.Platform.Media
                 if (base.Queue.Count > 0)
                     SetChannelVolumes();
             }
+        }
+
+        public override bool PlatformIsRepeating
+        {
+            get { return base.PlatformIsRepeating; }
+            set
+            {
+                base.PlatformIsRepeating = value;
+            }
+        }
+
+        public override bool PlatformIsShuffled
+        {
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
+        }
+
+        public override bool PlatformGameHasControl
+        {
+            get { return true; }
         }
 
         public override TimeSpan PlatformPlayPosition
@@ -62,22 +95,6 @@ namespace Microsoft.Xna.Platform.Media
         protected override bool PlatformUpdateState(ref MediaState state)
         {
             return false;
-        }
-
-        public override float PlatformVolume
-        {
-            set
-            {
-                base.PlatformVolume = value;
-
-                if (base.Queue.ActiveSong != null)
-                    SetChannelVolumes();
-            }
-        }
-
-        public override bool PlatformGameHasControl
-        {
-            get { return true; }
         }
 
         #endregion
@@ -177,33 +194,6 @@ namespace Microsoft.Xna.Platform.Media
             //base.ClearQueue();
         }
 
-
-        #region IDisposable Members
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_player != null)
-                {
-                    _player.BufferNeeded -= this.sfxi_BufferNeeded;
-                    _player.Dispose();
-                }
-                _player = null;
-
-                if (_reader != null)
-                    _reader.Dispose();
-                _reader = null;
-
-                _sampleBuffer = null;
-                _dataBuffer = null;
-
-            }
-
-            base.Dispose(disposing);
-        }
-
-        #endregion
 
         struct BufferInfo
         {
@@ -342,6 +332,28 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_player != null)
+                {
+                    _player.BufferNeeded -= this.sfxi_BufferNeeded;
+                    _player.Dispose();
+                }
+                _player = null;
+
+                if (_reader != null)
+                    _reader.Dispose();
+                _reader = null;
+
+                _sampleBuffer = null;
+                _dataBuffer = null;
+
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
-

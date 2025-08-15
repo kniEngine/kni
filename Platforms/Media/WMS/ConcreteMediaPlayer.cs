@@ -65,13 +65,6 @@ namespace Microsoft.Xna.Platform.Media
             _clock = _session.Clock.QueryInterface<MediaFoundation.PresentationClock>();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            MediaFoundation.MediaManager.Shutdown();
-
-            base.Dispose(disposing);
-        }
-
         #region IAsyncCallback
 
         internal void Invoke(MediaFoundation.AsyncResult asyncResult)
@@ -122,14 +115,46 @@ namespace Microsoft.Xna.Platform.Media
 
         #region Properties
 
+        public override float PlatformVolume
+        {
+            get { return base.PlatformVolume; }
+            set
+            {
+                base.PlatformVolume = value;
+
+                SetChannelVolumes();
+            }
+        }
+
         public override bool PlatformIsMuted
         {
+            get { return base.PlatformIsMuted; }
             set
             {
                 base.PlatformIsMuted = value;
 
                 SetChannelVolumes();
             }
+        }
+
+        public override bool PlatformIsRepeating
+        {
+            get { return base.PlatformIsRepeating; }
+            set
+            {
+                base.PlatformIsRepeating = value;
+            }
+        }
+
+        public override bool PlatformIsShuffled
+        {
+            get { return base.PlatformIsShuffled; }
+            set { base.PlatformIsShuffled = value; }
+        }
+
+        public override bool PlatformGameHasControl
+        {
+            get { return true; }
         }
 
         public override TimeSpan PlatformPlayPosition
@@ -168,23 +193,9 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        public override bool PlatformGameHasControl
-        {
-            get { return true; }
-        }
-
         protected override bool PlatformUpdateState(ref MediaState state)
         {
             return false;
-        }
-
-        public override float PlatformVolume
-        {
-            set
-            {
-                base.PlatformVolume = value;
-                SetChannelVolumes();
-            }
         }
 
         #endregion
@@ -431,6 +442,18 @@ namespace Microsoft.Xna.Platform.Media
                 _nextSong = null;
             }
         }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            MediaFoundation.MediaManager.Shutdown();
+
+            base.Dispose(disposing);
+        }
     }
 
     internal sealed class MediaPlatformStream : IDisposable
@@ -542,4 +565,3 @@ namespace Microsoft.Xna.Platform.Media
         #endregion
     }
 }
-
