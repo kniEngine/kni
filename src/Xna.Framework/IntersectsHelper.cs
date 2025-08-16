@@ -412,8 +412,65 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            internal void OrderQuad(ref Vector3 normal)
+            private int GetInternalKey(int idx)
             {
+                switch (idx)
+                {
+                    case 0: return _v0;
+                    case 1: return _v1;
+                    case 2: return _v2;
+                    case 3: return _v3;
+
+                    default:
+                        throw new InvalidOperationException("idx");
+                }
+            }
+
+            private void SetInternalKey(int idx, int keyInternal)
+            {
+                switch (idx)
+                {
+                    case 0: _v0 = keyInternal; return;
+                    case 1: _v1 = keyInternal; return;
+                    case 2: _v2 = keyInternal; return;
+                    case 3: _v3 = keyInternal; return;
+
+                    default:
+                        throw new InvalidOperationException("idx");
+                }
+            }
+
+            internal unsafe void OrderQuad(ref Vector3 normal)
+            {
+                Vector3 center = (this[0] + this[1] + this[2] + this[3]) * 0.25f;
+
+                normal = Vector3.Normalize(normal);
+                Vector3 refAxis = Math.Abs(normal.X) > 0.9f ? Vector3.UnitY : Vector3.UnitX;
+                Vector3 u = Vector3.Normalize(Vector3.Cross(normal, refAxis));
+                Vector3 v = Vector3.Cross(normal, u);
+
+                // precompute angles
+                float* angles = stackalloc float[4];
+                angles[0] = (float)Math.Atan2(Vector3.Dot(this[0] - center, v), Vector3.Dot(this[0] - center, u));
+                angles[1] = (float)Math.Atan2(Vector3.Dot(this[1] - center, v), Vector3.Dot(this[1] - center, u));
+                angles[2] = (float)Math.Atan2(Vector3.Dot(this[2] - center, v), Vector3.Dot(this[2] - center, u));
+                angles[3] = (float)Math.Atan2(Vector3.Dot(this[3] - center, v), Vector3.Dot(this[3] - center, u));
+
+                // simple insertion sort for 4 items
+                for (int i = 1; i < 4; i++)
+                {
+                    int keyInternal = GetInternalKey(i);
+                    float keyAngle = angles[i];
+                    int j = i-1;
+                    while (j >= 0 && angles[j] > keyAngle)
+                    {
+                        SetInternalKey(j+1, GetInternalKey(j));
+                        angles[j+1] = angles[j];
+                        j--;
+                    }
+                    SetInternalKey(j+1, keyInternal);
+                    angles[j+1] = keyAngle;
+                }
             }
         }
 
