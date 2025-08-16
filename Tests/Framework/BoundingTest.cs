@@ -309,6 +309,34 @@ namespace Kni.Tests.Framework
         }
 
         [Test]
+        public void BoundingFrustumIntersectsBoundingSphere2()
+        {
+            Matrix view = new Matrix(
+                  0.5952947f, -0.1383422f, -0.79150826f, -0f,
+                 -0.02417625f, 0.9815369f, -0.18973885f, 0f,
+                  0.80314344f, 0.13208623f, 0.58095926f, -0f,
+                 -35.168182f, -63.662083f, -26.71203f, 1f
+            );
+
+            Matrix projection = new Matrix(
+                   1.0349208f, 0f, 0f, 0,
+                   0f, 0.86867154f, 0f, 0,
+                   0.0349208f, -0.035242487f, -1.00002f, -1,
+                   0f, 0f, -0.02000f, 0
+                );
+
+            BoundingFrustum testFrustum = new BoundingFrustum(view * projection);
+
+            BoundingSphere bsphere1 = new BoundingSphere(
+                new Vector3(8, 8, 8),
+                13.856406f
+                );
+
+            Assert.AreEqual(testFrustum.Intersects(bsphere1), true);
+            Assert.AreEqual(testFrustum.Contains(bsphere1), ContainmentType.Intersects);
+        }
+
+        [Test]
         public void BoundingFrustumContainsBoundingSphere()
         {
             var view = Matrix.CreateLookAt(new Vector3(0, 0, 5), Vector3.Zero, Vector3.Up);
