@@ -266,7 +266,8 @@ namespace Microsoft.Xna.Framework
         internal static void BoundingFrustumIntersectsBoundingSphere(BoundingFrustum frustum, ref BoundingSphere sphere, out bool result)
         {
             result = true;
-            int back = 0;
+            int sphereBack = 0;
+            int sphereCenterBack = 0;
             for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
             {
                 float distance = frustum._planes[i].DotCoordinate(sphere.Center);
@@ -276,21 +277,27 @@ namespace Microsoft.Xna.Framework
                     return;
                 }
                 else if (distance < -sphere.Radius) // PlaneIntersectionType.Back
-                {                    
-                    back++;
+                {
+                    sphereBack++;
                 }
                 else // PlaneIntersectionType.Intersecting
                 {
                 }
+
+                if (distance < 0)
+                    sphereCenterBack++;
             }
 
-            if (back >= (BoundingFrustum.PlaneCount - 1))
+            // The sphere is inside the frustum (sphereBack==6),
+            // or intersects with 1 face and is contained by the other 5 (sphereBack==5).
+            if (sphereBack >= (BoundingFrustum.PlaneCount - 1))
                 return;
 
-            ContainmentType fcc = frustum.Contains(sphere.Center);
-            if (fcc == ContainmentType.Contains)
+            // The sphere center is inside the frustum.
+            if (sphereCenterBack == BoundingFrustum.PlaneCount)
                 return;
 
+            // The sphere intersects with an edge.
             if (SegmentIntersectsBoundingSphere(ref frustum._corners[0], ref frustum._corners[1], ref sphere))
                 return;
             if (SegmentIntersectsBoundingSphere(ref frustum._corners[1], ref frustum._corners[2], ref sphere))
@@ -320,23 +327,23 @@ namespace Microsoft.Xna.Framework
             Vector3 pt0 = sphere.Center - dotCoord0 * frustum._planes[0].Normal;
             if (PointInPolygon(ref pt0, new FixedPolygon4(frustum._corners, 1, 0, 3, 2)))
                 return;
-            float dotCoord1 =frustum._planes[1].DotCoordinate(sphere.Center);
+            float dotCoord1 = frustum._planes[1].DotCoordinate(sphere.Center);
             Vector3 pt1 = sphere.Center - dotCoord1 * frustum._planes[1].Normal;
             if (PointInPolygon(ref pt1, new FixedPolygon4(frustum._corners, 4, 5, 6, 7)))
                 return;
-            float dotCoord2 =frustum._planes[2].DotCoordinate(sphere.Center);
+            float dotCoord2 = frustum._planes[2].DotCoordinate(sphere.Center);
             Vector3 pt2 = sphere.Center - dotCoord2 * frustum._planes[2].Normal;
             if (PointInPolygon(ref pt2, new FixedPolygon4(frustum._corners, 3, 0, 7, 4)))
                 return;
-            float dotCoord3 =frustum._planes[3].DotCoordinate(sphere.Center);
+            float dotCoord3 = frustum._planes[3].DotCoordinate(sphere.Center);
             Vector3 pt3 = sphere.Center - dotCoord3 * frustum._planes[3].Normal;
             if (PointInPolygon(ref pt3, new FixedPolygon4(frustum._corners, 1, 2, 5, 6)))
                 return;
-            float dotCoord4 =frustum._planes[4].DotCoordinate(sphere.Center);
+            float dotCoord4 = frustum._planes[4].DotCoordinate(sphere.Center);
             Vector3 pt4 = sphere.Center - dotCoord4 * frustum._planes[4].Normal;
             if (PointInPolygon(ref pt4, new FixedPolygon4(frustum._corners, 0, 1, 4, 5)))
                 return;
-            float dotCoord5 =frustum._planes[5].DotCoordinate(sphere.Center);
+            float dotCoord5 = frustum._planes[5].DotCoordinate(sphere.Center);
             Vector3 pt5 = sphere.Center - dotCoord5 * frustum._planes[5].Normal;
             if (PointInPolygon(ref pt5, new FixedPolygon4(frustum._corners, 2, 3, 6, 7)))
                 return;
