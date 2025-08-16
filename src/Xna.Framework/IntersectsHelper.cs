@@ -474,34 +474,31 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        private static bool PointInPolygon(ref Vector3 pt, FixedPolygon4 p)
+        private static bool PointInPolygon(ref Vector3 pt, FixedPolygon4 points)
         {
-            int low = 0, high = 4;
-            do
-            {
-                int mid = (low + high) / 2;
-
-                Vector3 vZero = p[0];
-                Vector3 vMid  = p[mid];
-                if (TriangleIsCCW(ref vZero, ref vMid, ref pt))
-                    low = mid;
-                else
-                    high = mid;
-            } 
-            while ((low + 1) < high);
-
-            if (low == 0 || high == 4)
-                return false;
-
-            Vector3 vLow  = p[low];
-            Vector3 vHigh = p[high];
-            return TriangleIsCCW(ref vLow, ref vHigh, ref pt);
+            return (IsPointInTriangle(ref pt, points[0], points[1], points[2]) 
+                ||  IsPointInTriangle(ref pt, points[0], points[2], points[3]));
         }
 
-        private static bool TriangleIsCCW(ref Vector3 v0, ref Vector3 v1, ref Vector3 v2)
+        static bool IsPointInTriangle(ref Vector3 pt, Vector3 a, Vector3 b, Vector3 c)
         {
-            float b = (v1.X - v0.X) * (v2.Y - v0.Y) - (v1.Y - v0.Y) * (v2.X - v0.X);
-            return (b > 0);
+            Vector3 v0 = c - a;
+            Vector3 v1 = b - a;
+            Vector3 v2 = pt - a;
+
+            float dot00 = Vector3.Dot(v0, v0);
+            float dot01 = Vector3.Dot(v0, v1);
+            float dot02 = Vector3.Dot(v0, v2);
+            float dot11 = Vector3.Dot(v1, v1);
+            float dot12 = Vector3.Dot(v1, v2);
+
+            float denom = dot00 * dot11 - dot01 * dot01;
+            if (denom == 0) return false;
+
+            float u = (dot11 * dot02 - dot01 * dot12) / denom;
+            float v = (dot00 * dot12 - dot01 * dot02) / denom;
+
+            return (u >= 0) && (v >= 0) && (u + v <= 1);
         }
 
         private static bool SegmentIntersectsBoundingSphere(ref Vector3 pos0, ref Vector3 pos1, ref BoundingSphere sphere)
