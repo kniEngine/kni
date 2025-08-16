@@ -269,15 +269,18 @@ namespace Microsoft.Xna.Framework
             int back = 0;
             for (int i = 0; i < BoundingFrustum.PlaneCount; i++)
             {
-                frustum._planes[i].Intersects(ref sphere, out PlaneIntersectionType planeIntersectionType);
-                switch (planeIntersectionType)
+                float distance = frustum._planes[i].DotCoordinate(sphere.Center);
+                if (distance > sphere.Radius) // PlaneIntersectionType.Front
                 {
-                    case PlaneIntersectionType.Front:
-                        result = false;
-                        return;
-                    case PlaneIntersectionType.Back:
-                        back++;
-                        break;
+                    result = false;
+                    return;
+                }
+                else if (distance < -sphere.Radius) // PlaneIntersectionType.Back
+                {                    
+                    back++;
+                }
+                else // PlaneIntersectionType.Intersecting
+                {
                 }
             }
 
