@@ -327,42 +327,54 @@ namespace Microsoft.Xna.Framework
             if (dotCoord0 >= 0 && dotCoord0 <= sphere.Radius)
             {
                 Vector3 pt0 = sphere.Center - dotCoord0 * frustum._planes[0].Normal;
-                if (PointInPolygon(ref pt0, new FixedPolygon4(frustum._corners, 1, 0, 3, 2)))
+                FixedPolygon4 points = new FixedPolygon4(frustum._corners, 1, 0, 3, 2);
+                points.OrderQuad(ref frustum._planes[0].Normal);
+                if (PointInPolygon(ref pt0, points))
                     return;
             }
             float dotCoord1 = frustum._planes[1].DotCoordinate(sphere.Center);
             if (dotCoord1 >= 0 && dotCoord1 <= sphere.Radius)
             {
                 Vector3 pt1 = sphere.Center - dotCoord1 * frustum._planes[1].Normal;
-                if (PointInPolygon(ref pt1, new FixedPolygon4(frustum._corners, 4, 5, 6, 7)))
+                FixedPolygon4 points = new FixedPolygon4(frustum._corners, 4, 5, 6, 7);
+                points.OrderQuad(ref frustum._planes[1].Normal);
+                if (PointInPolygon(ref pt1, points))
                     return;
             }
             float dotCoord2 = frustum._planes[2].DotCoordinate(sphere.Center);
             if (dotCoord2 >= 0 && dotCoord2 <= sphere.Radius)
             {
                 Vector3 pt2 = sphere.Center - dotCoord2 * frustum._planes[2].Normal;
-                if (PointInPolygon(ref pt2, new FixedPolygon4(frustum._corners, 3, 0, 7, 4)))
+                FixedPolygon4 points =new FixedPolygon4(frustum._corners, 3, 0, 7, 4);
+                points.OrderQuad(ref frustum._planes[2].Normal);
+                if (PointInPolygon(ref pt2, points))
                     return;
             }
             float dotCoord3 = frustum._planes[3].DotCoordinate(sphere.Center);
             if (dotCoord3 >= 0 && dotCoord3 <= sphere.Radius)
             {
                 Vector3 pt3 = sphere.Center - dotCoord3 * frustum._planes[3].Normal;
-                if (PointInPolygon(ref pt3, new FixedPolygon4(frustum._corners, 1, 2, 5, 6)))
+                FixedPolygon4 points =new FixedPolygon4(frustum._corners, 1, 2, 5, 6);
+                points.OrderQuad(ref frustum._planes[3].Normal);
+                if (PointInPolygon(ref pt3, points))
                     return;
             }
             float dotCoord4 = frustum._planes[4].DotCoordinate(sphere.Center);
             if (dotCoord4 >= 0 && dotCoord4 <= sphere.Radius)
             {
                 Vector3 pt4 = sphere.Center - dotCoord4 * frustum._planes[4].Normal;
-                if (PointInPolygon(ref pt4, new FixedPolygon4(frustum._corners, 0, 1, 4, 5)))
+                FixedPolygon4 points =new FixedPolygon4(frustum._corners, 0, 1, 4, 5);
+                points.OrderQuad(ref frustum._planes[4].Normal);
+                if (PointInPolygon(ref pt4, points))
                     return;
             }
             float dotCoord5 = frustum._planes[5].DotCoordinate(sphere.Center);
             if (dotCoord5 >= 0 && dotCoord5 <= sphere.Radius)
             {
                 Vector3 pt5 = sphere.Center - dotCoord5 * frustum._planes[5].Normal;
-                if (PointInPolygon(ref pt5, new FixedPolygon4(frustum._corners, 2, 3, 6, 7)))
+                FixedPolygon4 points =new FixedPolygon4(frustum._corners, 2, 3, 6, 7);
+                points.OrderQuad(ref frustum._planes[5].Normal);
+                if (PointInPolygon(ref pt5, points))
                     return;
             }
 
@@ -398,6 +410,10 @@ namespace Microsoft.Xna.Framework
                             throw new InvalidOperationException("idx");
                     }
                 }
+            }
+
+            internal void OrderQuad(ref Vector3 normal)
+            {
             }
         }
 
