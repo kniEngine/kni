@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework
         #region Public Fields
 
         /// <summary>
-        /// The direction of this <see cref="Ray"/>.
+        /// The direction of this <see cref="Ray"/>. This vector is assumed to be normalized.
         /// </summary>
         [DataMember]
         public Vector3 Direction;
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework
         /// Create a <see cref="Ray"/>.
         /// </summary>
         /// <param name="position">The origin of the <see cref="Ray"/>.</param>
-        /// <param name="direction">The direction of the <see cref="Ray"/>.</param>
+        /// <param name="direction">The direction of the <see cref="Ray"/>. This vector is assumed to be normalized.</param>
         public Ray(Vector3 position, Vector3 direction)
         {
             this.Position = position;
