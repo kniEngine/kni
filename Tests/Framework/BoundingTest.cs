@@ -396,6 +396,27 @@ namespace Kni.Tests.Framework
         }
 
         [Test]
+        public void BoundingSphereIntersectsRayTest()
+        {
+            BoundingSphere sphere = new BoundingSphere(Vector3.Zero, 1);
+            
+            Ray ray1 = new Ray(Vector3.UnitY*4, Vector3.Normalize(Vector3.UnitY*-1 + Vector3.UnitX*0));
+            Ray ray2 = new Ray(Vector3.UnitY*4, Vector3.Normalize(Vector3.UnitY*-1 + Vector3.UnitX*2));
+            Ray ray3 = new Ray(Vector3.UnitY*5, Vector3.Normalize(Vector3.UnitY*-1 + Vector3.UnitX*1));
+            Ray ray4 = new Ray(Vector3.UnitY*5, Vector3.Normalize(Vector3.UnitY*-1 + Vector3.UnitX*1000));
+
+            float? value1 = sphere.Intersects(ray1);
+            float? value2 = sphere.Intersects(ray2);
+            float? value3 = sphere.Intersects(ray3);
+            float? value4 = sphere.Intersects(ray4);
+
+            Assert.AreEqual(3, value1);
+            Assert.AreEqual(null, value2);
+            Assert.AreEqual(null, value3);
+            Assert.AreEqual(null, value4);
+        }
+
+        [Test]
         public void BoundingSphereContainsTests()
         {
             var zeroPoint = BoundingSphere.CreateFromPoints( new[] {Vector3.Zero} );
