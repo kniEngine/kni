@@ -45,8 +45,7 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.IsLooped = value;
-
-                _player.Looping = true;
+                _player.Looping = value;
             }
         }
 
