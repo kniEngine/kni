@@ -15,7 +15,9 @@ namespace Kni.Tests.ContentPipeline
 {
     class TestProcessorContext : ContentProcessorContext
     {
+        private readonly OpaqueDataDictionary _parameters = new OpaqueDataDictionary();
         private readonly TargetPlatform _targetPlatform;
+        private readonly GraphicsProfile _targetProfile;
         private readonly string _outputFilename;
         private readonly TestContentBuildLogger _logger;
         internal readonly List<string> _dependencies = new List<string>();
@@ -24,6 +26,7 @@ namespace Kni.Tests.ContentPipeline
                                     string outputFilename)
         {
             _targetPlatform = targetPlatform;
+            _targetProfile = GraphicsProfile.HiDef;
             _outputFilename = outputFilename;
             _logger = new TestContentBuildLogger();
         }
@@ -55,7 +58,7 @@ namespace Kni.Tests.ContentPipeline
 
         public override OpaqueDataDictionary Parameters
         {
-            get { throw new NotImplementedException(); }
+            get { return _parameters; }
         }
 
         public override TargetPlatform TargetPlatform
@@ -65,7 +68,7 @@ namespace Kni.Tests.ContentPipeline
 
         public override GraphicsProfile TargetProfile
         {
-            get { return GraphicsProfile.HiDef; }
+            get { return _targetProfile; }
         }
 
         public override void AddDependency(string filename)
