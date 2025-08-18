@@ -22,8 +22,8 @@ namespace EffectCompiler
         [CommandLineParser.Name("Platform", "\t - Specify the shader target Platform. Allowed values: (Windows,WindowsStoreApp,DesktopGL,Android,iOS,BlazorGL).")]
         public TargetPlatform Platform = (TargetPlatform)(-1);
 
-        [CommandLineParser.Name("GraphicsProfile", "\t - Specify the shader target GraphicsProfile.")]
-        public GraphicsProfile GraphicsProfile = GraphicsProfile.Reach;
+        [CommandLineParser.Name("Profile", "\t - Specify the shader target GraphicsProfile. Allowed values: (Reach, HiDef)")]
+        public GraphicsProfile Profile = GraphicsProfile.Reach;
 
         [CommandLineParser.Name("Config", "\t - BuildConfiguration. Set to 'Debug' to include extra debug information in the compiled effect.")]
         public string Config;
