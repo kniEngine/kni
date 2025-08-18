@@ -43,9 +43,17 @@ namespace EffectCompiler
                 processor.Defines = options.Defines;
 
                 if (options.Platform == (TargetPlatform)(-1))
-                    throw new InvalidOperationException("Missing argument 'Platform'");
+                {
+                    if (options.Backend.Count == 0)
+                        throw new InvalidOperationException("Missing argument 'Platform' or 'Backend'");
+                    else
+                        options.Platform = TargetPlatform.Windows;
+                }
 
                 ContentProcessorContext processorContext = new ProcessorContext(logger, options.Platform, options.Profile, options.OutputFile, options.Config);
+                if (options.Backend.Count > 0)
+                    processorContext.Parameters.Add("_GraphicsBackendList", options.Backend);
+
                 CompiledEffectContent output = processor.Process(content, processorContext);
 
                 byte[] effectCode = output.GetEffectCode();
