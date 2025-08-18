@@ -43,7 +43,7 @@ namespace EffectCompiler
                 processor.Defines = options.Defines;
 
                 if (options.Platform == (TargetPlatform)(-1))
-                    throw new InvalidOperationException("Platform");
+                    throw new InvalidOperationException("Missing argument 'Platform'");
 
                 ContentProcessorContext processorContext = new ProcessorContext(logger, options.Platform, options.Profile, options.OutputFile, options.Config);
                 CompiledEffectContent output = processor.Process(content, processorContext);
