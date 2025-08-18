@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
@@ -61,12 +62,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
 
             List<ShaderProfile> shaderProfiles = new List<ShaderProfile>();
+            List<GraphicsBackend> backends = context.Parameters.GetValue<List<GraphicsBackend>>("_GraphicsBackendList", null);
+            if (backends == null)
             {
                 ShaderProfile shaderProfile = EffectProcessor.FromPlatform(context.TargetPlatform);
                 if (shaderProfile == null)
                     throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
                 shaderProfiles.Add(shaderProfile);
             }
+            else
+            {
+                foreach(GraphicsBackend backend in backends)
+                {
+                    ShaderProfile shaderProfile = EffectProcessor.FromBackend(backend);
+                    if (shaderProfile == null)
+                        throw new InvalidContentException(string.Format("{0} effects are not supported.", backend), input.Identity);
+                    shaderProfiles.Add(shaderProfile);
+                }
+            }
+
 
             // Write out the effect to a runtime format.
             try
@@ -157,6 +171,27 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 case TargetPlatform.DesktopGL:
                 case TargetPlatform.MacOSX:
                 case TargetPlatform.RaspberryPi:
+                    return ShaderProfile.OpenGL_Mojo;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// Returns the correct profile for the named GraphicsBackend or
+        /// null if no supporting profile is found.
+        /// </summary>
+        public static ShaderProfile FromBackend(GraphicsBackend backend)
+        {
+            switch (backend)
+            {
+                case GraphicsBackend.DirectX11:
+                    return ShaderProfile.DirectX_11;
+
+                case GraphicsBackend.OpenGL:
+                case GraphicsBackend.GLES:
+                case GraphicsBackend.WebGL:
                     return ShaderProfile.OpenGL_Mojo;
 
                 default:

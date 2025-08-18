@@ -4,6 +4,7 @@
 
 // Copyright (C)2022 Nick Kastellanos
 
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +22,9 @@ namespace EffectCompiler
 
         [CommandLineParser.Name("Platform", "\t - Specify the shader target Platform. Allowed values: (Windows,WindowsStoreApp,DesktopGL,Android,iOS,BlazorGL).")]
         public TargetPlatform Platform = (TargetPlatform)(-1);
+
+        [CommandLineParser.Name("Backend", "\t - Specify the shader target Backend. Allowed values: (DirectX11,OpenGL).")]
+        public List<GraphicsBackend> Backend = new List<GraphicsBackend>();
 
         [CommandLineParser.Name("Profile", "\t - Specify the shader target GraphicsProfile. Allowed values: (Reach, HiDef)")]
         public GraphicsProfile Profile = GraphicsProfile.Reach;
