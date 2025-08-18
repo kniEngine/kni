@@ -14,14 +14,17 @@ namespace EffectCompiler
     internal class ProcessorContext : ContentProcessorContext
     {
         ContentBuildLogger _logger;
+        OpaqueDataDictionary _parameters = new OpaqueDataDictionary();
         TargetPlatform _targetPlatform;
+        GraphicsProfile _targetProfile;
         string _buildConfiguration;
         string _outputFilename;
 
-        public ProcessorContext(ContentBuildLogger logger, TargetPlatform targetPlatform, string outputFilename, string config) : base()
+        public ProcessorContext(ContentBuildLogger logger, TargetPlatform targetPlatform, GraphicsProfile targetProfile, string outputFilename, string config) : base()
         {
             _logger = logger;
             _targetPlatform = targetPlatform;
+            _targetProfile = targetProfile;
             _outputFilename = outputFilename;
             _buildConfiguration = config;
         }
@@ -37,11 +40,11 @@ namespace EffectCompiler
 
         public override string OutputFilename { get { return _outputFilename; } }
 
-        public override OpaqueDataDictionary Parameters { get { throw new NotImplementedException(); } }
+        public override OpaqueDataDictionary Parameters { get { return _parameters; } }
 
         public override TargetPlatform TargetPlatform { get { return _targetPlatform; } }
 
-        public override GraphicsProfile TargetProfile { get { throw new NotImplementedException(); } }
+        public override GraphicsProfile TargetProfile { get { return _targetProfile; } }
 
         public override void AddDependency(string filename)
         {

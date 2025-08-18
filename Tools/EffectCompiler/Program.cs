@@ -45,7 +45,7 @@ namespace EffectCompiler
                 if (options.Platform == (TargetPlatform)(-1))
                     throw new InvalidOperationException("Platform");
 
-                ContentProcessorContext processorContext = new ProcessorContext(logger, options.Platform, options.OutputFile, options.Config);
+                ContentProcessorContext processorContext = new ProcessorContext(logger, options.Platform, options.GraphicsProfile, options.OutputFile, options.Config);
                 CompiledEffectContent output = processor.Process(content, processorContext);
 
                 byte[] effectCode = output.GetEffectCode();
