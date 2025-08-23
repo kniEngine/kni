@@ -318,29 +318,23 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
-            string glesFloatPrecision;
-            switch (shaderStage)
+            if (shaderStage == ShaderStage.Pixel)
             {
-                case ShaderStage.Pixel:
-                    glesFloatPrecision = "precision mediump float;\n";
-                    break;
-                case ShaderStage.Vertex:
-                    glesFloatPrecision = "precision highp float;\n";
-                    break;
-                case ShaderStage.Compute:
-                    glesFloatPrecision = "precision highp float;\n";
-                    break;
-
-                default:
-                    throw new InvalidOperationException();
+                glslCode = "#ifdef GL_ES\n"
+                         + "precision mediump float;\n"
+                         + "precision mediump int;\n"
+                         + "#endif\n"
+                         + "\n"
+                         + glslCode;
             }
-
-            glslCode = "#ifdef GL_ES\n" 
-                     + glesFloatPrecision
-                     + "precision mediump int;\n"
-                     + "#endif\n"
-                     + "\n" 
-                     + glslCode;
+            if (shaderStage == ShaderStage.Vertex)
+            {
+                glslCode = "#ifdef GL_ES\n"
+                         + "precision mediump int;\n"
+                         + "#endif\n"
+                         + "\n"
+                         + glslCode;
+            }
 
             // Enable standard derivatives extension as necessary
             if (glslCode.IndexOf("dFdx", StringComparison.InvariantCulture) >= 0
@@ -368,10 +362,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
-            glslCode = "precision highp float;\n"
-                     + "precision highp int;\n"
-                     + "\n"
-                     + glslCode;
+            if (shaderStage == ShaderStage.Pixel)
+            {
+                glslCode = "precision highp float;\n"
+                         + "precision highp int;\n"
+                         + "\n"
+                         + glslCode;
+            }
 
             glslCode = "#version 300 es\n"
                      + glslCode;
