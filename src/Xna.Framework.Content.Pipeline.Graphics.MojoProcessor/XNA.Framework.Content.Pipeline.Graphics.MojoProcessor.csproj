@@ -47,6 +47,7 @@
     <Compile Include="Processors\MojoEffectProcessor.cs" />
     <Compile Include="EffectCompiler\ConstantBufferData.cs" />
     <Compile Include="EffectCompiler\EffectObject.cs" />
+    <Compile Include="EffectCompiler\GLSLBytecode.cs" />
     <Compile Include="EffectCompiler\KNIFXWriter11.cs" />
     <Compile Include="EffectCompiler\MarshalHelper.cs" />
     <Compile Include="EffectCompiler\SamplerInfo.cs" />

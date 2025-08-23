@@ -265,42 +265,41 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             string glsl110Code = parseData.output;
             glsl110Code = glsl110Code.Replace("\r\n", "\n");
 
+            List<GLSLBytecode> glslBytecodes = new List<GLSLBytecode>();
+
             string glslCode = ConvertGLSL110ToGLSL(dxshader.Stage, glsl110Code);
-            byte[] glslByteCode = Encoding.ASCII.GetBytes(glslCode);
+            GLSLBytecode glsl000 = new GLSLBytecode(0,0,false, Encoding.ASCII.GetBytes(glslCode));
+            glslBytecodes.Add(glsl000);
 
             // GLES 3.00 is required for dFdx/dFdy/gl_FragData
             string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glsl110Code);
-            byte[] glsl300esByteCode = Encoding.ASCII.GetBytes(glsl300esCode);
+            GLSLBytecode glsl300es = new GLSLBytecode(3, 0, true, Encoding.ASCII.GetBytes(glsl300esCode));
+            glslBytecodes.Add(glsl000);
 
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.ASCII))
             {
                 writer.Write((short)0); // Reserved
 
-                // write directory
-                writer.Write((short)2); // count
-
-                int offset0 = 18;
-
-                writer.Write((byte)0); // glsl major
-                writer.Write((byte)0); // glsl minor
-                writer.Write(false); // es
-                writer.Write((int)offset0);
-
-                int offset1 = offset0 + glslByteCode.Length + 2;
-
-                writer.Write((byte)3); // glsl major
-                writer.Write((byte)0); // glsl minor
-                writer.Write(true); // es
-                writer.Write((int)offset1);
-
+                // write bytecode directory
+                writer.Write((short)glslBytecodes.Count);
+                const int HeaderSize = 4;
+                const int EntrySize = 7;
+                int bytecodesOffset = HeaderSize + EntrySize * glslBytecodes.Count;
+                for (int i = 0; i < glslBytecodes.Count; i++)
+                {
+                    writer.Write((byte)glslBytecodes[i].Major);
+                    writer.Write((byte)glslBytecodes[i].Minor);
+                    writer.Write(glslBytecodes[i].ES);
+                    writer.Write((int)(bytecodesOffset));
+                    bytecodesOffset += (2 + glslBytecodes[i].Bytecode.Length);
+                }
                 // write bytecodes
-                Debug.Assert(memoryStream.Position == (offset0));
-                writer.Write((short)glslByteCode.Length);
-                writer.Write(glslByteCode);
-                Debug.Assert(memoryStream.Position == (offset1));
-                writer.Write((short)glsl300esByteCode.Length);
-                writer.Write(glsl300esByteCode);
+                for (int i = 0; i < glslBytecodes.Count; i++)
+                {
+                    writer.Write((short)glslBytecodes[i].Bytecode.Length);
+                    writer.Write(glslBytecodes[i].Bytecode);
+                }
 
                 // Store the code for serialization.
                 dxshader.ShaderCode = memoryStream.ToArray();
