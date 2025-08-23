@@ -274,7 +274,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // GLES 3.00 is required for dFdx/dFdy/gl_FragData
             string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glsl110Code);
             GLSLBytecode glsl300es = new GLSLBytecode(3, 0, true, Encoding.ASCII.GetBytes(glsl300esCode));
-            glslBytecodes.Add(glsl000);
+            glslBytecodes.Add(glsl300es);
 
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.ASCII))
