@@ -321,16 +321,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             if (shaderStage == ShaderStage.Pixel)
             {
                 glslCode = "#ifdef GL_ES\n"
-                         + "precision mediump float;\n"
-                         + "precision mediump int;\n"
-                         + "#endif\n"
-                         + "\n"
-                         + glslCode;
-            }
-            if (shaderStage == ShaderStage.Vertex)
-            {
-                glslCode = "#ifdef GL_ES\n"
-                         + "precision mediump int;\n"
+                         + "precision highp float;\n"
+                         + "precision highp int;\n"
                          + "#endif\n"
                          + "\n"
                          + glslCode;
