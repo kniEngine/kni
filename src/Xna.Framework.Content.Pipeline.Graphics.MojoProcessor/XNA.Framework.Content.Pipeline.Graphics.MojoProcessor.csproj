@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Processors\EffectProcessor.cs" />
     <Compile Include="Processors\EffectProcessorDebugMode.cs" />
+    <Compile Include="Processors\MojoEffectProcessor.cs" />
     <Compile Include="EffectCompiler\ConstantBufferData.cs" />
     <Compile Include="EffectCompiler\EffectObject.cs" />
     <Compile Include="EffectCompiler\KNIFXWriter11.cs" />
