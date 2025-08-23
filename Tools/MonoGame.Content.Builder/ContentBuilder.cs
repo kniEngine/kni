@@ -427,7 +427,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Builder
 
             // If this is an incremental build we merge the list
             // of previous content with the new list.
-            if (Incremental && !targetChanged)
+            if (Incremental && !targetChanged && previousFileCollection != null)
                 newFileCollection.Merge(previousFileCollection);
 
             // Delete the old file and write the new content 
