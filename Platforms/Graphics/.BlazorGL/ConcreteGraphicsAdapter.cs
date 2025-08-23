@@ -124,7 +124,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     {
                         IWebGL2RenderingContext webgl2 = oc.GetContext<IWebGL2RenderingContext>();
                         if (webgl2 == null) return false;
-                        // TODO: add more Feature Level 10.0 checks
+                        int maxTextureSize = webgl2.GetParameter(WebGL2PNameInteger.MAX_TEXTURE_SIZE);
+                        if (maxTextureSize < 8192) return false;
                         return true;
                     }
                 case GraphicsProfile.FL10_1:
