@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler;
@@ -68,26 +69,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     DebugMode = EffectProcessorDebugMode.Debug;
             }
 
-            List<ShaderProfile> shaderProfiles = new List<ShaderProfile>();
             List<GraphicsBackend> backends = context.Parameters.GetValue<List<GraphicsBackend>>("_GraphicsBackendList", null);
             if (backends == null)
             {
-                ShaderProfile shaderProfile = MojoEffectProcessor.FromPlatform(context.TargetPlatform);
-                if (shaderProfile == null)
-                    throw new InvalidContentException(string.Format("{0} effects are not supported.", context.TargetPlatform), input.Identity);
-                shaderProfiles.Add(shaderProfile);
-            }
-            else
-            {
-                foreach(GraphicsBackend backend in backends)
-                {
-                    ShaderProfile shaderProfile = MojoEffectProcessor.FromBackend(backend);
-                    if (shaderProfile == null)
-                        throw new InvalidContentException(string.Format("{0} effects are not supported.", backend), input.Identity);
-                    shaderProfiles.Add(shaderProfile);
-                }
+                backends = new List<GraphicsBackend>();
+                GraphicsBackend backend = MojoEffectProcessor.BackendFromPlatform(context.TargetPlatform);
+                backends.Add(backend);
             }
 
+            // replace any WebGL backend with GLES, and remove duplicates.
+            backends = backends.Select( (backend) => (backend == GraphicsBackend.WebGL) ? GraphicsBackend.GLES : backend)
+                               .Distinct()
+                               .ToList();
 
             // Write out the effect to a runtime format.
             try
@@ -101,10 +94,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     writer.Write((short)0); // reserved
 
                     // write fxCount
-                    writer.Write((short)shaderProfiles.Count);
-                    for (int shaderProfileIdx = 0; shaderProfileIdx < shaderProfiles.Count; shaderProfileIdx++)
+                    writer.Write((short)backends.Count);
+                    for (int backendIdx = 0; backendIdx < backends.Count; backendIdx++)
                     {
-                        ShaderProfile shaderProfile = shaderProfiles[shaderProfileIdx];
+                        GraphicsBackend backend = backends[backendIdx];
+                        ShaderProfile shaderProfile = MojoEffectProcessor.ShaderProfileFromBackend(backend);
+                        if (shaderProfile == null)
+                            throw new InvalidContentException(string.Format("{0} effects are not supported.", backend), input.Identity);
 
                         EffectObject effectObject;
                         try
@@ -161,24 +157,28 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
         /// <summary>
-        /// Returns the correct profile for the named platform or
+        /// Returns the correct GraphicsBackend for the named platform or
         /// null if no supporting profile is found.
         /// </summary>
-        public static ShaderProfile FromPlatform(TargetPlatform platform)
+        public static GraphicsBackend BackendFromPlatform(TargetPlatform platform)
         {
             switch (platform)
             {
                 case TargetPlatform.Windows:
                 case TargetPlatform.WindowsStoreApp:
-                    return ShaderProfile.DirectX_11;
+                    return GraphicsBackend.DirectX11;
+
+                case TargetPlatform.DesktopGL:
+                case TargetPlatform.MacOSX:
+                    return GraphicsBackend.OpenGL;
 
                 case TargetPlatform.iOS:
                 case TargetPlatform.Android:
-                case TargetPlatform.BlazorGL:
-                case TargetPlatform.DesktopGL:
-                case TargetPlatform.MacOSX:
                 case TargetPlatform.RaspberryPi:
-                    return ShaderProfile.OpenGL_Mojo;
+                    return GraphicsBackend.GLES;
+
+                case TargetPlatform.BlazorGL:
+                    return GraphicsBackend.WebGL;
 
                 default:
                     throw new InvalidOperationException();
@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         /// Returns the correct profile for the named GraphicsBackend or
         /// null if no supporting profile is found.
         /// </summary>
-        public static ShaderProfile FromBackend(GraphicsBackend backend)
+        public static ShaderProfile ShaderProfileFromBackend(GraphicsBackend backend)
         {
             switch (backend)
             {
@@ -199,24 +199,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 case GraphicsBackend.OpenGL:
                 case GraphicsBackend.GLES:
                 case GraphicsBackend.WebGL:
-                    return ShaderProfile.OpenGL_Mojo;
-
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
-
-        /// <summary>
-        /// Returns the profile by type or null if no match is found.
-        /// </summary>
-        public static ShaderProfile FromType(ShaderProfileType profileType)
-        {
-            switch (profileType)
-            {
-                case ShaderProfileType.DirectX_11:
-                    return ShaderProfile.DirectX_11;
-
-                case ShaderProfileType.OpenGL_Mojo:
                     return ShaderProfile.OpenGL_Mojo;
 
                 default:
