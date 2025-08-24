@@ -310,10 +310,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static string ConvertGLSL110ToGLSL(ShaderStage shaderStage, string glslCode)
         {
-            // TODO: This sort of sucks... why does MojoShader not produce
-            // code valid for GLES out of the box?
-
-            // GLES platforms do not like this.
+            // remove the opengl 1.10 header. GLES platforms do not like this.
             Debug.Assert(glslCode.StartsWith("#version 110\n"));
             glslCode = glslCode.Replace("#version 110\n", "");
 
@@ -351,6 +348,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static string ConvertGLSL110ToGLSL300es(ShaderStage shaderStage, string glslCode)
         {
+            // remove the opengl 1.10 header. GLES platforms do not like this.
             Debug.Assert(glslCode.StartsWith("#version 110\n"));
             glslCode = glslCode.Replace("#version 110\n", "");
 
@@ -363,6 +361,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                          + glslCode;
             }
 
+            // add the GL ES header.
             glslCode = "#version 300 es\n"
                      + glslCode;
 
