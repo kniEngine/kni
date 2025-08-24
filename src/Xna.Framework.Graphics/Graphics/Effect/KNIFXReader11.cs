@@ -205,15 +205,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 EffectParameterCollection elements = ReadParameters();
                 EffectParameterCollection structMembers = ReadParameters();
 
+                bool integersAsFloats = (_shaderProfile == ShaderProfileType.OpenGL_Mojo);
                 object data = null;
                 if (elements.Count == 0 && structMembers.Count == 0)
                 {
                     switch (type)
                     {
                         case EffectParameterType.Bool:
-                            if (_shaderProfile == ShaderProfileType.OpenGL_Mojo)
+                            if (integersAsFloats)
                             {
-                                // MojoShader stores Booleans in a float type.
+                                // Booleans are stored in a float type.
                                 float[] buffer = new float[rowCount * columnCount];
                                 for (int j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadInt32();
@@ -230,9 +231,9 @@ namespace Microsoft.Xna.Framework.Graphics
                             break;
 
                         case EffectParameterType.Int32:
-                            if (_shaderProfile == ShaderProfileType.OpenGL_Mojo)
+                            if (integersAsFloats)
                             {
-                                // MojoShader stores Integers in a float type.
+                                // Integers are stored in a float type.
                                 float[] buffer = new float[rowCount * columnCount];
                                 for (int j = 0; j < buffer.Length; j++)
                                     buffer[j] = ReadInt32();
@@ -270,7 +271,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return new EffectParameter(
                     class_, type, name, rowCount, columnCount, columnCountActual, semantic,
-                    annotations, elements, structMembers, data, _shaderProfile);
+                    annotations, elements, structMembers, data, integersAsFloats);
             }
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)

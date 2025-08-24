@@ -15,8 +15,6 @@ namespace Microsoft.Xna.Framework.Graphics
     [DebuggerDisplay("{DebugDisplayString}")]
     public class EffectParameter
     {
-        ShaderProfileType _profile;
-
         public string Name { get; private set; }
 
         public string Semantic { get; private set; }
@@ -38,6 +36,11 @@ namespace Microsoft.Xna.Framework.Graphics
         public EffectAnnotationCollection Annotations { get; private set; }
         
         internal object Data { get; private set; }
+        // Because we are compiling SM3.0 to GLSL 1.10 instead of GLSL 1.20
+        // MojoShader encodes integers and booleans as floats,
+        // and we need to handle int<->float conversion manually.
+        // TODO: Compile SM 3.0 and above with MojoShader.NativeConstants.PROFILE_GLSL120.
+        private bool _integersAsFloats;
 
         /// <summary>
         /// The next state key used when an effect parameter
@@ -63,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                     EffectParameterCollection elements,
                                     EffectParameterCollection structMembers,
                                     object data,
-                                    ShaderProfileType profile)
+                                    bool intsAsFloats)
         {
             ParameterClass = class_;
             ParameterType = type;
@@ -80,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
             StructureMembers = structMembers;
 
             Data = data;
-            _profile = profile;
+            _integersAsFloats = intsAsFloats;
 
             StateKey = unchecked(NextStateKey++);
         }
@@ -105,7 +108,7 @@ namespace Microsoft.Xna.Framework.Graphics
             Array array = cloneSource.Data as Array;
             if (array != null)
                 Data = array.Clone();
-            _profile = cloneSource._profile;
+            _integersAsFloats = cloneSource._integersAsFloats;
 
             StateKey = unchecked(NextStateKey++);
         }
@@ -115,8 +118,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Bool)
             {
-                if (_profile == ShaderProfileType.OpenGL_Mojo)
-                    return ((float[])Data)[0] != 0.0f; // MojoShader encodes booleans into a float.
+                if (_integersAsFloats)
+                    return ((float[])Data)[0] != 0.0f;
                 else
                     return ((int[])Data)[0] != 0;
             }
@@ -128,8 +131,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Bool)
             {
-                if (_profile == ShaderProfileType.OpenGL_Mojo)
-                    ((float[])Data)[0] = value ? 1 : 0; // MojoShader encodes booleans into a float.
+                if (_integersAsFloats)
+                    ((float[])Data)[0] = value ? 1 : 0;
                 else
                     ((int[])Data)[0] = value ? 1 : 0;
 
@@ -154,8 +157,8 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Int32)
             {
-                if (_profile == ShaderProfileType.OpenGL_Mojo)
-                    return (int)((float[])Data)[0]; // MojoShader encodes integers into a float.
+                if (_integersAsFloats)
+                    return (int)((float[])Data)[0];
                 else
                     return ((int[])Data)[0];
             }
@@ -175,8 +178,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (ParameterClass == EffectParameterClass.Scalar && ParameterType == EffectParameterType.Int32)
             {
-                if (_profile == ShaderProfileType.OpenGL_Mojo)
-                    ((float[])Data)[0] = value; // MojoShader encodes integers into a float.
+                if (_integersAsFloats)
+                    ((float[])Data)[0] = value;
                 else
                     ((int[])Data)[0] = value;
 

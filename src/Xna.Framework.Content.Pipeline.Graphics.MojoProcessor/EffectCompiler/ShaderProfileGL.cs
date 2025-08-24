@@ -163,9 +163,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
             );//(a, b) => ((int)(a.info.elements > 1))a.register_index.CompareTo(b.register_index));
 
-            // NOTE: It seems the latest versions of MojoShader only 
-            // output vec4 register sets.  We leave the code below, but
-            // the runtime has been optimized for this case.
+            // NOTE: Because we are compiling SM3.0 to GLSL 1.10 instead of GLSL 1.20
+            // MojoShader encodes integers and booleans as floats,
+            // and we need to handle int<->float conversion manually.
+            // We leave the code below, but the runtime has been optimized for this case.
+            // TODO: Compile SM 3.0 and above with MojoShader.NativeConstants.PROFILE_GLSL120.
 
             // For whatever reason the register indexing is 
             // incorrect from MojoShader.
