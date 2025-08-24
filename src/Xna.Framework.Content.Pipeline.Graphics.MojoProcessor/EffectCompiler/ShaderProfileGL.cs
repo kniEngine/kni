@@ -314,6 +314,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // code valid for GLES out of the box?
 
             // GLES platforms do not like this.
+            Debug.Assert(glslCode.StartsWith("#version 110\n"));
             glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
@@ -350,6 +351,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static string ConvertGLSL110ToGLSL300es(ShaderStage shaderStage, string glslCode)
         {
+            Debug.Assert(glslCode.StartsWith("#version 110\n"));
             glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
