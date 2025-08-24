@@ -76,12 +76,12 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                         else
                         {
-                            bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 0, minor: 0, es: false);
+                            bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 1, minor: 0, es: false);
                         }
                     }
                     else //if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL)
                     {
-                        bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 0, minor: 0, es: false);
+                        bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 1, minor: 1, es: false);
                     }
 
                     int bytecodeLength = BitConverter.ToInt16(shaderBytecode, bytecodeOffset); bytecodeOffset += 2;
