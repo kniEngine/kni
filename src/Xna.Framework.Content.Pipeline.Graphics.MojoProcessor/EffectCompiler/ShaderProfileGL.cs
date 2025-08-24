@@ -262,19 +262,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Gather all the parameters used by this shader.
             AddConstantBuffers(cbuffers, dxshader, symbols, dx11CBuffersData);
 
-            string glsl110Code = parseData.output;
-            glsl110Code = glsl110Code.Replace("\r\n", "\n");
+            string glslCode = parseData.output;
+            glslCode = glslCode.Replace("\r\n", "\n");
 
             List<GLSLBytecode> glslBytecodes = new List<GLSLBytecode>();
 
-            string glslCode = ConvertGLSL110ToGLSL(dxshader.Stage, glsl110Code);
-            GLSLBytecode glsl000 = new GLSLBytecode(0,0,false, Encoding.ASCII.GetBytes(glslCode));
-            glslBytecodes.Add(glsl000);
+            string glsl110Code = ConvertGLSL110ToGLSL110(dxshader.Stage, glslCode);
+            GLSLBytecode glsl110 = new GLSLBytecode(1, 1, false, Encoding.ASCII.GetBytes(glsl110Code));
+            glslBytecodes.Add(glsl110);
 
             // GLES 3.00 is required for dFdx/dFdy/gl_FragData
-            string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glsl110Code);
+            string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glslCode);
             GLSLBytecode glsl300es = new GLSLBytecode(3, 0, true, Encoding.ASCII.GetBytes(glsl300esCode));
             glslBytecodes.Add(glsl300es);
+
+            if (shaderVersion == new ShaderVersion(2,0))
+            {
+                string glsl100Code = ConvertGLSL110ToGLSL100(dxshader.Stage, glslCode);
+                GLSLBytecode glsl100 = new GLSLBytecode(1, 0, false, Encoding.ASCII.GetBytes(glsl100Code));
+                glslBytecodes.Add(glsl100);
+            }
 
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.ASCII))
@@ -308,7 +315,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return dxshader;
         }
 
-        private static string ConvertGLSL110ToGLSL(ShaderStage shaderStage, string glslCode)
+        private static string ConvertGLSL110ToGLSL110(ShaderStage shaderStage, string glslCode)
+        {
+            // remove the opengl 1.10 header for now.
+            Debug.Assert(glslCode.StartsWith("#version 110\n"));
+            glslCode = glslCode.Replace("#version 110\n", "");
+
+            // add the header back.
+            // (version 1.10 is the OpenGL default)
+            //glslCode = "#version 110\n"
+            //         + glslCode;
+
+            return glslCode;
+        }
+
+        private static string ConvertGLSL110ToGLSL100(ShaderStage shaderStage, string glslCode)
         {
             // remove the opengl 1.10 header. GLES platforms do not like this.
             Debug.Assert(glslCode.StartsWith("#version 110\n"));
@@ -317,20 +338,26 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             // Add the required precision specifiers for GLES.
             if (shaderStage == ShaderStage.Pixel)
             {
-                glslCode = "#ifdef GL_ES\n"
-                         + "precision highp float;\n"
+                glslCode = "precision highp float;\n"
                          + "precision highp int;\n"
-                         + "#endif\n"
                          + "\n"
                          + glslCode;
             }
 
-            // Enable standard derivatives extension as necessary
-            if (glslCode.IndexOf("dFdx", StringComparison.InvariantCulture) >= 0
-            ||  glslCode.IndexOf("dFdy", StringComparison.InvariantCulture) >= 0)
-            {
-                glslCode = "#extension GL_OES_standard_derivatives : enable\n" + glslCode;
-            }
+            // Enable standard derivatives extension as necessary.
+            // (we dont need that on Reach/sm2.0)
+            //if (glslCode.IndexOf("dFdx", StringComparison.InvariantCulture) >= 0
+            //||  glslCode.IndexOf("dFdy", StringComparison.InvariantCulture) >= 0
+            //||  glslCode.IndexOf("fwidth", StringComparison.InvariantCulture) >= 0)
+            //{
+            //    glslCode = "#extension GL_OES_standard_derivatives : enable\n"
+            //             + "\n";
+            //}
+
+            // add the GL ES header.
+            // (version 1.00 is the GLes default)
+            //glslCode = "#version 100\n"
+            //         + glslCode;
 
             return glslCode;
         }
