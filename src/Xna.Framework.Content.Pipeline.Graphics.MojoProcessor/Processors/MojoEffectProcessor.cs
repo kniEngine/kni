@@ -535,7 +535,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (sharedIndex == -1)
             {
                 // Compile and create the shader.
-                ShaderData shaderData = shaderProfile.CreateShader(input, context, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderStage, ref errorsAndWarnings);
+                ShaderData shaderData = shaderProfile.CreateShader(input, context, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderVersion, shaderStage, ref errorsAndWarnings);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;
                 shaderData.ShaderVersion = shaderVersion;

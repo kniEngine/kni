@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderVersion shaderVersion, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             ConstantBufferData[] dx11CBuffersData;
             string dx11ShaderProfileName = shaderProfileName;
@@ -96,12 +96,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0", "s_3_0");
             using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx9ShaderProfileName, false, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, shaderInfo, shaderBytecodeDX9, shaderStage, effect.ConstantBuffers, debugMode, dx11CBuffersData);
+                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, shaderInfo, shaderBytecodeDX9, shaderStage, shaderVersion, effect.ConstantBuffers, debugMode, dx11CBuffersData);
                 return shaderDataDX9;
             }
         }
 
-        private static ShaderData CreateGLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, EffectProcessorDebugMode debugMode, ConstantBufferData[] dx11CBuffersData)
+        private static ShaderData CreateGLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, ShaderVersion shaderVersion, List<ConstantBufferData> cbuffers, EffectProcessorDebugMode debugMode, ConstantBufferData[] dx11CBuffersData)
         {
             ShaderData dxshader = new ShaderData(shaderStage);
 
@@ -310,10 +310,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static string ConvertGLSL110ToGLSL(ShaderStage shaderStage, string glslCode)
         {
-            // TODO: This sort of sucks... why does MojoShader not produce
-            // code valid for GLES out of the box?
-
-            // GLES platforms do not like this.
+            // remove the opengl 1.10 header. GLES platforms do not like this.
+            Debug.Assert(glslCode.StartsWith("#version 110\n"));
             glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
@@ -350,6 +348,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
         private static string ConvertGLSL110ToGLSL300es(ShaderStage shaderStage, string glslCode)
         {
+            // remove the opengl 1.10 header. GLES platforms do not like this.
+            Debug.Assert(glslCode.StartsWith("#version 110\n"));
             glslCode = glslCode.Replace("#version 110\n", "");
 
             // Add the required precision specifiers for GLES.
@@ -361,6 +361,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                          + glslCode;
             }
 
+            // add the GL ES header.
             glslCode = "#version 300 es\n"
                      + glslCode;
 

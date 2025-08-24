@@ -75,13 +75,20 @@ namespace Microsoft.Xna.Platform.Graphics
                     int bytecodeOffset;
 
                     if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.GLES
-                    &&  this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
+                    ||  this.GraphicsDevice.Adapter.Backend == GraphicsBackend.WebGL)
                     {
-                        bytecodeOffset = FindShaderByteCode(shaderBytecode, major:3, minor:0, es:true);
+                        if (this.GraphicsDevice.GraphicsProfile >= GraphicsProfile.HiDef)
+                        {
+                            bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 3, minor: 0, es: true);
+                        }
+                        else
+                        {
+                            bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 0, minor: 0, es: false);
+                        }
                     }
-                    else
+                    else //if (this.GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL)
                     {
-                        bytecodeOffset = FindShaderByteCode(shaderBytecode, major:0, minor:0, es:false);
+                        bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 0, minor: 0, es: false);
                     }
 
                     int bytecodeLength = BitConverter.ToInt16(shaderBytecode, bytecodeOffset); bytecodeOffset += 2;

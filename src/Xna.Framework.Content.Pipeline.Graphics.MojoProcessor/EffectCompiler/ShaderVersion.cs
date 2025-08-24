@@ -70,6 +70,44 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             return ParseShaderModel(csModel, ComputeShaderRegex);
         }
 
+        public static bool operator <(ShaderVersion l, ShaderVersion r)
+        {
+            if (l.Major == r.Major)
+                return (l.Minor < r.Minor);
+            return (l.Major < r.Major);
+        }
+
+        public static bool operator >(ShaderVersion l, ShaderVersion r)
+        {
+            if (l.Major == r.Major)
+                return (l.Minor > r.Minor);
+            return (l.Major > r.Major);
+        }
+
+        public static bool operator <=(ShaderVersion l, ShaderVersion r)
+        {
+            if (l.Major == r.Major)
+                return (l.Minor <= r.Minor);
+            return (l.Major < r.Major);
+        }
+
+        public static bool operator >=(ShaderVersion l, ShaderVersion r)
+        {
+            if (l.Major == r.Major)
+                return (l.Minor >= r.Minor);
+            return (l.Major > r.Major);
+        }
+
+        public static bool operator ==(ShaderVersion l, ShaderVersion r)
+        {
+            return (l.Major == r.Major && l.Minor == r.Minor);
+        }
+
+        public static bool operator !=(ShaderVersion l, ShaderVersion r)
+        {
+            return (l.Major != r.Major || l.Minor != r.Minor);
+        }
+
         public override string ToString()
         {
             return String.Format("{{Major: {0}, Minor: {1} }}",
