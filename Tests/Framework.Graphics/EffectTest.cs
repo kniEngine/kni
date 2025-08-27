@@ -687,6 +687,49 @@ namespace Kni.Tests.Graphics
 
             effect.Dispose();
         }
+
+        [Test]
+        public void ShouldSetAndGetOptimizedMatrixArray()
+        {
+            GraphicsDevice device = game.GraphicsDevice;
+
+            string effectName = "OptimizedMatrixArray";
+
+#if WINDOWSDX || DESKTOPGL
+            Effect effect = AssetTestUtility.CompileAndLoadEffect(device, Paths.RawEffect(effectName));
+#else
+            Effect effect = content.Load<Effect>(Paths.CompiledEffect(effectName));
+#endif
+
+            EffectParameter colorMatrixParam = effect.Parameters["ColorsMatrix"];
+            EffectPass effectPass = effect.CurrentTechnique.Passes[0];
+
+            effectPass.Apply();
+
+            Matrix mtx0 = new Matrix(
+                11, 12, 13, 14,
+                21, 22, 23, 24,
+                31, 32, 33, 34,
+                41, 42, 43, 44
+            );
+
+            Matrix mtx1 = new Matrix(
+                211, 212, 213, 214,
+                221, 222, 223, 224,
+                231, 232, 233, 234,
+                241, 242, 243, 244
+            );
+
+            Matrix[] mtxArrayA = new Matrix[2] { mtx0, mtx1 };
+
+            colorMatrixParam.SetValue(mtxArrayA);
+
+            Matrix[] mtxArrayB = colorMatrixParam.GetValueMatrixArray(2);
+            Assert.That(mtxArrayA[0], Is.EqualTo(mtxArrayB[0]));
+            Assert.That(mtxArrayA[1], Is.EqualTo(mtxArrayB[1]));
+
+            effect.Dispose();
+        }
 #endif
 
     }
