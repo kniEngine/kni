@@ -1106,9 +1106,9 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             return new ConcretePixelShader(this, shaderVersion, shaderBytecode, samplers, cBuffers, attributes);
         }
-        public override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
+        public override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, bool integersAsFloats)
         {
-            return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
+            return new ConcreteConstantBuffer(this, name, parameterIndexes, parameterOffsets, sizeInBytes, integersAsFloats);
         }
 
         public override IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage)

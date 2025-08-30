@@ -22,10 +22,10 @@ namespace Microsoft.Xna.Platform.Graphics
                               int[] parameterIndexes,
                               int[] parameterOffsets,
                               int sizeInBytes,
-                              ShaderProfileType profile)
+                              bool integersAsFloats)
             : base()
         {
-            _strategy = ((IPlatformGraphicsContext)device.MainContext).Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, profile);
+            _strategy = ((IPlatformGraphicsContext)device.MainContext).Strategy.CreateConstantBufferStrategy(name, parameterIndexes, parameterOffsets, sizeInBytes, integersAsFloats);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

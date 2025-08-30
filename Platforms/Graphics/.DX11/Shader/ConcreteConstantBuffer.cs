@@ -22,12 +22,9 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.Buffer DXcbuffer { get { return _cbuffer; } }
 
 
-        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
-            : base(contextStrategy, name, parameters, offsets, sizeInBytes, profile)
+        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, bool integersAsFloats)
+            : base(contextStrategy, name, parameters, offsets, sizeInBytes, integersAsFloats)
         {
-            Debug.Assert(profile == ShaderProfileType.DirectX_11,
-                "Effect profile '" + profile + "' is not compatible with the graphics backend '" + ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend + "'.");
-
             _cbuffer = CreateD3D11Buffer();
         }
 

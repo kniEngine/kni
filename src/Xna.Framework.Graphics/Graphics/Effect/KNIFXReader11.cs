@@ -73,12 +73,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     offsets[i]    = (int)ReadUInt16();
                 }
 
+                bool integersAsFloats = (_shaderProfile == ShaderProfileType.OpenGL_Mojo);
                 ConstantBuffer buffer = new ConstantBuffer(_graphicsDevice,
                                                 name,
                                                 parameters,
                                                 offsets,
                                                 sizeInBytes,
-                                                _shaderProfile);
+                                                integersAsFloats);
                 return buffer;
             }
 

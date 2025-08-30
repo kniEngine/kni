@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private int[] _parameters;
         private int[] _offsets;
         private byte[] _bufferData;
-        private ShaderProfileType _profile;
+        private bool _integersAsFloats;
         private bool _dirty;
         private ulong _stateKey;
 
@@ -35,19 +35,19 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _stateKey; }
             set { _stateKey = value; }
         }
-        protected ShaderProfileType Profile
+        protected bool IntegersAsFloats
         {
-            get { return _profile; }
+            get { return _integersAsFloats; }
         }
 
-        protected ConstantBufferStrategy(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
+        protected ConstantBufferStrategy(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, bool integersAsFloats)
             : base(contextStrategy)
         {
             this._name = name;
             this._parameters = parameters;
             this._offsets = offsets;
             this._bufferData = new byte[sizeInBytes];
-            this._profile = profile;
+            this._integersAsFloats = integersAsFloats;
         }
 
         protected ConstantBufferStrategy(ConstantBufferStrategy source)
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // copies
             this._bufferData = (byte[])source._bufferData.Clone();
-            this._profile = source._profile;
+            this._integersAsFloats = source._integersAsFloats;
         }
 
         public T ToConcrete<T>() where T : ConstantBufferStrategy
