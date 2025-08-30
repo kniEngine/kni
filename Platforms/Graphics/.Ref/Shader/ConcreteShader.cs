@@ -11,8 +11,8 @@ namespace Microsoft.Xna.Platform.Graphics
     public abstract class ConcreteShader : ShaderStrategy
     {
     
-        internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
+        internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
+            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes)
         {
             throw new PlatformNotSupportedException();
 

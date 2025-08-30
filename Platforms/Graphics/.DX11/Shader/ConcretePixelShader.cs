@@ -21,8 +21,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal D3D11.PixelShader DXPixelShader { get { return _pixelShader; } }
 
 
-        internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
+        internal ConcretePixelShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
+            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes)
         {
             CreatePixelShader();
         }

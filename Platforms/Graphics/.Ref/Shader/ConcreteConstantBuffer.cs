@@ -10,8 +10,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
     internal sealed class ConcreteConstantBuffer : ConstantBufferStrategy
     {
-        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
-            : base(contextStrategy, name, parameters, offsets, sizeInBytes, profile)
+        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, bool integersAsFloats)
+            : base(contextStrategy, name, parameters, offsets, sizeInBytes, integersAsFloats)
         {
             throw new PlatformNotSupportedException();
         }

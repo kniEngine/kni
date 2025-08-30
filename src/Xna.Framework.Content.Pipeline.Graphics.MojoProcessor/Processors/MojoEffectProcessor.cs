@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             throw new InvalidContentException(ex.Message, input.Identity, ex);
                         }
 
-                        // Write an simple identifier for DX11 vs GLSL
+                        // Write an identifier for DX11 vs GLSL
                         // so we can easily detect the correct shader type.
                         writer.Write((short)shaderProfile.ProfileType);
 

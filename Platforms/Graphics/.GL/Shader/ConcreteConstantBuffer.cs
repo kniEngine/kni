@@ -22,11 +22,9 @@ namespace Microsoft.Xna.Platform.Graphics
         static ConcreteConstantBuffer _lastConstantBufferApplied = null;
 
 
-        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, ShaderProfileType profile)
-            : base(contextStrategy, name, parameters, offsets, sizeInBytes, profile)
+        public ConcreteConstantBuffer(GraphicsContextStrategy contextStrategy, string name, int[] parameters, int[] offsets, int sizeInBytes, bool integersAsFloats)
+            : base(contextStrategy, name, parameters, offsets, sizeInBytes, integersAsFloats)
         {
-            Debug.Assert(profile == ShaderProfileType.OpenGL_Mojo,
-                "Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
 
         }
 

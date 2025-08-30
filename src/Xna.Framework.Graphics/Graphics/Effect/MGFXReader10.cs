@@ -78,12 +78,13 @@ namespace Microsoft.Xna.Framework.Graphics
                     offsets[i]    = (int)ReadUInt16();
                 }
 
+                bool integersAsFloats = (_shaderProfile == ShaderProfileType.OpenGL_Mojo);
                 ConstantBuffer buffer = new ConstantBuffer(_graphicsDevice,
                                                 name,
                                                 parameters,
                                                 offsets,
                                                 sizeInBytes,
-                                                _shaderProfile);
+                                                integersAsFloats);
                 return buffer;
             }
 
@@ -145,14 +146,12 @@ namespace Microsoft.Xna.Framework.Graphics
                         return new VertexShader(_graphicsDevice,
                             shaderVersion,
                             shaderBytecode,
-                            samplers, cBuffers, attributes,
-                            _shaderProfile);
+                            samplers, cBuffers, attributes);
                     case ShaderStage.Pixel:
                         return new PixelShader(_graphicsDevice,
                             shaderVersion,
                             shaderBytecode,
-                            samplers, cBuffers, attributes,
-                            _shaderProfile);
+                            samplers, cBuffers, attributes);
 
                     default:
                         throw new InvalidOperationException("stage");

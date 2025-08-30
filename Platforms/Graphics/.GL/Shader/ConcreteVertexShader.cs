@@ -18,8 +18,8 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private readonly Dictionary<VertexElement[], VertexDeclarationAttributeInfo> _vertexAttribInfoCache = new Dictionary<VertexElement[], VertexDeclarationAttributeInfo>();
 
-        internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
+        internal ConcreteVertexShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
+            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes)
         {
             base.CreateShader(contextStrategy, ShaderType.VertexShader, shaderVersion, shaderBytecode);
         }
