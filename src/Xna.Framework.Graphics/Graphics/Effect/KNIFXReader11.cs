@@ -16,6 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private class KNIFXReader11 : BinaryReader
         {
             private readonly GraphicsDevice _graphicsDevice;
+            private bool _integersAsFloats;
             ShaderProfileType _shaderProfile;
 
             public KNIFXReader11(Stream stream, GraphicsDevice graphicsDevice, ShaderProfileType shaderProfile) : base(stream)
@@ -38,6 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 Effect effect = new Effect(_graphicsDevice);
 
+                _integersAsFloats = ReadBoolean();
                 effect.ConstantBuffers = ReadConstantBuffers();
                 effect._shaders = ReadShaders();
                 effect.Parameters = ReadParameters();
@@ -73,13 +75,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     offsets[i]    = (int)ReadUInt16();
                 }
 
-                bool integersAsFloats = (_shaderProfile == ShaderProfileType.OpenGL_Mojo);
                 ConstantBuffer buffer = new ConstantBuffer(_graphicsDevice,
                                                 name,
                                                 parameters,
                                                 offsets,
                                                 sizeInBytes,
-                                                integersAsFloats);
+                                                _integersAsFloats);
                 return buffer;
             }
 
@@ -204,14 +205,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 EffectParameterCollection elements = ReadParameters();
                 EffectParameterCollection structMembers = ReadParameters();
 
-                bool integersAsFloats = (_shaderProfile == ShaderProfileType.OpenGL_Mojo);
                 object data = null;
                 if (elements.Count == 0 && structMembers.Count == 0)
                 {
                     switch (type)
                     {
                         case EffectParameterType.Bool:
-                            if (integersAsFloats)
+                            if (_integersAsFloats)
                             {
                                 // Booleans are stored in a float type.
                                 float[] buffer = new float[rowCount * columnCount];
@@ -230,7 +230,7 @@ namespace Microsoft.Xna.Framework.Graphics
                             break;
 
                         case EffectParameterType.Int32:
-                            if (integersAsFloats)
+                            if (_integersAsFloats)
                             {
                                 // Integers are stored in a float type.
                                 float[] buffer = new float[rowCount * columnCount];
@@ -270,7 +270,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 return new EffectParameter(
                     class_, type, name, rowCount, columnCount, columnCountActual, semantic,
-                    annotations, elements, structMembers, data, integersAsFloats);
+                    annotations, elements, structMembers, data, _integersAsFloats);
             }
 
             private EffectTechniqueCollection ReadTechniques(Effect effect)

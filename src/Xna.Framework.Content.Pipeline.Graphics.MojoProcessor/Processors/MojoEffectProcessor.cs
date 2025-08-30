@@ -129,7 +129,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         using (MemoryStream fxStream = new MemoryStream())
                         using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
                         {
-                            fxWriter.WriteEffect(effectObject);
+                            bool integersAsFloats = (shaderProfile.ProfileType == ShaderProfileType.OpenGL_Mojo);
+                            fxWriter.WriteEffect(effectObject, integersAsFloats);
 
                             int effectLength = (int)fxStream.Length;
 
