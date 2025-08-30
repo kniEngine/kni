@@ -19,12 +19,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal WebGLShader ShaderHandle { get { return _shaderHandle; } }
 
-        internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
-            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile)
+        internal ConcreteShader(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
+            : base(contextStrategy, shaderVersion, shaderBytecode, samplers, cBuffers, attributes)
         {
-            Debug.Assert(profile == ShaderProfileType.OpenGL_Mojo,
-                "Effect profile '"+profile+"' is not compatible with the graphics backend '"+((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.Adapter.Backend+"'.");
-
             GraphicsProfile graphicsProfile = this.GraphicsDeviceStrategy.GraphicsProfile;
             ShaderVersion maxVersion = MaxShaderVersions[graphicsProfile];
             if (shaderVersion != default

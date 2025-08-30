@@ -560,8 +560,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream);
 
-        public abstract ShaderStrategy CreateVertexShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
-        public abstract ShaderStrategy CreatePixelShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile);
+        public abstract ShaderStrategy CreateVertexShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes);
+        public abstract ShaderStrategy CreatePixelShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes);
         public abstract ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile);
 
         public abstract IndexBufferStrategy CreateIndexBufferStrategy(IndexElementSize indexElementSize, int indexCount, BufferUsage usage);

@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
             { GraphicsProfile.FL11_1,  new ShaderVersion(5, 0) },
         };
 
-        protected ShaderStrategy(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        protected ShaderStrategy(GraphicsContextStrategy contextStrategy, ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
             : base(contextStrategy)
         {
             _contextStrategy = contextStrategy;

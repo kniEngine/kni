@@ -15,11 +15,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal VertexShader(GraphicsDevice graphicsDevice,
             ShaderVersion shaderVersion,
             byte[] shaderBytecode,
-            SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes,
-            ShaderProfileType profile)
+            SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
             : base()
         {
-            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateVertexShaderStrategy(shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile);
+            _strategy = ((IPlatformGraphicsContext)graphicsDevice.CurrentContext).Strategy.CreateVertexShaderStrategy(shaderVersion, shaderBytecode, samplers, cBuffers, attributes);
             SetResourceStrategy((IGraphicsResourceStrategy)_strategy);
         }
 

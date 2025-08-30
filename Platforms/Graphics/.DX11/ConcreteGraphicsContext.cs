@@ -757,13 +757,13 @@ namespace Microsoft.Xna.Platform.Graphics
             return new ConcreteTexture2D(this, stream);
         }
 
-        public override ShaderStrategy CreateVertexShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        public override ShaderStrategy CreateVertexShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
         {
-            return new ConcreteVertexShader(this, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile);
+            return new ConcreteVertexShader(this, shaderVersion, shaderBytecode, samplers, cBuffers, attributes);
         }
-        public override ShaderStrategy CreatePixelShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes, ShaderProfileType profile)
+        public override ShaderStrategy CreatePixelShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)
         {
-            return new ConcretePixelShader(this, shaderVersion, shaderBytecode, samplers, cBuffers, attributes, profile);
+            return new ConcretePixelShader(this, shaderVersion, shaderBytecode, samplers, cBuffers, attributes);
         }
         public override ConstantBufferStrategy CreateConstantBufferStrategy(string name, int[] parameterIndexes, int[] parameterOffsets, int sizeInBytes, ShaderProfileType profile)
         {
