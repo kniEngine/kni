@@ -66,7 +66,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                     EffectParameterCollection elements,
                                     EffectParameterCollection structMembers,
                                     object data,
-                                    bool intsAsFloats)
+                                    bool integersAsFloats)
         {
             ParameterClass = class_;
             ParameterType = type;
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
             StructureMembers = structMembers;
 
             Data = data;
-            _integersAsFloats = intsAsFloats;
+            _integersAsFloats = integersAsFloats;
 
             StateKey = unchecked(NextStateKey++);
         }
