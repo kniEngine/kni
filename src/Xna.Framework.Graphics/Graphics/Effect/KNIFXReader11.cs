@@ -17,12 +17,10 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             private readonly GraphicsDevice _graphicsDevice;
             private bool _integersAsFloats;
-            ShaderProfileType _shaderProfile;
 
-            public KNIFXReader11(Stream stream, GraphicsDevice graphicsDevice, ShaderProfileType shaderProfile) : base(stream)
+            public KNIFXReader11(Stream stream, GraphicsDevice graphicsDevice) : base(stream)
             {
                 this._graphicsDevice = graphicsDevice;
-                this._shaderProfile =   shaderProfile;
             }
 
             private int ReadPackedInt()

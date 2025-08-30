@@ -81,11 +81,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
                             for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
                             {
-                                ShaderProfileType shaderProfile = (ShaderProfileType)BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
+                                GraphicsBackend shaderBackend = (GraphicsBackend)BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
                                 int effectKey = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
                                 int fxOffset = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
 
-                                if (!((IPlatformGraphicsAdapter)graphicsDevice.Adapter).Strategy.Platform_IsShaderProfileSupported(shaderProfile))
+                                if (!((IPlatformGraphicsAdapter)graphicsDevice.Adapter).Strategy.Platform_IsShaderBackendSupported(shaderBackend))
                                     continue;
 
                                 Effect effect;
@@ -95,7 +95,7 @@ namespace Microsoft.Xna.Framework.Graphics
                                     {
                                         int effectLength = BitConverter.ToInt32(effectCode, index + fxOffset); fxOffset += 4;
                                         using (Stream stream = new MemoryStream(effectCode, index + fxOffset, effectLength, false))
-                                        using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice, shaderProfile))
+                                        using (KNIFXReader11 reader = new KNIFXReader11(stream, graphicsDevice))
                                             effect = reader.ReadEffect();
 
                                         ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(effectKey, effect);
