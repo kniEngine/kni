@@ -270,20 +270,34 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             List<GLSLBytecode> glslBytecodes = new List<GLSLBytecode>();
 
-            string glsl110Code = ConvertGLSL110ToGLSL110(dxshader.Stage, glslCode);
-            GLSLBytecode glsl110 = new GLSLBytecode(1, 1, false, Encoding.ASCII.GetBytes(glsl110Code));
-            glslBytecodes.Add(glsl110);
-
-            // GLES 3.00 is required for dFdx/dFdy/gl_FragData
-            string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glslCode);
-            GLSLBytecode glsl300es = new GLSLBytecode(3, 0, true, Encoding.ASCII.GetBytes(glsl300esCode));
-            glslBytecodes.Add(glsl300es);
-
-            if (shaderVersion == new ShaderVersion(2,0))
+            switch(backend)
             {
-                string glsl100Code = ConvertGLSL110ToGLSL100(dxshader.Stage, glslCode);
-                GLSLBytecode glsl100 = new GLSLBytecode(1, 0, false, Encoding.ASCII.GetBytes(glsl100Code));
-                glslBytecodes.Add(glsl100);
+                case GraphicsBackend.OpenGL:
+                    {
+                        string glsl110Code = ConvertGLSL110ToGLSL110(dxshader.Stage, glslCode);
+                        GLSLBytecode glsl110 = new GLSLBytecode(1, 1, false, Encoding.ASCII.GetBytes(glsl110Code));
+                        glslBytecodes.Add(glsl110);
+                    }
+                    break;
+                case GraphicsBackend.GLES:
+                case GraphicsBackend.WebGL:
+                    {
+                        // GLES 3.00 is required for dFdx/dFdy/gl_FragData
+                        string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glslCode);
+                        GLSLBytecode glsl300es = new GLSLBytecode(3, 0, true, Encoding.ASCII.GetBytes(glsl300esCode));
+                        glslBytecodes.Add(glsl300es);
+
+                        if (shaderVersion == new ShaderVersion(2, 0))
+                        {
+                            string glsl100Code = ConvertGLSL110ToGLSL100(dxshader.Stage, glslCode);
+                            GLSLBytecode glsl100 = new GLSLBytecode(1, 0, false, Encoding.ASCII.GetBytes(glsl100Code));
+                            glslBytecodes.Add(glsl100);
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
             }
 
             using (MemoryStream memoryStream = new MemoryStream())
