@@ -116,6 +116,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
+            Dictionary<GraphicsBackend, MemoryStream> fxStreams = new Dictionary<GraphicsBackend, MemoryStream>();
+            for (int backendIdx = 0; backendIdx < backends.Count; backendIdx++)
+            {
+                GraphicsBackend backend = backends[backendIdx];
+                EffectObject effectObject = effectObjects[backend];
+
+                MemoryStream fxStream = new MemoryStream();
+                using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
+                {
+                    bool integersAsFloats = (shaderProfileTypes[backend] == ShaderProfileType.OpenGL_Mojo);
+                    fxWriter.WriteEffect(effectObject, integersAsFloats);
+                }
+                fxStreams[backend] = fxStream;
+            }
+
             // Write out the effect to a runtime format.
             try
             {
@@ -132,20 +147,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     for (int backendIdx = 0; backendIdx < backends.Count; backendIdx++)
                     {
                         GraphicsBackend backend = backends[backendIdx];
-
-                        // Write the GraphicsBackend, so we can easily detect the correct shader type.
-                        writer.Write((short)backend);
-
-                        EffectObject effectObject = effectObjects[backend];
-
-                        using (MemoryStream fxStream = new MemoryStream())
-                        using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
+                        using (MemoryStream fxStream = fxStreams[backend])
                         {
-                            bool integersAsFloats = (shaderProfileTypes[backend] == ShaderProfileType.OpenGL_Mojo);
-                            fxWriter.WriteEffect(effectObject, integersAsFloats);
-
-                            int effectLength = (int)fxStream.Length;
-
+                            // Write the GraphicsBackend, so we can easily detect the correct shader type.
+                            writer.Write((short)backend);
                             // Calculate a hash code from memory stream and write it to the header.
                             int effectKey = HashHelper.ComputeHash(fxStream);
                             writer.Write((Int32)effectKey);
@@ -153,7 +158,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             writer.Write((Int32)stream.Position + 4);
 
                             // write the length of the memory stream.
-                            writer.Write((Int32)effectLength);
+                            writer.Write((Int32)fxStream.Length);
                             //write content from memory stream to final stream.
                             fxStream.WriteTo(writer.BaseStream);
                         }
