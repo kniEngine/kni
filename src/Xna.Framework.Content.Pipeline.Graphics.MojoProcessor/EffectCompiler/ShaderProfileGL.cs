@@ -565,7 +565,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     param.class_ = EffectObject.PARAMETER_CLASS.MATRIX_COLUMNS;
 
                     // MojoShader optimizes matrices to occupy less registers.
-                    param.columnsActual = Math.Min(param.columnsActual, symbol.register_count);
+                    param.columnsActual = Math.Min(param.columns, symbol.register_count);
 
                     break;
 
@@ -622,7 +622,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     mparam.class_ = param.class_;
                     mparam.rows = param.rows;
                     mparam.columns = param.columns;
-                    mparam.columnsActual = param.columnsActual;
+                    mparam.columnsActual = (uint)Math.Min(param.columns, symbol.register_count - i * param.columns);
                     mparam.data = new byte[param.columns * param.rows * 4];
 
                     param.member_handles[i] = mparam;
