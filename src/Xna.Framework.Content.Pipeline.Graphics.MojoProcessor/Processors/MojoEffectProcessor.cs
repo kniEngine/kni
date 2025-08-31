@@ -82,6 +82,40 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                                .Distinct()
                                .ToList();
 
+            // compile effect
+            Dictionary<GraphicsBackend, EffectObject> effectObjects = new Dictionary<GraphicsBackend, EffectObject>();
+            Dictionary<GraphicsBackend, ShaderProfileType> shaderProfileTypes = new Dictionary<GraphicsBackend, ShaderProfileType>();
+            for (int backendIdx = 0; backendIdx < backends.Count; backendIdx++)
+            {
+                GraphicsBackend backend = backends[backendIdx];
+
+                ShaderProfile shaderProfile = MojoEffectProcessor.ShaderProfileFromBackend(backend);
+                if (shaderProfile == null)
+                    throw new InvalidContentException(string.Format("{0} effects are not supported.", backend), input.Identity);
+
+                try
+                {
+                    string fullFilePath = Path.GetFullPath(input.Identity.SourceFilename);
+
+                    // Preprocess the FX file expanding includes and macros.
+                    string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
+
+                    EffectObject effectObject = ProcessTechniques(input, context, backend, shaderProfile, fullFilePath, effectCode);
+
+                    effectObjects[backend] = effectObject;
+                    shaderProfileTypes[backend] = shaderProfile.ProfileType;
+                }
+                catch (InvalidContentException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Extract good line numbers from fx parser!
+                    throw new InvalidContentException(ex.Message, input.Identity, ex);
+                }
+            }
+
             // Write out the effect to a runtime format.
             try
             {
@@ -98,37 +132,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     for (int backendIdx = 0; backendIdx < backends.Count; backendIdx++)
                     {
                         GraphicsBackend backend = backends[backendIdx];
-                        ShaderProfile shaderProfile = MojoEffectProcessor.ShaderProfileFromBackend(backend);
-                        if (shaderProfile == null)
-                            throw new InvalidContentException(string.Format("{0} effects are not supported.", backend), input.Identity);
-
-                        EffectObject effectObject;
-                        try
-                        {
-                            string fullFilePath = Path.GetFullPath(input.Identity.SourceFilename);
-
-                            // Preprocess the FX file expanding includes and macros.
-                            string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
-
-                            effectObject = ProcessTechniques(input, context, backend, shaderProfile, fullFilePath, effectCode);
-                        }
-                        catch (InvalidContentException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex)
-                        {
-                            // TODO: Extract good line numbers from fx parser!
-                            throw new InvalidContentException(ex.Message, input.Identity, ex);
-                        }
 
                         // Write the GraphicsBackend, so we can easily detect the correct shader type.
                         writer.Write((short)backend);
 
+                        EffectObject effectObject = effectObjects[backend];
+
                         using (MemoryStream fxStream = new MemoryStream())
                         using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
                         {
-                            bool integersAsFloats = (shaderProfile.ProfileType == ShaderProfileType.OpenGL_Mojo);
+                            bool integersAsFloats = (shaderProfileTypes[backend] == ShaderProfileType.OpenGL_Mojo);
                             fxWriter.WriteEffect(effectObject, integersAsFloats);
 
                             int effectLength = (int)fxStream.Length;
