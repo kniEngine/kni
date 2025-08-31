@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 EffectObject effectObject = effectObjects[backend];
 
                 MemoryStream fxStream = new MemoryStream();
-                using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
+                KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream);
                 {
                     bool integersAsFloats = (shaderProfileTypes[backend] == ShaderProfileType.OpenGL_Mojo);
                     fxWriter.WriteEffect(effectObject, integersAsFloats);
@@ -142,23 +142,39 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     writer.Write((short)KNIFXWriter11.Version);
                     writer.Write((short)0); // reserved
 
-                    // write fxCount
+                    // write fx Directory
                     writer.Write((short)backends.Count);
+                    int HeaderSize = (int)writer.BaseStream.Position;
+                    const int EntrySize = 10;
+                    int fxOffset = HeaderSize + (backends.Count * EntrySize);
                     for (int backendIdx = 0; backendIdx < backends.Count; backendIdx++)
                     {
                         GraphicsBackend backend = backends[backendIdx];
-                        using (MemoryStream fxStream = fxStreams[backend])
+                        MemoryStream fxStream = fxStreams[backend];
                         {
+                            int effectLength = (int)fxStream.Length;
+
                             // Write the GraphicsBackend, so we can easily detect the correct shader type.
                             writer.Write((short)backend);
                             // Calculate a hash code from memory stream and write it to the header.
                             int effectKey = HashHelper.ComputeHash(fxStream);
                             writer.Write((Int32)effectKey);
                             // write fxOffset
-                            writer.Write((Int32)stream.Position + 4);
+                            writer.Write((Int32)fxOffset);
+                            fxOffset += (4 + effectLength);
+                        }
+                    }
+
+                    // write fx streams
+                    for (int backendIdx = 0; backendIdx < backends.Count; backendIdx++)
+                    {
+                        GraphicsBackend backend = backends[backendIdx];
+                        using (MemoryStream fxStream = fxStreams[backend])
+                        {
+                            int effectLength = (int)fxStream.Length;
 
                             // write the length of the memory stream.
-                            writer.Write((Int32)fxStream.Length);
+                            writer.Write((Int32)effectLength);
                             //write content from memory stream to final stream.
                             fxStream.WriteTo(writer.BaseStream);
                         }
