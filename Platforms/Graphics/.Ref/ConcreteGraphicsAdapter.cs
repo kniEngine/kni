@@ -71,6 +71,11 @@ namespace Microsoft.Xna.Platform.Graphics
             get { throw new PlatformNotSupportedException(); }
         }
 
+        public override bool Platform_IsShaderBackendSupported(GraphicsBackend shaderBackend)
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public override bool Platform_IsShaderProfileSupported(ShaderProfileType shaderProfile)
         {
             throw new PlatformNotSupportedException();

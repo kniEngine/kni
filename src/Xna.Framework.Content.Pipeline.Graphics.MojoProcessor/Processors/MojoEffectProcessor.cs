@@ -122,14 +122,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             throw new InvalidContentException(ex.Message, input.Identity, ex);
                         }
 
-                        // Write an identifier for DX11 vs GLSL
-                        // so we can easily detect the correct shader type.
-                        writer.Write((short)shaderProfile.ProfileType);
+                        // Write the GraphicsBackend, so we can easily detect the correct shader type.
+                        writer.Write((short)backend);
 
                         using (MemoryStream fxStream = new MemoryStream())
                         using (KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream))
                         {
-                            fxWriter.WriteEffect(effectObject);
+                            bool integersAsFloats = (shaderProfile.ProfileType == ShaderProfileType.OpenGL_Mojo);
+                            fxWriter.WriteEffect(effectObject, integersAsFloats);
 
                             int effectLength = (int)fxStream.Length;
 

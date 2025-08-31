@@ -112,6 +112,19 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return GraphicsBackend.GLES; }
         }
 
+        public override bool Platform_IsShaderBackendSupported(GraphicsBackend shaderBackend)
+        {
+            switch (shaderBackend)
+            {
+                case GraphicsBackend.OpenGL:
+                case GraphicsBackend.GLES:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         public override bool Platform_IsShaderProfileSupported(ShaderProfileType shaderProfile)
         {
             switch (shaderProfile)

@@ -43,6 +43,18 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return GraphicsBackend.DirectX11; }
         }
 
+        public override bool Platform_IsShaderBackendSupported(GraphicsBackend shaderBackend)
+        {
+            switch (shaderBackend)
+            {
+                case GraphicsBackend.DirectX11:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         public override bool Platform_IsShaderProfileSupported(ShaderProfileType shaderProfile)
         {
             switch (shaderProfile)

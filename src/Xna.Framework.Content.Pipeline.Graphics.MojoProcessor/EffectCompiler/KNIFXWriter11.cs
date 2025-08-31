@@ -24,8 +24,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Write7BitEncodedInt(zzint);
         }
 
-        internal void WriteEffect(EffectObject effectObject)
+        internal void WriteEffect(EffectObject effectObject, bool integersAsFloats)
         {
+            Write((bool)integersAsFloats);
             WriteConstantBuffers(effectObject.ConstantBuffers);
             WriteShaders(effectObject.Shaders);
             WriteParameters(effectObject.Parameters, effectObject.Parameters.Length);
