@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+using Microsoft.Xna.Framework.Graphics;
 using D3D = SharpDX.Direct3D;
 using D3DC = SharpDX.D3DCompiler;
 
@@ -61,19 +62,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderVersion shaderVersion, ShaderStage shaderStage, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderVersion shaderVersion, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             string dx11ShaderProfileName = shaderProfileName;
             dx11ShaderProfileName = dx11ShaderProfileName.Replace("s_2_0", "s_4_0_level_9_1");
             dx11ShaderProfileName = dx11ShaderProfileName.Replace("s_3_0", "s_4_0_level_9_3");
             using (D3DC.ShaderBytecode shaderBytecodeDX11 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx11ShaderProfileName, true, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(input, context, shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, debugMode);
+                ShaderData shaderDataDX11 = ShaderProfileDX11.CreateHLSL(input, context, backend, shaderInfo, shaderBytecodeDX11, shaderStage, effect.ConstantBuffers, debugMode);
                 return shaderDataDX11;
             }
         }
 
-        private static ShaderData CreateHLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, EffectProcessorDebugMode debugMode)
+        private static ShaderData CreateHLSL(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX11, ShaderStage shaderStage, List<ConstantBufferData> cbuffers, EffectProcessorDebugMode debugMode)
         {
             ShaderData dxshader = new ShaderData(shaderStage);
             dxshader._attributes = new ShaderData.Attribute[0];

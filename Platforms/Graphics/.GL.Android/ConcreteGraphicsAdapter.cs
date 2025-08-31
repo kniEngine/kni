@@ -118,7 +118,6 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             switch (shaderBackend)
             {
-                case GraphicsBackend.OpenGL:
                 case GraphicsBackend.GLES:
                     return true;
 

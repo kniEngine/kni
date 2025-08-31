@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+using Microsoft.Xna.Framework.Graphics;
 using D3DC = SharpDX.D3DCompiler;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
@@ -72,7 +73,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
         }
 
-        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderVersion shaderVersion, ShaderStage shaderStage, ref string errorsAndWarnings)
+        internal override ShaderData CreateShader(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, EffectObject effect, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderVersion shaderVersion, ShaderStage shaderStage, ref string errorsAndWarnings)
         {
             ConstantBufferData[] dx11CBuffersData;
             string dx11ShaderProfileName = shaderProfileName;
@@ -96,12 +97,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             dx9ShaderProfileName = dx9ShaderProfileName.Replace("s_4_0", "s_3_0");
             using (D3DC.ShaderBytecode shaderBytecodeDX9 = ShaderProfile.CompileHLSL(input, context, fullFilePath, fileContent, debugMode, shaderFunction, dx9ShaderProfileName, false, ref errorsAndWarnings))
             {
-                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, shaderInfo, shaderBytecodeDX9, shaderStage, shaderVersion, effect.ConstantBuffers, debugMode, dx11CBuffersData);
+                ShaderData shaderDataDX9 = ShaderProfileGL.CreateGLSL(input, context, backend, shaderInfo, shaderBytecodeDX9, shaderStage, shaderVersion, effect.ConstantBuffers, debugMode, dx11CBuffersData);
                 return shaderDataDX9;
             }
         }
 
-        private static ShaderData CreateGLSL(EffectContent input, ContentProcessorContext context, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, ShaderVersion shaderVersion, List<ConstantBufferData> cbuffers, EffectProcessorDebugMode debugMode, ConstantBufferData[] dx11CBuffersData)
+        private static ShaderData CreateGLSL(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, ShaderInfo shaderInfo, D3DC.ShaderBytecode shaderBytecodeDX9, ShaderStage shaderStage, ShaderVersion shaderVersion, List<ConstantBufferData> cbuffers, EffectProcessorDebugMode debugMode, ConstantBufferData[] dx11CBuffersData)
         {
             ShaderData dxshader = new ShaderData(shaderStage);
 
@@ -269,20 +270,34 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 
             List<GLSLBytecode> glslBytecodes = new List<GLSLBytecode>();
 
-            string glsl110Code = ConvertGLSL110ToGLSL110(dxshader.Stage, glslCode);
-            GLSLBytecode glsl110 = new GLSLBytecode(1, 1, false, Encoding.ASCII.GetBytes(glsl110Code));
-            glslBytecodes.Add(glsl110);
-
-            // GLES 3.00 is required for dFdx/dFdy/gl_FragData
-            string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glslCode);
-            GLSLBytecode glsl300es = new GLSLBytecode(3, 0, true, Encoding.ASCII.GetBytes(glsl300esCode));
-            glslBytecodes.Add(glsl300es);
-
-            if (shaderVersion == new ShaderVersion(2,0))
+            switch(backend)
             {
-                string glsl100Code = ConvertGLSL110ToGLSL100(dxshader.Stage, glslCode);
-                GLSLBytecode glsl100 = new GLSLBytecode(1, 0, false, Encoding.ASCII.GetBytes(glsl100Code));
-                glslBytecodes.Add(glsl100);
+                case GraphicsBackend.OpenGL:
+                    {
+                        string glsl110Code = ConvertGLSL110ToGLSL110(dxshader.Stage, glslCode);
+                        GLSLBytecode glsl110 = new GLSLBytecode(1, 1, false, Encoding.ASCII.GetBytes(glsl110Code));
+                        glslBytecodes.Add(glsl110);
+                    }
+                    break;
+                case GraphicsBackend.GLES:
+                case GraphicsBackend.WebGL:
+                    {
+                        // GLES 3.00 is required for dFdx/dFdy/gl_FragData
+                        string glsl300esCode = ConvertGLSL110ToGLSL300es(dxshader.Stage, glslCode);
+                        GLSLBytecode glsl300es = new GLSLBytecode(3, 0, true, Encoding.ASCII.GetBytes(glsl300esCode));
+                        glslBytecodes.Add(glsl300es);
+
+                        if (shaderVersion == new ShaderVersion(2, 0))
+                        {
+                            string glsl100Code = ConvertGLSL110ToGLSL100(dxshader.Stage, glslCode);
+                            GLSLBytecode glsl100 = new GLSLBytecode(1, 0, false, Encoding.ASCII.GetBytes(glsl100Code));
+                            glslBytecodes.Add(glsl100);
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
             }
 
             using (MemoryStream memoryStream = new MemoryStream())

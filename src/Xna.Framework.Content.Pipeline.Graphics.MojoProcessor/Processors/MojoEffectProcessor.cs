@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                             // Preprocess the FX file expanding includes and macros.
                             string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
 
-                            effectObject = ProcessTechniques(input, context, shaderProfile, fullFilePath, effectCode);
+                            effectObject = ProcessTechniques(input, context, backend, shaderProfile, fullFilePath, effectCode);
                         }
                         catch (InvalidContentException)
                         {
@@ -256,7 +256,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         }
 
 
-        private EffectObject ProcessTechniques(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath, string effectCode)
+        private EffectObject ProcessTechniques(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, ShaderProfile shaderProfile, string fullFilePath, string effectCode)
         {
             // Parse the resulting file for techniques and passes.
             ParseTree tree = new Parser(new Scanner()).Parse(effectCode, fullFilePath);
@@ -304,7 +304,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string shaderErrorsAndWarnings = String.Empty;
             try
             {
-                effectObject = MojoEffectProcessor.CompileEffect(input, context, shaderProfile, shaderInfo, fullFilePath, cleanFile, this.DebugMode, out shaderErrorsAndWarnings);
+                effectObject = MojoEffectProcessor.CompileEffect(input, context, backend, shaderProfile, shaderInfo, fullFilePath, cleanFile, this.DebugMode, out shaderErrorsAndWarnings);
             }
             catch (ShaderCompilerException)
             {
@@ -350,7 +350,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        private static EffectObject CompileEffect(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, out string errorsAndWarnings)
+        private static EffectObject CompileEffect(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, ShaderProfile shaderProfile, ShaderInfo shaderInfo, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, out string errorsAndWarnings)
         {
             errorsAndWarnings = string.Empty;
 
@@ -391,7 +391,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         shaderProfile.ValidateShaderModels(pinfo, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, psShaderVersion);
 
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = MojoEffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, psShaderVersion, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = MojoEffectProcessor.CreateShader(input, context, backend, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, psShaderVersion, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
@@ -400,7 +400,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         shaderProfile.ValidateShaderModels(pinfo, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Pixel, vsShaderVersion);
 
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = MojoEffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, vsShaderVersion, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = MojoEffectProcessor.CreateShader(input, context, backend, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.vsFunction, pinfo.vsModel, ShaderStage.Vertex, vsShaderVersion, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.csFunction))
@@ -409,7 +409,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         shaderProfile.ValidateShaderModels(pinfo, pinfo.csFunction, pinfo.csModel, ShaderStage.Compute, csShaderVersion);
 
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = MojoEffectProcessor.CreateShader(input, context, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.csFunction, pinfo.csModel, ShaderStage.Compute, csShaderVersion, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = MojoEffectProcessor.CreateShader(input, context, backend, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.csFunction, pinfo.csModel, ShaderStage.Compute, csShaderVersion, ref errorsAndWarnings);
                     }
 
                     pass.states = new EffectObject.EffectStateContent[pass.state_count];
@@ -508,7 +508,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             }
         }
 
-        internal static EffectObject.EffectStateContent CreateShader(EffectContent input, ContentProcessorContext context, EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ShaderVersion shaderVersion, ref string errorsAndWarnings)
+        internal static EffectObject.EffectStateContent CreateShader(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, EffectObject effect, ShaderInfo shaderInfo, ShaderProfile shaderProfile, string fullFilePath, string fileContent, EffectProcessorDebugMode debugMode, string shaderFunction, string shaderProfileName, ShaderStage shaderStage, ShaderVersion shaderVersion, ref string errorsAndWarnings)
         {
             // Check if this shader has already been created.
 
@@ -517,7 +517,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (sharedIndex == -1)
             {
                 // Compile and create the shader.
-                ShaderData shaderData = shaderProfile.CreateShader(input, context, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderVersion, shaderStage, ref errorsAndWarnings);
+                ShaderData shaderData = shaderProfile.CreateShader(input, context, backend, effect, shaderInfo, fullFilePath, fileContent, debugMode, shaderFunction, shaderProfileName, shaderVersion, shaderStage, ref errorsAndWarnings);
                 shaderData.ShaderFunctionName = shaderFunction;
                 shaderData.ShaderProfile = shaderProfileName;
                 shaderData.ShaderVersion = shaderVersion;
