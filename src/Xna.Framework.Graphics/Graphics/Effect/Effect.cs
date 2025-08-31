@@ -77,7 +77,6 @@ namespace Microsoft.Xna.Framework.Graphics
                             int headerOffset = fxHeader.HeaderSize;
 
                             int fxCount = BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
-                            Debug.Assert(fxCount == 1);
 
                             for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
                             {
