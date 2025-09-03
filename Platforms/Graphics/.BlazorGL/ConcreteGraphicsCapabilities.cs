@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             _maxVertexBufferSlots = (profile >= GraphicsProfile.FL10_1) ? 32 : 16;
 
-            SupportsInstancing = false;
+            SupportsInstancing = profile >= GraphicsProfile.HiDef;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;
             SupportsSeparateBlendStates = true;
