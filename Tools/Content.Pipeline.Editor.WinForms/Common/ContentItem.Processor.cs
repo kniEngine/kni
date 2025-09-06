@@ -96,30 +96,37 @@ namespace Content.Pipeline.Editor
 
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
-            var props = new PropertyDescriptorCollection(null);
+            PropertyDescriptorCollection props = new PropertyDescriptorCollection(null);
 
-            var processor = value as ProcessorTypeDescription;
+            ProcessorTypeDescription processor = value as ProcessorTypeDescription;
 
             if (context.Instance is Array)
             {
-                var array = context.Instance as object[];
+                object[] array = context.Instance as object[];
 
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(value, attributes, true))
-                    props.Add(new MultiTargetPropertyDescriptor(prop.Name, prop.PropertyType, prop.ComponentType, prop, array));
+                {
+                    var multiProp = new MultiTargetPropertyDescriptor(prop.Name,
+                                                                      prop.PropertyType,
+                                                                      prop.ComponentType,
+                                                                      prop,
+                                                                      array);
+                    props.Add(multiProp);
+                }
 
-                var paramArray = array.Select(e => ((ContentItem)e).ProcessorParams).ToArray();
+                OpaqueDataDictionary[] paramArray = array.Select(e => ((ContentItem)e).ProcessorParams).ToArray();
 
                 foreach (var p in processor.Properties)
                 {
                     var prop = new OpaqueDataDictionaryElementPropertyDescriptor(p.Name,
                                                                                  p.Type,
                                                                                  null);
-                    var prop2 = new MultiTargetPropertyDescriptor(prop.Name,
-                                                             prop.PropertyType,
-                                                             prop.ComponentType,
-                                                             prop,
-                                                             paramArray);
-                    props.Add(prop2);
+                    var multiProp = new MultiTargetPropertyDescriptor(prop.Name,
+                                                                      prop.PropertyType,
+                                                                      prop.ComponentType,
+                                                                      prop,
+                                                                      paramArray);
+                    props.Add(multiProp);
                 }
             }
             else
@@ -135,7 +142,6 @@ namespace Content.Pipeline.Editor
                         var desc = new OpaqueDataDictionaryElementPropertyDescriptor(p.Key,
                                                                                      p.Value.GetType(),
                                                                                      contentItem.ProcessorParams);
-
                         props.Add(desc);
                     }
                 }
@@ -151,7 +157,6 @@ namespace Content.Pipeline.Editor
                         var desc = new OpaqueDataDictionaryElementPropertyDescriptor(p.Name,
                                                                                      p.Type,
                                                                                      contentItem.ProcessorParams);
-
                         props.Add(desc);
                     }
                 }

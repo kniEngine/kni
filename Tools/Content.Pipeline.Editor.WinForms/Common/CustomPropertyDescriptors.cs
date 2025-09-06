@@ -14,7 +14,7 @@ namespace Content.Pipeline.Editor
     public class MultiTargetPropertyDescriptor : PropertyDescriptor
     {
         private readonly Type _propertyType;
-        private readonly Type _componentType;        
+        private readonly Type _componentType;
         private readonly object[] _targets;
         private readonly PropertyDescriptor _property;
 
@@ -29,21 +29,22 @@ namespace Content.Pipeline.Editor
 
         public override object GetValue(object component)
         {
-            var val = _property.GetValue(_targets[0]);
-            for (var i = 1; i < _targets.Length; i++)
+            object value = _property.GetValue(_targets[0]);
+
+            for (int i = 1; i < _targets.Length; i++)
             {
-                var v = _property.GetValue(_targets[i]);
-                if (!v.Equals(val))
+                object other = _property.GetValue(_targets[i]);
+                if (!other.Equals(value))
                     return null;
             }
 
-            return val;                
+            return value;
         }
 
         public override void SetValue(object component, object value)
         {
-            for (var i = 0; i < _targets.Length; i++)
-                _property.SetValue(_targets[i], value);         
+            for (int i = 0; i < _targets.Length; i++)
+                _property.SetValue(_targets[i], value);
         }
 
         public override bool CanResetValue(object component) { return true; }
@@ -61,33 +62,41 @@ namespace Content.Pipeline.Editor
     {
         private readonly Type _propertyType;
         private readonly Type _componentType;
-        private readonly string _propertyName;
         private readonly OpaqueDataDictionary _target;
 
         public OpaqueDataDictionaryElementPropertyDescriptor(string propertyName, Type propertyType, OpaqueDataDictionary target)
             : base(propertyName, new Attribute[] { })
         {
             _propertyType = propertyType;
-            _propertyName = propertyName;
             _componentType = typeof(OpaqueDataDictionary);
             _target = target;
         }
 
         public override object GetValue(object component)
         {
-            OpaqueDataDictionary data = _target ?? (component as OpaqueDataDictionary);
+            if (_target != null)
+            {
+                if (_target.ContainsKey(base.Name))
+                    return _target[base.Name];
+            }
 
-            if (data.ContainsKey(_propertyName))
-                return data[_propertyName];
+            OpaqueDataDictionary data = (component as OpaqueDataDictionary);
+            if (data.ContainsKey(base.Name))
+                return data[base.Name];
 
             return string.Empty;
         }
 
         public override void SetValue(object component, object value)
         {
-            OpaqueDataDictionary data = _target ?? (component as OpaqueDataDictionary);
+            if (_target != null)
+            {
+                _target[base.Name] = value;
+                return;
+            }
 
-            data[_propertyName] = value;
+            OpaqueDataDictionary data = (component as OpaqueDataDictionary);
+            data[base.Name] = value;
         }
 
         public override bool CanResetValue(object component) { return true; }
