@@ -75,16 +75,18 @@ namespace Content.Pipeline.Editor
 
         public override object GetValue(object component)
         {
-            var data = _target ?? (component as OpaqueDataDictionary);
-            if (!data.ContainsKey(_propertyName))
-                return string.Empty;
+            OpaqueDataDictionary data = _target ?? (component as OpaqueDataDictionary);
 
-            return data[_propertyName];            
+            if (data.ContainsKey(_propertyName))
+                return data[_propertyName];
+
+            return string.Empty;
         }
 
         public override void SetValue(object component, object value)
         {
-            var data = _target ?? (component as OpaqueDataDictionary);
+            OpaqueDataDictionary data = _target ?? (component as OpaqueDataDictionary);
+
             data[_propertyName] = value;
         }
 

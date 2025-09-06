@@ -124,11 +124,10 @@ namespace Content.Pipeline.Editor
             }
             else
             {
-                var contentItem = context.Instance as ContentItem;
+                ContentItem contentItem = context.Instance as ContentItem;
 
                 if (value == PipelineTypes.MissingProcessor)
                 {
-
                     props.Add(new ReadonlyPropertyDescriptor("Name", typeof (string), typeof (ProcessorTypeDescription), contentItem.ProcessorName));
 
                     foreach (var p in contentItem.ProcessorParams)
@@ -136,7 +135,6 @@ namespace Content.Pipeline.Editor
                         var desc = new OpaqueDataDictionaryElementPropertyDescriptor(p.Key,
                                                                                      p.Value.GetType(),
                                                                                      contentItem.ProcessorParams);
-
 
                         props.Add(desc);
                     }

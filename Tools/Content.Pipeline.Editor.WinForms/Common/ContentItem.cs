@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -170,28 +171,28 @@ namespace Content.Pipeline.Editor
                 // so that the correct editor appears within the property grid.
                 foreach (var p in _processor.Properties)
                 {
-                    if (!ProcessorParams.ContainsKey(p.Name))
+                    if (ProcessorParams.ContainsKey(p.Name))
                     {
-                        ProcessorParams[p.Name] = p.DefaultValue;
-                    }
-                    else
-                    {
-                        var src = ProcessorParams[p.Name];
+                        object src = ProcessorParams[p.Name];
                         if (src != null)
                         {
-                            var srcType = src.GetType();
+                            Type srcType = src.GetType();
 
-                            var converter = PipelineTypes.FindConverter(p.Type);
+                            TypeConverter converter = PipelineTypes.FindConverter(p.Type);
 
                             // Should we throw an exception here?
                             // This property will actually not be editable in the property grid
                             // since we do not have a type converter for it.
                             if (converter.CanConvertFrom(srcType))
                             {
-                                var dst = converter.ConvertFrom(null, CultureInfo.InvariantCulture, src);
+                                object dst = converter.ConvertFrom(null, CultureInfo.InvariantCulture, src);
                                 ProcessorParams[p.Name] = dst;
                             }
                         }
+                    }
+                    else
+                    {
+                        ProcessorParams[p.Name] = p.DefaultValue;
                     }
                 }
             }
