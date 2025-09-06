@@ -373,36 +373,53 @@ namespace Content.Pipeline.Editor
             // build PackageReferencesLibrary
             if (rebuild)
             {
-                string framework = "netstandard2.0";
-#if NET8_0_OR_GREATER
-                framework = "net8.0";
-#endif
-                string newCmd = String.Format("new classlib --framework \"{0}\" -n {1} -o \"{2}\"", framework, libraryName, projFolder);
-                newCmd += " --force";
-                ExecuteDotnet(fullPackageReferencesFolder, newCmd);
-
-
-                foreach (Package packageReference in packageReferences)
+                using (var modalWindow = new System.Windows.Forms.Form())
                 {
-                    string addCmd = String.Format("add {0}.csproj package {1} ", libraryName, packageReference.Name);
-                    addCmd += " --no-restore";
-                    if (packageReference.Version != String.Empty)
-                        addCmd += " --version " + packageReference.Version;
-                    ExecuteDotnet(fullPackageReferencesProjFolder, addCmd);
+                    modalWindow.Text = "KNI Pipeline";
+                    modalWindow.Width = 300;
+                    modalWindow.Height = 80;
+                    modalWindow.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+                    modalWindow.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+                    modalWindow.ControlBox = false;
+                    modalWindow.TopMost = true;
+                    var label = new System.Windows.Forms.Label();
+                    label.Text = "Resolving Package References...";
+                    label.Dock = System.Windows.Forms.DockStyle.Fill;
+                    label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                    modalWindow.Controls.Add(label);
+                    modalWindow.Show();
+
+                    string framework = "netstandard2.0";
+#if NET8_0_OR_GREATER
+                    framework = "net8.0";
+#endif
+                    string newCmd = String.Format("new classlib --framework \"{0}\" -n {1} -o \"{2}\"", framework, libraryName, projFolder);
+                    newCmd += " --force";
+                    ExecuteDotnet(fullPackageReferencesFolder, newCmd);
+
+
+                    foreach (Package packageReference in packageReferences)
+                    {
+                        string addCmd = String.Format("add {0}.csproj package {1} ", libraryName, packageReference.Name);
+                        addCmd += " --no-restore";
+                        if (packageReference.Version != String.Empty)
+                            addCmd += " --version " + packageReference.Version;
+                        ExecuteDotnet(fullPackageReferencesProjFolder, addCmd);
+                    }
+
+                    string cleanCmd = String.Format("clean {0}.csproj --output {1}", libraryName, publishDir);
+                    cleanCmd += " --nologo";
+                    ExecuteDotnet(fullPackageReferencesProjFolder, cleanCmd);
+                    string publishCmd = String.Format("publish {0}.csproj --output {1}", libraryName, publishDir);
+                    publishCmd += " --nologo";
+                    ExecuteDotnet(fullPackageReferencesProjFolder, publishCmd);
+
+                    // save db
+                    PackageReferencesCollection dbfile = new PackageReferencesCollection();
+                    foreach (Package package in packages)
+                        dbfile.AddPackage(package);
+                    dbfile.SaveBinary(intermediatePackageCollectionPath);
                 }
-
-                string cleanCmd = String.Format("clean {0}.csproj --output {1}", libraryName, publishDir);
-                cleanCmd += " --nologo";
-                ExecuteDotnet(fullPackageReferencesProjFolder, cleanCmd);
-                string publishCmd = String.Format("publish {0}.csproj --output {1}", libraryName, publishDir);
-                publishCmd += " --nologo";
-                ExecuteDotnet(fullPackageReferencesProjFolder, publishCmd);
-
-                // save db
-                PackageReferencesCollection dbfile = new PackageReferencesCollection();
-                foreach (Package package in packages)
-                    dbfile.AddPackage(package);
-                dbfile.SaveBinary(intermediatePackageCollectionPath);
             }
 
             // load packages
