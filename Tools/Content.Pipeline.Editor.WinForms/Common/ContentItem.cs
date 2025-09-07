@@ -88,7 +88,6 @@ namespace Content.Pipeline.Editor
         public ImporterTypeDescription Importer
         {
             get { return _importer; }
-
             set
             {
                 if (_importer == value)
@@ -115,7 +114,6 @@ namespace Content.Pipeline.Editor
         public ProcessorTypeDescription Processor
         {
             get { return _processor; }
-
             set
             {
                 if (_processor == value)
@@ -196,7 +194,7 @@ namespace Content.Pipeline.Editor
                     }
                 }
             }
-        }        
+        }
 
         public override string ToString()
         {

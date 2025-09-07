@@ -6,30 +6,29 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 
 namespace Content.Pipeline.Editor
-{    
+{
     /// <summary>
     /// Custom converter for the Processor property of a ContentItem.
     /// </summary>
     internal class ImporterConverter : TypeConverter
-    {                
+    {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
             if (context.Instance is Array)
             {
-                var array = context.Instance as Array;
+                Array array = context.Instance as Array;
                 foreach (var obj in array)
                 {
-                    var item = obj as ContentItem;
+                    ContentItem item = obj as ContentItem;
                     if (item.BuildAction == BuildAction.Copy)
                         return false;
                 }
             }
             else
             {
-                var contentItem = (context.Instance as ContentItem);
+                ContentItem contentItem = context.Instance as ContentItem;
                 if (contentItem.BuildAction == BuildAction.Copy)
                     return false;
             }                
@@ -43,7 +42,7 @@ namespace Content.Pipeline.Editor
         }
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-        {            
+        {
             return PipelineTypes.ImportersStandardValuesCollection;
         }
 
@@ -59,14 +58,12 @@ namespace Content.Pipeline.Editor
         {
             if (value is string)
             {
-                var str = value as string;
+                string str = value as string;
 
-                foreach (var i in PipelineTypes.Importers)
+                foreach (ImporterTypeDescription i in PipelineTypes.Importers)
                 {
                     if (i.DisplayName.Equals(str))
-                    {
                         return i;
-                    }
                 }
                 
                 if (string.IsNullOrEmpty(str))
@@ -78,28 +75,27 @@ namespace Content.Pipeline.Editor
             return base.ConvertFrom(context, culture, value);
         }
 
-
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            var importer = (ImporterTypeDescription)value;// contentItem.Importer;
-            //System.Diagnostics.Debug.Assert(importer == value);
-
-            if (destinationType == typeof (string))
+            if (destinationType == typeof(string))
             {
+                ImporterTypeDescription importer = (ImporterTypeDescription)value; // contentItem.Importer;
+                //System.Diagnostics.Debug.Assert(importer == value);
+
                 if (importer == PipelineTypes.MissingImporter)
                 {
-                    var contentItem = (ContentItem)context.Instance;
+                    ContentItem contentItem = (ContentItem)context.Instance;
                     return string.Format("[missing] {0}", contentItem.ImporterName ?? "[null]");
                 }
 
-                return ((ImporterTypeDescription)value).DisplayName;
+                return importer.DisplayName;
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
         public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {            
+        {
             return false;
         }
     }
