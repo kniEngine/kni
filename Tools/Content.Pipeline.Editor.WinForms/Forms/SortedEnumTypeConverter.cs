@@ -33,7 +33,8 @@ namespace Content.Pipeline.Editor
 
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            if (sourceType == typeof(string) || sourceType == EnumType)
+            if (sourceType == typeof(string)
+            ||  sourceType == EnumType)
                 return true;
 
             return base.CanConvertFrom(context, sourceType);
@@ -55,12 +56,15 @@ namespace Content.Pipeline.Editor
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == typeof(string) && value != null)
+            if (destinationType == typeof(string))
             {
-                if (value is string)
-                    return value;
+                if (value != null)
+                {
+                    if (value is string)
+                        return value;
 
-                return Enum.GetName(EnumType, value);
+                    return Enum.GetName(EnumType, value);
+                }
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
