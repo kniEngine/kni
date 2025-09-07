@@ -6,12 +6,18 @@ namespace Content.Pipeline.Editor
 {
     class SortedEnumTypeConverter : EnumConverter
     {
+        private readonly Type _enumType;
         private readonly StandardValuesCollection _values;
 
         public SortedEnumTypeConverter(Type type) : 
             base(type)
         {
-            string[] values = Enum.GetNames(EnumType);
+            _enumType = this.EnumType;
+            if (_enumType.IsGenericType
+            &&  _enumType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                _enumType = Nullable.GetUnderlyingType(_enumType);
+
+            string[] values = Enum.GetNames(_enumType);
             Array.Sort(values);
             _values = new StandardValuesCollection(values);
         }
@@ -34,7 +40,7 @@ namespace Content.Pipeline.Editor
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             if (sourceType == typeof(string)
-            ||  sourceType == EnumType)
+            ||  sourceType == _enumType)
                 return true;
 
             return base.CanConvertFrom(context, sourceType);
@@ -44,11 +50,11 @@ namespace Content.Pipeline.Editor
         {
             if (value != null)
             {
-                if (value.GetType() == EnumType)
+                if (value.GetType() == _enumType)
                     return value;
 
                 if (value is string)
-                    return Enum.Parse(EnumType, value as string, true);
+                    return Enum.Parse(_enumType, value as string, true);
             }
 
             return base.ConvertFrom(context, culture, value);
@@ -63,7 +69,7 @@ namespace Content.Pipeline.Editor
                     if (value is string)
                         return value;
 
-                    return Enum.GetName(EnumType, value);
+                    return Enum.GetName(_enumType, value);
                 }
             }
 
