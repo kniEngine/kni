@@ -20,17 +20,17 @@ namespace Content.Pipeline.Editor
         {
             if (context.Instance is Array)
             {
-                var array = context.Instance as Array;
+                Array array = context.Instance as Array;
                 foreach (var obj in array)
                 {
-                    var item = obj as ContentItem;
+                    ContentItem item = obj as ContentItem;
                     if (item.BuildAction == BuildAction.Copy)
                         return false;
                 }
             }
             else
             {
-                var contentItem = (context.Instance as ContentItem);
+                ContentItem contentItem = context.Instance as ContentItem;
                 if (contentItem.BuildAction == BuildAction.Copy)
                     return false;
             }                
@@ -51,44 +51,38 @@ namespace Content.Pipeline.Editor
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             if (sourceType == typeof (string))
-            {
                 return true;
-            }
 
             return base.CanConvertFrom(context, sourceType);
         }
-
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value is string)
             {
-                foreach (var i in PipelineTypes.Processors)
+                foreach (ProcessorTypeDescription i in PipelineTypes.Processors)
                 {
                     if (i.DisplayName.Equals(value))
-                    {
                         return i;
-                    }
                 }
             }
 
             return base.ConvertFrom(context, culture, value);
         }
 
-
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == typeof (string))
+            if (destinationType == typeof(string))
             {
-                var processor = (ProcessorTypeDescription)value;
+                ProcessorTypeDescription processor = (ProcessorTypeDescription)value;
 
                 if (processor == PipelineTypes.MissingProcessor)
                 {
-                    var contentItem = context.Instance as ContentItem;
+                    ContentItem contentItem = context.Instance as ContentItem;
                     return string.Format("[missing] {0}", contentItem.ProcessorName);
                 }
 
-                return ((ProcessorTypeDescription)value).DisplayName;
+                return processor.DisplayName;
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
