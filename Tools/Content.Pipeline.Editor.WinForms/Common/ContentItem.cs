@@ -191,7 +191,7 @@ namespace Content.Pipeline.Editor
                     }
                     else
                     {
-                        ProcessorParams[p.Name] = p.DefaultValue;
+                        //ProcessorParams[p.Name] = p.DefaultValue;
                     }
                 }
             }
