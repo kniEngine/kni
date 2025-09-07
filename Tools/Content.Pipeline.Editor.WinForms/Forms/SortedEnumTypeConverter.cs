@@ -11,7 +11,7 @@ namespace Content.Pipeline.Editor
         public SortedEnumTypeConverter(Type type) : 
             base(type)
         {
-            var values = Enum.GetNames(EnumType);
+            string[] values = Enum.GetNames(EnumType);
             Array.Sort(values);
             _values = new StandardValuesCollection(values);
         }

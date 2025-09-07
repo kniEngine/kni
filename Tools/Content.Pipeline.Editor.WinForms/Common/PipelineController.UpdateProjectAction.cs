@@ -72,8 +72,8 @@ namespace Content.Pipeline.Editor
 
         private void Toggle()
         {
-            var item = (PipelineProject)_con.GetItem(_state.OriginalPath);
-            var state = ProjectState.Get(item);
+            PipelineProject item = (PipelineProject)_con.GetItem(_state.OriginalPath);
+            ProjectState state = ProjectState.Get(item);
             _state.Apply(item);
             _state = state;
 
