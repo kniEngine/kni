@@ -43,6 +43,7 @@
     <Compile Include="Common\ContentItem.cs" />
     <Compile Include="Common\ContentItem.Importer.cs" />
     <Compile Include="Common\ContentItem.Processor.cs" />
+    <Compile Include="Common\ContentItemConverter.cs" />
     <Compile Include="Common\ContentItemPathComparer.cs" />
     <Compile Include="Common\ContentItemTemplate.cs" />
     <Compile Include="Common\ContentItemState.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="Common\PipelineProjectParser.cs" />
     <Compile Include="Common\Util.cs" />
     <Compile Include="Common\StringExtensions.cs" />
-    <Compile Include="Common\CustomPropertyDescriptors.cs" />
     <Compile Include="Common\PipelineController.cs" />
     <Compile Include="Common\PipelineProject.cs" />
     <Compile Include="Common\PipelineTypes.cs" />
