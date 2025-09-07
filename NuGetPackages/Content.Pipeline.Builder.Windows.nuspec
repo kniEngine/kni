@@ -20,13 +20,14 @@
   <files>
     <file src="NuGetPackages\build\Builder\nkast.Xna.Framework.Content.Pipeline.Builder.targets" target="build\nkast.Xna.Framework.Content.Pipeline.Builder.targets" />
 
-    <!-- tools -->
-    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\runtimes\win7-x64\native\*.dll" target="tools\runtimes\win7-x64\native" />
-    
+    <!-- tools -->    
     <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.exe" target="tools" />
     <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.runtimeconfig.json" target="tools" />
     <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.dll" target="tools" />
     <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.dll.config" target="tools" />
+    <!--
+    <file src="Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\runtimes\win7-x64\native\*.dll" target="tools\runtimes\win7-x64\native" />
+    -->
     
     <!-- Nuget Icon -->
     <file src="Images\Icon.png" target="\" />
