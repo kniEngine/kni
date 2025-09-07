@@ -15,6 +15,7 @@ namespace Content.Pipeline.Editor
         Copy,
     }
 
+    [TypeConverter(typeof(ContentItemConverter))]
     public class ContentItem : IProjectItem
     {
         public IContentItemObserver Observer;
@@ -33,7 +34,7 @@ namespace Content.Pipeline.Editor
         public string OriginalPath { get; set; }
         public string OutputFile; // This refers to the "Link" which can override the default output location
 
-        [Category("Common")]
+        [Category("1.Common")]
         [Description("The file name of this item.")]
         public string Name 
         { 
@@ -46,7 +47,7 @@ namespace Content.Pipeline.Editor
             }
         }
 
-        [Category("Common")]
+        [Category("1.Common")]
         [Description("The folder where this item is located.")]
         public string Location
         {
@@ -64,7 +65,7 @@ namespace Content.Pipeline.Editor
 
         #endregion
 
-        [Category("Settings")]
+        [Category("2.Settings")]
         [DisplayName("Build Action")]
         [Description("The way to process this content item.")]
         public BuildAction BuildAction
@@ -82,7 +83,7 @@ namespace Content.Pipeline.Editor
             }
         }
 
-        [Category("Settings")]
+        [Category("2.Settings")]
         [Description("The importer used to load the content file.")]
         [TypeConverter(typeof(ImporterConverter))]
         public ImporterTypeDescription Importer
@@ -108,7 +109,7 @@ namespace Content.Pipeline.Editor
             }
         }
 
-        [Category("Settings")]
+        [Category("2.Settings")]
         [Description("The processor used to transform the content for runtime use.")]
         [TypeConverter(typeof(ProcessorConverter))]
         public ProcessorTypeDescription Processor

@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using Microsoft.Xna.Framework.Content.Pipeline;
 
 namespace Content.Pipeline.Editor
 {
@@ -88,114 +86,9 @@ namespace Content.Pipeline.Editor
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            PropertyDescriptorCollection props = new PropertyDescriptorCollection(null);
-
-            ProcessorTypeDescription processor = value as ProcessorTypeDescription;
-
-            if (context.Instance is Array)
-            {
-                object[] array = context.Instance as object[];
-
-                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(value, attributes, true))
-                {
-                    var multiProp = new MultiTargetPropertyDescriptor(prop.Name,
-                                                                      prop.PropertyType,
-                                                                      prop.ComponentType,
-                                                                      prop,
-                                                                      array);
-                    props.Add(multiProp);
-                }
-
-                OpaqueDataDictionary[] paramArray = array.Select(e => ((ContentItem)e).ProcessorParams).ToArray();
-
-                foreach (var p in processor.Properties)
-                {
-                    var prop = new OpaqueDataDictionaryElementPropertyDescriptor(p.Name,
-                                                                                 p.Type,
-                                                                                 null);
-                    var multiProp = new MultiTargetPropertyDescriptor(prop.Name,
-                                                                      prop.PropertyType,
-                                                                      prop.ComponentType,
-                                                                      prop,
-                                                                      paramArray);
-                    props.Add(multiProp);
-                }
-            }
-            else
-            {
-                ContentItem contentItem = context.Instance as ContentItem;
-
-                if (value == PipelineTypes.MissingProcessor)
-                {
-                    props.Add(new ReadonlyPropertyDescriptor("Name", typeof (string), typeof (ProcessorTypeDescription), contentItem.ProcessorName));
-
-                    foreach (var p in contentItem.ProcessorParams)
-                    {
-                        var desc = new OpaqueDataDictionaryElementPropertyDescriptor(p.Key,
-                                                                                     p.Value.GetType(),
-                                                                                     contentItem.ProcessorParams);
-                        props.Add(desc);
-                    }
-                }
-                else
-                {
-                    // Emit regular properties.
-                    foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(value, attributes, true))
-                        props.Add(prop);
-
-                    // Emit processor parameters.
-                    foreach (var p in processor.Properties)
-                    {
-                        var desc = new OpaqueDataDictionaryElementPropertyDescriptor(p.Name,
-                                                                                     p.Type,
-                                                                                     contentItem.ProcessorParams);
-                        props.Add(desc);
-                    }
-                }
-            }
-
-            return props;
-        }
-
         public override bool GetPropertiesSupported(ITypeDescriptorContext context)
         {
-            if (!GetStandardValuesSupported(context))
-                return false;
-
-            if (context.Instance is Array)
-            {
-                var array = (context.Instance as Array);
-                var first = array.GetValue(0) as ContentItem;
-
-                if (!first.Processor.Properties.Any())
-                    return false;
-
-                if (first.Processor == PipelineTypes.MissingProcessor)
-                    return false;
-
-                for (var i = 1; i < array.Length; i++)
-                {
-                    var item = array.GetValue(i) as ContentItem;
-                    if (item.Processor != first.Processor)
-                        return false;
-
-                    if (!item.Processor.Properties.Any())
-                        return false;                    
-                }
-            }
-            else
-            {
-                var item = context.Instance as ContentItem;
-                if (item.BuildAction == BuildAction.Copy)
-                    return false;
-
-                if (!item.Processor.Properties.Any())
-                    return false;          
-            }
-            
-            return true;
+            return false;
         }
     }
 }
