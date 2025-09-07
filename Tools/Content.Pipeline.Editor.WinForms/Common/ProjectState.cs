@@ -24,22 +24,17 @@ namespace Content.Pipeline.Editor
 
         /// <summary>
         /// Create a ProjectState storing member values of the passed PipelineProject.
-        /// </summary>        
-        public static ProjectState Get(PipelineProject proj)
+        /// </summary>
+        public ProjectState(PipelineProject proj)
         {
-            ProjectState state = new ProjectState()
-                {
-                    OriginalPath = proj.OriginalPath,
-                    OutputDir = proj.OutputDir,
-                    IntermediateDir = proj.IntermediateDir,
-                    References = new List<string>(proj.References),
-                    PackageReferences = new List<Package>(proj.PackageReferences),
-                    Platform = proj.Platform,
-                    Profile = proj.Profile,
-                    Config = proj.Config,        
-                };
-
-            return state;
+            this.OriginalPath = proj.OriginalPath;
+            this.OutputDir = proj.OutputDir;
+            this.IntermediateDir = proj.IntermediateDir;
+            this.References = new List<string>(proj.References);
+            this.PackageReferences = new List<Package>(proj.PackageReferences);
+            this.Platform = proj.Platform;
+            this.Profile = proj.Profile;
+            this.Config = proj.Config;
         }
 
         /// <summary>

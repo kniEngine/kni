@@ -25,7 +25,7 @@ namespace Content.Pipeline.Editor
             _view = view;
             _con = con;
 
-            _state = ProjectState.Get(item);
+            _state = new ProjectState(item);
 
             switch (property.Name)
             {
@@ -72,8 +72,8 @@ namespace Content.Pipeline.Editor
 
         private void Toggle()
         {
-            var item = (PipelineProject)_con.GetItem(_state.OriginalPath);
-            var state = ProjectState.Get(item);
+            PipelineProject item = (PipelineProject)_con.GetItem(_state.OriginalPath);
+            ProjectState state = new ProjectState(item);
             _state.Apply(item);
             _state = state;
 

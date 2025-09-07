@@ -322,10 +322,10 @@ namespace Content.Pipeline.Editor
                 // Parse an optional argument.
                 char[] separators = {':'};
 
-                var split = arg.Substring(1).Split(separators, 2, StringSplitOptions.None);
+                string[] split = arg.Substring(1).Split(separators, 2, StringSplitOptions.None);
 
-                var name = split[0];
-                var value = (split.Length > 1) ? split[1] : "true";
+                string name = split[0];
+                string value = (split.Length > 1) ? split[1] : "true";
 
                 MemberInfo member;
 
@@ -368,8 +368,8 @@ namespace Content.Pipeline.Editor
                     // Set the value of a single option.
                     if (member is MethodInfo)
                     {
-                        var method = member as MethodInfo;
-                        var parameters = method.GetParameters();
+                        MethodInfo method = member as MethodInfo;
+                        ParameterInfo[] parameters = method.GetParameters();
                         if (parameters.Length == 0)
                             method.Invoke(_optionsObject, null);
                         else
@@ -377,12 +377,12 @@ namespace Content.Pipeline.Editor
                     }
                     else if (member is FieldInfo)
                     {
-                        var field = member as FieldInfo;
+                        FieldInfo field = member as FieldInfo;
                         field.SetValue(_optionsObject, ChangeType(value, field.FieldType));
                     }
                     else 
                     {
-                        var property = member as PropertyInfo;
+                        PropertyInfo property = member as PropertyInfo;
                         property.SetValue(_optionsObject, ChangeType(value, property.PropertyType), null);
                     }
                 }
@@ -421,7 +421,7 @@ namespace Content.Pipeline.Editor
 
         static object ChangeType(string value, Type type)
         {
-            var converter = TypeDescriptor.GetConverter(type);
+            TypeConverter converter = TypeDescriptor.GetConverter(type);
 
             return converter.ConvertFromInvariantString(value);
         }
