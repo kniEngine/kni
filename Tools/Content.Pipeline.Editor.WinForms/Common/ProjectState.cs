@@ -24,7 +24,7 @@ namespace Content.Pipeline.Editor
 
         /// <summary>
         /// Create a ProjectState storing member values of the passed PipelineProject.
-        /// </summary>        
+        /// </summary>
         public static ProjectState Get(PipelineProject proj)
         {
             ProjectState state = new ProjectState()
