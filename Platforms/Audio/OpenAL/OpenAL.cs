@@ -242,13 +242,13 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             else
                 return FuncLoader.LoadLibraryExt("openal");
 #elif ANDROID
-            IntPtr ret = FuncLoader.LoadLibrary("libopenal32.so");
+            IntPtr ret = FuncLoader.LoadLibrary("libopenal.so");
 
             if (ret == IntPtr.Zero)
             {
                 string appFilesDir = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                 string appDir = Path.GetDirectoryName(appFilesDir);
-                string lib = Path.Combine(appDir, "lib", "libopenal32.so");
+                string lib = Path.Combine(appDir, "lib", "libopenal.so");
 
                 ret = FuncLoader.LoadLibrary(lib);
             }
