@@ -159,8 +159,7 @@ namespace Microsoft.Xna.Platform.Audio
             _sourceId = ConcreteAudioService.ReserveSource();
 
             // bind buffer to source
-            int bufferId = _concreteSoundEffect.GetALSoundBuffer()._bufferId;
-            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.Buffer, bufferId);
+            ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.Buffer, _concreteSoundEffect.ALBufferId);
             ConcreteAudioService.OpenAL.CheckError("Failed to bind buffer to source.");
 
             // Send the position, gain, looping, pitch, and distance model to the OpenAL driver.

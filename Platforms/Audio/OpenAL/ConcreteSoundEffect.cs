@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Platform.Audio
     {
         private ALSoundBuffer _soundBuffer;
 
+        internal int ALBufferId { get { return _soundBuffer._bufferId; } }
+
 
         #region Initialization
 
@@ -255,11 +257,6 @@ namespace Microsoft.Xna.Platform.Audio
         }
 
         #endregion
-
-        internal ALSoundBuffer GetALSoundBuffer()
-        {
-            return _soundBuffer;
-        }
 
 
         public static ALFormat GetSoundFormat(int audioFormat, int channels, int bitsPerSample)
