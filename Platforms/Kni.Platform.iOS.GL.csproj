@@ -100,7 +100,6 @@
     <Compile Include="Audio\OpenAL\ConcreteSoundEffect.cs" />
     <Compile Include="Audio\OpenAL\ConcreteSoundEffectInstance.cs" />
     <Compile Include="Audio\OpenAL\AudioLoader.cs" />
-    <Compile Include="Audio\OpenAL\OALSoundBuffer.cs" />
     <Compile Include="Audio\OpenAL\OpenAL.cs" />
   </ItemGroup>
 
