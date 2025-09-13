@@ -223,6 +223,10 @@ namespace Microsoft.Xna.Platform.Audio
         private void CreateBuffer(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment)
         {
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+
+            _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
+            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
+      
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
         }
