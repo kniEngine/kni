@@ -243,19 +243,17 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
                 return FuncLoader.LoadLibraryExt("openal");
 #elif ANDROID
             IntPtr ret = FuncLoader.LoadLibrary("libopenal.so");
-
-            if (ret == IntPtr.Zero)
-            {
-                string appFilesDir = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                string appDir = Path.GetDirectoryName(appFilesDir);
-                string lib = Path.Combine(appDir, "lib", "libopenal.so");
-
-                ret = FuncLoader.LoadLibrary(lib);
-            }
-
-            return ret;
-#else
+            if (ret != IntPtr.Zero)
+                return ret;
+            
+            string appFilesDir = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            string appDir = Path.GetDirectoryName(appFilesDir);
+            string lib = Path.Combine(appDir, "lib", "libopenal.so");
+            return FuncLoader.LoadLibrary(lib);
+#elif IOS || TVOS
             return FuncLoader.LoadLibrary("/System/Library/Frameworks/OpenAL.framework/OpenAL");
+#else
+            throw new PlatformNotSupportedException();
 #endif
         }
 
