@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Platform.Audio
                     }
                     else
                     {
-                        InitializeIeeeFloat(buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                        InitializeIeeeFloat(concreteAudioService, buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
                     }
                     break;
                 case AudioLoader.FormatMsAdpcm:
@@ -93,7 +93,7 @@ namespace Microsoft.Xna.Platform.Audio
                     }
                     else
                     {
-                        InitializeAdpcm(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                        InitializeAdpcm(concreteAudioService, buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
                     break;
                 case AudioLoader.FormatIma4:
@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Platform.Audio
                     }
                     else
                     {
-                        InitializeIma4(buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                        InitializeIma4(concreteAudioService, buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
                     break;
 
@@ -119,6 +119,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformInitializePcm(byte[] buffer, int index, int count, int sampleBits, int sampleRate, int channels, int loopStart, int loopLength)
         {
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
+      
             if (sampleBits == 24)
             {
                 // Convert 24-bit signed PCM to 16-bit signed PCM
@@ -131,11 +133,23 @@ namespace Microsoft.Xna.Platform.Audio
             ALFormat alFormat = GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
 
             // bind buffer
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
-            _soundBuffer = new ALSoundBuffer(AudioService.Current);
+           _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
+            switch (alFormat)
+            {
+                case ALFormat.MonoMSAdpcm:
+                case ALFormat.StereoMSAdpcm:
+                    if (!concreteAudioService.SupportsAdpcm)
+                        throw new InvalidOperationException("MS-ADPCM is not supported by this OpenAL driver");
+                    break;
+
+                case ALFormat.MonoIma4:
+                case ALFormat.StereoIma4:
+                    if (!concreteAudioService.SupportsIma4)
+                        throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
+                    break;
+            }
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, 0);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
         }
@@ -152,60 +166,18 @@ namespace Microsoft.Xna.Platform.Audio
             }
             else
             {
-                InitializeAdpcm(buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
+                InitializeAdpcm(concreteAudioService, buffer, index, count, sampleRate, channels, (blockAlignment + 22) * channels, loopStart, loopLength);
             }
         }
 
-        private void InitializeIeeeFloat(byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
+        private void InitializeIeeeFloat(ConcreteAudioService concreteAudioService, byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
         {
             ALFormat alFormat = GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
 
             // bind buffer
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
-            concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, offset, count, sampleRate, 0);
-            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
-        }
-
-        private void InitializeAdpcm(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
-        {           
-
-            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatMsAdpcm, channels, 0, blockAlignment);
-
-            // Buffer length must be aligned with the block alignment
-            int alignedCount = count - (count % blockAlignment);
-
-            // bind buffer
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
-            _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
-            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
-            concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
-            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
-        }
-
-        private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
-        {
-            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
-            int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatIma4, channels, 0, blockAlignment);
-
-            // bind buffer
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
-             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
-            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
-            concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
-            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
-        }
-
-        private static void CheckSupportedFormat(ALFormat alFormat, ConcreteAudioService concreteAudioService)
-        {
             switch (alFormat)
             {
                 case ALFormat.MonoMSAdpcm:
@@ -220,6 +192,66 @@ namespace Microsoft.Xna.Platform.Audio
                         throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
                     break;
             }
+            concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, offset, count, sampleRate, 0);
+            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
+        }
+
+        private void InitializeAdpcm(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
+        {           
+
+            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
+            int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatMsAdpcm, channels, 0, blockAlignment);
+
+            // Buffer length must be aligned with the block alignment
+            int alignedCount = count - (count % blockAlignment);
+
+            // bind buffer
+            _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
+            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
+            switch (alFormat)
+            {
+                case ALFormat.MonoMSAdpcm:
+                case ALFormat.StereoMSAdpcm:
+                    if (!concreteAudioService.SupportsAdpcm)
+                        throw new InvalidOperationException("MS-ADPCM is not supported by this OpenAL driver");
+                    break;
+
+                case ALFormat.MonoIma4:
+                case ALFormat.StereoIma4:
+                    if (!concreteAudioService.SupportsIma4)
+                        throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
+                    break;
+            }
+            concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
+            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
+        }
+
+        private void InitializeIma4(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
+        {
+            ALFormat alFormat = GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
+            int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatIma4, channels, 0, blockAlignment);
+
+            // bind buffer
+             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
+            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
+            switch (alFormat)
+            {
+                case ALFormat.MonoMSAdpcm:
+                case ALFormat.StereoMSAdpcm:
+                    if (!concreteAudioService.SupportsAdpcm)
+                        throw new InvalidOperationException("MS-ADPCM is not supported by this OpenAL driver");
+                    break;
+
+                case ALFormat.MonoIma4:
+                case ALFormat.StereoIma4:
+                    if (!concreteAudioService.SupportsIma4)
+                        throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
+                    break;
+            }
+            concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
+            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
         }
 
         #endregion
