@@ -133,6 +133,7 @@ namespace Microsoft.Xna.Platform.Audio
             // bind buffer
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
             ALSoundBuffer.BindDataBuffer(concreteAudioService, _soundBuffer._bufferId, buffer, index, count, alFormat, sampleRate);
         }
 
@@ -159,6 +160,7 @@ namespace Microsoft.Xna.Platform.Audio
             // bind buffer
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
             ALSoundBuffer.BindDataBuffer(concreteAudioService, _soundBuffer._bufferId, buffer, offset, count, alFormat, sampleRate);
         }
 
@@ -174,6 +176,7 @@ namespace Microsoft.Xna.Platform.Audio
             // bind buffer
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
             ALSoundBuffer.BindDataBuffer(concreteAudioService, _soundBuffer._bufferId, buffer, index, alignedCount, alFormat, sampleRate, sampleAlignment);
         }
 
@@ -185,6 +188,7 @@ namespace Microsoft.Xna.Platform.Audio
             // bind buffer
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
              _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
             ALSoundBuffer.BindDataBuffer(concreteAudioService, _soundBuffer._bufferId, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
