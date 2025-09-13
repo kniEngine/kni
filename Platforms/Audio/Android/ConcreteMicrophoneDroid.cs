@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform.Audio
                 if (_bufferSize <= minBufferSize)
                     throw new Exception("Invalid buffer size for AudioRecord!");
 
-                if (deviceName == "Default")
+                if (deviceName == "DefaultMicrophone")
                 {
                     // Create AudioRecord instance
                     _audioRecord = new AudioRecord(
