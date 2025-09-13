@@ -35,9 +35,8 @@ namespace Microsoft.Xna.Platform.Audio
         }
         
 
-        public static void BindDataBuffer(IPlatformAudioService _audioService, int bufferId, byte[] dataBuffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment = 0)
+        public static void BindDataBuffer(ConcreteAudioService concreteAudioService, int bufferId, byte[] dataBuffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment = 0)
         {
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
             ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
 
             concreteAudioService.OpenAL.BufferData(bufferId, alFormat, dataBuffer, index, count, sampleRate, sampleAlignment);
