@@ -8,7 +8,7 @@ using Microsoft.Xna.Platform.Audio.OpenAL;
 
 namespace Microsoft.Xna.Platform.Audio
 {
-    internal class ALSoundBuffer : IDisposable
+    sealed internal class ALSoundBuffer : IDisposable
     {
         internal AudioService _audioService;
 
@@ -37,7 +37,7 @@ namespace Microsoft.Xna.Platform.Audio
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_isBufferDisposed)
             {
