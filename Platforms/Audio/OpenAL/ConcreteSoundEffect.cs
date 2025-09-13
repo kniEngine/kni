@@ -223,7 +223,7 @@ namespace Microsoft.Xna.Platform.Audio
         private void CreateBuffer(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment)
         {
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
+            ALSoundBuffer.BindDataBuffer(concreteAudioService, _soundBuffer._bufferId, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
 
