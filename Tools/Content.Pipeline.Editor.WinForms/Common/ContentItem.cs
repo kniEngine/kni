@@ -126,10 +126,8 @@ namespace Content.Pipeline.Editor
                 // When the processor changes reset our parameters
                 // to the default for the processor type.
                 ProcessorParams.Clear();
-                foreach (var p in _processor.Properties)
-                {
-                    ProcessorParams.Add(p.Name, p.DefaultValue);
-                }
+                //foreach (var p in _processor.Properties)
+                //    ProcessorParams.Add(p.Name, p.DefaultValue);
 
                 if (Observer != null)
                     Observer.OnItemModified(this);
