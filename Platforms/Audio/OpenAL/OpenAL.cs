@@ -516,19 +516,6 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             alSourceQueueBuffers(source, 1, &buffer);
         }
 
-        internal unsafe int[] SourceUnqueueBuffers(int source, int numEntries)
-        {
-            if (numEntries <= 0)
-                throw new ArgumentOutOfRangeException("numEntries", "Must be greater than zero.");
-
-            int[] buffers = new int[numEntries];
-            fixed (int* pbuffers = buffers)
-            {
-                alSourceUnqueueBuffers(source, numEntries, pbuffers);
-            }
-            return buffers;
-        }
-
         internal unsafe void SourceUnqueueBuffers(int source, int numEntries, int[] buffers)
         {
             fixed (int* pbuffers = buffers)
