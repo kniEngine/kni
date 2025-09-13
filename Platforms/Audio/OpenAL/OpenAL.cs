@@ -524,6 +524,15 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             }
         }
 
+        internal unsafe int SourceUnqueueBuffer(int source, int numEntries)
+        {
+            int buffer;
+            fixed (int* pbuffers = buffers)
+            {
+                alSourceUnqueueBuffers(source, numEntries, pbuffers);
+            }
+        }
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int d_algetenumvalue(string enumName);
         internal d_algetenumvalue alGetEnumValue;
