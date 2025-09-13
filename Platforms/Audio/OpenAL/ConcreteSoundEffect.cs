@@ -19,6 +19,7 @@ namespace Microsoft.Xna.Platform.Audio
 {
     class ConcreteSoundEffect : SoundEffectStrategy
     {
+        internal AudioService _audioService;
         private ALSoundBuffer _soundBuffer;
 
         internal int ALBufferId { get { return _soundBuffer._bufferId; } }
@@ -135,7 +136,9 @@ namespace Microsoft.Xna.Platform.Audio
             ALFormat alFormat = GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
 
             // bind buffer
-           _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _audioService = AudioService.Current;
+            _audioService.Disposing += _soundBuffer._audioService_Disposing;
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, 0);
@@ -164,6 +167,8 @@ namespace Microsoft.Xna.Platform.Audio
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _audioService = AudioService.Current;
+            _audioService.Disposing += _soundBuffer._audioService_Disposing;
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, offset, count, sampleRate, 0);
@@ -180,6 +185,8 @@ namespace Microsoft.Xna.Platform.Audio
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _audioService = AudioService.Current;
+            _audioService.Disposing += _soundBuffer._audioService_Disposing;
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
@@ -192,7 +199,9 @@ namespace Microsoft.Xna.Platform.Audio
             int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatIma4, channels, 0, blockAlignment);
 
             // bind buffer
-             _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _soundBuffer = new ALSoundBuffer(AudioService.Current);
+            _audioService = AudioService.Current;
+            _audioService.Disposing += _soundBuffer._audioService_Disposing;
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
@@ -250,6 +259,8 @@ namespace Microsoft.Xna.Platform.Audio
         {
             if (disposing)
             {
+                _audioService = null;
+
                 _soundBuffer.Dispose();
                 _soundBuffer = null;
             }

@@ -18,7 +18,6 @@ namespace Microsoft.Xna.Platform.Audio
         public ALSoundBuffer(AudioService audioService)
         {
             _audioService = audioService;
-            _audioService.Disposing += _audioService_Disposing;
         }
 
         ~ALSoundBuffer()
@@ -26,7 +25,7 @@ namespace Microsoft.Xna.Platform.Audio
             Dispose(false);
         }
 
-        private void _audioService_Disposing(object sender, EventArgs e)
+        internal void _audioService_Disposing(object sender, EventArgs e)
         {
             Dispose();
         }
