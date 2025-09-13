@@ -524,10 +524,10 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
             }
         }
 
-        internal unsafe int SourceUnqueueBuffer(int source, int numEntries)
+        internal unsafe int SourceUnqueueBuffer(int source)
         {
             int buffer;
-            alSourceUnqueueBuffers(source, numEntries, &buffer);
+            alSourceUnqueueBuffers(source, 1, &buffer);
             return buffer;
         }
 
