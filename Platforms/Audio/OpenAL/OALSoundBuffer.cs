@@ -10,9 +10,10 @@ namespace Microsoft.Xna.Platform.Audio
     sealed internal class ALSoundBuffer : IDisposable
     {
         internal AudioService _audioService;
-        bool _isDisposed;
 
         internal int _bufferId;
+        bool _isBufferDisposed;
+
 
         public ALSoundBuffer(AudioService audioService)
         {
@@ -38,24 +39,18 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void Dispose(bool disposing)
         {
-            if (_isDisposed) return;
-
-            if (disposing)
+            if (!_isBufferDisposed)
             {
-                // Clean up managed objects
+                ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
+
+                concreteAudioService.OpenAL.DeleteBuffer(_bufferId);
+                concreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
+                _isBufferDisposed = true;
+                _bufferId = 0;
+
+                _audioService.Disposing -= _audioService_Disposing;
+                _audioService = null;
             }
-
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
-   
-            // Release unmanaged resources
-            concreteAudioService.OpenAL.DeleteBuffer(_bufferId);
-            concreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
-            _bufferId = 0;
-
-            _audioService.Disposing -= _audioService_Disposing;
-            _audioService = null;
-
-            _isDisposed = true;
         }
     }
 }
