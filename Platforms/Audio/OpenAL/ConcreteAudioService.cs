@@ -43,8 +43,8 @@ namespace Microsoft.Xna.Platform.Audio
         bool _isDisposed;
         public bool SupportsIma4 { get; private set; }
         public bool SupportsAdpcm { get; private set; }
-        public bool SupportsEfx { get; private set; }
         public bool SupportsIeee { get; private set; }
+        public bool SupportsEfx { get; private set; }
         
         internal int ReverbSlot = 0;
         internal int ReverbEffect = 0;
@@ -217,8 +217,8 @@ namespace Microsoft.Xna.Platform.Audio
                     OpenAL.ALC.CheckError("Could not make OpenAL context current");
                     SupportsIma4 = OpenAL.IsExtensionPresent("AL_EXT_IMA4");
                     SupportsAdpcm = OpenAL.IsExtensionPresent("AL_SOFT_MSADPCM");
-                    SupportsEfx = OpenAL.IsExtensionPresent("AL_EXT_EFX");
                     SupportsIeee = OpenAL.IsExtensionPresent("AL_EXT_float32");
+                    SupportsEfx = OpenAL.IsExtensionPresent("AL_EXT_EFX");
                     return true;
                 }
             }
