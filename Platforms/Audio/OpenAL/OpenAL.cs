@@ -527,10 +527,8 @@ namespace Microsoft.Xna.Platform.Audio.OpenAL
         internal unsafe int SourceUnqueueBuffer(int source, int numEntries)
         {
             int buffer;
-            fixed (int* pbuffers = buffers)
-            {
-                alSourceUnqueueBuffers(source, numEntries, pbuffers);
-            }
+            alSourceUnqueueBuffers(source, numEntries, &buffer);
+            return buffer;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
