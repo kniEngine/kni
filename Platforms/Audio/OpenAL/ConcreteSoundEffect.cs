@@ -19,6 +19,7 @@ namespace Microsoft.Xna.Platform.Audio
 {
     class ConcreteSoundEffect : SoundEffectStrategy
     {
+        internal AudioService _audioService;
         private ALSoundBuffer _soundBuffer;
 
 
@@ -224,6 +225,9 @@ namespace Microsoft.Xna.Platform.Audio
         {
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
 
+            _audioService = AudioService.Current;
+            _audioService.Disposing += _soundBuffer._audioService_Disposing;
+
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
       
@@ -249,6 +253,7 @@ namespace Microsoft.Xna.Platform.Audio
                 _soundBuffer = null;
             }
 
+            _audioService = null;
         }
 
 #endregion
