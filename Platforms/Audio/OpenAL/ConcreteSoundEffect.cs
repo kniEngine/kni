@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, count, alFormat, sampleRate);
+            ALSoundBuffer.BindDataBuffer(AudioService.Current, _soundBuffer._bufferId, buffer, index, count, alFormat, sampleRate);
         }
 
         public override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, offset, count, alFormat, sampleRate);
+            ALSoundBuffer.BindDataBuffer(AudioService.Current, _soundBuffer._bufferId, buffer, offset, count, alFormat, sampleRate);
         }
 
         private void InitializeAdpcm(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
@@ -171,7 +171,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, alignedCount, alFormat, sampleRate, sampleAlignment);
+            ALSoundBuffer.BindDataBuffer(AudioService.Current, _soundBuffer._bufferId, buffer, index, alignedCount, alFormat, sampleRate, sampleAlignment);
         }
 
         private void InitializeIma4(byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
@@ -181,7 +181,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             // bind buffer
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(buffer, index, count, alFormat, sampleRate, sampleAlignment);
+            ALSoundBuffer.BindDataBuffer(AudioService.Current, _soundBuffer._bufferId, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
         #endregion
