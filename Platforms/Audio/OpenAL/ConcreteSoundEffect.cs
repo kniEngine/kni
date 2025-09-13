@@ -135,7 +135,7 @@ namespace Microsoft.Xna.Platform.Audio
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
+            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, 0);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
         }
@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Platform.Audio
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
+            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, offset, count, sampleRate, 0);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
         }
@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Platform.Audio
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
+            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
         }
@@ -199,9 +199,27 @@ namespace Microsoft.Xna.Platform.Audio
              _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer._bufferId = concreteAudioService.OpenAL.GenBuffer();
             concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
-            ALSoundBuffer.CheckSupportedFormat(alFormat, concreteAudioService);
+            ConcreteSoundEffect.CheckSupportedFormat(alFormat, concreteAudioService);
             concreteAudioService.OpenAL.BufferData(_soundBuffer._bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
+        }
+
+        private static void CheckSupportedFormat(ALFormat alFormat, ConcreteAudioService concreteAudioService)
+        {
+            switch (alFormat)
+            {
+                case ALFormat.MonoMSAdpcm:
+                case ALFormat.StereoMSAdpcm:
+                    if (!concreteAudioService.SupportsAdpcm)
+                        throw new InvalidOperationException("MS-ADPCM is not supported by this OpenAL driver");
+                    break;
+
+                case ALFormat.MonoIma4:
+                case ALFormat.StereoIma4:
+                    if (!concreteAudioService.SupportsIma4)
+                        throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
+                    break;
+            }
         }
 
         #endregion

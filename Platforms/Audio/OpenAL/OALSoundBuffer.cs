@@ -29,24 +29,6 @@ namespace Microsoft.Xna.Platform.Audio
             Dispose(false);
         }
 
-        internal static void CheckSupportedFormat(ALFormat alFormat, ConcreteAudioService concreteAudioService)
-        {
-            switch (alFormat)
-            {
-                case ALFormat.MonoMSAdpcm:
-                case ALFormat.StereoMSAdpcm:
-                    if (!concreteAudioService.SupportsAdpcm)
-                        throw new InvalidOperationException("MS-ADPCM is not supported by this OpenAL driver");
-                    break;
-
-                case ALFormat.MonoIma4:
-                case ALFormat.StereoIma4:
-                    if (!concreteAudioService.SupportsIma4)
-                        throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
-                    break;
-            }
-        }
-
         private void _audioService_Disposing(object sender, EventArgs e)
         {
             Dispose();
