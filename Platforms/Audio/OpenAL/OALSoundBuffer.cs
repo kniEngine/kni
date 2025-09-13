@@ -22,11 +22,6 @@ namespace Microsoft.Xna.Platform.Audio
 
             _audioService = audioService;
             _audioService.Disposing += _audioService_Disposing;
-
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)audioService).Strategy.ToConcrete<ConcreteAudioService>();
-
-            _bufferId = concreteAudioService.OpenAL.GenBuffer();
-            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
         }
 
         ~ALSoundBuffer()
