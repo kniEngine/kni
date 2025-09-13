@@ -17,9 +17,6 @@ namespace Microsoft.Xna.Platform.Audio
 
         public ALSoundBuffer(AudioService audioService)
         {
-            if (audioService == null)
-                throw new ArgumentNullException("audioService");
-
             _audioService = audioService;
             _audioService.Disposing += _audioService_Disposing;
         }
