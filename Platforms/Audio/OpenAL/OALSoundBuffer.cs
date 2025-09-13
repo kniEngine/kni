@@ -10,13 +10,10 @@ namespace Microsoft.Xna.Platform.Audio
 {
     internal class ALSoundBuffer : IDisposable
     {
-        internal AudioService _audioService { get; private set; }
+        internal AudioService _audioService;
 
         internal int _bufferId;
         private bool _isBufferDisposed;
-
-        internal ConcreteAudioService ConcreteAudioService { get { return ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>(); } }
-
 
         public ALSoundBuffer(AudioService audioService)
         {
@@ -26,8 +23,10 @@ namespace Microsoft.Xna.Platform.Audio
             _audioService = audioService;
             _audioService.Disposing += _audioService_Disposing;
 
-            _bufferId = ConcreteAudioService.OpenAL.GenBuffer();
-            ConcreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)audioService).Strategy.ToConcrete<ConcreteAudioService>();
+
+            _bufferId = concreteAudioService.OpenAL.GenBuffer();
+            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
         }
 
         ~ALSoundBuffer()
@@ -38,13 +37,15 @@ namespace Microsoft.Xna.Platform.Audio
 
         public void BindDataBuffer(byte[] dataBuffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment = 0)
         {
-            if ((alFormat == ALFormat.MonoMSAdpcm || alFormat == ALFormat.StereoMSAdpcm) && !ConcreteAudioService.SupportsAdpcm)
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
+       
+            if ((alFormat == ALFormat.MonoMSAdpcm || alFormat == ALFormat.StereoMSAdpcm) && !concreteAudioService.SupportsAdpcm)
                 throw new InvalidOperationException("MS-ADPCM is not supported by this OpenAL driver");
-            if ((alFormat == ALFormat.MonoIma4 || alFormat == ALFormat.StereoIma4) && !ConcreteAudioService.SupportsIma4)
+            if ((alFormat == ALFormat.MonoIma4 || alFormat == ALFormat.StereoIma4) && !concreteAudioService.SupportsIma4)
                 throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
 
-            ConcreteAudioService.OpenAL.BufferData(_bufferId, alFormat, dataBuffer, index, count, sampleRate, sampleAlignment);
-            ConcreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
+            concreteAudioService.OpenAL.BufferData(_bufferId, alFormat, dataBuffer, index, count, sampleRate, sampleAlignment);
+            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
         }
 
         private void _audioService_Disposing(object sender, EventArgs e)
@@ -67,9 +68,11 @@ namespace Microsoft.Xna.Platform.Audio
                 // Clean up managed objects
             }
 
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
+   
             // Release unmanaged resources
-            ConcreteAudioService.OpenAL.DeleteBuffer(_bufferId);
-            ConcreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
+            concreteAudioService.OpenAL.DeleteBuffer(_bufferId);
+            concreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
             _bufferId = 0;
 
             _audioService.Disposing -= _audioService_Disposing;
