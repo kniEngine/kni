@@ -186,9 +186,9 @@ namespace Microsoft.Xna.Platform.Audio
 
         #endregion
 
-        internal ALSoundBuffer GetALSoundBuffer()
+        internal int GetALBufferId()
         {
-            return _soundBuffer;
+            return _soundBuffer._bufferId;
         }
 
 

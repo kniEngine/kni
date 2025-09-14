@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Platform.Audio
             _sourceId = ConcreteAudioService.ReserveSource();
 
             // bind buffer to source
-            int bufferId = _concreteSoundEffect.GetALSoundBuffer()._bufferId;
+            int bufferId = _concreteSoundEffect.GetALBufferId();
             ConcreteAudioService.OpenAL.Source(_sourceId, ALSourcei.Buffer, bufferId);
             ConcreteAudioService.OpenAL.CheckError("Failed to bind buffer to source.");
 
