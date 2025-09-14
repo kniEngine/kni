@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Audio
             PlatformInitializeBuffer(buffer, index, count, audioFormat, channels, sampleRate, blockAlignment, bitsPerSample, loopStart, loopLength);
         }
 
-        private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, int audioFormat, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
+        private void PlatformInitializeBuffer(byte[] buffer, int index, int count, int audioFormat, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
         {
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
 
@@ -64,51 +64,66 @@ namespace Microsoft.Xna.Platform.Audio
                     // PCM
                     if (channels < 1 || 2 < channels)
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
-                    PlatformInitializePcm(buffer, bufferOffset, bufferSize, bitsPerSample, sampleRate, channels, loopStart, loopLength);
+
+                    PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                     break;
+
                 case AudioLoader.FormatIeee:
                     // IEEE Float
                     if (channels < 1 || 2 < channels)
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+
                     if (!concreteAudioService.SupportsIeee)
                     {
                         // If 32-bit IEEE float is not supported, convert to 16-bit signed PCM
-                        buffer = AudioLoader.ConvertFloatTo16(buffer, bufferOffset, bufferSize);
-                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                        buffer = AudioLoader.ConvertFloatTo16(buffer, index, count);
+                        index = 0;
+                        count = buffer.Length;
+                        bitsPerSample = 16;
+                        PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                     }
                     else
                     {
-                        InitializeIeeeFloat(concreteAudioService, buffer, bufferOffset, bufferSize, sampleRate, channels, loopStart, loopLength);
+                        InitializeIeeeFloat(concreteAudioService, buffer, index, count, sampleRate, channels, loopStart, loopLength);
                     }
                     break;
+
                 case AudioLoader.FormatMsAdpcm:
                     // Microsoft ADPCM
                     if (channels < 1 || 2 < channels)
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+
                     if (!concreteAudioService.SupportsAdpcm)
                     {
                         // If MS-ADPCM is not supported, convert to 16-bit signed PCM
-                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
-                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                        buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
+                        index = 0;
+                        count = buffer.Length;
+                        bitsPerSample = 16;
+                        PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                     }
                     else
                     {
-                        InitializeAdpcm(concreteAudioService, buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                        InitializeAdpcm(concreteAudioService, buffer, index, count, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
                     break;
                 case AudioLoader.FormatIma4:
                     // IMA4 ADPCM
                     if (channels < 1 || 2 < channels)
                         throw new NotSupportedException("The specified channel count (" + channels + ") is not supported.");
+
                     if (!concreteAudioService.SupportsIma4)
                     {
                         // If IMA/ADPCM is not supported, convert to 16-bit signed PCM
-                        buffer = AudioLoader.ConvertIma4ToPcm(buffer, bufferOffset, bufferSize, channels, blockAlignment);
-                        PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                        buffer = AudioLoader.ConvertIma4ToPcm(buffer, index, count, channels, blockAlignment);
+                        index = 0;
+                        count = buffer.Length;
+                        bitsPerSample = 16;
+                        PlatformInitializePcm(buffer, index, count, bitsPerSample, sampleRate, channels, loopStart, loopLength);
                     }
                     else
                     {
-                        InitializeIma4(concreteAudioService, buffer, bufferOffset, bufferSize, sampleRate, channels, blockAlignment, loopStart, loopLength);
+                        InitializeIma4(concreteAudioService, buffer, index, count, sampleRate, channels, blockAlignment, loopStart, loopLength);
                     }
                     break;
 
@@ -150,7 +165,10 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 // If MS-ADPCM is not supported, convert to 16-bit signed PCM
                 buffer = MsAdpcmDecoder.ConvertMsAdpcmToPcm(buffer, index, count, channels, blockAlignment);
-                PlatformInitializePcm(buffer, 0, buffer.Length, 16, sampleRate, channels, loopStart, loopLength);
+                index = 0;
+                count = buffer.Length;
+                int sampleBits = 16;
+                PlatformInitializePcm(buffer, index, count, sampleBits, sampleRate, channels, loopStart, loopLength);
             }
             else
             {
