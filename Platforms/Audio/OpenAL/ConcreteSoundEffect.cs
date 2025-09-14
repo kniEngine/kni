@@ -131,10 +131,9 @@ namespace Microsoft.Xna.Platform.Audio
             }
 
             ALFormat alFormat = GetSoundFormat(AudioLoader.FormatPcm, channels, sampleBits);
+            int sampleAlignment = 0;
 
-            // bind buffer
-            _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate);
+            CreateBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
         public override void PlatformInitializeXactAdpcm(byte[] buffer, int index, int count, int channels, int sampleRate, int blockAlignment, int loopStart, int loopLength)
@@ -153,13 +152,12 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        private void InitializeIeeeFloat(ConcreteAudioService concreteAudioService, byte[] buffer, int offset, int count, int sampleRate, int channels, int loopStart, int loopLength)
+        private void InitializeIeeeFloat(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, int sampleRate, int channels, int loopStart, int loopLength)
         {
             ALFormat alFormat = GetSoundFormat(AudioLoader.FormatIeee, channels, 32);
+            int sampleAlignment = 0;
 
-            // bind buffer
-            _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(concreteAudioService, buffer, offset, count, alFormat, sampleRate);
+            CreateBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
         private void InitializeAdpcm(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
@@ -167,13 +165,10 @@ namespace Microsoft.Xna.Platform.Audio
 
             ALFormat alFormat = GetSoundFormat(AudioLoader.FormatMsAdpcm, channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatMsAdpcm, channels, 0, blockAlignment);
-
             // Buffer length must be aligned with the block alignment
-            int alignedCount = count - (count % blockAlignment);
+            count = count - (count % blockAlignment);
 
-            // bind buffer
-            _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(concreteAudioService, buffer, index, alignedCount, alFormat, sampleRate, sampleAlignment);
+            CreateBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
         private void InitializeIma4(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, int sampleRate, int channels, int blockAlignment, int loopStart, int loopLength)
@@ -181,10 +176,15 @@ namespace Microsoft.Xna.Platform.Audio
             ALFormat alFormat = GetSoundFormat(AudioLoader.FormatIma4, (int)channels, 0);
             int sampleAlignment = AudioLoader.SampleAlignment(AudioLoader.FormatIma4, channels, 0, blockAlignment);
 
-            // bind buffer
+            CreateBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
+        }
+
+        private void CreateBuffer(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment)
+        {
             _soundBuffer = new ALSoundBuffer(AudioService.Current);
             _soundBuffer.BindDataBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
+
 
         #endregion
 

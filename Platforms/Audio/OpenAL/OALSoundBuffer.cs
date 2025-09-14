@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Audio
         }
         
 
-        public void BindDataBuffer(ConcreteAudioService concreteAudioService, byte[] dataBuffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment = 0)
+        public void BindDataBuffer(ConcreteAudioService concreteAudioService, byte[] dataBuffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment)
         {
             concreteAudioService.OpenAL.BufferData(_bufferId, alFormat, dataBuffer, index, count, sampleRate, sampleAlignment);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
