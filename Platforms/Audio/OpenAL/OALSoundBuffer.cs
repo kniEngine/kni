@@ -35,11 +35,6 @@ namespace Microsoft.Xna.Platform.Audio
         public void BindDataBuffer(byte[] dataBuffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment = 0)
         {
             ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
-       
-            if ((alFormat == ALFormat.MonoMSAdpcm || alFormat == ALFormat.StereoMSAdpcm) && !concreteAudioService.SupportsAdpcm)
-                throw new InvalidOperationException("MS-ADPCM is not supported by this OpenAL driver");
-            if ((alFormat == ALFormat.MonoIma4 || alFormat == ALFormat.StereoIma4) && !concreteAudioService.SupportsIma4)
-                throw new InvalidOperationException("IMA/ADPCM is not supported by this OpenAL driver");
 
             concreteAudioService.OpenAL.BufferData(_bufferId, alFormat, dataBuffer, index, count, sampleRate, sampleAlignment);
             concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
