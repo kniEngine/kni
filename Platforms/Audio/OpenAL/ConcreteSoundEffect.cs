@@ -19,7 +19,9 @@ namespace Microsoft.Xna.Platform.Audio
 {
     class ConcreteSoundEffect : SoundEffectStrategy
     {
-        private ALSoundBuffer _soundBuffer;
+        private AudioService _audioService;
+        private int _bufferId;
+        private bool _isBufferDisposed;
 
 
         #region Initialization
@@ -56,7 +58,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         private void PlatformInitializeBuffer(byte[] buffer, int index, int count, int audioFormat, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
         {
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)AudioService.Current).Strategy.ToConcrete<ConcreteAudioService>();
+            AudioService audioService = AudioService.Current;
+            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)audioService).Strategy.ToConcrete<ConcreteAudioService>();
 
             switch (audioFormat)
             {
@@ -220,10 +223,40 @@ namespace Microsoft.Xna.Platform.Audio
             CreateBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
         }
 
+
         private void CreateBuffer(ConcreteAudioService concreteAudioService, byte[] buffer, int index, int count, ALFormat alFormat, int sampleRate, int sampleAlignment)
         {
-            _soundBuffer = new ALSoundBuffer(AudioService.Current);
-            _soundBuffer.BindDataBuffer(concreteAudioService, buffer, index, count, alFormat, sampleRate, sampleAlignment);
+            _audioService = AudioService.Current;
+            _audioService.Disposing += _audioService_Disposing;
+
+            _bufferId = concreteAudioService.OpenAL.GenBuffer();
+            concreteAudioService.OpenAL.CheckError("Failed to generate OpenAL data buffer.");
+      
+            concreteAudioService.OpenAL.BufferData(_bufferId, alFormat, buffer, index, count, sampleRate, sampleAlignment);
+            concreteAudioService.OpenAL.CheckError("Failed to fill buffer.");
+        }
+
+        internal void _audioService_Disposing(object sender, EventArgs e)
+        {
+            DeleteBuffer();
+        }
+
+        private void DeleteBuffer()
+        {
+            if (!_isBufferDisposed)
+            {
+                ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
+
+                concreteAudioService.OpenAL.DeleteBuffer(_bufferId);
+                concreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
+                _isBufferDisposed = true;
+                _bufferId = 0;
+
+                _audioService.Disposing -= _audioService_Disposing;
+                _audioService = null;
+            }
+
+            _audioService = null;
         }
 
 
@@ -231,7 +264,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal int GetALBufferId()
         {
-            return _soundBuffer._bufferId;
+            return _bufferId;
         }
 
         #region IDisposable Members
@@ -240,10 +273,10 @@ namespace Microsoft.Xna.Platform.Audio
         {
             if (disposing)
             {
-                _soundBuffer.Dispose();
-                _soundBuffer = null;
+
             }
 
+            DeleteBuffer();
         }
 
 #endregion
