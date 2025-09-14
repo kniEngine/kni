@@ -51,24 +51,25 @@ namespace Microsoft.Xna.Platform.Audio
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_isBufferDisposed) return;
-
-            if (disposing)
+            if (!_isBufferDisposed)
             {
-                // Clean up managed objects
+                if (disposing)
+                {
+                    // Clean up managed objects
+                }
+
+                ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
+
+                // Release unmanaged resources
+                concreteAudioService.OpenAL.DeleteBuffer(_bufferId);
+                concreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
+                _bufferId = 0;
+
+                _audioService.Disposing -= _audioService_Disposing;
+                _audioService = null;
+
+                _isBufferDisposed = true;
             }
-
-            ConcreteAudioService concreteAudioService = ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>();
-   
-            // Release unmanaged resources
-            concreteAudioService.OpenAL.DeleteBuffer(_bufferId);
-            concreteAudioService.OpenAL.CheckError("Failed to delete buffer.");
-            _bufferId = 0;
-
-            _audioService.Disposing -= _audioService_Disposing;
-            _audioService = null;
-
-            _isBufferDisposed = true;
         }
     }
 }
