@@ -11,9 +11,9 @@ namespace Microsoft.Xna.Platform.Audio
     internal class ALSoundBuffer : IDisposable
     {
         internal AudioService _audioService { get; private set; }
-        bool _isDisposed;
 
         public int Buffer { get; private set; }
+        private bool _isBufferDisposed;
 
         internal ConcreteAudioService ConcreteAudioService { get { return ((IPlatformAudioService)_audioService).Strategy.ToConcrete<ConcreteAudioService>(); } }
 
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_isDisposed) return;
+            if (_isBufferDisposed) return;
 
             if (disposing)
             {
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Audio
             _audioService.Disposing -= _audioService_Disposing;
             _audioService = null;
 
-            _isDisposed = true;
+            _isBufferDisposed = true;
         }
     }
 }
