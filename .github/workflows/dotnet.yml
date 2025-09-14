@@ -62,6 +62,12 @@ jobs:
       run: dotnet build Kni.Platform.iOS.GL.sln --property:WarningLevel=1
     - name: Build Android.GL
       run: dotnet build Kni.Platform.Android.GL.sln --property:WarningLevel=1
+
+    - name: Install Android SDK Platform 32
+      shell: cmd
+      run: |
+        echo y | "%ANDROID_HOME%\cmdline-tools\latest\bin\sdkmanager.bat" --install "platforms;android-32"
+
     - name: Build Oculus.GL
       run: dotnet build Kni.Platform.Oculus.GL.sln --property:WarningLevel=1
    # - name: Build Cardboard.GL
