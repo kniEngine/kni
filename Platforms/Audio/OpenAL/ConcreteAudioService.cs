@@ -41,10 +41,13 @@ namespace Microsoft.Xna.Platform.Audio
 #endif
         private Stack<int> _alSourcesPool = new Stack<int>(32);
         bool _isDisposed;
+
+        // supported formats
         public bool SupportsIma4 { get; private set; }
         public bool SupportsAdpcm { get; private set; }
+        public bool SupportsIeee { get; private set; } // Ieee Float32
+        //supported extensions
         public bool SupportsEfx { get; private set; }
-        public bool SupportsIeee { get; private set; }
         
         internal int ReverbSlot = 0;
         internal int ReverbEffect = 0;
@@ -215,10 +218,12 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     OpenAL.ALC.MakeContextCurrent(_context);
                     OpenAL.ALC.CheckError("Could not make OpenAL context current");
+
                     SupportsIma4 = OpenAL.IsExtensionPresent("AL_EXT_IMA4");
                     SupportsAdpcm = OpenAL.IsExtensionPresent("AL_SOFT_MSADPCM");
-                    SupportsEfx = OpenAL.IsExtensionPresent("AL_EXT_EFX");
                     SupportsIeee = OpenAL.IsExtensionPresent("AL_EXT_float32");
+
+                    SupportsEfx = OpenAL.IsExtensionPresent("AL_EXT_EFX");
                     return true;
                 }
             }
