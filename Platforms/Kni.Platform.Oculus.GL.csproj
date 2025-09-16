@@ -11,15 +11,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	  <!-- By setting TargetPlatformVersionSupported
-	       we disable _CheckForInvalidTargetPlatformVersion check.
-	       This let us target android SDK 32 under .net9.
-	  -->
+      <!-- By setting TargetPlatformVersionSupported
+           we disable _CheckForInvalidTargetPlatformVersion check.
+           This let us target android SDK 32 under .net9.
+      -->
     <TargetPlatformVersionSupported>true</TargetPlatformVersionSupported>
   </PropertyGroup>
-	
+
   <PropertyGroup>
-	<EnableDefaultItems>false</EnableDefaultItems>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net8.0-android32.0</TargetFramework>
     <LangVersion>Default</LangVersion>
@@ -156,10 +156,10 @@
     <Compile Include="Graphics\.GL\Shader\ConcretePixelShader.cs" />
     <Compile Include="Graphics\.GL\Shader\ShaderProgram.cs" />
 
-	<Compile Include="Graphics\.GL\States\ConcreteBlendState.cs" />
-	<Compile Include="Graphics\.GL\States\ConcreteDepthStencilState.cs" />
-	<Compile Include="Graphics\.GL\States\ConcreteRasterizerState.cs" />
-	<Compile Include="Graphics\.GL\States\ConcreteSamplerState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteBlendState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteDepthStencilState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteRasterizerState.cs" />
+    <Compile Include="Graphics\.GL\States\ConcreteSamplerState.cs" />
 
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicIndexBuffer.cs" />
     <Compile Include="Graphics\.GL\Vertices\ConcreteDynamicVertexBuffer.cs" />
@@ -273,24 +273,24 @@
   </ItemGroup>
 
   <ItemGroup>
-	<EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.gles.fxo">
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.gles.fxo">
       <LogicalName>Resources.AlphaTestEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.gles.fxo">
       <LogicalName>Resources.BasicEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.gles.fxo">
       <LogicalName>Resources.DualTextureEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.gles.fxo">
       <LogicalName>Resources.EnvironmentMapEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.gles.fxo">
       <LogicalName>Resources.SkinnedEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.gles.fxo">
       <LogicalName>Resources.SpriteEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

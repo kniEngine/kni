@@ -313,6 +313,20 @@
     <Compile Include="Properties\AssemblyInfo.Android.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-arm\native\libopenal.so">
+      <Link>libs\armeabi-v7a\libopenal.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-arm64\native\libopenal.so">
+      <Link>libs\arm64-v8a\libopenal.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-x86\native\libopenal.so">
+      <Link>libs\x86\libopenal.so</Link>
+    </EmbeddedNativeLibrary>
+    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-x64\native\libopenal.so">
+      <Link>libs\x86_64\libopenal.so</Link>
+    </EmbeddedNativeLibrary>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.gles.fxo">
       <LogicalName>Resources.AlphaTestEffect.fxo</LogicalName>
     </EmbeddedResource>
@@ -331,20 +345,6 @@
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.gles.fxo">
       <LogicalName>Resources.SpriteEffect.fxo</LogicalName>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-arm\native\libopenal.so">
-      <Link>libs\armeabi-v7a\libopenal.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-arm64\native\libopenal.so">
-      <Link>libs\arm64-v8a\libopenal.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-x86\native\libopenal.so">
-      <Link>libs\x86\libopenal.so</Link>
-    </EmbeddedNativeLibrary>
-    <EmbeddedNativeLibrary Include="..\ThirdParty\Dependencies\openal-soft\1.16.0\runtimes\android-x64\native\libopenal.so">
-      <Link>libs\x86_64\libopenal.so</Link>
-    </EmbeddedNativeLibrary>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
 </Project>

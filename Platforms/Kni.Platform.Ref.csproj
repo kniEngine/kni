@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	<EnableDefaultItems>false</EnableDefaultItems>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
     <LangVersion>7.3</LangVersion>
@@ -96,7 +96,7 @@
     <Compile Include="Audio\Ref\ConcreteSoundEffect.cs" />
     <Compile Include="Audio\Ref\ConcreteSoundEffectInstance.cs" />
   </ItemGroup>
-	
+
   <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
     <Compile Include="Devices\.Ref\ConcreteDevicesFactory.cs" />
     <Compile Include="Devices\.Ref\ConcreteHaptics.cs" />

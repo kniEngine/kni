@@ -29,7 +29,7 @@
     <Product>Xna.Framework</Product>
     <Company>Kastellanos Nikos</Company>
   </PropertyGroup>
-	
+
   <ItemGroup>
     <EmbeddedResource Include="ILLink.Descriptors.xml">
       <LogicalName>ILLink.Descriptors.xml</LogicalName>
@@ -39,7 +39,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
   </PropertyGroup>
-	
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
 
@@ -460,24 +460,24 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-	<EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo">
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.fxo">
       <LogicalName>Resources.AlphaTestEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.fxo">
       <LogicalName>Resources.BasicEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.fxo">
       <LogicalName>Resources.DualTextureEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.fxo">
       <LogicalName>Resources.EnvironmentMapEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.fxo">
       <LogicalName>Resources.SkinnedEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.fxo">
       <LogicalName>Resources.SpriteEffect.fxo</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
