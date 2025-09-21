@@ -1,6 +1,71 @@
 ﻿# Changelog
 
 
+## 4.2.9001 Release - October ??, 2025
+
+### Fixed
+ - fix ColorWriter RuntimeType namespace #2298
+ - fix parsing WMV metadata #2322
+ - fix BuildEvent SourceFile for external references #2333
+ - fix GraphicsResourceStrategy.Dispose() #2334
+ - fix OpenAL default microphone selection #2339
+ - content editor preserve Link #2345
+ - fix GL Clear(...) #2354
+ - fix SoundEffectInstance default Volume #2360
+ - Fix SFX MasterVolume #2381
+ - fix parsing WebM metadata #2386
+ - fix ShouldNotOverrideTextures tests #2401
+ - fix BoundingFrustum Intersects BoundingSphere #2436
+ - fix Android ConcreteVideoPlayer IsLooped #2439
+ - fix Android ConcreteMediaPlayerStrategy IsRepeating #2440
+ - Fix GLes precision #2448
+ - fix Incremental builds #2449
+ - fix shouldSetAndGetOptimizedMatrixArray Test #2466
+ - fix SDL MediaPlayer.IsRepeating gaps #2515
+
+### Performance
+ - optimize ConstantBufferStrategy.SetData(...) #2320
+ - optimize CreateGeometry(...) #2336
+ - perf SoundEffectProcessor #2369
+ - reduce allocations on OpenAL DynamicSoundEffectInstance #2484
+ - reduce allocations on OpenAL SoundEffect #2489
+ - reduce ModelBoneCollection allocations #2501
+
+### Changed
+ - PathComparer #2290
+ - upgrade to SharpDX 4.2.0 #2297, #2479
+ - Transcode Video files #2324
+ - check Shader model Version #2350
+ - default media formats #2384
+ - use WebM as the default on all platforms #2388
+ - use MP3 as the default on all platforms #2389
+ - KNIFX Format #2396, #2400
+ - GLSL 300es Shaders #2406
+ - Allow SM4.0 on GLSL #2428, #2446
+ - seperate GL shaders #2456, #2457, #2463
+ - Multiplatform KNIFX #2464
+ - update Wasm v8.0.10 #2467
+ - resolving packages modal window #2471
+ - preserve ProcessorParams #2476, #2482
+ - upgrade Android to to 166K aligned OpenAL v1.24.3 + OBOE #2495, #2504
+ - Thread-safe Model.Draw(...) #2500
+ - allow WebGL feature level FL10_0 #2517
+	- 
+### Added
+ - VideoImporter #2385
+ - implement WebAudio Pan #2361
+ - implement WebAudio Ieee float #2367
+ - implement Android ConcreteMouse #2422, #2423
+ - Implements BlazorGameWindow.OnTextInput #2351
+ - Implements Mouse.SetCursor for BlazorGL #2346
+ - Implements DrawInstancedPrimitives support for BlazorGL #2338
+ - implements DynamicSoundEffectInstance for BlazorGL #2468
+ - implements MicrophoneStrategy for BlazorGL #2469
+ - implements WinForms.DX SaveAsJpeg() #2519
+
+### Removed
+ - drop support for legacy MGFX v09 #2397
+
 ## 4.1.9001 Release - April 08, 2025
 
 ### Fixed
