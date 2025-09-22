@@ -652,62 +652,60 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(aiParent != null);
 
             BoneContent bone = null;
+            if (_bones.Contains(aiNode))
             {
-                if (_bones.Contains(aiNode))
+                // Bone
+                bone = new BoneContent();
+                bone.Name = aiNode.Name;
+                bone.Identity = _identity;
+
+                // node.Transform is irrelevant for bones. This transform is just the
+                // pose of the node at the time of the export. This could, for example,
+                // be one of the animation frames. It is not necessarily the bind pose
+                // (rest pose)!
+                // In XNA BoneContent.Transform needs to be set to the relative bind pose
+                // matrix. The relative bind pose matrix can be derived from the OffsetMatrix
+                // which is stored in aiMesh.Bones.
+                //
+                // offsetMatrix ... Offset matrix. Transforms the mesh from local space to bone space in bind pose.
+                // bindPoseRel  ... Relative bind pose matrix. Defines the transform of a bone relative to its parent bone.
+                // bindPoseAbs  ... Absolute bind pose matrix. Defines the transform of a bone relative to world space.
+                //
+                // The offset matrix is the inverse of the absolute bind pose matrix.
+                //   offsetMatrix = inverse(bindPoseAbs)
+                //
+                // bindPoseAbs = bindPoseRel * parentBindPoseAbs
+                // => bindPoseRel = bindPoseAbs * inverse(parentBindPoseAbs)
+                //                = inverse(offsetMatrix) * parentOffsetMatrix
+
+                _deformationBones.TryGetValue(aiNode.Name, out Bone aiBone);
+                _deformationBones.TryGetValue(aiParent.Name, out Bone aiParentBone);
+
+                if (aiBone != null && aiParentBone != null)
                 {
-                    // Bone
-                    bone = new BoneContent();
-                    bone.Name = aiNode.Name;
-                    bone.Identity = _identity;
-
-                    // node.Transform is irrelevant for bones. This transform is just the
-                    // pose of the node at the time of the export. This could, for example,
-                    // be one of the animation frames. It is not necessarily the bind pose
-                    // (rest pose)!
-                    // In XNA BoneContent.Transform needs to be set to the relative bind pose
-                    // matrix. The relative bind pose matrix can be derived from the OffsetMatrix
-                    // which is stored in aiMesh.Bones.
-                    //
-                    // offsetMatrix ... Offset matrix. Transforms the mesh from local space to bone space in bind pose.
-                    // bindPoseRel  ... Relative bind pose matrix. Defines the transform of a bone relative to its parent bone.
-                    // bindPoseAbs  ... Absolute bind pose matrix. Defines the transform of a bone relative to world space.
-                    //
-                    // The offset matrix is the inverse of the absolute bind pose matrix.
-                    //   offsetMatrix = inverse(bindPoseAbs)
-                    //
-                    // bindPoseAbs = bindPoseRel * parentBindPoseAbs
-                    // => bindPoseRel = bindPoseAbs * inverse(parentBindPoseAbs)
-                    //                = inverse(offsetMatrix) * parentOffsetMatrix
-
-                    _deformationBones.TryGetValue(aiNode.Name, out Bone aiBone);
-                    _deformationBones.TryGetValue(aiParent.Name, out Bone aiParentBone);
-
-                    if (aiBone != null && aiParentBone != null)
-                    {
-                        bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * ToXna(aiParentBone.OffsetMatrix);
-                    }
-                    else if (aiBone != null && aiNode == _rootBone)
-                    {
-                        // The current bone is the first in the chain.
-                        // The parent offset matrix is missing. :(
+                    bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * ToXna(aiParentBone.OffsetMatrix);
+                }
+                else if (aiBone != null && aiNode == _rootBone)
+                {
+                    // The current bone is the first in the chain.
+                    // The parent offset matrix is missing. :(
                        
-                        // --> Let's assume that parent's transform is Identity.
-                        bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix));
-                    }
-                    else if (aiBone != null && aiParent == _rootBone)
-                    {
-                        // The current bone is the second bone in the chain.
-                        // The parent offset matrix is missing. :(
-                        // --> Derive matrix from parent bone, which is the root bone.
-                        bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * Matrix.Invert(parentBone.Transform);
-                    }
-                    else
-                    {
-                        // Offset matrices are not provided by Assimp. :(
-                        // Let's hope that the skeleton was exported in bind pose.
-                        // (Otherwise we are just importing garbage.)
-                        bone.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
-                    }
+                    // --> Let's assume that parent's transform is Identity.
+                    bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix));
+                }
+                else if (aiBone != null && aiParent == _rootBone)
+                {
+                    // The current bone is the second bone in the chain.
+                    // The parent offset matrix is missing. :(
+                    // --> Derive matrix from parent bone, which is the root bone.
+                    bone.Transform = Matrix.Invert(ToXna(aiBone.OffsetMatrix)) * Matrix.Invert(parentBone.Transform);
+                }
+                else
+                {
+                    // Offset matrices are not provided by Assimp. :(
+                    // Let's hope that the skeleton was exported in bind pose.
+                    // (Otherwise we are just importing garbage.)
+                    bone.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
                 }
             }
 
