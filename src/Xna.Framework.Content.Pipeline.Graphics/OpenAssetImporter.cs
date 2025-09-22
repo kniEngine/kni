@@ -707,10 +707,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                     // (Otherwise we are just importing garbage.)
                     bone.Transform = ToXna(GetRelativeTransform(aiNode, aiParent));
                 }
-            }
 
-            if (bone != null)
-            {
                 if (parentBone != null)
                     parentBone.Children.Add(bone);
 
