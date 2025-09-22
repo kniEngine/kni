@@ -651,11 +651,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             Debug.Assert(aiNode != null);
             Debug.Assert(aiParent != null);
 
-            BoneContent bone = null;
             if (_bones.Contains(aiNode))
             {
                 // Bone
-                bone = new BoneContent();
+                BoneContent bone = new BoneContent();
                 bone.Name = aiNode.Name;
                 bone.Identity = _identity;
 
@@ -725,7 +724,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 foreach (Node aiChild in aiNode.Children)
                     ImportBones(aiChild, aiParent, parentBone);
 
-                return bone;
+                return null;
             }
         }
 
