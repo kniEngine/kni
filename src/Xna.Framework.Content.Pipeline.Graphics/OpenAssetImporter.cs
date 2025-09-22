@@ -555,6 +555,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         }
 
         /// <summary>
+        /// Copies the current node and all descendant nodes into a list.
+        /// </summary>
+        /// <param name="aiNode">The current node.</param>
+        /// <param name="list">The list.</param>
+        private static void GetSubtree(Node aiNode, List<Node> list)
+        {
+            Debug.Assert(aiNode != null);
+            Debug.Assert(list != null);
+
+            list.Add(aiNode);
+            foreach (Node aiChild in aiNode.Children)
+                GetSubtree(aiChild, list);
+        }
+
+        /// <summary>
         /// Finds the deformation bones (= bones attached to meshes).
         /// </summary>
         /// <param name="aiScene">The scene.</param>
@@ -875,21 +890,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             }
 
             return animation;
-        }
-
-        /// <summary>
-        /// Copies the current node and all descendant nodes into a list.
-        /// </summary>
-        /// <param name="aiNode">The current node.</param>
-        /// <param name="list">The list.</param>
-        private static void GetSubtree(Node aiNode, List<Node> list)
-        {
-            Debug.Assert(aiNode != null);
-            Debug.Assert(list != null);
-
-            list.Add(aiNode);
-            foreach (Node aiChild in aiNode.Children)
-                GetSubtree(aiChild, list);
         }
 
         /// <summary>
