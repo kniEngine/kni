@@ -710,12 +710,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 if (parentBone != null)
                     parentBone.Children.Add(bone);
 
-                // For the children, this is the new parent.
-                aiParent = aiNode;
-                parentBone = bone;
-
                 foreach (Node aiChild in aiNode.Children)
-                    ImportBones(aiChild, aiParent, parentBone);
+                    ImportBones(aiChild, aiNode, bone);
 
                 return bone;
             }
