@@ -714,12 +714,19 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
                 // For the children, this is the new parent.
                 aiParent = aiNode;
                 parentBone = bone;
+
+                foreach (Node aiChild in aiNode.Children)
+                    ImportBones(aiChild, aiParent, parentBone);
+
+                return bone;
             }
+            else
+            {
+                foreach (Node aiChild in aiNode.Children)
+                    ImportBones(aiChild, aiParent, parentBone);
 
-            foreach (Node aiChild in aiNode.Children)
-                ImportBones(aiChild, aiParent, parentBone);
-
-            return bone;
+                return bone;
+            }
         }
 
         /// <summary>
