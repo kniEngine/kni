@@ -42,6 +42,16 @@ namespace Microsoft.Xna.Framework.Graphics
             set { this._transform = value; }
         }
         
+        internal ModelBone(int index, string name, Matrix transform)
+        {
+            Children = new ModelBoneCollection(new List<ModelBone>());
+
+            this.Index = index;
+            this.Name = name;
+            this.Transform = transform;
+        }
+
+        // tests only
         internal ModelBone()
         {
             Children = new ModelBoneCollection(new List<ModelBone>());

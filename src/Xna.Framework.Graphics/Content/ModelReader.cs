@@ -29,10 +29,7 @@ namespace Microsoft.Xna.Framework.Content
             {
                 string boneName = input.ReadObject<string>();
                 Matrix boneTransform = input.ReadMatrix();
-                ModelBone bone = new ModelBone();
-                bone.Index = (int)boneIndex;
-                bone.Name = boneName;
-                bone.Transform = boneTransform;
+                ModelBone bone = new ModelBone((int)boneIndex, boneName, boneTransform);
                 bones.Add(bone);
             }
             
