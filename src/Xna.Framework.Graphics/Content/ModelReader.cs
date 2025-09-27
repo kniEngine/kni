@@ -25,18 +25,18 @@ namespace Microsoft.Xna.Framework.Content
 
             List<ModelBone> bones = new List<ModelBone>((int)boneCount);
 
-            for (uint i = 0; i < boneCount; i++)
+            for (uint boneIndex = 0; boneIndex < boneCount; boneIndex++)
             {
                 string boneName = input.ReadObject<string>();
                 Matrix boneTransform = input.ReadMatrix();
-                ModelBone bone = new ModelBone { Transform = boneTransform, Index = (int)i, Name = boneName };
+                ModelBone bone = new ModelBone { Transform = boneTransform, Index = (int)boneIndex, Name = boneName };
                 bones.Add(bone);
             }
             
             // Read the bone hierarchy.
-            for (int i = 0; i < boneCount; i++)
+            for (int boneIndex = 0; boneIndex < boneCount; boneIndex++)
             {
-                ModelBone bone = bones[i];
+                ModelBone bone = bones[boneIndex];
 
                 //Debug.WriteLine("Bone {0} hierarchy:", i);
 
