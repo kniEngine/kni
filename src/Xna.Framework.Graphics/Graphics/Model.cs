@@ -123,8 +123,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    int index = modelBone.Parent.Index;
-                    Matrix.Multiply(ref modelBone._transform, ref destinationBoneTransforms[index], out destinationBoneTransforms[i]);
+                    int parentBoneIndex = modelBone.Parent.Index;
+                    Matrix.Multiply(ref modelBone._transform, ref destinationBoneTransforms[parentBoneIndex], out destinationBoneTransforms[i]);
                 }
             }
         }
