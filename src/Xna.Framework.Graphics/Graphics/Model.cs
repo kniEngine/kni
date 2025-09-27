@@ -119,12 +119,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 if (modelBone.Parent == null)
                 {
-                    destinationBoneTransforms[i] = modelBone.transform;
+                    destinationBoneTransforms[i] = modelBone._transform;
                 }
                 else
                 {
                     int index = modelBone.Parent.Index;
-                    Matrix.Multiply(ref modelBone.transform, ref destinationBoneTransforms[index], out destinationBoneTransforms[i]);
+                    Matrix.Multiply(ref modelBone._transform, ref destinationBoneTransforms[index], out destinationBoneTransforms[i]);
                 }
             }
         }

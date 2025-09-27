@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private List<ModelMesh> _meshes = new List<ModelMesh>();
 
-        internal Matrix transform;
+        internal Matrix _transform;
 
         /// <summary>
         /// Gets a collection of bones that are children of this bone.
@@ -40,8 +40,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         public Matrix Transform
         { 
-            get { return this.transform; }
-            set { this.transform = value; }
+            get { return this._transform; }
+            set { this._transform = value; }
         }
         
         internal ModelBone()
