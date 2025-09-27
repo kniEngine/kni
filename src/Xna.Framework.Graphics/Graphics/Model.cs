@@ -117,14 +117,14 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 ModelBone modelBone = this.Bones[i];
 
-                if (modelBone.Parent == null)
-                {
-                    destinationBoneTransforms[i] = modelBone._transform;
-                }
-                else
+                if (modelBone.Parent != null)
                 {
                     int parentBoneIndex = modelBone.Parent.Index;
                     Matrix.Multiply(ref modelBone._transform, ref destinationBoneTransforms[parentBoneIndex], out destinationBoneTransforms[i]);
+                }
+                else
+                {
+                    destinationBoneTransforms[i] = modelBone._transform;
                 }
             }
         }
