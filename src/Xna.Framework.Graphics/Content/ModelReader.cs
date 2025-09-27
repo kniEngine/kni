@@ -56,9 +56,7 @@ namespace Microsoft.Xna.Framework.Content
                 {
                     int childIndex = ReadBoneReference(input, is8BitBoneReference);
                     if (childIndex != -1)
-                    {
                         bone.AddChild(bones[childIndex]);
-                    }
                 }
             }
 
