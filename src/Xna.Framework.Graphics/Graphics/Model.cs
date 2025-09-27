@@ -68,17 +68,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="view">The view transform.</param>
         /// <param name="projection">The projection transform.</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public void Draw(Matrix world, Matrix view, Matrix projection) 
-        {       
-            int boneCount = this.Bones.Count;
+        public void Draw(Matrix world, Matrix view, Matrix projection)
+        {
+            if (_sharedDrawBoneMatrices == null
+            ||  _sharedDrawBoneMatrices.Length < this.Bones.Count)
+                _sharedDrawBoneMatrices = new Matrix[this.Bones.Count];
             
-            if (_sharedDrawBoneMatrices == null ||
-                _sharedDrawBoneMatrices.Length < boneCount)
-            {
-                _sharedDrawBoneMatrices = new Matrix[boneCount];    
-            }
-            
-            // Look up combined bone matrices for the entire model.            
+            // Look up combined bone matrices for the entire model.
             CopyAbsoluteBoneTransformsTo(_sharedDrawBoneMatrices);
 
             // Draw the model.
@@ -111,18 +107,20 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentNullException("destinationBoneTransforms");
             if (destinationBoneTransforms.Length < this.Bones.Count)
                 throw new ArgumentOutOfRangeException("destinationBoneTransforms");
+
             int count = this.Bones.Count;
             for (int i = 0; i < count; i++)
             {
-                ModelBone modelBone = (this.Bones)[i];
-                if (modelBone.Parent == null)
+                ModelBone modelBone = this.Bones[i];
+
+                if (modelBone.Parent != null)
                 {
-                    destinationBoneTransforms[i] = modelBone.transform;
+                    int parentBoneIndex = modelBone.Parent.Index;
+                    Matrix.Multiply(ref modelBone._transform, ref destinationBoneTransforms[parentBoneIndex], out destinationBoneTransforms[i]);
                 }
                 else
                 {
-                    int index = modelBone.Parent.Index;
-                    Matrix.Multiply(ref modelBone.transform, ref destinationBoneTransforms[index], out destinationBoneTransforms[i]);
+                    destinationBoneTransforms[i] = modelBone._transform;
                 }
             }
         }

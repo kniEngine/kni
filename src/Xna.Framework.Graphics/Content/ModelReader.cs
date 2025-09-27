@@ -25,18 +25,18 @@ namespace Microsoft.Xna.Framework.Content
 
             List<ModelBone> bones = new List<ModelBone>((int)boneCount);
 
-            for (uint i = 0; i < boneCount; i++)
+            for (uint boneIndex = 0; boneIndex < boneCount; boneIndex++)
             {
-                string name = input.ReadObject<string>();
-                Matrix matrix = input.ReadMatrix();
-                ModelBone bone = new ModelBone { Transform = matrix, Index = (int)i, Name = name };
+                string boneName = input.ReadObject<string>();
+                Matrix boneTransform = input.ReadMatrix();
+                ModelBone bone = new ModelBone((int)boneIndex, boneName, boneTransform);
                 bones.Add(bone);
             }
             
             // Read the bone hierarchy.
-            for (int i = 0; i < boneCount; i++)
+            for (int boneIndex = 0; boneIndex < boneCount; boneIndex++)
             {
-                ModelBone bone = bones[i];
+                ModelBone bone = bones[boneIndex];
 
                 //Debug.WriteLine("Bone {0} hierarchy:", i);
 
@@ -45,25 +45,18 @@ namespace Microsoft.Xna.Framework.Content
                 int parentIndex = ReadBoneReference(input, is8BitBoneReference);
 
                 if (parentIndex != -1)
-                {
                     bone.Parent = bones[parentIndex];
-                }
 
                 // Read the child bone references.
                 uint childCount = input.ReadUInt32();
 
-                if (childCount != 0)
-                {
-                    //Debug.WriteLine("Children:");
+                //Debug.WriteLine("Children:");
 
-                    for (uint j = 0; j < childCount; j++)
-                    {
-                        int childIndex = ReadBoneReference(input, is8BitBoneReference);
-                        if (childIndex != -1)
-                        {
-                            bone.AddChild(bones[childIndex]);
-                        }
-                    }
+                for (uint j = 0; j < childCount; j++)
+                {
+                    int childIndex = ReadBoneReference(input, is8BitBoneReference);
+                    if (childIndex != -1)
+                        bone.AddChild(bones[childIndex]);
                 }
             }
 
@@ -131,12 +124,9 @@ namespace Microsoft.Xna.Framework.Content
 
                 ModelMesh mesh = new ModelMesh(input.GetGraphicsDevice(), parts);
 
-                // Tag reassignment
                 mesh.Tag = meshTag;
-
                 mesh.Name = name;
                 mesh.ParentBone = bones[parentBoneIndex];
-                mesh.ParentBone.AddMesh(mesh);
                 mesh.BoundingSphere = boundingSphere;
                 meshes.Add(mesh);
             }
