@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public sealed class Model
     {
-        private static Matrix[] _sharedDrawBoneMatrices;
+        private Matrix[] _cachedBoneTransforms;
         
         /// <summary>
         /// A collection of <see cref="ModelBone"/> objects which describe how each mesh in the
@@ -70,12 +70,11 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <exception cref="InvalidOperationException"></exception>
         public void Draw(Matrix world, Matrix view, Matrix projection)
         {
-            if (_sharedDrawBoneMatrices == null
-            ||  _sharedDrawBoneMatrices.Length < this.Bones.Count)
-                _sharedDrawBoneMatrices = new Matrix[this.Bones.Count];
+            if (_cachedBoneTransforms == null)
+                _cachedBoneTransforms = new Matrix[this.Bones.Count];
             
             // Look up combined bone matrices for the entire model.
-            CopyAbsoluteBoneTransformsTo(_sharedDrawBoneMatrices);
+            CopyAbsoluteBoneTransformsTo(_cachedBoneTransforms);
 
             // Draw the model.
             foreach (ModelMesh mesh in Meshes)
@@ -85,7 +84,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     IEffectMatrices effectMatricies = effect as IEffectMatrices;
                     if (effectMatricies != null)
                     {						
-                        effectMatricies.World = _sharedDrawBoneMatrices[mesh.ParentBone.Index] * world;
+                        effectMatricies.World = _cachedBoneTransforms[mesh.ParentBone.Index] * world;
                         effectMatricies.View = view;
                         effectMatricies.Projection = projection;
                     }
