@@ -28,8 +28,8 @@ namespace Microsoft.Xna.Framework.Content
             for (uint i = 0; i < boneCount; i++)
             {
                 string name = input.ReadObject<string>();
-                Matrix matrix = input.ReadMatrix();
-                ModelBone bone = new ModelBone { Transform = matrix, Index = (int)i, Name = name };
+                Matrix boneTransform = input.ReadMatrix();
+                ModelBone bone = new ModelBone { Transform = boneTransform, Index = (int)i, Name = name };
                 bones.Add(bone);
             }
             
