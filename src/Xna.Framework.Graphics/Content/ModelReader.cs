@@ -27,9 +27,9 @@ namespace Microsoft.Xna.Framework.Content
 
             for (uint i = 0; i < boneCount; i++)
             {
-                string name = input.ReadObject<string>();
+                string boneName = input.ReadObject<string>();
                 Matrix boneTransform = input.ReadMatrix();
-                ModelBone bone = new ModelBone { Transform = boneTransform, Index = (int)i, Name = name };
+                ModelBone bone = new ModelBone { Transform = boneTransform, Index = (int)i, Name = boneName };
                 bones.Add(bone);
             }
             
