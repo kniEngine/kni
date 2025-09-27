@@ -95,7 +95,11 @@ namespace Kni.Tests.Graphics
         [Test]
         public void ShouldReadTransformationsFromBones()
         {
-            List<ModelBone> someBones = new ModelBone[] { new ModelBone(), new ModelBone() }.ToList();
+            List<ModelBone> someBones = new ModelBone[] 
+            { 
+                new ModelBone(),
+                new ModelBone()
+            }.ToList();
             Model model = new Model(someBones, new List<ModelMesh>());
 
             Matrix[] expected = new Matrix[] { Matrix.Identity * 1, Matrix.Identity * 2 };
@@ -111,7 +115,10 @@ namespace Kni.Tests.Graphics
         [Test]
         public void CopyBoneTransformsFrom_Exceptions()
         {
-            List<ModelBone> someBones = new ModelBone[] { new ModelBone() }.ToList();
+            List<ModelBone> someBones = new ModelBone[]
+            { 
+                new ModelBone() 
+            }.ToList();
             Model model = new Model(someBones, new List<ModelMesh>());
 
             Assert.Throws<ArgumentNullException>(() => model.CopyBoneTransformsFrom(null));
@@ -121,8 +128,12 @@ namespace Kni.Tests.Graphics
         [Test]
         public void CopyBoneTransformsTo_Exceptions()
         {
-            List<ModelBone> someBones = new ModelBone[] { new ModelBone() }.ToList();
+            List<ModelBone> someBones = new ModelBone[]
+            {
+                new ModelBone()
+            }.ToList();
             Model model = new Model(someBones, new List<ModelMesh>());
+
             Assert.Throws<ArgumentNullException>(() => model.CopyBoneTransformsTo(null));
             Assert.Throws<ArgumentOutOfRangeException>(() => model.CopyBoneTransformsTo(new Matrix[0]));
         }

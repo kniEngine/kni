@@ -404,8 +404,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </remarks>
         private NodeContent ImportNodes(ContentImporterContext context, Scene aiScene, Node aiNode, List<MaterialContent> materials, Node aiParent, NodeContent parent)
         {
-            Debug.Assert(aiNode != null);
-
             NodeContent node = null;
             if (aiNode.HasMeshes)
             {
@@ -561,9 +559,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <param name="list">The list.</param>
         private static void GetSubtree(Node aiNode, List<Node> list)
         {
-            Debug.Assert(aiNode != null);
-            Debug.Assert(list != null);
-
             list.Add(aiNode);
             foreach (Node aiChild in aiNode.Children)
                 GetSubtree(aiChild, list);
@@ -576,9 +571,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <returns>A dictionary of all deformation bones and their offset matrices.</returns>
         private static Dictionary<string, Bone> FindDeformationBones(Scene aiScene)
         {
-            Debug.Assert(aiScene != null);
-
             Dictionary<string, Bone> deformationBones = new Dictionary<string, Bone>();
+
             if (aiScene.HasMeshes)
                 foreach (Mesh aiMesh in aiScene.Meshes)
                     if (aiMesh.HasBones)
@@ -597,7 +591,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// <returns>The root bone.</returns>
         private static Node FindRootBone(Scene aiScene, string boneName)
         {
-            Debug.Assert(aiScene != null);
             Debug.Assert(!string.IsNullOrEmpty(boneName));
 
             // Start with the specified bone.
@@ -649,7 +642,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         private BoneContent ImportBones(Node aiNode, Node aiParent, BoneContent parentBone)
         {
             Debug.Assert(aiNode != null);
-            Debug.Assert(aiParent != null);
 
             if (_bones.Contains(aiNode))
             {
@@ -900,8 +892,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
         /// </returns>
         private static Matrix4x4 GetRelativeTransform(Node node, Node ancestorNode)
         {
-            Debug.Assert(node != null);
-
             // Get transform of node relative to ancestor.
             Matrix4x4 transform = node.Transform;
             for (Node parent = node.Parent; parent != ancestorNode; parent = parent.Parent)
