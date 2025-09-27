@@ -50,16 +50,14 @@ namespace Microsoft.Xna.Framework.Content
                 // Read the child bone references.
                 uint childCount = input.ReadUInt32();
 
-                {
-                    //Debug.WriteLine("Children:");
+                //Debug.WriteLine("Children:");
 
-                    for (uint j = 0; j < childCount; j++)
+                for (uint j = 0; j < childCount; j++)
+                {
+                    int childIndex = ReadBoneReference(input, is8BitBoneReference);
+                    if (childIndex != -1)
                     {
-                        int childIndex = ReadBoneReference(input, is8BitBoneReference);
-                        if (childIndex != -1)
-                        {
-                            bone.AddChild(bones[childIndex]);
-                        }
+                        bone.AddChild(bones[childIndex]);
                     }
                 }
             }
