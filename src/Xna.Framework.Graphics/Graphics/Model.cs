@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="view">The view transform.</param>
         /// <param name="projection">The projection transform.</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public void Draw(Matrix world, Matrix view, Matrix projection) 
+        public void Draw(Matrix world, Matrix view, Matrix projection)
         {
             if (_sharedDrawBoneMatrices == null
             ||  _sharedDrawBoneMatrices.Length < this.Bones.Count)
