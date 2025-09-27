@@ -21,12 +21,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets the index of this bone in the Bones collection.
         /// </summary>
-        public int Index { get; internal set; }
+        public int Index { get; private set; }
 
         /// <summary>
         /// Gets the name of this bone.
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets the parent of this bone.
