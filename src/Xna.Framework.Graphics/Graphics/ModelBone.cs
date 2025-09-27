@@ -11,8 +11,6 @@ namespace Microsoft.Xna.Framework.Graphics
     {
         private List<ModelBone> _children = new List<ModelBone>();
 
-        private List<ModelMesh> _meshes = new List<ModelMesh>();
-
         internal Matrix _transform;
 
         /// <summary>
@@ -47,11 +45,6 @@ namespace Microsoft.Xna.Framework.Graphics
         internal ModelBone()
         {
             Children = new ModelBoneCollection(new List<ModelBone>());
-        }
-
-        internal void AddMesh(ModelMesh mesh)
-        {
-            _meshes.Add(mesh);
         }
 
         internal void AddChild(ModelBone childModelBone)

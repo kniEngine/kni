@@ -130,7 +130,6 @@ namespace Microsoft.Xna.Framework.Content
                 mesh.Tag = meshTag;
                 mesh.Name = name;
                 mesh.ParentBone = bones[parentBoneIndex];
-                mesh.ParentBone.AddMesh(mesh);
                 mesh.BoundingSphere = boundingSphere;
                 meshes.Add(mesh);
             }
