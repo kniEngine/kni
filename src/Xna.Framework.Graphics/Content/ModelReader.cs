@@ -50,7 +50,6 @@ namespace Microsoft.Xna.Framework.Content
                 // Read the child bone references.
                 uint childCount = input.ReadUInt32();
 
-                if (childCount != 0)
                 {
                     //Debug.WriteLine("Children:");
 
