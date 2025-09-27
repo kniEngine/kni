@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_sharedDrawBoneMatrices == null ||
                 _sharedDrawBoneMatrices.Length < boneCount)
             {
-                _sharedDrawBoneMatrices = new Matrix[boneCount];    
+                _sharedDrawBoneMatrices = new Matrix[boneCount];
             }
             
             // Look up combined bone matrices for the entire model.
