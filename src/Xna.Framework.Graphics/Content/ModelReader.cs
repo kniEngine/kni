@@ -45,9 +45,7 @@ namespace Microsoft.Xna.Framework.Content
                 int parentIndex = ReadBoneReference(input, is8BitBoneReference);
 
                 if (parentIndex != -1)
-                {
                     bone.Parent = bones[parentIndex];
-                }
 
                 // Read the child bone references.
                 uint childCount = input.ReadUInt32();
