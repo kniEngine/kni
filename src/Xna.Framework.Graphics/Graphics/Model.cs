@@ -70,12 +70,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <exception cref="InvalidOperationException"></exception>
         public void Draw(Matrix world, Matrix view, Matrix projection) 
         {
-            int boneCount = this.Bones.Count;
-            
             if (_sharedDrawBoneMatrices == null ||
-                _sharedDrawBoneMatrices.Length < boneCount)
+                _sharedDrawBoneMatrices.Length < this.Bones.Count)
             {
-                _sharedDrawBoneMatrices = new Matrix[boneCount];
+                _sharedDrawBoneMatrices = new Matrix[this.Bones.Count];
             }
             
             // Look up combined bone matrices for the entire model.
