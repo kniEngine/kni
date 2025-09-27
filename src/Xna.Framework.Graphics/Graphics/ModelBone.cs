@@ -54,9 +54,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _meshes.Add(mesh);
         }
 
-        internal void AddChild(ModelBone modelBone)
+        internal void AddChild(ModelBone childModelBone)
         {
-            _children.Add(modelBone);
+            _children.Add(childModelBone);
             Children = new ModelBoneCollection(_children);
         }
     }
