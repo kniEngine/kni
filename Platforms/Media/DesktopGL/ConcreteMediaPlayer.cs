@@ -85,9 +85,7 @@ namespace Microsoft.Xna.Platform.Media
 
                 ConcreteSoundEffectInstance soundEffectInstanceStrategy = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteSoundEffectInstance>();
                 int sampleOffset = soundEffectInstanceStrategy.GetSamplePosition();
-                int currentBytes = sampleOffset * _reader.Channels * sizeof(short);
-                int totalBytes = currentBytes + _consumedBufferBytes;
-                TimeSpan time = _player.GetSampleDuration(totalBytes);
+                TimeSpan time = _consumedBufferDuration + _player.GetSampleDuration(sampleOffset * _reader.Channels * sizeof(short));
                 return time;
             }
         }
@@ -128,7 +126,7 @@ namespace Microsoft.Xna.Platform.Media
                         return;
                     case SoundState.Stopped:
                         _bufferNeededCount = 0;
-                        _consumedBufferBytes = 0;
+                        _consumedBufferDuration = TimeSpan.Zero;
 
                         _player.Volume = innerVolume;
                         _player.Play();
@@ -197,11 +195,18 @@ namespace Microsoft.Xna.Platform.Media
 
         struct BufferInfo
         {
-            public int BufferBytes;
+            public readonly int SizeInBytes;
+            public readonly TimeSpan Duration;
+
+            public BufferInfo(int sizeInBytes, TimeSpan duration)
+            {
+                this.SizeInBytes = sizeInBytes;
+                this.Duration = duration;
+            }
         }
 
         Queue<BufferInfo> _bufferQueue = new Queue<BufferInfo>();
-        int _consumedBufferBytes = 0;
+        TimeSpan _consumedBufferDuration = TimeSpan.Zero;
         int _bufferNeededCount = 0;
 
         internal unsafe void sfxi_BufferNeeded(object sender, EventArgs e)
@@ -211,13 +216,13 @@ namespace Microsoft.Xna.Platform.Media
             int pendingBufferCount = sfxi.PendingBufferCount;
             int bufferQueueCount = _bufferQueue.Count;
 
-            BufferInfo currdata = default;
+            BufferInfo currBufferInfo = default;
             if (_bufferNeededCount >= 3)
             {
                 if (_bufferQueue.Count > 0)
                 {
-                    currdata = _bufferQueue.Dequeue();
-                    _consumedBufferBytes += currdata.BufferBytes;
+                    currBufferInfo = _bufferQueue.Dequeue();
+                    _consumedBufferDuration += currBufferInfo.Duration;
                 }
             }
             else
@@ -232,11 +237,12 @@ namespace Microsoft.Xna.Platform.Media
                 {
                     ConcreteMediaPlayerStrategy.ConvertFloat32ToInt16(pSampleBuffer, (short*)pDataBuffer, count);
                 }
-                sfxi.SubmitBuffer(_dataBuffer, 0, count * sizeof(short));
+
+                int sizeInBytes = count * sizeof(short);
+                sfxi.SubmitBuffer(_dataBuffer, 0, sizeInBytes);
 
                 //submit BufferInfo
-                BufferInfo bufferInfo = default;
-                bufferInfo.BufferBytes = count * sizeof(short);
+                BufferInfo bufferInfo = new BufferInfo(sizeInBytes, _player.GetSampleDuration(sizeInBytes));
                 _bufferQueue.Enqueue(bufferInfo);
             }
 
@@ -267,7 +273,7 @@ namespace Microsoft.Xna.Platform.Media
 
                         _reader.DecodedPosition = 0; // reset song
                         _bufferNeededCount = 0;
-                        _consumedBufferBytes = 0;
+                        _consumedBufferDuration = TimeSpan.Zero;
 
                         OnPlatformActiveSongChanged();
                     }
