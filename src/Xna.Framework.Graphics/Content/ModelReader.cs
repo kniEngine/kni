@@ -133,7 +133,6 @@ namespace Microsoft.Xna.Framework.Content
 
                 // Tag reassignment
                 mesh.Tag = meshTag;
-
                 mesh.Name = name;
                 mesh.ParentBone = bones[parentBoneIndex];
                 mesh.ParentBone.AddMesh(mesh);

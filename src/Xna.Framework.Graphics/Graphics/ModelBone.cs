@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public sealed class ModelBone
     {
         private List<ModelBone> _children = new List<ModelBone>();
-        
+
         private List<ModelMesh> _meshes = new List<ModelMesh>();
 
         internal Matrix transform;
@@ -38,17 +38,17 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Gets or sets the matrix used to transform this bone relative to its parent bone.
         /// </summary>
-        public Matrix Transform 
+        public Matrix Transform
         { 
-            get { return this.transform; } 
+            get { return this.transform; }
             set { this.transform = value; }
         }
         
-        internal ModelBone()	
+        internal ModelBone()
         {
             Children = new ModelBoneCollection(new List<ModelBone>());
         }
-        
+
         internal void AddMesh(ModelMesh mesh)
         {
             _meshes.Add(mesh);

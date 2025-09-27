@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="projection">The projection transform.</param>
         /// <exception cref="InvalidOperationException"></exception>
         public void Draw(Matrix world, Matrix view, Matrix projection) 
-        {       
+        {
             int boneCount = this.Bones.Count;
             
             if (_sharedDrawBoneMatrices == null ||
@@ -78,7 +78,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _sharedDrawBoneMatrices = new Matrix[boneCount];    
             }
             
-            // Look up combined bone matrices for the entire model.            
+            // Look up combined bone matrices for the entire model.
             CopyAbsoluteBoneTransformsTo(_sharedDrawBoneMatrices);
 
             // Draw the model.
@@ -111,10 +111,12 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentNullException("destinationBoneTransforms");
             if (destinationBoneTransforms.Length < this.Bones.Count)
                 throw new ArgumentOutOfRangeException("destinationBoneTransforms");
+
             int count = this.Bones.Count;
             for (int i = 0; i < count; i++)
             {
                 ModelBone modelBone = (this.Bones)[i];
+
                 if (modelBone.Parent == null)
                 {
                     destinationBoneTransforms[i] = modelBone.transform;
