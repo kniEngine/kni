@@ -131,7 +131,6 @@ namespace Microsoft.Xna.Framework.Content
 
                 ModelMesh mesh = new ModelMesh(input.GetGraphicsDevice(), parts);
 
-                // Tag reassignment
                 mesh.Tag = meshTag;
                 mesh.Name = name;
                 mesh.ParentBone = bones[parentBoneIndex];
