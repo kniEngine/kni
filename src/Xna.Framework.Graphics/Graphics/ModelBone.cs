@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Graphics
         
         internal ModelBone(int index, string name, Matrix transform)
         {
-            Children = new ModelBoneCollection(new List<ModelBone>());
+            Children = new ModelBoneCollection(_children);
 
             this.Index = index;
             this.Name = name;
@@ -54,13 +54,12 @@ namespace Microsoft.Xna.Framework.Graphics
         // tests only
         internal ModelBone()
         {
-            Children = new ModelBoneCollection(new List<ModelBone>());
+            Children = new ModelBoneCollection(_children);
         }
 
         internal void AddChild(ModelBone childModelBone)
         {
             _children.Add(childModelBone);
-            Children = new ModelBoneCollection(_children);
         }
     }
 }
