@@ -115,7 +115,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int count = this.Bones.Count;
             for (int i = 0; i < count; i++)
             {
-                ModelBone modelBone = (this.Bones)[i];
+                ModelBone modelBone = this.Bones[i];
 
                 if (modelBone.Parent == null)
                 {
