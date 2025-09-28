@@ -106,11 +106,37 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
+        public unsafe void DynamicPlatformUpdateBuffers()
+        {
+            // Get the processed buffers
+            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersProcessed, out int processedBuffers);
+            ConcreteAudioService.OpenAL.CheckError("Failed to get processed buffer count.");
+
+            // Unqueue and release buffers
+            if (processedBuffers > 0)
+            {
+                int* pProcessedBuffers = stackalloc int[processedBuffers];
+                ConcreteAudioService.OpenAL.alSourceUnqueueBuffers(_sourceId, processedBuffers, pProcessedBuffers);
+                ConcreteAudioService.OpenAL.CheckError("Failed to unqueue buffers.");
+
+                ConcreteAudioService.OpenAL.alDeleteBuffers(processedBuffers, pProcessedBuffers);
+                ConcreteAudioService.OpenAL.CheckError("Failed to delete buffers.");
+
+                for (int i = 0; i < processedBuffers; i++)
+                {
+                    _queuedBuffersCount--;
+                    int bufferId = pProcessedBuffers[i];
+                }
+
+                // Raise the event for each removed buffer
+                this.BuffersNeeded+= processedBuffers;
+            }
+        }
+
         public unsafe void DynamicPlatformClearBuffers()
         {
             // Get the queued buffers
-            int queuedBuffers;
-            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersQueued, out queuedBuffers);
+            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersQueued, out int queuedBuffers);
             ConcreteAudioService.OpenAL.CheckError("Failed to get processed buffer count.");
 
             // Remove all queued buffers
@@ -127,34 +153,6 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        public unsafe void DynamicPlatformUpdateBuffers()
-        {
-            // Get the processed buffers
-            int processedBuffers;
-            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersProcessed, out processedBuffers);
-            ConcreteAudioService.OpenAL.CheckError("Failed to get processed buffer count.");
-
-            // Unqueue and release buffers
-            if (processedBuffers > 0)
-            {
-                int* pProcessedBuffers = stackalloc int[processedBuffers];
-                ConcreteAudioService.OpenAL.alSourceUnqueueBuffers(_sourceId, processedBuffers, pProcessedBuffers);
-                ConcreteAudioService.OpenAL.CheckError("Failed to unqueue buffers.");
-
-                ConcreteAudioService.OpenAL.alDeleteBuffers(processedBuffers, pProcessedBuffers);
-                ConcreteAudioService.OpenAL.CheckError("Failed to delete buffers.");
-
-                _queuedBuffersCount-= processedBuffers;
-
-                for (int i = 0; i < processedBuffers; i++)
-                {
-                    int bufferId = pProcessedBuffers[i];
-                }
-            }
-
-            // Raise the event for each removed buffer
-            this.BuffersNeeded+= processedBuffers;
-        }
 
         protected unsafe override void Dispose(bool disposing)
         {
@@ -170,9 +168,9 @@ namespace Microsoft.Xna.Platform.Audio
                 ConcreteAudioService.OpenAL.SourceStop(_sourceId);
                 ConcreteAudioService.OpenAL.CheckError("Failed to stop source.");
             }
+
             // Get the queued buffers
-            int queuedBuffers;
-            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersQueued, out queuedBuffers);
+            ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersQueued, out int queuedBuffers);
             ConcreteAudioService.OpenAL.CheckError("Failed to get processed buffer count.");
 
             // Remove all queued buffers
