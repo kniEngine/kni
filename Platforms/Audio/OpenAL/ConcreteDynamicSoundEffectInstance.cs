@@ -19,6 +19,30 @@ namespace Microsoft.Xna.Platform.Audio
         private ALFormat _alFormat;
         private int _queuedBuffersCount;
 
+        private int _lastalBuffer = 0;
+        private Queue<MarkerInfo> _markerQueue = new Queue<MarkerInfo>();
+
+        public event MarkerHandler Marker;
+
+
+        public delegate void MarkerHandler(object sender, int markerId);
+        struct MarkerInfo
+        {
+            public readonly int alBuffer;
+            public readonly int Marker;
+
+            public MarkerInfo(int lastBufferId, int marker) : this()
+            {
+                this.alBuffer = lastBufferId;
+                this.Marker = marker;
+            }
+
+            public override string ToString()
+            {
+                return string.Format("{{ alBuffer: {0}, Marker: {1} }}", alBuffer, Marker);
+            }
+        }
+
         private readonly WeakReference _dynamicSoundEffectInstanceRef = new WeakReference(null);
         DynamicSoundEffectInstance IDynamicSoundEffectInstanceStrategy.DynamicSoundEffectInstance
         {
@@ -94,6 +118,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             // Queue the buffer
             _queuedBuffersCount++;
+            _lastalBuffer = alBuffer;
             ConcreteAudioService.OpenAL.SourceQueueBuffer(_sourceId, alBuffer);
             ConcreteAudioService.OpenAL.CheckError("Failed to queue the buffer.");
 
@@ -104,6 +129,15 @@ namespace Microsoft.Xna.Platform.Audio
                 ConcreteAudioService.OpenAL.SourcePlay(_sourceId);
                 ConcreteAudioService.OpenAL.CheckError("Failed to resume source playback.");
             }
+        }
+
+        internal void SubmitMarker(int markerId)
+        {
+            if (_lastalBuffer == 0)
+                throw new InvalidOperationException("No buffer submitted to associate marker with.");
+
+            MarkerInfo markerInfo = new MarkerInfo(_lastalBuffer, markerId);
+            _markerQueue.Enqueue(markerInfo);
         }
 
         public unsafe void DynamicPlatformUpdateBuffers()
@@ -125,7 +159,15 @@ namespace Microsoft.Xna.Platform.Audio
                 for (int i = 0; i < processedBuffers; i++)
                 {
                     _queuedBuffersCount--;
-                    int bufferId = pProcessedBuffers[i];
+                    int alBuffer = pProcessedBuffers[i];
+                    while (_markerQueue.Count > 0 && _markerQueue.Peek().alBuffer == alBuffer)
+                    {
+                        MarkerInfo markerInfo = _markerQueue.Dequeue();
+
+                        var handler = Marker;
+                        if (handler != null)
+                            handler(this, markerInfo.Marker);
+                    }
                 }
 
                 // Raise the event for each removed buffer
@@ -151,6 +193,9 @@ namespace Microsoft.Xna.Platform.Audio
 
                 _queuedBuffersCount-= queuedBuffers;
             }
+
+            _lastalBuffer = 0;
+            _markerQueue.Clear();
         }
 
 
@@ -185,6 +230,9 @@ namespace Microsoft.Xna.Platform.Audio
                 
                 _queuedBuffersCount-= queuedBuffers;
             }
+
+            _lastalBuffer = 0;
+            _markerQueue.Clear();
 
             ConcreteAudioService.RecycleSource(_sourceId);
             _sourceId = 0;
