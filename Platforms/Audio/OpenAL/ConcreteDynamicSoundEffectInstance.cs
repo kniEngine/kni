@@ -169,6 +169,7 @@ namespace Microsoft.Xna.Platform.Audio
                 ConcreteAudioService.OpenAL.SourceStop(_sourceId);
                 ConcreteAudioService.OpenAL.CheckError("Failed to stop source.");
             }
+
             // Get the queued buffers
             ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersQueued, out int queuedBuffers);
             ConcreteAudioService.OpenAL.CheckError("Failed to get processed buffer count.");
