@@ -22,6 +22,10 @@ namespace Microsoft.Xna.Platform.Media
         private float[] _sampleBuffer;
         private byte[] _dataBuffer;
 
+        private Dictionary<int, BufferInfo> _bufferInfoMap = new Dictionary<int, BufferInfo>();
+        private int _lastMarker = 0;
+        private TimeSpan _consumedBufferDuration = TimeSpan.Zero;
+
         internal ConcreteMediaPlayerStrategy()
         {
         }
@@ -125,7 +129,6 @@ namespace Microsoft.Xna.Platform.Media
                         _player.Resume();
                         return;
                     case SoundState.Stopped:
-                        _bufferNeededCount = 0;
                         _consumedBufferDuration = TimeSpan.Zero;
 
                         _player.Volume = innerVolume;
@@ -197,41 +200,24 @@ namespace Microsoft.Xna.Platform.Media
         {
             public readonly int SizeInBytes;
             public readonly TimeSpan Duration;
+            public readonly int Marker;
 
-            public BufferInfo(int sizeInBytes, TimeSpan duration)
+            public BufferInfo(int sizeInBytes, TimeSpan duration, int marker)
             {
                 this.SizeInBytes = sizeInBytes;
                 this.Duration = duration;
+                this.Marker = marker;
             }
 
             public override string ToString()
             {
-                return string.Format("{{ Size: {0}, Duration: {1} }}", SizeInBytes, Duration);
+                return string.Format("{{ Marker: {0}, Size: {1}, Duration: {2} }}", Marker, SizeInBytes, Duration);
             }
         }
-
-        Queue<BufferInfo> _bufferQueue = new Queue<BufferInfo>();
-        TimeSpan _consumedBufferDuration = TimeSpan.Zero;
-        int _bufferNeededCount = 0;
 
         internal unsafe void sfxi_BufferNeeded(object sender, EventArgs e)
         {
             DynamicSoundEffectInstance sfxi = (DynamicSoundEffectInstance)sender;
-
-            int pendingBufferCount = sfxi.PendingBufferCount;
-            int bufferQueueCount = _bufferQueue.Count;
-
-            BufferInfo currBufferInfo = default;
-            if (_bufferNeededCount >= 3)
-            {
-                if (_bufferQueue.Count > 0)
-                {
-                    currBufferInfo = _bufferQueue.Dequeue();
-                    _consumedBufferDuration += currBufferInfo.Duration;
-                }
-            }
-            else
-                _bufferNeededCount++;
 
             // Submit Buffer
             int count = _reader.ReadSamples(_sampleBuffer, 0, _sampleBuffer.Length);
@@ -246,9 +232,13 @@ namespace Microsoft.Xna.Platform.Media
                 int sizeInBytes = count * sizeof(short);
                 sfxi.SubmitBuffer(_dataBuffer, 0, sizeInBytes);
 
-                //submit BufferInfo
-                BufferInfo bufferInfo = new BufferInfo(sizeInBytes, _player.GetSampleDuration(sizeInBytes));
-                _bufferQueue.Enqueue(bufferInfo);
+                //submit BufferInfo Marker
+                unchecked { _lastMarker = (_lastMarker+1); }
+                ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)sfxi).GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                cdsei.SubmitMarker(_lastMarker);
+
+                BufferInfo bufferInfo = new BufferInfo(sizeInBytes, _player.GetSampleDuration(sizeInBytes), _lastMarker);
+                _bufferInfoMap.Add(_lastMarker, bufferInfo);
             }
 
             if (count == 0)
@@ -277,7 +267,6 @@ namespace Microsoft.Xna.Platform.Media
                             return;
 
                         _reader.DecodedPosition = 0; // reset song
-                        _bufferNeededCount = 0;
                         _consumedBufferDuration = TimeSpan.Zero;
 
                         OnPlatformActiveSongChanged();
@@ -293,6 +282,15 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
+        private void sfxi_Marker(object sender, int markerId)
+        {
+            BufferInfo currBufferInfo = _bufferInfoMap[markerId];
+            _bufferInfoMap.Remove(markerId);
+
+            _consumedBufferDuration += currBufferInfo.Duration;
+
+        }
+
         internal void CreatePlayer(SongStrategy strategy)
         {
             if (_player == null)
@@ -302,6 +300,8 @@ namespace Microsoft.Xna.Platform.Media
 
                 _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
                 _player.BufferNeeded += this.sfxi_BufferNeeded;
+                ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                cdsei.Marker += this.sfxi_Marker;
             }
 
             int samples = (_reader.SampleRate * _reader.Channels) / 2;
