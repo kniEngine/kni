@@ -128,10 +128,10 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     int bufferId = pProcessedBuffers[i];
                 }
-            }
 
-            // Raise the event for each removed buffer
-            this.BuffersNeeded+= processedBuffers;
+                // Raise the event for each removed buffer
+                this.BuffersNeeded+= processedBuffers;
+            }
         }
 
         public unsafe void DynamicPlatformClearBuffers()
