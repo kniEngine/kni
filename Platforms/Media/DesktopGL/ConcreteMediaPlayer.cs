@@ -244,43 +244,40 @@ namespace Microsoft.Xna.Platform.Media
                 _bufferInfoMap.Add(_lastMarker, bufferInfo);
             }
 
-            if (count == 0)
+            if (this.PlatformIsRepeating && base.Queue.Count == 1) // single song repeat
             {
-                if (this.PlatformIsRepeating && base.Queue.Count == 1) // single song repeat
+                if (sfxi.PendingBufferCount <= 0) // song finished
                 {
                     // TODO: Fix the play gap between two loops by resetting _reader.DecodedPosition
                     //       before PendingBufferCount reach zero and keep feeding buffers.
                     //       In that case we have to fire the events later by counting PendingBufferCount
                     //       and the number of submited buffers.
-                    if (sfxi.PendingBufferCount <= 0) // song finished
-                    {
-                        Song activeSong = this.Queue.ActiveSong;
-                        long decodedPosition = _reader.DecodedPosition;
-                        VorbisReader reader = _reader;
+                    Song activeSong = this.Queue.ActiveSong;
+                    long decodedPosition = _reader.DecodedPosition;
+                    VorbisReader reader = _reader;
 
-                        ((IPlatformSong)activeSong).Strategy.PlayCount++;
+                    ((IPlatformSong)activeSong).Strategy.PlayCount++;
 
-                        OnPlatformMediaStateChanged();
-                        // check if user changed the state during the MediaStateChanged event.
-                        if (this.State != MediaState.Playing
-                        ||  this.Queue.Count != 1
-                        ||  this.Queue.ActiveSong != activeSong
-                        ||  _reader != reader
-                        ||  decodedPosition != _reader.DecodedPosition)
-                            return;
+                    OnPlatformMediaStateChanged();
+                    // check if user changed the state during the MediaStateChanged event.
+                    if (this.State != MediaState.Playing
+                    || this.Queue.Count != 1
+                    || this.Queue.ActiveSong != activeSong
+                    || _reader != reader
+                    || decodedPosition != _reader.DecodedPosition)
+                        return;
 
-                        _reader.DecodedPosition = 0; // reset song
-                        _consumedBufferDuration = TimeSpan.Zero;
+                    _reader.DecodedPosition = 0; // reset reader
+                    _consumedBufferDuration = TimeSpan.Zero;
 
-                        OnPlatformActiveSongChanged();
-                    }
+                    OnPlatformActiveSongChanged();
                 }
-                else
+            }
+            else
+            {
+                if (sfxi.PendingBufferCount <= 0) // song finished
                 {
-                    if (sfxi.PendingBufferCount <= 0) // song finished
-                    {
-                        base.OnSongFinishedPlaying();
-                    }
+                    base.OnSongFinishedPlaying();
                 }
             }
         }
@@ -292,6 +289,15 @@ namespace Microsoft.Xna.Platform.Media
 
             _consumedBufferDuration += currBufferInfo.Duration;
 
+            if (currBufferInfo.IsLast) // song finished
+            {
+                if (PlatformIsRepeating && base.Queue.Count == 1) // single song repeat
+                {
+                }
+                else
+                {
+                }
+            }
         }
 
         internal void CreatePlayer(SongStrategy strategy)
