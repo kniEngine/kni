@@ -201,12 +201,14 @@ namespace Microsoft.Xna.Platform.Media
             public readonly int SizeInBytes;
             public readonly TimeSpan Duration;
             public readonly int Marker;
+            public readonly bool IsLast;
 
-            public BufferInfo(int sizeInBytes, TimeSpan duration, int marker)
+            public BufferInfo(int sizeInBytes, TimeSpan duration, int marker, bool isLast)
             {
                 this.SizeInBytes = sizeInBytes;
                 this.Duration = duration;
                 this.Marker = marker;
+                this.IsLast = isLast;
             }
 
             public override string ToString()
@@ -237,7 +239,8 @@ namespace Microsoft.Xna.Platform.Media
                 ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)sfxi).GetStrategy<ConcreteDynamicSoundEffectInstance>();
                 cdsei.SubmitMarker(_lastMarker);
 
-                BufferInfo bufferInfo = new BufferInfo(sizeInBytes, _player.GetSampleDuration(sizeInBytes), _lastMarker);
+                bool isLastBuffer = _reader.DecodedPosition == _reader.TotalSamples;
+                BufferInfo bufferInfo = new BufferInfo(sizeInBytes, _player.GetSampleDuration(sizeInBytes), _lastMarker, isLastBuffer);
                 _bufferInfoMap.Add(_lastMarker, bufferInfo);
             }
 
