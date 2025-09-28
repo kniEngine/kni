@@ -316,6 +316,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (_player != null)
             {
+                ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                cdsei.Marker -= this.sfxi_Marker;
                 _player.BufferNeeded -= this.sfxi_BufferNeeded;
                 _player.Dispose();
             }
@@ -350,6 +352,8 @@ namespace Microsoft.Xna.Platform.Media
             {
                 if (_player != null)
                 {
+                    ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                    cdsei.Marker -= this.sfxi_Marker;
                     _player.BufferNeeded -= this.sfxi_BufferNeeded;
                     _player.Dispose();
                 }
@@ -361,6 +365,10 @@ namespace Microsoft.Xna.Platform.Media
 
                 _sampleBuffer = null;
                 _dataBuffer = null;
+
+                _bufferInfoMap = null;
+                _lastMarker = 0;
+                _consumedBufferDuration = TimeSpan.Zero;
 
             }
 
