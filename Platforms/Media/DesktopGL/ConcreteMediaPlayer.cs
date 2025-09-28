@@ -203,6 +203,11 @@ namespace Microsoft.Xna.Platform.Media
                 this.SizeInBytes = sizeInBytes;
                 this.Duration = duration;
             }
+
+            public override string ToString()
+            {
+                return string.Format("{{ Size: {0}, Duration: {1} }}", SizeInBytes, Duration);
+            }
         }
 
         Queue<BufferInfo> _bufferQueue = new Queue<BufferInfo>();
