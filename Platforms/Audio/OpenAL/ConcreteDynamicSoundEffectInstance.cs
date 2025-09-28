@@ -122,10 +122,9 @@ namespace Microsoft.Xna.Platform.Audio
                 ConcreteAudioService.OpenAL.alDeleteBuffers(processedBuffers, pProcessedBuffers);
                 ConcreteAudioService.OpenAL.CheckError("Failed to delete buffers.");
 
-                _queuedBuffersCount-= processedBuffers;
-
                 for (int i = 0; i < processedBuffers; i++)
                 {
+                    _queuedBuffersCount--;
                     int bufferId = pProcessedBuffers[i];
                 }
 
