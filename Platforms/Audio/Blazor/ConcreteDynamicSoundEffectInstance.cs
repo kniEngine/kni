@@ -165,6 +165,10 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
+        public void DynamicPlatformUpdateBuffers()
+        {
+        }
+
         public void DynamicPlatformClearBuffers()
         {
             _pendingBuffers = 0;
@@ -172,9 +176,6 @@ namespace Microsoft.Xna.Platform.Audio
             _streamSource.Port.PostMessage(2); // 2 = clear buffers
         }
 
-        public void DynamicPlatformUpdateBuffers()
-        {
-        }
 
         protected override void Dispose(bool disposing)
         {

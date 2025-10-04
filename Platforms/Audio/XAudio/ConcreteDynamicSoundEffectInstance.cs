@@ -94,6 +94,11 @@ namespace Microsoft.Xna.Platform.Audio
             _queuedBuffers.Add(new QueuedBuffer(dataBuffer, audioBuffer));
         }
 
+        public void DynamicPlatformUpdateBuffers()
+        {
+            // The XAudio implementation utilizes callbacks, so no work here.
+        }
+
         public void DynamicPlatformClearBuffers()
         {
             // Dequeue all the submitted buffers
@@ -108,12 +113,6 @@ namespace Microsoft.Xna.Platform.Audio
                 _bufferPool.Return(queuedBuffer.DataBuffer);
             }
         }
-
-        public void DynamicPlatformUpdateBuffers()
-        {
-            // The XAudio implementation utilizes callbacks, so no work here.
-        }
-
 
         private void OnBufferEnd(IntPtr context)
         {

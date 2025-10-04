@@ -60,15 +60,16 @@ namespace Microsoft.Xna.Platform.Audio
             throw new PlatformNotSupportedException();
         }
 
+        public void DynamicPlatformUpdateBuffers()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
         public void DynamicPlatformClearBuffers()
         {
             throw new PlatformNotSupportedException();
         }
 
-        public void DynamicPlatformUpdateBuffers()
-        {
-            throw new PlatformNotSupportedException();
-        }
 
         protected override void Dispose(bool disposing)
         {

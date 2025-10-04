@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Platform.Audio
             _markerQueue.Enqueue(markerInfo);
         }
 
-        public unsafe void DynamicPlatformUpdateBuffers()
+        unsafe public void DynamicPlatformUpdateBuffers()
         {
             // Get the processed buffers
             ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersProcessed, out int processedBuffers);
@@ -175,7 +175,7 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        public unsafe void DynamicPlatformClearBuffers()
+        unsafe public void DynamicPlatformClearBuffers()
         {
             // Get the queued buffers
             ConcreteAudioService.OpenAL.GetSource(_sourceId, ALGetSourcei.BuffersQueued, out int queuedBuffers);
