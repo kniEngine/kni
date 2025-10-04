@@ -52,9 +52,10 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 case SetDataOptions.None:
                     // MapSubresource doesn't work with MapMode.Write on Dynamic buffers.
-                    // Call the base method that is using UpdateSubresource(...).
-                    base.SetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride, options, bufferSize, elementSizeInBytes);
-                    return;
+                    // And the base SetData<>() using UpdateSubresource(...) doesn't seem to set the data.
+                    // We have to use Discard.
+                    mode = D3D11.MapMode.WriteDiscard;
+                    break;
                 case SetDataOptions.Discard:
                     mode = D3D11.MapMode.WriteDiscard;
                     break;
