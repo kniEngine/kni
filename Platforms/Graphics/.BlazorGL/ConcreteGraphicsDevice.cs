@@ -160,6 +160,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 case GraphicsProfile.HiDef:
                     glContext = canvas.GetContext<IWebGL2RenderingContext>(contextAttributes);
                     break;
+                case GraphicsProfile.FL10_0:
+                    glContext = canvas.GetContext<IWebGL2RenderingContext>(contextAttributes);
+                    break;
 
                 default:
                     throw new NotSupportedException("GraphicsProfile "+ this.GraphicsProfile);
