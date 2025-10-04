@@ -246,10 +246,8 @@ namespace Microsoft.Xna.Platform.Media
 
             if (this.PlatformIsRepeating && base.Queue.Count == 1) // single song repeat
             {
-                if (sfxi.PendingBufferCount <= 0)
+                if (_reader.DecodedPosition == _reader.TotalSamples)
                 {
-                    // TODO: Fix the play gap between two loops by resetting _reader.DecodedPosition
-                    //       before PendingBufferCount reach zero and keep feeding buffers.
                     _reader.DecodedPosition = 0; // reset reader
                 }
             }
