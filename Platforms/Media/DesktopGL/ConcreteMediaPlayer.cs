@@ -246,38 +246,9 @@ namespace Microsoft.Xna.Platform.Media
 
             if (this.PlatformIsRepeating && base.Queue.Count == 1) // single song repeat
             {
-                if (sfxi.PendingBufferCount <= 0) // song finished
+                if (_reader.DecodedPosition == _reader.TotalSamples)
                 {
-                    // TODO: Fix the play gap between two loops by resetting _reader.DecodedPosition
-                    //       before PendingBufferCount reach zero and keep feeding buffers.
-                    //       In that case we have to fire the events later by counting PendingBufferCount
-                    //       and the number of submited buffers.
-                    Song activeSong = this.Queue.ActiveSong;
-                    long decodedPosition = _reader.DecodedPosition;
-                    VorbisReader reader = _reader;
-
-                    ((IPlatformSong)activeSong).Strategy.PlayCount++;
-
-                    OnPlatformMediaStateChanged();
-                    // check if user changed the state during the MediaStateChanged event.
-                    if (this.State != MediaState.Playing
-                    || this.Queue.Count != 1
-                    || this.Queue.ActiveSong != activeSong
-                    || _reader != reader
-                    || decodedPosition != _reader.DecodedPosition)
-                        return;
-
                     _reader.DecodedPosition = 0; // reset reader
-                    _consumedBufferDuration = TimeSpan.Zero;
-
-                    OnPlatformActiveSongChanged();
-                }
-            }
-            else
-            {
-                if (sfxi.PendingBufferCount <= 0) // song finished
-                {
-                    base.OnSongFinishedPlaying();
                 }
             }
         }
@@ -293,9 +264,27 @@ namespace Microsoft.Xna.Platform.Media
             {
                 if (PlatformIsRepeating && base.Queue.Count == 1) // single song repeat
                 {
+                    Song activeSong = this.Queue.ActiveSong;
+                    long decodedPosition = _reader.DecodedPosition;
+                    VorbisReader reader = _reader;
+
+                    ((IPlatformSong)activeSong).Strategy.PlayCount++;
+
+                    OnPlatformMediaStateChanged();
+                    // check if user changed the state during the MediaStateChanged event.
+                    if (this.State != MediaState.Playing
+                    ||  this.Queue.Count != 1
+                    ||  this.Queue.ActiveSong != activeSong
+                    ||  _reader != reader
+                    ||  decodedPosition != _reader.DecodedPosition)
+                        return;
+
+                    _consumedBufferDuration = TimeSpan.Zero;
+                    OnPlatformActiveSongChanged();
                 }
                 else
                 {
+                    base.OnSongFinishedPlaying();
                 }
             }
         }
