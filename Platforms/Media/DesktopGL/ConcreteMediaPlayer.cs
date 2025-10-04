@@ -273,13 +273,6 @@ namespace Microsoft.Xna.Platform.Media
                     OnPlatformActiveSongChanged();
                 }
             }
-            else
-            {
-                if (sfxi.PendingBufferCount <= 0) // song finished
-                {
-                    base.OnSongFinishedPlaying();
-                }
-            }
         }
 
         private void sfxi_Marker(object sender, int markerId)
@@ -296,6 +289,7 @@ namespace Microsoft.Xna.Platform.Media
                 }
                 else
                 {
+                    base.OnSongFinishedPlaying();
                 }
             }
         }

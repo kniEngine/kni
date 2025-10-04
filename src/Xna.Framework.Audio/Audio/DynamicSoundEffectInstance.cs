@@ -346,6 +346,8 @@ namespace Microsoft.Xna.Framework.Audio
             {
                 // Update the buffers
                 _dynamicStrategy.DynamicPlatformUpdateBuffers();
+                if (this.IsDisposed)
+                    return;
 
                 if (_initialBuffersNeeded)
                     _dynamicStrategy.BuffersNeeded = Math.Max(_dynamicStrategy.BuffersNeeded, TargetPendingBufferCount - 1 - PendingBufferCount);
