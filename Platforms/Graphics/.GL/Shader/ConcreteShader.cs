@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         bytecodeOffset = FindShaderByteCode(shaderBytecode, major: 1, minor: 1, es: false);
                     }
 
-                    int bytecodeLength = BitConverter.ToInt16(shaderBytecode, bytecodeOffset); bytecodeOffset += 2;
+                    int bytecodeLength = BitConverter.ToInt32(shaderBytecode, bytecodeOffset); bytecodeOffset += 4;
                     GL.ShaderSource(_shaderHandle, shaderBytecode, bytecodeOffset, bytecodeLength);
                     GL.CheckGLError();
                 }
