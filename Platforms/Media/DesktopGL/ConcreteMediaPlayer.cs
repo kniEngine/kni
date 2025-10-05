@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
-        private DynamicSoundEffectInstance _player;
+        private DynamicSoundEffectInstance _soundPlayer;
         private VorbisReader _reader;
         private float[] _sampleBuffer;
         private byte[] _dataBuffer;
@@ -87,9 +87,9 @@ namespace Microsoft.Xna.Platform.Media
                 if (_reader == null)
                     return TimeSpan.Zero;
 
-                ConcreteSoundEffectInstance soundEffectInstanceStrategy = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteSoundEffectInstance>();
+                ConcreteSoundEffectInstance soundEffectInstanceStrategy = ((IPlatformSoundEffectInstance)_soundPlayer).GetStrategy<ConcreteSoundEffectInstance>();
                 int sampleOffset = soundEffectInstanceStrategy.GetSamplePosition();
-                TimeSpan time = _consumedBufferDuration + _player.GetSampleDuration(sampleOffset * _reader.Channels * sizeof(short));
+                TimeSpan time = _consumedBufferDuration + _soundPlayer.GetSampleDuration(sampleOffset * _reader.Channels * sizeof(short));
                 return time;
             }
         }
@@ -105,8 +105,8 @@ namespace Microsoft.Xna.Platform.Media
         {
             float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-            if (_player != null)
-                _player.Volume = innerVolume;
+            if (_soundPlayer != null)
+                _soundPlayer.Volume = innerVolume;
         }
 
         public override void PlatformPlaySong(Song song)
@@ -115,24 +115,24 @@ namespace Microsoft.Xna.Platform.Media
             {
                 float innerVolume = base.PlatformIsMuted ? 0.0f : base.PlatformVolume;
 
-                if (_player != null)
-                    _player.Volume = innerVolume;
+                if (_soundPlayer != null)
+                    _soundPlayer.Volume = innerVolume;
 
                 this.CreatePlayer(((IPlatformSong)song).Strategy);
 
-                SoundState state = _player.State;
+                SoundState state = _soundPlayer.State;
                 switch (state)
                 {
                     case SoundState.Playing:
                         return;
                     case SoundState.Paused:
-                        _player.Resume();
+                        _soundPlayer.Resume();
                         return;
                     case SoundState.Stopped:
                         _consumedBufferDuration = TimeSpan.Zero;
 
-                        _player.Volume = innerVolume;
-                        _player.Play();
+                        _soundPlayer.Volume = innerVolume;
+                        _soundPlayer.Play();
                         ((IPlatformSong)song).Strategy.PlayCount++;
                         return;
                 }
@@ -145,8 +145,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
-                if (_player != null)
-                    _player.Pause();
+                if (_soundPlayer != null)
+                    _soundPlayer.Pause();
             }
         }
 
@@ -155,8 +155,8 @@ namespace Microsoft.Xna.Platform.Media
             Song activeSong = base.Queue.ActiveSong;
             if (activeSong != null)
             {
-                if (_player != null)
-                    _player.Resume();
+                if (_soundPlayer != null)
+                    _soundPlayer.Resume();
             }
         }
 
@@ -168,9 +168,9 @@ namespace Microsoft.Xna.Platform.Media
 
                 Song activeSong = base.Queue.ActiveSong;
 
-                if (_player != null)
+                if (_soundPlayer != null)
                 {
-                    _player.Stop();
+                    _soundPlayer.Stop();
                     this.DestroyPlayer();
                 }
             }
@@ -182,9 +182,9 @@ namespace Microsoft.Xna.Platform.Media
             {
                 Song song = base.Queue[0];
 
-                if (_player != null)
+                if (_soundPlayer != null)
                 {
-                    _player.Stop();
+                    _soundPlayer.Stop();
                     this.DestroyPlayer();
                 }
 
@@ -240,7 +240,7 @@ namespace Microsoft.Xna.Platform.Media
                 cdsei.SubmitMarker(_lastMarker);
 
                 bool isLastBuffer = _reader.DecodedPosition == _reader.TotalSamples;
-                BufferInfo bufferInfo = new BufferInfo(sizeInBytes, _player.GetSampleDuration(sizeInBytes), _lastMarker, isLastBuffer);
+                BufferInfo bufferInfo = new BufferInfo(sizeInBytes, _soundPlayer.GetSampleDuration(sizeInBytes), _lastMarker, isLastBuffer);
                 _bufferInfoMap.Add(_lastMarker, bufferInfo);
             }
 
@@ -291,14 +291,14 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void CreatePlayer(SongStrategy strategy)
         {
-            if (_player == null)
+            if (_soundPlayer == null)
             {
                 _reader = new VorbisReader(strategy.Filename);
                 strategy.Duration = _reader.TotalTime;
 
-                _player = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
-                _player.BufferNeeded += this.sfxi_BufferNeeded;
-                ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                _soundPlayer = new DynamicSoundEffectInstance(_reader.SampleRate, (AudioChannels)_reader.Channels);
+                _soundPlayer.BufferNeeded += this.sfxi_BufferNeeded;
+                ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_soundPlayer).GetStrategy<ConcreteDynamicSoundEffectInstance>();
                 cdsei.Marker += this.sfxi_Marker;
             }
 
@@ -312,14 +312,14 @@ namespace Microsoft.Xna.Platform.Media
 
         internal void DestroyPlayer()
         {
-            if (_player != null)
+            if (_soundPlayer != null)
             {
-                ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_soundPlayer).GetStrategy<ConcreteDynamicSoundEffectInstance>();
                 cdsei.Marker -= this.sfxi_Marker;
-                _player.BufferNeeded -= this.sfxi_BufferNeeded;
-                _player.Dispose();
+                _soundPlayer.BufferNeeded -= this.sfxi_BufferNeeded;
+                _soundPlayer.Dispose();
             }
-            _player = null;
+            _soundPlayer = null;
 
             if (_reader != null)
                 _reader.Dispose();
@@ -348,14 +348,14 @@ namespace Microsoft.Xna.Platform.Media
         {
             if (disposing)
             {
-                if (_player != null)
+                if (_soundPlayer != null)
                 {
-                    ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_player).GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                    ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)_soundPlayer).GetStrategy<ConcreteDynamicSoundEffectInstance>();
                     cdsei.Marker -= this.sfxi_Marker;
-                    _player.BufferNeeded -= this.sfxi_BufferNeeded;
-                    _player.Dispose();
+                    _soundPlayer.BufferNeeded -= this.sfxi_BufferNeeded;
+                    _soundPlayer.Dispose();
                 }
-                _player = null;
+                _soundPlayer = null;
 
                 if (_reader != null)
                     _reader.Dispose();
