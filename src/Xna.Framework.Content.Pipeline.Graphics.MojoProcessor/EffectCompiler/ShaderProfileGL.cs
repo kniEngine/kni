@@ -316,12 +316,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                     writer.Write((byte)glslBytecodes[i].Minor);
                     writer.Write(glslBytecodes[i].ES);
                     writer.Write((int)(bytecodesOffset));
-                    bytecodesOffset += (2 + glslBytecodes[i].Bytecode.Length);
+                    bytecodesOffset += (4 + glslBytecodes[i].Bytecode.Length);
                 }
                 // write bytecodes
                 for (int i = 0; i < glslBytecodes.Count; i++)
                 {
-                    writer.Write((short)glslBytecodes[i].Bytecode.Length);
+                    writer.Write((Int32)glslBytecodes[i].Bytecode.Length);
                     writer.Write(glslBytecodes[i].Bytecode);
                 }
 
