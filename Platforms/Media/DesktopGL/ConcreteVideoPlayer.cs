@@ -1,6 +1,10 @@
 // Copyright (C)2022 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
@@ -9,6 +13,9 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
+        private Texture2D _lastFrame;
+
+        private DynamicSoundEffectInstance _soundPlayer;
 
         public override MediaState State
         {
@@ -50,21 +57,34 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteVideoPlayerStrategy()
         {
-            throw new NotImplementedException();
+            
         }
 
         public override Texture2D PlatformGetTexture()
         {
+            if (_lastFrame != null)
+            {
+                if (_lastFrame.Width != base.Video.Width || _lastFrame.Height != base.Video.Height)
+                {
+                    _lastFrame.Dispose();
+                    _lastFrame = null;
+                }
+            }
+            if (_lastFrame == null)
+                _lastFrame = new Texture2D(((IPlatformVideo)base.Video).Strategy.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+
             throw new NotImplementedException();
         }
 
         protected override void PlatformUpdateState(ref MediaState state)
         {
-            throw new NotImplementedException();
+            
         }
 
         public override void PlatformPlay(Video video)
         {
+            base.Video = video;
+
             throw new NotImplementedException();
         }
 
