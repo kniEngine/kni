@@ -152,7 +152,42 @@ namespace Microsoft.Xna.Platform.Graphics
             Task result = SaveAsImageAsync_UAP(Windows.Graphics.Imaging.BitmapEncoder.JpegEncoderId, stream, width, height);
             result.Wait();
 #else
-            throw new NotImplementedException();
+            // We assume non-premultiplied pixel format.
+            Guid sourceFormat = WIC.PixelFormat.Format32bppRGBA;
+            int sourceStride = WIC.PixelFormat.GetStride(sourceFormat, this.Width);
+
+            Color[] pixelData = TextureHelpers.GetColorData(this);
+            GCHandle gCHandle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
+            try
+            {
+                IntPtr pPixelData = gCHandle.AddrOfPinnedObject();
+                DX.DataRectangle dataRectangle = new DX.DataRectangle(pPixelData, sourceStride);
+
+                using (WIC.ImagingFactory factory = new WIC.ImagingFactory())
+                using (WIC.Bitmap bitmap = new WIC.Bitmap(factory, this.Width, this.Height, sourceFormat, dataRectangle))
+                using (WIC.BitmapScaler scaler = new WIC.BitmapScaler(factory))
+                using (WIC.FormatConverter converter = new WIC.FormatConverter(factory))
+                using (WIC.JpegBitmapEncoder encoder = new WIC.JpegBitmapEncoder(factory, stream))
+                using (WIC.BitmapFrameEncode frame = new WIC.BitmapFrameEncode(encoder))
+                {
+                    scaler.Initialize(bitmap, width, height, WIC.BitmapInterpolationMode.Linear);
+
+                    // Convert bitmap to BGRA. JpegBitmapEncoder doesn't work with Format32bppRGBA.
+                    Guid targetFormat = WIC.PixelFormat.Format32bppBGRA;
+                    converter.Initialize(scaler, targetFormat);
+
+                    frame.Initialize();
+                    frame.SetPixelFormat(ref targetFormat);
+                    frame.WriteSource(converter);
+                    frame.Commit();
+
+                    encoder.Commit();
+                }
+            }
+            finally
+            {
+                gCHandle.Free();
+            }
 #endif
         }
 
