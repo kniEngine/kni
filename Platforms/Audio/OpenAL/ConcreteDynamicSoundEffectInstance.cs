@@ -133,11 +133,14 @@ namespace Microsoft.Xna.Platform.Audio
 
         internal void SubmitMarker(int markerId)
         {
-            if (_lastalBuffer == 0)
-                throw new InvalidOperationException("No buffer submitted to associate marker with.");
+            lock (AudioService.SyncHandle)
+            {
+                if (_lastalBuffer == 0)
+                    throw new InvalidOperationException("No buffer submitted to associate marker with.");
 
-            MarkerInfo markerInfo = new MarkerInfo(_lastalBuffer, markerId);
-            _markerQueue.Enqueue(markerInfo);
+                MarkerInfo markerInfo = new MarkerInfo(_lastalBuffer, markerId);
+                _markerQueue.Enqueue(markerInfo);
+            }
         }
 
         unsafe public void DynamicPlatformUpdateBuffers()
