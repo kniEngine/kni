@@ -2,7 +2,7 @@
 
 A core element of Microsoft XNA is the effect system which is used for all rendering.
 
-For KNI we are supporting stock and custom effects for DirectX HLSL, desktop GLSL, mobile GLSL.
+For KNI we are supporting stock and custom HLSL effects, for DirectX 11, desktop OpenGL, mobile GLES and WebGL.
 There currently is no effect system or shader language that supports all the platforms we require, forcing us to build a new custom effect system.
 
 ## MGFX
