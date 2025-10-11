@@ -2,12 +2,12 @@
 
 A core element of Microsoft XNA is the effect system which is used for all rendering.
 
-For KNI we are supporting stock and custom effects for DirectX HLSL, desktop GLSL, mobile GLSL.
+For KNI we are supporting stock and custom HLSL effects, for DirectX 11, desktop OpenGL, mobile GLES and WebGL.
 There currently is no effect system or shader language that supports all the platforms we require, forcing us to build a new custom effect system.
 
 ## MGFX
 
-MGFX is KNI's "Effect" runtime and tools which with the following core goals:
+KNIFX is KNI's "Effect" runtime and tools which with the following core goals:
 
 * Support a similar technique, passes, shaders structure as Microsoft FX files.
 * Have a textual format for ease of editing.
@@ -26,7 +26,7 @@ KNI has the following effects built-in and fully supported on current platforms:
 * SkinnedEffect
 * SpriteEffect
 
-Under the hood these effects use the same system and tools as one would for a custom Effect.  The source of these effects can be found in the ['MonoGame.Framework\Graphics\Effect\Shaders'](https://github.com/kniEngine/kni/tree/main/MonoGame.Framework/Graphics/Effect/Shaders) folder.
+Under the hood these effects use the same system and tools as one would for a custom Effect.  The source of these effects can be found in the ['Platforms\Graphics\Effect\Shaders'](https://github.com/kniEngine/kni/tree/main/Platforms/Graphics/Effect/Shaders) folder.
 
 ## Custom Effects
 
@@ -37,23 +37,28 @@ To use a custom effect with KNI you must do one of the following:
 
 ## Effect Writing Tips
 
-These are some tips for writing or converting effects for use with MonoGame.
+These are some tips for writing or converting effects for use with KNI.
 
+| The compiler support both new HLSL syntax and is backward compatible with the old HLSL syntax. vs_4_0_level_9_1 and vs_2_0 are interchangeable:|
 | The supported shader models when targeting DX are the following:|
 |---|
 |  * `vs_4_0_level_9_1` and `ps_4_0_level_9_1` (`Reach` `GraphicsProfile`)|
-|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (`HiDef` `GraphicsProfile`)|
+|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (requires `HiDef` `GraphicsProfile` at runtime)|
+|  * `vs_2_0` and `ps_2_0` (`Reach` `GraphicsProfile`)|
+|  * `vs_3_0` and `ps_3_0` (requires `HiDef` `GraphicsProfile` at runtime)|
 |  * `vs_4_0` and `ps_4_0` (requires `FL10_0` `GraphicsProfile` at runtime)|
 |  * `vs_4_1` and `ps_4_1` (requires `FL10_1` `GraphicsProfile` at runtime)|
 |  * `vs_5_0` and `ps_5_0` (requires `FL11_0` `GraphicsProfile` at runtime)|
 |---|
 |When targeting GL platforms we automatically translate FX files to GLSL using a library called [MojoShader](http://icculus.org/mojoshader/).|
+|Shader Model 4.0 under GL unlocks the instruction count limit of 3.0, but is otherwise limited to 3.0 instructions|
 |The supported feature levels are the following:|
 |---|
 |  * `vs_4_0_level_9_1` and `ps_4_0_level_9_1` (`Reach` `GraphicsProfile`)|
-|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (`HiDef` `GraphicsProfile`)|
+|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (requires `HiDef` `GraphicsProfile` at runtime)|
 |  * `vs_2_0` and `ps_2_0` (`Reach` `GraphicsProfile`)|
-|  * `vs_3_0` and `ps_3_0` (`HiDef` `GraphicsProfile`)|
+|  * `vs_3_0` and `ps_3_0` (requires `HiDef` `GraphicsProfile` at runtime)|
+|  * `vs_4_0` and `ps_4_0` (requires `FL10_0` `GraphicsProfile` at runtime)|
 |---|
 |You can use preprocessor checks to add conditional code or compilation depending on defined symbols. KNI defines the following symbols when compiling effects:|
 |---|
@@ -68,7 +73,6 @@ These are some tips for writing or converting effects for use with MonoGame.
 Custom symbols can be defined from the [MGCB Editor](~/articles/tools/mgcb_editor.md) or via [KNIFXC](~/articles/tools/knifxc.md).
 
 * Make sure the pixel shaders inputs **exactly match** the vertex shader outputs so the parameters are passed in the correct registers. The parameters need to have the same size and order. Omitting parameters might not break compilation, but can cause unexpected results.
-* Note that on GL platforms default values on Effect parameters do not work.  Either set the parameter from code or use a real constant like a #define.
 * The effect compiler is aggressive about removing unused parameters, be sure the parameters you are setting are actually used.
 * Preshaders are not supported.
-* If you think you have found a bug porting a shader, [please let us know](https://github.com/MonoGame/MonoGame/issues).
+* If you think you have found a bug porting a shader, [please let us know](https://github.com/kniEngine/kni/issues).
