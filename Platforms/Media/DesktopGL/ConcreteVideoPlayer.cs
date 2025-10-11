@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,7 +36,7 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.IsMuted = value;
-                throw new NotImplementedException();
+                PlatformSetVolume();
             }
         }
 
@@ -50,14 +51,13 @@ namespace Microsoft.Xna.Platform.Media
             set
             {
                 base.Volume = value;
-                if (base.Video != null)
-                    PlatformSetVolume();
+                PlatformSetVolume();
             }
         }
 
         internal ConcreteVideoPlayerStrategy()
         {
-            
+
         }
 
         public override Texture2D PlatformGetTexture()
@@ -100,18 +100,29 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformStop()
         {
+
             throw new NotImplementedException();
         }
 
         private void PlatformSetVolume()
         {
-            throw new NotImplementedException();
+           float volume = base.Volume;
+           if (IsMuted)
+                volume = 0.0f;
+
+           if (_soundPlayer != null)
+              _soundPlayer.Volume = volume;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+                if (_soundPlayer != null)
+                {
+                    _soundPlayer.Dispose();
+                    _soundPlayer = null;
+                }
             }
 
             base.Dispose(disposing);
