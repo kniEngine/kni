@@ -37,23 +37,28 @@ To use a custom effect with KNI you must do one of the following:
 
 ## Effect Writing Tips
 
-These are some tips for writing or converting effects for use with MonoGame.
+These are some tips for writing or converting effects for use with KNI.
 
+| The compiler support both new HLSL syntax and is backward compatible with the old HLSL syntax. vs_4_0_level_9_1 and vs_2_0 are interchangeable:|
 | The supported shader models when targeting DX are the following:|
 |---|
 |  * `vs_4_0_level_9_1` and `ps_4_0_level_9_1` (`Reach` `GraphicsProfile`)|
-|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (`HiDef` `GraphicsProfile`)|
+|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (requires `HiDef` `GraphicsProfile` at runtime)|
+|  * `vs_2_0` and `ps_2_0` (`Reach` `GraphicsProfile`)|
+|  * `vs_3_0` and `ps_3_0` (requires `HiDef` `GraphicsProfile` at runtime)|
 |  * `vs_4_0` and `ps_4_0` (requires `FL10_0` `GraphicsProfile` at runtime)|
 |  * `vs_4_1` and `ps_4_1` (requires `FL10_1` `GraphicsProfile` at runtime)|
 |  * `vs_5_0` and `ps_5_0` (requires `FL11_0` `GraphicsProfile` at runtime)|
 |---|
 |When targeting GL platforms we automatically translate FX files to GLSL using a library called [MojoShader](http://icculus.org/mojoshader/).|
+|Shader Model 4.0 under GL unlocks the instruction count limit of 3.0, but is otherwise limited to 3.0 instructions|
 |The supported feature levels are the following:|
 |---|
 |  * `vs_4_0_level_9_1` and `ps_4_0_level_9_1` (`Reach` `GraphicsProfile`)|
-|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (`HiDef` `GraphicsProfile`)|
+|  * `vs_4_0_level_9_3` and `ps_4_0_level_9_3` (requires `HiDef` `GraphicsProfile` at runtime)|
 |  * `vs_2_0` and `ps_2_0` (`Reach` `GraphicsProfile`)|
-|  * `vs_3_0` and `ps_3_0` (`HiDef` `GraphicsProfile`)|
+|  * `vs_3_0` and `ps_3_0` (requires `HiDef` `GraphicsProfile` at runtime)|
+|  * `vs_4_0` and `ps_4_0` (requires `FL10_0` `GraphicsProfile` at runtime)|
 |---|
 |You can use preprocessor checks to add conditional code or compilation depending on defined symbols. KNI defines the following symbols when compiling effects:|
 |---|
