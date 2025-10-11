@@ -7,7 +7,7 @@ There currently is no effect system or shader language that supports all the pla
 
 ## MGFX
 
-MGFX is KNI's "Effect" runtime and tools which with the following core goals:
+KNIFX is KNI's "Effect" runtime and tools which with the following core goals:
 
 * Support a similar technique, passes, shaders structure as Microsoft FX files.
 * Have a textual format for ease of editing.
