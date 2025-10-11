@@ -26,7 +26,7 @@ KNI has the following effects built-in and fully supported on current platforms:
 * SkinnedEffect
 * SpriteEffect
 
-Under the hood these effects use the same system and tools as one would for a custom Effect.  The source of these effects can be found in the ['MonoGame.Framework\Graphics\Effect\Shaders'](https://github.com/kniEngine/kni/tree/main/MonoGame.Framework/Graphics/Effect/Shaders) folder.
+Under the hood these effects use the same system and tools as one would for a custom Effect.  The source of these effects can be found in the ['Platforms\Graphics\Effect\Shaders'](https://github.com/kniEngine/kni/tree/main/Platforms/Graphics/Effect/Shaders) folder.
 
 ## Custom Effects
 
