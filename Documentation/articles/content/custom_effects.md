@@ -75,4 +75,4 @@ Custom symbols can be defined from the [MGCB Editor](~/articles/tools/mgcb_edito
 * Make sure the pixel shaders inputs **exactly match** the vertex shader outputs so the parameters are passed in the correct registers. The parameters need to have the same size and order. Omitting parameters might not break compilation, but can cause unexpected results.
 * The effect compiler is aggressive about removing unused parameters, be sure the parameters you are setting are actually used.
 * Preshaders are not supported.
-* If you think you have found a bug porting a shader, [please let us know](https://github.com/MonoGame/MonoGame/issues).
+* If you think you have found a bug porting a shader, [please let us know](https://github.com/kniEngine/kni/issues).
