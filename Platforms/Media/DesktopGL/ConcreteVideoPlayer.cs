@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,9 +14,13 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
-        private Texture2D _lastFrame;
+        private Texture2D[] _textures = new Texture2D[2];
+        private int _currentTexture;
+        private TimeSpan _lastFrameTime;
 
-        private DynamicSoundEffectInstance _soundPlayer;
+        internal DynamicSoundEffectInstance _soundPlayer;
+
+        DecoderThread _decoderThread;
 
         public override MediaState State
         {
@@ -42,7 +46,7 @@ namespace Microsoft.Xna.Platform.Media
 
         public override TimeSpan PlayPosition
         {
-            get { throw new NotImplementedException(); }
+            get { return _decoderThread.Watch.Elapsed; }
         }
 
         public override float Volume
@@ -62,18 +66,35 @@ namespace Microsoft.Xna.Platform.Media
 
         public override Texture2D PlatformGetTexture()
         {
-            if (_lastFrame != null)
+            if (_textures[0] != null)
             {
-                if (_lastFrame.Width != base.Video.Width || _lastFrame.Height != base.Video.Height)
+                if (_textures[0].Width != base.Video.Width || _textures[0].Height != base.Video.Height)
                 {
-                    _lastFrame.Dispose();
-                    _lastFrame = null;
+                    _textures[0].Dispose();
+                    _textures[0] = null;
+                    _textures[1].Dispose();
+                    _textures[1] = null;
                 }
             }
-            if (_lastFrame == null)
-                _lastFrame = new Texture2D(((IPlatformVideo)base.Video).Strategy.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+            if (_textures[0] == null)
+            {
+                GraphicsDevice graphicsDevice = ((IPlatformVideo)base.Video).Strategy.GraphicsDevice;
+                _textures[0] = new Texture2D(graphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+                _textures[1] = new Texture2D(graphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+            }
 
-            throw new NotImplementedException();
+            if (_decoderThread != null)
+            {
+                if (_decoderThread.TryGetNextVideoFrame(out TrackData frameData))
+                {
+                    _lastFrameTime = frameData.TrackTime;
+                    _currentTexture = (_currentTexture+1) & 0x01;
+                    _textures[_currentTexture].SetData(frameData.Data);
+                    _decoderThread._videoFramePool.Return(frameData.Data);
+                }
+            }
+
+            return _textures[_currentTexture];
         }
 
         protected override void PlatformUpdateState(ref MediaState state)
@@ -85,45 +106,134 @@ namespace Microsoft.Xna.Platform.Media
         {
             base.Video = video;
 
-            throw new NotImplementedException();
+            // Cleanup the last video first.
+            if (State != MediaState.Stopped)
+            {
+                _decoderThread.Stop();
+                _decoderThread.Stopped -= OnDecoderThreadStopped;
+                _decoderThread = null;
+                if (_soundPlayer != null)
+                    _soundPlayer.Dispose();
+                _soundPlayer = null;
+            }
+
+            _decoderThread = new DecoderThread(this);
+            _decoderThread.Stopped += OnDecoderThreadStopped;
+
+            VideoDecoderProcess.MKVTrack vtrack = _decoderThread.DecoderProcess._tracks.Values.First((t) => (t.Type == VideoDecoderProcess.MKVTrackType.Video));
+            VideoDecoderProcess.MKVVideoTrack videoTrack = (VideoDecoderProcess.MKVVideoTrack)vtrack;
+            VideoDecoderProcess.MKVVideoSettings videoSettings = videoTrack.VideoSettings;
+
+            VideoDecoderProcess.MKVTrack atrack = _decoderThread.DecoderProcess._tracks.Values.FirstOrDefault((t) => (t.Type == VideoDecoderProcess.MKVTrackType.Audio));
+            if (atrack != null)
+            {
+                VideoDecoderProcess.MKVAudioTrack audioTrack = (VideoDecoderProcess.MKVAudioTrack)atrack;
+                VideoDecoderProcess.MKVAudioSettings audioSettings = audioTrack.AudioSettings;
+                int SampleRate = (int)audioSettings.SamplingFrequency;
+                AudioChannels channels = (AudioChannels)audioSettings.Channels;
+                int samples = (SampleRate * (int)channels) / 2;
+                _soundPlayer = new DynamicSoundEffectInstance(SampleRate, channels);
+
+                _soundPlayer.BufferNeeded += (s, e) =>
+                {
+                    Debug.WriteLine("_soundPlayer.PendingBufferCount: " + _soundPlayer.PendingBufferCount);
+                    Debug.WriteLine("_videoFrameQueue.Count: " + _decoderThread._videoFrameQueue.Count);
+                };
+            }
+            PlatformSetVolume();
+            if (_soundPlayer != null)
+                _soundPlayer.Play();
+
+            _lastFrameTime = TimeSpan.Zero;
+            this.State = MediaState.Playing;
+
+            _decoderThread.Start();
         }
 
         public override void PlatformPause()
         {
-            throw new NotImplementedException();
+            _decoderThread.Watch.Stop();
+            if (_soundPlayer!=null)
+                _soundPlayer.Pause();
+            State = MediaState.Paused;
         }
 
         public override void PlatformResume()
         {
-            throw new NotImplementedException();
+            if (_soundPlayer != null)
+                _soundPlayer.Resume();
+            _decoderThread.Watch.Start();
+            State = MediaState.Playing;
         }
 
         public override void PlatformStop()
         {
+            if (_decoderThread != null)
+            {
+                _decoderThread.Stop();
+                _decoderThread.Stopped -= OnDecoderThreadStopped;
+                _decoderThread = null;
+            }
 
-            throw new NotImplementedException();
+            State = MediaState.Stopped;
+            if (_soundPlayer != null)
+            {
+                _soundPlayer.Stop();
+                _soundPlayer.Dispose();
+                _soundPlayer = null;
+            }
+        }
+
+        private void OnDecoderThreadStopped(object sender, EventArgs e)
+        {
+            // TODO: event comes from another thread, so we need to sync base.State, and clean up. 
+            base.State = MediaState.Stopped;
+
+            _decoderThread.Stopped -= OnDecoderThreadStopped;
+            _decoderThread = null;
+            if (_soundPlayer != null)
+                _soundPlayer.Dispose();
+            _soundPlayer = null;
         }
 
         private void PlatformSetVolume()
         {
-           float volume = base.Volume;
-           if (IsMuted)
+            float volume = base.Volume;
+            if (IsMuted)
                 volume = 0.0f;
 
-           if (_soundPlayer != null)
-              _soundPlayer.Volume = volume;
+            if (_soundPlayer != null)
+                _soundPlayer.Volume = volume;
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+                if (_decoderThread != null)
+                {
+                    _decoderThread.Stop();
+                    _decoderThread.Stopped -= OnDecoderThreadStopped;
+                    _decoderThread = null;
+                }
                 if (_soundPlayer != null)
                 {
                     _soundPlayer.Dispose();
                     _soundPlayer = null;
                 }
+                if (_textures != null)
+                {
+                    if (_textures[0] != null)
+                        _textures[0].Dispose();
+                    if (_textures[1] != null)
+                        _textures[1].Dispose();
+                    _textures[0] = null;
+                    _textures[1] = null;
+                    _textures = null;
+                }
+
             }
+
 
             base.Dispose(disposing);
         }
