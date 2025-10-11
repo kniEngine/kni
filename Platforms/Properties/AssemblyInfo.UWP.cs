@@ -8,5 +8,5 @@
 
 // Version information for the assembly which is automatically
 // set by our automated build process.
-[assembly: AssemblyVersion("4.1.9001.0")]
-[assembly: AssemblyFileVersion("4.1.9001.0")]
+[assembly: AssemblyVersion("4.2.9001.0")]
+[assembly: AssemblyFileVersion("4.2.9001.0")]
