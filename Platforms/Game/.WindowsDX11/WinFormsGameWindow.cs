@@ -134,7 +134,23 @@ namespace Microsoft.Xna.Framework
             _handle = Form.Handle;
             _instances.Add(this.Handle, this);
 
-            ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            //ChangeClientSize
+            {
+                bool prevIsResizing = Form.IsResizing;
+                // make sure we don't see the events from this as a user resize
+                Form.IsResizing = true;
+
+                SysDrawing.Size clientSize = this.Form.ClientSize;
+                if (clientSize.Width != GraphicsDeviceManager.DefaultBackBufferWidth
+                || clientSize.Height != GraphicsDeviceManager.DefaultBackBufferHeight)
+                    this.Form.ClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+
+                // if the window wasn't moved manually and it's resized, it should be centered
+                if (!_wasMoved)
+                    CenterOnPrimaryMonitor();
+
+                Form.IsResizing = prevIsResizing;
+            }
 
             SetIcon();
             Title = AssemblyHelper.GetDefaultWindowTitle();
