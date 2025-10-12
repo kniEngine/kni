@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Input
 
         private readonly List<Keys> _keys = new List<Keys>(10);
 
-        private bool _isActive;
+        private bool _isActive = true;
 
         [DllImport("user32.dll")]
         private static extern bool GetKeyboardState(byte[] lpKeyState);
