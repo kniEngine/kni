@@ -45,6 +45,7 @@ namespace Microsoft.Xna.Platform.Input
             if (_isActive == false)
             {
                 // return the cleared _keys, if _isActive == false
+                // TODO: should we return false for toggled keys?
                 _isCapsLocked = Console.CapsLock;
                 _isNumLocked = Console.NumberLock;
                 return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
@@ -54,6 +55,7 @@ namespace Microsoft.Xna.Platform.Input
             if (isKeyStateValid == false)
             {
                 // return the previous state of _keys, if GetKeyboardState fails
+                // TODO: should we return the previous state of toggled keys?
                 _isCapsLocked = Console.CapsLock;
                 _isNumLocked = Console.NumberLock;
                 return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
@@ -72,6 +74,7 @@ namespace Microsoft.Xna.Platform.Input
                     _keys.Add(key);
             }
 
+            // TODO: should we get toggled keys from IsKeyToggled(...)?
             _isCapsLocked = Console.CapsLock;
             _isNumLocked = Console.NumberLock;
             return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
