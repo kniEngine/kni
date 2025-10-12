@@ -44,10 +44,11 @@ namespace Microsoft.Xna.Platform.Input
 
                 foreach (byte keyCode in DefinedKeyCodes)
                 {
+                    Keys key = (Keys)keyCode;
+
                     if (!IsKeyPressed(keyCode))
                         continue;
 
-                    Keys key = (Keys)keyCode;
                     if (!_keys.Contains(key))
                         _keys.Add(key);
                 }
