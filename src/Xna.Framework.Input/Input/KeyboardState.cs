@@ -11,8 +11,8 @@ namespace Microsoft.Xna.Framework.Input
     /// </summary>
     public struct KeyboardState
     {
-        private const byte CapsLockModifier = 1;
-        private const byte NumLockModifier  = 2;
+        private const byte CapsLockBit = 1;
+        private const byte NumLockBit  = 2;
 
         // Used for the common situation where GetPressedKeys will return an empty array
         private static Keys[] _empty = new Keys[0];
@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Framework.Input
             _keys5 = 0;
             _keys6 = 0;
             _keys7 = 0;
-            _modifiers = (byte)(0 | (capsLock ? CapsLockModifier : 0) | (numLock ? NumLockModifier : 0));
+            _modifiers = (byte)(0 | (capsLock ? CapsLockBit : 0) | (numLock ? NumLockBit : 0));
 
             if (keys != null)
             {
@@ -128,7 +128,7 @@ namespace Microsoft.Xna.Framework.Input
             _keys5 = 0;
             _keys6 = 0;
             _keys7 = 0;
-            _modifiers = (byte)(0 | (capsLock ? CapsLockModifier : 0) | (numLock ? NumLockModifier : 0));
+            _modifiers = (byte)(0 | (capsLock ? CapsLockBit : 0) | (numLock ? NumLockBit : 0));
 
             if (keys != null)
             {
@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public bool CapsLock
         {
-            get { return (_modifiers & CapsLockModifier) > 0; }
+            get { return (_modifiers & CapsLockBit) > 0; }
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Framework.Input
         /// </summary>
         public bool NumLock
         {
-            get { return (_modifiers & NumLockModifier) > 0; }
+            get { return (_modifiers & NumLockBit) > 0; }
         }
 
         /// <summary>
