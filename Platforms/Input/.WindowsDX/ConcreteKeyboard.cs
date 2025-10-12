@@ -13,9 +13,13 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteKeyboard : KeyboardStrategy
     {
-        private readonly byte[] DefinedKeyCodes;
+        private readonly Keys[] DefinedKeyCodes;
 
         private readonly byte[] _keyState = new byte[256];
+        bool _isCapsLocked;
+        bool _isNumLocked;
+
+
         private readonly List<Keys> _keys = new List<Keys>(10);
 
         private bool _isActive;
@@ -26,47 +30,72 @@ namespace Microsoft.Xna.Platform.Input
         public ConcreteKeyboard()
         {
             Array definedKeys = Enum.GetValues(typeof(Keys));
-            List<byte> keyCodes = new List<byte>(Math.Min(definedKeys.Length, 255));
+            List<Keys> keyCodes = new List<Keys>(Math.Min(definedKeys.Length, 255));
             foreach (object key in definedKeys)
             {
                 int keyCode = (int)key;
                 if ((keyCode >= 1) && (keyCode <= 255))
-                    keyCodes.Add((byte)keyCode);
+                    keyCodes.Add((Keys)keyCode);
             }
             DefinedKeyCodes = keyCodes.ToArray();
         }
 
         public override KeyboardState PlatformGetState()
         {
-            if (_isActive && GetKeyboardState(_keyState))
+            if (_isActive == false)
             {
-                _keys.RemoveAll( (keyCode) => IsKeyReleased((byte)keyCode) );
-
-                foreach (byte keyCode in DefinedKeyCodes)
-                {
-                    if (IsKeyReleased(keyCode))
-                        continue;
-
-                    Keys key = (Keys)keyCode;
-                    if (!_keys.Contains(key))
-                        _keys.Add(key);
-                }
+                // return the cleared _keys, if _isActive == false
+                // TODO: should we return false for toggled keys?
+                _isCapsLocked = Console.CapsLock;
+                _isNumLocked = Console.NumberLock;
+                return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
             }
 
-            bool isCapsLockToggled = Console.CapsLock;
-            bool isNumLockToggled = Console.NumberLock;
-            return base.CreateKeyboardState(_keys, isCapsLockToggled, isNumLockToggled);
+            bool isKeyStateValid = GetKeyboardState(_keyState);
+            if (isKeyStateValid == false)
+            {
+                // return the previous state of _keys, if GetKeyboardState fails
+                // TODO: should we return the previous state of toggled keys?
+                _isCapsLocked = Console.CapsLock;
+                _isNumLocked = Console.NumberLock;
+                return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
+            }
+
+            // remove released keys
+            _keys.RemoveAll((key) => !IsKeyPressed(key));
+
+            // add pressed keys
+            foreach (Keys key in DefinedKeyCodes)
+            {
+                if (!IsKeyPressed(key))
+                    continue;
+
+                if (!_keys.Contains(key))
+                    _keys.Add(key);
+            }
+
+            // TODO: should we get toggled keys from IsKeyToggled(...)?
+            _isCapsLocked = Console.CapsLock;
+            _isNumLocked = Console.NumberLock;
+            return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
         }
 
-        private bool IsKeyReleased(byte keyCode)
+        private bool IsKeyPressed(Keys key)
         {
-            return ((_keyState[keyCode] & 0x80) == 0);
+            return ((_keyState[(int)key] & 0x80) != 0);
+        }
+
+        private bool IsKeyToggled(Keys key)
+        {
+            return ((_keyState[(int)key] & 0x01) != 0);
         }
 
         internal void SetActive(bool isActive)
         {
             _isActive = isActive;
-            if (!_isActive)
+
+            // clear _keys, if _isActive == false
+            if (_isActive == false)
                 _keys.Clear();
         }
     }
