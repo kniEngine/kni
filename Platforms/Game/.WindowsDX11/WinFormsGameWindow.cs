@@ -135,10 +135,9 @@ namespace Microsoft.Xna.Framework
             _instances.Add(this.Handle, this);
 
             //ChangeClientSize
-            SysDrawing.Size clientSize = this.Form.ClientSize;
-            if (clientSize.Width != GraphicsDeviceManager.DefaultBackBufferWidth
-            || clientSize.Height != GraphicsDeviceManager.DefaultBackBufferHeight)
-                this.Form.ClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            SysDrawing.Size newClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            if (this.Form.ClientSize != newClientSize)
+                this.Form.ClientSize = newClientSize;
             CenterOnPrimaryMonitor();
 
             SetIcon();
@@ -396,10 +395,9 @@ namespace Microsoft.Xna.Framework
             // make sure we don't see the events from this as a user resize
             Form.IsResizing = true;
 
-            SysDrawing.Size clientSize = this.Form.ClientSize;
-            if (clientSize.Width  != width
-            ||  clientSize.Height != height)
-                this.Form.ClientSize = new SysDrawing.Size(width, height);
+            SysDrawing.Size newClientSize = new SysDrawing.Size(width, height);
+            if (this.Form.ClientSize != newClientSize)
+                this.Form.ClientSize = newClientSize;
 
             // if the window wasn't moved manually and it's resized, it should be centered
             if (!_wasMoved)
