@@ -46,6 +46,7 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     if (IsKeyReleased(keyCode))
                         continue;
+
                     Keys key = (Keys)keyCode;
                     if (!_keys.Contains(key))
                         _keys.Add(key);
