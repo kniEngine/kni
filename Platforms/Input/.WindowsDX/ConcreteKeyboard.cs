@@ -53,9 +53,9 @@ namespace Microsoft.Xna.Platform.Input
                 }
             }
 
-            bool isCapsLockToggled = Console.CapsLock;
-            bool isNumLockToggled = Console.NumberLock;
-            return base.CreateKeyboardState(_keys, isCapsLockToggled, isNumLockToggled);
+            bool isCapsLocked = Console.CapsLock;
+            bool isNumLocked = Console.NumberLock;
+            return base.CreateKeyboardState(_keys, isCapsLocked, isNumLocked);
         }
 
         private bool IsKeyReleased(byte keyCode)
