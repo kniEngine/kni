@@ -66,8 +66,8 @@ namespace Microsoft.Xna.Framework
         {
             get
             {
-                var position = Form.PointToScreen(SysDrawing.Point.Empty);
-                var size = Form.ClientSize;
+                SysDrawing.Point position = Form.PointToScreen(SysDrawing.Point.Empty);
+                SysDrawing.Size size = Form.ClientSize;
                 return new Rectangle(position.X, position.Y, size.Width, size.Height);
             }
         }
