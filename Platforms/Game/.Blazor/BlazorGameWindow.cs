@@ -304,12 +304,6 @@ namespace Microsoft.Xna.Framework
             _window.Document.Title = title;
         }
 
-        // Run game loop when the app becomes Idle.
-        private void TickOnIdle(object sender, EventArgs e)
-        {
-        }
-
-
         internal void ChangeClientSize(int width, int height)
         {
 
