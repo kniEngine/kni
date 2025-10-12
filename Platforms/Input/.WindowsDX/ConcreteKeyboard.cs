@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_isActive && GetKeyboardState(_keyState))
             {
-                _keys.RemoveAll( (keyCode) => !IsKeyPressed((byte)keyCode) );
+                _keys.RemoveAll( (key) => !IsKeyPressed((byte)key) );
 
                 foreach (byte keyCode in DefinedKeyCodes)
                 {
