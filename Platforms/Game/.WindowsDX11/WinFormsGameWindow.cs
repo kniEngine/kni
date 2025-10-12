@@ -153,6 +153,9 @@ namespace Microsoft.Xna.Framework
             if (TouchPanel.WindowHandle == IntPtr.Zero)
                 TouchPanel.WindowHandle = this.Handle;
 
+            // disable Keyboard input until the window is activated.
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(false);
+
             Form.Activated += OnActivated;
             Form.Deactivate += OnDeactivate;
             Form.ResizeBegin += OnResizeBegin;
@@ -418,6 +421,9 @@ namespace Microsoft.Xna.Framework
                 Mouse.WindowHandle = IntPtr.Zero;
             if (TouchPanel.WindowHandle == this.Handle)
                 TouchPanel.WindowHandle = IntPtr.Zero;
+
+            // re-enable keyboard input.
+            ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(true);
 
             _instances.Remove(this.Handle);
             _handle = IntPtr.Zero;
