@@ -136,17 +136,12 @@ namespace Microsoft.Xna.Framework
 
             //ChangeClientSize
             {
-                // make sure we don't see the events from this as a user resize
-                Form.IsResizing = true;
-
                 SysDrawing.Size clientSize = this.Form.ClientSize;
                 if (clientSize.Width != GraphicsDeviceManager.DefaultBackBufferWidth
                 || clientSize.Height != GraphicsDeviceManager.DefaultBackBufferHeight)
                     this.Form.ClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
 
                 CenterOnPrimaryMonitor();
-
-                Form.IsResizing = false;
             }
 
             SetIcon();
