@@ -135,14 +135,11 @@ namespace Microsoft.Xna.Framework
             _instances.Add(this.Handle, this);
 
             //ChangeClientSize
-            {
-                SysDrawing.Size clientSize = this.Form.ClientSize;
-                if (clientSize.Width != GraphicsDeviceManager.DefaultBackBufferWidth
-                || clientSize.Height != GraphicsDeviceManager.DefaultBackBufferHeight)
-                    this.Form.ClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
-
-                CenterOnPrimaryMonitor();
-            }
+            SysDrawing.Size clientSize = this.Form.ClientSize;
+            if (clientSize.Width != GraphicsDeviceManager.DefaultBackBufferWidth
+            || clientSize.Height != GraphicsDeviceManager.DefaultBackBufferHeight)
+                this.Form.ClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            CenterOnPrimaryMonitor();
 
             SetIcon();
             Title = AssemblyHelper.GetDefaultWindowTitle();
