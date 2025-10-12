@@ -144,9 +144,7 @@ namespace Microsoft.Xna.Framework
                 || clientSize.Height != GraphicsDeviceManager.DefaultBackBufferHeight)
                     this.Form.ClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
 
-                // if the window wasn't moved manually and it's resized, it should be centered
-                if (!_wasMoved)
-                    CenterOnPrimaryMonitor();
+                CenterOnPrimaryMonitor();
 
                 Form.IsResizing = false;
             }
