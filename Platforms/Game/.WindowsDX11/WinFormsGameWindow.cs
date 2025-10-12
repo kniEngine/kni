@@ -136,7 +136,6 @@ namespace Microsoft.Xna.Framework
 
             //ChangeClientSize
             {
-                bool prevIsResizing = Form.IsResizing;
                 // make sure we don't see the events from this as a user resize
                 Form.IsResizing = true;
 
@@ -149,7 +148,7 @@ namespace Microsoft.Xna.Framework
                 if (!_wasMoved)
                     CenterOnPrimaryMonitor();
 
-                Form.IsResizing = prevIsResizing;
+                Form.IsResizing = false;
             }
 
             SetIcon();
