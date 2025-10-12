@@ -387,12 +387,11 @@ namespace Microsoft.Xna.Framework
 
         internal void ChangeClientSize(int width, int height)
         {
-            SysDrawing.Size clientSize = this.Form.ClientSize;
-
             bool prevIsResizing = Form.IsResizing;
             // make sure we don't see the events from this as a user resize
             Form.IsResizing = true;
 
+            SysDrawing.Size clientSize = this.Form.ClientSize;
             if (clientSize.Width != width || clientSize.Height != height)
                 this.Form.ClientSize = new SysDrawing.Size(width, height);
 
