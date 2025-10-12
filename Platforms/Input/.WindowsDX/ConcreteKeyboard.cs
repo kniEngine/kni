@@ -70,6 +70,7 @@ namespace Microsoft.Xna.Platform.Input
         internal void SetActive(bool isActive)
         {
             _isActive = isActive;
+
             if (!_isActive)
                 _keys.Clear();
         }
