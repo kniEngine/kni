@@ -41,27 +41,26 @@ namespace Microsoft.Xna.Platform.Input
             if (!_isActive)
                 return base.CreateKeyboardState(_keys, Console.CapsLock, Console.NumberLock);
 
-            if (GetKeyboardState(_keyState))
-            {
-                _keys.RemoveAll((key) => !IsKeyPressed(key));
-
-                foreach (Keys key in DefinedKeyCodes)
-                {
-                    if (!IsKeyPressed(key))
-                        continue;
-
-                    if (!_keys.Contains(key))
-                        _keys.Add(key);
-                }
-
-                bool isCapsLocked = Console.CapsLock;
-                bool isNumLocked = Console.NumberLock;
-                return base.CreateKeyboardState(_keys, isCapsLocked, isNumLocked);
-            }
-            else
+            bool isKeyStateValid = GetKeyboardState(_keyState);
+            if (!isKeyStateValid)
             {
                 return base.CreateKeyboardState(_keys, Console.CapsLock, Console.NumberLock);
             }
+
+            _keys.RemoveAll((key) => !IsKeyPressed(key));
+
+            foreach (Keys key in DefinedKeyCodes)
+            {
+                if (!IsKeyPressed(key))
+                    continue;
+
+                if (!_keys.Contains(key))
+                    _keys.Add(key);
+            }
+
+            bool isCapsLocked = Console.CapsLock;
+            bool isNumLocked = Console.NumberLock;
+            return base.CreateKeyboardState(_keys, isCapsLocked, isNumLocked);
         }
 
         private bool IsKeyPressed(Keys key)
