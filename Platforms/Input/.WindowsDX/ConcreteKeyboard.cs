@@ -40,19 +40,22 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_isActive && GetKeyboardState(_keyState))
             {
-                _keys.RemoveAll( (key) => IsKeyReleased((byte)key) );
+                _keys.RemoveAll( (keyCode) => IsKeyReleased((byte)keyCode) );
 
-                foreach (var keyCode in DefinedKeyCodes)
+                foreach (byte keyCode in DefinedKeyCodes)
                 {
                     if (IsKeyReleased(keyCode))
                         continue;
-                    var key = (Keys)keyCode;
+
+                    Keys key = (Keys)keyCode;
                     if (!_keys.Contains(key))
                         _keys.Add(key);
                 }
             }
 
-            return base.CreateKeyboardState(_keys, Console.CapsLock, Console.NumberLock);
+            bool isCapsLockToggled = Console.CapsLock;
+            bool isNumLockToggled = Console.NumberLock;
+            return base.CreateKeyboardState(_keys, isCapsLockToggled, isNumLockToggled);
         }
 
         private bool IsKeyReleased(byte keyCode)
