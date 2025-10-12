@@ -398,9 +398,16 @@ namespace Microsoft.Xna.Framework
 
             // if the window wasn't moved manually and it's resized, it should be centered
             if (!_wasMoved)
-                Form.CenterOnPrimaryMonitor();
+                CenterOnPrimaryMonitor();
 
             Form.IsResizing = prevIsResizing;
+        }
+
+        internal void CenterOnPrimaryMonitor()
+        {
+            Form.Location = new System.Drawing.Point(
+                 (Screen.PrimaryScreen.WorkingArea.Width  - Form.Width ) / 2,
+                 (Screen.PrimaryScreen.WorkingArea.Height - Form.Height) / 2);
         }
 
         [System.Security.SuppressUnmanagedCodeSecurity] // We won't use this maliciously
