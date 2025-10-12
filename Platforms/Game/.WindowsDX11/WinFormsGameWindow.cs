@@ -134,7 +134,6 @@ namespace Microsoft.Xna.Framework
             _handle = Form.Handle;
             _instances.Add(this.Handle, this);
 
-            //ChangeClientSize
             SysDrawing.Size newClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
             if (this.Form.ClientSize != newClientSize)
                 this.Form.ClientSize = newClientSize;
