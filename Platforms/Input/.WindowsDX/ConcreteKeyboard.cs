@@ -40,13 +40,13 @@ namespace Microsoft.Xna.Platform.Input
         {
             if (_isActive && GetKeyboardState(_keyState))
             {
-                _keys.RemoveAll( (key) => !IsKeyPressed((byte)key) );
+                _keys.RemoveAll( (key) => !IsKeyPressed(key) );
 
                 foreach (byte keyCode in DefinedKeyCodes)
                 {
                     Keys key = (Keys)keyCode;
 
-                    if (!IsKeyPressed(keyCode))
+                    if (!IsKeyPressed(key))
                         continue;
 
                     if (!_keys.Contains(key))
@@ -59,9 +59,9 @@ namespace Microsoft.Xna.Platform.Input
             return base.CreateKeyboardState(_keys, isCapsLocked, isNumLocked);
         }
 
-        private bool IsKeyPressed(byte keyCode)
+        private bool IsKeyPressed(Keys key)
         {
-            return ((_keyState[keyCode] & 0x80) != 0);
+            return ((_keyState[(int)key] & 0x80) != 0);
         }
 
         private bool IsKeyToggled(Keys key)
