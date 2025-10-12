@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Platform.Input
 {
     public sealed class ConcreteKeyboard : KeyboardStrategy
     {
-        private readonly byte[] DefinedKeyCodes;
+        private readonly Keys[] DefinedKeyCodes;
 
         private readonly byte[] _keyState = new byte[256];
         private readonly List<Keys> _keys = new List<Keys>(10);
@@ -26,12 +26,12 @@ namespace Microsoft.Xna.Platform.Input
         public ConcreteKeyboard()
         {
             Array definedKeys = Enum.GetValues(typeof(Keys));
-            List<byte> keyCodes = new List<byte>(Math.Min(definedKeys.Length, 255));
+            List<Keys> keyCodes = new List<Keys>(Math.Min(definedKeys.Length, 255));
             foreach (object key in definedKeys)
             {
                 int keyCode = (int)key;
                 if ((keyCode >= 1) && (keyCode <= 255))
-                    keyCodes.Add((byte)keyCode);
+                    keyCodes.Add((Keys)keyCode);
             }
             DefinedKeyCodes = keyCodes.ToArray();
         }
@@ -42,10 +42,8 @@ namespace Microsoft.Xna.Platform.Input
             {
                 _keys.RemoveAll( (key) => !IsKeyPressed(key) );
 
-                foreach (byte keyCode in DefinedKeyCodes)
+                foreach (Keys key in DefinedKeyCodes)
                 {
-                    Keys key = (Keys)keyCode;
-
                     if (!IsKeyPressed(key))
                         continue;
 
