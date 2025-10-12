@@ -78,13 +78,6 @@ namespace Microsoft.Xna.Framework.Windows
             Application.RemoveMessageFilter(this);
         }
 
-        public void CenterOnPrimaryMonitor()
-        {
-             Location = new System.Drawing.Point(
-                 (Screen.PrimaryScreen.WorkingArea.Width  - Width ) / 2,
-                 (Screen.PrimaryScreen.WorkingArea.Height - Height) / 2);
-        }
-
         // TNC: handle keyboard messages internally to avoid garbage from EventArgs
         // we need to handle those early in a IMessageFilter to skip OnPreviewKeyDown(PreviewKeyDownEventArgs)
         bool IMessageFilter.PreFilterMessage(ref Message m)

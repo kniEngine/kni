@@ -66,8 +66,8 @@ namespace Microsoft.Xna.Framework
         {
             get
             {
-                var position = Form.PointToScreen(SysDrawing.Point.Empty);
-                var size = Form.ClientSize;
+                SysDrawing.Point position = Form.PointToScreen(SysDrawing.Point.Empty);
+                SysDrawing.Size size = Form.ClientSize;
                 return new Rectangle(position.X, position.Y, size.Width, size.Height);
             }
         }
@@ -134,7 +134,10 @@ namespace Microsoft.Xna.Framework
             _handle = Form.Handle;
             _instances.Add(this.Handle, this);
 
-            ChangeClientSize(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            SysDrawing.Size newClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            if (this.Form.ClientSize != newClientSize)
+                this.Form.ClientSize = newClientSize;
+            CenterOnPrimaryMonitor();
 
             SetIcon();
             Title = AssemblyHelper.GetDefaultWindowTitle();
@@ -387,20 +390,26 @@ namespace Microsoft.Xna.Framework
 
         internal void ChangeClientSize(int width, int height)
         {
-            Rectangle clientBounds = this.ClientBounds;
-
             bool prevIsResizing = Form.IsResizing;
             // make sure we don't see the events from this as a user resize
             Form.IsResizing = true;
 
-            if (clientBounds.Width != width || clientBounds.Height != height)
-                this.Form.ClientSize = new SysDrawing.Size(width, height);
+            SysDrawing.Size newClientSize = new SysDrawing.Size(width, height);
+            if (this.Form.ClientSize != newClientSize)
+                this.Form.ClientSize = newClientSize;
 
             // if the window wasn't moved manually and it's resized, it should be centered
             if (!_wasMoved)
-                Form.CenterOnPrimaryMonitor();
+                CenterOnPrimaryMonitor();
 
             Form.IsResizing = prevIsResizing;
+        }
+
+        internal void CenterOnPrimaryMonitor()
+        {
+            Form.Location = new System.Drawing.Point(
+                 (Screen.PrimaryScreen.WorkingArea.Width  - Form.Width ) / 2,
+                 (Screen.PrimaryScreen.WorkingArea.Height - Form.Height) / 2);
         }
 
         [System.Security.SuppressUnmanagedCodeSecurity] // We won't use this maliciously
