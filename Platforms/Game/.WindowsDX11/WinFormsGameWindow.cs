@@ -392,7 +392,8 @@ namespace Microsoft.Xna.Framework
             Form.IsResizing = true;
 
             SysDrawing.Size clientSize = this.Form.ClientSize;
-            if (clientSize.Width != width || clientSize.Height != height)
+            if (clientSize.Width  != width
+            ||  clientSize.Height != height)
                 this.Form.ClientSize = new SysDrawing.Size(width, height);
 
             // if the window wasn't moved manually and it's resized, it should be centered
