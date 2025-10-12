@@ -63,6 +63,11 @@ namespace Microsoft.Xna.Platform.Input
             return ((_keyState[keyCode] & 0x80) == 0);
         }
 
+        private bool IsKeyToggled(Keys key)
+        {
+            return ((_keyState[(int)key] & 0x01) != 0);
+        }
+
         internal void SetActive(bool isActive)
         {
             _isActive = isActive;
