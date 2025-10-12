@@ -16,6 +16,10 @@ namespace Microsoft.Xna.Platform.Input
         private readonly Keys[] DefinedKeyCodes;
 
         private readonly byte[] _keyState = new byte[256];
+        bool _isCapsLocked;
+        bool _isNumLocked;
+
+
         private readonly List<Keys> _keys = new List<Keys>(10);
 
         private bool _isActive;
@@ -39,12 +43,18 @@ namespace Microsoft.Xna.Platform.Input
         public override KeyboardState PlatformGetState()
         {
             if (!_isActive)
-                return base.CreateKeyboardState(_keys, Console.CapsLock, Console.NumberLock);
+            {
+                _isCapsLocked = Console.CapsLock;
+                _isNumLocked = Console.NumberLock;
+                return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
+            }
 
             bool isKeyStateValid = GetKeyboardState(_keyState);
             if (!isKeyStateValid)
             {
-                return base.CreateKeyboardState(_keys, Console.CapsLock, Console.NumberLock);
+                _isCapsLocked = Console.CapsLock;
+                _isNumLocked = Console.NumberLock;
+                return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
             }
 
             _keys.RemoveAll((key) => !IsKeyPressed(key));
@@ -58,9 +68,9 @@ namespace Microsoft.Xna.Platform.Input
                     _keys.Add(key);
             }
 
-            bool isCapsLocked = Console.CapsLock;
-            bool isNumLocked = Console.NumberLock;
-            return base.CreateKeyboardState(_keys, isCapsLocked, isNumLocked);
+            _isCapsLocked = Console.CapsLock;
+            _isNumLocked = Console.NumberLock;
+            return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
         }
 
         private bool IsKeyPressed(Keys key)
