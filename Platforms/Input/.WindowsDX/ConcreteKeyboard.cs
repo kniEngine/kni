@@ -42,11 +42,11 @@ namespace Microsoft.Xna.Platform.Input
             {
                 _keys.RemoveAll( (key) => IsKeyReleased((byte)key) );
 
-                foreach (var keyCode in DefinedKeyCodes)
+                foreach (byte keyCode in DefinedKeyCodes)
                 {
                     if (IsKeyReleased(keyCode))
                         continue;
-                    var key = (Keys)keyCode;
+                    Keys key = (Keys)keyCode;
                     if (!_keys.Contains(key))
                         _keys.Add(key);
                 }
