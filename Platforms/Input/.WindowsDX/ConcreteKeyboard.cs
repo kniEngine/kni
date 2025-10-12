@@ -42,23 +42,27 @@ namespace Microsoft.Xna.Platform.Input
 
         public override KeyboardState PlatformGetState()
         {
-            if (!_isActive)
+            if (_isActive == false)
             {
+                // return the cleared _keys, if _isActive == false
                 _isCapsLocked = Console.CapsLock;
                 _isNumLocked = Console.NumberLock;
                 return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
             }
 
             bool isKeyStateValid = GetKeyboardState(_keyState);
-            if (!isKeyStateValid)
+            if (isKeyStateValid == false)
             {
+                // return the previous state of _keys, if GetKeyboardState fails
                 _isCapsLocked = Console.CapsLock;
                 _isNumLocked = Console.NumberLock;
                 return base.CreateKeyboardState(_keys, _isCapsLocked, _isNumLocked);
             }
 
+            // remove released keys
             _keys.RemoveAll((key) => !IsKeyPressed(key));
 
+            // add pressed keys
             foreach (Keys key in DefinedKeyCodes)
             {
                 if (!IsKeyPressed(key))
@@ -87,7 +91,8 @@ namespace Microsoft.Xna.Platform.Input
         {
             _isActive = isActive;
 
-            if (!_isActive)
+            // clear _keys, if _isActive == false
+            if (_isActive == false)
                 _keys.Clear();
         }
     }
