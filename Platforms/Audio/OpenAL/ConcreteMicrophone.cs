@@ -111,5 +111,14 @@ namespace Microsoft.Xna.Platform.Audio
 
             return 0;
         }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
     }
 }

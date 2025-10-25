@@ -179,5 +179,14 @@ namespace Microsoft.Xna.Platform.Audio
                 _micWorkletNode = null;
             }
         }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
     }
 }
