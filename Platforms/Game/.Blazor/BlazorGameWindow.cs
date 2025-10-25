@@ -380,8 +380,6 @@ namespace Microsoft.Xna.Framework
                 raiseClientSizeChanged = true;
             }
 
-            ChangeClientSize(pp.BackBufferWidth, pp.BackBufferHeight);
-
             if (raiseClientSizeChanged)
                 OnClientSizeChanged();
         }
