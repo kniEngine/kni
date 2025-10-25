@@ -123,5 +123,14 @@ namespace Microsoft.Xna.Platform.Audio
             int bytesRead = _audioRecord.Read(buffer, offset, count);
             return bytesRead;
         }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
     }
 }

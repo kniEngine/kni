@@ -56,5 +56,14 @@ namespace Microsoft.Xna.Platform.Audio
         {
             throw new NotImplementedException();
         }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+        }
     }
 }

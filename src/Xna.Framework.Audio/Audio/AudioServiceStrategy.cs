@@ -51,7 +51,7 @@ namespace Microsoft.Xna.Platform.Audio
         #endregion
     }
 
-    abstract public class MicrophoneStrategy
+    abstract public class MicrophoneStrategy : IDisposable
     {
         private int _sampleRate = 44100;
         private TimeSpan _bufferDuration = TimeSpan.FromMilliseconds(1000.0);
@@ -95,6 +95,22 @@ namespace Microsoft.Xna.Platform.Audio
             // this assumes 16bit mono data
             return AudioService.GetSampleSizeInBytes(duration, _sampleRate, AudioChannels.Mono);
         }
+
+
+        #region IDisposable
+        ~MicrophoneStrategy()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected abstract void Dispose(bool disposing);
+        #endregion
     }
 
     abstract public class SoundEffectStrategy : IDisposable
