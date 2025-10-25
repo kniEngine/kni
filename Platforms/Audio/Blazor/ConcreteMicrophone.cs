@@ -44,11 +44,13 @@ namespace Microsoft.Xna.Platform.Audio
         internal ConcreteMicrophone()
             : base()
         {
-            _ac = new AudioContext();
-            base.SampleRate = _ac.SampleRate;
+            using (AudioContext ac = new AudioContext())
+            {
+                base.SampleRate = ac.SampleRate;
 
-            int bufferSize = base.SampleRate * 1 * sizeof(short) * 2;
-            _dataBuffer = new byte[bufferSize];
+                int bufferSize = base.SampleRate * 1 * sizeof(short) * 2;
+                _dataBuffer = new byte[bufferSize];
+            }
         }
 
         public override void PlatformStart(string deviceName)
@@ -132,6 +134,8 @@ namespace Microsoft.Xna.Platform.Audio
 
             try
             {
+                _ac = new AudioContext();
+
                 // init micProcessor AudioWorklet
                 await _ac.AudioWorklet.AddModuleAsync("js/micProcessor.js");
                 if (token.IsCancellationRequested) return;
@@ -177,6 +181,12 @@ namespace Microsoft.Xna.Platform.Audio
                 _micWorkletNode.Port.Message-= OnMicMessage;
                 _micWorkletNode.Dispose();
                 _micWorkletNode = null;
+            }
+
+            if (_ac != null)
+            {
+                _ac.Dispose();
+                _ac = null;
             }
         }
 
