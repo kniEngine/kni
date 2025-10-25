@@ -14,6 +14,7 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <TargetFramework>net8.0-ios</TargetFramework>
+	<CheckEolWorkloads>false</CheckEolWorkloads>
     <SupportedOSPlatformVersion>11.2</SupportedOSPlatformVersion>
     <LangVersion>Default</LangVersion>
     <IsTrimmable>True</IsTrimmable>
