@@ -45,6 +45,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
+    - name: Restore Android workload
+      run: dotnet workload restore Kni.Platform.Android.GL.sln
+    - name: Restore iOS workload
+      run: dotnet workload restore Kni.Platform.iOS.GL.sln
+    - name: Restore Blazor workload
+      run: dotnet workload restore Kni.Platform.Blazor.GL.sln
+    - name: Restore WinForms workload
+      run: dotnet workload restore Kni.Platform.WinForms.DX11.sln
+      
     - name: Restore dependencies
       run: dotnet restore KNI.sln
       
