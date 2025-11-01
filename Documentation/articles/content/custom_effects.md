@@ -65,8 +65,10 @@ These are some tips for writing or converting effects for use with KNI.
 |  * `__KNIFX__`                   |
 |  * `__DEBUG__` when building with the Debug flag |
 |  * `__DIRECTX__` when targeting DirectX |
-|  * `__OPENGL__` when targeting OpenGL |
-|  * `__MOJOSHADER__` when building with MojoShader, targeting OpenGL |
+|  * `__GL__` when targeting OpenGL/GLES/WebGL |
+|  * `__OPENGL__` when targeting desktop OpenGL |
+|  * `__GLES__` when targeting GLES/WebGL |
+|  * `__MOJOSHADER__` when building with MojoShader, targeting OpenGL/GLES/WebGL |
 |---|
 
 
