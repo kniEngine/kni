@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         /// </summary>
         public abstract ShaderProfileType ProfileType { get; }
 
-        internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros();
+        internal abstract IEnumerable<KeyValuePair<string,string>> GetMacros(GraphicsBackend backend);
 
         internal abstract void ValidateShaderModels(PassInfo pass, string shaderFunction, string shaderModel, ShaderStage shaderStage, ShaderVersion shaderVersion);
 

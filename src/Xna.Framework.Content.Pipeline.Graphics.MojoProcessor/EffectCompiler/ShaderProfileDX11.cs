@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
         }
 
-        internal override IEnumerable<KeyValuePair<string, string>> GetMacros()
+        internal override IEnumerable<KeyValuePair<string, string>> GetMacros(GraphicsBackend backend)
         {
             yield return new KeyValuePair<string, string>("__DIRECTX__", "1");
         }

@@ -28,10 +28,22 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
         }
 
-        internal override IEnumerable<KeyValuePair<string, string>> GetMacros()
+        internal override IEnumerable<KeyValuePair<string, string>> GetMacros(GraphicsBackend backend)
         {
-            yield return new KeyValuePair<string, string>("__OPENGL__", "1");
+            yield return new KeyValuePair<string, string>("__GL__", "1");
             yield return new KeyValuePair<string, string>("__MOJOSHADER__", "1");
+
+            switch(backend)
+            {
+                case GraphicsBackend.OpenGL:
+                        yield return new KeyValuePair<string, string>("__OPENGL__", "1");
+                    break;
+
+                    case GraphicsBackend.GLES:
+                    case GraphicsBackend.WebGL:
+                        yield return new KeyValuePair<string, string>("__GLES__", "1");
+                    break;
+            }
         }
 
         internal override void ValidateShaderModels(PassInfo pass, string shaderFunction, string shaderModel, ShaderStage shaderStage, ShaderVersion shaderVersion)
