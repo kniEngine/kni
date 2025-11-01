@@ -248,17 +248,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             pp.AddMacro("__KNIFX__", "1");
 
-            // deprecated macro. Left for backward compatibility with MonoGame.
-            pp.AddMacro("MGFX", "1");
-
-            // If we're building shaders for debug set that flag too.
+            // If we're building shaders for debug set __DEBUG__ flag too.
             if (DebugMode == EffectProcessorDebugMode.Debug)
-            {
                 pp.AddMacro("__DEBUG__", "1");
-
-                // deprecated macro. Left for backward compatibility with MonoGame.
-                pp.AddMacro("DEBUG", "1");
-            }
 
             foreach (KeyValuePair<string, string> macro in shaderProfile.GetMacros())
                 pp.AddMacro(macro.Key, macro.Value);

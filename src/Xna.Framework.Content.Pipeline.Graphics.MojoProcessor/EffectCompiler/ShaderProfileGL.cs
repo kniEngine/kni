@@ -32,10 +32,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         {
             yield return new KeyValuePair<string, string>("__OPENGL__", "1");
             yield return new KeyValuePair<string, string>("__MOJOSHADER__", "1");
-
-            // deprecated macros. Left for backward compatibility with MonoGame.
-            yield return new KeyValuePair<string, string>("GLSL", "1");
-            yield return new KeyValuePair<string, string>("OPENGL", "1");
         }
 
         internal override void ValidateShaderModels(PassInfo pass, string shaderFunction, string shaderModel, ShaderStage shaderStage, ShaderVersion shaderVersion)
