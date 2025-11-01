@@ -28,10 +28,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         internal override IEnumerable<KeyValuePair<string, string>> GetMacros()
         {
             yield return new KeyValuePair<string, string>("__DIRECTX__", "1");
-
-            // deprecated macros. Left for backward compatibility with MonoGame.
-            yield return new KeyValuePair<string, string>("HLSL", "1");
-            yield return new KeyValuePair<string, string>("SM4", "1");
         }
 
         internal override void ValidateShaderModels(PassInfo pass, string shaderFunction, string shaderModel, ShaderStage shaderStage, ShaderVersion shaderVersion)
