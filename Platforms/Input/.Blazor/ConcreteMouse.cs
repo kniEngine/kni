@@ -80,7 +80,7 @@ namespace Microsoft.Xna.Platform.Input
         public override void PlatformSetCursor(MouseCursor cursor)
         {
             BlazorGameWindow gameWindow = BlazorGameWindow.FromHandle(_wndHandle);
-            gameWindow._canvas.Cursor = ((IPlatformMouseCursor)cursor).GetStrategy<ConcreteMouseCursor>().CursorCSSPropertyValue;
+            gameWindow._canvas.Style["cursor"] = ((IPlatformMouseCursor)cursor).GetStrategy<ConcreteMouseCursor>().CursorCSSPropertyValue;
         }
 
 

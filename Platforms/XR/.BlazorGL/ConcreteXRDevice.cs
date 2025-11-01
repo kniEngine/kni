@@ -355,7 +355,7 @@ namespace Microsoft.Xna.Framework.XR
                     {
                         try
                         {
-                            _createLocalFloorSpaceTask = _currentXRSession.RequestReferenceSpace("local-floor");
+                            _createLocalFloorSpaceTask = _currentXRSession.RequestReferenceSpaceAsync("local-floor");
                             _createLocalFloorSpaceTask.ContinueWith((t) =>
                             {
                                 if (_createLocalFloorSpaceTask.IsCompletedSuccessfully)
@@ -408,7 +408,7 @@ namespace Microsoft.Xna.Framework.XR
                 _xrsession.Ended += _xrsession_Ended;
                 _xrsession.InputSourcesChanged += _xrsession_InputSourcesChanged;
                 await GL.MakeXRCompatibleAsync();
-                _localSpace = await _xrsession.RequestReferenceSpace("local");
+                _localSpace = await _xrsession.RequestReferenceSpaceAsync("local");
 
                 XRWebGLLayerOptions glLayerOptions = new XRWebGLLayerOptions();
                 glLayerOptions.Antialias = false;
