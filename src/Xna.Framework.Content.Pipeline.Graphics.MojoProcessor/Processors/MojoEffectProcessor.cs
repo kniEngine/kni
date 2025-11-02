@@ -98,7 +98,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     string fullFilePath = Path.GetFullPath(input.Identity.SourceFilename);
 
                     // Preprocess the FX file expanding includes and macros.
-                    string effectCode = Preprocess(input, context, shaderProfile, fullFilePath);
+                    string effectCode = Preprocess(input, context, backend, shaderProfile, fullFilePath);
 
                     EffectObject effectObject = ProcessTechniques(input, context, backend, shaderProfile, fullFilePath, effectCode);
 
@@ -242,7 +242,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
         // Pre-process the file,
         // resolving all #includes and macros.
-        private string Preprocess(EffectContent input, ContentProcessorContext context, ShaderProfile shaderProfile, string fullFilePath)
+        private string Preprocess(EffectContent input, ContentProcessorContext context, GraphicsBackend backend, ShaderProfile shaderProfile, string fullFilePath)
         {
             Preprocessor pp = new Preprocessor(input, context, fullFilePath);
 
@@ -252,7 +252,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             if (DebugMode == EffectProcessorDebugMode.Debug)
                 pp.AddMacro("__DEBUG__", "1");
 
-            foreach (KeyValuePair<string, string> macro in shaderProfile.GetMacros())
+            foreach (KeyValuePair<string, string> macro in shaderProfile.GetMacros(backend))
                 pp.AddMacro(macro.Key, macro.Value);
 
             if (!string.IsNullOrEmpty(Defines))
