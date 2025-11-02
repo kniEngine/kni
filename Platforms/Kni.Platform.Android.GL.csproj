@@ -5,8 +5,8 @@
     <BaseOutputPath>..\Artifacts\Platforms\Android</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>True</AppendTargetFrameworkToOutputPath>
 
-    <Version>4.1.9001.0</Version>
-    <AssemblyVersion>4.1.9001.0</AssemblyVersion>
+    <Version>4.2.9001.0</Version>
+    <AssemblyVersion>4.2.9001.0</AssemblyVersion>
 
   </PropertyGroup>
 

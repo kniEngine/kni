@@ -1,6 +1,75 @@
 ﻿# Changelog
 
 
+## 4.2.9001 Release - November 2, 2025
+
+### Fixed
+ - fix BoundingFrustum Intersects BoundingSphere #2436
+ - fix GraphicsResourceStrategy.Dispose() #2334
+ - fix ShouldNotOverrideTextures tests #2401 (XNA API compatibility)
+ - fix shouldSetAndGetOptimizedMatrixArray Test #2466
+ - Fix SFX MasterVolume #2381
+ - [DesktopGL] fix SDL MediaPlayer.IsRepeating gaps #2515
+ - [OpenAL] fix default microphone selection #2339
+ - [XAudio/WebAudio] fix SoundEffectInstance default Volume #2360
+ - [Android] fix Android ConcreteMediaPlayerStrategy IsRepeating #2440
+ - [Android] fix Android ConcreteVideoPlayer IsLooped #2439
+ - [Blazor.GL] MouseState.ScrollWheelValue does not change #2532
+ - [GL] fix GLes precision #2448
+ - [GL] fix GraphicsDevice.Clear(...) #2354
+ - [Content.Pipeline] fix Incremental builds #2449
+ - [Content.Pipeline] fix ColorWriter RuntimeType namespace #2298
+ - [Content.Pipeline] fix BuildEvent SourceFile for external references #2333
+ - [Content.Pipeline] fix parsing WebM metadata #2386
+ - [Content.Pipeline] fix parsing WMV metadata #2322
+ - [PipelineEditor] content editor preserve Link #2345
+
+### Performance
+ - optimize ConstantBufferStrategy.SetData(...) #2320
+ - reduce ModelBoneCollection allocations #2501
+ - [OpenAL] reduce allocations on OpenAL DynamicSoundEffectInstance #2484
+ - [OpenAL] reduce allocations on OpenAL SoundEffect #2489
+ - [Content.Pipeline] optimize CreateGeometry(...) #2336
+ - [Content.Pipeline] perf SoundEffectProcessor #2369
+
+### Changed
+ - thread-safe Model.Draw(...) #2500
+ - KNIFX Format #2396, #2400
+ - multiplatform shaders #2464
+ - check Shader model Version #2350
+ - GLSL 300es Shaders #2406
+ - [GL] seperate GL shaders #2456, #2457, #2463
+ - [Android] upgrade to 16K aligned OpenAL v1.24.3 + OBOE #2495, #2504
+ - [Winforms.DX11] enable DX Keyboard Input by default when there is no GameWindow/Game. #2528
+ - [Blazor.GL] update Wasm v8.0.11 #2467,#2543
+ - [WebGL] allow feature level FL10_0 #2517
+ - [GL] allow SM4.0 on GLSL #2428, #2446
+ - [DX11] upgrade to SharpDX 4.2.0 #2297, #2479
+ - [Content.Pipeline] default media formats #2384
+ - [Content.Pipeline] use WebM as the default on all platforms #2388
+ - [Content.Pipeline] use MP3 as the default on all platforms #2389
+ - [Content.Pipeline] Transcode Video files #2324
+ - [PipelineEditor] resolving packages modal window #2471
+ - [PipelineEditor] preserve ProcessorParams #2476, #2482
+ - [PipelineEditor] PathComparer #2290
+
+### Added
+ - [Android] implement ConcreteMouse #2422, #2423
+ - [Winforms.DX11] implements SaveAsJpeg() #2519
+ - [Blazor.GL] Implements BlazorGameWindow.OnTextInput #2351
+ - [Blazor.GL] Implements Mouse.SetCursor for BlazorGL #2346
+ - [WebAudio] implement WebAudio Pan #2361
+ - [WebAudio] implement WebAudio Ieee float #2367
+ - [WebAudio] implements DynamicSoundEffectInstance #2468
+ - [WebAudio] implements MicrophoneStrategy #2469
+ - [WebGL] Implements DrawInstancedPrimitives support for BlazorGL #2338
+ - [Content.Pipeline] VideoImporter #2385
+ - [Content.Pipeline] added .fx defines __GL__, __GLES__ #2546
+
+### Removed
+ - [Content.Pipeline] drop support for legacy MGFX v09 #2397
+ - [Content.Pipeline] removed .fx defines MGFX, DEBUG, GLSL, HLSL, OPENGL, SM4 #2545
+
 ## 4.1.9001 Release - April 08, 2025
 
 ### Fixed

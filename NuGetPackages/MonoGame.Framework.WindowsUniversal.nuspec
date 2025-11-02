@@ -20,16 +20,16 @@
 
         <dependencies>
             <group targetFramework=".NETCore0.0">
-                <dependency id="nkast.Xna.Framework" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Content" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Graphics" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Audio" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Media" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Input" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Game" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Devices" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.Storage" version="4.1.9001" />
-                <dependency id="nkast.Xna.Framework.XR" version="4.1.9001" />
+                <dependency id="nkast.Xna.Framework" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Content" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Graphics" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Audio" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Media" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Input" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Game" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Devices" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.Storage" version="4.2.9001" />
+                <dependency id="nkast.Xna.Framework.XR" version="4.2.9001" />
                 <dependency id="SharpDX" version="4.2.0" />
                 <dependency id="SharpDX.Direct2D1" version="4.2.0" />
                 <dependency id="SharpDX.Direct3D11" version="4.2.0" />

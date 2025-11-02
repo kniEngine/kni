@@ -1,4 +1,4 @@
-# Migrating from MonoGame 3.8.1 to KNI 4.1
+# Migrating from MonoGame 3.8.1 to KNI 4.2
 
 
 ## Migrating Framework
@@ -12,17 +12,17 @@ Edit your .csproj file of the main project and replace:
 to:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.1.9001" />
-    <PackageReference Include="nkast.Kni.Platform.{Platform}" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.2.9001" />
+    <PackageReference Include="nkast.Kni.Platform.{Platform}" Version="4.2.9001" />
 ```
 
 where {Platform} maps as follows.
@@ -41,16 +41,16 @@ For libraries, edit your .csproj file and replace:
 to:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.1.9001" />
-    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.2.9001" />
 ```
 
 ### Migrating Framework (Android)
@@ -89,7 +89,7 @@ Then replace:
 With:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.2.9001" />
 ```
 
 Then rename 'MonoGameContentReference':
@@ -109,7 +109,7 @@ With 'KniContentReference':
 if your importers require Windows libraries (WinForms,WPF), use the 'nkast.Xna.Framework.Content.Pipeline.Builder.Windows' package.
 
 
-## Migrating Effects (optional)
+## Migrating Effects
 
 Edit your .fx file and rename 'VS_SHADERMODEL' and 'PS_SHADERMODEL':
 
@@ -144,6 +144,12 @@ Then remove:
 #endif
 ```
 
+Replace the following defines:
+
+ DEBUG with __DEBUG__
+ MGFX with __KNIFX__
+ HLSL and SM4 with __DIRECTX__
+ GLSL and OPENGL with __GL__ or (__OPENGL__ || __GLES__)
 
 ## Trimming (optional)
 
