@@ -6,22 +6,6 @@
 Edit your .csproj file and replace:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.0.9001" />
-    <PackageReference Include="nkast.Kni.Platform.{Platform}." Version="4.0.9001" />
-```
-
-to:
-
-```xml
     <PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.1.9001" />
@@ -32,27 +16,28 @@ to:
     <PackageReference Include="nkast.Xna.Framework.Game" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.XR" Version="4.1.9001" />
-    <PackageReference Include="nkast.Kni.Platform.{Platform}" Version="4.1.9001" />
+    <PackageReference Include="nkast.Kni.Platform.{Platform}." Version="4.1.9001" />
+```
+
+to:
+
+```xml
+    <PackageReference Include="nkast.Xna.Framework" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.2.9001" />
+    <PackageReference Include="nkast.Kni.Platform.{Platform}" Version="4.2.9001" />
 ```
 
 For libraries, edit your .csproj file and replace:
 
 ```xml
-    <PackageReference Include="nkast.Xna.Framework" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.0.9001" />
-    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.0.9001" />
-```
-
-to:
-
-```xml
     <PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.1.9001" />
@@ -63,6 +48,21 @@ to:
     <PackageReference Include="nkast.Xna.Framework.Game" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.XR" Version="4.1.9001" />
+```
+
+to:
+
+```xml
+    <PackageReference Include="nkast.Xna.Framework" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Audio" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Media" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Input" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Game" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.2.9001" />
+    <PackageReference Include="nkast.Xna.Framework.XR" Version="4.2.9001" />
 ```
 
 ## Migrating Content Builder
@@ -71,7 +71,7 @@ Edit your .csproj file and replace:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.0.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.1.9001" />
   </ItemGroup>
 ```
 
@@ -79,7 +79,7 @@ to:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.2.9001" />
   </ItemGroup>
 ```
 
@@ -125,17 +125,17 @@ Edit index.html file and replace:
 with:
 
 ```xml
-    <script src="_content/nkast.Wasm.Dom/js/JSObject.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Dom/js/Window.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Dom/js/Document.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Dom/js/Navigator.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Dom/js/Gamepad.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Dom/js/Media.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.XHR/js/XHR.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Canvas/js/Canvas.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Canvas/js/CanvasGLContext.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.Audio/js/Audio.8.0.10.js"></script>
-    <script src="_content/nkast.Wasm.XR/js/XR.8.0.10.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/JSObject.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Window.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Document.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Navigator.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Gamepad.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Media.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.XHR/js/XHR.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Canvas/js/Canvas.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Canvas/js/CanvasGLContext.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.Audio/js/Audio.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.XR/js/XR.8.0.11.js"></script>
 ```
 
 Create a new Blazor.GL project, and copy the files:
