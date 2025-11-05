@@ -125,7 +125,7 @@ Edit index.html file and replace:
 with:
 
 ```xml
-    <script src="_content/nkast.Wasm.Dom/js/JSObject.8.0.11.js"></script>
+    <script src="_content/nkast.Wasm.JSInterop/js/JSObject.8.0.11.js"></script>
     <script src="_content/nkast.Wasm.Dom/js/Window.8.0.11.js"></script>
     <script src="_content/nkast.Wasm.Dom/js/Document.8.0.11.js"></script>
     <script src="_content/nkast.Wasm.Dom/js/Navigator.8.0.11.js"></script>
