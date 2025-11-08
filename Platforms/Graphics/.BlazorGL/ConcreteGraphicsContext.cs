@@ -122,6 +122,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.Disable(WebGLCapability.SCISSOR_TEST);
                 GL.CheckGLError();
                 _lastRasterizerState.ScissorTestEnable = false;
+                _rasterizerStateDirty = true;
             }
 
             WebGLBufferBits bb = default(WebGLBufferBits);
