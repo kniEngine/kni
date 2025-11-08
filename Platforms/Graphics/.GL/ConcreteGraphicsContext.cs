@@ -172,6 +172,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.Disable(EnableCap.ScissorTest);
                 GL.CheckGLError();
                 _lastRasterizerState.ScissorTestEnable = false;
+                _rasterizerStateDirty = true;
             }
 
             ClearBufferMask bufferMask = 0;
