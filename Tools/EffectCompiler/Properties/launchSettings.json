@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "EffectCompiler": {
+      "commandName": "Project",
+      "commandLineArgs": "AlphaTestEffect.fx ..\\Resources\\AlphaTestEffect.fxo /Backend:DirectX11 /Backend:OpenGL /Backend:GLES",
+      "workingDirectory": "..\\..\\Platforms\\Graphics\\Effect\\Shaders"
+    }
+  }
+}
