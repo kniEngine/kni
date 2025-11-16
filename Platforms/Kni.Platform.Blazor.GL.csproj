@@ -6,8 +6,8 @@
 
     <DefineConstants>BLAZORGL;STBSHARP_INTERNAL</DefineConstants>
     
-    <Version>4.2.9001.1</Version>
-    <AssemblyVersion>4.2.9001.1</AssemblyVersion>
+    <Version>4.2.9001.2</Version>
+    <AssemblyVersion>4.2.9001.2</AssemblyVersion>
 
   </PropertyGroup>
 
