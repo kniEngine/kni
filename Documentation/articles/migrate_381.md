@@ -146,10 +146,10 @@ Then remove:
 
 Replace the following defines:
 
- DEBUG with __DEBUG__
- MGFX with __KNIFX__
- HLSL and SM4 with __DIRECTX__
- GLSL and OPENGL with __GL__ or (__OPENGL__ || __GLES__)
+ DEBUG with `__DEBUG__`  <br>
+ MGFX with `__KNIFX__`  <br>
+ HLSL and SM4 with `__DIRECTX__`  <br>
+ GLSL and OPENGL with `__GL__` or (`__OPENGL__` || `__GLES__`)  <br>
 
 ## Trimming (optional)
 

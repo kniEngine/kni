@@ -156,10 +156,10 @@ Edit your Application.csproj file and after <TargetFramework>, add:
 
 Edit your .fx file and replace the following defines:
 
- replace DEBUG with __DEBUG__
- replace MGFX with __KNIFX__
- replace HLSL and SM4 with __DIRECTX__
- replace GLSL , OPENGL and __OPENGL__ with __GL__ or (__OPENGL__ || __GLES__)
+ replace DEBUG with `__DEBUG__`  <br>
+ replace MGFX with `__KNIFX__`  <br>
+ replace HLSL and SM4 with `__DIRECTX__`  <br>
+ replace GLSL , OPENGL and `__OPENGL__` with `__GL__` or (`__OPENGL__` || `__GLES__`)  <br>
 
 
 
