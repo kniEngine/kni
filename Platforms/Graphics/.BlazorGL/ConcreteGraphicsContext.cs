@@ -707,9 +707,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (base.Capabilities.SupportsInstancing)
                 {
-                    throw new NotImplementedException();
-                    //GL2.VertexAttribDivisor(element.AttributeLocation, 0);
-                    //GL.CheckGLError();
+                    ((IWebGL2RenderingContext)GL).VertexAttribDivisor(element.AttributeLocation, 0);
+                    GL.CheckGLError();
                 }
             }
 
