@@ -29,6 +29,17 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         ReadWrite = 0x88BA,
     }
 
+    public enum BufferRangeAccess
+    {
+        Read  = 0x0001,
+        Write = 0x0002,
+
+        InvalidateRange  = 0x0004,
+        InvalidateBuffer = 0x0008,
+        FlushExplicit    = 0x0010,
+        Unsynchronized   = 0x0020,
+    }
+
     internal enum BufferUsageHint
     {
         StreamDraw  = 0x88E0,
@@ -1313,6 +1324,12 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate IntPtr MapBufferRangeDelegate(BufferTarget target, IntPtr offset, IntPtr length, BufferRangeAccess access);
+        internal MapBufferRangeDelegate MapBufferRange; // OpenGL 2.0, GLES 3.0
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate bool UnmapBufferDelegate(BufferTarget target);
         internal UnmapBufferDelegate UnmapBuffer;
 
@@ -1595,6 +1612,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             UnmapBuffer = LoadFunctionOrNull<UnmapBufferDelegate>("glUnmapBuffer");
             BufferSubData = LoadFunctionOrNull<BufferSubDataDelegate>("glBufferSubData");
             DeleteBuffers = LoadFunctionOrNull<DeleteBuffersDelegate>("glDeleteBuffers");
+
+            // OpenGL >= 2.0, GLES >= 3.0
+            MapBufferRange = LoadFunctionOrNull<MapBufferRangeDelegate>("glMapBufferRange");
 
             VertexAttribPointer = LoadFunctionOrNull<VertexAttribPointerDelegate>("glVertexAttribPointer");
 

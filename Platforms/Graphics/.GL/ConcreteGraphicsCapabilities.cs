@@ -31,6 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal bool SupportsBaseVertex { get; private set; }
         internal bool SupportsDrawRangeElements { get; private set; }
+        internal bool SupportsMapBufferRange { get; private set; }
 
         private int _maxDrawBuffers;
 
@@ -157,6 +158,9 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsBaseVertex = version >= new GLVersion(3,2) || GL.Extensions.Contains("GL_ARB_draw_elements_base_vertex");
             SupportsDrawRangeElements = (GL.BoundApi == OGL.RenderApi.GL && version >= new GLVersion(2, 0))
                                      || (GL.BoundApi == OGL.RenderApi.ES && version >= new GLVersion(3, 0));
+
+            SupportsMapBufferRange = (GL.BoundApi == OGL.RenderApi.GL && version >= new GLVersion(2, 0))
+                                  || (GL.BoundApi == OGL.RenderApi.ES && version >= new GLVersion(3, 0));
 
             GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
             GL.CheckGLError();
