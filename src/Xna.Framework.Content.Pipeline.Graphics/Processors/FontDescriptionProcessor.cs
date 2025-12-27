@@ -466,8 +466,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 fontContent.MetricsDescender = face.Size.Metrics.Descender / 64f;
 
 #if DEBUG
-                fontContent.FaceUnderlinePosition = face.UnderlinePosition / 64f;
-                fontContent.FaceUnderlineThickness = face.UnderlineThickness / 64f;
+                fontContent.FaceUnderlinePosition = face.UnderlinePosition * emSizeInPixels / face.UnitsPerEM;
+                fontContent.FaceUnderlineThickness = face.UnderlineThickness * emSizeInPixels / face.UnitsPerEM;
 #endif
 
                 return fontContent;
