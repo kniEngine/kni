@@ -465,7 +465,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 fontContent.MetricsAscender  = face.Size.Metrics.Ascender / 64f;
                 fontContent.MetricsDescender = face.Size.Metrics.Descender / 64f;
 
+                fontContent.FaceBBoxLeft = face.BBox.Left * emSizeInPixels / face.UnitsPerEM;
+                fontContent.FaceBBoxTop = face.BBox.Top * emSizeInPixels / face.UnitsPerEM;
+                fontContent.FaceBBoxRight = face.BBox.Right * emSizeInPixels / face.UnitsPerEM;
+                fontContent.FaceBBoxBottom = face.BBox.Bottom * emSizeInPixels / face.UnitsPerEM;
+
 #if DEBUG
+                fontContent.FaceAscender = face.Ascender * emSizeInPixels / face.UnitsPerEM;
+                fontContent.FaceDescender = face.Descender * emSizeInPixels / face.UnitsPerEM;
+
                 fontContent.FaceUnderlinePosition = face.UnderlinePosition * emSizeInPixels / face.UnitsPerEM;
                 fontContent.FaceUnderlineThickness = face.UnderlineThickness * emSizeInPixels / face.UnitsPerEM;
 #endif
