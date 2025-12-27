@@ -134,7 +134,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
         public float MetricsAscender;
         public float MetricsDescender;
 
+        public float FaceBBoxLeft;
+        public float FaceBBoxTop;
+        public float FaceBBoxRight;
+        public float FaceBBoxBottom;
+
 #if DEBUG
+        public float FaceAscender;
+        public float FaceDescender;
+
         public float FaceUnderlinePosition;
         public float FaceUnderlineThickness;
 #endif
