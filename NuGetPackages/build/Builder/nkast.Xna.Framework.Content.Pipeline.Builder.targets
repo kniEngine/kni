@@ -136,8 +136,8 @@
   <Target Name="RunContentBuilder" DependsOnTargets="PrepareContentBuilder">
   
     <PropertyGroup>
-      <KniContentBuilderExe Condition="'$(KniContentBuilderExe)' == ''">$(MSBuildThisFileDirectory)..\Tools\MGCB.exe</KniContentBuilderExe>
-      <KniContentBuilderCmd>&quot;$(KniContentBuilderExe)&quot;</KniContentBuilderCmd>
+      <KniContentBuilderExe Condition="'$(KniContentBuilderExe)' == ''">$(MSBuildThisFileDirectory)..\Tools\MGCB.dll</KniContentBuilderExe>
+      <KniContentBuilderCmd>dotnet &quot;$(KniContentBuilderExe)&quot;</KniContentBuilderCmd>
     </PropertyGroup>
     
     <!-- Execute MGCB from the project directory so we use the correct manifest. -->
