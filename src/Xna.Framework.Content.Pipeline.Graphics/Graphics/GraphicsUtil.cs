@@ -563,8 +563,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             return format;
         }
 
-        internal static bool RequiresPowerOfTwo(TextureProcessorOutputFormat format, TargetPlatform targetPlatform, GraphicsProfile targetProfile)
+        internal static bool RequiresPowerOfTwo(TextureProcessorOutputFormat format, bool generateMipmaps, TargetPlatform targetPlatform, GraphicsProfile targetProfile)
         {
+            if (generateMipmaps)
+                return (targetProfile == GraphicsProfile.Reach);
+
             switch (format)
             {
                 case TextureProcessorOutputFormat.DxtCompressed:
