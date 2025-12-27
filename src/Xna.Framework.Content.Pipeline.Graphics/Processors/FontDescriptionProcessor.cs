@@ -445,8 +445,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             using (Library sharpFontLib = new Library())
             using (Face face = sharpFontLib.NewFace(faceInfo.FontFile, faceInfo.FaceIndex))
             {
-                float size = (96f/72f) * input.Size;
-                int fixedSize = (int)(size * 64);
+                float emSizeInPixels = (96f/72f) * input.Size;
+                int fixedSize = (int)(emSizeInPixels * 64);
                 const uint dpi = 0;
                 face.SetCharSize(0, fixedSize, dpi, dpi);
 
