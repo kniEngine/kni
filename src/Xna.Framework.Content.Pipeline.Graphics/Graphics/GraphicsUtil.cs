@@ -565,7 +565,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         internal static bool RequiresPowerOfTwo(TextureProcessorOutputFormat format, TargetPlatform targetPlatform, GraphicsProfile targetProfile)
         {
-            // Does it require POT textures?
             switch (format)
             {
                 case TextureProcessorOutputFormat.DxtCompressed:
@@ -583,7 +582,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         internal static bool RequiresSquare(TextureProcessorOutputFormat format, TargetPlatform targetPlatform)
         {
-            // Does it require square textures?
             switch (format)
             {
                 case TextureProcessorOutputFormat.PvrCompressed:
