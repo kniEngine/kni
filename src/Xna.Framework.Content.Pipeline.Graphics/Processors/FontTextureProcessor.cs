@@ -17,6 +17,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
     public class FontTextureProcessor : ContentProcessor<Texture2DContent, SpriteFontContent>
     {
         private Vector4 transparentPixel = Color.Magenta.ToVector4();
+        private bool _generateMipmaps = false;
 
         [DefaultValue(' ')]
         public virtual char FirstCharacter { get; set; }
@@ -25,6 +26,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         public virtual bool PremultiplyAlpha { get; set; }
 
         public virtual TextureProcessorOutputFormat TextureFormat { get; set; }
+
+        [DefaultValue(false)]
+        [DisplayName("Generate Mipmaps")]
+        public virtual bool GenerateMipmaps
+        {
+            get { return _generateMipmaps; }
+            set { _generateMipmaps = value; }
+        }
 
         public FontTextureProcessor()
         {
@@ -65,7 +74,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             TextureProcessorOutputFormat format = TextureFormat;
             if (format == TextureProcessorOutputFormat.Compressed)
                 format = GraphicsUtil.GetTextureFormatForPlatform(format, context.TargetPlatform);
-            bool requiresPot = GraphicsUtil.RequiresPowerOfTwo(format, context.TargetPlatform, context.TargetProfile);
+            bool requiresPot = GraphicsUtil.RequiresPowerOfTwo(format, GenerateMipmaps ,context.TargetPlatform, context.TargetProfile);
             bool requiresSquare = GraphicsUtil.RequiresSquare(format, context.TargetPlatform);
 
             BitmapContent glyphAtlas = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
@@ -93,6 +102,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 TextureProcessor.ProcessPremultiplyAlpha((PixelBitmapContent<Vector4>)glyphAtlas);
 
             output.Texture.Faces[0].Add(glyphAtlas);
+
+            if (GenerateMipmaps)
+                output.Texture.GenerateMipmaps(false);
 
             // Perform the final texture conversion.
             try

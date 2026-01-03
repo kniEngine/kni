@@ -563,9 +563,11 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             return format;
         }
 
-        internal static bool RequiresPowerOfTwo(TextureProcessorOutputFormat format, TargetPlatform targetPlatform, GraphicsProfile targetProfile)
+        internal static bool RequiresPowerOfTwo(TextureProcessorOutputFormat format, bool generateMipmaps, TargetPlatform targetPlatform, GraphicsProfile targetProfile)
         {
-            // Does it require POT textures?
+            if (generateMipmaps)
+                return (targetProfile == GraphicsProfile.Reach);
+
             switch (format)
             {
                 case TextureProcessorOutputFormat.DxtCompressed:
@@ -583,7 +585,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         internal static bool RequiresSquare(TextureProcessorOutputFormat format, TargetPlatform targetPlatform)
         {
-            // Does it require square textures?
             switch (format)
             {
                 case TextureProcessorOutputFormat.PvrCompressed:

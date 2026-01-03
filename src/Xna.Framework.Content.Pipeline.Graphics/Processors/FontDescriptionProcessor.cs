@@ -26,6 +26,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         List<string> _allowedFontFileExtensions = new List<string> { ".ttf", ".ttc", ".otf" };
 
         SmoothingMode _smoothing = SmoothingMode.Normal;
+        private bool _generateMipmaps = false;
 
         [DefaultValue(true)]
         public virtual bool PremultiplyAlpha { get; set; }
@@ -38,6 +39,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
         {
             get { return _smoothing; }
             set { _smoothing = value; }
+        }
+
+        [DefaultValue(false)]
+        [DisplayName("Generate Mipmaps")]
+        public virtual bool GenerateMipmaps
+        {
+            get { return _generateMipmaps; }
+            set { _generateMipmaps = value; }
         }
 
         public FontDescriptionProcessor()
@@ -84,7 +93,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             TextureProcessorOutputFormat format = TextureFormat;
             if (format == TextureProcessorOutputFormat.Compressed)
                 format = GraphicsUtil.GetTextureFormatForPlatform(format, context.TargetPlatform);
-            bool requiresPot = GraphicsUtil.RequiresPowerOfTwo(format, context.TargetPlatform, context.TargetProfile);
+            bool requiresPot = GraphicsUtil.RequiresPowerOfTwo(format, GenerateMipmaps ,context.TargetPlatform, context.TargetProfile);
             bool requiresSquare = GraphicsUtil.RequiresSquare(format, context.TargetPlatform);
 
             BitmapContent glyphAtlas = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
@@ -127,6 +136,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 TextureProcessor.ProcessPremultiplyAlpha((PixelBitmapContent<Vector4>)glyphAtlas);
 
             output.Texture.Faces[0].Add(glyphAtlas);
+
+            if (GenerateMipmaps)
+                output.Texture.GenerateMipmaps(false);
 
             // Perform the final texture conversion.
             try
