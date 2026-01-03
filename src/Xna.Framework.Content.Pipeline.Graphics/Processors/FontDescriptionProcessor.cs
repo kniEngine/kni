@@ -383,7 +383,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     string styleName = fontInfo.NameEntry.TypographyicSubfamilyName;
                     FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(fontInfo.OS2TranslatedStyle);
 
-                    FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, faceIndex, fontStyle, styleName);
+                    Typography.OpenFont.Tables.OS2Table table = fontInfo.OS2Table;
+                    ushort winAscend = (table != null) ? table.usWinAscent : (ushort)0;
+                    ushort winDescent = (table != null) ? table.usWinDescent : (ushort)0;
+
+                    FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, faceIndex, fontStyle, styleName,
+                                                                 winAscend, winDescent);
 
                     CachefontFaceInfo(fontFamilyInfoCache, fontName, fontFaceInfo);
                 }
@@ -397,7 +402,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                         string styleName = fontInfo.NameEntry.TypographyicSubfamilyName;
                         FontDescriptionStyle fontStyle = FontFaceInfo.ToFontStyle(fontInfo.OS2TranslatedStyle);
 
-                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, faceIndex, fontStyle, styleName);
+                        Typography.OpenFont.Tables.OS2Table table = fontInfo.OS2Table;
+                        ushort winAscend = (table != null) ? table.usWinAscent : (ushort)0;
+                        ushort winDescent = (table != null) ? table.usWinDescent : (ushort)0;
+
+                        FontFaceInfo fontFaceInfo = new FontFaceInfo(fontFile, faceIndex, fontStyle, styleName,
+                                                                     winAscend, winDescent);
 
                         CachefontFaceInfo(fontFamilyInfoCache, fontName, fontFaceInfo);
                     }
@@ -460,6 +470,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     fontContent.Glyphs.Add(ch, glyph);
                 }
 
+                //SharpFont.Fnt.Header header = face.GetWinFntHeader();
+                fontContent.WinAscend = faceInfo.WinAscend * emSizeInPixels / face.UnitsPerEM;
+                fontContent.WinDescend = faceInfo.WinDescent * emSizeInPixels / face.UnitsPerEM;
 
                 fontContent.MetricsHeight = face.Size.Metrics.Height / 64f;
                 fontContent.MetricsAscender  = face.Size.Metrics.Ascender / 64f;

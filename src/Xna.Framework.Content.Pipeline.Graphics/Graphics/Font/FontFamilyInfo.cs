@@ -29,6 +29,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
 
         // optional properties
         public readonly string StyleName;
+
+        public readonly ushort WinAscend;
+        public readonly ushort WinDescent;
+
         private readonly SharpFont.FaceFlags FaceFlags;
 
         public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style)
@@ -38,13 +42,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Graphics
             this.Style = style;
         }
 
-        public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName)
+        public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName, ushort winAscend, ushort winDescent)
         {
             this.FontFile = fontPath;
             this.FaceIndex = faceIndex;
             this.Style = style;
 
             this.StyleName = styleName;
+
+            this.WinAscend = winAscend;
+            this.WinDescent = winDescent;
         }
 
         public FontFaceInfo(string fontPath, int faceIndex, FontDescriptionStyle style, string styleName, SharpFont.FaceFlags faceFlags)
