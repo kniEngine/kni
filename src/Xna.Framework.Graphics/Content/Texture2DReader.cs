@@ -23,16 +23,6 @@ namespace Microsoft.Xna.Framework.Content
             int levelCount = input.ReadInt32();
             int levelCountOutput = levelCount;
 
-            // If the system does not fully support Power of Two textures,
-            // skip any mip maps supplied with any non PoT textures.
-            if (levelCount > 1 && !((IPlatformGraphicsDevice)input.GetGraphicsDevice()).Strategy.Capabilities.SupportsNonPowerOfTwo &&
-                (!MathHelper.IsPowerOfTwo(width) || !MathHelper.IsPowerOfTwo(height)))
-            {
-                levelCountOutput = 1;
-                System.Diagnostics.Debug.WriteLine(
-                    "Device does not support non Power of Two textures. Skipping mipmaps.");
-            }
-
             SurfaceFormat convertedFormat = surfaceFormat;
             switch (surfaceFormat)
             {
