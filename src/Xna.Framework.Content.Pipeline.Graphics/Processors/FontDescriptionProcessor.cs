@@ -99,9 +99,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             BitmapContent glyphAtlas = GlyphPacker.ArrangeGlyphs(glyphs.Values, requiresPot, requiresSquare);
 
             // calculate line spacing.
-            output.VerticalLineSpacing = (int)font.MetricsHeight;
-            // The LineSpacing from XNA font importer is +1px that SharpFont.
-            output.VerticalLineSpacing += 1;
+            if (font.WinAscend != 0 || font.WinDescend != 0)
+            {
+                output.VerticalLineSpacing = (int)Math.Ceiling(font.WinAscend + font.WinDescend);
+            }
+            else
+            {
+                output.VerticalLineSpacing = (int)font.MetricsHeight;
+                // The LineSpacing from XNA font importer is +1px that SharpFont.
+                output.VerticalLineSpacing += 1;
+            }
 
             float glyphHeightEx = -(font.MetricsDescender/2f);
             // The above value of glyphHeightEx match the XNA importer,
