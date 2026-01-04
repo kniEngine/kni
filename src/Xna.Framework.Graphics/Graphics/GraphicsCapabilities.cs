@@ -20,12 +20,6 @@ namespace Microsoft.Xna.Platform.Graphics
     {
 
         /// <summary>
-        /// Whether the device fully supports non power-of-two textures, including
-        /// mip maps and wrap modes other than CLAMP_TO_EDGE
-        /// </summary>
-        public bool SupportsNonPowerOfTwo { get; protected set; }
-
-        /// <summary>
         /// Whether the device supports anisotropic texture filtering
         /// </summary>
         public bool SupportsTextureFilterAnisotropic { get; protected set; }

@@ -29,7 +29,6 @@ namespace Microsoft.Xna.Platform.Graphics
             if (profile == GraphicsProfile.FL11_1)
                 _maxTextureSize = 16384;
 
-            SupportsNonPowerOfTwo = profile >= GraphicsProfile.HiDef;
             SupportsTextureFilterAnisotropic = true;
 
             SupportsDepth24 = false;
