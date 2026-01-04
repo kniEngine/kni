@@ -70,10 +70,25 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             foreach (FontGlyph glyph in glyphs.Values)
                 output.VerticalLineSpacing = Math.Max(output.VerticalLineSpacing, glyph.Subrect.Height);
 
-            // We need to know how to pack the glyphs.
             TextureProcessorOutputFormat format = TextureFormat;
+            // resolve Compressed format.
             if (format == TextureProcessorOutputFormat.Compressed)
                 format = GraphicsUtil.GetTextureFormatForPlatform(format, context.TargetPlatform);
+
+            if (format == TextureProcessorOutputFormat.NoChange)
+            {
+                switch(faceFormat)
+                {
+                    case SurfaceFormat.Color:
+                        format = TextureProcessorOutputFormat.Color;
+                        break;
+                    // TODO: Get output format from input faceFormat
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+
+            // We need to know how to pack the glyphs.
             bool requiresPot = GraphicsUtil.RequiresPowerOfTwo(format, GenerateMipmaps ,context.TargetPlatform, context.TargetProfile);
             bool requiresSquare = GraphicsUtil.RequiresSquare(format, context.TargetPlatform);
 
@@ -109,54 +124,54 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             // Perform the final texture conversion.
             try
             {
-                TextureProcessorOutputFormat textureFormat = GraphicsUtil.GetTextureFormatForPlatform(TextureFormat, context.TargetPlatform);
-
-                switch (textureFormat)
+                format = GraphicsUtil.GetTextureFormatForPlatform(format, context.TargetPlatform);
+                switch (format)
                 {
-                    case TextureProcessorOutputFormat.NoChange:
-                        // We do nothing in this case.
-                        break;
                     case TextureProcessorOutputFormat.Color:
                         // If this is color just make sure the format is right and return it.
-                        input.ConvertBitmapType(typeof(PixelBitmapContent<Color>));
+                        output.Texture.ConvertBitmapType(typeof(PixelBitmapContent<Color>));
                         break;
+
                     case TextureProcessorOutputFormat.Color16Bit:
                         // Handle this common compression format.
-                        GraphicsUtil.CompressColor16Bit(input);
+                        GraphicsUtil.CompressColor16Bit(output.Texture);
                         break;
 
                     case TextureProcessorOutputFormat.AtcCompressed:
                         {
                             // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
-                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
-                            GraphicsUtil.CompressColor16Bit(input);
-                            //GraphicsUtil.CompressAti(input);
+                            output.Texture.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressColor16Bit(output.Texture);
+                            //GraphicsUtil.CompressAti(output.Texture);
                         }
                         break;
                     case TextureProcessorOutputFormat.DxtCompressed:
                         {
                             // Compress the greyscale font texture page using a specially-formulated DXT3 mode
-                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
-                            GraphicsUtil.CompressFontDXT3(input, context);
-                            //GraphicsUtil.CompressDxt(input, context);
+                            output.Texture.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressFontDXT3(output.Texture, context);
+                            //GraphicsUtil.CompressDxt(output.Texture, context);
                         }
                         break;
                     case TextureProcessorOutputFormat.Etc1Compressed:
                         {
                             // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
-                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
-                            GraphicsUtil.CompressColor16Bit(input);
-                            //GraphicsUtil.CompressEtc1(input, context);
+                            output.Texture.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressColor16Bit(output.Texture);
+                            //GraphicsUtil.CompressEtc1(output.Texture, context);
                         }
                         break;
                     case TextureProcessorOutputFormat.PvrCompressed:
                         {
                             // If sharp alpha is required (for a font texture page), use 16-bit color instead of PVR
-                            input.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
-                            GraphicsUtil.CompressColor16Bit(input);
-                            //GraphicsUtil.CompressPvrtc(input, context);
+                            output.Texture.ConvertBitmapType(typeof(PixelBitmapContent<Vector4>)); // Make sure we're in a floating point format
+                            GraphicsUtil.CompressColor16Bit(output.Texture);
+                            //GraphicsUtil.CompressPvrtc(output.Texture, context);
                         }
                         break;
+
+                    default:
+                        throw new NotImplementedException("The texture output format " + format + " is not implemented for font textures.");
                 }
             }
             catch (EntryPointNotFoundException ex)
