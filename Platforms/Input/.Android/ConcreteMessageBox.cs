@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Android.App;
 using Android.Content;
-using Microsoft.Xna.Framework;
 
 namespace Microsoft.Xna.Platform.Input
 {

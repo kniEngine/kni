@@ -5,9 +5,9 @@
 // Copyright (C)2023 Nick Kastellanos
 
 using System;
-using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using Android.Views;
 
 namespace Microsoft.Xna.Platform.Input.Touch
 {

@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Javax.Microedition.Khronos.Egl;
-using Android.Runtime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Javax.Microedition.Khronos.Egl;
+using Android.Runtime;
 using Log = Android.Util.Log;
 
 
