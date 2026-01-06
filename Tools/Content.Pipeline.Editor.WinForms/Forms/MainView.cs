@@ -58,6 +58,7 @@ namespace Content.Pipeline.Editor
 
             _treeIcons = new ContentIcons();
             
+            _treeView.TreeViewNodeSorter = new TreeViewNodeSorter();
             _treeView.ImageList = _treeIcons.Icons;
             _treeView.BeforeExpand += TreeViewOnBeforeExpand;
             _treeView.BeforeCollapse += TreeViewOnBeforeCollapse;
