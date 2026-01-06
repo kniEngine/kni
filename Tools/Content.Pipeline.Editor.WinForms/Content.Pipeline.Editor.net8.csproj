@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Forms\PipelineProjectProxy.cs" />
     <Compile Include="Forms\TreeViewExtensions.cs" />
+    <Compile Include="Forms\TreeViewNodeSorter.cs" />	  
     <Compile Include="Forms\SortedEnumTypeConverter.cs" />
     <Compile Include="Forms\AboutDialog.cs">
       <SubType>Form</SubType>
