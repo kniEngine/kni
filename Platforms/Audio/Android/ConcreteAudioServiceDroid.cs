@@ -6,12 +6,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Platform.Audio.OpenAL;
 using Microsoft.Xna.Platform.Utilities;
-
-using Microsoft.Xna.Framework;
-using System.Globalization;
 using Android.Content.PM;
 using Android.Content;
 using Android.Media;

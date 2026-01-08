@@ -8,12 +8,12 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Android.Views;
-using Android.Runtime;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
 using GetParamName = Microsoft.Xna.Platform.Graphics.OpenGL.GetPName;
-using Javax.Microedition.Khronos.Egl;
+using Android.Views;
+using Android.Runtime;
 using Android.Util;
+using Javax.Microedition.Khronos.Egl;
 
 
 namespace Microsoft.Xna.Platform.Graphics

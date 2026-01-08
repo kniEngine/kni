@@ -6,9 +6,9 @@
 
 using System;
 using System.Diagnostics;
-using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Platform.Media;
+using Android.Views;
 
 
 namespace Microsoft.Xna.Platform

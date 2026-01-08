@@ -6,12 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using Android.Content;
-using Android.Content.PM;
-using Android.OS;
-using Android.Views;
-using Android.Util;
-using Javax.Microedition.Khronos.Egl;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
@@ -21,7 +15,13 @@ using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
+using Android.Content;
+using Android.Content.PM;
+using Android.OS;
+using Android.Views;
+using Android.Util;
 using Android.Runtime;
+using Javax.Microedition.Khronos.Egl;
 
 
 namespace Microsoft.Xna.Framework

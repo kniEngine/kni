@@ -1,7 +1,7 @@
-using Android.App;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Android.App;
 
 namespace Microsoft.Xna.Platform.Utilities
 {

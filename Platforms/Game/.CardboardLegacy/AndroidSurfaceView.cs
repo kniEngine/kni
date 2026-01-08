@@ -6,14 +6,14 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Platform;
+using Microsoft.Xna.Platform.Input;
 using Android.Content;
 using Android.Media;
 using Android.Util;
 using Android.Views;
 using Javax.Microedition.Khronos.Egl;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Platform;
-using Microsoft.Xna.Platform.Input;
 using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 
