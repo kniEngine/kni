@@ -5,6 +5,7 @@
 
   <property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
   <property name="msbuild17" value="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe" />
+  <property name="msbuild18" value="C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\msbuild.exe" />
 
   <property name="nugetPath" value="C:\Program Files (x86)\NuGet3\nuget.exe" />
   <property name="nugetPackageVersion" value="4.2.9001" />
