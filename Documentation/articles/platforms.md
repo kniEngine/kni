@@ -82,7 +82,7 @@ This platform is meant to publish games on the **Windows Store**, for both **Win
 
 Note that UWP games running on Xbox get [restricted access](https://docs.microsoft.com/en-us/windows/uwp/xbox-apps/system-resource-allocation) to the console capabilities. To unlock those restrictions, MonoGame has a dedicated Xbox platform for registered [ID@Xbox](https://www.xbox.com/en-US/Developers/id) developers targeting the XDK (this platform is private and requires you to contact your ID@Xbox manager).
 
-Building for UWP requires the Windows SDK version 19041 or better to be installed.
+Building for UWP requires the Windows SDK version 22621 or better to be installed.
 
 ### Android
 
