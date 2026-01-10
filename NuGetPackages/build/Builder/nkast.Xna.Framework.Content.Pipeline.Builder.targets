@@ -136,7 +136,7 @@
   <Target Name="RunContentBuilder" DependsOnTargets="PrepareContentBuilder">
   
     <PropertyGroup>
-      <KniContentBuilderExe Condition="'$(KniContentBuilderExe)' == ''">$(MSBuildThisFileDirectory)..\Tools\MGCB.dll</KniContentBuilderExe>
+      <KniContentBuilderExe Condition="'$(KniContentBuilderExe)' == ''">$(MSBuildThisFileDirectory)..\tools\MGCB.dll</KniContentBuilderExe>
       <KniContentBuilderCmd>dotnet &quot;$(KniContentBuilderExe)&quot;</KniContentBuilderCmd>
     </PropertyGroup>
     
