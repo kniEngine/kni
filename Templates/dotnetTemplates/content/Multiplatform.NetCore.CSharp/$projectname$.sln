@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36930.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "$projectname$.Platforms", "$projectname$.Platforms", "{$fldguid$}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "$projectname$.Shared", "$projectname$.Shared\$projectname$.Shared.shproj", "{$guid1$}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.Android.GL", "$projectname$.Android.GL\$projectname$.Android.GL.csproj", "{$guid2$}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.WinForms.DX11", "$projectname$.WinForms.DX11\$projectname$.WinForms.DX11.csproj", "{$guid3$}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.SDL2.GL", "$projectname$.SDL2.GL\$projectname$.SDL2.GL.csproj", "{$guid4$}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.Blazor.GL", "$projectname$.Blazor.GL\$projectname$.Blazor.GL.csproj", "{$guid7$}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{$guid2$}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{$guid2$}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{$guid2$}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{$guid2$}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{$guid2$}.Release|Any CPU.Build.0 = Release|Any CPU
+		{$guid2$}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{$guid3$}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{$guid3$}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{$guid3$}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{$guid3$}.Release|Any CPU.Build.0 = Release|Any CPU
+		{$guid4$}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{$guid4$}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{$guid4$}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{$guid4$}.Release|Any CPU.Build.0 = Release|Any CPU
+		{$guid7$}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{$guid7$}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{$guid7$}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{$guid7$}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{$guid2$} = {$fldguid$}
+		{$guid3$} = {$fldguid$}
+		{$guid4$} = {$fldguid$}
+		{$guid7$} = {$fldguid$}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {$slnguid$}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid2$}*SharedItemsImports = 5
+		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid7$}*SharedItemsImports = 5
+		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid1$}*SharedItemsImports = 13
+		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid4$}*SharedItemsImports = 5
+		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid3$}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal
