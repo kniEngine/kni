@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "KNI Engine",
+  "classifications": [ "KNI", "Games", "Desktop", "OpenGL", "Windows", "Linux", "macOS" ],
+  "identity": "nkast.Kni.SDL2.GL.netFramework.Project.CSharp",
+  "name": "KNI Cross Platform Desktop Game Project (.NET Framework)",
+  "shortName": "kni-sdl2-gl-netframework",
+  "description": "A KNI game project for Windows, Mac and Linux using OpenGL.",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "$projectname$",
+  "primaryOutputs": [
+    {
+      "path": "$projectname$.csproj"
+    }
+  ],
+  "symbols": {
+    "slnguid": { "type": "generated", "generator": "guid", "replaces": "$slnguid$" },
+    "guid1": { "type": "generated", "generator": "guid", "replaces": "$guid1$" },
+    "guid2": { "type": "generated", "generator": "guid", "replaces": "$guid2$" },
+    "filesafeprojectname": {
+      "type": "derived",
+      "valueSource": "name",
+      "replaces": "$safeprojectname$",
+      "valueTransform": "safe_name"
+    }
+  },
+  "preferNameDirectory": true,
+  "icon": "TemplateIcon.png"
+}
