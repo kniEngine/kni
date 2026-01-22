@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "KNI Engine",
+  "classifications": [ "KNI", "Games", "windows", "linux", "macos", "desktop", "xbox", "uwp" ],
+  "identity": "nkast.Kni.Multiplatform.netFramework.Project.CSharp",
+  "name": "KNI Multiplatform Game Project (.NET Framework)",
+  "shortName": "kni-multiplatform-netframework",
+  "description": "A KNI game project for multiple platforms with shared content.",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "$projectname$",
+  "primaryOutputs": [
+    {
+      "path": "WinForms.DX11/$projectname$.csproj"
+    }
+  ],
+  "symbols": {
+    "slnguid": { "type": "generated", "generator": "guid", "replaces": "$slnguid$" },
+    "fldguid": { "type": "generated", "generator": "guid", "replaces": "$fldguid$" },
+    "guid1": { "type": "generated", "generator": "guid", "replaces": "$guid1$" },
+    "guid2": { "type": "generated", "generator": "guid", "replaces": "$guid2$" },
+    "guid3": { "type": "generated", "generator": "guid", "replaces": "$guid3$" },
+    "guid4": { "type": "generated", "generator": "guid", "replaces": "$guid4$" },
+    "guid7": { "type": "generated", "generator": "guid", "replaces": "$guid7$" },
+    "filesafeprojectname": {
+      "type": "derived",
+      "valueSource": "name",
+      "replaces": "$safeprojectname$",
+      "valueTransform": "safe_name"
+    }
+  },
+  "preferNameDirectory": true,
+  "icon": "TemplateIcon.png"
+}
