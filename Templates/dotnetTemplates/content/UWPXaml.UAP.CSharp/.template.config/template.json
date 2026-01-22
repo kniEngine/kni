@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "KNI Engine",
+  "classifications": [ "KNI", "Games", "Desktop", "Windows", "xbox", "uwp" ],
+  "identity": "nkast.Kni.UAP.Xaml.DX11.Project.CSharp",
+  "name": "KNI Windows 10 Universal (XAML) Game Project (.uap10)",
+  "shortName": "kni-uap-xaml-dx11-netframework",
+  "description": "A KNI game project for Windows 10 UWP using XAML controls.",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "$projectname$",
+  "primaryOutputs": [
+    {
+      "path": "$projectname$.csproj"
+    }
+  ],
+  "symbols": {
+    "slnguid": { "type": "generated", "generator": "guid", "replaces": "$slnguid$" },
+    "guid1": { "type": "generated", "generator": "guid", "replaces": "$guid1$" },
+    "guid9": { "type": "generated", "generator": "guid", "replaces": "$guid9$" },
+    "filesafeprojectname": {
+      "type": "derived",
+      "valueSource": "name",
+      "replaces": "$safeprojectname$",
+      "valueTransform": "safe_name"
+    }
+  },
+  "preferNameDirectory": true,
+  "icon": "TemplateIcon.png"
+}
