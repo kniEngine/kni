@@ -14,13 +14,13 @@
     <DefineConstants>$(DefineConstants);WINDOWSDX</DefineConstants>
     <KniPlatform>Windows</KniPlatform>
   </PropertyGroup>
-	
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
   </PropertyGroup>
-	
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
-	
+
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
@@ -31,6 +31,7 @@
     <Compile Include="$safeprojectname$Game.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="nkast.Xna.Framework" Version="4.2.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content" Version="4.2.9001" />
@@ -48,6 +49,7 @@
   <ItemGroup>
     <Content Include="Icon.ico" />
   </ItemGroup>
+
   <ItemGroup>
     <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
     <None Include="app.manifest" />
