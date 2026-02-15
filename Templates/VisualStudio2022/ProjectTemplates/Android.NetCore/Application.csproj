@@ -6,13 +6,13 @@
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Exe</OutputType>
     <IsTrimmable>True</IsTrimmable>
-	<TrimMode>partial</TrimMode>
+    <TrimMode>partial</TrimMode>
     <RootNamespace>$safeprojectname$</RootNamespace>
     <AssemblyName>$safeprojectname$</AssemblyName>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <DefineConstants>$(DefineConstants);ANDROID</DefineConstants>
     <KniPlatform>Android</KniPlatform>
-    <ApplicationId>com.companyname.$ext_safeprojectname$</ApplicationId>
+    <ApplicationId>com.companyname.$safeprojectname$</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidStoreUncompressedFileExtensions>.m4a</AndroidStoreUncompressedFileExtensions>
@@ -53,6 +53,7 @@
     <AndroidResource Include="Resources\Values\Styles.xml" />
     <Folder Include="Resources\Layout\" />
   </ItemGroup>
+
   <ItemGroup>
     <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
   </ItemGroup>
