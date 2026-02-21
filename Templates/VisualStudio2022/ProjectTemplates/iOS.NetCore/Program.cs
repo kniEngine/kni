@@ -5,7 +5,7 @@ using UIKit;
 namespace $safeprojectname$
 {
     [Register("AppDelegate")]
-    class Program : UIApplicationDelegate
+    internal class Program : UIApplicationDelegate
     {
         private static $safeprojectname$Game game;
 
