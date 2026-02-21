@@ -83,7 +83,7 @@ namespace $ext_safeprojectname$
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
-            
+
             if (e.PrelaunchActivated == false)
             {
                 if (rootFrame.Content == null)
