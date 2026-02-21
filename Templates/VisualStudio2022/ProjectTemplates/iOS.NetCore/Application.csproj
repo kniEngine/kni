@@ -34,9 +34,11 @@
     <Compile Include="$safeprojectname$Game.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <KniContentReference Include="Content\$safeprojectname$Content.mgcb" />
   </ItemGroup>
+
   <ItemGroup>
     <BundleResource Include="Default.png" />
     <BundleResource Include="GameThumbnail.png" />
