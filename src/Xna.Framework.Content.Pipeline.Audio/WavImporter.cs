@@ -31,13 +31,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline
             if (!File.Exists(filename))
                 throw new FileNotFoundException(string.Format("Could not locate audio file {0}.", Path.GetFileName(filename)));
 
-            var content = new AudioContent(filename, AudioFileType.Wav);
+            AudioContent content = new AudioContent(filename, AudioFileType.Wav);
 
             // Validate the format of the input.
             if (content.Format.SampleRate < 8000 || content.Format.SampleRate > 48000)
                 throw new InvalidContentException(string.Format("Audio file {0} contains audio data with unsupported sample rate of {1}Hz. Supported sample rates are from 8KHz up to 48KHz.", Path.GetFileName(filename), content.Format.SampleRate));
-            var validPcm = content.Format.Format == 1 && (content.Format.BitsPerSample == 8 || content.Format.BitsPerSample == 16 || content.Format.BitsPerSample == 24);
-            var validAdpcm = (content.Format.Format == 2 || content.Format.Format == 17) && content.Format.BitsPerSample == 4;
+            bool validPcm = content.Format.Format == 1 && (content.Format.BitsPerSample == 8 || content.Format.BitsPerSample == 16 || content.Format.BitsPerSample == 24);
+            bool validAdpcm = (content.Format.Format == 2 || content.Format.Format == 17) && content.Format.BitsPerSample == 4;
             var validIeeeFloat = content.Format.Format == 3 && content.Format.BitsPerSample == 32;
             if (!(validPcm || validAdpcm || validIeeeFloat))
                 throw new InvalidContentException(string.Format("Audio file {0} contains audio data with unsupported format of {1} and bit depth of {2}. Supported bit depths are unsigned 8-bit, signed 16-bit, signed 24-bit for PCM(1) and 32-bit for IEEE Float(3).", Path.GetFileName(filename), content.Format.Format, content.Format.BitsPerSample));
