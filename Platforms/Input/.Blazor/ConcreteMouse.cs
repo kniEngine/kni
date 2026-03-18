@@ -86,14 +86,12 @@ namespace Microsoft.Xna.Platform.Input
 
         private void OnMouseMove(object sender, int x, int y)
         {
-            _pos.X = x;
-            _pos.Y = y;
+            UpdateMousePosition(x, y);
         }
 
         private void OnMouseDown(object sender, int x, int y, int buttons)
         {
-            _pos.X = x;
-            _pos.Y = y;
+            UpdateMousePosition(x, y);
             _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
             _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
             _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
@@ -101,8 +99,7 @@ namespace Microsoft.Xna.Platform.Input
 
         private void OnMouseUp(object sender, int x, int y, int buttons)
         {
-            _pos.X = x;
-            _pos.Y = y;
+            UpdateMousePosition(x, y);
             _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
             _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
             _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
@@ -114,5 +111,11 @@ namespace Microsoft.Xna.Platform.Input
             _scrollY -= deltaY;
         }
 
+        private void UpdateMousePosition(int x, int y)
+        {
+            BlazorGameWindow gameWindow = BlazorGameWindow.FromHandle(_wndHandle);
+            _pos.X = x - gameWindow.ClientBounds.X;
+            _pos.Y = y - gameWindow.ClientBounds.Y;
+        }
     }
 }
