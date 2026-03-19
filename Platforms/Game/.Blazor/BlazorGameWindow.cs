@@ -174,6 +174,8 @@ namespace Microsoft.Xna.Framework
                 if (!_keys.Contains(xnakey))
                     _keys.Add(xnakey);
 
+                OnKeyDown(xnakey);
+
                 if (IsTextInputAttached())
                 {
                     bool controlKeyBlocksTextInput = false;
@@ -211,6 +213,8 @@ namespace Microsoft.Xna.Framework
 
                 if (_keys.Contains(xnakey))
                     _keys.Remove(xnakey);
+
+                OnKeyUp(xnakey);
             };
 
             _window.OnFocus += OnActivated;
