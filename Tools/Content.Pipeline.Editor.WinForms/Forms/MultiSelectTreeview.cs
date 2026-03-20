@@ -23,6 +23,8 @@ namespace Content.Pipeline.Editor
         /// <summary>
         /// The baskground colour of the node being dragged over.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Color DragOverNodeBackColor
         {
             get
@@ -38,6 +40,8 @@ namespace Content.Pipeline.Editor
         /// <summary>
         /// The foreground colour of the node being dragged over.
         /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Color DragOverNodeForeColor
         {
             get
