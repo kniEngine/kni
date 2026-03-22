@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <KniContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">   
+    <KniContentReference Include="..\$ext_safeprojectname$Content\$ext_safeprojectname$Content.mgcb">
       <Link>Content\$ext_safeprojectname$Content.mgcb</Link>
     </KniContentReference>
   </ItemGroup>
