@@ -35,8 +35,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     return false;
 
                 return PlatformGetResult();
-
-                return _isComplete;
             }
         }
 
@@ -59,7 +57,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = true;
             _isComplete = false;
 
-            GL.BeginQuery(QueryTarget.SamplesPassed, _glQueryId);
+            QueryTarget queryTarget = GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL ?
+                QueryTarget.SamplesPassed : QueryTarget.SamplesPassedExt;
+
+            GL.BeginQuery(queryTarget, _glQueryId);
             GL.CheckGLError();
         }
 
@@ -73,7 +74,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = false;
             _queryPerformed = true;
 
-            GL.EndQuery(QueryTarget.SamplesPassed);
+            QueryTarget queryTarget = GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL ?
+                QueryTarget.SamplesPassed : QueryTarget.SamplesPassedExt;
+
+            GL.EndQuery(queryTarget);
             GL.CheckGLError();
         }
 
