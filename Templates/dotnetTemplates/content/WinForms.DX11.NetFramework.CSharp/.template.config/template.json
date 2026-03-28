@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "KNI Engine",
+  "classifications": [ "KNI", "Games", "Desktop", "Windows" ],
+  "identity": "nkast.Kni.WinForms.DX11.netFramework.Project.CSharp",
+  "name": "KNI Windows Game Project (.NET Framework)",
+  "shortName": "kni-winforms-dx11-netframework",
+  "description": "A KNI game project for the Windows desktop using DirectX 11.",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "$projectname$",
+  "primaryOutputs": [
+    {
+      "path": "$projectname$.csproj"
+    }
+  ],
+  "symbols": {
+    "slnguid": { "type": "generated", "generator": "guid", "replaces": "$slnguid$" },
+    "guid1": { "type": "generated", "generator": "guid", "replaces": "$guid1$" },
+    "guid2": { "type": "generated", "generator": "guid", "replaces": "$guid2$" },
+    "filesafeprojectname": {
+      "type": "derived",
+      "valueSource": "name",
+      "replaces": "$safeprojectname$",
+      "valueTransform": "safe_name"
+    }
+  },
+  "preferNameDirectory": true,
+  "icon": "TemplateIcon.png"
+}
