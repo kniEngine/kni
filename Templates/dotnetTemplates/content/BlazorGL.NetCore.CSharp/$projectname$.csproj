@@ -39,7 +39,7 @@
     <PackageReference Include="nkast.Xna.Framework.Devices" Version="4.2.9001" />
     <PackageReference Include="nkast.Xna.Framework.Storage" Version="4.2.9001" />
     <PackageReference Include="nkast.Xna.Framework.XR" Version="4.2.9001" />
-    <PackageReference Include="nkast.Kni.Platform.Blazor.GL" Version="4.2.9001" />
+    <PackageReference Include="nkast.Kni.Platform.Blazor.GL" Version="4.2.9001.2" />
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.2.9001" />
   </ItemGroup>
 
