@@ -4,7 +4,7 @@
     <!-- The package metadata. -->
     <!-- Follow the instructions on https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
     <PackageId>nkast.Kni.Templates</PackageId>
-    <PackageVersion>4.2.9001-preview.1</PackageVersion>
+    <PackageVersion>4.2.9001-preview.2</PackageVersion>
     <Title>KNI Templates</Title>
     <Authors>KNI Engine</Authors>
     <Description>.NET templates for creating KNI game projects.</Description>
