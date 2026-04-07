@@ -31,6 +31,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// The occlusion query has not yet completed. Check <see cref="IsComplete"/> before reading
         /// the result!
         /// </exception>
+        /// <remarks>For GLES and WebGL, the exact pixel count is not available. 
+        /// Instead, a value of 1 indicates that one or more pixels are visible.</remarks>
         public int PixelCount
         {
             get
