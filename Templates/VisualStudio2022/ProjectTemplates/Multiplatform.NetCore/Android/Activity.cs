@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -19,7 +20,7 @@ namespace $ext_safeprojectname$
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            var game = new $ext_safeprojectname$Game();
+            Game game = new $ext_safeprojectname$Game();
             SetContentView((View)game.Services.GetService(typeof(View)));
             game.Run();
         }
