@@ -12,7 +12,7 @@ namespace $safeprojectname$
         /// </summary>
         static void Main()
         {
-            var factory = new Microsoft.Xna.Platform.GameFrameworkViewSource<$projectname$Game>();
+            var factory = new Microsoft.Xna.Platform.GameFrameworkViewSource<Platform$projectname$Game>();
             Windows.ApplicationModel.Core.CoreApplication.Run(factory);
         }
     }
