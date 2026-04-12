@@ -14,7 +14,7 @@ namespace $safeprojectname$
         [STAThread]
         static void Main()
         {
-            using (Game game = new $safeprojectname$Game())
+            using (Game game = new Platform$safeprojectname$Game())
                 game.Run();
         }
     }

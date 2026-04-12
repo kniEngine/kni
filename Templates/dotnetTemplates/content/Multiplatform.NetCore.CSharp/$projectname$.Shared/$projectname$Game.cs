@@ -14,8 +14,8 @@ namespace $safeprojectname$
     /// </summary>
     public class $safeprojectname$Game : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        protected GraphicsDeviceManager graphics;
+        protected SpriteBatch spriteBatch;
 
         public $safeprojectname$Game()
         {
@@ -23,11 +23,8 @@ namespace $safeprojectname$
             Content.RootDirectory = "Content";
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
-//-:cnd:noEmit
-#if (ANDROID || iOS)
-            graphics.IsFullScreen = true;
-#endif
-//+:cnd:noEmit
+            if (TitleContainer.Platform == TitlePlatform.iOS)
+                    graphics.IsFullScreen = true;
 
         }
 

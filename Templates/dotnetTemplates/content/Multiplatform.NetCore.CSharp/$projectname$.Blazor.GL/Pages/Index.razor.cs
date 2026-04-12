@@ -24,7 +24,7 @@ namespace $safeprojectname$.Pages
             // init game
             if (_game == null)
             {
-                _game = new $safeprojectname$Game();
+                _game = new Platform$safeprojectname$Game();
                 _game.Run();
             }
 

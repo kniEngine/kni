@@ -20,7 +20,7 @@ namespace $safeprojectname$
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            Game game = new $safeprojectname$Game();
+            Game game = new Platform$safeprojectname$Game();
             SetContentView((View)game.Services.GetService(typeof(View)));
             game.Run();
         }
