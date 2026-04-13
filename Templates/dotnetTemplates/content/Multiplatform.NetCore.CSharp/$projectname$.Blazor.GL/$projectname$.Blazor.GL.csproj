@@ -54,6 +54,8 @@
       <Link>Content\$projectname$Content.mgcb</Link>
     </KniContentReference>
   </ItemGroup>
-  <Import Project="..\$projectname$.Shared\$projectname$.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\$projectname$.Game\$projectname$.Game.csproj" />
+  </ItemGroup>
 
 </Project>
