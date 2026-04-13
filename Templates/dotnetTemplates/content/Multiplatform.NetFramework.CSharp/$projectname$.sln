@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.WinForms.DX11
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.SDL2.GL", "$projectname$.SDL2.GL\$projectname$.SDL2.GL.csproj", "{$guid4$}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.UWPCore", "$projectname$.UWPCore\$projectname$.UWPCore.csproj", "{$guid2$}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.UWPCore", "$projectname$.UWPCore\$projectname$.UWPCore.csproj", "{$guid5$}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "$projectname$.UWPXaml", "$projectname$.UWPXaml\$projectname$.UWPXaml.csproj", "{$guid7$}"
 EndProject
@@ -29,12 +29,12 @@ Global
 		{$guid4$}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{$guid4$}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{$guid4$}.Release|Any CPU.Build.0 = Release|Any CPU
-		{$guid2$}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{$guid2$}.Debug|Any CPU.Build.0 = Debug|x64
-		{$guid2$}.Debug|Any CPU.Deploy.0 = Debug|x64
-		{$guid2$}.Release|Any CPU.ActiveCfg = Release|x64
-		{$guid2$}.Release|Any CPU.Build.0 = Release|x64
-		{$guid2$}.Release|Any CPU.Deploy.0 = Release|x64
+		{$guid5$}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{$guid5$}.Debug|Any CPU.Build.0 = Debug|x64
+		{$guid5$}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{$guid5$}.Release|Any CPU.ActiveCfg = Release|x64
+		{$guid5$}.Release|Any CPU.Build.0 = Release|x64
+		{$guid5$}.Release|Any CPU.Deploy.0 = Release|x64
 		{$guid7$}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{$guid7$}.Debug|Any CPU.Build.0 = Debug|x64
 		{$guid7$}.Debug|Any CPU.Deploy.0 = Debug|x64
@@ -48,7 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{$guid3$} = {$fldguid$}
 		{$guid4$} = {$fldguid$}
-		{$guid2$} = {$fldguid$}
+		{$guid5$} = {$fldguid$}
 		{$guid7$} = {$fldguid$}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
@@ -57,7 +57,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid3$}*SharedItemsImports = 5
 		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid4$}*SharedItemsImports = 5
-		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid2$}*SharedItemsImports = 5
+		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid5$}*SharedItemsImports = 5
 		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid7$}*SharedItemsImports = 5
 		$projectname$\$projectname$.Shared\$projectname$.Shared.projitems*{$guid1$}*SharedItemsImports = 13
 	EndGlobalSection
