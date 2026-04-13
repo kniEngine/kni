@@ -20,10 +20,12 @@
     "slnguid": { "type": "generated", "generator": "guid", "replaces": "$slnguid$" },
     "fldguid": { "type": "generated", "generator": "guid", "replaces": "$fldguid$" },
     "guid1": { "type": "generated", "generator": "guid", "replaces": "$guid1$" },
-    "guid2": { "type": "generated", "generator": "guid", "replaces": "$guid2$" },
     "guid3": { "type": "generated", "generator": "guid", "replaces": "$guid3$" },
     "guid4": { "type": "generated", "generator": "guid", "replaces": "$guid4$" },
+    "guid5": { "type": "generated", "generator": "guid", "replaces": "$guid5$" },
+    "guid6": { "type": "generated", "generator": "guid", "replaces": "$guid6$" },
     "guid7": { "type": "generated", "generator": "guid", "replaces": "$guid7$" },
+    "guid8": { "type": "generated", "generator": "guid", "replaces": "$guid8$" },
     "filesafeprojectname": {
       "type": "derived",
       "valueSource": "name",
