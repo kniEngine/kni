@@ -17,7 +17,7 @@ namespace $safeprojectname$
             // Uncomment this line to enable VR with the nkast.Kni.Platform.WinForms.DX11.OculusOVR package.
             //Microsoft.Xna.Platform.XR.XRFactory.RegisterXRFactory(new Microsoft.Xna.Platform.XR.LibOVR.ConcreteXRFactory());
 
-            using (Game game = new $safeprojectname$Game())
+            using (Game game = new Platform$safeprojectname$Game())
                 game.Run();
         }
     }
