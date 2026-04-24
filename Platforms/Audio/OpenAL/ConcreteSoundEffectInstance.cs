@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Platform.Audio
         public override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
         {
             // set up matrix to transform world space coordinates to listener space coordinates
-            Matrix worldSpaceToListenerSpace = Matrix.Transpose(Matrix.CreateWorld(listener.Position, listener.Forward, listener.Up));
+            Matrix worldSpaceToListenerSpace = Matrix.Invert(Matrix.CreateWorld(listener.Position, listener.Forward, listener.Up));
             // set up our final position and velocity according to orientation of listener
             _relativePosition = emitter.Position;
             Vector3.Transform(ref _relativePosition, ref worldSpaceToListenerSpace, out _relativePosition);
