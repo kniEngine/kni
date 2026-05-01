@@ -26,6 +26,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         private bool _started;
         private bool _paused;
+        private bool _stopping;
         private bool _ended;
         private double _offset;
         private double _lastCurrentTime;
@@ -139,6 +140,8 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformRelease(bool isLooped)
         {
+            _stopping = true;
+            _bufferSource.Loop = false;
         }
 
         public override bool PlatformUpdateState(ref SoundState state)
@@ -157,7 +160,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformSetIsLooped(bool isLooped, SoundState state)
         {
-            if (_bufferSource != null)
+            if (_bufferSource != null && !_stopping)
             {
                 _bufferSource.Loop = isLooped;
             }
@@ -222,6 +225,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 _started = false;
                 _paused = false;
+                _stopping = false;
             }
             _ended = false;
         }
