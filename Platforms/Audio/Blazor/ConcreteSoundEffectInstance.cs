@@ -20,10 +20,15 @@ namespace Microsoft.Xna.Platform.Audio
         internal ConcreteAudioService ConcreteAudioService { get { return (ConcreteAudioService)_audioServiceStrategy; } }
 
         AudioBufferSourceNode _bufferSource;
-        bool _ended;
         protected StereoPannerNode _stereoPannerNode;
         protected GainNode _gainNode;
         protected AudioNode _sourceTarget;
+
+        private bool _started;
+        private bool _paused;
+        private bool _ended;
+        private double _offset;
+        private double _lastCurrentTime;
 
         public override bool IsXAct
         {
@@ -114,43 +119,22 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformPause()
         {
-            throw new NotImplementedException();
+            SourceNodeStop(pause: true);
         }
 
         public override void PlatformPlay(bool isLooped)
         {
-            AudioContext context = ConcreteAudioService.Context;
-
-            _bufferSource = context.CreateBufferSource();
-            _bufferSource.Loop = isLooped;
-            _bufferSource.Buffer = _concreteSoundEffect.GetAudioBuffer();
-            _bufferSource.Connect(_sourceTarget);
-
-            // XAct sound effects are not tied to the SoundEffect master volume.
-            float masterVolume = (!this.IsXAct) ? SoundEffect.MasterVolume : 1f;
-            _gainNode.Gain.SetTargetAtTime(base.Volume * masterVolume, 0, 0);
-            _stereoPannerNode.Pan.SetTargetAtTime(base.Pan, 0, 0);
-
-            _bufferSource.OnEnded += _bufferSource_OnEnded;
-            _bufferSource.Start();
+            SourceNodeStart(offset: 0d);
         }
 
         public override void PlatformResume(bool isLooped)
         {
-            throw new NotImplementedException();
+            SourceNodeStart(offset: _offset);
         }
 
         public override void PlatformStop()
         {
-            AudioContext context = ConcreteAudioService.Context;
-
-            _bufferSource.OnEnded -= _bufferSource_OnEnded;
-            _ended = false;
-
-            _bufferSource.Stop();
-            _bufferSource.Disconnect(_sourceTarget);
-            _bufferSource.Dispose();
-            _bufferSource = null;
+            SourceNodeStop(pause: false);
         }
 
         public override void PlatformRelease(bool isLooped)
@@ -159,15 +143,12 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override bool PlatformUpdateState(ref SoundState state)
         {
-            if (state != SoundState.Stopped && _ended)
+            UpdateOffset();
+
+            if (state == SoundState.Playing && _ended)
             {
-                _ended = false;
+                SourceNodeStop(pause: false);
                 state = SoundState.Stopped;
-
-                _bufferSource.Disconnect(_sourceTarget);
-                _bufferSource.Dispose();
-                _bufferSource = null;
-
                 return true;
             }
 
@@ -192,6 +173,74 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformClearFilter()
         {
+        }
+
+        private void SourceNodeStart(double offset)
+        {
+            AudioContext context = ConcreteAudioService.Context;
+            AudioBuffer audioBuffer = _concreteSoundEffect.GetAudioBuffer();
+
+            _bufferSource = context.CreateBufferSource();
+            _bufferSource.Loop = IsLooped;
+            _bufferSource.Buffer = audioBuffer;
+            _bufferSource.OnEnded += _bufferSource_OnEnded;
+            _bufferSource.Connect(_sourceTarget);
+
+            _offset = offset;
+            if (IsLooped)
+                _offset %= audioBuffer.Duration;
+
+            if (_offset == 0)
+                _bufferSource.Start();
+            else
+                _bufferSource.Start(0, _offset);
+
+            _started = true;
+            _paused = false;
+            _lastCurrentTime = context.CurrentTime;
+        }
+
+        private void SourceNodeStop(bool pause)
+        {
+            if (pause)
+                UpdateOffset();
+
+            _bufferSource.OnEnded -= _bufferSource_OnEnded;
+
+            if (!_ended)
+                _bufferSource.Stop();
+
+            _bufferSource.Disconnect(_sourceTarget);
+            _bufferSource.Dispose();
+            _bufferSource = null;
+
+            if (pause)
+            {
+                _paused = true;
+            }
+            else
+            {
+                _started = false;
+                _paused = false;
+            }
+            _ended = false;
+        }
+
+        private void UpdateOffset()
+        {
+            if (!_started || _paused || _ended)
+                return;
+
+            AudioContext context = ConcreteAudioService.Context;
+
+            double currentTime = context.CurrentTime;
+            if (currentTime == _lastCurrentTime)
+                return;
+
+            double elapsedRealTime = currentTime - _lastCurrentTime;
+            double elapsedBufferTime = elapsedRealTime * _bufferSource.PlaybackRate.Value;
+            _offset += elapsedBufferTime;
+            _lastCurrentTime = currentTime;
         }
 
         protected override void Dispose(bool disposing)
