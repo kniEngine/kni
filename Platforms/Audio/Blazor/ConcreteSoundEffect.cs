@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Platform.Audio
                             {
                                 for (int i = 0; i < sampleCount; i++)
                                 {
-                                    dest[i] = (float)pBuffer16[i * numOfChannels] / (float)short.MaxValue;
+                                    dest[i] = (float)pBuffer16[i * numOfChannels + c] / 32768f;
                                 }
                                 _audioBuffer.CopyToChannel(dest, c);
                             }                           
@@ -197,7 +197,7 @@ namespace Microsoft.Xna.Platform.Audio
                             {
                                 for (int i = 0; i < sampleCount; i++)
                                 {
-                                    dest[i] = pBuffer32f[i * numOfChannels];
+                                    dest[i] = pBuffer32f[i * numOfChannels + c];
                                 }
                                 _audioBuffer.CopyToChannel(dest, c);
                             }                           
