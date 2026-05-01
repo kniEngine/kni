@@ -80,13 +80,7 @@ namespace Microsoft.Xna.Platform.Audio
             set
             {
                 base.Pitch = value;
-
-                if (_bufferSource != null)
-                {
-                    float wapitch = (float)Math.Pow(2, value);
-                    //TODO: implement Pitch
-                    //_bufferSource.PlaybackRate.SetTargetAtTime(wapitch, 0, 0.05f);
-                }
+                SetPlaybackRate();
             }
         }
 
@@ -193,6 +187,8 @@ namespace Microsoft.Xna.Platform.Audio
             if (IsLooped)
                 _offset %= audioBuffer.Duration;
 
+            SetPlaybackRate();
+
             if (_offset == 0)
                 _bufferSource.Start();
             else
@@ -245,6 +241,18 @@ namespace Microsoft.Xna.Platform.Audio
             double elapsedBufferTime = elapsedRealTime * _bufferSource.PlaybackRate.Value;
             _offset += elapsedBufferTime;
             _lastCurrentTime = currentTime;
+        }
+
+        protected virtual void SetPlaybackRate()
+        {
+            if (_bufferSource == null)
+                return;
+
+            UpdateOffset();
+
+            float playbackRate = (float)Math.Pow(2, base.Pitch);
+            playbackRate = MathHelper.Clamp(playbackRate, 0.5f, 2.0f);
+            _bufferSource.PlaybackRate.SetValueAtTime(playbackRate, 0);
         }
 
         protected override void Dispose(bool disposing)
