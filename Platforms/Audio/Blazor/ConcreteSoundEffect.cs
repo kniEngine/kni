@@ -146,11 +146,23 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 fixed (void* pBuffer = buffer)
                 {
+                    float[] dest = new float[sampleCount];
                     switch (sampleBits)
                     {
+                        case 8: // PCM 8bit
+                            byte* pBuffer8 = (byte*)pBuffer;
+                            for (int c = 0; c < numOfChannels; c++)
+                            {
+                                for (int i = 0; i < sampleCount; i++)
+                                {
+                                    dest[i] = ((float)pBuffer8[i * numOfChannels + c] - 128f) / 128f;
+                                }
+                                _audioBuffer.CopyToChannel(dest, c);
+                            }
+                            break;
+
                         case 16: // PCM 16bit
                             short* pBuffer16 = (short*)pBuffer;
-                            float[] dest = new float[sampleCount];
                             for (int c = 0; c < numOfChannels; c++)
                             {
                                 for (int i = 0; i < sampleCount; i++)
@@ -158,7 +170,34 @@ namespace Microsoft.Xna.Platform.Audio
                                     dest[i] = (float)pBuffer16[i * numOfChannels + c] / 32768f;
                                 }
                                 _audioBuffer.CopyToChannel(dest, c);
-                            }                           
+                            }
+                            break;
+
+                        case 24: // PCM 24bit
+                            byte* pBufferBytes = (byte*)pBuffer;
+                            for (int c = 0; c < numOfChannels; c++)
+                            {
+                                for (int i = 0; i < sampleCount; i++)
+                                {
+                                    int offset = (i * numOfChannels + c) * 3;
+                                    int sample = (pBufferBytes[offset + 2] << 24) | (pBufferBytes[offset + 1] << 16) | (pBufferBytes[offset] << 8);
+                                    sample >>= 8;
+                                    dest[i] = sample / 8388608f;
+                                }
+                                _audioBuffer.CopyToChannel(dest, c);
+                            }
+                            break;
+
+                        case 32: // PCM 32bit
+                            int* pBuffer32 = (int*)pBuffer;
+                            for (int c = 0; c < numOfChannels; c++)
+                            {
+                                for (int i = 0; i < sampleCount; i++)
+                                {
+                                    dest[i] = (float)pBuffer32[i * numOfChannels + c] / 2147483648f;
+                                }
+                                _audioBuffer.CopyToChannel(dest, c);
+                            }
                             break;
 
                         default:
@@ -200,7 +239,7 @@ namespace Microsoft.Xna.Platform.Audio
                                     dest[i] = pBuffer32f[i * numOfChannels + c];
                                 }
                                 _audioBuffer.CopyToChannel(dest, c);
-                            }                           
+                            }
                             break;
 
                         default:
