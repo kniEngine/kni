@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using nkast.Wasm.Audio;
 using AudioListener = Microsoft.Xna.Framework.Audio.AudioListener;
-using WebAudioListener = nkast.Wasm.Audio.AudioListener;
 
 namespace Microsoft.Xna.Platform.Audio
 {
@@ -19,7 +18,8 @@ namespace Microsoft.Xna.Platform.Audio
         private ConcreteSoundEffect _concreteSoundEffect;
         internal ConcreteAudioService ConcreteAudioService { get { return (ConcreteAudioService)_audioServiceStrategy; } }
 
-        AudioBufferSourceNode _bufferSource;
+        private AudioBufferSourceNode _bufferSource;
+        protected PannerNode _pannerNode;
         protected StereoPannerNode _stereoPannerNode;
         protected GainNode _gainNode;
         protected AudioNode _sourceTarget;
@@ -30,6 +30,7 @@ namespace Microsoft.Xna.Platform.Audio
         private bool _ended;
         private double _offset;
         private double _lastCurrentTime;
+        protected float _dopplerEffect;
 
         public override bool IsXAct
         {
@@ -101,6 +102,8 @@ namespace Microsoft.Xna.Platform.Audio
             _stereoPannerNode.Connect(_sourceTarget); _sourceTarget = _stereoPannerNode;
             _gainNode.Connect(_sourceTarget); _sourceTarget = _gainNode;
 
+            _dopplerEffect = 1.0f;
+
             this.Volume = 1.0f;
             this.Pan = 0.0f;
             this.Pitch = 0.0f;
@@ -110,6 +113,42 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformApply3D(AudioListener listener, AudioEmitter emitter)
         {
+            if (_pannerNode == null)
+            {
+                AudioContext context = ConcreteAudioService.Context;
+
+                _stereoPannerNode.Disconnect(context.Destination);
+
+                _pannerNode = context.CreatePanner();
+                _pannerNode.Connect(context.Destination);
+
+                _gainNode.Disconnect(_stereoPannerNode);
+                _gainNode.Connect(_pannerNode);
+
+                _pannerNode.PanningModel = PanningModelType.EqualPower;
+                _pannerNode.DistanceModel = DistanceModelType.Inverse;
+                _pannerNode.RolloffFactor = 1f;
+                _pannerNode.MaxDistance = double.MaxValue;
+            }
+
+            Matrix worldSpaceToListenerSpace = Matrix.Invert(Matrix.CreateWorld(listener.Position, listener.Forward, listener.Up));
+            Vector3 relativePosition = Vector3.Transform(emitter.Position, worldSpaceToListenerSpace);
+
+            _pannerNode.RefDistance = SoundEffect.DistanceScale;
+
+            _pannerNode.PositionX.SetValueAtTime(relativePosition.X, 0f);
+            _pannerNode.PositionY.SetValueAtTime(relativePosition.Y, 0f);
+            _pannerNode.PositionZ.SetValueAtTime(relativePosition.Z, 0f);
+
+            Vector3 direction = (relativePosition != Vector3.Zero) ? Vector3.Normalize(relativePosition) : Vector3.Zero;
+            float listenerRadialVelocity = listener.Velocity.X * direction.X + listener.Velocity.Y * direction.Y + listener.Velocity.Z * direction.Z;
+            float emitterRadialVelocity = emitter.Velocity.X * direction.X + emitter.Velocity.Y * direction.Y + emitter.Velocity.Z * direction.Z;
+
+            float unscaledDopplerEffect = Math.Max((SoundEffect.SpeedOfSound + listenerRadialVelocity), 0.0001f) /
+                Math.Max((SoundEffect.SpeedOfSound + emitterRadialVelocity), 0.0001f);
+            _dopplerEffect = 1f + ((unscaledDopplerEffect - 1f) * SoundEffect.DopplerScale * emitter.DopplerScale);
+
+            SetPlaybackRate();
         }
 
         public override void PlatformPause()
@@ -250,7 +289,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             UpdateOffset();
 
-            float playbackRate = (float)Math.Pow(2, base.Pitch);
+            float playbackRate = (float)Math.Pow(2, base.Pitch) * _dopplerEffect;
             playbackRate = MathHelper.Clamp(playbackRate, 0.5f, 2.0f);
             _bufferSource.PlaybackRate.SetValueAtTime(playbackRate, 0);
         }
@@ -264,11 +303,15 @@ namespace Microsoft.Xna.Platform.Audio
 
                 _gainNode.Dispose();
                 _stereoPannerNode.Dispose();
+
+                if (_pannerNode != null)
+                    _pannerNode.Dispose();
             }
 
             _bufferSource = null;
             _gainNode = null;
             _stereoPannerNode = null;
+            _pannerNode = null;
         }
 
         private void _bufferSource_OnEnded(object sender, EventArgs e)
