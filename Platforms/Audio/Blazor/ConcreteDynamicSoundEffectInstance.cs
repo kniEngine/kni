@@ -19,6 +19,14 @@ namespace Microsoft.Xna.Platform.Audio
         private bool _isStreamSourceInitialized;
         private int _pendingBuffers;
 
+        private enum PortMessageType
+        {
+            None = 0,
+            BufferProcessed = 1,
+            ClearBuffers = 2,
+            Pause = 3,
+            Resume = 4
+        }
 
         private readonly WeakReference _dynamicSoundEffectInstanceRef = new WeakReference(null);
         DynamicSoundEffectInstance IDynamicSoundEffectInstanceStrategy.DynamicSoundEffectInstance
@@ -64,7 +72,7 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformPause()
         {
-            throw new NotImplementedException();
+            _streamSource.Port.PostMessage((int)PortMessageType.Pause);
         }
 
         public override void PlatformPlay(bool isLooped)
@@ -81,6 +89,9 @@ namespace Microsoft.Xna.Platform.Audio
         private async Task InitStreamSourceAsync()
         {
             AudioContext context = ConcreteAudioService.Context;
+
+            if (context.State == ContextState.Suspended)
+                await context.ResumeAsync();
 
             if (!ConcreteAudioService.IsDynamicSoundModuleInitialized)
             {
@@ -102,21 +113,6 @@ namespace Microsoft.Xna.Platform.Audio
             }
         }
 
-        private void ReleaseMicrophoneDevice()
-        {
-            if (_streamSource != null)
-            {
-                _streamSource.Disconnect(_sourceTarget);
-                _streamSource.Dispose();
-                _streamSource = null;
-            }
-            _isStreamSourceInitialized = false;
-            _pendingBuffers = 0;
-            _tmpBuffers.Clear();
-
-
-        }
-
         private void StreamSource_OnMessage(object sender, MessageEventArgs e)
         {
             if (e.DataByteArray != null)
@@ -127,7 +123,7 @@ namespace Microsoft.Xna.Platform.Audio
             {
                 var msg = e.DataFloat64;
                 
-                if (msg == 1) // buffer is proccessed
+                if (msg == (int)PortMessageType.BufferProcessed)
                 {
                     _pendingBuffers--;
                 }
@@ -136,12 +132,20 @@ namespace Microsoft.Xna.Platform.Audio
 
         public override void PlatformResume(bool isLooped)
         {
-            throw new NotImplementedException();
+            _streamSource.Port.PostMessage((int)PortMessageType.Resume);
         }
 
         public override void PlatformStop()
         {
-            ReleaseMicrophoneDevice();
+            if (_streamSource != null)
+            {
+                _streamSource.Disconnect(_sourceTarget);
+                _streamSource.Dispose();
+                _streamSource = null;
+        }
+            _isStreamSourceInitialized = false;
+            _pendingBuffers = 0;
+            _tmpBuffers.Clear();
         }
 
         public override void PlatformRelease(bool isLooped)
@@ -177,7 +181,9 @@ namespace Microsoft.Xna.Platform.Audio
         {
             _pendingBuffers = 0;
             _tmpBuffers.Clear();
-            _streamSource.Port.PostMessage(2); // 2 = clear buffers
+
+            if (_streamSource != null)
+                _streamSource.Port.PostMessage((int)PortMessageType.ClearBuffers);
         }
 
 

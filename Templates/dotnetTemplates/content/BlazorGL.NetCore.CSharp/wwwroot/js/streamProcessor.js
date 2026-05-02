@@ -5,6 +5,7 @@ class StreamProcessor extends AudioWorkletProcessor
     {
         super();
         this.queue = [];
+        this.paused = false;
 
         this.port.onmessage = (event) =>
         {
@@ -12,9 +13,14 @@ class StreamProcessor extends AudioWorkletProcessor
 
             if (typeof data === 'number')
             {
-                if (data === 2)
-                {                    
-                    this.queue = [];
+                switch (data)
+                {
+                    case 2:
+                        this.queue = []; break;
+                    case 3:
+                        this.paused = true; break;
+                    case 4:
+                        this.paused = false; break;
                 }
             }
             if (data instanceof Uint8Array)
@@ -36,7 +42,7 @@ class StreamProcessor extends AudioWorkletProcessor
 
         let written = 0;
 
-        while (written < sampleCount && this.queue.length > 0)
+        while (written < sampleCount && this.queue.length > 0 && !this.paused)
         {
             const buffer = this.queue[0];
             const offset = buffer.offset;
