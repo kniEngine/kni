@@ -82,8 +82,12 @@ namespace Microsoft.Xna.Platform.Audio
         {
             AudioContext context = ConcreteAudioService.Context;
 
+            if (!ConcreteAudioService.IsDynamicSoundModuleInitialized)
+            {
             await context.AudioWorklet.AddModuleAsync("js/streamProcessor.js");
-            _streamSource = context.CreateWorklet("stream-processor");
+                ConcreteAudioService.IsDynamicSoundModuleInitialized = true;
+            }
+
             _streamSource.Port.Message += StreamSource_OnMessage;
             _streamSource.Connect(_sourceTarget);
 
