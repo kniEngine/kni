@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using nkast.Wasm.Audio;
 using nkast.Wasm.ChannelMessaging;
@@ -25,7 +26,10 @@ namespace Microsoft.Xna.Platform.Audio
             BufferProcessed = 1,
             ClearBuffers = 2,
             Pause = 3,
-            Resume = 4
+            Resume = 4,
+            Pitch = 5,
+            SampleRate = 6,
+            Channels = 7
         }
 
         private readonly WeakReference _dynamicSoundEffectInstanceRef = new WeakReference(null);
@@ -40,10 +44,8 @@ namespace Microsoft.Xna.Platform.Audio
             get { return base.Pitch; }
             set
             {
-                if (value != 0)
-                    throw new NotSupportedException("DynamicSoundEffectInstance does not support Pitch.");
-
                 base.Pitch = value;
+                SetPlaybackRate();
             }
         }
 
@@ -52,15 +54,6 @@ namespace Microsoft.Xna.Platform.Audio
         {
             _sampleRate = sampleRate;
             _channels = channels;
-
-            AudioContext context = ConcreteAudioService.Context;
-
-            // TODO: implement resampling.
-            if (_sampleRate != context.SampleRate)
-                throw new NotImplementedException($"Sample rate {_sampleRate} does not match AudioContext sample rate {context.SampleRate}.");
-            // TODO: implement Stereo.
-            if (_channels != 1)
-                throw new NotImplementedException($"Channels {_channels} is not implemented.");
         }
 
         public int BuffersNeeded { get; set; }
@@ -95,12 +88,27 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (!ConcreteAudioService.IsDynamicSoundModuleInitialized)
             {
-            await context.AudioWorklet.AddModuleAsync("js/streamProcessor.js");
+                await context.AudioWorklet.AddModuleAsync("js/streamProcessor.js");
                 ConcreteAudioService.IsDynamicSoundModuleInitialized = true;
             }
 
+            AudioWorkletNodeOptions options = new AudioWorkletNodeOptions()
+            {
+                NumberOfInputs = 0,
+                NumberOfOutputs = 1,
+                OutputChannelCount = new int[] { _channels }
+            };
+
+            _streamSource = context.CreateWorklet("stream-processor", options);
             _streamSource.Port.Message += StreamSource_OnMessage;
             _streamSource.Connect(_sourceTarget);
+
+            _streamSource.Port.PostMessage((int)PortMessageType.SampleRate);
+            _streamSource.Port.PostMessage(_sampleRate);
+            _streamSource.Port.PostMessage((int)PortMessageType.Channels);
+            _streamSource.Port.PostMessage(_channels);
+
+            SetPlaybackRate();
 
             _isStreamSourceInitialized = true;
 
@@ -142,7 +150,7 @@ namespace Microsoft.Xna.Platform.Audio
                 _streamSource.Disconnect(_sourceTarget);
                 _streamSource.Dispose();
                 _streamSource = null;
-        }
+            }
             _isStreamSourceInitialized = false;
             _pendingBuffers = 0;
             _tmpBuffers.Clear();
@@ -186,6 +194,17 @@ namespace Microsoft.Xna.Platform.Audio
                 _streamSource.Port.PostMessage((int)PortMessageType.ClearBuffers);
         }
 
+        protected override void SetPlaybackRate()
+        {
+            if (_streamSource == null)
+                return;
+
+            float playbackRate = (float)Math.Pow(2, base.Pitch) * _dopplerEffect;
+            playbackRate = MathHelper.Clamp(playbackRate, 0.5f, 2.0f);
+
+            _streamSource.Port.PostMessage((int)PortMessageType.Pitch);
+            _streamSource.Port.PostMessage(playbackRate);
+        }
 
         protected override void Dispose(bool disposing)
         {
