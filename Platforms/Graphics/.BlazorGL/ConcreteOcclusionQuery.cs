@@ -11,11 +11,13 @@ namespace Microsoft.Xna.Platform.Graphics
         private bool _inBeginEndPair;  // true if Begin was called and End was not yet called.
         private bool _queryPerformed;  // true if Begin+End were called at least once.
         private bool _isComplete;      // true if the result is available in _pixelCount.
-        private int _pixelCount;       // The query result.
+        private int _queryResultValue; // The query result.
 
         private WebGL2Query _query;
 
-        public override int PixelCount { get { return _pixelCount; } }
+        public override int PixelCount { get { throw new PlatformNotSupportedException(); } }
+
+        public override bool AnyPixelsPassed { get { return _queryResultValue > 0; } }
 
         public override bool IsComplete
         {
@@ -77,12 +79,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (resultReady == 0)
             {
-                _pixelCount = 0;
+                _queryResultValue = 0;
                 _isComplete = false;
             }
             else
             {
-                _pixelCount = ((IWebGL2RenderingContext)GL).GetQueryParameter(_query, WebGL2QueryParam.QUERY_RESULT);
+                _queryResultValue = ((IWebGL2RenderingContext)GL).GetQueryParameter(_query, WebGL2QueryParam.QUERY_RESULT);
                 GL.CheckGLError();
                 _isComplete = true;
             }
