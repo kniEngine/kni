@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Platform.Input
 
         public void OnMouseWheel(object sender, int deltaX, int deltaY, int deltaZ, int deltaMode)
         {
-            _scrollX -= deltaX;
+            _scrollX += deltaX;
             _scrollY -= deltaY;
         }
 
