@@ -52,12 +52,22 @@ namespace Microsoft.Xna.Platform.Input.Touch
             : base()
         {
             // Initialize Capabilities
-            int maximumTouchCount = GetSystemMetrics(SM_MAXIMUMTOUCHES);
-            bool isConnected = (maximumTouchCount > 0);
+            int maximumTouchCount = 0;
+            bool isConnected = false;
             bool hasPressure = false;
-            _capabilities = base.CreateTouchPanelCapabilities(maximumTouchCount, isConnected, hasPressure);
 
-            
+            int maximumTouches = GetSystemMetrics(SystemMetrics.SM_MAXIMUMTOUCHES);
+            InputDigitizer digitizer = (InputDigitizer)GetSystemMetrics(SystemMetrics.SM_DIGITIZER);
+
+            if ((digitizer & InputDigitizer.NID_READY) != 0
+            &&  (digitizer & InputDigitizer.NID_INTEGRATED_TOUCH) != 0
+            &&  maximumTouches > 0)
+            {
+                maximumTouchCount = maximumTouches;
+                isConnected = true;
+            }
+
+            _capabilities = base.CreateTouchPanelCapabilities(maximumTouchCount, isConnected, hasPressure);
         }
 
         public override TouchPanelCapabilities GetCapabilities()
@@ -127,10 +137,25 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
-        const int SM_MAXIMUMTOUCHES = 95;
+        private enum SystemMetrics
+        {
+            SM_DIGITIZER = 94,
+            SM_MAXIMUMTOUCHES = 95,
+        }
+
+        [Flags]
+        private enum InputDigitizer
+        {
+            NID_INTEGRATED_TOUCH = 0x01,
+            NID_EXTERNAL_TOUCH   = 0x02,
+            NID_INTEGRATED_PEN   = 0x04,
+            NID_EXTERNAL_PEN     = 0x08,
+            NID_MULTI_INPUT      = 0x40,
+            NID_READY            = 0x80
+        }
 
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]
-        static extern int GetSystemMetrics(int nIndex);
+        static extern int GetSystemMetrics(SystemMetrics nIndex);
 
     }
 }
