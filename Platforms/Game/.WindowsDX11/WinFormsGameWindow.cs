@@ -553,7 +553,7 @@ namespace Microsoft.Xna.Framework
 
             ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
-            InternalSetFormBorderStyle(isBorderless: false);
+            InternalSetFormBorderStyle(IsBorderless);
             Form.WindowState = FormWindowState.Normal;
             _lastFormState = FormWindowState.Normal;
             Form.Location = _locationBeforeFullScreen;
@@ -572,7 +572,7 @@ namespace Microsoft.Xna.Framework
 
             ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
-            InternalSetFormBorderStyle(isBorderless: false);
+            InternalSetFormBorderStyle(IsBorderless);
             Form.WindowState = FormWindowState.Minimized;
             _lastFormState = FormWindowState.Minimized;
             Form.Location = _locationBeforeFullScreen;
