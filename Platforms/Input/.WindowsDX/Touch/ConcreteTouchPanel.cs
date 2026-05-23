@@ -5,6 +5,7 @@
 // Copyright (C)2024 Nick Kastellanos
 
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 
@@ -12,6 +13,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 {
     public sealed class ConcreteTouchPanel : TouchPanelStrategy
     {
+        private readonly HashSet<int> _canceledTouchIds = new HashSet<int>();
+
         public override IntPtr WindowHandle
         {
             get { return base.WindowHandle; }
@@ -87,6 +90,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public override void AddPressedEvent(int nativeTouchId, Vector2 position)
         {
+            System.Diagnostics.Debug.Assert(!_canceledTouchIds.Contains(nativeTouchId), "nativeTouchId already registered");
+
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
             {
@@ -100,6 +105,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         public override void AddMovedEvent(int nativeTouchId, Vector2 position)
         {
+            if (_canceledTouchIds.Contains(nativeTouchId))
+                return;
+
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
             {
@@ -113,6 +121,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
    
         public override void AddReleasedEvent(int nativeTouchId, Vector2 position)
         {
+            if (_canceledTouchIds.Remove(nativeTouchId))
+                return;
+
             IntPtr wndHandle = this.WindowHandle;
             if (wndHandle != IntPtr.Zero)
             {
@@ -148,7 +159,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
             // local copy of touchStates
             int[] nativeTouchIds = GetTouchIds();
 
-            //TODO: add to a hashset of canceled touch ids to ignore future events until the touch is released by the system.
+            for (int i = 0; i < nativeTouchIds.Length; i++)
+                _canceledTouchIds.Add(nativeTouchIds[i]);
             
             // submit a Canceled event for each touch Id
             for (int i = 0; i < nativeTouchIds.Length; i++)
