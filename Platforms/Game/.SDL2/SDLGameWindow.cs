@@ -227,7 +227,11 @@ namespace Microsoft.Xna.Framework
             if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = _handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)
+            {
                 TouchPanel.WindowHandle = _handle;
+                TouchPanel.DisplayWidth = _width;
+                TouchPanel.DisplayHeight = _height;
+            }
 
             if (_pIcon != IntPtr.Zero)
                 SDL.WINDOW.SetIcon(_handle, _pIcon);

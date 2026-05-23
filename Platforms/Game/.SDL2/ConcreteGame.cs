@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Utilities;
 
 
@@ -55,6 +56,31 @@ namespace Microsoft.Xna.Platform
             _gameWindow = new SdlGameWindow(Game);
             base.Window = _gameWindow;
             base.SetWindowListeners();
+
+            _gameWindow.ClientSizeChanged += GameWindow_ClientSizeChanged;
+            _gameWindow.OrientationChanged += GameWindow_OrientationChanged;
+        }
+
+        private void GameWindow_ClientSizeChanged(object sender, EventArgs e)
+        {
+            GameWindow window = sender as GameWindow;
+
+            if (TouchPanel.WindowHandle == window.Handle)
+            {
+                Rectangle windowBounds = window.ClientBounds;
+                TouchPanel.DisplayWidth = windowBounds.Width;
+                TouchPanel.DisplayHeight = windowBounds.Height;
+            }
+        }
+
+        private void GameWindow_OrientationChanged(object sender, EventArgs e)
+        {
+            GameWindow window = sender as GameWindow;
+
+            if (TouchPanel.WindowHandle == window.Handle)
+            {
+                TouchPanel.DisplayOrientation = window.CurrentOrientation;
+            }
         }
 
         public override bool IsMouseVisible
