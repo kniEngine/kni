@@ -414,6 +414,7 @@ namespace Microsoft.Xna.Framework
                                 break;
                             case Sdl.Window.EventId.FocusLost:
                                 base.OnDeactivated();
+                                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().SDL2CancelAllTouches();
                                 break;
                             case Sdl.Window.EventId.Moved:
                                 if (!_supressMoved)
