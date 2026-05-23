@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Utilities;
 
 
@@ -226,7 +227,11 @@ namespace Microsoft.Xna.Framework
             if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = _handle;
             if (TouchPanel.WindowHandle == IntPtr.Zero)
+            {
                 TouchPanel.WindowHandle = _handle;
+                TouchPanel.DisplayWidth = _width;
+                TouchPanel.DisplayHeight = _height;
+            }
 
             if (_pIcon != IntPtr.Zero)
                 SDL.WINDOW.SetIcon(_handle, _pIcon);
@@ -287,6 +292,34 @@ namespace Microsoft.Xna.Framework
                             const int wheelDelta = 120;
                             ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollY += ev.Wheel.Y * wheelDelta;
                             ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollX += ev.Wheel.X * wheelDelta;
+                        }
+                        break;
+
+                    case Sdl.EventType.FingerDown:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+                            //((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(identifier, new Vector2(x, y));
+                        }
+                        break;
+                    case Sdl.EventType.FingerMotion:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+                            //((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(identifier, new Vector2(x, y));
+                        }
+                        break;
+                    case Sdl.EventType.FingerUp:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+                            //((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(identifier, new Vector2(x, y));
                         }
                         break;
 
@@ -384,6 +417,7 @@ namespace Microsoft.Xna.Framework
                                 break;
                             case Sdl.Window.EventId.FocusLost:
                                 base.OnDeactivated();
+                                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().SDL2CancelAllTouches();
                                 break;
                             case Sdl.Window.EventId.Moved:
                                 if (!_supressMoved)

@@ -45,10 +45,12 @@ namespace Microsoft.Xna.Platform.Input
 
                 int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
-                Point pos, windowPos;
-                Sdl.Mouse.Button state = SDL.MOUSE.GetGlobalState(out pos.X, out pos.Y);
+                Point clientPos;
+                //Sdl.Mouse.Button state = SDL.MOUSE.GetState(out clientPos.X, out clientPos.Y);
+                Point globalPos, windowPos;
+                Sdl.Mouse.Button state = SDL.MOUSE.GetGlobalState(out globalPos.X, out globalPos.Y);
                 SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
-                Point clientPos = pos - windowPos;
+                clientPos = globalPos - windowPos;
 
                 MouseState mouseState = new MouseState(
                     x: clientPos.X, y: clientPos.Y,

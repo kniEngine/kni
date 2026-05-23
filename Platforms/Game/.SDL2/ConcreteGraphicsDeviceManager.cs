@@ -70,8 +70,7 @@ namespace Microsoft.Xna.Platform
 
                 this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
-                // update the touchpanel display size when the graphicsdevice is reset
-                this.GraphicsDevice.DeviceReset += GraphicsDevice_DeviceReset_UpdateTouchPanel;
+                // update the GameWindow size when PresentationChanged.
                 ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
 
                 this.OnDeviceCreated(EventArgs.Empty);
@@ -216,8 +215,7 @@ namespace Microsoft.Xna.Platform
 
             this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
-            // update the touchpanel display size when the graphicsdevice is reset
-            this.GraphicsDevice.DeviceReset += GraphicsDevice_DeviceReset_UpdateTouchPanel;
+            // update the GameWindow size when PresentationChanged.
             ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
 
             this.OnDeviceCreated(EventArgs.Empty);
@@ -226,13 +224,6 @@ namespace Microsoft.Xna.Platform
             this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
 
             ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(string.Empty, gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen);
-        }
-
-        private void GraphicsDevice_DeviceReset_UpdateTouchPanel(object sender, EventArgs eventArgs)
-        {
-            TouchPanel.DisplayWidth = this.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = this.GraphicsDevice.PresentationParameters.BackBufferHeight;
-            TouchPanel.DisplayOrientation = this.GraphicsDevice.PresentationParameters.DisplayOrientation;
         }
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)

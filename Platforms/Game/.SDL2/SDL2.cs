@@ -22,6 +22,7 @@ internal class Sdl
     public Joystick JOYSTICK { get; private set; }
     public GameController GAMECONTROLLER { get; private set; }
     public Haptic HAPTIC { get; private set; }
+    public Touch TOUCH { get; private set; }
 
     public readonly Version version;
 
@@ -54,6 +55,7 @@ internal class Sdl
         JOYSTICK = new Joystick(this, NativeLibrary);
         GAMECONTROLLER = new GameController(this, NativeLibrary);
         HAPTIC = new Haptic(this, NativeLibrary);
+        TOUCH = new Touch(this, NativeLibrary);
     }
 
     private IntPtr GetNativeLibrary()
@@ -979,6 +981,16 @@ internal class Sdl
 
     public class Touch
     {
+        private Sdl _sdl;
+
+        public enum TouchDeviceType
+        {
+            Invalid          =   -1,
+            Direct           = 0x00,
+            IndirectAbsolute = 0x01,
+            IndirectRelative = 0x02,
+        }
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct FingerEvent
         {
@@ -991,6 +1003,36 @@ internal class Sdl
             public float Dy;
             public float Pressure;
             public uint WindowID;
+        }
+
+        public Touch(Sdl sdl, IntPtr library)
+        {
+            _sdl = sdl;
+            LoadEntryPoints(library);
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate int d_sdl_getnumtouchdevices();
+        public d_sdl_getnumtouchdevices GetNumTouchDevices;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate long d_sdl_gettouchdevice(int index);
+        public d_sdl_gettouchdevice GetTouchDevice;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate int d_sdl_getnumtouchfingers(long touchId);
+        public d_sdl_getnumtouchfingers GetNumTouchFingers;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate TouchDeviceType d_sdl_gettouchdevicetype(long touchId);
+        public d_sdl_gettouchdevicetype GetTouchDeviceType;
+
+        private void LoadEntryPoints(IntPtr library)
+        {
+            GetNumTouchDevices = FuncLoader.LoadFunctionOrNull<d_sdl_getnumtouchdevices>(library, "SDL_GetNumTouchDevices");
+            GetTouchDevice = FuncLoader.LoadFunctionOrNull<d_sdl_gettouchdevice>(library, "SDL_GetTouchDevice");
+            GetNumTouchFingers = FuncLoader.LoadFunctionOrNull<d_sdl_getnumtouchfingers>(library, "SDL_GetNumTouchFingers");
+            GetTouchDeviceType = FuncLoader.LoadFunctionOrNull<d_sdl_gettouchdevicetype>(library, "SDL_GetTouchDeviceType");
         }
     }
 
