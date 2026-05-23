@@ -975,6 +975,22 @@ internal class Sdl
         }
     }
 
+    public class Touch
+    {
+        public struct FingerEvent
+        {
+            public uint Timestamp;
+            public long TouchId;
+            public long FingerId;
+            public float X;
+            public float Y;
+            public float Dx;
+            public float Dy;
+            public float Pressure;
+            public uint WindowID;
+        }
+    }
+
     public class Keyboard
     {
         private Sdl _sdl;
