@@ -164,6 +164,8 @@ internal class Sdl
         [FieldOffset(4)]
         public Mouse.WheelEvent Wheel;
         [FieldOffset(4)]
+        public Touch.FingerEvent Finger;
+        [FieldOffset(4)]
         public Joystick.DeviceEvent JoystickDevice;
         [FieldOffset(4)]
         public GameController.DeviceEvent ControllerDevice;
