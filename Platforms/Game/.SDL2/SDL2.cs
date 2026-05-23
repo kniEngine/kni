@@ -94,7 +94,7 @@ internal class Sdl
 
         MouseMotion = 0x400,
         MouseButtonDown = 0x401,
-        MouseButtonup = 0x402,
+        MouseButtonUp = 0x402,
         MouseWheel = 0x403,
 
         JoyAxisMotion = 0x600,
