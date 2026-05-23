@@ -251,12 +251,14 @@ namespace Microsoft.Xna.Framework
                     case Sdl.EventType.Quit:
                         isExiting = true;
                         break;
+
                     case Sdl.EventType.JoyDeviceAdded:
                         ((IPlatformJoystick)Joystick.Current).GetStrategy<ConcreteJoystick>().AddDevice(ev.JoystickDevice.Which);
                         break;
                     case Sdl.EventType.JoyDeviceRemoved:
                         ((IPlatformJoystick)Joystick.Current).GetStrategy<ConcreteJoystick>().RemoveDevice(ev.JoystickDevice.Which);
                         break;
+
                     case Sdl.EventType.ControllerDeviceAdded:
                         ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(ev.ControllerDevice.Which);
                         break;
@@ -271,6 +273,7 @@ namespace Microsoft.Xna.Framework
                     case Sdl.EventType.ControllerAxisMotion:
                         ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().UpdatePacketInfo(ev.ControllerDevice.Which, ev.ControllerDevice.TimeStamp);
                         break;
+
                     case Sdl.EventType.MouseMotion:
                         unchecked
                         {
@@ -286,24 +289,26 @@ namespace Microsoft.Xna.Framework
                             ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollX += ev.Wheel.X * wheelDelta;
                         }
                         break;
+
                     case Sdl.EventType.KeyDown:
-                    {
-                        Keys key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
-                        if (!_keys.Contains(key))
-                                _keys.Add(key);
-                        char character = (char)ev.Key.Keysym.Sym;
-                        this.OnKeyDown(key);
-                        if (char.IsControl(character))
-                                this.OnTextInput(character, key);
-                        break;
-                    }
-                    case Sdl.EventType.KeyUp:
-                    {
+                        {
                             Keys key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
-                        _keys.Remove(key);
-                        this.OnKeyUp(key);
+                            if (!_keys.Contains(key))
+                                _keys.Add(key);
+                            char character = (char)ev.Key.Keysym.Sym;
+                            this.OnKeyDown(key);
+                            if (char.IsControl(character))
+                                this.OnTextInput(character, key);
+                        }
                         break;
-                    }
+                    case Sdl.EventType.KeyUp:
+                        {
+                            Keys key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
+                            _keys.Remove(key);
+                            this.OnKeyUp(key);
+                        }
+                        break;
+
                     case Sdl.EventType.TextInput:
                         if (this.IsTextInputAttached())
                         {
@@ -359,6 +364,7 @@ namespace Microsoft.Xna.Framework
                             }
                         }
                         break;
+
                     case Sdl.EventType.WindowEvent:
 
                         // If the ID is not the same as our main window ID
@@ -391,25 +397,27 @@ namespace Microsoft.Xna.Framework
                         break;
 
                     case Sdl.EventType.DropFile:
-                        if (ev.Drop.WindowId != this.Id)
-                            break;
+                        {
+                            if (ev.Drop.WindowId != this.Id)
+                                break;
 
-                        string path = InteropHelpers.Utf8ToString(ev.Drop.File);
-                        SDL.SDL_Free(ev.Drop.File);
-                        _dropList.Add(path);
-
+                            string path = InteropHelpers.Utf8ToString(ev.Drop.File);
+                            SDL.SDL_Free(ev.Drop.File);
+                            _dropList.Add(path);
+                        }
                         break;
 
                     case Sdl.EventType.DropComplete:
-                        if (ev.Drop.WindowId != this.Id)
-                            break;
-
-                        if (_dropList.Count > 0)
                         {
-                            OnFileDrop(new FileDropEventArgs(_dropList.ToArray()));
-                            _dropList.Clear();
-                        }
+                            if (ev.Drop.WindowId != this.Id)
+                                break;
 
+                            if (_dropList.Count > 0)
+                            {
+                                OnFileDrop(new FileDropEventArgs(_dropList.ToArray()));
+                                _dropList.Clear();
+                            }
+                        }
                         break;
                 }
             }
