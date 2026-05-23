@@ -56,6 +56,7 @@ namespace Microsoft.Xna.Framework.Windows
 
         public const int WM_ENTERSIZEMOVE = 0x0231;
         public const int WM_EXITSIZEMOVE  = 0x0232;
+        public const int WM_KILLFOCUS     = 0x0008;
         public const int WM_DROPFILES = 0x0233;
         public const int WM_POINTERUPDATE = 0x0245;
         public const int WM_POINTERDOWN   = 0x0246;
@@ -228,6 +229,12 @@ namespace Microsoft.Xna.Framework.Windows
                             m.Result = IntPtr.Zero;
                             return;
                         }
+                    }
+                    break;
+                case WM_KILLFOCUS:
+                    {
+                        // Cancel all touches when the game window loses focus.
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().WinFormsCancelAllTouches();
                     }
                     break;
 

@@ -137,6 +137,24 @@ namespace Microsoft.Xna.Platform.Input.Touch
             }
         }
 
+        /// <summary>
+        /// This will invalidate the touch panel state.
+        /// </summary>
+        /// <remarks>
+        /// Called from orientation change on window clientBounds changes, minimize, etc
+        /// </remarks>
+        internal void WinFormsCancelAllTouches()
+        {
+            // local copy of touchStates
+            int[] nativeTouchIds = GetTouchIds();
+
+            //TODO: add to a hashset of canceled touch ids to ignore future events until the touch is released by the system.
+            
+            // submit a Canceled event for each touch Id
+            for (int i = 0; i < nativeTouchIds.Length; i++)
+                AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
+        }
+
         private enum SystemMetrics
         {
             SM_DIGITIZER = 94,
