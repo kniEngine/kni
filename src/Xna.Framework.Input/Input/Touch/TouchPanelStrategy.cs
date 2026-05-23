@@ -10,6 +10,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
 {
     public abstract partial class TouchPanelStrategy
     {
+        // Used for the common situation where GetTouchIds will return an empty array
+        private static int[] _emptyTouchIds = new int[0];
+
         private readonly Stopwatch _stopwatch;
 
         private IntPtr _windowHandle;
@@ -89,7 +92,8 @@ namespace Microsoft.Xna.Platform.Input.Touch
 
         protected int[] GetTouchIds()
         {
-            //TODO: return a preallocated empty array if _touchIdsMap is empty.
+            if (_touchIdsMap.Count == 0)
+                return _emptyTouchIds;
 
             int[] nativeTouchIds = new int[_touchIdsMap.Count];
             _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
