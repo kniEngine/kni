@@ -85,21 +85,21 @@ internal class Sdl
         Quit = 0x100,
 
         WindowEvent = 0x200,
-        SysWM = 0x201,
+        SysWM       = 0x201,
 
-        KeyDown = 0x300,
-        KeyUp = 0x301,
+        KeyDown     = 0x300,
+        KeyUp       = 0x301,
         TextEditing = 0x302,
-        TextInput = 0x303,
+        TextInput   = 0x303,
 
-        MouseMotion = 0x400,
+        MouseMotion     = 0x400,
         MouseButtonDown = 0x401,
-        MouseButtonUp = 0x402,
-        MouseWheel = 0x403,
+        MouseButtonUp   = 0x402,
+        MouseWheel      = 0x403,
 
         JoyAxisMotion = 0x600,
         JoyBallMotion = 0x601,
-        JoyHatMotion = 0x602,
+        JoyHatMotion  = 0x602,
         JoyButtonDown = 0x603,
         JoyButtonUp   = 0x604,
         JoyDeviceAdded   = 0x605,
@@ -112,13 +112,13 @@ internal class Sdl
         ControllerDeviceRemoved  = 0x654,
         ControllerDeviceRemapped = 0x655,
 
-        FingerDown = 0x700,
-        FingerUp = 0x701,
+        FingerDown   = 0x700,
+        FingerUp     = 0x701,
         FingerMotion = 0x702,
 
         DollarGesture = 0x800,
-        DollarRecord = 0x801,
-        MultiGesture = 0x802,
+        DollarRecord  = 0x801,
+        MultiGesture  = 0x802,
 
         ClipboardUpdate = 0x900,
 
@@ -127,11 +127,11 @@ internal class Sdl
         DropBegin = 0x1002,
         DropComplete = 0x1003,
 
-        AudioDeviceAdded = 0x1100,
+        AudioDeviceAdded   = 0x1100,
         AudioDeviceRemoved = 0x1101,
 
         RenderTargetsReset = 0x2000,
-        RenderDeviceReset = 0x2001,
+        RenderDeviceReset  = 0x2001,
 
         UserEvent = 0x8000,
 
