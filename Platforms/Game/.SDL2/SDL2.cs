@@ -457,11 +457,27 @@ internal class Sdl
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        public struct SDL_SysWMinfo_Win
+        {
+            public IntPtr window; // HWND
+            public IntPtr hdc;    // HDC
+            public IntPtr hinstance; // HINSTANCE
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        public struct SDL_SysWMinfo_Info
+        {
+            [FieldOffset(0)]
+            public SDL_SysWMinfo_Win win;
+            // additional platforms here...
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
         public struct SDL_SysWMinfo
         {
             public Version version;
             public SysWMType subsystem;
-            public IntPtr window;
+            public SDL_SysWMinfo_Info info;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
