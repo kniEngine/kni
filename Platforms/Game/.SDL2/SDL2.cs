@@ -979,6 +979,7 @@ internal class Sdl
 
     public class Touch
     {
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct FingerEvent
         {
             public uint Timestamp;
