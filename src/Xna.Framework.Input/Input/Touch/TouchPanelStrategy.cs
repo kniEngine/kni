@@ -100,24 +100,6 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return nativeTouchIds;
         }
 
-        /// <summary>
-        /// This will invalidate the touch panel state.
-        /// </summary>
-        /// <remarks>
-        /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
-        /// </remarks>
-        public void BlazorCancelAllTouches()
-        {
-            // TODO: move this method to Blazor ConcreteTouchPanel.
-
-            // local copy of touchStates
-            int[] nativeTouchIds = GetTouchIds();
-
-            // submit a Canceled event for each touch Id
-            for (int i = 0; i < nativeTouchIds.Length; i++)
-                AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
-        }
-
         public void TestReleaseAllTouches()
         {
             // local copy of touchStates
