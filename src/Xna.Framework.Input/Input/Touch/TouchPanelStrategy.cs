@@ -10,6 +10,9 @@ namespace Microsoft.Xna.Platform.Input.Touch
 {
     public abstract partial class TouchPanelStrategy
     {
+        // Used for the common situation where GetTouchIds will return an empty array
+        private static int[] _emptyTouchIds = new int[0];
+
         private readonly Stopwatch _stopwatch;
 
         private IntPtr _windowHandle;
@@ -87,28 +90,20 @@ namespace Microsoft.Xna.Platform.Input.Touch
         public abstract void AddReleasedEvent(int nativeTouchId, Vector2 position);
         public abstract void AddCanceledEvent(int nativeTouchId, Vector2 position);
 
-        /// <summary>
-        /// This will invalidate the touch panel state.
-        /// </summary>
-        /// <remarks>
-        /// Called from orientation change on mobiles, window clientBounds changes, minimize, etc
-        /// </remarks>
-        public void BlazorCancelAllTouches()
+        protected int[] GetTouchIds()
         {
-            // local copy of touchStates
+            if (_touchIdsMap.Count == 0)
+                return _emptyTouchIds;
+
             int[] nativeTouchIds = new int[_touchIdsMap.Count];
             _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
-
-            // submit a Canceled event for each touch Id
-            for (int i = 0; i < nativeTouchIds.Length; i++)
-                AddCanceledEvent(nativeTouchIds[i], Vector2.Zero);
+            return nativeTouchIds;
         }
 
         public void TestReleaseAllTouches()
         {
             // local copy of touchStates
-            int[] nativeTouchIds = new int[_touchIdsMap.Count];
-            _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+            int[] nativeTouchIds = GetTouchIds();
 
             for (int i = 0; i < nativeTouchIds.Length; i++)
                 AddReleasedEvent(nativeTouchIds[i], Vector2.Zero);
