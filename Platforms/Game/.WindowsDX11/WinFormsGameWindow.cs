@@ -125,6 +125,18 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
+        [Flags]
+        public enum TouchWindowFlags : uint
+        {
+            Default   = 0x0000,
+            FineTouch = 0x0001,
+            WantPalm  = 0x0002,
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool RegisterTouchWindow(IntPtr hwnd, TouchWindowFlags ulFlags);
+
+
         internal WinFormsGameWindow(ConcreteGame concreteGame)
         {
             _concreteGame = concreteGame;
@@ -133,6 +145,8 @@ namespace Microsoft.Xna.Framework
             Form = new WinFormsGameForm(this);
             _handle = Form.Handle;
             _instances.Add(this.Handle, this);
+
+            RegisterTouchWindow(_handle, TouchWindowFlags.WantPalm);
 
             SysDrawing.Size newClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
             if (this.Form.ClientSize != newClientSize)
@@ -154,7 +168,11 @@ namespace Microsoft.Xna.Framework
 
             // Capture touch events.
             if (TouchPanel.WindowHandle == IntPtr.Zero)
+            {
                 TouchPanel.WindowHandle = this.Handle;
+                TouchPanel.DisplayWidth = this.Form.ClientSize.Width;
+                TouchPanel.DisplayHeight = this.Form.ClientSize.Height;
+            }
 
             // disable Keyboard input until the window is activated.
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(false);

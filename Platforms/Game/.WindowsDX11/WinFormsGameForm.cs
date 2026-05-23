@@ -56,6 +56,7 @@ namespace Microsoft.Xna.Framework.Windows
 
         public const int WM_ENTERSIZEMOVE = 0x0231;
         public const int WM_EXITSIZEMOVE  = 0x0232;
+        public const int WM_KILLFOCUS     = 0x0008;
         public const int WM_DROPFILES = 0x0233;
         public const int WM_POINTERUPDATE = 0x0245;
         public const int WM_POINTERDOWN   = 0x0246;
@@ -188,28 +189,52 @@ namespace Microsoft.Xna.Framework.Windows
                 case WM_POINTERDOWN:
                     {
                         int id = m.GetPointerId();
-                        var position = m.GetPointerLocation();
-                        position = PointToClient(position);
-                        Vector2 vec = new Vector2(position.X, position.Y);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(id, vec);
+                        if (GetPointerType((uint)id, out POINTER_INPUT_TYPE pointerType)
+                        &&  pointerType == POINTER_INPUT_TYPE.PT_TOUCH)
+                        {
+                            var position = m.GetPointerLocation();
+                            position = PointToClient(position);
+                            Vector2 vec = new Vector2(position.X, position.Y);
+                            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(id, vec);
+                            m.Result = IntPtr.Zero;
+                            return;
+                        }
                     }
                     break;
                 case WM_POINTERUPDATE:
                     {
                         int id = m.GetPointerId();
-                        var position = m.GetPointerLocation();
-                        position = PointToClient(position);
-                        Vector2 vec = new Vector2(position.X, position.Y);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(id, vec);
+                        if (GetPointerType((uint)id, out POINTER_INPUT_TYPE pointerType)
+                        &&  pointerType == POINTER_INPUT_TYPE.PT_TOUCH)
+                        {
+                            var position = m.GetPointerLocation();
+                            position = PointToClient(position);
+                            Vector2 vec = new Vector2(position.X, position.Y);
+                            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(id, vec);
+                            m.Result = IntPtr.Zero;
+                            return;
+                        }
                     }
                     break;
                 case WM_POINTERUP:
                     {
                         int id = m.GetPointerId();
-                        var position = m.GetPointerLocation();
-                        position = PointToClient(position);
-                        Vector2 vec = new Vector2(position.X, position.Y);
-                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(id, vec);
+                        if (GetPointerType((uint)id, out POINTER_INPUT_TYPE pointerType)
+                        &&  pointerType == POINTER_INPUT_TYPE.PT_TOUCH)
+                        {
+                            var position = m.GetPointerLocation();
+                            position = PointToClient(position);
+                            Vector2 vec = new Vector2(position.X, position.Y);
+                            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(id, vec);
+                            m.Result = IntPtr.Zero;
+                            return;
+                        }
+                    }
+                    break;
+                case WM_KILLFOCUS:
+                    {
+                        // Cancel all touches when the game window loses focus.
+                        ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().WinFormsCancelAllTouches();
                     }
                     break;
 
@@ -303,5 +328,17 @@ namespace Microsoft.Xna.Framework.Windows
                     return (Microsoft.Xna.Framework.Input.Keys)keyCode;
             }
         }
+
+        public enum POINTER_INPUT_TYPE : uint
+        {
+            PT_POINTER  = 0x0001,
+            PT_TOUCH    = 0x0002,
+            PT_PEN      = 0x0003,
+            PT_MOUSE    = 0x0004,
+            PT_TOUCHPAD = 0x0005,
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetPointerType(uint pointerId, out POINTER_INPUT_TYPE pointerType);
     }
 }
