@@ -150,23 +150,24 @@ internal class Sdl
     {
         [FieldOffset(0)]
         public EventType Type;
-        [FieldOffset(0)]
+
+        [FieldOffset(4)]
         public Window.Event Window;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public Keyboard.Event Key;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public Mouse.MotionEvent Motion;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public Keyboard.TextEditingEvent Edit;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public Keyboard.TextInputEvent Text;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public Mouse.WheelEvent Wheel;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public Joystick.DeviceEvent JoystickDevice;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public GameController.DeviceEvent ControllerDevice;
-        [FieldOffset(0)]
+        [FieldOffset(4)]
         public Drop.Event Drop;
     }
 
@@ -431,7 +432,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public struct Event
         {
-            public EventType Type;
             public uint TimeStamp;
             public uint WindowID;
             public EventId EventID;
@@ -870,7 +870,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public struct MotionEvent
         {
-            public EventType Type;
             public uint Timestamp;
             public uint WindowID;
             public uint Which;
@@ -887,7 +886,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public struct WheelEvent
         {
-            public EventType Type;
             public uint TimeStamp;
             public uint WindowId;
             public uint Which;
@@ -998,7 +996,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public struct Event
         {
-            public EventType Type;
             public uint TimeStamp;
             public uint WindowId;
             public byte State;
@@ -1011,7 +1008,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct TextEditingEvent
         {
-            public EventType Type;
             public uint Timestamp;
             public uint WindowId;
             public fixed byte Text[32];
@@ -1022,7 +1018,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct TextInputEvent
         {
-            public EventType Type;
             public uint Timestamp;
             public uint WindowId;
             public fixed byte Text[32];
@@ -1063,7 +1058,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public struct DeviceEvent
         {
-            public EventType Type;
             public uint TimeStamp;
             public int Which;
         }
@@ -1236,7 +1230,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public struct DeviceEvent
         {
-            public EventType Type;
             public uint TimeStamp;
             public int Which;
         }
@@ -1509,7 +1502,6 @@ internal class Sdl
         [StructLayout(LayoutKind.Sequential)]
         public unsafe struct Event
         {
-            public EventType Type;
             public uint TimeStamp;
             public IntPtr File;
             public uint WindowId;
