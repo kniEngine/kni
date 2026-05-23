@@ -83,12 +83,8 @@ namespace Microsoft.Xna.Framework
                 _isResizable = value;
                 Form.MaximizeBox = _isResizable;
 
-                if (!_isBorderless)
-                {
-                    Form.FormBorderStyle = (_isResizable)
-                                            ? FormBorderStyle.Sizable
-                                            : FormBorderStyle.FixedSingle;
-                }
+                if (!IsBorderless)
+                    InternalSetFormBorderStyle(isBorderless: false);
             }
         }
 
@@ -101,17 +97,21 @@ namespace Microsoft.Xna.Framework
                     return;
 
                 _isBorderless = value;
+                InternalSetFormBorderStyle(_isBorderless);
+            }
+        }
 
-                if (!_isBorderless)
-                {
-                    Form.FormBorderStyle = (_isResizable)
-                                            ? FormBorderStyle.Sizable
-                                            : FormBorderStyle.FixedSingle;
-                }
-                else
-                {
-                    Form.FormBorderStyle = FormBorderStyle.None;
-                }
+        private void InternalSetFormBorderStyle(bool isBorderless)
+        {
+            if (isBorderless)
+            {
+                Form.FormBorderStyle = FormBorderStyle.None;
+            }
+            else
+            {
+                Form.FormBorderStyle = (_isResizable)
+                                     ? FormBorderStyle.Sizable
+                                     : FormBorderStyle.FixedSingle;
             }
         }
 
@@ -532,7 +532,7 @@ namespace Microsoft.Xna.Framework
 
             if (!pp.HardwareModeSwitch)
             {
-                IsBorderless = true;
+                InternalSetFormBorderStyle(isBorderless: true);
                 Form.WindowState = FormWindowState.Maximized;
                 _lastFormState = FormWindowState.Maximized;
             }
@@ -553,7 +553,7 @@ namespace Microsoft.Xna.Framework
 
             ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
-            IsBorderless = false;
+            InternalSetFormBorderStyle(isBorderless: false);
             Form.WindowState = FormWindowState.Normal;
             _lastFormState = FormWindowState.Normal;
             Form.Location = _locationBeforeFullScreen;
@@ -572,7 +572,7 @@ namespace Microsoft.Xna.Framework
 
             ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
-            IsBorderless = false;
+            InternalSetFormBorderStyle(isBorderless: false);
             Form.WindowState = FormWindowState.Minimized;
             _lastFormState = FormWindowState.Minimized;
             Form.Location = _locationBeforeFullScreen;
