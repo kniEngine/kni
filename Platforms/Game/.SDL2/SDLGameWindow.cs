@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Utilities;
 
 
@@ -287,6 +288,31 @@ namespace Microsoft.Xna.Framework
                             const int wheelDelta = 120;
                             ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollY += ev.Wheel.Y * wheelDelta;
                             ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollX += ev.Wheel.X * wheelDelta;
+                        }
+                        break;
+
+                    case Sdl.EventType.FingerDown:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+                        }
+                        break;
+                    case Sdl.EventType.FingerMotion:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+                        }
+                        break;
+                    case Sdl.EventType.FingerUp:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
                         }
                         break;
 
