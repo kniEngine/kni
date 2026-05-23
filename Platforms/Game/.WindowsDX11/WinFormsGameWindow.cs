@@ -532,10 +532,6 @@ namespace Microsoft.Xna.Framework
 
             if (!pp.HardwareModeSwitch)
             {
-                // FIXME: setting the WindowState to Maximized when the form is not shown will not update the ClientBounds
-                // this causes the back buffer to be the wrong size when initializing in soft full screen
-                // we show the form to bypass the issue
-                Form.Show();
                 IsBorderless = true;
                 Form.WindowState = FormWindowState.Maximized;
                 _lastFormState = FormWindowState.Maximized;
