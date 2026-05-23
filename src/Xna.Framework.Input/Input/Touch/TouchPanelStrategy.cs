@@ -87,6 +87,15 @@ namespace Microsoft.Xna.Platform.Input.Touch
         public abstract void AddReleasedEvent(int nativeTouchId, Vector2 position);
         public abstract void AddCanceledEvent(int nativeTouchId, Vector2 position);
 
+        protected int[] GetTouchIds()
+        {
+            //TODO: return a preallocated empty array if _touchIdsMap is empty.
+
+            int[] nativeTouchIds = new int[_touchIdsMap.Count];
+            _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+            return nativeTouchIds;
+        }
+
         /// <summary>
         /// This will invalidate the touch panel state.
         /// </summary>
@@ -95,9 +104,10 @@ namespace Microsoft.Xna.Platform.Input.Touch
         /// </remarks>
         public void BlazorCancelAllTouches()
         {
+            // TODO: move this method to Blazor ConcreteTouchPanel.
+
             // local copy of touchStates
-            int[] nativeTouchIds = new int[_touchIdsMap.Count];
-            _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+            int[] nativeTouchIds = GetTouchIds();
 
             // submit a Canceled event for each touch Id
             for (int i = 0; i < nativeTouchIds.Length; i++)
@@ -107,8 +117,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
         public void TestReleaseAllTouches()
         {
             // local copy of touchStates
-            int[] nativeTouchIds = new int[_touchIdsMap.Count];
-            _touchIdsMap.Keys.CopyTo(nativeTouchIds, 0);
+            int[] nativeTouchIds = GetTouchIds();
 
             for (int i = 0; i < nativeTouchIds.Length; i++)
                 AddReleasedEvent(nativeTouchIds[i], Vector2.Zero);
