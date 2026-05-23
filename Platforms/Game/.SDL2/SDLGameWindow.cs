@@ -274,8 +274,24 @@ namespace Microsoft.Xna.Framework
                     case Sdl.EventType.MouseMotion:
                         unchecked
                         {
-                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawX += ev.Motion.Xrel;
-                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawY += ev.Motion.Yrel;
+                            ConcreteMouse mouseStrategy = ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>();
+                            mouseStrategy.RawX += ev.Motion.Xrel;
+                            mouseStrategy.RawY += ev.Motion.Yrel;
+                            mouseStrategy.EventX = ev.Motion.X;
+                            mouseStrategy.EventY = ev.Motion.Y;
+                            mouseStrategy.HasEventPos = true;
+                        }
+                        break;
+                    case Sdl.EventType.MouseButtonDown:
+                        {
+                            // Capture the position carried by the event itself.
+                            // On Windows touchscreens, tap-down does not move the OS cursor,
+                            // so polling SDL_GetGlobalMouseState lags by one drag — but the
+                            // synthesized SDL_MOUSEBUTTONDOWN event has the tap coordinates.
+                            ConcreteMouse mouseStrategy = ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>();
+                            mouseStrategy.EventX = ev.Button.X;
+                            mouseStrategy.EventY = ev.Button.Y;
+                            mouseStrategy.HasEventPos = true;
                         }
                         break;
                     case Sdl.EventType.MouseWheel:

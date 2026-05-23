@@ -21,6 +21,14 @@ namespace Microsoft.Xna.Platform.Input
         internal int RawX;
         internal int RawY;
 
+        // Window-relative position tracked from the SDL event queue.
+        // Preferred over GetGlobalState() because Windows does not move the
+        // OS cursor on touchscreen tap-down — only the SDL event carries the
+        // tap coordinates, so polling lags the first frame of a tap.
+        internal int EventX;
+        internal int EventY;
+        internal bool HasEventPos;
+
         public override IntPtr PlatformGetWindowHandle()
         {
             return _wndHandle;
@@ -49,6 +57,12 @@ namespace Microsoft.Xna.Platform.Input
                 Sdl.Mouse.Button state = SDL.MOUSE.GetGlobalState(out pos.X, out pos.Y);
                 SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
                 Point clientPos = pos - windowPos;
+
+                if (HasEventPos)
+                {
+                    clientPos.X = EventX;
+                    clientPos.Y = EventY;
+                }
 
                 MouseState mouseState = new MouseState(
                     x: clientPos.X, y: clientPos.Y,
