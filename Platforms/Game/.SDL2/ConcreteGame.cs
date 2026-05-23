@@ -48,6 +48,8 @@ namespace Microsoft.Xna.Platform
             if (SDL.version >= minVersion && CurrentPlatform.OS == OS.Windows && Debugger.IsAttached)
                 SDL.SetHint("SDL_WINDOWS_DISABLE_THREAD_NAMING", "1");
 
+            SDL.SetHint("SDL_TOUCH_MOUSE_EVENTS", "0");
+
             SDL.Init(Sdl.InitFlags.Video
             );
 
