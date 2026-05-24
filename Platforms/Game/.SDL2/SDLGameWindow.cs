@@ -194,13 +194,9 @@ namespace Microsoft.Xna.Framework
                 Sdl.Window.State.InputFocus |
                 Sdl.Window.State.MouseFocus;
 
+            IntPtr oldhandle = _handle;
             if (_handle != IntPtr.Zero)
             {
-                if (Mouse.WindowHandle == _handle)
-                    Mouse.WindowHandle = IntPtr.Zero;
-                if (TouchPanel.WindowHandle == _handle)
-                    TouchPanel.WindowHandle = IntPtr.Zero;
-
                 _instances.Remove(this.Handle);
                 SDL.WINDOW.Destroy(_handle);
                 _handle = IntPtr.Zero;
@@ -224,9 +220,9 @@ namespace Microsoft.Xna.Framework
 
             Id = SDL.WINDOW.GetWindowId(_handle);
 
-            if (Mouse.WindowHandle == IntPtr.Zero)
+            if (Mouse.WindowHandle == oldhandle)
                 Mouse.WindowHandle = _handle;
-            if (TouchPanel.WindowHandle == IntPtr.Zero)
+            if (TouchPanel.WindowHandle == oldhandle)
             {
                 TouchPanel.WindowHandle = _handle;
                 TouchPanel.DisplayWidth = _width;
