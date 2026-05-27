@@ -221,7 +221,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     return DXGI.Format.BC3_UNorm_SRgb;
                     
                 default:
-                    throw new NotSupportedException("Unknown surface format!");
+                    throw new NotSupportedException("Unknown surface format");
             }
         }
 
