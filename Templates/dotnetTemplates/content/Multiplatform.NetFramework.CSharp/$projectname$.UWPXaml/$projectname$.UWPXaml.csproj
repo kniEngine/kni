@@ -153,7 +153,9 @@
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
-  <Import Project="..\$projectname$.Shared\$projectname$.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\$projectname$.Game\$projectname$.Game.csproj" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
 
 </Project>
