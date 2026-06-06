@@ -44,7 +44,7 @@ dotnet new <template-short-name> -n ProjectName
 | `kni-winforms-dx11-netframework` | KNI Windows Game Project (.NET Framework) | WinForms | DirectX11 | XAudio |
 | `kni-uap-core-dx11-netframework` | KNI Windows 10 Universal (Core) Game Project (.uap10) | UWP Core | DirectX11 | XAudio |
 | `kni-uap-xaml-dx11-netframework` | KNI Windows 10 Universal (XAML) Game Project (.uap10) | UWP XAML | DirectX11 | XAudio |
-| `kni-multiplatform` | KNI Multiplatform Game Project (.net8) | Android/Blazor/SDL2/WinForms | GLES/WebGL/OpenGL/DirectX11 | OpenAL/WebAudio/XAudio |
+| `kni-multiplatform` | KNI Multiplatform Game Project (.net8) | Android/Oculus/Blazor/SDL2/WinForms | GLES/WebGL/OpenGL/DirectX11 | OpenAL/WebAudio/XAudio |
 | `kni-multiplatform-netframework` | KNI Multiplatform Game Project (.NET Framework) | SDL2/WinForms/UWP | DirectX11/OpenGL | XAudio/OpenAL |
 | `kni-ContentPipelineExtension` | KNI Content Pipeline Extension Project (.NetStandard) | - | - | - |
 
