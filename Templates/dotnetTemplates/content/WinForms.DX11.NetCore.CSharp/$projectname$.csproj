@@ -46,6 +46,10 @@
     <PackageReference Include="nkast.Kni.Platform.WinForms.DX11" Version="4.2.9001" />
     <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.2.9001" />
   </ItemGroup>
+  <ItemGroup Condition="$(DefineConstants.Contains('OculusOVR'))">
+    <PackageReference Include="nkast.Kni.Platform.WinForms.DX11.OculusOVR" Version="4.2.9001" />
+    <PackageReference Include="nkast.LibOVR" Version="2.2.0" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
   </ItemGroup>
