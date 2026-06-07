@@ -56,6 +56,7 @@ namespace $safeprojectname$
 
             base.Initialize();
 
+            // Initialize XR device and Select VR/AR mode.
             xrDevice.BeginSessionAsync(XRSessionMode.VR);
             xrDevice.TrackFloorLevelAsync(true);
         }
@@ -118,43 +119,46 @@ namespace $safeprojectname$
 
             if (xrDevice.DeviceState == XRDeviceState.Enabled)
             {
-
                 // Draw on XR headset.
-                xrDevice.BeginFrame();
-                try
+                int beginResult = xrDevice.BeginFrame();
+                if (beginResult >= 0)
                 {
-                    HeadsetState headsetState = xrDevice.GetHeadsetState();
-
-                    // Draw each eye on a rendertarget.
-                    foreach (XREye eye in xrDevice.GetEyes())
+                    try
                     {
-                        RenderTarget2D rt = xrDevice.GetEyeRenderTarget(eye);
-                        GraphicsDevice.SetRenderTarget(rt);
+                        HeadsetState headsetState = xrDevice.GetHeadsetState();
 
-                        // Get XR view and projection.
-                        view = headsetState.GetEyeView(eye);
-                        projection = xrDevice.CreateProjection(eye, 0.05f, 1000);
+                        // Draw each eye on a rendertarget.
+                        foreach (XREye eye in xrDevice.GetEyes())
+                        {
+                            RenderTarget2D rt = xrDevice.GetEyeRenderTarget(eye);
+                            GraphicsDevice.SetRenderTarget(rt);
 
-                        // TODO: Add your drawing code here
-                        if (xrDevice.SessionMode == XRSessionMode.AR)
-                            GraphicsDevice.Clear(Color.Transparent);
-                        else
-                            GraphicsDevice.Clear(Color.CornflowerBlue);
+                            // Get XR view and projection.
+                            view = headsetState.GetEyeView(eye);
+                            projection = xrDevice.CreateProjection(eye, 0.05f, 1000);
 
-                        base.Draw(gameTime);
+                            // TODO: Add your drawing code here.
+                            if (xrDevice.SessionMode == XRSessionMode.AR)
+                                GraphicsDevice.Clear(Color.Transparent);
+                            else
+                                GraphicsDevice.Clear(Color.CornflowerBlue);
 
-                        // Resolve eye rendertarget.
-                        GraphicsDevice.SetRenderTarget(null);
-                        // Submit eye rendertarget.
-                        xrDevice.CommitRenderTarget(eye, rt);
+                            base.Draw(gameTime);
+
+                            // Resolve eye rendertarget.
+                            GraphicsDevice.SetRenderTarget(null);
+                            // Submit eye rendertarget.
+                            xrDevice.CommitRenderTarget(eye, rt);
+                        }
                     }
+                    finally
+                    {
+                        // Submit XR frame.
+                        int result = xrDevice.EndFrame();
+                    }
+
+                    return;
                 }
-                finally
-                {
-                    // Submit XR frame.
-                    int result = xrDevice.EndFrame();
-                }
-                return;
             }
 
             // Draw on the backbuffer.
