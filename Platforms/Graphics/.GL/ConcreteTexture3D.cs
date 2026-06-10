@@ -62,6 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
+                int fSize = this.Format.GetSize();
                 int elementSizeInByte = sizeof(T);
                 fixed (T* pData = &data[0])
                 {
@@ -75,9 +76,21 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.BindTexture(_glTarget, _glTexture);
                     GL.CheckGLError();
 
+                    GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
+                    GL.CheckGLError();
+
+                    if (_glIsCompressedTexture)
+                    {
+                        GL.CompressedTexSubImage3D(_glTarget, level, left, top, front, width, height, depth,
+                            _glInternalFormat, elementCount * elementSizeInByte, dataPtr);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
                     GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
                     GL.CheckGLError();
                 }
+            }
             }
             finally
             {
