@@ -295,39 +295,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     if (_glIsCompressedTexture)
                     {
-                        int imageSize = 0;
-                        switch (format)
-                        {
-                            case SurfaceFormat.RgbPvrtc2Bpp:
-                            case SurfaceFormat.RgbaPvrtc2Bpp:
-                                imageSize = (Math.Max(size, 16) * Math.Max(size, 8) * 2 + 7) / 8;
-                                break;
-                            case SurfaceFormat.RgbPvrtc4Bpp:
-                            case SurfaceFormat.RgbaPvrtc4Bpp:
-                                imageSize = (Math.Max(size, 8) * Math.Max(size, 8) * 4 + 7) / 8;
-                                break;
-                            case SurfaceFormat.Dxt1:
-                            case SurfaceFormat.Dxt1a:
-                            case SurfaceFormat.Dxt1SRgb:
-                            case SurfaceFormat.Dxt3:
-                            case SurfaceFormat.Dxt3SRgb:
-                            case SurfaceFormat.Dxt5:
-                            case SurfaceFormat.Dxt5SRgb:
-                            case SurfaceFormat.RgbEtc1:
-                            case SurfaceFormat.Rgb8Etc2:
-                            case SurfaceFormat.Srgb8Etc2:
-                            case SurfaceFormat.Rgb8A1Etc2:
-                            case SurfaceFormat.Srgb8A1Etc2:
-                            case SurfaceFormat.Rgba8Etc2:
-                            case SurfaceFormat.SRgb8A8Etc2:
-                            case SurfaceFormat.RgbaAtcExplicitAlpha:
-                            case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-                                imageSize = (size + 3) / 4 * ((size + 3) / 4) * format.GetSize();
-                                break;
-                            default:
-                                throw new NotSupportedException();
-                        }
-                        GL.CompressedTexImage2D(target, 0, _glInternalFormat, size, size, 0, imageSize, IntPtr.Zero);
+                            Rectangle bounds = new Rectangle(0, 0, s, s);
+                            int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
+                            GL.CompressedTexImage2D(target, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, 0, dataSize, IntPtr.Zero);
                         GL.CheckGLError();
                     }
                     else
