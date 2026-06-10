@@ -155,18 +155,45 @@ namespace Microsoft.Xna.Platform.Graphics
                     out _glType,
                     out _glIsCompressedTexture);
 
-                GL.TexImage3D(_glTarget, 0, _glInternalFormat, width, height, depth, 0, _glFormat, _glType, IntPtr.Zero);
+                int w = width;
+                int h = height;
+                int d = depth;
+                int level = 0;
+                while (true)
+                {
+                    if (_glIsCompressedTexture)
+                    {
+                        int boundsWidth = Math.Max(this.Width >> level, 1);
+                        int boundsHeight = Math.Max(this.Height >> level, 1);
+                        int boundsDepth = Math.Max(this.Depth >> level, 1);
+                        int dataSize = GetCompressedDataByteSize(
+                            format.GetSize(), 0, 0, w, h, 0, d, boundsWidth, boundsHeight, boundsDepth,
+                            out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom, out int checkedFront, out int checkedBack);
+                        GL.CompressedTexImage3D(_glTarget, level, _glInternalFormat, checkedRight, checkedBottom, checkedBack, 0, dataSize, IntPtr.Zero);
+                        GL.CheckGLError();
+                    }
+                    else
+                    {
+                        GL.TexImage3D(_glTarget, level, _glInternalFormat, w, h, d, 0, _glFormat, _glType, IntPtr.Zero);
                 GL.CheckGLError();
+                    }
 
-                if (mipMap)
-                    throw new NotImplementedException("Texture3D does not yet support mipmaps.");
+                    if ((w == 1 && h == 1 && d == 1) || !mipMap)
+                        break;
+                    if (w > 1)
+                        w = w / 2;
+                    if (h > 1)
+                        h = h / 2;
+                    if (d > 1)
+                        d = d / 2;
+                    ++level;
+                }
             }
             finally
             {
                 contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
-
 
     }
 }
