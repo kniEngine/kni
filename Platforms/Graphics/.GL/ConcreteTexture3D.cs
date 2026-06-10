@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Platform.Graphics.Utilities;
 using Microsoft.Xna.Platform.Graphics.OpenGL;
+using Microsoft.Xna.Platform.Utilities;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -50,7 +51,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Depth { get { return _depth; } }
 
         public unsafe void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
-                               T[] data, int startIndex, int elementCount)
+                                      T[] data, int startIndex, int elementCount)
             where T : struct
         {
             int width = right - left;
@@ -87,10 +88,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     else
                     {
-                    GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
-                    GL.CheckGLError();
+                        GL.TexSubImage3D(_glTarget, level, left, top, front, width, height, depth, _glFormat, _glType, dataPtr);
+                        GL.CheckGLError();
+                    }
                 }
-            }
             }
             finally
             {
@@ -98,11 +99,131 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
-                               T[] data, int startIndex, int elementCount)
+        public unsafe void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
+                                      T[] data, int startIndex, int elementCount)
              where T : struct
         {
-            throw new NotImplementedException();
+            int width = right - left;
+            int height = bottom - top;
+            int depth = back - front;
+
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            try
+            {
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+
+#if GLES
+                ValidateGetDataSurfaceFormat(Format, contextStrategy);
+
+                int framebufferId = 0;
+                framebufferId = GL.GenFramebuffer();
+                GL.CheckGLError();
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
+                GL.CheckGLError();
+
+                int fSize = Format.GetSize();
+                fixed (T* pData = &data[0])
+                {
+                    for (int zSlice = front; zSlice < back; zSlice++)
+                    {
+                        GL.FramebufferTextureLayer(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, _glTexture, level, zSlice);
+                        GL.CheckGLError();
+
+                        IntPtr dataPtr = (IntPtr)pData;
+                        dataPtr = dataPtr + ((startIndex + ((zSlice - front) * width * height)) * fSize);
+                        GL.ReadPixels(left, top, width, height, _glFormat, _glType, dataPtr);
+                        GL.CheckGLError();
+                    }
+                }
+                GL.DeleteFramebuffer(framebufferId);
+#else
+                // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
+                int fSize = Format.GetSize();
+                int w = Math.Max(this.Width >> level, 1);
+                int h = Math.Max(this.Height >> level, 1);
+                int d = Math.Max(this.Depth >> level, 1);
+                int TsizeInBytes = sizeof(T);
+
+                if (!isSharedContext)
+                    ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+                GL.ActiveTexture(TextureUnit.Texture0 + 0);
+                GL.CheckGLError();
+                GL.BindTexture(TextureTarget.Texture3D, _glTexture);
+                GL.CheckGLError();
+
+                GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
+                GL.CheckGLError();
+
+                fixed (T* pData = &data[0])
+                {
+                    IntPtr dataPtr = (IntPtr)pData;
+                    dataPtr = dataPtr + startIndex * TsizeInBytes;
+
+                    if (_glIsCompressedTexture)
+                    {
+                        if (left == 0 && top == 0 && front == 0
+                        && width == w && height == h && depth == d
+                        && startIndex == 0 && elementCount == data.Length)
+                        {
+                            GL.GetCompressedTexImage(TextureTarget.Texture3D, level, dataPtr);
+                            GL.CheckGLError();
+                        }
+                        else
+                        {
+                            throw new ArgumentException("GetData does not support retrieving partial regions of compressed Texture3D data on this platform.");
+                        }
+                    }
+                    else
+                    {
+                        if (left == 0 && top == 0 && front == 0
+                        && width == w && height == h && depth == d
+                        && startIndex == 0 && elementCount == data.Length)
+                        {
+                            GL.GetTexImage(TextureTarget.Texture3D, level, _glFormat, _glType, dataPtr);
+                            GL.CheckGLError();
+                        }
+                        else
+                        {
+                            int bytes = w * h * d * fSize;
+                            IntPtr pTemp = Marshal.AllocHGlobal(bytes);
+                            try
+                            {
+                                GL.GetTexImage(TextureTarget.Texture3D, level, _glFormat, _glType, pTemp);
+                                GL.CheckGLError();
+
+                                int fWidthSize = w * fSize;
+                                int fSliceSize = h * fWidthSize;
+                                int tWidthSize = width * fSize;
+                                int tSliceSize = height * tWidthSize;
+                                int rowCount = height;
+                                int sliceCount = depth;
+                                IntPtr tempPtr = (IntPtr)pTemp;
+                                tempPtr = tempPtr + (left * fSize) + (top * fWidthSize) + (front * fSliceSize);
+                                for (int s = 0; s < sliceCount; s++)
+                                {
+                                    for (int r = 0; r < rowCount; r++)
+                                    {
+                                        MemCopyHelper.MemoryCopy(
+                                            tempPtr + (s * fSliceSize) + (r * fWidthSize),
+                                            dataPtr + (s * tSliceSize) + (r * tWidthSize),
+                                            tWidthSize);
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                Marshal.FreeHGlobal(pTemp);
+                            }
+                        }
+                    }
+                }
+#endif
+            }
+            finally
+            {
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+            }
         }
 
         public int GetCompressedDataByteSize(int fSize, int left, int top, int right, int bottom, int front, int back,
@@ -188,7 +309,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     else
                     {
                         GL.TexImage3D(_glTarget, level, _glInternalFormat, w, h, d, 0, _glFormat, _glType, IntPtr.Zero);
-                GL.CheckGLError();
+                        GL.CheckGLError();
                     }
 
                     if ((w == 1 && h == 1 && d == 1) || !mipMap)
