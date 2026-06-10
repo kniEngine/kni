@@ -89,13 +89,32 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
-                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-#if OPENGL && DESKTOPGL
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
                 TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
+
+#if GLES
+                ValidateGetDataSurfaceFormat(Format, contextStrategy);
+
+                int framebufferId = 0;
+                framebufferId = GL.GenFramebuffer();
+                GL.CheckGLError();
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
+                GL.CheckGLError();
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, target, _glTexture, level);
+                GL.CheckGLError();
+
+                fixed (T* pData = &data[0])
+                {
+                    IntPtr dataPtr = (IntPtr)pData + (startIndex * Format.GetSize());
+                    GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
+                    GL.CheckGLError();
+                }
+                GL.DeleteFramebuffer(framebufferId);
+#else
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 int fSize = this.Format.GetSize();
                 int w = Math.Max(this.Size >> level, 1);
@@ -181,13 +200,11 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                     }
                 }
-#else
-                throw new NotImplementedException();
 #endif
             }
             finally
             {
-                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
