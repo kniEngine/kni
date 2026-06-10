@@ -351,27 +351,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     if (_glIsCompressedTexture)
                     {
-                        int imageSize = 0;
-                        // PVRTC has explicit calculations for imageSize
-                        // https://www.khronos.org/registry/OpenGL/extensions/IMG/IMG_texture_compression_pvrtc.txt
-                        if (format == SurfaceFormat.RgbPvrtc2Bpp || format == SurfaceFormat.RgbaPvrtc2Bpp)
-                        {
-                            imageSize = (Math.Max(w, 16) * Math.Max(h, 8) * 2 + 7) / 8;
-                        }
-                        else if (format == SurfaceFormat.RgbPvrtc4Bpp || format == SurfaceFormat.RgbaPvrtc4Bpp)
-                        {
-                            imageSize = (Math.Max(w, 8) * Math.Max(h, 8) * 4 + 7) / 8;
-                        }
-                        else
-                        {
-                            int blockSize = format.GetSize();
-                            int blockWidth, blockHeight;
-                            format.GetBlockSize(out blockWidth, out blockHeight);
-                            int wBlocks = (w + (blockWidth - 1)) / blockWidth;
-                            int hBlocks = (h + (blockHeight - 1)) / blockHeight;
-                            imageSize = wBlocks * hBlocks * blockSize;
-                        }
-                        GL.CompressedTexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, imageSize, IntPtr.Zero);
+                        Rectangle bounds = new Rectangle(0, 0, w, h);
+                        int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
+                        GL.CompressedTexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, 0,
+                                                dataSize, IntPtr.Zero);
                         GL.CheckGLError();
                     }
                     else
