@@ -228,7 +228,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
             {
                 return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
-        }
+            }
             else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
             {
                 return (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
@@ -293,32 +293,29 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     TextureTarget target = ConcreteTextureCube.GetGLCubeFace((CubeMapFace)i);
 
-                    if (_glIsCompressedTexture)
+                    int s = size;
+                    int level = 0;
+                    while (true)
                     {
+                        if (_glIsCompressedTexture)
+                        {
                             Rectangle bounds = new Rectangle(0, 0, s, s);
                             int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
                             GL.CompressedTexImage2D(target, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, 0, dataSize, IntPtr.Zero);
-                        GL.CheckGLError();
-                    }
-                    else
-                    {
-                        GL.TexImage2D(target, 0, _glInternalFormat, size, size, 0, _glFormat, _glType, IntPtr.Zero);
-                        GL.CheckGLError();
-                    }
-                }
+                            GL.CheckGLError();
+                        }
+                        else
+                        {
+                            GL.TexImage2D(target, level, _glInternalFormat, s, s, 0, _glFormat, _glType, IntPtr.Zero);
+                            GL.CheckGLError();
+                        }
 
-                if (mipMap)
-                {
-                    System.Diagnostics.Debug.Assert(TextureTarget.TextureCubeMap == _glTarget);
-#if IOS || TVOS || ANDROID
-                    GL.GenerateMipmap(TextureTarget.TextureCubeMap);
-                    GL.CheckGLError();
-#else
-                    GL.GenerateMipmap(_glTarget);
-                    GL.CheckGLError();
-                    // This updates the mipmaps after a change in the base texture
-                    GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);
-#endif
+                        if ((s == 1) || !mipMap)
+                            break;
+                        if (s > 1)
+                            s = s / 2;
+                        ++level;
+                    }
                 }
             }
             finally
