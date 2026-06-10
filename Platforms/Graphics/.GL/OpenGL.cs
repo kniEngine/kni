@@ -903,6 +903,13 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate void FramebufferTextureLayerDelegate(FramebufferTarget target, FramebufferAttachment attachment,
+            int texture, int level, int layer);
+        internal FramebufferTextureLayerDelegate FramebufferTextureLayer;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void FramebufferRenderbufferDelegate(FramebufferTarget target, FramebufferAttachment attachement,
             RenderbufferTarget renderBufferTarget, int buffer);
         internal FramebufferRenderbufferDelegate FramebufferRenderbuffer;
@@ -1556,6 +1563,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             BindFramebuffer = LoadFunctionOrNull<BindFramebufferDelegate>("glBindFramebuffer");
             DeleteFramebuffers = LoadFunctionOrNull<DeleteFramebuffersDelegate>("glDeleteFramebuffers");
             FramebufferTexture2D = LoadFunctionOrNull<FramebufferTexture2DDelegate>("glFramebufferTexture2D");
+            FramebufferTextureLayer = LoadFunctionOrNull<FramebufferTextureLayerDelegate>("glFramebufferTextureLayer");
             FramebufferRenderbuffer = LoadFunctionOrNull<FramebufferRenderbufferDelegate>("glFramebufferRenderbuffer");
             RenderbufferStorage = LoadFunctionOrNull<RenderbufferStorageDelegate>("glRenderbufferStorage");
             RenderbufferStorageMultisample = LoadFunctionOrNull<RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisample");
