@@ -215,8 +215,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     if (_glIsCompressedTexture)
                     {
-                        w = w / 4;
-                        h = h / 4;
+                        Format.GetBlockSize(out int blockWidth, out int blockHeight);
+                        w = w / blockWidth;
+                        h = h / blockHeight;
                         int bytes = w * h * fSize;
                         IntPtr pTemp = Marshal.AllocHGlobal(bytes);
                         try
@@ -225,10 +226,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.CheckGLError();
 
                             IntPtr tempPtr = (IntPtr)pTemp;
-                            tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w * fSize;
+                            tempPtr = tempPtr + checkedRect.X / blockWidth * fSize + checkedRect.Top / blockHeight * w * fSize;
                             int fWidthSize = w * fSize;
-                            int tRectWidthSize = checkedRect.Width / 4 * fSize;
-                            int rowCount = checkedRect.Height / 4;
+                            int tRectWidthSize = checkedRect.Width / blockWidth * fSize;
+                            int rowCount = checkedRect.Height / blockHeight;
                             for (int r = 0; r < rowCount; r++)
                             {
                                 MemCopyHelper.MemoryCopy(
