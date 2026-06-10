@@ -184,7 +184,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
                 GL.CheckGLError();
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, level);
                 GL.CheckGLError();
 
                 fixed (T* pData = &data[0])
