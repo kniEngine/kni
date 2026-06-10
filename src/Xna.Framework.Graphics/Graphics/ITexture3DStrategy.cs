@@ -17,5 +17,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount) where T : struct;
         void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount) where T : struct;
+        int GetCompressedDataByteSize(int fSize, int left, int top, int right, int bottom, int front, int back,
+            int textureBoundsWidth, int textureBoundsHeight, int textureBoundsDepth,
+            out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom, out int checkedFront, out int checkedBack);
     }
 }
