@@ -98,6 +98,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
 
                     GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
+                    GL.CheckGLError();
 
                     if (_glIsCompressedTexture)
                     {
@@ -144,6 +145,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
 
                     GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
+                    GL.CheckGLError();
 
                     if (_glIsCompressedTexture)
                     {
@@ -206,7 +208,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+                GL.CheckGLError();
+
                 GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
+                GL.CheckGLError();
 
                 fixed (T* pData = &data[0])
                 {
