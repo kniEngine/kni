@@ -45,6 +45,12 @@ namespace Microsoft.Xna.Platform.Graphics
             set { throw new InvalidOperationException("The state object is readonly."); }
         }
 
+        public override int MinMipLevel
+        {
+            get { return base.MinMipLevel; }
+            set { throw new InvalidOperationException("The state object is readonly."); }
+        }
+
         public override int MaxMipLevel
         {
             get { return base.MaxMipLevel; }
