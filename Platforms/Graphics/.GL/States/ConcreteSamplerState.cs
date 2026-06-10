@@ -100,6 +100,11 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.CheckGLError();
             GL.TexParameter(target, TextureParameterName.TextureWrapT, (int)ToGLTextureAddressMode(AddressV));
             GL.CheckGLError();
+            if (((ConcreteGraphicsCapabilities)cgraphicsContext.Capabilities).SupportsTexture3D)
+            {
+                GL.TexParameter(target, TextureParameterName.TextureWrapR, (int)ToGLTextureAddressMode(AddressW));
+                GL.CheckGLError();
+            }
 
 #if !GLES
             // Border color is not supported by glTexParameter in OpenGL ES 2.0
