@@ -344,13 +344,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                 GL.CheckGLError();
 
-                // Set mipMap levels
-#if !GLES
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-                GL.CheckGLError();
-#endif
-
-
                 int w = width;
                 int h = height;
                 int level = 0;
