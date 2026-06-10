@@ -245,10 +245,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     else
                     {
-                        if (level == 0
-                        &&  checkedRect.X == 0 && checkedRect.Y == 0
-                        &&  checkedRect.Width == this.Width && checkedRect.Height == this.Height
-                        &&  startIndex == 0 && elementCount == data.Length)
+                        if (checkedRect.X == 0 && checkedRect.Y == 0
+                        && checkedRect.Width == w && checkedRect.Height == h
+                        && startIndex == 0 && elementCount == data.Length)
                         {
                             GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, dataPtr);
                             GL.CheckGLError();
