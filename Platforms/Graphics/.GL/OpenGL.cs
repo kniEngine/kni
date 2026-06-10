@@ -1288,6 +1288,13 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate void CompressedTexSubImage3DDelegate(TextureTarget target, int level,
+            int x, int y, int z, int width, int height, int depth, PixelInternalFormat format, int size, IntPtr data);
+        internal CompressedTexSubImage3DDelegate CompressedTexSubImage3D;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void TexSubImage3DDelegate(TextureTarget target, int level,
             int x, int y, int z, int width, int height, int depth, PixelFormat format, PixelType pixelType, IntPtr data);
         internal TexSubImage3DDelegate TexSubImage3D;
@@ -1611,6 +1618,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             GetCompressedTexImage = LoadFunctionOrNull<GetCompressedTexImageDelegate>("glGetCompressedTexImage");
             CompressedTexImage3D = LoadFunctionOrNull<CompressedTexImage3DDelegate>("glCompressedTexImage3D");
             TexImage3D = LoadFunctionOrNull<TexImage3DDelegate>("glTexImage3D");
+            CompressedTexSubImage3D = LoadFunctionOrNull<CompressedTexSubImage3DDelegate>("glCompressedTexSubImage3D");
             TexSubImage3D = LoadFunctionOrNull<TexSubImage3DDelegate>("glTexSubImage3D");
             DeleteTextures = LoadFunctionOrNull<DeleteTexturesDelegate>("glDeleteTextures");
 
