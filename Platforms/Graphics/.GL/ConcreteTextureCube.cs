@@ -164,9 +164,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     else
                     {
-                        if (level == 0
-                        && checkedRect.X == 0 && checkedRect.Y == 0
-                        && checkedRect.Width == this.Size && checkedRect.Height == this.Size
+                        if (checkedRect.X == 0 && checkedRect.Y == 0
+                        && checkedRect.Width == w && checkedRect.Height == h
                         && startIndex == 0 && elementCount == data.Length)
                         {
                             GL.GetTexImage(target, level, _glFormat, _glType, dataPtr);
