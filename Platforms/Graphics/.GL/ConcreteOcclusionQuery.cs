@@ -18,11 +18,22 @@ namespace Microsoft.Xna.Platform.Graphics
         private bool _inBeginEndPair;  // true if Begin was called and End was not yet called.
         private bool _queryPerformed;  // true if Begin+End were called at least once.
         private bool _isComplete;      // true if the result is available in _pixelCount.
-        private int _pixelCount;       // The query result.
+        private int _queryResultValue; // The query result.
 
         private int _glQueryId = -1;
 
-        public override int PixelCount { get { return _pixelCount; } }
+        public override int PixelCount
+        {
+            get
+            {
+                if (GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL)
+                    return _queryResultValue;
+                else
+                    throw new PlatformNotSupportedException();
+            }
+        }
+
+        public override bool AnyPixelsPassed { get { return _queryResultValue > 0; } }
 
         public override bool IsComplete
         {
@@ -35,8 +46,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     return false;
 
                 return PlatformGetResult();
-
-                return _isComplete;
             }
         }
 
@@ -59,7 +68,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = true;
             _isComplete = false;
 
-            GL.BeginQuery(QueryTarget.SamplesPassed, _glQueryId);
+            QueryTarget queryTarget = GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL ?
+                QueryTarget.SamplesPassed : QueryTarget.SamplesPassedExt;
+
+            GL.BeginQuery(queryTarget, _glQueryId);
             GL.CheckGLError();
         }
 
@@ -73,7 +85,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _inBeginEndPair = false;
             _queryPerformed = true;
 
-            GL.EndQuery(QueryTarget.SamplesPassed);
+            QueryTarget queryTarget = GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL ?
+                QueryTarget.SamplesPassed : QueryTarget.SamplesPassedExt;
+
+            GL.EndQuery(queryTarget);
             GL.CheckGLError();
         }
 
@@ -87,12 +102,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (resultReady == 0)
             {
-                _pixelCount = 0;
+                _queryResultValue = 0;
                 _isComplete = false;
             }
             else
             {
-                GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResult, out _pixelCount);
+                GL.GetQueryObject(_glQueryId, GetQueryObjectParam.QueryResult, out _queryResultValue);
                 GL.CheckGLError();
                 _isComplete = true;
             }

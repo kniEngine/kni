@@ -18,6 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
 
         public abstract int PixelCount { get; }
+        public abstract bool AnyPixelsPassed { get; }
         public abstract bool IsComplete { get; }
 
         protected OcclusionQueryStrategy(GraphicsContextStrategy contextStrategy)

@@ -31,6 +31,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// The occlusion query has not yet completed. Check <see cref="IsComplete"/> before reading
         /// the result!
         /// </exception>
+        /// <remarks>PixelCount is not available on platforms using GLES/WebGL. Use AnyPixelsPassed instead.</remarks>
         public int PixelCount
         {
             get
@@ -39,6 +40,28 @@ namespace Microsoft.Xna.Framework.Graphics
                     throw new InvalidOperationException("The occlusion query has not yet completed. Check IsComplete before reading the result.");
 
                 return _strategy.PixelCount;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating if at least one or more pixels are visible.
+        /// </summary>
+        /// <value>
+        /// <see langword="true"/> if one or more pixels are visible; otherwise,
+        /// <see langword="false"/>.
+        /// </value>
+        /// <exception cref="InvalidOperationException">
+        /// The occlusion query has not yet completed. Check <see cref="IsComplete"/> before reading
+        /// the result!
+        /// </exception>
+        public bool AnyPixelsPassed
+        {
+            get
+            {
+                if (!IsComplete)
+                    throw new InvalidOperationException("The occlusion query has not yet completed. Check IsComplete before reading the result.");
+
+                return _strategy.AnyPixelsPassed;
             }
         }
 
