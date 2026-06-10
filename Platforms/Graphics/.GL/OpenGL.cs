@@ -468,6 +468,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
     internal enum TextureParameterName
     {
         TextureMaxAnisotropyExt = 0x84FE,
+        TextureMinLod = 0x813A,
+        TextureMaxLod = 0x813B,
         TextureBaseLevel = 0x813C,
         TextureMaxLevel = 0x813D,
         TextureMinFilter = 0x2801,

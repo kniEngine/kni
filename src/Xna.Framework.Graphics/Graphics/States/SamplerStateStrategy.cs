@@ -15,6 +15,7 @@ namespace Microsoft.Xna.Platform.Graphics
         private TextureAddressMode _addressW;
         private Color _borderColor;
         private int _maxAnisotropy;
+        private int _minMipLevel;
         private int _maxMipLevel;
         private float _mipMapLevelOfDetailBias;
         private TextureFilterMode _filterMode;
@@ -56,6 +57,13 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _maxAnisotropy; }
             set { _maxAnisotropy = value; }
         }
+
+        public virtual int MinMipLevel
+        {
+            get { return _minMipLevel; }
+            set { _minMipLevel = value; }
+        }
+
         public virtual int MaxMipLevel
         {
             get { return _maxMipLevel; }
@@ -88,6 +96,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _addressW = TextureAddressMode.Wrap;
             _borderColor = Color.White;
             _maxAnisotropy = 4;
+            _minMipLevel = int.MaxValue;
             _maxMipLevel = 0;
             _mipMapLevelOfDetailBias = 0.0f;
             _comparisonFunction = CompareFunction.Never;
@@ -103,6 +112,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _addressW = source.AddressW;
             _borderColor = source.BorderColor;
             _maxAnisotropy = source.MaxAnisotropy;
+            _minMipLevel = source.MinMipLevel;
             _maxMipLevel = source.MaxMipLevel;
             _mipMapLevelOfDetailBias = source.MipMapLevelOfDetailBias;
             _comparisonFunction = source.ComparisonFunction;
@@ -118,6 +128,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _addressW = source.AddressW;
             _borderColor = source.BorderColor;
             _maxAnisotropy = source.MaxAnisotropy;
+            _minMipLevel = source.MinMipLevel;
             _maxMipLevel = source.MaxMipLevel;
             _mipMapLevelOfDetailBias = source.MipMapLevelOfDetailBias;
             _comparisonFunction = source.ComparisonFunction;
