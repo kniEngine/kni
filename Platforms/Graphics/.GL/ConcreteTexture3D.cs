@@ -110,8 +110,8 @@ namespace Microsoft.Xna.Platform.Graphics
             checkedTop = top & ~blockHeightMinusOne;
             // The last two mip levels require the width and height to be passed
             // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
-            checkedRight = checkedLeft + ((width < blockWidth && textureBoundsWidth < blockWidth) ? textureBoundsWidth : roundedWidth);
-            checkedBottom = checkedTop + ((height < blockHeight && textureBoundsHeight < blockHeight) ? textureBoundsHeight : roundedHeight);
+            checkedRight = (width < blockWidth && textureBoundsWidth < blockWidth) ? textureBoundsWidth : checkedLeft + roundedWidth;
+            checkedBottom = (height < blockHeight && textureBoundsHeight < blockHeight) ? textureBoundsHeight : checkedTop + roundedHeight;
             checkedFront = front;
             checkedBack = back;
             if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
