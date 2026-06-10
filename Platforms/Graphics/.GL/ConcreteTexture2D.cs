@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 fixed (T* pData = &data[0])
                 {
-                    IntPtr dataPtr = (IntPtr)pData;
+                    IntPtr dataPtr = (IntPtr)pData + (startIndex * Format.GetSize());
                     GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
                     GL.CheckGLError();
                 }
