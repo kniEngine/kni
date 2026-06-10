@@ -117,7 +117,7 @@ namespace Microsoft.Xna.Platform.Audio
             Emitter e = ToDXEmitter(emitter);
             e.CurveDistanceScaler = SoundEffect.DistanceScale;
             e.DopplerScaler = SoundEffect.DopplerScale;
-            e.ChannelCount = _concreteSoundEffect._format.Channels;
+            e.ChannelCount = _voice.VoiceDetails.InputChannelCount;
 
             //stereo channel
             if (e.ChannelCount > 1)
@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             // Number of channels in the sound being played.
             // Not actually sure if XNA supported 3D attenuation of sterio sounds, but X3DAudio does.
-            int srcChannelCount = _concreteSoundEffect._format.Channels;
+            int srcChannelCount = _voice.VoiceDetails.InputChannelCount;
 
             // Number of output channels.
             int dstChannelCount = ConcreteAudioService.MasterVoice.VoiceDetails.InputChannelCount;
