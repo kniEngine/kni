@@ -298,7 +298,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // round x and y down to next multiple of block size; width and height up to next multiple of block size
             int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
             int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
-            // OpenGL only: The last two mip levels require the width and height to be passed
+            // The last two mip levels require the width and height to be passed
             // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
             checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
                                         (rect.Width < blockWidth && textureBounds.Width < blockWidth) ? textureBounds.Width : roundedWidth,
