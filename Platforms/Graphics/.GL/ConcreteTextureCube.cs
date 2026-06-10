@@ -126,6 +126,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
+                GL.CheckGLError();
+
+                GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
+                GL.CheckGLError();
 
                 fixed (T* pData = &data[0])
                 {
