@@ -170,13 +170,14 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
-                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
 #if GLES
-                // TODO: check for non renderable formats (formats that can't be attached to FBO)
+                ValidateGetDataSurfaceFormat(Format, contextStrategy);
 
                 int framebufferId = 0;
                 framebufferId = GL.GenFramebuffer();
@@ -284,7 +285,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
