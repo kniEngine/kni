@@ -474,6 +474,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         TextureMagFilter = 0x2800,
         TextureWrapS = 0x2802,
         TextureWrapT = 0x2803,
+        TextureWrapR = 0x8072,
         TextureBorderColor = 0x1004,
         TextureLodBias = 0x8501,
         TextureCompareMode = 0x884C,
