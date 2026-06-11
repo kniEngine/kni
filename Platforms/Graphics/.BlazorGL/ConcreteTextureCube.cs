@@ -68,7 +68,25 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new NotImplementedException();
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            ValidateGetDataSurfaceFormat(Format, contextStrategy);
+
+            WebGLTextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
+
+            WebGLFramebuffer glFramebuffer;
+            glFramebuffer = GL.CreateFramebuffer();
+            GL.CheckGLError();
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+            GL.CheckGLError();
+            GL.FramebufferTexture2D(
+                WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, target, _glTexture, level);
+            GL.CheckGLError();
+
+            GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+            GL.CheckGLError();
+            glFramebuffer.Dispose();
         }
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
