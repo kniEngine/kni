@@ -124,9 +124,10 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             {
-                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                // TODO: check for non renderable formats (formats that can't be attached to FBO)
+                ValidateGetDataSurfaceFormat(Format, contextStrategy);
 
                 WebGLFramebuffer glFramebuffer;
                 glFramebuffer = GL.CreateFramebuffer();
