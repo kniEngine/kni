@@ -72,7 +72,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 dataPtr = dataPtr + startIndex * elementSizeInByte;
 
                 int rowPitch = this.Format.GetPitch(width);
-                int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.
+                int rowCount = this.Format.IsCompressedFormat() ? ((height + 3) / 4) : height;
+                int slicePitch = rowPitch * rowCount; // For 3D texture: Size of 2D image.
                 DX.DataBox dataBox = new DX.DataBox(dataPtr, rowPitch, slicePitch);
 
                 int subresourceIndex = level;
