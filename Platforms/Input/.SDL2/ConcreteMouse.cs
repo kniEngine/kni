@@ -48,11 +48,7 @@ namespace Microsoft.Xna.Platform.Input
 
                 int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
-                //state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
-                Point globalPos, windowPos;
-                state = SDL.MOUSE.GetGlobalState(out globalPos.X, out globalPos.Y);
-                SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
-                mousePos = globalPos - windowPos;
+                state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
             }
             else // (wndHandle == IntPtr.Zero)
             {
