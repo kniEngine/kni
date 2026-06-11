@@ -20,7 +20,6 @@ using Android.Util;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
         // What is the state of the app.

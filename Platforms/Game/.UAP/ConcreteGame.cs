@@ -31,7 +31,6 @@ namespace Microsoft.Xna.Platform
     {
         internal static string LaunchParameters;
 
-        [CLSCompliant(false)]
         public static ApplicationExecutionState PreviousExecutionState { get; internal set; }
 
         private static ConcreteGame _concreteGameInstance = null;

@@ -81,7 +81,6 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        [CLSCompliant(false)]
         public UIImage Platform_GetAlbumArt(int width = 0, int height = 0)
         {
             if (width == 0)
@@ -92,7 +91,6 @@ namespace Microsoft.Xna.Platform.Media
             return this._thumbnail.ImageWithSize(new CGSize(width, height));
         }
 
-        [CLSCompliant(false)]
         public UIImage Platform_GetThumbnail()
         {
             return this.Platform_GetAlbumArt(220, 220);
