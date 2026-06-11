@@ -159,7 +159,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                     out _glInternalFormat,
                     out _glFormat,
-                    out _glType, 
+                    out _glType,
                     out _glIsCompressedTexture
                     );
 
@@ -168,21 +168,30 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     WebGLTextureTarget target = ConcreteTextureCube.GetGLCubeFace((CubeMapFace)i);
 
-                    if (_glIsCompressedTexture)
+                    int s = size;
+                    int level = 0;
+                    while (true)
                     {
-                         throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        GL.TexImage2D(target, 0, _glInternalFormat, size, size, _glFormat, _glType);
-                        GL.CheckGLError();
-                    }
-                }
+                        if (_glIsCompressedTexture)
+                        {
+                            Rectangle bounds = new Rectangle(0, 0, s, s);
+                            int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
+                            byte[] data = new byte[dataSize]; // WebGL CompressedTexImage2D requires data.
+                            GL.CompressedTexImage2D(target, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, data);
+                            GL.CheckGLError();
+                        }
+                        else
+                        {
+                            GL.TexImage2D(target, level, _glInternalFormat, s, s, _glFormat, _glType);
+                            GL.CheckGLError();
+                        }
 
-                if (mipMap)
-                {
-                    GL.GenerateMipmap(WebGLTextureTarget.TEXTURE_CUBE_MAP);
-                    GL.CheckGLError();
+                        if ((s == 1) || !mipMap)
+                            break;
+                        if (s > 1)
+                            s = s / 2;
+                        ++level;
+                    }
                 }
             }
         }
