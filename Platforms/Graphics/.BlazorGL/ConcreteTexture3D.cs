@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public int Depth { get { return _depth; } }
 
         public void SetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
-                               T[] data, int startIndex, int elementCount)
+            T[] data, int startIndex, int elementCount)
             where T : struct
         {
             var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
@@ -83,7 +83,32 @@ namespace Microsoft.Xna.Platform.Graphics
                                T[] data, int startIndex, int elementCount)
              where T : struct
         {
-            throw new NotImplementedException();
+            int width = right - left;
+            int height = bottom - top;
+            int elementsPerZSlice = width * height;
+
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            ValidateGetDataSurfaceFormat(Format, contextStrategy);
+
+            WebGLFramebuffer glFramebuffer;
+            glFramebuffer = GL.CreateFramebuffer();
+            GL.CheckGLError();
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+            GL.CheckGLError();
+
+            for (int zSlice = front; zSlice < back; zSlice++)
+            {
+                ((IWebGL2RenderingContext)GL).FramebufferTextureLayer(
+                    WebGL2FramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, _glTexture, level, zSlice);
+                GL.CheckGLError();
+
+                GL.ReadPixels(left, top, width, height, _glFormat, _glType, data, startIndex + (zSlice - front) * elementsPerZSlice, elementsPerZSlice);
+                GL.CheckGLError();
+            }
+
+            glFramebuffer.Dispose();
         }
 
         public int GetCompressedDataByteSize(int fSize, int left, int top, int right, int bottom, int front, int back,
@@ -186,7 +211,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                
+
             }
 
             base.Dispose(disposing);
