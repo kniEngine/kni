@@ -51,7 +51,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 WebGLTextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
                 if (_glIsCompressedTexture)
                 {
-                    throw new NotImplementedException();
+                    GL.CompressedTexSubImage2D(
+                        target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                        _glFormat, data, startIndex, elementCount);
+                    GL.CheckGLError();
                 }
                 else
                 {
