@@ -42,9 +42,6 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                if (startIndex != 0 && !_glIsCompressedTexture)
-                    throw new NotImplementedException("startIndex");
-
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
                 GL.CheckGLError();
@@ -58,7 +55,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    GL.TexSubImage2D(target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+                    GL.TexSubImage2D(target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                        _glFormat, _glType, data, startIndex, elementCount);
                     GL.CheckGLError();
                 }
             }
