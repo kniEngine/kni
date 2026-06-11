@@ -138,7 +138,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, WebGLTextureTarget.TEXTURE_2D, _glTexture, level);
                 GL.CheckGLError();
 
-                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data, startIndex, elementCount);
                 GL.CheckGLError();
                 glFramebuffer.Dispose();
             }
