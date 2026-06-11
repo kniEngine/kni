@@ -165,12 +165,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
         {
-            // round x and y down to next multiple of four; width and height up to next multiple of four
-            int roundedWidth = (rect.Width + 3) & ~0x3;
-            int roundedHeight = (rect.Height + 3) & ~0x3;
-            checkedRect = new Rectangle(rect.X & ~0x3, rect.Y & ~0x3,
+            Format.GetBlockSize(out int blockWidth, out int blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
                                         roundedWidth, roundedHeight);
-            return (roundedWidth * roundedHeight * fSize / 16);
+            return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
         }
         #endregion ITextureCubeStrategy
 
