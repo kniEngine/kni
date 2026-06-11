@@ -63,9 +63,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 int w, h;
                 TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
 
-                if (startIndex != 0 && !_glIsCompressedTexture)
-                    throw new NotImplementedException("startIndex");
-
                 System.Diagnostics.Debug.Assert(_glTexture != null);
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
@@ -84,7 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 }
                 else
                 {
-                    GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data);
+                    GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data, startIndex, elementCount);
                     GL.CheckGLError();
                 }
             }
@@ -96,9 +93,6 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                if (startIndex != 0)
-                    throw new NotImplementedException("startIndex");
-
                 System.Diagnostics.Debug.Assert(_glTexture != null);
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
@@ -107,6 +101,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
 
                 GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
+                GL.CheckGLError();
 
                 if (_glIsCompressedTexture)
                 {
@@ -116,7 +111,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     GL.TexSubImage2D(
                         WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
-                        _glFormat, _glType, data);
+                        _glFormat, _glType, data, startIndex, elementCount);
                     GL.CheckGLError();
                 }
             }
