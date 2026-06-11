@@ -132,10 +132,27 @@ namespace Microsoft.Xna.Platform.Graphics
                         int rowSize = elementSize * elementsInRow;
                         if (rowSize == dataBox.RowPitch)
                             stream.ReadRange(data, startIndex, elementCount);
+                        else if (checkedRect.X == 0 && checkedRect.Y == 0 &&
+                                 checkedRect.Width == levelSize && checkedRect.Height == levelSize &&
+                                 startIndex == 0 && elementCount == data.Length)
+                        {
+                            // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
+                            int elementSize2 = sizeof(T);
+                            if (elementSize2 == 1) // byte[]
+                                elementsInRow = elementsInRow * elementSize;
+
+                            int currentIndex = 0;
+                            for (int row = 0; row < rows; row++)
+                            {
+                                stream.ReadRange(data, currentIndex, elementsInRow);
+                                stream.Seek((dataBox.RowPitch - rowSize), SeekOrigin.Current);
+                                currentIndex += elementsInRow;
+                            }
+                        }
                         else
                         {
                             // Some drivers may add pitch to rows.
-                            // We need to copy each row separatly and skip trailing zeros.
+                            // We need to copy each row separately and skip trailing zeros.
                             stream.Seek(0, SeekOrigin.Begin);
 
                             int elementSizeInByte = sizeof(T);
