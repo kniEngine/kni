@@ -63,9 +63,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 int w, h;
                 TextureHelpers.GetSizeForLevel(Width, Height, level, out w, out h);
 
-                if (startIndex != 0 && !_glIsCompressedTexture)
-                    throw new NotImplementedException("startIndex");
-
                 System.Diagnostics.Debug.Assert(_glTexture != null);
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
@@ -79,12 +76,12 @@ namespace Microsoft.Xna.Platform.Graphics
                 if (_glIsCompressedTexture)
                 {
                     GL.CompressedTexImage2D(
-                            WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, data, startIndex, elementCount);
+                        WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, data, startIndex, elementCount);
                     GL.CheckGLError();
                 }
                 else
                 {
-                    GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data);
+                    GL.TexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, _glFormat, _glType, data, startIndex, elementCount);
                     GL.CheckGLError();
                 }
             }
@@ -96,9 +93,6 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                if (startIndex != 0)
-                    throw new NotImplementedException("startIndex");
-
                 System.Diagnostics.Debug.Assert(_glTexture != null);
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
@@ -107,16 +101,20 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
 
                 GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
+                GL.CheckGLError();
 
                 if (_glIsCompressedTexture)
                 {
-                    throw new NotImplementedException();
+                    GL.CompressedTexSubImage2D(
+                        WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                        _glFormat, data, startIndex, elementCount);
+                    GL.CheckGLError();
                 }
                 else
                 {
                     GL.TexSubImage2D(
                         WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
-                        _glFormat, _glType, data);
+                        _glFormat, _glType, data, startIndex, elementCount);
                     GL.CheckGLError();
                 }
             }
@@ -126,19 +124,21 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             {
-                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+                GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                // TODO: check for non renderable formats (formats that can't be attached to FBO)
+                ValidateGetDataSurfaceFormat(Format, contextStrategy);
 
                 WebGLFramebuffer glFramebuffer;
                 glFramebuffer = GL.CreateFramebuffer();
                 GL.CheckGLError();
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
                 GL.CheckGLError();
-                GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, WebGLTextureTarget.TEXTURE_2D, _glTexture);
+                GL.FramebufferTexture2D(
+                    WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, WebGLTextureTarget.TEXTURE_2D, _glTexture, level);
                 GL.CheckGLError();
 
-                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+                GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data, startIndex, elementCount);
                 GL.CheckGLError();
                 glFramebuffer.Dispose();
             }
@@ -153,16 +153,11 @@ namespace Microsoft.Xna.Platform.Graphics
             // round x and y down to next multiple of block size; width and height up to next multiple of block size
             int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
             int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            // The last two mip levels require the width and height to be passed
+            // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
             checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
-#if OPENGL
-                    // OpenGL only: The last two mip levels require the width and height to be
-                    // passed as 2x2 and 1x1, but there needs to be enough data passed to occupy
-                    // a full block.
-                    (rect.Width < blockWidth && textureBounds.Width < blockWidth) ? textureBounds.Width : roundedWidth,
-                    (rect.Height < blockHeight && textureBounds.Height < blockHeight) ? textureBounds.Height : roundedHeight);
-#else
-                                        roundedWidth, roundedHeight);
-#endif
+                                        (rect.Width < blockWidth && textureBounds.Width < blockWidth) ? textureBounds.Width : roundedWidth,
+                                        (rect.Height < blockHeight && textureBounds.Height < blockHeight) ? textureBounds.Height : roundedHeight);
             if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
             {
                 return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
@@ -201,11 +196,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(WebGLTextureTarget.TEXTURE_2D, _glTexture);
                 GL.CheckGLError();
 
-                // Set mipMap levels
-                //GL2.TexParameter(WebGLTextureTarget.TEXTURE_2D, WebGL2TexParamName.TEXTURE_BASE_LEVEL, 0);
-                //GL.CheckGLError();
-
-
                 int w = width;
                 int h = height;
                 int level = 0;
@@ -213,28 +203,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     if (_glIsCompressedTexture)
                     {
-                        int imageSize = 0;
-                        // PVRTC has explicit calculations for imageSize
-                        // https://www.khronos.org/registry/OpenGL/extensions/IMG/IMG_texture_compression_pvrtc.txt
-                        if (format == SurfaceFormat.RgbPvrtc2Bpp || format == SurfaceFormat.RgbaPvrtc2Bpp)
-                        {
-                            imageSize = (Math.Max(w, 16) * Math.Max(h, 8) * 2 + 7) / 8;
-                        }
-                        else if (format == SurfaceFormat.RgbPvrtc4Bpp || format == SurfaceFormat.RgbaPvrtc4Bpp)
-                        {
-                            imageSize = (Math.Max(w, 8) * Math.Max(h, 8) * 4 + 7) / 8;
-                        }
-                        else
-                        {
-                            int blockSize = format.GetSize();
-                            int blockWidth, blockHeight;
-                            format.GetBlockSize(out blockWidth, out blockHeight);
-                            int wBlocks = (w + (blockWidth - 1)) / blockWidth;
-                            int hBlocks = (h + (blockHeight - 1)) / blockHeight;
-                            imageSize = wBlocks * hBlocks * blockSize;
-                        }
-                        byte[] data = new byte[imageSize]; // WebGL CompressedTexImage2D requires data.
-                        GL.CompressedTexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, w, h, data);
+                        Rectangle bounds = new Rectangle(0, 0, w, h);
+                        int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
+                        byte[] data = new byte[dataSize]; // WebGL CompressedTexImage2D requires data.
+                        GL.CompressedTexImage2D(WebGLTextureTarget.TEXTURE_2D, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, data);
                         GL.CheckGLError();
                     }
                     else
