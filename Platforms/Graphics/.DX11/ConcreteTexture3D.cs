@@ -146,6 +146,29 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
         }
+
+        public int GetCompressedDataByteSize(int fSize, int left, int top, int right, int bottom, int front, int back,
+                                             int textureBoundsWidth, int textureBoundsHeight, int textureBoundsDepth,
+                                             out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                                             out int checkedFront, out int checkedBack)
+        {
+            int width = right - left;
+            int height = bottom - top;
+            int depth = back - front;
+            Format.GetBlockSize(out int blockWidth, out int blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            checkedLeft = left & ~blockWidthMinusOne;
+            checkedTop = top & ~blockHeightMinusOne;
+            checkedRight = checkedLeft + roundedWidth;
+            checkedBottom = checkedTop + roundedHeight;
+            checkedFront = front;
+            checkedBack = back;
+            return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight) * depth;
+        }
         #endregion ITexture3DStrategy
 
         internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
