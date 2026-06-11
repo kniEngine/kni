@@ -255,19 +255,8 @@ namespace Microsoft.Xna.Platform.Graphics
             int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
             checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
                                         roundedWidth, roundedHeight);
-            if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
-            {
-                return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
-            }
-            else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
-            {
-                return (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
-            }
-            else
-            {
                 return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
             }
-        }
         #endregion ITexture2DStrategy
 
 
