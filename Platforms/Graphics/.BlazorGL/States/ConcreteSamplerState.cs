@@ -19,16 +19,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
         }
 
-      internal void PlatformApplyState(ConcreteGraphicsContext cgraphicsContext, WebGLTextureTarget target, bool useMipmaps = false)
+        internal void PlatformApplyState(ConcreteGraphicsContext cgraphicsContext, WebGLTextureTarget target, bool useMipmaps = false)
         {
             Debug.Assert(GraphicsDevice == ((IPlatformGraphicsContext)cgraphicsContext.Context).DeviceStrategy.Device, "The state was created for a different device!");
 
             var GL = cgraphicsContext.GL;
 
             // texture filtering
-            float textureMaxAnisotropy;
+            float textureMaxAnisotropy = 1f;
             WebGLTexParam textureMinFilter;
-            WebGLTexParam textureMaxFilter; 
+            WebGLTexParam textureMaxFilter;
             switch (Filter)
             {
                 case TextureFilter.Point:
@@ -40,6 +40,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     textureMaxFilter = WebGLTexParam.LINEAR;
                     break;
                 case TextureFilter.Anisotropic:
+                    textureMaxAnisotropy = MathHelper.Clamp(MaxAnisotropy, 1.0f, cgraphicsContext.Capabilities.MaxTextureAnisotropy);
                     textureMinFilter = (useMipmaps ? WebGLTexParam.LINEAR_MIPMAP_LINEAR : WebGLTexParam.LINEAR);
                     textureMaxFilter = WebGLTexParam.LINEAR;
                     break;
@@ -73,7 +74,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             if (cgraphicsContext.Capabilities.SupportsTextureFilterAnisotropic)
             {
-                throw new NotImplementedException();
+                GL.TexParameter(target, WebGLTexParamName.TEXTURE_MAX_ANISOTROPY_EXT, textureMaxAnisotropy);
+                GL.CheckGLError();
             }
             GL.TexParameter(target, WebGLTexParamName.TEXTURE_MIN_FILTER, textureMinFilter);
             GL.CheckGLError();
@@ -113,7 +115,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new ArgumentException("No support for " + textureAddressMode);
             }
         }
- 
+
         protected override void PlatformGraphicsContextLost()
         {
         }
