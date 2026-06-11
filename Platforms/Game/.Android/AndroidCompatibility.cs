@@ -24,11 +24,9 @@ namespace Microsoft.Xna.Framework
 
         public bool FlipLandscape { get; private set; }
 
-        [CLSCompliant(false)]
         public Orientation NaturalOrientation { get; private set; }
 
 
-        [CLSCompliant(false)]
         public static AndroidCompatibility Current
         {
             get
@@ -124,7 +122,6 @@ namespace Microsoft.Xna.Framework
         /// Get the absolute orientation of the device, accounting for platform differences.
         /// </summary>
         /// <returns></returns>
-        [CLSCompliant(false)]
         public DisplayOrientation GetAbsoluteOrientation(Activity activity)
         {
             Orientation orientation = activity.Resources.Configuration.Orientation;

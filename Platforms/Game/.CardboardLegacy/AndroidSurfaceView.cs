@@ -19,7 +19,6 @@ using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
     public class AndroidSurfaceView : VRCardboard.CardboardView
         , ISurfaceView
         , VRCardboard.CardboardView.IRenderer

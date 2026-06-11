@@ -25,7 +25,6 @@ namespace Microsoft.Xna.Platform.Media
 
         internal Uri StreamSource { get { return _streamSource; } }
 
-        [CLSCompliant(false)]
         public NSUrl AssetUrl { get { return this._assetUrl; } }
 
         internal ConcreteSongStrategy()

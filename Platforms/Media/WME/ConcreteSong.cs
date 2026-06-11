@@ -18,7 +18,6 @@ namespace Microsoft.Xna.Platform.Media
 
         internal Uri StreamSource { get { return _streamSource; } }
 
-        [CLSCompliant(false)]
         public StorageFile StorageFile
         {
             get { return this._musicProperties.File; }

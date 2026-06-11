@@ -13,7 +13,6 @@ using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
     public class AndroidGameActivity : VRCardboard.CardboardActivity
     {
         public bool AutoPauseAndResumeMediaPlayer = true;
@@ -102,7 +101,6 @@ namespace Microsoft.Xna.Framework
         }
     }
 
-    [CLSCompliant(false)]
     public static class ActivityExtensions
     {
         public static ActivityAttribute GetActivityAttribute(this AndroidGameActivity obj)

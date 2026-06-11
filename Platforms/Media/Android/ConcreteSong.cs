@@ -17,7 +17,6 @@ namespace Microsoft.Xna.Platform.Media
 
         internal Uri StreamSource { get { return _streamSource; } }
 
-        [CLSCompliant(false)]
         public Android.Net.Uri AssetUri { get { return this._assetUri; } }
 
 

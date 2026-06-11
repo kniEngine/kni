@@ -17,7 +17,6 @@ using Android.Views;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
     public class AndroidSurfaceView : SurfaceView
         , ISurfaceView
         , ISurfaceHolderCallback
