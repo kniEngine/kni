@@ -105,7 +105,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (_glIsCompressedTexture)
                 {
-                    throw new NotImplementedException();
+                    GL.CompressedTexSubImage2D(
+                        WebGLTextureTarget.TEXTURE_2D, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                        _glFormat, data, startIndex, elementCount);
+                    GL.CheckGLError();
                 }
                 else
                 {
