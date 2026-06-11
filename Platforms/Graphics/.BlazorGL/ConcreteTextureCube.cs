@@ -42,9 +42,6 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                if (startIndex != 0 && !_glIsCompressedTexture)
-                    throw new NotImplementedException("startIndex");
-
                 ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
                 GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
                 GL.CheckGLError();
@@ -54,11 +51,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 WebGLTextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
                 if (_glIsCompressedTexture)
                 {
-                    throw new NotImplementedException();
+                    GL.CompressedTexSubImage2D(
+                        target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                        _glFormat, data, startIndex, elementCount);
+                    GL.CheckGLError();
                 }
                 else
                 {
-                    GL.TexSubImage2D(target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+                    GL.TexSubImage2D(target, level, checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height,
+                        _glFormat, _glType, data, startIndex, elementCount);
                     GL.CheckGLError();
                 }
             }
@@ -67,25 +68,52 @@ namespace Microsoft.Xna.Platform.Graphics
         public void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            throw new NotImplementedException();
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+
+            ValidateGetDataSurfaceFormat(Format, contextStrategy);
+
+            WebGLTextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
+
+            WebGLFramebuffer glFramebuffer;
+            glFramebuffer = GL.CreateFramebuffer();
+            GL.CheckGLError();
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+            GL.CheckGLError();
+            GL.FramebufferTexture2D(
+                WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, target, _glTexture, level);
+            GL.CheckGLError();
+
+            GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
+            GL.CheckGLError();
+            glFramebuffer.Dispose();
         }
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
         {
-            // round x and y down to next multiple of four; width and height up to next multiple of four
-            int roundedWidth = (rect.Width + 3) & ~0x3;
-            int roundedHeight = (rect.Height + 3) & ~0x3;
-            checkedRect = new Rectangle(rect.X & ~0x3, rect.Y & ~0x3,
-#if OPENGL
-                    // OpenGL only: The last two mip levels require the width and height to be
-                    // passed as 2x2 and 1x1, but there needs to be enough data passed to occupy
-                    // a 4x4 block.
-                    (rect.Width < 4 && textureBounds.Width < 4) ? textureBounds.Width : roundedWidth,
-                    (rect.Height < 4 && textureBounds.Height < 4) ? textureBounds.Height : roundedHeight);
-#else
-                                        roundedWidth, roundedHeight);
-#endif
-            return (roundedWidth * roundedHeight * fSize / 16);
+            Format.GetBlockSize(out int blockWidth, out int blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            // The last two mip levels require the width and height to be passed
+            // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
+            checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
+                                        (rect.Width < blockWidth && textureBounds.Width < blockWidth) ? textureBounds.Width : roundedWidth,
+                                        (rect.Height < blockHeight && textureBounds.Height < blockHeight) ? textureBounds.Height : roundedHeight);
+            if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
+            }
+            else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
+            }
+            else
+            {
+                return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
+            }
         }
         #endregion ITextureCubeStrategy
 
@@ -131,7 +159,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 ConcreteTexture.ToGLSurfaceFormat(format, contextStrategy,
                     out _glInternalFormat,
                     out _glFormat,
-                    out _glType, 
+                    out _glType,
                     out _glIsCompressedTexture
                     );
 
@@ -140,21 +168,30 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     WebGLTextureTarget target = ConcreteTextureCube.GetGLCubeFace((CubeMapFace)i);
 
-                    if (_glIsCompressedTexture)
+                    int s = size;
+                    int level = 0;
+                    while (true)
                     {
-                         throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        GL.TexImage2D(target, 0, _glInternalFormat, size, size, _glFormat, _glType);
-                        GL.CheckGLError();
-                    }
-                }
+                        if (_glIsCompressedTexture)
+                        {
+                            Rectangle bounds = new Rectangle(0, 0, s, s);
+                            int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
+                            byte[] data = new byte[dataSize]; // WebGL CompressedTexImage2D requires data.
+                            GL.CompressedTexImage2D(target, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, data);
+                            GL.CheckGLError();
+                        }
+                        else
+                        {
+                            GL.TexImage2D(target, level, _glInternalFormat, s, s, _glFormat, _glType);
+                            GL.CheckGLError();
+                        }
 
-                if (mipMap)
-                {
-                    GL.GenerateMipmap(WebGLTextureTarget.TEXTURE_CUBE_MAP);
-                    GL.CheckGLError();
+                        if ((s == 1) || !mipMap)
+                            break;
+                        if (s > 1)
+                            s = s / 2;
+                        ++level;
+                    }
                 }
             }
         }
