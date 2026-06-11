@@ -60,7 +60,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, 0, data.Length);
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length,
+                              out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                              out int checkedFront, out int checkedBack);
             _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
         }
 
@@ -68,7 +70,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, startIndex, elementCount);
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount,
+                              out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                              out int checkedFront, out int checkedBack);
             _strategyTexture3D.SetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
@@ -77,8 +81,11 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, startIndex, elementCount);
-            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount);
-            _strategyTexture3D.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount,
+                              out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                              out int checkedFront, out int checkedBack);
+            _strategyTexture3D.SetData<T>(level, checkedLeft, checkedTop, checkedRight, checkedBottom, checkedFront, checkedBack,
+                                          data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -100,8 +107,11 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, startIndex, elementCount);
-            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount);                       
-            _strategyTexture3D.GetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+            ValidateParams<T>(level, left, top, right, bottom, front, back, elementCount,
+                              out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                              out int checkedFront, out int checkedBack);
+            _strategyTexture3D.GetData<T>(level, checkedLeft, checkedTop, checkedRight, checkedBottom, checkedFront, checkedBack,
+                                          data, startIndex, elementCount);
         }
 
         /// <summary>
@@ -115,7 +125,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, startIndex, elementCount);
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, elementCount,
+                              out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                              out int checkedFront, out int checkedBack);
             _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, startIndex, elementCount);
         }
 
@@ -128,7 +140,9 @@ namespace Microsoft.Xna.Framework.Graphics
             where T : struct
         {
             ValidateArrayBounds<T>(data, 0, data.Length);
-            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length);
+            ValidateParams<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data.Length,
+                              out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                              out int checkedFront, out int checkedBack);
             _strategyTexture3D.GetData<T>(0, 0, 0, this.Width, this.Height, 0, this.Depth, data, 0, data.Length);
         }
 
@@ -143,9 +157,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("The data array is too small.");
         }
 
-        private unsafe void ValidateParams<T>(int level,
-                                       int left, int top, int right, int bottom, int front, int back,
-                                       int elementCount)
+        private unsafe void ValidateParams<T>(int level, int left, int top, int right, int bottom, int front, int back, int elementCount,
+                                              out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                                              out int checkedFront, out int checkedBack)
             where T : struct
         {
             int tSize = sizeof(T);
@@ -168,7 +182,24 @@ namespace Microsoft.Xna.Framework.Graphics
             if (level < 0 || level >= LevelCount)
                 throw new ArgumentException("level must be smaller than the number of levels in this texture.");
 
-            int dataByteSize = width*height*depth*fSize;
+            int dataByteSize;
+            if (Format.IsCompressedFormat())
+            {
+                dataByteSize = _strategyTexture3D.GetCompressedDataByteSize(
+                    fSize, left, top, right, bottom, front, back, texWidth, texHeight, texDepth,
+                    out checkedLeft, out checkedTop, out checkedRight, out checkedBottom, out checkedFront, out checkedBack);
+            }
+            else
+            {
+                checkedLeft = left;
+                checkedTop = top;
+                checkedRight = right;
+                checkedBottom = bottom;
+                checkedFront = front;
+                checkedBack = back;
+                dataByteSize = width * height * depth * fSize;
+            }
+
             if (elementCount * tSize != dataByteSize)
                 throw new ArgumentException(string.Format("elementCount is not the right size, " +
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",
@@ -176,4 +207,3 @@ namespace Microsoft.Xna.Framework.Graphics
         }
     }
 }
-
