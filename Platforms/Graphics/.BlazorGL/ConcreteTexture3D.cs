@@ -48,11 +48,35 @@ namespace Microsoft.Xna.Platform.Graphics
                                T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            int width = right - left;
-            int height = bottom - top;
-            int depth = back - front;
+            var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            throw new NotImplementedException();
+            TextureHelpers.GetSizeForLevel(Width, Height, Depth, level, out int w, out int h, out int d);
+
+            System.Diagnostics.Debug.Assert(_glTexture != null);
+            ((IPlatformTextureCollection)base.GraphicsDeviceStrategy.CurrentContext.Textures).Strategy.Dirty(0);
+            GL.ActiveTexture(WebGLTextureUnit.TEXTURE0 + 0);
+            GL.CheckGLError();
+            GL.BindTexture(WebGLTextureTarget.TEXTURE_3D, _glTexture);
+            GL.CheckGLError();
+
+            GL.PixelStore(WebGLPixelParameter.UNPACK_ALIGNMENT, Math.Min(this.Format.GetSize(), 8));
+            GL.CheckGLError();
+
+            if (_glIsCompressedTexture)
+            {
+                // TODO: Requires ASTC and/or BPTC support adding before CompressedTexSubImage3D can be implemented.
+                throw new NotImplementedException("Texture3D does not yet support compressed formats on this platform.");
+
+                ((IWebGL2RenderingContext)GL).CompressedTexSubImage3D(
+                    WebGLTextureTarget.TEXTURE_3D, level, left, top, front, w, h, d, _glFormat, data, startIndex, elementCount);
+                GL.CheckGLError();
+            }
+            else
+            {
+                ((IWebGL2RenderingContext)GL).TexSubImage3D(
+                    WebGLTextureTarget.TEXTURE_3D, level, left, top, front, w, h, d, _glFormat, _glType, data, startIndex, elementCount);
+                GL.CheckGLError();
+            }
         }
 
         public void GetData<T>(int level, int left, int top, int right, int bottom, int front, int back,
