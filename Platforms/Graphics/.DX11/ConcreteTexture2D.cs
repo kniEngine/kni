@@ -195,9 +195,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     int rowSize = elementSize * elementsInRow;
                     if (rowSize == dataBox.RowPitch)
                         stream.ReadRange(data, startIndex, elementCount);
-                    else if (level == 0 && arraySlice == 0 &&
+                    else if (arraySlice == 0 &&
                              checkedRect.X == 0 && checkedRect.Y == 0 &&
-                             checkedRect.Width == this.Width && checkedRect.Height == this.Height &&
+                             checkedRect.Width == levelWidth && checkedRect.Height == levelHeight &&
                              startIndex == 0 && elementCount == data.Length)
                     {
                         // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
@@ -216,7 +216,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     else
                     {
                         // Some drivers may add pitch to rows.
-                        // We need to copy each row separatly and skip trailing zeros.
+                        // We need to copy each row separately and skip trailing zeros.
                         stream.Seek(0, SeekOrigin.Begin);
 
                         int elementSizeInByte = sizeof(T);
@@ -238,7 +238,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     DX.Utilities.Dispose( ref stream);
 
-                    d3dContext.UnmapSubresource(stagingTexture, 0);                    
+                    d3dContext.UnmapSubresource(stagingTexture, 0);
                     DX.Utilities.Dispose(ref stagingTexture);
                 }
             }
@@ -255,18 +255,7 @@ namespace Microsoft.Xna.Platform.Graphics
             int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
             checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
                                         roundedWidth, roundedHeight);
-            if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
-            {
-                return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
-            }
-            else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
-            {
-                return (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
-            }
-            else
-            {
-                return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
-            }
+            return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
         }
         #endregion ITexture2DStrategy
 
