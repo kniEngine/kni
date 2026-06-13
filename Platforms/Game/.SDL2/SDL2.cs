@@ -955,6 +955,10 @@ internal class Sdl
         public d_sdl_getmousestate GetState;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate Button d_sdl_getrelativemousestate(out int x, out int y);
+        public d_sdl_getrelativemousestate GetRelativeState;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void d_sdl_setcursor(IntPtr cursor);
         public d_sdl_setcursor SetCursor;
 
@@ -973,6 +977,7 @@ internal class Sdl
             FreeCursor = FuncLoader.LoadFunctionOrNull<d_sdl_freecursor>(library, "SDL_FreeCursor");
             GetGlobalState = FuncLoader.LoadFunctionOrNull<d_sdl_getglobalmousestate>(library, "SDL_GetGlobalMouseState");
             GetState = FuncLoader.LoadFunctionOrNull<d_sdl_getmousestate>(library, "SDL_GetMouseState");
+            GetRelativeState = FuncLoader.LoadFunctionOrNull<d_sdl_getrelativemousestate>(library, "SDL_GetRelativeMouseState");
             SetCursor = FuncLoader.LoadFunctionOrNull<d_sdl_setcursor>(library, "SDL_SetCursor");
             ShowCursor = FuncLoader.LoadFunctionOrNull<d_sdl_showcursor>(library, "SDL_ShowCursor");
             WarpInWindow = FuncLoader.LoadFunctionOrNull<d_sdl_warpmouseinwindow>(library, "SDL_WarpMouseInWindow");

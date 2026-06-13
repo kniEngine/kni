@@ -16,10 +16,10 @@ namespace Microsoft.Xna.Platform.Input
 
         private Sdl SDL { get { return Sdl.Current; } }
 
+        private int RawX;
+        private int RawY;
         internal int ScrollX;
         internal int ScrollY;
-        internal int RawX;
-        internal int RawY;
 
         public override IntPtr PlatformGetWindowHandle()
         {
@@ -39,6 +39,7 @@ namespace Microsoft.Xna.Platform.Input
         public override MouseState PlatformGetState()
         {
             Point mousePos;
+            Point relPos;
             Sdl.Mouse.Button state;
             IntPtr wndHandle = _wndHandle;
             if (wndHandle != IntPtr.Zero)
@@ -56,6 +57,13 @@ namespace Microsoft.Xna.Platform.Input
             else // (wndHandle == IntPtr.Zero)
             {
                 state = SDL.MOUSE.GetGlobalState(out mousePos.X, out mousePos.Y);
+            }
+
+            SDL.MOUSE.GetRelativeState(out relPos.X, out relPos.Y);
+            unchecked
+            {
+                RawX += relPos.X;
+                RawY += relPos.Y;
             }
 
             MouseState mouseState = new MouseState(

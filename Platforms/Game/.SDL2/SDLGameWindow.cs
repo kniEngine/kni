@@ -276,11 +276,6 @@ namespace Microsoft.Xna.Framework
                         break;
 
                     case Sdl.EventType.MouseMotion:
-                        unchecked
-                        {
-                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawX += ev.Motion.Xrel;
-                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawY += ev.Motion.Yrel;
-                        }
                         break;
                     case Sdl.EventType.MouseWheel:
                         unchecked
