@@ -97,7 +97,9 @@ namespace Microsoft.Xna.Framework
                     return;
 
                 _isBorderless = value;
-                InternalSetFormBorderStyle(_isBorderless);
+
+                if (!IsFullScreen)
+                    InternalSetFormBorderStyle(_isBorderless);
             }
         }
 
