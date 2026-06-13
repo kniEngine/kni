@@ -63,6 +63,20 @@ namespace Microsoft.Xna.Platform.Input.Touch
             return _capabilities;
         }
 
+        private void UpdateCapabilities()
+        {
+            // SDL2 doesn't provide a way to query the maximum number of touches,
+            // so we will update the capabilities based on the active touch count.
+            TouchCollection state = GetState();
+            if (_capabilities.MaximumTouchCount < state.Count)
+            {
+                _capabilities = base.CreateTouchPanelCapabilities(
+                     state.Count,
+                    isConnected: true,
+                    _capabilities.HasPressure);
+            }
+        }
+
         public override TouchCollection GetState()
         {
             return base.GetState();
@@ -85,6 +99,7 @@ namespace Microsoft.Xna.Platform.Input.Touch
                 Point winSize = new Point(windowsBounds.Width, windowsBounds.Height);
 
                 base.AddPressedEvent(nativeTouchId, position, winSize);
+                UpdateCapabilities();
             }
         }
 
