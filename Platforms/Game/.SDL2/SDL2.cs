@@ -269,7 +269,7 @@ internal class Sdl
     public d_sdl_pollevent PollEvent;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int d_sdl_pumpevents();
+    public delegate void d_sdl_pumpevents();
     public d_sdl_pumpevents PumpEvents;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
