@@ -83,8 +83,8 @@ namespace Microsoft.Xna.Framework
                 _isResizable = value;
                 Form.MaximizeBox = _isResizable;
 
-                if (!IsBorderless)
-                    InternalSetFormBorderStyle(isBorderless: false);
+                if (!IsFullScreen)
+                    InternalSetFormBorderStyle(IsBorderless);
             }
         }
 
