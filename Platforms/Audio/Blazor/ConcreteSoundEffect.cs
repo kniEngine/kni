@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             duration = TimeSpan.FromSeconds((float)sampleCount / (float)freq);
 
-            PlatformInitializeBuffer(buffer, 0, buffer.Length, audioFormat, channels, freq, blockAlignment, bitsPerSample, 0, sampleCount / channels);
+            PlatformInitializeBuffer(buffer, 0, buffer.Length, audioFormat, channels, freq, blockAlignment, bitsPerSample, 0, 0);
         }
 
         private void PlatformInitializeBuffer(byte[] buffer, int bufferOffset, int bufferSize, int audioFormat, int channels, int sampleRate, int blockAlignment, int bitsPerSample, int loopStart, int loopLength)
@@ -137,27 +137,67 @@ namespace Microsoft.Xna.Platform.Audio
                 throw new NotImplementedException();
 
             int numOfChannels = (int)channels;
-            
-            _audioBuffer = concreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
+            int sampleCount = count / (numOfChannels * sampleBits / 8);
+
+            _audioBuffer = concreteAudioService.Context.CreateBuffer(numOfChannels, sampleCount, sampleRate);
 
             // convert buffer to float (-1,+1) and set data for each channel.
             unsafe
             {
                 fixed (void* pBuffer = buffer)
                 {
+                    float[] dest = new float[sampleCount];
                     switch (sampleBits)
                     {
-                        case 16: // PCM 16bit
-                            short* pBuffer16 = (short*)pBuffer;
-                            float[] dest = new float[loopLength];
+                        case 8: // PCM 8bit
+                            byte* pBuffer8 = (byte*)pBuffer;
                             for (int c = 0; c < numOfChannels; c++)
                             {
-                                for (int i = 0; i < loopLength; i++)
+                                for (int i = 0; i < sampleCount; i++)
                                 {
-                                    dest[i] = (float)pBuffer16[i * numOfChannels] / (float)short.MaxValue;
+                                    dest[i] = ((float)pBuffer8[i * numOfChannels + c] - 128f) / 128f;
                                 }
                                 _audioBuffer.CopyToChannel(dest, c);
-                            }                           
+                            }
+                            break;
+
+                        case 16: // PCM 16bit
+                            short* pBuffer16 = (short*)pBuffer;
+                            for (int c = 0; c < numOfChannels; c++)
+                            {
+                                for (int i = 0; i < sampleCount; i++)
+                                {
+                                    dest[i] = (float)pBuffer16[i * numOfChannels + c] / 32768f;
+                                }
+                                _audioBuffer.CopyToChannel(dest, c);
+                            }
+                            break;
+
+                        case 24: // PCM 24bit
+                            byte* pBufferBytes = (byte*)pBuffer;
+                            for (int c = 0; c < numOfChannels; c++)
+                            {
+                                for (int i = 0; i < sampleCount; i++)
+                                {
+                                    int offset = (i * numOfChannels + c) * 3;
+                                    int sample = (pBufferBytes[offset + 2] << 24) | (pBufferBytes[offset + 1] << 16) | (pBufferBytes[offset] << 8);
+                                    sample >>= 8;
+                                    dest[i] = sample / 8388608f;
+                                }
+                                _audioBuffer.CopyToChannel(dest, c);
+                            }
+                            break;
+
+                        case 32: // PCM 32bit
+                            int* pBuffer32 = (int*)pBuffer;
+                            for (int c = 0; c < numOfChannels; c++)
+                            {
+                                for (int i = 0; i < sampleCount; i++)
+                                {
+                                    dest[i] = (float)pBuffer32[i * numOfChannels + c] / 2147483648f;
+                                }
+                                _audioBuffer.CopyToChannel(dest, c);
+                            }
                             break;
 
                         default:
@@ -178,8 +218,9 @@ namespace Microsoft.Xna.Platform.Audio
                 throw new NotImplementedException();
 
             int numOfChannels = (int)channels;
-            
-            _audioBuffer = concreteAudioService.Context.CreateBuffer(numOfChannels, loopLength, sampleRate);
+            int sampleCount = count / (numOfChannels * sampleBits / 8);
+
+            _audioBuffer = concreteAudioService.Context.CreateBuffer(numOfChannels, sampleCount, sampleRate);
 
             // set data for each channel.
             unsafe
@@ -190,15 +231,15 @@ namespace Microsoft.Xna.Platform.Audio
                     {
                         case 32:
                             float* pBuffer32f = (float*)pBuffer;
-                            float[] dest = new float[loopLength];
+                            float[] dest = new float[sampleCount];
                             for (int c = 0; c < numOfChannels; c++)
                             {
-                                for (int i = 0; i < loopLength; i++)
+                                for (int i = 0; i < sampleCount; i++)
                                 {
-                                    dest[i] = pBuffer32f[i * numOfChannels];
+                                    dest[i] = pBuffer32f[i * numOfChannels + c];
                                 }
                                 _audioBuffer.CopyToChannel(dest, c);
-                            }                           
+                            }
                             break;
 
                         default:
