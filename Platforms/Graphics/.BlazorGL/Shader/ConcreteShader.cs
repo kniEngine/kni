@@ -168,19 +168,19 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             glslCode = rgxPrecision.Replace(glslCode, "precision highp $1;");
-            if (shaderType == WebGLShaderType.FRAGMENT)
-            {
-                glslCode = "precision highp float;\n"
-                         + "precision highp int;\n"
-                         + "precision highp sampler3D;\n"
-                         + "\n"
-                         + glslCode;
-            }
 
             glslCode = rgxAttribute.Replace(glslCode, "in");
             glslCode = rgxTexture.Replace(glslCode, "texture");
 
             glslCode = "#version 300 es\n"
+                     + (shaderType == WebGLShaderType.FRAGMENT
+                           ? "precision highp float;\n"
+                           + "precision highp int;\n"
+                           + "precision highp sampler2D;\n"
+                           + "precision highp sampler3D;\n"
+                           + "precision highp samplerCube;\n"
+                           + "\n"
+                           : "")
                      + glslCode;
 
             return glslCode;

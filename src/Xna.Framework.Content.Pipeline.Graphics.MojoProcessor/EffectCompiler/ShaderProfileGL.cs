@@ -404,18 +404,16 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             Debug.Assert(glslCode.StartsWith("#version 110\n"));
             glslCode = glslCode.Replace("#version 110\n", "");
 
-            // Add the required precision specifiers for GLES.
-            if (shaderStage == ShaderStage.Pixel)
-            {
-                glslCode = "precision highp float;\n"
-                         + "precision highp int;\n"
-                         + "precision highp sampler3D;\n"
-                         + "\n"
-                         + glslCode;
-            }
-
             // add the GL ES header.
             glslCode = "#version 300 es\n"
+                     + (shaderStage == ShaderStage.Pixel
+                           ? "precision highp float;\n"
+                           + "precision highp int;\n"
+                           + "precision highp sampler2D;\n"
+                           + "precision highp sampler3D;\n"
+                           + "precision highp samplerCube;\n"
+                           + "\n"
+                           : "")
                      + glslCode;
 
             switch (shaderStage)
