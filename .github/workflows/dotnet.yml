@@ -98,5 +98,8 @@ jobs:
    # - name: Build Windows UAP.DX11
    #   run: dotnet msbuild Kni.Platform.UAP.DX11.sln --property:WarningLevel=1
 
+    - name: Build dotnet Templates
+      run: dotnet build Templates\dotnetTemplates\nkast.Kni.Templates.csproj --property:WarningLevel=1
+
    # - name: Test
    #   run: dotnet test --no-build --verbosity normal
