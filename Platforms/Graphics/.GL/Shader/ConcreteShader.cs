@@ -165,6 +165,22 @@ namespace Microsoft.Xna.Platform.Graphics
                 @"^#define (\w+) gl_FragData\[(\d+)\]", RegexOptions.Multiline);
         static Regex rgxTexture = new Regex(
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
+        static Regex rgxSampler3D = new Regex(
+                @"\bsampler3D\b", RegexOptions.Multiline);
+        static Regex rgxSampler3DPrecision = new Regex(
+                @"precision\s+(lowp|mediump|highp)\s+sampler3D\s*;", RegexOptions.Multiline);
+
+        private static string EnsureSampler3DPrecision(string glslCode)
+        {
+            if (rgxSampler3D.IsMatch(glslCode)
+            && !rgxSampler3DPrecision.IsMatch(glslCode))
+            {
+                glslCode = "precision highp sampler3D;\n"
+                         + glslCode;
+            }
+
+            return glslCode;
+        }
 
         private string ConvertGLSLToGLSL300es(ShaderType shaderType, string glslCode)
         {
@@ -182,6 +198,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         glslCode = rgxVarying.Replace(glslCode, "in");
                         glslCode = rgxFragColor.Replace(glslCode, "out vec4 $1;");
                         glslCode = rgxFragData .Replace(glslCode, "layout(location=$2) out vec4 $1;");
+                        glslCode = EnsureSampler3DPrecision(glslCode);
                     }
                     break;
             }
