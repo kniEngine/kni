@@ -177,18 +177,38 @@ namespace Microsoft.Xna.Platform.Graphics
             && !rgxSampler3DPrecision.IsMatch(glslCode))
             {
                 int insertIndex = 0;
+                bool sawPrecisionDirective = false;
 
-                while (insertIndex < glslCode.Length
-                &&     glslCode.IndexOf("precision ", insertIndex, StringComparison.Ordinal) == insertIndex)
+                while (insertIndex < glslCode.Length)
                 {
                     int lineEnd = glslCode.IndexOf('\n', insertIndex);
-                    if (lineEnd < 0)
+                    int nextIndex = lineEnd >= 0
+                                  ? lineEnd + 1
+                                  : glslCode.Length;
+                    string line = lineEnd >= 0
+                                ? glslCode.Substring(insertIndex, lineEnd - insertIndex)
+                                : glslCode.Substring(insertIndex);
+                    string trimmed = line.TrimStart();
+
+                    if (trimmed.StartsWith("precision ", StringComparison.Ordinal))
                     {
-                        insertIndex = glslCode.Length;
-                        break;
+                        sawPrecisionDirective = true;
+                        insertIndex = nextIndex;
+                        continue;
                     }
 
-                    insertIndex = lineEnd + 1;
+                    if (sawPrecisionDirective
+                    &&  (trimmed.Length == 0
+                    ||   trimmed.StartsWith("//", StringComparison.Ordinal)))
+                    {
+                        insertIndex = nextIndex;
+                        continue;
+                    }
+
+                    if (!sawPrecisionDirective)
+                        insertIndex = 0;
+
+                    break;
                 }
 
                 glslCode = glslCode.Insert(insertIndex, "precision highp sampler3D;\n");
