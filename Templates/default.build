@@ -4,5 +4,6 @@
 	<property name="os" value="${operating-system::get-platform(environment::get-operating-system())}" />
 
 	<target name="build" description="Build Nuget Templates">
+		<exec program="dotnet" commandline="pack dotnetTemplates\nkast.Kni.Templates.csproj --output ${project::get-base-directory()}\..\Artifacts\Packages\ /t:Build /p:Configuration=Release" />
 	</target>
 </project>
