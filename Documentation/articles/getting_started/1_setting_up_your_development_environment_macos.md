@@ -2,7 +2,7 @@
 
 This section provides a step-by-step guide for setting up your development environment on macOS.
 
-MonoGame can work with most .NET compatible tools, but we recommend [Visual Studio 2022 for Mac](https://visualstudio.microsoft.com/vs/mac/) (prior versions are not supported).
+KNI can work with most .NET compatible tools, but we recommend [Visual Studio 2022 for Mac](https://visualstudio.microsoft.com/vs/mac/).
 
 Alternatively, you can use [JetBrains Rider](https://www.jetbrains.com/rider/) or [Visual Studio Code](https://code.visualstudio.com/).
 
@@ -67,14 +67,14 @@ If you ever need to undo the script, simply delete the `.winemonogame` folder in
 
 **Next up:** [Creating a new project](2_creating_a_new_project_vsm.md)
 
-## [Alternative] Install the .NET 6 SDK (compatible with JetBrains Rider and Visual Studio Code)
+## [Alternative] Install the .NET 8 SDK (compatible with JetBrains Rider and Visual Studio Code)
 
-If you prefer to use JetBrains Rider or Visual Studio Code, after installing any of them you will need to [install the .NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
+If you prefer to use JetBrains Rider or Visual Studio Code, after installing any of them you will also need to [install the .NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 
-Once the .NET 6 SDK is installed, you can open a terminal and install the MonoGame templates by typing the following command:
+Once the .NET 8 SDK is installed, you can open a terminal and install the KNI templates by typing the following command:
 
 ```sh
-dotnet new --install MonoGame.Templates.CSharp
+dotnet new install nkast.Kni.Templates::4.2.9001-preview.7
 ```
 
 **Next up:** [Creating a new project](2_creating_a_new_project_vsm.md)

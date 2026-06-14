@@ -2,13 +2,13 @@
 
 This section provides a step-by-step guide for setting up your development environment on Windows.
 
-MonoGame can work with most .NET compatible tools, but we recommend [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (prior versions are not supported with MonoGame 3.8.1).
+KNI can work with most .NET compatible tools, but we recommend [Visual Studio 2022](https://visualstudio.microsoft.com/vs/).
 
 Alternatively, you can use [JetBrains Rider](https://www.jetbrains.com/rider/) or [Visual Studio Code](https://code.visualstudio.com/).
 
 ## [Recommended] Install Visual Studio 2022
 
-Before using MonoGame, you will need to install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or later (any edition, including Community) with the following workloads, depending on your desired [target platform(s)](~/platforms.md):
+Before using KNI, you will need to install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or later (any edition, including Community) with the following workloads, depending on your desired [target platform(s)](~/platforms.md):
 
 * .NET desktop development (mandatory for all platforms)
 * Mobile Development with .NET (optional, if you wish to target Android, iOS, or iPadOS)
@@ -28,14 +28,14 @@ Once it is open, simply search for **MonoGame** in the top right search window, 
 
 **Next up:** [Creating a new project](2_creating_a_new_project_vs.md)
 
-## [Alternative] Install the .NET 6 SDK (compatible with JetBrains Rider and Visual Studio Code)
+## [Alternative] Install the .NET 8 SDK (compatible with JetBrains Rider and Visual Studio Code)
 
-If you prefer to use JetBrains Rider or Visual Studio Code, and after installing any of them, you will also need to [install the .NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
+If you prefer to use JetBrains Rider or Visual Studio Code, and after installing any of them, you will also need to [install the .NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 
-Once the .NET 6 SDK is installed, you can open a Command Prompt and install the MonoGame templates by typing the following command:
+Once the .NET 8 SDK is installed, you can open a Command Prompt and install the KNI templates by typing the following command:
 
 ```sh
-dotnet new --install MonoGame.Templates.CSharp
+dotnet new install nkast.Kni.Templates::4.2.9001-preview.7
 ```
 
 **Next up:** [Creating a new project](2_creating_a_new_project_vs.md)
