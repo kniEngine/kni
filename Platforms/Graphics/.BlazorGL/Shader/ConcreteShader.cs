@@ -148,8 +148,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
         static Regex rgxSampler3D = new Regex(
                 @"\bsampler3D\b", RegexOptions.Multiline);
-        static Regex rgxSampler3DPrecision = new Regex(
-                @"precision\s+(lowp|mediump|highp)\s+sampler3D\s*;", RegexOptions.Multiline);
 
         private string ConvertGLSLToGLSL300es(WebGLShaderType shaderType, string glslCode)
         {
@@ -173,8 +171,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             glslCode = rgxPrecision.Replace(glslCode, "precision highp $1;");
             if (shaderType == WebGLShaderType.FRAGMENT
-            &&  rgxSampler3D.IsMatch(glslCode)
-            && !rgxSampler3DPrecision.IsMatch(glslCode))
+            &&  rgxSampler3D.IsMatch(glslCode))
             {
                 int insertIndex = 0;
                 bool sawPrecisionDirective = false;

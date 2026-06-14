@@ -399,8 +399,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
         static Regex rgxSampler3D = new Regex(
                 @"\bsampler3D\b", RegexOptions.Multiline);
-        static Regex rgxSampler3DPrecision = new Regex(
-                @"precision\s+(lowp|mediump|highp)\s+sampler3D\s*;", RegexOptions.Multiline);
 
         private static string ConvertGLSL110ToGLSL300es(ShaderStage shaderStage, string glslCode)
         {
@@ -414,9 +412,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                 glslCode = "precision highp float;\n"
                          + "precision highp int;\n"
                          + (rgxSampler3D.IsMatch(glslCode)
-                         && !rgxSampler3DPrecision.IsMatch(glslCode)
-                                ? "precision highp sampler3D;\n"
-                                : "")
+                               ? "precision highp sampler3D;\n"
+                               : "")
                          + "\n"
                          + glslCode;
             }
