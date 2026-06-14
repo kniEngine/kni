@@ -146,8 +146,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 @"^#define (\w+) gl_FragData\[(\d+)\]", RegexOptions.Multiline);
         static Regex rgxTexture = new Regex(
                 @"texture(2D|3D|Cube)(?=\()", RegexOptions.Multiline);
-        static Regex rgxSampler3D = new Regex(
-                @"\bsampler3D\b", RegexOptions.Multiline);
 
         private string ConvertGLSLToGLSL300es(WebGLShaderType shaderType, string glslCode)
         {
@@ -170,45 +168,13 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             glslCode = rgxPrecision.Replace(glslCode, "precision highp $1;");
-            if (shaderType == WebGLShaderType.FRAGMENT
-            &&  rgxSampler3D.IsMatch(glslCode))
+            if (shaderType == WebGLShaderType.FRAGMENT)
             {
-                int insertIndex = 0;
-                bool sawPrecisionDirective = false;
-
-                while (insertIndex < glslCode.Length)
-                {
-                    int lineEnd = glslCode.IndexOf('\n', insertIndex);
-                    int nextIndex = lineEnd >= 0
-                                  ? lineEnd + 1
-                                  : glslCode.Length;
-                    string line = lineEnd >= 0
-                                ? glslCode.Substring(insertIndex, lineEnd - insertIndex)
-                                : glslCode.Substring(insertIndex);
-                    string trimmed = line.TrimStart();
-
-                    if (trimmed.StartsWith("precision ", StringComparison.Ordinal))
-                    {
-                        sawPrecisionDirective = true;
-                        insertIndex = nextIndex;
-                        continue;
-                    }
-
-                    if (sawPrecisionDirective
-                    &&  (trimmed.Length == 0
-                    ||   trimmed.StartsWith("//", StringComparison.Ordinal)))
-                    {
-                        insertIndex = nextIndex;
-                        continue;
-                    }
-
-                    if (!sawPrecisionDirective)
-                        insertIndex = 0;
-
-                    break;
-                }
-
-                glslCode = glslCode.Insert(insertIndex, "precision highp sampler3D;\n");
+                glslCode = "precision highp float;\n"
+                         + "precision highp int;\n"
+                         + "precision highp sampler3D;\n"
+                         + "\n"
+                         + glslCode;
             }
 
             glslCode = rgxAttribute.Replace(glslCode, "in");
