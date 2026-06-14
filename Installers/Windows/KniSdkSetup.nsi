@@ -125,7 +125,7 @@ Section "VS012 Redistributables (x64)" VS2012Redist
   
 SectionEnd
 
-Section "VS2022 Templates" VS2022
+Section /o "VS2022 Templates" VS2022
 
   IfFileExists `$DOCUMENTS\Visual Studio 2022\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
