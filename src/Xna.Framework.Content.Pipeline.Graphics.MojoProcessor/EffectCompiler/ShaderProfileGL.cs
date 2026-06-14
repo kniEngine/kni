@@ -402,18 +402,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
         static Regex rgxSampler3DPrecision = new Regex(
                 @"precision\s+(lowp|mediump|highp)\s+sampler3D\s*;", RegexOptions.Multiline);
 
-        private static string EnsureSampler3DPrecision(string glslCode)
-        {
-            if (rgxSampler3D.IsMatch(glslCode)
-            && !rgxSampler3DPrecision.IsMatch(glslCode))
-            {
-                glslCode = "precision highp sampler3D;\n"
-                         + glslCode;
-            }
-
-            return glslCode;
-        }
-
         private static string ConvertGLSL110ToGLSL300es(ShaderStage shaderStage, string glslCode)
         {
             // remove the opengl 1.10 header. GLES platforms do not like this.
@@ -425,6 +413,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 glslCode = "precision highp float;\n"
                          + "precision highp int;\n"
+                         + (rgxSampler3D.IsMatch(glslCode)
+                         && !rgxSampler3DPrecision.IsMatch(glslCode)
+                                ? "precision highp sampler3D;\n"
+                                : "")
                          + "\n"
                          + glslCode;
             }
@@ -446,7 +438,6 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
                         glslCode = rgxVarying.Replace(glslCode, "in");
                         glslCode = rgxFragColor.Replace(glslCode, "out vec4 $1;");
                         glslCode = rgxFragData.Replace(glslCode, "layout(location=$2) out vec4 $1;");
-                        glslCode = EnsureSampler3DPrecision(glslCode);
                     }
                     break;
             }

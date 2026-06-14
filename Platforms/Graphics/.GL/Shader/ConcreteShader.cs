@@ -170,18 +170,6 @@ namespace Microsoft.Xna.Platform.Graphics
         static Regex rgxSampler3DPrecision = new Regex(
                 @"precision\s+(lowp|mediump|highp)\s+sampler3D\s*;", RegexOptions.Multiline);
 
-        private static string EnsureSampler3DPrecision(string glslCode)
-        {
-            if (rgxSampler3D.IsMatch(glslCode)
-            && !rgxSampler3DPrecision.IsMatch(glslCode))
-            {
-                glslCode = "precision highp sampler3D;\n"
-                         + glslCode;
-            }
-
-            return glslCode;
-        }
-
         private string ConvertGLSLToGLSL300es(ShaderType shaderType, string glslCode)
         {
             switch (shaderType)
@@ -198,12 +186,33 @@ namespace Microsoft.Xna.Platform.Graphics
                         glslCode = rgxVarying.Replace(glslCode, "in");
                         glslCode = rgxFragColor.Replace(glslCode, "out vec4 $1;");
                         glslCode = rgxFragData .Replace(glslCode, "layout(location=$2) out vec4 $1;");
-                        glslCode = EnsureSampler3DPrecision(glslCode);
                     }
                     break;
             }
 
             glslCode = rgxPrecision.Replace(glslCode, "precision highp $1;");
+            if (shaderType == ShaderType.FragmentShader
+            &&  rgxSampler3D.IsMatch(glslCode)
+            && !rgxSampler3DPrecision.IsMatch(glslCode))
+            {
+                int insertIndex = 0;
+
+                while (insertIndex < glslCode.Length
+                &&     glslCode.IndexOf("precision ", insertIndex, StringComparison.Ordinal) == insertIndex)
+                {
+                    int lineEnd = glslCode.IndexOf('\n', insertIndex);
+                    if (lineEnd < 0)
+                    {
+                        insertIndex = glslCode.Length;
+                        break;
+                    }
+
+                    insertIndex = lineEnd + 1;
+                }
+
+                glslCode = glslCode.Insert(insertIndex, "precision highp sampler3D;\n");
+            }
+
             glslCode = rgxAttribute.Replace(glslCode, "in");
             glslCode = rgxTexture.Replace(glslCode, "texture");
 
