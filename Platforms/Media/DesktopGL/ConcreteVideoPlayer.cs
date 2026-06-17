@@ -79,15 +79,11 @@ namespace Microsoft.Xna.Platform.Media
 
             if (_decoderProcess != null)
             {
-                if (_decoderProcess.TryPeekVideoFrame(out VideoDecoderProcess.TrackData frameData))
+                if (_decoderThread.TryGetNextVideoFrame(out VideoDecoderProcess.TrackData frameData))
                 {
-                    if (frameData.TrackTime < _decoderThread.Watch.Elapsed)
-                    {
-                        _lastFrameTime = frameData.TrackTime;
-                        _lastFrame.SetData(frameData.Data);
-                        _decoderProcess._videoFrameQueue.Dequeue();
-                        _decoderProcess._videoFramePool.Return(frameData.Data);
-                    }
+                    _lastFrameTime = frameData.TrackTime;
+                    _lastFrame.SetData(frameData.Data);
+                    _decoderProcess._videoFramePool.Return(frameData.Data);
                 }
             }
 

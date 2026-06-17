@@ -24,6 +24,9 @@ namespace Microsoft.Xna.Platform.Media
         internal readonly Stopwatch Watch = new Stopwatch();
         private volatile ThreadState _threadState;
 
+        private VideoDecoderProcess.TrackData? _nextVideoFrame;
+        private object _nextVideoFrameLock = new object();
+
         internal Thread _thread;
 
         public event EventHandler Stopped;
@@ -49,13 +52,13 @@ namespace Microsoft.Xna.Platform.Media
 
         private static void OnThreadStart(object obj)
         {
-            DecoderThread args = (DecoderThread)obj;
-            ConcreteVideoPlayerStrategy videoPlayerStrategy = args.VideoPlayerStrategy;
-            VideoDecoderProcess decoderProcess = args.DecoderProcess;
+            DecoderThread decoderThread = (DecoderThread)obj;
+            ConcreteVideoPlayerStrategy videoPlayerStrategy = decoderThread.VideoPlayerStrategy;
+            VideoDecoderProcess decoderProcess = decoderThread.DecoderProcess;
 
             while (true)
             {
-                if (args._threadState == ThreadState.Stop)
+                if (decoderThread._threadState == ThreadState.Stop)
                     break;
 
                 if (decoderProcess._videoFrameQueue.Count < 1
@@ -69,10 +72,10 @@ namespace Microsoft.Xna.Platform.Media
                     {
                         if (!videoPlayerStrategy.IsLooped)
                         {
-                            args._threadState = ThreadState.Stop;
-                            var handler = args.Stopped;
+                            decoderThread._threadState = ThreadState.Stop;
+                            var handler = decoderThread.Stopped;
                             if (handler != null)
-                                handler(args, EventArgs.Empty);
+                                handler(decoderThread, EventArgs.Empty);
                             break;
                         }
                         else
@@ -80,13 +83,23 @@ namespace Microsoft.Xna.Platform.Media
                             throw new NotSupportedException("Looping is not supported.", eosEx);
                         }
                     }
+                }
 
-                    while (videoPlayerStrategy._soundPlayer.PendingBufferCount <= 3 
-                       &&  decoderProcess.TryPeekAudioFrame(out VideoDecoderProcess.TrackData audioFrame))
+                while (decoderProcess.TryPeekAudioFrame(out VideoDecoderProcess.TrackData audioFrame)
+                   && videoPlayerStrategy._soundPlayer.PendingBufferCount <= 3)
+                {
+                    decoderProcess._audioFrameQueue.Dequeue();
+                    videoPlayerStrategy._soundPlayer.SubmitBuffer(audioFrame.Data, 0, audioFrame.Data.Length);
+                    decoderProcess._audioFramePool.Return(audioFrame.Data);
+                }
+
+                while (decoderProcess.TryPeekVideoFrame(out VideoDecoderProcess.TrackData frameData)
+                   &&  frameData.TrackTime <= decoderThread.Watch.Elapsed)
+                {
+                    decoderProcess._videoFrameQueue.Dequeue();
+                    lock (decoderThread._nextVideoFrameLock)
                     {
-                        videoPlayerStrategy._soundPlayer.SubmitBuffer(audioFrame.Data, 0, audioFrame.Data.Length);
-                        decoderProcess._audioFrameQueue.Dequeue();
-                        decoderProcess._audioFramePool.Return(audioFrame.Data);
+                        decoderThread._nextVideoFrame = frameData;
                     }
                 }
 
@@ -94,6 +107,25 @@ namespace Microsoft.Xna.Platform.Media
             }
 
             return;
+        }
+
+        internal bool TryGetNextVideoFrame(out VideoDecoderProcess.TrackData trackData)
+        {
+            lock (_nextVideoFrameLock)
+            {
+                if (_nextVideoFrame != null
+                &&  _nextVideoFrame.Value.TrackTime <= Watch.Elapsed)
+                {
+                    trackData = _nextVideoFrame.Value;
+                    _nextVideoFrame = null;
+                    return true;
+                }
+                else
+                {
+                    trackData = default(VideoDecoderProcess.TrackData);
+                    return false;
+                }
+            }
         }
 
         public void Stop()
