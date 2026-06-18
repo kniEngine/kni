@@ -15,7 +15,8 @@ namespace Microsoft.Xna.Platform.Media
     internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
         private VideoDecoderProcess _decoderProcess;
-        private Texture2D _lastFrame;
+        private Texture2D[] _textures = new Texture2D[2];
+        private int _currentTexture;
         private TimeSpan _lastFrameTime;
 
         internal DynamicSoundEffectInstance _soundPlayer;
@@ -66,28 +67,35 @@ namespace Microsoft.Xna.Platform.Media
 
         public override Texture2D PlatformGetTexture()
         {
-            if (_lastFrame != null)
+            if (_textures[0] != null)
             {
-                if (_lastFrame.Width != base.Video.Width || _lastFrame.Height != base.Video.Height)
+                if (_textures[0].Width != base.Video.Width || _textures[0].Height != base.Video.Height)
                 {
-                    _lastFrame.Dispose();
-                    _lastFrame = null;
+                    _textures[0].Dispose();
+                    _textures[0] = null;
+                    _textures[1].Dispose();
+                    _textures[1] = null;
                 }
             }
-            if (_lastFrame == null)
-                _lastFrame = new Texture2D(((IPlatformVideo)base.Video).Strategy.GraphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+            if (_textures[0] == null)
+            {
+                GraphicsDevice graphicsDevice = ((IPlatformVideo)base.Video).Strategy.GraphicsDevice;
+                _textures[0] = new Texture2D(graphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+                _textures[1] = new Texture2D(graphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
+            }
 
             if (_decoderProcess != null)
             {
                 if (_decoderThread.TryGetNextVideoFrame(out VideoDecoderProcess.TrackData frameData))
                 {
                     _lastFrameTime = frameData.TrackTime;
-                    _lastFrame.SetData(frameData.Data);
+                    _currentTexture = (_currentTexture+1) & 0x01;
+                    _textures[_currentTexture].SetData(frameData.Data);
                     _decoderProcess._videoFramePool.Return(frameData.Data);
                 }
             }
 
-            return _lastFrame;
+            return _textures[_currentTexture];
         }
 
         protected override void PlatformUpdateState(ref MediaState state)
@@ -215,6 +223,16 @@ namespace Microsoft.Xna.Platform.Media
                 {
                     _soundPlayer.Dispose();
                     _soundPlayer = null;
+                }
+                if (_textures != null)
+                {
+                    if (_textures[0] != null)
+                        _textures[0].Dispose();
+                    if (_textures[1] != null)
+                        _textures[1].Dispose();
+                    _textures[0] = null;
+                    _textures[1] = null;
+                    _textures = null;
                 }
 
             }
