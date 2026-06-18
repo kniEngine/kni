@@ -155,12 +155,16 @@ namespace Microsoft.Xna.Platform.Media
 
         public override void PlatformPause()
         {
-            throw new NotImplementedException();
+            _decoderThread.Watch.Stop();
+            _soundPlayer.Pause();
+            State = MediaState.Paused;
         }
 
         public override void PlatformResume()
         {
-            throw new NotImplementedException();
+            _soundPlayer.Resume();
+            _decoderThread.Watch.Start();
+            State = MediaState.Playing;
         }
 
         public override void PlatformStop()
