@@ -13,6 +13,8 @@ namespace Microsoft.Xna.Platform.Graphics
         
         public override int PixelCount { get { throw new NotImplementedException(); } }
 
+        public override bool AnyPixelsPassed { get { throw new NotImplementedException(); } }
+
         public override bool IsComplete { get { throw new NotImplementedException(); } }
 
         internal ConcreteOcclusionQuery(GraphicsContextStrategy contextStrategy)
