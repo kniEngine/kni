@@ -84,7 +84,20 @@ namespace Microsoft.Xna.Platform.Media
                     {
                         if (videoPlayerStrategy.IsLooped)
                         {
-                            throw new NotSupportedException("Looping is not supported.");
+                            decoderThread.Watch.Stop();
+
+                            decoderThread.DecoderProcess.Dispose();
+                            decoderThread.DecoderProcess = null;
+
+                            string ffmpegPath = "x64\\ffmpeg";
+                            string inputFile = "" + ((IPlatformVideo)videoPlayerStrategy.Video).Strategy.FileName;
+                            decoderThread.DecoderProcess = new VideoDecoderProcess(videoPlayerStrategy.Video, ffmpegPath, inputFile);
+
+                            decoderThread.DecoderProcess.ParseMKV(decoderThread._videoFrameQueue, decoderThread._audioFrameQueue,
+                                                                  decoderThread._videoFramePool, decoderThread._audioFramePool);
+
+                            decoderThread.Watch.Reset();
+                            decoderThread.Watch.Start();
                         }
                         else
                         {
