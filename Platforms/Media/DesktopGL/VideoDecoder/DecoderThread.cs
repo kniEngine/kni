@@ -19,26 +19,36 @@ namespace Microsoft.Xna.Platform.Media
 
     internal class DecoderThread
     {
-        public readonly ConcreteVideoPlayerStrategy VideoPlayerStrategy;
-        public readonly VideoDecoderProcess DecoderProcess;
+        private readonly ConcreteVideoPlayerStrategy VideoPlayerStrategy;
+        public VideoDecoderProcess DecoderProcess;
         internal readonly Stopwatch Watch = new Stopwatch();
         private volatile ThreadState _threadState;
 
-        private VideoDecoderProcess.TrackData? _nextVideoFrame;
+        internal Queue<TrackData> _videoFrameQueue = new Queue<TrackData>();
+        internal Queue<TrackData> _audioFrameQueue = new Queue<TrackData>();
+        internal FrameBufferPool _videoFramePool = new FrameBufferPool();
+        internal FrameBufferPool _audioFramePool = new FrameBufferPool();
+
+        private TrackData? _nextVideoFrame;
         private object _nextVideoFrameLock = new object();
 
         internal Thread _thread;
 
         public event EventHandler Stopped;
 
-        public DecoderThread(ConcreteVideoPlayerStrategy videoPlayerStrategy, VideoDecoderProcess decoderProcess)
+        public DecoderThread(ConcreteVideoPlayerStrategy videoPlayerStrategy)
         {
             this.VideoPlayerStrategy = videoPlayerStrategy;
-            this.DecoderProcess = decoderProcess;
             this._threadState = ThreadState.None;
+
+            string ffmpegPath = "x64\\ffmpeg";
+            string inputFile = "" + ((IPlatformVideo)VideoPlayerStrategy.Video).Strategy.FileName;
+            this.DecoderProcess = new VideoDecoderProcess(VideoPlayerStrategy.Video, ffmpegPath, inputFile);
 
             _thread = new Thread(DecoderThread.OnThreadStart);
             _thread.IsBackground = true;
+
+            DecoderProcess.ParseMKV(_videoFrameQueue, _audioFrameQueue, _videoFramePool, _audioFramePool);
         }
 
         public void Start()
@@ -54,19 +64,20 @@ namespace Microsoft.Xna.Platform.Media
         {
             DecoderThread decoderThread = (DecoderThread)obj;
             ConcreteVideoPlayerStrategy videoPlayerStrategy = decoderThread.VideoPlayerStrategy;
-            VideoDecoderProcess decoderProcess = decoderThread.DecoderProcess;
 
             while (true)
             {
                 if (decoderThread._threadState == ThreadState.Stop)
                     break;
 
-                if (decoderProcess._videoFrameQueue.Count < 1
-                ||  decoderProcess._audioFrameQueue.Count < 1)
+                if (decoderThread._videoFrameQueue.Count < 1
+                ||  decoderThread._audioFrameQueue.Count < 1)
                 {
                     try
                     {
-                        decoderProcess.ParseSegmentCluster2(decoderProcess._binaryReader, (long)0);
+                        decoderThread.DecoderProcess.ParseSegmentCluster2(decoderThread.DecoderProcess._binaryReader, (long)0,
+                                                                          decoderThread._videoFrameQueue, decoderThread._audioFrameQueue,
+                                                                          decoderThread._videoFramePool, decoderThread._audioFramePool);
                     }
                     catch (EndOfStreamException eosEx)
                     {
@@ -85,18 +96,18 @@ namespace Microsoft.Xna.Platform.Media
                     }
                 }
 
-                while (decoderProcess.TryPeekAudioFrame(out VideoDecoderProcess.TrackData audioFrame)
+                while (decoderThread.TryPeekAudioFrame(out TrackData audioFrame)
                    && videoPlayerStrategy._soundPlayer.PendingBufferCount <= 3)
                 {
-                    decoderProcess._audioFrameQueue.Dequeue();
+                    decoderThread._audioFrameQueue.Dequeue();
                     videoPlayerStrategy._soundPlayer.SubmitBuffer(audioFrame.Data, 0, audioFrame.Data.Length);
-                    decoderProcess._audioFramePool.Return(audioFrame.Data);
+                    decoderThread._audioFramePool.Return(audioFrame.Data);
                 }
 
-                while (decoderProcess.TryPeekVideoFrame(out VideoDecoderProcess.TrackData frameData)
+                while (decoderThread.TryPeekVideoFrame(out TrackData frameData)
                    &&  frameData.TrackTime <= decoderThread.Watch.Elapsed)
                 {
-                    decoderProcess._videoFrameQueue.Dequeue();
+                    decoderThread._videoFrameQueue.Dequeue();
                     lock (decoderThread._nextVideoFrameLock)
                     {
                         decoderThread._nextVideoFrame = frameData;
@@ -109,7 +120,7 @@ namespace Microsoft.Xna.Platform.Media
             return;
         }
 
-        internal bool TryGetNextVideoFrame(out VideoDecoderProcess.TrackData trackData)
+        internal bool TryGetNextVideoFrame(out TrackData trackData)
         {
             lock (_nextVideoFrameLock)
             {
@@ -122,10 +133,32 @@ namespace Microsoft.Xna.Platform.Media
                 }
                 else
                 {
-                    trackData = default(VideoDecoderProcess.TrackData);
+                    trackData = default(TrackData);
                     return false;
                 }
             }
+        }
+
+        public bool TryPeekVideoFrame(out TrackData frameData)
+        {
+            if (_videoFrameQueue.Count > 0)
+            {
+                frameData = _videoFrameQueue.Peek();
+                return true;
+            }
+            frameData = default(TrackData);
+            return false;
+        }
+
+        public bool TryPeekAudioFrame(out TrackData frameData)
+        {
+            if (_audioFrameQueue.Count > 0)
+            {
+                frameData = _audioFrameQueue.Peek();
+                return true;
+            }
+            frameData = default(TrackData);
+            return false;
         }
 
         public void Stop()
@@ -135,6 +168,9 @@ namespace Microsoft.Xna.Platform.Media
             _thread = null;
 
             Watch.Stop();
+
+            DecoderProcess.Dispose();
+            DecoderProcess = null;
         }
     }
 }

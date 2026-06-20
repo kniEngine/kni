@@ -14,7 +14,6 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteVideoPlayerStrategy : VideoPlayerStrategy
     {
-        private VideoDecoderProcess _decoderProcess;
         private Texture2D[] _textures = new Texture2D[2];
         private int _currentTexture;
         private TimeSpan _lastFrameTime;
@@ -84,14 +83,14 @@ namespace Microsoft.Xna.Platform.Media
                 _textures[1] = new Texture2D(graphicsDevice, base.Video.Width, base.Video.Height, false, SurfaceFormat.Color);
             }
 
-            if (_decoderProcess != null)
+            if (_decoderThread != null)
             {
-                if (_decoderThread.TryGetNextVideoFrame(out VideoDecoderProcess.TrackData frameData))
+                if (_decoderThread.TryGetNextVideoFrame(out TrackData frameData))
                 {
                     _lastFrameTime = frameData.TrackTime;
                     _currentTexture = (_currentTexture+1) & 0x01;
                     _textures[_currentTexture].SetData(frameData.Data);
-                    _decoderProcess._videoFramePool.Return(frameData.Data);
+                    _decoderThread._videoFramePool.Return(frameData.Data);
                 }
             }
 
@@ -111,25 +110,20 @@ namespace Microsoft.Xna.Platform.Media
             if (State != MediaState.Stopped)
             {
                 _decoderThread.Stop();
+                _decoderThread.Stopped -= OnDecoderThreadStopped;
                 _decoderThread = null;
-                _decoderProcess.Dispose();
-                _decoderProcess = null;
                 _soundPlayer.Dispose();
                 _soundPlayer = null;
             }
 
-            string ffmpegPath = "x64\\ffmpeg";
-            string inputFile = "" + ((IPlatformVideo)base.Video).Strategy.FileName;
+            _decoderThread = new DecoderThread(this);
+            _decoderThread.Stopped += OnDecoderThreadStopped;
 
-            _decoderProcess = new VideoDecoderProcess(base.Video, ffmpegPath, inputFile);
-
-            _decoderProcess.ParseMKV();
-
-            VideoDecoderProcess.MKVTrack atrack = _decoderProcess._tracks.Values.First((t) => (t.Type == VideoDecoderProcess.MKVTrackType.Audio));
+            VideoDecoderProcess.MKVTrack atrack = _decoderThread.DecoderProcess._tracks.Values.First((t) => (t.Type == VideoDecoderProcess.MKVTrackType.Audio));
             VideoDecoderProcess.MKVAudioTrack audioTrack = (VideoDecoderProcess.MKVAudioTrack)atrack;
             VideoDecoderProcess.MKVAudioSettings audioSettings = audioTrack.AudioSettings;
 
-            VideoDecoderProcess.MKVTrack vtrack = _decoderProcess._tracks.Values.First((t) => (t.Type == VideoDecoderProcess.MKVTrackType.Video));
+            VideoDecoderProcess.MKVTrack vtrack = _decoderThread.DecoderProcess._tracks.Values.First((t) => (t.Type == VideoDecoderProcess.MKVTrackType.Video));
             VideoDecoderProcess.MKVVideoTrack videoTrack = (VideoDecoderProcess.MKVVideoTrack)vtrack;
             VideoDecoderProcess.MKVVideoSettings videoSettings = videoTrack.VideoSettings;
 
@@ -139,7 +133,7 @@ namespace Microsoft.Xna.Platform.Media
             _soundPlayer.BufferNeeded += (s, e) =>
             {
                 Debug.WriteLine("_soundPlayer.PendingBufferCount: " + _soundPlayer.PendingBufferCount);
-                Debug.WriteLine("_videoFrameQueue.Count: " + _decoderProcess._videoFrameQueue.Count);
+                Debug.WriteLine("_videoFrameQueue.Count: " + _decoderThread._videoFrameQueue.Count);
             };
             int samples = (SampleRate * (int)channels) / 2;
             PlatformSetVolume();
@@ -148,8 +142,6 @@ namespace Microsoft.Xna.Platform.Media
             _lastFrameTime = TimeSpan.Zero;
             this.State = MediaState.Playing;
 
-            _decoderThread = new DecoderThread(this, _decoderProcess);
-            _decoderThread.Stopped += OnDecoderThreadStopped;
             _decoderThread.Start();
         }
 
@@ -172,12 +164,8 @@ namespace Microsoft.Xna.Platform.Media
             if (_decoderThread != null)
             {
                 _decoderThread.Stop();
+                _decoderThread.Stopped -= OnDecoderThreadStopped;
                 _decoderThread = null;
-            }
-            if (_decoderProcess != null)
-            {
-                _decoderProcess.Dispose();
-                _decoderProcess = null;
             }
 
             State = MediaState.Stopped;
@@ -192,9 +180,8 @@ namespace Microsoft.Xna.Platform.Media
             base.State = MediaState.Stopped;
 
             _decoderThread.Stop();
+            _decoderThread.Stopped -= OnDecoderThreadStopped;
             _decoderThread = null;
-            _decoderProcess.Dispose();
-            _decoderProcess = null;
             _soundPlayer.Dispose();
             _soundPlayer = null;
         }
@@ -216,12 +203,8 @@ namespace Microsoft.Xna.Platform.Media
                 if (_decoderThread != null)
                 {
                     _decoderThread.Stop();
+                    _decoderThread.Stopped -= OnDecoderThreadStopped;
                     _decoderThread = null;
-                }
-                if (_decoderProcess != null)
-                {
-                    _decoderProcess.Dispose();
-                    _decoderProcess = null;
                 }
                 if (_soundPlayer != null)
                 {

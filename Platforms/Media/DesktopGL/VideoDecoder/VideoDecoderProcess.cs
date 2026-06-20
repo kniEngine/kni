@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
 
@@ -17,11 +15,6 @@ namespace Microsoft.Xna.Platform.Media
         private Process _ffmpegProcess;
         private StreamReader _outputReader;
         internal PipeBinaryReader _binaryReader;
-
-        internal Queue<TrackData> _videoFrameQueue = new Queue<TrackData>();
-        internal Queue<TrackData> _audioFrameQueue = new Queue<TrackData>();
-        internal FrameBufferPool _videoFramePool = new FrameBufferPool();
-        internal FrameBufferPool _audioFramePool = new FrameBufferPool();
 
         public VideoDecoderProcess(Video video, string ffmpegPath, string inputFile)
         {
@@ -165,20 +158,6 @@ namespace Microsoft.Xna.Platform.Media
             LacingEBML  = 0x06,
         };
 
-        internal struct TrackData
-        {
-            public readonly byte[] Data;
-            public readonly TimeSpan TrackTime;
-            public readonly long AbsoluteTimecode;
-
-            public TrackData(byte[] frameData, TimeSpan trackTime, long absoluteTimecode)
-            {
-                Data = frameData;
-                TrackTime = trackTime;
-                AbsoluteTimecode = absoluteTimecode;
-            }
-        }
-
         public struct MKVAudioSettings
         {
             public int Channels;
@@ -235,7 +214,8 @@ namespace Microsoft.Xna.Platform.Media
         internal Dictionary<int, MKVTrack> _tracks = new Dictionary<int, MKVTrack>();
 
 
-        internal void ParseMKV()
+        internal void ParseMKV(Queue<TrackData> _videoFrameQueue, Queue<TrackData> audioFrameQueue,
+                               FrameBufferPool videoFramePool, FrameBufferPool audioFramePool)
         {
             ReadEBMLElement(_binaryReader);
             EBMLElementHeader segmentElementHdr = ReadSegmentStart(_binaryReader);
@@ -243,10 +223,10 @@ namespace Microsoft.Xna.Platform.Media
 
             // parse first cluster
             if (clusterHdr.Id == MKVElement.Cluster)
-                ParseCluster(_binaryReader, (long)clusterHdr.Size);
+                ParseCluster(_binaryReader, (long)clusterHdr.Size, _videoFrameQueue, audioFrameQueue, videoFramePool, audioFramePool);
 
             while (_videoFrameQueue.Count < 1)
-                ParseSegmentCluster2(_binaryReader, (long)segmentElementHdr.Size);
+                ParseSegmentCluster2(_binaryReader, (long)segmentElementHdr.Size, _videoFrameQueue, audioFrameQueue, videoFramePool, audioFramePool);
         }
 
         private EBMLElementHeader ReadSegmentStart(PipeBinaryReader reader)
@@ -490,7 +470,9 @@ namespace Microsoft.Xna.Platform.Media
             return videoSettings;
         }
 
-        private void ParseSegmentCluster(PipeBinaryReader reader, long segmentSize)
+        private void ParseSegmentCluster(PipeBinaryReader reader, long segmentSize,
+            Queue<TrackData> videoFrameQueue, Queue<TrackData> audioFrameQueue,
+            FrameBufferPool videoFramePool, FrameBufferPool audioFramePool)
         {
             long start = reader.Position;
 
@@ -505,7 +487,7 @@ namespace Microsoft.Xna.Platform.Media
                 switch (elementHdr.Id)
                 {
                     case MKVElement.Cluster:
-                        ParseCluster(reader, (long)elementHdr.Size);
+                        ParseCluster(reader, (long)elementHdr.Size, videoFrameQueue, audioFrameQueue, videoFramePool, audioFramePool);
                         break;
 
                     default:
@@ -515,7 +497,9 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        internal void ParseSegmentCluster2(PipeBinaryReader reader, long segmentSize)
+        internal void ParseSegmentCluster2(PipeBinaryReader reader, long segmentSize,
+            Queue<TrackData> videoFrameQueue, Queue<TrackData> audioFrameQueue,
+            FrameBufferPool videoFramePool, FrameBufferPool audioFramePool)
         {
             long start = reader.Position;
 
@@ -528,7 +512,7 @@ namespace Microsoft.Xna.Platform.Media
             switch (elementHdr.Id)
             {
                 case MKVElement.Cluster:
-                    ParseCluster(reader, (long)elementHdr.Size);
+                    ParseCluster(reader, (long)elementHdr.Size, videoFrameQueue, audioFrameQueue, videoFramePool, audioFramePool);
                     break;
 
                 default:
@@ -537,7 +521,9 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        private void ParseCluster(PipeBinaryReader reader, long clusterSize)
+        private void ParseCluster(PipeBinaryReader reader, long clusterSize,
+            Queue<TrackData> videoFrameQueue, Queue<TrackData> audioFrameQueue,
+            FrameBufferPool videoFramePool, FrameBufferPool audioFramePool)
         {
             long start = reader.Position;
             int clusterTimecode = 0;
@@ -555,7 +541,9 @@ namespace Microsoft.Xna.Platform.Media
                         Debug.WriteLine($"Cluster timecode: {clusterTimecode}");
                         break;
                     case MKVElement.SimpleBlock:
-                        ParseSimpleBlock(reader, (long)elementHdr.Size, clusterTimecode);
+                        ParseSimpleBlock(reader, (long)elementHdr.Size, clusterTimecode,
+                            videoFrameQueue, audioFrameQueue,
+                            videoFramePool, audioFramePool);
                         break;
 
                     default:
@@ -565,7 +553,9 @@ namespace Microsoft.Xna.Platform.Media
             }
         }
 
-        private void ParseSimpleBlock(PipeBinaryReader reader, long blockSize, int clusterTimecode)
+        private void ParseSimpleBlock(PipeBinaryReader reader, long blockSize, int clusterTimecode,
+            Queue<TrackData> videoFrameQueue, Queue<TrackData> audioFrameQueue,
+            FrameBufferPool videoFramePool, FrameBufferPool audioFramePool)
         {
             long blockStart = reader.Position;
 
@@ -584,19 +574,19 @@ namespace Microsoft.Xna.Platform.Media
                 case MKVTrackType.Video:
                     {
                         MKVVideoTrack videoTrack = (MKVVideoTrack)track;
-                        byte[] frameData = _videoFramePool.Get((int)frameDataSize);
+                        byte[] frameData = videoFramePool.Get((int)frameDataSize);
                         TrackData trackData = new TrackData(frameData, trackTime, (long)absoluteTimecode);
                         ReadVideoFrame(frameDataSize, videoTrack.VideoSettings, trackData.Data);
-                        _videoFrameQueue.Enqueue(trackData);
+                        videoFrameQueue.Enqueue(trackData);
                     }
                     break;
                 case MKVTrackType.Audio:
                     {
                         MKVAudioTrack audioTrack = (MKVAudioTrack)track;
-                        byte[] frameData = _audioFramePool.Get((int)frameDataSize);
+                        byte[] frameData = audioFramePool.Get((int)frameDataSize);
                         TrackData trackData = new TrackData(frameData, trackTime, (long)absoluteTimecode);
                         ReadAudioFrame(frameDataSize, audioTrack.AudioSettings, trackData.Data);
-                        _audioFrameQueue.Enqueue(trackData);
+                        audioFrameQueue.Enqueue(trackData);
                     }
                     break;
 
@@ -608,28 +598,6 @@ namespace Microsoft.Xna.Platform.Media
 
 
             Debug.WriteLine($"  SimpleBlock -> Track: {trackNumber}, TrackType: {track.Type}, AbsTime: {absoluteTimecode}, blockTimecode: {blockTimecode}, Keyframe: {(flags & SimpleBlockFlags.Keyframe) != 0}, Size: {frameDataSize}");
-        }
-
-        public bool TryPeekVideoFrame(out TrackData frameData)
-        {
-            if (_videoFrameQueue.Count > 0)
-            {
-                frameData = _videoFrameQueue.Peek();
-                return true;
-            }
-            frameData = default(TrackData);
-            return false;
-        }
-
-        public bool TryPeekAudioFrame(out TrackData frameData)
-        {
-            if (_audioFrameQueue.Count > 0)
-            {
-                frameData = _audioFrameQueue.Peek();
-                return true;
-            }
-            frameData = default(TrackData);
-            return false;
         }
 
         public void ReadVideoFrame(long videoFrameDataSize, MKVVideoSettings videoSettings, byte[] frameData)

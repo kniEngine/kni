@@ -185,6 +185,7 @@
     <Compile Include="Media\DesktopGL\VideoDecoder\DecoderThread.cs" />
     <Compile Include="Media\DesktopGL\VideoDecoder\FrameBufferPool.cs" />
     <Compile Include="Media\DesktopGL\VideoDecoder\PipeBinaryReader.cs" />
+    <Compile Include="Media\DesktopGL\VideoDecoder\TrackData.cs" />
     <Compile Include="Media\DesktopGL\VideoDecoder\VideoDecoderProcess.cs" />
   </ItemGroup>
 
