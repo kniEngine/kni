@@ -65,6 +65,7 @@ namespace Microsoft.Xna.Platform.Media
             DecoderThread decoderThread = (DecoderThread)obj;
             ConcreteVideoPlayerStrategy videoPlayerStrategy = decoderThread.VideoPlayerStrategy;
 
+            bool reachEndOfStream = false;
             while (true)
             {
                 if (decoderThread._threadState == ThreadState.Stop)
@@ -81,17 +82,13 @@ namespace Microsoft.Xna.Platform.Media
                     }
                     catch (EndOfStreamException eosEx)
                     {
-                        if (!videoPlayerStrategy.IsLooped)
+                        if (videoPlayerStrategy.IsLooped)
                         {
-                            decoderThread._threadState = ThreadState.Stop;
-                            var handler = decoderThread.Stopped;
-                            if (handler != null)
-                                handler(decoderThread, EventArgs.Empty);
-                            break;
+                            throw new NotSupportedException("Looping is not supported.");
                         }
                         else
                         {
-                            throw new NotSupportedException("Looping is not supported.", eosEx);
+                            reachEndOfStream = true;
                         }
                     }
                 }
@@ -111,6 +108,26 @@ namespace Microsoft.Xna.Platform.Media
                     lock (decoderThread._nextVideoFrameLock)
                     {
                         decoderThread._nextVideoFrame = frameData;
+                    }
+                }
+
+                if (reachEndOfStream)
+                {
+                    if (decoderThread._videoFrameQueue.Count < 1
+                    &&  decoderThread._audioFrameQueue.Count < 1)
+                    {
+                        if (!videoPlayerStrategy.IsLooped)
+                        {
+                            decoderThread._threadState = ThreadState.Stop;
+                            var handler = decoderThread.Stopped;
+                            if (handler != null)
+                                handler(decoderThread, EventArgs.Empty);
+                            break;
+                        }
+                        else
+                        {
+                            throw new NotSupportedException("Looping is not supported.");
+                        }
                     }
                 }
 
