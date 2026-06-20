@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -9,9 +9,9 @@
     <RootNamespace>$ext_safeprojectname$</RootNamespace>
     <AssemblyName>$ext_safeprojectname$</AssemblyName>
     <DefineConstants>$(DefineConstants);BLAZORGL</DefineConstants>
-	<KniPlatform>BlazorGL</KniPlatform>
+    <KniPlatform>BlazorGL</KniPlatform>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
     <!--<InvariantGlobalization>true</InvariantGlobalization>-->

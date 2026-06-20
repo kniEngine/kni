@@ -82,7 +82,7 @@ namespace $safeprojectname$
                     System.Diagnostics.Debug.WriteLine(ovre.Message);
                 }
             }
-            
+
             GamePadState touchControllerState = TouchController.GetState(TouchControllerType.Touch);
 #endif
 //+:cnd:noEmit

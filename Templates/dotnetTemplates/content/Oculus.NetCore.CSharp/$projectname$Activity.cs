@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
