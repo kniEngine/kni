@@ -25,6 +25,7 @@ internal class Sdl
     public Touch TOUCH { get; private set; }
 
     public readonly Version version;
+    public int _SDLInitThreadId = -1;
 
     public static Sdl Current
     {
@@ -228,10 +229,21 @@ internal class Sdl
     public delegate int d_sdl_init(InitFlags flags);
     public d_sdl_init SDL_Init;
 
+    public int ManagedThreadId()
+    {
+#if NET6_0_OR_GREATER || NETSTANDARD2_0
+            return Environment.CurrentManagedThreadId;
+#else
+        return System.Threading.Thread.CurrentThread.ManagedThreadId;
+#endif
+    }
+
     public void Init(InitFlags flags)
     {
         int res = SDL_Init(flags);
         GetError(res);
+
+        _SDLInitThreadId = this.ManagedThreadId();
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

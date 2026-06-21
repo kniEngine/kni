@@ -48,6 +48,9 @@ namespace Microsoft.Xna.Platform.Input
 
                 int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
+                if (SDL._SDLInitThreadId == SDL.ManagedThreadId())
+                    SDL.PumpEvents();
+
                 state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
             }
             else // (wndHandle == IntPtr.Zero)
