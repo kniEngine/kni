@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Audio
                 string signature = new string(reader.ReadChars(4));
                 if (signature != "RIFF")
                     throw new ArgumentException("Specified stream is not a wave file.");
-                reader.ReadInt32(); // riff_chunk_size
+                int riffSize = reader.ReadInt32(); // riff_chunk_size
 
                 string wformat = new string(reader.ReadChars(4));
                 if (wformat != "WAVE")
