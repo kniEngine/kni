@@ -145,6 +145,7 @@ namespace Microsoft.Xna.Platform.Audio
                             audioData = reader.ReadBytes(chunkSize);
                             break;
 
+                        case "JUNK":
                         default:
                             // Skip this chunk
                             if (reader.BaseStream.CanSeek)
