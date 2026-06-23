@@ -103,14 +103,14 @@ namespace Microsoft.Xna.Platform.Audio
                                 // Read extra data if present
                                 if (chunkSize > 16)
                                 {
-                                    int extraDataSize = reader.ReadInt16();
+                                    int cbSize = reader.ReadInt16();
                                     if (audioFormat == FormatIma4)
                                     {
                                         samplesPerBlock = reader.ReadInt16();
-                                        extraDataSize -= 2;
+                                        cbSize -= 2;
                                     }
-                                    if (extraDataSize > 0)
-                                        SkipBytes(reader, extraDataSize);
+                                    if (cbSize > 0)
+                                        SkipBytes(reader, cbSize);
                                 }
                             }
                             break;
