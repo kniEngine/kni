@@ -109,15 +109,7 @@ namespace Microsoft.Xna.Platform.Audio
                                         extraDataSize -= 2;
                                     }
                                     if (extraDataSize > 0)
-                                    {
-                                        if (reader.BaseStream.CanSeek)
-                                            reader.BaseStream.Seek(extraDataSize, SeekOrigin.Current);
-                                        else
-                                        {
-                                            for (int i = 0; i < extraDataSize; ++i)
-                                                reader.ReadByte();
-                                        }
-                                    }
+                                        SkipBytes(reader, extraDataSize);
                                 }
                             }
                             break;
@@ -130,15 +122,7 @@ namespace Microsoft.Xna.Platform.Audio
                             }
                             // Skip any remaining chunk data
                             if (chunkSize > 0)
-                            {
-                                if (reader.BaseStream.CanSeek)
-                                    reader.BaseStream.Seek(chunkSize, SeekOrigin.Current);
-                                else
-                                {
-                                    for (int i = 0; i < chunkSize; ++i)
-                                        reader.ReadByte();
-                                }
-                            }
+                                SkipBytes(reader, chunkSize);
                             break;
 
                         case "data":
@@ -148,13 +132,7 @@ namespace Microsoft.Xna.Platform.Audio
                         case "JUNK":
                         default:
                             // Skip this chunk
-                            if (reader.BaseStream.CanSeek)
-                                reader.BaseStream.Seek(chunkSize, SeekOrigin.Current);
-                            else
-                            {
-                                for (int i = 0; i < chunkSize; ++i)
-                                    reader.ReadByte();
-                            }
+                            SkipBytes(reader, chunkSize);
                             break;
                     }
                 }
@@ -186,6 +164,19 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 return audioData;
+            }
+        }
+
+        private static void SkipBytes(BinaryReader reader, int count)
+        {
+            if (reader.BaseStream.CanSeek)
+            {
+                reader.BaseStream.Seek(count, SeekOrigin.Current);
+            }
+            else
+            {
+                for (int i = 0; i < count; i++)
+                    reader.ReadByte();
             }
         }
 
