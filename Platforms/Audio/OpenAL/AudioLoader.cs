@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Audio
                 string signature = new string(reader.ReadChars(4));
                 if (signature != "RIFF")
                     throw new ArgumentException("Specified stream is not a wave file.");
-                reader.ReadInt32(); // riff_chunk_size
+                int riffSize = reader.ReadInt32(); // riff_chunk_size
 
                 string wformat = new string(reader.ReadChars(4));
                 if (wformat != "WAVE")
@@ -88,69 +88,51 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     string chunkType = new string(reader.ReadChars(4));
                     int chunkSize = reader.ReadInt32();
+                    long nextChunk = reader.BaseStream.Position + chunkSize;
                     switch (chunkType)
                     {
                         case "fmt ":
                             {
-                                audioFormat = reader.ReadInt16(); // 2
-                                channels = reader.ReadInt16(); // 4
-                                frequency = reader.ReadInt32();  // 8
-                                int byteRate = reader.ReadInt32();    // 12
-                                blockAlignment = (int)reader.ReadInt16();  // 14
-                                bitsPerSample = reader.ReadInt16(); // 16
+                                audioFormat = reader.ReadInt16();         //  2
+                                channels = reader.ReadInt16();            //  4
+                                frequency = reader.ReadInt32();           //  8
+                                int byteRate = reader.ReadInt32();        // 12
+                                blockAlignment = (int)reader.ReadInt16(); // 14
+                                bitsPerSample = reader.ReadInt16();       // 16
 
                                 // Read extra data if present
                                 if (chunkSize > 16)
                                 {
-                                    int extraDataSize = reader.ReadInt16();
+                                    int cbSize = reader.ReadInt16();
                                     if (audioFormat == FormatIma4)
                                     {
                                         samplesPerBlock = reader.ReadInt16();
-                                        extraDataSize -= 2;
+                                        cbSize -= 2;
                                     }
-                                    if (extraDataSize > 0)
-                                    {
-                                        if (reader.BaseStream.CanSeek)
-                                            reader.BaseStream.Seek(extraDataSize, SeekOrigin.Current);
-                                        else
-                                        {
-                                            for (int i = 0; i < extraDataSize; ++i)
-                                                reader.ReadByte();
-                                        }
-                                    }
+                                    if (cbSize > 0)
+                                        SkipBytes(reader, cbSize);
                                 }
                             }
                             break;
+
                         case "fact":
                             if (audioFormat == FormatIma4)
                             {
                                 sampleCount = reader.ReadInt32() * channels;
-                                chunkSize -= 4;
                             }
                             // Skip any remaining chunk data
-                            if (chunkSize > 0)
-                            {
-                                if (reader.BaseStream.CanSeek)
-                                    reader.BaseStream.Seek(chunkSize, SeekOrigin.Current);
-                                else
-                                {
-                                    for (int i = 0; i < chunkSize; ++i)
-                                        reader.ReadByte();
-                                }
-                            }
+                            if (reader.BaseStream.Position < nextChunk)
+                                SkipBytes(reader, (int)(nextChunk - reader.BaseStream.Position));
                             break;
+
                         case "data":
                             audioData = reader.ReadBytes(chunkSize);
                             break;
+
+                        case "JUNK":
                         default:
                             // Skip this chunk
-                            if (reader.BaseStream.CanSeek)
-                                reader.BaseStream.Seek(chunkSize, SeekOrigin.Current);
-                            else
-                            {
-                                for (int i = 0; i < chunkSize; ++i)
-                                    reader.ReadByte();
-                            }
+                            SkipBytes(reader, chunkSize);
                             break;
                     }
                 }
@@ -182,6 +164,19 @@ namespace Microsoft.Xna.Platform.Audio
                 }
 
                 return audioData;
+            }
+        }
+
+        private static void SkipBytes(BinaryReader reader, int count)
+        {
+            if (reader.BaseStream.CanSeek)
+            {
+                reader.BaseStream.Seek(count, SeekOrigin.Current);
+            }
+            else
+            {
+                for (int i = 0; i < count; i++)
+                    reader.ReadByte();
             }
         }
 
