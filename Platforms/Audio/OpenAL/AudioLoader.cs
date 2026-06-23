@@ -121,6 +121,7 @@ namespace Microsoft.Xna.Platform.Audio
                                 }
                             }
                             break;
+
                         case "fact":
                             if (audioFormat == FormatIma4)
                             {
@@ -139,9 +140,11 @@ namespace Microsoft.Xna.Platform.Audio
                                 }
                             }
                             break;
+
                         case "data":
                             audioData = reader.ReadBytes(chunkSize);
                             break;
+
                         default:
                             // Skip this chunk
                             if (reader.BaseStream.CanSeek)
