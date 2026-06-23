@@ -88,6 +88,7 @@ namespace Microsoft.Xna.Platform.Audio
                 {
                     string chunkType = new string(reader.ReadChars(4));
                     int chunkSize = reader.ReadInt32();
+                    long nextChunk = reader.BaseStream.Position + chunkSize;
                     switch (chunkType)
                     {
                         case "fmt ":
@@ -118,11 +119,10 @@ namespace Microsoft.Xna.Platform.Audio
                             if (audioFormat == FormatIma4)
                             {
                                 sampleCount = reader.ReadInt32() * channels;
-                                chunkSize -= 4;
                             }
                             // Skip any remaining chunk data
-                            if (chunkSize > 0)
-                                SkipBytes(reader, chunkSize);
+                            if (reader.BaseStream.Position < nextChunk)
+                                SkipBytes(reader, (int)(nextChunk - reader.BaseStream.Position));
                             break;
 
                         case "data":
