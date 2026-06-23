@@ -92,12 +92,12 @@ namespace Microsoft.Xna.Platform.Audio
                     {
                         case "fmt ":
                             {
-                                audioFormat = reader.ReadInt16(); // 2
-                                channels = reader.ReadInt16(); // 4
-                                frequency = reader.ReadInt32();  // 8
-                                int byteRate = reader.ReadInt32();    // 12
-                                blockAlignment = (int)reader.ReadInt16();  // 14
-                                bitsPerSample = reader.ReadInt16(); // 16
+                                audioFormat = reader.ReadInt16();         //  2
+                                channels = reader.ReadInt16();            //  4
+                                frequency = reader.ReadInt32();           //  8
+                                int byteRate = reader.ReadInt32();        // 12
+                                blockAlignment = (int)reader.ReadInt16(); // 14
+                                bitsPerSample = reader.ReadInt16();       // 16
 
                                 // Read extra data if present
                                 if (chunkSize > 16)
