@@ -91,6 +91,42 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new NotImplementedException();
         }
+
+        public int GetCompressedDataByteSize(int fSize, int left, int top, int right, int bottom, int front, int back,
+                                             int textureBoundsWidth, int textureBoundsHeight, int textureBoundsDepth,
+                                             out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                                             out int checkedFront, out int checkedBack)
+        {
+            int width = right - left;
+            int height = bottom - top;
+            int depth = back - front;
+            Format.GetBlockSize(out int blockWidth, out int blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            checkedLeft = left & ~blockWidthMinusOne;
+            checkedTop = top & ~blockHeightMinusOne;
+            // The last two mip levels require the width and height to be passed
+            // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
+            checkedRight = (width < blockWidth && textureBoundsWidth < blockWidth) ? textureBoundsWidth : checkedLeft + roundedWidth;
+            checkedBottom = (height < blockHeight && textureBoundsHeight < blockHeight) ? textureBoundsHeight : checkedTop + roundedHeight;
+            checkedFront = front;
+            checkedBack = back;
+            if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
+            {
+                return (Math.Max(checkedRight - checkedLeft, 16) * Math.Max(checkedBottom - checkedTop, 8) * 2 + 7) / 8 * depth;
+            }
+            else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
+            {
+                return (Math.Max(checkedRight - checkedLeft, 8) * Math.Max(checkedBottom - checkedTop, 8) * 4 + 7) / 8 * depth;
+            }
+            else
+            {
+                return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight) * depth;
+            }
+        }
         #endregion ITexture3DStrategy
 
 
