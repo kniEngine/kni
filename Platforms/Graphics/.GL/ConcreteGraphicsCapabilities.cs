@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
 			SupportsDepth24 = GL.Extensions.Contains("GL_OES_depth24");
 			SupportsPackedDepthStencil = GL.Extensions.Contains("GL_OES_packed_depth_stencil");
 			SupportsDepthNonLinear = GL.Extensions.Contains("GL_NV_depth_nonlinear");
-            SupportsTextureMaxLevel = GL.Extensions.Contains("GL_APPLE_texture_max_level");
+            SupportsTextureMaxLevel = GL.BoundApi == OGL.RenderApi.ES && version >= new GLVersion(3,0);
 #elif DESKTOPGL
             SupportsDepth24 = true;
             SupportsPackedDepthStencil = true;

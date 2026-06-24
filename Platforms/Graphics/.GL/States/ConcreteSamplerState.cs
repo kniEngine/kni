@@ -138,10 +138,9 @@ namespace Microsoft.Xna.Platform.Graphics
             // TextureMaxLevel
             if (cgraphicsContext.Capabilities.SupportsTextureMaxLevel)
             {
-                int textureMaxLevel = 1000;
-                if (this.MaxMipLevel > 0)
-                    textureMaxLevel = this.MaxMipLevel;
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, textureMaxLevel);
+                GL.TexParameter(target, TextureParameterName.TextureMinLod, MaxMipLevel);
+                GL.CheckGLError();
+                GL.TexParameter(target, TextureParameterName.TextureMaxLod, MinMipLevel);
                 GL.CheckGLError();
             }
         }
