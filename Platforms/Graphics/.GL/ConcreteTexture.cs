@@ -350,6 +350,49 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
+        internal static void ValidateGetDataSurfaceFormat(SurfaceFormat format, GraphicsContextStrategy contextStrategy)
+        {
+#if GLES
+            bool isGLES3 = ((ConcreteGraphicsContextGL)contextStrategy)._glVersion.Major >= 3;
+
+            bool valid;
+            switch (format)
+            {
+                case SurfaceFormat.Color:
+                case SurfaceFormat.Bgr565:
+                case SurfaceFormat.Bgra5551:
+                case SurfaceFormat.Bgra4444:
+                case SurfaceFormat.Alpha8:
+                    valid = true;
+                    break;
+
+                case SurfaceFormat.NormalizedByte2:
+                case SurfaceFormat.NormalizedByte4:
+                case SurfaceFormat.Rgba1010102:
+                case SurfaceFormat.Rg32:
+                case SurfaceFormat.Rgba64:
+                case SurfaceFormat.Single:
+                case SurfaceFormat.Vector2:
+                case SurfaceFormat.Vector4:
+                case SurfaceFormat.HalfSingle:
+                case SurfaceFormat.HalfVector2:
+                case SurfaceFormat.HalfVector4:
+                case SurfaceFormat.HdrBlendable:
+                case SurfaceFormat.ColorSRgb:
+                case SurfaceFormat.ColorSRgba:
+                    valid = isGLES3;
+                    break;
+
+                default:
+                    valid = false;
+                    break;
+            }
+
+            if (!valid)
+                throw new NotSupportedException($"GetData is not supported with SurfaceFormat.{format} on this platform.");
+#endif
+        }
+
         internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
             bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
