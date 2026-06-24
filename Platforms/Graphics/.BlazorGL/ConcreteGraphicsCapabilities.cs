@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (profile == GraphicsProfile.FL11_1)
                 _maxTextureSize = 16384;
 
-            SupportsTextureFilterAnisotropic = false; // TODO: check for TEXTURE_MAX_ANISOTROPY_EXT
+            SupportsTextureFilterAnisotropic = GL.GetExtension("EXT_texture_filter_anisotropic");
 
             SupportsDepth24 = false;
             SupportsPackedDepthStencil = false;
@@ -76,7 +76,9 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsBaseIndexInstancing = false;
             SupportsSeparateBlendStates = true;
 
-            MaxTextureAnisotropy = (profile == GraphicsProfile.Reach) ? 2 : 16;
+            MaxTextureAnisotropy = SupportsTextureFilterAnisotropic
+                ? GL.GetParameter(WebGLPNameInteger.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
+                : 0;
 
             if (profile >= GraphicsProfile.HiDef)
                 _maxDrawBuffers = 4;
