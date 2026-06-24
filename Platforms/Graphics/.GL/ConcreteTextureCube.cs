@@ -89,13 +89,32 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe void GetData<T>(CubeMapFace face, int level, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
-                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
-
-#if OPENGL && DESKTOPGL
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
                 TextureTarget target = ConcreteTextureCube.GetGLCubeFace(face);
+
+#if GLES
+                ValidateGetDataSurfaceFormat(Format, contextStrategy);
+
+                int framebufferId = 0;
+                framebufferId = GL.GenFramebuffer();
+                GL.CheckGLError();
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
+                GL.CheckGLError();
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, target, _glTexture, level);
+                GL.CheckGLError();
+
+                fixed (T* pData = &data[0])
+                {
+                    IntPtr dataPtr = (IntPtr)pData + (startIndex * Format.GetSize());
+                    GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
+                    GL.CheckGLError();
+                }
+                GL.DeleteFramebuffer(framebufferId);
+#else
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 int fSize = this.Format.GetSize();
                 int w = Math.Max(this.Size >> level, 1);
@@ -107,6 +126,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.TextureCubeMap, _glTexture);
+                GL.CheckGLError();
+
+                GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
+                GL.CheckGLError();
 
                 fixed (T* pData = &data[0])
                 {
@@ -115,8 +138,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     if (_glIsCompressedTexture)
                     {
-                        w = w / 4;
-                        h = h / 4;
+                        Format.GetBlockSize(out int blockWidth, out int blockHeight);
+                        w = w / blockWidth;
+                        h = h / blockHeight;
                         int bytes = w * h * fSize;
                         IntPtr pTemp = Marshal.AllocHGlobal(bytes);
                         try
@@ -125,10 +149,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.CheckGLError();
 
                             IntPtr tempPtr = (IntPtr)pTemp;
-                            tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w * fSize;
+                            tempPtr = tempPtr + checkedRect.X / blockWidth * fSize + checkedRect.Top / blockHeight * w * fSize;
                             int fWidthSize = w * fSize;
-                            int tRectWidthSize = checkedRect.Width / 4 * fSize;
-                            int rowCount = checkedRect.Height / 4;
+                            int tRectWidthSize = checkedRect.Width / blockWidth * fSize;
+                            int rowCount = checkedRect.Height / blockHeight;
                             for (int r = 0; r < rowCount; r++)
                             {
                                 MemCopyHelper.MemoryCopy(
@@ -144,9 +168,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     else
                     {
-                        if (level == 0
-                        && checkedRect.X == 0 && checkedRect.Y == 0
-                        && checkedRect.Width == this.Size && checkedRect.Height == this.Size
+                        if (checkedRect.X == 0 && checkedRect.Y == 0
+                        && checkedRect.Width == w && checkedRect.Height == h
                         && startIndex == 0 && elementCount == data.Length)
                         {
                             GL.GetTexImage(target, level, _glFormat, _glType, dataPtr);
@@ -181,27 +204,39 @@ namespace Microsoft.Xna.Platform.Graphics
                         }
                     }
                 }
-#else
-                throw new NotImplementedException();
 #endif
             }
             finally
             {
-                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
         {
-            // round x and y down to next multiple of four; width and height up to next multiple of four
-            int roundedWidth = (rect.Width + 3) & ~0x3;
-            int roundedHeight = (rect.Height + 3) & ~0x3;
-            // OpenGL only: The last two mip levels require the width and height to be passed
-            // as 2x2 and 1x1, but there needs to be enough data passed to occupy a 4x4 block.
-            checkedRect = new Rectangle(rect.X & ~0x3, rect.Y & ~0x3,
-                                        (rect.Width < 4 && textureBounds.Width < 4) ? textureBounds.Width : roundedWidth,
-                                        (rect.Height < 4 && textureBounds.Height < 4) ? textureBounds.Height : roundedHeight);
-            return (roundedWidth * roundedHeight * fSize / 16);
+            Format.GetBlockSize(out int blockWidth, out int blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            // The last two mip levels require the width and height to be passed
+            // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
+            checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
+                                        (rect.Width < blockWidth && textureBounds.Width < blockWidth) ? textureBounds.Width : roundedWidth,
+                                        (rect.Height < blockHeight && textureBounds.Height < blockHeight) ? textureBounds.Height : roundedHeight);
+            if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
+            }
+            else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
+            {
+                return (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
+            }
+            else
+            {
+                return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
+            }
         }
         #endregion ITextureCubeStrategy
 
@@ -258,62 +293,29 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     TextureTarget target = ConcreteTextureCube.GetGLCubeFace((CubeMapFace)i);
 
-                    if (_glIsCompressedTexture)
+                    int s = size;
+                    int level = 0;
+                    while (true)
                     {
-                        int imageSize = 0;
-                        switch (format)
+                        if (_glIsCompressedTexture)
                         {
-                            case SurfaceFormat.RgbPvrtc2Bpp:
-                            case SurfaceFormat.RgbaPvrtc2Bpp:
-                                imageSize = (Math.Max(size, 16) * Math.Max(size, 8) * 2 + 7) / 8;
-                                break;
-                            case SurfaceFormat.RgbPvrtc4Bpp:
-                            case SurfaceFormat.RgbaPvrtc4Bpp:
-                                imageSize = (Math.Max(size, 8) * Math.Max(size, 8) * 4 + 7) / 8;
-                                break;
-                            case SurfaceFormat.Dxt1:
-                            case SurfaceFormat.Dxt1a:
-                            case SurfaceFormat.Dxt1SRgb:
-                            case SurfaceFormat.Dxt3:
-                            case SurfaceFormat.Dxt3SRgb:
-                            case SurfaceFormat.Dxt5:
-                            case SurfaceFormat.Dxt5SRgb:
-                            case SurfaceFormat.RgbEtc1:
-                            case SurfaceFormat.Rgb8Etc2:
-                            case SurfaceFormat.Srgb8Etc2:
-                            case SurfaceFormat.Rgb8A1Etc2:
-                            case SurfaceFormat.Srgb8A1Etc2:
-                            case SurfaceFormat.Rgba8Etc2:
-                            case SurfaceFormat.SRgb8A8Etc2:
-                            case SurfaceFormat.RgbaAtcExplicitAlpha:
-                            case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-                                imageSize = (size + 3) / 4 * ((size + 3) / 4) * format.GetSize();
-                                break;
-                            default:
-                                throw new NotSupportedException();
+                            Rectangle bounds = new Rectangle(0, 0, s, s);
+                            int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
+                            GL.CompressedTexImage2D(target, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, 0, dataSize, IntPtr.Zero);
+                            GL.CheckGLError();
                         }
-                        GL.CompressedTexImage2D(target, 0, _glInternalFormat, size, size, 0, imageSize, IntPtr.Zero);
-                        GL.CheckGLError();
-                    }
-                    else
-                    {
-                        GL.TexImage2D(target, 0, _glInternalFormat, size, size, 0, _glFormat, _glType, IntPtr.Zero);
-                        GL.CheckGLError();
-                    }
-                }
+                        else
+                        {
+                            GL.TexImage2D(target, level, _glInternalFormat, s, s, 0, _glFormat, _glType, IntPtr.Zero);
+                            GL.CheckGLError();
+                        }
 
-                if (mipMap)
-                {
-                    System.Diagnostics.Debug.Assert(TextureTarget.TextureCubeMap == _glTarget);
-#if IOS || TVOS || ANDROID
-                    GL.GenerateMipmap(TextureTarget.TextureCubeMap);
-                    GL.CheckGLError();
-#else
-                    GL.GenerateMipmap(_glTarget);
-                    GL.CheckGLError();
-                    // This updates the mipmaps after a change in the base texture
-                    GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.GenerateMipmap, (int)Bool.True);
-#endif
+                        if ((s == 1) || !mipMap)
+                            break;
+                        if (s > 1)
+                            s = s / 2;
+                        ++level;
+                    }
                 }
             }
             finally
