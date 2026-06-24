@@ -904,6 +904,13 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate void FramebufferTextureLayerDelegate(FramebufferTarget target, FramebufferAttachment attachment,
+            int texture, int level, int layer);
+        internal FramebufferTextureLayerDelegate FramebufferTextureLayer;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void FramebufferRenderbufferDelegate(FramebufferTarget target, FramebufferAttachment attachement,
             RenderbufferTarget renderBufferTarget, int buffer);
         internal FramebufferRenderbufferDelegate FramebufferRenderbuffer;
@@ -1275,9 +1282,23 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate void CompressedTexImage3DDelegate(TextureTarget target, int level, PixelInternalFormat internalFormat,
+            int width, int height, int depth, int border, int size, IntPtr data);
+        internal CompressedTexImage3DDelegate CompressedTexImage3D;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void TexImage3DDelegate(TextureTarget target, int level, PixelInternalFormat internalFormat,
             int width, int height, int depth, int border, PixelFormat format, PixelType pixelType, IntPtr data);
         internal TexImage3DDelegate TexImage3D;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal delegate void CompressedTexSubImage3DDelegate(TextureTarget target, int level,
+            int x, int y, int z, int width, int height, int depth, PixelInternalFormat format, int size, IntPtr data);
+        internal CompressedTexSubImage3DDelegate CompressedTexSubImage3D;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1543,6 +1564,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             BindFramebuffer = LoadFunctionOrNull<BindFramebufferDelegate>("glBindFramebuffer");
             DeleteFramebuffers = LoadFunctionOrNull<DeleteFramebuffersDelegate>("glDeleteFramebuffers");
             FramebufferTexture2D = LoadFunctionOrNull<FramebufferTexture2DDelegate>("glFramebufferTexture2D");
+            FramebufferTextureLayer = LoadFunctionOrNull<FramebufferTextureLayerDelegate>("glFramebufferTextureLayer");
             FramebufferRenderbuffer = LoadFunctionOrNull<FramebufferRenderbufferDelegate>("glFramebufferRenderbuffer");
             RenderbufferStorage = LoadFunctionOrNull<RenderbufferStorageDelegate>("glRenderbufferStorage");
             RenderbufferStorageMultisample = LoadFunctionOrNull<RenderbufferStorageMultisampleDelegate>("glRenderbufferStorageMultisample");
@@ -1603,7 +1625,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             Finish = LoadFunctionOrNull<FinishDelegate>("glFinish");
             GetTexImage = LoadFunctionOrNull<GetTexImageDelegate>("glGetTexImage");
             GetCompressedTexImage = LoadFunctionOrNull<GetCompressedTexImageDelegate>("glGetCompressedTexImage");
+            CompressedTexImage3D = LoadFunctionOrNull<CompressedTexImage3DDelegate>("glCompressedTexImage3D");
             TexImage3D = LoadFunctionOrNull<TexImage3DDelegate>("glTexImage3D");
+            CompressedTexSubImage3D = LoadFunctionOrNull<CompressedTexSubImage3DDelegate>("glCompressedTexSubImage3D");
             TexSubImage3D = LoadFunctionOrNull<TexSubImage3DDelegate>("glTexSubImage3D");
             DeleteTextures = LoadFunctionOrNull<DeleteTexturesDelegate>("glDeleteTextures");
 
