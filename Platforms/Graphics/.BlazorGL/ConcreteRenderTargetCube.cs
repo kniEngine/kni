@@ -34,7 +34,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
 
-            PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, _multiSampleCount);
+            // If we don't need a depth buffer then we're done.
+            if (preferredDepthFormat != DepthFormat.None)
+                PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, _multiSampleCount);
         }
 
 
