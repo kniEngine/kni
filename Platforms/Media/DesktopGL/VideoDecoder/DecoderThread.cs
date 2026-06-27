@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Platform.Audio;
 
 namespace Microsoft.Xna.Platform.Media
 {
@@ -104,6 +105,13 @@ namespace Microsoft.Xna.Platform.Media
                             reachEndOfStream = true;
                         }
                     }
+                }
+
+                lock (AudioService.SyncHandle)
+                {
+                    ConcreteDynamicSoundEffectInstance cdsei = ((IPlatformSoundEffectInstance)videoPlayerStrategy._soundPlayer)
+                        .GetStrategy<ConcreteDynamicSoundEffectInstance>();
+                    cdsei.DynamicPlatformUpdateBuffers();
                 }
 
                 while (decoderThread.TryPeekAudioFrame(out TrackData audioFrame)
