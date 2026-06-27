@@ -112,6 +112,9 @@ namespace Microsoft.Xna.Platform.Audio
                                     if (cbSize > 0)
                                         SkipBytes(reader, cbSize);
                                 }
+
+                                if (reader.BaseStream.Position < nextChunk)
+                                    throw new InvalidDataException("Unknown WAV fmt chunk format.");
                             }
                             break;
 
