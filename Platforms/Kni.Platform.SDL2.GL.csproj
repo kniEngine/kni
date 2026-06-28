@@ -380,6 +380,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Silk.NET.SDL" Version="2.22.0" Condition=" '$(TargetFramework)' != 'net40' " />
   </ItemGroup>
   
   <ItemGroup>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Xna.Platform.Utilities;
+using Silk.NET.SDL;
 
 internal class Sdl
 {
