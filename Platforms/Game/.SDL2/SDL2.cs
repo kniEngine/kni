@@ -184,6 +184,7 @@ internal class Sdl
         public int Height;
     }
 
+    // Use Silk.NET's Version struct with added operators for compatibility
     public struct Version
     {
         public byte Major;
@@ -222,6 +223,17 @@ internal class Sdl
         public override string ToString()
         {
             return String.Format("{0}.{1}.{2}",Major, Minor, Patch);
+        }
+
+        // Implicit conversion to/from Silk.NET Version
+        public static implicit operator Version(Silk.NET.SDL.Version silkVersion)
+        {
+            return new Version(silkVersion.Major, silkVersion.Minor, silkVersion.Patch);
+        }
+
+        public static implicit operator Silk.NET.SDL.Version(Version version)
+        {
+            return new Silk.NET.SDL.Version { Major = version.Major, Minor = version.Minor, Patch = version.Patch };
         }
     }
 
@@ -610,6 +622,7 @@ internal class Sdl
     {
         private Sdl _sdl;
 
+        // Use Silk.NET's DisplayMode
         public struct Mode
         {
             public uint Format;
@@ -617,6 +630,37 @@ internal class Sdl
             public int Height;
             public int RefreshRate;
             public IntPtr DriverData;
+
+            // Implicit conversions for Silk.NET compatibility
+            public static implicit operator Mode(Silk.NET.SDL.DisplayMode silk)
+            {
+                unsafe
+                {
+                    return new Mode
+                    {
+                        Format = silk.Format,
+                        Width = silk.W,
+                        Height = silk.H,
+                        RefreshRate = silk.RefreshRate,
+                        DriverData = unchecked((IntPtr)silk.Driverdata)
+                    };
+                }
+            }
+
+            public static implicit operator Silk.NET.SDL.DisplayMode(Mode mode)
+            {
+                unsafe
+                {
+                    return new Silk.NET.SDL.DisplayMode
+                    {
+                        Format = mode.Format,
+                        W = mode.Width,
+                        H = mode.Height,
+                        RefreshRate = mode.RefreshRate,
+                        Driverdata = (void*)mode.DriverData
+                    };
+                }
+            }
         }
 
         public Display(Sdl sdl, IntPtr library)
