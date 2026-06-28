@@ -642,7 +642,7 @@ internal class Sdl
                         Width = silk.W,
                         Height = silk.H,
                         RefreshRate = silk.RefreshRate,
-                        DriverData = unchecked((IntPtr)silk.Driverdata)
+                        DriverData = new IntPtr(silk.Driverdata)
                     };
                 }
             }
