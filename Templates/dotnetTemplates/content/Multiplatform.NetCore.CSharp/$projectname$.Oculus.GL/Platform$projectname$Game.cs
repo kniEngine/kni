@@ -37,6 +37,7 @@ namespace $safeprojectname$
             InactiveSleepTime = TimeSpan.FromSeconds(0);
 
             xrDevice = new XRDevice("$safeprojectname$", this.Services);
+            base.Services.AddService<XRDevice>(xrDevice);
         }
 
         /// <inheritdoc/>
