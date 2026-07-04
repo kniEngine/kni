@@ -14,8 +14,8 @@
       <!-- By setting TargetPlatformVersionSupported
            we disable _CheckForInvalidTargetPlatformVersion check.
            This let us target android SDK 32 under .net9.
-      -->
     <TargetPlatformVersionSupported>true</TargetPlatformVersionSupported>
+      -->
   </PropertyGroup>
 
   <PropertyGroup>
