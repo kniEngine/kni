@@ -13,6 +13,7 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteMouse : MouseStrategy
     {
         private IntPtr _wndHandle = IntPtr.Zero;
+        private Sdl.Window.SysWMType _sysWMType = Sdl.Window.SysWMType.Unknown;
 
         private Sdl SDL { get { return Sdl.Current; } }
 
@@ -48,16 +49,30 @@ namespace Microsoft.Xna.Platform.Input
 
                 int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
+                switch (gameWindow._sysWMType)
+                {
+                    case Sdl.Window.SysWMType.Wayland:
+                        {
+                            if (SDL.SDLInitThreadId == SDL.GetManagedThreadId())
+                                SDL.PumpEvents();
+                            state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
+                        }
+                        break;
+                    default:
+                        {
 #if ENABLE_TOUCHINPUT
-                if (SDL.SDLInitThreadId == SDL.GetManagedThreadId())
-                    SDL.PumpEvents();
-                state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
+                            if (SDL.SDLInitThreadId == SDL.GetManagedThreadId())
+                                SDL.PumpEvents();
+                            state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
 #else
-                Point globalPos, windowPos;
-                state = SDL.MOUSE.GetGlobalState(out globalPos.X, out globalPos.Y);
-                SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
-                mousePos = globalPos - windowPos;
+                            Point globalPos, windowPos;
+                            state = SDL.MOUSE.GetGlobalState(out globalPos.X, out globalPos.Y);
+                            SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
+                            mousePos = globalPos - windowPos;
 #endif
+                        }
+                        break;
+                }
             }
             else // (wndHandle == IntPtr.Zero)
             {
