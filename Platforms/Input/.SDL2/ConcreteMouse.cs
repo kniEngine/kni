@@ -48,11 +48,14 @@ namespace Microsoft.Xna.Platform.Input
 
                 int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
-                //state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
+#if ENABLE_TOUCHINPUT
+                state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
+#else
                 Point globalPos, windowPos;
                 state = SDL.MOUSE.GetGlobalState(out globalPos.X, out globalPos.Y);
                 SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
                 mousePos = globalPos - windowPos;
+#endif
             }
             else // (wndHandle == IntPtr.Zero)
             {
