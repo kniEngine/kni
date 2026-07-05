@@ -13,7 +13,6 @@ namespace Microsoft.Xna.Platform.Input
     public sealed class ConcreteMouse : MouseStrategy
     {
         private IntPtr _wndHandle = IntPtr.Zero;
-        private Sdl.Window.SysWMType _sysWMType = Sdl.Window.SysWMType.Unknown;
 
         private Sdl SDL { get { return Sdl.Current; } }
 
