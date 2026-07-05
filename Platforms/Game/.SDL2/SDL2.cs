@@ -461,7 +461,7 @@ internal class Sdl
 
         public enum SysWMType
         {
-            Unknow,
+            Unknown,
             Windows,
             X11,
             Directfb,

@@ -104,6 +104,8 @@ namespace Microsoft.Xna.Framework
         internal readonly Game _game;
         private IntPtr _handle;
         private IntPtr _pIcon;
+        internal Sdl.Window.SysWMType _sysWMType = Sdl.Window.SysWMType.Unknown;
+
         private bool _disposed;
         private bool _isResizable, _isBorderless;
         private bool _mouseVisible, _hardwareSwitch;
@@ -137,6 +139,11 @@ namespace Microsoft.Xna.Framework
                 GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight,
                 Sdl.Window.State.Hidden | Sdl.Window.State.FullscreenDesktop);
             _instances.Add(this.Handle, this);
+
+            Sdl.Window.SDL_SysWMinfo sysWMinfo = default;
+            SDL.GetVersion(out sysWMinfo.version);
+            SDL.WINDOW.GetWindowWMInfo(_handle, ref sysWMinfo);
+            _sysWMType = sysWMinfo.subsystem;
 
             Title = AssemblyHelper.GetDefaultWindowTitle();
 
