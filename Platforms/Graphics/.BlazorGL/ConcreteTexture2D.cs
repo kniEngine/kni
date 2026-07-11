@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
             if (this._shared)
                 return new IntPtr(this._glTexture.Uid);
 
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("GetSharedHandle() requires the Texture2D to have been created with shared=true.");
         }
 
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
