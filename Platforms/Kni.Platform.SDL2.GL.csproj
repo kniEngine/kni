@@ -182,6 +182,11 @@
     <Compile Include="Media\DesktopGL\ConcreteSong.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideoPlayer.cs" />
     <Compile Include="Media\DesktopGL\ConcreteVideo.cs" />
+    <Compile Include="Media\DesktopGL\VideoDecoder\DecoderThread.cs" />
+    <Compile Include="Media\DesktopGL\VideoDecoder\FrameBufferPool.cs" />
+    <Compile Include="Media\DesktopGL\VideoDecoder\PipeBinaryReader.cs" />
+    <Compile Include="Media\DesktopGL\VideoDecoder\TrackData.cs" />
+    <Compile Include="Media\DesktopGL\VideoDecoder\VideoDecoderProcess.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
