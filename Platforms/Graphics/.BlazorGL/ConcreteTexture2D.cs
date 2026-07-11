@@ -16,6 +16,8 @@ namespace Microsoft.Xna.Platform.Graphics
         private readonly int _height;
         private readonly int _arraySize;
 
+        protected readonly bool _shared;
+
 
         internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, int arraySize, bool shared,
                                    bool isRenderTarget)
@@ -24,6 +26,8 @@ namespace Microsoft.Xna.Platform.Graphics
             this._width  = width;
             this._height = height;
             this._arraySize = arraySize;
+
+            this._shared = shared;
 
             System.Diagnostics.Debug.Assert(isRenderTarget);
         }
@@ -34,6 +38,8 @@ namespace Microsoft.Xna.Platform.Graphics
             this._width  = width;
             this._height = height;
             this._arraySize = arraySize;
+
+            this._shared = shared;
 
             this.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
         }
@@ -51,7 +57,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public IntPtr GetSharedHandle()
         {
-            throw new NotImplementedException();
+            if (this._shared)
+                return new IntPtr(this._glTexture.Uid);
+
+            throw new InvalidOperationException("GetSharedHandle() requires the Texture2D to have been created with shared=true.");
         }
 
         public void SetData<T>(int level, T[] data, int startIndex, int elementCount)
