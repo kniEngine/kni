@@ -143,9 +143,9 @@ SectionEnd
 Section ".NET Templates" DotNetTemplates
 
   SetOutPath "$INSTDIR\Templates"
-  File /r '..\..\Templates\dotnetTemplates\bin\Release\nkast.Kni.Templates.4.2.9001-preview.8.nupkg'
+  File /r '..\..\Artifacts\Packages\nkast.Kni.Templates.4.2.9001.nupkg'
 
-  nsExec::ExecToLog 'dotnet new install "$INSTDIR\Templates\nkast.Kni.Templates.4.2.9001-preview.8.nupkg"'
+  nsExec::ExecToLog 'dotnet new install "$INSTDIR\Templates\nkast.Kni.Templates.4.2.9001.nupkg"'
   Pop $0
   ${If} $0 != 0
     DetailPrint "Failed to install .NET templates. Make sure .NET SDK is installed."

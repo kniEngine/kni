@@ -74,7 +74,7 @@ If you prefer to use JetBrains Rider or Visual Studio Code, after installing any
 Once the .NET 8 SDK is installed, you can open a terminal and install the KNI templates by typing the following command:
 
 ```sh
-dotnet new install nkast.Kni.Templates::4.2.9001-preview.7
+dotnet new install nkast.Kni.Templates@4.2.9001
 ```
 
 **Next up:** [Creating a new project](2_creating_a_new_project_vsm.md)
