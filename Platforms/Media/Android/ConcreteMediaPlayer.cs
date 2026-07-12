@@ -13,12 +13,12 @@ namespace Microsoft.Xna.Platform.Media
 {
     internal sealed class ConcreteMediaPlayerStrategy : MediaPlayerStrategy
     {
-        private Android.Media.MediaPlayer _androidPlayer;
+        private global::Android.Media.MediaPlayer _androidPlayer;
         private Song _playingSong;
 
         internal ConcreteMediaPlayerStrategy()
         {
-            this._androidPlayer = new Android.Media.MediaPlayer();
+            this._androidPlayer = new global::Android.Media.MediaPlayer();
             this._androidPlayer.Completion += AndroidPlayer_Completion;
         }
 
@@ -115,12 +115,12 @@ namespace Microsoft.Xna.Platform.Media
 
                 if (((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().AssetUri != null)
                 {
-                    _androidPlayer.SetDataSource(Android.App.Application.Context,
+                    _androidPlayer.SetDataSource(global::Android.App.Application.Context,
                                                  ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().AssetUri);
                 }
                 else
                 {
-                    Android.Content.Res.AssetFileDescriptor afd = Android.App.Application.Context.Assets.OpenFd(
+                    global::Android.Content.Res.AssetFileDescriptor afd = global::Android.App.Application.Context.Assets.OpenFd(
                         ((IPlatformSong)song).Strategy.ToConcrete<ConcreteSongStrategy>().StreamSource.OriginalString);
                     if (afd == null)
                         return;

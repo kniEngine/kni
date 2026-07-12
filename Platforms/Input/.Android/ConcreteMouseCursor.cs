@@ -25,9 +25,9 @@ namespace Microsoft.Xna.Platform.Input
                 {
                     if (_cursorType != MouseCursorType.User)
                     {
-                        if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+                        if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.N)
                         {
-                            Context appContext = Android.App.Application.Context;
+                            Context appContext = global::Android.App.Application.Context;
                             _pointerIcon = PointerIcon.GetSystemIcon(appContext, _androidCursor);
                         }
                     }
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Platform.Input
 #if !XAMARIN
         private PointerIconType CursorTypeToAndroidCursor(MouseCursorStrategy.MouseCursorType cursorType)
         {
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+            if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.N)
             {
                 switch (cursorType)
                 {

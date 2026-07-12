@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Media
             List<Song> songList = new List<Song>();
             List<Album> albumList = new List<Album>();
 
-            using (Android.Database.ICursor musicCursor = Context.ContentResolver.Query(MediaStore.Audio.Media.ExternalContentUri, null, null, null, null))
+            using (global::Android.Database.ICursor musicCursor = Context.ContentResolver.Query(MediaStore.Audio.Media.ExternalContentUri, null, null, null, null))
             {
                 if (musicCursor != null)
                 {

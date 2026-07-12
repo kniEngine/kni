@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework
         internal bool IsActivityActive { get { return _isActivityActive; } }
 
 
-        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+        public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
         {
             base.OnConfigurationChanged(newConfig);
         }

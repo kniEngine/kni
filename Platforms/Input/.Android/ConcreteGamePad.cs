@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Input
                 InputDevice dvc = InputDevice.GetDevice(gamePad._deviceId);
                 if (dvc == null)
                 {
-                    Android.Util.Log.Debug("MonoGame", "Detected controller disconnect [" + index + "] ");
+                    global::Android.Util.Log.Debug("KNI", "Detected controller disconnect [" + index + "] ");
                     gamePad._isConnected = false;
                     return state;
                 }
@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Platform.Input
             if (gamePad == null)
                 return false;
 
-            Android.OS.Vibrator vibrator = gamePad._device.Vibrator;
+            global::Android.OS.Vibrator vibrator = gamePad._device.Vibrator;
             if (!vibrator.HasVibrator)
                 return false;
             vibrator.Vibrate(500);
@@ -129,14 +129,14 @@ namespace Microsoft.Xna.Platform.Input
                 }
                 else if (pad != null && !pad._isConnected && pad._descriptor == device.Descriptor)
                 {
-                    Android.Util.Log.Debug("MonoGame", "Found previous controller [" + i + "] " + device.Name);
+                    global::Android.Util.Log.Debug("KNI", "Found previous controller [" + i + "] " + device.Name);
                     pad._deviceId = device.Id;
                     pad._isConnected = true;
                     return pad;
                 }
                 else if (pad == null)
                 {
-                    Android.Util.Log.Debug("MonoGame", "Found new controller [" + i + "] " + device.Name);
+                    global::Android.Util.Log.Debug("KNI", "Found new controller [" + i + "] " + device.Name);
                     GamePadCapabilities caps = CapabilitiesOfDevice(device);
                     pad = new AndroidGamePadDevice(device, caps);
                     _gamepads[i] = pad;
@@ -152,7 +152,7 @@ namespace Microsoft.Xna.Platform.Input
             // If we're holding onto a disconnected pad, overwrite it with this one
             if (firstDisconnectedPadId >= 0)
             {
-                Android.Util.Log.Debug("MonoGame", "Found new controller in place of disconnected controller [" + firstDisconnectedPadId + "] " + device.Name);
+                global::Android.Util.Log.Debug("KNI", "Found new controller in place of disconnected controller [" + firstDisconnectedPadId + "] " + device.Name);
                 GamePadCapabilities caps = CapabilitiesOfDevice(device);
                 AndroidGamePadDevice pad = new AndroidGamePadDevice(device, caps);
                 _gamepads[firstDisconnectedPadId] = pad;
@@ -342,7 +342,7 @@ namespace Microsoft.Xna.Platform.Input
             // get a bool[] with indices matching the keyMap
             bool[] hasMap = new bool[16];
             // HasKeys() was defined in Kitkat / API19 / Android 4.4
-            if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Kitkat)
+            if (global::Android.OS.Build.VERSION.SdkInt < global::Android.OS.BuildVersionCodes.Kitkat)
             {
                 Keycode[] keyMap2 = new Keycode[keyMap.Length];
                 for (int i = 0; i < keyMap.Length; i++)

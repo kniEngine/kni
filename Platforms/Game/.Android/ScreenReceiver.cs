@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework
 
         public override void OnReceive(Context context, Intent intent)
         {
-            Android.Util.Log.Info("Kni", intent.Action.ToString());
+            global::Android.Util.Log.Info("Kni", intent.Action.ToString());
             if(intent.Action == Intent.ActionScreenOff)
             {
                 OnLocked();
@@ -53,12 +53,12 @@ namespace Microsoft.Xna.Framework
                 OnUnlocked();
             }
 
-            if (intent.Action == Android.Telephony.TelephonyManager.ActionPhoneStateChanged)
+            if (intent.Action == global::Android.Telephony.TelephonyManager.ActionPhoneStateChanged)
             {
                 if (intent.Extras != null)
                 {
-                    string state = intent.GetStringExtra(Android.Telephony.TelephonyManager.ExtraState);
-                    if (state == Android.Telephony.TelephonyManager.ExtraStateRinging)
+                    string state = intent.GetStringExtra(global::Android.Telephony.TelephonyManager.ExtraState);
+                    if (state == global::Android.Telephony.TelephonyManager.ExtraStateRinging)
                     {
                         // TODO: Find a way to set Game.IsActive = false during a call.
                         // View.ClearFocus() doesn't have any affect. 

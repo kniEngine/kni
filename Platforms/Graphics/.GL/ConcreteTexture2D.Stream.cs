@@ -144,8 +144,8 @@ namespace Microsoft.Xna.Platform.Graphics
 #if ANDROID
         private unsafe void PlatformFromStream_ANDROID(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
         {
-            using (Android.Graphics.Bitmap image = Android.Graphics.BitmapFactory.DecodeStream(stream, null,
-                new Android.Graphics.BitmapFactory.Options
+            using (global::Android.Graphics.Bitmap image = global::Android.Graphics.BitmapFactory.DecodeStream(stream, null,
+                new global::Android.Graphics.BitmapFactory.Options
                 {
                     InScaled = false,
                     InDither = false,
@@ -162,9 +162,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 int[] data = new int[width * height];
                 if ((width != image.Width) || (height != image.Height))
                 {
-                    using (Android.Graphics.Bitmap imagePadded = Android.Graphics.Bitmap.CreateBitmap(width, height, Android.Graphics.Bitmap.Config.Argb8888))
+                    using (global::Android.Graphics.Bitmap imagePadded = global::Android.Graphics.Bitmap.CreateBitmap(width, height, global::Android.Graphics.Bitmap.Config.Argb8888))
                     {
-                        Android.Graphics.Canvas canvas = new Android.Graphics.Canvas(imagePadded);
+                        global::Android.Graphics.Canvas canvas = new global::Android.Graphics.Canvas(imagePadded);
                         canvas.DrawARGB(0, 0, 0, 0);
                         canvas.DrawBitmap(image, 0, 0, null);
                         imagePadded.GetPixels(data, 0, width, 0, 0, width, height);

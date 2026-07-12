@@ -27,9 +27,9 @@ namespace Microsoft.Xna.Platform.Audio
         public override void PlatformPopulateCaptureDevices(List<Microphone> microphones, ref Microphone defaultMicrophone)
         {
 #if !XAMARIN
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
+            if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.M)
             {
-                Context appContext = Android.App.Application.Context;
+                Context appContext = global::Android.App.Application.Context;
 
                 AudioManager audioManager = appContext.GetSystemService(Context.AudioService) as AudioManager;
                 if (audioManager != null)
