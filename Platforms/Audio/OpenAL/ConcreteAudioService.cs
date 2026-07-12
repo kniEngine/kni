@@ -137,10 +137,10 @@ namespace Microsoft.Xna.Platform.Audio
                 int frequency = DEFAULT_FREQUENCY;
                 int updateSize = DEFAULT_UPDATE_SIZE;
                 int updateBuffers = DEFAULT_UPDATE_BUFFER_COUNT;
-                if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.JellyBeanMr1)
+                if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.JellyBeanMr1)
                 {
-                    var appContext = Android.App.Application.Context;
-                    Android.Util.Log.Debug("OAL", appContext.PackageManager.HasSystemFeature(PackageManager.FeatureAudioLowLatency) ? "Supports low latency audio playback." : "Does not support low latency audio playback.");
+                    var appContext = global::Android.App.Application.Context;
+                    global::Android.Util.Log.Debug("OAL", appContext.PackageManager.HasSystemFeature(PackageManager.FeatureAudioLowLatency) ? "Supports low latency audio playback." : "Does not support low latency audio playback.");
 
                     AudioManager audioManager = appContext.GetSystemService(Context.AudioService) as AudioManager;
                     if (audioManager != null)
@@ -155,16 +155,16 @@ namespace Microsoft.Xna.Platform.Audio
 
                     // If 4.4 or higher, then we don't need to double buffer on the application side.
                     // See http://stackoverflow.com/a/15006327
-                    if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat)
+                    if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.Kitkat)
                     {
                         updateBuffers = 1;
                     }
                 }
                 else
                 {
-                    Android.Util.Log.Debug("OAL", "Android 4.2 or higher required for low latency audio playback.");
+                    global::Android.Util.Log.Debug("OAL", "Android 4.2 or higher required for low latency audio playback.");
                 }
-                Android.Util.Log.Debug("OAL", "Using sample rate " + frequency + "Hz and " + updateBuffers + " buffers of " + updateSize + " frames.");
+                global::Android.Util.Log.Debug("OAL", "Using sample rate " + frequency + "Hz and " + updateBuffers + " buffers of " + updateSize + " frames.");
 
                 // These are missing and non-standard ALC constants
                 const int AlcFrequency = 0x1007;

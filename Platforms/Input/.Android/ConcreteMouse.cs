@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Platform.Input
         public override void PlatformSetCursor(MouseCursor cursor)
         {
 #if !XAMARIN
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+            if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.N)
             {
                 if (_wndHandle != IntPtr.Zero)
                 {

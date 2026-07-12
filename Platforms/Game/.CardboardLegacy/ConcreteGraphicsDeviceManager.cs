@@ -122,7 +122,7 @@ namespace Microsoft.Xna.Platform
             this.OnDeviceCreated(EventArgs.Empty);
 
 
-            Android.App.Activity activity = AndroidGameWindow.Activity;
+            global::Android.App.Activity activity = AndroidGameWindow.Activity;
             DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
             DisplayOrientation supported2 = this.SupportedOrientations;
             if (supported2 == DisplayOrientation.Default)

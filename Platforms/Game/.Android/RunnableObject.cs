@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Platform
     internal class RunnableObject : Java.Lang.Object
         , Java.Lang.IRunnable
     {
-        private Android.OS.Handler _handler;
+        private global::Android.OS.Handler _handler;
         private int _frameRequests = 0;
 
         public event EventHandler Tick;
@@ -19,8 +19,8 @@ namespace Microsoft.Xna.Platform
 
         public void InitLoopHandler()
         {
-            Android.OS.Looper looper = Android.OS.Looper.MainLooper;
-            _handler = new Android.OS.Handler(looper);
+            global::Android.OS.Looper looper = global::Android.OS.Looper.MainLooper;
+            _handler = new global::Android.OS.Handler(looper);
         }
 
         public void RequestFrame()

@@ -13,11 +13,11 @@ namespace Microsoft.Xna.Platform.Media
     internal sealed class ConcreteSongStrategy : SongStrategy
     {
         private Uri _streamSource;
-        internal Android.Net.Uri _assetUri;
+        internal global::Android.Net.Uri _assetUri;
 
         internal Uri StreamSource { get { return _streamSource; } }
 
-        public Android.Net.Uri AssetUri { get { return this._assetUri; } }
+        public global::Android.Net.Uri AssetUri { get { return this._assetUri; } }
 
 
         internal ConcreteSongStrategy()

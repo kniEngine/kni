@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Platform
 
         public override Stream PlatformOpenStream(string name)
         {
-            Stream stream = Android.App.Application.Context.Assets.Open(name, Android.Content.Res.Access.Random);
+            Stream stream = global::Android.App.Application.Context.Assets.Open(name, global::Android.Content.Res.Access.Random);
 
             // This results in a ~50% reduction in load times on Android due to slow Android asset streams.
             stream = new BufferedStream(stream);

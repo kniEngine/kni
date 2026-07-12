@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework
             }
             else
             {
-                Android.Graphics.Point p = new Android.Graphics.Point();
+                global::Android.Graphics.Point p = new global::Android.Graphics.Point();
                 activity.WindowManager.DefaultDisplay.GetRealSize(p);
                 size.X = p.X;
                 size.Y = p.Y;
@@ -94,7 +94,7 @@ namespace Microsoft.Xna.Framework
             // init _currentOrientation
             DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
             // Android 2.3 and above support reverse orientations
-            int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
+            int sdkVer = (int)global::Android.OS.Build.VERSION.SdkInt;
             if (sdkVer < 10)
             {
                 if (currentOrientation == DisplayOrientation.LandscapeRight)
@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Framework
             filter.AddAction(Intent.ActionScreenOff);
             filter.AddAction(Intent.ActionScreenOn);
             filter.AddAction(Intent.ActionUserPresent);
-            filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
+            filter.AddAction(global::Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
             _screenReceiver = new ScreenReceiver(_activity);
             _activity.RegisterReceiver(_screenReceiver, filter);
             _screenReceiver.Unlocked += ScreenReceiver_Unlocked;
@@ -285,7 +285,7 @@ namespace Microsoft.Xna.Framework
             if (newOrientation != _currentOrientation)
             {
                 // Android 2.3 and above support reverse orientations
-                int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
+                int sdkVer = (int)global::Android.OS.Build.VERSION.SdkInt;
                 if (sdkVer < 10)
                 {
                     if (newOrientation == DisplayOrientation.LandscapeRight)
@@ -333,7 +333,7 @@ namespace Microsoft.Xna.Framework
                 _clientBounds = bounds;
                 OnClientSizeChanged();
 
-                Android.Util.Log.Debug("Kni", "GameWindow.ChangeClientBounds: newClientBounds=" + this.ClientBounds.Width + "," + this.ClientBounds.Height);
+                global::Android.Util.Log.Debug("KNI", "GameWindow.ChangeClientBounds: newClientBounds=" + this.ClientBounds.Width + "," + this.ClientBounds.Height);
 
                 // Set the new display size on the touch panel.
                 TouchPanel.DisplayWidth = this.ClientBounds.Width;

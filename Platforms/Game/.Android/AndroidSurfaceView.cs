@@ -35,7 +35,7 @@ namespace Microsoft.Xna.Framework
             _surfaceHolder.AddCallback((ISurfaceHolderCallback)this);
 
             // Holder.SetType is deprecated. The SurfaceType value is ignored.
-            if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
+            if (global::Android.OS.Build.VERSION.SdkInt < global::Android.OS.BuildVersionCodes.Honeycomb)
                 _surfaceHolder.SetType(SurfaceType.Gpu);
         }
 

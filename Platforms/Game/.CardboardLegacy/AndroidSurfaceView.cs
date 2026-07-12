@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Framework
             _gameWindow = gameWindow;
 
             // Holder.SetType is deprecated. The SurfaceType value is ignored.
-            if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
+            if (global::Android.OS.Build.VERSION.SdkInt < global::Android.OS.BuildVersionCodes.Honeycomb)
                 Holder.SetType(SurfaceType.Gpu);
 
             this.Holder.SetFormat(Android.Graphics.Format.Rgba8888);

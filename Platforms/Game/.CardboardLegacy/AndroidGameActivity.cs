@@ -3,11 +3,11 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Platform;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
+using Microsoft.Xna.Platform;
 using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework
         internal bool IsActivityActive { get { return _isActivityActive; } }
 
 
-        public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)
+        public override void OnConfigurationChanged(global::Android.Content.Res.Configuration newConfig)
         {
             base.OnConfigurationChanged(newConfig);
         }

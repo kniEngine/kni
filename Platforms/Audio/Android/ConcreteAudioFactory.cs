@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Audio
         public override MicrophoneStrategy CreateMicrophoneStrategy()
         {
 #if !XAMARIN
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
+            if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.M)
             {
                 return new ConcreteMicrophoneDroid();
             }

@@ -53,8 +53,8 @@ namespace Microsoft.Xna.Framework
         private Orientation GetDeviceNaturalOrientation(Activity activity)
         {
             // check if MainActivity setup is correct. 
-            Android.Content.PM.ScreenOrientation screenOrientation = activity.RequestedOrientation;
-            if (screenOrientation != Android.Content.PM.ScreenOrientation.Landscape)
+            global::Android.Content.PM.ScreenOrientation screenOrientation = activity.RequestedOrientation;
+            if (screenOrientation != global::Android.Content.PM.ScreenOrientation.Landscape)
                 throw new InvalidOperationException("Invalid orientation. Set ScreenOrientation in MainActivity to Landscape.");
 
             Orientation orientation = activity.Resources.Configuration.Orientation;

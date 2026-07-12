@@ -1675,9 +1675,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         void LogExtensions(string extstring, HashSet<string> extensions)
         {
 #if __ANDROID__
-            Android.Util.Log.Verbose("GL","Supported Extensions");
+            global::Android.Util.Log.Verbose("GL","Supported Extensions");
             foreach (string ext in extensions)
-                Android.Util.Log.Verbose("GL", "   " + ext);
+                global::Android.Util.Log.Verbose("GL", "   " + ext);
 #else
             System.Diagnostics.Debug.WriteLine("Supported GL Extensions");
             System.Diagnostics.Debug.WriteLine("   " + extstring.Replace(" ", "\n   "));
@@ -1930,7 +1930,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             {
 #if ANDROID
                 // Todo: Add generic logging interface
-                Android.Util.Log.Debug("KNI", "OpenGLException at " + location + " - " + ex.Message);
+                global::Android.Util.Log.Debug("KNI", "OpenGLException at " + location + " - " + ex.Message);
 #else
                 Debug.WriteLine("OpenGLException at " + location + " - " + ex.Message);
 #endif
