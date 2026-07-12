@@ -166,29 +166,26 @@ namespace Microsoft.Xna.Framework
             if (stream == null)
                 stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Kni.bmp");
 
-            try
+            if (stream != null)
             {
-                if (stream != null)
+                using (stream)
                 {
-                    using (stream)
+                    byte[] data = new byte[stream.Length];
+                    stream.Read(data, 0, data.Length);
+                    GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                    try
                     {
-                        byte[] data = new byte[stream.Length];
-                        stream.Read(data, 0, data.Length);
-                        GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                        try
-                        {
-                            IntPtr pRWops = SDL.RwFromMem(data, data.Length);
-                            IntPtr pIcon = SDL.LoadBMP_RW(pRWops, 1);
-                            return pIcon;
-                        }
-                        finally
-                        {
-                            handle.Free();
-                        }
+                        IntPtr pRWops = SDL.RwFromMem(data, data.Length);
+                        IntPtr pIcon = SDL.LoadBMP_RW(pRWops, 1);
+                        return pIcon;
+                    }
+                    catch { }
+                    finally
+                    {
+                        handle.Free();
                     }
                 }
             }
-            catch { }
 
             return IntPtr.Zero;
         }
