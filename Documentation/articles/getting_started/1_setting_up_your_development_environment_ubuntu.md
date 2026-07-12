@@ -26,7 +26,7 @@ code --install-extension ms-dotnettools.csharp
 The following command will install templates for the .NET CLI and Rider IDE. 
 
 ```sh
-dotnet new install nkast.Kni.Templates::4.2.9001-preview.7
+dotnet new install nkast.Kni.Templates@4.2.9001
 ```
 
 ## [Optional] Set up Wine for effect compilation
