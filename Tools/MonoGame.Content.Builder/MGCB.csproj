@@ -8,7 +8,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFrameworks>net48;net8.0-windows;net8.0</TargetFrameworks>
+    <TargetFrameworks>net48;net10.0-windows;net10.0</TargetFrameworks>
     <ProjectGuid>{4243474D-572E-6E69-646F-77734D474342}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Microsoft.Xna.Framework.Content.Pipeline.Builder</RootNamespace>

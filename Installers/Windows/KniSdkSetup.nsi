@@ -77,17 +77,17 @@ Section "Kni Core Components" CoreComponents ;No components page, name is not im
   
   ; Install the Kni tools to a single shared folder.
   SetOutPath '$INSTDIR\Tools'
-  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.exe'
-  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.runtimeconfig.json'
-  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net8.0\*.dll'
-  File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.exe'
-  File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.runtimeconfig.json'
-  File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net8.0-windows\*.dll'
-  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\Templates'
-  ;File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\runtimes'
-  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\PipelineEditor.exe'
-  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\PipelineEditor.runtimeconfig.json'
-  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net8.0-windows\PipelineEditor.dll'
+  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net10.0\*.exe'
+  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net10.0\*.runtimeconfig.json'
+  File /r '..\..\Tools\EffectCompiler\bin\Windows\AnyCPU\Release\net10.0\*.dll'
+  File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net10.0-windows\*.exe'
+  File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net10.0-windows\*.runtimeconfig.json'
+  File /r '..\..\Tools\MonoGame.Content.Builder\bin\Windows\AnyCPU\Release\net10.0-windows\*.dll'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net10.0-windows\Templates'
+  ;File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net10.0-windows\runtimes'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net10.0-windows\PipelineEditor.exe'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net10.0-windows\PipelineEditor.runtimeconfig.json'
+  File /r '..\..\Tools\Content.Pipeline.Editor.WinForms\bin\AnyCPU\Release\net10.0-windows\PipelineEditor.dll'
   File '..\..\Artifacts\Xna.Framework.Design\Release\netstandard2.0\*.dll'
 
   ; Associate .mgcb files open in the Pipeline tool.
