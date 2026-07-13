@@ -25,6 +25,7 @@
     <Description>The Content framework.</Description>
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Content</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -111,6 +112,10 @@
     <Compile Include="TitleContainerFactory.cs" />
     <Compile Include="TitleContainerStrategy.cs" />
     <Compile Include="TitlePlatform.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,6 +22,7 @@
     <Description>KNI Framework Framework Content Pipeline.</Description>
     <PackageTags>KNI;</PackageTags>
     <PackageId>nkast.Xna.Framework.Content.Pipeline</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -176,6 +177,10 @@
     <Compile Include="Utilities\ContentExtensions.cs" />
     <Compile Include="Utilities\PathHelper.cs" />
     <Compile Include="Utilities\ReflectionHelpers.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
