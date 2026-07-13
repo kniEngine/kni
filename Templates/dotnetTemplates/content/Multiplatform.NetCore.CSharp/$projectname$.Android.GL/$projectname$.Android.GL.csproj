@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <TargetFramework>net8.0-android</TargetFramework>
+    <TargetFramework>net10.0-android</TargetFramework>
     <ProjectGuid>$guid2$</ProjectGuid>
     <OutputType>Exe</OutputType>
     <IsTrimmable>True</IsTrimmable>
