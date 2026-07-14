@@ -226,12 +226,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="nkast.Wasm.JSInterop" Version="8.0.11"  />
-    <PackageReference Include="nkast.Wasm.Audio" Version="8.0.11"  />
-    <PackageReference Include="nkast.Wasm.Canvas" Version="8.0.11"  />
-    <PackageReference Include="nkast.Wasm.Dom" Version="8.0.11"  />
-    <PackageReference Include="nkast.Wasm.XHR" Version="8.0.11"  />
-    <PackageReference Include="nkast.Wasm.XR" Version="8.0.11"  />
+    <PackageReference Include="nkast.Wasm.JSInterop" Version="10.0.1"  />
+    <PackageReference Include="nkast.Wasm.Audio" Version="10.0.1"  />
+    <PackageReference Include="nkast.Wasm.Canvas" Version="10.0.1"  />
+    <PackageReference Include="nkast.Wasm.Dom" Version="10.0.1"  />
+    <PackageReference Include="nkast.Wasm.XHR" Version="10.0.1"  />
+    <PackageReference Include="nkast.Wasm.XR" Version="10.0.1"  />
   </ItemGroup>
 
 </Project>
