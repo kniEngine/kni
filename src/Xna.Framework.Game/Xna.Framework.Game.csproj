@@ -25,6 +25,7 @@
     <Description>The Game framework.</Description>
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Game</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -55,6 +56,10 @@
     <Compile Include="IGameComponent.cs" />
     <Compile Include="IUpdateable.cs" />
     <Compile Include="LaunchParameters.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 

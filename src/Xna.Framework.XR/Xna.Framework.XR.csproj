@@ -25,6 +25,7 @@
     <Description>The XR framework.</Description>
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.XR</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -46,6 +47,10 @@
     <Compile Include="XR\XREye.cs" />
     <Compile Include="XR\XRFactory.cs" />
     <Compile Include="XR\XRSessionMode.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
