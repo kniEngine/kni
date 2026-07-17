@@ -225,7 +225,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="nkast.LibOXR" Version="1.0.0" />
+    <PackageReference Include="nkast.LibOXR" Version="1.2.0" />
     <PackageReference Include="Silk.NET.OpenXR" Version="2.22.0" />
   </ItemGroup>
 
