@@ -26,7 +26,6 @@ using Javax.Microedition.Khronos.Egl;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
     public class AndroidGameWindow : GameWindow, IDisposable
     {
         // What is the state of the app.
@@ -84,7 +83,7 @@ namespace Microsoft.Xna.Framework
             }
             else
             {
-                Android.Graphics.Point p = new Android.Graphics.Point();
+                global::Android.Graphics.Point p = new global::Android.Graphics.Point();
                 activity.WindowManager.DefaultDisplay.GetRealSize(p);
                 size.X = p.X;
                 size.Y = p.Y;
@@ -95,7 +94,7 @@ namespace Microsoft.Xna.Framework
             // init _currentOrientation
             DisplayOrientation currentOrientation = AndroidCompatibility.Current.GetAbsoluteOrientation(activity);
             // Android 2.3 and above support reverse orientations
-            int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
+            int sdkVer = (int)global::Android.OS.Build.VERSION.SdkInt;
             if (sdkVer < 10)
             {
                 if (currentOrientation == DisplayOrientation.LandscapeRight)
@@ -120,7 +119,7 @@ namespace Microsoft.Xna.Framework
             filter.AddAction(Intent.ActionScreenOff);
             filter.AddAction(Intent.ActionScreenOn);
             filter.AddAction(Intent.ActionUserPresent);
-            filter.AddAction(Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
+            filter.AddAction(global::Android.Telephony.TelephonyManager.ActionPhoneStateChanged);
             _screenReceiver = new ScreenReceiver(_activity);
             _activity.RegisterReceiver(_screenReceiver, filter);
             _screenReceiver.Unlocked += ScreenReceiver_Unlocked;
@@ -286,7 +285,7 @@ namespace Microsoft.Xna.Framework
             if (newOrientation != _currentOrientation)
             {
                 // Android 2.3 and above support reverse orientations
-                int sdkVer = (int)Android.OS.Build.VERSION.SdkInt;
+                int sdkVer = (int)global::Android.OS.Build.VERSION.SdkInt;
                 if (sdkVer < 10)
                 {
                     if (newOrientation == DisplayOrientation.LandscapeRight)
@@ -334,7 +333,7 @@ namespace Microsoft.Xna.Framework
                 _clientBounds = bounds;
                 OnClientSizeChanged();
 
-                Android.Util.Log.Debug("Kni", "GameWindow.ChangeClientBounds: newClientBounds=" + this.ClientBounds.Width + "," + this.ClientBounds.Height);
+                global::Android.Util.Log.Debug("KNI", "GameWindow.ChangeClientBounds: newClientBounds=" + this.ClientBounds.Width + "," + this.ClientBounds.Height);
 
                 // Set the new display size on the touch panel.
                 TouchPanel.DisplayWidth = this.ClientBounds.Width;
@@ -561,14 +560,14 @@ namespace Microsoft.Xna.Framework
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _glFramebuffer);
             GL.CheckGLError();
 
-            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+            global::Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
                 (int)RenderbufferTarget.Renderbuffer,
-                Android.Opengl.GLES20.GlRenderbufferWidth,
+                global::Android.Opengl.GLES20.GlRenderbufferWidth,
                 renderbufferParameters, 0
                 );
-            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+            global::Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
                 (int)RenderbufferTarget.Renderbuffer,
-                Android.Opengl.GLES20.GlRenderbufferHeight,
+                global::Android.Opengl.GLES20.GlRenderbufferHeight,
                 renderbufferParameters, 1
                 );
 
@@ -576,33 +575,33 @@ namespace Microsoft.Xna.Framework
             h = renderbufferParameters[1];
 
             renderbufferParameters = new int[10];
-            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+            global::Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
                 (int)RenderbufferTarget.Renderbuffer,
-                Android.Opengl.GLES20.GlRenderbufferInternalFormat,
+                global::Android.Opengl.GLES20.GlRenderbufferInternalFormat,
                 renderbufferParameters, 0
                 );
             int internalFormat = renderbufferParameters[0];
 
             renderbufferParameters = new int[10];
-            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+            global::Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
                 (int)RenderbufferTarget.Renderbuffer,
-                Android.Opengl.GLES20.GlRenderbufferRedSize,
+                global::Android.Opengl.GLES20.GlRenderbufferRedSize,
                 renderbufferParameters, 0
                 );
             int redSize = renderbufferParameters[0];
 
             renderbufferParameters = new int[10];
-            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+            global::Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
                 (int)RenderbufferTarget.Renderbuffer,
-                Android.Opengl.GLES20.GlRenderbufferDepthSize,
+                global::Android.Opengl.GLES20.GlRenderbufferDepthSize,
                 renderbufferParameters, 0
                 );
             int depthSize = renderbufferParameters[0];
 
             renderbufferParameters = new int[10];
-            Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
+            global::Android.Opengl.GLES20.GlGetRenderbufferParameteriv(
                 (int)RenderbufferTarget.Renderbuffer,
-                Android.Opengl.GLES20.GlRenderbufferStencilSize,
+                global::Android.Opengl.GLES20.GlRenderbufferStencilSize,
                 renderbufferParameters, 0
                 );
             int stencilSize = renderbufferParameters[0];
@@ -620,7 +619,7 @@ namespace Microsoft.Xna.Framework
             // by a texture at the time of this call. If an implementor needs to change the current framebuffer, 
             // it must be reset back afterwards to the one obtained viaglGetIntegerv(GL_FRAMEBUFFER_BINDING, ...) 
             // at the beginning of this call.
-            Android.Opengl.GLES20.GlGetIntegerv(Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 0);
+            global::Android.Opengl.GLES20.GlGetIntegerv(global::Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 0);
             _glFramebuffer = _parameterFramebufferBinding[0];
 
             if (_game.GraphicsDevice != null)
@@ -641,7 +640,7 @@ namespace Microsoft.Xna.Framework
 
             this.RunFrame();
 
-            Android.Opengl.GLES20.GlGetIntegerv(Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 1);
+            global::Android.Opengl.GLES20.GlGetIntegerv(global::Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 1);
             System.Diagnostics.Debug.Assert(_glFramebuffer == _parameterFramebufferBinding[1],
                 "framebuffer must be restored back to the one set at the beggining of CardboardView.IRenderer.OnDrawFrame()");
 
@@ -649,7 +648,7 @@ namespace Microsoft.Xna.Framework
 
         internal void VrRendererOnFinishFrame(VRCardboard.Viewport viewport)
         {
-            Android.Opengl.GLES20.GlGetIntegerv(Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 2);
+            global::Android.Opengl.GLES20.GlGetIntegerv(global::Android.Opengl.GLES20.GlFramebufferBinding, _parameterFramebufferBinding, 2);
             _glFramebuffer = _parameterFramebufferBinding[2];
         }
 

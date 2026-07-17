@@ -474,6 +474,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         TextureMagFilter = 0x2800,
         TextureWrapS = 0x2802,
         TextureWrapT = 0x2803,
+        TextureWrapR = 0x8072,
         TextureBorderColor = 0x1004,
         TextureLodBias = 0x8501,
         TextureCompareMode = 0x884C,
@@ -1674,9 +1675,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         void LogExtensions(string extstring, HashSet<string> extensions)
         {
 #if __ANDROID__
-            Android.Util.Log.Verbose("GL","Supported Extensions");
+            global::Android.Util.Log.Verbose("GL","Supported Extensions");
             foreach (string ext in extensions)
-                Android.Util.Log.Verbose("GL", "   " + ext);
+                global::Android.Util.Log.Verbose("GL", "   " + ext);
 #else
             System.Diagnostics.Debug.WriteLine("Supported GL Extensions");
             System.Diagnostics.Debug.WriteLine("   " + extstring.Replace(" ", "\n   "));
@@ -1929,7 +1930,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             {
 #if ANDROID
                 // Todo: Add generic logging interface
-                Android.Util.Log.Debug("KNI", "OpenGLException at " + location + " - " + ex.Message);
+                global::Android.Util.Log.Debug("KNI", "OpenGLException at " + location + " - " + ex.Message);
 #else
                 Debug.WriteLine("OpenGLException at " + location + " - " + ex.Message);
 #endif

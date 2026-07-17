@@ -24,6 +24,7 @@
     <Description>The Design Converters.</Description>
     <PackageTags>KNI;.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Design</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +36,10 @@
     <Compile Include="Design\Vector2Converter.cs" />
     <Compile Include="Design\Vector3Converter.cs" />
     <Compile Include="Design\Vector4Converter.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

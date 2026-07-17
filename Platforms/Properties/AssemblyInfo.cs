@@ -13,9 +13,6 @@ using System.Resources;
 [assembly: AssemblyCopyright("Copyright ©2009-2022 MonoGame Team, ©2025 Nick Kastellanos")]
 [assembly: AssemblyCulture("")]
 
-// Mark the assembly as CLS compliant so it can be safely used in other .NET languages
-[assembly: CLSCompliant(true)]
-
 // Allow the content pipeline assembly to access
 // some of our internal helper methods that it needs.
 //[assembly: InternalsVisibleTo("Xna.Framework.Content.Pipeline")]

@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform.Media
         private Genre _genre;
         private SongCollection _songs;
 
-        private Android.Net.Uri _thumbnail;
+        private global::Android.Net.Uri _thumbnail;
 
         public override string Name
         {
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Platform.Media
 
 
         internal ConcreteAlbumStrategy(string name, Artist artist, Genre genre, SongCollection songCollection,
-                                     Android.Net.Uri thumbnail)
+                                       global::Android.Net.Uri thumbnail)
         {
             this._name = name;
             this._artist = artist;
@@ -76,7 +76,6 @@ namespace Microsoft.Xna.Platform.Media
         }
 
 
-        [CLSCompliant(false)]
         public Bitmap Platform_GetAlbumArt(int width = 0, int height = 0)
         {
             Bitmap albumArt = MediaStore.Images.Media.GetBitmap(ConcreteMediaLibraryStrategy.Context.ContentResolver, this._thumbnail);
@@ -88,7 +87,6 @@ namespace Microsoft.Xna.Platform.Media
             return scaledAlbumArt;
         }
 
-        [CLSCompliant(false)]
         public Bitmap Platform_GetThumbnail()
         {
             return this.Platform_GetAlbumArt(220, 220);

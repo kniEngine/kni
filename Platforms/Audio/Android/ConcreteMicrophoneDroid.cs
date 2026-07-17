@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Platform.Audio
         public override void PlatformStart(string deviceName)
         {
 #if !XAMARIN
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.M)
+            if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.M)
             {
                 // Calculate the buffer size
                 int minBufferSize = AudioRecord.GetMinBufferSize(SampleRate, ChannelConfig, AudioFormat);
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Platform.Audio
                     throw new NotImplementedException();
                 }
 
-                if (_audioRecord.State != Android.Media.State.Initialized)
+                if (_audioRecord.State != global::Android.Media.State.Initialized)
                     throw new Exception("AudioRecord initialization failed!");
 
                 _audioRecord.SetNotificationMarkerPosition(_bufferSize);

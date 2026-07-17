@@ -8,12 +8,12 @@ namespace Microsoft.Xna.Platform.Devices
 {
     public sealed class ConcreteHaptics : HapticsStrategy
     {
-        Android.OS.Vibrator _nativeVibrator;
+        global::Android.OS.Vibrator _nativeVibrator;
         private bool _hasVibrator = true;
 
         public ConcreteHaptics()
         {
-            _nativeVibrator = (Android.OS.Vibrator)Android.App.Application.Context.GetSystemService(Android.Content.Context.VibratorService);
+            _nativeVibrator = (global::Android.OS.Vibrator)global::Android.App.Application.Context.GetSystemService(global::Android.Content.Context.VibratorService);
             try
             {
                 _hasVibrator = _nativeVibrator.HasVibrator;

@@ -148,7 +148,7 @@ namespace Microsoft.Xna.Framework
                 // TODO: Implement TouchEvent.ChangedTouches and call TouchPanelStrategy.AddCanceledEvent(...)
                 //       instead of InvalidateTouches().
                 //       see: https://developer.mozilla.org/en-US/docs/Web/API/TouchEvent/changedTouches
-                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<TouchPanelStrategy>().BlazorCancelAllTouches();
+                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().BlazorCancelAllTouches();
             };
 
             // keyboard events
@@ -173,6 +173,8 @@ namespace Microsoft.Xna.Framework
 
                 if (!_keys.Contains(xnakey))
                     _keys.Add(xnakey);
+
+                OnKeyDown(xnakey);
 
                 if (IsTextInputAttached())
                 {
@@ -211,6 +213,8 @@ namespace Microsoft.Xna.Framework
 
                 if (_keys.Contains(xnakey))
                     _keys.Remove(xnakey);
+
+                OnKeyUp(xnakey);
             };
 
             _window.OnFocus += OnActivated;

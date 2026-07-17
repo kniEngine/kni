@@ -787,15 +787,15 @@ namespace Microsoft.Xna.Framework.XR
                     isConnected = true;
 
                     //// left buttons
-                    if (_lbuttons != null && _lbuttons.Length >= 4)
+                    if (_lbuttons != null && _lbuttons.Length > 4)
                         buttons |= Buttons.X;
-                    if (_lbuttons != null && _lbuttons.Length >= 5)
+                    if (_lbuttons != null && _lbuttons.Length > 5)
                         buttons |= Buttons.Y;
-                    if (_lbuttons != null && _lbuttons.Length >= 3)
+                    if (_lbuttons != null && _lbuttons.Length > 3)
                         buttons |= Buttons.LeftStick;
-                    if (_lbuttons != null)
+                    if (_lbuttons != null && _lbuttons.Length > 0)
                         buttons |= Buttons.LeftTrigger;
-                    if (_lbuttons != null && _lbuttons.Length >= 1)
+                    if (_lbuttons != null && _lbuttons.Length > 1)
                         buttons |= Buttons.LeftGrip;
                 }
             }
@@ -807,15 +807,15 @@ namespace Microsoft.Xna.Framework.XR
                     isConnected = true;
 
                     //// right buttons  
-                    if (_rbuttons != null && _rbuttons.Length >= 4)
+                    if (_rbuttons != null && _rbuttons.Length > 4)
                         buttons |= Buttons.A;
-                    if (_rbuttons != null && _rbuttons.Length >= 5)
+                    if (_rbuttons != null && _rbuttons.Length > 5)
                         buttons |= Buttons.B;
-                    if (_rbuttons != null && _rbuttons.Length >= 3)
+                    if (_rbuttons != null && _rbuttons.Length > 3)
                         buttons |= Buttons.RightStick;
-                    if (_rbuttons != null)
+                    if (_rbuttons != null && _rbuttons.Length > 0)
                         buttons |= Buttons.RightTrigger;
-                    if (_rbuttons != null && _rbuttons.Length >= 1)
+                    if (_rbuttons != null && _rbuttons.Length > 1)
                         buttons |= Buttons.RightGrip;
                 }
             }
@@ -827,27 +827,27 @@ namespace Microsoft.Xna.Framework.XR
                     isConnected = true;
 
                     //// left buttons
-                    if (_lbuttons != null && _lbuttons.Length >= 4)
+                    if (_lbuttons != null && _lbuttons.Length > 4)
                         buttons |= Buttons.X;
-                    if (_lbuttons != null && _lbuttons.Length >= 5)
+                    if (_lbuttons != null && _lbuttons.Length > 5)
                         buttons |= Buttons.Y;
-                    if (_lbuttons != null && _lbuttons.Length >= 3)
+                    if (_lbuttons != null && _lbuttons.Length > 3)
                         buttons |= Buttons.LeftStick;
-                    if (_lbuttons != null)
+                    if (_lbuttons != null && _lbuttons.Length > 0)
                         buttons |= Buttons.LeftTrigger;
-                    if (_lbuttons != null && _lbuttons.Length >= 1)
+                    if (_lbuttons != null && _lbuttons.Length > 1)
                         buttons |= Buttons.LeftGrip;
 
                     //// right buttons  
-                    if (_rbuttons != null && _rbuttons.Length >= 4)
+                    if (_rbuttons != null && _rbuttons.Length > 4)
                         buttons |= Buttons.A;
-                    if (_rbuttons != null && _rbuttons.Length >= 5)
+                    if (_rbuttons != null && _rbuttons.Length > 5)
                         buttons |= Buttons.B;
-                    if (_rbuttons != null && _rbuttons.Length >= 3)
+                    if (_rbuttons != null && _rbuttons.Length > 3)
                         buttons |= Buttons.RightStick;
-                    if (_rbuttons != null)
+                    if (_rbuttons != null && _rbuttons.Length > 0)
                         buttons |= Buttons.RightTrigger;
-                    if (_rbuttons != null && _rbuttons.Length >= 1)
+                    if (_rbuttons != null && _rbuttons.Length > 1)
                         buttons |= Buttons.RightGrip;
                 }
             }
@@ -904,9 +904,9 @@ namespace Microsoft.Xna.Framework.XR
             float leftTrigger = 0;
             float rightTrigger = 0;
 
-            if (_lbuttons != null)
+            if (_lbuttons != null && _lbuttons.Length > 0)
                 leftTrigger = _lbuttons[0].Value;
-            if (_rbuttons != null)
+            if (_rbuttons != null && _rbuttons.Length > 0)
                 rightTrigger = _rbuttons[0].Value;
 
             GamePadTriggers triggers = new GamePadTriggers(
@@ -921,9 +921,9 @@ namespace Microsoft.Xna.Framework.XR
             float leftGrip = 0;
             float rightGrip = 0;
 
-            if (_lbuttons != null && _lbuttons.Length >= 1)
+            if (_lbuttons != null && _lbuttons.Length > 1)
                 leftGrip = _lbuttons[1].Value;
-            if (_rbuttons != null && _rbuttons.Length >= 1)
+            if (_rbuttons != null && _rbuttons.Length > 1)
                 rightGrip = _rbuttons[1].Value;
 
             grips = new GamePadTriggers(
@@ -931,27 +931,27 @@ namespace Microsoft.Xna.Framework.XR
                     rightTrigger: rightGrip);
 
             //// left buttons
-            if (_lbuttons != null && _lbuttons.Length >= 4 && _lbuttons[4].Pressed)
+            if (_lbuttons != null && _lbuttons.Length > 4 && _lbuttons[4].Pressed)
                 buttons |= Buttons.X;
-            if (_lbuttons != null && _lbuttons.Length >= 5 && _lbuttons[5].Pressed)
+            if (_lbuttons != null && _lbuttons.Length > 5 && _lbuttons[5].Pressed)
                 buttons |= Buttons.Y;
-            if (_lbuttons != null && _lbuttons.Length >= 3 && _lbuttons[3].Pressed)
+            if (_lbuttons != null && _lbuttons.Length > 3 && _lbuttons[3].Pressed)
                 buttons |= Buttons.LeftStick;
-            if (_lbuttons != null && _lbuttons[0].Pressed)
+            if (_lbuttons != null && _lbuttons.Length > 0 && _lbuttons[0].Pressed)
                 buttons |= Buttons.LeftTrigger;
-            if (_lbuttons != null && _lbuttons.Length >= 1 && _lbuttons[1].Pressed)
+            if (_lbuttons != null && _lbuttons.Length > 1 && _lbuttons[1].Pressed)
                 buttons |= Buttons.LeftGrip;
 
             //// right buttons  
-            if (_rbuttons != null && _rbuttons.Length >= 4 && _rbuttons[4].Pressed)
+            if (_rbuttons != null && _rbuttons.Length > 4 && _rbuttons[4].Pressed)
                 buttons |= Buttons.A;
-            if (_rbuttons != null && _rbuttons.Length >= 5 && _rbuttons[5].Pressed)
+            if (_rbuttons != null && _rbuttons.Length > 5 && _rbuttons[5].Pressed)
                 buttons |= Buttons.B;
-            if (_rbuttons != null && _rbuttons.Length >= 3 && _rbuttons[3].Pressed)
+            if (_rbuttons != null && _rbuttons.Length > 3 && _rbuttons[3].Pressed)
                 buttons |= Buttons.RightStick;
-            if (_lbuttons != null && _rbuttons[0].Pressed)
+            if (_rbuttons != null && _rbuttons.Length > 0 && _rbuttons[0].Pressed)
                 buttons |= Buttons.RightTrigger;
-            if (_rbuttons != null && _rbuttons.Length >= 1 && _rbuttons[1].Pressed)
+            if (_rbuttons != null && _rbuttons.Length > 1 && _rbuttons[1].Pressed)
                 buttons |= Buttons.RightGrip;
 
             float TriggerThresholdOn = 0.6f;
@@ -964,27 +964,27 @@ namespace Microsoft.Xna.Framework.XR
 
             // left touches
 
-            if (_lbuttons != null && _lbuttons.Length >= 4 && _lbuttons[4].Touched)
+            if (_lbuttons != null && _lbuttons.Length > 4 && _lbuttons[4].Touched)
                 touches |= Buttons.X;
-            if (_lbuttons != null && _lbuttons.Length >= 5 && _lbuttons[5].Touched)
+            if (_lbuttons != null && _lbuttons.Length > 5 && _lbuttons[5].Touched)
                 touches |= Buttons.Y;
-            if (_lbuttons != null && _lbuttons.Length >= 3 && _lbuttons[3].Touched)
+            if (_lbuttons != null && _lbuttons.Length > 3 && _lbuttons[3].Touched)
                 touches |= Buttons.LeftStick;
-            if (_lbuttons != null && _lbuttons[0].Touched)
+            if (_lbuttons != null && _lbuttons.Length > 0 && _lbuttons[0].Touched)
                 touches |= Buttons.LeftTrigger;
-            if (_lbuttons != null && _lbuttons.Length >= 1 && _lbuttons[1].Touched)
+            if (_lbuttons != null && _lbuttons.Length > 1 && _lbuttons[1].Touched)
                 touches |= Buttons.LeftGrip;
 
             // right touches
-            if (_rbuttons != null && _rbuttons.Length >= 4 && _rbuttons[4].Touched)
+            if (_rbuttons != null && _rbuttons.Length > 4 && _rbuttons[4].Touched)
                 touches |= Buttons.A;
-            if (_rbuttons != null && _rbuttons.Length >= 5 && _rbuttons[5].Touched)
+            if (_rbuttons != null && _rbuttons.Length > 5 && _rbuttons[5].Touched)
                 touches |= Buttons.B;
-            if (_rbuttons != null && _rbuttons.Length >= 3 && _rbuttons[3].Touched)
+            if (_rbuttons != null && _rbuttons.Length > 3 && _rbuttons[3].Touched)
                 touches |= Buttons.RightStick;
-            if (_rbuttons != null && _rbuttons[0].Touched)
+            if (_rbuttons != null && _rbuttons.Length > 0 && _rbuttons[0].Touched)
                 touches |= Buttons.RightTrigger;
-            if (_rbuttons != null && _rbuttons.Length >= 1 && _rbuttons[1].Touched)
+            if (_rbuttons != null && _rbuttons.Length > 1 && _rbuttons[1].Touched)
                 touches |= Buttons.RightGrip;
 
             _gamePadState = new GamePadState(

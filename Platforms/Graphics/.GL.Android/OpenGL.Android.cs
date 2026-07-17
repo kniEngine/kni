@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
         protected override IntPtr GetNativeLibrary()
         {
-            Android.Util.Log.Verbose("GL", "Loading Entry Points");
+            global::Android.Util.Log.Verbose("GL", "Loading Entry Points");
 
             BindAPI = FuncLoader.LoadFunctionOrNull<BindAPIDelegate>(libGL, "eglBindAPI");
 
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
                 BoundApi = RenderApi.ES;
             }
                 
-            Android.Util.Log.Verbose("GL", "Bound {0}", BoundApi);
+            global::Android.Util.Log.Verbose("GL", "Bound {0}", BoundApi);
 
             if (BoundApi == RenderApi.ES)
             {

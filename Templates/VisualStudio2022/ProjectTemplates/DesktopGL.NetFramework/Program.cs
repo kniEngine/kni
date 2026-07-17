@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace $safeprojectname$
 {
@@ -13,7 +14,7 @@ namespace $safeprojectname$
         [STAThread]
         static void Main()
         {
-            using (var game = new $safeprojectname$Game())
+            using (Game game = new $safeprojectname$Game())
                 game.Run();
         }
     }

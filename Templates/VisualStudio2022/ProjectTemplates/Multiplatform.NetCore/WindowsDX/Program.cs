@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace $ext_safeprojectname$
 {
@@ -16,7 +17,7 @@ namespace $ext_safeprojectname$
             // Uncomment this line to enable VR with the nkast.Kni.Platform.WinForms.DX11.OculusOVR package.
             //Microsoft.Xna.Platform.XR.XRFactory.RegisterXRFactory(new Microsoft.Xna.Platform.XR.LibOVR.ConcreteXRFactory());
 
-            using (var game = new $ext_safeprojectname$Game())
+            using (Game game = new $ext_safeprojectname$Game())
                 game.Run();
         }
     }

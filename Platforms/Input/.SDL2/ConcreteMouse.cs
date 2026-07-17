@@ -16,10 +16,10 @@ namespace Microsoft.Xna.Platform.Input
 
         private Sdl SDL { get { return Sdl.Current; } }
 
+        private int RawX;
+        private int RawY;
         internal int ScrollX;
         internal int ScrollY;
-        internal int RawX;
-        internal int RawY;
 
         public override IntPtr PlatformGetWindowHandle()
         {
@@ -38,6 +38,9 @@ namespace Microsoft.Xna.Platform.Input
 
         public override MouseState PlatformGetState()
         {
+            Point mousePos;
+            Point relPos;
+            Sdl.Mouse.Button state;
             IntPtr wndHandle = _wndHandle;
             if (wndHandle != IntPtr.Zero)
             {
@@ -45,26 +48,55 @@ namespace Microsoft.Xna.Platform.Input
 
                 int winFlags = SDL.WINDOW.GetWindowFlags(wndHandle);
 
-                Point pos, windowPos;
-                Sdl.Mouse.Button state = SDL.MOUSE.GetGlobalState(out pos.X, out pos.Y);
-                SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
-                Point clientPos = pos - windowPos;
-
-                MouseState mouseState = new MouseState(
-                    x: clientPos.X, y: clientPos.Y,
-                    scrollWheel: ScrollY, horizontalScrollWheel: ScrollX,
-                    rawX: RawX, rawY: RawY,
-                    leftButton: (state & Sdl.Mouse.Button.Left) != 0 ? ButtonState.Pressed : ButtonState.Released,
-                    middleButton: (state & Sdl.Mouse.Button.Middle) != 0 ? ButtonState.Pressed : ButtonState.Released,
-                    rightButton: (state & Sdl.Mouse.Button.Right) != 0 ? ButtonState.Pressed : ButtonState.Released,
-                    xButton1: (state & Sdl.Mouse.Button.X1Mask) != 0 ? ButtonState.Pressed : ButtonState.Released,
-                    xButton2: (state & Sdl.Mouse.Button.X2Mask) != 0 ? ButtonState.Pressed : ButtonState.Released
-                    );
-
-                return mouseState;
+                switch (gameWindow._sysWMType)
+                {
+                    case Sdl.Window.SysWMType.Wayland:
+                        {
+                            if (SDL.SDLInitThreadId == SDL.GetManagedThreadId())
+                                SDL.PumpEvents();
+                            state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
+                        }
+                        break;
+                    default:
+                        {
+#if ENABLE_TOUCHINPUT
+                            if (SDL.SDLInitThreadId == SDL.GetManagedThreadId())
+                                SDL.PumpEvents();
+                            state = SDL.MOUSE.GetState(out mousePos.X, out mousePos.Y);
+#else
+                            Point globalPos, windowPos;
+                            state = SDL.MOUSE.GetGlobalState(out globalPos.X, out globalPos.Y);
+                            SDL.WINDOW.GetPosition(wndHandle, out windowPos.X, out windowPos.Y);
+                            mousePos = globalPos - windowPos;
+#endif
+                        }
+                        break;
+                }
             }
-            else
-                return new MouseState();
+            else // (wndHandle == IntPtr.Zero)
+            {
+                state = SDL.MOUSE.GetGlobalState(out mousePos.X, out mousePos.Y);
+            }
+
+            SDL.MOUSE.GetRelativeState(out relPos.X, out relPos.Y);
+            unchecked
+            {
+                RawX += relPos.X;
+                RawY += relPos.Y;
+            }
+
+            MouseState mouseState = new MouseState(
+                x: mousePos.X, y: mousePos.Y,
+                scrollWheel: ScrollY, horizontalScrollWheel: ScrollX,
+                rawX: RawX, rawY: RawY,
+                leftButton:   (state & Sdl.Mouse.Button.Left)   != 0 ? ButtonState.Pressed : ButtonState.Released,
+                middleButton: (state & Sdl.Mouse.Button.Middle) != 0 ? ButtonState.Pressed : ButtonState.Released,
+                rightButton:  (state & Sdl.Mouse.Button.Right)  != 0 ? ButtonState.Pressed : ButtonState.Released,
+                xButton1: (state & Sdl.Mouse.Button.X1Mask) != 0 ? ButtonState.Pressed : ButtonState.Released,
+                xButton2: (state & Sdl.Mouse.Button.X2Mask) != 0 ? ButtonState.Pressed : ButtonState.Released
+                );
+
+            return mouseState;
         }
 
         public override void PlatformSetPosition(int x, int y)

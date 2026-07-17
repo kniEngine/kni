@@ -25,6 +25,7 @@
     <Description>The Storage framework.</Description>
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Storage</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,6 +46,10 @@
     <Compile Include="Storage\StorageFactory.cs" />
     <Compile Include="Storage\StorageService.cs" />
     <Compile Include="Storage\StorageServiceStrategy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

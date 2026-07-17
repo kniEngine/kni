@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform.Input
         private Point _pos;
         private int _scrollX, _scrollY;
         private int _rawX, _rawY;
-        private ButtonState _leftButton, _rightButton, _middleButton;
+        private ButtonState _leftButton, _rightButton, _middleButton, _xButton1, _xButton2;
 
 
         public override IntPtr PlatformGetWindowHandle()
@@ -35,6 +35,8 @@ namespace Microsoft.Xna.Platform.Input
                 _leftButton = default(ButtonState);
                 _rightButton = default(ButtonState);
                 _middleButton = default(ButtonState);
+                _xButton1 = default(ButtonState);
+                _xButton2 = default(ButtonState);
 
                 _domWindow.OnMouseMove -= OnMouseMove;
                 _domWindow.OnMouseDown -= OnMouseDown;
@@ -65,8 +67,8 @@ namespace Microsoft.Xna.Platform.Input
                     leftButton: _leftButton,
                     middleButton: _middleButton,
                     rightButton: _rightButton,
-                    xButton1: ButtonState.Released,
-                    xButton2: ButtonState.Released
+                    xButton1: _xButton1,
+                    xButton2: _xButton2
                     );
 
             return mouseState;
@@ -94,24 +96,29 @@ namespace Microsoft.Xna.Platform.Input
         {
             _pos.X = x;
             _pos.Y = y;
-            _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _leftButton   = ((buttons &  1) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _rightButton  = ((buttons &  2) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _middleButton = ((buttons &  4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _xButton1     = ((buttons &  8) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _xButton2     = ((buttons & 16) != 0) ? ButtonState.Pressed : ButtonState.Released;
         }
 
         private void OnMouseUp(object sender, int x, int y, int buttons)
         {
             _pos.X = x;
             _pos.Y = y;
-            _leftButton   = ((buttons & 1) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _rightButton  = ((buttons & 2) != 0) ? ButtonState.Pressed : ButtonState.Released;
-            _middleButton = ((buttons & 4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _leftButton   = ((buttons &  1) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _rightButton  = ((buttons &  2) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _middleButton = ((buttons &  4) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _xButton1     = ((buttons &  8) != 0) ? ButtonState.Pressed : ButtonState.Released;
+            _xButton2     = ((buttons & 16) != 0) ? ButtonState.Pressed : ButtonState.Released;
         }
 
         public void OnMouseWheel(object sender, int deltaX, int deltaY, int deltaZ, int deltaMode)
         {
-            _scrollX -= deltaX;
-            _scrollY -= deltaY;
+            const int wheelDelta = 120;
+            _scrollX += Math.Sign(deltaX) * wheelDelta;
+            _scrollY -= Math.Sign(deltaY) * wheelDelta;
         }
 
     }

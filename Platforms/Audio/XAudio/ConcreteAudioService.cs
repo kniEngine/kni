@@ -26,7 +26,6 @@ namespace Microsoft.Xna.Platform.Audio
 
         // XNA does not expose this, but it exists in X3DAudio.
         // TODO: move to SoundEngine.
-        //[CLSCompliant(false)]
         public Speakers Speakers
         {
             get { return _speakers; }

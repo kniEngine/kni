@@ -25,6 +25,7 @@
     <Description>The Graphics framework.</Description>
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Graphics</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -270,6 +271,10 @@
     <Compile Include="Graphics\Utilities\HashHelpers.cs" />
     <Compile Include="Graphics\Utilities\ReflectionHelpers.cs" />
     <Compile Include="Graphics\Utilities\TextureHelpers.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

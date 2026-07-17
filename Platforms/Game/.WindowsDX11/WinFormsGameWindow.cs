@@ -83,12 +83,8 @@ namespace Microsoft.Xna.Framework
                 _isResizable = value;
                 Form.MaximizeBox = _isResizable;
 
-                if (!_isBorderless)
-                {
-                    Form.FormBorderStyle = (_isResizable)
-                                            ? FormBorderStyle.Sizable
-                                            : FormBorderStyle.FixedSingle;
-                }
+                if (!IsFullScreen)
+                    InternalSetFormBorderStyle(IsBorderless);
             }
         }
 
@@ -102,16 +98,22 @@ namespace Microsoft.Xna.Framework
 
                 _isBorderless = value;
 
-                if (!_isBorderless)
-                {
-                    Form.FormBorderStyle = (_isResizable)
-                                            ? FormBorderStyle.Sizable
-                                            : FormBorderStyle.FixedSingle;
-                }
-                else
-                {
-                    Form.FormBorderStyle = FormBorderStyle.None;
-                }
+                if (!IsFullScreen)
+                    InternalSetFormBorderStyle(_isBorderless);
+            }
+        }
+
+        private void InternalSetFormBorderStyle(bool isBorderless)
+        {
+            if (isBorderless)
+            {
+                Form.FormBorderStyle = FormBorderStyle.None;
+            }
+            else
+            {
+                Form.FormBorderStyle = (_isResizable)
+                                     ? FormBorderStyle.Sizable
+                                     : FormBorderStyle.FixedSingle;
             }
         }
 
@@ -125,6 +127,18 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
+        [Flags]
+        public enum TouchWindowFlags : uint
+        {
+            Default   = 0x0000,
+            FineTouch = 0x0001,
+            WantPalm  = 0x0002,
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool RegisterTouchWindow(IntPtr hwnd, TouchWindowFlags ulFlags);
+
+
         internal WinFormsGameWindow(ConcreteGame concreteGame)
         {
             _concreteGame = concreteGame;
@@ -133,6 +147,8 @@ namespace Microsoft.Xna.Framework
             Form = new WinFormsGameForm(this);
             _handle = Form.Handle;
             _instances.Add(this.Handle, this);
+
+            RegisterTouchWindow(_handle, TouchWindowFlags.WantPalm);
 
             SysDrawing.Size newClientSize = new SysDrawing.Size(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
             if (this.Form.ClientSize != newClientSize)
@@ -154,7 +170,11 @@ namespace Microsoft.Xna.Framework
 
             // Capture touch events.
             if (TouchPanel.WindowHandle == IntPtr.Zero)
+            {
                 TouchPanel.WindowHandle = this.Handle;
+                TouchPanel.DisplayWidth = this.Form.ClientSize.Width;
+                TouchPanel.DisplayHeight = this.Form.ClientSize.Height;
+            }
 
             // disable Keyboard input until the window is activated.
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetActive(false);
@@ -514,11 +534,7 @@ namespace Microsoft.Xna.Framework
 
             if (!pp.HardwareModeSwitch)
             {
-                // FIXME: setting the WindowState to Maximized when the form is not shown will not update the ClientBounds
-                // this causes the back buffer to be the wrong size when initializing in soft full screen
-                // we show the form to bypass the issue
-                Form.Show();
-                IsBorderless = true;
+                InternalSetFormBorderStyle(isBorderless: true);
                 Form.WindowState = FormWindowState.Maximized;
                 _lastFormState = FormWindowState.Maximized;
             }
@@ -539,7 +555,7 @@ namespace Microsoft.Xna.Framework
 
             ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
-            IsBorderless = false;
+            InternalSetFormBorderStyle(IsBorderless);
             Form.WindowState = FormWindowState.Normal;
             _lastFormState = FormWindowState.Normal;
             Form.Location = _locationBeforeFullScreen;
@@ -558,7 +574,7 @@ namespace Microsoft.Xna.Framework
 
             ((IPlatformGraphicsDevice)_concreteGame.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().ClearHardwareFullscreen();
 
-            IsBorderless = false;
+            InternalSetFormBorderStyle(IsBorderless);
             Form.WindowState = FormWindowState.Minimized;
             _lastFormState = FormWindowState.Minimized;
             Form.Location = _locationBeforeFullScreen;

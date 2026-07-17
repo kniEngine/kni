@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Platform.Audio
             _channels = channels;
             WaveFormat format = new WaveFormat(sampleRate, channels);
 
-            _voice = new SourceVoice(ConcreteAudioService.Device, format, true);
+            _voice = new SourceVoice(ConcreteAudioService.Device, format, VoiceFlags.None, XAudio2.MaximumFrequencyRatio, true);
             _voice.BufferEnd += OnBufferEnd;
         }
 

@@ -18,7 +18,7 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="Application.csproj" File="Application.csproj" ReplaceParameters="true">
-      
+
       <ProjectItem ReplaceParameters="false" TargetFileName="Directory.Build.props">Directory.Build.props</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="AndroidManifest.xml">AndroidManifest.xml</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="$ext_safeprojectname$Activity.cs">Activity.cs</ProjectItem>
@@ -40,7 +40,7 @@
           <ProjectItem ReplaceParameters="true" TargetFileName="Styles.xml">Styles.xml</ProjectItem>
         </Folder>
       </Folder>
-      
+
     </Project>
   </TemplateContent>
 </VSTemplate>

@@ -25,6 +25,7 @@
     <Description>The core framework.</Description>
     <PackageTags>KNI;.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -66,6 +67,10 @@
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="Vector4.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
     
   <ItemGroup>

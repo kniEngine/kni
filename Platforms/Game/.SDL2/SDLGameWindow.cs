@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform;
 using Microsoft.Xna.Platform.Graphics;
 using Microsoft.Xna.Platform.Input;
+using Microsoft.Xna.Platform.Input.Touch;
 using Microsoft.Xna.Platform.Utilities;
 
 
@@ -103,6 +104,8 @@ namespace Microsoft.Xna.Framework
         internal readonly Game _game;
         private IntPtr _handle;
         private IntPtr _pIcon;
+        internal Sdl.Window.SysWMType _sysWMType = Sdl.Window.SysWMType.Unknown;
+
         private bool _disposed;
         private bool _isResizable, _isBorderless;
         private bool _mouseVisible, _hardwareSwitch;
@@ -137,6 +140,11 @@ namespace Microsoft.Xna.Framework
                 Sdl.Window.State.Hidden | Sdl.Window.State.FullscreenDesktop);
             _instances.Add(this.Handle, this);
 
+            Sdl.Window.SDL_SysWMinfo sysWMinfo = default;
+            SDL.GetVersion(out sysWMinfo.version);
+            SDL.WINDOW.GetWindowWMInfo(_handle, ref sysWMinfo);
+            _sysWMType = sysWMinfo.subsystem;
+
             Title = AssemblyHelper.GetDefaultWindowTitle();
 
             if (Mouse.WindowHandle == IntPtr.Zero)
@@ -158,29 +166,26 @@ namespace Microsoft.Xna.Framework
             if (stream == null)
                 stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Kni.bmp");
 
-            try
+            if (stream != null)
             {
-                if (stream != null)
+                using (stream)
                 {
-                    using (stream)
+                    byte[] data = new byte[stream.Length];
+                    stream.Read(data, 0, data.Length);
+                    GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                    try
                     {
-                        byte[] data = new byte[stream.Length];
-                        stream.Read(data, 0, data.Length);
-                        GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-                        try
-                        {
-                            IntPtr pRWops = SDL.RwFromMem(data, data.Length);
-                            IntPtr pIcon = SDL.LoadBMP_RW(pRWops, 1);
-                            return pIcon;
-                        }
-                        finally
-                        {
-                            handle.Free();
-                        }
+                        IntPtr pRWops = SDL.RwFromMem(data, data.Length);
+                        IntPtr pIcon = SDL.LoadBMP_RW(pRWops, 1);
+                        return pIcon;
+                    }
+                    catch { }
+                    finally
+                    {
+                        handle.Free();
                     }
                 }
             }
-            catch { }
 
             return IntPtr.Zero;
         }
@@ -193,13 +198,9 @@ namespace Microsoft.Xna.Framework
                 Sdl.Window.State.InputFocus |
                 Sdl.Window.State.MouseFocus;
 
+            IntPtr oldhandle = _handle;
             if (_handle != IntPtr.Zero)
             {
-                if (Mouse.WindowHandle == _handle)
-                    Mouse.WindowHandle = IntPtr.Zero;
-                if (TouchPanel.WindowHandle == _handle)
-                    TouchPanel.WindowHandle = IntPtr.Zero;
-
                 _instances.Remove(this.Handle);
                 SDL.WINDOW.Destroy(_handle);
                 _handle = IntPtr.Zero;
@@ -223,10 +224,14 @@ namespace Microsoft.Xna.Framework
 
             Id = SDL.WINDOW.GetWindowId(_handle);
 
-            if (Mouse.WindowHandle == IntPtr.Zero)
+            if (Mouse.WindowHandle == oldhandle)
                 Mouse.WindowHandle = _handle;
-            if (TouchPanel.WindowHandle == IntPtr.Zero)
+            if (TouchPanel.WindowHandle == oldhandle)
+            {
                 TouchPanel.WindowHandle = _handle;
+                TouchPanel.DisplayWidth = _width;
+                TouchPanel.DisplayHeight = _height;
+            }
 
             if (_pIcon != IntPtr.Zero)
                 SDL.WINDOW.SetIcon(_handle, _pIcon);
@@ -251,12 +256,14 @@ namespace Microsoft.Xna.Framework
                     case Sdl.EventType.Quit:
                         isExiting = true;
                         break;
+
                     case Sdl.EventType.JoyDeviceAdded:
                         ((IPlatformJoystick)Joystick.Current).GetStrategy<ConcreteJoystick>().AddDevice(ev.JoystickDevice.Which);
                         break;
                     case Sdl.EventType.JoyDeviceRemoved:
                         ((IPlatformJoystick)Joystick.Current).GetStrategy<ConcreteJoystick>().RemoveDevice(ev.JoystickDevice.Which);
                         break;
+
                     case Sdl.EventType.ControllerDeviceAdded:
                         ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().AddDevice(ev.ControllerDevice.Which);
                         break;
@@ -271,12 +278,8 @@ namespace Microsoft.Xna.Framework
                     case Sdl.EventType.ControllerAxisMotion:
                         ((IPlatformGamePad)GamePad.Current).GetStrategy<ConcreteGamePad>().UpdatePacketInfo(ev.ControllerDevice.Which, ev.ControllerDevice.TimeStamp);
                         break;
+
                     case Sdl.EventType.MouseMotion:
-                        unchecked
-                        {
-                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawX += ev.Motion.Xrel;
-                            ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().RawY += ev.Motion.Yrel;
-                        }
                         break;
                     case Sdl.EventType.MouseWheel:
                         unchecked
@@ -286,24 +289,60 @@ namespace Microsoft.Xna.Framework
                             ((IPlatformMouse)Mouse.Current).GetStrategy<ConcreteMouse>().ScrollX += ev.Wheel.X * wheelDelta;
                         }
                         break;
+
+                    case Sdl.EventType.FingerDown:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+#if ENABLE_TOUCHINPUT
+                            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(identifier, new Vector2(x, y));
+#endif
+                        }
+                        break;
+                    case Sdl.EventType.FingerMotion:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+#if ENABLE_TOUCHINPUT
+                            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(identifier, new Vector2(x, y));
+#endif
+                        }
+                        break;
+                    case Sdl.EventType.FingerUp:
+                        {
+                            int identifier = (int)ev.Finger.FingerId;
+                            float x = ev.Finger.X;
+                            float y = ev.Finger.Y;
+                            x *= _width; y *= _height;
+#if ENABLE_TOUCHINPUT
+                            ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(identifier, new Vector2(x, y));
+#endif
+                        }
+                        break;
+
                     case Sdl.EventType.KeyDown:
-                    {
-                        Keys key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
-                        if (!_keys.Contains(key))
-                                _keys.Add(key);
-                        char character = (char)ev.Key.Keysym.Sym;
-                        this.OnKeyDown(key);
-                        if (char.IsControl(character))
-                                this.OnTextInput(character, key);
-                        break;
-                    }
-                    case Sdl.EventType.KeyUp:
-                    {
+                        {
                             Keys key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
-                        _keys.Remove(key);
-                        this.OnKeyUp(key);
+                            if (!_keys.Contains(key))
+                                _keys.Add(key);
+                            char character = (char)ev.Key.Keysym.Sym;
+                            this.OnKeyDown(key);
+                            if (char.IsControl(character))
+                                this.OnTextInput(character, key);
+                        }
                         break;
-                    }
+                    case Sdl.EventType.KeyUp:
+                        {
+                            Keys key = KeyboardUtil.ToXna(ev.Key.Keysym.Sym);
+                            _keys.Remove(key);
+                            this.OnKeyUp(key);
+                        }
+                        break;
+
                     case Sdl.EventType.TextInput:
                         if (this.IsTextInputAttached())
                         {
@@ -359,6 +398,7 @@ namespace Microsoft.Xna.Framework
                             }
                         }
                         break;
+
                     case Sdl.EventType.WindowEvent:
 
                         // If the ID is not the same as our main window ID
@@ -378,6 +418,7 @@ namespace Microsoft.Xna.Framework
                                 break;
                             case Sdl.Window.EventId.FocusLost:
                                 base.OnDeactivated();
+                                ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().SDL2CancelAllTouches();
                                 break;
                             case Sdl.Window.EventId.Moved:
                                 if (!_supressMoved)
@@ -391,25 +432,27 @@ namespace Microsoft.Xna.Framework
                         break;
 
                     case Sdl.EventType.DropFile:
-                        if (ev.Drop.WindowId != this.Id)
-                            break;
+                        {
+                            if (ev.Drop.WindowId != this.Id)
+                                break;
 
-                        string path = InteropHelpers.Utf8ToString(ev.Drop.File);
-                        SDL.SDL_Free(ev.Drop.File);
-                        _dropList.Add(path);
-
+                            string path = InteropHelpers.Utf8ToString(ev.Drop.File);
+                            SDL.SDL_Free(ev.Drop.File);
+                            _dropList.Add(path);
+                        }
                         break;
 
                     case Sdl.EventType.DropComplete:
-                        if (ev.Drop.WindowId != this.Id)
-                            break;
-
-                        if (_dropList.Count > 0)
                         {
-                            OnFileDrop(new FileDropEventArgs(_dropList.ToArray()));
-                            _dropList.Clear();
-                        }
+                            if (ev.Drop.WindowId != this.Id)
+                                break;
 
+                            if (_dropList.Count > 0)
+                            {
+                                OnFileDrop(new FileDropEventArgs(_dropList.ToArray()));
+                                _dropList.Clear();
+                            }
+                        }
                         break;
                 }
             }

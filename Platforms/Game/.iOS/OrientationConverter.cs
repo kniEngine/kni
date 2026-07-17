@@ -73,7 +73,6 @@ namespace Microsoft.Xna.Framework
 {
     public static class OrientationConverter
     {
-        [CLSCompliant(false)]
         public static DisplayOrientation UIDeviceOrientationToDisplayOrientation(UIDeviceOrientation orientation)
         {
             switch (orientation)
@@ -90,7 +89,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        [CLSCompliant(false)]
         public static DisplayOrientation ToDisplayOrientation(UIInterfaceOrientation orientation)
         {
             switch (orientation)
@@ -105,7 +103,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        [CLSCompliant(false)]
         public static UIInterfaceOrientationMask ToUIInterfaceOrientationMask(DisplayOrientation orientation)
         {
             switch (Normalize(orientation))

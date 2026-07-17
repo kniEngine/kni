@@ -195,13 +195,13 @@ namespace Microsoft.Xna.Platform.XR
             _graphics.DeviceDisposing += GraphicsDeviceDisposing;
 
 
-            Android.App.Activity activity = _services.GetService(typeof(Android.App.Activity)) as Android.App.Activity;
+            global::Android.App.Activity activity = _services.GetService(typeof(global::Android.App.Activity)) as global::Android.App.Activity;
             if (activity == null)
                 throw new InvalidOperationException("Activity not found in services.");
 
             LoaderInitInfoAndroidKHR loaderInitInfo = new LoaderInitInfoAndroidKHR(
                                 applicationVM: (void*)Java.Interop.JniRuntime.CurrentRuntime.InvocationPointer,
-                                applicationContext: (void*)Android.Runtime.JNIEnv.ToJniHandle(activity)
+                                applicationContext: (void*)global::Android.Runtime.JNIEnv.ToJniHandle(activity)
                                 );
             Result xrResult;
 
@@ -607,28 +607,28 @@ namespace Microsoft.Xna.Platform.XR
             //var GL = adapter.Ogl;
 
             // bind DrawFramebuffer
-            Android.Opengl.GLES30.GlBindFramebuffer(Android.Opengl.GLES30.GlDrawFramebuffer, _Renderer.FrameBuffer[eyeIndex].FrameBuffers[textureIndex]);
+            global::Android.Opengl.GLES30.GlBindFramebuffer(global::Android.Opengl.GLES30.GlDrawFramebuffer, _Renderer.FrameBuffer[eyeIndex].FrameBuffers[textureIndex]);
             //GL.BindFramebuffer(OpenGL.FramebufferTarget.DrawFramebuffer, _Renderer.FrameBuffer[eyeIndex].FrameBuffers[textureIndex]);
             //GL.CheckGLError();
 
             // fix oversaturation
-            Android.Opengl.GLES30.GlDisable(FRAMEBUFFER_SRGB);
+            global::Android.Opengl.GLES30.GlDisable(FRAMEBUFFER_SRGB);
 
             // copy rendertarget to texture
             {
                 int[] sourceFramebuffer = new int[1];
-                Android.Opengl.GLES30.GlGenFramebuffers(sourceFramebuffer.Length, sourceFramebuffer, 0);
+                global::Android.Opengl.GLES30.GlGenFramebuffers(sourceFramebuffer.Length, sourceFramebuffer, 0);
                 //int sourceFramebuffer = GL.GenFramebuffer();
                 //GL.CheckGLError();
 
-                Android.Opengl.GLES30.GlBindFramebuffer(Android.Opengl.GLES30.GlReadFramebuffer, sourceFramebuffer[0]);
+                global::Android.Opengl.GLES30.GlBindFramebuffer(global::Android.Opengl.GLES30.GlReadFramebuffer, sourceFramebuffer[0]);
                 //GL.BindFramebuffer(OpenGL.FramebufferTarget.ReadFramebuffer, sourceFramebuffer);
                 //GL.CheckGLError();
 
-                Android.Opengl.GLES30.GlFramebufferTexture2D(
-                    Android.Opengl.GLES30.GlReadFramebuffer,
-                    Android.Opengl.GLES30.GlColorAttachment0,
-                    Android.Opengl.GLES30.GlTexture2d, (int)rt.GetSharedHandle(), 0);
+                global::Android.Opengl.GLES30.GlFramebufferTexture2D(
+                    global::Android.Opengl.GLES30.GlReadFramebuffer,
+                    global::Android.Opengl.GLES30.GlColorAttachment0,
+                    global::Android.Opengl.GLES30.GlTexture2d, (int)rt.GetSharedHandle(), 0);
                 //GL.FramebufferTexture2D(
                 //    OpenGL.FramebufferTarget.ReadFramebuffer,
                 //    OpenGL.FramebufferAttachment.ColorAttachment0,
@@ -637,19 +637,19 @@ namespace Microsoft.Xna.Platform.XR
                 //GL.CheckGLError();
 
                 // copy and y-flip
-                Android.Opengl.GLES30.GlBlitFramebuffer(0, 0, rt.Width, rt.Height,
+                global::Android.Opengl.GLES30.GlBlitFramebuffer(0, 0, rt.Width, rt.Height,
                                    0, _Renderer.FrameBuffer[eyeIndex].Height - 1, _Renderer.FrameBuffer[eyeIndex].Width, 0,
-                                   Android.Opengl.GLES30.GlColorBufferBit, Android.Opengl.GLES30.GlNearest);
+                                   global::Android.Opengl.GLES30.GlColorBufferBit, global::Android.Opengl.GLES30.GlNearest);
                 //GL.BlitFramebuffer(0, 0, rt.Width, rt.Height,
                 //                   0, _Renderer.FrameBuffer[eyeIndex].Height - 1, _Renderer.FrameBuffer[eyeIndex].Width, 0,
                 //                   OpenGL.ClearBufferMask.ColorBufferBit, OpenGL.BlitFramebufferFilter.Nearest);
                 //GL.CheckGLError();
 
-                Android.Opengl.GLES30.GlBindFramebuffer(Android.Opengl.GLES30.GlReadFramebuffer, sourceFramebuffer[0]);
+                global::Android.Opengl.GLES30.GlBindFramebuffer(global::Android.Opengl.GLES30.GlReadFramebuffer, sourceFramebuffer[0]);
                 //GL.BindFramebuffer(OpenGL.FramebufferTarget.ReadFramebuffer, 0);
                 //GL.CheckGLError();
 
-                Android.Opengl.GLES30.GlDeleteFramebuffers(sourceFramebuffer.Length, sourceFramebuffer, 0);
+                global::Android.Opengl.GLES30.GlDeleteFramebuffers(sourceFramebuffer.Length, sourceFramebuffer, 0);
                 //GL.DeleteFramebuffer(sourceFramebuffer);
                 //GL.CheckGLError();
             }
@@ -657,7 +657,7 @@ namespace Microsoft.Xna.Platform.XR
             ovrRenderer_RenderFrame_Release(ref _Renderer, eyeIndex);
 
             // unbind DrawFramebuffer
-            Android.Opengl.GLES30.GlBindFramebuffer(Android.Opengl.GLES30.GlDrawFramebuffer, 0);
+            global::Android.Opengl.GLES30.GlBindFramebuffer(global::Android.Opengl.GLES30.GlDrawFramebuffer, 0);
             //GL.BindFramebuffer(OpenGL.FramebufferTarget.DrawFramebuffer, 0);
             //GL.CheckGLError();
         }
@@ -848,6 +848,7 @@ namespace Microsoft.Xna.Platform.XR
             requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_swapchain_update_state_opengl_es));
             requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_foveation));
             requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_foveation_configuration));
+            //requiredExtensionNames.Add(nameof(OxrExtensions.XR_EXT_hand_tracking));
 
             if (this.SessionMode == XRSessionMode.AR)
                 requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_passthrough));
@@ -894,6 +895,10 @@ namespace Microsoft.Xna.Platform.XR
             Console.WriteLine("systemId. {0}.", _oxrInstance.SystemId);
 
             SystemColorSpacePropertiesFB colorSpacePropertiesFB = new SystemColorSpacePropertiesFB(StructureType.SystemColorSpacePropertiesFB);
+
+            //SystemHandTrackingPropertiesEXT systemHandTrackingPropertiesEXT = default;
+            //systemHandTrackingPropertiesEXT.Type = StructureType.SystemHandTrackingPropertiesExt;
+            //colorSpacePropertiesFB.Next = &systemHandTrackingPropertiesEXT;
 
             xrResult = _oxrInstance.GetSystemProperties(&colorSpacePropertiesFB, out SystemProperties systemProperties);
             Debug.Assert(xrResult == Result.Success, "GetSystemProperties");
@@ -952,10 +957,10 @@ namespace Microsoft.Xna.Platform.XR
             _CpuLevel = CPU_LEVEL;
             _GpuLevel = GPU_LEVEL;
 
-            Android.Opengl.EGLDisplay display = Android.Opengl.EGL14.EglGetCurrentDisplay();
-            Android.Opengl.EGLContext context = Android.Opengl.EGL14.EglGetCurrentContext();
+            global::Android.Opengl.EGLDisplay display = global::Android.Opengl.EGL14.EglGetCurrentDisplay();
+            global::Android.Opengl.EGLContext context = global::Android.Opengl.EGL14.EglGetCurrentContext();
             int[] currentConfig = new int[1];
-            Android.Opengl.EGL14.EglQueryContext(display, context, Android.Opengl.EGL14.EglConfigId, currentConfig, 0);
+            global::Android.Opengl.EGL14.EglQueryContext(display, context, global::Android.Opengl.EGL14.EglConfigId, currentConfig, 0);
             int eglConfig = currentConfig[0];
 
             // Create the OpenXR Session.
@@ -1613,7 +1618,7 @@ namespace Microsoft.Xna.Platform.XR
 
             frameBuffer.FrameBuffers = new int[frameBuffer.TextureSwapChainLength];
 
-            Android.Opengl.GLES30.GlGenFramebuffers((int)frameBuffer.TextureSwapChainLength, frameBuffer.FrameBuffers, 0);
+            global::Android.Opengl.GLES30.GlGenFramebuffers((int)frameBuffer.TextureSwapChainLength, frameBuffer.FrameBuffers, 0);
 
             //ConcreteGraphicsAdapter adapter = ((IPlatformGraphicsAdapter)_graphics.GraphicsDevice.Adapter).Strategy.ToConcrete<ConcreteGraphicsAdapter>();
             //var GL = adapter.Ogl;
@@ -1627,14 +1632,14 @@ namespace Microsoft.Xna.Platform.XR
                 //frameBuffer.FrameBuffers[i] = GL.GenFramebuffer();
                 //GL.CheckGLError();
 
-                Android.Opengl.GLES30.GlBindFramebuffer(Android.Opengl.GLES30.GlDrawFramebuffer, frameBuffer.FrameBuffers[i]);
+                global::Android.Opengl.GLES30.GlBindFramebuffer(global::Android.Opengl.GLES30.GlDrawFramebuffer, frameBuffer.FrameBuffers[i]);
                 //GL.BindFramebuffer(OpenGL.FramebufferTarget.DrawFramebuffer, frameBuffer.FrameBuffers[i]);
                 //GL.CheckGLError();
 
-                Android.Opengl.GLES30.GlFramebufferTexture2D(
-                    Android.Opengl.GLES30.GlDrawFramebuffer,
-                    Android.Opengl.GLES30.GlColorAttachment0,
-                    Android.Opengl.GLES30.GlTexture2d, (int)colorTexture, 0);
+                global::Android.Opengl.GLES30.GlFramebufferTexture2D(
+                    global::Android.Opengl.GLES30.GlDrawFramebuffer,
+                    global::Android.Opengl.GLES30.GlColorAttachment0,
+                    global::Android.Opengl.GLES30.GlTexture2d, (int)colorTexture, 0);
                 //GL.FramebufferTexture2D(
                 //  OpenGL.FramebufferTarget.DrawFramebuffer,
                 //  OpenGL.FramebufferAttachment.ColorAttachment0,

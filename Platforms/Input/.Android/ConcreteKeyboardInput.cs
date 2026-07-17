@@ -32,7 +32,7 @@ namespace Microsoft.Xna.Platform.Input
                     input.SetSelection(defaultText.Length);
 
                 if (usePasswordMode)
-                    input.InputType = Android.Text.InputTypes.ClassText | Android.Text.InputTypes.TextVariationPassword;
+                    input.InputType = global::Android.Text.InputTypes.ClassText | global::Android.Text.InputTypes.TextVariationPassword;
 
                 alert.SetView(input);
 

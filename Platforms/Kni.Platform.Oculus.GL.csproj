@@ -14,14 +14,14 @@
       <!-- By setting TargetPlatformVersionSupported
            we disable _CheckForInvalidTargetPlatformVersion check.
            This let us target android SDK 32 under .net9.
-      -->
     <TargetPlatformVersionSupported>true</TargetPlatformVersionSupported>
+      -->
   </PropertyGroup>
 
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFramework>net8.0-android32.0</TargetFramework>
+    <TargetFramework>net8.0-android</TargetFramework>
     <LangVersion>Default</LangVersion>
     <IsTrimmable>True</IsTrimmable>
     <ProjectGuid>{3472997A-CD26-4D0D-B64A-795F913E6777}</ProjectGuid>
@@ -225,7 +225,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="nkast.LibOXR" Version="1.0.0" />
+    <PackageReference Include="nkast.LibOXR" Version="1.2.0" />
     <PackageReference Include="Silk.NET.OpenXR" Version="2.22.0" />
   </ItemGroup>
 

@@ -37,6 +37,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal int MaxDrawBuffers { get { return _maxDrawBuffers; } }
 
+        internal bool SupportsTexture3D { get; private set; }
 
         internal void PlatformInitialize(ConcreteGraphicsContextGL cgraphicsContext, GraphicsDeviceStrategy deviceStrategy, GLVersion version)
         {
@@ -164,6 +165,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             GL.GetInteger(GetParamName.MaxDrawBuffers, out _maxDrawBuffers);
             GL.CheckGLError();
+
+            SupportsTexture3D = (GL.BoundApi == OGL.RenderApi.GL && version >= new GLVersion(1, 2))
+                             || (GL.BoundApi == OGL.RenderApi.ES && version >= new GLVersion(3, 0));
         }
 
     }

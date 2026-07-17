@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Platform.Media
     {
         private const int GL_TEXTURE_EXTERNAL_OES = (0x00008D65);
         
-        private Android.Media.MediaPlayer _player;
+        private global::Android.Media.MediaPlayer _player;
 
         private SurfaceTexture _surfaceTexture;
         private Surface _surface;
@@ -89,7 +89,7 @@ namespace Microsoft.Xna.Platform.Media
 
         internal ConcreteVideoPlayerStrategy()
         {
-            _player = new Android.Media.MediaPlayer();
+            _player = new global::Android.Media.MediaPlayer();
 
         }
         
@@ -209,7 +209,7 @@ namespace Microsoft.Xna.Platform.Media
 
             this.Video = video;
 
-            Android.Content.Res.AssetFileDescriptor afd = Android.App.Application.Context.Assets.OpenFd(((IPlatformVideo)this.Video).Strategy.FileName);
+            global::Android.Content.Res.AssetFileDescriptor afd = global::Android.App.Application.Context.Assets.OpenFd(((IPlatformVideo)this.Video).Strategy.FileName);
             if (afd == null)
                 return;
 

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "KNI Engine",
+  "classifications": [ "KNI", "Games", "Web" ],
+  "identity": "nkast.Kni.Blazor.GL.Project.CSharp",
+  "name": "KNI Web Game Project (.net8)",
+  "shortName": "kni-blazor-gl",
+  "description": "A KNI game project for Blazor webassembly using WebGL.",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "$projectname$",
+  "primaryOutputs": [
+    {
+      "path": "$projectname$.csproj"
+    }
+  ],
+  "symbols": {
+    "slnguid": { "type": "generated", "generator": "guid", "replaces": "$slnguid$" },
+    "guid1": { "type": "generated", "generator": "guid", "replaces": "$guid1$" },
+    "filesafeprojectname": {
+      "type": "derived",
+      "valueSource": "name",
+      "replaces": "$safeprojectname$",
+      "valueTransform": "safe_name"
+    }
+  },
+  "preferNameDirectory": true,
+  "icon": "TemplateIcon.png"
+}

@@ -25,6 +25,7 @@
     <Description>The Devices framework.</Description>
     <PackageTags>.net core;core;.net standard;standard</PackageTags>
     <PackageId>nkast.Xna.Framework.Devices</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -60,6 +61,10 @@
     <Compile Include="Devices\Sensors\SensorServiceStrategy.cs" />
     <Compile Include="Devices\Sensors\SensorState.cs" />
     <Compile Include="Devices\Sensors\SensorStrategy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

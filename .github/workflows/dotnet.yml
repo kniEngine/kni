@@ -18,6 +18,7 @@ jobs:
     - uses: actions/checkout@v4    
       with:
           submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
 
    # - name: Setup .NET
    #   uses: actions/setup-dotnet@v4
@@ -96,6 +97,9 @@ jobs:
    #   run: dotnet build Kni.Platform.Cardboard.GL.sln --property:WarningLevel=1
    # - name: Build Windows UAP.DX11
    #   run: dotnet msbuild Kni.Platform.UAP.DX11.sln --property:WarningLevel=1
+
+    - name: Build dotnet Templates
+      run: dotnet build Templates\dotnetTemplates\nkast.Kni.Templates.csproj --property:WarningLevel=1
 
    # - name: Test
    #   run: dotnet test --no-build --verbosity normal

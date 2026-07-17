@@ -26,6 +26,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override int PixelCount { get { return _pixelCount; } }
 
+        public override bool AnyPixelsPassed { get { return _pixelCount > 0; } }
+
         public override bool IsComplete
         {
             get

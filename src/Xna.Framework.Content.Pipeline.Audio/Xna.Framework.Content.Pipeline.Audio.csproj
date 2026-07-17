@@ -22,6 +22,7 @@
     <Description>KNI Framework Framework Content Pipeline Audio.</Description>
     <PackageTags>KNI;</PackageTags>
     <PackageId>nkast.Xna.Framework.Content.Pipeline.Audio</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -72,6 +73,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <NativeBinary>True</NativeBinary>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

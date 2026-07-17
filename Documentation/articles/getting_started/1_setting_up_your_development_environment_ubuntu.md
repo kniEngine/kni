@@ -2,11 +2,11 @@
 
 This section provides a step-by-step guide for setting up your development environment on Linux.
 
-The only development environment that MonoGame officially supports on Linux is [Visual Studio Code](https://code.visualstudio.com/).
+The only development environment that KNI officially supports on Linux is [Visual Studio Code](https://code.visualstudio.com/).
 
-## Install .NET 6 SDK
+## Install .NET 8 SDK
 
-To install the .NET 6 SDK on your Linux distribution, please follow [Microsoft's instructions](https://docs.microsoft.com/dotnet/core/install/linux).
+To install the .NET 8 SDK on your Linux distribution, please follow [Microsoft's instructions](https://docs.microsoft.com/dotnet/core/install/linux).
 
 ## Install Visual Studio Code
 
@@ -21,14 +21,12 @@ code --install-extension ms-dotnettools.csharp
 ```
 > Or alternatively, select the "Extensions" tab on the left hand side in VSCOde and search for the C# Extension published by Microsoft.
 
-## Install MonoGame templates
+## Install KNI templates
 
 The following command will install templates for the .NET CLI and Rider IDE. 
 
-> There is no template support for MonoDevelop.
-
 ```sh
-dotnet new --install MonoGame.Templates.CSharp
+dotnet new install nkast.Kni.Templates@4.2.9001
 ```
 
 ## [Optional] Set up Wine for effect compilation

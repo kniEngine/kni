@@ -24,11 +24,9 @@ namespace Microsoft.Xna.Framework
 
         public bool FlipLandscape { get; private set; }
 
-        [CLSCompliant(false)]
         public Orientation NaturalOrientation { get; private set; }
 
 
-        [CLSCompliant(false)]
         public static AndroidCompatibility Current
         {
             get
@@ -55,8 +53,8 @@ namespace Microsoft.Xna.Framework
         private Orientation GetDeviceNaturalOrientation(Activity activity)
         {
             // check if MainActivity setup is correct. 
-            Android.Content.PM.ScreenOrientation screenOrientation = activity.RequestedOrientation;
-            if (screenOrientation != Android.Content.PM.ScreenOrientation.Landscape)
+            global::Android.Content.PM.ScreenOrientation screenOrientation = activity.RequestedOrientation;
+            if (screenOrientation != global::Android.Content.PM.ScreenOrientation.Landscape)
                 throw new InvalidOperationException("Invalid orientation. Set ScreenOrientation in MainActivity to Landscape.");
 
             Orientation orientation = activity.Resources.Configuration.Orientation;
@@ -124,7 +122,6 @@ namespace Microsoft.Xna.Framework
         /// Get the absolute orientation of the device, accounting for platform differences.
         /// </summary>
         /// <returns></returns>
-        [CLSCompliant(false)]
         public DisplayOrientation GetAbsoluteOrientation(Activity activity)
         {
             Orientation orientation = activity.Resources.Configuration.Orientation;

@@ -19,7 +19,6 @@ using VRCardboard = Com.Google.Vrtoolkit.Cardboard;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
     public class AndroidSurfaceView : VRCardboard.CardboardView
         , ISurfaceView
         , VRCardboard.CardboardView.IRenderer
@@ -35,13 +34,13 @@ namespace Microsoft.Xna.Framework
             _gameWindow = gameWindow;
 
             // Holder.SetType is deprecated. The SurfaceType value is ignored.
-            if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.Honeycomb)
+            if (global::Android.OS.Build.VERSION.SdkInt < global::Android.OS.BuildVersionCodes.Honeycomb)
                 Holder.SetType(SurfaceType.Gpu);
 
-            this.Holder.SetFormat(Android.Graphics.Format.Rgba8888);
+            this.Holder.SetFormat(global::Android.Graphics.Format.Rgba8888);
 
             ((VRCardboard.CardboardActivity)context).CardboardView = this;
-            ((Android.App.Activity)context).SetContentView(this);
+            ((global::Android.App.Activity)context).SetContentView(this);
 
             this.SetRenderer(this);
             //gameView.DistortionCorrectionEnabled = false;

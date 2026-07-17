@@ -132,10 +132,27 @@ namespace Microsoft.Xna.Platform.Graphics
                         int rowSize = elementSize * elementsInRow;
                         if (rowSize == dataBox.RowPitch)
                             stream.ReadRange(data, startIndex, elementCount);
+                        else if (checkedRect.X == 0 && checkedRect.Y == 0 &&
+                                 checkedRect.Width == levelSize && checkedRect.Height == levelSize &&
+                                 startIndex == 0 && elementCount == data.Length)
+                        {
+                            // TNC: optimized PlatformGetData() that reads multiple elements in a row when texture has rowPitch
+                            int elementSize2 = sizeof(T);
+                            if (elementSize2 == 1) // byte[]
+                                elementsInRow = elementsInRow * elementSize;
+
+                            int currentIndex = 0;
+                            for (int row = 0; row < rows; row++)
+                            {
+                                stream.ReadRange(data, currentIndex, elementsInRow);
+                                stream.Seek((dataBox.RowPitch - rowSize), SeekOrigin.Current);
+                                currentIndex += elementsInRow;
+                            }
+                        }
                         else
                         {
                             // Some drivers may add pitch to rows.
-                            // We need to copy each row separatly and skip trailing zeros.
+                            // We need to copy each row separately and skip trailing zeros.
                             stream.Seek(0, SeekOrigin.Begin);
 
                             int elementSizeInByte = sizeof(T);
@@ -165,12 +182,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)
         {
-            // round x and y down to next multiple of four; width and height up to next multiple of four
-            int roundedWidth = (rect.Width + 3) & ~0x3;
-            int roundedHeight = (rect.Height + 3) & ~0x3;
-            checkedRect = new Rectangle(rect.X & ~0x3, rect.Y & ~0x3,
+            Format.GetBlockSize(out int blockWidth, out int blockHeight);
+            int blockWidthMinusOne = blockWidth - 1;
+            int blockHeightMinusOne = blockHeight - 1;
+            // round x and y down to next multiple of block size; width and height up to next multiple of block size
+            int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+            int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+            checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
                                         roundedWidth, roundedHeight);
-            return (roundedWidth * roundedHeight * fSize / 16);
+            return roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
         }
         #endregion ITextureCubeStrategy
 

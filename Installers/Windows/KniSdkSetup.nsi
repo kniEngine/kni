@@ -125,7 +125,7 @@ Section "VS012 Redistributables (x64)" VS2012Redist
   
 SectionEnd
 
-Section "VS2022 Templates" VS2022
+Section /o "VS2022 Templates" VS2022
 
   IfFileExists `$DOCUMENTS\Visual Studio 2022\*.*` InstallTemplates CannotInstallTemplates
   InstallTemplates:
@@ -137,6 +137,21 @@ Section "VS2022 Templates" VS2022
   CannotInstallTemplates:
     DetailPrint "Visual Studio 2022 not found"
   EndTemplates:
+
+SectionEnd
+
+Section ".NET Templates" DotNetTemplates
+
+  SetOutPath "$INSTDIR\Templates"
+  File /r '..\..\Artifacts\Packages\nkast.Kni.Templates.4.2.9001.nupkg'
+
+  nsExec::ExecToLog 'dotnet new install "$INSTDIR\Templates\nkast.Kni.Templates.4.2.9001.nupkg"'
+  Pop $0
+  ${If} $0 != 0
+    DetailPrint "Failed to install .NET templates. Make sure .NET SDK is installed."
+  ${Else}
+    DetailPrint ".NET templates installed successfully"
+  ${EndIf}
 
 SectionEnd
 
@@ -165,6 +180,7 @@ SectionEnd
 LangString CoreComponentsDesc ${LANG_ENGLISH} "Install the Runtimes and the MSBuild extensions for MonoGame"
 LangString VS2012RedistDesc ${LANG_ENGLISH} "Install the VS2012 Redistributables (x64)"
 LangString VS2022Desc ${LANG_ENGLISH} "Install the project templates for Visual Studio 2022"
+LangString DotNetTemplatesDesc ${LANG_ENGLISH} "Install the project templates for .NET CLI (dotnet new)"
 LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your start menu"
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -172,6 +188,7 @@ LangString MenuDesc ${LANG_ENGLISH} "Add a link to the MonoGame website to your 
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2012Redist} $(VS2012RedistDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${NugetPackages} $(NugetPackagesDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${VS2022} $(VS2022Desc)
+  !insertmacro MUI_DESCRIPTION_TEXT ${DotNetTemplates} $(DotNetTemplatesDesc)
   !insertmacro MUI_DESCRIPTION_TEXT ${Menu} $(MenuDesc)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -201,10 +218,23 @@ IfFileExists `$DOCUMENTS\Visual Studio 2022\*.*` end disable
   end:
 FunctionEnd
 
+Function checkDotNet
+  nsExec::ExecToStack 'dotnet --version'
+  Pop $0
+  Pop $1
+  ${If} $0 != 0
+	; dotnet CLI not found, disable the section
+	SectionGetFlags ${DotNetTemplates} $0
+	IntOp $0 $0 & ${SECTION_OFF}
+	SectionSetFlags ${DotNetTemplates} $0
+  ${EndIf}
+FunctionEnd
+
 Function .onInit 
   IntOp $0 $0 | ${SF_RO}
   call checkVS2012Redist
   Call checkVS2022
+  Call checkDotNet
   IntOp $0 ${SF_SELECTED} | ${SF_RO}
   SectionSetFlags ${core_id} $0
 FunctionEnd
@@ -221,6 +251,11 @@ Section "Uninstall"
   DeleteRegKey HKCR '.mgcb'
   DeleteRegKey HKCR 'MonoGame.ContentBuilderFile'
   
+  ; Uninstall .NET templates if they exist
+;  IfFileExists "$INSTDIR\Templates\*.nupkg" 0 SkipDotNetUninstall
+;    nsExec::ExecToLog 'dotnet new uninstall nkast.Kni.Templates'
+;  SkipDotNetUninstall:
+
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ProjectTemplates\Visual C#\KNI"
   RMDir /r "$DOCUMENTS\Visual Studio 2022\Templates\ItemTemplates\Visual C#\KNI"
   RMDir /r "$SMPROGRAMS\${APPNAME}"
