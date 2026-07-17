@@ -848,6 +848,7 @@ namespace Microsoft.Xna.Platform.XR
             requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_swapchain_update_state_opengl_es));
             requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_foveation));
             requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_foveation_configuration));
+            //requiredExtensionNames.Add(nameof(OxrExtensions.XR_EXT_hand_tracking));
 
             if (this.SessionMode == XRSessionMode.AR)
                 requiredExtensionNames.Add(nameof(OxrExtensions.XR_FB_passthrough));
@@ -894,6 +895,10 @@ namespace Microsoft.Xna.Platform.XR
             Console.WriteLine("systemId. {0}.", _oxrInstance.SystemId);
 
             SystemColorSpacePropertiesFB colorSpacePropertiesFB = new SystemColorSpacePropertiesFB(StructureType.SystemColorSpacePropertiesFB);
+
+            //SystemHandTrackingPropertiesEXT systemHandTrackingPropertiesEXT = default;
+            //systemHandTrackingPropertiesEXT.Type = StructureType.SystemHandTrackingPropertiesExt;
+            //colorSpacePropertiesFB.Next = &systemHandTrackingPropertiesEXT;
 
             xrResult = _oxrInstance.GetSystemProperties(&colorSpacePropertiesFB, out SystemProperties systemProperties);
             Debug.Assert(xrResult == Result.Success, "GetSystemProperties");
