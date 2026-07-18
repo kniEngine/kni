@@ -56,6 +56,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             throw new PlatformNotSupportedException();
         }
+
+        public int GetCompressedDataByteSize(int fSize, int left, int top, int right, int bottom, int front, int back,
+                                             int textureBoundsWidth, int textureBoundsHeight, int textureBoundsDepth,
+                                             out int checkedLeft, out int checkedTop, out int checkedRight, out int checkedBottom,
+                                             out int checkedFront, out int checkedBack)
+        {
+            throw new PlatformNotSupportedException();
+        }
         #endregion ITexture3DStrategy
 
         internal void PlatformConstructTexture3D(GraphicsContextStrategy contextStrategy, int width, int height, int depth, bool mipMap, SurfaceFormat format)
