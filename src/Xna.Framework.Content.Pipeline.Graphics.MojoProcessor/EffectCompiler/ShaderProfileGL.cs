@@ -409,6 +409,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             {
                 glslCode = "precision highp float;\n"
                          + "precision highp int;\n"
+                         + "precision highp sampler2D;\n"
+                         + "precision highp samplerCube;\n"
+                         + "precision highp sampler3D;\n"
                          + "\n"
                          + glslCode;
             }
