@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 EffectObject effectObject = effectObjects[backend];
 
                 MemoryStream fxStream = new MemoryStream();
-                KNIFXWriter11 fxWriter = new KNIFXWriter11(fxStream);
+                KNIFXWriter12 fxWriter = new KNIFXWriter12(fxStream);
                 {
                     bool integersAsFloats = (shaderProfileTypes[backend] == ShaderProfileType.OpenGL_Mojo);
                     fxWriter.WriteEffect(effectObject, integersAsFloats);
@@ -138,8 +138,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     // Write a very simple header for identification and versioning.
-                    writer.Write(KNIFXWriter11.KNIFXSignature.ToCharArray());
-                    writer.Write((short)KNIFXWriter11.Version);
+                    writer.Write(KNIFXWriter12.KNIFXSignature.ToCharArray());
+                    writer.Write((short)KNIFXWriter12.Version);
                     writer.Write((short)0); // reserved
 
                     // write fx Directory

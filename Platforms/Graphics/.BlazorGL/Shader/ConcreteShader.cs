@@ -163,6 +163,11 @@ namespace Microsoft.Xna.Platform.Graphics
                         glslCode = rgxVarying.Replace(glslCode, "in");
                         glslCode = rgxFragColor.Replace(glslCode, "out vec4 $1;");
                         glslCode = rgxFragData .Replace(glslCode, "layout(location=$2) out vec4 $1;");
+
+                        glslCode = "precision highp sampler2D;\n"
+                                 + "precision highp samplerCube;\n"
+                                 + "precision highp sampler3D;\n"
+                                 + glslCode;
                     }
                     break;
             }

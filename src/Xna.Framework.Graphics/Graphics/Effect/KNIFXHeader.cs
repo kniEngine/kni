@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
             /// <summary>
             /// The current KNI Effect file format versions
             /// </summary>
-            public const int CurrentKNIFXVersion = 11;
+            public const int CurrentKNIFXVersion = 12;
 
             public readonly int Signature;
             public readonly int Version;

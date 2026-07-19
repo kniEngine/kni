@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    class KNIFXWriter11 : BinaryWriter
+    class KNIFXWriter12 : BinaryWriter
     {
         internal const string KNIFXSignature = "KNIF";
-        internal const int Version = 11;
+        internal const int Version = 12;
 
-        public KNIFXWriter11(Stream output) : base(output)
+        public KNIFXWriter12(Stream output) : base(output)
         {
         }
 

@@ -70,6 +70,9 @@ namespace Microsoft.Xna.Framework.Graphics
             KNIFXHeader fxHeader = new KNIFXHeader(effectCode, index);
             if (fxHeader.Signature == KNIFXHeader.KNIFXSignature)
             {
+                if (fxHeader.Version < KNIFXHeader.CurrentKNIFXVersion)
+                    Console.WriteLine("This effect is for an older version of KNI and needs to be rebuilt.");
+
                 switch (fxHeader.Version)
                 {
                     case 11:
@@ -118,6 +121,52 @@ namespace Microsoft.Xna.Framework.Graphics
                             throw new Exception("Effect profile '" + String.Join(",", shaderProfiles) + "' is not compatible with the graphics backend '" + graphicsDevice.Adapter.Backend + "'.");
                         }
 
+                    case 12:
+                        {
+                            int headerOffset = fxHeader.HeaderSize;
+
+                            int fxCount = BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
+
+                            for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
+                            {
+                                GraphicsBackend shaderBackend = (GraphicsBackend)BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
+                                int effectKey = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
+                                int fxOffset = BitConverter.ToInt32(effectCode, index + headerOffset); headerOffset += 4;
+
+                                if (!((IPlatformGraphicsAdapter)graphicsDevice.Adapter).Strategy.Platform_IsShaderBackendSupported(shaderBackend))
+                                    continue;
+
+                                Effect effect;
+                                lock (((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache)
+                                {
+                                    if (!((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.TryGetValue(effectKey, out effect))
+                                    {
+                                        int effectLength = BitConverter.ToInt32(effectCode, index + fxOffset); fxOffset += 4;
+                                        using (Stream stream = new MemoryStream(effectCode, index + fxOffset, effectLength, false))
+                                        using (KNIFXReader12 reader = new KNIFXReader12(stream, graphicsDevice))
+                                            effect = reader.ReadEffect();
+
+                                        ((IPlatformGraphicsDevice)graphicsDevice).Strategy.EffectCache.Add(effectKey, effect);
+                                    }
+                                }
+
+                                // Clone it.
+                                _isClone = true;
+                                Clone(effect);
+                                return;
+                            }
+
+                            headerOffset = fxHeader.HeaderSize;
+                            String[] shaderProfiles = new string[fxCount];
+                            for (int fxIdx = 0; fxIdx < fxCount; fxIdx++)
+                            {
+                                ShaderProfileType shaderProfile = (ShaderProfileType)BitConverter.ToInt16(effectCode, index + headerOffset); headerOffset += 2;
+                                headerOffset += 8;
+                                shaderProfiles[fxIdx] = shaderProfile.ToString();
+                            }
+                            throw new Exception("Effect profile '" + String.Join(",", shaderProfiles) + "' is not compatible with the graphics backend '" + graphicsDevice.Adapter.Backend + "'.");
+                        }
+
                     default:
                         if (fxHeader.Version > KNIFXHeader.CurrentKNIFXVersion)
                             throw new Exception("This effect seems to be for a newer version of KNI.");
@@ -131,6 +180,8 @@ namespace Microsoft.Xna.Framework.Graphics
             MGFXHeader mgfxheader = new MGFXHeader(effectCode, index);
             if (mgfxheader.Signature == MGFXHeader.MGFXSignature)
             {
+                Console.WriteLine("This effect is for an older version of KNI and needs to be rebuilt.");
+
                 switch (mgfxheader.Version)
                 {
                     case 10:
@@ -164,7 +215,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                     default:
                         if (mgfxheader.Version > MGFXHeader.MGFXVersion)
-                            throw new Exception("This effect seems to be for a newer version of KNI.");
+                            throw new Exception("This effect is an unsupported effect format. Please rebuild the effect using the KNI content pipeline.");
                         if (mgfxheader.Version < MGFXHeader.MGFXVersion)
                             throw new Exception("This effect is for an older version of KNI and needs to be rebuilt.");
                         break;
