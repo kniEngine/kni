@@ -44,7 +44,7 @@ Page Custom SponsorPage SponsorPageLeave
  
 Name '${APPNAME} SDK ${INSTALLERVERSION}'
 OutFile 'KniSdkSetup.exe'
-InstallDir '$PROGRAMFILES\${APPNAME}\v${VERSION}'
+InstallDir '$PROGRAMFILES64\${APPNAME}\v${VERSION}'
 VIProductVersion "${INSTALLERVERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${APPNAME} SDK"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "Kni framework"
