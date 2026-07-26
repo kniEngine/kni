@@ -98,6 +98,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
 
                     GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
+                    GL.CheckGLError();
 
                     if (_glIsCompressedTexture)
                     {
@@ -144,6 +145,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
 
                     GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(fSize, 8));
+                    GL.CheckGLError();
 
                     if (_glIsCompressedTexture)
                     {
@@ -170,25 +172,26 @@ namespace Microsoft.Xna.Platform.Graphics
         public unsafe void GetData<T>(int level, int arraySlice, Rectangle checkedRect, T[] data, int startIndex, int elementCount)
             where T : struct
         {
-            bool isSharedContext = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
+            bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
-                var GL = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
 #if GLES
-                // TODO: check for non renderable formats (formats that can't be attached to FBO)
+                ValidateGetDataSurfaceFormat(Format, contextStrategy);
 
                 int framebufferId = 0;
                 framebufferId = GL.GenFramebuffer();
                 GL.CheckGLError();
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
                 GL.CheckGLError();
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, level);
                 GL.CheckGLError();
 
                 fixed (T* pData = &data[0])
                 {
-                    IntPtr dataPtr = (IntPtr)pData;
+                    IntPtr dataPtr = (IntPtr)pData + (startIndex * Format.GetSize());
                     GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
                     GL.CheckGLError();
                 }
@@ -205,7 +208,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.ActiveTexture(TextureUnit.Texture0 + 0);
                 GL.CheckGLError();
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
+                GL.CheckGLError();
+
                 GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(TsizeInBytes, 8));
+                GL.CheckGLError();
 
                 fixed (T* pData = &data[0])
                 {
@@ -214,8 +220,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     if (_glIsCompressedTexture)
                     {
-                        w = w / 4;
-                        h = h / 4;
+                        Format.GetBlockSize(out int blockWidth, out int blockHeight);
+                        w = w / blockWidth;
+                        h = h / blockHeight;
                         int bytes = w * h * fSize;
                         IntPtr pTemp = Marshal.AllocHGlobal(bytes);
                         try
@@ -224,10 +231,10 @@ namespace Microsoft.Xna.Platform.Graphics
                             GL.CheckGLError();
 
                             IntPtr tempPtr = (IntPtr)pTemp;
-                            tempPtr = tempPtr + checkedRect.X / 4 * fSize + checkedRect.Top / 4 * w * fSize;
+                            tempPtr = tempPtr + checkedRect.X / blockWidth * fSize + checkedRect.Top / blockHeight * w * fSize;
                             int fWidthSize = w * fSize;
-                            int tRectWidthSize = checkedRect.Width / 4 * fSize;
-                            int rowCount = checkedRect.Height / 4;
+                            int tRectWidthSize = checkedRect.Width / blockWidth * fSize;
+                            int rowCount = checkedRect.Height / blockHeight;
                             for (int r = 0; r < rowCount; r++)
                             {
                                 MemCopyHelper.MemoryCopy(
@@ -243,10 +250,9 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     else
                     {
-                        if (level == 0
-                        &&  checkedRect.X == 0 && checkedRect.Y == 0
-                        &&  checkedRect.Width == this.Width && checkedRect.Height == this.Height
-                        &&  startIndex == 0 && elementCount == data.Length)
+                        if (checkedRect.X == 0 && checkedRect.Y == 0
+                        && checkedRect.Width == w && checkedRect.Height == h
+                        && startIndex == 0 && elementCount == data.Length)
                         {
                             GL.GetTexImage(TextureTarget.Texture2D, level, _glFormat, _glType, dataPtr);
                             GL.CheckGLError();
@@ -284,7 +290,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
             finally
             {
-                ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+                contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
         }
 
@@ -297,7 +303,7 @@ namespace Microsoft.Xna.Platform.Graphics
             // round x and y down to next multiple of block size; width and height up to next multiple of block size
             int roundedWidth = (rect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
             int roundedHeight = (rect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
-            // OpenGL only: The last two mip levels require the width and height to be passed
+            // The last two mip levels require the width and height to be passed
             // as 2x2 and 1x1, but there needs to be enough data passed to occupy a full block.
             checkedRect = new Rectangle(rect.X & ~blockWidthMinusOne, rect.Y & ~blockHeightMinusOne,
                                         (rect.Width < blockWidth && textureBounds.Width < blockWidth) ? textureBounds.Width : roundedWidth,
@@ -343,13 +349,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindTexture(TextureTarget.Texture2D, _glTexture);
                 GL.CheckGLError();
 
-                // Set mipMap levels
-#if !GLES
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-                GL.CheckGLError();
-#endif
-
-
                 int w = width;
                 int h = height;
                 int level = 0;
@@ -357,27 +356,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     if (_glIsCompressedTexture)
                     {
-                        int imageSize = 0;
-                        // PVRTC has explicit calculations for imageSize
-                        // https://www.khronos.org/registry/OpenGL/extensions/IMG/IMG_texture_compression_pvrtc.txt
-                        if (format == SurfaceFormat.RgbPvrtc2Bpp || format == SurfaceFormat.RgbaPvrtc2Bpp)
-                        {
-                            imageSize = (Math.Max(w, 16) * Math.Max(h, 8) * 2 + 7) / 8;
-                        }
-                        else if (format == SurfaceFormat.RgbPvrtc4Bpp || format == SurfaceFormat.RgbaPvrtc4Bpp)
-                        {
-                            imageSize = (Math.Max(w, 8) * Math.Max(h, 8) * 4 + 7) / 8;
-                        }
-                        else
-                        {
-                            int blockSize = format.GetSize();
-                            int blockWidth, blockHeight;
-                            format.GetBlockSize(out blockWidth, out blockHeight);
-                            int wBlocks = (w + (blockWidth - 1)) / blockWidth;
-                            int hBlocks = (h + (blockHeight - 1)) / blockHeight;
-                            imageSize = wBlocks * hBlocks * blockSize;
-                        }
-                        GL.CompressedTexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, w, h, 0, imageSize, IntPtr.Zero);
+                        Rectangle bounds = new Rectangle(0, 0, w, h);
+                        int dataSize = GetCompressedDataByteSize(format.GetSize(), bounds, ref bounds, out Rectangle checkedRect);
+                        GL.CompressedTexImage2D(TextureTarget.Texture2D, level, _glInternalFormat, checkedRect.Width, checkedRect.Height, 0,
+                                                dataSize, IntPtr.Zero);
                         GL.CheckGLError();
                     }
                     else
