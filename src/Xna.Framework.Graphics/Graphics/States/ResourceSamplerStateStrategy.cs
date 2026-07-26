@@ -45,6 +45,12 @@ namespace Microsoft.Xna.Platform.Graphics
             set { throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device."); }
         }
 
+        public override int MinMipLevel
+        {
+            get { return base.MinMipLevel; }
+            set { throw new InvalidOperationException("You cannot modify the state after it has been bound to the graphics device."); }
+        }
+
         public override int MaxMipLevel
         {
             get { return base.MaxMipLevel; }

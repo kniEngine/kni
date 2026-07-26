@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsDepth24 = false;
             SupportsPackedDepthStencil = false;
             SupportsDepthNonLinear = false;
-            SupportsTextureMaxLevel = false;
+            SupportsTextureMaxLevel = profile >= GraphicsProfile.HiDef;
 
             // 16bit textures
             SupportsBgra5551 = false;

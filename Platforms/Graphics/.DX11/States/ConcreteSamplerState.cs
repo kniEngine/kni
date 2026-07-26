@@ -54,12 +54,17 @@ namespace Microsoft.Xna.Platform.Graphics
             samplerStateDesc.MipLodBias = MipMapLevelOfDetailBias;
             samplerStateDesc.ComparisonFunction = ComparisonFunction.ToDXComparisonFunction();
 
-            // TODO: How do i do this?
-            samplerStateDesc.MinimumLod = 0.0f;
-
-            // To support feature level 9.1 these must 
-            // be set to these exact values.
-            samplerStateDesc.MaximumLod = float.MaxValue;
+            if (contextStrategy.Capabilities.SupportsTextureMaxLevel)
+            {
+                samplerStateDesc.MinimumLod = MaxMipLevel;
+                samplerStateDesc.MaximumLod = MinMipLevel;
+            }
+            else
+            {
+                // To support feature level 9.1 these must be set to these exact values.
+                samplerStateDesc.MinimumLod = 0.0f;
+                samplerStateDesc.MaximumLod = float.MaxValue;
+            }
 
             // Create the state.
             return new D3D11.SamplerState(deviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, samplerStateDesc);

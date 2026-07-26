@@ -73,6 +73,18 @@ namespace Microsoft.Xna.Framework.Graphics
             set { _strategy.MaxAnisotropy = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the level of detail (LOD) index of the smallest map to use.
+        /// </summary>
+        public int MinMipLevel
+        {
+            get { return _strategy.MinMipLevel; }
+            set { _strategy.MinMipLevel = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the level of detail (LOD) index of the largest map to use.
+        /// </summary>
         public int MaxMipLevel
         {
             get { return _strategy.MaxMipLevel; }

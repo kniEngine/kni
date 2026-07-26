@@ -19,6 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
         TextureAddressMode AddressW { get; set; }
         Color BorderColor { get; set; }
         int MaxAnisotropy { get; set; }
+        int MinMipLevel { get; set; }
         int MaxMipLevel { get; set; }
         float MipMapLevelOfDetailBias { get; set; }
         CompareFunction ComparisonFunction { get; set; }
