@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Platform.Audio
 
             if (!ConcreteAudioService.IsDynamicSoundModuleInitialized)
             {
-                await context.AudioWorklet.AddModuleAsync("js/streamProcessor.js");
+                await context.AudioWorklet.AddModuleAsync("js/streamProcessor2.js");
                 ConcreteAudioService.IsDynamicSoundModuleInitialized = true;
             }
 
