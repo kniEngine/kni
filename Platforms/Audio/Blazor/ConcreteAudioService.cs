@@ -15,6 +15,7 @@ namespace Microsoft.Xna.Platform.Audio
     {
         internal AudioContext Context { get; private set; }
 
+        internal bool IsDynamicSoundModuleInitialized { get; set; }
 
         internal ConcreteAudioService()
         {
