@@ -21,7 +21,7 @@
   <PropertyGroup>
     <EnableDefaultItems>false</EnableDefaultItems>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <TargetFramework>net8.0-android30</TargetFramework>
+    <TargetFramework>net10.0-android30</TargetFramework>
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <LangVersion>Default</LangVersion>
     <IsTrimmable>True</IsTrimmable>

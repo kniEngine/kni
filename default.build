@@ -36,7 +36,7 @@
     
     <exec program="dotnet" commandline="build Kni.Platform.WinForms.DX11.sln /t:Clean /p:Configuration=Release" />
     
-    <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
+    <exec program="${msbuild18}" commandline='Kni.Platform.UAP.DX11.sln /t:Clean /p:Configuration=Release /p:Platform="Any CPU"' />
     
     <exec program="dotnet" commandline="build Kni.Platform.SDL2.GL.sln /t:Clean /p:Configuration=Release" />
     
@@ -186,11 +186,11 @@
   <target name="build_windowsUAP10" description="Build Windows 10 UAP">
 
       <!--
-      <exec program="${msbuild17}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild17}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /p:Configuration=Release' />
+      <exec program="${msbuild18}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild18}" commandline='Platforms\Kni.Platform.UAP.DX11.csproj /p:Configuration=Release' />
       -->
-      <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Restore /p:Configuration=Release' />
-      <exec program="${msbuild17}" commandline='Kni.Platform.UAP.DX11.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
+      <exec program="${msbuild18}" commandline='Kni.Platform.UAP.DX11.sln /t:Restore /p:Configuration=Release' />
+      <exec program="${msbuild18}" commandline='Kni.Platform.UAP.DX11.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"' />
 
   </target>
 

@@ -52,7 +52,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EffectCompiler", "Tools\Eff
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MGCB", "Tools\MonoGame.Content.Builder\MGCB.csproj", "{4243474D-572E-6E69-646F-77734D474342}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Pipeline.Editor.net8", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net8.csproj", "{5212C44E-1573-43C2-85E8-5751A12FBBFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Pipeline.Editor.net10", "Tools\Content.Pipeline.Editor.WinForms\Content.Pipeline.Editor.net10.csproj", "{5212C44E-1573-43C2-85E8-5751A12FBBFD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kni.Tests.WinForms.DX11", "Tests\Kni.Tests.WinForms.DX11.csproj", "{DED2DDB6-D4BE-656D-2E54-657374732E57}"
 EndProject
