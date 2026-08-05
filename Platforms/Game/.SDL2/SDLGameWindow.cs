@@ -549,24 +549,6 @@ namespace Microsoft.Xna.Framework
                 _height = clientHeight;
             }
 
-            SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-            int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-            int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-            centerX = Math.Max(centerX, minx);
-            centerY = Math.Max(centerY, miny);
-
-            if (IsFullScreen && !willBeFullScreen)
-            {
-                // We need to get the display information again in case
-                // the resolution of it was changed.
-                SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-
-                // This centering only occurs when exiting fullscreen
-                // so it should center the window on the current display.
-                centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
-            }
-
             // If this window is resizable, there is a bug in SDL 2.0.4 where
             // after the window gets resized, window position information
             // becomes wrong (for me it always returned 10 8). Solution is
@@ -576,6 +558,24 @@ namespace Microsoft.Xna.Framework
             Sdl.Version nonResizeableVersion = new Sdl.Version(2, 0, 4);
             if (!_wasMoved && (SDL.version > nonResizeableVersion || !AllowUserResizing))
             {
+                SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                centerX = Math.Max(centerX, minx);
+                centerY = Math.Max(centerY, miny);
+
+                if (IsFullScreen && !willBeFullScreen)
+                {
+                    // We need to get the display information again in case
+                    // the resolution of it was changed.
+                    SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
+
+                    // This centering only occurs when exiting fullscreen
+                    // so it should center the window on the current display.
+                    centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
+                    centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                }
+
                 SDL.WINDOW.SetPosition(Handle, centerX, centerY);
             }
 
