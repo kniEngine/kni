@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Framework
             return IntPtr.Zero;
         }
 
-        internal void RecreateWindow()
+        internal void RecreateWindow(int width, int height)
         {
             Sdl.Window.State initflags =
                 Sdl.Window.State.OpenGL |
@@ -217,11 +217,11 @@ namespace Microsoft.Xna.Framework
                 winy = winy | displayIndex;
             }
 
-            _width = GraphicsDeviceManager.DefaultBackBufferWidth;
-            _height = GraphicsDeviceManager.DefaultBackBufferHeight;
-
-            _handle = SDL.WINDOW.Create(Title, winx, winy, _width, _height, initflags);
+            _handle = SDL.WINDOW.Create(Title, winx, winy, width, height, initflags);
             _instances.Add(this.Handle, this);
+
+            _width = width;
+            _height = height;
 
             Id = SDL.WINDOW.GetWindowId(_handle);
 
