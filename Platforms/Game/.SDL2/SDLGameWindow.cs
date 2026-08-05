@@ -566,12 +566,12 @@ namespace Microsoft.Xna.Framework
 
                 if (IsFullScreen && !willBeFullScreen)
                 {
+                    // This centering only occurs when exiting fullscreen
+                    // so it should center the window on the current display.
+
                     // We need to get the display information again in case
                     // the resolution of it was changed.
                     SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-
-                    // This centering only occurs when exiting fullscreen
-                    // so it should center the window on the current display.
                     centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
                     centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
                 }
