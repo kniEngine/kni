@@ -125,14 +125,14 @@ namespace Microsoft.Xna.Platform
 
         private void PlatformInitialize(PresentationParameters presentationParameters)
         {
-            ColorFormat surfaceFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
+            ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
             DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
 
             // TODO Need to get this data from the Presentation Parameters
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, surfaceFormat.R);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.GreenSize, surfaceFormat.G);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.BlueSize, surfaceFormat.B);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.AlphaSize, surfaceFormat.A);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, backBufferFormat.R);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.GreenSize, backBufferFormat.G);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.BlueSize, backBufferFormat.B);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.AlphaSize, backBufferFormat.A);
 
             switch (depthStencilFormat)
             {
