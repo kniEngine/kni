@@ -212,8 +212,9 @@ namespace Microsoft.Xna.Framework
             // if we are on Linux, start on the current screen
             if (CurrentPlatform.OS == OS.Linux)
             {
-                winx |= GetMouseDisplay();
-                winy |= GetMouseDisplay();
+                int displayIndex = GetMouseDisplay();
+                winx = winx | displayIndex;
+                winy = winy | displayIndex;
             }
 
             _width = GraphicsDeviceManager.DefaultBackBufferWidth;
@@ -489,17 +490,15 @@ namespace Microsoft.Xna.Framework
 
         private int GetMouseDisplay()
         {
-            int x, y;
-            SDL.MOUSE.GetGlobalState(out x, out y);
+            SDL.MOUSE.GetGlobalState(out int x, out int y);
 
             int displayCount = SDL.DISPLAY.GetNumVideoDisplays();
             for (int i = 0; i < displayCount; i++)
             {
-                Sdl.Rectangle rect;
-                SDL.DISPLAY.GetBounds(i, out rect);
+                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle rect);
 
-                if (x >= rect.X && x < rect.X + rect.Width &&
-                    y >= rect.Y && y < rect.Y + rect.Height)
+                if (x >= rect.X && x < rect.X + rect.Width
+                &&  y >= rect.Y && y < rect.Y + rect.Height)
                 {
                     return i;
                 }
