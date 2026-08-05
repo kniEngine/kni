@@ -571,8 +571,10 @@ namespace Microsoft.Xna.Framework
             // after the window gets resized, window position information
             // becomes wrong (for me it always returned 10 8). Solution is
             // to not try and set the window position because it will be wrong.
+            //TODO: Remove this 10-year old 'temporary' workaround for 2.0.4.
+            //      It's been fixed, and we are currently in 2.0.20.
             Sdl.Version nonResizeableVersion = new Sdl.Version(2, 0, 4);
-            if ((SDL.version > nonResizeableVersion || !AllowUserResizing) && !_wasMoved)
+            if (!_wasMoved && (SDL.version > nonResizeableVersion || !AllowUserResizing))
             {
                 SDL.WINDOW.SetPosition(Handle, centerX, centerY);
             }
