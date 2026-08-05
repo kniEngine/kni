@@ -549,11 +549,11 @@ namespace Microsoft.Xna.Framework
                 _height = clientHeight;
             }
 
-            int ignore, minx = 0, miny = 0;
-            SDL.WINDOW.GetBorderSize(_handle, out miny, out minx, out ignore, out ignore);
-
-            int centerX = Math.Max(prevBounds.X + ((prevBounds.Width - clientWidth) / 2), minx);
-            int centerY = Math.Max(prevBounds.Y + ((prevBounds.Height - clientHeight) / 2), miny);
+            SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+            int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+            int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+            centerX = Math.Max(centerX, minx);
+            centerY = Math.Max(centerY, miny);
 
             if (IsFullScreen && !willBeFullScreen)
             {
