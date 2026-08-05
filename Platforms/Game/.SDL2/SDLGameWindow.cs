@@ -530,6 +530,7 @@ namespace Microsoft.Xna.Framework
                 SDL.WINDOW.SetFullscreen(Handle, (willBeFullScreen) ? fullscreenFlag : (Sdl.Window.State)0);
                 _hardwareSwitch = gdm.HardwareModeSwitch;
             }
+
             // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
             if (CurrentPlatform.OS == OS.Windows)
             {
