@@ -573,7 +573,9 @@ namespace Microsoft.Xna.Framework
             // to not try and set the window position because it will be wrong.
             Sdl.Version nonResizeableVersion = new Sdl.Version(2, 0, 4);
             if ((SDL.version > nonResizeableVersion || !AllowUserResizing) && !_wasMoved)
+            {
                 SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+            }
 
             if (IsFullScreen != willBeFullScreen)
                 OnClientSizeChanged();
