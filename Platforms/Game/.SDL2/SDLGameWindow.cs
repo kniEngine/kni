@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Framework
             return IntPtr.Zero;
         }
 
-        internal void CreateWindow()
+        internal void RecreateWindow()
         {
             Sdl.Window.State initflags =
                 Sdl.Window.State.OpenGL |
