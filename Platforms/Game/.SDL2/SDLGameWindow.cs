@@ -537,16 +537,16 @@ namespace Microsoft.Xna.Framework
                 SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeFullScreen && _hardwareSwitch ? "1" : "0");
             }
 
-            if (!willBeFullScreen || gdm.HardwareModeSwitch)
+            if (willBeFullScreen && !gdm.HardwareModeSwitch)
+            {
+                _width = displayRect.Width;
+                _height = displayRect.Height;
+            }
+            else
             {
                 SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
                 _width = clientWidth;
                 _height = clientHeight;
-            }
-            else
-            {
-                _width = displayRect.Width;
-                _height = displayRect.Height;
             }
 
             int ignore, minx = 0, miny = 0;
