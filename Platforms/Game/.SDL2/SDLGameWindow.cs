@@ -574,9 +574,12 @@ namespace Microsoft.Xna.Framework
                     SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
                     centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
                     centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
-
-                SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                else
+                {
+                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                }
             }
 
             if (IsFullScreen != willBeFullScreen)
