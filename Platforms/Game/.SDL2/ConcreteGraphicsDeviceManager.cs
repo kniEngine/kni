@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform
 
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
         {
-            var clientBounds = base.Game.Window.ClientBounds;
+            Rectangle clientBounds = base.Game.Window.ClientBounds;
             base.PreferredBackBufferWidth = clientBounds.Width;
             base.PreferredBackBufferHeight = clientBounds.Height;
 
@@ -125,8 +125,8 @@ namespace Microsoft.Xna.Platform
 
         private void PlatformInitialize(PresentationParameters presentationParameters)
         {
-            var surfaceFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
-            var depthStencilFormat = this.PreferredDepthStencilFormat;
+            ColorFormat surfaceFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
+            DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
 
             // TODO Need to get this data from the Presentation Parameters
             SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, surfaceFormat.R);
@@ -209,7 +209,7 @@ namespace Microsoft.Xna.Platform
             if (this.GraphicsDevice != null)
                 return;
 
-            var gdi = this.DoPreparingDeviceSettings();
+            GraphicsDeviceInformation gdi = this.DoPreparingDeviceSettings();
 
             this.PlatformInitialize(gdi.PresentationParameters);
 
