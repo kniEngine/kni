@@ -558,12 +558,6 @@ namespace Microsoft.Xna.Framework
             Sdl.Version nonResizeableVersion = new Sdl.Version(2, 0, 4);
             if (!_wasMoved && (SDL.version > nonResizeableVersion || !AllowUserResizing))
             {
-                SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-                int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                centerX = Math.Max(centerX, minx);
-                centerY = Math.Max(centerY, miny);
-
                 if (IsFullScreen && !willBeFullScreen)
                 {
                     // This centering only occurs when exiting fullscreen
@@ -572,12 +566,17 @@ namespace Microsoft.Xna.Framework
                     // We need to get the display information again in case
                     // the resolution of it was changed.
                     SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-                    centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                    centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                    int centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
+                    int centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
                 else
                 {
+                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                    int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                    int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                    centerX = Math.Max(centerX, minx);
+                    centerY = Math.Max(centerY, miny);
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
             }
