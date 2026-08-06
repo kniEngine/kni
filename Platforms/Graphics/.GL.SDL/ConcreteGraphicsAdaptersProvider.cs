@@ -27,10 +27,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             List<GraphicsAdapter> adapterList = new List<GraphicsAdapter>(1);
 
-            ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter();
-            GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);
+            int displayCount = Sdl.Current.DISPLAY.GetNumVideoDisplays();
+            for (int i = 0; i < displayCount; i++)
+            {
+                ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(i);
+                GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);
 
-            adapterList.Add(adapter);
+                adapterList.Add(adapter);
+            }
 
             // The first adapter is considered the default.
             ((IPlatformGraphicsAdapter)adapterList[0]).Strategy.Platform_IsDefaultAdapter = true;

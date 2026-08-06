@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private DisplayModeCollection _supportedDisplayModes;
         private DisplayMode _currentDisplayMode;
-        private string _description = string.Empty;
 
         int _displayIndex;
 
@@ -32,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override string Platform_Description
         {
-            get { return _description; }
+            get { return base.Platform_Description; }
             set { }
         }
 
@@ -183,10 +182,14 @@ namespace Microsoft.Xna.Platform.Graphics
         internal GLVersion glVersion { get { return _glVersion; } }
 
 
-        internal ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter(int displayIndex)
         {
             IntPtr glWindowHandle = IntPtr.Zero;
             IntPtr glContext = IntPtr.Zero;
+
+            this._displayIndex = displayIndex;
+            base.Platform_DeviceName = SDL.DISPLAY.GetDisplayName(displayIndex);
+
             try
             {
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
@@ -230,7 +233,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     _glVersion = new GLVersion(1, 1);
                 }
 
-                _description = _gl.GetString(StringName.Renderer);
+                base.Platform_Description = _gl.GetString(StringName.Renderer);
 
                 // get adapter caps.
                 _gl.GetInteger(GetParamName.MaxTextureSize, out _capMaxTextureSize);
