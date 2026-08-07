@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>4.2.9001.0</Version>
-    <AssemblyVersion>4.2.9001.0</AssemblyVersion>
+    <Version>4.3.9001.0</Version>
+    <AssemblyVersion>4.3.9001.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>
