@@ -4,115 +4,115 @@
 ## 4.3.9001 Release - August ??, 2026
 
 ### Fixed
- - fix WinForms IsBorderless #2625
- - fix SoftMode Fullscreen screen flash #2624
- - fix SDL2 PumpEvents signature #2651
- - fix RegisterLocalNuget paths #2677
- - fix Wayland Mouse.GetState() #2666, #2667
- - fix renamed incorrect project file name #2656
- - fix UWP template #2605
- - fix consistency of "Xna" capitalization in project files #2560
- - catch Malformed wav files #2660
- - fix WavImporter error msg #2589
- - fix FontTextureProcessor format #2575
- - fix UnderlinePosition #2567
- - fix GL ScissorRectangle #2552
- - [GL] implement GLES GetData() for buffers #2588
- - [WebGL] fix WebGL DrawUserIndexedPrimitives(...) #2559
- - [BlazorGL] RenderTargetCube with DepthFormat.None fix #2648
- - [BlazorGL] Fixes array length checks for ConcreteXRDevice buttons/touches #2597
- - [BlazorGL] BlazorGL mouse wheel notches #2675
- - [Android.GL] Fixes OcclusionQuery #2598
- - [XAudio2] Fixes DynamicSoundEffectInstance.Apply3D #2610
- - [XAudio2] Fixes DynamicSoundEffectInstance.Pitch #2611
- - [OpenAL] Fixes AudioListener transform #2608
- - [DX11] fix SamplerState.MaxMipLevel #2634
- - [DX11] DX11: throw on unknown SurfaceFormat in ToDXFormat mapping #2629
- - [Content.Pipeline] run content builder through dotnet #2565, #2581
- - [Content.Pipeline] Content editor dotnet 10.0 fix #2595
- - [Content.Pipeline] WavImporter types #2590, #2591
+ - fix WinForms IsBorderless [#2625](https://github.com/kniEngine/kni/pull/2625) *
+ - fix SoftMode Fullscreen screen flash [#2624](https://github.com/kniEngine/kni/pull/2624) *
+ - fix SDL2 PumpEvents signature [#2651](https://github.com/kniEngine/kni/pull/2651) *
+ - fix RegisterLocalNuget paths [#2677](https://github.com/kniEngine/kni/pull/2677) *
+ - fix Wayland Mouse.GetState() [#2666](https://github.com/kniEngine/kni/pull/2666), [#2667](https://github.com/kniEngine/kni/pull/2667) *
+ - fix renamed incorrect project file name [#2656](https://github.com/kniEngine/kni/pull/2656) *
+ - fix UWP template [#2605](https://github.com/kniEngine/kni/pull/2605) *
+ - fix consistency of "Xna" capitalization in project files [#2560](https://github.com/kniEngine/kni/pull/2560) *
+ - catch Malformed wav files [#2660](https://github.com/kniEngine/kni/pull/2660) *
+ - fix WavImporter error msg [#2589](https://github.com/kniEngine/kni/pull/2589) *
+ - fix FontTextureProcessor format [#2575](https://github.com/kniEngine/kni/pull/2575) *
+ - fix UnderlinePosition [#2567](https://github.com/kniEngine/kni/pull/2567) *
+ - fix GL ScissorRectangle [#2552](https://github.com/kniEngine/kni/pull/2552) *
+ - [GL] implement GLES GetData() for buffers [#2588](https://github.com/kniEngine/kni/pull/2588) *
+ - [WebGL] fix WebGL DrawUserIndexedPrimitives(...) [#2559](https://github.com/kniEngine/kni/pull/2559) *
+ - [BlazorGL] RenderTargetCube with DepthFormat.None fix [#2648](https://github.com/kniEngine/kni/pull/2648) *
+ - [BlazorGL] Fixes array length checks for ConcreteXRDevice buttons/touches [#2597](https://github.com/kniEngine/kni/pull/2597) *
+ - [BlazorGL] BlazorGL mouse wheel notches [#2675](https://github.com/kniEngine/kni/pull/2675) *
+ - [Android.GL] Fixes OcclusionQuery [#2598](https://github.com/kniEngine/kni/pull/2598) *
+ - [XAudio2] Fixes DynamicSoundEffectInstance.Apply3D [#2610](https://github.com/kniEngine/kni/pull/2610) *
+ - [XAudio2] Fixes DynamicSoundEffectInstance.Pitch [#2611](https://github.com/kniEngine/kni/pull/2611) *
+ - [OpenAL] Fixes AudioListener transform [#2608](https://github.com/kniEngine/kni/pull/2608) *
+ - [DX11] fix SamplerState.MaxMipLevel [#2634](https://github.com/kniEngine/kni/pull/2634) *
+ - [DX11] DX11: throw on unknown SurfaceFormat in ToDXFormat mapping [#2629](https://github.com/kniEngine/kni/pull/2629) *
+ - [Content.Pipeline] run content builder through dotnet [#2565](https://github.com/kniEngine/kni/pull/2565), [#2581](https://github.com/kniEngine/kni/pull/2581) *
+ - [Content.Pipeline] Content editor dotnet 10.0 fix [#2595](https://github.com/kniEngine/kni/pull/2595) *
+ - [Content.Pipeline] WavImporter types [#2590](https://github.com/kniEngine/kni/pull/2590), [#2591](https://github.com/kniEngine/kni/pull/2591) *
 
 ### Performance
 
 ### Changed
- - .net10 and vs2026 support #2681
- - resolve Android namespaces #2673, #2676
- - targeting Android API 5.0 #2630
- - update Wasm v10.0.3 #2695
- - upgrade LibOXR 1.2.0 #2680
- - upgrade Oculus to API 34 #2661, #2662
- - Update UAP SDK 22621 #2582
- - Update NVorbis submodule #2554
- - update LayoutFarm/Typography libraries #2571
- - remove CLSCompliant from platforms #2649
- - remove NPOT Mipmap fallback #2576
- - Platform Game class #2606
- - use WinAscend/WinDescend to calculate SpriteFont yoffset #2573
- - use WinAscend/WinDescend to calculate SpriteFont VerticalLineSpacing #2572
- - face BBox values #2568, #2569
- - font face WinAscent values #2570
- - rename emSizeInPixels #2566
- - [GL] Gles300 sampler precision #2684
- - [GL] MapBufferRange #2574
- - [Content.Pipeline] add GenerateMipmaps option for FontDescriptionProcessor #2564
+ - .net10 and vs2026 support [#2681](https://github.com/kniEngine/kni/pull/2681) *
+ - resolve Android namespaces [#2673](https://github.com/kniEngine/kni/pull/2673), [#2676](https://github.com/kniEngine/kni/pull/2676) *
+ - targeting Android API 5.0 [#2630](https://github.com/kniEngine/kni/pull/2630) *
+ - update Wasm v10.0.3 [#2695](https://github.com/kniEngine/kni/pull/2695) *
+ - upgrade LibOXR 1.2.0 [#2680](https://github.com/kniEngine/kni/pull/2680) *
+ - upgrade Oculus to API 34 [#2661](https://github.com/kniEngine/kni/pull/2661), [#2662](https://github.com/kniEngine/kni/pull/2662) *
+ - Update UAP SDK 22621 [#2582](https://github.com/kniEngine/kni/pull/2582) *
+ - Update NVorbis submodule [#2554](https://github.com/kniEngine/kni/pull/2554) *
+ - update LayoutFarm/Typography libraries [#2571](https://github.com/kniEngine/kni/pull/2571) *
+ - remove CLSCompliant from platforms [#2649](https://github.com/kniEngine/kni/pull/2649) *
+ - remove NPOT Mipmap fallback [#2576](https://github.com/kniEngine/kni/pull/2576) *
+ - Platform Game class [#2606](https://github.com/kniEngine/kni/pull/2606) *
+ - use WinAscend/WinDescend to calculate SpriteFont yoffset [#2573](https://github.com/kniEngine/kni/pull/2573) *
+ - use WinAscend/WinDescend to calculate SpriteFont VerticalLineSpacing [#2572](https://github.com/kniEngine/kni/pull/2572) *
+ - face BBox values [#2568](https://github.com/kniEngine/kni/pull/2568), [#2569](https://github.com/kniEngine/kni/pull/2569) *
+ - font face WinAscent values [#2570](https://github.com/kniEngine/kni/pull/2570) *
+ - rename emSizeInPixels [#2566](https://github.com/kniEngine/kni/pull/2566) *
+ - [GL] Gles300 sampler precision [#2684](https://github.com/kniEngine/kni/pull/2684) *
+ - [GL] MapBufferRange [#2574](https://github.com/kniEngine/kni/pull/2574) *
+ - [Content.Pipeline] add GenerateMipmaps option for FontDescriptionProcessor [#2564](https://github.com/kniEngine/kni/pull/2564) *
 
 ### Added
- - x64 installer #2686
- - SDL2 GetRelativeState() #2652
- - SDL2 ENABLE_TOUCHINPUT Define #2665
- - implement SDL2 global MouseState #2627
- - Prepare SDL2 touch input #2623
- - FingerEvent #2621, #2622
- - Touch input for WinForms #2619
- - [BlazorGL] Implements DynamicSoundEffectInstance Pause/Resume/Pitch/SampleRate/Channels #2615
- - [BlazorGL] Implements SoundEffectInstance Pause/Resume/Stop/Pitch/Apply3D #2614
- - [BlazorGL] Implements SoundEffect formats #2613
- - [BlazorGL] Implements OcclusionQuery #2599
- - [BlazorGL] Implements Mouse xButton1/2 #2616
- - [BlazorGL] Implements BlazorGameWindow.OnKeyDown/Up #2594
- - [BlazorGL] Implements SamplerState TextureFilter.Anisotropic #2644
- - [BlazorGL] Implements Texture3D #2646
- - [BlazorGL] Implement Texture2D.GetSharedHandle() #2669
- - [BlazorGL] Texture2D fixes/implementations #2645
- - [BlazorGL] TextureCube fixes/implementations #2647
- - [GL] Texture3D implementations for OpenGL/GLES #2638
- - [GL] TextureCube fixes/implementations #2639
- - [GL] Texture2D fixes/implementations #2637
- - [GL] Implements SamplerState.AddressW #2640
- - [DX11] Texture3D compressed format support #2642
- - [DX11] TextureCube implementations #2643
- - [DX11] Texture2D fixes/implementations #2641
- - [DX11] Adds SamplerState.MinMipLevel #2634
- - Adds ConcreteTexture.ValidateGetDataSurfaceFormat methods #2636
- - Adds Texture3D.GetCompressedDataByteSize method #2635
- - [Content.Pipeline] mkv Decoder #2671
- - dotnet templates #1793, #2664
- - dotnet Templates preview.2 #2602
- - dotnet Templates preview.3 #2628
- - dotnet templates game library #2607
- - Build dotnet templates #2655
- - update dotnet templates #2672
- - Update dotnet templates for v4.2 hotfixes #2600
- - Normalize dotnet templates #2657
- - Dotnet templates XRDevice service #2663
- - WebXR templates #2653
- - multiplatform Template Oculus.GL #2632
- - normalize VS2022 templates #2583, #2596
- - normalize iOS template #2586
- - normalize UAP Xaml Template #2585
- - UAP Templates remove temporary pfx file #2584
- - update WindowsDX template #2556
- - use Game type in templates instead of var #2604
- - Fix windows .icon resource files #2601
- - sync streamProcessor.js in templates, and rename for cache-busting #2689
- - Framework Readme.md files #2678
- - update migration article #2550, #2555, #2558
- - Correct migration article JSObject src #2551
- - test universal shaders #2557
- - update build action with token #2618
- - define msbuild18 #2580
- - reorder using Android #2578
- - order folders first in the Editor #2577
+ - x64 installer [#2686](https://github.com/kniEngine/kni/pull/2686) *
+ - SDL2 GetRelativeState() [#2652](https://github.com/kniEngine/kni/pull/2652) *
+ - SDL2 ENABLE_TOUCHINPUT Define [#2665](https://github.com/kniEngine/kni/pull/2665) *
+ - implement SDL2 global MouseState [#2627](https://github.com/kniEngine/kni/pull/2627) *
+ - Prepare SDL2 touch input [#2623](https://github.com/kniEngine/kni/pull/2623) *
+ - FingerEvent [#2621](https://github.com/kniEngine/kni/pull/2621), [#2622](https://github.com/kniEngine/kni/pull/2622) *
+ - Touch input for WinForms [#2619](https://github.com/kniEngine/kni/pull/2619) *
+ - [BlazorGL] Implements DynamicSoundEffectInstance Pause/Resume/Pitch/SampleRate/Channels [#2615](https://github.com/kniEngine/kni/pull/2615) *
+ - [BlazorGL] Implements SoundEffectInstance Pause/Resume/Stop/Pitch/Apply3D [#2614](https://github.com/kniEngine/kni/pull/2614) *
+ - [BlazorGL] Implements SoundEffect formats [#2613](https://github.com/kniEngine/kni/pull/2613) *
+ - [BlazorGL] Implements OcclusionQuery [#2599](https://github.com/kniEngine/kni/pull/2599) *
+ - [BlazorGL] Implements Mouse xButton1/2 [#2616](https://github.com/kniEngine/kni/pull/2616) *
+ - [BlazorGL] Implements BlazorGameWindow.OnKeyDown/Up [#2594](https://github.com/kniEngine/kni/pull/2594) *
+ - [BlazorGL] Implements SamplerState TextureFilter.Anisotropic [#2644](https://github.com/kniEngine/kni/pull/2644) *
+ - [BlazorGL] Implements Texture3D [#2646](https://github.com/kniEngine/kni/pull/2646) *
+ - [BlazorGL] Implement Texture2D.GetSharedHandle() [#2669](https://github.com/kniEngine/kni/pull/2669) *
+ - [BlazorGL] Texture2D fixes/implementations [#2645](https://github.com/kniEngine/kni/pull/2645) *
+ - [BlazorGL] TextureCube fixes/implementations [#2647](https://github.com/kniEngine/kni/pull/2647) *
+ - [GL] Texture3D implementations for OpenGL/GLES [#2638](https://github.com/kniEngine/kni/pull/2638) *
+ - [GL] TextureCube fixes/implementations [#2639](https://github.com/kniEngine/kni/pull/2639) *
+ - [GL] Texture2D fixes/implementations [#2637](https://github.com/kniEngine/kni/pull/2637) *
+ - [GL] Implements SamplerState.AddressW [#2640](https://github.com/kniEngine/kni/pull/2640) *
+ - [DX11] Texture3D compressed format support [#2642](https://github.com/kniEngine/kni/pull/2642) *
+ - [DX11] TextureCube implementations [#2643](https://github.com/kniEngine/kni/pull/2643) *
+ - [DX11] Texture2D fixes/implementations [#2641](https://github.com/kniEngine/kni/pull/2641) *
+ - [DX11] Adds SamplerState.MinMipLevel [#2634](https://github.com/kniEngine/kni/pull/2634) *
+ - Adds ConcreteTexture.ValidateGetDataSurfaceFormat methods [#2636](https://github.com/kniEngine/kni/pull/2636) *
+ - Adds Texture3D.GetCompressedDataByteSize method [#2635](https://github.com/kniEngine/kni/pull/2635) *
+ - [Content.Pipeline] mkv Decoder [#2671](https://github.com/kniEngine/kni/pull/2671) *
+ - dotnet templates [#1793](https://github.com/kniEngine/kni/pull/1793), [#2664](https://github.com/kniEngine/kni/pull/2664) *
+ - dotnet Templates preview.2 [#2602](https://github.com/kniEngine/kni/pull/2602) *
+ - dotnet Templates preview.3 [#2628](https://github.com/kniEngine/kni/pull/2628) *
+ - dotnet templates game library [#2607](https://github.com/kniEngine/kni/pull/2607) *
+ - Build dotnet templates [#2655](https://github.com/kniEngine/kni/pull/2655) *
+ - update dotnet templates [#2672](https://github.com/kniEngine/kni/pull/2672) *
+ - Update dotnet templates for v4.2 hotfixes [#2600](https://github.com/kniEngine/kni/pull/2600) *
+ - Normalize dotnet templates [#2657](https://github.com/kniEngine/kni/pull/2657) *
+ - Dotnet templates XRDevice service [#2663](https://github.com/kniEngine/kni/pull/2663) *
+ - WebXR templates [#2653](https://github.com/kniEngine/kni/pull/2653) *
+ - multiplatform Template Oculus.GL [#2632](https://github.com/kniEngine/kni/pull/2632) *
+ - normalize VS2022 templates [#2583](https://github.com/kniEngine/kni/pull/2583), [#2596](https://github.com/kniEngine/kni/pull/2596) *
+ - normalize iOS template [#2586](https://github.com/kniEngine/kni/pull/2586) *
+ - normalize UAP Xaml Template [#2585](https://github.com/kniEngine/kni/pull/2585) *
+ - UAP Templates remove temporary pfx file [#2584](https://github.com/kniEngine/kni/pull/2584) *
+ - update WindowsDX template [#2556](https://github.com/kniEngine/kni/pull/2556) *
+ - use Game type in templates instead of var [#2604](https://github.com/kniEngine/kni/pull/2604) *
+ - Fix windows .icon resource files [#2601](https://github.com/kniEngine/kni/pull/2601) *
+ - sync streamProcessor.js in templates, and rename for cache-busting [#2689](https://github.com/kniEngine/kni/pull/2689) *
+ - Framework Readme.md files [#2678](https://github.com/kniEngine/kni/pull/2678) *
+ - update migration article [#2550](https://github.com/kniEngine/kni/pull/2550), [#2555](https://github.com/kniEngine/kni/pull/2555), [#2558](https://github.com/kniEngine/kni/pull/2558) *
+ - Correct migration article JSObject src [#2551](https://github.com/kniEngine/kni/pull/2551) *
+ - test universal shaders [#2557](https://github.com/kniEngine/kni/pull/2557) *
+ - update build action with token [#2618](https://github.com/kniEngine/kni/pull/2618) *
+ - define msbuild18 [#2580](https://github.com/kniEngine/kni/pull/2580) *
+ - reorder using Android [#2578](https://github.com/kniEngine/kni/pull/2578) *
+ - order folders first in the Editor [#2577](https://github.com/kniEngine/kni/pull/2577) *
 
 ### Removed
 
