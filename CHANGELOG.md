@@ -4,19 +4,117 @@
 ## 4.3.9001 Release - August ??, 2026
 
 ### Fixed
- - 
+ - fix WinForms IsBorderless #2625
+ - fix SoftMode Fullscreen screen flash #2624
+ - fix SDL2 PumpEvents signature #2651
+ - fix RegisterLocalNuget paths #2677
+ - fix Wayland Mouse.GetState() #2666, #2667
+ - fix renamed incorrect project file name #2656
+ - fix UWP template #2605
+ - fix consistency of "Xna" capitalization in project files #2560
+ - catch Malformed wav files #2660
+ - fix WavImporter error msg #2589
+ - fix FontTextureProcessor format #2575
+ - fix UnderlinePosition #2567
+ - fix GL ScissorRectangle #2552
+ - [GL] implement GLES GetData() for buffers #2588
+ - [WebGL] fix WebGL DrawUserIndexedPrimitives(...) #2559
+ - [BlazorGL] RenderTargetCube with DepthFormat.None fix #2648
+ - [BlazorGL] Fixes array length checks for ConcreteXRDevice buttons/touches #2597
+ - [BlazorGL] BlazorGL mouse wheel notches #2675
+ - [Android.GL] Fixes OcclusionQuery #2598
+ - [XAudio2] Fixes DynamicSoundEffectInstance.Apply3D #2610
+ - [XAudio2] Fixes DynamicSoundEffectInstance.Pitch #2611
+ - [OpenAL] Fixes AudioListener transform #2608
+ - [DX11] fix SamplerState.MaxMipLevel #2634
+ - [DX11] DX11: throw on unknown SurfaceFormat in ToDXFormat mapping #2629
+ - [Content.Pipeline] run content builder through dotnet #2565, #2581
+ - [Content.Pipeline] Content editor dotnet 10.0 fix #2595
+ - [Content.Pipeline] WavImporter types #2590, #2591
 
 ### Performance
- - 
 
 ### Changed
- - 
+ - .net10 and vs2026 support #2681
+ - resolve Android namespaces #2673, #2676
+ - targeting Android API 5.0 #2630
+ - update Wasm v10.0.3 #2695
+ - upgrade LibOXR 1.2.0 #2680
+ - upgrade Oculus to API 34 #2661, #2662
+ - Update UAP SDK 22621 #2582
+ - Update NVorbis submodule #2554
+ - update LayoutFarm/Typography libraries #2571
+ - remove CLSCompliant from platforms #2649
+ - remove NPOT Mipmap fallback #2576
+ - Platform Game class #2606
+ - use WinAscend/WinDescend to calculate SpriteFont yoffset #2573
+ - use WinAscend/WinDescend to calculate SpriteFont VerticalLineSpacing #2572
+ - face BBox values #2568, #2569
+ - font face WinAscent values #2570
+ - rename emSizeInPixels #2566
+ - [GL] Gles300 sampler precision #2684
+ - [GL] MapBufferRange #2574
+ - [Content.Pipeline] add GenerateMipmaps option for FontDescriptionProcessor #2564
 
 ### Added
- - 
+ - x64 installer #2686
+ - SDL2 GetRelativeState() #2652
+ - SDL2 ENABLE_TOUCHINPUT Define #2665
+ - implement SDL2 global MouseState #2627
+ - Prepare SDL2 touch input #2623
+ - FingerEvent #2621, #2622
+ - Touch input for WinForms #2619
+ - [BlazorGL] Implements DynamicSoundEffectInstance Pause/Resume/Pitch/SampleRate/Channels #2615
+ - [BlazorGL] Implements SoundEffectInstance Pause/Resume/Stop/Pitch/Apply3D #2614
+ - [BlazorGL] Implements SoundEffect formats #2613
+ - [BlazorGL] Implements OcclusionQuery #2599
+ - [BlazorGL] Implements Mouse xButton1/2 #2616
+ - [BlazorGL] Implements BlazorGameWindow.OnKeyDown/Up #2594
+ - [BlazorGL] Implements SamplerState TextureFilter.Anisotropic #2644
+ - [BlazorGL] Implements Texture3D #2646
+ - [BlazorGL] Implement Texture2D.GetSharedHandle() #2669
+ - [BlazorGL] Texture2D fixes/implementations #2645
+ - [BlazorGL] TextureCube fixes/implementations #2647
+ - [GL] Texture3D implementations for OpenGL/GLES #2638
+ - [GL] TextureCube fixes/implementations #2639
+ - [GL] Texture2D fixes/implementations #2637
+ - [GL] Implements SamplerState.AddressW #2640
+ - [DX11] Texture3D compressed format support #2642
+ - [DX11] TextureCube implementations #2643
+ - [DX11] Texture2D fixes/implementations #2641
+ - [DX11] Adds SamplerState.MinMipLevel #2634
+ - Adds ConcreteTexture.ValidateGetDataSurfaceFormat methods #2636
+ - Adds Texture3D.GetCompressedDataByteSize method #2635
+ - [Content.Pipeline] mkv Decoder #2671
+ - dotnet templates #1793, #2664
+ - dotnet Templates preview.2 #2602
+ - dotnet Templates preview.3 #2628
+ - dotnet templates game library #2607
+ - Build dotnet templates #2655
+ - update dotnet templates #2672
+ - Update dotnet templates for v4.2 hotfixes #2600
+ - Normalize dotnet templates #2657
+ - Dotnet templates XRDevice service #2663
+ - WebXR templates #2653
+ - multiplatform Template Oculus.GL #2632
+ - normalize VS2022 templates #2583, #2596
+ - normalize iOS template #2586
+ - normalize UAP Xaml Template #2585
+ - UAP Templates remove temporary pfx file #2584
+ - update WindowsDX template #2556
+ - use Game type in templates instead of var #2604
+ - Fix windows .icon resource files #2601
+ - sync streamProcessor.js in templates, and rename for cache-busting #2689
+ - Framework Readme.md files #2678
+ - update migration article #2550, #2555, #2558
+ - Correct migration article JSObject src #2551
+ - test universal shaders #2557
+ - update build action with token #2618
+ - define msbuild18 #2580
+ - reorder using Android #2578
+ - order folders first in the Editor #2577
 
 ### Removed
- - 
 
 ## 4.2.9001 Release - November 2, 2025
 
