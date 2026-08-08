@@ -190,7 +190,7 @@ namespace Microsoft.Xna.Framework
             return IntPtr.Zero;
         }
 
-        internal void CreateWindow()
+        internal void RecreateWindow(int width, int height)
         {
             Sdl.Window.State initflags =
                 Sdl.Window.State.OpenGL |
@@ -212,15 +212,16 @@ namespace Microsoft.Xna.Framework
             // if we are on Linux, start on the current screen
             if (CurrentPlatform.OS == OS.Linux)
             {
-                winx |= GetMouseDisplay();
-                winy |= GetMouseDisplay();
+                int displayIndex = GetMouseDisplay();
+                winx = winx | displayIndex;
+                winy = winy | displayIndex;
             }
 
-            _width = GraphicsDeviceManager.DefaultBackBufferWidth;
-            _height = GraphicsDeviceManager.DefaultBackBufferHeight;
-
-            _handle = SDL.WINDOW.Create(Title, winx, winy, _width, _height, initflags);
+            _handle = SDL.WINDOW.Create(Title, winx, winy, width, height, initflags);
             _instances.Add(this.Handle, this);
+
+            _width = width;
+            _height = height;
 
             Id = SDL.WINDOW.GetWindowId(_handle);
 
@@ -489,17 +490,15 @@ namespace Microsoft.Xna.Framework
 
         private int GetMouseDisplay()
         {
-            int x, y;
-            SDL.MOUSE.GetGlobalState(out x, out y);
+            SDL.MOUSE.GetGlobalState(out int x, out int y);
 
             int displayCount = SDL.DISPLAY.GetNumVideoDisplays();
             for (int i = 0; i < displayCount; i++)
             {
-                Sdl.Rectangle rect;
-                SDL.DISPLAY.GetBounds(i, out rect);
+                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle rect);
 
-                if (x >= rect.X && x < rect.X + rect.Width &&
-                    y >= rect.Y && y < rect.Y + rect.Height)
+                if (x >= rect.X && x < rect.X + rect.Width
+                &&  y >= rect.Y && y < rect.Y + rect.Height)
                 {
                     return i;
                 }
@@ -531,49 +530,56 @@ namespace Microsoft.Xna.Framework
                 SDL.WINDOW.SetFullscreen(Handle, (willBeFullScreen) ? fullscreenFlag : (Sdl.Window.State)0);
                 _hardwareSwitch = gdm.HardwareModeSwitch;
             }
+
             // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
             if (CurrentPlatform.OS == OS.Windows)
             {
                 SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeFullScreen && _hardwareSwitch ? "1" : "0");
             }
 
-            if (!willBeFullScreen || gdm.HardwareModeSwitch)
-            {
-                SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
-                _width = clientWidth;
-                _height = clientHeight;
-            }
-            else
+            if (willBeFullScreen && !gdm.HardwareModeSwitch)
             {
                 _width = displayRect.Width;
                 _height = displayRect.Height;
             }
-
-            int ignore, minx = 0, miny = 0;
-            SDL.WINDOW.GetBorderSize(_handle, out miny, out minx, out ignore, out ignore);
-
-            int centerX = Math.Max(prevBounds.X + ((prevBounds.Width - clientWidth) / 2), minx);
-            int centerY = Math.Max(prevBounds.Y + ((prevBounds.Height - clientHeight) / 2), miny);
-
-            if (IsFullScreen && !willBeFullScreen)
+            else
             {
-                // We need to get the display information again in case
-                // the resolution of it was changed.
-                SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-
-                // This centering only occurs when exiting fullscreen
-                // so it should center the window on the current display.
-                centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
+                _width = clientWidth;
+                _height = clientHeight;
             }
 
             // If this window is resizable, there is a bug in SDL 2.0.4 where
             // after the window gets resized, window position information
             // becomes wrong (for me it always returned 10 8). Solution is
             // to not try and set the window position because it will be wrong.
+            //TODO: Remove this 10-year old 'temporary' workaround for 2.0.4.
+            //      It's been fixed, and we are currently in 2.0.20.
             Sdl.Version nonResizeableVersion = new Sdl.Version(2, 0, 4);
-            if ((SDL.version > nonResizeableVersion || !AllowUserResizing) && !_wasMoved)
-                SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+            if (!_wasMoved && (SDL.version > nonResizeableVersion || !AllowUserResizing))
+            {
+                if (IsFullScreen && !willBeFullScreen)
+                {
+                    // This centering only occurs when exiting fullscreen
+                    // so it should center the window on the current display.
+
+                    // We need to get the display information again in case
+                    // the resolution of it was changed.
+                    SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
+                    int centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
+                    int centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                }
+                else
+                {
+                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                    int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                    int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                    centerX = Math.Max(centerX, minx);
+                    centerY = Math.Max(centerY, miny);
+                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                }
+            }
 
             if (IsFullScreen != willBeFullScreen)
                 OnClientSizeChanged();

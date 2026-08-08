@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Platform
 
         public ConcreteGraphicsDeviceManager(Game game) : base(game)
         {
-            var clientBounds = base.Game.Window.ClientBounds;
+            Rectangle clientBounds = base.Game.Window.ClientBounds;
             base.PreferredBackBufferWidth = clientBounds.Width;
             base.PreferredBackBufferHeight = clientBounds.Height;
 
@@ -125,14 +125,14 @@ namespace Microsoft.Xna.Platform
 
         private void PlatformInitialize(PresentationParameters presentationParameters)
         {
-            var surfaceFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
-            var depthStencilFormat = this.PreferredDepthStencilFormat;
+            ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
+            DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
 
             // TODO Need to get this data from the Presentation Parameters
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, surfaceFormat.R);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.GreenSize, surfaceFormat.G);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.BlueSize, surfaceFormat.B);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.AlphaSize, surfaceFormat.A);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, backBufferFormat.R);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.GreenSize, backBufferFormat.G);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.BlueSize, backBufferFormat.B);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.AlphaSize, backBufferFormat.A);
 
             switch (depthStencilFormat)
             {
@@ -164,7 +164,8 @@ namespace Microsoft.Xna.Platform
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, presentationParameters.MultiSampleCount);
             }
 
-            ((SdlGameWindow)Game.Window).CreateWindow();
+            //TODO: use PresentationParameters BackBufferWidth/BackBufferHeight.
+            ((SdlGameWindow)Game.Window).RecreateWindow(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
             presentationParameters.DeviceWindowHandle = Game.Window.Handle;
         }
 
@@ -209,7 +210,7 @@ namespace Microsoft.Xna.Platform
             if (this.GraphicsDevice != null)
                 return;
 
-            var gdi = this.DoPreparingDeviceSettings();
+            GraphicsDeviceInformation gdi = this.DoPreparingDeviceSettings();
 
             this.PlatformInitialize(gdi.PresentationParameters);
 

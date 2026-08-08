@@ -203,6 +203,16 @@
     <Compile Include="Game\.SDL2\ConcreteGraphicsDeviceManager.cs" />
     <Compile Include="Game\.SDL2\SDLGameWindow.cs" />
     <Compile Include="Game\.SDL2\SDL2.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Display.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Drop.cs" />
+    <Compile Include="Game\.SDL2\SDL2.GameController.cs" />
+    <Compile Include="Game\.SDL2\SDL2.GL.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Haptic.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Joystick.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Keyboard.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Mouse.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Touch.cs" />
+    <Compile Include="Game\.SDL2\SDL2.Window.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'net40' ">
