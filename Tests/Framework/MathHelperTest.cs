@@ -71,6 +71,10 @@ namespace Kni.Tests.Framework
             Assert.AreEqual(0, MathHelper.Min(0, 0));
             Assert.AreEqual(-5, MathHelper.Min(-5, 5));
             Assert.AreEqual(-5, MathHelper.Min(5, -5));
+
+            Assert.AreEqual(float.NaN, MathHelper.Min(float.NaN, float.NaN));
+            Assert.AreEqual(float.NaN, MathHelper.Min(1, float.NaN));
+            Assert.AreEqual(float.NaN, MathHelper.Min(float.NaN, 1));
         }
 
         [Test]
@@ -82,6 +86,10 @@ namespace Kni.Tests.Framework
             Assert.AreEqual(0, MathHelper.Max(0, 0));
             Assert.AreEqual(5, MathHelper.Max(-5, 5));
             Assert.AreEqual(5, MathHelper.Max(5, -5));
+
+            Assert.AreEqual(float.NaN, MathHelper.Max(float.NaN, float.NaN));
+            Assert.AreEqual(float.NaN, MathHelper.Max(1, float.NaN));
+            Assert.AreEqual(float.NaN, MathHelper.Max(float.NaN, 1));
         }
 
         [TestCase(MathHelper.PiOver4, 0.7853982f)]
