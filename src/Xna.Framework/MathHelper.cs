@@ -214,6 +214,8 @@ namespace Microsoft.Xna.Framework
         {
             if (value1 > value2)
                 return value1;
+            if (float.IsNaN(value1))
+                return float.NaN;
 
             return value2;
         }
@@ -242,6 +244,8 @@ namespace Microsoft.Xna.Framework
         {
             if (value1 < value2)
                 return value1;
+            if (float.IsNaN(value1))
+                return float.NaN;
 
             return value2;
         }
