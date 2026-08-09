@@ -212,7 +212,12 @@ namespace Microsoft.Xna.Framework
         /// <returns>The greater value.</returns>
         public static float Max(float value1, float value2)
         {
-            return value1 > value2 ? value1 : value2;
+            if (value1 > value2)
+                return value1;
+            if (float.IsNaN(value1))
+                return float.NaN;
+
+            return value2;
         }
 
         /// <summary>
@@ -223,7 +228,10 @@ namespace Microsoft.Xna.Framework
         /// <returns>The greater value.</returns>
         public static int Max(int value1, int value2)
         {
-            return value1 > value2 ? value1 : value2;
+            if (value1 > value2)
+                return value1;
+
+            return value2;
         }
         
         /// <summary>
@@ -234,7 +242,12 @@ namespace Microsoft.Xna.Framework
         /// <returns>The lesser value.</returns>
         public static float Min(float value1, float value2)
         {
-            return value1 < value2 ? value1 : value2;
+            if (value1 < value2)
+                return value1;
+            if (float.IsNaN(value1))
+                return float.NaN;
+
+            return value2;
         }
 
         /// <summary>
@@ -245,7 +258,10 @@ namespace Microsoft.Xna.Framework
         /// <returns>The lesser value.</returns>
         public static int Min(int value1, int value2)
         {
-            return value1 < value2 ? value1 : value2;
+            if (value1 < value2)
+                return value1;
+
+            return value2;
         }
         
         /// <summary>
