@@ -176,6 +176,7 @@
     <Compile Include="Framework.Graphics\Texture3DTest.cs" />
     <Compile Include="Framework.Graphics\TextureCubeTest.cs" />
     <Compile Include="Framework.Graphics\VertexBufferTest.cs" />
+    <Compile Include="Framework.Graphics\VertexPosition.XNA.cs" />
     <Compile Include="Framework.Graphics\ViewportTest.cs" />
     <Compile Include="Framework.Graphics\VisualMiscellaneousTests.cs" />
     <Compile Include="Framework.Graphics\BlendStateTest.cs" />
@@ -926,6 +927,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\Effects\XNA\CustomSpriteBatchEffect.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\Effects\XNA\DeferredBasicEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Effects\XNA\Instancing.xnb">
