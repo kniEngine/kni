@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Platform.Content.Utilities;
 
 namespace Microsoft.Xna.Framework.Content
@@ -246,15 +247,18 @@ namespace Microsoft.Xna.Framework.Content
             if (readerType != null)
                 return readerType;
             resolvedReaderTypeName = readerTypeName + string.Format(", {0}", _contentGraphicsAssemblyName);
-            readerType = Type.GetType(resolvedReaderTypeName);
+            try { readerType = Type.GetType(resolvedReaderTypeName); }
+            catch(FileLoadException) { /* ignore */ }
             if (readerType != null)
                 return readerType;
             resolvedReaderTypeName = readerTypeName + string.Format(", {0}", _contentAudioAssemblyName);
-            readerType = Type.GetType(resolvedReaderTypeName);
+            try { readerType = Type.GetType(resolvedReaderTypeName); }
+            catch(FileLoadException) { /* ignore */ }
             if (readerType != null)
                 return readerType;
             resolvedReaderTypeName = readerTypeName + string.Format(", {0}", _contentMediaAssemblyName);
-            readerType = Type.GetType(resolvedReaderTypeName);
+            try { readerType = Type.GetType(resolvedReaderTypeName); }
+            catch(FileLoadException) { /* ignore */ }
             if (readerType != null)
                 return readerType;
 
