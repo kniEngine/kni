@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
     internal enum QueryTarget
     {
         SamplesPassed    = 0x8914,
-        SamplesPassedExt = 0x8C2F,
+        AnySamplesPassed = 0x8C2F,
     }
 
     internal enum GetQueryObjectParam

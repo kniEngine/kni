@@ -69,7 +69,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _isComplete = false;
 
             QueryTarget queryTarget = GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL ?
-                QueryTarget.SamplesPassed : QueryTarget.SamplesPassedExt;
+                QueryTarget.SamplesPassed : QueryTarget.AnySamplesPassed;
 
             GL.BeginQuery(queryTarget, _glQueryId);
             GL.CheckGLError();
@@ -86,7 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _queryPerformed = true;
 
             QueryTarget queryTarget = GraphicsDevice.Adapter.Backend == GraphicsBackend.OpenGL ?
-                QueryTarget.SamplesPassed : QueryTarget.SamplesPassedExt;
+                QueryTarget.SamplesPassed : QueryTarget.AnySamplesPassed;
 
             GL.EndQuery(queryTarget);
             GL.CheckGLError();
