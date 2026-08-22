@@ -1,6 +1,88 @@
 ﻿# Changelog
 
 
+## 4.3.9001 Release - August 22, 2026
+
+### Fixed
+ - [SDL2] implement SDL2 global MouseState [#2627](https://github.com/kniEngine/kni/pull/2627)
+ - [Winforms] fix WinForms IsBorderless [#2625](https://github.com/kniEngine/kni/pull/2625)
+ - [Winforms] fix SoftMode Fullscreen screen flash [#2624](https://github.com/kniEngine/kni/pull/2624)
+ - [SDL2] fix SDL2 PumpEvents signature [#2651](https://github.com/kniEngine/kni/pull/2651)
+ - [SDL2] fix Wayland Mouse.GetState() [#2666](https://github.com/kniEngine/kni/pull/2666), [#2667](https://github.com/kniEngine/kni/pull/2667)
+ - [Audio] catch Malformed wav files [#2660](https://github.com/kniEngine/kni/pull/2660)
+ - Fix math helper min/max NaN tests [#2698](https://github.com/kniEngine/kni/pull/2698)
+ - remove NPOT Mipmap fallback [#2576](https://github.com/kniEngine/kni/pull/2576) (XNA API compatibility)
+ - fix ContentTypeReaderManager FileLoadException [#2701](https://github.com/kniEngine/kni/pull/2701)
+ - [GL] fix GL ScissorRectangle [#2552](https://github.com/kniEngine/kni/pull/2552)
+ - [WebXR] Fixes array length checks for ConcreteXRDevice buttons/touches [#2597](https://github.com/kniEngine/kni/pull/2597)
+ - [BlazorGL] BlazorGL mouse wheel notches [#2675](https://github.com/kniEngine/kni/pull/2675)
+ - [WebGL] fix WebGL DrawUserIndexedPrimitives(...) [#2559](https://github.com/kniEngine/kni/pull/2559)
+ - [BlazorGL] RenderTargetCube with DepthFormat.None fix [#2648](https://github.com/kniEngine/kni/pull/2648)
+ - [XAudio2] Fixes DynamicSoundEffectInstance.Apply3D [#2610](https://github.com/kniEngine/kni/pull/2610)
+ - [XAudio2] Fixes DynamicSoundEffectInstance.Pitch [#2611](https://github.com/kniEngine/kni/pull/2611)
+ - [OpenAL] Fixes AudioListener transform [#2608](https://github.com/kniEngine/kni/pull/2608)
+ - [GL/DX11] fix SamplerState.MaxMipLevel [#2634](https://github.com/kniEngine/kni/pull/2634)
+ - [DX11] throw on unknown SurfaceFormat in ToDXFormat mapping [#2629](https://github.com/kniEngine/kni/pull/2629)
+ - [Content.Pipeline] fix WavImporter error msg [#2589](https://github.com/kniEngine/kni/pull/2589)
+ - [Content.Pipeline] fix FontDescriptionProcessor UnderlinePosition [#2567](https://github.com/kniEngine/kni/pull/2567)
+ - [Content.Pipeline] use WinAscend/WinDescend to calculate SpriteFont yoffset [#2573](https://github.com/kniEngine/kni/pull/2573)
+ - [Content.Pipeline] use WinAscend/WinDescend to calculate SpriteFont VerticalLineSpacing [#2572](https://github.com/kniEngine/kni/pull/2572)
+ - [Content.Pipeline] fix FontTextureProcessor format [#2575](https://github.com/kniEngine/kni/pull/2575)
+ - [Content.Pipeline] run content builder through dotnet [#2565](https://github.com/kniEngine/kni/pull/2565), [#2581](https://github.com/kniEngine/kni/pull/2581)
+ - [Content.Pipeline] Content editor dotnet 10.0 fix [#2595](https://github.com/kniEngine/kni/pull/2595)
+ - fix migration article [#2550](https://github.com/kniEngine/kni/pull/2550), [#2555](https://github.com/kniEngine/kni/pull/2555), [#2558](https://github.com/kniEngine/kni/pull/2558), [#2551](https://github.com/kniEngine/kni/pull/2551)
+ - fix consistency of "Xna" capitalization in project files [#2656](https://github.com/kniEngine/kni/pull/2656), [#2560](https://github.com/kniEngine/kni/pull/2560)
+ - Fix windows .icon resource files [#2601](https://github.com/kniEngine/kni/pull/2601)
+
+### Performance
+
+### Changed
+ - x64 SDK installer [#2686](https://github.com/kniEngine/kni/pull/2686)
+ - .net10 and vs2026 support [#2681](https://github.com/kniEngine/kni/pull/2681), [#2673](https://github.com/kniEngine/kni/pull/2673), [#2676](https://github.com/kniEngine/kni/pull/2676), [#2630](https://github.com/kniEngine/kni/pull/2630), [#2580](https://github.com/kniEngine/kni/pull/2580)
+ - [BlazorGL] update Wasm v10.0.3 [#2695](https://github.com/kniEngine/kni/pull/2695)
+ - [Oculus] upgrade LibOXR 1.2.0 [#2680](https://github.com/kniEngine/kni/pull/2680)
+ - [Oculus] upgrade Oculus to API 34 [#2661](https://github.com/kniEngine/kni/pull/2661), [#2662](https://github.com/kniEngine/kni/pull/2662)
+ - [UAP] Update UAP SDK 22621 [#2582](https://github.com/kniEngine/kni/pull/2582)
+ - Update NVorbis submodule [#2554](https://github.com/kniEngine/kni/pull/2554)
+ - update LayoutFarm/Typography libraries [#2571](https://github.com/kniEngine/kni/pull/2571)
+ - remove CLSCompliant from platforms [#2649](https://github.com/kniEngine/kni/pull/2649)
+ - [SDL2] use GetRelativeState() for Raw mouse input [#2652](https://github.com/kniEngine/kni/pull/2652)
+ - [PipelineEditor] order folders first in the Editor [#2577](https://github.com/kniEngine/kni/pull/2577)
+
+### Added
+ - [Winforms] Implements Touch input for WinForms [#2619](https://github.com/kniEngine/kni/pull/2619)
+ - [GL] implement GLES GetData() for buffers [#2588](https://github.com/kniEngine/kni/pull/2588)
+ - [SDL2] ENABLE_TOUCHINPUT Define [#2665](https://github.com/kniEngine/kni/pull/2665), [#2623](https://github.com/kniEngine/kni/pull/2623)
+ - [Android.GL] Implements OcclusionQuery.AnyPixelsPassed [#2598](https://github.com/kniEngine/kni/pull/2598)
+ - [WebAudio] Implements SoundEffect formats [#2613](https://github.com/kniEngine/kni/pull/2613)
+ - [WebGL] Implements SamplerState TextureFilter.Anisotropic [#2644](https://github.com/kniEngine/kni/pull/2644)
+ - [WebGL] Implements OcclusionQuery.AnyPixelsPassed [#2599](https://github.com/kniEngine/kni/pull/2599)
+ - [WebAudio] Implements DynamicSoundEffectInstance Pause/Resume/Pitch/SampleRate/Channels [#2615](https://github.com/kniEngine/kni/pull/2615), [#2689](https://github.com/kniEngine/kni/pull/2689)
+ - [WebAudio] Implements SoundEffectInstance Pause/Resume/Stop/Pitch/Apply3D [#2614](https://github.com/kniEngine/kni/pull/2614)
+ - [BlazorGL] Implements Mouse xButton1/2 [#2616](https://github.com/kniEngine/kni/pull/2616)
+ - [BlazorGL] Implements BlazorGameWindow.OnKeyDown/Up [#2594](https://github.com/kniEngine/kni/pull/2594)
+ - [WebGL] Implement Texture2D.GetSharedHandle() [#2669](https://github.com/kniEngine/kni/pull/2669)
+ - [WebGL] Implements Texture3D [#2646](https://github.com/kniEngine/kni/pull/2646)
+ - [WebGL] Texture2D fixes/implementations [#2645](https://github.com/kniEngine/kni/pull/2645)
+ - [WebGL] TextureCube fixes/implementations [#2647](https://github.com/kniEngine/kni/pull/2647)
+ - [GL] Texture3D implementations for OpenGL/GLES [#2638](https://github.com/kniEngine/kni/pull/2638)
+ - [GL] TextureCube fixes/implementations [#2639](https://github.com/kniEngine/kni/pull/2639)
+ - [GL] Texture2D fixes/implementations [#2637](https://github.com/kniEngine/kni/pull/2637)
+ - [DX11] Texture3D compressed format support [#2642](https://github.com/kniEngine/kni/pull/2642)
+ - [DX11] TextureCube implementations [#2643](https://github.com/kniEngine/kni/pull/2643)
+ - [DX11] Texture2D fixes/implementations [#2641](https://github.com/kniEngine/kni/pull/2641)
+ - [GL] Implements SamplerState.AddressW [#2640](https://github.com/kniEngine/kni/pull/2640)
+ - [GL/DX11] Adds SamplerState.MinMipLevel [#2634](https://github.com/kniEngine/kni/pull/2634)
+ - [SDL2] implemented VideoPlayer [#2671](https://github.com/kniEngine/kni/pull/2671)
+ - [UAP] UAP Templates remove temporary pfx file [#2584](https://github.com/kniEngine/kni/pull/2584)
+ - dotnet templates [#1793](https://github.com/kniEngine/kni/pull/1793), [#2664](https://github.com/kniEngine/kni/pull/2664), [#2607](https://github.com/kniEngine/kni/pull/2607), [#2606](https://github.com/kniEngine/kni/pull/2606), [#2655](https://github.com/kniEngine/kni/pull/2655), [#2672](https://github.com/kniEngine/kni/pull/2672), [#2600](https://github.com/kniEngine/kni/pull/2600), [#2605](https://github.com/kniEngine/kni/pull/2605), [#2653](https://github.com/kniEngine/kni/pull/2653), [#2700](https://github.com/kniEngine/kni/pull/2700)
+ - [Oculus] multiplatform Template Oculus.GL [#2632](https://github.com/kniEngine/kni/pull/2632)
+ - Framework Readme.md files [#2678](https://github.com/kniEngine/kni/pull/2678)
+ - [Content.Pipeline] sampler precision in Gles300 shaders [#2684](https://github.com/kniEngine/kni/pull/2684)
+ - [Content.Pipeline] add GenerateMipmaps option for FontDescriptionProcessor [#2564](https://github.com/kniEngine/kni/pull/2564)
+
+### Removed
+
 ## 4.2.9001 Release - November 2, 2025
 
 ### Fixed

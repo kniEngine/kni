@@ -8,7 +8,7 @@
   <property name="msbuild18" value="C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\msbuild.exe" />
 
   <property name="nugetPath" value="C:\Program Files (x86)\NuGet3\nuget.exe" />
-  <property name="nugetPackageVersion" value="4.2.9001" />
+  <property name="nugetPackageVersion" value="4.3.9001" />
   
   <!-- Helper default target. -->
   <target   name="build" 
