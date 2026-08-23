@@ -224,7 +224,9 @@ namespace Microsoft.Xna.Platform
             PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
             this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
 
-            ((SdlGameWindow)this.Game.Window).EndCreateDevice(string.Empty, gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen);
+            //TODO: Use PresentationParameters.HardwareModeSwitch instead of this.HardwareModeSwitch.
+            //      PresentationParameters.HardwareModeSwitch might have been changed by PreparingDeviceSettings event. 
+            ((SdlGameWindow)this.Game.Window).EndCreateDevice(string.Empty, gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen, this.HardwareModeSwitch);
         }
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
@@ -233,7 +235,9 @@ namespace Microsoft.Xna.Platform
 
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Game.Window.Handle);
             string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
-            ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen);
+
+            //TODO: Use PresentationParameters.HardwareModeSwitch instead of this.HardwareModeSwitch.
+            ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen, this.HardwareModeSwitch);
         }
 
 
