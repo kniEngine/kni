@@ -174,6 +174,7 @@ internal partial class Sdl
         public Drop.Event Drop;
     }
 
+    [DebuggerDisplay("X: {X}, Y: {Y}, Width: {Width}, Height: {Height}")]
     public struct Rectangle
     {
         public int X;
