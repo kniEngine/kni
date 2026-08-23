@@ -518,12 +518,12 @@ namespace Microsoft.Xna.Framework
             _screenDeviceName = screenDeviceName;
 
             Rectangle prevBounds = ClientBounds;
-            int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
 
-            Sdl.Rectangle displayRect;
-            SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
+            int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
+            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayRect);
 
             GraphicsDeviceManager gdm = ((IPlatformGame)_game).GetStrategy<GameStrategy>().GraphicsDeviceManager;
+
             if (willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
             {
                 Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
