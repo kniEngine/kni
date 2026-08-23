@@ -549,14 +549,7 @@ namespace Microsoft.Xna.Framework
                 _height = clientHeight;
             }
 
-            // If this window is resizable, there is a bug in SDL 2.0.4 where
-            // after the window gets resized, window position information
-            // becomes wrong (for me it always returned 10 8). Solution is
-            // to not try and set the window position because it will be wrong.
-            //TODO: Remove this 10-year old 'temporary' workaround for 2.0.4.
-            //      It's been fixed, and we are currently in 2.0.20.
-            Sdl.Version nonResizeableVersion = new Sdl.Version(2, 0, 4);
-            if (!_wasMoved && (SDL.version > nonResizeableVersion || !AllowUserResizing))
+            if (!_wasMoved)
             {
                 if (IsFullScreen && !willBeFullScreen)
                 {
