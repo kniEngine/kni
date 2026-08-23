@@ -107,7 +107,7 @@ namespace Microsoft.Xna.Framework
 
         private bool _disposed;
         private bool _isResizable, _isBorderless;
-        private bool _isFullScreen, _hardwareSwitch;
+        private bool _isFullScreen, _isExclusiveFullScreen;
         private bool _mouseVisible;
         private string _screenDeviceName;
         private int _width, _height;
@@ -526,18 +526,18 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (!_isFullScreen || _isExclusiveFullScreen != gdm.HardwareModeSwitch)
                 {
                     Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch 
                                                     ? Sdl.Window.State.Fullscreen 
                                                     : Sdl.Window.State.FullscreenDesktop;
                     SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
-                    _hardwareSwitch = gdm.HardwareModeSwitch;
+                    _isExclusiveFullScreen = gdm.HardwareModeSwitch;
                 }
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _hardwareSwitch ? "1" : "0");
+                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _isExclusiveFullScreen ? "1" : "0");
 
                 if (!gdm.HardwareModeSwitch)
                 {
@@ -568,10 +568,10 @@ namespace Microsoft.Xna.Framework
             }
             else // (willBeFullScreen == false)
             {
-                if (_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (_isFullScreen || _isExclusiveFullScreen != gdm.HardwareModeSwitch)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
-                    _hardwareSwitch = gdm.HardwareModeSwitch;
+                    _isExclusiveFullScreen = gdm.HardwareModeSwitch;
                 }
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
@@ -629,18 +629,18 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (!_isFullScreen || _isExclusiveFullScreen != gdm.HardwareModeSwitch)
                 {
                     Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch
                                                     ? Sdl.Window.State.Fullscreen
                                                     : Sdl.Window.State.FullscreenDesktop;
                     SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
-                    _hardwareSwitch = gdm.HardwareModeSwitch;
+                    _isExclusiveFullScreen = gdm.HardwareModeSwitch;
                 }
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _hardwareSwitch ? "1" : "0");
+                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _isExclusiveFullScreen ? "1" : "0");
 
                 if (!gdm.HardwareModeSwitch)
                 {
@@ -671,10 +671,10 @@ namespace Microsoft.Xna.Framework
             }
             else // (willBeFullScreen == false)
             {
-                if (_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (_isFullScreen || _isExclusiveFullScreen != gdm.HardwareModeSwitch)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
-                    _hardwareSwitch = gdm.HardwareModeSwitch;
+                    _isExclusiveFullScreen = gdm.HardwareModeSwitch;
                 }
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
