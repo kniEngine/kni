@@ -99,7 +99,6 @@ namespace Microsoft.Xna.Framework
 
         public static GameWindow Instance;
         public uint? Id;
-        public bool IsFullScreen;
 
         internal readonly Game _game;
         private IntPtr _handle;
@@ -108,7 +107,8 @@ namespace Microsoft.Xna.Framework
 
         private bool _disposed;
         private bool _isResizable, _isBorderless;
-        private bool _mouseVisible, _hardwareSwitch;
+        private bool _isFullScreen, _hardwareSwitch;
+        private bool _mouseVisible;
         private string _screenDeviceName;
         private int _width, _height;
         private bool _wasMoved, _supressMoved;
@@ -526,7 +526,7 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (!_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
                 {
                     Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch 
                                                     ? Sdl.Window.State.Fullscreen 
@@ -561,14 +561,14 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
-                if (!IsFullScreen)
+                if (!_isFullScreen)
                     OnClientSizeChanged();
 
-                IsFullScreen = true;
+                _isFullScreen = true;
             }
             else // (willBeFullScreen == false)
             {
-                if (IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                     _hardwareSwitch = gdm.HardwareModeSwitch;
@@ -584,7 +584,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (IsFullScreen)
+                    if (_isFullScreen)
                     {
                         // This centering only occurs when exiting fullscreen
                         // so it should center the window on the current display.
@@ -607,10 +607,10 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                if (IsFullScreen)
+                if (_isFullScreen)
                     OnClientSizeChanged();
 
-                IsFullScreen = false;
+                _isFullScreen = false;
             }
 
             _supressMoved = true;
@@ -629,7 +629,7 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (!_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
                 {
                     Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch
                                                     ? Sdl.Window.State.Fullscreen
@@ -664,14 +664,14 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
-                if (!IsFullScreen)
+                if (!_isFullScreen)
                     OnClientSizeChanged();
 
-                IsFullScreen = true;
+                _isFullScreen = true;
             }
             else // (willBeFullScreen == false)
             {
-                if (IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (_isFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                     _hardwareSwitch = gdm.HardwareModeSwitch;
@@ -687,7 +687,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (IsFullScreen)
+                    if (_isFullScreen)
                     {
                         // This centering only occurs when exiting fullscreen
                         // so it should center the window on the current display.
@@ -710,10 +710,10 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                if (IsFullScreen)
+                if (_isFullScreen)
                     OnClientSizeChanged();
 
-                IsFullScreen = false;
+                _isFullScreen = false;
             }
 
             _supressMoved = true;
