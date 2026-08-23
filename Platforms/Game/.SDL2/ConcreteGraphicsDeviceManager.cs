@@ -224,7 +224,7 @@ namespace Microsoft.Xna.Platform
             PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
             this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
 
-            ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(string.Empty, gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen);
+            ((SdlGameWindow)this.Game.Window).EndCreateDevice(string.Empty, gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen);
         }
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
