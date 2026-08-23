@@ -70,27 +70,32 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                bool displayChanged = false;
                 int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-                displayChanged = displayIndex != _displayIndex;
+                System.Diagnostics.Debug.WriteLine(displayIndex = this._displayIndex);
+                displayIndex = this._displayIndex;
 
+                bool displayChanged = displayIndex != _displayIndex;
                 if (_supportedDisplayModes == null || displayChanged)
                 {
-                    List<DisplayMode> modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
-                    
+                    System.Diagnostics.Debug.Assert(_displayIndex == displayIndex);
                     _displayIndex = displayIndex;
-                    modes.Clear();
+
+                    List<DisplayMode> modes = new List<DisplayMode>();
 
                     int modeCount = SDL.DISPLAY.GetNumDisplayModes(displayIndex);
 
                     for (int i = 0; i < modeCount; i++)
                     {
-                        Sdl.Display.Mode mode;
-                        SDL.DISPLAY.GetDisplayMode(displayIndex, i, out mode);
+                        SDL.DISPLAY.GetDisplayMode(displayIndex, i, out Sdl.Display.Mode mode);
 
-                        // We are only using one format, Color
-                        // mode.Format gets the Color format from SDL
-                        DisplayMode displayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+                        Sdl.PixelFormat format = (Sdl.PixelFormat)mode.Format;
+
+                        SurfaceFormat surfaceFormat = GetSurfaceFormat(mode.Format);
+
+                        string name = SDL.GetPixelFormatName(mode.Format);
+                        System.Diagnostics.Debug.WriteLine(name);
+
+                        DisplayMode displayMode = base.CreateDisplayMode(mode.Width, mode.Height, surfaceFormat);
                         if (!modes.Contains(displayMode))
                             modes.Add(displayMode);
                     }
@@ -120,13 +125,71 @@ namespace Microsoft.Xna.Platform.Graphics
             get
             {
                 int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
+                System.Diagnostics.Debug.WriteLine(displayIndex = this._displayIndex);
+                displayIndex = this._displayIndex;
 
-                Sdl.Display.Mode mode;
-                SDL.DISPLAY.GetCurrentDisplayMode(displayIndex, out mode);
-
-                _currentDisplayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+                SDL.DISPLAY.GetCurrentDisplayMode(displayIndex, out Sdl.Display.Mode mode);
+                _currentDisplayMode = base.CreateDisplayMode(mode.Width, mode.Height, GetSurfaceFormat(mode.Format));
 
                 return _currentDisplayMode;
+            }
+        }
+
+        SurfaceFormat GetSurfaceFormat(uint pixelFormat)
+        {
+            Sdl.PixelFormat format = (Sdl.PixelFormat)pixelFormat;
+
+            if (SDL.PixelFormatEnumToMasks(pixelFormat, out int bpp, out uint rmask, out uint gmask, out uint bmask, out uint amask))
+            {
+                if (bpp == 16)
+                {
+                    switch (format)
+                    {
+                        case Sdl.PixelFormat.RGB565:
+                        case Sdl.PixelFormat.BGR565:
+                            return SurfaceFormat.Bgr565;
+
+                        case Sdl.PixelFormat.ARGB4444:
+                        case Sdl.PixelFormat.RGBA4444:
+                        case Sdl.PixelFormat.ABGR4444:
+                        case Sdl.PixelFormat.BGRA4444:
+                            return SurfaceFormat.Bgra4444;
+
+                        case Sdl.PixelFormat.ARGB1555:
+                        case Sdl.PixelFormat.RGBA5551:
+                        case Sdl.PixelFormat.ABGR1555:
+                        case Sdl.PixelFormat.BGRA5551:
+                            return SurfaceFormat.Bgra5551;
+                    }
+                }
+
+                int bytesPerPixel = Sdl.GetBytesPerPixel(pixelFormat);
+                if (bpp == 32 || bytesPerPixel == 4)
+                {
+                    return SurfaceFormat.Color;
+                }
+            }
+
+            switch (format)
+            {
+                case Sdl.PixelFormat.RGB565:
+                case Sdl.PixelFormat.BGR565:
+                    return SurfaceFormat.Bgr565;
+
+                case Sdl.PixelFormat.ARGB4444:
+                case Sdl.PixelFormat.RGBA4444:
+                case Sdl.PixelFormat.ABGR4444:
+                case Sdl.PixelFormat.BGRA4444:
+                    return SurfaceFormat.Bgra4444;
+
+                case Sdl.PixelFormat.ARGB1555:
+                case Sdl.PixelFormat.RGBA5551:
+                case Sdl.PixelFormat.ABGR1555:
+                case Sdl.PixelFormat.BGRA5551:
+                    return SurfaceFormat.Bgra5551;
+
+                default:
+                    return SurfaceFormat.Color;
             }
         }
 

@@ -146,6 +146,105 @@ internal partial class Sdl
         GetEvent = 0x2,
     }
 
+    public enum PixelType : byte
+    {
+        Unknown = 0,
+        Index1 = 1,
+        Index4 = 2,
+        Index8 = 3,
+        Packed8 = 4,
+        Packed16 = 5,
+        Packed32 = 6,
+        ArrayU8 = 7,
+        ArrayU16 = 8,
+        ArrayU32 = 9,
+        ArrayF16 = 10,
+        ArrayF32 = 11,
+    }
+
+    public enum BitmapOrder : byte
+    {
+        None = 0,
+        _4321 = 1,
+        _1234 = 2,
+    }
+
+    public enum PackedOrder : byte
+    {
+        None = 0,
+        XRGB = 1,
+        RGBX = 2,
+        ARGB = 3,
+        RGBA = 4,
+        XBGR = 5,
+        BGRX = 6,
+        ABGR = 7,
+        BGRA = 8,
+    }
+
+    public enum ArrayOrder : byte
+    {
+        None = 0,
+        RGB = 1,
+        RGBA = 2,
+        ARGB = 3,
+        BGR = 4,
+        BGRA = 5,
+        ABGR = 6,
+    }
+
+    public enum PackedLayout : byte
+    {
+        None = 0,
+        _332 = 1,
+        _4444 = 2,
+        _1555 = 3,
+        _5551 = 4,
+        _565 = 5,
+        _8888 = 6,
+        _2101010 = 7,
+        _1010102 = 8,
+    }
+
+    public enum PixelFormat : uint
+    {
+        Unknown = 0,
+
+        Index1LSB = (1u << 28) | (1u << 24) | (1u << 20) | (1u << 8),
+        Index1MSB = (1u << 28) | (1u << 24) | (2u << 20) | (1u << 8),
+        Index4LSB = (1u << 28) | (2u << 24) | (1u << 20) | (4u << 8),
+        Index4MSB = (1u << 28) | (2u << 24) | (2u << 20) | (4u << 8),
+        Index8 = (1u << 28) | (3u << 24) | (8u << 8) | 1u,
+
+        RGB332 = (1u << 28) | (4u << 24) | (1u << 20) | (1u << 16) | (8u << 8) | 1u,
+        RGB444 = (1u << 28) | (5u << 24) | (1u << 20) | (2u << 16) | (12u << 8) | 2u,
+        RGB555 = (1u << 28) | (5u << 24) | (2u << 20) | (3u << 16) | (15u << 8) | 2u,
+        BGR555 = (1u << 28) | (5u << 24) | (6u << 20) | (3u << 16) | (15u << 8) | 2u,
+        ARGB4444 = (1u << 28) | (5u << 24) | (3u << 20) | (2u << 16) | (16u << 8) | 2u,
+        RGBA4444 = (1u << 28) | (5u << 24) | (4u << 20) | (2u << 16) | (16u << 8) | 2u,
+        ABGR4444 = (1u << 28) | (5u << 24) | (7u << 20) | (2u << 16) | (16u << 8) | 2u,
+        BGRA4444 = (1u << 28) | (5u << 24) | (8u << 20) | (2u << 16) | (16u << 8) | 2u,
+        ARGB1555 = (1u << 28) | (5u << 24) | (3u << 20) | (3u << 16) | (16u << 8) | 2u,
+        RGBA5551 = (1u << 28) | (5u << 24) | (4u << 20) | (4u << 16) | (16u << 8) | 2u,
+        ABGR1555 = (1u << 28) | (5u << 24) | (7u << 20) | (3u << 16) | (16u << 8) | 2u,
+        BGRA5551 = (1u << 28) | (5u << 24) | (8u << 20) | (4u << 16) | (16u << 8) | 2u,
+        RGB565 = (1u << 28) | (5u << 24) | (2u << 20) | (5u << 16) | (16u << 8) | 2u,
+        BGR565 = (1u << 28) | (5u << 24) | (6u << 20) | (5u << 16) | (16u << 8) | 2u,
+
+        RGB24 = (1u << 28) | (7u << 24) | (1u << 20) | (24u << 8) | 3u,
+        BGR24 = (1u << 28) | (7u << 24) | (4u << 20) | (24u << 8) | 3u,
+
+        RGB888 = (1u << 28) | (6u << 24) | (1u << 20) | (6u << 16) | (24u << 8) | 4u,
+        RGBX8888 = (1u << 28) | (6u << 24) | (2u << 20) | (6u << 16) | (32u << 8) | 4u,
+        BGR888 = (1u << 28) | (6u << 24) | (5u << 20) | (6u << 16) | (24u << 8) | 4u,
+        BGRX8888 = (1u << 28) | (6u << 24) | (6u << 20) | (6u << 16) | (32u << 8) | 4u,
+        ARGB8888 = (1u << 28) | (6u << 24) | (3u << 20) | (6u << 16) | (32u << 8) | 4u,
+        RGBA8888 = (1u << 28) | (6u << 24) | (4u << 20) | (6u << 16) | (32u << 8) | 4u,
+        ABGR8888 = (1u << 28) | (6u << 24) | (7u << 20) | (6u << 16) | (32u << 8) | 4u,
+        BGRA8888 = (1u << 28) | (6u << 24) | (8u << 20) | (6u << 16) | (32u << 8) | 4u,
+        ARGB2101010 = (1u << 28) | (6u << 24) | (3u << 20) | (7u << 16) | (32u << 8) | 4u,
+    }
+
     [StructLayout(LayoutKind.Explicit, Size = 56)]
     public struct Event
     {
@@ -327,6 +426,63 @@ internal partial class Sdl
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate IntPtr d_sdl_getpixelformatname(uint format);
+    private d_sdl_getpixelformatname SDL_GetPixelFormatName;
+
+    public string GetPixelFormatName(uint format)
+    {
+        return InteropHelpers.Utf8ToString(SDL_GetPixelFormatName(format));
+    }
+
+    public string GetPixelFormatName(PixelFormat format)
+    {
+        return GetPixelFormatName((uint)format);
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate int d_sdl_pixelformatenumtomasks(uint format, out int bpp, out uint rmask, out uint gmask, out uint bmask, out uint amask);
+    private d_sdl_pixelformatenumtomasks SDL_PixelFormatEnumToMasks;
+
+    public bool PixelFormatEnumToMasks(uint format, out int bpp, out uint rmask, out uint gmask, out uint bmask, out uint amask)
+    {
+        return SDL_PixelFormatEnumToMasks(format, out bpp, out rmask, out gmask, out bmask, out amask) != 0;
+    }
+
+    public bool PixelFormatEnumToMasks(PixelFormat format, out int bpp, out uint rmask, out uint gmask, out uint bmask, out uint amask)
+    {
+        return PixelFormatEnumToMasks((uint)format, out bpp, out rmask, out gmask, out bmask, out amask);
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate uint d_sdl_maskstopixelformatenum(int bpp, uint rmask, uint gmask, uint bmask, uint amask);
+    private d_sdl_maskstopixelformatenum SDL_MasksToPixelFormatEnum;
+
+    public uint MasksToPixelFormatEnum(int bpp, uint rmask, uint gmask, uint bmask, uint amask)
+    {
+        return SDL_MasksToPixelFormatEnum(bpp, rmask, gmask, bmask, amask);
+    }
+
+    public PixelFormat MasksToPixelFormat(int bpp, uint rmask, uint gmask, uint bmask, uint amask)
+    {
+        return (PixelFormat)MasksToPixelFormatEnum(bpp, rmask, gmask, bmask, amask);
+    }
+
+    public static PixelType GetPixelType(uint format)
+    {
+        return (PixelType)((format >> 24) & 0x0F);
+    }
+
+    public static int GetBitsPerPixel(uint format)
+    {
+        return (int)((format >> 8) & 0xFF);
+    }
+
+    public static int GetBytesPerPixel(uint format)
+    {
+        return (int)(format & 0xFF);
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void d_sdl_clearerror();
     public d_sdl_clearerror ClearError;
 
@@ -369,7 +525,6 @@ internal partial class Sdl
     public delegate void d_sdl_free(IntPtr ptr);
     public d_sdl_free SDL_Free;
 
-
     private void LoadEntryPoints(IntPtr library)
     {
         SDL_Init = FuncLoader.LoadFunctionOrNull<d_sdl_init>(library, "SDL_Init");
@@ -390,6 +545,9 @@ internal partial class Sdl
         SDL_RWFromMem = FuncLoader.LoadFunctionOrNull<d_sdl_rwfrommem>(library, "SDL_RWFromMem");
         SetHint = FuncLoader.LoadFunctionOrNull<d_sdl_sethint>(library, "SDL_SetHint");
         SDL_Free = FuncLoader.LoadFunctionOrNull<d_sdl_free>(library, "SDL_free");
+        SDL_GetPixelFormatName = FuncLoader.LoadFunctionOrNull<d_sdl_getpixelformatname>(library, "SDL_GetPixelFormatName");
+        SDL_PixelFormatEnumToMasks = FuncLoader.LoadFunctionOrNull<d_sdl_pixelformatenumtomasks>(library, "SDL_PixelFormatEnumToMasks");
+        SDL_MasksToPixelFormatEnum = FuncLoader.LoadFunctionOrNull<d_sdl_maskstopixelformatenum>(library, "SDL_MasksToPixelFormatEnum");
     }
 
 }
