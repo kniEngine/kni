@@ -29,12 +29,14 @@ SOFTWARE.
 #endregion License
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     [DataContract]
+    [DebuggerDisplay("{Width}x{Height} {Format}")]
     public class DisplayMode
     {
         #region Fields
