@@ -526,20 +526,20 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (true != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
                 {
                     Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
-                    SDL.WINDOW.SetFullscreen(Handle, (willBeFullScreen) ? fullscreenFlag : (Sdl.Window.State)0);
+                    SDL.WINDOW.SetFullscreen(Handle, (true) ? fullscreenFlag : (Sdl.Window.State)0);
                     _hardwareSwitch = gdm.HardwareModeSwitch;
                 }
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
                 {
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeFullScreen && _hardwareSwitch ? "1" : "0");
+                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", true && _hardwareSwitch ? "1" : "0");
                 }
 
-                if (willBeFullScreen && !gdm.HardwareModeSwitch)
+                if (true && !gdm.HardwareModeSwitch)
                 {
                     _width = displayRect.Width;
                     _height = displayRect.Height;
@@ -553,7 +553,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (IsFullScreen && !willBeFullScreen)
+                    if (IsFullScreen && !true)
                     {
                         // This centering only occurs when exiting fullscreen
                         // so it should center the window on the current display.
@@ -576,27 +576,27 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                if (IsFullScreen != willBeFullScreen)
+                if (IsFullScreen != true)
                     OnClientSizeChanged();
 
-                IsFullScreen = willBeFullScreen;
+                IsFullScreen = true;
             }
             else // (willBeFullScreen == false)
             {
-                if (willBeFullScreen != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
+                if (false != IsFullScreen || _hardwareSwitch != gdm.HardwareModeSwitch)
                 {
                     Sdl.Window.State fullscreenFlag = gdm.HardwareModeSwitch ? Sdl.Window.State.Fullscreen : Sdl.Window.State.FullscreenDesktop;
-                    SDL.WINDOW.SetFullscreen(Handle, (willBeFullScreen) ? fullscreenFlag : (Sdl.Window.State)0);
+                    SDL.WINDOW.SetFullscreen(Handle, (false) ? fullscreenFlag : (Sdl.Window.State)0);
                     _hardwareSwitch = gdm.HardwareModeSwitch;
                 }
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
                 {
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeFullScreen && _hardwareSwitch ? "1" : "0");
+                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", false && _hardwareSwitch ? "1" : "0");
                 }
 
-                if (willBeFullScreen && !gdm.HardwareModeSwitch)
+                if (false && !gdm.HardwareModeSwitch)
                 {
                     _width = displayRect.Width;
                     _height = displayRect.Height;
@@ -610,7 +610,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (IsFullScreen && !willBeFullScreen)
+                    if (IsFullScreen && !false)
                     {
                         // This centering only occurs when exiting fullscreen
                         // so it should center the window on the current display.
@@ -633,10 +633,10 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                if (IsFullScreen != willBeFullScreen)
+                if (IsFullScreen != false)
                     OnClientSizeChanged();
 
-                IsFullScreen = willBeFullScreen;
+                IsFullScreen = false;
             }
 
             _supressMoved = true;
