@@ -13,6 +13,7 @@ internal partial class Sdl
     {
         private Sdl _sdl;
 
+        [DebuggerDisplay("{Width}x{Height} @{RefreshRate}Hz, Format:{Format}")]
         public struct Mode
         {
             public uint Format;
