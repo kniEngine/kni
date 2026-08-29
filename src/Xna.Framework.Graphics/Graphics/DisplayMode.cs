@@ -114,7 +114,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public override string ToString()
         {
-            return String.Format("{Width:{0}, Height:{1}, Format:{2}, AspectRatio:{3}}",
+            return String.Format("{{Width:{0}, Height:{1}, Format:{2}, AspectRatio:{3} }}",
                 _width, _height, _format, AspectRatio);
         }
 
