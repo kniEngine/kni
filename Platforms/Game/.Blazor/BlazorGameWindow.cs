@@ -37,6 +37,7 @@ namespace Microsoft.Xna.Framework
 
         private readonly List<Keys> _keys = new List<Keys>();
 
+        private Rectangle _clientBounds;
         private Point _locationBeforeFullScreen;
 
         // flag to indicate that we're switching to/from full screen and should ignore resize events
@@ -56,13 +57,7 @@ namespace Microsoft.Xna.Framework
 
         public override string ScreenDeviceName { get { return String.Empty; } }
 
-        public override Rectangle ClientBounds
-        {
-            get
-            {
-                return new Rectangle(0, 0, _canvas.Width, _canvas.Height);
-            }
-        }
+        public override Rectangle ClientBounds { get { return _clientBounds; } }
 
         public override bool AllowUserResizing
         {
@@ -107,6 +102,7 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
+        internal Div _canvasHolder { get; private set; }
         internal Canvas _canvas { get; private set; }
         internal Window wasmWindow { get { return _window; } }
 
@@ -115,6 +111,7 @@ namespace Microsoft.Xna.Framework
             _concreteGame = concreteGame;
 
             _window = Window.Current;
+            _canvasHolder = _window.Document.GetElementById<Div>("canvasHolder");
             _canvas = _window.Document.GetElementById<Canvas>("theCanvas");
             _instances.Add(this.Handle, this);
 
@@ -222,9 +219,11 @@ namespace Microsoft.Xna.Framework
             // Form.Resize += OnResize;
             //  Form.ResizeBegin += OnResizeBegin;
             //  Form.ResizeEnd += OnResizeEnd;
-            _window.OnResize += OnResize;
 
-           // Form.KeyPress += OnKeyPress;
+            // Form.KeyPress += OnKeyPress;
+
+            UpdateClientBounds();
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate += UpdateClientBounds;
         }
 
         private void SetIcon()
@@ -270,14 +269,6 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        internal void OnResize(object sender)
-        {
-
-            UpdateBackBufferSize();
-
-            OnClientSizeChanged();
-        }
-
         // TODO: move UpdateBackBufferSize() in graphicsDeviceManager
         private void UpdateBackBufferSize()
         {
@@ -287,8 +278,8 @@ namespace Microsoft.Xna.Framework
                 if (gdm.GraphicsDevice == null)
                     return;
 
-                _canvas.Width = _window.InnerWidth;
-                _canvas.Height = _window.InnerHeight;
+                _canvas.Width = _clientBounds.Width;
+                _canvas.Height = _clientBounds.Height;
 
                 int newWidth  = _canvas.Width;
                 int newHeight = _canvas.Height;
@@ -311,6 +302,23 @@ namespace Microsoft.Xna.Framework
         internal void ChangeClientSize(int width, int height)
         {
 
+        }
+
+        private void UpdateClientBounds()
+        {
+            DOMRect boundingClientRect = _canvasHolder.GetBoundingClientRect();
+            int width = (int)boundingClientRect.Width;
+            int height = (int)boundingClientRect.Height;
+
+            bool resized = width != _clientBounds.Width || height != _clientBounds.Height;
+
+            _clientBounds = new Rectangle((int)boundingClientRect.X, (int)boundingClientRect.Y, width, height);
+
+            if (resized)
+            {
+                UpdateBackBufferSize();
+                OnClientSizeChanged();
+            }
         }
 
         #region Public Methods
@@ -337,6 +345,8 @@ namespace Microsoft.Xna.Framework
             _canvas = null;
 
             _concreteGame = null;
+
+            ((IFrameworkDispatcher)FrameworkDispatcher.Current).OnUpdate -= UpdateClientBounds;
         }
 
         public void MouseVisibleToggled()
