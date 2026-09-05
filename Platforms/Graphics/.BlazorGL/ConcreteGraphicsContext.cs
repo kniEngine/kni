@@ -155,6 +155,39 @@ namespace Microsoft.Xna.Platform.Graphics
             BlendState = prevBlendState;
         }
 
+        // Something else drew into this GL context behind our back (e.g. a library sharing the
+        // context instead of using its own canvas). Two things need clearing, not one:
+        //
+        // 1. The state KNI thinks it already pushed to the GPU (_lastBlendState etc, checked by
+        //    ConcreteBlendState/ConcreteDepthStencilState/ConcreteRasterizerState.PlatformApplyState).
+        //    Re-apply it right now instead of waiting.
+        // 2. The dirty flags that decide whether KNI looks at that state again at all. If the app
+        //    sets the same BlendState/DepthStencilState/RasterizerState object it used last frame
+        //    (very common - e.g. reusing BlendState.Opaque), those property setters return early on
+        //    reference equality and never reach #1. Force them dirty so the next draw checks for real.
+        public override void InvalidateStateCache()
+        {
+            ((IPlatformBlendState)base._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState(this, true);
+            ((IPlatformDepthStencilState)base._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(this, true);
+            ((IPlatformRasterizerState)base._actualRasterizerState).GetStrategy<ConcreteRasterizerState>().PlatformApplyState(this, true);
+
+            _blendStateDirty = true;
+            _blendFactorDirty = true;
+            _depthStencilStateDirty = true;
+            _rasterizerStateDirty = true;
+            _scissorRectangleDirty = true;
+            _vertexShaderDirty = true;
+            _pixelShaderDirty = true;
+            _indexBufferDirty = true;
+            _vertexBuffersDirty = true;
+
+            _shaderProgram = null;
+            _lastVertexAttribs = 0; // 0 = dirty, forces a rebind on the next draw.
+
+            ((IPlatformTextureCollection)this.Textures).Strategy.Dirty();
+            ((IPlatformTextureCollection)this.VertexTextures).Strategy.Dirty();
+        }
+
         private void PlatformApplyState()
         {
             //this.EnsureContextCurrentThread();

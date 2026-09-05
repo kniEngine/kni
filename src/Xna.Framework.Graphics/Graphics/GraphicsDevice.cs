@@ -272,6 +272,17 @@ namespace Microsoft.Xna.Framework.Graphics
             CurrentContext.Clear(options, color, depth, stencil);
         }
 
+        // Call this after some other code has drawn into this GraphicsDevice's GPU context directly
+        // (for example, a rendering library sharing the context instead of using its own canvas -
+        // SkiaSharp is one). It forces the next draw call to rebind everything - shader, textures,
+        // buffers, blend/depth/rasterizer state - instead of trusting what's already bound.
+        //
+        // Only does anything on BlazorGL right now. A no-op everywhere else.
+        public void InvalidateStateCache()
+        {
+            CurrentContext.InvalidateStateCache();
+        }
+
         public void Dispose()
         {
             Dispose(true);

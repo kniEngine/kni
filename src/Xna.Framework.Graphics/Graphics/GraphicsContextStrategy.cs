@@ -588,6 +588,12 @@ namespace Microsoft.Xna.Platform.Graphics
             return (T)this;
         }
 
+        // No-op by default. Override where an external renderer can draw into the same GPU context
+        // KNI is using - see Platforms/Graphics/.BlazorGL/ConcreteGraphicsContext.cs.
+        public virtual void InvalidateStateCache()
+        {
+        }
+
         #region Metrics
         protected void Metrics_AddClearCount() { unchecked { _graphicsMetrics._clearCount++; } }
         protected void Metrics_AddDrawCount() { unchecked { _graphicsMetrics._drawCount++; } }
