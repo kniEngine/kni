@@ -277,10 +277,10 @@ namespace Microsoft.Xna.Framework.Graphics
         // SkiaSharp is one). It forces the next draw call to rebind everything - shader, textures,
         // buffers, blend/depth/rasterizer state - instead of trusting what's already bound.
         //
-        // Only does anything on BlazorGL right now. A no-op everywhere else.
-        public void InvalidateStateCache()
+        // Only implemented on BlazorGL right now. Throws on the other backends.
+        public void InvalidateState()
         {
-            CurrentContext.InvalidateStateCache();
+            CurrentContext.InvalidateState();
         }
 
         public void Dispose()

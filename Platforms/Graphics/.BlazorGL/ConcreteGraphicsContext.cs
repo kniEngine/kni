@@ -165,7 +165,7 @@ namespace Microsoft.Xna.Platform.Graphics
         //    sets the same BlendState/DepthStencilState/RasterizerState object it used last frame
         //    (very common - e.g. reusing BlendState.Opaque), those property setters return early on
         //    reference equality and never reach #1. Force them dirty so the next draw checks for real.
-        public override void InvalidateStateCache()
+        public override void InvalidateState()
         {
             ((IPlatformBlendState)base._actualBlendState).GetStrategy<ConcreteBlendState>().PlatformApplyState(this, true);
             ((IPlatformDepthStencilState)base._actualDepthStencilState).GetStrategy<ConcreteDepthStencilState>().PlatformApplyState(this, true);
