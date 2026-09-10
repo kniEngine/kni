@@ -184,6 +184,10 @@ namespace Microsoft.Xna.Platform.Graphics
             _shaderProgram = null;
             _lastVertexAttribs = 0; // 0 = dirty, forces a rebind on the next draw.
 
+            // Mirrors real GL enabled-attribute state; an external EnableVertexAttribArray/
+            // DisableVertexAttribArray call makes this stale, so clear it rather than trust it.
+            _enabledVertexAttributesSet.Clear();
+
             ((IPlatformTextureCollection)this.Textures).Strategy.Dirty();
             ((IPlatformTextureCollection)this.VertexTextures).Strategy.Dirty();
         }
