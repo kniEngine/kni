@@ -146,6 +146,11 @@ namespace Microsoft.Xna.Framework.Graphics
             _strategy.Clear(options, color, depth, stencil);
         }
 
+        public void InvalidateState()
+        {
+            _strategy.InvalidateState();
+        }
+
         public void SetVertexBuffer(VertexBuffer vertexBuffer)
         {
             _strategy.SetVertexBuffer(vertexBuffer);

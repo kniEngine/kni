@@ -588,6 +588,11 @@ namespace Microsoft.Xna.Platform.Graphics
             return (T)this;
         }
 
+        // Called when an external renderer has drawn into the same GPU context KNI is using, so the
+        // next draw cannot trust anything it thinks is already bound. Implemented on BlazorGL, see
+        // Platforms/Graphics/.BlazorGL/ConcreteGraphicsContext.cs.
+        public abstract void InvalidateState();
+
         #region Metrics
         protected void Metrics_AddClearCount() { unchecked { _graphicsMetrics._clearCount++; } }
         protected void Metrics_AddDrawCount() { unchecked { _graphicsMetrics._drawCount++; } }
