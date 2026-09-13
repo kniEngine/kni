@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 bool displayChanged = false;
                 if (_supportedDisplayModes == null || displayChanged)
                 {
-                    var modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
+                    List<DisplayMode> modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
 
                     modes.Sort(DisplayModeComparison);
                     _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
