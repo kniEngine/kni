@@ -188,16 +188,22 @@ namespace Microsoft.Xna.Platform.Graphics
         internal GLVersion glVersion { get { return _glVersion; } }
 
 
-        internal ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter(
+            OGL gl, GLVersion glVersion, string description, int capMaxTextureSize, int capMaxMultiSampleCount, int capMaxTextureSlots, int capMaxVertexTextureSlots, int capMaxVertexAttribs, int capMaxDrawBuffers)
         {
-            InitOpenGL(SDL, out _gl, out _glVersion,
-                out _description, out _capMaxTextureSize, out _capMaxMultiSampleCount,
-                out _capMaxTextureSlots, out _capMaxVertexTextureSlots, out _capMaxVertexAttribs,
-                out _capMaxDrawBuffers
-                );
+            _gl = gl;
+            _glVersion = glVersion;
+            _description = description;
+            _capMaxTextureSize = capMaxTextureSize;
+            _capMaxMultiSampleCount = capMaxMultiSampleCount;
+            _capMaxTextureSlots = capMaxTextureSlots;
+            _capMaxVertexTextureSlots = capMaxVertexTextureSlots;
+            _capMaxVertexAttribs = capMaxVertexAttribs;
+            _capMaxDrawBuffers = capMaxDrawBuffers;
         }
 
-        internal static void InitOpenGL(Sdl SDL, out OGL _gl, out GLVersion _glVersion,
+        internal static void InitOpenGL(Sdl SDL, 
+            out OGL _gl, out GLVersion _glVersion,
             out string _description, out int _capMaxTextureSize, out int _capMaxMultiSampleCount,
             out int _capMaxTextureSlots, out int _capMaxVertexTextureSlots, out int _capMaxVertexAttribs,
             out int _capMaxDrawBuffers)
