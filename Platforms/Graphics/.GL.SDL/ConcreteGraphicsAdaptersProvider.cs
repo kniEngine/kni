@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Platform.Graphics.OpenGL;
 
 
 namespace Microsoft.Xna.Platform.Graphics
@@ -27,10 +28,26 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             List<GraphicsAdapter> adapterList = new List<GraphicsAdapter>(1);
 
-            ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter();
-            GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);
+            ConcreteGraphicsAdapter.InitOpenGL(Sdl.Current,
+                out OGL _gl, out GLVersion _glVersion,
+                out string _description, out int _capMaxTextureSize, out int _capMaxMultiSampleCount,
+                out int _capMaxTextureSlots, out int _capMaxVertexTextureSlots, out int _capMaxVertexAttribs,
+                out int _capMaxDrawBuffers
+                );
 
-            adapterList.Add(adapter);
+            int displayCount = Sdl.Current.DISPLAY.GetNumVideoDisplays();
+
+            //TODO: get all adapters
+            {
+                ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(
+                    _gl, _glVersion,
+                    _description, _capMaxTextureSize, _capMaxMultiSampleCount,
+                    _capMaxTextureSlots, _capMaxVertexTextureSlots, _capMaxVertexAttribs,
+                    _capMaxDrawBuffers);
+                GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);
+
+                adapterList.Add(adapter);
+            }
 
             // The first adapter is considered the default.
             ((IPlatformGraphicsAdapter)adapterList[0]).Strategy.Platform_IsDefaultAdapter = true;

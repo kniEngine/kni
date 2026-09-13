@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private DisplayModeCollection _supportedDisplayModes;
         private DisplayMode _currentDisplayMode;
-        private string _description = string.Empty;
 
         int _displayIndex;
 
@@ -32,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override string Platform_Description
         {
-            get { return _description; }
+            get { return base.Platform_Description; }
             set { }
         }
 
@@ -188,7 +187,25 @@ namespace Microsoft.Xna.Platform.Graphics
         internal GLVersion glVersion { get { return _glVersion; } }
 
 
-        internal ConcreteGraphicsAdapter()
+        internal ConcreteGraphicsAdapter(
+            OGL gl, GLVersion glVersion, string description, int capMaxTextureSize, int capMaxMultiSampleCount, int capMaxTextureSlots, int capMaxVertexTextureSlots, int capMaxVertexAttribs, int capMaxDrawBuffers)
+        {
+            _gl = gl;
+            _glVersion = glVersion;
+            base.Platform_Description = description;
+            _capMaxTextureSize = capMaxTextureSize;
+            _capMaxMultiSampleCount = capMaxMultiSampleCount;
+            _capMaxTextureSlots = capMaxTextureSlots;
+            _capMaxVertexTextureSlots = capMaxVertexTextureSlots;
+            _capMaxVertexAttribs = capMaxVertexAttribs;
+            _capMaxDrawBuffers = capMaxDrawBuffers;
+        }
+
+        internal static void InitOpenGL(Sdl SDL, 
+            out OGL _gl, out GLVersion _glVersion,
+            out string _description, out int _capMaxTextureSize, out int _capMaxMultiSampleCount,
+            out int _capMaxTextureSlots, out int _capMaxVertexTextureSlots, out int _capMaxVertexAttribs,
+            out int _capMaxDrawBuffers)
         {
             IntPtr glWindowHandle = IntPtr.Zero;
             IntPtr glContext = IntPtr.Zero;
@@ -200,7 +217,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 glWindowHandle = SDL.WINDOW.Create("KnisDefaultAdapterWindow", 0, 0, 0, 0,
                     Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
                 glContext = SDL.OpenGL.CreateGLContext(glWindowHandle);
-
                 try
                 {
                     // OGL.Initialize() must be called while we have a gl context,
@@ -216,18 +232,20 @@ namespace Microsoft.Xna.Platform.Graphics
                         "KNI requires OpenGL 3.0 compatible drivers, or either ARB_framebuffer_object or EXT_framebuffer_object extensions.");
                 }
 
+                _glVersion = default;
                 // try getting the context version
                 // GL_MAJOR_VERSION and GL_MINOR_VERSION are GL 3.0+ only, so we need to rely on GL_VERSION string.
                 try
                 {
-                    _version = _gl.GetString(StringName.Version);
-                    if (string.IsNullOrEmpty(_version))
+                    string version = _gl.GetString(StringName.Version);
+                    System.Diagnostics.Debug.WriteLine("openGL version: " + version);
+                    if (string.IsNullOrEmpty(version))
                         throw new NoSuitableGraphicsDeviceException("Unable to retrieve OpenGL version");
 
                     // for OpenGL, the GL_VERSION string always starts with the version number in the "major.minor" format,
                     // optionally followed by multiple vendor specific characters
-                    _glVersion.Major = Convert.ToInt16(_version.Substring(0, 1));
-                    _glVersion.Minor = Convert.ToInt16(_version.Substring(2, 1));
+                    _glVersion.Major = Convert.ToInt16(version.Substring(0, 1));
+                    _glVersion.Minor = Convert.ToInt16(version.Substring(2, 1));
                 }
                 catch (FormatException)
                 {
