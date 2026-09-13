@@ -74,17 +74,25 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     var modes = new List<DisplayMode>(new[] { Platform_CurrentDisplayMode, });
 
-                    modes.Sort(delegate (DisplayMode a, DisplayMode b)
-                    {
-                        if (a == b) return 0;
-                        if (a.Format <= b.Format && a.Width <= b.Width && a.Height <= b.Height) return -1;
-                        else return 1;
-                    });
+                    modes.Sort(DisplayModeComparison);
                     _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
                 }
 
                 return _supportedDisplayModes;
             }
+        }
+
+        private static int DisplayModeComparison(DisplayMode a, DisplayMode b)
+        {
+            if (a == b)
+                return 0;
+
+            if (a.Format <= b.Format
+            &&  a.Width  <= b.Width
+            &&  a.Height <= b.Height)
+                return -1;
+
+            return 1;
         }
 
         public override DisplayMode Platform_CurrentDisplayMode
