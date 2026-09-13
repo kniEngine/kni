@@ -108,12 +108,17 @@ namespace Microsoft.Xna.Platform.Graphics
             if (a == b)
                 return 0;
 
-            if (a.Format <= b.Format 
-            &&  a.Width  <= b.Width 
-            &&  a.Height <= b.Height)
-                return -1;
-            
-            return 1;
+            int formatComparison = a.Format.CompareTo(b.Format);
+            if (formatComparison != 0)
+                return formatComparison;
+            int widthComparison = a.Width.CompareTo(b.Width);
+            if (widthComparison != 0)
+                return widthComparison;
+            int heightComparison = a.Height.CompareTo(b.Height);
+            if (heightComparison != 0)
+                return heightComparison;
+
+            return 0;
         }
 
         public override DisplayMode Platform_CurrentDisplayMode
