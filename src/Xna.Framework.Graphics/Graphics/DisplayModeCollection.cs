@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             get 
             {
-                var list = new List<DisplayMode>();
+                List<DisplayMode> list = new List<DisplayMode>();
                 foreach (DisplayMode mode in _modes)
                 {
                     if (mode.Format == format)
@@ -42,17 +42,22 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Sort the modes in a consistent way that happens
             // to match XNA behavior on some graphics devices.
-
-            modes.Sort(delegate(DisplayMode a, DisplayMode b)
-            {
-                if (a == b) 
-                    return 0;
-                if (a.Format <= b.Format && a.Width <= b.Width && a.Height <= b.Height) 
-                    return -1;
-                return 1;
-            });
+            modes.Sort(DisplayModeComparison);
 
             _modes = modes;
+        }
+
+        private static int DisplayModeComparison(DisplayMode a, DisplayMode b)
+        {
+            if (a == b)
+                return 0;
+
+            if (a.Format <= b.Format
+            &&  a.Width  <= b.Width
+            &&  a.Height <= b.Height)
+                return -1;
+
+            return 1;
         }
     }
 }
