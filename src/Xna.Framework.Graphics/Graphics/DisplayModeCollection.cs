@@ -42,7 +42,6 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             // Sort the modes in a consistent way that happens
             // to match XNA behavior on some graphics devices.
-
             modes.Sort(DisplayModeComparison);
 
             _modes = modes;
