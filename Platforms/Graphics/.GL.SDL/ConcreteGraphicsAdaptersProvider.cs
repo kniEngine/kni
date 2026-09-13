@@ -35,14 +35,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 out int _capMaxDrawBuffers
                 );
 
-            ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(
-                _gl, _glVersion,
-                _description, _capMaxTextureSize, _capMaxMultiSampleCount,
-                _capMaxTextureSlots, _capMaxVertexTextureSlots, _capMaxVertexAttribs,
-                _capMaxDrawBuffers);
-            GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);
+            int displayCount = Sdl.Current.DISPLAY.GetNumVideoDisplays();
 
-            adapterList.Add(adapter);
+            //TODO: get all adapters
+            {
+                ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(
+                    _gl, _glVersion,
+                    _description, _capMaxTextureSize, _capMaxMultiSampleCount,
+                    _capMaxTextureSlots, _capMaxVertexTextureSlots, _capMaxVertexAttribs,
+                    _capMaxDrawBuffers);
+                GraphicsAdapter adapter = base.CreateGraphicsAdapter(adapterStrategy);
+
+                adapterList.Add(adapter);
+            }
 
             // The first adapter is considered the default.
             ((IPlatformGraphicsAdapter)adapterList[0]).Strategy.Platform_IsDefaultAdapter = true;
