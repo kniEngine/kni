@@ -20,7 +20,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         private DisplayModeCollection _supportedDisplayModes;
         private DisplayMode _currentDisplayMode;
-        private string _description = string.Empty;
 
         int _displayIndex;
 
@@ -32,7 +31,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override string Platform_Description
         {
-            get { return _description; }
+            get { return base.Platform_Description; }
             set { }
         }
 
@@ -193,7 +192,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _gl = gl;
             _glVersion = glVersion;
-            _description = description;
+            base.Platform_Description = description;
             _capMaxTextureSize = capMaxTextureSize;
             _capMaxMultiSampleCount = capMaxMultiSampleCount;
             _capMaxTextureSlots = capMaxTextureSlots;
