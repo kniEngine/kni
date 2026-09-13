@@ -12,10 +12,9 @@ namespace Microsoft.Xna.Framework.Graphics
     static public class GraphicsWebGLExtensions
     {
         /// <summary>
-        /// Returns a handle to the internal WebGL rendering context. Valid only on Blazor platforms.
-        /// For usage, convert this to nkast.Wasm.Canvas.WebGL.IWebGLRenderingContext.
+        /// Returns the internal WebGL rendering context. Valid only on Blazor platforms.
         /// </summary>
-        public static object GetWebGLContext(this GraphicsDevice device)
+        public static IWebGLRenderingContext GetWebGLContext(this GraphicsDevice device)
         {
             GraphicsContext context = ((IPlatformGraphicsDevice)device).Strategy.CurrentContext;
             IWebGLRenderingContext glContext = ((IPlatformGraphicsContext)context).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
@@ -23,10 +22,9 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         /// <summary>
-        /// Returns a handle to the internal WebGL texture object. Valid only on Blazor platforms.
-        /// For usage, convert this to nkast.Wasm.Canvas.WebGL.WebGLTexture.
+        /// Returns the internal WebGL texture object. Valid only on Blazor platforms.
         /// </summary>
-        public static object GetWebGLTexture(this Texture texture)
+        public static WebGLTexture GetWebGLTexture(this Texture texture)
         {
             WebGLTexture glTexture = ((IPlatformTexture)texture).GetTextureStrategy<ConcreteTexture>()._glTexture;
             return glTexture;
