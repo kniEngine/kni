@@ -695,6 +695,11 @@ namespace Microsoft.Xna.Platform.Graphics
             this.D3dContext.Flush();
         }
 
+        public override void InvalidateState()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public override OcclusionQueryStrategy CreateOcclusionQueryStrategy()
         {

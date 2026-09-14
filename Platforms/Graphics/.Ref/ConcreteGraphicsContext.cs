@@ -101,6 +101,11 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new PlatformNotSupportedException();
         }
 
+        public override void InvalidateState()
+        {
+            throw new PlatformNotSupportedException();
+        }
+
 
         public override OcclusionQueryStrategy CreateOcclusionQueryStrategy()
         {

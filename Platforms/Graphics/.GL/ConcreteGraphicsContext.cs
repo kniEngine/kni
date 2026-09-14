@@ -1099,6 +1099,11 @@ namespace Microsoft.Xna.Platform.Graphics
             GL.Flush();
         }
 
+        public override void InvalidateState()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public override OcclusionQueryStrategy CreateOcclusionQueryStrategy()
         {
