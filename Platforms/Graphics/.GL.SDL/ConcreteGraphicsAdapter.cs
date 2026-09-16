@@ -19,7 +19,6 @@ namespace Microsoft.Xna.Platform.Graphics
         private Sdl SDL { get { return Sdl.Current; } }
 
         private DisplayModeCollection _supportedDisplayModes;
-        private DisplayMode _currentDisplayMode;
 
         int _displayIndex;
 
@@ -92,10 +91,18 @@ namespace Microsoft.Xna.Platform.Graphics
                 int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
 
                 SDL.DISPLAY.GetCurrentDisplayMode(windowDisplayIndex, out Sdl.Display.Mode mode);
+                SurfaceFormat modeFormat = SurfaceFormat.Color;
 
-                _currentDisplayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+                DisplayModeCollection supportedDisplayModes = this.Platform_SupportedDisplayModes;
+                foreach(DisplayMode displayMode in supportedDisplayModes)
+                {
+                    if (displayMode.Width  == mode.Width
+                    &&  displayMode.Height == mode.Height
+                    &&  displayMode.Format == modeFormat)
+                        return displayMode;
+                }
 
-                return _currentDisplayMode;
+                throw new InvalidOperationException("Current display mode not found in supported display modes.");
             }
         }
 
