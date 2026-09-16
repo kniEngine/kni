@@ -75,11 +75,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 if (_supportedDisplayModes == null || displayChanged)
                 {
-                    List<DisplayMode> modes = new List<DisplayMode>();
-                    
                     _displayIndex = windowDisplayIndex;
 
                     int modeCount = SDL.DISPLAY.GetNumDisplayModes(windowDisplayIndex);
+                    List<DisplayMode> modes = new List<DisplayMode>(modeCount);
 
                     for (int i = 0; i < modeCount; i++)
                     {
