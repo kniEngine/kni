@@ -19,7 +19,6 @@ namespace Microsoft.Xna.Platform.Graphics
         private Sdl SDL { get { return Sdl.Current; } }
 
         private DisplayModeCollection _supportedDisplayModes;
-        private DisplayMode _currentDisplayMode;
 
         int _displayIndex;
 
@@ -93,9 +92,11 @@ namespace Microsoft.Xna.Platform.Graphics
 
                 SDL.DISPLAY.GetCurrentDisplayMode(windowDisplayIndex, out Sdl.Display.Mode mode);
 
-                _currentDisplayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+                DisplayMode currentDisplayMode;
 
-                return _currentDisplayMode;
+                currentDisplayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+
+                return currentDisplayMode;
             }
         }
 
