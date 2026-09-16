@@ -78,43 +78,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     _displayIndex = windowDisplayIndex;
 
-                    int modeCount = SDL.DISPLAY.GetNumDisplayModes(_displayIndex);
-                    List<DisplayMode> modes = new List<DisplayMode>(modeCount);
-
-                    for (int i = 0; i < modeCount; i++)
-                    {
-                        SDL.DISPLAY.GetDisplayMode(_displayIndex, i, out Sdl.Display.Mode mode);
-
-                        // We are only using one format, Color
-                        // mode.Format gets the Color format from SDL
-                        DisplayMode displayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
-                        if (!modes.Contains(displayMode))
-                            modes.Add(displayMode);
-                    }
-                    modes.Sort(DisplayModeComparison);
-                    _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
+                    _supportedDisplayModes = GetDisplayModes();
                 }
 
                 return _supportedDisplayModes;
             }
-        }
-
-        private static int DisplayModeComparison(DisplayMode a, DisplayMode b)
-        {
-            if (a == b)
-                return 0;
-
-            int formatComparison = a.Format.CompareTo(b.Format);
-            if (formatComparison != 0)
-                return formatComparison;
-            int widthComparison = a.Width.CompareTo(b.Width);
-            if (widthComparison != 0)
-                return widthComparison;
-            int heightComparison = a.Height.CompareTo(b.Height);
-            if (heightComparison != 0)
-                return heightComparison;
-
-            return 0;
         }
 
         public override DisplayMode Platform_CurrentDisplayMode
@@ -195,6 +163,44 @@ namespace Microsoft.Xna.Platform.Graphics
             _capMaxVertexTextureSlots = capMaxVertexTextureSlots;
             _capMaxVertexAttribs = capMaxVertexAttribs;
             _capMaxDrawBuffers = capMaxDrawBuffers;
+        }
+
+        private DisplayModeCollection GetDisplayModes()
+        {
+            int modeCount = SDL.DISPLAY.GetNumDisplayModes(_displayIndex);
+            List<DisplayMode> modes = new List<DisplayMode>(modeCount);
+
+            for (int i = 0; i < modeCount; i++)
+            {
+                SDL.DISPLAY.GetDisplayMode(_displayIndex, i, out Sdl.Display.Mode mode);
+
+                // We are only using one format, Color
+                // mode.Format gets the Color format from SDL
+                DisplayMode displayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
+                if (!modes.Contains(displayMode))
+                    modes.Add(displayMode);
+            }
+            modes.Sort(DisplayModeComparison);
+
+            return base.CreateDisplayModeCollection(modes);
+        }
+
+        private static int DisplayModeComparison(DisplayMode a, DisplayMode b)
+        {
+            if (a == b)
+                return 0;
+
+            int formatComparison = a.Format.CompareTo(b.Format);
+            if (formatComparison != 0)
+                return formatComparison;
+            int widthComparison = a.Width.CompareTo(b.Width);
+            if (widthComparison != 0)
+                return widthComparison;
+            int heightComparison = a.Height.CompareTo(b.Height);
+            if (heightComparison != 0)
+                return heightComparison;
+
+            return 0;
         }
 
         internal static void InitOpenGL(Sdl SDL, 
