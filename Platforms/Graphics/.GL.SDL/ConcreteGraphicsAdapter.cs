@@ -70,9 +70,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                bool displayChanged = false;
                 int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-                displayChanged = displayIndex != _displayIndex;
+                bool displayChanged = displayIndex != _displayIndex;
 
                 if (_supportedDisplayModes == null || displayChanged)
                 {
@@ -85,8 +84,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     for (int i = 0; i < modeCount; i++)
                     {
-                        Sdl.Display.Mode mode;
-                        SDL.DISPLAY.GetDisplayMode(displayIndex, i, out mode);
+                        SDL.DISPLAY.GetDisplayMode(displayIndex, i, out Sdl.Display.Mode mode);
 
                         // We are only using one format, Color
                         // mode.Format gets the Color format from SDL
@@ -126,8 +124,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
 
-                Sdl.Display.Mode mode;
-                SDL.DISPLAY.GetCurrentDisplayMode(displayIndex, out mode);
+                SDL.DISPLAY.GetCurrentDisplayMode(displayIndex, out Sdl.Display.Mode mode);
 
                 _currentDisplayMode = base.CreateDisplayMode(mode.Width, mode.Height, SurfaceFormat.Color);
 
