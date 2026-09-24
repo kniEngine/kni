@@ -429,6 +429,9 @@ namespace Microsoft.Xna.Framework
                             case Sdl.Window.EventId.Close:
                                 isExiting = true;
                                 break;
+                            case Sdl.Window.EventId.DisplayChanged:
+                                DisplayChanged(ev.Window.Data1);
+                                break;
                         }
                         break;
 
@@ -737,6 +740,10 @@ namespace Microsoft.Xna.Framework
 
                 OnClientSizeChanged();
             }
+        }
+
+        private void DisplayChanged(int displayIndex)
+        {
         }
 
         protected override void SetTitle(string title)

@@ -34,6 +34,10 @@ internal partial class Sdl
             FocusGained,
             FocusLost,
             Close,
+            TakeFocus,
+            HitTest,
+            ICCProfChanged,
+            DisplayChanged,
         }
 
 
