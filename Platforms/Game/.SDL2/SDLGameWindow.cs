@@ -429,6 +429,9 @@ namespace Microsoft.Xna.Framework
                             case Sdl.Window.EventId.Close:
                                 isExiting = true;
                                 break;
+                            case Sdl.Window.EventId.DisplayChanged:
+                                DisplayChanged(ev.Window.Data1);
+                                break;
                         }
                         break;
 
@@ -737,6 +740,18 @@ namespace Microsoft.Xna.Framework
 
                 OnClientSizeChanged();
             }
+        }
+
+        private void DisplayChanged(int displayIndex)
+        {
+            _screenDeviceName = SDL.DISPLAY.GetDisplayName(displayIndex);
+
+            //TODO: in XNA, this will:
+            // 1) change GameWindow.ScreenDeviceName
+            // 2) fire GraphicsDevice.DeviceResetting event
+            // 3) change GraphicsDevice.Adapter
+            // 4) fire GraphicsDevice.DeviceReset event. sender.GetHashCode() didn't change.
+            // 5) call protected void OnScreenDeviceNameChanged() which Raises GameWindow.ScreenDeviceNameChanged event
         }
 
         protected override void SetTitle(string title)
