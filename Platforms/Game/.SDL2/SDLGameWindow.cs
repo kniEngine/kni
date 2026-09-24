@@ -744,6 +744,7 @@ namespace Microsoft.Xna.Framework
 
         private void DisplayChanged(int displayIndex)
         {
+            _screenDeviceName = SDL.DISPLAY.GetDisplayName(displayIndex);
         }
 
         protected override void SetTitle(string title)
