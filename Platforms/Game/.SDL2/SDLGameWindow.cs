@@ -744,12 +744,19 @@ namespace Microsoft.Xna.Framework
             GraphicsAdapter newAdapter = GraphicsAdapter.Adapters[displayIndex];
             _screenDeviceName = newAdapter.DeviceName;
 
-            //TODO: in XNA, this will:
-            // 1) change GameWindow.ScreenDeviceName
-            // 2) fire GraphicsDevice.DeviceResetting event
-            // 3) change GraphicsDevice.Adapter
-            // 4) fire GraphicsDevice.DeviceReset event. sender.GetHashCode() didn't change.
-            // 5) call protected void OnScreenDeviceNameChanged() which Raises GameWindow.ScreenDeviceNameChanged event
+            try
+            {
+                GraphicsDevice device = _game.GraphicsDevice;
+                ConcreteGraphicsDevice cgd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)device).Strategy;
+                cgd.AdapterChanged(newAdapter);
+            }
+            catch (InvalidOperationException)
+            {
+                // No Graphics Device Service?
+            }
+
+            //TODO: call protected void OnScreenDeviceNameChanged()
+            //      which Raises GameWindow.ScreenDeviceNameChanged
         }
 
         protected override void SetTitle(string title)
