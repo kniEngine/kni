@@ -611,14 +611,11 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (willBeExclusiveFullScreen)
-                {
-                    Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
-                                                    ? Sdl.Window.State.Fullscreen
-                                                    : Sdl.Window.State.FullscreenDesktop;
-                    SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
-                    _isExclusiveFullScreen = willBeExclusiveFullScreen;
-                }
+                Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
+                                                ? Sdl.Window.State.Fullscreen
+                                                : Sdl.Window.State.FullscreenDesktop;
+                SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
+                _isExclusiveFullScreen = willBeExclusiveFullScreen;
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
