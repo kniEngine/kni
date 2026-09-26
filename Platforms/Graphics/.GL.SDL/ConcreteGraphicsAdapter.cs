@@ -144,7 +144,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         private OGL _gl;
-        private string _version;
         private GLVersion _glVersion;
 
         int _capMaxTextureSize;
