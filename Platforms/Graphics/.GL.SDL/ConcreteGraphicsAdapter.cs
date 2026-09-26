@@ -69,16 +69,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-                if (windowDisplayIndex != _displayIndex) // display changed?
-                    _supportedDisplayModes = null;
-
                 if (_supportedDisplayModes == null)
-                {
-                    _displayIndex = windowDisplayIndex;
-
                     _supportedDisplayModes = GetDisplayModes();
-                }
 
                 return _supportedDisplayModes;
             }
