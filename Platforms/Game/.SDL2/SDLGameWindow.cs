@@ -603,7 +603,7 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!false || false != willBeExclusiveFullScreen)
+                if (true || true == willBeExclusiveFullScreen)
                 {
                     Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
                                                     ? Sdl.Window.State.Fullscreen
@@ -638,14 +638,14 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
-                if (!false)
+                if (true)
                     OnClientSizeChanged();
 
                 _isFullScreen = true;
             }
             else // (willBeFullScreen == false)
             {
-                if (false || false != willBeExclusiveFullScreen)
+                if (false || true == willBeExclusiveFullScreen)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                     _isExclusiveFullScreen = willBeExclusiveFullScreen;
