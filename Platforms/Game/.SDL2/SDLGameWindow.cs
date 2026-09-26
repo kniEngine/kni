@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework
 
         private bool _disposed;
         private bool _isResizable, _isBorderless;
-        private bool _isFullScreen, _isExclusiveFullScreen;
+        private bool _isFullScreen;
         private bool _mouseVisible;
         private string _screenDeviceName;
         private int _width, _height;
@@ -512,18 +512,14 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!_isFullScreen || _isExclusiveFullScreen != willBeExclusiveFullScreen)
-                {
-                    Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
-                                                    ? Sdl.Window.State.Fullscreen
-                                                    : Sdl.Window.State.FullscreenDesktop;
-                    SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
-                    _isExclusiveFullScreen = willBeExclusiveFullScreen;
-                }
+                Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
+                                                ? Sdl.Window.State.Fullscreen
+                                                : Sdl.Window.State.FullscreenDesktop;
+                SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _isExclusiveFullScreen ? "1" : "0");
+                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeExclusiveFullScreen ? "1" : "0");
 
                 if (!willBeExclusiveFullScreen)
                 {
@@ -554,13 +550,11 @@ namespace Microsoft.Xna.Framework
             }
             else // (willBeFullScreen == false)
             {
-                if (_isFullScreen || _isExclusiveFullScreen != willBeExclusiveFullScreen)
+                if (_isFullScreen)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
-                    _isExclusiveFullScreen = willBeExclusiveFullScreen;
                 }
 
-                // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
                     SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
                 
@@ -615,11 +609,10 @@ namespace Microsoft.Xna.Framework
                                                 ? Sdl.Window.State.Fullscreen
                                                 : Sdl.Window.State.FullscreenDesktop;
                 SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
-                _isExclusiveFullScreen = willBeExclusiveFullScreen;
 
                 // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                 if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", _isExclusiveFullScreen ? "1" : "0");
+                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeExclusiveFullScreen ? "1" : "0");
 
                 if (!willBeExclusiveFullScreen)
                 {
@@ -649,11 +642,6 @@ namespace Microsoft.Xna.Framework
             }
             else // (willBeFullScreen == false)
             {
-                if (willBeExclusiveFullScreen)
-                {
-                    _isExclusiveFullScreen = willBeExclusiveFullScreen;
-                }
-
                 _isFullScreen = false;
             }
 
