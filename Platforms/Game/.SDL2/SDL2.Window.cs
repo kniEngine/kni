@@ -138,14 +138,7 @@ internal partial class Sdl
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int d_sdl_getwindowdisplayindex(IntPtr window);
-        private d_sdl_getwindowdisplayindex SDL_GetWindowDisplayIndex;
 
-        public int GetDisplayIndex(IntPtr window)
-        {
-            int res = SDL_GetWindowDisplayIndex(window);
-            _sdl.GetError(res);
-            return res;
-        }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate int d_sdl_getwindowflags(IntPtr window);
@@ -221,7 +214,6 @@ internal partial class Sdl
             SDL_CreateWindow = FuncLoader.LoadFunctionOrNull<d_sdl_createwindow>(library, "SDL_CreateWindow");
             Destroy = FuncLoader.LoadFunctionOrNull<d_sdl_destroywindow>(library, "SDL_DestroyWindow");
             GetWindowId = FuncLoader.LoadFunctionOrNull<d_sdl_getwindowid>(library, "SDL_GetWindowID");
-            SDL_GetWindowDisplayIndex = FuncLoader.LoadFunctionOrNull<d_sdl_getwindowdisplayindex>(library, "SDL_GetWindowDisplayIndex");
             GetWindowFlags = FuncLoader.LoadFunctionOrNull<d_sdl_getwindowflags>(library, "SDL_GetWindowFlags");
             SetIcon = FuncLoader.LoadFunctionOrNull<d_sdl_setwindowicon>(library, "SDL_SetWindowIcon");
             GetPosition = FuncLoader.LoadFunctionOrNull<d_sdl_getwindowposition>(library, "SDL_GetWindowPosition");

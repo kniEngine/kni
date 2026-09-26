@@ -143,7 +143,7 @@ namespace Microsoft.Xna.Framework
 
             Title = AssemblyHelper.GetDefaultWindowTitle();
 
-            int windowDisplayIndex = SDL.WINDOW.GetDisplayIndex(this.Handle);
+            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(this.Handle);
             _screenDeviceName = GraphicsAdapter.Adapters[windowDisplayIndex].DeviceName;
 
             if (Mouse.WindowHandle == IntPtr.Zero)
@@ -222,7 +222,7 @@ namespace Microsoft.Xna.Framework
 
             Id = SDL.WINDOW.GetWindowId(_handle);
 
-            int windowDisplayIndex = SDL.WINDOW.GetDisplayIndex(this.Handle);
+            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(this.Handle);
             _screenDeviceName = GraphicsAdapter.Adapters[windowDisplayIndex].DeviceName;
 
             if (Mouse.WindowHandle == oldhandle)
@@ -507,7 +507,7 @@ namespace Microsoft.Xna.Framework
         {
             Rectangle prevBounds = ClientBounds;
 
-            int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
+            int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
             SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayRect);
 
             if (willBeFullScreen == true)
@@ -600,7 +600,7 @@ namespace Microsoft.Xna.Framework
         {
             Rectangle prevBounds = ClientBounds;
 
-            int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
+            int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
             SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayRect);
 
             if (willBeFullScreen == true)
