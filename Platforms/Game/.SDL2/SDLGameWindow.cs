@@ -603,7 +603,7 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!_isFullScreen || _isExclusiveFullScreen != willBeExclusiveFullScreen)
+                if (!false || false != willBeExclusiveFullScreen)
                 {
                     Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
                                                     ? Sdl.Window.State.Fullscreen
@@ -638,14 +638,14 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
-                if (!_isFullScreen)
+                if (!false)
                     OnClientSizeChanged();
 
                 _isFullScreen = true;
             }
             else // (willBeFullScreen == false)
             {
-                if (_isFullScreen || _isExclusiveFullScreen != willBeExclusiveFullScreen)
+                if (false || false != willBeExclusiveFullScreen)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                     _isExclusiveFullScreen = willBeExclusiveFullScreen;
@@ -661,7 +661,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (_isFullScreen)
+                    if (false)
                     {
                         // This centering only occurs when exiting fullscreen
                         // so it should center the window on the current display.
@@ -684,7 +684,7 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
-                if (_isFullScreen)
+                if (false)
                     OnClientSizeChanged();
 
                 _isFullScreen = false;
