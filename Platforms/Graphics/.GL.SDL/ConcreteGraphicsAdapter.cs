@@ -88,9 +88,7 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get
             {
-                int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-
-                SDL.DISPLAY.GetCurrentDisplayMode(windowDisplayIndex, out Sdl.Display.Mode mode);
+                SDL.DISPLAY.GetCurrentDisplayMode(_displayIndex, out Sdl.Display.Mode mode);
                 SurfaceFormat modeFormat = SurfaceFormat.Color;
 
                 DisplayModeCollection supportedDisplayModes = this.Platform_SupportedDisplayModes;
