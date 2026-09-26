@@ -517,17 +517,21 @@ namespace Microsoft.Xna.Framework
                                                 : Sdl.Window.State.FullscreenDesktop;
                 SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
 
-                // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
-                if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeExclusiveFullScreen ? "1" : "0");
 
                 if (!willBeExclusiveFullScreen)
                 {
+                    if (CurrentPlatform.OS == OS.Windows)
+                        SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
+
                     _width = displayRect.Width;
                     _height = displayRect.Height;
                 }
                 else
                 {
+                    // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
+                    if (CurrentPlatform.OS == OS.Windows)
+                        SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "1" );
+
                     SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
                     _width = clientWidth;
                     _height = clientHeight;
@@ -610,17 +614,21 @@ namespace Microsoft.Xna.Framework
                                                 : Sdl.Window.State.FullscreenDesktop;
                 SDL.WINDOW.SetFullscreen(Handle, fullscreenFlag);
 
-                // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
-                if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", willBeExclusiveFullScreen ? "1" : "0");
 
                 if (!willBeExclusiveFullScreen)
                 {
+                    if (CurrentPlatform.OS == OS.Windows)
+                        SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
+
                     _width = displayRect.Width;
                     _height = displayRect.Height;
                 }
                 else
                 {
+                    // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
+                    if (CurrentPlatform.OS == OS.Windows)
+                        SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "1");
+
                     SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
                     _width = clientWidth;
                     _height = clientHeight;
