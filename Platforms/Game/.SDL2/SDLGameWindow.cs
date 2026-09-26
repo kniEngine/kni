@@ -189,7 +189,7 @@ namespace Microsoft.Xna.Framework
             return IntPtr.Zero;
         }
 
-        internal void RecreateWindow(int width, int height)
+        internal void RecreateWindow(GraphicsAdapter adapter, int width, int height)
         {
             Sdl.Window.State initflags =
                 Sdl.Window.State.OpenGL |
@@ -208,13 +208,9 @@ namespace Microsoft.Xna.Framework
             int winx = Sdl.Window.PosCentered;
             int winy = Sdl.Window.PosCentered;
 
-            // if we are on Linux, start on the current screen
-            if (CurrentPlatform.OS == OS.Linux)
-            {
-                int displayIndex = GetMouseDisplay();
-                winx = winx | displayIndex;
-                winy = winy | displayIndex;
-            }
+            int displayIndex = (int)adapter.MonitorHandle;
+            winx = winx | displayIndex;
+            winy = winy | displayIndex;
 
             _handle = SDL.WINDOW.Create(Title, winx, winy, width, height, initflags);
             _instances.Add(this.Handle, this);
@@ -491,25 +487,6 @@ namespace Microsoft.Xna.Framework
         ~SdlGameWindow()
         {
             Dispose(false);
-        }
-
-        private int GetMouseDisplay()
-        {
-            SDL.MOUSE.GetGlobalState(out int x, out int y);
-
-            int displayCount = SDL.DISPLAY.GetNumVideoDisplays();
-            for (int i = 0; i < displayCount; i++)
-            {
-                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle rect);
-
-                if (x >= rect.X && x < rect.X + rect.Width
-                &&  y >= rect.Y && y < rect.Y + rect.Height)
-                {
-                    return i;
-                }
-            }
-
-            return 0;
         }
 
         public void SetCursorVisible(bool visible)

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Platform.Graphics;
+using Microsoft.Xna.Platform.Utilities;
 using ColorFormat = Microsoft.Xna.Platform.Graphics.OpenGL.ColorFormat;
 
 namespace Microsoft.Xna.Platform
@@ -92,6 +93,13 @@ namespace Microsoft.Xna.Platform
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = GraphicsProfile;
 
+            // if we are on Linux, start on the current screen
+            if (CurrentPlatform.OS == OS.Linux)
+            {
+                int displayIndex = GetMouseDisplay();
+                gdi.Adapter = GraphicsAdapter.Adapters[displayIndex];
+            }
+
             PresentationParameters pp = new PresentationParameters();
             pp.BackBufferFormat = this.PreferredBackBufferFormat;
             pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
@@ -123,7 +131,7 @@ namespace Microsoft.Xna.Platform
             return gdi;
         }
 
-        private void PlatformInitialize(PresentationParameters presentationParameters)
+        private void PlatformInitialize(GraphicsAdapter adapter, PresentationParameters presentationParameters)
         {
             ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
             DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
@@ -165,7 +173,7 @@ namespace Microsoft.Xna.Platform
             }
 
             //TODO: use PresentationParameters BackBufferWidth/BackBufferHeight.
-            ((SdlGameWindow)Game.Window).RecreateWindow(GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            ((SdlGameWindow)Game.Window).RecreateWindow(adapter ,GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
             presentationParameters.DeviceWindowHandle = Game.Window.Handle;
         }
 
@@ -212,12 +220,13 @@ namespace Microsoft.Xna.Platform
 
             GraphicsDeviceInformation gdi = this.DoPreparingDeviceSettings();
 
-            this.PlatformInitialize(gdi.PresentationParameters);
+            this.PlatformInitialize(gdi.Adapter, gdi.PresentationParameters);
 
             this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
             int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Game.Window.Handle);
             GraphicsAdapter actualWindowAdapter = GraphicsAdapter.Adapters[windowDisplayIndex];
+            System.Diagnostics.Debug.Assert(this.GraphicsDevice.Adapter == actualWindowAdapter);
             if (this.GraphicsDevice.Adapter != actualWindowAdapter)
                 ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().UpdateAdapter(actualWindowAdapter);
 
@@ -240,6 +249,24 @@ namespace Microsoft.Xna.Platform
 
             //TODO: Use PresentationParameters.HardwareModeSwitch instead of this.HardwareModeSwitch.
             ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen, this.HardwareModeSwitch);
+        }
+
+        private int GetMouseDisplay()
+        {
+            SDL.MOUSE.GetGlobalState(out int x, out int y);
+
+            for (int i = 0; i < GraphicsAdapter.Adapters.Count; i++)
+            {
+                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle rect);
+
+                if (x >= rect.X && x < rect.X + rect.Width
+                &&  y >= rect.Y && y < rect.Y + rect.Height)
+                {
+                    return i;
+                }
+            }
+
+            return 0;
         }
 
 
