@@ -189,7 +189,9 @@ namespace Microsoft.Xna.Framework
             return IntPtr.Zero;
         }
 
-        internal void RecreateWindow(GraphicsAdapter adapter, int width, int height)
+        //TODO: create the window in fullscreen mode if willBeFullScreen is true.
+        internal void RecreateWindow(GraphicsAdapter adapter, int width, int height,
+                                     bool willBeFullScreen, bool willBeExclusiveFullScreen)
         {
             Sdl.Window.State initflags =
                 Sdl.Window.State.OpenGL |

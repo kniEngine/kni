@@ -131,7 +131,7 @@ namespace Microsoft.Xna.Platform
             return gdi;
         }
 
-        private void PlatformInitialize(GraphicsAdapter adapter, PresentationParameters presentationParameters)
+        private void PlatformInitialize(PresentationParameters presentationParameters)
         {
             ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
             DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
@@ -171,9 +171,6 @@ namespace Microsoft.Xna.Platform
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleBuffers, 1);
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, presentationParameters.MultiSampleCount);
             }
-
-            ((SdlGameWindow)Game.Window).RecreateWindow(adapter , presentationParameters.BackBufferWidth, presentationParameters.BackBufferHeight);
-            presentationParameters.DeviceWindowHandle = Game.Window.Handle;
         }
 
         /// <summary>
@@ -219,7 +216,12 @@ namespace Microsoft.Xna.Platform
 
             GraphicsDeviceInformation gdi = this.DoPreparingDeviceSettings();
 
-            this.PlatformInitialize(gdi.Adapter, gdi.PresentationParameters);
+            this.PlatformInitialize(gdi.PresentationParameters);
+
+            ((SdlGameWindow)Game.Window).RecreateWindow(gdi.Adapter,
+                                                        gdi.PresentationParameters.BackBufferWidth, gdi.PresentationParameters.BackBufferHeight,
+                                                        gdi.PresentationParameters.IsFullScreen, this.HardwareModeSwitch);
+            gdi.PresentationParameters.DeviceWindowHandle = Game.Window.Handle;
 
             this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
