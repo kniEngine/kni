@@ -646,13 +646,8 @@ namespace Microsoft.Xna.Framework
             {
                 if (willBeExclusiveFullScreen)
                 {
-                    SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                     _isExclusiveFullScreen = willBeExclusiveFullScreen;
                 }
-
-                // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
-                if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
 
                 SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
                 _width = clientWidth;
