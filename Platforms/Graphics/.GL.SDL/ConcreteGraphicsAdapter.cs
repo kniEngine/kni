@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        private DisplayModeCollection _supportedDisplayModes;
+        private readonly DisplayModeCollection _supportedDisplayModes;
 
         int _displayIndex;
 
@@ -67,13 +67,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override DisplayModeCollection Platform_SupportedDisplayModes
         {
-            get
-            {
-                if (_supportedDisplayModes == null)
-                    _supportedDisplayModes = GetDisplayModes();
-
-                return _supportedDisplayModes;
-            }
+            get { return _supportedDisplayModes; }
         }
 
         public override DisplayMode Platform_CurrentDisplayMode
@@ -160,13 +154,11 @@ namespace Microsoft.Xna.Platform.Graphics
             _capMaxVertexTextureSlots = capMaxVertexTextureSlots;
             _capMaxVertexAttribs = capMaxVertexAttribs;
             _capMaxDrawBuffers = capMaxDrawBuffers;
-        }
 
-        private DisplayModeCollection GetDisplayModes()
-        {
+
+            // Get Display Modes
             int modeCount = SDL.DISPLAY.GetNumDisplayModes(_displayIndex);
             List<DisplayMode> modes = new List<DisplayMode>(modeCount);
-
             for (int i = 0; i < modeCount; i++)
             {
                 SDL.DISPLAY.GetDisplayMode(_displayIndex, i, out Sdl.Display.Mode mode);
@@ -178,8 +170,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     modes.Add(displayMode);
             }
             modes.Sort(DisplayModeComparison);
+            _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
 
-            return base.CreateDisplayModeCollection(modes);
         }
 
         private static int DisplayModeComparison(DisplayMode a, DisplayMode b)
