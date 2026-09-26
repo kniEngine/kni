@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override string Platform_DeviceName
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Platform_DeviceName; }
         }
 
         public override string Platform_Description
@@ -155,6 +155,7 @@ namespace Microsoft.Xna.Platform.Graphics
             _capMaxVertexAttribs = capMaxVertexAttribs;
             _capMaxDrawBuffers = capMaxDrawBuffers;
 
+            base.Platform_DeviceName = SDL.DISPLAY.GetDisplayName(displayIndex);
 
             // Get Display Modes
             int modeCount = SDL.DISPLAY.GetNumDisplayModes(_displayIndex);
