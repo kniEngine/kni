@@ -97,7 +97,6 @@ namespace Microsoft.Xna.Framework
         }
 
 
-        public static GameWindow Instance;
         public uint? Id;
 
         internal readonly Game _game;
@@ -119,9 +118,6 @@ namespace Microsoft.Xna.Framework
         public SdlGameWindow(Game game)
         {
             _game = game;
-            _screenDeviceName = "";
-
-            Instance = this;
 
             _keys = new List<Keys>();
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKeys(_keys);
@@ -146,6 +142,9 @@ namespace Microsoft.Xna.Framework
             _sysWMType = sysWMinfo.subsystem;
 
             Title = AssemblyHelper.GetDefaultWindowTitle();
+
+            int windowDisplayIndex = SDL.WINDOW.GetDisplayIndex(this.Handle);
+            _screenDeviceName = GraphicsAdapter.Adapters[windowDisplayIndex].DeviceName;
 
             if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = this.Handle;
@@ -190,7 +189,7 @@ namespace Microsoft.Xna.Framework
             return IntPtr.Zero;
         }
 
-        internal void RecreateWindow(int width, int height)
+        internal void RecreateWindow(GraphicsAdapter adapter, int width, int height)
         {
             Sdl.Window.State initflags =
                 Sdl.Window.State.OpenGL |
@@ -209,13 +208,9 @@ namespace Microsoft.Xna.Framework
             int winx = Sdl.Window.PosCentered;
             int winy = Sdl.Window.PosCentered;
 
-            // if we are on Linux, start on the current screen
-            if (CurrentPlatform.OS == OS.Linux)
-            {
-                int displayIndex = GetMouseDisplay();
-                winx = winx | displayIndex;
-                winy = winy | displayIndex;
-            }
+            int displayIndex = (int)adapter.MonitorHandle;
+            winx = winx | displayIndex;
+            winy = winy | displayIndex;
 
             _handle = SDL.WINDOW.Create(Title, winx, winy, width, height, initflags);
             _instances.Add(this.Handle, this);
@@ -224,6 +219,9 @@ namespace Microsoft.Xna.Framework
             _height = height;
 
             Id = SDL.WINDOW.GetWindowId(_handle);
+
+            int windowDisplayIndex = SDL.WINDOW.GetDisplayIndex(this.Handle);
+            _screenDeviceName = GraphicsAdapter.Adapters[windowDisplayIndex].DeviceName;
 
             if (Mouse.WindowHandle == oldhandle)
                 Mouse.WindowHandle = _handle;
@@ -491,35 +489,14 @@ namespace Microsoft.Xna.Framework
             Dispose(false);
         }
 
-        private int GetMouseDisplay()
-        {
-            SDL.MOUSE.GetGlobalState(out int x, out int y);
-
-            int displayCount = SDL.DISPLAY.GetNumVideoDisplays();
-            for (int i = 0; i < displayCount; i++)
-            {
-                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle rect);
-
-                if (x >= rect.X && x < rect.X + rect.Width
-                &&  y >= rect.Y && y < rect.Y + rect.Height)
-                {
-                    return i;
-                }
-            }
-
-            return 0;
-        }
-
         public void SetCursorVisible(bool visible)
         {
             _mouseVisible = visible;
             SDL.MOUSE.ShowCursor(visible ? 1 : 0);
         }
 
-        internal void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
+        internal void EndScreenDeviceChange(int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
         {
-            _screenDeviceName = screenDeviceName;
-
             Rectangle prevBounds = ClientBounds;
 
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
@@ -617,10 +594,8 @@ namespace Microsoft.Xna.Framework
             _supressMoved = true;
         }
 
-        internal void EndCreateDevice(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
+        internal void EndCreateDevice(int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
         {
-            _screenDeviceName = screenDeviceName;
-
             Rectangle prevBounds = ClientBounds;
 
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
@@ -744,14 +719,22 @@ namespace Microsoft.Xna.Framework
 
         private void DisplayChanged(int displayIndex)
         {
-            _screenDeviceName = SDL.DISPLAY.GetDisplayName(displayIndex);
+            GraphicsAdapter newAdapter = GraphicsAdapter.Adapters[displayIndex];
+            _screenDeviceName = newAdapter.DeviceName;
 
-            //TODO: in XNA, this will:
-            // 1) change GameWindow.ScreenDeviceName
-            // 2) fire GraphicsDevice.DeviceResetting event
-            // 3) change GraphicsDevice.Adapter
-            // 4) fire GraphicsDevice.DeviceReset event. sender.GetHashCode() didn't change.
-            // 5) call protected void OnScreenDeviceNameChanged() which Raises GameWindow.ScreenDeviceNameChanged event
+            try
+            {
+                GraphicsDevice device = _game.GraphicsDevice;
+                ConcreteGraphicsDevice cgd = (ConcreteGraphicsDevice)((IPlatformGraphicsDevice)device).Strategy;
+                cgd.AdapterChanged(newAdapter);
+            }
+            catch (InvalidOperationException)
+            {
+                // No Graphics Device Service?
+            }
+
+            //TODO: call protected void OnScreenDeviceNameChanged()
+            //      which Raises GameWindow.ScreenDeviceNameChanged
         }
 
         protected override void SetTitle(string title)

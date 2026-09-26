@@ -45,6 +45,20 @@ namespace Microsoft.Xna.Platform.Graphics
             height = mode.Height;
         }
 
+        internal void UpdateAdapter(GraphicsAdapter actualWindowAdapter)
+        {
+            base.Adapter = actualWindowAdapter;
+        }
+
+        internal void AdapterChanged(GraphicsAdapter newAdapter)
+        {
+            //TODO: fire GraphicsDevice.DeviceResetting
+
+            base.Adapter = newAdapter;
+
+            //TODO: fire GraphicsDevice.DeviceReset
+
+        }
 
         public override void Present()
         {

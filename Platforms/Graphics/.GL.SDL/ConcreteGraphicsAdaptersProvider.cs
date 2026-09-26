@@ -37,9 +37,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int displayCount = Sdl.Current.DISPLAY.GetNumVideoDisplays();
 
-            //TODO: get all adapters
+            for (int i = 0; i < displayCount; i++)
             {
-                ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(
+                ConcreteGraphicsAdapter adapterStrategy = new ConcreteGraphicsAdapter(i,
                     _gl, _glVersion,
                     _description, _capMaxTextureSize, _capMaxMultiSampleCount,
                     _capMaxTextureSlots, _capMaxVertexTextureSlots, _capMaxVertexAttribs,

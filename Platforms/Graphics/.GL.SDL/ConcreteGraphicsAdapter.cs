@@ -18,14 +18,14 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private Sdl SDL { get { return Sdl.Current; } }
 
-        private DisplayModeCollection _supportedDisplayModes;
+        private readonly DisplayModeCollection _supportedDisplayModes;
 
         int _displayIndex;
 
 
         public override string Platform_DeviceName
         {
-            get { throw new NotImplementedException(); }
+            get { return base.Platform_DeviceName; }
         }
 
         public override string Platform_Description
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override IntPtr Platform_MonitorHandle
         {
-            get { throw new NotImplementedException(); }
+            get { return new IntPtr(_displayIndex); }
         }
 
         public override bool Platform_IsDefaultAdapter
@@ -67,30 +67,14 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override DisplayModeCollection Platform_SupportedDisplayModes
         {
-            get
-            {
-                int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-                if (windowDisplayIndex != _displayIndex) // display changed?
-                    _supportedDisplayModes = null;
-
-                if (_supportedDisplayModes == null)
-                {
-                    _displayIndex = windowDisplayIndex;
-
-                    _supportedDisplayModes = GetDisplayModes();
-                }
-
-                return _supportedDisplayModes;
-            }
+            get { return _supportedDisplayModes; }
         }
 
         public override DisplayMode Platform_CurrentDisplayMode
         {
             get
             {
-                int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(SdlGameWindow.Instance.Handle);
-
-                SDL.DISPLAY.GetCurrentDisplayMode(windowDisplayIndex, out Sdl.Display.Mode mode);
+                SDL.DISPLAY.GetCurrentDisplayMode(_displayIndex, out Sdl.Display.Mode mode);
                 SurfaceFormat modeFormat = SurfaceFormat.Color;
 
                 DisplayModeCollection supportedDisplayModes = this.Platform_SupportedDisplayModes;
@@ -144,7 +128,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
         private OGL _gl;
-        private string _version;
         private GLVersion _glVersion;
 
         int _capMaxTextureSize;
@@ -158,9 +141,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal GLVersion glVersion { get { return _glVersion; } }
 
 
-        internal ConcreteGraphicsAdapter(
+        internal ConcreteGraphicsAdapter(int displayIndex,
             OGL gl, GLVersion glVersion, string description, int capMaxTextureSize, int capMaxMultiSampleCount, int capMaxTextureSlots, int capMaxVertexTextureSlots, int capMaxVertexAttribs, int capMaxDrawBuffers)
         {
+            _displayIndex = displayIndex;
             _gl = gl;
             _glVersion = glVersion;
             base.Platform_Description = description;
@@ -170,13 +154,12 @@ namespace Microsoft.Xna.Platform.Graphics
             _capMaxVertexTextureSlots = capMaxVertexTextureSlots;
             _capMaxVertexAttribs = capMaxVertexAttribs;
             _capMaxDrawBuffers = capMaxDrawBuffers;
-        }
 
-        private DisplayModeCollection GetDisplayModes()
-        {
+            base.Platform_DeviceName = SDL.DISPLAY.GetDisplayName(displayIndex);
+
+            // Get Display Modes
             int modeCount = SDL.DISPLAY.GetNumDisplayModes(_displayIndex);
             List<DisplayMode> modes = new List<DisplayMode>(modeCount);
-
             for (int i = 0; i < modeCount; i++)
             {
                 SDL.DISPLAY.GetDisplayMode(_displayIndex, i, out Sdl.Display.Mode mode);
@@ -188,8 +171,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     modes.Add(displayMode);
             }
             modes.Sort(DisplayModeComparison);
+            _supportedDisplayModes = base.CreateDisplayModeCollection(modes);
 
-            return base.CreateDisplayModeCollection(modes);
         }
 
         private static int DisplayModeComparison(DisplayMode a, DisplayMode b)
