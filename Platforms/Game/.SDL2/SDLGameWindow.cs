@@ -611,7 +611,6 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (willBeExclusiveFullScreen)
                 {
                     Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
                                                     ? Sdl.Window.State.Fullscreen
