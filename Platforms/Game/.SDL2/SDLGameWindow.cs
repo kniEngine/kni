@@ -603,7 +603,7 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (true || true == willBeExclusiveFullScreen)
+                if (willBeExclusiveFullScreen)
                 {
                     Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
                                                     ? Sdl.Window.State.Fullscreen
@@ -638,14 +638,13 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
-                if (true)
                     OnClientSizeChanged();
 
                 _isFullScreen = true;
             }
             else // (willBeFullScreen == false)
             {
-                if (false || true == willBeExclusiveFullScreen)
+                if (willBeExclusiveFullScreen)
                 {
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                     _isExclusiveFullScreen = willBeExclusiveFullScreen;
@@ -661,19 +660,6 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (false)
-                    {
-                        // This centering only occurs when exiting fullscreen
-                        // so it should center the window on the current display.
-
-                        // We need to get the display information again in case
-                        // the resolution of it was changed.
-                        SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-                        int centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                        int centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
-                        SDL.WINDOW.SetPosition(Handle, centerX, centerY);
-                    }
-                    else
                     {
                         SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
                         int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
@@ -683,9 +669,6 @@ namespace Microsoft.Xna.Framework
                         SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                     }
                 }
-
-                if (false)
-                    OnClientSizeChanged();
 
                 _isFullScreen = false;
             }
