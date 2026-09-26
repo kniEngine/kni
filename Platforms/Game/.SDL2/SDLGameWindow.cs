@@ -603,7 +603,7 @@ namespace Microsoft.Xna.Framework
 
             if (willBeFullScreen == true)
             {
-                if (!_isFullScreen || _isExclusiveFullScreen != willBeExclusiveFullScreen)
+                if (willBeExclusiveFullScreen)
                 {
                     Sdl.Window.State fullscreenFlag = willBeExclusiveFullScreen
                                                     ? Sdl.Window.State.Fullscreen
@@ -638,22 +638,16 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
-                if (!_isFullScreen)
-                    OnClientSizeChanged();
+                OnClientSizeChanged();
 
                 _isFullScreen = true;
             }
             else // (willBeFullScreen == false)
             {
-                if (_isFullScreen || _isExclusiveFullScreen != willBeExclusiveFullScreen)
+                if (willBeExclusiveFullScreen)
                 {
-                    SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                     _isExclusiveFullScreen = willBeExclusiveFullScreen;
                 }
-
-                // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
-                if (CurrentPlatform.OS == OS.Windows)
-                    SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
 
                 SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
                 _width = clientWidth;
@@ -661,31 +655,13 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (_isFullScreen)
-                    {
-                        // This centering only occurs when exiting fullscreen
-                        // so it should center the window on the current display.
-
-                        // We need to get the display information again in case
-                        // the resolution of it was changed.
-                        SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-                        int centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                        int centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
-                        SDL.WINDOW.SetPosition(Handle, centerX, centerY);
-                    }
-                    else
-                    {
-                        SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-                        int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                        int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                        centerX = Math.Max(centerX, minx);
-                        centerY = Math.Max(centerY, miny);
-                        SDL.WINDOW.SetPosition(Handle, centerX, centerY);
-                    }
+                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                    int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                    int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                    centerX = Math.Max(centerX, minx);
+                    centerY = Math.Max(centerY, miny);
+                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
-
-                if (_isFullScreen)
-                    OnClientSizeChanged();
 
                 _isFullScreen = false;
             }
