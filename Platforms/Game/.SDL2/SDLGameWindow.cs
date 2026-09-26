@@ -741,7 +741,8 @@ namespace Microsoft.Xna.Framework
 
         private void DisplayChanged(int displayIndex)
         {
-            _screenDeviceName = SDL.DISPLAY.GetDisplayName(displayIndex);
+            GraphicsAdapter newAdapter = GraphicsAdapter.Adapters[displayIndex];
+            _screenDeviceName = newAdapter.DeviceName;
 
             //TODO: in XNA, this will:
             // 1) change GameWindow.ScreenDeviceName
