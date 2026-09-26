@@ -97,7 +97,6 @@ namespace Microsoft.Xna.Framework
         }
 
 
-        public static GameWindow Instance;
         public uint? Id;
 
         internal readonly Game _game;
@@ -120,8 +119,6 @@ namespace Microsoft.Xna.Framework
         {
             _game = game;
             _screenDeviceName = "";
-
-            Instance = this;
 
             _keys = new List<Keys>();
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKeys(_keys);
