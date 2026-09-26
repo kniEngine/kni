@@ -638,7 +638,7 @@ namespace Microsoft.Xna.Framework
                     SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
-                    OnClientSizeChanged();
+                OnClientSizeChanged();
 
                 _isFullScreen = true;
             }
@@ -660,14 +660,12 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    {
-                        SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-                        int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                        int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                        centerX = Math.Max(centerX, minx);
-                        centerY = Math.Max(centerY, miny);
-                        SDL.WINDOW.SetPosition(Handle, centerX, centerY);
-                    }
+                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                    int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                    int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                    centerX = Math.Max(centerX, minx);
+                    centerY = Math.Max(centerY, miny);
+                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
                 _isFullScreen = false;
