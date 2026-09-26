@@ -157,9 +157,10 @@ namespace Microsoft.Xna.Platform.Graphics
         internal GLVersion glVersion { get { return _glVersion; } }
 
 
-        internal ConcreteGraphicsAdapter(
+        internal ConcreteGraphicsAdapter(int displayIndex,
             OGL gl, GLVersion glVersion, string description, int capMaxTextureSize, int capMaxMultiSampleCount, int capMaxTextureSlots, int capMaxVertexTextureSlots, int capMaxVertexAttribs, int capMaxDrawBuffers)
         {
+            _displayIndex = displayIndex;
             _gl = gl;
             _glVersion = glVersion;
             base.Platform_Description = description;
