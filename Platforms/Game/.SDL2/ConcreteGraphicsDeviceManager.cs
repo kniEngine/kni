@@ -172,8 +172,7 @@ namespace Microsoft.Xna.Platform
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, presentationParameters.MultiSampleCount);
             }
 
-            //TODO: use PresentationParameters BackBufferWidth/BackBufferHeight.
-            ((SdlGameWindow)Game.Window).RecreateWindow(adapter ,GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight);
+            ((SdlGameWindow)Game.Window).RecreateWindow(adapter , presentationParameters.BackBufferWidth, presentationParameters.BackBufferHeight);
             presentationParameters.DeviceWindowHandle = Game.Window.Handle;
         }
 

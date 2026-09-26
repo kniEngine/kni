@@ -238,6 +238,12 @@ namespace Microsoft.Xna.Framework
             SDL.WINDOW.SetBordered(_handle, _isBorderless ? 0 : 1);
             SDL.WINDOW.SetResizable(_handle, _isResizable);
 
+            SDL.WINDOW.GetPosition(Handle, out int posX, out int posY);
+            SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+            posX = Math.Max(posX, minx);
+            posY = Math.Max(posY, miny);
+            SDL.WINDOW.SetPosition(Handle, posX, posY);
+
             SetCursorVisible(_mouseVisible);
         }
 
@@ -647,20 +653,6 @@ namespace Microsoft.Xna.Framework
                 if (willBeExclusiveFullScreen)
                 {
                     _isExclusiveFullScreen = willBeExclusiveFullScreen;
-                }
-
-                SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
-                _width = clientWidth;
-                _height = clientHeight;
-
-                if (!_wasMoved)
-                {
-                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-                    int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                    int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                    centerX = Math.Max(centerX, minx);
-                    centerY = Math.Max(centerY, miny);
-                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                 }
 
                 _isFullScreen = false;
