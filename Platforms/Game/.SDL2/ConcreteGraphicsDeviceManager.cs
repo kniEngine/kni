@@ -231,18 +231,15 @@ namespace Microsoft.Xna.Platform
 
             //TODO: Use PresentationParameters.HardwareModeSwitch instead of this.HardwareModeSwitch.
             //      PresentationParameters.HardwareModeSwitch might have been changed by PreparingDeviceSettings event. 
-            ((SdlGameWindow)this.Game.Window).EndCreateDevice(string.Empty, gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen, this.HardwareModeSwitch);
+            ((SdlGameWindow)this.Game.Window).EndCreateDevice(gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen, this.HardwareModeSwitch);
         }
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
         {
             PresentationParameters pp = args.PresentationParameters;
 
-            int displayIndex = SDL.WINDOW.GetDisplayIndex(Game.Window.Handle);
-            string displayName = SDL.DISPLAY.GetDisplayName(displayIndex);
-
             //TODO: Use PresentationParameters.HardwareModeSwitch instead of this.HardwareModeSwitch.
-            ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(displayName, pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen, this.HardwareModeSwitch);
+            ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen, this.HardwareModeSwitch);
         }
 
 

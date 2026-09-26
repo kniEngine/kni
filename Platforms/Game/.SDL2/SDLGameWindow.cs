@@ -118,7 +118,6 @@ namespace Microsoft.Xna.Framework
         public SdlGameWindow(Game game)
         {
             _game = game;
-            _screenDeviceName = "";
 
             _keys = new List<Keys>();
             ((IPlatformKeyboard)Keyboard.Current).GetStrategy<ConcreteKeyboard>().SetKeys(_keys);
@@ -143,6 +142,9 @@ namespace Microsoft.Xna.Framework
             _sysWMType = sysWMinfo.subsystem;
 
             Title = AssemblyHelper.GetDefaultWindowTitle();
+
+            int windowDisplayIndex = SDL.WINDOW.GetDisplayIndex(this.Handle);
+            _screenDeviceName = GraphicsAdapter.Adapters[windowDisplayIndex].DeviceName;
 
             if (Mouse.WindowHandle == IntPtr.Zero)
                 Mouse.WindowHandle = this.Handle;
@@ -221,6 +223,9 @@ namespace Microsoft.Xna.Framework
             _height = height;
 
             Id = SDL.WINDOW.GetWindowId(_handle);
+
+            int windowDisplayIndex = SDL.WINDOW.GetDisplayIndex(this.Handle);
+            _screenDeviceName = GraphicsAdapter.Adapters[windowDisplayIndex].DeviceName;
 
             if (Mouse.WindowHandle == oldhandle)
                 Mouse.WindowHandle = _handle;
@@ -513,10 +518,8 @@ namespace Microsoft.Xna.Framework
             SDL.MOUSE.ShowCursor(visible ? 1 : 0);
         }
 
-        internal void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
+        internal void EndScreenDeviceChange(int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
         {
-            _screenDeviceName = screenDeviceName;
-
             Rectangle prevBounds = ClientBounds;
 
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
@@ -614,10 +617,8 @@ namespace Microsoft.Xna.Framework
             _supressMoved = true;
         }
 
-        internal void EndCreateDevice(string screenDeviceName, int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
+        internal void EndCreateDevice(int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
         {
-            _screenDeviceName = screenDeviceName;
-
             Rectangle prevBounds = ClientBounds;
 
             int displayIndex = SDL.WINDOW.GetDisplayIndex(Handle);
