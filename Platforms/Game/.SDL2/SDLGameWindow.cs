@@ -640,10 +640,6 @@ namespace Microsoft.Xna.Framework
 
                 _isFullScreen = true;
             }
-            else // (willBeFullScreen == false)
-            {
-                _isFullScreen = false;
-            }
 
             _supressMoved = true;
         }
