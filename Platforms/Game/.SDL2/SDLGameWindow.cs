@@ -507,8 +507,8 @@ namespace Microsoft.Xna.Framework
         {
             Rectangle prevBounds = ClientBounds;
 
-            int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
-            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayBounds);
+            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
+            SDL.DISPLAY.GetBounds(windowDisplayIndex, out Sdl.Rectangle displayBounds);
 
             if (willBeFullScreen == true)
             {
@@ -571,7 +571,7 @@ namespace Microsoft.Xna.Framework
 
                         // We need to get the display information again in case
                         // the resolution of it was changed.
-                        SDL.DISPLAY.GetBounds(displayIndex, out displayBounds);
+                        SDL.DISPLAY.GetBounds(windowDisplayIndex, out displayBounds);
                         int centerX = displayBounds.X + displayBounds.Width / 2 - clientWidth / 2;
                         int centerY = displayBounds.Y + displayBounds.Height / 2 - clientHeight / 2;
                         SDL.WINDOW.SetPosition(Handle, centerX, centerY);
@@ -600,8 +600,8 @@ namespace Microsoft.Xna.Framework
         {
             Rectangle prevBounds = ClientBounds;
 
-            int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
-            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayBounds);
+            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
+            SDL.DISPLAY.GetBounds(windowDisplayIndex, out Sdl.Rectangle displayBounds);
 
             if (willBeFullScreen == true)
             {
