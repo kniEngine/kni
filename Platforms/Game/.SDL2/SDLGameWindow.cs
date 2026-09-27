@@ -508,7 +508,7 @@ namespace Microsoft.Xna.Framework
             Rectangle prevBounds = ClientBounds;
 
             int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
-            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayRect);
+            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayBounds);
 
             if (willBeFullScreen == true)
             {
@@ -518,8 +518,8 @@ namespace Microsoft.Xna.Framework
                     if (CurrentPlatform.OS == OS.Windows)
                         SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
 
-                    _width = displayRect.Width;
-                    _height = displayRect.Height;
+                    _width = displayBounds.Width;
+                    _height = displayBounds.Height;
                 }
                 else
                 {
@@ -571,9 +571,9 @@ namespace Microsoft.Xna.Framework
 
                         // We need to get the display information again in case
                         // the resolution of it was changed.
-                        SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-                        int centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                        int centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                        SDL.DISPLAY.GetBounds(displayIndex, out displayBounds);
+                        int centerX = displayBounds.X + displayBounds.Width / 2 - clientWidth / 2;
+                        int centerY = displayBounds.Y + displayBounds.Height / 2 - clientHeight / 2;
                         SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                     }
                     else
@@ -601,7 +601,7 @@ namespace Microsoft.Xna.Framework
             Rectangle prevBounds = ClientBounds;
 
             int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
-            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayRect);
+            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayBounds);
 
             if (willBeFullScreen == true)
             {
@@ -611,8 +611,8 @@ namespace Microsoft.Xna.Framework
                     if (CurrentPlatform.OS == OS.Windows)
                         SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
 
-                    _width = displayRect.Width;
-                    _height = displayRect.Height;
+                    _width = displayBounds.Width;
+                    _height = displayBounds.Height;
                 }
                 else
                 {

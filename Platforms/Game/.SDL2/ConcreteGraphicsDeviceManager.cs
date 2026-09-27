@@ -258,10 +258,10 @@ namespace Microsoft.Xna.Platform
 
             for (int i = 0; i < GraphicsAdapter.Adapters.Count; i++)
             {
-                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle rect);
+                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle displayBounds);
 
-                if (x >= rect.X && x < rect.X + rect.Width
-                &&  y >= rect.Y && y < rect.Y + rect.Height)
+                if (x >= displayBounds.X && x < displayBounds.X + displayBounds.Width
+                &&  y >= displayBounds.Y && y < displayBounds.Y + displayBounds.Height)
                 {
                     return i;
                 }
