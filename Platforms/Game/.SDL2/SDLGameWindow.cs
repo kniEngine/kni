@@ -572,9 +572,9 @@ namespace Microsoft.Xna.Framework
                         // We need to get the display information again in case
                         // the resolution of it was changed.
                         SDL.DISPLAY.GetBounds(windowDisplayIndex, out displayBounds);
-                        int centerX = displayBounds.X + displayBounds.Width / 2 - clientWidth / 2;
-                        int centerY = displayBounds.Y + displayBounds.Height / 2 - clientHeight / 2;
-                        SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                        int posX = displayBounds.X + displayBounds.Width / 2 - clientWidth / 2;
+                        int posY = displayBounds.Y + displayBounds.Height / 2 - clientHeight / 2;
+                        SDL.WINDOW.SetPosition(Handle, posX, posY);
                     }
                     else
                     {
