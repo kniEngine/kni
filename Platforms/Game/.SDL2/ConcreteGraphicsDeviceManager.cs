@@ -238,10 +238,6 @@ namespace Microsoft.Xna.Platform
             PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
             this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
 
-            //TODO: Use PresentationParameters.HardwareModeSwitch instead of this.HardwareModeSwitch.
-            //      PresentationParameters.HardwareModeSwitch might have been changed by PreparingDeviceSettings event. 
-            ((SdlGameWindow)this.Game.Window).EndCreateDevice(gdpp.BackBufferWidth, gdpp.BackBufferHeight, gdpp.IsFullScreen, this.HardwareModeSwitch);
-
             this.OnDeviceCreated(EventArgs.Empty);
         }
 

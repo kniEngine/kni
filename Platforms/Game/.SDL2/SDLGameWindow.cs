@@ -106,12 +106,11 @@ namespace Microsoft.Xna.Framework
 
         private bool _disposed;
         private bool _isResizable, _isBorderless;
-        private bool _isFullScreen;
+        private bool _isFullScreen, _centerFirstTimeWindowed;
         private bool _mouseVisible;
         private string _screenDeviceName;
         private int _width, _height;
         private bool _wasMoved, _supressMoved;
-
         private readonly List<Keys> _keys;
         private readonly List<string> _dropList;
 
@@ -214,6 +213,15 @@ namespace Microsoft.Xna.Framework
             winx = winx | displayIndex;
             winy = winy | displayIndex;
 
+            if (willBeFullScreen == true && !willBeExclusiveFullScreen)
+            {
+                // for borderless fullscreen, we ignore PresentationParameters/PreferredBackBuffer
+                // and use the current display mode.
+                SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayBounds);
+                width = displayBounds.Width;
+                height = displayBounds.Height;
+            }
+
             _handle = SDL.WINDOW.Create(Title, winx, winy, width, height, initflags);
             _instances.Add(this.Handle, this);
 
@@ -250,6 +258,33 @@ namespace Microsoft.Xna.Framework
             }
             _supressMoved = true;
             SDL.WINDOW.SetPosition(Handle, posX, posY);
+
+            if (willBeFullScreen == true)
+            {
+                if (!willBeExclusiveFullScreen)
+                {
+                    _supressMoved = true;
+                    SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.FullscreenDesktop);
+                }
+                else
+                {
+                    _supressMoved = true;
+                    SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.Fullscreen);
+                    // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
+                    if (CurrentPlatform.OS == OS.Windows)
+                        SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "1");
+                }
+
+                _isFullScreen = true;
+                _centerFirstTimeWindowed = true;
+            }
+
+            // XNA rises the ClientSizeChanged event when switching from windowed to fullscreen mode,
+            // but not for simple resizing (windowed --> windowed).
+            if (willBeFullScreen == true)
+            {
+                OnClientSizeChanged();
+            }
 
             SetCursorVisible(_mouseVisible);
         }
@@ -540,8 +575,12 @@ namespace Microsoft.Xna.Framework
                     _height = clientHeight;
                 }
 
+                // XNA rises the ClientSizeChanged event when switching from windowed to fullscreen mode,
+                // but not for switching display modes (fullscreen --> fullscreen).
                 if (!_isFullScreen)
+                {
                     OnClientSizeChanged();
+                }
 
                 _isFullScreen = true;
             }
@@ -560,9 +599,27 @@ namespace Microsoft.Xna.Framework
                 _width = clientWidth;
                 _height = clientHeight;
 
-                if (!_wasMoved)
+                if (_isFullScreen)
                 {
-                    if (!_isFullScreen)
+                    if (_centerFirstTimeWindowed)
+                    {
+                        SDL.DISPLAY.GetBounds(windowDisplayIndex, out displayBounds);
+                        int posX = displayBounds.X + displayBounds.Width / 2 - clientWidth / 2;
+                        int posY = displayBounds.Y + displayBounds.Height / 2 - clientHeight / 2;
+                        SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
+                        if (!SDL.DISPLAY.TryFindDisplay(posX - borderLeft, posY - borderTop, out int displayIndex2))
+                        {
+                            posX = Math.Max(posX, displayBounds.X + borderLeft);
+                            posY = Math.Max(posY, displayBounds.Y + borderTop);
+                        }
+                        SDL.WINDOW.SetPosition(Handle, posX, posY);
+
+                        _centerFirstTimeWindowed = false;
+                    }
+                }
+                else
+                {
+                    if (!_wasMoved)
                     {
                         int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                         int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
@@ -577,46 +634,14 @@ namespace Microsoft.Xna.Framework
                     }
                 }
 
+                // XNA rises the ClientSizeChanged event when switching from fullscreen to windowed mode,
+                // but not for resizing (windowed --> windowed).
                 if (_isFullScreen)
+                {
                     OnClientSizeChanged();
+                }
 
                 _isFullScreen = false;
-            }
-        }
-
-        internal void EndCreateDevice(int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
-        {
-            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
-            SDL.DISPLAY.GetBounds(windowDisplayIndex, out Sdl.Rectangle displayBounds);
-
-            if (willBeFullScreen == true)
-            {
-                if (!willBeExclusiveFullScreen)
-                {
-                    _supressMoved = true;
-                    SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.FullscreenDesktop);
-                    if (CurrentPlatform.OS == OS.Windows)
-                        SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
-
-                    _width = displayBounds.Width;
-                    _height = displayBounds.Height;
-                }
-                else
-                {
-                    SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
-                    _supressMoved = true;
-                    SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.Fullscreen);
-                    // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
-                    if (CurrentPlatform.OS == OS.Windows)
-                        SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "1");
-
-                    _width = clientWidth;
-                    _height = clientHeight;
-                }
-
-                OnClientSizeChanged();
-
-                _isFullScreen = true;
             }
         }
 
