@@ -242,8 +242,12 @@ namespace Microsoft.Xna.Framework
 
             SDL.WINDOW.GetPosition(Handle, out int posX, out int posY);
             SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
-            posX = Math.Max(posX, borderLeft);
-            posY = Math.Max(posY, borderTop);
+            if (!SDL.DISPLAY.TryFindDisplay(posX - borderLeft, posY - borderTop, out int displayIndex2))
+            {
+                SDL.DISPLAY.GetBounds(windowDisplayIndex, out Sdl.Rectangle displayBounds);
+                posX = Math.Max(posX, displayBounds.X + borderLeft);
+                posY = Math.Max(posY, displayBounds.Y + borderTop);
+            }
             SDL.WINDOW.SetPosition(Handle, posX, posY);
 
             SetCursorVisible(_mouseVisible);
@@ -581,8 +585,11 @@ namespace Microsoft.Xna.Framework
                         int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                         int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
                         SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
-                        posX = Math.Max(posX, borderLeft);
-                        posY = Math.Max(posY, borderTop);
+                        if (!SDL.DISPLAY.TryFindDisplay(posX - borderLeft, posY - borderTop, out int displayIndex2))
+                        {
+                            posX = Math.Max(posX, displayBounds.X + borderLeft);
+                            posY = Math.Max(posY, displayBounds.Y + borderTop);
+                        }
                         SDL.WINDOW.SetPosition(Handle, posX, posY);
                     }
                 }
