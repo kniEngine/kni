@@ -113,6 +113,24 @@ internal partial class Sdl
             return res;
         }
 
+        internal bool TryFindDisplay(int x, int y, out int displayIndex)
+        {
+            int displayCount = this.GetNumVideoDisplays();
+            for (int i = 0; i < displayCount; i++)
+            {
+                this.GetBounds(i, out Sdl.Rectangle displayBounds);
+
+                if (x >= displayBounds.X && x < displayBounds.X + displayBounds.Width
+                &&  y >= displayBounds.Y && y < displayBounds.Y + displayBounds.Height)
+                {
+                    displayIndex = i;
+                    return true;
+                }
+            }
+
+            displayIndex = -1;
+            return false;
+        }
 
         private void LoadEntryPoints(IntPtr library)
         {

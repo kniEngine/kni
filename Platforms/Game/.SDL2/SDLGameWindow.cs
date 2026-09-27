@@ -241,9 +241,9 @@ namespace Microsoft.Xna.Framework
             SDL.WINDOW.SetResizable(_handle, _isResizable);
 
             SDL.WINDOW.GetPosition(Handle, out int posX, out int posY);
-            SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-            posX = Math.Max(posX, minx);
-            posY = Math.Max(posY, miny);
+            SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
+            posX = Math.Max(posX, borderLeft);
+            posY = Math.Max(posY, borderTop);
             SDL.WINDOW.SetPosition(Handle, posX, posY);
 
             SetCursorVisible(_mouseVisible);
@@ -507,8 +507,8 @@ namespace Microsoft.Xna.Framework
         {
             Rectangle prevBounds = ClientBounds;
 
-            int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
-            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayRect);
+            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
+            SDL.DISPLAY.GetBounds(windowDisplayIndex, out Sdl.Rectangle displayBounds);
 
             if (willBeFullScreen == true)
             {
@@ -518,8 +518,8 @@ namespace Microsoft.Xna.Framework
                     if (CurrentPlatform.OS == OS.Windows)
                         SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
 
-                    _width = displayRect.Width;
-                    _height = displayRect.Height;
+                    _width = displayBounds.Width;
+                    _height = displayBounds.Height;
                 }
                 else
                 {
@@ -535,12 +535,12 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-                    int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                    int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                    centerX = Math.Max(centerX, minx);
-                    centerY = Math.Max(centerY, miny);
-                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                    int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                    int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                    SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
+                    posX = Math.Max(posX, borderLeft);
+                    posY = Math.Max(posY, borderTop);
+                    SDL.WINDOW.SetPosition(Handle, posX, posY);
                 }
 
                 if (!_isFullScreen)
@@ -571,19 +571,19 @@ namespace Microsoft.Xna.Framework
 
                         // We need to get the display information again in case
                         // the resolution of it was changed.
-                        SDL.DISPLAY.GetBounds(displayIndex, out displayRect);
-                        int centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                        int centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                        SDL.DISPLAY.GetBounds(windowDisplayIndex, out displayBounds);
+                        int centerX = displayBounds.X + displayBounds.Width / 2 - clientWidth / 2;
+                        int centerY = displayBounds.Y + displayBounds.Height / 2 - clientHeight / 2;
                         SDL.WINDOW.SetPosition(Handle, centerX, centerY);
                     }
                     else
                     {
-                        SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-                        int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                        int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                        centerX = Math.Max(centerX, minx);
-                        centerY = Math.Max(centerY, miny);
-                        SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                        int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                        int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                        SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
+                        posX = Math.Max(posX, borderLeft);
+                        posY = Math.Max(posY, borderTop);
+                        SDL.WINDOW.SetPosition(Handle, posX, posY);
                     }
                 }
 
@@ -600,8 +600,8 @@ namespace Microsoft.Xna.Framework
         {
             Rectangle prevBounds = ClientBounds;
 
-            int displayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
-            SDL.DISPLAY.GetBounds(displayIndex, out Sdl.Rectangle displayRect);
+            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
+            SDL.DISPLAY.GetBounds(windowDisplayIndex, out Sdl.Rectangle displayBounds);
 
             if (willBeFullScreen == true)
             {
@@ -611,8 +611,8 @@ namespace Microsoft.Xna.Framework
                     if (CurrentPlatform.OS == OS.Windows)
                         SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
 
-                    _width = displayRect.Width;
-                    _height = displayRect.Height;
+                    _width = displayBounds.Width;
+                    _height = displayBounds.Height;
                 }
                 else
                 {
@@ -628,12 +628,12 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
-                    int centerX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                    int centerY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                    centerX = Math.Max(centerX, minx);
-                    centerY = Math.Max(centerY, miny);
-                    SDL.WINDOW.SetPosition(Handle, centerX, centerY);
+                    int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
+                    int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
+                    SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
+                    posX = Math.Max(posX, borderLeft);
+                    posY = Math.Max(posY, borderTop);
+                    SDL.WINDOW.SetPosition(Handle, posX, posY);
                 }
 
                 OnClientSizeChanged();
