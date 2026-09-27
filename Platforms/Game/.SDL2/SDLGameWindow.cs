@@ -537,16 +537,6 @@ namespace Microsoft.Xna.Framework
                     _height = clientHeight;
                 }
 
-                if (!_wasMoved)
-                {
-                    int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                    int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                    SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
-                    posX = Math.Max(posX, borderLeft);
-                    posY = Math.Max(posY, borderTop);
-                    SDL.WINDOW.SetPosition(Handle, posX, posY);
-                }
-
                 if (!_isFullScreen)
                     OnClientSizeChanged();
 
@@ -568,19 +558,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    if (_isFullScreen)
-                    {
-                        // This centering only occurs when exiting fullscreen
-                        // so it should center the window on the current display.
-
-                        // We need to get the display information again in case
-                        // the resolution of it was changed.
-                        SDL.DISPLAY.GetBounds(windowDisplayIndex, out displayBounds);
-                        int posX = displayBounds.X + displayBounds.Width / 2 - clientWidth / 2;
-                        int posY = displayBounds.Y + displayBounds.Height / 2 - clientHeight / 2;
-                        SDL.WINDOW.SetPosition(Handle, posX, posY);
-                    }
-                    else
+                    if (!_isFullScreen)
                     {
                         int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                         int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
@@ -605,8 +583,6 @@ namespace Microsoft.Xna.Framework
 
         internal void EndCreateDevice(int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
         {
-            Rectangle prevBounds = ClientBounds;
-
             int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Handle);
             SDL.DISPLAY.GetBounds(windowDisplayIndex, out Sdl.Rectangle displayBounds);
 
@@ -631,16 +607,6 @@ namespace Microsoft.Xna.Framework
 
                     _width = clientWidth;
                     _height = clientHeight;
-                }
-
-                if (!_wasMoved)
-                {
-                    int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
-                    int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                    SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
-                    posX = Math.Max(posX, borderLeft);
-                    posY = Math.Max(posY, borderTop);
-                    SDL.WINDOW.SetPosition(Handle, posX, posY);
                 }
 
                 OnClientSizeChanged();
