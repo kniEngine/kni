@@ -192,6 +192,8 @@ namespace Microsoft.Xna.Framework
         internal void RecreateWindow(GraphicsAdapter adapter, int width, int height,
                                      bool willBeFullScreen, bool willBeExclusiveFullScreen)
         {
+            Rectangle prevBounds = ClientBounds;
+
             Sdl.Window.State initflags =
                 Sdl.Window.State.OpenGL |
                 Sdl.Window.State.Hidden |
@@ -283,7 +285,8 @@ namespace Microsoft.Xna.Framework
             // but not for simple resizing (windowed --> windowed).
             if (willBeFullScreen == true)
             {
-                OnClientSizeChanged();
+                if (prevBounds.Width != _width || prevBounds.Height != _height)
+                    OnClientSizeChanged();
             }
 
             SetCursorVisible(_mouseVisible);
@@ -579,7 +582,8 @@ namespace Microsoft.Xna.Framework
                 // but not for switching display modes (fullscreen --> fullscreen).
                 if (!_isFullScreen)
                 {
-                    OnClientSizeChanged();
+                    if (prevBounds.Width != _width || prevBounds.Height != _height)
+                        OnClientSizeChanged();
                 }
 
                 _isFullScreen = true;
@@ -638,7 +642,8 @@ namespace Microsoft.Xna.Framework
                 // but not for resizing (windowed --> windowed).
                 if (_isFullScreen)
                 {
-                    OnClientSizeChanged();
+                    if (prevBounds.Width != _width || prevBounds.Height != _height)
+                        OnClientSizeChanged();
                 }
 
                 _isFullScreen = false;
