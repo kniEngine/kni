@@ -205,7 +205,7 @@ internal partial class Sdl
         public d_sdl_getwindowwminfo GetWindowWMInfo;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate int d_sdl_getwindowborderssize(IntPtr window, out int top, out int left, out int right, out int bottom);
+        public delegate int d_sdl_getwindowborderssize(IntPtr window, out int top, out int left, out int bottom, out int right);
         public d_sdl_getwindowborderssize GetBorderSize;
 
 

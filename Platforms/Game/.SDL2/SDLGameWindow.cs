@@ -241,7 +241,7 @@ namespace Microsoft.Xna.Framework
             SDL.WINDOW.SetResizable(_handle, _isResizable);
 
             SDL.WINDOW.GetPosition(Handle, out int posX, out int posY);
-            SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+            SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
             posX = Math.Max(posX, minx);
             posY = Math.Max(posY, miny);
             SDL.WINDOW.SetPosition(Handle, posX, posY);
@@ -535,7 +535,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
                     int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                     int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
                     posX = Math.Max(posX, minx);
@@ -578,7 +578,7 @@ namespace Microsoft.Xna.Framework
                     }
                     else
                     {
-                        SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                        SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
                         int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                         int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
                         posX = Math.Max(posX, minx);
@@ -628,7 +628,7 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int right, out int bottom);
+                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
                     int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                     int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
                     posX = Math.Max(posX, minx);
