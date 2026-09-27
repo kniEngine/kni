@@ -96,8 +96,9 @@ namespace Microsoft.Xna.Platform
             // if we are on Linux, start on the current screen
             if (CurrentPlatform.OS == OS.Linux)
             {
-                int displayIndex = GetMouseDisplay();
-                gdi.Adapter = GraphicsAdapter.Adapters[displayIndex];
+                SDL.MOUSE.GetGlobalState(out int x, out int y);
+                if (SDL.DISPLAY.TryFindDisplay(x, y, out int displayIndex))
+                    gdi.Adapter = GraphicsAdapter.Adapters[displayIndex];
             }
 
             PresentationParameters pp = new PresentationParameters();
@@ -251,25 +252,6 @@ namespace Microsoft.Xna.Platform
             //TODO: Use PresentationParameters.HardwareModeSwitch instead of this.HardwareModeSwitch.
             ((SdlGameWindow)this.Game.Window).EndScreenDeviceChange(pp.BackBufferWidth, pp.BackBufferHeight, pp.IsFullScreen, this.HardwareModeSwitch);
         }
-
-        private int GetMouseDisplay()
-        {
-            SDL.MOUSE.GetGlobalState(out int x, out int y);
-
-            for (int i = 0; i < GraphicsAdapter.Adapters.Count; i++)
-            {
-                SDL.DISPLAY.GetBounds(i, out Sdl.Rectangle displayBounds);
-
-                if (x >= displayBounds.X && x < displayBounds.X + displayBounds.Width
-                &&  y >= displayBounds.Y && y < displayBounds.Y + displayBounds.Height)
-                {
-                    return i;
-                }
-            }
-
-            return 0;
-        }
-
 
         #region IGraphicsDeviceManager strategy
 
