@@ -248,6 +248,7 @@ namespace Microsoft.Xna.Framework
                 posX = Math.Max(posX, displayBounds.X + borderLeft);
                 posY = Math.Max(posY, displayBounds.Y + borderTop);
             }
+            _supressMoved = true;
             SDL.WINDOW.SetPosition(Handle, posX, posY);
 
             SetCursorVisible(_mouseVisible);
@@ -518,6 +519,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (!willBeExclusiveFullScreen)
                 {
+                    _supressMoved = true;
                     SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.FullscreenDesktop);
                     if (CurrentPlatform.OS == OS.Windows)
                         SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
@@ -528,6 +530,7 @@ namespace Microsoft.Xna.Framework
                 else
                 {
                     SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
+                    _supressMoved = true;
                     SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.Fullscreen);
                     // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                     if (CurrentPlatform.OS == OS.Windows)
@@ -546,6 +549,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (_isFullScreen)
                 {
+                    _supressMoved = true;
                     SDL.WINDOW.SetFullscreen(Handle, (Sdl.Window.State)0);
                 }
 
@@ -568,6 +572,7 @@ namespace Microsoft.Xna.Framework
                             posX = Math.Max(posX, displayBounds.X + borderLeft);
                             posY = Math.Max(posY, displayBounds.Y + borderTop);
                         }
+                        _supressMoved = true;
                         SDL.WINDOW.SetPosition(Handle, posX, posY);
                     }
                 }
@@ -577,8 +582,6 @@ namespace Microsoft.Xna.Framework
 
                 _isFullScreen = false;
             }
-
-            _supressMoved = true;
         }
 
         internal void EndCreateDevice(int clientWidth, int clientHeight, bool willBeFullScreen, bool willBeExclusiveFullScreen)
@@ -590,6 +593,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (!willBeExclusiveFullScreen)
                 {
+                    _supressMoved = true;
                     SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.FullscreenDesktop);
                     if (CurrentPlatform.OS == OS.Windows)
                         SDL.SetHint("SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS", "0");
@@ -600,6 +604,7 @@ namespace Microsoft.Xna.Framework
                 else
                 {
                     SDL.WINDOW.SetSize(Handle, clientWidth, clientHeight);
+                    _supressMoved = true;
                     SDL.WINDOW.SetFullscreen(Handle, Sdl.Window.State.Fullscreen);
                     // If going to exclusive full-screen mode, force the window to minimize on focus loss (Windows only)
                     if (CurrentPlatform.OS == OS.Windows)
@@ -613,8 +618,6 @@ namespace Microsoft.Xna.Framework
 
                 _isFullScreen = true;
             }
-
-            _supressMoved = true;
         }
 
         public void ClientResize(int width, int height)
