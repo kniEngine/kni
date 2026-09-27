@@ -241,9 +241,9 @@ namespace Microsoft.Xna.Framework
             SDL.WINDOW.SetResizable(_handle, _isResizable);
 
             SDL.WINDOW.GetPosition(Handle, out int posX, out int posY);
-            SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
-            posX = Math.Max(posX, minx);
-            posY = Math.Max(posY, miny);
+            SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
+            posX = Math.Max(posX, borderLeft);
+            posY = Math.Max(posY, borderTop);
             SDL.WINDOW.SetPosition(Handle, posX, posY);
 
             SetCursorVisible(_mouseVisible);
@@ -535,11 +535,11 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
+                    SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
                     int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                     int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                    posX = Math.Max(posX, minx);
-                    posY = Math.Max(posY, miny);
+                    posX = Math.Max(posX, borderLeft);
+                    posY = Math.Max(posY, borderTop);
                     SDL.WINDOW.SetPosition(Handle, posX, posY);
                 }
 
@@ -578,11 +578,11 @@ namespace Microsoft.Xna.Framework
                     }
                     else
                     {
-                        SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
+                        SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
                         int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                         int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                        posX = Math.Max(posX, minx);
-                        posY = Math.Max(posY, miny);
+                        posX = Math.Max(posX, borderLeft);
+                        posY = Math.Max(posY, borderTop);
                         SDL.WINDOW.SetPosition(Handle, posX, posY);
                     }
                 }
@@ -628,11 +628,11 @@ namespace Microsoft.Xna.Framework
 
                 if (!_wasMoved)
                 {
-                    SDL.WINDOW.GetBorderSize(_handle, out int miny, out int minx, out int bottom, out int right);
+                    SDL.WINDOW.GetBorderSize(_handle, out int borderTop, out int borderLeft, out int borderBottom, out int borderRight);
                     int posX = prevBounds.X + ((prevBounds.Width - clientWidth) / 2);
                     int posY = prevBounds.Y + ((prevBounds.Height - clientHeight) / 2);
-                    posX = Math.Max(posX, minx);
-                    posY = Math.Max(posY, miny);
+                    posX = Math.Max(posX, borderLeft);
+                    posY = Math.Max(posY, borderTop);
                     SDL.WINDOW.SetPosition(Handle, posX, posY);
                 }
 
