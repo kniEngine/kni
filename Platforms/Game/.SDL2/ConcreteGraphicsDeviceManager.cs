@@ -178,10 +178,9 @@ namespace Microsoft.Xna.Platform
 
             // Platform initialize.
 
-            ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
-            DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
+            ColorFormat backBufferFormat = ToGLColorFormat(pp.BackBufferFormat);
+            DepthFormat depthStencilFormat = pp.DepthStencilFormat;
 
-            // TODO Need to get this data from the Presentation Parameters
             SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, backBufferFormat.R);
             SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.GreenSize, backBufferFormat.G);
             SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.BlueSize, backBufferFormat.B);
@@ -220,7 +219,7 @@ namespace Microsoft.Xna.Platform
             // Recreate the window.
             ((SdlGameWindow)Game.Window).RecreateWindow(gdi.Adapter,
                                                         pp.BackBufferWidth, pp.BackBufferHeight,
-                                                        pp.IsFullScreen, this.HardwareModeSwitch);
+                                                        pp.IsFullScreen, pp.HardwareModeSwitch);
             pp.DeviceWindowHandle = Game.Window.Handle;
 
             this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
