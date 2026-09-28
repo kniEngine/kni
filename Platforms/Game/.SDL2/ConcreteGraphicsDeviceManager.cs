@@ -132,7 +132,7 @@ namespace Microsoft.Xna.Platform
             return gdi;
         }
 
-        private void PlatformInitialize(PresentationParameters presentationParameters)
+        private void PlatformInitialize(PresentationParameters pp)
         {
             ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
             DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
@@ -167,10 +167,10 @@ namespace Microsoft.Xna.Platform
             SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
             SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMinorVersion, 1);
 
-            if (presentationParameters.MultiSampleCount > 0)
+            if (pp.MultiSampleCount > 0)
             {
                 SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleBuffers, 1);
-                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, presentationParameters.MultiSampleCount);
+                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, pp.MultiSampleCount);
             }
         }
 
