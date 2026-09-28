@@ -132,6 +132,48 @@ namespace Microsoft.Xna.Platform
             return gdi;
         }
 
+        private void PlatformInitialize(PresentationParameters presentationParameters)
+        {
+            ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
+            DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
+
+            // TODO Need to get this data from the Presentation Parameters
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, backBufferFormat.R);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.GreenSize, backBufferFormat.G);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.BlueSize, backBufferFormat.B);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.AlphaSize, backBufferFormat.A);
+
+            switch (depthStencilFormat)
+            {
+                case DepthFormat.None:
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 0);
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 0);
+                    break;
+                case DepthFormat.Depth16:
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 16);
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 0);
+                    break;
+                case DepthFormat.Depth24:
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 24);
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 0);
+                    break;
+                case DepthFormat.Depth24Stencil8:
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 24);
+                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 8);
+                    break;
+            }
+
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DoubleBuffer, 1);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
+            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMinorVersion, 1);
+
+            if (presentationParameters.MultiSampleCount > 0)
+            {
+                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleBuffers, 1);
+                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, presentationParameters.MultiSampleCount);
+            }
+        }
+
         /// <summary>
         /// Convert a <see cref="SurfaceFormat"/> to an GL ColorFormat.
         /// This is used for setting up the backbuffer format of the OpenGL context.
@@ -174,54 +216,13 @@ namespace Microsoft.Xna.Platform
                 return;
 
             GraphicsDeviceInformation gdi = this.DoPreparingDeviceSettings();
-            PresentationParameters pp = gdi.PresentationParameters;
 
-            // Platform initialize.
+            this.PlatformInitialize(gdi.PresentationParameters);
 
-            ColorFormat backBufferFormat = ToGLColorFormat(this.PreferredBackBufferFormat);
-            DepthFormat depthStencilFormat = this.PreferredDepthStencilFormat;
-
-            // TODO Need to get this data from the Presentation Parameters
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.RedSize, backBufferFormat.R);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.GreenSize, backBufferFormat.G);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.BlueSize, backBufferFormat.B);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.AlphaSize, backBufferFormat.A);
-
-            switch (depthStencilFormat)
-            {
-                case DepthFormat.None:
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 0);
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 0);
-                    break;
-                case DepthFormat.Depth16:
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 16);
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 0);
-                    break;
-                case DepthFormat.Depth24:
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 24);
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 0);
-                    break;
-                case DepthFormat.Depth24Stencil8:
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DepthSize, 24);
-                    SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.StencilSize, 8);
-                    break;
-            }
-
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.DoubleBuffer, 1);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMajorVersion, 2);
-            SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextMinorVersion, 1);
-
-            if (pp.MultiSampleCount > 0)
-            {
-                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleBuffers, 1);
-                SDL.OpenGL.SetAttribute(Sdl.GL.Attribute.MultiSampleSamples, pp.MultiSampleCount);
-            }
-
-            // Recreate the window.
             ((SdlGameWindow)Game.Window).RecreateWindow(gdi.Adapter,
-                                                        pp.BackBufferWidth, pp.BackBufferHeight,
-                                                        pp.IsFullScreen, this.HardwareModeSwitch);
-            pp.DeviceWindowHandle = Game.Window.Handle;
+                                                        gdi.PresentationParameters.BackBufferWidth, gdi.PresentationParameters.BackBufferHeight,
+                                                        gdi.PresentationParameters.IsFullScreen, this.HardwareModeSwitch);
+            gdi.PresentationParameters.DeviceWindowHandle = Game.Window.Handle;
 
             this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
