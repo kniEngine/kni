@@ -216,13 +216,14 @@ namespace Microsoft.Xna.Platform
                 return;
 
             GraphicsDeviceInformation gdi = this.DoPreparingDeviceSettings();
+            PresentationParameters pp = gdi.PresentationParameters;
 
-            this.PlatformInitialize(gdi.PresentationParameters);
+            this.PlatformInitialize(pp);
 
             ((SdlGameWindow)Game.Window).RecreateWindow(gdi.Adapter,
-                                                        gdi.PresentationParameters.BackBufferWidth, gdi.PresentationParameters.BackBufferHeight,
-                                                        gdi.PresentationParameters.IsFullScreen, this.HardwareModeSwitch);
-            gdi.PresentationParameters.DeviceWindowHandle = Game.Window.Handle;
+                                                        pp.BackBufferWidth, pp.BackBufferHeight,
+                                                        pp.IsFullScreen, this.HardwareModeSwitch);
+            pp.DeviceWindowHandle = Game.Window.Handle;
 
             this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
