@@ -225,12 +225,6 @@ namespace Microsoft.Xna.Platform
 
             this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
-            int windowDisplayIndex = SDL.DISPLAY.GetWindowDisplayIndex(Game.Window.Handle);
-            GraphicsAdapter actualWindowAdapter = GraphicsAdapter.Adapters[windowDisplayIndex];
-            System.Diagnostics.Debug.Assert(this.GraphicsDevice.Adapter == actualWindowAdapter);
-            if (this.GraphicsDevice.Adapter != actualWindowAdapter)
-                ((IPlatformGraphicsDevice)this.GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().UpdateAdapter(actualWindowAdapter);
-
             // update the GameWindow size when PresentationChanged.
             ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
 
