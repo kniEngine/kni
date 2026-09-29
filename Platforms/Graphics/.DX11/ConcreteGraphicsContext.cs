@@ -182,7 +182,7 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 D3D11.BlendState blendState = ((IPlatformBlendState)_actualBlendState).GetStrategy<ConcreteBlendState>().GetDxState();
                 RawColor4 blendFactor = BlendFactor.ToRawColor4();
-                this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor);
+                this.D3dContext.OutputMerger.SetBlendState(blendState, blendFactor, _actualBlendState.MultiSampleMask);
 
                 _blendStateDirty = false;
                 _blendFactorDirty = false;
