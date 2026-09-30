@@ -38,6 +38,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal int MaxDrawBuffers { get { return _maxDrawBuffers; } }
 
         internal bool SupportsTexture3D { get; private set; }
+        internal bool SupportsRasterizerMultiSample { get; private set; }
 
         internal void PlatformInitialize(ConcreteGraphicsContextGL cgraphicsContext, GraphicsDeviceStrategy deviceStrategy, GLVersion version)
         {
@@ -168,6 +169,9 @@ namespace Microsoft.Xna.Platform.Graphics
 
             SupportsTexture3D = (GL.BoundApi == OGL.RenderApi.GL && version >= new GLVersion(1, 2))
                              || (GL.BoundApi == OGL.RenderApi.ES && version >= new GLVersion(3, 0));
+
+            SupportsRasterizerMultiSample = (GL.BoundApi == OGL.RenderApi.GL && version >= new GLVersion(1, 3))
+                                         || (GL.BoundApi == OGL.RenderApi.ES && GL.Extensions.Contains("GL_EXT_multisample_compatibility"));
         }
 
     }
