@@ -76,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsInstancing = profile >= GraphicsProfile.HiDef;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;
-            SupportsSeparateBlendStates = true;
+            SupportsSeparateBlendStates = GL.GetExtension("OES_draw_buffers_indexed");
 
             MaxTextureAnisotropy = SupportsTextureFilterAnisotropic
                 ? GL.GetParameter(WebGLPNameInteger.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
