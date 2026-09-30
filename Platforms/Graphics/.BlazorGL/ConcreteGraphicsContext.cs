@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         // Keeps track of last applied state to avoid redundant OpenGL calls
         internal BlendState _lastBlendState = new BlendState();
-        internal bool _lastBlendEnable = false;
+        internal int _lastBlendEnableMask;
         internal DepthStencilState _lastDepthStencilState = new DepthStencilState();
         internal RasterizerState _lastRasterizerState = new RasterizerState();
 
