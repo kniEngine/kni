@@ -339,6 +339,38 @@ namespace Microsoft.Xna.Framework.Content
             }
         }
 
+        /// <summary>
+        /// Unloads a single asset that was previously loaded with <see cref="Load{T}"/>.
+        /// A disposable asset is disposed. Does nothing if the asset is not loaded.
+        /// </summary>
+        /// <param name="assetName">The name the asset was loaded with.</param>
+        public virtual void UnloadAsset(string assetName)
+        {
+            if (string.IsNullOrEmpty(assetName))
+                throw new ArgumentNullException("assetName");
+            if (_isDisposed)
+                throw new ObjectDisposedException("ContentManager");
+
+            // Same key normalization as Load<T>().
+            string key = assetName.Replace('\\', '/');
+
+            lock (this.SyncHandle)
+            {
+                object asset;
+                if (_loadedAssets.TryGetValue(key, out asset))
+                {
+                    IDisposable disposable = asset as IDisposable;
+                    if (disposable != null)
+                    {
+                        disposable.Dispose();
+                        _disposableAssets.Remove(disposable);
+                    }
+
+                    _loadedAssets.Remove(key);
+                }
+            }
+        }
+
 
         #region IDisposable Implementation
         ~ContentManager()
