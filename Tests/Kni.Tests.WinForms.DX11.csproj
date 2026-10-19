@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="ContentPipeline\BuilderTargetsTest.cs" />
     <Compile Include="ContentPipeline\AssetTestClasses.cs" />
-    <Compile Include="ContentPipeline\CustomSpriteTests.cs" />
+    <Compile Include="ContentPipeline\CustomTextureRegionTests.cs" />
     <Compile Include="ContentPipeline\AudioContentTests.cs" />
     <Compile Include="ContentPipeline\BitmapContentTests.cs" />
     <Compile Include="ContentPipeline\ContentCompilerTest.cs" />
@@ -451,10 +451,10 @@
     <Content Include="Assets\Effects\ComputeShader.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\CustomSpriteBatchEffect.fx">
+    <Content Include="Assets\Effects\CustomTextureRegionBatchEffect.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\CustomSpriteBatchEffectComparisonSampler.fx">
+    <Content Include="Assets\Effects\CustomTextureRegionBatchEffectComparisonSampler.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\ReferenceImages\BlendState\VisualTests.png">
@@ -895,10 +895,10 @@
     <Content Include="Assets\Xml\16_SharedResources.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Xml\CustomSprite1.xml">
+    <Content Include="Assets\Xml\CustomTextureRegion1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Xml\CustomSprite2.xml">
+    <Content Include="Assets\Xml\CustomTextureRegion2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Xml\17_ExternalReferences.xml">
@@ -955,10 +955,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\Effects\DirectX\CustomSpriteBatchEffect.xnb">
+    <Content Include="Assets\Effects\DirectX\CustomTextureRegionBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Effects\DirectX\CustomSpriteBatchEffectComparisonSampler.xnb">
+    <Content Include="Assets\Effects\DirectX\CustomTextureRegionBatchEffectComparisonSampler.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Effects\DirectX\GrayScale.xnb">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent>
-  <Asset Type="Kni.Tests.ContentPipeline.CustomSpriteContent">
+  <Asset Type="Kni.Tests.ContentPipeline.CustomTextureRegionContent">
     <SourceRectangle>0 0 32 32</SourceRectangle>
     <Texture>
       <Reference>#External1</Reference>

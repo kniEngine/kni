@@ -99,7 +99,7 @@
 
   <ItemGroup>
     <Compile Include="ContentPipeline\AssetTestClasses.cs" />
-    <Compile Include="ContentPipeline\CustomSpriteTests.cs" />
+    <Compile Include="ContentPipeline\CustomTextureRegionTests.cs" />
     <Compile Include="ContentPipeline\AudioContentTests.cs" />
     <Compile Include="ContentPipeline\BitmapContentTests.cs" />
     <Compile Include="ContentPipeline\FbxImporterTests.cs" />
@@ -785,10 +785,10 @@
     <Content Include="Assets\Xml\16_SharedResources.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Xml\CustomSprite1.xml">
+    <Content Include="Assets\Xml\CustomTextureRegion1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Xml\CustomSprite2.xml">
+    <Content Include="Assets\Xml\CustomTextureRegion2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Xml\17_ExternalReferences.xml">
@@ -933,7 +933,7 @@
     <Content Include="Assets\Audio\tone_stereo_44khz_msadpcm.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\Effects\XNA\CustomSpriteBatchEffect.xnb">
+    <None Include="Assets\Effects\XNA\CustomTextureRegionBatchEffect.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Effects\XNA\DeferredBasicEffect.xnb">

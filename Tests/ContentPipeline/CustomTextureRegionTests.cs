@@ -15,27 +15,27 @@ using NUnit.Framework;
 namespace Kni.Tests.ContentPipeline
 {
     // Design-time asset. Refers to the texture through an ExternalReference.
-    public class CustomSpriteContent
+    public class CustomTextureRegionContent
     {
         public Rectangle SourceRectangle;
         public ExternalReference<TextureContent> Texture;
     }
 
     // Runtime asset. It owns a reference to the texture and disposes it.
-    public class CustomSprite : IDisposable
+    public class CustomTextureRegion : IDisposable
     {
         private bool _isDisposed;
 
         public Texture2D Texture { get; private set; }
         public Rectangle SourceRectangle { get; private set; }
 
-        public CustomSprite(Texture2D texture, Rectangle sourceRectangle)
+        public CustomTextureRegion(Texture2D texture, Rectangle sourceRectangle)
         {
             Texture = texture;
             SourceRectangle = sourceRectangle;
         }
 
-        ~CustomSprite()
+        ~CustomTextureRegion()
         {
             Dispose(false);
         }
@@ -61,17 +61,17 @@ namespace Kni.Tests.ContentPipeline
         }
     }
 
-    [ContentProcessor(DisplayName = "CustomSprite Processor")]
-    public class CustomSpriteProcessor : ContentProcessor<CustomSpriteContent, CustomSpriteContent>
+    [ContentProcessor(DisplayName = "CustomTextureRegion Processor")]
+    public class CustomTextureRegionProcessor : ContentProcessor<CustomTextureRegionContent, CustomTextureRegionContent>
     {
-        public override CustomSpriteContent Process(CustomSpriteContent input, ContentProcessorContext context)
+        public override CustomTextureRegionContent Process(CustomTextureRegionContent input, ContentProcessorContext context)
         {
             // Build the texture as an external asset. All sprites that point
             // to the same source file share the same built asset.
             ExternalReference<TextureContent> texture =
                 context.BuildAsset<TextureContent, TextureContent>(input.Texture, "TextureProcessor");
 
-            return new CustomSpriteContent()
+            return new CustomTextureRegionContent()
             {
                 SourceRectangle = input.SourceRectangle,
                 Texture = texture,
@@ -80,9 +80,9 @@ namespace Kni.Tests.ContentPipeline
     }
 
     [ContentTypeWriter]
-    public class CustomSpriteWriter : ContentTypeWriter<CustomSpriteContent>
+    public class CustomTextureRegionWriter : ContentTypeWriter<CustomTextureRegionContent>
     {
-        protected override void Write(ContentWriter output, CustomSpriteContent value)
+        protected override void Write(ContentWriter output, CustomTextureRegionContent value)
         {
             output.Write(value.SourceRectangle.X);
             output.Write(value.SourceRectangle.Y);
@@ -93,18 +93,18 @@ namespace Kni.Tests.ContentPipeline
 
         public override string GetRuntimeType(TargetPlatform targetPlatform)
         {
-            return typeof(CustomSprite).AssemblyQualifiedName;
+            return typeof(CustomTextureRegion).AssemblyQualifiedName;
         }
 
         public override string GetRuntimeReader(TargetPlatform targetPlatform)
         {
-            return typeof(CustomSpriteReader).AssemblyQualifiedName;
+            return typeof(CustomTextureRegionReader).AssemblyQualifiedName;
         }
     }
 
-    public class CustomSpriteReader : ContentTypeReader<CustomSprite>
+    public class CustomTextureRegionReader : ContentTypeReader<CustomTextureRegion>
     {
-        protected override CustomSprite Read(ContentReader input, CustomSprite existingInstance)
+        protected override CustomTextureRegion Read(ContentReader input, CustomTextureRegion existingInstance)
         {
             int x = input.ReadInt32();
             int y = input.ReadInt32();
@@ -112,27 +112,27 @@ namespace Kni.Tests.ContentPipeline
             int h = input.ReadInt32();
             // loaded through the ContentManager, so it is cached and shared.
             Texture2D texture = input.ReadExternalReference<Texture2D>();
-            return new CustomSprite(texture, new Rectangle(x, y, w, h));
+            return new CustomTextureRegion(texture, new Rectangle(x, y, w, h));
         }
     }
 
-    public static class CustomSpriteExtensions
+    public static class CustomTextureRegionExtensions
     {
-        public static void Draw(this SpriteBatch spriteBatch, CustomSprite sprite, Vector2 position, Color color)
+        public static void Draw(this SpriteBatch spriteBatch, CustomTextureRegion sprite, Vector2 position, Color color)
         {
             spriteBatch.Draw(sprite.Texture, position, sprite.SourceRectangle, color);
         }
 
-        public static void Draw(this SpriteBatch spriteBatch, CustomSprite sprite, Rectangle destinationRectangle, Color color)
+        public static void Draw(this SpriteBatch spriteBatch, CustomTextureRegion sprite, Rectangle destinationRectangle, Color color)
         {
             spriteBatch.Draw(sprite.Texture, destinationRectangle, sprite.SourceRectangle, color);
         }
     }
 
     [TestFixture]
-    class CustomSpriteTests : GraphicsDeviceTestFixtureBase
+    class CustomTextureRegionTests : GraphicsDeviceTestFixtureBase
     {
-        const string RootDirectory = "CustomSpriteRoot";
+        const string RootDirectory = "CustomTextureRegionRoot";
 
         class TestBuildContext : TestProcessorContext
         {
@@ -205,13 +205,13 @@ namespace Kni.Tests.ContentPipeline
             var files = new Dictionary<string, byte[]>();
 
             // import (XmlImporter) -> process -> compile
-            foreach (string name in new[] { "CustomSprite1", "CustomSprite2" })
+            foreach (string name in new[] { "CustomTextureRegion1", "CustomTextureRegion2" })
             {
-                var imported = (CustomSpriteContent)new XmlImporter().Import(
+                var imported = (CustomTextureRegionContent)new XmlImporter().Import(
                     Paths.Xml(name + ".xml"), new TestImporterContext("TestObj", "TestBin"));
                 imported.Texture.Filename = Path.GetFullPath(imported.Texture.Filename);
 
-                CustomSpriteContent processed = new CustomSpriteProcessor().Process(imported, context);
+                CustomTextureRegionContent processed = new CustomTextureRegionProcessor().Process(imported, context);
                 files[name] = Compile(processed, platform, root);
             }
             foreach (var kvp in context.Output)
@@ -219,8 +219,8 @@ namespace Kni.Tests.ContentPipeline
 
             using (var manager = new MemoryContentManager(game.Services, files))
             {
-                CustomSprite sprite1 = manager.Load<CustomSprite>("CustomSprite1");
-                CustomSprite sprite2 = manager.Load<CustomSprite>("CustomSprite2");
+                CustomTextureRegion sprite1 = manager.Load<CustomTextureRegion>("CustomTextureRegion1");
+                CustomTextureRegion sprite2 = manager.Load<CustomTextureRegion>("CustomTextureRegion2");
 
                 Assert.AreEqual(1, context.Output.Count);
                 Assert.AreEqual(new Rectangle(0, 0, 32, 32), sprite1.SourceRectangle);
