@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="Kni.Tests.ContentPipeline.CustomSpriteContent">
+    <SourceRectangle>32 32 32 32</SourceRectangle>
+    <Texture>
+      <Reference>#External1</Reference>
+    </Texture>
+  </Asset>
+  <ExternalReferences>
+    <ExternalReference ID="#External1" TargetType="Microsoft.Xna.Framework.Content.Pipeline.Graphics.TextureContent">../Textures/LogoOnly_64px.png</ExternalReference>
+  </ExternalReferences>
+</XnaContent>
