@@ -21,9 +21,11 @@ namespace Kni.Tests.ContentPipeline
         public ExternalReference<TextureContent> Texture;
     }
 
-    // Runtime asset. It doesn't own the texture, so it must not dispose it.
+    // Runtime asset. It owns a reference to the texture and disposes it.
     public class CustomSprite : IDisposable
     {
+        private bool _isDisposed;
+
         public Texture2D Texture { get; private set; }
         public Rectangle SourceRectangle { get; private set; }
 
@@ -33,10 +35,29 @@ namespace Kni.Tests.ContentPipeline
             SourceRectangle = sourceRectangle;
         }
 
+        ~CustomSprite()
+        {
+            Dispose(false);
+        }
+
         public void Dispose()
         {
-            // The texture is shared and owned by the ContentManager.
-            Texture = null;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_isDisposed)
+            {
+                if (disposing)
+                {
+                    if (Texture != null)
+                        Texture.Dispose();
+                }
+                Texture = null;
+                _isDisposed = true;
+            }
         }
     }
 
@@ -197,9 +218,10 @@ namespace Kni.Tests.ContentPipeline
                 files[kvp.Key] = kvp.Value;
 
             using (var manager = new MemoryContentManager(game.Services, files))
-            using (CustomSprite sprite1 = manager.Load<CustomSprite>("CustomSprite1"))
-            using (CustomSprite sprite2 = manager.Load<CustomSprite>("CustomSprite2"))
             {
+                CustomSprite sprite1 = manager.Load<CustomSprite>("CustomSprite1");
+                CustomSprite sprite2 = manager.Load<CustomSprite>("CustomSprite2");
+
                 Assert.AreEqual(1, context.Output.Count);
                 Assert.AreEqual(new Rectangle(0, 0, 32, 32), sprite1.SourceRectangle);
                 Assert.AreEqual(new Rectangle(32, 32, 32, 32), sprite2.SourceRectangle);
@@ -215,6 +237,13 @@ namespace Kni.Tests.ContentPipeline
                     spriteBatch.Draw(sprite2, new Rectangle(64, 0, 32, 32), Color.White);
                     spriteBatch.End();
                 }
+
+                Texture2D texture = sprite1.Texture;
+                sprite1.Dispose();
+                Assert.IsTrue(texture.IsDisposed);
+                Assert.IsNull(sprite1.Texture);
+                sprite1.Dispose(); // safe to call twice
+                sprite2.Dispose();
             }
         }
     }
