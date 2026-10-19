@@ -558,7 +558,7 @@ namespace Microsoft.Xna.Platform.Graphics
         public abstract IRenderTarget3DStrategy CreateRenderTarget3DStrategy(int width, int height, int depth, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount);
         public abstract IRenderTargetCubeStrategy CreateRenderTargetCubeStrategy(int size, bool mipMap, RenderTargetUsage usage, SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount);
 
-        public abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream);
+        public abstract ITexture2DStrategy CreateTexture2DStrategy(Stream stream, Action<byte[]> colorProcessor);
 
         public abstract ShaderStrategy CreateVertexShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes);
         public abstract ShaderStrategy CreatePixelShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes);
