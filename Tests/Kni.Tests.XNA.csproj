@@ -153,6 +153,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Framework.Graphics\ContentManagerTest.cs" />
     <Compile Include="Framework.Graphics\DepthStencilStateTest.cs" />
     <Compile Include="Framework.Graphics\EffectTest.cs" />
     <Compile Include="Framework.Graphics\GraphicsAdapterTest.cs" />
@@ -839,6 +840,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Models\Spaceship.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Models\Spaceship2.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Models\enemy_0.xnb">
