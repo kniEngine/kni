@@ -509,5 +509,35 @@ namespace Kni.Tests.Audio
             var soundEffect = content.Load<SoundEffect>(Paths.Audio(filename));
             Assert.AreEqual(durationTicks, soundEffect.Duration.Ticks);
         }
+
+#if !XNA
+        // ContentManager.UnloadAsset() is not part of XNA 4.0.
+        [Test]
+        public void UnloadAsset_DisposesTheAssetAndAllowsReload()
+        {
+            var services = new GameServiceContainer();
+            services.AddService<IGraphicsDeviceService>(new GraphicsDeviceProxy());
+            var content = new ContentManagerProxy(services);
+            var assetName = Paths.Audio("tone_mono_44khz_16bit");
+            var first = content.Load<SoundEffect>(assetName);
+
+            content.UnloadAsset(assetName);
+
+            Assert.IsTrue(first.IsDisposed);
+            var second = content.Load<SoundEffect>(assetName);
+            Assert.AreNotSame(first, second);
+            Assert.IsFalse(second.IsDisposed);
+        }
+
+        [Test]
+        public void UnloadAsset_NotLoaded_DoesNothing()
+        {
+            var services = new GameServiceContainer();
+            services.AddService<IGraphicsDeviceService>(new GraphicsDeviceProxy());
+            var content = new ContentManagerProxy(services);
+
+            Assert.DoesNotThrow(() => content.UnloadAsset("NotLoaded"));
+        }
+#endif
     }
 }
