@@ -149,7 +149,17 @@ namespace Microsoft.Xna.Platform.Graphics
                 context._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
             }
 
-            // TODO: Implement MultiSampleAntiAlias
+            if (((ConcreteGraphicsCapabilities)context.Capabilities).SupportsRasterizerMultiSample &&
+                (force ||
+                 this.MultiSampleAntiAlias != context._lastRasterizerState.MultiSampleAntiAlias))
+            {
+                if (MultiSampleAntiAlias)
+                    GL.Enable(EnableCap.Multisample);
+                else
+                    GL.Disable(EnableCap.Multisample);
+                GL.CheckGLError();
+                context._lastRasterizerState.MultiSampleAntiAlias = this.MultiSampleAntiAlias;
+            }
         }
 
 
