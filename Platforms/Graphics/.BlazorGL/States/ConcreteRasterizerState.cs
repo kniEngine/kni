@@ -127,11 +127,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 context._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
             }
 
+            if (!this.DepthClipEnable &&
+                !((ConcreteGraphicsCapabilities)context.Capabilities).SupportsDepthClamp)
+                throw new PlatformNotSupportedException("DepthClipEnable = false on BlazorGL requires the EXT_depth_clamp extension.");
+
             if (context.Capabilities.SupportsDepthClamp &&
                 (force ||
                  this.DepthClipEnable != context._lastRasterizerState.DepthClipEnable))
             {
-                throw new PlatformNotSupportedException();
+                if (!DepthClipEnable)
+                    GL.Enable(WebGLCapability.DEPTH_CLAMP_EXT);
+                else
+                    GL.Disable(WebGLCapability.DEPTH_CLAMP_EXT);
+                GL.CheckGLError();
                 context._lastRasterizerState.DepthClipEnable = this.DepthClipEnable;
             }
 
