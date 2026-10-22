@@ -10,8 +10,10 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsCapabilities : GraphicsCapabilities
     {
         private int _maxDrawBuffers;
+        private bool _supportsBlendStateMinMax;
 
         internal int MaxDrawBuffers { get { return _maxDrawBuffers; } }
+        internal bool SupportsBlendStateMinMax { get { return _supportsBlendStateMinMax; } }
 
         internal void PlatformInitialize(ConcreteGraphicsContext cgraphicsContext, GraphicsDeviceStrategy deviceStrategy)
         {
@@ -74,7 +76,7 @@ namespace Microsoft.Xna.Platform.Graphics
             SupportsInstancing = profile >= GraphicsProfile.HiDef;
             //TNC: TODO: detect suport based on feture level
             SupportsBaseIndexInstancing = false;
-            SupportsSeparateBlendStates = true;
+            SupportsSeparateBlendStates = GL.GetExtension("OES_draw_buffers_indexed");
 
             MaxTextureAnisotropy = SupportsTextureFilterAnisotropic
                 ? GL.GetParameter(WebGLPNameInteger.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
@@ -82,6 +84,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (profile >= GraphicsProfile.HiDef)
                 _maxDrawBuffers = 4;
+
+            _supportsBlendStateMinMax = (GL is IWebGL2RenderingContext) || GL.GetExtension("EXT_blend_minmax");
         }
 
     }
