@@ -675,8 +675,20 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate int EnableiDelegate(EnableCap cap, int index);
+        internal EnableiDelegate Enablei;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate int DisableDelegate(EnableCap cap);
         internal DisableDelegate Disable;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
+        internal delegate int DisableiDelegate(EnableCap cap, int index);
+        internal DisableiDelegate Disablei;
 
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
@@ -1190,6 +1202,12 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
         [System.Security.SuppressUnmanagedCodeSecurity()]
         [UnmanagedFunctionPointer(callingConvention)]
         [MonoNativeFunctionWrapper]
+        internal delegate void ColorMaskiDelegate(int buffer, bool r, bool g, bool b, bool a);
+        internal ColorMaskiDelegate ColorMaski;
+
+        [System.Security.SuppressUnmanagedCodeSecurity()]
+        [UnmanagedFunctionPointer(callingConvention)]
+        [MonoNativeFunctionWrapper]
         internal delegate void DepthFuncDelegate(ComparisonFunc function);
         internal DepthFuncDelegate DepthFunc;
 
@@ -1520,7 +1538,9 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             BindTexture = LoadFunctionOrNull<BindTextureDelegate>("glBindTexture");
 
             Enable = LoadFunctionOrNull<EnableDelegate>("glEnable");
+            Enablei = LoadFunctionOrNull<EnableiDelegate>("glEnablei");
             Disable = LoadFunctionOrNull<DisableDelegate>("glDisable");
+            Disablei = LoadFunctionOrNull<DisableiDelegate>("glDisablei");
             CullFace = LoadFunctionOrNull<CullFaceDelegate>("glCullFace");
             FrontFace = LoadFunctionOrNull<FrontFaceDelegate>("glFrontFace");
             PolygonMode = LoadFunctionOrNull<PolygonModeDelegate>("glPolygonMode");
@@ -1611,6 +1631,7 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
             BlendFuncSeparate = LoadFunctionOrNull<BlendFuncSeparateDelegate>("glBlendFuncSeparate");
             BlendFuncSeparatei = LoadFunctionOrNull<BlendFuncSeparateiDelegate>("glBlendFuncSeparatei");
             ColorMask = LoadFunctionOrNull<ColorMaskDelegate>("glColorMask");
+            ColorMaski = LoadFunctionOrNull<ColorMaskiDelegate>("glColorMaski");
             DepthFunc = LoadFunctionOrNull<DepthFuncDelegate>("glDepthFunc");
             DepthMask = LoadFunctionOrNull<DepthMaskDelegate>("glDepthMask");
             StencilFuncSeparate = LoadFunctionOrNull<StencilFuncSeparateDelegate>("glStencilFuncSeparate");
