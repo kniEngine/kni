@@ -346,9 +346,7 @@ namespace Microsoft.Xna.Framework
                             float x = ev.Finger.X;
                             float y = ev.Finger.Y;
                             x *= _width; y *= _height;
-#if ENABLE_TOUCHINPUT
                             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddPressedEvent(identifier, new Vector2(x, y));
-#endif
                         }
                         break;
                     case Sdl.EventType.FingerMotion:
@@ -357,9 +355,7 @@ namespace Microsoft.Xna.Framework
                             float x = ev.Finger.X;
                             float y = ev.Finger.Y;
                             x *= _width; y *= _height;
-#if ENABLE_TOUCHINPUT
                             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddMovedEvent(identifier, new Vector2(x, y));
-#endif
                         }
                         break;
                     case Sdl.EventType.FingerUp:
@@ -368,9 +364,7 @@ namespace Microsoft.Xna.Framework
                             float x = ev.Finger.X;
                             float y = ev.Finger.Y;
                             x *= _width; y *= _height;
-#if ENABLE_TOUCHINPUT
                             ((IPlatformTouchPanel)TouchPanel.Current).GetStrategy<ConcreteTouchPanel>().AddReleasedEvent(identifier, new Vector2(x, y));
-#endif
                         }
                         break;
 
