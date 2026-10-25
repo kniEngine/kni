@@ -690,8 +690,7 @@ namespace Microsoft.Xna.Framework
                 // No Graphics Device Service?
             }
 
-            //TODO: call protected void OnScreenDeviceNameChanged()
-            //      which Raises GameWindow.ScreenDeviceNameChanged
+            base.OnScreenDeviceNameChanged();
         }
 
         protected override void SetTitle(string title)
