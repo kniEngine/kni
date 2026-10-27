@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal partial class ConcreteTexture2D
     {
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream)
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor)
             : base(contextStrategy, SurfaceFormat.Color, 1)
         {
             this._arraySize = 1;
@@ -39,7 +39,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (stream.CanSeek)
             {
-                PlatformFromStream_DX(contextStrategy, stream, out this._width, out this._height);
+                PlatformFromStream_DX(contextStrategy, stream, colorProcessor, out this._width, out this._height);
             }
             else
             {
@@ -48,18 +48,21 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     stream.CopyTo(ms);
                     ms.Seek(0, SeekOrigin.Begin);
-                    PlatformFromStream_ImageSharp(contextStrategy, ms, out this._width, out this._height);
+                    PlatformFromStream_ImageSharp(contextStrategy, ms, colorProcessor, out this._width, out this._height);
                  }
             }
         }
 
-        private unsafe void PlatformFromStream_ImageSharp(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        private unsafe void PlatformFromStream_ImageSharp(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor, out int width, out int height)
         {
             // The data returned is always four channel BGRA
             StbImageSharp.ImageResult result = StbImageSharp.ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
             width = result.Width;
             height = result.Height;
             ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
+
+            if (colorProcessor != null)
+                colorProcessor(result.Data);
 
             this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
             this.SetData<byte>(0, result.Data, 0, result.Data.Length);
@@ -87,7 +90,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        private unsafe void PlatformFromStream_DX(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        private unsafe void PlatformFromStream_DX(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor, out int width, out int height)
         {
             // For reference this implementation was ultimately found through this post:
             // http://stackoverflow.com/questions/9602102/loading-textures-with-sharpdx-in-metro 
@@ -117,6 +120,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 using (DX.DataStream dataStream = new DX.DataStream(bmpSource.Size.Height * bmpSource.Size.Width * 4, true, true))
                 {
                     bmpSource.CopyPixels(bmpSource.Size.Width * 4, dataStream);
+                    if (colorProcessor != null)
+                    {
+                        // The processor works on a managed array, so copy the pixels out and back.
+                        byte[] pixels = new byte[(int)dataStream.Length];
+                        Marshal.Copy(dataStream.DataPointer, pixels, 0, pixels.Length);
+                        colorProcessor(pixels);
+                        Marshal.Copy(pixels, 0, dataStream.DataPointer, pixels.Length);
+                    }
                     DX.DataRectangle rect = new DX.DataRectangle(dataStream.DataPointer, bmpSource.Size.Width * 4);
                     _texture = new D3D11.Texture2D(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc, rect);
                     _resourceView = new D3D11.ShaderResourceView(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, _texture);
