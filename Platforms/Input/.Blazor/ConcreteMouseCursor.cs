@@ -1,7 +1,9 @@
 ﻿// Copyright (C)2021-2024 Nick Kastellanos
 
 using System;
+using System.IO;
 using Microsoft.Xna.Framework.Input;
+using StbImageWriteSharp;
 
 namespace Microsoft.Xna.Platform.Input
 {
@@ -55,7 +57,25 @@ namespace Microsoft.Xna.Platform.Input
 
         public ConcreteMouseCursor(byte[] data, int w, int h, int originx, int originy)
         {
-            throw new PlatformNotSupportedException();
+            this._cursorType = MouseCursorStrategy.MouseCursorType.User;
+            this._handle = IntPtr.Zero;
+
+            byte[] pngBytes = ConvertToPngByteArray(data, w, h);
+            string pngBase64String = Convert.ToBase64String(pngBytes);
+            _cursorCSSPropertyValue = $"url(data:image/png;base64,{pngBase64String}) {originx} {originy}, auto";
+        }
+
+        private unsafe byte[] ConvertToPngByteArray(byte[] data, int width, int height)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                fixed (byte* pData = data)
+                {
+                    ImageWriter writer = new ImageWriter();
+                    writer.WritePng(pData, width, height, ColorComponents.RedGreenBlueAlpha, stream);
+                }
+                return stream.ToArray();
+            }
         }
 
         protected override void Dispose(bool dispose)
