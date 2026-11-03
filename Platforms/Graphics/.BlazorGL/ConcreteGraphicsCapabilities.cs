@@ -10,8 +10,10 @@ namespace Microsoft.Xna.Platform.Graphics
     internal sealed class ConcreteGraphicsCapabilities : GraphicsCapabilities
     {
         private int _maxDrawBuffers;
+        private bool _supportsRasterizerStateFillMode;
 
         internal int MaxDrawBuffers { get { return _maxDrawBuffers; } }
+        internal bool SupportsRasterizerStateFillMode { get { return _supportsRasterizerStateFillMode; } }
 
         internal void PlatformInitialize(ConcreteGraphicsContext cgraphicsContext, GraphicsDeviceStrategy deviceStrategy)
         {
@@ -82,6 +84,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (profile >= GraphicsProfile.HiDef)
                 _maxDrawBuffers = 4;
+
+            _supportsRasterizerStateFillMode = GL.GetExtension("WEBGL_polygon_mode");
         }
 
     }
