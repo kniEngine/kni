@@ -1262,8 +1262,37 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     ((IWebGL2RenderingContext)GL).ReadBuffer(WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
                     GL.CheckGLError();
-                    ((IWebGL2RenderingContext)GL).DrawBuffer(WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
+
+                    switch (i)
+                    {
+                        case 0:
+                            ((IWebGL2RenderingContext)GL).DrawBuffer(
+                                WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0);
+                            break;
+
+                        case 1:
+                            ((IWebGL2RenderingContext)GL).DrawBuffers([
+                                WebGL2DrawBufferAttachmentPoint.NONE,
+                                WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + 1]);
+                            break;
+
+                        case 2:
+                            ((IWebGL2RenderingContext)GL).DrawBuffers([
+                                WebGL2DrawBufferAttachmentPoint.NONE,
+                                WebGL2DrawBufferAttachmentPoint.NONE,
+                                WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + 2]);
+                            break;
+
+                        case 3:
+                            ((IWebGL2RenderingContext)GL).DrawBuffers([
+                                WebGL2DrawBufferAttachmentPoint.NONE,
+                                WebGL2DrawBufferAttachmentPoint.NONE,
+                                WebGL2DrawBufferAttachmentPoint.NONE,
+                                WebGL2DrawBufferAttachmentPoint.COLOR_ATTACHMENT0 + 3]);
+                            break;
+                    }
                     GL.CheckGLError();
+
                     ((IWebGL2RenderingContext)GL).BlitFramebuffer(
                         0, 0, renderTarget.Width, renderTarget.Height,
                         0, 0, renderTarget.Width, renderTarget.Height,
