@@ -1282,8 +1282,27 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + i);
                     GL.CheckGLError();
-                    GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + i);
+
+                    switch (i)
+                    {
+                        case 0:
+                            GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
+                            break;
+
+                        case 1:
+                            GL.DrawBuffers(2, new DrawBufferMode[] { DrawBufferMode.None, DrawBufferMode.ColorAttachment0 + 1 });
+                            break;
+
+                        case 2:
+                            GL.DrawBuffers(3, new DrawBufferMode[] { DrawBufferMode.None, DrawBufferMode.None, DrawBufferMode.ColorAttachment0 + 2 });
+                            break;
+
+                        case 3:
+                            GL.DrawBuffers(4, new DrawBufferMode[] { DrawBufferMode.None, DrawBufferMode.None, DrawBufferMode.None, DrawBufferMode.ColorAttachment0 + 3 });
+                            break;
+                    }
                     GL.CheckGLError();
+
                     Debug.Assert(this._supportsBlitFramebuffer);
                     GL.BlitFramebuffer(0, 0, renderTarget.Width, renderTarget.Height,
                                        0, 0, renderTarget.Width, renderTarget.Height,
