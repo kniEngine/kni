@@ -60,10 +60,16 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
-            bool isSharedContext = ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
+            ConcreteGraphicsContextGL context = ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>();
+            bool isSharedContext = context.BindSharedContext();
             try
             {
-                var GL = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                var GL = context.GL;
+
+                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, _glDefaultFramebuffer);
+                GL.CheckGLError();
+                GL.ReadBuffer(ReadBufferMode.Back);
+                GL.CheckGLError();
 
                 Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
                 int fSize = PresentationParameters.BackBufferFormat.GetSize();
@@ -71,8 +77,18 @@ namespace Microsoft.Xna.Platform.Graphics
                 int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
                 fixed (T* pData = &data[0])
                 {
-                    IntPtr dataPtr = (IntPtr)pData;
-                    GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, PixelFormat.Rgba, PixelType.UnsignedByte, dataPtr);
+                    ConcreteTexture.ToGLSurfaceFormat(PresentationParameters.BackBufferFormat, context,
+                        out PixelInternalFormat glInternalFormat,
+                        out PixelFormat glFormat,
+                        out PixelType glType,
+                        out bool glIsCompressedFormat);
+
+                    GL.PixelStore(PixelStoreParameter.PackAlignment, Math.Min(tSize, 8));
+                    GL.CheckGLError();
+
+                    IntPtr dataPtr = (IntPtr)pData + (startIndex * tSize);
+                    GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, glFormat, glType, dataPtr);
+                    GL.CheckGLError();
 
                     // buffer is returned upside down, so we swap the rows around when copying over
                     int rowSize = srcRect.Width * fSize / tSize;
@@ -92,14 +108,12 @@ namespace Microsoft.Xna.Platform.Graphics
 
                         // copy buffer to top row
                         Array.Copy(row, 0, data, topRow, rowSize);
-
-                        elementCount -= rowSize;
                     }
                 }
             }
             finally
             {
-                ((IPlatformGraphicsContext)this.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
+                context.UnbindSharedContext();
             }
         }
 

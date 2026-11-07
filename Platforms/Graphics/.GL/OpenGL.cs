@@ -97,6 +97,8 @@ namespace Microsoft.Xna.Platform.Graphics.OpenGL
 
     internal enum ReadBufferMode
     {
+        Front            = 0x0404,
+        Back             = 0x0405,
         ColorAttachment0 = 0x8CE0,
     }
 
