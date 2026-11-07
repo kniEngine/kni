@@ -78,8 +78,8 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             _dxAdapter = dxAdapter;
 
-            this.Platform_DeviceName = dxMonitor.Description.DeviceName.TrimEnd(new char[] { '\0' });
-            this.Platform_Description = dxAdapter.Description1.Description.TrimEnd(new char[] { '\0' });
+            this.Platform_DeviceName = dxMonitor.Description.DeviceName;
+            this.Platform_Description = dxAdapter.Description1.Description;
             this.Platform_DeviceId = dxAdapter.Description1.DeviceId;
             this.Platform_Revision = dxAdapter.Description1.Revision;
             this.Platform_VendorId = dxAdapter.Description1.VendorId;
