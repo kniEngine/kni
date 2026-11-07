@@ -53,9 +53,56 @@ namespace Microsoft.Xna.Platform.Graphics
             base.Present();
         }
 
-        public override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
+        public unsafe override void GetBackBufferData<T>(Rectangle? rect, T[] data, int startIndex, int elementCount)
         {
-            throw new NotImplementedException();
+            if (PresentationParameters.RenderTargetUsage != RenderTargetUsage.PreserveContents)
+                throw new InvalidOperationException(
+                    "GetBackBufferData() on BlazorGL requires PresentationParameters.RenderTargetUsage to be set to PreserveContents.");
+
+            ConcreteGraphicsContext context = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>();
+            var GL = context.GL;
+
+            ((IWebGL2RenderingContext)GL).BindFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, _glDefaultFramebuffer);
+            GL.CheckGLError();
+            ((IWebGL2RenderingContext)GL).ReadBuffer(WebGL2DrawBufferAttachmentPoint.BACK);
+            GL.CheckGLError();
+
+            Rectangle srcRect = rect ?? new Rectangle(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
+            int fSize = PresentationParameters.BackBufferFormat.GetSize();
+            int tSize = sizeof(T);
+            int flippedY = PresentationParameters.BackBufferHeight - srcRect.Y - srcRect.Height;
+
+            ConcreteTexture.ToGLSurfaceFormat(PresentationParameters.BackBufferFormat, context,
+                        out WebGLInternalFormat glInternalFormat,
+                        out WebGLFormat glFormat,
+                        out WebGLTexelType glType,
+                        out bool glIsCompressedFormat);
+
+            GL.PixelStore(WebGLPixelParameter.PACK_ALIGNMENT, Math.Min(tSize, 8));
+            GL.CheckGLError();
+
+            GL.ReadPixels(srcRect.X, flippedY, srcRect.Width, srcRect.Height, glFormat, glType, data, startIndex, elementCount);
+            GL.CheckGLError();
+
+            // buffer is returned upside down, so we swap the rows around when copying over
+            int rowSize = srcRect.Width * fSize / tSize;
+
+            T[] row = new T[rowSize];
+
+            for (int dy = 0; dy < srcRect.Height / 2; dy++)
+            {
+                int topRow = startIndex + dy * rowSize;
+                int bottomRow = startIndex + (srcRect.Height - dy - 1) * rowSize;
+
+                // copy the bottom row to buffer
+                Array.Copy(data, bottomRow, row, 0, rowSize);
+
+                // copy top row to bottom row
+                Array.Copy(data, topRow, data, bottomRow, rowSize);
+
+                // copy buffer to top row
+                Array.Copy(row, 0, data, topRow, rowSize);
+            }
         }
 
         protected override void PlatformInitialize()
