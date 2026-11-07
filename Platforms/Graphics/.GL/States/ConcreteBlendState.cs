@@ -22,29 +22,86 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, source)
         {
         }
+
         internal void PlatformApplyState(ConcreteGraphicsContextGL context, bool force = false)
         {
             var GL = context.GL;
 
-            bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
-                                  this.ColorDestinationBlend == Blend.Zero &&
-                                  this.AlphaSourceBlend == Blend.One &&
-                                  this.AlphaDestinationBlend == Blend.Zero);
-
-            if (force ||
-                blendEnabled != context._lastBlendEnable)
+            if (!this.IndependentBlendEnable)
             {
-                if (blendEnabled)
-                    GL.Enable(EnableCap.Blend);
-                else
-                    GL.Disable(EnableCap.Blend);
-                GL.CheckGLError();
-                context._lastBlendEnable = blendEnabled;
+                bool blendEnabled = !(this.ColorSourceBlend == Blend.One &&
+                                      this.ColorDestinationBlend == Blend.Zero &&
+                                      this.AlphaSourceBlend == Blend.One &&
+                                      this.AlphaDestinationBlend == Blend.Zero);
+
+                int blendEnabledMask = blendEnabled ? 0xF : 0x0;
+
+                if (force ||
+                    blendEnabledMask != context._lastBlendEnableMask)
+                {
+                    if (blendEnabled)
+                        GL.Enable(EnableCap.Blend);
+                    else
+                        GL.Disable(EnableCap.Blend);
+                    GL.CheckGLError();
+                    context._lastBlendEnableMask = blendEnabledMask;
+                }
+            }
+            else
+            {
+                if (!((ConcreteGraphicsCapabilities)context.Capabilities).SupportsSeparateBlendStates)
+                    throw new PlatformNotSupportedException("Independent blend states require at least OpenGL 4.0 or GLES 3.2, or equivalent extension support.");
+
+                int newBlendEnableMask = 0;
+                for (int i = 0; i < this.Targets.Length; i++)
+                {
+                    bool blendEnabled = !(this.Targets[i].ColorSourceBlend == Blend.One &&
+                                          this.Targets[i].ColorDestinationBlend == Blend.Zero &&
+                                          this.Targets[i].AlphaSourceBlend == Blend.One &&
+                                          this.Targets[i].AlphaDestinationBlend == Blend.Zero);
+
+                    int targetMask = blendEnabled ? (1 << i) : 0;
+                    int lastTargetMask = context._lastBlendEnableMask & (1 << i);
+
+                    if (force ||
+                        targetMask != lastTargetMask)
+                    {
+                        if (blendEnabled)
+                            GL.Enablei(EnableCap.Blend, i);
+                        else
+                            GL.Disablei(EnableCap.Blend, i);
+                        GL.CheckGLError();
+                    }
+                    newBlendEnableMask |= targetMask;
+                }
+                context._lastBlendEnableMask = newBlendEnableMask;
             }
 
             if (!this.IndependentBlendEnable)
             {
-                if (force ||
+                bool targetsFunctionsDiffer = false;
+                bool targetsBlendsDiffer = false;
+                bool targetsChannelsDiffer = false;
+                if (context._lastBlendState.IndependentBlendEnable)
+                {
+                    for (int i = 0; i < this.Targets.Length; i++)
+                    {
+                        if (this.ColorBlendFunction != context._lastBlendState[i].ColorBlendFunction ||
+                            this.AlphaBlendFunction != context._lastBlendState[i].AlphaBlendFunction)
+                            targetsFunctionsDiffer = true;
+
+                        if (this.ColorSourceBlend != context._lastBlendState[i].ColorSourceBlend ||
+                            this.ColorDestinationBlend != context._lastBlendState[i].ColorDestinationBlend ||
+                            this.AlphaSourceBlend != context._lastBlendState[i].AlphaSourceBlend ||
+                            this.AlphaDestinationBlend != context._lastBlendState[i].AlphaDestinationBlend)
+                            targetsBlendsDiffer = true;
+
+                        if (this.ColorWriteChannels != context._lastBlendState[i].ColorWriteChannels)
+                            targetsChannelsDiffer = true;
+                    }
+                }
+
+                if (force || targetsFunctionsDiffer ||
                     this.ColorBlendFunction != context._lastBlendState.ColorBlendFunction ||
                     this.AlphaBlendFunction != context._lastBlendState.AlphaBlendFunction)
                 {
@@ -52,14 +109,14 @@ namespace Microsoft.Xna.Platform.Graphics
                         ToGLBlendEquationMode(this.ColorBlendFunction),
                         ToGLBlendEquationMode(this.AlphaBlendFunction));
                     GL.CheckGLError();
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < this.Targets.Length; i++)
                     {
                         context._lastBlendState[i].ColorBlendFunction = this.ColorBlendFunction;
                         context._lastBlendState[i].AlphaBlendFunction = this.AlphaBlendFunction;
                     }
                 }
 
-                if (force ||
+                if (force || targetsBlendsDiffer ||
                     this.ColorSourceBlend != context._lastBlendState.ColorSourceBlend ||
                     this.ColorDestinationBlend != context._lastBlendState.ColorDestinationBlend ||
                     this.AlphaSourceBlend != context._lastBlendState.AlphaSourceBlend ||
@@ -71,7 +128,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         ToGLBlendFunc(this.AlphaSourceBlend),
                         ToGLBlendFunc(this.AlphaDestinationBlend));
                     GL.CheckGLError();
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < this.Targets.Length; i++)
                     {
                         context._lastBlendState[i].ColorSourceBlend = this.ColorSourceBlend;
                         context._lastBlendState[i].ColorDestinationBlend = this.ColorDestinationBlend;
@@ -79,10 +136,23 @@ namespace Microsoft.Xna.Platform.Graphics
                         context._lastBlendState[i].AlphaDestinationBlend = this.AlphaDestinationBlend;
                     }
                 }
+
+                if (force || targetsChannelsDiffer ||
+                    this.ColorWriteChannels != context._lastBlendState.ColorWriteChannels)
+                {
+                    GL.ColorMask(
+                        (this.ColorWriteChannels & ColorWriteChannels.Red) != 0,
+                        (this.ColorWriteChannels & ColorWriteChannels.Green) != 0,
+                        (this.ColorWriteChannels & ColorWriteChannels.Blue) != 0,
+                        (this.ColorWriteChannels & ColorWriteChannels.Alpha) != 0);
+                    GL.CheckGLError();
+                    for (int i = 0; i < this.Targets.Length; i++)
+                        context._lastBlendState[i].ColorWriteChannels = this.ColorWriteChannels;
+                }
             }
             else // (_strategy.IndependentBlendEnable == true)
             {
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < this.Targets.Length; i++)
                 {
                     if (force ||
                         this.Targets[i].ColorBlendFunction != context._lastBlendState[i].ColorBlendFunction ||
@@ -113,20 +183,22 @@ namespace Microsoft.Xna.Platform.Graphics
                         context._lastBlendState[i].AlphaSourceBlend = this.Targets[i].AlphaSourceBlend;
                         context._lastBlendState[i].AlphaDestinationBlend = this.Targets[i].AlphaDestinationBlend;
                     }
+
+                    if (force ||
+                        this.Targets[i].ColorWriteChannels != context._lastBlendState[i].ColorWriteChannels)
+                    {
+                        GL.ColorMaski(i,
+                            (this.Targets[i].ColorWriteChannels & ColorWriteChannels.Red) != 0,
+                            (this.Targets[i].ColorWriteChannels & ColorWriteChannels.Green) != 0,
+                            (this.Targets[i].ColorWriteChannels & ColorWriteChannels.Blue) != 0,
+                            (this.Targets[i].ColorWriteChannels & ColorWriteChannels.Alpha) != 0);
+                        GL.CheckGLError();
+                        context._lastBlendState[i].ColorWriteChannels = this.Targets[i].ColorWriteChannels;
+                    }
                 }
             }
 
-            if (force ||
-                this.ColorWriteChannels != context._lastBlendState.ColorWriteChannels)
-            {
-                GL.ColorMask(
-                    (this.ColorWriteChannels & ColorWriteChannels.Red) != 0,
-                    (this.ColorWriteChannels & ColorWriteChannels.Green) != 0,
-                    (this.ColorWriteChannels & ColorWriteChannels.Blue) != 0,
-                    (this.ColorWriteChannels & ColorWriteChannels.Alpha) != 0);
-                GL.CheckGLError();
-                context._lastBlendState.ColorWriteChannels = this.ColorWriteChannels;
-            }
+            context._lastBlendState.IndependentBlendEnable = this.IndependentBlendEnable;
         }
 
         private static BlendEquationMode ToGLBlendEquationMode(BlendFunction function)
