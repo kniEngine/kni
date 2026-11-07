@@ -41,10 +41,14 @@ namespace Microsoft.Xna.Platform.Graphics
             _glDisposeContext = SDL.OpenGL.CreateGLContext(_glDisposeContextWindowHandle);
 
            // create _glSharedContext for creating GL objects from working threads.
-            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, (int)Sdl.GL.ContextReleaseBehaviour.None);
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, (int)Sdl.GL.ContextReleaseBehaviour.Flush);
             Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 1);
             _glSharedContextWindowHandle = SDL.WINDOW.Create("", 0, 0, 0, 0, Sdl.Window.State.Hidden | Sdl.Window.State.OpenGL);
             _glSharedContext = SDL.OpenGL.CreateGLContext(_glSharedContextWindowHandle);
+
+            // restore attributes.
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ContextReleaseBehaviour, (int)Sdl.GL.ContextReleaseBehaviour.Flush);
+            Sdl.Current.OpenGL.SetAttribute(Sdl.GL.Attribute.ShareWithCurrentContext, 0);
 
             MakeCurrent(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.DeviceWindowHandle);
             int swapInterval = ConcreteGraphicsContext.ToGLSwapInterval(((IPlatformGraphicsContext)context).DeviceStrategy.PresentationParameters.PresentationInterval);
