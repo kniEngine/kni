@@ -524,11 +524,6 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 #endif
 
-        internal void Internal_CreateSizeDependentResources()
-        {
-            this.CreateSizeDependentResources();
-        }
-
         private void CreateSizeDependentResources()
         {
             // Clamp MultiSampleCount
