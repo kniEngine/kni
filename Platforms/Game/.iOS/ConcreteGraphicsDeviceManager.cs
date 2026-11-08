@@ -73,42 +73,16 @@ namespace Microsoft.Xna.Platform
 
         public override void CreateDevice()
         {
-            PresentationParameters pp = new PresentationParameters();
-            pp.DepthStencilFormat = DepthFormat.Depth24;
+            GraphicsDeviceInformation gdi = this.PrepareDeviceInformation();
 
-            {
-                // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
-                int width = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
-                int height = (int)(UIKit.UIScreen.MainScreen.Bounds.Height * UIKit.UIScreen.MainScreen.Scale);
+            UIKit.UIApplication.SharedApplication.StatusBarHidden = gdi.PresentationParameters.IsFullScreen;
 
-                // Flip the dimensions if we need to.
-                if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft
-                ||  TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
-                {
-                    width = height;
-                    height = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
-                }
+            var deviceSettingsArgs = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(deviceSettingsArgs);
 
-                pp.BackBufferWidth = width;
-                pp.BackBufferHeight = height;
-            }
-
-            // force "full screen" as default on iOS
-            pp.IsFullScreen = true;
-            UIKit.UIApplication.SharedApplication.StatusBarHidden = pp.IsFullScreen;
-
-            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
-            gdi.GraphicsProfile = this.GraphicsProfile; // Microsoft defaults this to Reach.
-            gdi.Adapter = GraphicsAdapter.DefaultAdapter;
-            gdi.PresentationParameters = pp;
-            var pe = new PreparingDeviceSettingsEventArgs(gdi);
-
-            this.OnPreparingDeviceSettings(pe);
-
-            pp = gdi.PresentationParameters;
             this.GraphicsProfile = gdi.GraphicsProfile;
 
-            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
+            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
             // ApplyChanges
             {
@@ -132,8 +106,8 @@ namespace Microsoft.Xna.Platform
 
             ((iOSGameWindow)Game.Window).ViewController.View.LayoutSubviews();
 
-            PresentationParameters pp3 = this.GraphicsDevice.PresentationParameters;
-            this.GraphicsDevice.Viewport = new Viewport(0, 0, pp3.BackBufferWidth, pp3.BackBufferHeight);
+            PresentationParameters gdpp = this.GraphicsDevice.PresentationParameters;
+            this.GraphicsDevice.Viewport = new Viewport(0, 0, gdpp.BackBufferWidth, gdpp.BackBufferHeight);
         }
 
         public override void ApplyChanges()
@@ -161,6 +135,39 @@ namespace Microsoft.Xna.Platform
             TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
         }
 
+        private GraphicsDeviceInformation PrepareDeviceInformation()
+        {
+            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
+            gdi.Adapter = GraphicsAdapter.DefaultAdapter;
+            gdi.GraphicsProfile = this.GraphicsProfile;
+
+            PresentationParameters pp = new PresentationParameters();
+            pp.DepthStencilFormat = DepthFormat.Depth24;
+
+            {
+                // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
+                int width = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
+                int height = (int)(UIKit.UIScreen.MainScreen.Bounds.Height * UIKit.UIScreen.MainScreen.Scale);
+
+                // Flip the dimensions if we need to.
+                if (TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeLeft
+                ||  TouchPanel.DisplayOrientation == DisplayOrientation.LandscapeRight)
+                {
+                    width = height;
+                    height = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
+                }
+
+                pp.BackBufferWidth = width;
+                pp.BackBufferHeight = height;
+            }
+
+            // force "full screen" as default on iOS
+            pp.IsFullScreen = true;
+
+            gdi.PresentationParameters = pp;
+
+            return gdi;
+        }
 
         #region IGraphicsDeviceManager strategy
 

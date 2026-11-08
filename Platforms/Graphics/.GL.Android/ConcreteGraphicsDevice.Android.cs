@@ -41,8 +41,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
             int depth = 0;
             int stencil = 0;
-            int sampleBuffers = 0;
-            int samples = 0;
             switch (this.PresentationParameters.DepthStencilFormat)
             {
                 case DepthFormat.Depth16:
@@ -59,6 +57,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     break;
             }
 
+            int sampleBuffers = 0;
+            int samples = 0;
             if (this.PresentationParameters.MultiSampleCount > 1)
             {
                 sampleBuffers = 1;

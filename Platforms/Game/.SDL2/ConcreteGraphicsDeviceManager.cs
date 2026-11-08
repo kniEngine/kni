@@ -52,132 +52,20 @@ namespace Microsoft.Xna.Platform
             ApplyChanges();
         }
 
-        public override void ApplyChanges()
-        {
-            if (this.GraphicsDevice == null)
-            {
-                this.CreateDevice();
-            }
-
-            // populates a gdi with settings in this gdm and allows users to override them with
-            // PrepareDeviceSettings event this information should be applied to the GraphicsDevice
-            var gdi = this.DoPreparingDeviceSettings();
-
-            if (gdi.GraphicsProfile != GraphicsDevice.GraphicsProfile)
-            {
-                // if the GraphicsProfile changed we need to create a new GraphicsDevice
-                this.GraphicsDevice.Dispose();
-                this.GraphicsDevice = null;
-
-                this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
-
-                // update the GameWindow size when PresentationChanged.
-                ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
-
-                this.OnDeviceCreated(EventArgs.Empty);
-            }
-            else
-            {
-                GraphicsDevice.Reset(gdi.PresentationParameters);
-            }
-        }
-
-        /// <summary>
-        /// This populates a GraphicsDeviceInformation instance and invokes PreparingDeviceSettings to
-        /// allow users to change the settings. Then returns that GraphicsDeviceInformation.
-        /// Throws NullReferenceException if users set GraphicsDeviceInformation.PresentationParameters to null.
-        /// </summary>
-        internal GraphicsDeviceInformation DoPreparingDeviceSettings()
-        {
-            var gdi = new GraphicsDeviceInformation();
-            gdi.Adapter = GraphicsAdapter.DefaultAdapter;
-            gdi.GraphicsProfile = GraphicsProfile;
-
-            // if we are on Linux, start on the current screen
-            if (CurrentPlatform.OS == OS.Linux)
-            {
-                SDL.MOUSE.GetGlobalState(out int x, out int y);
-                if (SDL.DISPLAY.TryFindDisplay(x, y, out int displayIndex))
-                    gdi.Adapter = GraphicsAdapter.Adapters[displayIndex];
-            }
-
-            PresentationParameters pp = new PresentationParameters();
-            pp.BackBufferFormat = this.PreferredBackBufferFormat;
-            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
-            pp.BackBufferWidth = this.PreferredBackBufferWidth;
-            pp.BackBufferHeight = this.PreferredBackBufferHeight;
-            pp.IsFullScreen = this.IsFullScreen;
-            pp.HardwareModeSwitch = this.HardwareModeSwitch;
-            pp.PresentationInterval = this.SynchronizeWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
-            pp.DisplayOrientation = this.Game.Window.CurrentOrientation;
-            pp.DeviceWindowHandle = this.Game.Window.Handle;
-
-            int maxMultiSampleCount = 0;
-            if (this.PreferMultiSampling)
-            {
-                if (GraphicsDevice != null)
-                {
-                    maxMultiSampleCount = ((IPlatformGraphicsDevice)GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsDevice)GraphicsDevice).Strategy.PresentationParameters.BackBufferFormat);
-                }
-            }
-            pp.MultiSampleCount = maxMultiSampleCount;
-
-            gdi.PresentationParameters = pp;
-            var args = new PreparingDeviceSettingsEventArgs(gdi);
-            this.OnPreparingDeviceSettings(args);
-
-            if (gdi.PresentationParameters == null || gdi.Adapter == null)
-                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
-
-            return gdi;
-        }
-
-        /// <summary>
-        /// Convert a <see cref="SurfaceFormat"/> to an GL ColorFormat.
-        /// This is used for setting up the backbuffer format of the OpenGL context.
-        /// </summary>
-        /// <returns>A GL ColorFormat instance.</returns>
-        /// <param name="format">The <see cref="SurfaceFormat"/> to convert.</param>
-        private static ColorFormat ToGLColorFormat(SurfaceFormat format)
-        {
-            switch (format)
-            {
-                case SurfaceFormat.Alpha8:
-                    return new ColorFormat(0, 0, 0, 8);
-                case SurfaceFormat.Bgr565:
-                    return new ColorFormat(5, 6, 5, 0);
-                case SurfaceFormat.Bgra4444:
-                    return new ColorFormat(4, 4, 4, 4);
-                case SurfaceFormat.Bgra5551:
-                    return new ColorFormat(5, 5, 5, 1);
-                case SurfaceFormat.Bgr32:
-                    return new ColorFormat(8, 8, 8, 0);
-                case SurfaceFormat.Bgra32:
-                case SurfaceFormat.Color:
-                case SurfaceFormat.ColorSRgb:
-                case SurfaceFormat.ColorSRgba:
-                    return new ColorFormat(8, 8, 8, 8);
-                case SurfaceFormat.Rgba1010102:
-                    return new ColorFormat(10, 10, 10, 2);
-
-                default:
-                    // Floating point backbuffers formats could be implemented
-                    // but they are not typically used on the backbuffer. In
-                    // those cases it is better to create a render target instead.
-                    throw new NotSupportedException();
-            }
-        }
-
         public override void CreateDevice()
         {
             if (this.GraphicsDevice != null)
                 return;
 
-            GraphicsDeviceInformation gdi = this.DoPreparingDeviceSettings();
-            PresentationParameters pp = gdi.PresentationParameters;
+            GraphicsDeviceInformation gdi = this.PrepareDeviceInformation();
+            var deviceSettingsArgs = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(deviceSettingsArgs);
+            if (gdi.PresentationParameters == null || gdi.Adapter == null)
+                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
 
             // Platform initialize.
 
+            PresentationParameters pp = gdi.PresentationParameters;
             ColorFormat backBufferFormat = ToGLColorFormat(pp.BackBufferFormat);
             DepthFormat depthStencilFormat = pp.DepthStencilFormat;
 
@@ -228,6 +116,116 @@ namespace Microsoft.Xna.Platform
             ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
 
             this.OnDeviceCreated(EventArgs.Empty);
+        }
+
+        public override void ApplyChanges()
+        {
+            if (this.GraphicsDevice == null)
+            {
+                this.CreateDevice();
+            }
+
+            GraphicsDeviceInformation gdi = this.PrepareDeviceInformation();
+            var deviceSettingsArgs = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(deviceSettingsArgs);
+            if (gdi.PresentationParameters == null || gdi.Adapter == null)
+                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
+
+            if (gdi.GraphicsProfile != GraphicsDevice.GraphicsProfile)
+            {
+                // if the GraphicsProfile changed we need to create a new GraphicsDevice
+                this.GraphicsDevice.Dispose();
+                this.GraphicsDevice = null;
+
+                this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
+
+                // update the GameWindow size when PresentationChanged.
+                ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
+
+                this.OnDeviceCreated(EventArgs.Empty);
+            }
+            else
+            {
+                GraphicsDevice.Reset(gdi.PresentationParameters);
+            }
+        }
+
+        private GraphicsDeviceInformation PrepareDeviceInformation()
+        {
+            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
+            gdi.Adapter = GraphicsAdapter.DefaultAdapter;
+            gdi.GraphicsProfile = GraphicsProfile;
+
+            // if we are on Linux, start on the current screen
+            if (CurrentPlatform.OS == OS.Linux)
+            {
+                SDL.MOUSE.GetGlobalState(out int x, out int y);
+                if (SDL.DISPLAY.TryFindDisplay(x, y, out int displayIndex))
+                    gdi.Adapter = GraphicsAdapter.Adapters[displayIndex];
+            }
+
+            PresentationParameters pp = new PresentationParameters();
+            pp.BackBufferFormat = this.PreferredBackBufferFormat;
+            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
+            pp.BackBufferWidth = this.PreferredBackBufferWidth;
+            pp.BackBufferHeight = this.PreferredBackBufferHeight;
+            pp.IsFullScreen = this.IsFullScreen;
+            pp.HardwareModeSwitch = this.HardwareModeSwitch;
+            pp.PresentationInterval = this.SynchronizeWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
+            pp.DisplayOrientation = this.Game.Window.CurrentOrientation;
+            pp.DeviceWindowHandle = this.Game.Window.Handle;
+
+            int maxMultiSampleCount = 0;
+            if (this.PreferMultiSampling)
+            {
+                //maxMultiSampleCount = 32;
+
+                if (GraphicsDevice != null)
+                {
+                    maxMultiSampleCount = ((IPlatformGraphicsDevice)GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsDevice)GraphicsDevice).Strategy.PresentationParameters.BackBufferFormat);
+                }
+            }
+            pp.MultiSampleCount = maxMultiSampleCount;
+
+            gdi.PresentationParameters = pp;
+
+            return gdi;
+        }
+
+        /// <summary>
+        /// Convert a <see cref="SurfaceFormat"/> to an GL ColorFormat.
+        /// This is used for setting up the backbuffer format of the OpenGL context.
+        /// </summary>
+        /// <returns>A GL ColorFormat instance.</returns>
+        /// <param name="format">The <see cref="SurfaceFormat"/> to convert.</param>
+        private static ColorFormat ToGLColorFormat(SurfaceFormat format)
+        {
+            switch (format)
+            {
+                case SurfaceFormat.Alpha8:
+                    return new ColorFormat(0, 0, 0, 8);
+                case SurfaceFormat.Bgr565:
+                    return new ColorFormat(5, 6, 5, 0);
+                case SurfaceFormat.Bgra4444:
+                    return new ColorFormat(4, 4, 4, 4);
+                case SurfaceFormat.Bgra5551:
+                    return new ColorFormat(5, 5, 5, 1);
+                case SurfaceFormat.Bgr32:
+                    return new ColorFormat(8, 8, 8, 0);
+                case SurfaceFormat.Bgra32:
+                case SurfaceFormat.Color:
+                case SurfaceFormat.ColorSRgb:
+                case SurfaceFormat.ColorSRgba:
+                    return new ColorFormat(8, 8, 8, 8);
+                case SurfaceFormat.Rgba1010102:
+                    return new ColorFormat(10, 10, 10, 2);
+
+                default:
+                    // Floating point backbuffers formats could be implemented
+                    // but they are not typically used on the backbuffer. In
+                    // those cases it is better to create a render target instead.
+                    throw new NotSupportedException();
+            }
         }
 
         private void GraphicsDevice_PresentationChanged_UpdateGamePlatform(object sender, PresentationEventArgs args)
