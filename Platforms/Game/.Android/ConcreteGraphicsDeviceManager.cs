@@ -76,38 +76,21 @@ namespace Microsoft.Xna.Platform
 
         public override void CreateDevice()
         {
-            PresentationParameters pp = new PresentationParameters();
-            pp.MultiSampleCount = (this.PreferMultiSampling) ? 4 : 1;
-            pp.BackBufferFormat = this.PreferredBackBufferFormat;
-            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
-            pp.BackBufferWidth = 800;
-            pp.BackBufferHeight = 480;
+            GraphicsDeviceInformation gdi = this.PrepareDeviceInformation();
+            var deviceSettingsArgs = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(deviceSettingsArgs);
 
-            // force "full screen" as default on Android
-            pp.IsFullScreen = true;
-            
-            pp.DeviceWindowHandle = this.Game.Window.Handle;
-
-            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
-            gdi.GraphicsProfile = this.GraphicsProfile;
-            gdi.Adapter = GraphicsAdapter.DefaultAdapter;
-            gdi.PresentationParameters = pp;
-            var pe = new PreparingDeviceSettingsEventArgs(gdi);
-
-            this.OnPreparingDeviceSettings(pe);
-
-            pp = gdi.PresentationParameters;
             this.GraphicsProfile = gdi.GraphicsProfile;
 
             AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
             View surfaceView = androidGameWindow.GameView;
 
+            PresentationParameters pp = gdi.PresentationParameters;
             pp.DisplayOrientation = base.Game.Window.CurrentOrientation;
-
             pp.BackBufferWidth = surfaceView.Width;
             pp.BackBufferHeight = surfaceView.Height;
 
-            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, pp);
+            this.GraphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
 
             // ApplyChanges
             {
@@ -132,34 +115,8 @@ namespace Microsoft.Xna.Platform
                 else
                     supported2 = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
             }
+
             androidGameWindow.SetOrientation(currentOrientation, supported2);
-
-        }
-
-        private void GameWindow_OrientationChanged(object sender, EventArgs e)
-        {
-            if (GraphicsDevice != null)
-            {
-                AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
-                View surfaceView = androidGameWindow.GameView;
-
-                base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
-
-                base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
-                base.GraphicsDevice.PresentationParameters.BackBufferHeight = surfaceView.Height;
-
-                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
-                {
-                    PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
-                    base.GraphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-                    base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
-                }
-
-                TouchPanel.DisplayWidth  = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
-                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
-                TouchPanel.DisplayOrientation = base.GraphicsDevice.PresentationParameters.DisplayOrientation;
-            }
-
         }
 
         public override void ApplyChanges()
@@ -184,10 +141,68 @@ namespace Microsoft.Xna.Platform
                 else
                     supported = (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
             }
-            androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, supported);
 
+            androidGameWindow.SetOrientation(base.Game.Window.CurrentOrientation, supported);
         }
 
+        private GraphicsDeviceInformation PrepareDeviceInformation()
+        {
+            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
+            gdi.Adapter = GraphicsAdapter.DefaultAdapter;
+            gdi.GraphicsProfile = this.GraphicsProfile;
+
+            PresentationParameters pp = new PresentationParameters();
+            pp.BackBufferFormat = this.PreferredBackBufferFormat;
+            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
+            pp.BackBufferWidth = 800;
+            pp.BackBufferHeight = 480;
+
+            // force "full screen" as default on Android
+            pp.IsFullScreen = true;
+            
+            pp.DeviceWindowHandle = this.Game.Window.Handle;
+
+            int maxMultiSampleCount = 0;
+            if (this.PreferMultiSampling)
+            {
+                maxMultiSampleCount = 4;
+            }
+            else
+            {
+                maxMultiSampleCount = 1;
+            }
+            pp.MultiSampleCount = maxMultiSampleCount;
+
+            gdi.PresentationParameters = pp;
+
+            return gdi;
+        }
+
+
+        private void GameWindow_OrientationChanged(object sender, EventArgs e)
+        {
+            if (GraphicsDevice != null)
+            {
+                AndroidGameWindow androidGameWindow = (AndroidGameWindow)base.Game.Window;
+                View surfaceView = androidGameWindow.GameView;
+
+                base.GraphicsDevice.PresentationParameters.DisplayOrientation = base.Game.Window.CurrentOrientation;
+
+                base.GraphicsDevice.PresentationParameters.BackBufferWidth = surfaceView.Width;
+                base.GraphicsDevice.PresentationParameters.BackBufferHeight = surfaceView.Height;
+
+                if (!((IPlatformGraphicsContext)((IPlatformGraphicsDevice)base.GraphicsDevice).Strategy.MainContext).Strategy.IsRenderTargetBound)
+                {
+                    PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+                    base.GraphicsDevice.Viewport = new Viewport(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
+                    base.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, pp.BackBufferWidth, pp.BackBufferHeight);
+                }
+
+                TouchPanel.DisplayWidth = base.GraphicsDevice.PresentationParameters.BackBufferWidth;
+                TouchPanel.DisplayHeight = base.GraphicsDevice.PresentationParameters.BackBufferHeight;
+                TouchPanel.DisplayOrientation = base.GraphicsDevice.PresentationParameters.DisplayOrientation;
+            }
+        }
 
         #region IGraphicsDeviceManager strategy
 
