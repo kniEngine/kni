@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Devices.Sensors;
+using nkast.Wasm.Dom;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
@@ -20,7 +21,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
 
         public override bool PlatformIsCompassSupported()
         {
-            return false;
+            return Window.Current.IsDeviceOrientationEventDefined;
         }
 
         public override void Suspend()
