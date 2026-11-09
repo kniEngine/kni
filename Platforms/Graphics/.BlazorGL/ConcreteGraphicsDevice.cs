@@ -17,8 +17,6 @@ namespace Microsoft.Xna.Platform.Graphics
 
         internal Dictionary<int, ShaderProgram> ProgramCache { get { return _programCache; } }
 
-        internal WebGLFramebuffer _glDefaultFramebuffer = null;
-
 
         internal ConcreteGraphicsDevice(GraphicsDevice device, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, bool preferHalfPixelOffset, PresentationParameters presentationParameters)
             : base(device, adapter, graphicsProfile, preferHalfPixelOffset, presentationParameters)
@@ -62,7 +60,7 @@ namespace Microsoft.Xna.Platform.Graphics
             ConcreteGraphicsContext context = ((IPlatformGraphicsContext)_mainContext).Strategy.ToConcrete<ConcreteGraphicsContext>();
             var GL = context.GL;
 
-            ((IWebGL2RenderingContext)GL).BindFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, _glDefaultFramebuffer);
+            ((IWebGL2RenderingContext)GL).BindFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, context._glDefaultFramebuffer);
             GL.CheckGLError();
             ((IWebGL2RenderingContext)GL).ReadBuffer(WebGL2DrawBufferAttachmentPoint.BACK);
             GL.CheckGLError();

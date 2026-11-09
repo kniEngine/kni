@@ -39,6 +39,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
         // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], WebGLFramebuffer> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], WebGLFramebuffer>(new RenderTargetBindingArrayComparer());
+        internal WebGLFramebuffer _glActiveDrawFramebuffer = null;
+        internal WebGLFramebuffer _glDefaultFramebuffer = null;
 
         internal bool FramebufferRequireFlippedY { get { return (base.RenderTargetCount > 0); } }
 
@@ -1244,6 +1246,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                 }
 
+                _glActiveDrawFramebuffer = glResolveFramebuffer;
+
                 // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
                 if (_lastRasterizerState.ScissorTestEnable)
                 {
@@ -1339,8 +1343,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformApplyDefaultRenderTarget()
         {
-            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER,((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
+            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, _glDefaultFramebuffer);
             GL.CheckGLError();
+
+            _glActiveDrawFramebuffer = _glDefaultFramebuffer;
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
@@ -1403,6 +1409,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
                 GL.CheckGLError();
             }
+
+            _glActiveDrawFramebuffer = glFramebuffer;
 
 #if DESKTOPGL
             //GL.DrawBuffers(base.RenderTargetCount, _drawBuffers);

@@ -244,7 +244,8 @@ namespace Microsoft.Xna.Framework.XR
         public override int EndFrame()
         {
             var graphicsDevice = _graphics.GraphicsDevice;
-            var GL = (IWebGL2RenderingContext)((IPlatformGraphicsContext)((IPlatformGraphicsDevice)graphicsDevice).Strategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            var context = ((IPlatformGraphicsContext)((IPlatformGraphicsDevice)graphicsDevice).Strategy.CurrentContext).Strategy.ToConcrete<ConcreteGraphicsContext>();
+            var GL = (IWebGL2RenderingContext)context.GL;
 
             XRWebGLLayer glLayer = _currentRenderState.BaseLayer;
 
@@ -254,7 +255,7 @@ namespace Microsoft.Xna.Framework.XR
                 if (viewerPose != null)
                 {
                     WebGLFramebuffer glFramebuffer = glLayer.Framebuffer;
-                    WebGLFramebuffer glDefaultFramebuffer = ((IPlatformGraphicsDevice)graphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer;
+                    WebGLFramebuffer glDefaultFramebuffer = context._glDefaultFramebuffer;
 
                     foreach (XRView xrView in viewerPose.Views)
                     {
@@ -322,6 +323,8 @@ namespace Microsoft.Xna.Framework.XR
                             //rebind glDefaultFramebuffer 
                             GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glDefaultFramebuffer);
                             //GL.CheckGLError();
+
+                            context._glActiveDrawFramebuffer = glDefaultFramebuffer;
 
                             //CheckFramebufferStatus(WebGL2FramebufferType.DRAW_FRAMEBUFFER);
                         }

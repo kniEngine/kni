@@ -69,7 +69,8 @@ namespace Microsoft.Xna.Platform.Graphics
             where T : struct
         {
             GraphicsContextStrategy contextStrategy = ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy;
-            var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
+            ConcreteGraphicsContext context = contextStrategy.ToConcrete<ConcreteGraphicsContext>();
+            var GL = context.GL;
 
             ValidateGetDataSurfaceFormat(Format, contextStrategy);
 
@@ -78,15 +79,32 @@ namespace Microsoft.Xna.Platform.Graphics
             WebGLFramebuffer glFramebuffer;
             glFramebuffer = GL.CreateFramebuffer();
             GL.CheckGLError();
-            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+
+            if (GL is IWebGL2RenderingContext)
+                ((IWebGL2RenderingContext)GL).BindFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, glFramebuffer);
+            else
+                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
             GL.CheckGLError();
-            GL.FramebufferTexture2D(
-                WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, target, _glTexture, level);
+
+            if (GL is IWebGL2RenderingContext)
+                ((IWebGL2RenderingContext)GL).FramebufferTexture2D(
+                    WebGL2FramebufferType.READ_FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, target, _glTexture, level);
+            else
+                GL.FramebufferTexture2D(
+                    WebGLFramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, target, _glTexture, level);
             GL.CheckGLError();
 
             GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, data);
             GL.CheckGLError();
+
             glFramebuffer.Dispose();
+
+            if ((GL is not IWebGL2RenderingContext) &&
+                context._glActiveDrawFramebuffer != context._glDefaultFramebuffer)
+            {
+                GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, context._glActiveDrawFramebuffer);
+                GL.CheckGLError();
+            }
         }
 
         public int GetCompressedDataByteSize(int fSize, Rectangle rect, ref Rectangle textureBounds, out Rectangle checkedRect)

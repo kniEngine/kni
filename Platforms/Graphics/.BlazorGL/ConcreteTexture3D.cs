@@ -95,13 +95,13 @@ namespace Microsoft.Xna.Platform.Graphics
             WebGLFramebuffer glFramebuffer;
             glFramebuffer = GL.CreateFramebuffer();
             GL.CheckGLError();
-            GL.BindFramebuffer(WebGLFramebufferType.FRAMEBUFFER, glFramebuffer);
+            ((IWebGL2RenderingContext)GL).BindFramebuffer(WebGL2FramebufferType.READ_FRAMEBUFFER, glFramebuffer);
             GL.CheckGLError();
 
             for (int zSlice = front; zSlice < back; zSlice++)
             {
                 ((IWebGL2RenderingContext)GL).FramebufferTextureLayer(
-                    WebGL2FramebufferType.FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, _glTexture, level, zSlice);
+                    WebGL2FramebufferType.READ_FRAMEBUFFER, WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0, _glTexture, level, zSlice);
                 GL.CheckGLError();
 
                 GL.ReadPixels(left, top, width, height, _glFormat, _glType, data, startIndex + (zSlice - front) * elementsPerZSlice, elementsPerZSlice);
