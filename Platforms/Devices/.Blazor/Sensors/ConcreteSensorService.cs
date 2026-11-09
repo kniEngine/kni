@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Devices.Sensors;
+using nkast.Wasm.Dom;
 
 namespace Microsoft.Xna.Platform.Devices.Sensors
 {
@@ -15,7 +16,7 @@ namespace Microsoft.Xna.Platform.Devices.Sensors
 
         public override bool PlatformIsAccelerometerSupported()
         {
-            return false;
+            return Window.Current.IsDeviceMotionEventDefined;
         }
 
         public override bool PlatformIsCompassSupported()
