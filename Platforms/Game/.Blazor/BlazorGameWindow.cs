@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -37,13 +38,7 @@ namespace Microsoft.Xna.Framework
 
         private readonly List<Keys> _keys = new List<Keys>();
 
-        private Point _locationBeforeFullScreen;
-
-        // flag to indicate that we're switching to/from full screen and should ignore resize events
-        private bool _switchingFullScreen;
-
-
-
+        private Task _switchFullscreenTask;
 
         #region Internal Properties
 
@@ -107,6 +102,7 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
+        internal Div _canvasHolder { get; private set; }
         internal Canvas _canvas { get; private set; }
         internal Window wasmWindow { get { return _window; } }
 
@@ -115,6 +111,7 @@ namespace Microsoft.Xna.Framework
             _concreteGame = concreteGame;
 
             _window = Window.Current;
+            _canvasHolder = _window.Document.GetElementById<Div>("canvasHolder");
             _canvas = _window.Document.GetElementById<Canvas>("theCanvas");
             _instances.Add(this.Handle, this);
 
@@ -225,6 +222,15 @@ namespace Microsoft.Xna.Framework
             _window.OnResize += OnResize;
 
            // Form.KeyPress += OnKeyPress;
+
+            _window.Document.OnFullscreenChange += (object sender) =>
+            {
+                if (_canvasHolder == null)
+                    IsFullScreen = false;
+
+                int fullscreenElementUid = _window.Document.FullscreenElementUid;
+                IsFullScreen = _canvasHolder.Uid == fullscreenElementUid;
+            };
         }
 
         private void SetIcon()
@@ -334,6 +340,7 @@ namespace Microsoft.Xna.Framework
                 TouchPanel.WindowHandle = IntPtr.Zero;
 
             _instances.Remove(this.Handle);
+            _canvasHolder = null;
             _canvas = null;
 
             _concreteGame = null;
@@ -358,52 +365,34 @@ namespace Microsoft.Xna.Framework
 
         internal void OnPresentationChanged(PresentationParameters pp)
         {
-            var raiseClientSizeChanged = false;
-            if (pp.IsFullScreen && pp.HardwareModeSwitch && IsFullScreen && HardwareModeSwitch)
-            {
-                if(_concreteGame.IsActive)
-                {
-                    // stay in hardware full screen, need to call ResizeTargets so the displaymode can be switched
-                   // _concreteGame.GraphicsDevice.ResizeTargets();
-                }
-                else
-                {
-                    // This needs to be called in case the user presses the Windows key while the focus is on the second monitor,
-                    //	which (sometimes) causes the window to exit fullscreen mode, but still keeps it visible
-                    MinimizeFullScreen();
-                }
-            }
-            else if (pp.IsFullScreen && (!IsFullScreen || pp.HardwareModeSwitch != HardwareModeSwitch))
+            if (pp.IsFullScreen && !IsFullScreen)
             {
                 EnterFullScreen(pp);
-                raiseClientSizeChanged = true;
             }
             else if (!pp.IsFullScreen && IsFullScreen)
             {
                 ExitFullScreen();
-                raiseClientSizeChanged = true;
             }
-
-            if (raiseClientSizeChanged)
-                OnClientSizeChanged();
         }
 
         #endregion
 
         internal void EnterFullScreen(PresentationParameters pp)
         {
-
+            if (_switchFullscreenTask == null && _window.Document.FullscreenEnabled)
+            {
+                _switchFullscreenTask = _canvasHolder.RequestFullscreenAsync();
+                _switchFullscreenTask.ContinueWith((t) => _switchFullscreenTask = null);
+            }
         }
-
 
         private void ExitFullScreen()
         {
-
-        }
-
-        private void MinimizeFullScreen()
-        {
-
+            if (_switchFullscreenTask == null && _window.Document.FullscreenEnabled)
+            {
+                _switchFullscreenTask = _window.Document.ExitFullscreenAsync();
+                _switchFullscreenTask.ContinueWith((t) => _switchFullscreenTask = null);
+            }
         }
 
         internal void InitFocus()
@@ -413,4 +402,3 @@ namespace Microsoft.Xna.Framework
         }
     }
 }
-
