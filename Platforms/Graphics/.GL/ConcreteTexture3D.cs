@@ -119,7 +119,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 int framebufferId = 0;
                 framebufferId = GL.GenFramebuffer();
                 GL.CheckGLError();
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
+                GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, framebufferId);
                 GL.CheckGLError();
 
                 int fSize = Format.GetSize();
@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     for (int zSlice = front; zSlice < back; zSlice++)
                     {
-                        GL.FramebufferTextureLayer(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, _glTexture, level, zSlice);
+                        GL.FramebufferTextureLayer(FramebufferTarget.ReadFramebuffer, FramebufferAttachment.ColorAttachment0, _glTexture, level, zSlice);
                         GL.CheckGLError();
 
                         IntPtr dataPtr = (IntPtr)pData;

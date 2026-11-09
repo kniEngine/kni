@@ -56,6 +56,8 @@ namespace Microsoft.Xna.Platform.Graphics
         internal Dictionary<RenderTargetBinding[], int> _glFramebuffers = new Dictionary<RenderTargetBinding[], int>(new RenderTargetBindingArrayComparer());
         // FBO cache used to resolve MSAA rendertargets, we create 1 FBO per RenderTargetBinding combination
         internal Dictionary<RenderTargetBinding[], int> _glResolveFramebuffers = new Dictionary<RenderTargetBinding[], int>(new RenderTargetBindingArrayComparer());
+        internal int _glActiveDrawFramebuffer = 0;
+        internal int _glDefaultFramebuffer = 0;
 
         internal bool _supportsInvalidateFramebuffer;
         internal bool _supportsBlitFramebuffer;
@@ -1264,6 +1266,8 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.CheckGLError();
                 }
 
+                _glActiveDrawFramebuffer = glResolveFramebuffer;
+
                 // The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
                 if (_lastRasterizerState.ScissorTestEnable)
                 {
@@ -1352,8 +1356,10 @@ namespace Microsoft.Xna.Platform.Graphics
 
         protected override void PlatformApplyDefaultRenderTarget()
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer,((IPlatformGraphicsContext)this.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>()._glDefaultFramebuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, _glDefaultFramebuffer);
             GL.CheckGLError();
+
+            _glActiveDrawFramebuffer = _glDefaultFramebuffer;
 
             // Reset the raster state because we flip vertices
             // when rendering offscreen and hence the cull direction.
@@ -1408,6 +1414,8 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, glFramebuffer);
                 GL.CheckGLError();
             }
+
+            _glActiveDrawFramebuffer = glFramebuffer;
 
 #if DESKTOPGL
             GL.DrawBuffers(base.RenderTargetCount, this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers);
