@@ -132,6 +132,109 @@ namespace Kni.Tests.Graphics
             }
         }
 
+#if !XNA
+        [TestCase]
+        public void FromStreamColorProcessorPremultiplies()
+        {
+            using (var stream = File.OpenRead("Assets/Textures/red_128.png"))
+            using (var texture = Texture2D.FromStream(gd, stream, DefaultColorProcessors.PremultiplyAlpha))
+            {
+                var pngData = new Color[8 * 8];
+                texture.GetData(pngData);
+
+                for (var i = 0; i < pngData.Length; i++)
+                {
+                    Assert.AreEqual(128, pngData[i].R);
+                    Assert.AreEqual(0,   pngData[i].G);
+                    Assert.AreEqual(0,   pngData[i].B);
+                    Assert.AreEqual(128, pngData[i].A);
+                }
+            }
+        }
+
+        [TestCase]
+        public void FromStreamColorProcessorReceivesRgbaBytes()
+        {
+            byte[] received = null;
+
+            using (var stream = File.OpenRead("Assets/Textures/red_128.png"))
+            using (var texture = Texture2D.FromStream(gd, stream, data =>
+            {
+                received = (byte[])data.Clone();
+                for (var i = 0; i < data.Length; i += 4)
+                {
+                    data[i + 0] = 10;
+                    data[i + 1] = 20;
+                    data[i + 2] = 30;
+                    data[i + 3] = 40;
+                }
+            }))
+            {
+                Assert.IsNotNull(received);
+                Assert.AreEqual(8 * 8 * 4, received.Length);
+                Assert.AreEqual(new byte[] { 255, 0, 0, 128 }, new[] { received[0], received[1], received[2], received[3] });
+
+                var pngData = new Color[8 * 8];
+                texture.GetData(pngData);
+
+                for (var i = 0; i < pngData.Length; i++)
+                    Assert.AreEqual(new Color(10, 20, 30, 40), pngData[i]);
+            }
+        }
+
+        [TestCase]
+        public void FromStreamNullColorProcessorLeavesPixelsUnchanged()
+        {
+            using (var stream = File.OpenRead("Assets/Textures/red_128.png"))
+            using (var texture = Texture2D.FromStream(gd, stream, null))
+            {
+                var pngData = new Color[8 * 8];
+                texture.GetData(pngData);
+
+                for (var i = 0; i < pngData.Length; i++)
+                    Assert.AreEqual(new Color(255, 0, 0, 128), pngData[i]);
+            }
+        }
+
+        [TestCase]
+        public void PremultiplyAlphaProcessorRoundsToNearest()
+        {
+            var data = new byte[]
+            {
+                255, 100, 0, 128,
+                255, 255, 255, 0,
+                10, 20, 30, 255,
+            };
+
+            DefaultColorProcessors.PremultiplyAlpha(data);
+
+            Assert.AreEqual(new byte[]
+            {
+                128, 50, 0, 128,
+                0, 0, 0, 0,
+                10, 20, 30, 255,
+            }, data);
+        }
+
+        [TestCase]
+        public void ZeroTransparentPixelsProcessorOnlyClearsZeroAlpha()
+        {
+            var data = new byte[]
+            {
+                1, 2, 3, 0,
+                4, 5, 6, 7,
+            };
+
+            DefaultColorProcessors.ZeroTransparentPixels(data);
+
+            Assert.AreEqual(new byte[]
+            {
+                0, 0, 0, 0,
+                4, 5, 6, 7,
+            }, data);
+        }
+#endif
+
 #if XNA 
 		// FromStream() reads the texture unchanged.
 		// It's up to the user to apply cut-off, premultiply, etc.

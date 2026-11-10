@@ -34,7 +34,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal partial class ConcreteTexture2D
     {
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream)
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor)
             : base(contextStrategy, SurfaceFormat.Color, 1)
         {
             this._arraySize = 1;
@@ -44,15 +44,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 stream.Seek(0, SeekOrigin.Begin);
 
 #if DESKTOPGL && (NET40 || NET40_OR_GREATER)
-            PlatformFromStream_DESKTOPGL(contextStrategy, stream, out this._width, out this._height);
+            PlatformFromStream_DESKTOPGL(contextStrategy, stream, colorProcessor, out this._width, out this._height);
 #elif ANDROID
-            PlatformFromStream_ANDROID(contextStrategy, stream, out this._width, out this._height);
+            PlatformFromStream_ANDROID(contextStrategy, stream, colorProcessor, out this._width, out this._height);
 #elif IOS || TVOS
-            PlatformFromStream_IOS(contextStrategy, stream, out this._width, out this._height);
+            PlatformFromStream_IOS(contextStrategy, stream, colorProcessor, out this._width, out this._height);
 #else
             if (stream.CanSeek)
             {
-                PlatformFromStream_ImageSharp(contextStrategy, stream, out this._width, out this._height);
+                PlatformFromStream_ImageSharp(contextStrategy, stream, colorProcessor, out this._width, out this._height);
             }
             else
             {
@@ -61,14 +61,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     stream.CopyTo(ms);
                     ms.Seek(0, SeekOrigin.Begin);
-                    PlatformFromStream_ImageSharp(contextStrategy, ms, out this._width, out this._height);
+                    PlatformFromStream_ImageSharp(contextStrategy, ms, colorProcessor, out this._width, out this._height);
                 }
             }
 
 #endif
         }
 
-        private unsafe void PlatformFromStream_ImageSharp(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        private unsafe void PlatformFromStream_ImageSharp(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor, out int width, out int height)
         {
             // The data returned is always four channel BGRA
             StbImageSharp.ImageResult result = StbImageSharp.ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
@@ -76,13 +76,16 @@ namespace Microsoft.Xna.Platform.Graphics
             height = result.Height;
             ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
+            if (colorProcessor != null)
+                colorProcessor(result.Data);
+
             this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
             this.SetData<byte>(0, result.Data, 0, result.Data.Length);
         }
 
         #region DESKTOPGL 
 #if DESKTOPGL && (NET40 || NET40_OR_GREATER)
-        private unsafe void PlatformFromStream_DESKTOPGL(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        private unsafe void PlatformFromStream_DESKTOPGL(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor, out int width, out int height)
         {
             System.Drawing.Bitmap image = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(stream);
             try
@@ -115,6 +118,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Convert from ARGB to ABGR
                 ConvertToABGR_DESKTOPGL(width, height, data);
 
+                if (colorProcessor != null)
+                    colorProcessor(data);
+
                 this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
                 this.SetData<byte>(0, data, 0, data.Length);
             }
@@ -142,7 +148,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         #region ANDROID
 #if ANDROID
-        private unsafe void PlatformFromStream_ANDROID(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        private unsafe void PlatformFromStream_ANDROID(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor, out int width, out int height)
         {
             using (global::Android.Graphics.Bitmap image = global::Android.Graphics.BitmapFactory.DecodeStream(stream, null,
                 new global::Android.Graphics.BitmapFactory.Options
@@ -180,6 +186,15 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Convert from ARGB to ABGR
                 ConvertToABGR_ANDROID(width, height, data);
 
+                if (colorProcessor != null)
+                {
+                    // The processor works on RGBA bytes, so copy the pixels out and back.
+                    byte[] bytes = new byte[data.Length * 4];
+                    Buffer.BlockCopy(data, 0, bytes, 0, bytes.Length);
+                    colorProcessor(bytes);
+                    Buffer.BlockCopy(bytes, 0, data, 0, bytes.Length);
+                }
+
                 this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
                 this.SetData<int>(0, data, 0, data.Length);
             }
@@ -200,7 +215,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
         #region IOS || TVOS
 #if IOS || TVOS
-        private unsafe void PlatformFromStream_IOS(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        private unsafe void PlatformFromStream_IOS(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor, out int width, out int height)
         {
             using (UIImage uiImage = UIImage.LoadFromData(NSData.FromStream(stream)))
             {
@@ -219,6 +234,9 @@ namespace Microsoft.Xna.Platform.Graphics
                 bitmapContext.DrawImage(new System.Drawing.RectangleF(0, 0, width, height), cgImage);
                 bitmapContext.Dispose();
                 colorSpace.Dispose();
+
+                if (colorProcessor != null)
+                    colorProcessor(data);
 
                 this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
                 this.SetData<byte>(0, data, 0, data.Length);

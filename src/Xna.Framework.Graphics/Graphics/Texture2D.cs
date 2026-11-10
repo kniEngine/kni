@@ -120,9 +120,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         }
 
-        private Texture2D(GraphicsContext context, Stream stream)
+        private Texture2D(GraphicsContext context, Stream stream, Action<byte[]> colorProcessor)
         {
-            _strategyTexture2D = ((IPlatformGraphicsContext)context).Strategy.CreateTexture2DStrategy(stream);
+            _strategyTexture2D = ((IPlatformGraphicsContext)context).Strategy.CreateTexture2DStrategy(stream, colorProcessor);
             _strategyTexture = _strategyTexture2D;
             SetResourceStrategy((IGraphicsResourceStrategy)_strategyTexture2D);
 
@@ -375,6 +375,23 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </remarks>
         public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
         {
+            return FromStream(graphicsDevice, stream, null);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Texture2D"/> from a stream, supported formats bmp, gif, jpg, png, tif and dds (only for simple textures).
+        /// May work with other formats, but will not work with tga files.
+        /// </summary>
+        /// <param name="graphicsDevice">The graphics device to use to create the texture.</param>
+        /// <param name="stream">The stream from which to read the image data.</param>
+        /// <param name="colorProcessor">Function that is applied to the data in RGBA format before the texture is sent to video memory. Could be null(no processing then).
+        /// See <see cref="DefaultColorProcessors"/>.</param>
+        /// <returns>The <see cref="Texture2D"/> created from the image stream.</returns>
+        /// <remarks>Note that different image decoders may generate slight differences between platforms, but perceptually 
+        /// the images should be identical.  The processor runs on the decoded pixels, so no readback or second upload of the texture is needed.
+        /// </remarks>
+        public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream, Action<byte[]> colorProcessor)
+        {
             if (graphicsDevice == null)
                 throw new ArgumentNullException("graphicsDevice");
             if (stream == null)
@@ -382,7 +399,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             try
             {
-                return new Texture2D(graphicsDevice.MainContext, stream);
+                return new Texture2D(graphicsDevice.MainContext, stream, colorProcessor);
             }
             catch(Exception e)
             {
