@@ -317,6 +317,29 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Submit a sprite for drawing in the current batch.
         /// </summary>
         /// <param name="texture">A texture.</param>
+        /// <param name="pose">The pose (position and orientation) of the sprite.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this sprite.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void Draw(Texture2D texture,
+                Pose2 pose,
+                Rectangle? sourceRectangle,
+                Color color,
+                Vector2 origin,
+                Vector2 scale,
+                SpriteEffects effects,
+                float layerDepth)
+        {
+            Draw(texture, pose.Translation, sourceRectangle, color, pose.Orientation, origin, scale, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
         /// <param name="color">A color mask.</param>
@@ -847,6 +870,24 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="spriteFont">A font.</param>
         /// <param name="text">The text which will be drawn.</param>
+        /// <param name="pose">The pose (position and orientation) of the string.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this string.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this string.</param>
+        public unsafe void DrawString(
+            SpriteFont spriteFont, string text, Pose2 pose, Color color,
+            Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
+        {
+            DrawString(spriteFont, text, pose.Translation, color, pose.Orientation, origin, scale, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a text string of sprites for drawing in the current batch.
+        /// </summary>
+        /// <param name="spriteFont">A font.</param>
+        /// <param name="text">The text which will be drawn.</param>
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="color">A color mask.</param>
         /// <param name="rotation">A rotation of this string.</param>
@@ -943,6 +984,24 @@ namespace Microsoft.Xna.Framework.Graphics
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
                        ref rotation, origin, scale, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a text string of sprites for drawing in the current batch.
+        /// </summary>
+        /// <param name="spriteFont">A font.</param>
+        /// <param name="text">The text which will be drawn.</param>
+        /// <param name="pose">The pose (position and orientation) of the string.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this string.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this string.</param>
+        public unsafe void DrawString(
+            SpriteFont spriteFont, StringBuilder text, Pose2 pose, Color color,
+            Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
+        {
+            DrawString(spriteFont, text, pose.Translation, color, pose.Orientation, origin, scale, effects, layerDepth);
         }
 
         private unsafe void DrawString(
@@ -1215,6 +1274,25 @@ namespace Microsoft.Xna.Framework.Graphics
             spriteFont.GetGlyphIndexes(text, pChars, pGlyphIndices, text.Length);
             DrawString(spriteFont, pChars, pGlyphIndices, text.Length, position, color,
                 ref rotation, origin, scale, effects, layerDepth, rtl);
+        }
+
+        /// <summary>
+        /// Submit a text string of sprites for drawing in the current batch.
+        /// </summary>
+        /// <param name="spriteFont">A font.</param>
+        /// <param name="text">The text which will be drawn.</param>
+        /// <param name="pose">The pose (position and orientation) of the string.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this string.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this string.</param>
+        /// <param name="rtl">Text is Right to Left.</param>
+        public unsafe void DrawString(
+            SpriteFont spriteFont, StringBuilder text, Pose2 pose, Color color,
+            Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
+        {
+            DrawString(spriteFont, text, pose.Translation, color, pose.Orientation, origin, scale, effects, layerDepth, rtl);
         }
 
         private unsafe void DrawString(
