@@ -151,16 +151,13 @@ namespace Microsoft.Xna.Platform
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = this.GraphicsProfile;
 
-            PresentationParameters pp = new PresentationParameters();
-            pp.BackBufferFormat = this.PreferredBackBufferFormat;
-            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
-            pp.BackBufferWidth = 800;
-            pp.BackBufferHeight = 480;
+            SurfaceFormat selectedFormat;
+            DepthFormat selectedDepthFormat;
+            int selectedMultiSampleCount;
 
-            // force "full screen" as default on Android
-            pp.IsFullScreen = true;
-            
-            pp.DeviceWindowHandle = this.Game.Window.Handle;
+            //TODO: use gdi.Adapter.QueryBackBufferFormat(...) 
+            selectedFormat = this.PreferredBackBufferFormat;
+            selectedDepthFormat = this.PreferredDepthStencilFormat;
 
             int maxMultiSampleCount = 0;
             if (this.PreferMultiSampling)
@@ -171,7 +168,16 @@ namespace Microsoft.Xna.Platform
             {
                 maxMultiSampleCount = 1;
             }
-            pp.MultiSampleCount = maxMultiSampleCount;
+            selectedMultiSampleCount = maxMultiSampleCount;
+
+            PresentationParameters pp = new PresentationParameters();
+            pp.BackBufferFormat = selectedFormat;
+            pp.DepthStencilFormat = selectedDepthFormat;
+            pp.MultiSampleCount = selectedMultiSampleCount;
+            pp.BackBufferWidth = 800;
+            pp.BackBufferHeight = 480;
+            pp.IsFullScreen = true; // force "full screen" as default on Android            
+            pp.DeviceWindowHandle = this.Game.Window.Handle;
 
             gdi.PresentationParameters = pp;
 
