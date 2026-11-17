@@ -170,6 +170,7 @@ namespace Microsoft.Xna.Platform
             DepthFormat selectedDepthFormat;
             int selectedMultiSampleCount;
 
+            //TODO: use gdi.Adapter.QueryBackBufferFormat(...)
             selectedFormat = this.PreferredBackBufferFormat;
             selectedDepthFormat = this.PreferredDepthStencilFormat;
 
