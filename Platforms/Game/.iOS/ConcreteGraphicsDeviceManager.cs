@@ -141,9 +141,15 @@ namespace Microsoft.Xna.Platform
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = this.GraphicsProfile;
 
+            SurfaceFormat selectedFormat;
+            DepthFormat selectedDepthFormat;
+            int selectedMultiSampleCount;
+
+            selectedFormat = this.PreferredBackBufferFormat;
+            selectedDepthFormat = this.PreferredDepthStencilFormat;
+
             PresentationParameters pp = new PresentationParameters();
             pp.DepthStencilFormat = DepthFormat.Depth24;
-
             {
                 // Mainscreen.Bounds does not account for the device's orientation. it ALWAYS assumes portrait
                 int width = (int)(UIKit.UIScreen.MainScreen.Bounds.Width * UIKit.UIScreen.MainScreen.Scale);
@@ -159,10 +165,8 @@ namespace Microsoft.Xna.Platform
 
                 pp.BackBufferWidth = width;
                 pp.BackBufferHeight = height;
-            }
-
-            // force "full screen" as default on iOS
-            pp.IsFullScreen = true;
+            }                        
+            pp.IsFullScreen = true; // force "full screen" as default on iOS
 
             gdi.PresentationParameters = pp;
 

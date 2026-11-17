@@ -166,16 +166,12 @@ namespace Microsoft.Xna.Platform
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = GraphicsProfile;
 
-            PresentationParameters pp = new PresentationParameters();
-            pp.BackBufferFormat = this.PreferredBackBufferFormat;
-            pp.DepthStencilFormat = this.PreferredDepthStencilFormat;
-            pp.BackBufferWidth = this.PreferredBackBufferWidth;
-            pp.BackBufferHeight = this.PreferredBackBufferHeight;
-            pp.IsFullScreen = this.IsFullScreen;
-            pp.HardwareModeSwitch = this.HardwareModeSwitch;
-            pp.PresentationInterval = this.SynchronizeWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
-            pp.DisplayOrientation = this.Game.Window.CurrentOrientation;
-            pp.DeviceWindowHandle = this.Game.Window.Handle;
+            SurfaceFormat selectedFormat;
+            DepthFormat selectedDepthFormat;
+            int selectedMultiSampleCount;
+
+            selectedFormat = this.PreferredBackBufferFormat;
+            selectedDepthFormat = this.PreferredDepthStencilFormat;
 
             // always initialize MultiSampleCount to the maximum, if users want to overwrite
             // this they have to respond to the PreparingDeviceSettingsEvent and modify
@@ -188,7 +184,19 @@ namespace Microsoft.Xna.Platform
                 if (GraphicsDevice != null)
                     maxMultiSampleCount = ((IPlatformGraphicsDevice)GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(this.PreferredBackBufferFormat);
             }
-            pp.MultiSampleCount = maxMultiSampleCount;
+            selectedMultiSampleCount = maxMultiSampleCount;
+
+            PresentationParameters pp = new PresentationParameters();
+            pp.BackBufferFormat = selectedFormat;
+            pp.DepthStencilFormat = selectedDepthFormat;
+            pp.MultiSampleCount = selectedMultiSampleCount;
+            pp.BackBufferWidth = this.PreferredBackBufferWidth;
+            pp.BackBufferHeight = this.PreferredBackBufferHeight;
+            pp.IsFullScreen = this.IsFullScreen;
+            pp.HardwareModeSwitch = this.HardwareModeSwitch;
+            pp.PresentationInterval = this.SynchronizeWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
+            pp.DisplayOrientation = this.Game.Window.CurrentOrientation;
+            pp.DeviceWindowHandle = this.Game.Window.Handle;
 
             gdi.PresentationParameters = pp;
 
