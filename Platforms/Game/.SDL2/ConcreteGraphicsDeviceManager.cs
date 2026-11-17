@@ -182,7 +182,7 @@ namespace Microsoft.Xna.Platform
 
                 if (GraphicsDevice != null)
                 {
-                    maxMultiSampleCount = ((IPlatformGraphicsDevice)GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(((IPlatformGraphicsDevice)GraphicsDevice).Strategy.PresentationParameters.BackBufferFormat);
+                    maxMultiSampleCount = ((IPlatformGraphicsDevice)GraphicsDevice).Strategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(this.PreferredBackBufferFormat);
                 }
             }
             pp.MultiSampleCount = maxMultiSampleCount;
