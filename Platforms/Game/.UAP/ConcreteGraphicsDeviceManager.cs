@@ -65,6 +65,45 @@ namespace Microsoft.Xna.Platform
             ApplyChanges();
         }
 
+        public override void CreateDevice()
+        {
+            if (this.GraphicsDevice != null)
+                return;
+
+            // We don't want to trigger orientation changes 
+            // when no preference is being changed.
+            if (_uapGameSupportedOrientations != this.SupportedOrientations)
+            {
+                _uapGameSupportedOrientations = this.SupportedOrientations;
+
+                DisplayOrientation supported = this.SupportedOrientations;
+                if (supported == DisplayOrientation.Default)
+                {
+                    // Make the decision based on the preferred backbuffer dimensions.
+                    if (this.PreferredBackBufferWidth > this.PreferredBackBufferHeight)
+                        supported = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+                    else
+                        supported = DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
+                }
+
+                NativeDisplayInformation.AutoRotationPreferences = FromOrientation(supported);
+            }
+
+            GraphicsDeviceInformation gdi = this.PrepareDeviceInformation();
+            var deviceSettingsArgs = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(deviceSettingsArgs);
+            if (gdi.PresentationParameters == null || gdi.Adapter == null)
+                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
+
+            this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
+
+            // update the touchpanel display size when the graphicsdevice is reset
+            this.GraphicsDevice.DeviceReset += GraphicsDevice_DeviceReset_UpdateTouchPanel;
+            ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
+
+            this.OnDeviceCreated(EventArgs.Empty);
+        }
+
         public override void ApplyChanges()
         {
             if (this.GraphicsDevice == null)
@@ -93,17 +132,18 @@ namespace Microsoft.Xna.Platform
                 NativeDisplayInformation.AutoRotationPreferences = FromOrientation(supported);
             }
 
-
             // UAP PlatformApplyChanges
             ((UAPGameWindow)base.Game.Window).SetClientSize(base.PreferredBackBufferWidth, base.PreferredBackBufferHeight);
 
-            // populates a gdi with settings in this gdm and allows users to override them with
-            // PrepareDeviceSettings event this information should be applied to the GraphicsDevice
-            var gdi = this.DoPreparingDeviceSettings();
+            GraphicsDeviceInformation gdi = this.PrepareDeviceInformation();
+            var deviceSettingsArgs = new PreparingDeviceSettingsEventArgs(gdi);
+            this.OnPreparingDeviceSettings(deviceSettingsArgs);
+            if (gdi.PresentationParameters == null || gdi.Adapter == null)
+                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
 
+            // if the GraphicsProfile changed we need to create a new GraphicsDevice
             if (gdi.GraphicsProfile != GraphicsDevice.GraphicsProfile)
             {
-                // if the GraphicsProfile changed we need to create a new GraphicsDevice
                 this.GraphicsDevice.Dispose();
                 this.GraphicsDevice = null;
 
@@ -114,37 +154,15 @@ namespace Microsoft.Xna.Platform
                 ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
 
                 this.OnDeviceCreated(EventArgs.Empty);
+                return;
             }
-            else
-            {
-                GraphicsDevice.Reset(gdi.PresentationParameters);
-            }
+
+            GraphicsDevice.Reset(gdi.PresentationParameters);
         }
 
-        private static NativeDisplayOrientation FromOrientation(DisplayOrientation orientation)
+        private GraphicsDeviceInformation PrepareDeviceInformation()
         {
-            NativeDisplayOrientation result = NativeDisplayOrientation.None;
-
-            if ((orientation & DisplayOrientation.LandscapeLeft) != 0)
-                result |= NativeDisplayOrientation.Landscape;
-            if ((orientation & DisplayOrientation.LandscapeRight) != 0)
-                result |= NativeDisplayOrientation.LandscapeFlipped;
-            if ((orientation & DisplayOrientation.Portrait) != 0)
-                result |= NativeDisplayOrientation.Portrait;
-            if ((orientation & DisplayOrientation.PortraitDown) != 0)
-                result |= NativeDisplayOrientation.PortraitFlipped;
-
-            return result;
-        }
-
-        /// <summary>
-        /// This populates a GraphicsDeviceInformation instance and invokes PreparingDeviceSettings to
-        /// allow users to change the settings. Then returns that GraphicsDeviceInformation.
-        /// Throws NullReferenceException if users set GraphicsDeviceInformation.PresentationParameters to null.
-        /// </summary>
-        internal GraphicsDeviceInformation DoPreparingDeviceSettings()
-        {
-            var gdi = new GraphicsDeviceInformation();
+            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
             gdi.Adapter = GraphicsAdapter.DefaultAdapter;
             gdi.GraphicsProfile = GraphicsProfile;
 
@@ -173,48 +191,24 @@ namespace Microsoft.Xna.Platform
             pp.MultiSampleCount = maxMultiSampleCount;
 
             gdi.PresentationParameters = pp;
-            var args = new PreparingDeviceSettingsEventArgs(gdi);
-            this.OnPreparingDeviceSettings(args);
-
-            if (gdi.PresentationParameters == null || gdi.Adapter == null)
-                throw new NullReferenceException("Members should not be set to null in PreparingDeviceSettingsEventArgs");
 
             return gdi;
         }
 
-        public override void CreateDevice()
+        private static NativeDisplayOrientation FromOrientation(DisplayOrientation orientation)
         {
-            if (this.GraphicsDevice != null)
-                return;
+            NativeDisplayOrientation result = NativeDisplayOrientation.None;
 
-            // We don't want to trigger orientation changes 
-            // when no preference is being changed.
-            if (_uapGameSupportedOrientations != this.SupportedOrientations)
-            {
-                _uapGameSupportedOrientations = this.SupportedOrientations;
+            if ((orientation & DisplayOrientation.LandscapeLeft) != 0)
+                result |= NativeDisplayOrientation.Landscape;
+            if ((orientation & DisplayOrientation.LandscapeRight) != 0)
+                result |= NativeDisplayOrientation.LandscapeFlipped;
+            if ((orientation & DisplayOrientation.Portrait) != 0)
+                result |= NativeDisplayOrientation.Portrait;
+            if ((orientation & DisplayOrientation.PortraitDown) != 0)
+                result |= NativeDisplayOrientation.PortraitFlipped;
 
-                DisplayOrientation supported = this.SupportedOrientations;
-                if (supported == DisplayOrientation.Default)
-                {
-                    // Make the decision based on the preferred backbuffer dimensions.
-                    if (this.PreferredBackBufferWidth > this.PreferredBackBufferHeight)
-                        supported = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
-                    else
-                        supported = DisplayOrientation.Portrait | DisplayOrientation.PortraitDown;
-                }
-
-                NativeDisplayInformation.AutoRotationPreferences = FromOrientation(supported);
-            }
-
-            var gdi = this.DoPreparingDeviceSettings();
-
-            this.GraphicsDevice = new GraphicsDevice(gdi.Adapter, gdi.GraphicsProfile, this.PreferHalfPixelOffset, gdi.PresentationParameters);
-
-            // update the touchpanel display size when the graphicsdevice is reset
-            this.GraphicsDevice.DeviceReset += GraphicsDevice_DeviceReset_UpdateTouchPanel;
-            ((IPlatformGraphicsDevice)this.GraphicsDevice).PresentationChanged += this.GraphicsDevice_PresentationChanged_UpdateGamePlatform;
-
-            this.OnDeviceCreated(EventArgs.Empty);
+            return result;
         }
 
         private void GraphicsDevice_DeviceReset_UpdateTouchPanel(object sender, EventArgs eventArgs)
@@ -244,7 +238,6 @@ namespace Microsoft.Xna.Platform
                 Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.Auto;
             }
         }
-
 
         #region IGraphicsDeviceManager strategy
 

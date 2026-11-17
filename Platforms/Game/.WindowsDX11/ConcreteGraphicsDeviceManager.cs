@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Platform
                 this.OnDeviceCreated(EventArgs.Empty);
                 return;
             }
-            
+
             GraphicsDevice.Reset(gdi.PresentationParameters);
         }
 
