@@ -67,21 +67,50 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new InvalidOperationException("CullMode");
             }
 
+            bool contextSupportsFillMode = ((ConcreteGraphicsCapabilities)context.Capabilities).SupportsRasterizerStateFillMode;
+
             if (FillMode == FillMode.WireFrame)
-                throw new PlatformNotSupportedException();
+            {
+                if (!contextSupportsFillMode)
+                    throw new PlatformNotSupportedException("FillMode.WireFrame on BlazorGL requires the WEBGL_polygon_mode extension.");
+                if (CullMode != CullMode.None)
+                    throw new PlatformNotSupportedException("FillMode.WireFrame on BlazorGL requires CullMode.None to be set.");
+            }
+
+            if (contextSupportsFillMode &&
+                (force ||
+                 this.FillMode != context._lastRasterizerState.FillMode))
+            {
+                switch (FillMode)
+                {
+                    case FillMode.Solid:
+                        GL.PolygonModeExtension.PolygonMode(WebGLCullFaceMode.FRONT_AND_BACK, WebGLPolygonMode.FILL_WEBGL);
+                        GL.CheckGLError();
+                        break;
+
+                    case FillMode.WireFrame:
+                        GL.PolygonModeExtension.PolygonMode(WebGLCullFaceMode.FRONT_AND_BACK, WebGLPolygonMode.LINE_WEBGL);
+                        GL.CheckGLError();
+                        break;
+
+                    default:
+                        throw new InvalidOperationException("FillMode");
+                }
+                context._lastRasterizerState.FillMode = this.FillMode;
+            }
 
             if (force ||
                 this.ScissorTestEnable != context._lastRasterizerState.ScissorTestEnable)
-			{
-			    if (ScissorTestEnable)
-				    GL.Enable(WebGLCapability.SCISSOR_TEST);
-			    else
-				    GL.Disable(WebGLCapability.SCISSOR_TEST);
+            {
+                if (ScissorTestEnable)
+                    GL.Enable(WebGLCapability.SCISSOR_TEST);
+                else
+                    GL.Disable(WebGLCapability.SCISSOR_TEST);
                 GL.CheckGLError();
                 context._lastRasterizerState.ScissorTestEnable = this.ScissorTestEnable;
             }
 
-            if (force || 
+            if (force ||
                 this.DepthBias != context._lastRasterizerState.DepthBias ||
                 this.SlopeScaleDepthBias != context._lastRasterizerState.SlopeScaleDepthBias)
             {
@@ -115,6 +144,11 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                     GL.Enable(WebGLCapability.POLYGON_OFFSET_FILL);
                     GL.CheckGLError();
+                    if (contextSupportsFillMode)
+                    {
+                        GL.Enable(WebGLCapability.POLYGON_OFFSET_LINE_WEBGL);
+                        GL.CheckGLError();
+                    }
                     GL.PolygonOffset(this.SlopeScaleDepthBias, this.DepthBias * depthMul);
                     GL.CheckGLError();
                 }
@@ -122,6 +156,11 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     GL.Disable(WebGLCapability.POLYGON_OFFSET_FILL);
                     GL.CheckGLError();
+                    if (contextSupportsFillMode)
+                    {
+                        GL.Disable(WebGLCapability.POLYGON_OFFSET_LINE_WEBGL);
+                        GL.CheckGLError();
+                    }
                 }
                 context._lastRasterizerState.DepthBias = this.DepthBias;
                 context._lastRasterizerState.SlopeScaleDepthBias = this.SlopeScaleDepthBias;
