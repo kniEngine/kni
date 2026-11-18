@@ -76,21 +76,71 @@ namespace Microsoft.Xna.Platform.Graphics
             // set function
             if (this.TwoSidedStencilMode)
             {
-                throw new NotImplementedException();
+                if (force ||
+                    this.TwoSidedStencilMode != context._lastDepthStencilState.TwoSidedStencilMode ||
+                    this.StencilFunction != context._lastDepthStencilState.StencilFunction ||
+                    this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
+                    this.StencilMask != context._lastDepthStencilState.StencilMask)
+                {
+                    GL.StencilFuncSeparate(WebGLCullFaceMode.FRONT, this.StencilFunction.ToGLComparisonFunction(),
+                                           this.ReferenceStencil, this.StencilMask);
+                    GL.CheckGLError();
+                    context._lastDepthStencilState.StencilFunction = this.StencilFunction;
+                }
+
+                if (force ||
+                    this.TwoSidedStencilMode != context._lastDepthStencilState.TwoSidedStencilMode ||
+                    this.CounterClockwiseStencilFunction != context._lastDepthStencilState.CounterClockwiseStencilFunction ||
+                    this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
+                    this.StencilMask != context._lastDepthStencilState.StencilMask)
+                {
+                    GL.StencilFuncSeparate(WebGLCullFaceMode.BACK, this.CounterClockwiseStencilFunction.ToGLComparisonFunction(),
+                                           this.ReferenceStencil, this.StencilMask);
+                    GL.CheckGLError();
+                    context._lastDepthStencilState.CounterClockwiseStencilFunction = this.CounterClockwiseStencilFunction;
+                }
+
+                if (force ||
+                    this.TwoSidedStencilMode != context._lastDepthStencilState.TwoSidedStencilMode ||
+                    this.StencilFail != context._lastDepthStencilState.StencilFail ||
+                    this.StencilDepthBufferFail != context._lastDepthStencilState.StencilDepthBufferFail ||
+                    this.StencilPass != context._lastDepthStencilState.StencilPass)
+                {
+                    GL.StencilOpSeparate(WebGLCullFaceMode.FRONT, ToGLStencilOp(this.StencilFail),
+                                         ToGLStencilOp(this.StencilDepthBufferFail),
+                                         ToGLStencilOp(this.StencilPass));
+                    GL.CheckGLError();
+                    context._lastDepthStencilState.StencilFail = this.StencilFail;
+                    context._lastDepthStencilState.StencilDepthBufferFail = this.StencilDepthBufferFail;
+                    context._lastDepthStencilState.StencilPass = this.StencilPass;
+                }
+
+                if (force ||
+                    this.TwoSidedStencilMode != context._lastDepthStencilState.TwoSidedStencilMode ||
+                    this.CounterClockwiseStencilFail != context._lastDepthStencilState.CounterClockwiseStencilFail ||
+                    this.CounterClockwiseStencilDepthBufferFail != context._lastDepthStencilState.CounterClockwiseStencilDepthBufferFail ||
+                    this.CounterClockwiseStencilPass != context._lastDepthStencilState.CounterClockwiseStencilPass)
+                {
+                    GL.StencilOpSeparate(WebGLCullFaceMode.BACK, ToGLStencilOp(this.CounterClockwiseStencilFail),
+                                         ToGLStencilOp(this.CounterClockwiseStencilDepthBufferFail),
+                                         ToGLStencilOp(this.CounterClockwiseStencilPass));
+                    GL.CheckGLError();
+                    context._lastDepthStencilState.CounterClockwiseStencilFail = this.CounterClockwiseStencilFail;
+                    context._lastDepthStencilState.CounterClockwiseStencilDepthBufferFail = this.CounterClockwiseStencilDepthBufferFail;
+                    context._lastDepthStencilState.CounterClockwiseStencilPass = this.CounterClockwiseStencilPass;
+                }
             }
             else
             {
                 if (force ||
-					this.TwoSidedStencilMode != context._lastDepthStencilState.TwoSidedStencilMode ||
-					this.StencilFunction != context._lastDepthStencilState.StencilFunction ||
-					this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
-					this.StencilMask != context._lastDepthStencilState.StencilMask)
-				{
+                    this.TwoSidedStencilMode != context._lastDepthStencilState.TwoSidedStencilMode ||
+                    this.StencilFunction != context._lastDepthStencilState.StencilFunction ||
+                    this.ReferenceStencil != context._lastDepthStencilState.ReferenceStencil ||
+                    this.StencilMask != context._lastDepthStencilState.StencilMask)
+                {
                     GL.StencilFunc(this.StencilFunction.ToGLComparisonFunction(), ReferenceStencil, StencilMask);
                     GL.CheckGLError();
                     context._lastDepthStencilState.StencilFunction = this.StencilFunction;
-                    context._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;
-                    context._lastDepthStencilState.StencilMask = this.StencilMask;
                 }
 
                 if (force ||
@@ -110,6 +160,8 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             context._lastDepthStencilState.TwoSidedStencilMode = this.TwoSidedStencilMode;
+            context._lastDepthStencilState.ReferenceStencil = this.ReferenceStencil;
+            context._lastDepthStencilState.StencilMask = this.StencilMask;
 
             if (force ||
                 this.StencilWriteMask != context._lastDepthStencilState.StencilWriteMask)
@@ -145,7 +197,7 @@ namespace Microsoft.Xna.Platform.Graphics
                     throw new ArgumentOutOfRangeException("operation");
             }
         }
-  
+
         protected override void PlatformGraphicsContextLost()
         {
         }
