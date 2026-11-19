@@ -176,17 +176,21 @@ namespace Microsoft.Xna.Platform.Graphics
             bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
-                var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
+                ConcreteGraphicsContextGL context = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>();
+                var GL = context.GL;
 
 #if GLES
                 ValidateGetDataSurfaceFormat(Format, contextStrategy);
 
+                bool supportsReadFramebuffer = context._supportsBlitFramebuffer;
+                FramebufferTarget framebufferTarget = supportsReadFramebuffer ? FramebufferTarget.ReadFramebuffer : FramebufferTarget.Framebuffer;
+
                 int framebufferId = 0;
                 framebufferId = GL.GenFramebuffer();
                 GL.CheckGLError();
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebufferId);
+                GL.BindFramebuffer(framebufferTarget, framebufferId);
                 GL.CheckGLError();
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, level);
+                GL.FramebufferTexture2D(framebufferTarget, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, _glTexture, level);
                 GL.CheckGLError();
 
                 fixed (T* pData = &data[0])
@@ -195,7 +199,15 @@ namespace Microsoft.Xna.Platform.Graphics
                     GL.ReadPixels(checkedRect.X, checkedRect.Y, checkedRect.Width, checkedRect.Height, _glFormat, _glType, dataPtr);
                     GL.CheckGLError();
                 }
+
                 GL.DeleteFramebuffer(framebufferId);
+                GL.CheckGLError();
+
+                if (!supportsReadFramebuffer)
+                {
+                    GL.BindFramebuffer(framebufferTarget, context._glActiveDrawFramebuffer);
+                    GL.CheckGLError();
+                }
 #else
                 // Note: for compressed format Format.GetSize() returns the size of a 4x4 block
                 int fSize = this.Format.GetSize();
