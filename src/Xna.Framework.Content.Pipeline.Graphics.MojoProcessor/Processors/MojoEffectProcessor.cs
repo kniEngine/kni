@@ -123,7 +123,7 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 EffectObject effectObject = effectObjects[backend];
 
                 MemoryStream fxStream = new MemoryStream();
-                KNIFXWriter12 fxWriter = new KNIFXWriter12(fxStream);
+                KNIFXWriter13 fxWriter = new KNIFXWriter13(fxStream);
                 {
                     bool integersAsFloats = (shaderProfileTypes[backend] == ShaderProfileType.OpenGL_Mojo);
                     fxWriter.WriteEffect(effectObject, integersAsFloats);
@@ -138,8 +138,8 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     // Write a very simple header for identification and versioning.
-                    writer.Write(KNIFXWriter12.KNIFXSignature.ToCharArray());
-                    writer.Write((short)KNIFXWriter12.Version);
+                    writer.Write(KNIFXWriter13.KNIFXSignature.ToCharArray());
+                    writer.Write((short)KNIFXWriter13.Version);
                     writer.Write((short)0); // reserved
 
                     // write fx Directory
@@ -307,6 +307,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             string cleanFile = effectCode;
             WhitespaceNodes(TokenType.Technique_Declaration, tree.Nodes, ref cleanFile);
             WhitespaceNodes(TokenType.Sampler_Declaration_States, tree.Nodes, ref cleanFile);
+            WhitespaceNodes(TokenType.Shader_Array_Declaration, tree.Nodes, ref cleanFile);
+
+            // Remove the int declarations that are used for shader indexing.
+            foreach (string name in GetShaderIndexNames(shaderInfo))
+            {
+                IntDeclarationInfo decl;
+                if (shaderInfo.IntDeclarations.TryGetValue(name, out decl))
+                    WhitespaceRange(decl.startPos, decl.endPos, ref cleanFile);
+            }
 
 
             // Remove empty techniques.
@@ -344,6 +353,82 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
             return effectObject;
         }
+
+        private static IEnumerable<string> GetShaderIndexNames(ShaderInfo shaderInfo)
+        {
+            HashSet<string> names = new HashSet<string>();
+            foreach (TechniqueInfo tech in shaderInfo.Techniques)
+                foreach (PassInfo pass in tech.Passes)
+                {
+                    // The first entry is the shader array.
+                    if (pass.vsIndexChain != null)
+                        for (int i = 1; i < pass.vsIndexChain.Count; i++)
+                            names.Add(pass.vsIndexChain[i]);
+                    if (pass.psIndexChain != null)
+                        for (int i = 1; i < pass.psIndexChain.Count; i++)
+                            names.Add(pass.psIndexChain[i]);
+                }
+            return names;
+        }
+
+        private static void WhitespaceRange(int start, int end, ref string sourceFile)
+        {
+            char[] chars = sourceFile.ToCharArray();
+            for (int c = start; c < end; c++)
+                if (!char.IsWhiteSpace(chars[c]))
+                    chars[c] = ' ';
+            sourceFile = new string(chars);
+        }
+
+        // Resolves a chain like [VSArray, VSIndices, ShaderIndex] to a table of shader indices.
+        private static EffectObject.ShaderSelectorContent CreateShaderSelector(
+            PassInfo pinfo, List<string> chain, ShaderStage stage,
+            InputCreateShader createShader, ShaderInfo shaderInfo, ShaderProfile shaderProfile)
+        {
+            if (chain.Count < 2)
+                throw new InvalidContentException("Invalid shader index expression in pass '" + pinfo.name + "'.");
+
+            ShaderArrayInfo array;
+            if (!shaderInfo.ShaderArrays.TryGetValue(chain[0], out array))
+                throw new InvalidContentException("Shader array '" + chain[0] + "' is not declared.");
+            if ((stage == ShaderStage.Vertex) != (array.stage == ShaderArrayStage.Vertex))
+                throw new InvalidContentException("Shader array '" + chain[0] + "' is not a " + stage + " shader array.");
+
+            // Index arrays, from the outermost to the innermost.
+            List<IntDeclarationInfo> indexArrays = new List<IntDeclarationInfo>();
+            for (int i = 1; i < chain.Count - 1; i++)
+            {
+                IntDeclarationInfo decl;
+                if (!shaderInfo.IntDeclarations.TryGetValue(chain[i], out decl) || !decl.isArray)
+                    throw new InvalidContentException("Index array '" + chain[i] + "' is not declared.");
+                indexArrays.Add(decl);
+            }
+
+            int length = (indexArrays.Count > 0) ? indexArrays[indexArrays.Count - 1].values.Count : array.Shaders.Count;
+
+            EffectObject.ShaderSelectorContent selector = new EffectObject.ShaderSelectorContent();
+            selector.parameterName = chain[chain.Count - 1];
+            selector.table = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                int v = i;
+                for (int k = indexArrays.Count - 1; k >= 0; k--)
+                {
+                    if (v < 0 || v >= indexArrays[k].values.Count)
+                        throw new InvalidContentException("Index " + v + " is out of range for '" + indexArrays[k].name + "'.");
+                    v = indexArrays[k].values[v];
+                }
+                if (v < 0 || v >= array.Shaders.Count)
+                    throw new InvalidContentException("Index " + v + " is out of range for shader array '" + array.name + "'.");
+
+                ShaderCompileInfo shader = array.Shaders[v];
+                selector.table[i] = createShader(shader.function, shader.model);
+            }
+
+            return selector;
+        }
+
+        private delegate int InputCreateShader(string function, string model);
 
         private static void WhitespaceNodes(TokenType type, List<ParseNode> nodes, ref string sourceFile)
         {
@@ -412,6 +497,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                     pass.state_count = 0;
                     EffectObject.EffectStateContent[] tempstate = new EffectObject.EffectStateContent[3];
 
+                    if (pinfo.psIndexChain != null)
+                    {
+                        string warnings = errorsAndWarnings;
+                        pass.pixelShaderSelector = CreateShaderSelector(pinfo, pinfo.psIndexChain, ShaderStage.Pixel,
+                            (function, model) =>
+                            {
+                                ShaderVersion version = ShaderVersion.ParsePixelShaderModel(model);
+                                shaderProfile.ValidateShaderModels(pinfo, function, model, ShaderStage.Pixel, version);
+                                EffectObject.EffectStateContent state = MojoEffectProcessor.CreateShader(input, context, backend, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, function, model, ShaderStage.Pixel, version, ref warnings);
+                                return (int)state.parameter.data;
+                            }, shaderInfo, shaderProfile);
+                        errorsAndWarnings = warnings;
+                    }
+
                     if (!string.IsNullOrEmpty(pinfo.psFunction))
                     {
                         ShaderVersion psShaderVersion = ShaderVersion.ParsePixelShaderModel(pinfo.psModel);
@@ -419,6 +518,20 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
 
                         pass.state_count += 1;
                         tempstate[pass.state_count - 1] = MojoEffectProcessor.CreateShader(input, context, backend, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, pinfo.psFunction, pinfo.psModel, ShaderStage.Pixel, psShaderVersion, ref errorsAndWarnings);
+                    }
+
+                    if (pinfo.vsIndexChain != null)
+                    {
+                        string warnings = errorsAndWarnings;
+                        pass.vertexShaderSelector = CreateShaderSelector(pinfo, pinfo.vsIndexChain, ShaderStage.Vertex,
+                            (function, model) =>
+                            {
+                                ShaderVersion version = ShaderVersion.ParseVertexShaderModel(model);
+                                shaderProfile.ValidateShaderModels(pinfo, function, model, ShaderStage.Vertex, version);
+                                EffectObject.EffectStateContent state = MojoEffectProcessor.CreateShader(input, context, backend, effect, shaderInfo, shaderProfile, fullFilePath, fileContent, debugMode, function, model, ShaderStage.Vertex, version, ref warnings);
+                                return (int)state.parameter.data;
+                            }, shaderInfo, shaderProfile);
+                        errorsAndWarnings = warnings;
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.vsFunction))
@@ -505,6 +618,14 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
                 }
             }
 
+            // Add the parameters used for shader indexing.
+            foreach (EffectObject.EffectTechniqueContent technique in effect.Techniques)
+                foreach (EffectObject.EffectPassContent pass in technique.pass_handles)
+                {
+                    ResolveSelectorParameter(pass.vertexShaderSelector, parameters, shaderInfo);
+                    ResolveSelectorParameter(pass.pixelShaderSelector, parameters, shaderInfo);
+                }
+
             // TODO: Annotations are part of the .FX format and
             // not a part of shaders... we need to implement them
             // in our fx parser if we want them back.
@@ -512,6 +633,37 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.Processors
             effect.Parameters = parameters.ToArray();
 
             return effect;
+        }
+
+        private static void ResolveSelectorParameter(EffectObject.ShaderSelectorContent selector, List<EffectObject.EffectParameterContent> parameters, ShaderInfo shaderInfo)
+        {
+            if (selector == null)
+                return;
+
+            int index = parameters.FindIndex(e => e.name == selector.parameterName);
+            if (index == -1)
+            {
+                int initialValue = 0;
+                IntDeclarationInfo decl;
+                if (shaderInfo.IntDeclarations.TryGetValue(selector.parameterName, out decl) && !decl.isArray && decl.values.Count > 0)
+                    initialValue = decl.values[0];
+
+                EffectObject.EffectParameterContent param = new EffectObject.EffectParameterContent();
+                param.class_ = EffectObject.PARAMETER_CLASS.SCALAR;
+                param.type = EffectObject.PARAMETER_TYPE.INT;
+                param.name = selector.parameterName;
+                param.semantic = string.Empty;
+                param.rows = 1;
+                param.columns = 1;
+                param.columnsActual = 1;
+                param.data = BitConverter.GetBytes(initialValue);
+                parameters.Add(param);
+                index = parameters.Count - 1;
+            }
+            else if (parameters[index].class_ != EffectObject.PARAMETER_CLASS.SCALAR || parameters[index].type != EffectObject.PARAMETER_TYPE.INT)
+                throw new InvalidContentException("The shader index parameter '" + selector.parameterName + "' must be an int scalar.");
+
+            selector.parameterIndex = index;
         }
 
         private static EffectObject.PARAMETER_TYPE SamplerTypeToParameterType(MojoShader.SamplerType samplerType)

@@ -134,17 +134,56 @@ float4 PSAlphaTestEqNe(VSOutputTx pin) : SV_Target0
 }
 
 
-// NOTE: The order of the techniques here are
+// NOTE: The order of the shader indices here are
 // defined to match the indexing in AlphaTestEffect.cs.
 
-TECHNIQUE_SM2(AlphaTestEffect_LTGT, VSAlphaTest, PSAlphaTestLtGt);
-TECHNIQUE_SM2(AlphaTestEffect_LTGT_Fog, VSAlphaTestFog, PSAlphaTestLtGtFog);
-TECHNIQUE_SM2(AlphaTestEffect_LTGT_VertexColor, VSAlphaTestVc, PSAlphaTestLtGt);
-TECHNIQUE_SM2(AlphaTestEffect_LTGT_VertexColor_Fog, VSAlphaTestVcFog, PSAlphaTestLtGtFog);
+VertexShader VSArray[4] =
+{
+    compile vs_4_0_level_9_1 VSAlphaTest(),
+    compile vs_4_0_level_9_1 VSAlphaTestFog(),
+    compile vs_4_0_level_9_1 VSAlphaTestVc(),
+    compile vs_4_0_level_9_1 VSAlphaTestVcFog(),
+};
 
-TECHNIQUE_SM2(AlphaTestEffect_EQNE, VSAlphaTest, PSAlphaTestEqNe);
-TECHNIQUE_SM2(AlphaTestEffect_EQNE_Fog, VSAlphaTestFog, PSAlphaTestEqNeFog);
-TECHNIQUE_SM2(AlphaTestEffect_EQNE_VertexColor, VSAlphaTestVc, PSAlphaTestEqNe);
-TECHNIQUE_SM2(AlphaTestEffect_EQNE_VertexColor_Fog, VSAlphaTestVcFog, PSAlphaTestEqNeFog);
+PixelShader PSArray[4] =
+{
+    compile ps_4_0_level_9_1 PSAlphaTestLtGt(),
+    compile ps_4_0_level_9_1 PSAlphaTestLtGtFog(),
+    compile ps_4_0_level_9_1 PSAlphaTestEqNe(),
+    compile ps_4_0_level_9_1 PSAlphaTestEqNeFog(),
+};
 
+int VSIndices[8] =
+{
+    0,   // AlphaTestEffect_LTGT
+    1,   // AlphaTestEffect_LTGT_Fog
+    2,   // AlphaTestEffect_LTGT_VertexColor
+    3,   // AlphaTestEffect_LTGT_VertexColor_Fog
+    0,   // AlphaTestEffect_EQNE
+    1,   // AlphaTestEffect_EQNE_Fog
+    2,   // AlphaTestEffect_EQNE_VertexColor
+    3,   // AlphaTestEffect_EQNE_VertexColor_Fog
+};
 
+int PSIndices[8] =
+{
+    0,   // AlphaTestEffect_LTGT
+    1,   // AlphaTestEffect_LTGT_Fog
+    0,   // AlphaTestEffect_LTGT_VertexColor
+    1,   // AlphaTestEffect_LTGT_VertexColor_Fog
+    2,   // AlphaTestEffect_EQNE
+    3,   // AlphaTestEffect_EQNE_Fog
+    2,   // AlphaTestEffect_EQNE_VertexColor
+    3,   // AlphaTestEffect_EQNE_VertexColor_Fog
+};
+
+int ShaderIndex = 0;
+
+Technique AlphaTestEffect
+{
+    Pass
+    {
+        VertexShader = (VSArray[VSIndices[ShaderIndex]]);
+        PixelShader  = (PSArray[PSIndices[ShaderIndex]]);
+    }
+}

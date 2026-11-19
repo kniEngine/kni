@@ -427,6 +427,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
                 case TokenType.ComputeShader_Pass_Expression:
                     Value = EvalComputeShader_Pass_Expression(tree, paramlist);
                     break;
+                case TokenType.Shader_Index_Expression:
+                    Value = EvalShader_Index_Expression(tree, paramlist);
+                    break;
+                case TokenType.Index_Expression:
+                    Value = EvalIndex_Expression(tree, paramlist);
+                    break;
+                case TokenType.Shader_Compile_Expression:
+                    Value = EvalShader_Compile_Expression(tree, paramlist);
+                    break;
+                case TokenType.Shader_Array_Declaration:
+                    Value = EvalShader_Array_Declaration(tree, paramlist);
+                    break;
+                case TokenType.Int_Declaration:
+                    Value = EvalInt_Declaration(tree, paramlist);
+                    break;
                 case TokenType.AddressMode_Clamp:
                     Value = EvalAddressMode_Clamp(tree, paramlist);
                     break;
@@ -946,7 +961,9 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
            // We need to have at least one shader to keep this pass.
            if (!string.IsNullOrEmpty(pass.psFunction)
            ||  !string.IsNullOrEmpty(pass.vsFunction)
-           ||  !string.IsNullOrEmpty(pass.csFunction))
+           ||  !string.IsNullOrEmpty(pass.csFunction)
+           ||  pass.psIndexChain != null
+           ||  pass.vsIndexChain != null)
            {
               var technique = paramlist[0] as TechniqueInfo;
               technique.Passes.Add(pass);
@@ -958,16 +975,32 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
         protected virtual object EvalVertexShader_Pass_Expression(ParseTree tree, params object[] paramlist)
         {
             var pass = paramlist[0] as PassInfo;
-           pass.vsModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
-           pass.vsFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           var indexChain = this.GetValue(tree, TokenType.Shader_Index_Expression, 0) as List<string>;
+           if (indexChain != null)
+           {
+              pass.vsIndexChain = indexChain;
+           }
+           else
+           {
+              pass.vsModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
+              pass.vsFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           }
            return null;
         }
 
         protected virtual object EvalPixelShader_Pass_Expression(ParseTree tree, params object[] paramlist)
         {
             var pass = paramlist[0] as PassInfo;
-           pass.psModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
-           pass.psFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           var indexChain = this.GetValue(tree, TokenType.Shader_Index_Expression, 0) as List<string>;
+           if (indexChain != null)
+           {
+              pass.psIndexChain = indexChain;
+           }
+           else
+           {
+              pass.psModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
+              pass.psFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           }
            return null;
         }
 
@@ -976,6 +1009,59 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             var pass = paramlist[0] as PassInfo;
            pass.csModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
            pass.csFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           return null;
+        }
+
+        protected virtual object EvalShader_Index_Expression(ParseTree tree, params object[] paramlist)
+        {
+            return this.GetValue(tree, TokenType.Index_Expression, 0);
+        }
+
+        protected virtual object EvalIndex_Expression(ParseTree tree, params object[] paramlist)
+        {
+            var chain = new List<string>();
+           chain.Add(this.GetValue(tree, TokenType.Identifier, 0) as string);
+        
+           var inner = this.GetValue(tree, TokenType.Index_Expression, 0) as List<string>;
+           if (inner != null)
+              chain.AddRange(inner);
+        
+           return chain;
+        }
+
+        protected virtual object EvalShader_Compile_Expression(ParseTree tree, params object[] paramlist)
+        {
+            var array = paramlist[0] as ShaderArrayInfo;
+        
+           var compile = new ShaderCompileInfo();
+           compile.model = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
+           compile.function = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           array.Shaders.Add(compile);
+        
+           return null;
+        }
+
+        protected virtual object EvalShader_Array_Declaration(ParseTree tree, params object[] paramlist)
+        {
+            var array = new ShaderArrayInfo();
+           array.name = this.GetValue(tree, TokenType.Identifier, 0) as string;
+           array.stage = (this.GetValue(tree, TokenType.VertexShader, 0) != null) ? ShaderArrayStage.Vertex : ShaderArrayStage.Pixel;
+           array.startPos = Token.StartPos;
+           array.endPos = Token.EndPos;
+        
+           foreach (var node in Nodes)
+              node.Eval(tree, array);
+        
+           var shaderInfo = paramlist[0] as ShaderInfo;
+           shaderInfo.ShaderArrays[array.name] = array;
+        
+           return null;
+        }
+
+        protected virtual object EvalInt_Declaration(ParseTree tree, params object[] paramlist)
+        {
+            var shaderInfo = paramlist[0] as ShaderInfo;
+           shaderInfo.AddIntDeclaration(this.GetValue(tree, TokenType.IntDeclaration, 0) as string, Token.StartPos, Token.EndPos);
            return null;
         }
 

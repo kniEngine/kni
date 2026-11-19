@@ -11,6 +11,12 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly PixelShader _pixelShader;
         private readonly VertexShader _vertexShader;
 
+        // Shader indexing: the shader is selected by the value of an int effect parameter.
+        private readonly VertexShader[] _vertexShaders;
+        private readonly PixelShader[] _pixelShaders;
+        private readonly int _vertexShaderSelector;
+        private readonly int _pixelShaderSelector;
+
         private readonly BlendState _blendState;
         private readonly DepthStencilState _depthStencilState;
         private readonly RasterizerState _rasterizerState;
@@ -45,6 +51,26 @@ namespace Microsoft.Xna.Framework.Graphics
             Annotations = annotations;
         }
         
+        internal EffectPass(    Effect effect,
+                                string name,
+                                VertexShader vertexShader,
+                                PixelShader pixelShader,
+                                VertexShader[] vertexShaders,
+                                int vertexShaderSelector,
+                                PixelShader[] pixelShaders,
+                                int pixelShaderSelector,
+                                BlendState blendState,
+                                DepthStencilState depthStencilState,
+                                RasterizerState rasterizerState,
+                                EffectAnnotationCollection annotations )
+            : this(effect, name, vertexShader, pixelShader, blendState, depthStencilState, rasterizerState, annotations)
+        {
+            _vertexShaders = vertexShaders;
+            _vertexShaderSelector = vertexShaderSelector;
+            _pixelShaders = pixelShaders;
+            _pixelShaderSelector = pixelShaderSelector;
+        }
+
         internal EffectPass(Effect effect, EffectPass cloneSource)
         {
             Debug.Assert(effect != null, "Got a null effect!");
@@ -60,6 +86,10 @@ namespace Microsoft.Xna.Framework.Graphics
             Annotations = cloneSource.Annotations;
             _vertexShader = cloneSource._vertexShader;
             _pixelShader = cloneSource._pixelShader;
+            _vertexShaders = cloneSource._vertexShaders;
+            _vertexShaderSelector = cloneSource._vertexShaderSelector;
+            _pixelShaders = cloneSource._pixelShaders;
+            _pixelShaderSelector = cloneSource._pixelShaderSelector;
         }
 
         public void Apply()
@@ -73,33 +103,41 @@ namespace Microsoft.Xna.Framework.Graphics
 
             GraphicsContext context = _effect.GraphicsDevice.CurrentContext;
 
-            if (_vertexShader != null)
+            VertexShader vertexShader = _vertexShader;
+            if (_vertexShaders != null)
+                vertexShader = _vertexShaders[_effect.Parameters[_vertexShaderSelector].GetValueInt32()];
+
+            PixelShader pixelShader = _pixelShader;
+            if (_pixelShaders != null)
+                pixelShader = _pixelShaders[_effect.Parameters[_pixelShaderSelector].GetValueInt32()];
+
+            if (vertexShader != null)
             {
-                context.VertexShader = _vertexShader;
+                context.VertexShader = vertexShader;
 
                 // Update the texture parameters.
-                SetShaderSamplers(_vertexShader, context.VertexTextures, context.VertexSamplerStates);
+                SetShaderSamplers(vertexShader, context.VertexTextures, context.VertexSamplerStates);
 
                 // Update the constant buffers.
-                for (int c = 0; c < _vertexShader.CBuffers.Length; c++)
+                for (int c = 0; c < vertexShader.CBuffers.Length; c++)
                 {
-                    ConstantBuffer constantBuffer = _effect.ConstantBuffers[_vertexShader.CBuffers[c]];
+                    ConstantBuffer constantBuffer = _effect.ConstantBuffers[vertexShader.CBuffers[c]];
                     ((IPlatformConstantBuffer)constantBuffer).Strategy.Update(_effect.Parameters);
                     ((IPlatformGraphicsContext)context).Strategy._vertexConstantBuffers[c] = constantBuffer;
                 }
             }
 
-            if (_pixelShader != null)
+            if (pixelShader != null)
             {
-                context.PixelShader = _pixelShader;
+                context.PixelShader = pixelShader;
 
                 // Update the texture parameters.
-                SetShaderSamplers(_pixelShader, context.Textures, context.SamplerStates);
+                SetShaderSamplers(pixelShader, context.Textures, context.SamplerStates);
 
                 // Update the constant buffers.
-                for (int c = 0; c < _pixelShader.CBuffers.Length; c++)
+                for (int c = 0; c < pixelShader.CBuffers.Length; c++)
                 {
-                    ConstantBuffer constantBuffer = _effect.ConstantBuffers[_pixelShader.CBuffers[c]];
+                    ConstantBuffer constantBuffer = _effect.ConstantBuffers[pixelShader.CBuffers[c]];
                     ((IPlatformConstantBuffer)constantBuffer).Strategy.Update(_effect.Parameters);
                     ((IPlatformGraphicsContext)context).Strategy._pixelConstantBuffers[c] = constantBuffer;
                 }

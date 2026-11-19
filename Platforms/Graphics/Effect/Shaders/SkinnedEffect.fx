@@ -257,26 +257,80 @@ float4 PSSkinnedPixelLighting(VSOutputPixelLightingTx pin) : SV_Target0
 }
 
 
-// NOTE: The order of the techniques here are
+// NOTE: The order of the shader indices here are
 // defined to match the indexing in SkinnedEffect.cs.
 
-TECHNIQUE_SM2( SkinnedEffect_VertexLighting_OneBone,		VSSkinnedVertexLightingOneBone,		PSSkinnedVertexLighting );
-TECHNIQUE_SM2( SkinnedEffect_VertexLighting_OneBone_Fog,	VSSkinnedVertexLightingOneBone,		PSSkinnedVertexLightingFog );
-TECHNIQUE_SM2( SkinnedEffect_VertexLighting_TwoBone,		VSSkinnedVertexLightingTwoBones,	PSSkinnedVertexLighting );
-TECHNIQUE_SM2( SkinnedEffect_VertexLighting_TwoBone_Fog,	VSSkinnedVertexLightingTwoBones,	PSSkinnedVertexLightingFog );
-TECHNIQUE_SM2( SkinnedEffect_VertexLighting_FourBone,		VSSkinnedVertexLightingFourBones,	PSSkinnedVertexLighting );
-TECHNIQUE_SM2( SkinnedEffect_VertexLighting_FourBone_Fog,	VSSkinnedVertexLightingFourBones,	PSSkinnedVertexLightingFog );
+VertexShader VSArray[9] =
+{
+    compile vs_4_0_level_9_1 VSSkinnedVertexLightingOneBone(),
+    compile vs_4_0_level_9_1 VSSkinnedVertexLightingTwoBones(),
+    compile vs_4_0_level_9_1 VSSkinnedVertexLightingFourBones(),
+    compile vs_4_0_level_9_1 VSSkinnedOneLightOneBone(),
+    compile vs_4_0_level_9_1 VSSkinnedOneLightTwoBones(),
+    compile vs_4_0_level_9_1 VSSkinnedOneLightFourBones(),
+    compile vs_4_0_level_9_1 VSSkinnedPixelLightingOneBone(),
+    compile vs_4_0_level_9_1 VSSkinnedPixelLightingTwoBones(),
+    compile vs_4_0_level_9_1 VSSkinnedPixelLightingFourBones(),
+};
 
-TECHNIQUE_SM2( SkinnedEffect_OneLight_OneBone,			VSSkinnedOneLightOneBone,	PSSkinnedVertexLighting );
-TECHNIQUE_SM2( SkinnedEffect_OneLight_OneBone_Fog,		VSSkinnedOneLightOneBone,	PSSkinnedVertexLightingFog );
-TECHNIQUE_SM2( SkinnedEffect_OneLight_TwoBone,			VSSkinnedOneLightTwoBones,	PSSkinnedVertexLighting );
-TECHNIQUE_SM2( SkinnedEffect_OneLight_TwoBone_Fog,		VSSkinnedOneLightTwoBones,	PSSkinnedVertexLightingFog );
-TECHNIQUE_SM2( SkinnedEffect_OneLight_FourBone,			VSSkinnedOneLightFourBones,	PSSkinnedVertexLighting );
-TECHNIQUE_SM2( SkinnedEffect_OneLight_FourBone_Fog,		VSSkinnedOneLightFourBones,	PSSkinnedVertexLightingFog );
+PixelShader PSArray[3] =
+{
+    compile ps_4_0_level_9_1 PSSkinnedVertexLighting(),
+    compile ps_4_0_level_9_1 PSSkinnedVertexLightingFog(),
+    compile ps_4_0_level_9_1 PSSkinnedPixelLighting(),
+};
 
-TECHNIQUE_SM2( SkinnedEffect_PixelLighting_OneBone,			VSSkinnedPixelLightingOneBone,		PSSkinnedPixelLighting );
-TECHNIQUE_SM2( SkinnedEffect_PixelLighting_OneBone_Fog,		VSSkinnedPixelLightingOneBone,		PSSkinnedPixelLighting );
-TECHNIQUE_SM2( SkinnedEffect_PixelLighting_TwoBone,			VSSkinnedPixelLightingTwoBones,		PSSkinnedPixelLighting );
-TECHNIQUE_SM2( SkinnedEffect_PixelLighting_TwoBone_Fog,		VSSkinnedPixelLightingTwoBones,		PSSkinnedPixelLighting );
-TECHNIQUE_SM2( SkinnedEffect_PixelLighting_FourBone,		VSSkinnedPixelLightingFourBones,	PSSkinnedPixelLighting );
-TECHNIQUE_SM2( SkinnedEffect_PixelLighting_FourBone_Fog,	VSSkinnedPixelLightingFourBones,	PSSkinnedPixelLighting );
+int VSIndices[18] =
+{
+    0,   // SkinnedEffect_VertexLighting_OneBone
+    0,   // SkinnedEffect_VertexLighting_OneBone_Fog
+    1,   // SkinnedEffect_VertexLighting_TwoBone
+    1,   // SkinnedEffect_VertexLighting_TwoBone_Fog
+    2,   // SkinnedEffect_VertexLighting_FourBone
+    2,   // SkinnedEffect_VertexLighting_FourBone_Fog
+    3,   // SkinnedEffect_OneLight_OneBone
+    3,   // SkinnedEffect_OneLight_OneBone_Fog
+    4,   // SkinnedEffect_OneLight_TwoBone
+    4,   // SkinnedEffect_OneLight_TwoBone_Fog
+    5,   // SkinnedEffect_OneLight_FourBone
+    5,   // SkinnedEffect_OneLight_FourBone_Fog
+    6,   // SkinnedEffect_PixelLighting_OneBone
+    6,   // SkinnedEffect_PixelLighting_OneBone_Fog
+    7,   // SkinnedEffect_PixelLighting_TwoBone
+    7,   // SkinnedEffect_PixelLighting_TwoBone_Fog
+    8,   // SkinnedEffect_PixelLighting_FourBone
+    8,   // SkinnedEffect_PixelLighting_FourBone_Fog
+};
+
+int PSIndices[18] =
+{
+    0,   // SkinnedEffect_VertexLighting_OneBone
+    1,   // SkinnedEffect_VertexLighting_OneBone_Fog
+    0,   // SkinnedEffect_VertexLighting_TwoBone
+    1,   // SkinnedEffect_VertexLighting_TwoBone_Fog
+    0,   // SkinnedEffect_VertexLighting_FourBone
+    1,   // SkinnedEffect_VertexLighting_FourBone_Fog
+    0,   // SkinnedEffect_OneLight_OneBone
+    1,   // SkinnedEffect_OneLight_OneBone_Fog
+    0,   // SkinnedEffect_OneLight_TwoBone
+    1,   // SkinnedEffect_OneLight_TwoBone_Fog
+    0,   // SkinnedEffect_OneLight_FourBone
+    1,   // SkinnedEffect_OneLight_FourBone_Fog
+    2,   // SkinnedEffect_PixelLighting_OneBone
+    2,   // SkinnedEffect_PixelLighting_OneBone_Fog
+    2,   // SkinnedEffect_PixelLighting_TwoBone
+    2,   // SkinnedEffect_PixelLighting_TwoBone_Fog
+    2,   // SkinnedEffect_PixelLighting_FourBone
+    2,   // SkinnedEffect_PixelLighting_FourBone_Fog
+};
+
+int ShaderIndex = 0;
+
+Technique SkinnedEffect
+{
+    Pass
+    {
+        VertexShader = (VSArray[VSIndices[ShaderIndex]]);
+        PixelShader  = (PSArray[PSIndices[ShaderIndex]]);
+    }
+}

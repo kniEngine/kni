@@ -174,25 +174,72 @@ float4 PSEnvMapSpecular(VSOutputTxEnvMap pin) : SV_Target0
 }
 
 
-// NOTE: The order of the techniques here are
+// NOTE: The order of the shader indices here are
 // defined to match the indexing in EnvironmentMapEffect.cs.
 
-TECHNIQUE_SM2( EnvironmentMapEffect,						VSEnvMap,			PSEnvMap );
-TECHNIQUE_SM2( EnvironmentMapEffect_Fog,					VSEnvMap,			PSEnvMapFog );
-TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel,				VSEnvMapFresnel,	PSEnvMap );
-TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel_Fog,			VSEnvMapFresnel,	PSEnvMapFog );
+VertexShader VSArray[4] =
+{
+    compile vs_4_0_level_9_1 VSEnvMap(),
+    compile vs_4_0_level_9_1 VSEnvMapFresnel(),
+    compile vs_4_0_level_9_1 VSEnvMapOneLight(),
+    compile vs_4_0_level_9_1 VSEnvMapOneLightFresnel(),
+};
 
-TECHNIQUE_SM2( EnvironmentMapEffect_Specular,				VSEnvMap,			PSEnvMapSpecular );
-TECHNIQUE_SM2( EnvironmentMapEffect_Specular_Fog,			VSEnvMap,			PSEnvMapSpecularFog );
-TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel_Specular,		VSEnvMapFresnel,	PSEnvMapSpecular );
-TECHNIQUE_SM2( EnvironmentMapEffect_Fresnel_Specular_Fog,	VSEnvMapFresnel,	PSEnvMapSpecularFog );
+PixelShader PSArray[4] =
+{
+    compile ps_4_0_level_9_1 PSEnvMap(),
+    compile ps_4_0_level_9_1 PSEnvMapFog(),
+    compile ps_4_0_level_9_1 PSEnvMapSpecular(),
+    compile ps_4_0_level_9_1 PSEnvMapSpecularFog(),
+};
 
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight,						VSEnvMapOneLight,			PSEnvMap );
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fog,					VSEnvMapOneLight,			PSEnvMapFog );
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel,				VSEnvMapOneLightFresnel,	PSEnvMap );
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel_Fog,			VSEnvMapOneLightFresnel,	PSEnvMapFog );
+int VSIndices[16] =
+{
+    0,   // EnvironmentMapEffect
+    0,   // EnvironmentMapEffect_Fog
+    1,   // EnvironmentMapEffect_Fresnel
+    1,   // EnvironmentMapEffect_Fresnel_Fog
+    0,   // EnvironmentMapEffect_Specular
+    0,   // EnvironmentMapEffect_Specular_Fog
+    1,   // EnvironmentMapEffect_Fresnel_Specular
+    1,   // EnvironmentMapEffect_Fresnel_Specular_Fog
+    2,   // EnvironmentMapEffect_OneLight
+    2,   // EnvironmentMapEffect_OneLight_Fog
+    3,   // EnvironmentMapEffect_OneLight_Fresnel
+    3,   // EnvironmentMapEffect_OneLight_Fresnel_Fog
+    2,   // EnvironmentMapEffect_OneLight_Specular
+    2,   // EnvironmentMapEffect_OneLight_Specular_Fog
+    3,   // EnvironmentMapEffect_OneLight_Fresnel_Specular
+    3,   // EnvironmentMapEffect_OneLight_Fresnel_Specular_Fog
+};
 
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Specular,				VSEnvMapOneLight,			PSEnvMapSpecular );
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Specular_Fog,			VSEnvMapOneLight,			PSEnvMapSpecularFog );
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel_Specular,		VSEnvMapOneLightFresnel,	PSEnvMapSpecular );
-TECHNIQUE_SM2( EnvironmentMapEffect_OneLight_Fresnel_Specular_Fog,	VSEnvMapOneLightFresnel,	PSEnvMapSpecularFog );
+int PSIndices[16] =
+{
+    0,   // EnvironmentMapEffect
+    1,   // EnvironmentMapEffect_Fog
+    0,   // EnvironmentMapEffect_Fresnel
+    1,   // EnvironmentMapEffect_Fresnel_Fog
+    2,   // EnvironmentMapEffect_Specular
+    3,   // EnvironmentMapEffect_Specular_Fog
+    2,   // EnvironmentMapEffect_Fresnel_Specular
+    3,   // EnvironmentMapEffect_Fresnel_Specular_Fog
+    0,   // EnvironmentMapEffect_OneLight
+    1,   // EnvironmentMapEffect_OneLight_Fog
+    0,   // EnvironmentMapEffect_OneLight_Fresnel
+    1,   // EnvironmentMapEffect_OneLight_Fresnel_Fog
+    2,   // EnvironmentMapEffect_OneLight_Specular
+    3,   // EnvironmentMapEffect_OneLight_Specular_Fog
+    2,   // EnvironmentMapEffect_OneLight_Fresnel_Specular
+    3,   // EnvironmentMapEffect_OneLight_Fresnel_Specular_Fog
+};
+
+int ShaderIndex = 0;
+
+Technique EnvironmentMapEffect
+{
+    Pass
+    {
+        VertexShader = (VSArray[VSIndices[ShaderIndex]]);
+        PixelShader  = (PSArray[PSIndices[ShaderIndex]]);
+    }
+}

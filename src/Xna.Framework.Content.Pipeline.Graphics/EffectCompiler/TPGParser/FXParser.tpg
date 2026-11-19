@@ -22,6 +22,7 @@
 [IgnoreCase] Register -> @"register";
 [IgnoreCase] Boolean -> @"true|false|0|1";
 Number -> @"[+-]? ?[0-9]?\.?[0-9]+[fF]?";
+IntDeclaration -> @"int[ \t\n\r]+[A-Za-z_][A-Za-z0-9_]*[ \t\n\r]*(\[[ \t\n\r]*[0-9]*[ \t\n\r]*\])?[ \t\n\r]*=[ \t\n\r]*(\{[^}]*\}|[+-]?[0-9]+)[ \t\n\r]*;";
 [IgnoreCase] HexColor -> @"0x[0-9a-f]{6}([0-9a-f][0-9a-f])?";
 Identifier -> @"[A-Za-z_][A-Za-z0-9_]*";
 OpenBracket -> @"{";
@@ -152,7 +153,7 @@ EndOfFile -> @"^$";
 
 
 // Productions
-Start -> (Code | Technique_Declaration | Sampler_Declaration)* EndOfFile
+Start -> (Code | Technique_Declaration | Sampler_Declaration | Shader_Array_Declaration | Int_Declaration)* EndOfFile
 {
    var shader = new ShaderInfo();
 
@@ -334,7 +335,9 @@ Pass_Declaration ->	Pass Identifier? OpenBracket (VertexShader_Pass_Expression |
    // We need to have at least one shader to keep this pass.
    if (!string.IsNullOrEmpty(pass.psFunction)
    ||  !string.IsNullOrEmpty(pass.vsFunction)
-   ||  !string.IsNullOrEmpty(pass.csFunction))
+   ||  !string.IsNullOrEmpty(pass.csFunction)
+   ||  pass.psIndexChain != null
+   ||  pass.vsIndexChain != null)
    {
       var technique = paramlist[0] as TechniqueInfo;
       technique.Passes.Add(pass);
@@ -343,19 +346,35 @@ Pass_Declaration ->	Pass Identifier? OpenBracket (VertexShader_Pass_Expression |
    return null;
 };
 
-VertexShader_Pass_Expression -> VertexShader Equals Compile ShaderModel Identifier OpenParenthesis CloseParenthesis Semicolon
+VertexShader_Pass_Expression -> VertexShader Equals (Compile ShaderModel Identifier OpenParenthesis CloseParenthesis | Shader_Index_Expression) Semicolon
 {
    var pass = paramlist[0] as PassInfo;
-   pass.vsModel = $ShaderModel as string;
-   pass.vsFunction = $Identifier as string;
+   var indexChain = $Shader_Index_Expression as List<string>;
+   if (indexChain != null)
+   {
+      pass.vsIndexChain = indexChain;
+   }
+   else
+   {
+      pass.vsModel = $ShaderModel as string;
+      pass.vsFunction = $Identifier as string;
+   }
    return null;
 };
 
-PixelShader_Pass_Expression -> PixelShader Equals Compile ShaderModel Identifier OpenParenthesis CloseParenthesis Semicolon
+PixelShader_Pass_Expression -> PixelShader Equals (Compile ShaderModel Identifier OpenParenthesis CloseParenthesis | Shader_Index_Expression) Semicolon
 {
    var pass = paramlist[0] as PassInfo;
-   pass.psModel = $ShaderModel as string;
-   pass.psFunction = $Identifier as string;
+   var indexChain = $Shader_Index_Expression as List<string>;
+   if (indexChain != null)
+   {
+      pass.psIndexChain = indexChain;
+   }
+   else
+   {
+      pass.psModel = $ShaderModel as string;
+      pass.psFunction = $Identifier as string;
+   }
    return null;
 };
 
@@ -364,6 +383,64 @@ ComputeShader_Pass_Expression -> ComputeShader Equals Compile ShaderModel Identi
    var pass = paramlist[0] as PassInfo;
    pass.csModel = $ShaderModel as string;
    pass.csFunction = $Identifier as string;
+   return null;
+};
+
+// Shader indexing: VertexShader = (ShaderArray[IndexArray[Parameter]]);
+// Returns the chain of identifiers, ordered from the shader array to the index parameter.
+Shader_Index_Expression -> OpenParenthesis Index_Expression CloseParenthesis
+{
+   return $Index_Expression;
+};
+
+Index_Expression -> Identifier (OpenSquareBracket Index_Expression CloseSquareBracket)?
+{
+   var chain = new List<string>();
+   chain.Add($Identifier as string);
+
+   var inner = $Index_Expression as List<string>;
+   if (inner != null)
+      chain.AddRange(inner);
+
+   return chain;
+};
+
+Shader_Compile_Expression -> Compile ShaderModel Identifier OpenParenthesis CloseParenthesis
+{
+   var array = paramlist[0] as ShaderArrayInfo;
+
+   var compile = new ShaderCompileInfo();
+   compile.model = $ShaderModel as string;
+   compile.function = $Identifier as string;
+   array.Shaders.Add(compile);
+
+   return null;
+};
+
+// VertexShader VSArray[2] = { compile vs_4_0 VS0(), compile vs_4_0 VS1() };
+Shader_Array_Declaration -> (VertexShader | PixelShader) Identifier OpenSquareBracket Number? CloseSquareBracket Equals OpenBracket Shader_Compile_Expression (Comma Shader_Compile_Expression?)* CloseBracket Semicolon
+{
+   var array = new ShaderArrayInfo();
+   array.name = $Identifier as string;
+   array.stage = ($VertexShader != null) ? ShaderArrayStage.Vertex : ShaderArrayStage.Pixel;
+   array.startPos = Token.StartPos;
+   array.endPos = Token.EndPos;
+
+   foreach (var node in Nodes)
+      node.Eval(tree, array);
+
+   var shaderInfo = paramlist[0] as ShaderInfo;
+   shaderInfo.ShaderArrays[array.name] = array;
+
+   return null;
+};
+
+// int ShaderIndex = 0;
+// int VSIndices[3] = { 0, 1, 2 };
+Int_Declaration -> IntDeclaration
+{
+   var shaderInfo = paramlist[0] as ShaderInfo;
+   shaderInfo.AddIntDeclaration($IntDeclaration as string, Token.StartPos, Token.EndPos);
    return null;
 };
 

@@ -449,45 +449,126 @@ float4 PSBasicPixelLightingTx(VSOutputPixelLightingTx pin) : SV_Target0
 }
 
 
-// NOTE: The order of the techniques here are
+// NOTE: The order of the shader indices here are
 // defined to match the indexing in BasicEffect.cs.
 
-TECHNIQUE_SM2( BasicEffect,							VSBasic,		PSBasic );
-TECHNIQUE_SM2( BasicEffect_Fog,						VSBasicFog,			PSBasicFog );
-TECHNIQUE_SM2( BasicEffect_VertexColor,				VSBasicVc,		PSBasic );
-TECHNIQUE_SM2( BasicEffect_VertexColor_Fog,			VSBasicVcFog,		PSBasicFog );
+VertexShader VSArray[20] =
+{
+    compile vs_4_0_level_9_1 VSBasic(),
+    compile vs_4_0_level_9_1 VSBasicFog(),
+    compile vs_4_0_level_9_1 VSBasicVc(),
+    compile vs_4_0_level_9_1 VSBasicVcFog(),
+    compile vs_4_0_level_9_1 VSBasicTx(),
+    compile vs_4_0_level_9_1 VSBasicTxFog(),
+    compile vs_4_0_level_9_1 VSBasicTxVc(),
+    compile vs_4_0_level_9_1 VSBasicTxVcFog(),
+    compile vs_4_0_level_9_1 VSBasicVertexLighting(),
+    compile vs_4_0_level_9_1 VSBasicVertexLightingVc(),
+    compile vs_4_0_level_9_1 VSBasicVertexLightingTx(),
+    compile vs_4_0_level_9_1 VSBasicVertexLightingTxVc(),
+    compile vs_4_0_level_9_1 VSBasicOneLight(),
+    compile vs_4_0_level_9_1 VSBasicOneLightVc(),
+    compile vs_4_0_level_9_1 VSBasicOneLightTx(),
+    compile vs_4_0_level_9_1 VSBasicOneLightTxVc(),
+    compile vs_4_0_level_9_1 VSBasicPixelLighting(),
+    compile vs_4_0_level_9_1 VSBasicPixelLightingVc(),
+    compile vs_4_0_level_9_1 VSBasicPixelLightingTx(),
+    compile vs_4_0_level_9_1 VSBasicPixelLightingTxVc(),
+};
 
-TECHNIQUE_SM2( BasicEffect_Texture,					VSBasicTx,		PSBasicTx );
-TECHNIQUE_SM2( BasicEffect_Texture_Fog,				VSBasicTxFog,		PSBasicTxFog );
-TECHNIQUE_SM2( BasicEffect_Texture_VertexColor,		VSBasicTxVc,	PSBasicTx );
-TECHNIQUE_SM2( BasicEffect_Texture_VertexColor_Fog,	VSBasicTxVcFog,		PSBasicTxFog );
+PixelShader PSArray[10] =
+{
+    compile ps_4_0_level_9_1 PSBasic(),
+    compile ps_4_0_level_9_1 PSBasicFog(),
+    compile ps_4_0_level_9_1 PSBasicTx(),
+    compile ps_4_0_level_9_1 PSBasicTxFog(),
+    compile ps_4_0_level_9_1 PSBasicVertexLighting(),
+    compile ps_4_0_level_9_1 PSBasicVertexLightingFog(),
+    compile ps_4_0_level_9_1 PSBasicVertexLightingTx(),
+    compile ps_4_0_level_9_1 PSBasicVertexLightingTxFog(),
+    compile ps_4_0_level_9_1 PSBasicPixelLighting(),
+    compile ps_4_0_level_9_1 PSBasicPixelLightingTx(),
+};
 
-TECHNIQUE_SM2( BasicEffect_VertexLighting,							VSBasicVertexLighting,		PSBasicVertexLighting );
-TECHNIQUE_SM2( BasicEffect_VertexLighting_Fog,						VSBasicVertexLighting,		PSBasicVertexLightingFog );
-TECHNIQUE_SM2( BasicEffect_VertexLighting_VertexColor,				VSBasicVertexLightingVc,	PSBasicVertexLighting );
-TECHNIQUE_SM2( BasicEffect_VertexLighting_VertexColor_Fog,			VSBasicVertexLightingVc,	PSBasicVertexLightingFog );
+int VSIndices[32] =
+{
+    0,   // BasicEffect
+    1,   // BasicEffect_Fog
+    2,   // BasicEffect_VertexColor
+    3,   // BasicEffect_VertexColor_Fog
+    4,   // BasicEffect_Texture
+    5,   // BasicEffect_Texture_Fog
+    6,   // BasicEffect_Texture_VertexColor
+    7,   // BasicEffect_Texture_VertexColor_Fog
+    8,   // BasicEffect_VertexLighting
+    8,   // BasicEffect_VertexLighting_Fog
+    9,   // BasicEffect_VertexLighting_VertexColor
+    9,   // BasicEffect_VertexLighting_VertexColor_Fog
+    10,  // BasicEffect_VertexLighting_Texture
+    10,  // BasicEffect_VertexLighting_Texture_Fog
+    11,  // BasicEffect_VertexLighting_Texture_VertexColor
+    11,  // BasicEffect_VertexLighting_Texture_VertexColor_Fog
+    12,  // BasicEffect_OneLight
+    12,  // BasicEffect_OneLight_Fog
+    13,  // BasicEffect_OneLight_VertexColor
+    13,  // BasicEffect_OneLight_VertexColor_Fog
+    14,  // BasicEffect_OneLight_Texture
+    14,  // BasicEffect_OneLight_Texture_Fog
+    15,  // BasicEffect_OneLight_Texture_VertexColor
+    15,  // BasicEffect_OneLight_Texture_VertexColor_Fog
+    16,  // BasicEffect_PixelLighting
+    16,  // BasicEffect_PixelLighting_Fog
+    17,  // BasicEffect_PixelLighting_VertexColor
+    17,  // BasicEffect_PixelLighting_VertexColor_Fog
+    18,  // BasicEffect_PixelLighting_Texture
+    18,  // BasicEffect_PixelLighting_Texture_Fog
+    19,  // BasicEffect_PixelLighting_Texture_VertexColor
+    19,  // BasicEffect_PixelLighting_Texture_VertexColor_Fog
+};
 
-TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture,					VSBasicVertexLightingTx,	PSBasicVertexLightingTx );
-TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture_Fog,				VSBasicVertexLightingTx,	PSBasicVertexLightingTxFog );
-TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture_VertexColor,		VSBasicVertexLightingTxVc,	PSBasicVertexLightingTx );
-TECHNIQUE_SM2( BasicEffect_VertexLighting_Texture_VertexColor_Fog,	VSBasicVertexLightingTxVc,	PSBasicVertexLightingTxFog );
+int PSIndices[32] =
+{
+    0,   // BasicEffect
+    1,   // BasicEffect_Fog
+    0,   // BasicEffect_VertexColor
+    1,   // BasicEffect_VertexColor_Fog
+    2,   // BasicEffect_Texture
+    3,   // BasicEffect_Texture_Fog
+    2,   // BasicEffect_Texture_VertexColor
+    3,   // BasicEffect_Texture_VertexColor_Fog
+    4,   // BasicEffect_VertexLighting
+    5,   // BasicEffect_VertexLighting_Fog
+    4,   // BasicEffect_VertexLighting_VertexColor
+    5,   // BasicEffect_VertexLighting_VertexColor_Fog
+    6,   // BasicEffect_VertexLighting_Texture
+    7,   // BasicEffect_VertexLighting_Texture_Fog
+    6,   // BasicEffect_VertexLighting_Texture_VertexColor
+    7,   // BasicEffect_VertexLighting_Texture_VertexColor_Fog
+    4,   // BasicEffect_OneLight
+    5,   // BasicEffect_OneLight_Fog
+    4,   // BasicEffect_OneLight_VertexColor
+    5,   // BasicEffect_OneLight_VertexColor_Fog
+    6,   // BasicEffect_OneLight_Texture
+    7,   // BasicEffect_OneLight_Texture_Fog
+    6,   // BasicEffect_OneLight_Texture_VertexColor
+    7,   // BasicEffect_OneLight_Texture_VertexColor_Fog
+    8,   // BasicEffect_PixelLighting
+    8,   // BasicEffect_PixelLighting_Fog
+    8,   // BasicEffect_PixelLighting_VertexColor
+    8,   // BasicEffect_PixelLighting_VertexColor_Fog
+    9,   // BasicEffect_PixelLighting_Texture
+    9,   // BasicEffect_PixelLighting_Texture_Fog
+    9,   // BasicEffect_PixelLighting_Texture_VertexColor
+    9,   // BasicEffect_PixelLighting_Texture_VertexColor_Fog
+};
 
-TECHNIQUE_SM2( BasicEffect_OneLight,							VSBasicOneLight,		PSBasicVertexLighting );
-TECHNIQUE_SM2( BasicEffect_OneLight_Fog,						VSBasicOneLight,		PSBasicVertexLightingFog );
-TECHNIQUE_SM2( BasicEffect_OneLight_VertexColor,				VSBasicOneLightVc,		PSBasicVertexLighting );
-TECHNIQUE_SM2( BasicEffect_OneLight_VertexColor_Fog,			VSBasicOneLightVc,		PSBasicVertexLightingFog );
+int ShaderIndex = 0;
 
-TECHNIQUE_SM2( BasicEffect_OneLight_Texture,					VSBasicOneLightTx,		PSBasicVertexLightingTx );
-TECHNIQUE_SM2( BasicEffect_OneLight_Texture_Fog,				VSBasicOneLightTx,		PSBasicVertexLightingTxFog );
-TECHNIQUE_SM2( BasicEffect_OneLight_Texture_VertexColor,		VSBasicOneLightTxVc,	PSBasicVertexLightingTx );
-TECHNIQUE_SM2( BasicEffect_OneLight_Texture_VertexColor_Fog,	VSBasicOneLightTxVc,	PSBasicVertexLightingTxFog );
-
-TECHNIQUE_SM2( BasicEffect_PixelLighting,							VSBasicPixelLighting,		PSBasicPixelLighting );
-TECHNIQUE_SM2( BasicEffect_PixelLighting_Fog,						VSBasicPixelLighting,		PSBasicPixelLighting );
-TECHNIQUE_SM2( BasicEffect_PixelLighting_VertexColor,				VSBasicPixelLightingVc,		PSBasicPixelLighting );
-TECHNIQUE_SM2( BasicEffect_PixelLighting_VertexColor_Fog,			VSBasicPixelLightingVc,		PSBasicPixelLighting );
-
-TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture,					VSBasicPixelLightingTx,		PSBasicPixelLightingTx );
-TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture_Fog,				VSBasicPixelLightingTx,		PSBasicPixelLightingTx );
-TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture_VertexColor,		VSBasicPixelLightingTxVc,	PSBasicPixelLightingTx );
-TECHNIQUE_SM2( BasicEffect_PixelLighting_Texture_VertexColor_Fog,	VSBasicPixelLightingTxVc,	PSBasicPixelLightingTx );
+Technique BasicEffect
+{
+    Pass
+    {
+        VertexShader = (VSArray[VSIndices[ShaderIndex]]);
+        PixelShader  = (PSArray[PSIndices[ShaderIndex]]);
+    }
+}

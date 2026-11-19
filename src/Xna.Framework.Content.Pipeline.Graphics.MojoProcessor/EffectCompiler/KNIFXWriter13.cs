@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
 {
-    class KNIFXWriter12 : BinaryWriter
+    class KNIFXWriter13 : BinaryWriter
     {
         internal const string KNIFXSignature = "KNIF";
-        internal const int Version = 12;
+        internal const int Version = 13;
 
-        public KNIFXWriter12(Stream output) : base(output)
+        public KNIFXWriter13(Stream output) : base(output)
         {
         }
 
@@ -223,11 +223,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             WriteAnnotations(pass.annotation_handles);
 
             // Write the index for the vertex and pixel shaders.
+            // -1: no shader, >= 0: shader index, -2: shader selected by a parameter.
             int vertexShaderIndex  = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.VERTEXSHADER, pass.states);
             int pixelShaderIndex   = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.PIXELSHADER, pass.states);
             int computeShaderIndex = EffectObject.GetShaderIndex(EffectObject.STATE_CLASS.COMPUTESHADER, pass.states);
-            WritePackedInt(vertexShaderIndex);
-            WritePackedInt(pixelShaderIndex);
+            WriteShaderReference(vertexShaderIndex, pass.vertexShaderSelector);
+            WriteShaderReference(pixelShaderIndex, pass.pixelShaderSelector);
             WritePackedInt(computeShaderIndex);
 
             // Write the state objects too!
@@ -254,6 +255,21 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             }
             else
                 Write(false);
+        }
+
+        private void WriteShaderReference(int shaderIndex, EffectObject.ShaderSelectorContent selector)
+        {
+            if (selector == null)
+            {
+                WritePackedInt(shaderIndex);
+                return;
+            }
+
+            WritePackedInt(-2);
+            WritePackedInt(selector.parameterIndex);
+            WritePackedInt(selector.table.Length);
+            foreach (int index in selector.table)
+                WritePackedInt(index);
         }
 
         private void WriteBlendState(BlendState blendState)

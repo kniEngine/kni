@@ -51,12 +51,15 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
 
              // Concat Rule
-            tok = scanner.LookAhead(TokenType.Code, TokenType.Technique, TokenType.Sampler); // ZeroOrMore Rule
+            tok = scanner.LookAhead(TokenType.Code, TokenType.Technique, TokenType.Sampler, TokenType.VertexShader, TokenType.PixelShader, TokenType.IntDeclaration); // ZeroOrMore Rule
             while (tok.Type == TokenType.Code
                 || tok.Type == TokenType.Technique
-                || tok.Type == TokenType.Sampler)
+                || tok.Type == TokenType.Sampler
+                || tok.Type == TokenType.VertexShader
+                || tok.Type == TokenType.PixelShader
+                || tok.Type == TokenType.IntDeclaration)
             {
-                tok = scanner.LookAhead(TokenType.Code, TokenType.Technique, TokenType.Sampler); // Choice Rule
+                tok = scanner.LookAhead(TokenType.Code, TokenType.Technique, TokenType.Sampler, TokenType.VertexShader, TokenType.PixelShader, TokenType.IntDeclaration); // Choice Rule
                 switch (tok.Type)
                 { // Choice Rule
                     case TokenType.Code:
@@ -75,11 +78,18 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
                     case TokenType.Sampler:
                         ParseSampler_Declaration(node); // NonTerminal Rule: Sampler_Declaration
                         break;
+                    case TokenType.VertexShader:
+                    case TokenType.PixelShader:
+                        ParseShader_Array_Declaration(node); // NonTerminal Rule: Shader_Array_Declaration
+                        break;
+                    case TokenType.IntDeclaration:
+                        ParseInt_Declaration(node); // NonTerminal Rule: Int_Declaration
+                        break;
                     default:
-                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected Code, Technique, or Sampler.", 0x0002, tok));
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected Code, Technique, Sampler, VertexShader, PixelShader, or IntDeclaration.", 0x0002, tok));
                         break;
                 } // Choice Rule
-            tok = scanner.LookAhead(TokenType.Code, TokenType.Technique, TokenType.Sampler); // ZeroOrMore Rule
+            tok = scanner.LookAhead(TokenType.Code, TokenType.Technique, TokenType.Sampler, TokenType.VertexShader, TokenType.PixelShader, TokenType.IntDeclaration); // ZeroOrMore Rule
             }
 
              // Concat Rule
@@ -2649,54 +2659,68 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
 
              // Concat Rule
-            tok = scanner.Scan(TokenType.Compile); // Terminal Rule: Compile
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.Compile) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Compile.ToString(), 0x1001, tok));
-                return;
-            }
+            tok = scanner.LookAhead(TokenType.Compile, TokenType.OpenParenthesis); // Choice Rule
+            switch (tok.Type)
+            { // Choice Rule
+                case TokenType.Compile:
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.ShaderModel); // Terminal Rule: ShaderModel
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.ShaderModel) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ShaderModel.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.Compile); // Terminal Rule: Compile
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.Compile) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Compile.ToString(), 0x1001, tok));
+                        return;
+                    }
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.Identifier); // Terminal Rule: Identifier
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.Identifier) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Identifier.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.ShaderModel); // Terminal Rule: ShaderModel
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.ShaderModel) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ShaderModel.ToString(), 0x1001, tok));
+                        return;
+                    }
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.OpenParenthesis); // Terminal Rule: OpenParenthesis
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.OpenParenthesis) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenParenthesis.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.Identifier); // Terminal Rule: Identifier
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.Identifier) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Identifier.ToString(), 0x1001, tok));
+                        return;
+                    }
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.CloseParenthesis); // Terminal Rule: CloseParenthesis
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.CloseParenthesis) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseParenthesis.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.OpenParenthesis); // Terminal Rule: OpenParenthesis
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.OpenParenthesis) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenParenthesis.ToString(), 0x1001, tok));
+                        return;
+                    }
+
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.CloseParenthesis); // Terminal Rule: CloseParenthesis
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.CloseParenthesis) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseParenthesis.ToString(), 0x1001, tok));
+                        return;
+                    }
+                    break;
+                case TokenType.OpenParenthesis:
+                    ParseShader_Index_Expression(node); // NonTerminal Rule: Shader_Index_Expression
+                    break;
+                default:
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected Compile or OpenParenthesis.", 0x0002, tok));
+                    break;
+            } // Choice Rule
 
              // Concat Rule
             tok = scanner.Scan(TokenType.Semicolon); // Terminal Rule: Semicolon
@@ -2740,54 +2764,68 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
             }
 
              // Concat Rule
-            tok = scanner.Scan(TokenType.Compile); // Terminal Rule: Compile
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.Compile) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Compile.ToString(), 0x1001, tok));
-                return;
-            }
+            tok = scanner.LookAhead(TokenType.Compile, TokenType.OpenParenthesis); // Choice Rule
+            switch (tok.Type)
+            { // Choice Rule
+                case TokenType.Compile:
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.ShaderModel); // Terminal Rule: ShaderModel
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.ShaderModel) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ShaderModel.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.Compile); // Terminal Rule: Compile
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.Compile) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Compile.ToString(), 0x1001, tok));
+                        return;
+                    }
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.Identifier); // Terminal Rule: Identifier
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.Identifier) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Identifier.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.ShaderModel); // Terminal Rule: ShaderModel
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.ShaderModel) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ShaderModel.ToString(), 0x1001, tok));
+                        return;
+                    }
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.OpenParenthesis); // Terminal Rule: OpenParenthesis
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.OpenParenthesis) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenParenthesis.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.Identifier); // Terminal Rule: Identifier
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.Identifier) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Identifier.ToString(), 0x1001, tok));
+                        return;
+                    }
 
-             // Concat Rule
-            tok = scanner.Scan(TokenType.CloseParenthesis); // Terminal Rule: CloseParenthesis
-            n = node.CreateNode(tok, tok.ToString() );
-            node.Token.UpdateRange(tok);
-            node.Nodes.Add(n);
-            if (tok.Type != TokenType.CloseParenthesis) {
-                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseParenthesis.ToString(), 0x1001, tok));
-                return;
-            }
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.OpenParenthesis); // Terminal Rule: OpenParenthesis
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.OpenParenthesis) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenParenthesis.ToString(), 0x1001, tok));
+                        return;
+                    }
+
+                     // Concat Rule
+                    tok = scanner.Scan(TokenType.CloseParenthesis); // Terminal Rule: CloseParenthesis
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.CloseParenthesis) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseParenthesis.ToString(), 0x1001, tok));
+                        return;
+                    }
+                    break;
+                case TokenType.OpenParenthesis:
+                    ParseShader_Index_Expression(node); // NonTerminal Rule: Shader_Index_Expression
+                    break;
+                default:
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected Compile or OpenParenthesis.", 0x0002, tok));
+                    break;
+            } // Choice Rule
 
              // Concat Rule
             tok = scanner.Scan(TokenType.Semicolon); // Terminal Rule: Semicolon
@@ -2892,6 +2930,321 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
 
             parent.Token.UpdateRange(node.Token);
         } // NonTerminalSymbol: ComputeShader_Pass_Expression
+
+        private void ParseShader_Index_Expression(ParseNode parent) // NonTerminalSymbol: Shader_Index_Expression
+        {
+            Token tok;
+            ParseNode n;
+            ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.Shader_Index_Expression), "Shader_Index_Expression");
+            parent.Nodes.Add(node);
+
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.OpenParenthesis); // Terminal Rule: OpenParenthesis
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.OpenParenthesis) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenParenthesis.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            ParseIndex_Expression(node); // NonTerminal Rule: Index_Expression
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.CloseParenthesis); // Terminal Rule: CloseParenthesis
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.CloseParenthesis) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseParenthesis.ToString(), 0x1001, tok));
+                return;
+            }
+
+            parent.Token.UpdateRange(node.Token);
+        } // NonTerminalSymbol: Shader_Index_Expression
+
+        private void ParseIndex_Expression(ParseNode parent) // NonTerminalSymbol: Index_Expression
+        {
+            Token tok;
+            ParseNode n;
+            ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.Index_Expression), "Index_Expression");
+            parent.Nodes.Add(node);
+
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.Identifier); // Terminal Rule: Identifier
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.Identifier) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Identifier.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.LookAhead(TokenType.OpenSquareBracket); // Option Rule
+            if (tok.Type == TokenType.OpenSquareBracket)
+            {
+
+                 // Concat Rule
+                tok = scanner.Scan(TokenType.OpenSquareBracket); // Terminal Rule: OpenSquareBracket
+                n = node.CreateNode(tok, tok.ToString() );
+                node.Token.UpdateRange(tok);
+                node.Nodes.Add(n);
+                if (tok.Type != TokenType.OpenSquareBracket) {
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenSquareBracket.ToString(), 0x1001, tok));
+                    return;
+                }
+
+                 // Concat Rule
+                ParseIndex_Expression(node); // NonTerminal Rule: Index_Expression
+
+                 // Concat Rule
+                tok = scanner.Scan(TokenType.CloseSquareBracket); // Terminal Rule: CloseSquareBracket
+                n = node.CreateNode(tok, tok.ToString() );
+                node.Token.UpdateRange(tok);
+                node.Nodes.Add(n);
+                if (tok.Type != TokenType.CloseSquareBracket) {
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseSquareBracket.ToString(), 0x1001, tok));
+                    return;
+                }
+            }
+
+            parent.Token.UpdateRange(node.Token);
+        } // NonTerminalSymbol: Index_Expression
+
+        private void ParseShader_Compile_Expression(ParseNode parent) // NonTerminalSymbol: Shader_Compile_Expression
+        {
+            Token tok;
+            ParseNode n;
+            ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.Shader_Compile_Expression), "Shader_Compile_Expression");
+            parent.Nodes.Add(node);
+
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.Compile); // Terminal Rule: Compile
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.Compile) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Compile.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.ShaderModel); // Terminal Rule: ShaderModel
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.ShaderModel) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.ShaderModel.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.Identifier); // Terminal Rule: Identifier
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.Identifier) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Identifier.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.OpenParenthesis); // Terminal Rule: OpenParenthesis
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.OpenParenthesis) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenParenthesis.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.CloseParenthesis); // Terminal Rule: CloseParenthesis
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.CloseParenthesis) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseParenthesis.ToString(), 0x1001, tok));
+                return;
+            }
+
+            parent.Token.UpdateRange(node.Token);
+        } // NonTerminalSymbol: Shader_Compile_Expression
+
+        private void ParseShader_Array_Declaration(ParseNode parent) // NonTerminalSymbol: Shader_Array_Declaration
+        {
+            Token tok;
+            ParseNode n;
+            ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.Shader_Array_Declaration), "Shader_Array_Declaration");
+            parent.Nodes.Add(node);
+
+
+             // Concat Rule
+            tok = scanner.LookAhead(TokenType.VertexShader, TokenType.PixelShader); // Choice Rule
+            switch (tok.Type)
+            { // Choice Rule
+                case TokenType.VertexShader:
+                    tok = scanner.Scan(TokenType.VertexShader); // Terminal Rule: VertexShader
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.VertexShader) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.VertexShader.ToString(), 0x1001, tok));
+                        return;
+                    }
+                    break;
+                case TokenType.PixelShader:
+                    tok = scanner.Scan(TokenType.PixelShader); // Terminal Rule: PixelShader
+                    n = node.CreateNode(tok, tok.ToString() );
+                    node.Token.UpdateRange(tok);
+                    node.Nodes.Add(n);
+                    if (tok.Type != TokenType.PixelShader) {
+                        tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.PixelShader.ToString(), 0x1001, tok));
+                        return;
+                    }
+                    break;
+                default:
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected VertexShader or PixelShader.", 0x0002, tok));
+                    break;
+            } // Choice Rule
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.Identifier); // Terminal Rule: Identifier
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.Identifier) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Identifier.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.OpenSquareBracket); // Terminal Rule: OpenSquareBracket
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.OpenSquareBracket) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenSquareBracket.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.LookAhead(TokenType.Number); // Option Rule
+            if (tok.Type == TokenType.Number)
+            {
+                tok = scanner.Scan(TokenType.Number); // Terminal Rule: Number
+                n = node.CreateNode(tok, tok.ToString() );
+                node.Token.UpdateRange(tok);
+                node.Nodes.Add(n);
+                if (tok.Type != TokenType.Number) {
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Number.ToString(), 0x1001, tok));
+                    return;
+                }
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.CloseSquareBracket); // Terminal Rule: CloseSquareBracket
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.CloseSquareBracket) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseSquareBracket.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.Equals); // Terminal Rule: Equals
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.Equals) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Equals.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.OpenBracket); // Terminal Rule: OpenBracket
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.OpenBracket) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.OpenBracket.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            ParseShader_Compile_Expression(node); // NonTerminal Rule: Shader_Compile_Expression
+
+             // Concat Rule
+            tok = scanner.LookAhead(TokenType.Comma); // ZeroOrMore Rule
+            while (tok.Type == TokenType.Comma)
+            {
+
+                 // Concat Rule
+                tok = scanner.Scan(TokenType.Comma); // Terminal Rule: Comma
+                n = node.CreateNode(tok, tok.ToString() );
+                node.Token.UpdateRange(tok);
+                node.Nodes.Add(n);
+                if (tok.Type != TokenType.Comma) {
+                    tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Comma.ToString(), 0x1001, tok));
+                    return;
+                }
+
+                 // Concat Rule
+                tok = scanner.LookAhead(TokenType.Compile); // Option Rule
+                if (tok.Type == TokenType.Compile)
+                {
+                    ParseShader_Compile_Expression(node); // NonTerminal Rule: Shader_Compile_Expression
+                }
+            tok = scanner.LookAhead(TokenType.Comma); // ZeroOrMore Rule
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.CloseBracket); // Terminal Rule: CloseBracket
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.CloseBracket) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.CloseBracket.ToString(), 0x1001, tok));
+                return;
+            }
+
+             // Concat Rule
+            tok = scanner.Scan(TokenType.Semicolon); // Terminal Rule: Semicolon
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.Semicolon) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.Semicolon.ToString(), 0x1001, tok));
+                return;
+            }
+
+            parent.Token.UpdateRange(node.Token);
+        } // NonTerminalSymbol: Shader_Array_Declaration
+
+        private void ParseInt_Declaration(ParseNode parent) // NonTerminalSymbol: Int_Declaration
+        {
+            Token tok;
+            ParseNode n;
+            ParseNode node = parent.CreateNode(scanner.GetToken(TokenType.Int_Declaration), "Int_Declaration");
+            parent.Nodes.Add(node);
+
+            tok = scanner.Scan(TokenType.IntDeclaration); // Terminal Rule: IntDeclaration
+            n = node.CreateNode(tok, tok.ToString() );
+            node.Token.UpdateRange(tok);
+            node.Nodes.Add(n);
+            if (tok.Type != TokenType.IntDeclaration) {
+                tree.Errors.Add(new ParseError("Unexpected token '" + tok.Text.Replace("\n", "") + "' found. Expected " + TokenType.IntDeclaration.ToString(), 0x1001, tok));
+                return;
+            }
+
+            parent.Token.UpdateRange(node.Token);
+        } // NonTerminalSymbol: Int_Declaration
 
         private void ParseAddressMode_Clamp(ParseNode parent) // NonTerminalSymbol: AddressMode_Clamp
         {

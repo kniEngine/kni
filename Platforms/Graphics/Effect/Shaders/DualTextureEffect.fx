@@ -119,10 +119,46 @@ float4 PSDualTexture(VSOutputTx2 pin) : SV_Target0
 }
 
 
-// NOTE: The order of the techniques here are
-// defined to match the indexing in DualTextureEffect_Fog.cs.
+// NOTE: The order of the shader indices here are
+// defined to match the indexing in DualTextureEffect.cs.
 
-TECHNIQUE_SM2( DualTextureEffect,					VSDualTexture,		PSDualTexture );
-TECHNIQUE_SM2( DualTextureEffect_Fog,				VSDualTextureFog,		PSDualTextureFog );
-TECHNIQUE_SM2( DualTextureEffect_VertexColor,		VSDualTextureVc,	PSDualTexture );
-TECHNIQUE_SM2( DualTextureEffect_VertexColor_Fog,	VSDualTextureVcFog,		PSDualTextureFog );
+VertexShader VSArray[4] =
+{
+    compile vs_4_0_level_9_1 VSDualTexture(),
+    compile vs_4_0_level_9_1 VSDualTextureFog(),
+    compile vs_4_0_level_9_1 VSDualTextureVc(),
+    compile vs_4_0_level_9_1 VSDualTextureVcFog(),
+};
+
+PixelShader PSArray[2] =
+{
+    compile ps_4_0_level_9_1 PSDualTexture(),
+    compile ps_4_0_level_9_1 PSDualTextureFog(),
+};
+
+int VSIndices[4] =
+{
+    0,   // DualTextureEffect
+    1,   // DualTextureEffect_Fog
+    2,   // DualTextureEffect_VertexColor
+    3,   // DualTextureEffect_VertexColor_Fog
+};
+
+int PSIndices[4] =
+{
+    0,   // DualTextureEffect
+    1,   // DualTextureEffect_Fog
+    0,   // DualTextureEffect_VertexColor
+    1,   // DualTextureEffect_VertexColor_Fog
+};
+
+int ShaderIndex = 0;
+
+Technique DualTextureEffect
+{
+    Pass
+    {
+        VertexShader = (VSArray[VSIndices[ShaderIndex]]);
+        PixelShader  = (PSArray[PSIndices[ShaderIndex]]);
+    }
+}

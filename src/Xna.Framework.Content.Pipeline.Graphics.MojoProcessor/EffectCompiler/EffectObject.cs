@@ -330,6 +330,13 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             public EffectParameterContent parameter;
         }
 
+        public class ShaderSelectorContent
+        {
+            public string parameterName;
+            public int parameterIndex = -1;
+            public int[] table;
+        }
+
         public class EffectSamplerContent
         {
             public uint state_count = 0;
@@ -347,6 +354,12 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler
             public RasterizerState rasterizerState;
 
             public EffectStateContent[] states;
+
+            // Shader indexing. When set, the shader of the stage is selected at runtime
+            // from the value of an int parameter: shaderIndex = table[parameter].
+            public ShaderSelectorContent vertexShaderSelector;
+            public ShaderSelectorContent pixelShaderSelector;
+
             public EffectParameterContent[] annotation_handles = null;
         }
 

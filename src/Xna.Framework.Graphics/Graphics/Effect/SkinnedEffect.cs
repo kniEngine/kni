@@ -36,6 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
         EffectParameter worldParam;
         EffectParameter worldInverseTransposeParam;
         EffectParameter worldViewProjParam;
+        EffectParameter shaderIndexParam;
         EffectParameter bonesParam;
 
         #endregion
@@ -180,7 +181,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (preferPerPixelLighting != value)
                 {
                     preferPerPixelLighting = value;
-                    UpdateCurrentTechnique();
+                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 }
             }
         }
@@ -225,7 +226,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     fogEnabled = value;
                     dirtyFlags |= EffectDirtyFlags.FogEnable;
-                    UpdateCurrentTechnique();
+                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 }
             }
         }
@@ -290,7 +291,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 weightsPerVertex = value;
-                UpdateCurrentTechnique();
+                dirtyFlags |= EffectDirtyFlags.ShaderIndex;
             }
         }
 
@@ -428,6 +429,7 @@ namespace Microsoft.Xna.Framework.Graphics
             worldParam                  = Parameters["World"];
             worldInverseTransposeParam  = Parameters["WorldInverseTranspose"];
             worldViewProjParam          = Parameters["WorldViewProj"];
+            shaderIndexParam            = Parameters["ShaderIndex"];
             bonesParam                  = Parameters["Bones"];
 
             light0 = new DirectionalLight(Parameters["DirLight0Direction"],
@@ -452,7 +454,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void Light_EnabledChanged(object sender, EventArgs e)
         {
             _oneLight = !light1.Enabled && !light2.Enabled;
-            UpdateCurrentTechnique();
+            dirtyFlags |= EffectDirtyFlags.ShaderIndex;
         }
 
         /// <summary>
@@ -460,6 +462,14 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         protected internal override void OnApply()
         {
+            // Recompute the shader index?
+            if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
+            {
+                shaderIndexParam.SetValue(GetShaderIndex());
+
+                dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
+            }
+
             // Recompute the world+view+projection matrix or fog vector?
             dirtyFlags = EffectHelpers.SetWorldViewProjAndFog(dirtyFlags, ref world, ref view, ref projection, ref worldView, fogEnabled, fogStart, fogEnd, worldViewProjParam, fogVectorParam);
 
@@ -475,7 +485,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void UpdateCurrentTechnique()
+        private int GetShaderIndex()
         {
             int shaderIndex = 0;
 
@@ -492,7 +502,7 @@ namespace Microsoft.Xna.Framework.Graphics
             else if (_oneLight) // oneLight
                 shaderIndex += 6;
 
-            CurrentTechnique = Techniques[shaderIndex];
+            return shaderIndex;
         }
 
         #endregion

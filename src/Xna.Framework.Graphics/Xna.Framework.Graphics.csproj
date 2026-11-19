@@ -89,6 +89,7 @@
     <Compile Include="Graphics\Effect\MGFXReader10.cs" />
     <Compile Include="Graphics\Effect\KNIFXReader11.cs" />
     <Compile Include="Graphics\Effect\KNIFXReader12.cs" />
+    <Compile Include="Graphics\Effect\KNIFXReader13.cs" />
     <Compile Include="Graphics\Effect\EffectAnnotation.cs" />
     <Compile Include="Graphics\Effect\EffectAnnotationCollection.cs" />
     <Compile Include="Graphics\Effect\EffectHelpers.cs" />

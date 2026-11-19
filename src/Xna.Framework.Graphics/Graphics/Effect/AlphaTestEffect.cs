@@ -29,6 +29,7 @@ namespace Microsoft.Xna.Framework.Graphics
         EffectParameter fogColorParam;
         EffectParameter fogVectorParam;
         EffectParameter worldViewProjParam;
+        EffectParameter shaderIndexParam;
 
         #endregion
 
@@ -136,7 +137,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     fogEnabled = value;
                     dirtyFlags |= EffectDirtyFlags.FogEnable;
-                    UpdateCurrentTechnique();
+                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 }
             }
         }
@@ -196,7 +197,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (vertexColorEnabled != value)
                 {
                     vertexColorEnabled = value;
-                    UpdateCurrentTechnique();
+                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 }
             }
         }
@@ -213,7 +214,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 {
                     alphaFunction = value;
                     dirtyFlags |= EffectDirtyFlags.AlphaTest;
-                    UpdateCurrentTechnique();
+                    dirtyFlags |= EffectDirtyFlags.ShaderIndex;
                 }
             }
         }
@@ -290,6 +291,7 @@ namespace Microsoft.Xna.Framework.Graphics
             fogColorParam       = Parameters["FogColor"];
             fogVectorParam      = Parameters["FogVector"];
             worldViewProjParam  = Parameters["WorldViewProj"];
+            shaderIndexParam    = Parameters["ShaderIndex"];
         }
         
         /// <summary>
@@ -297,6 +299,14 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         protected internal override void OnApply()
         {
+            // Recompute the shader index?
+            if ((dirtyFlags & EffectDirtyFlags.ShaderIndex) != 0)
+            {
+                shaderIndexParam.SetValue(GetShaderIndex());
+
+                dirtyFlags &= ~EffectDirtyFlags.ShaderIndex;
+            }
+
             // Recompute the world+view+projection matrix or fog vector?
             dirtyFlags = EffectHelpers.SetWorldViewProjAndFog(dirtyFlags, ref world, ref view, ref projection, ref worldView, fogEnabled, fogStart, fogEnd, worldViewProjParam, fogVectorParam);
 
@@ -384,7 +394,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void UpdateCurrentTechnique()
+        private int GetShaderIndex()
         {
             int shaderIndex = 0;
 
@@ -397,7 +407,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (alphaFunction == CompareFunction.Equal || alphaFunction == CompareFunction.NotEqual)
                 shaderIndex += 4;
 
-            CurrentTechnique = Techniques[shaderIndex];
+            return shaderIndex;
         }
 
 

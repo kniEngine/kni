@@ -13,6 +13,10 @@ namespace Microsoft.Xna.Framework.Content.Pipeline.EffectCompiler.TPGParser
         public string psModel;
         public string psFunction;
 
+        // Shader indexing: ShaderArray, IndexArray..., IndexParameter
+        public System.Collections.Generic.List<string> vsIndexChain;
+        public System.Collections.Generic.List<string> psIndexChain;
+
         public string csModel;
         public string csFunction;
 
