@@ -14,27 +14,31 @@ namespace Microsoft.Xna.Platform.Graphics
         IRenderTargetStrategyGL
     {
         private readonly DepthFormat _depthStencilFormat;
-        internal int _multiSampleCount;
+        private int _multiSampleCount;
         private readonly RenderTargetUsage _renderTargetUsage;
         private bool _isContentLost;
 
+        private int[] _glColorBuffers;
+        private int _glDepthBuffer;
+        private int _glStencilBuffer;
 
         internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
             : base(contextStrategy, size, mipMap, preferredSurfaceFormat,
                    isRenderTarget: true)
         {
-            this._renderTargetUsage = usage;
-            this._depthStencilFormat = preferredDepthFormat;
+            _renderTargetUsage = usage;
+            _depthStencilFormat = preferredDepthFormat;
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
-            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(this.Format);
+            _multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
-            PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
+            base.PlatformConstructTextureCube(contextStrategy, size, mipMap, this.Format);
 
-            PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, _multiSampleCount);
+            ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, size, size, 6, mipMap,
+                this.Format, _depthStencilFormat, _multiSampleCount);
         }
 
 
@@ -58,27 +62,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _isContentLost; }
         }
-
-        public void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
-        {
-            if (this.MultiSampleCount > 1)
-            {
-            }
-        }
         #endregion IRenderTargetStrategy
 
-
-        int _glColorBuffer;
-        int _glDepthBuffer;
-        int _glStencilBuffer;
 
         #region IRenderTargetStrategyGL
         int IRenderTargetStrategyGL.GLTexture { get { return _glTexture; } }
         TextureTarget IRenderTargetStrategyGL.GLTarget { get { return _glTarget; } }
-        int IRenderTargetStrategyGL.GLColorBuffer
+        int[] IRenderTargetStrategyGL.GLColorBuffers
         {
-            get { return _glColorBuffer; }
-            set { _glColorBuffer = value; }
+            get { return _glColorBuffers; }
+            set { _glColorBuffers = value; }
         }
         int IRenderTargetStrategyGL.GLDepthBuffer
         {
@@ -98,15 +91,10 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion IRenderTargetStrategyGL
 
 
-        private void PlatformConstructTextureCube_rt(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
+        protected override void PlatformGraphicsContextLost()
         {
-            base.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
-        }
 
-        private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
-            DepthFormat preferredDepthFormat, int multiSampleCount)
-        {
-            ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, this.Size, this.Size, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
+            base.PlatformGraphicsContextLost();
         }
 
         protected override void Dispose(bool disposing)
@@ -117,7 +105,6 @@ namespace Microsoft.Xna.Platform.Graphics
             }
 
             ConcreteTexture.PlatformDeleteRenderTarget((IRenderTargetStrategyGL)this, ((IPlatformGraphicsContext)base.GraphicsDeviceStrategy.CurrentContext).Strategy);
-
 
             base.Dispose(disposing);
         }

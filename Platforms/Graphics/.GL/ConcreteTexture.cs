@@ -393,14 +393,20 @@ namespace Microsoft.Xna.Platform.Graphics
 #endif
         }
 
-        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy,
+            int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
+            renderTargetGL.GLColorBuffers = new int[depth];
+
+            if (multiSampleCount <= 1 && preferredDepthFormat == DepthFormat.None)
+                return;
+
             bool isSharedContext = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().BindSharedContext();
             try
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                if (multiSampleCount > 0)
+                if (multiSampleCount > 1)
                 {
                     RenderbufferStorage colorInternalFormat = default;
                     switch (preferredFormat)
@@ -440,14 +446,17 @@ namespace Microsoft.Xna.Platform.Graphics
                             break;
                     }
 
-                    renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
-                    GL.CheckGLError();
-                    GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
-                    GL.CheckGLError();
+                    for (int i = 0; i < renderTargetGL.GLColorBuffers.Length; i++)
+                    {
+                        renderTargetGL.GLColorBuffers[i] = GL.GenRenderbuffer();
+                        GL.CheckGLError();
+                        GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffers[i]);
+                        GL.CheckGLError();
 
-                    System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
-                    GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
-                    GL.CheckGLError();
+                        System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
+                        GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, colorInternalFormat, width, height);
+                        GL.CheckGLError();
+                    }
                 }
 
                 if (preferredDepthFormat != DepthFormat.None)
@@ -508,7 +517,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
                         GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLDepthBuffer);
                         GL.CheckGLError();
-                        if (multiSampleCount > 0)
+                        if (multiSampleCount > 1)
                         {
                             GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, depthInternalFormat, width, height);
                             GL.CheckGLError();
@@ -527,7 +536,7 @@ namespace Microsoft.Xna.Platform.Graphics
                                 GL.CheckGLError();
                                 GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLStencilBuffer);
                                 GL.CheckGLError();
-                                if (multiSampleCount > 0)
+                                if (multiSampleCount > 1)
                                 {
                                     System.Diagnostics.Debug.Assert(GL.RenderbufferStorageMultisample != null);
                                     GL.RenderbufferStorageMultisample(RenderbufferTarget.Renderbuffer, multiSampleCount, stencilInternalFormat, width, height);
@@ -547,7 +556,6 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().UnbindSharedContext();
             }
-            return;
         }
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
@@ -557,16 +565,22 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
-                if (renderTargetGL.GLColorBuffer != 0)
+                for (int i = 0; i < renderTargetGL.GLColorBuffers.Length; i++)
                 {
-                    GL.DeleteRenderbuffer(renderTargetGL.GLColorBuffer);
-                    GL.CheckGLError();
+                    if (renderTargetGL.GLColorBuffers[i] != 0)
+                    {
+                        GL.DeleteRenderbuffer(renderTargetGL.GLColorBuffers[i]);
+                        GL.CheckGLError();
+                    }
                 }
-                if (renderTargetGL.GLStencilBuffer != 0 && renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
+
+                if (renderTargetGL.GLStencilBuffer != 0
+                &&  renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
                 {
                     GL.DeleteRenderbuffer(renderTargetGL.GLStencilBuffer);
                     GL.CheckGLError();
                 }
+
                 if (renderTargetGL.GLDepthBuffer != 0)
                 {
                     GL.DeleteRenderbuffer(renderTargetGL.GLDepthBuffer);

@@ -1237,7 +1237,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[0];
             IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0)
+            if (renderTarget.MultiSampleCount > 1)
             {
                 int glResolveFramebuffer = 0;
                 if (!_glResolveFramebuffers.TryGetValue(base.CurrentRenderTargetBindings, out glResolveFramebuffer))
@@ -1249,13 +1249,23 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     for (int i = 0; i < base.RenderTargetCount; i++)
                     {
-                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IRenderTarget)base.CurrentRenderTargetBindings[i].RenderTarget).RenderTargetStrategy;
+                        renderTargetBinding = base.CurrentRenderTargetBindings[i];
+                        renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTarget.RenderTargetStrategy;
 
-                        FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
-                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
-                        GL.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, attachement, target, renderTargetGL.GLTexture, 0);
+                        FramebufferAttachment attachment = (FramebufferAttachment.ColorAttachment0 + i);
+                        if (renderTargetBinding.RenderTarget is RenderTarget3D)
+                        {
+                            GL.FramebufferTextureLayer(FramebufferTarget.DrawFramebuffer, attachment, renderTargetGL.GLTexture, 0, renderTargetBinding.ArraySlice);
+                        }
+                        else
+                        {
+                            TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                            GL.FramebufferTexture2D(FramebufferTarget.DrawFramebuffer, attachment, target, renderTargetGL.GLTexture, 0);
+                        }
                         GL.CheckGLError();
                     }
+
                     _glResolveFramebuffers.Add((RenderTargetBinding[])base.CurrentRenderTargetBindings.Clone(), glResolveFramebuffer);
                 }
                 else
@@ -1333,6 +1343,12 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 renderTargetBinding = base.CurrentRenderTargetBindings[i];
 
+                if (renderTargetBinding.RenderTarget is RenderTargetSwapChain)
+                {
+                    ConcreteRenderTargetSwapChain renderTargetSwapChain = ((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ConcreteRenderTargetSwapChain>();
+                    renderTargetSwapChain.InvalidateDepthBuffer(this);
+                }
+
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
                     IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>();
@@ -1378,17 +1394,25 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     renderTargetBinding = base.CurrentRenderTargetBindings[i];
                     renderTargetGL = ((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
-                    FramebufferAttachment attachement = (FramebufferAttachment.ColorAttachment0 + i);
+                    FramebufferAttachment attachment = (FramebufferAttachment.ColorAttachment0 + i);
 
-                    if (renderTargetGL.GLColorBuffer != 0)
+                    if (renderTargetGL.GLColorBuffers[renderTargetBinding.ArraySlice] != 0)
                     {
-                        GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachement, RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
+                        GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachment, RenderbufferTarget.Renderbuffer,
+                            renderTargetGL.GLColorBuffers[renderTargetBinding.ArraySlice]);
                         GL.CheckGLError();
                     }
                     else
                     {
-                        TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
-                        GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachement, target, renderTargetGL.GLTexture, 0);
+                        if (renderTargetBinding.RenderTarget is RenderTarget3D)
+                        {
+                            GL.FramebufferTextureLayer(FramebufferTarget.Framebuffer, attachment, renderTargetGL.GLTexture, 0, renderTargetBinding.ArraySlice);
+                        }
+                        else
+                        {
+                            TextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, attachment, target, renderTargetGL.GLTexture, 0);
+                        }
                         GL.CheckGLError();
                     }
                 }

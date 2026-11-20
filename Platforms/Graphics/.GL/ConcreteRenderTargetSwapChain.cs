@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteRenderTargetSwapChain(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, RenderTargetUsage usage,
             IntPtr glTextureHandle, PresentInterval presentInterval,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
-            :base(contextStrategy, width, height, mipMap, 1, false, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount,
+            : base(contextStrategy, width, height, mipMap, 1, false, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount,
                   TextureSurfaceType.RenderTargetSwapChain)
         {
             _glTextureHandle = glTextureHandle;
@@ -70,13 +70,15 @@ namespace Microsoft.Xna.Platform.Graphics
 
             IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)this;
 
+            renderTargetGL.GLColorBuffers = new int[1];
+
             if (multiSampleCount > 1)
             {
                 RenderbufferStorage colorInternalFormat = RenderbufferStorage.RGBA8;
 
-                renderTargetGL.GLColorBuffer = GL.GenRenderbuffer();
+                renderTargetGL.GLColorBuffers[0] = GL.GenRenderbuffer();
                 GL.CheckGLError();
-                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffer);
+                GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderTargetGL.GLColorBuffers[0]);
                 GL.CheckGLError();
                 if (multiSampleCount > 0)
                 {
@@ -233,7 +235,7 @@ namespace Microsoft.Xna.Platform.Graphics
             FramebufferAttachment.DepthAttachment,
         };
 
-        public override void ResolveSubresource(GraphicsContextStrategy contextStrategy)
+        public void InvalidateDepthBuffer(GraphicsContextStrategy contextStrategy)
         {
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().GL;
 
