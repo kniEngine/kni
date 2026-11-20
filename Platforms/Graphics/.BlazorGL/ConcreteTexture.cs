@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Platform.Graphics
     internal class ConcreteTexture : GraphicsResourceStrategy, ITextureStrategy
     {
         private readonly GraphicsContextStrategy _contextStrategy;
-        private readonly SurfaceFormat _format;        
+        private readonly SurfaceFormat _format;
         private readonly int _levelCount;
 
         internal ConcreteTexture(GraphicsContextStrategy contextStrategy, SurfaceFormat format, int levelCount)
@@ -196,13 +196,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 throw new NotSupportedException($"GetData is not supported with SurfaceFormat.{format} on this platform.");
         }
 
-        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
+        internal static void PlatformCreateRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy,
+            int width, int height, int depth, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int multiSampleCount)
         {
-            //contextStrategy.ToConcrete<ConcreteGraphicsContextGL>().EnsureContextCurrentThread();
             {
+                renderTargetGL.GLColorBuffers = new WebGLRenderbuffer[depth];
+
+                if (multiSampleCount <= 1 && preferredDepthFormat == DepthFormat.None)
+                    return;
+
                 var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-                if (multiSampleCount > 0)
+                if (multiSampleCount > 1 ||
+                    (renderTargetGL is ConcreteRenderTarget3D && preferredDepthFormat != DepthFormat.None))
                 {
                     WebGL2RenderbufferInternalFormat colorInternalFormat = default;
                     switch (preferredFormat)
@@ -242,14 +248,26 @@ namespace Microsoft.Xna.Platform.Graphics
                             throw new InvalidOperationException("format");
                     }
 
-                    renderTargetGL.GLColorBuffer = GL.CreateRenderbuffer();
-                    GL.CheckGLError();
-                    GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
-                    GL.CheckGLError();
+                    for (int i = 0; i < renderTargetGL.GLColorBuffers.Length; i++)
+                    {
+                        renderTargetGL.GLColorBuffers[i] = GL.CreateRenderbuffer();
+                        GL.CheckGLError();
+                        GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffers[i]);
+                        GL.CheckGLError();
 
-                    System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
-                    ((IWebGL2RenderingContext)GL).RenderbufferStorageMultisample(WebGLRenderbufferType.RENDERBUFFER, multiSampleCount, colorInternalFormat, width, height);
-                    GL.CheckGLError();
+                        if (multiSampleCount > 1)
+                        {
+                            System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
+                            ((IWebGL2RenderingContext)GL).RenderbufferStorageMultisample(WebGLRenderbufferType.RENDERBUFFER, multiSampleCount,
+                                colorInternalFormat, width, height);
+                        }
+                        else
+                        {
+                            ((IWebGL2RenderingContext)GL).RenderbufferStorage(WebGLRenderbufferType.RENDERBUFFER,
+                                colorInternalFormat, width, height);
+                        }
+                        GL.CheckGLError();
+                    }
                 }
 
                 if (preferredDepthFormat != DepthFormat.None)
@@ -287,7 +305,7 @@ namespace Microsoft.Xna.Platform.Graphics
                         GL.CheckGLError();
                         GL.BindRenderbuffer(WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLDepthBuffer);
                         GL.CheckGLError();
-                        if (multiSampleCount > 0)
+                        if (multiSampleCount > 1)
                         {
                             System.Diagnostics.Debug.Assert(GL is IWebGL2RenderingContext); // (GL.RenderbufferStorageMultisample == null)
                             ((IWebGL2RenderingContext)GL).RenderbufferStorageMultisample(WebGLRenderbufferType.RENDERBUFFER, multiSampleCount, depthInternalFormat2, width, height);
@@ -314,7 +332,6 @@ namespace Microsoft.Xna.Platform.Graphics
                     }
                 }
             }
-            return;
         }
 
         internal static void PlatformDeleteRenderTarget(IRenderTargetStrategyGL renderTargetGL, GraphicsContextStrategy contextStrategy)
@@ -322,16 +339,22 @@ namespace Microsoft.Xna.Platform.Graphics
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
             {
-                if (renderTargetGL.GLColorBuffer != null)
+                for (int i = 0; i < renderTargetGL.GLColorBuffers.Length; i++)
                 {
-                    renderTargetGL.GLColorBuffer.Dispose();
-                    GL.CheckGLError();
+                    if (renderTargetGL.GLColorBuffers[i] != null)
+                    {
+                        renderTargetGL.GLColorBuffers[i].Dispose();
+                        GL.CheckGLError();
+                    }
                 }
-                if (renderTargetGL.GLStencilBuffer != null && renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
+
+                if (renderTargetGL.GLStencilBuffer != null
+                &&  renderTargetGL.GLStencilBuffer != renderTargetGL.GLDepthBuffer)
                 {
                     renderTargetGL.GLStencilBuffer.Dispose();
                     GL.CheckGLError();
                 }
+
                 if (renderTargetGL.GLDepthBuffer != null)
                 {
                     renderTargetGL.GLDepthBuffer.Dispose();

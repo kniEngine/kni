@@ -14,10 +14,14 @@ namespace Microsoft.Xna.Platform.Graphics
         IRenderTargetStrategyGL
     {
         private readonly DepthFormat _depthStencilFormat;
-        internal int _multiSampleCount;
+        private int _multiSampleCount;
         private readonly RenderTargetUsage _renderTargetUsage;
         private bool _isContentLost;
-        
+
+        private WebGLRenderbuffer[] _glColorBuffers;
+        private WebGLRenderbuffer _glDepthBuffer;
+        private WebGLRenderbuffer _glStencilBuffer;
+
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount,
@@ -25,8 +29,8 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, width, height, mipMap, preferredSurfaceFormat, arraySize, shared,
                    isRenderTarget: true)
         {
-            this._renderTargetUsage = usage;
-            this._depthStencilFormat = preferredDepthFormat;
+            _renderTargetUsage = usage;
+            _depthStencilFormat = preferredDepthFormat;
 
             if (surfaceType == TextureSurfaceType.RenderTargetSwapChain)
             {
@@ -36,12 +40,13 @@ namespace Microsoft.Xna.Platform.Graphics
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
-            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(this.Format);
+            _multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
-            PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
+            base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, this.Format, shared);
 
-            PlatformConstructRenderTarget2D(contextStrategy, width, height, mipMap, preferredDepthFormat, _multiSampleCount, shared);
+            ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, width, height, arraySize, mipMap,
+                this.Format, _depthStencilFormat, _multiSampleCount);
         }
 
 
@@ -65,27 +70,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _isContentLost; }
         }
-
-        public virtual void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
-        {
-            if (this.MultiSampleCount > 1)
-            {
-            }
-        }
         #endregion IRenderTargetStrategy
 
-
-        WebGLRenderbuffer _glColorBuffer;
-        WebGLRenderbuffer _glDepthBuffer;
-        WebGLRenderbuffer _glStencilBuffer;
 
         #region IRenderTargetStrategyGL
         WebGLTexture IRenderTargetStrategyGL.GLTexture { get { return _glTexture; } }
         WebGLTextureTarget IRenderTargetStrategyGL.GLTarget { get { return _glTarget; } }
-        WebGLRenderbuffer IRenderTargetStrategyGL.GLColorBuffer
+        WebGLRenderbuffer[] IRenderTargetStrategyGL.GLColorBuffers
         {
-            get { return _glColorBuffer; }
-            set { _glColorBuffer = value; }
+            get { return _glColorBuffers; }
+            set { _glColorBuffers = value; }
         }
         WebGLRenderbuffer IRenderTargetStrategyGL.GLDepthBuffer
         {
@@ -106,18 +100,6 @@ namespace Microsoft.Xna.Platform.Graphics
             return _glTarget;
         }
         #endregion IRenderTargetStrategyGL
-
-
-        private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
-        {
-            base.PlatformConstructTexture2D(contextStrategy, width, height, mipMap, format, shared);
-        }
-
-        private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
-            DepthFormat preferredDepthFormat, int multiSampleCount, bool shared)
-        {
-            ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, width, height, mipMap, this.Format, preferredDepthFormat, multiSampleCount);
-        }
 
 
         protected override void PlatformGraphicsContextLost()

@@ -14,9 +14,13 @@ namespace Microsoft.Xna.Platform.Graphics
         IRenderTargetStrategyGL
     {
         private readonly DepthFormat _depthStencilFormat;
-        internal int _multiSampleCount;
+        private int _multiSampleCount;
         private readonly RenderTargetUsage _renderTargetUsage;
         private bool _isContentLost;
+
+        private WebGLRenderbuffer[] _glColorBuffers;
+        private WebGLRenderbuffer _glDepthBuffer;
+        private WebGLRenderbuffer _glStencilBuffer;
 
 
         internal ConcreteRenderTargetCube(GraphicsContextStrategy contextStrategy, int size, bool mipMap, RenderTargetUsage usage,
@@ -24,19 +28,18 @@ namespace Microsoft.Xna.Platform.Graphics
             : base(contextStrategy, size, mipMap, preferredSurfaceFormat,
                    isRenderTarget: true)
         {
-            this._renderTargetUsage = usage;
-            this._depthStencilFormat = preferredDepthFormat;
+            _renderTargetUsage = usage;
+            _depthStencilFormat = preferredDepthFormat;
 
             var GL = contextStrategy.ToConcrete<ConcreteGraphicsContext>().GL;
 
-            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
-            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(this.Format);
+            _multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
-            PlatformConstructTextureCube_rt(contextStrategy, size, mipMap, preferredSurfaceFormat);
+            base.PlatformConstructTextureCube(contextStrategy, size, mipMap, this.Format);
 
-            // If we don't need a depth buffer then we're done.
-            if (preferredDepthFormat != DepthFormat.None)
-                PlatformConstructRenderTargetCube(contextStrategy, mipMap, preferredDepthFormat, _multiSampleCount);
+            ConcreteTexture.PlatformCreateRenderTarget((IRenderTargetStrategyGL)this, contextStrategy, size, size, size, mipMap,
+                this.Format, _depthStencilFormat, _multiSampleCount);
         }
 
 
@@ -60,27 +63,16 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _isContentLost; }
         }
-
-        public void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
-        {
-            if (this.MultiSampleCount > 1)
-            {
-            }
-        }
         #endregion IRenderTargetStrategy
 
-
-        WebGLRenderbuffer _glColorBuffer;
-        WebGLRenderbuffer _glDepthBuffer;
-        WebGLRenderbuffer _glStencilBuffer;
 
         #region IRenderTargetStrategyGL
         WebGLTexture IRenderTargetStrategyGL.GLTexture { get { return _glTexture; } }
         WebGLTextureTarget IRenderTargetStrategyGL.GLTarget { get { return _glTarget; } }
-        WebGLRenderbuffer IRenderTargetStrategyGL.GLColorBuffer
+        WebGLRenderbuffer[] IRenderTargetStrategyGL.GLColorBuffers
         {
-            get { return _glColorBuffer; }
-            set { _glColorBuffer = value; }
+            get { return _glColorBuffers; }
+            set { _glColorBuffers = value; }
         }
         WebGLRenderbuffer IRenderTargetStrategyGL.GLDepthBuffer
         {
@@ -100,15 +92,11 @@ namespace Microsoft.Xna.Platform.Graphics
         #endregion IRenderTargetStrategyGL
 
 
-        private void PlatformConstructTextureCube_rt(GraphicsContextStrategy contextStrategy, int size, bool mipMap, SurfaceFormat format)
-        {
-            base.PlatformConstructTextureCube(contextStrategy, size, mipMap, format);
-        }
-
-        private void PlatformConstructRenderTargetCube(GraphicsContextStrategy contextStrategy, bool mipMap,
-            DepthFormat preferredDepthFormat, int multiSampleCount)
+        protected override void PlatformGraphicsContextLost()
         {
             throw new NotImplementedException();
+
+            base.PlatformGraphicsContextLost();
         }
 
         protected override void Dispose(bool disposing)

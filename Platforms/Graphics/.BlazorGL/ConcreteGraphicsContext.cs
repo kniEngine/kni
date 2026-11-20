@@ -1217,7 +1217,8 @@ namespace Microsoft.Xna.Platform.Graphics
 
             RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[0];
             IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
-            if (renderTarget.MultiSampleCount > 0)
+            if (renderTarget.MultiSampleCount > 1
+            || (renderTarget is RenderTarget3D && renderTarget.DepthStencilFormat != DepthFormat.None))
             {
                 WebGLFramebuffer glResolveFramebuffer = null;
                 if (!_glResolveFramebuffers.TryGetValue(base.CurrentRenderTargetBindings, out glResolveFramebuffer))
@@ -1229,13 +1230,24 @@ namespace Microsoft.Xna.Platform.Graphics
 
                     for (int i = 0; i < base.RenderTargetCount; i++)
                     {
-                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IRenderTarget)base.CurrentRenderTargetBindings[i].RenderTarget).RenderTargetStrategy;
+                        renderTargetBinding = base.CurrentRenderTargetBindings[i];
+                        renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
+                        IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)renderTarget.RenderTargetStrategy;
 
                         WebGLFramebufferAttachmentPoint attachment = WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i;
-                        WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
-                        ((IWebGL2RenderingContext)GL).FramebufferTexture2D(WebGL2FramebufferType.DRAW_FRAMEBUFFER, attachment, target, renderTargetGL.GLTexture);
+                        if (renderTargetBinding.RenderTarget is RenderTarget3D)
+                        {
+                            ((IWebGL2RenderingContext)GL).FramebufferTextureLayer(WebGL2FramebufferType.DRAW_FRAMEBUFFER, attachment,
+                                renderTargetGL.GLTexture, 0, renderTargetBinding.ArraySlice);
+                        }
+                        else
+                        {
+                            WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                            ((IWebGL2RenderingContext)GL).FramebufferTexture2D(WebGL2FramebufferType.DRAW_FRAMEBUFFER, attachment, target, renderTargetGL.GLTexture);
+                        }
                         GL.CheckGLError();
                     }
+
                     _glResolveFramebuffers.Add((RenderTargetBinding[])base.CurrentRenderTargetBindings.Clone(), glResolveFramebuffer);
                 }
                 else
@@ -1373,17 +1385,26 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     renderTargetBinding = base.CurrentRenderTargetBindings[i];
                     renderTargetGL = ((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>() as IRenderTargetStrategyGL;
-                    WebGLFramebufferAttachmentPoint attachement = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
+                    WebGLFramebufferAttachmentPoint attachment = (WebGLFramebufferAttachmentPoint.COLOR_ATTACHMENT0 + i);
 
-                    if (renderTargetGL.GLColorBuffer != null)
+                    if (renderTargetGL.GLColorBuffers[renderTargetBinding.ArraySlice] != null)
                     {
-                        GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, attachement, WebGLRenderbufferType.RENDERBUFFER, renderTargetGL.GLColorBuffer);
+                        GL.FramebufferRenderbuffer(WebGLFramebufferType.FRAMEBUFFER, attachment, WebGLRenderbufferType.RENDERBUFFER,
+                            renderTargetGL.GLColorBuffers[renderTargetBinding.ArraySlice]);
                         GL.CheckGLError();
                     }
                     else
                     {
-                        WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
-                        GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, attachement, target, renderTargetGL.GLTexture);
+                        if (renderTargetBinding.RenderTarget is RenderTarget3D)
+                        {
+                            ((IWebGL2RenderingContext)GL).FramebufferTextureLayer(WebGL2FramebufferType.FRAMEBUFFER, attachment,
+                                renderTargetGL.GLTexture, 0, renderTargetBinding.ArraySlice);
+                        }
+                        else
+                        {
+                            WebGLTextureTarget target = renderTargetGL.GetFramebufferTarget(renderTargetBinding.ArraySlice);
+                            GL.FramebufferTexture2D(WebGLFramebufferType.FRAMEBUFFER, attachment, target, renderTargetGL.GLTexture);
+                        }
                         GL.CheckGLError();
                     }
                 }
@@ -1398,9 +1419,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 GL.CheckGLError();
             }
 
-#if DESKTOPGL
-            //GL.DrawBuffers(base.RenderTargetCount, _drawBuffers);
-#endif
             var GL2 = GL as IWebGL2RenderingContext;
             if (GL2 != null)
                 GL2.DrawBuffers(this.ToConcrete<ConcreteGraphicsContext>()._drawBuffers, 0, base.RenderTargetCount);
