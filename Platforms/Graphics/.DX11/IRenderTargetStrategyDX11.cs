@@ -23,10 +23,9 @@ namespace Microsoft.Xna.Platform.Graphics
         /// <summary>
         /// Gets the <see cref="SharpDX.Direct3D11.DepthStencilView"/>.
         /// </summary>
-        /// <param name="arraySlice">The array slice.</param>
         /// <returns>The <see cref="SharpDX.Direct3D11.DepthStencilView"/>. Can be <see langword="null"/>.</returns>
-        D3D11.DepthStencilView GetDepthStencilView(int arraySlice);
+        D3D11.DepthStencilView GetDepthStencilView();
 
-        void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy);
+        void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy, int arraySlice);
     }
 }

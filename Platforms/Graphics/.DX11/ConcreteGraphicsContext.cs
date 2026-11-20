@@ -845,7 +845,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
                 if (renderTarget != null)
                 {
-                    ((IRenderTargetStrategyDX11)renderTarget.RenderTargetStrategy).ResolveSubresource(this);
+                    ((IRenderTargetStrategyDX11)renderTarget.RenderTargetStrategy).ResolveSubresource(this, renderTargetBinding.ArraySlice);
                 }
 
                 // Generate mipmaps.
@@ -895,7 +895,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Use the depth from the first target.
             IRenderTargetStrategyDX11 renderTargetDX = (IRenderTargetStrategyDX11)((IPlatformTexture)base.CurrentRenderTargetBindings[0].RenderTarget).GetTextureStrategy<ITextureStrategy>();
-            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(base.CurrentRenderTargetBindings[0].ArraySlice);
+            _currentDepthStencilView = renderTargetDX.GetDepthStencilView();
 
             // Set the targets.
             lock (this.SyncHandle)
