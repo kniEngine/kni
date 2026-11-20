@@ -16,9 +16,14 @@ namespace Microsoft.Xna.Platform.Graphics
         IRenderTargetStrategyDX11
     {
         private readonly DepthFormat _depthStencilFormat;
-        internal int _multiSampleCount;
+        private protected int _multiSampleCount;
         private readonly RenderTargetUsage _renderTargetUsage;
         private bool _isContentLost;
+
+        private DXGI.SampleDescription _msSampleDescription;
+        private protected D3D11.Texture2D _resolveTextureArray;
+        private protected D3D11.RenderTargetView[] _renderTargetViews;
+        private protected D3D11.DepthStencilView _depthStencilView;
 
 
         internal ConcreteRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, int arraySize, bool shared, RenderTargetUsage usage,
@@ -36,13 +41,14 @@ namespace Microsoft.Xna.Platform.Graphics
                 return;
             }
 
-            int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
-            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            ConcreteGraphicsDevice graphicsDevice = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>();
 
+            int maxMultiSampleCount = graphicsDevice.GetMaxMultiSampleCount(preferredSurfaceFormat);
+            _multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
-            PlatformConstructTexture2D_rt(contextStrategy, width, height, mipMap, preferredSurfaceFormat, shared);
+            PlatformConstructTexture2D_rt(graphicsDevice.D3DDevice);
 
-            PlatformConstructRenderTarget2D(contextStrategy, width, height, mipMap, preferredDepthFormat, _multiSampleCount, shared);
+            PlatformConstructRenderTarget2D(graphicsDevice);
         }
 
 
@@ -66,6 +72,19 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             get { return _isContentLost; }
         }
+        #endregion IRenderTargetStrategy
+
+
+        #region IRenderTargetStrategyDX11
+        D3D11.RenderTargetView IRenderTargetStrategyDX11.GetRenderTargetView(int arraySlice)
+        {
+            return _renderTargetViews[arraySlice];
+        }
+
+        D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView()
+        {
+            return _depthStencilView;
+        }
 
         public virtual void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy, int arraySlice)
         {
@@ -75,36 +94,17 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     D3D11.DeviceContext d3dContext = graphicsContextStrategy.ToConcrete<ConcreteGraphicsContext>().D3dContext;
 
-                    System.Diagnostics.Debug.Assert(_msTexture != null);
+                    int destinationSubresourceIndex = arraySlice * this.LevelCount;
 
-                    d3dContext.ResolveSubresource(
-                        _msTexture,
-                        0,
-                        this.GetTexture(),
-                        0,
-                        this.Format.ToDXFormat());
+                    System.Diagnostics.Debug.Assert(_resolveTextureArray != null);
+                    d3dContext.ResolveSubresource(_resolveTextureArray, arraySlice, this.GetTexture(), destinationSubresourceIndex, this.Format.ToDXFormat());
                 }
             }
         }
-        #endregion IRenderTargetStrategy
+        #endregion IRenderTargetStrategyDX11
 
 
-        internal D3D11.RenderTargetView[] _renderTargetViews;
-        internal D3D11.DepthStencilView[] _depthStencilViews;
-
-
-        D3D11.RenderTargetView IRenderTargetStrategyDX11.GetRenderTargetView(int arraySlice)
-        {
-            return _renderTargetViews[arraySlice];
-        }
-
-        D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView()
-        {
-            return _depthStencilViews[0];
-        }
-
-
-        private void PlatformConstructTexture2D_rt(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, SurfaceFormat format, bool shared)
+        private void PlatformConstructTexture2D_rt(D3D11.Device d3dDevice)
         {
             DXGI.SampleDescription sampleDesc = new DXGI.SampleDescription(1, 0);
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
@@ -121,114 +121,99 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (_shared)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.Shared;
-            if (MultiSampleCount == 0 || _shared)
+            if (MultiSampleCount <= 1 || _mipMap || _shared)
                 texture2DDesc.BindFlags |= D3D11.BindFlags.RenderTarget;
             if (_mipMap)
                 texture2DDesc.OptionFlags |= D3D11.ResourceOptionFlags.GenerateMipMaps;
 
             System.Diagnostics.Debug.Assert(_texture == null);
-            D3D11.Resource texture = new D3D11.Texture2D(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+            D3D11.Resource texture = new D3D11.Texture2D(d3dDevice, texture2DDesc);
             _texture = texture;
-            _resourceView = new D3D11.ShaderResourceView(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture);
+            _resourceView = new D3D11.ShaderResourceView(d3dDevice, texture);
         }
 
-        internal D3D11.Texture2D _msTexture;
-        private DXGI.SampleDescription _msSampleDescription;
-
-        private void PlatformConstructRenderTarget2D(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap,
-            DepthFormat preferredDepthFormat, int multiSampleCount, bool shared)
+        private void PlatformConstructRenderTarget2D(ConcreteGraphicsDevice graphicsDevice)
         {
-            D3D11.Device d3dDevice = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice;
-
-            _msSampleDescription = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetSupportedSampleDescription(this.Format.ToDXFormat(), multiSampleCount);
+            _msSampleDescription = graphicsDevice.GetSupportedSampleDescription(this.Format.ToDXFormat(), _multiSampleCount);
 
             _renderTargetViews = new D3D11.RenderTargetView[this.ArraySize];
-            _depthStencilViews = new D3D11.DepthStencilView[1];
 
-            if (multiSampleCount > 1)
-                _msTexture = CreateMSTexture();
+            if (_multiSampleCount > 1)
+                CreateResolveTexture(graphicsDevice.D3DDevice);
 
-            CreateRenderTargetView(d3dDevice, width, height);
+            CreateRenderTargetView(graphicsDevice.D3DDevice);
             if (DepthStencilFormat != DepthFormat.None)
-                CreateDepthStencilView(d3dDevice, width, height);
+                CreateDepthStencilView(graphicsDevice.D3DDevice);
         }
 
-        private void CreateRenderTargetView(D3D11.Device d3dDevice, int width, int height)
+        private void CreateRenderTargetView(D3D11.Device d3dDevice)
         {
-            D3D11.Resource viewTex = (MultiSampleCount > 1)
-                                   ? _msTexture
-                                   : _texture;
-
-            System.Diagnostics.Debug.Assert(viewTex != null);
-
-            // Create a view interface on the rendertarget to use on bind.
-            if (this.ArraySize > 1)
+            // Create one render target view per array slice.
+            for (int i = 0; i < this.ArraySize; i++)
             {
-                for (int i = 0; i < this.ArraySize; i++)
+                D3D11.Resource viewTex = _resolveTextureArray ?? _texture;
+
+                System.Diagnostics.Debug.Assert(viewTex != null);
+
+                if (this.ArraySize > 1)
                 {
-                    D3D11.RenderTargetViewDescription renderTargetViewDescription = new D3D11.RenderTargetViewDescription();
+                    D3D11.RenderTargetViewDescription renderTargetViewDesc = new D3D11.RenderTargetViewDescription();
+                    renderTargetViewDesc.Format = this.Format.ToDXFormat();
                     if (MultiSampleCount > 1)
                     {
-                        renderTargetViewDescription.Dimension = D3D11.RenderTargetViewDimension.Texture2DMultisampledArray;
-                        renderTargetViewDescription.Texture2DMSArray.ArraySize = 1;
-                        renderTargetViewDescription.Texture2DMSArray.FirstArraySlice = i;
+                        renderTargetViewDesc.Dimension = D3D11.RenderTargetViewDimension.Texture2DMultisampledArray;
+                        renderTargetViewDesc.Texture2DMSArray.ArraySize = 1;
+                        renderTargetViewDesc.Texture2DMSArray.FirstArraySlice = i;
                     }
                     else
                     {
-                        renderTargetViewDescription.Dimension = D3D11.RenderTargetViewDimension.Texture2DArray;
-                        renderTargetViewDescription.Texture2DArray.ArraySize = 1;
-                        renderTargetViewDescription.Texture2DArray.FirstArraySlice = i;
-                        renderTargetViewDescription.Texture2DArray.MipSlice = 0;
+                        renderTargetViewDesc.Dimension = D3D11.RenderTargetViewDimension.Texture2DArray;
+                        renderTargetViewDesc.Texture2DArray.ArraySize = 1;
+                        renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
+                        renderTargetViewDesc.Texture2DArray.MipSlice = 0;
                     }
-                    _renderTargetViews[i] = new D3D11.RenderTargetView(d3dDevice, viewTex, renderTargetViewDescription);
+
+                    _renderTargetViews[i] = new D3D11.RenderTargetView(d3dDevice, viewTex, renderTargetViewDesc);
                 }
-            }
-            else
-            {
-                _renderTargetViews[0] = new D3D11.RenderTargetView(d3dDevice, viewTex);
+                else
+                {
+                    _renderTargetViews[i] = new D3D11.RenderTargetView(d3dDevice, viewTex);
+                }
             }
         }
 
-        private void CreateDepthStencilView(D3D11.Device d3dDevice, int width, int height)
+        private void CreateDepthStencilView(D3D11.Device d3dDevice)
         {
-            // The depth stencil view's multisampling configuration must strictly
-            // match the texture's multisampling configuration.  Ignore whatever parameters
-            // were provided and use the texture's configuration so that things are
-            // guarenteed to work.
-            DXGI.SampleDescription multisampleDesc = _msSampleDescription;
-
             // Create a descriptor for the depth/stencil buffer.
-            // Allocate a 2-D surface as the depth/stencil buffer.
-            // Create a DepthStencil view on this surface to use on bind.
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
             texture2DDesc.Format = DepthStencilFormat.ToDXFormat();
             texture2DDesc.ArraySize = 1;
             texture2DDesc.MipLevels = 1;
-            texture2DDesc.Width = width;
-            texture2DDesc.Height = height;
-            texture2DDesc.SampleDescription = multisampleDesc;
+            texture2DDesc.Width = this.Width;
+            texture2DDesc.Height = this.Height;
+            texture2DDesc.SampleDescription = _msSampleDescription;
             texture2DDesc.BindFlags = D3D11.BindFlags.DepthStencil;
 
+            // Allocate a 2-D surface as the depth/stencil buffer.
             using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(d3dDevice, texture2DDesc))
             {
-                // Create the view for binding to the device.
                 D3D11.DepthStencilViewDescription depthStencilViewDesc = new D3D11.DepthStencilViewDescription();
                 depthStencilViewDesc.Format = DepthStencilFormat.ToDXFormat();
                 depthStencilViewDesc.Dimension = (MultiSampleCount > 1)
                                                ? D3D11.DepthStencilViewDimension.Texture2DMultisampled
                                                : D3D11.DepthStencilViewDimension.Texture2D;
-                _depthStencilViews[0] = new D3D11.DepthStencilView(d3dDevice, depthBuffer, depthStencilViewDesc);
+
+                // Create a DepthStencil view on this surface to use on bind.
+                _depthStencilView = new D3D11.DepthStencilView(d3dDevice, depthBuffer, depthStencilViewDesc);
             }
         }
 
-        private D3D11.Texture2D CreateMSTexture()
+        private void CreateResolveTexture(D3D11.Device d3dDevice)
         {
-            System.Diagnostics.Debug.Assert(_msTexture == null);
-
             D3D11.Texture2DDescription texture2DDesc = new D3D11.Texture2DDescription();
             texture2DDesc.Width = this.Width;
             texture2DDesc.Height = this.Height;
-            texture2DDesc.MipLevels = 1; // mip mapping is applied to the resolved texture, not the multisampled texture;
+            texture2DDesc.MipLevels = 1; // mip mapping is applied to the resolved texture, not the multi sampled texture.
             texture2DDesc.ArraySize = this.ArraySize;
             texture2DDesc.Format = this.Format.ToDXFormat();
             texture2DDesc.BindFlags = D3D11.BindFlags.RenderTarget; // ~BindFlags.ShaderResource, the multi sampled texture can never be bound directly.
@@ -237,23 +222,16 @@ namespace Microsoft.Xna.Platform.Graphics
             texture2DDesc.Usage = D3D11.ResourceUsage.Default;
             texture2DDesc.OptionFlags = D3D11.ResourceOptionFlags.None;
 
-            return new D3D11.Texture2D(base.GraphicsDeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().D3DDevice, texture2DDesc);
+            _resolveTextureArray = new D3D11.Texture2D(d3dDevice, texture2DDesc);
         }
 
         protected override void PlatformGraphicsContextLost()
         {
-            if (_renderTargetViews != null)
-            {
-                for (int i = 0; i < _renderTargetViews.Length; i++)
-                    _renderTargetViews[i].Dispose();
-                _renderTargetViews = null;
-            }
-            if (_depthStencilViews != null)
-            {
-                for (int i = 0; i < _depthStencilViews.Length; i++)
-                    DX.Utilities.Dispose(ref _depthStencilViews[i]);
-                _depthStencilViews = null;
-            }
+            for (int i = 0; i < _renderTargetViews?.Length; i++)
+                DX.Utilities.Dispose(ref _renderTargetViews[i]);
+
+            DX.Utilities.Dispose(ref _resolveTextureArray);
+            DX.Utilities.Dispose(ref _depthStencilView);
 
             base.PlatformGraphicsContextLost();
         }
@@ -262,24 +240,14 @@ namespace Microsoft.Xna.Platform.Graphics
         {
             if (disposing)
             {
-                if (_renderTargetViews != null)
-                {
-                    for (int i = 0; i < _renderTargetViews.Length; i++)
-                        _renderTargetViews[i].Dispose();
-                    _renderTargetViews = null;
-                }
-                if (_depthStencilViews != null)
-                {
-                    for (int i = 0; i < _depthStencilViews.Length; i++)
-                        DX.Utilities.Dispose(ref _depthStencilViews[i]);
-                    _depthStencilViews = null;
-                }
-                DX.Utilities.Dispose(ref _msTexture);
+                for (int i = 0; i < _renderTargetViews?.Length; i++)
+                    DX.Utilities.Dispose(ref _renderTargetViews[i]);
+
+                DX.Utilities.Dispose(ref _resolveTextureArray);
+                DX.Utilities.Dispose(ref _depthStencilView);
             }
 
             base.Dispose(disposing);
         }
-
-
     }
 }

@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using DX = SharpDX;
@@ -27,18 +26,16 @@ namespace Microsoft.Xna.Platform.Graphics
         internal ConcreteRenderTargetSwapChain(GraphicsContextStrategy contextStrategy, int width, int height, bool mipMap, RenderTargetUsage usage,
             IntPtr windowHandle, PresentInterval presentInterval,
             SurfaceFormat preferredSurfaceFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount)
-            :base(contextStrategy, width, height, mipMap, 1, false, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount,
+            : base(contextStrategy, width, height, mipMap, 1, false, usage, preferredSurfaceFormat, preferredDepthFormat, preferredMultiSampleCount,
                   TextureSurfaceType.RenderTargetSwapChain)
         {
             _windowHandle = windowHandle;
             _presentInterval = presentInterval;
 
             int maxMultiSampleCount = ((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy.ToConcrete<ConcreteGraphicsDevice>().GetMaxMultiSampleCount(preferredSurfaceFormat);
-            _multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
+            this._multiSampleCount = TextureHelpers.GetClampedMultiSampleCount(this.Format, preferredMultiSampleCount, maxMultiSampleCount);
 
-
-            ((ConcreteRenderTarget2D)this)._renderTargetViews = new D3D11.RenderTargetView[1];
-            ((ConcreteRenderTarget2D)this)._depthStencilViews = new D3D11.DepthStencilView[1];
+            this._renderTargetViews = new D3D11.RenderTargetView[1];
 
             DXGI.Format dxgiFormat = (preferredSurfaceFormat == SurfaceFormat.Color)
                                    ? DXGI.Format.B8G8R8A8_UNorm
@@ -57,6 +54,7 @@ namespace Microsoft.Xna.Platform.Graphics
         }
 
 
+        #region IRenderTargetStrategyDX11
         D3D11.RenderTargetView IRenderTargetStrategyDX11.GetRenderTargetView(int arraySlice)
         {
             return _renderTargetViews[arraySlice];
@@ -64,8 +62,16 @@ namespace Microsoft.Xna.Platform.Graphics
 
         D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView()
         {
-            return _depthStencilViews[0];
+            return _depthStencilView;
         }
+
+        public override void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy, int arraySlice)
+        {
+            // Using a multisampled SwapChainRenderTarget as a source Texture is not supported.
+            //base.ResolveSubresource(contextStrategy);
+        }
+        #endregion IRenderTargetStrategyDX11
+
 
         private void CreateSwapChainTexture(D3D11.Device d3dDevice, int width, int height, DXGI.SampleDescription multisampleDesc, DXGI.Format dxgiFormat)
         {
@@ -80,7 +86,7 @@ namespace Microsoft.Xna.Platform.Graphics
             swapChainDesc.BufferCount = 2;
             swapChainDesc.SwapEffect = _presentInterval.ToDXSwapEffect();
             swapChainDesc.IsWindowed = true;
-            
+
             // First, retrieve the underlying DXGI Device from the D3D Device.
             // Creates the swap chain 
             using (DXGI.Device1 dxgiDevice = d3dDevice.QueryInterface<DXGI.Device1>())
@@ -91,7 +97,7 @@ namespace Microsoft.Xna.Platform.Graphics
                 // Obtain the backbuffer for this window which will be the final 3D rendertarget.
                 _backBuffer = D3D11.Resource.FromSwapChain<D3D11.Texture2D>(_swapChain, 0);
                 // Create a view interface on the rendertarget to use on bind.
-                ((ConcreteRenderTarget2D)this)._renderTargetViews[0] = new D3D11.RenderTargetView(d3dDevice, _backBuffer);
+                this._renderTargetViews[0] = new D3D11.RenderTargetView(d3dDevice, _backBuffer);
             }
         }
 
@@ -113,7 +119,7 @@ namespace Microsoft.Xna.Platform.Graphics
             using (D3D11.Texture2D depthBuffer = new D3D11.Texture2D(d3dDevice, textureDescription))
             {
                 // Create a DepthStencil view on this surface to use on bind.
-                ((ConcreteRenderTarget2D)this)._depthStencilViews[0] = new D3D11.DepthStencilView(d3dDevice, depthBuffer);
+                this._depthStencilView = new D3D11.DepthStencilView(d3dDevice, depthBuffer);
             }
         }
 
@@ -164,12 +170,6 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                 }
             }
-        }
-
-        public override void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy, int arraySlice)
-        {
-            // Using a multisampled SwapChainRenderTarget as a source Texture is not supported.
-            //base.ResolveSubresource(contextStrategy);
         }
 
         protected override void Dispose(bool disposing)
