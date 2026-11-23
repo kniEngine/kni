@@ -162,9 +162,9 @@ namespace Microsoft.Xna.Platform.Graphics
             throw new NotImplementedException();
         }
 
-        public override ITexture2DStrategy CreateTexture2DStrategy(Stream stream)
+        public override ITexture2DStrategy CreateTexture2DStrategy(Stream stream, Action<byte[]> colorProcessor)
         {
-            return new ConcreteTexture2D(this, stream);
+            return new ConcreteTexture2D(this, stream, colorProcessor);
         }
 
         public override ShaderStrategy CreateVertexShaderStrategy(ShaderVersion shaderVersion, byte[] shaderBytecode, SamplerInfo[] samplers, int[] cBuffers, VertexAttribute[] attributes)

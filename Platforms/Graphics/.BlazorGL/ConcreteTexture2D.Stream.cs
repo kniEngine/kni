@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal partial class ConcreteTexture2D
     {
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream)
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor)
             : base(contextStrategy, SurfaceFormat.Color, 1)
         {
             this._arraySize = 1;
@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             if (stream.CanSeek)
             {
-                PlatformFromStream_ImageSharp(contextStrategy, stream, out this._width, out this._height);
+                PlatformFromStream_ImageSharp(contextStrategy, stream, colorProcessor, out this._width, out this._height);
             }
             else
             {
@@ -35,17 +35,20 @@ namespace Microsoft.Xna.Platform.Graphics
                 {
                     stream.CopyTo(ms);
                     ms.Seek(0, SeekOrigin.Begin);
-                    PlatformFromStream_ImageSharp(contextStrategy, ms, out this._width, out this._height);
+                    PlatformFromStream_ImageSharp(contextStrategy, ms, colorProcessor, out this._width, out this._height);
                 }
             }
         }
 
-        private unsafe void PlatformFromStream_ImageSharp(GraphicsContextStrategy contextStrategy, Stream stream, out int width, out int height)
+        private unsafe void PlatformFromStream_ImageSharp(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor, out int width, out int height)
         {
             StbImageSharp.ImageResult result = StbImageSharp.ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
             width = result.Width;
             height = result.Height;
             ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
+
+            if (colorProcessor != null)
+                colorProcessor(result.Data);
 
             this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
             this.SetData<byte>(0, result.Data, 0, result.Data.Length);

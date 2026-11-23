@@ -251,6 +251,7 @@
     <Compile Include="Graphics\SurfaceFormat.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\Texture2D.cs" />
+    <Compile Include="Graphics\DefaultColorProcessors.cs" />
     <Compile Include="Graphics\Texture3D.cs" />
     <Compile Include="Graphics\TextureCollection.cs" />
     <Compile Include="Graphics\TextureCollectionStrategy.cs" />

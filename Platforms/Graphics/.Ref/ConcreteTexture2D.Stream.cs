@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Platform.Graphics
 {
     internal partial class ConcreteTexture2D
     {
-        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream)
+        internal ConcreteTexture2D(GraphicsContextStrategy contextStrategy, Stream stream, Action<byte[]> colorProcessor)
             : base(contextStrategy, SurfaceFormat.Color, 1)
         {
             throw new PlatformNotSupportedException();
