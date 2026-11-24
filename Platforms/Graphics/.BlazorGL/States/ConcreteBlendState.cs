@@ -38,6 +38,19 @@ namespace Microsoft.Xna.Platform.Graphics
                 context._lastBlendEnable = blendEnabled;
             }
 
+            if (!((ConcreteGraphicsCapabilities)context.Capabilities).SupportsBlendStateMinMax)
+            {
+                for (int i = 0; i < this.Targets.Length; i++)
+                {
+                    if (this.Targets[i].ColorBlendFunction == BlendFunction.Min || this.Targets[i].ColorBlendFunction == BlendFunction.Max ||
+                        this.Targets[i].AlphaBlendFunction == BlendFunction.Min || this.Targets[i].AlphaBlendFunction == BlendFunction.Max)
+                        throw new PlatformNotSupportedException("BlendFunction Min/Max on BlazorGL requires WebGL2 or the EXT_blend_minmax extension.");
+
+                    if (!this.IndependentBlendEnable)
+                        break;
+                }
+            }
+
             if (!this.IndependentBlendEnable)
             {
                 if (force ||
@@ -104,6 +117,10 @@ namespace Microsoft.Xna.Platform.Graphics
                     return WebGLEquationFunc.REVERSE_SUBTRACT;
                 case BlendFunction.Subtract:
                     return WebGLEquationFunc.SUBTRACT;
+                case BlendFunction.Min:
+                    return WebGLEquationFunc.MIN;
+                case BlendFunction.Max:
+                    return WebGLEquationFunc.MAX;
 
                 default:
                     throw new ArgumentException();
