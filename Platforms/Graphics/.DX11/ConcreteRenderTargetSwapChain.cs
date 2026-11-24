@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Platform.Graphics
             return _renderTargetViews[arraySlice];
         }
 
-        D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView(int arraySlice)
+        D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView()
         {
             return _depthStencilViews[0];
         }
@@ -166,7 +166,7 @@ namespace Microsoft.Xna.Platform.Graphics
             }
         }
 
-        public override void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
+        public override void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy, int arraySlice)
         {
             // Using a multisampled SwapChainRenderTarget as a source Texture is not supported.
             //base.ResolveSubresource(contextStrategy);

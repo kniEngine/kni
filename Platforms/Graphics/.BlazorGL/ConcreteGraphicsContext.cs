@@ -1320,12 +1320,6 @@ namespace Microsoft.Xna.Platform.Graphics
             {
                 renderTargetBinding = base.CurrentRenderTargetBindings[i];
 
-                renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
-                if (renderTarget != null)
-                {
-                    ((IRenderTarget)renderTarget).RenderTargetStrategy.ResolveSubresource(this);
-                }
-
                 if (renderTargetBinding.RenderTarget.LevelCount > 1)
                 {
                     IRenderTargetStrategyGL renderTargetGL = (IRenderTargetStrategyGL)((IPlatformTexture)renderTargetBinding.RenderTarget).GetTextureStrategy<ITextureStrategy>();
