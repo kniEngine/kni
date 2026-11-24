@@ -20,7 +20,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         private DisplayModeCollection _supportedDisplayModes;
         private DisplayMode _currentDisplayMode;
-        private string _description = string.Empty;
+        private string _description;
 
         public override string Platform_DeviceName
         {
@@ -29,8 +29,30 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override string Platform_Description
         {
-            get { return _description; }
-            set { _description = value; }
+            get
+            {
+                if (_description == null)
+                {
+                    string vendor = "";
+                    string renderer = "";
+                    using (OffscreenCanvas offscreenCanvas = new OffscreenCanvas(1, 1))
+                    {
+                        IWebGLRenderingContext webgl = offscreenCanvas.GetContext<IWebGLRenderingContext>();
+                        if (webgl.GetExtension("WEBGL_debug_renderer_info"))
+                        {
+                            vendor = webgl.GetParameter(WebGLPNameString.UNMASKED_VENDOR_WEBGL);
+                            renderer = webgl.GetParameter(WebGLPNameString.UNMASKED_RENDERER_WEBGL);
+                        }
+                        else
+                        {
+                            vendor = webgl.GetParameter(WebGLPNameString.VENDOR);
+                            renderer = webgl.GetParameter(WebGLPNameString.RENDERER);
+                        }
+                    }
+                    _description = $"Vendor: {vendor}, Renderer: {renderer}";
+                }
+                return _description;
+            }
         }
 
         public override int Platform_DeviceId
@@ -40,17 +62,17 @@ namespace Microsoft.Xna.Platform.Graphics
 
         public override int Platform_Revision
         {
-            get { throw new NotImplementedException(); }
+            get { throw new PlatformNotSupportedException(); }
         }
 
         public override int Platform_VendorId
         {
-            get { throw new NotImplementedException(); }
+            get { throw new PlatformNotSupportedException(); }
         }
 
         public override int Platform_SubSystemId
         {
-            get { throw new NotImplementedException(); }
+            get { throw new PlatformNotSupportedException(); }
         }
 
         public override IntPtr Platform_MonitorHandle
