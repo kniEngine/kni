@@ -153,46 +153,25 @@ namespace Microsoft.Xna.Platform.Graphics
                     InPurgeable = true,
                     InInputShareable = true,
                     InPremultiplied = false,
+                    InPreferredConfig = global::Android.Graphics.Bitmap.Config.Argb8888,
                 }))
             {
                 width = image.Width;
                 height = image.Height;
                 ValidateBounds(((IPlatformGraphicsContext)contextStrategy.Context).DeviceStrategy, width, height);
 
-                int[] data = new int[width * height];
-                if ((width != image.Width) || (height != image.Height))
+                // ARGB_8888 pixels are stored as R,G,B,A bytes, which matches GL RGBA/UNSIGNED_BYTE.
+                byte[] data = new byte[width * height * 4];
+                using (global::Java.Nio.ByteBuffer buffer = global::Java.Nio.ByteBuffer.AllocateDirect(data.Length))
                 {
-                    using (global::Android.Graphics.Bitmap imagePadded = global::Android.Graphics.Bitmap.CreateBitmap(width, height, global::Android.Graphics.Bitmap.Config.Argb8888))
-                    {
-                        global::Android.Graphics.Canvas canvas = new global::Android.Graphics.Canvas(imagePadded);
-                        canvas.DrawARGB(0, 0, 0, 0);
-                        canvas.DrawBitmap(image, 0, 0, null);
-                        imagePadded.GetPixels(data, 0, width, 0, 0, width, height);
-                        imagePadded.Recycle();
-                    }
-                }
-                else
-                {
-                    image.GetPixels(data, 0, width, 0, 0, width, height);
+                    image.CopyPixelsToBuffer(buffer);
+                    buffer.Rewind();
+                    buffer.Get(data);
                 }
                 image.Recycle();
 
-                // Convert from ARGB to ABGR
-                ConvertToABGR_ANDROID(width, height, data);
-
                 this.PlatformConstructTexture2D(contextStrategy, width, height, false, SurfaceFormat.Color, false);
-                this.SetData<int>(0, data, 0, data.Length);
-            }
-        }
-
-        //Converts Pixel Data from ARGB to ABGR
-        private void ConvertToABGR_ANDROID(int pixelWidth, int pixelHeight, int[] pixels)
-        {
-            int pixelCount = pixelWidth * pixelHeight;
-            for (int i = 0; i < pixelCount; i++)
-            {
-                uint pixel = (uint)pixels[i];
-                pixels[i] = (int)((pixel & 0xFF00FF00) | ((pixel & 0x00FF0000) >> 16) | ((pixel & 0x000000FF) << 16));
+                this.SetData<byte>(0, data, 0, data.Length);
             }
         }
 #endif
