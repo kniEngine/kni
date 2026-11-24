@@ -842,10 +842,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[i];
 
                 // Resolve MSAA render targets
-                RenderTarget2D renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
+                IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
                 if (renderTarget != null)
                 {
-                    ((IRenderTarget)renderTarget).RenderTargetStrategy.ResolveSubresource(this);
+                    ((IRenderTargetStrategyDX11)renderTarget.RenderTargetStrategy).ResolveSubresource(this);
                 }
 
                 // Generate mipmaps.
