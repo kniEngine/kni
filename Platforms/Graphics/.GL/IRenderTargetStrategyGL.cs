@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Platform.Graphics
     {
         int GLTexture { get; }
         TextureTarget GLTarget { get; }
-        int GLColorBuffer { get; set; }
+        int[] GLColorBuffers { get; set; }
         int GLDepthBuffer { get; set; }
         int GLStencilBuffer { get; set; }
 

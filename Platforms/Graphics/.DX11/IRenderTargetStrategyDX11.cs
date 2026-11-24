@@ -26,5 +26,7 @@ namespace Microsoft.Xna.Platform.Graphics
         /// <param name="arraySlice">The array slice.</param>
         /// <returns>The <see cref="SharpDX.Direct3D11.DepthStencilView"/>. Can be <see langword="null"/>.</returns>
         D3D11.DepthStencilView GetDepthStencilView(int arraySlice);
+
+        void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy);
     }
 }
