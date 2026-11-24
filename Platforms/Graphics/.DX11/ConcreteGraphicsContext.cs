@@ -842,10 +842,10 @@ namespace Microsoft.Xna.Platform.Graphics
                 RenderTargetBinding renderTargetBinding = base.CurrentRenderTargetBindings[i];
 
                 // Resolve MSAA render targets
-                RenderTarget2D renderTarget = renderTargetBinding.RenderTarget as RenderTarget2D;
+                IRenderTarget renderTarget = renderTargetBinding.RenderTarget as IRenderTarget;
                 if (renderTarget != null)
                 {
-                    ((IRenderTarget)renderTarget).RenderTargetStrategy.ResolveSubresource(this);
+                    ((IRenderTargetStrategyDX11)renderTarget.RenderTargetStrategy).ResolveSubresource(this, renderTargetBinding.ArraySlice);
                 }
 
                 // Generate mipmaps.
@@ -895,7 +895,7 @@ namespace Microsoft.Xna.Platform.Graphics
 
             // Use the depth from the first target.
             IRenderTargetStrategyDX11 renderTargetDX = (IRenderTargetStrategyDX11)((IPlatformTexture)base.CurrentRenderTargetBindings[0].RenderTarget).GetTextureStrategy<ITextureStrategy>();
-            _currentDepthStencilView = renderTargetDX.GetDepthStencilView(base.CurrentRenderTargetBindings[0].ArraySlice);
+            _currentDepthStencilView = renderTargetDX.GetDepthStencilView();
 
             // Set the targets.
             lock (this.SyncHandle)
