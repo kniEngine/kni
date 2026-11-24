@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Platform.Graphics
             get { return _isContentLost; }
         }
 
-        public void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy)
+        public void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy, int arraySlice)
         {
             if (this.MultiSampleCount > 1)
             {
@@ -78,9 +78,9 @@ namespace Microsoft.Xna.Platform.Graphics
             return _renderTargetViews[arraySlice];
         }
 
-        D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView(int arraySlice)
+        D3D11.DepthStencilView IRenderTargetStrategyDX11.GetDepthStencilView()
         {
-            return _depthStencilViews[arraySlice];
+            return _depthStencilViews[0];
         }
 
 

@@ -16,7 +16,5 @@ namespace Microsoft.Xna.Platform.Graphics
         RenderTargetUsage RenderTargetUsage { get; }
 
         bool IsContentLost { get; }
-
-        void ResolveSubresource(GraphicsContextStrategy graphicsContextStrategy);
     }
 }
